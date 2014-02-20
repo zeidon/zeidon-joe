@@ -19,60 +19,50 @@
 
 package com.quinsoft.zeidon;
 
+import java.util.Set;
+
 /**
  * An interface for keeping track of selected entities.
- * 
- * @author DG 
+ *
+ * @author DG
  *
  */
 public interface SelectSet
 {
     /**
      * Returns true if the entity is selected in this set.
-     * 
+     *
      * @param ei
      * @return
      */
     boolean isSelected( EntityInstance ei );
 
     /**
-     * Returns true if the entity for this cursor is selected.
-     * 
-     * @param cursor
-     * @return
-     */
-    boolean isSelected( EntityCursor cursor );
-
-    /**
      * Adds the entity to the select set.
-     * 
+     *
      * @param ei
      */
     void select( EntityInstance ei );
-    
-    /**
-     * Adds the current entity for this cursor to the select set.
-     * 
-     * @param cursor
-     */
-    void select( EntityCursor cursor );
 
     /**
      * Removes the entity from the select set.
-     * 
+     *
      * @param ei
      */
     void deselect( EntityInstance ei );
-    
-    /**
-     * Removes the entity from the select set.
-     * 
-     * @param cursor
-     */
-    void deselect( EntityCursor cursor );
-    
+
     /**
      * Remove all the entities from the select set.
      */
     void clear();
+
+    /**
+     * Iterates over each of the entities in the set in hierarchical order.
+     */
+    EntityIterator<? extends EntityInstance> eachEntity();
+
+    /**
+     * Returns the set of entity instances in this SelectSet.
+     */
+    Set<EntityInstance> getSet();
 }

@@ -804,7 +804,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         SelectSet set = selectSets.get( index );
         if ( set == null )
         {
-            set = new SelectSetImpl();
+            set = new SelectSetImpl( this );
             selectSets.put( index, set );
         }
 
@@ -812,9 +812,11 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public void setDefaultSelectSet( Object index )
+    public Object setCurrentSelectSet( Object key )
     {
-        defaultSelectSet = index;
+        Object oldKey = defaultSelectSet;
+        defaultSelectSet = key;
+        return oldKey;
     }
 
     /* (non-Javadoc)

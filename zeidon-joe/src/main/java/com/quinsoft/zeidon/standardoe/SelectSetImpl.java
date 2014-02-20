@@ -19,37 +19,40 @@
 
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 
 /**
  * @author DG
  *
  */
-public class SelectSetImpl implements SelectSet
+class SelectSetImpl implements SelectSet
 {
     private final Set<EntityInstance> selectSet = new HashSet<EntityInstance>();
-    
+    private final ViewImpl view;
+    private       EntityInstance commonParent;
+    private       ViewEntity viewEntity;
+    private       EntityInstance referenceInstance;
+
+    SelectSetImpl( ViewImpl view )
+    {
+        this.view = view;
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.SelectSet#isSelected(com.quinsoft.zeidon.EntityInstance)
      */
     @Override
     public boolean isSelected(EntityInstance ei)
     {
-        return selectSet.contains( ei );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.SelectSet#isSelected(com.quinsoft.zeidon.EntityCursor)
-     */
-    @Override
-    public boolean isSelected(EntityCursor cursor)
-    {
-        return isSelected( cursor.getEntityInstance() );
+        return selectSet.contains( ei.getEntityInstance() );
     }
 
     /* (non-Javadoc)
@@ -58,16 +61,31 @@ public class SelectSetImpl implements SelectSet
     @Override
     public void select(EntityInstance ei)
     {
-        selectSet.add( ei );
-    }
+        ei = ei.getEntityInstance(); // Get EI from the cursor if a cursor was used.
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.SelectSet#select(com.quinsoft.zeidon.EntityCursor)
-     */
-    @Override
-    public void select(EntityCursor cursor)
-    {
-        select( cursor.getEntityInstance() );
+        if ( viewEntity == null )
+        {
+            viewEntity = ei.getViewEntity();
+            commonParent = ei.getParent();
+            referenceInstance = ei;
+        }
+        else
+        {
+            if ( ! viewEntity.equals( ei.getViewEntity() ) )
+                throw new ZeidonException( "SelectSets may (currently) only select entities of the same ViewEntity. " )
+                                        .prependViewEntity( viewEntity );
+
+            // Find the greatest common parent.  If the commonParent is currently null then
+            // we must be dealing with root entities.
+            if ( commonParent != null )
+            {
+                // Currently we only support entities under the same parent.
+                if ( ei.getParent() != commonParent )
+                    throw new ZeidonException( "SelectSet only supports entities under the same parent" );
+            }
+        }
+
+        selectSet.add( ei.getEntityInstance() );
     }
 
     /* (non-Javadoc)
@@ -76,16 +94,10 @@ public class SelectSetImpl implements SelectSet
     @Override
     public void deselect(EntityInstance ei)
     {
-        selectSet.remove( ei );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.SelectSet#deselect(com.quinsoft.zeidon.EntityCursor)
-     */
-    @Override
-    public void deselect(EntityCursor cursor)
-    {
-        deselect( cursor.getEntityInstance() );
+        selectSet.remove( ei.getEntityInstance() );
+        commonParent = null;
+        viewEntity = null;
+        referenceInstance = null;
     }
 
     /* (non-Javadoc)
@@ -95,5 +107,22 @@ public class SelectSetImpl implements SelectSet
     public void clear()
     {
         selectSet.clear();
+    }
+
+    @Override
+    public EntityIterator<? extends EntityInstance> eachEntity()
+    {
+        return new IteratorBuilder(view.getObjectInstance())
+                        .setCursor( view.cursor( viewEntity ) )
+                        .forTwinsOf( (EntityInstanceImpl) referenceInstance )
+                        .forViewEntity( viewEntity )
+                        .containedInSet( selectSet )
+                        .build();
+    }
+
+    @Override
+    public Set<EntityInstance> getSet()
+    {
+        return Collections.unmodifiableSet( selectSet );
     }
 }

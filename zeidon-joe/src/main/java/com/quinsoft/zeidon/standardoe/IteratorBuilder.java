@@ -22,9 +22,11 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
@@ -32,6 +34,7 @@ import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.standardoe.EntityComparator.AlwaysTrueComparator;
+import com.quinsoft.zeidon.standardoe.EntityComparator.InSetComparator;
 import com.quinsoft.zeidon.standardoe.EntityComparator.NonHiddenComparator;
 import com.quinsoft.zeidon.standardoe.EntityTraverser.DirectChildTraverser;
 import com.quinsoft.zeidon.standardoe.EntityTraverser.HierTraverser;
@@ -387,6 +390,15 @@ class IteratorBuilder
     {
         directChildren = true;
         scopingInstance = parent;
+        return this;
+    }
+
+    IteratorBuilder containedInSet( Set<EntityInstance> set )
+    {
+        if ( comparator != null )
+            throw new ZeidonException( "Comparitor already set" );
+
+        comparator = new InSetComparator( set );
         return this;
     }
 

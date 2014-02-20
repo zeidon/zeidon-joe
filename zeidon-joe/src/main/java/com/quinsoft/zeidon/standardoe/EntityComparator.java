@@ -17,10 +17,13 @@
     Copyright 2009-2012 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.Set;
+
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 
@@ -31,7 +34,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 class EntityComparator
 {
     private static final Object ANY_VALUE = new Object();
-    
+
     private final ViewAttribute viewAttribute;
     private final boolean       allowHidden;
     private final Object        compareValue;
@@ -53,10 +56,10 @@ class EntityComparator
         // comparator that checks just the hidden flag.
         if ( compareValue == ANY_VALUE )
             return true;
-        
+
         return entityInstance.compareAttribute( viewAttribute, compareValue ) == 0;
     }
-    
+
     ViewAttribute getViewAttribute()
     {
         return viewAttribute;
@@ -64,7 +67,7 @@ class EntityComparator
 
     /**
      * Returns true for any non-hidden entity.
-     * 
+     *
      * @author DG
      *
      */
@@ -85,12 +88,12 @@ class EntityComparator
     }
 
     /**
-     * Returns true if the entity instance has the same ER token. 
+     * Returns true if the entity instance has the same ER token.
      */
     static class ViewEntityComparator extends EntityComparator
     {
         private final ViewEntity viewEntity;
-        
+
         ViewEntityComparator( ViewEntity entity )
         {
             super( null, false, ANY_VALUE );
@@ -102,13 +105,33 @@ class EntityComparator
         {
             if ( ! super.isEqual( entityInstance ) )
                 return false;
-            
+
             if ( entityInstance.getViewEntity() == viewEntity )
                 return true;
-            
+
             //TODO: Handle recursive entities.
-            
+
             return false;
+        }
+    }
+
+    /**
+     * Returns true if the entity instance is contained in a set.
+     */
+    static class InSetComparator extends EntityComparator
+    {
+        private final Set<EntityInstance> selectSet;
+
+        InSetComparator( Set<EntityInstance> selectSet )
+        {
+            super( null, false, ANY_VALUE );
+            this.selectSet = selectSet;
+        }
+
+        @Override
+        boolean isEqual( EntityInstanceImpl entityInstance )
+        {
+            return selectSet.contains( entityInstance );
         }
     }
 }

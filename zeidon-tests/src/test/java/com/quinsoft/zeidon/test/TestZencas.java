@@ -4,6 +4,7 @@
 package com.quinsoft.zeidon.test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -19,6 +20,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -120,6 +122,56 @@ public class TestZencas
 		tester.testRecursiveEntities( testview );
         System.out.println("===== Finished testRecursiveEntities ========");
 	}
+
+	@Test
+	public void testSelectSet()
+	{
+        View stud = new QualificationBuilder( zencas )
+                            .setViewOd( "lStudDpt" )
+                            .addAttribQual( "Status", "A" )
+                            .addAttribQual( "AND" )
+                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+                            .activate();
+
+        EntityCursor student = stud.cursor( "Student" );
+        SelectSet selectSet = stud.getSelectSet( "test" );
+
+        // Set some entities in the select set.
+        student.setPosition( 7 );
+        selectSet.select( student );
+        student.setPosition( 2 );
+        selectSet.select( student );
+        student.setPosition( 8 );
+        selectSet.select( student );
+
+        int count = 0;
+        Set<EntityInstance> set = selectSet.getSet();
+        for ( EntityInstance ei : selectSet.eachEntity() )
+        {
+            count++;
+            long p = ei.getPosition();
+            Assert.assertTrue( "EI isn't in select set", set.contains( student.getEntityInstance() ) );
+        }
+
+        Assert.assertEquals( "We didn't get the right number of selected EIs", 3, count );
+
+        // Now try with a child
+        selectSet = stud.getSelectSet( "test2" );
+        student.setPosition( 7 );
+        EntityCursor track = stud.cursor( "StudentMajorDegreeTrack" );
+        track.setPosition( 2 );
+        selectSet.select( track );
+        set = selectSet.getSet();
+        for ( EntityInstance ei : selectSet.eachEntity() )
+        {
+            long p = ei.getPosition();
+            Assert.assertTrue( "EI isn't in select set", set.contains( track.getEntityInstance() ) );
+        }
+
+        stud.logObjectInstance();
+
+	}
+
 	@Test
 	public void testhasAny()
 	{

@@ -170,6 +170,13 @@ public interface EntityCursor extends EntityInstance
     CursorResult setPrevWithinOi( ViewAttribute attribute, Object value );
 
     CursorResult setByEntityKey( long entityKey );
+
+    /**
+     * Sets cursor by relative position (i.e. index) starting with 0.
+     *
+     * @param position
+     * @return
+     */
     CursorResult setPosition( int position );
     CursorResult setPosition( int position, String scopingEntity );
     boolean setToSubobject();

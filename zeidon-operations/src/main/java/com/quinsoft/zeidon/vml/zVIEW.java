@@ -514,9 +514,9 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public void setDefaultSelectSet( Object index )
+    public Object setCurrentSelectSet( Object key )
     {
-        view.setDefaultSelectSet( index );
+        return view.setCurrentSelectSet( key );
     }
 
     /* (non-Javadoc)

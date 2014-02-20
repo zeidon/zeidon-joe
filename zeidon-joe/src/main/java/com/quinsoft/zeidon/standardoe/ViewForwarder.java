@@ -200,9 +200,9 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     @Override
-    public void setDefaultSelectSet( Object index )
+    public Object setCurrentSelectSet( Object key )
     {
-        getView().setDefaultSelectSet( index );
+        return getView().setCurrentSelectSet( key );
     }
 
     /* (non-Javadoc)

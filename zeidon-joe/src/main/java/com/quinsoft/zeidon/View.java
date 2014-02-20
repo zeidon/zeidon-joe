@@ -101,8 +101,9 @@ public interface View extends TaskQualification, CacheMap
      * by getSelectSet().
      *
      * @param index
+     * @return Previous key
      */
-    void setDefaultSelectSet( Object index );
+    Object setCurrentSelectSet( Object key );
 
     static final long CONTROL_INCREMENTAL = 0x00000001;
     static final long CONTROL_ENTITY_TAGS = 0x00000002;
