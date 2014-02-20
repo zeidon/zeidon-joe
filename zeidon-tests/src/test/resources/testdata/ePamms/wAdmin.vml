@@ -1,0 +1,248 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    wAdmin        - Primary Registrant Administration operations
+// FILE:         wAdmin.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD mPrimReg
+   VIEW wWebXfer BASED ON LOD wWebXfer
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lPasswordLth
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( mPrimReg, "User", "UserPassword", szVerifyPassword, "Password" )
+   mPrimReg.User.UserPassword = szConfirmPassword
+
+   AcceptSubobject( mPrimReg, "User" )
+   AcceptSubobject( mPrimReg, "Person" )
+   AcceptSubobject( mPrimReg, "Address" )
+   AcceptSubobject( mPrimReg, "PrimaryRegistrant" )
+   Commit mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD mPrimReg
+
+   CancelSubobject( mPrimReg, "User" )
+   CancelSubobject( mPrimReg, "Person" )
+   CancelSubobject( mPrimReg, "Address" )
+   CancelSubobject( mPrimReg, "PrimaryRegistrant" )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdatePrimaryUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdatePrimaryUser( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD mPrimReg
+   VIEW wWebXfer BASED ON LOD wWebXfer
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lPasswordLth
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( mPrimReg, "User", "UserPassword", szVerifyPassword, "Password" )
+   mPrimReg.User.UserPassword = szConfirmPassword
+
+   AcceptSubobject( mPrimReg, "User" )
+   AcceptSubobject( mPrimReg, "Person" )
+   AcceptSubobject( mPrimReg, "Address" )
+   Commit mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrantForUpdate( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD mPrimReg
+
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = 1
+   NAME VIEW mPrimReg "mPrimReg"
+
+   IF mPrimReg.PrimaryRegistrant DOES NOT EXIST
+      CREATE ENTITY mPrimReg.PrimaryRegistrant
+   END
+
+   IF mPrimReg.Address DOES NOT EXIST
+      CREATE ENTITY mPrimReg.Address
+   END
+
+   IF mPrimReg.Person DOES NOT EXIST
+      CREATE ENTITY mPrimReg.Person
+   END
+
+   IF mPrimReg.User DOES NOT EXIST
+      CREATE ENTITY mPrimReg.User
+   END
+
+   mPrimReg.PrimaryRegistrant.ID = 1
+   mPrimReg.User.UserName = "Administrator"
+   mPrimReg.Address.Country = "USA"
+
+   CreateTemporalSubobjectVersion( mPrimReg, "PrimaryRegistrant" )
+   CreateTemporalSubobjectVersion( mPrimReg, "Address" )
+   CreateTemporalSubobjectVersion( mPrimReg, "Person" )
+   CreateTemporalSubobjectVersion( mPrimReg, "User" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdatePrimaryUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdatePrimaryUser( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD mPrimReg
+
+   CancelSubobject( mPrimReg, "User" )
+   CancelSubobject( mPrimReg, "Person" )
+   CancelSubobject( mPrimReg, "Address" )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryUserForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryUserForUpdate( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD mPrimReg
+   VIEW qPrimReg BASED ON LOD qPrimReg
+
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   // Ensure primary registrant administrator exists.
+   ACTIVATE qPrimReg WHERE qPrimReg.PrimaryRegistrant.ID = 1 AND
+                           qPrimReg.User.UserName = "Administrator"
+
+   IF qPrimReg.PrimaryRegistrant DOES NOT EXIST OR
+      qPrimReg.User DOES NOT EXIST
+
+      MessageSend( ViewToWindow, "", "New User",
+                   "The primary registrant administrator must exist.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      DropObjectInstance( qPrimReg )
+      RETURN 2
+   END
+
+   DropObjectInstance( qPrimReg )
+
+   ACTIVATE mPrimReg ROOTONLY WHERE mPrimReg.PrimaryRegistrant.ID = 1
+
+   NAME VIEW mPrimReg "mPrimReg"
+
+   // We've confirmed this entity exists, so no need to check.
+// IF mPrimReg.PrimaryRegistrant DOES NOT EXIST
+//    CREATE ENTITY mPrimReg.PrimaryRegistrant
+// END
+
+   // We activated root only, so create all the entities.
+   CREATE ENTITY mPrimReg.Address
+   CREATE ENTITY mPrimReg.Person
+   CREATE ENTITY mPrimReg.User
+   mPrimReg.Address.Country = "USA"
+
+   CreateTemporalSubobjectVersion( mPrimReg, "Address" )
+   CreateTemporalSubobjectVersion( mPrimReg, "Person" )
+   CreateTemporalSubobjectVersion( mPrimReg, "User" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END

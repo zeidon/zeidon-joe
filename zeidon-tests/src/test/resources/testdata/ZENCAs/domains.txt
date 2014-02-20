@@ -1,0 +1,1312 @@
+2	ActivityType	85	1	ContactList
+2	ActivityType	86	2	Meeting
+2	ActivityType	87	3	Appointment
+2	ActivityType	88	4	PhoneCall
+2	ActivityType	89	5	Fax
+2	ActivityType	90	6	EMail
+2	ActivityType	91	7	Mailing
+2	ActivityType	92	8	Todo
+2	ActivityType	756	10	Campus Visit
+150	AddressType	2096	Emergency	Emergency Contact
+150	AddressType	2043	Summer	Summer
+150	AddressType	2044	Fathers	Fathers
+150	AddressType	2045	Mothers	Mothers
+150	AddressType	2046	Permanent	Permanent
+150	AddressType	2047	DEProctor	Distance Ed Proctor
+150	AddressType	1989	Campus	Campus/Local
+150	AddressType	2097	Billing	Billing
+150	AddressType	1988	Work	Work
+146	AdmissionRequirementType	2091	C	College Transcript
+146	AdmissionRequirementType	1744	S	Test Score
+146	AdmissionRequirementType	1745	L	Letter of Recommendation
+146	AdmissionRequirementType	1740	T	Transcript
+146	AdmissionRequirementType	1741	A	Application
+146	AdmissionRequirementType	1746	E	Essay
+146	AdmissionRequirementType	1832	O	Other
+146	AdmissionRequirementType	1757	F	Form or Document
+146	AdmissionRequirementType	1759	D	Date
+57	AdmissionsAcceptanceStatus	695	CF	Comp Review and Intro to Algebra Req'd
+57	AdmissionsAcceptanceStatus	679	A	Honors 
+57	AdmissionsAcceptanceStatus	687	B	Regular Undergraduate
+57	AdmissionsAcceptanceStatus	701	CL	Intro to Algebra Required
+57	AdmissionsAcceptanceStatus	704	CW	Comp Review Required
+57	AdmissionsAcceptanceStatus	707	F	International 
+57	AdmissionsAcceptanceStatus	710	H	Phone Interview Required
+57	AdmissionsAcceptanceStatus	711	R	Returning
+57	AdmissionsAcceptanceStatus	713	Z	Denied 
+57	AdmissionsAcceptanceStatus	1748	AS	Academic Scholarship
+57	AdmissionsAcceptanceStatus	1750	G	Regular Graduate Admisssion
+57	AdmissionsAcceptanceStatus	2139	IC	Intro to Algebra and Computer Applications Required
+57	AdmissionsAcceptanceStatus	2140	CP	Computer Applications Required
+57	AdmissionsAcceptanceStatus	1783	EA	Early 
+57	AdmissionsAcceptanceStatus	1784	CA	Conditional 
+57	AdmissionsAcceptanceStatus	2041	AC	Accepted Other
+57	AdmissionsAcceptanceStatus	1782	PA	Provisional 
+57	AdmissionsAcceptanceStatus	2042	TR	Transitional Program
+57	AdmissionsAcceptanceStatus	1441	ACDR	Admission Committee Decision Required
+57	AdmissionsAcceptanceStatus	1821	IP	In Process
+65	AdmissionsRequirementMetType	858	M	Received
+65	AdmissionsRequirementMetType	859	W	Waived
+65	AdmissionsRequirementMetType	860	N	Not Req'd
+68	AlumniDegree	879	AA	Associate of Arts
+68	AlumniDegree	881	AS	Associate of Science
+68	AlumniDegree	882	AUD	AUD
+68	AlumniDegree	885	BA	Bachelor of Arts (BA)
+68	AlumniDegree	887	BCRT	Bachelor's Certificate (N/A)
+68	AlumniDegree	889	BMU	Bachelor of Music
+68	AlumniDegree	891	BS	Bachelor of Science
+68	AlumniDegree	894	CER	Certificate
+68	AlumniDegree	895	MA	Master of Arts
+68	AlumniDegree	896	MED	Master of Education
+68	AlumniDegree	897	MS	Master of Science
+68	AlumniDegree	898	PAL	Prog of Arts & Letters
+68	AlumniDegree	899	PALC	PALC
+68	AlumniDegree	900	TH B	TH B
+68	AlumniDegree	901	ThB	Bachelor of Theology
+69	AlumniDegreeMajor	902	ANTH	Anthropology
+69	AlumniDegreeMajor	1016	SPAN	Spanish
+69	AlumniDegreeMajor	1017	SPCH	SPCH
+69	AlumniDegreeMajor	1018	SPEC	Speech
+69	AlumniDegreeMajor	1019	SPED	Special Education
+69	AlumniDegreeMajor	1020	SPTH	Sports Therapy
+69	AlumniDegreeMajor	1021	THEOL	Theology
+69	AlumniDegreeMajor	1022	UNDEC	Undecided
+69	AlumniDegreeMajor	1023	Y MIN	Youth Ministry
+69	AlumniDegreeMajor	1024	YC ED	Youth and Christian Education
+69	AlumniDegreeMajor	1025	YCEMN	YCEMN
+69	AlumniDegreeMajor	903	ARTS	ARTS
+69	AlumniDegreeMajor	904	ASSOC	Associate Core
+69	AlumniDegreeMajor	905	ATTR	Athletic Training
+69	AlumniDegreeMajor	907	B LIT	Biblical Literature
+69	AlumniDegreeMajor	908	B STD	Biblical Studies
+69	AlumniDegreeMajor	909	BADM	Business Administration
+69	AlumniDegreeMajor	910	BIBLE	BIBLE
+69	AlumniDegreeMajor	911	BIOL	Biology
+69	AlumniDegreeMajor	912	BMAN	Business Management
+69	AlumniDegreeMajor	914	BUSNS	BUSNS
+69	AlumniDegreeMajor	916	C ENG	Comp Engineering
+69	AlumniDegreeMajor	918	CEE	Certificate Elementary Edudation
+69	AlumniDegreeMajor	919	CH ED	Christian Education
+69	AlumniDegreeMajor	920	CH MU	Church Music
+69	AlumniDegreeMajor	921	CHEM	Chemistry
+69	AlumniDegreeMajor	923	CHRSV	CHRSV
+69	AlumniDegreeMajor	924	CIS	Comp Info Systems
+69	AlumniDegreeMajor	925	COMM	Comm Arts
+69	AlumniDegreeMajor	926	COUNS	COUNS
+69	AlumniDegreeMajor	927	CRD	CRD
+69	AlumniDegreeMajor	928	CSCI	Cert In Reading
+69	AlumniDegreeMajor	929	CSN	Cert Mod Sp Needs
+69	AlumniDegreeMajor	930	DIVSC	Divisonal Major in Sci
+69	AlumniDegreeMajor	931	ECHLD	Early Childhood Education
+69	AlumniDegreeMajor	933	EDUC	Education
+69	AlumniDegreeMajor	934	EENG	Electrical Engineering
+69	AlumniDegreeMajor	935	EL ED	Elementary Education
+69	AlumniDegreeMajor	936	ELSCI	ELSCI
+69	AlumniDegreeMajor	937	ENGI	General Engineering
+69	AlumniDegreeMajor	938	ENGL	English
+69	AlumniDegreeMajor	939	ENGPY	Engineering Physics
+69	AlumniDegreeMajor	940	ENSC	Environmental Science
+69	AlumniDegreeMajor	941	ESL	English as a Second Language
+69	AlumniDegreeMajor	942	FAMCO	FAMCO
+69	AlumniDegreeMajor	943	FREN	French
+69	AlumniDegreeMajor	944	G SCI	General Science
+69	AlumniDegreeMajor	945	GBUS	General Business
+69	AlumniDegreeMajor	947	GNST	General Studies
+69	AlumniDegreeMajor	948	GSTDY	GSTDY
+69	AlumniDegreeMajor	949	HESC	Health Science
+69	AlumniDegreeMajor	950	HIST	History
+69	AlumniDegreeMajor	951	HORT	Horticulture
+69	AlumniDegreeMajor	952	L ART	Language Arts
+69	AlumniDegreeMajor	953	LANG	Modern Language
+69	AlumniDegreeMajor	954	LArts	LArts
+69	AlumniDegreeMajor	955	LATIN	LATIN
+69	AlumniDegreeMajor	956	LIBA	Liberal Arts
+69	AlumniDegreeMajor	957	LIT	Literature
+69	AlumniDegreeMajor	958	LMIN	Lay Ministries
+69	AlumniDegreeMajor	959	MAED	MAED
+69	AlumniDegreeMajor	960	MATH	MATH
+69	AlumniDegreeMajor	961	MED	MED
+69	AlumniDegreeMajor	962	MED T	Medical Technology
+69	AlumniDegreeMajor	963	MEDAS	Admin of Spec Edu
+69	AlumniDegreeMajor	964	MEDEC	ME Early Childhood
+69	AlumniDegreeMajor	965	MEDEE	ME- Elementary
+69	AlumniDegreeMajor	969	MEDMS	Middle School Education
+69	AlumniDegreeMajor	970	MEDMU	Music Education
+69	AlumniDegreeMajor	971	MEDPC	Principal Certification
+69	AlumniDegreeMajor	972	MEDPD	Instructional/Program Development
+69	AlumniDegreeMajor	973	MEDRD	Master of Education/Reading
+69	AlumniDegreeMajor	974	MEDRE	MEDRE
+69	AlumniDegreeMajor	975	MEDSE	Master of Secondary Education
+69	AlumniDegreeMajor	977	MEDSN	Moderate Special Needs
+69	AlumniDegreeMajor	978	MEDTL	Teaching ESL
+69	AlumniDegreeMajor	980	MFAMT	Marriage and Family Therapy
+69	AlumniDegreeMajor	981	MGMT	Management
+69	AlumniDegreeMajor	982	MGMTI	MGMTI
+69	AlumniDegreeMajor	983	mgmtl	mgmtl
+69	AlumniDegreeMajor	984	MOVE	Movement Arts
+69	AlumniDegreeMajor	985	MPASC	Master of Arts/Pastoral Couns.
+69	AlumniDegreeMajor	986	MREL	Master of Arts/Religion
+69	AlumniDegreeMajor	987	MSM	Master Management
+69	AlumniDegreeMajor	988	MU ED	Music Education
+69	AlumniDegreeMajor	989	MU PR	Music Performance
+69	AlumniDegreeMajor	990	MUS	MUS
+69	AlumniDegreeMajor	991	MUSIC	MUSIC
+69	AlumniDegreeMajor	992	NURS	Nursing (Co-Op Program)
+69	AlumniDegreeMajor	993	P MED	Pre-Medical
+69	AlumniDegreeMajor	994	P NUR	Pre-Nursing
+69	AlumniDegreeMajor	995	P SCI	P SCI
+69	AlumniDegreeMajor	996	PAL	Practical Arts & Letters
+69	AlumniDegreeMajor	997	PH ED	PH ED
+69	AlumniDegreeMajor	998	PH-TH	Pre Physical Therapy
+69	AlumniDegreeMajor	999	PHIL	Philosophy
+69	AlumniDegreeMajor	1000	PHYS	Physics
+69	AlumniDegreeMajor	1001	PIANO	PIANO
+69	AlumniDegreeMajor	1002	PLSCI	Political Science
+69	AlumniDegreeMajor	1003	PSYCH	Psychology
+69	AlumniDegreeMajor	1004	RELIG	Religion
+69	AlumniDegreeMajor	1005	S SCI	Social Science
+69	AlumniDegreeMajor	1006	SCI	Science
+69	AlumniDegreeMajor	1007	SECED	Secondary Education
+69	AlumniDegreeMajor	1008	SECSC	Secretarial Science
+69	AlumniDegreeMajor	1009	SO AN	SO AN
+69	AlumniDegreeMajor	1010	SO ST	Social Studies
+69	AlumniDegreeMajor	1011	SO WK	Social Work
+69	AlumniDegreeMajor	1012	SOC	Sociology
+69	AlumniDegreeMajor	1013	SOC S	SOC S
+69	AlumniDegreeMajor	968	MEDIP	Instruct Enrich/Develop Princ
+69	AlumniDegreeMajor	979	MFAMC	Master of Arts/Family Couns.
+69	AlumniDegreeMajor	915	C CSI	C CSI
+69	AlumniDegreeMajor	917	C SCI	Comp Science
+69	AlumniDegreeMajor	922	CHMIN	Church Ministries
+69	AlumniDegreeMajor	932	ECON	Economics
+69	AlumniDegreeMajor	966	MEDET	MEDET
+69	AlumniDegreeMajor	967	MEDIE	Instruct Enrich & Develop
+56	CategoryType	2112	FinAid	Financial Aid
+56	CategoryType	2064	Volunteer Staff	Volunteer Staff
+56	CategoryType	759	Admissions	Admissions 
+56	CategoryType	755	Majors	Potential Majors
+56	CategoryType	641	Athletics	Athletics
+56	CategoryType	642	Music	Music
+56	CategoryType	643	Extra	Extra-Curricular
+56	CategoryType	1454	AC	Academic
+56	CategoryType	1511	Pipeline	 Pipeline
+56	CategoryType	1273	Student Life	Student Life
+56	CategoryType	1274	Misc	Misc
+56	CategoryType	2061	Billing	Billing
+125	ChangeRequestFeature	1495	NF	New Feature
+126	ChangeRequestPriority	1496	High	High
+126	ChangeRequestPriority	1497	Low	Low
+126	ChangeRequestPriority	1498	Med	Medium
+126	ChangeRequestPriority	1499	Crit	Critical
+126	ChangeRequestPriority	1500	DN	Don't Know
+127	ChangeRequestType	1501	Bug	Bug
+127	ChangeRequestType	1502	En	Enhancement
+127	ChangeRequestType	1503	NF	New Feature
+4	ChurchDenomination	1475	CF	Calvary Chapel Outreach Fellowship
+4	ChurchDenomination	1474	CV	Calvary
+4	ChurchDenomination	1473	VI	Vineyard
+4	ChurchDenomination	1828	SDA	Seventh-day Adventist
+4	ChurchDenomination	453	AB	American Baptist Church
+4	ChurchDenomination	454	AD	Advent Christian Church
+4	ChurchDenomination	455	AL	Albanian Orthodox
+4	ChurchDenomination	456	AM	African Methodist Episcopal
+4	ChurchDenomination	457	AN	Anglican Church
+4	ChurchDenomination	458	AO	African Orthodox Church
+4	ChurchDenomination	459	AP	Apostolic Church
+4	ChurchDenomination	460	AR	Armenian Church
+4	ChurchDenomination	461	AS	Assembly of God Church
+4	ChurchDenomination	462	BA	Baptist Church
+4	ChurchDenomination	463	BI	Bible Church
+4	ChurchDenomination	464	BR	Church of the Brethren
+4	ChurchDenomination	465	CA	Catholic Church
+4	ChurchDenomination	466	CC	Community Church
+4	ChurchDenomination	467	CH	Christian Church
+4	ChurchDenomination	468	CM	Christian Missionary Alliance
+4	ChurchDenomination	469	CO	Congregational Church
+4	ChurchDenomination	470	CR	Christian Reformed
+4	ChurchDenomination	471	CU	Church of Christ
+4	ChurchDenomination	472	EC	Evangelical Covenant Church
+4	ChurchDenomination	473	EF	Evangelical Free Church
+4	ChurchDenomination	474	EL	Evangelical Lutheran
+4	ChurchDenomination	475	EO	Eastern Orthodox Church
+4	ChurchDenomination	476	EP	Episcopal Church
+4	ChurchDenomination	477	EV	Evangelical Church
+4	ChurchDenomination	478	FE	Federated Church
+4	ChurchDenomination	479	FG	Full Gospel
+4	ChurchDenomination	480	FM	Free Methodist
+4	ChurchDenomination	481	FR	Friends
+4	ChurchDenomination	482	FS	Foursquare Church
+4	ChurchDenomination	483	GC	Church of God in Christ
+4	ChurchDenomination	484	GD	Church of God
+4	ChurchDenomination	485	GE	Greek Evangelical Church
+4	ChurchDenomination	486	GO	Greek Orthodox Church
+4	ChurchDenomination	487	GP	Church of God Prophecy
+4	ChurchDenomination	488	HO	Holiness Church
+4	ChurchDenomination	489	IE	Independent Evangelical
+4	ChurchDenomination	490	IF	Independent Fundamental Church
+4	ChurchDenomination	491	IN	Interdenominational Church
+4	ChurchDenomination	492	LU	Lutheran Church
+4	ChurchDenomination	493	ME	Methodist Church
+4	ChurchDenomination	494	MN	Mennonite Church
+4	ChurchDenomination	495	NA	Nazarene Church
+4	ChurchDenomination	496	ND	Non Denominational Church
+4	ChurchDenomination	497	NR	Not Reporting Denomination
+4	ChurchDenomination	498	OT	Other than Christian Denom.
+4	ChurchDenomination	499	PE	Pentecostal
+4	ChurchDenomination	500	PR	Presbyterian Church
+4	ChurchDenomination	501	SA	Salvation Army
+4	ChurchDenomination	502	SB	Southern Baptist Church
+4	ChurchDenomination	503	UC	United Church of Christ
+4	ChurchDenomination	504	WE	Wesleyan Church
+5	ChurchRelatedRole	823	Assoc. Pastor	Assoc. Pastor
+5	ChurchRelatedRole	824	Admin. Asst.	Admin. Asst.
+5	ChurchRelatedRole	1574	YW	Youth Worker
+5	ChurchRelatedRole	855	Youth Minister	Youth Minister
+5	ChurchRelatedRole	856	Other	Other
+5	ChurchRelatedRole	846	Senior Pastor	Senior Pastor
+5	ChurchRelatedRole	836	Executive Pastor	Executive Pastor
+92	ChurchSpecialType	1168	Union	Union Office
+92	ChurchSpecialType	1833	C	Conference Office
+71	ClassCancelledReason	1041	LE	Low Enrollment
+71	ClassCancelledReason	1255	NF	No Faculty
+71	ClassCancelledReason	1256	O	Other
+48	CohortActivityType	567	N	Not Enough Students
+48	CohortActivityType	568	L	Location Problems
+49	CohortStatus	569	P	Potential
+49	CohortStatus	570	S	Started
+49	CohortStatus	571	C	Canceled
+49	CohortStatus	572	D	Completed
+6	CommunicationPlanType	93	1	Admissions
+6	CommunicationPlanType	94	2	Development
+6	CommunicationPlanType	95	3	Alumni
+50	ContactActivityResultCode	573	S	Successful
+50	ContactActivityResultCode	574	U	Unsuccessful
+50	ContactActivityResultCode	575	R	Registered
+50	ContactActivityResultCode	821	A	Send Application
+50	ContactActivityResultCode	636	L	Left Message
+61	ContactActivityType	781	d	Phone Call In
+61	ContactActivityType	782	e	Phone Call Out
+61	ContactActivityType	871	g	Misc
+61	ContactActivityType	765	7	Mailing
+61	ContactActivityType	1259	6E	Email Send Error
+61	ContactActivityType	857	6	EMail
+61	ContactActivityType	1543	SM	Sallie Mae
+61	ContactActivityType	1546	EH	Email HTML
+61	ContactActivityType	1578	6P	Email Parent
+61	ContactActivityType	1579	6C	Email Parent Copy
+61	ContactActivityType	1580	6U	Email Users
+61	ContactActivityType	1539	CR	Church Relations Visit
+61	ContactActivityType	1300	VC	Voice Mail
+61	ContactActivityType	1302	ch	Church Visit
+61	ContactActivityType	1510	TM	Text Messaging
+61	ContactActivityType	1468	FI	Facebook In
+61	ContactActivityType	1469	FO	Facebook Out
+61	ContactActivityType	1470	MI	MySpace In
+61	ContactActivityType	1471	MO	MySpace Out
+61	ContactActivityType	1435	FX	Fax
+61	ContactActivityType	1391	FF	Face To Face
+61	ContactActivityType	1392	2	Unknown
+61	ContactActivityType	1393	CV	Campus Visit
+113	ContactActivityTypeFaculty	1398	6	Email
+113	ContactActivityTypeFaculty	1399	7	Mailing
+113	ContactActivityTypeFaculty	1400	e	Phone Call Out
+113	ContactActivityTypeFaculty	1401	d	Phone Call In
+113	ContactActivityTypeFaculty	1402	FF	Face to Face
+113	ContactActivityTypeFaculty	1403	VC	Voice Mail
+113	ContactActivityTypeFaculty	1404	g	Miscellaneous
+8	ContactEventType	NULL	NULL	NULL
+9	Country	1846	ISR	Israel
+9	Country	1971	DEU	Germany
+9	Country	1847	IRN	Iran, Islamic Republic Of
+9	Country	1848	LVA	Latvia
+9	Country	1849	COG	Congo
+9	Country	1850	UMI	Us Minor Outlying Islands
+9	Country	1851	KNA	Saint Kitts And Nevis
+9	Country	1852	CHE	Switzerland
+9	Country	1853	PRY	Paraguay
+9	Country	1854	CYM	Cayman Islands
+9	Country	1855	TGO	Togo
+9	Country	1856	ATG	Antigua & Bar
+9	Country	1857	BGR	Bulgaria
+9	Country	1858	TON	Tonga
+9	Country	1859	BLR	Belarus
+9	Country	1860	CIV	Ivory Coast/Cote D'Ivore
+9	Country	1861	HUN	Hungary
+9	Country	1862	EST	Estonia
+9	Country	1863	MWI	Malawi
+9	Country	1864	SVK	Slovakia
+9	Country	1865	NZL	New Zealand
+9	Country	1866	UKR	Ukraine
+9	Country	1867	MYS	Malaysia
+9	Country	1868	UNK	Unknown
+9	Country	1869	GEO	Georgia
+9	Country	1870	VCT	St. Vincent & Grenadines
+9	Country	1871	BRB	Barbados
+9	Country	1872	NAM	Namibia
+9	Country	1873	ROU	Romania
+9	Country	1874	KWT	Kuwait
+9	Country	1875	POL	Poland
+9	Country	1876	NER	Niger
+9	Country	1877	ECU	Ecuador
+9	Country	1878	DOM	Dominican Republic
+9	Country	1879	PAK	Pakistan
+9	Country	1880	IND	India
+9	Country	1881	NPL	Nepal
+9	Country	1882	SAU	Saudi Arabia
+9	Country	1883	GAB	Gabon
+9	Country	1884	LKA	Sri Lanka
+9	Country	1885	SGP	Singapore
+9	Country	1886	THA	Thailand
+9	Country	1887	GBR	United Kingdom
+9	Country	1888	CYP	Cyprus
+9	Country	1889	CUB	Cuba
+9	Country	1890	BLZ	Belize
+9	Country	1891	LBN	Lebanon
+9	Country	1892	TTO	Trinidad And Tobago
+9	Country	1893	AUS	Australia
+9	Country	1894	NIC	Nicaragua
+9	Country	1895	GUY	Guyana
+9	Country	1896	PAN	Panama
+9	Country	1897	CRI	Costa Rica
+9	Country	1898	CAN	Canada
+9	Country	1899	SLV	El Salvador
+9	Country	1900	GTM	Guatemala
+9	Country	1901	ZWE	Zimbabwe
+9	Country	1902	ABW	Aruba
+9	Country	1903	BMU	Bermuda
+9	Country	1904	GRD	Grenada
+9	Country	1905	LBR	Liberia
+9	Country	1906	VIR	U.S. Virgin Islands
+9	Country	1907	IRQ	Iraq
+9	Country	1908	RUS	Russian Federation
+9	Country	1909	BWA	Botswana
+9	Country	1910	MDA	Moldova, Republic Of
+9	Country	1911	ITA	Italy
+9	Country	1912	BGD	Bangladesh
+9	Country	1913	VNM	Viet Nam
+9	Country	1914	NLD	Netherlands
+9	Country	1915	FSM	Fed. States Of Micronesia
+9	Country	1916	CHL	Chile
+9	Country	1917	SERBIA	Serbia
+9	Country	1918	GUM	Guam
+9	Country	1919	FRA	France
+9	Country	1920	JPN	Japan
+9	Country	1921	FIN	Finland
+9	Country	1922	BOL	Bolivia
+9	Country	1923	HND	Honduras
+9	Country	1924	ZMB	Zambia
+9	Country	1925	DMA	Dominica
+9	Country	1926	ZAF	South Africa
+9	Country	1927	MDG	Madagascar
+9	Country	1928	CMR	Cameroon
+9	Country	1929	GNB	Guinea-Bissau
+9	Country	1930	ETH	Ethiopia
+9	Country	1931	HTI	Haiti
+9	Country	1932	PRT	Portugal-Made
+9	Country	1933	SDN	Sudan
+9	Country	1934	EGY	Egypt
+9	Country	1935	GHA	Ghana
+9	Country	1936	SLE	Sierra Leone
+9	Country	1937	KOR	Korea, Republic Of(south)
+9	Country	1938	PLW	Palau
+9	Country	1939	PRK	Korea, Dem Peoples Rep(n)
+9	Country	1940	PER	Peru
+9	Country	1941	JAM	Jamaica
+9	Country	1942	NGA	Nigeria
+9	Country	1943	COL	Columbia
+9	Country	1944	SWE	Sweden
+9	Country	1945	MEX	Mexico
+9	Country	1946	MHL	Marshall Islands
+9	Country	1947	VEN	Venezuela
+9	Country	1948	BHS	Bahamas
+9	Country	1949	CHN	China
+9	Country	1950	AGO	Angola
+9	Country	1951	ARG	Argentina
+9	Country	1952	HKG	Hong Kong Special Admin
+9	Country	1953	UGA	Uganda
+9	Country	1954	ANT	Netherlands Antilles
+9	Country	1955	ASM	American Samoa
+9	Country	1956	KEN	Kenya
+9	Country	1957	GRC	Greece
+9	Country	1958	TZA	Tanzania, United Rep Of
+9	Country	1959	COD	Congo, Democratic Rep Of
+9	Country	1960	ERI	Eritrea
+9	Country	1961	RWA	Rwanda
+9	Country	1962	IDN	Indonesia
+9	Country	1963	PHL	Philippines
+9	Country	1964	LCA	Saint Lucia
+9	Country	1965	PRI	Puerto Rico
+9	Country	1966	TWN	Taiwan, Provi
+9	Country	1967	BRA	Brazil
+9	Country	1968	BRN	Brunei Daruss
+9	Country	1994	CZE	Czech Republic
+9	Country	1845	USA	United States
+9	Country	1972	QAT	Qatar
+9	Country	1999	MMR	Myanmar
+9	Country	2000	FJI	Fiji
+9	Country	2001	PNG	Papua New Gui
+9	Country	2002	ARE	United Arab E
+9	Country	2003	TUN	Tunisia      
+9	Country	2004	TJK	Tajikistan
+9	Country	2005	TUR	Turkey
+9	Country	2006	GIN	Guinea
+9	Country	2007	NOR	Norway       
+9	Country	2008	VGB	British Virgin Islands
+9	Country	2009	MNG	Mongolia     
+9	Country	2010	GMB	Gambia       
+9	Country	2011	CPV	Cape Verde   
+9	Country	2012	VUT	Vanuatu
+9	Country	2013	STP	Sao Tome And Principe
+9	Country	2014	SLB	Solomon Islands
+9	Country	2015	WSM	Samoa        
+9	Country	2016	ESP	Spain        
+9	Country	2017	SWZ	Swaziland
+9	Country	2018	SUR	Suriname     
+9	Country	2019	ENG	England      
+9	Country	2020	UZB	Uzbekistan   
+9	Country	2021	ALB	Albania
+9	Country	2022	TCA	Turks & Caicos Islands
+9	Country	2023	BEN	Benin
+9	Country	2024	BIH	Bosnia & Herzegovina
+9	Country	2025	BEL	Belgium
+9	Country	2026	LSO	Lesotho      
+9	Country	2027	DZA	Algeria
+9	Country	2028	JOR	Jordan
+9	Country	2029	TKM	Turkmenistan
+9	Country	2030	AFG	Afghanistan  
+9	Country	2031	IRL	Ireland      
+9	Country	2032	ISL	Iceland
+9	Country	2033	MAC	Macau
+9	Country	2034	YUG	Yugoslavia
+9	Country	2035	SOM	Somalia
+9	Country	2036	BDI	Burundi
+9	Country	2037	KGZ	Kyrgystan    
+9	Country	2038	SEN	Senegal
+10	DegreeEarned	155	AA	Associate of Arts
+10	DegreeEarned	156	BA	Bachelor of Arts
+10	DegreeEarned	157	AS	Associate of Science
+10	DegreeEarned	158	CT	Certificate
+10	DegreeEarned	159	MBA	Master of Business Administration
+10	DegreeEarned	1737	BBA	Bachelor of Business Administration
+10	DegreeEarned	161	BS	Bachelor of Science
+10	DegreeEarned	1738	MEd	Master of Education
+10	DegreeEarned	2228	MS	Master of Science
+10	DegreeEarned	2229	MA	Master of Arts
+10	DegreeEarned	1823	NONE	None
+10	DegreeEarned	1824	GED	General Equivalency Diploma
+10	DegreeEarned	1825	HS	High School Diploma
+51	DegreeMajor	576	ACCO	Accounting
+51	DegreeMajor	577	ADVE	ADVE
+51	DegreeMajor	578	AENG	AENG
+51	DegreeMajor	579	ARCH	ARCH
+51	DegreeMajor	580	ATTR	ATTR
+51	DegreeMajor	581	BADM	Business Admin
+51	DegreeMajor	582	BIOL	Biology
+51	DegreeMajor	583	BMAN	Business Mgmt.
+51	DegreeMajor	584	CENG	Chemical Engineering
+51	DegreeMajor	585	CHEM	Chemistry
+51	DegreeMajor	586	CHMU	CHMU
+51	DegreeMajor	587	CLPS	CLPS
+51	DegreeMajor	588	COMM	Communications
+51	DegreeMajor	589	CRJU	CRJU
+78	DegreeTrackStatus	1223	I	Inactive
+78	DegreeTrackStatus	1224	H	Historical
+78	DegreeTrackStatus	1068	A	Active
+11	Department	414	Education	Education
+11	Department	415	NaturalSciences	Natural Sciences
+11	Department	416	SocialSciences	Social Sciences
+11	Department	417	Religion	Religion
+11	Department	418	CommunicationArts	Communication Arts
+12	DistrictCode	165	01	District 01
+131	DonorStatus	1534	MD	Major Donor
+131	DonorStatus	1535	PD	Prospective Donor
+131	DonorStatus	1536	PMD	Prospective Major Donor
+131	DonorStatus	1537	I	Inactive
+108	EmployeeType	1606	C	Contracted
+108	EmployeeType	1607	T	Temporary
+108	EmployeeType	1354	S	Student Worker
+108	EmployeeType	1355	O	Regular Employee
+108	EmployeeType	2068	V	Volunteer
+42	EntranceClassification	2039	MV	Military Veteran
+42	EntranceClassification	2098	PB	Post Baccalaureate
+42	EntranceClassification	1751	GR	Graduate
+42	EntranceClassification	1752	ID	Individual Distance Learning
+42	EntranceClassification	1753	SU	Southwestern Union Teachers Certification Program
+42	EntranceClassification	1754	AD	Adult Degree Program
+42	EntranceClassification	1755	ES	English as a Second Language
+42	EntranceClassification	2125	EX	Exchange (Samyhook)
+42	EntranceClassification	2151	FS	Faculty/Staff/Dependent
+42	EntranceClassification	1785	HS	High School
+42	EntranceClassification	1786	AU	Audit
+42	EntranceClassification	1787	DE	Adventist Distance Education Consortium
+42	EntranceClassification	1788	GT	Guest
+42	EntranceClassification	1789	TN	Transient
+42	EntranceClassification	507	AC	Alternative Certification Program
+42	EntranceClassification	510	RD	Readmitted
+42	EntranceClassification	512	TR	Transfer
+42	EntranceClassification	1829	FR	Freshman
+42	EntranceClassification	1830	OS	Older Student
+42	EntranceClassification	1822	RN	Nursing
+42	EntranceClassification	2040	SC	Spanish Certificate
+53	Ethnicity	596	W	White
+53	Ethnicity	597	H	Hispanic
+53	Ethnicity	598	A	Asian
+53	Ethnicity	599	B	Black
+53	Ethnicity	600	I	Native American
+53	Ethnicity	601	O	Other
+60	EventType	760	1	College Fair
+60	EventType	761	2	Recurring Letters
+60	EventType	784	3	Recurring Lists
+58	ExamType	751	ACT	ACT
+58	ExamType	752	SAT	SAT
+58	ExamType	753	TOEFL	TOEFL
+58	ExamType	754	ACCUPLACER	ACCUPLACER
+58	ExamType	2124	CPTPLCMNT	Computer Placement
+58	ExamType	2099	GED	GED
+58	ExamType	2067	MAP	MAP
+58	ExamType	2148	MPT	Michigan Placement Test of English Proficiency
+58	ExamType	1790	GRE	Graduate Record Exam
+58	ExamType	1791	GMAT	Graduate Management Admissions Test
+115	ExtraCurricularActivityType	1414	CLUB	Club
+115	ExtraCurricularActivityType	1416	CS	Club Sports
+115	ExtraCurricularActivityType	1550	SGA	Student Government Association
+115	ExtraCurricularActivityType	1551	RA	Resident Assistant
+115	ExtraCurricularActivityType	2063	MO	Music Organization
+116	ExtraCurricularPartLevel	1422	Le	Leadership
+116	ExtraCurricularPartLevel	1423	Oc	Occasional
+116	ExtraCurricularPartLevel	1421	Me	Membership
+90	FA_COAItemType	1162	FEE	Fees
+90	FA_COAItemType	1163	OTH	Other
+90	FA_COAItemType	1161	EDU	Educational
+90	FA_COAItemType	1160	COL	Cost Of Living
+139	FA_DisbursementRevisionType	2137	P	Probation
+139	FA_DisbursementRevisionType	2138	U	Ineligible
+139	FA_DisbursementRevisionType	2136	IA	Incorrectly Awarded
+139	FA_DisbursementRevisionType	1547	T3	Manual Swap
+139	FA_DisbursementRevisionType	1544	T1	Withdrawal
+139	FA_DisbursementRevisionType	1545	T2	Revised EFC
+160	FA_FinancialRegistrationStatus	2106	SSP	3-Student Services Approval Pending (3 of 7)
+160	FA_FinancialRegistrationStatus	2230	CR	0 - Course Registration
+160	FA_FinancialRegistrationStatus	2149	SSS	2-Student Services Selection Pending (2 of 7)
+160	FA_FinancialRegistrationStatus	2226	PIU	1-Personal Information Updates Pending (1 of 7)
+160	FA_FinancialRegistrationStatus	2104	Compl	7-Registration Complete (7 of 7)
+160	FA_FinancialRegistrationStatus	2105	CAP	Course Approval Pending
+160	FA_FinancialRegistrationStatus	2107	ASP	4-Aid & Scholarships Pending (4 of 7)
+160	FA_FinancialRegistrationStatus	2108	PPP	5-Payment Plan Pending (5 of 7)
+160	FA_FinancialRegistrationStatus	2109	PP	6-Payment & Account Approval Pending (6 of 7)
+160	FA_FinancialRegistrationStatus	2114	WFC	Withdrawn from classes
+160	FA_FinancialRegistrationStatus	2121	RSC	Status Change
+162	FA_FullPartTimeType	2131	FT	FT
+162	FA_FullPartTimeType	2132	3/4T	3/4T
+162	FA_FullPartTimeType	2133	1/2T	1/2T
+162	FA_FullPartTimeType	2134	<1/2T	<1/2T
+124	FA_FundedType	1541	QE	Quasi Endowed
+124	FA_FundedType	2069	FED	Federal
+124	FA_FundedType	2070	OTH	Other
+124	FA_FundedType	1505	NS	State
+124	FA_FundedType	1493	AF	Annually Funded
+124	FA_FundedType	1494	Endow	Endowed
+63	FA_PaymentMethod	770	C	Cash
+63	FA_PaymentMethod	771	F	Financial Aid
+63	FA_PaymentMethod	772	T	Tuition Reimbursement
+63	FA_PaymentMethod	773	D	Direct Bill
+159	FA_RequirementClassification	2101	Appl	Application
+159	FA_RequirementClassification	2102	ISIR	ISIR
+91	FA_RequirementType	1164	D	Document
+157	FA_SAP_DynamicFinancialStatus	2087	D2	Dynamic 2
+157	FA_SAP_DynamicFinancialStatus	2086	D1	Dynamic 1
+158	FA_SAP_ManualFinancialStatus	2088	M1	Manual 1
+158	FA_SAP_ManualFinancialStatus	2089	M2	Manual 2
+15	FacultyStatus	1175	3	Not Real
+15	FacultyStatus	109	1	Active
+15	FacultyStatus	110	0	Inactive
+16	FacultyType	111	1	Professor
+16	FacultyType	112	2	Assistant Professor
+16	FacultyType	113	3	Associate Professor
+16	FacultyType	114	4	Lecturer
+16	FacultyType	115	5	Instructor
+16	FacultyType	1172	6	Adjunct
+16	FacultyType	1173	7	Part-Time
+16	FacultyType	1174	8	Administrative Faculty
+76	FinAidNeedType	1062	RESIDENCY	Residency
+76	FinAidNeedType	1063	GRADLEVEL	Grad Level
+76	FinAidNeedType	1064	DEPENDENCY	Dependency
+76	FinAidNeedType	1065	STATUS	Status
+77	FinAidRequirementType	1066	D	Document
+141	FinAidSourceStatus	1566	A	Active
+141	FinAidSourceStatus	1567	I	Inactive
+100	FinancialHold	1271	K	Bad Check
+100	FinancialHold	1251	B	Bad & Doubtful
+100	FinancialHold	1252	C	Collections
+70	FundDesignation	1046	CH	Church Budget
+70	FundDesignation	1047	CG	Church Matching Gift
+70	FundDesignation	1048	EN	ENC Fund
+70	FundDesignation	1049	MS	Miscellaneous
+70	FundDesignation	1026	AD	Academic Division
+70	FundDesignation	1027	AF	Annually Funded
+70	FundDesignation	1028	BE	BE
+70	FundDesignation	1029	CU	Choral Union
+70	FundDesignation	1030	EF	Endowed Fund
+70	FundDesignation	1031	EO	Endowed Other
+70	FundDesignation	1032	ES	Endowed Scholarship
+70	FundDesignation	1033	LB	Library Building
+70	FundDesignation	1034	MP	MP
+70	FundDesignation	1035	ND	ND
+70	FundDesignation	1036	OR	Other Restricted
+70	FundDesignation	1037	RS	Restricted
+70	FundDesignation	1038	SF	Annually Funded Scholarship
+70	FundDesignation	1039	TP	Temp
+70	FundDesignation	1040	UR	Unrestricted
+70	FundDesignation	1409	IN	Internally Restricted
+17	FundRestrictions	116	R	Restricted
+17	FundRestrictions	117	U	Unrestricted
+17	FundRestrictions	1408	T	Temporarily Restricted
+143	HR_HighestEmployeeDegree	1592	BA/BS	BA/BS
+143	HR_HighestEmployeeDegree	1593	MA	MA
+143	HR_HighestEmployeeDegree	1594	PhD	PhD
+143	HR_HighestEmployeeDegree	1595	UNK	Unknown
+143	HR_HighestEmployeeDegree	1596	AA	Assoc.
+143	HR_HighestEmployeeDegree	1597	DDS	DDS
+143	HR_HighestEmployeeDegree	1598	DMD	DMD
+143	HR_HighestEmployeeDegree	1599	MDiv	MDiv
+143	HR_HighestEmployeeDegree	1600	JD	JD
+143	HR_HighestEmployeeDegree	1601	MArch	M. Arch.
+143	HR_HighestEmployeeDegree	1602	MFA	MFA
+163	HR_InsuranceType	2154	HMO	HMO
+163	HR_InsuranceType	2155	PPO	PPO
+110	HR_MedicalCode	1359	2	2 - Family Split
+110	HR_MedicalCode	1360	3	3 - Family Medical Plan
+110	HR_MedicalCode	1361	4	4 - Individual
+110	HR_MedicalCode	1362	5	5 - Individual Reimbursement
+110	HR_MedicalCode	1363	7	7 - Indivual + Reimbursement(Indv)
+110	HR_MedicalCode	1364	8	8 - Family Reimbursement
+110	HR_MedicalCode	1554	1	1- Average
+121	HR_NewContractReason	1459	NewHire	New Hire
+121	HR_NewContractReason	1460	Promotion	Promotion
+129	HR_OccupationalActivity	1525	Tech/Para	Technical and Paraprofessional
+129	HR_OccupationalActivity	1526	OtherProf	Other Professionals
+144	HR_TenureTrack	1603	Tenured	Tenured
+144	HR_TenureTrack	1604	OnTrack	On Tenure Track
+144	HR_TenureTrack	1605	NonTenured	Not on Track
+122	HR_TerminationReason	1523	PC	Position Change
+122	HR_TerminationReason	1461	VI	Voluntary
+122	HR_TerminationReason	1521	IVT	Involuntary
+122	HR_TerminationReason	1522	G	Graduation
+18	Industry	168	1	Accounting/Finance
+18	Industry	875	31	District Camp
+18	Industry	876	30	District Office
+18	Industry	607	2	Advertising/PR
+18	Industry	608	3	Arts/Entertainment
+18	Industry	609	4	Banking/Mortgage
+18	Industry	610	5	Clerical/Administration
+18	Industry	611	8	Education/Training
+18	Industry	612	7	Construction/Facilities
+18	Industry	615	17	Consulting
+18	Industry	614	9	Engineering/Architecture
+18	Industry	616	19	Marketing
+18	Industry	617	6	College
+18	Industry	618	20	Non-Profit/Volunteer
+18	Industry	619	14	Internet/New Media
+18	Industry	620	21	Pharmaceutical/Biotech
+18	Industry	621	18	Manufacturing/Operations
+18	Industry	622	16	Legal
+18	Industry	623	15	Law Enforcement/Security
+18	Industry	624	13	Insurance
+18	Industry	625	12	Hospitality/Travel
+18	Industry	626	11	Health Care
+18	Industry	627	10	Government
+18	Industry	628	29	Other
+18	Industry	629	22	Real Estate
+18	Industry	630	23	Restaurant/Food Service
+18	Industry	631	24	Retail
+18	Industry	632	25	Sales
+18	Industry	633	26	Technology
+18	Industry	634	27	Telecommunications
+18	Industry	635	28	Transportation/Logistics
+19	InfluencerType	718	CATALOG	Catalog
+19	InfluencerType	720	CLAD	Campus Life Ad
+19	InfluencerType	721	DEPTFACT	Department Fact Sheet
+19	InfluencerType	722	ENCALUM	Alumnus
+19	InfluencerType	723	ENCFRIEND	Student is friend
+19	InfluencerType	724	ENSEMBLE	Music Ensemble
+19	InfluencerType	725	FACULTY	Faculty Member Contact
+19	InfluencerType	726	FAIR	College Fair
+19	InfluencerType	727	FOL	Competition
+19	InfluencerType	728	FRIEND	Friend interested
+19	InfluencerType	729	FUTCRUSADER	Future Crusader
+19	InfluencerType	730	HSGUID	High school guidance counselor
+19	InfluencerType	731	MOTORCADE	Motorcade
+19	InfluencerType	732	NEWSAD	Newspaper Ad
+19	InfluencerType	733	OTHERMAG	Other Magazine
+19	InfluencerType	734	OTHGUIDE	Other College Guide Book
+19	InfluencerType	735	PARENT	Parent
+19	InfluencerType	736	PASTOR	Pastor of my church
+19	InfluencerType	737	PETERSONS	Petersons Guide
+19	InfluencerType	738	RADIOAD	Radio Ad
+19	InfluencerType	739	REPCHURCH	Rep at my church
+19	InfluencerType	740	REPPHONE	Rep over the phone
+19	InfluencerType	741	REPSCHOOL	ENC Rep at my school
+19	InfluencerType	742	SATACT	SAT/ACT
+19	InfluencerType	743	SCHGUIDE	School Guide
+19	InfluencerType	744	SIBLING	Sibling Attended
+19	InfluencerType	745	SRPARENT	Senior Parent Weekend
+19	InfluencerType	746	SUMMIN	Summer ministries group
+19	InfluencerType	747	VIDEO	College Video
+19	InfluencerType	748	VIEWBOOK	Viewbook
+19	InfluencerType	749	YOUTHPAST	Youth pastor of my church
+19	InfluencerType	715	NULL	NULL
+19	InfluencerType	717	CAMVIS	Campus Visit
+19	InfluencerType	716	ATHLDEPT	ENC Athletic Department
+19	InfluencerType	719	CCH	Christian College Handbook
+20	InterestType	170	1	Sports
+149	NonresidencyPetitionReason	2143	DL	I am a distance learning student
+149	NonresidencyPetitionReason	2144	PT	I live with my parents
+149	NonresidencyPetitionReason	2145	22	I am 22 years old or older
+149	NonresidencyPetitionReason	2146	MD	I am married
+149	NonresidencyPetitionReason	2147	5C	I am taking 5 or fewer credits
+152	Occupation	1991	Computer Programmer	Computer Programmer
+152	Occupation	1992	Secretary	Secretary
+152	Occupation	1993	Teacher	Teacher
+21	OrgRelatedRole	171	1	Main Contact
+21	OrgRelatedRole	556	2	Secondary Contact
+22	ParentGuardianRole	173	1	Father
+22	ParentGuardianRole	174	2	Mother
+22	ParentGuardianRole	175	3	Guardian
+22	ParentGuardianRole	176	4	Grandparent
+23	PastorType	NULL	NULL	NULL
+54	PersonalSalutation	1043	Hon.	Hon.
+54	PersonalSalutation	1044	Ltc.	Ltc.
+54	PersonalSalutation	1045	Sgt.	Sgt.
+54	PersonalSalutation	805	Rev.	Rev.
+54	PersonalSalutation	807	Miss	Miss
+54	PersonalSalutation	809	Dr.	Dr.
+54	PersonalSalutation	810	Capt.	Capt.
+54	PersonalSalutation	811	Lt.	Lt.
+54	PersonalSalutation	803	Ms.	Ms.
+54	PersonalSalutation	813	Lcdr.	Lcdr.
+54	PersonalSalutation	814	Col.	Col.
+54	PersonalSalutation	815	Prof.	Prof.
+54	PersonalSalutation	816	Rab.	Rabbi
+54	PersonalSalutation	602	Mr.	Mr.
+54	PersonalSalutation	604	Mrs.	Mrs.
+147	PersonnelSalutationX	1837	Ms	Ms.
+147	PersonnelSalutationX	1838	Mrs	Mrs.
+147	PersonnelSalutationX	1839	Mrs.	Mrs.
+147	PersonnelSalutationX	1840	Rev	Rev.
+147	PersonnelSalutationX	1841	Rev.	Rev.
+147	PersonnelSalutationX	1842	Miss	Miss
+147	PersonnelSalutationX	1843	Dr.	Dr.
+147	PersonnelSalutationX	1844	Dr	Dr.
+147	PersonnelSalutationX	1834	Mr.	Mr.
+147	PersonnelSalutationX	1835	Mr	Mr.
+147	PersonnelSalutationX	1836	Ms.	Ms.
+130	PersonStatus	1527	I	Inactive
+130	PersonStatus	1529	L	Lost
+130	PersonStatus	1531	O	Omitted
+43	PrimaryLanguage	513	CH	Chinese
+43	PrimaryLanguage	514	EN	English
+43	PrimaryLanguage	515	FR	French
+43	PrimaryLanguage	516	GE	German
+43	PrimaryLanguage	517	GR	Greek
+43	PrimaryLanguage	518	SP	Spanish
+43	PrimaryLanguage	519	IT	Italian
+43	PrimaryLanguage	520	JA	Japanese
+43	PrimaryLanguage	521	KO	Korean
+43	PrimaryLanguage	522	OT	Other Languages
+43	PrimaryLanguage	523	PO	Portuguese
+43	PrimaryLanguage	524	RU	Russian
+43	PrimaryLanguage	525	SW	Swedish
+148	ProspectAppCommitteeDecision	1973	D	Denied
+148	ProspectAppCommitteeDecision	1974	A	Accepted
+145	ProspectApplicationDeniedReason	1609	LowGPA	Inadequate GPA
+145	ProspectApplicationDeniedReason	1610	BadHSTrans	Invalid HS Transcript
+123	ProspectApplicationReceiveSource	1466	Web	Web
+123	ProspectApplicationReceiveSource	1506	Mail	USPS Mail
+123	ProspectApplicationReceiveSource	1758	IP	In-Person
+140	ProspectChampionGroup	1557	ChO	Champion Only
+140	ProspectChampionGroup	1558	ChO/Adm	Champion and Admissions
+140	ProspectChampionGroup	1559	Adm	Admissions Only
+97	ProspectDataSource	1560	UNK	Unknown
+97	ProspectDataSource	2150	PG	Pagan
+97	ProspectDataSource	1577	Couns	Counselor at HS/Academy
+97	ProspectDataSource	1367	HSCF	High School College Fair
+97	ProspectDataSource	1368	CV	Church Visit
+97	ProspectDataSource	1373	EM	E-Mail
+97	ProspectDataSource	1379	CV	Campus Visit
+97	ProspectDataSource	1582	HS	Academy/HS Visit
+97	ProspectDataSource	2119	BE	Business Expo at SWAU
+97	ProspectDataSource	1478	IN	Internet
+97	ProspectDataSource	1780	BG	Brain Games
+97	ProspectDataSource	1781	CM	Campmeeting
+97	ProspectDataSource	1477	ISR	Financial Aid Paperwork -ISIR - FAFSA
+97	ProspectDataSource	1486	CF	College Fair
+97	ProspectDataSource	1779	BT	Basketball Tournament
+97	ProspectDataSource	1463	STU	ENC student (current)
+97	ProspectDataSource	1778	ASI	ASI Convention
+97	ProspectDataSource	1446	FSR	Faculty / Staff Referral
+97	ProspectDataSource	2120	SGYC	Spanish GYC
+97	ProspectDataSource	2142	HV	Home Visit from Administration
+97	ProspectDataSource	1220	SAT	SAT Scores
+97	ProspectDataSource	1777	AP	AP Score
+97	ProspectDataSource	2092	BR	Basketball Recruits
+97	ProspectDataSource	2156	Braz	Brazil Trip 2010
+97	ProspectDataSource	2152	SYC	Southern Youth Conference
+97	ProspectDataSource	1792	HWR	Hispanic Women's Retreat
+97	ProspectDataSource	1793	HRC	Hobson Repy Card (yellow)
+97	ProspectDataSource	1794	JMF	Jr Music Fest
+97	ProspectDataSource	1795	JCI	Just Claim It (Prayer Conference)
+97	ProspectDataSource	1796	MAG	Magazine
+97	ProspectDataSource	1797	MAIL	MAIL
+97	ProspectDataSource	1798	MAP	Math Placement
+97	ProspectDataSource	1799	MF	Music Festival
+97	ProspectDataSource	1800	MTS	Music Tour - Spring
+97	ProspectDataSource	1801	NAD	NAD (AEA) Reply Card
+97	ProspectDataSource	1802	PA	Paper Application
+97	ProspectDataSource	1803	PR	Parent Referral
+97	ProspectDataSource	1804	PC	Platform Calls
+97	ProspectDataSource	1805	PI	Platform Information
+97	ProspectDataSource	1806	PSAT	PSAT
+97	ProspectDataSource	1807	RC	Reply Card
+97	ProspectDataSource	1808	SATP	SAT Prep at SWAU
+97	ProspectDataSource	1809	SLE	Student Lead E-mail
+97	ProspectDataSource	1810	TC	Teen Camp
+97	ProspectDataSource	1811	TEL	Telephone Call
+97	ProspectDataSource	1812	TYF	Texas Youthfest
+97	ProspectDataSource	1813	TOEFEL	TOEFEL
+97	ProspectDataSource	1814	TR	Transcript Received
+97	ProspectDataSource	1815	VD	Visitation Day
+97	ProspectDataSource	1816	WAEAA	Web AEA Application
+97	ProspectDataSource	1817	WE	Web Application
+97	ProspectDataSource	1818	WWRC	Who's Who Reply Card
+97	ProspectDataSource	1819	YC	Youth Congress
+97	ProspectDataSource	1820	YR	Youth Rally
+97	ProspectDataSource	2093	AA	AACU Leads
+97	ProspectDataSource	2071	ACTR	ACT Reply Card/Info
+97	ProspectDataSource	2065	OSH	Oshkosh Camporee
+97	ProspectDataSource	2113	LYF	Latino Youth Fest
+97	ProspectDataSource	2048	HSC	College Course in High School
+97	ProspectDataSource	2118	WP	Week of Prayer
+97	ProspectDataSource	2066	ACRO	Acrofest Visit
+97	ProspectDataSource	2100	UWS	United We Serve Meeting
+97	ProspectDataSource	2135	GC	General Conference Session
+97	ProspectDataSource	2227	AEAap	AEA Applications
+97	ProspectDataSource	2232	Pastor	Pastoral Reference
+97	ProspectDataSource	2233	TXW	Texas Workers Meeting
+97	ProspectDataSource	2234	SWR	SW Region Meetings
+97	ProspectDataSource	1766	CPR	Church/Pastor Referral
+97	ProspectDataSource	1767	CLEP	CLEP Results
+97	ProspectDataSource	1768	CDA	College Days Application
+97	ProspectDataSource	1769	CDV	College Days Visit
+97	ProspectDataSource	1770	CLY	Conference Leads of Youth
+97	ProspectDataSource	1771	CSR	Current Student Referral
+97	ProspectDataSource	1772	EBF	Ethiopia Business Fair
+97	ProspectDataSource	1773	FL	Festival of the Laity
+97	ProspectDataSource	1774	FRL	Foreign List Aug 05
+97	ProspectDataSource	1775	GYC	General Youth Conference
+97	ProspectDataSource	1776	AR	Alumni Reunion
+97	ProspectDataSource	1984	PR	Personal Referral
+97	ProspectDataSource	1760	ACT	ACT Scores
+97	ProspectDataSource	1761	AEA	AEA Info
+97	ProspectDataSource	1763	PC	Pathfinder Camporee
+97	ProspectDataSource	1764	CO	Campout
+97	ProspectDataSource	1765	CVN	Campus Visit - No Show
+97	ProspectDataSource	1986	HRCY	Hobson reply card (yellow)
+142	ProspectEnrollmentCategory	1978	DegreeSeekingOther	Degree Seeking Other
+142	ProspectEnrollmentCategory	1979	DegreeSeekingCert	Degree Seeking Certificate
+142	ProspectEnrollmentCategory	1980	NonDegreeSeeking	Non-Degree Seeking
+142	ProspectEnrollmentCategory	1975	DegreeSeekingFirst	Degree Seeking First Time
+142	ProspectEnrollmentCategory	1976	DegreeSeekTransfer	Degree Seeking Transfer
+111	ProspectFacultyCallbackStatus	1394	AC	Active
+111	ProspectFacultyCallbackStatus	1395	AD	Send to Admissions
+119	ProspectPersonalityType	1431	F	SF
+119	ProspectPersonalityType	1432	T	NT
+119	ProspectPersonalityType	1428	S	ST
+119	ProspectPersonalityType	1429	P	NF
+112	ProspectPriorityStatus	1396	V	Very Important
+118	ProspectRanking	1430	B	Likely to Enroll
+118	ProspectRanking	1425	A	Highly LIkely to Enroll
+118	ProspectRanking	1426	C	Somewhat Likely to Enroll
+118	ProspectRanking	1427	D	Unlikely to Enroll
+24	ProspectStatus	120	1	Active
+24	ProspectStatus	121	0	Inactive
+40	ProspectType	1981	6	Deposited
+40	ProspectType	437	0	Suspect
+40	ProspectType	438	2	Lead
+40	ProspectType	440	4	Applied
+40	ProspectType	441	5	Admitted
+40	ProspectType	444	8	Denied
+40	ProspectType	445	10	Withdrawn
+40	ProspectType	1562	1	Inquiry
+26	PublicMessageType	127	1	Announcement
+26	PublicMessageType	128	2	Other
+89	RCodyFinance	1197	11	11
+89	RCodyFinance	1117	1	Quite Difficult
+89	RCodyFinance	1118	2	Somewhat Difficult
+89	RCodyFinance	1119	3	Not Difficult
+89	RCodyFinance	1120	4	Unknown
+89	RCodyFinance	1121	5	Refuse
+89	RCodyFinance	1122	6	End Survey
+81	RCodyInterestLevel	1188	Dawna	Dawna
+81	RCodyInterestLevel	1189	Rebecca	Rebecca
+81	RCodyInterestLevel	1190	Tony	Tony
+81	RCodyInterestLevel	1079	1	Likely to Apply
+81	RCodyInterestLevel	1080	2	Very Interested
+81	RCodyInterestLevel	1081	3	Somewhat Interested
+81	RCodyInterestLevel	1082	4	Uncertain
+81	RCodyInterestLevel	1083	5	Already Applied
+81	RCodyInterestLevel	1084	6	End Survey
+82	RCodyIntro	1074	10	Survey with Parent
+82	RCodyIntro	1075	11	Survey with Other
+82	RCodyIntro	1076	9	Survery with Student
+82	RCodyIntro	1347	A	A
+82	RCodyIntro	1349	4	4
+82	RCodyIntro	1293	1	1
+82	RCodyIntro	1294	2	2
+82	RCodyIntro	1295	3	3
+82	RCodyIntro	1296	6	6
+82	RCodyIntro	1297	7	7
+82	RCodyIntro	1298	8	8
+82	RCodyIntro	1457	 SAT: 1860 	 SAT: 1860 
+83	RCodyMostImportantFactor	1194	22	22
+83	RCodyMostImportantFactor	1195	25	25
+83	RCodyMostImportantFactor	1196	27	27
+83	RCodyMostImportantFactor	1093	1	Major Availability
+83	RCodyMostImportantFactor	1094	10	School Size - Medium
+83	RCodyMostImportantFactor	1095	11	School Size - Small
+83	RCodyMostImportantFactor	1096	12	Student/Faculty Ratio
+83	RCodyMostImportantFactor	1097	13	Extra-curricular Activities
+83	RCodyMostImportantFactor	1098	14	Athletics
+83	RCodyMostImportantFactor	1099	15	Career Placement
+83	RCodyMostImportantFactor	1100	16	Religious Affiliation
+83	RCodyMostImportantFactor	1101	17	Overall Atmosphere
+83	RCodyMostImportantFactor	1102	18	Facilities
+83	RCodyMostImportantFactor	1103	19	Security/Safety
+83	RCodyMostImportantFactor	1104	2	Major - Quality
+83	RCodyMostImportantFactor	1105	20	Family Influence
+83	RCodyMostImportantFactor	1106	21	Friends Influence
+83	RCodyMostImportantFactor	1107	23	Diversity
+83	RCodyMostImportantFactor	1108	24	Other
+83	RCodyMostImportantFactor	1109	26	Refuse
+83	RCodyMostImportantFactor	1110	3	Proximity - Close to Home
+83	RCodyMostImportantFactor	1111	4	Proximity - Far from Home
+83	RCodyMostImportantFactor	1112	5	Location
+83	RCodyMostImportantFactor	1113	6	Cost
+83	RCodyMostImportantFactor	1114	7	Financial Aid
+83	RCodyMostImportantFactor	1115	8	Academic Reputation
+83	RCodyMostImportantFactor	1116	9	School Size - Large
+88	RCodyRank	1085	1	First
+88	RCodyRank	1086	2	Second
+88	RCodyRank	1087	3	Third
+88	RCodyRank	1088	4	Fourth
+88	RCodyRank	1089	5	Fifth
+88	RCodyRank	1090	6	Sixth
+88	RCodyRank	1091	7	Unknown
+88	RCodyRank	1092	9	End Survey
+88	RCodyRank	1193	8	8
+88	RCodyRank	1280	3;	3;
+87	RCodyReasonRuledOut	1201	9	9
+87	RCodyReasonRuledOut	1135	1	Major Availability
+87	RCodyReasonRuledOut	1136	10	School Size - Too Small
+87	RCodyReasonRuledOut	1137	12	Extra-curricular Activities
+87	RCodyReasonRuledOut	1138	13	Athletics
+87	RCodyReasonRuledOut	1139	15	Religious Affiliation
+87	RCodyReasonRuledOut	1140	16	Overall Atmosphere
+87	RCodyReasonRuledOut	1141	17	Facilities
+87	RCodyReasonRuledOut	1142	19	Parent's Influence
+87	RCodyReasonRuledOut	1143	2	Major - Quality
+87	RCodyReasonRuledOut	1144	20	Friends Going Elsewhere
+87	RCodyReasonRuledOut	1145	21	Didn't Receive Enough Info
+87	RCodyReasonRuledOut	1146	22	Military
+87	RCodyReasonRuledOut	1147	23	Attending Community College
+87	RCodyReasonRuledOut	1148	24	Not Attending College
+87	RCodyReasonRuledOut	1149	25	Other
+87	RCodyReasonRuledOut	1150	26	Unknown
+87	RCodyReasonRuledOut	1151	27	Refuse
+87	RCodyReasonRuledOut	1152	28	End Survey
+87	RCodyReasonRuledOut	1153	3	Proximity - Too Close
+87	RCodyReasonRuledOut	1154	4	Proximity - Too Far
+87	RCodyReasonRuledOut	1155	5	Location
+87	RCodyReasonRuledOut	1156	6	Cost
+87	RCodyReasonRuledOut	1157	7	Financial Aid
+87	RCodyReasonRuledOut	1158	8	Academic Reputation
+87	RCodyReasonRuledOut	1159	14	Career Placement
+87	RCodyReasonRuledOut	1343	18	18
+85	RCodyResponseCode	1344	DAY	DAY
+85	RCodyResponseCode	1191	041214	041214
+85	RCodyResponseCode	1129	7	7
+85	RCodyResponseCode	1130	8	8
+85	RCodyResponseCode	1131	9	9
+85	RCodyResponseCode	1069	1	1
+85	RCodyResponseCode	1070	2	2
+85	RCodyResponseCode	1071	3	3
+85	RCodyResponseCode	1072	4	4
+85	RCodyResponseCode	1073	5	5
+85	RCodyResponseCode	1199	041215	041215
+85	RCodyResponseCode	1200	10	10
+85	RCodyResponseCode	1348	DE	DE
+85	RCodyResponseCode	1281	AM	AM
+85	RCodyResponseCode	1282	BSY	BSY
+85	RCodyResponseCode	1283	CB	CB
+85	RCodyResponseCode	1284	Evening	Evening
+85	RCodyResponseCode	1285	INBCALLBK	INBCALLBK
+85	RCodyResponseCode	1286	NA	NA
+85	RCodyResponseCode	1287	DIS	DIS
+85	RCodyResponseCode	1288	DNC	DNC
+85	RCodyResponseCode	1289	REF	REF
+85	RCodyResponseCode	1290	RN	RN
+85	RCodyResponseCode	1291	UNV	UNV
+85	RCodyResponseCode	1292	WU	WU
+85	RCodyResponseCode	1345	NAT	NAT
+85	RCodyResponseCode	1346	PRIV	PRIV
+86	RCodyStillA_Choice	1077	1	Yes
+86	RCodyStillA_Choice	1078	2	Yes, but Transfer Later
+86	RCodyStillA_Choice	1132	3	No
+86	RCodyStillA_Choice	1133	4	Not Attending College
+86	RCodyStillA_Choice	1134	5	End Survey
+86	RCodyStillA_Choice	1192	9	9
+86	RCodyStillA_Choice	1458	 Activities: I attended two retreats held by my church	 Activities: I attended two retreats held by my church
+84	RCodyVisit	1123	1	Interested in Visit
+84	RCodyVisit	1124	2	Not Interested in Visit
+84	RCodyVisit	1125	3	Already Visited
+84	RCodyVisit	1126	4	Needs More Info
+84	RCodyVisit	1127	5	Undecided
+84	RCodyVisit	1128	7	End Survey
+84	RCodyVisit	1198	6	6
+84	RCodyVisit	1342	1;	1;
+94	RetentionRiskType	1179	StuLife	Student Life
+94	RetentionRiskType	1180	PersFam	Personal/Family
+94	RetentionRiskType	1181	Health	Health
+94	RetentionRiskType	1182	Attend	Attendance
+94	RetentionRiskType	1183	Fin	Financial
+94	RetentionRiskType	1184	AcadRisk	Academic Risk
+94	RetentionRiskType	1185	Chapel	Chapel/Spiritual
+94	RetentionRiskType	1186	Transcript	Transcript Request
+94	RetentionRiskType	1187	Other	Other
+101	SAPaymentPlan	1262	S	Sally Mae
+101	SAPaymentPlan	1263	E	ENC
+101	SAPaymentPlan	1264	M	Monthly
+101	SAPaymentPlan	1266	T	TMS
+101	SAPaymentPlan	1267	A	AMS
+27	SchoolCategory	1219	O	Other
+27	SchoolCategory	1218	S	Study Abroad
+27	SchoolCategory	1418	U	Unaccredited
+27	SchoolCategory	177	C	College or University
+27	SchoolCategory	178	H	High School
+28	SchoolRelatedRole	185	1	Principal
+29	SchoolType	1827	SDA	Seventh-day Adventist
+29	SchoolType	757	P	Public
+29	SchoolType	758	R	Private
+29	SchoolType	1450	N	Protestant
+29	SchoolType	1451	C	Catholic
+30	StaffStatus	129	1	Active
+30	StaffStatus	130	0	Inactive
+55	StaffType	1977	S	Student - Admissions and Records
+55	StaffType	605	A	Admissions Counselor
+55	StaffType	606	C	Constituency Relations
+55	StaffType	2059	B	Admissions and Registrar
+164	State	2201	NV	NV
+164	State	2198	NM	NM
+164	State	2200	NT	NT Canada
+164	State	2202	NY	NY
+164	State	2203	OH	OH
+164	State	2204	OK	OK
+164	State	2205	ON	ON Canada
+164	State	2206	OR	OR
+164	State	2207	PA	PA
+164	State	2208	PE	PE Canada
+164	State	2209	QC	QC Canada
+164	State	2210	PR	Puerto Rico
+164	State	2211	RI	RI
+164	State	2212	SC	SC
+164	State	2213	SD	SD
+164	State	2214	SK	SK Canada
+164	State	2215	TN	TN
+164	State	2199	NS	NS Canada
+164	State	2216	TX	TX
+164	State	2217	UT	UT
+164	State	2218	VA	VA
+164	State	2219	VI	Error for Convert (vt)
+164	State	2220	VT	VT
+164	State	2221	WA	WA
+164	State	2222	WI	WI
+164	State	2223	WV	WV
+164	State	2224	WY	WY
+164	State	2225	YK	YK Canada
+164	State	2162	AP	AP
+164	State	2163	AR	AR
+164	State	2164	AZ	AZ
+164	State	2165	BC	BC Canada
+164	State	2166	CA	CA
+164	State	2167	CO	CO
+164	State	2168	CT	CT
+164	State	2169	DC	DC
+164	State	2170	DE	DE
+164	State	2171	FL	FL
+164	State	2172	GA	GA
+164	State	2173	GU	Guam
+164	State	2174	HI	HI
+164	State	2175	IA	IA
+164	State	2176	ID	ID
+164	State	2177	IL	IL
+164	State	2178	IN	IN
+164	State	2179	KS	KS
+164	State	2180	KY	KY
+164	State	2181	LA	LA
+164	State	2182	MA	MA
+164	State	2183	MB	MB Canada
+164	State	2184	MD	MD
+164	State	2185	ME	ME
+164	State	2186	MI	MI
+164	State	2187	MN	MN
+164	State	2188	MO	MO
+164	State	2189	MS	MS
+164	State	2190	MT	MT
+164	State	2191	NB	NB Canada
+164	State	2192	NC	NC
+164	State	2193	ND	ND
+164	State	2194	NE	NE
+164	State	2195	NF	NF Canada
+164	State	2196	NH	NH
+164	State	2197	NJ	NJ
+164	State	2161	AL	AL
+164	State	2157	AA	AA
+164	State	2158	AB	AB Canada
+164	State	2159	AE	AE
+164	State	2160	AK	AK
+154	StudentFinancialStanding	2128	MC50	GPA/50%
+154	StudentFinancialStanding	2072	MC1	Meets Req'mts
+154	StudentFinancialStanding	2110	NMC7	Assoc, > 96
+154	StudentFinancialStanding	2074	NMC1	GPA < 2.0
+154	StudentFinancialStanding	2075	NMC2	0-54, < 50%
+154	StudentFinancialStanding	2076	NMC3	55-88, < 58%
+154	StudentFinancialStanding	2078	NMC5	89+, < 67%
+154	StudentFinancialStanding	2079	NMC6	BA,  > 192
+154	StudentFinancialStanding	2129	MC58	GPA/58%
+154	StudentFinancialStanding	2130	MC67	GPA/67%
+154	StudentFinancialStanding	2111	NMC8	Grad < 3.0 or 67%
+109	StudentGradeChangeReason	1356	ProfErr	Professor Error
+109	StudentGradeChangeReason	1357	StuPet	Student Petition
+153	StudentHS_CourseSubject	2051	S	Science
+153	StudentHS_CourseSubject	2058	R	Religion
+153	StudentHS_CourseSubject	2053	E	English
+153	StudentHS_CourseSubject	2054	D	Social Studies
+153	StudentHS_CourseSubject	2055	F	Fine Arts
+153	StudentHS_CourseSubject	2056	T	Technology
+153	StudentHS_CourseSubject	2057	H	Health
+153	StudentHS_CourseSubject	2049	M	Math
+153	StudentHS_CourseSubject	2050	L	Language
+153	StudentHS_CourseSubject	2052	O	Other
+99	StudentHS_TranscriptStatus	1246	P	Partial Transcript Received
+99	StudentHS_TranscriptStatus	1247	O	Official Transcript Received
+99	StudentHS_TranscriptStatus	1248	N	HS Transcripts Not Required
+99	StudentHS_TranscriptStatus	1249	I	International Student - No H.S. Transcripts
+32	StudentStatus	NULL	NULL	NULL
+95	StudentTestingStatus	2127	ML	Michigan English Proficiency
+95	StudentTestingStatus	1222	BC	Testing Completed Successfully
+95	StudentTestingStatus	1214	CL	MATH011
+95	StudentTestingStatus	1215	CM	CSIS102
+95	StudentTestingStatus	1217	CW	ENGL021
+95	StudentTestingStatus	2094	ME	MATH011 and  ENGL021
+95	StudentTestingStatus	2141	MC	MATH011 and CSIS102
+33	StudentType	NULL	NULL	NULL
+93	StudentWithdrawalReason	1515	JOB	Job Related
+93	StudentWithdrawalReason	1516	LANG	Language issues
+93	StudentWithdrawalReason	1517	MED	Medical
+93	StudentWithdrawalReason	1518	NOREA	No Reason Given
+93	StudentWithdrawalReason	1519	RELO	Relocation
+93	StudentWithdrawalReason	1513	ATDN	Attendance
+93	StudentWithdrawalReason	1514	DEGIN	Degree Interest
+93	StudentWithdrawalReason	1176	FIN	Financial
+93	StudentWithdrawalReason	1237	LOAU	Leave of Absence - Return Unknown
+93	StudentWithdrawalReason	1238	LOANS	Leave of Absence - Return Next Sem
+93	StudentWithdrawalReason	1239	LOARN	Leave of Absence - Return Next Year
+93	StudentWithdrawalReason	1240	TR2YR	Transferring - 2 Yr College
+93	StudentWithdrawalReason	1241	TR4YR	Transferring - 4 Year
+93	StudentWithdrawalReason	1242	W	Withdrawing Permanently - Reason Unknown
+93	StudentWithdrawalReason	1243	WFIN	Withdrawing - Finances
+93	StudentWithdrawalReason	1244	WACAD	Withdrawing - Academic
+93	StudentWithdrawalReason	1245	WCOND	Withdrawing - Conduct
+93	StudentWithdrawalReason	1268	MIL	Military
+93	StudentWithdrawalReason	1269	LOA	Leave Of Absence
+93	StudentWithdrawalReason	1270	PER	Personal
+93	StudentWithdrawalReason	2122	ACSP	Academic Suspension
+93	StudentWithdrawalReason	2123	ACDM	Academic Dismissal
+98	TransferDeniedReason	1261	TM	Taken more than 7 yrs ago
+98	TransferDeniedReason	1265	NE	Not Equivalent
+98	TransferDeniedReason	1257	PT	Previously Taken
+98	TransferDeniedReason	1225	NC	No Credit
+98	TransferDeniedReason	1226	PF	Pass/Fail
+98	TransferDeniedReason	1227	PL	Pre-college Level
+98	TransferDeniedReason	1228	NE	No Equivalent
+98	TransferDeniedReason	1229	GB	Grade Below C-
+98	TransferDeniedReason	1230	W	Withdrew
+103	TrusteesCommitteeName	1305	Finan	Finance
+103	TrusteesCommitteeName	1306	Acad	Academic
+103	TrusteesCommitteeName	1315	InAdv	Institutional Advancement
+103	TrusteesCommitteeName	1316	StDev	Student Development
+103	TrusteesCommitteeName	1317	Exec	Executive
+103	TrusteesCommitteeName	1318	CoTru	Committee on Trustees
+104	TrusteesCommitteePosition	1319	Secr	Secretary
+104	TrusteesCommitteePosition	1320	Treas	Treasurer
+104	TrusteesCommitteePosition	1307	Chair	Chair
+104	TrusteesCommitteePosition	1308	ViceC	Vice Chair
+105	TrusteesDistrict	1309	Maine	Maine
+105	TrusteesDistrict	1310	NE	New England
+105	TrusteesDistrict	1325	MeNY	Metro NY
+105	TrusteesDistrict	1326	Phila	Philadelphia
+105	TrusteesDistrict	1327	Pitts	Pittsburgh
+105	TrusteesDistrict	1328	UNYor	Upstate NY
+105	TrusteesDistrict	1329	Virg	Virginia
+105	TrusteesDistrict	1330	MAtla	Mid-Atlantic
+106	TrusteesSubcommitteeName	1331	Audit	Audit
+106	TrusteesSubcommitteeName	1332	Build	Building and Facilities
+106	TrusteesSubcommitteeName	1333	IT	IT
+106	TrusteesSubcommitteeName	1334	Tuit	Tuition
+106	TrusteesSubcommitteeName	1335	HR	HR
+106	TrusteesSubcommitteeName	1311	Found	Foundation Board
+106	TrusteesSubcommitteeName	1312	Pres	Presidential
+106	TrusteesSubcommitteeName	1433	CusSr	Customer Service
+106	TrusteesSubcommitteeName	1434	AdGrS	Adult & Graduate Studies
+106	TrusteesSubcommitteeName	1336	RecEn	Recruitment and Enrollment
+106	TrusteesSubcommitteeName	1337	PasEd	Pastoral Education Funding
+106	TrusteesSubcommitteeName	1338	MuCul	Multicultural Affairs
+106	TrusteesSubcommitteeName	1339	Nomin	Nominating
+106	TrusteesSubcommitteeName	1340	AwRec	Awards and Recognition
+107	TrusteeType	1313	DisSu	District Superintendent
+107	TrusteeType	1321	LayAl	Lay Alumni
+107	TrusteeType	1322	LayLa	Lay At-Large
+107	TrusteeType	1323	MinAl	Minister Alumni
+107	TrusteeType	1324	MinAt	Minister At-Large
+107	TrusteeType	1350	Lay	Lay
+107	TrusteeType	1351	Minis	Ministerial
+107	TrusteeType	1352	LayMi	Lay Ministerial
+114	UserStatus	1406	A	Active
+114	UserStatus	1407	I	Inactive
+151	VisaCode	2153	O	Other
+151	VisaCode	1990	F-1	F-1
+75	WaiverReason	2090	ACTFL	ACTFL
+75	WaiverReason	1254	ACT	ACT Score
+75	WaiverReason	1054	SAT	SAT Score
+75	WaiverReason	1055	ADVP	Advanced Placement Test
+75	WaiverReason	1056	CLEP	College Level Exam Placement
+44	WithdrawalReason	1231	19	CAAS Decision
+44	WithdrawalReason	1455	BAMR	Bad Address-Mail Returned
+44	WithdrawalReason	1456	NRTC	No response to contact
+44	WithdrawalReason	1279	20	RCody
+44	WithdrawalReason	714	18	Counselor Withdraw
+44	WithdrawalReason	527	1	Chose another 4 year college
+44	WithdrawalReason	529	11	Military Service
+44	WithdrawalReason	530	12	Unknown
+44	WithdrawalReason	531	13	Personal Reasons
+44	WithdrawalReason	532	14	Working Fulltime
+44	WithdrawalReason	533	15	Staying closer to home
+44	WithdrawalReason	534	16	Can't afford to attend
+44	WithdrawalReason	535	17	Getting Married
+44	WithdrawalReason	536	2	Chose another 2 year college
+44	WithdrawalReason	537	3	Better Scholarship Offer
+44	WithdrawalReason	538	4	Activities more suitable
+44	WithdrawalReason	539	5	Sports more appropriate
+44	WithdrawalReason	540	6	More approprite acad program
+44	WithdrawalReason	541	7	Major more appropriate
+44	WithdrawalReason	542	8	To join friends
+44	WithdrawalReason	543	9	Better personal contact

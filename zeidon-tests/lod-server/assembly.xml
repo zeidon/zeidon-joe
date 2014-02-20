@@ -1,0 +1,31 @@
+<assembly>
+  <id>artifact</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>${basedir}/</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+	  <!-- We need our own bootstrap file to create  -->
+        <include>jar-bootstrap.rb</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <outputFileNameMapping></outputFileNameMapping>
+      <unpack>true</unpack>
+      <unpackOptions>
+	<excludes>
+	  <exclude>META-INF/MANIFEST.MF</exclude>
+	  <!-- Since we are overriding jar-bootstrap.rb, exlude it from Zeidon .jar -->
+	  <exclude>jar-bootstrap.rb</exclude>
+	</excludes>
+      </unpackOptions>
+    </dependencySet>
+  </dependencySets>
+</assembly>

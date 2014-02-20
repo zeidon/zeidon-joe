@@ -1,0 +1,11 @@
+#!/bin/bash
+
+pushd ../zeidon-joe
+cp="`mvn dependency:build-classpath | grep -v INFO`"
+popd
+
+export ZEIDON_HOME=/home/dchristensen/zeidon/resteasy/src/main/webapp/lplr
+
+#echo $cp
+jruby -J-cp $cp -J-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9005 `which jirb`
+#jirb -J-cp $cp 

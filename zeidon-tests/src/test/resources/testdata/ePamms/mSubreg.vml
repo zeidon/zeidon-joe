@@ -1,0 +1,212 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    mSubreg       - Subregistrant maintenance operations
+// FILE:         mSubreg.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameLFM
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameLFM( VIEW mSubreg BASED ON LOD mSubreg ,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_LastFirstMiddle( mSubreg , InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameFML
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameFML( VIEW mSubreg BASED ON LOD mSubreg ,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_FirstMiddleLast( mSubreg , InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregNameID( VIEW mSubreg BASED ON LOD mSubreg,
+               STRING ( 32 ) InternalEntityStructure,
+               STRING ( 32 ) InternalAttribStructure,
+               SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubreg.SubregOrganization EXISTS
+         szString = mSubreg.SubregOrganization.Name
+         IF mSubreg.Subregistrant.EPA_CompanyNumber != ""
+               szString = szString + " (" +
+                          mSubreg.Subregistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubreg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dPrimRegNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dPrimRegNameID( VIEW mSubreg BASED ON LOD mSubreg,
+                STRING ( 32 ) InternalEntityStructure,
+                STRING ( 32 ) InternalAttribStructure,
+                SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubreg.Organization  EXISTS
+         szString = mSubreg.Organization.Name
+         IF mSubreg.PrimaryRegistrant.EPA_CompanyNumber != ""
+              szString = szString + " (" +
+                         mSubreg.PrimaryRegistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubreg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProductNameNbr( VIEW mSubreg BASED ON LOD mSubreg,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubreg.MasterProduct  EXISTS
+         szString = mSubreg.MasterProduct.Name + " (" +
+                    mSubreg.PrimaryRegistrant.EPA_CompanyNumber + "-" +
+                    mSubreg.MasterProduct.Number + ")"
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubreg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregProductNameNbr( VIEW mSubreg BASED ON LOD mSubreg,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+       szString = mSubreg.SubregProduct.Name
+       IF mSubreg.SubregProduct.Number != 0
+          szString = szString + " (" + mSubreg.SubregProduct.Number + ")"
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubreg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

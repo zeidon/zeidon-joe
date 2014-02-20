@@ -1,0 +1,33 @@
+z1100-Zeidon    MEMPLOY  mEmploy  07/12/09   20:38:04 1.0a2    
+20090709115459643
+eEmployee  1,2
+aContactDate,2 04/10/2010
+aNote,2 This is a test of the emergency broadcast system.  In a real emergency you would be notified that the DB can't handle a string this size.
+
+eEmployeePerson 2,38
+aLastName,2 Baines
+aFirstName,2 William
+
+eHistoricalContract 2,6
+aStatus,2  I
+aPositionDescription,2 Admin Assistant
+aMedicalCode,2 3
+aEmployeeClassification,2 S
+aAnnualSalaryAmount,2 49000.0
+aFacultyDegree,2 MA
+aFacultyYearsOfService,2 3
+aRetirementBenefitsType,2 Post
+aFullPartTimeFlag,2 F
+
+eHistoricalContract 2,6
+aStatus,2  A
+aMedicalCode,2 5
+aAnnualSalaryAmount,2 48000.0
+aTenureTrack,2 OnTrack
+aFacultyYearsOfService,2 4
+aRetirementBenefitsType,2 Post
+aFullPartTimeFlag,2 F
+
+eActiveYearlyContract 2,4134
+
+i4         3

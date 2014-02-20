@@ -1,0 +1,656 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    mSubLC        - Subregistrant Label Content operations
+// FILE:         mSubLC.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameLFM
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameLFM( VIEW mSubLC BASED ON LOD mSubLC,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_LastFirstMiddle( mSubLC, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameFML
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameFML( VIEW mSubLC BASED ON LOD mSubLC,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_FirstMiddleLast( mSubLC, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregNameID
+// Subregistrant Name + EPA Company Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregNameID( VIEW mSubLC BASED ON LOD mSubLC,
+               STRING ( 32 ) InternalEntityStructure,
+               STRING ( 32 ) InternalAttribStructure,
+               SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubLC.SubregOrganization EXISTS
+         szString = mSubLC.SubregOrganization.Name
+         IF mSubLC.Subregistrant.EPA_CompanyNumber = ""
+            szString = szString + " (Non EPA)"
+         ELSE
+            szString = szString + " (" + mSubLC.Subregistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubLC,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dRegistrantNameID
+// Primary Registrant Name + EPA Company Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dRegistrantNameID( VIEW mSubLC BASED ON LOD mSubLC,
+                   STRING ( 32 ) InternalEntityStructure,
+                   STRING ( 32 ) InternalAttribStructure,
+                   SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubLC.Organization EXISTS
+         szString = mSubLC.Organization.Name
+         IF mSubLC.PrimaryRegistrant.EPA_CompanyNumber = ""
+            szString = szString + " (Non EPA)"
+         ELSE
+            szString = szString + " (" +
+                    mSubLC.PrimaryRegistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubLC,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dIngredientName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dIngredientName( VIEW mSubLC BASED ON LOD mSubLC,
+                 STRING ( 32 ) InternalEntityStructure,
+                 STRING ( 32 ) InternalAttribStructure,
+                 SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubLC.S_IngredientsStatement EXISTS
+         szString = mSubLC.S_IngredientsStatement.CommonName
+      IF szString = ""
+            szString = mSubLC.S_IngredientsStatement.ChemicalName
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubLC,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProductNameNbr( VIEW mSubLC BASED ON LOD mSubLC,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubLC.MasterProduct  EXISTS
+         szString = mSubLC.MasterProduct.Name + " (" +
+                    mSubLC.PrimaryRegistrant.EPA_CompanyNumber + "-" +
+                    mSubLC.MasterProduct.Number + ")"
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubLC,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregProductNameNbr( VIEW mSubLC BASED ON LOD mSubLC,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+       szString = mSubLC.SubregProduct.Name
+       IF mSubLC.SubregProduct.Number != 0
+          szString = szString + " (" + mSubLC.SubregProduct.Number + ")"
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubLC,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildNewSLC_Version
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildNewSLC_Version( VIEW NewSLC      BASED ON LOD mSubLC,
+                     VIEW PreviousSLC BASED ON LOD mSubLC,
+                     VIEW SourceMLC   BASED ON LOD mMasLC,
+                     VIEW PreviousMLC BASED ON LOD lMLCASrc )
+
+// STRING ( 10 ) szVersion
+   STRING ( 1 )  szEntityFoundFlag
+
+   // Create a new SLC from a previous SLC, tying the new back to the original.
+
+   // Root and single includes
+   CREATE ENTITY NewSLC.SubregLabelContent
+   SetMatchingAttributesByName( NewSLC, "SubregLabelContent", PreviousSLC, "SubregLabelContent", zSET_NULL )
+   SetAttributeFromCurrentDateTime( NewSLC, "SubregLabelContent", "RevisionDate" )
+// szVersion = NewSLC.SubregLabelContent.RevisionDate
+// NewSLC.SubregLabelContent.Version = szVersion  already done in calling routine
+   INCLUDE NewSLC.SubregProduct FROM PreviousSLC.SubregProduct
+   INCLUDE NewSLC.SP_SubregLabelContent FROM PreviousSLC.SubregLabelContent
+   INCLUDE NewSLC.MasterLabelContent FROM SourceMLC.MasterLabelContent
+
+   // S_Usage
+   // Usages come from the MLC.
+   FOR EACH SourceMLC.M_Usage
+      CREATE ENTITY NewSLC.S_Usage
+      SetMatchingAttributesByName( NewSLC, "S_Usage", SourceMLC, "M_Usage", zSET_NULL )
+   END
+
+   // S_GeneralSection
+   // General Sections must come entirely from the source MLC.
+   FOR EACH SourceMLC.M_GeneralSection
+      CREATE ENTITY NewSLC.S_GeneralSection
+      SetMatchingAttributesByName( NewSLC, "S_GeneralSection", SourceMLC, "M_GeneralSection", zSET_NULL )
+      INCLUDE NewSLC.M_GeneralSection FROM SourceMLC.M_GeneralSection
+      FOR EACH SourceMLC.M_GeneralStatement
+         CREATE ENTITY NewSLC.S_GeneralStatement
+         SetMatchingAttributesByName( NewSLC, "S_GeneralStatement", SourceMLC, "M_GeneralStatement", zSET_NULL )
+         INCLUDE NewSLC.M_GeneralStatement FROM SourceMLC.M_GeneralStatement
+      END
+   END
+
+   // S_IngredientsSection
+   // The Ingredients Sections must come entirely from the source MLC.
+   FOR EACH SourceMLC.M_IngredientsSection
+      CREATE ENTITY NewSLC.S_IngredientsSection
+      SetMatchingAttributesByName( NewSLC, "S_IngredientsSection", SourceMLC, "M_IngredientsSection", zSET_NULL )
+      INCLUDE NewSLC.M_IngredientsSection FROM SourceMLC.M_IngredientsSection
+      FOR EACH SourceMLC.M_IngredientsStatement
+         CREATE ENTITY NewSLC.S_IngredientsStatement
+         SetMatchingAttributesByName( NewSLC, "S_IngredientsStatement", SourceMLC, "M_IngredientsStatement", zSET_NULL )
+         INCLUDE NewSLC.M_IngredientsStatement FROM SourceMLC.M_IngredientsStatement
+      END
+   END
+
+   // S_StorageDisposalSection
+   // StorageDisposal Sections must come from the source MLC, except that, which Sections to use come from the previous SLC.
+   FOR EACH PreviousSLC.S_StorageDisposalSection
+      SET CURSOR FIRST PreviousMLC.M_StorageDisposalSection WHERE PreviousMLC.M_StorageDisposalSection.ID = PreviousSLC.M_StorageDisposalSection.ID
+      IF PreviousMLC.MN_StorageDisposalSection EXISTS
+         SET CURSOR FIRST SourceMLC.M_StorageDisposalSection WHERE SourceMLC.M_StorageDisposalSection.ID = PreviousMLC.MN_StorageDisposalSection.ID
+         // Now just copy the entries from the MLC StorageDisposal Section.
+         CREATE ENTITY NewSLC.S_StorageDisposalSection
+         SetMatchingAttributesByName( NewSLC, "S_StorageDisposalSection", SourceMLC, "M_StorageDisposalSection", zSET_NULL )
+         INCLUDE NewSLC.M_StorageDisposalSection FROM SourceMLC.M_StorageDisposalSection
+         FOR EACH SourceMLC.M_StorageDisposalStatement
+            CREATE ENTITY NewSLC.S_StorageDisposalStatement
+            SetMatchingAttributesByName( NewSLC, "S_StorageDisposalStatement", SourceMLC, "M_StorageDisposalStatement", zSET_NULL )
+            INCLUDE NewSLC.M_StorageDisposalStatement FROM SourceMLC.M_StorageDisposalStatement
+         END
+      END
+   END
+
+   // S_DirectionsForUseSection
+   // DirectionsForUse Sections must come from the source MLC, except for the Usages, which come from the previous SLC.
+   FOR EACH SourceMLC.M_DirectionsForUseSection
+      CREATE ENTITY NewSLC.S_DirectionsForUseSection
+      SetMatchingAttributesByName( NewSLC, "S_DirectionsForUseSection", SourceMLC, "M_DirectionsForUseSection", zSET_NULL )
+      INCLUDE NewSLC.M_DirectionsForUseSection FROM SourceMLC.M_DirectionsForUseSection
+      FOR EACH SourceMLC.M_DirectionsForUseStatement
+         CREATE ENTITY NewSLC.S_DirectionsForUseStatement
+         SetMatchingAttributesByName( NewSLC, "S_DirectionsForUseStatement", SourceMLC, "M_DirectionsForUseStatement", zSET_NULL )
+         INCLUDE NewSLC.M_DirectionsForUseStatement FROM SourceMLC.M_DirectionsForUseStatement
+      END
+
+      // Proceed back to PreviousMLC and then to previous SLC to get DirectionsUsages.
+      // If a DirectionsForUse section is not in either the previous MLC or the SLC, we'll use the intersection of Usages from the
+      // source MLC DirectionsForUse and the SLC.
+      szEntityFoundFlag = ""
+      IF SourceMLC.MP_DirectionsForUseSection EXISTS
+         SET CURSOR FIRST PreviousSLC.M_DirectionsForUseStatement WITHIN PreviousSLC.SubregLabelContent
+                    WHERE PreviousSLC.M_DirectionsForUseSection.ID = SourceMLC.MP_DirectionsForUseSection.ID
+         IF RESULT >= zCURSOR_SET
+            szEntityFoundFlag = "Y"
+         END
+      END
+      IF szEntityFoundFlag = "Y"
+         // The previous DirectionsForUse section exists, so get the Usages from the corresponding SLC DirectionsForUse entry that are
+         // also in the NewSLC and thereby also in the Source MLC. .
+         // The OriginalDirectionsUsage entries, however, will just come directly from the MLC.
+         FOR EACH PreviousSLC.S_DirectionsUsage WITHIN PreviousSLC.S_DirectionsForUseSection
+            SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = PreviousSLC.S_DirectionsUsage.UsageType
+                                              AND NewSLC.S_Usage.Name = PreviousSLC.S_DirectionsUsage.Name
+            IF RESULT >= zCURSOR_SET
+               CREATE ENTITY NewSLC.S_DirectionsUsageOrdering
+               INCLUDE NewSLC.S_DirectionsUsage FROM NewSLC.S_Usage
+            END
+         END
+         FOR EACH SourceMLC.M_DirectionsUsage WITHIN SourceMLC.M_DirectionsForUseSection
+            SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = SourceMLC.M_DirectionsUsage.UsageType
+                                              AND NewSLC.S_Usage.Name = SourceMLC.M_DirectionsUsage.Name
+            IF RESULT >= zCURSOR_SET
+               CREATE ENTITY NewSLC.S_OriginalDirectionUsageOrdering
+               INCLUDE NewSLC.S_OriginalDirectionsUsage FROM NewSLC.S_Usage
+            END
+         END
+      ELSE
+         // The previous DirectionsForUse section does not exist, so use the DirectionsUsages that are defined to the MLC for both the new
+         // DirectionsForUse entries and the OriginalDirectionsUsage entries.
+         FOR EACH SourceMLC.M_DirectionsUsage WITHIN SourceMLC.M_DirectionsForUseSection
+            SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = SourceMLC.M_DirectionsUsage.UsageType
+                                              AND NewSLC.S_Usage.Name = SourceMLC.M_DirectionsUsage.Name
+            IF RESULT >= zCURSOR_SET
+               CREATE ENTITY NewSLC.S_DirectionsUsageOrdering
+               INCLUDE NewSLC.S_DirectionsUsage         FROM NewSLC.S_Usage
+               CREATE ENTITY NewSLC.S_OriginalDirectionUsageOrdering
+               INCLUDE NewSLC.S_OriginalDirectionsUsage FROM NewSLC.S_Usage
+            END
+         END
+      END
+   END
+
+   // S_MarketingSection
+   // Marketing Sections come from the previous SLC.
+   // However, we only build sections and statements that are also in the source MLC.
+   FOR EACH PreviousSLC.S_MarketingSection
+      SET CURSOR FIRST PreviousMLC.M_MarketingSection WHERE PreviousMLC.M_MarketingSection.ID = PreviousSLC.M_MarketingSection.ID
+      IF PreviousMLC.MN_MarketingSection EXISTS
+         SET CURSOR FIRST SourceMLC.M_MarketingSection WHERE SourceMLC.M_MarketingSection.ID = PreviousMLC.MN_MarketingSection.ID
+         CREATE ENTITY NewSLC.S_MarketingSection
+         SetMatchingAttributesByName( NewSLC, "S_MarketingSection", SourceMLC, "M_MarketingSection", zSET_NULL )
+         INCLUDE NewSLC.M_MarketingSection FROM SourceMLC.M_MarketingSection
+         INCLUDE NewSLC.SP_MarketingSection FROM PreviousSLC.S_MarketingSection
+
+         // Statements
+         FOR EACH PreviousSLC.S_MarketingStatement
+            SET CURSOR FIRST PreviousMLC.M_MarketingStatement WHERE PreviousMLC.M_MarketingStatement.ID = PreviousSLC.M_MarketingStatement.ID
+            IF PreviousMLC.MN_MarketingStatement EXISTS
+               SET CURSOR FIRST SourceMLC.M_MarketingStatement WHERE SourceMLC.M_MarketingStatement.ID = PreviousMLC.MN_MarketingStatement.ID
+               CREATE ENTITY NewSLC.S_MarketingStatement
+               SetMatchingAttributesByName( NewSLC, "S_MarketingStatement", SourceMLC, "M_MarketingStatement", zSET_NULL )
+               INCLUDE NewSLC.M_MarketingStatement FROM SourceMLC.M_MarketingStatement
+               INCLUDE NewSLC.SP_MarketingStatement FROM PreviousSLC.S_MarketingStatement
+            END
+         END
+
+         // Usages
+         // Recreate only MarketingUsages that are in the NewSLC and thereby also in the Source MLC.
+         // The OriginalMarketingUsage entries, however, will just come directly from the MLC.
+         FOR EACH PreviousSLC.S_MarketingUsage WITHIN PreviousSLC.S_MarketingSection
+            SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = PreviousSLC.S_MarketingUsage.UsageType
+                                              AND NewSLC.S_Usage.Name = PreviousSLC.S_MarketingUsage.Name
+            IF RESULT >= zCURSOR_SET
+               CREATE ENTITY NewSLC.S_MarketingUsageOrdering
+               INCLUDE NewSLC.S_MarketingUsage FROM NewSLC.S_Usage
+            END
+         END
+         FOR EACH SourceMLC.M_MarketingUsage WITHIN SourceMLC.M_MarketingSection
+            SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = SourceMLC.M_MarketingUsage.UsageType
+                                              AND NewSLC.S_Usage.Name = SourceMLC.M_MarketingUsage.Name
+            IF RESULT >= zCURSOR_SET
+               CREATE ENTITY NewSLC.S_OriginalMarketingUsageOrdering
+               INCLUDE NewSLC.S_OriginalMarketingUsage FROM NewSLC.S_Usage
+            END
+         END
+      END
+   END
+
+   // S_HumanHazardSection
+   // The HumanHazard Sections must come entirely from the source MLC.
+   FOR EACH SourceMLC.M_HumanHazardSection
+      CREATE ENTITY NewSLC.S_HumanHazardSection
+      SetMatchingAttributesByName( NewSLC, "S_HumanHazardSection", SourceMLC, "M_HumanHazardSection", zSET_NULL )
+      INCLUDE NewSLC.M_HumanHazardSection FROM SourceMLC.M_HumanHazardSection
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildSLC_FromMLC
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildSLC_FromMLC( VIEW NewSLC    BASED ON LOD mSubLC,
+                  VIEW SourceMLC BASED ON LOD mMasLC )
+
+   STRING ( 32 ) szVersion
+
+// IssueError( NewSLC, 0, 0, "Start of Build SLC" )
+
+   // Create a new SLC from an MLC and tie it back to the MLC.
+
+   // It is assumed that the root entity (SubregLabelContent) and that Subreg Product
+   // includes have been set up prior to execution of this operation.
+   IF NewSLC.MasterLabelContent DOES NOT EXIST
+      INCLUDE NewSLC.MasterLabelContent FROM SourceMLC.MasterLabelContent
+   END
+
+   // Usage Entries ... Surface, Application Type, Area of Use, Organism Claim
+   FOR EACH SourceMLC.M_Usage
+      // Check for duplicates.
+      SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = SourceMLC.M_Usage.UsageType
+                                        AND NewSLC.S_Usage.Name = SourceMLC.M_Usage.Name
+      IF RESULT < zCURSOR_SET
+         SET CURSOR LAST NewSLC.S_Usage
+         CREATE ENTITY NewSLC.S_Usage
+         SetMatchingAttributesByName( NewSLC, "S_Usage", SourceMLC, "M_Usage", zSET_NULL )
+      END
+   END
+
+   // General Section ... Precautionary, First Aid, Other Hazard
+   FOR EACH SourceMLC.M_GeneralSection
+      CREATE ENTITY NewSLC.S_GeneralSection
+      SetMatchingAttributesByName( NewSLC, "S_GeneralSection", SourceMLC, "M_GeneralSection", zSET_NULL )
+      INCLUDE NewSLC.M_GeneralSection FROM SourceMLC.M_GeneralSection
+      FOR EACH SourceMLC.M_GeneralStatement
+         CREATE ENTITY NewSLC.S_GeneralStatement
+         SetMatchingAttributesByName( NewSLC, "S_GeneralStatement", SourceMLC, "M_GeneralStatement", zSET_NULL )
+         INCLUDE NewSLC.M_GeneralStatement FROM SourceMLC.M_GeneralStatement
+      END
+   END
+
+   // Ingredients Section
+   FOR EACH SourceMLC.M_IngredientsSection
+      CREATE ENTITY NewSLC.S_IngredientsSection
+      SetMatchingAttributesByName( NewSLC, "S_IngredientsSection", SourceMLC, "M_IngredientsSection", zSET_NULL )
+      INCLUDE NewSLC.M_IngredientsSection FROM SourceMLC.M_IngredientsSection
+      FOR EACH SourceMLC.M_IngredientsStatement
+         CREATE ENTITY NewSLC.S_IngredientsStatement
+         SetMatchingAttributesByName( NewSLC, "S_IngredientsStatement", SourceMLC, "M_IngredientsStatement", zSET_NULL )
+         INCLUDE NewSLC.M_IngredientsStatement FROM SourceMLC.M_IngredientsStatement
+      END
+   END
+
+   // StorageDisposal Section
+   FOR EACH SourceMLC.M_StorageDisposalSection
+      CREATE ENTITY NewSLC.S_StorageDisposalSection
+      SetMatchingAttributesByName( NewSLC, "S_StorageDisposalSection", SourceMLC, "M_StorageDisposalSection", zSET_NULL )
+      INCLUDE NewSLC.M_StorageDisposalSection FROM SourceMLC.M_StorageDisposalSection
+      FOR EACH SourceMLC.M_StorageDisposalStatement
+         CREATE ENTITY NewSLC.S_StorageDisposalStatement
+         SetMatchingAttributesByName( NewSLC, "S_StorageDisposalStatement", SourceMLC, "M_StorageDisposalStatement", zSET_NULL )
+         INCLUDE NewSLC.M_StorageDisposalStatement FROM SourceMLC.M_StorageDisposalStatement
+      END
+   END
+
+   // DirectionsForUse Section
+   FOR EACH SourceMLC.M_DirectionsForUseSection
+      CREATE ENTITY NewSLC.S_DirectionsForUseSection
+      SetMatchingAttributesByName( NewSLC, "S_DirectionsForUseSection", SourceMLC, "M_DirectionsForUseSection", zSET_NULL )
+      INCLUDE NewSLC.M_DirectionsForUseSection FROM SourceMLC.M_DirectionsForUseSection
+      FOR EACH SourceMLC.M_DirectionsForUseStatement
+         CREATE ENTITY NewSLC.S_DirectionsForUseStatement
+         SetMatchingAttributesByName( NewSLC, "S_DirectionsForUseStatement", SourceMLC, "M_DirectionsForUseStatement", zSET_NULL )
+         INCLUDE NewSLC.M_DirectionsForUseStatement FROM SourceMLC.M_DirectionsForUseStatement
+      END
+
+      FOR EACH SourceMLC.M_DirectionsUsage WITHIN SourceMLC.M_DirectionsForUseSection
+         SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = SourceMLC.M_DirectionsUsage.UsageType
+                                           AND NewSLC.S_Usage.Name = SourceMLC.M_DirectionsUsage.Name
+         IF RESULT >= zCURSOR_SET
+            // Check duplicates.
+            SET CURSOR FIRST NewSLC.S_OriginalDirectionsUsage WHERE NewSLC.S_OriginalDirectionsUsage.UsageType = SourceMLC.M_DirectionsUsage.UsageType
+                                                                AND NewSLC.S_OriginalDirectionsUsage.Name = SourceMLC.M_DirectionsUsage.Name
+            IF RESULT < zCURSOR_SET
+               CREATE ENTITY NewSLC.S_DirectionsUsageOrdering
+               INCLUDE NewSLC.S_DirectionsUsage         FROM NewSLC.S_Usage
+               CREATE ENTITY NewSLC.S_OriginalDirectionUsageOrdering
+               INCLUDE NewSLC.S_OriginalDirectionsUsage FROM NewSLC.S_Usage
+            END
+         END
+      END
+   END
+
+   // Marketing Section
+   FOR EACH SourceMLC.M_MarketingSection
+      CREATE ENTITY NewSLC.S_MarketingSection
+      SetMatchingAttributesByName( NewSLC, "S_MarketingSection", SourceMLC, "M_MarketingSection", zSET_NULL )
+      INCLUDE NewSLC.M_MarketingSection FROM SourceMLC.M_MarketingSection
+      FOR EACH SourceMLC.M_MarketingStatement
+         CREATE ENTITY NewSLC.S_MarketingStatement
+         SetMatchingAttributesByName( NewSLC, "S_MarketingStatement", SourceMLC, "M_MarketingStatement", zSET_NULL )
+         INCLUDE NewSLC.M_MarketingStatement FROM SourceMLC.M_MarketingStatement
+      END
+
+      FOR EACH SourceMLC.M_MarketingUsage WITHIN SourceMLC.M_MarketingSection
+         SET CURSOR FIRST NewSLC.S_Usage WHERE NewSLC.S_Usage.UsageType = SourceMLC.M_MarketingUsage.UsageType
+                                           AND NewSLC.S_Usage.Name = SourceMLC.M_MarketingUsage.Name
+         IF RESULT >= zCURSOR_SET
+            // Check duplicates.
+            SET CURSOR FIRST NewSLC.S_OriginalMarketingUsage WHERE NewSLC.S_OriginalMarketingUsage.UsageType = SourceMLC.M_MarketingUsage.UsageType
+                                                               AND NewSLC.S_OriginalMarketingUsage.Name = SourceMLC.M_MarketingUsage.Name
+            IF RESULT < zCURSOR_SET
+               CREATE ENTITY NewSLC.S_MarketingUsageOrdering
+               INCLUDE NewSLC.S_MarketingUsage         FROM NewSLC.S_Usage
+               CREATE ENTITY NewSLC.S_OriginalMarketingUsageOrdering
+               INCLUDE NewSLC.S_OriginalMarketingUsage FROM NewSLC.S_Usage
+            END
+         END
+      END
+   END
+
+   // HumanHazard Section
+   FOR EACH SourceMLC.M_HumanHazardSection
+      CREATE ENTITY NewSLC.S_HumanHazardSection
+      SetMatchingAttributesByName( NewSLC, "S_HumanHazardSection", SourceMLC, "M_HumanHazardSection", zSET_NULL )
+      INCLUDE NewSLC.M_HumanHazardSection FROM SourceMLC.M_HumanHazardSection
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dFullHazardStatement
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullHazardStatement( VIEW mSubLC BASED ON LOD mSubLC,
+                      STRING ( 32 ) InternalEntityStructure,
+                      STRING ( 32 ) InternalAttribStructure,
+                      SHORT GetOrSetFlag )
+
+   STRING ( 256 ) szString
+   STRING ( 256 ) szReplaceString
+   STRING ( 256 ) szLocation
+   SHORT nPosStart
+   SHORT nPosEnd
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSubLC.S_HumanHazardSection  EXISTS
+
+         szString = mSubLC.S_HumanHazardSection.PrecautionaryStatement
+         nPosStart  = zSearchSubString( szString, "{{Precautionary Position}}", "f", 0 )
+         IF nPosStart >= 0
+
+            nPosEnd = nPosStart + 26 // length of "{{Precautionary Position}}"
+            szReplaceString = ""
+            szLocation = mSubLC.S_HumanHazardSection.Location1
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSubLC.S_HumanHazardSection.Location2
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSubLC.S_HumanHazardSection.Location3
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSubLC.S_HumanHazardSection.Location4
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSubLC.S_HumanHazardSection.Location5
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            zReplaceSubString( szString, nPosStart, nPosEnd, szReplaceString )
+         END
+
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSubLC,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

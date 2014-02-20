@@ -1,0 +1,35 @@
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregProductNameNbr( VIEW lSubLCA BASED ON LOD lSubLCA,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+       szString = lSubLCA.SubregProduct.Name
+       IF lSubLCA.SubregProduct.Number != 0
+          szString = szString + " (" + lSubLCA.SubregProduct.Number + ")"
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( lSubLCA,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

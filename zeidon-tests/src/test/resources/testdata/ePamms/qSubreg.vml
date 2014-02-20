@@ -1,0 +1,103 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    qSubreg       - Subregistrant maintenance operations
+// FILE:         qSubreg.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameLFM
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameLFM( VIEW qSubreg BASED ON LOD qSubreg,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_LastFirstMiddle( qSubreg, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameFML
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameFML( VIEW qSubreg BASED ON LOD qSubreg,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_FirstMiddleLast( qSubreg, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dRegistrantNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dRegistrantNameID( VIEW qSubreg BASED ON LOD qSubreg,
+                   STRING ( 32 ) InternalEntityStructure,
+                   STRING ( 32 ) InternalAttribStructure,
+                   SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF qSubreg.SubregOrganization EXISTS
+         szString = qSubreg.SubregOrganization.Name
+         IF qSubreg.Subregistrant.EPA_CompanyNumber = ""
+            szString = szString + " (Non EPA)"
+         ELSE
+            szString = szString + " (" +
+                    qSubreg.Subregistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( qSubreg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

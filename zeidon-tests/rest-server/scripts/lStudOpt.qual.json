@@ -1,0 +1,23 @@
+{
+  ".oimeta" : {
+    "application" : "ZeidonSystem",
+    "odName" : "KZDBHQUA",
+    "incremental" : false
+  },
+  "EntitySpec" : [ {
+    "EntityName" : "Student",
+    "QualAttrib" : [ {
+      "EntityName" : "Student",
+      "AttributeName" : "Status",
+      "Value" : "A",
+      "Oper" : "="
+    }, {
+      "Oper" : "AND"
+    }, {
+      "EntityName" : "MajorDepartment",
+      "AttributeName" : "ID",
+      "Value" : "3",
+      "Oper" : "="
+    } ]
+  } ]
+}

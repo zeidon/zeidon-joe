@@ -1,0 +1,1137 @@
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildDifferencesMLC
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildDifferencesMLC( VIEW lMLCATgt BASED ON LOD lMLCATgt,
+                     VIEW lMLCASrc BASED ON LOD lMLCASrc )
+
+   STRING ( 20 ) szUsageType
+   STRING ( 20 ) szPercent
+   STRING ( 50 ) szSortTitle
+   INTEGER       lSortEntryNbr
+   INTEGER       lSortSectionNbr
+
+   // Build a difference subobject in the Target object that shows the differences between the two MLCs.
+
+   // Sorting: Note that we use SetDifferencesSortVs operation to set sort values that will put all the Difference entries for a Section
+   // together even though they were constructed separately.
+
+   // GENERAL
+
+   // First Process each Target entry against the corresponding Source entry.
+   FOR EACH lMLCATgt.M_GeneralSection
+      // Title
+      CREATE ENTITY lMLCATgt.ComparisonDifference
+      lMLCATgt.ComparisonDifference.Title = "General: " + lMLCATgt.M_GeneralSection.Title
+      lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+      lSortSectionNbr = lSortSectionNbr + 1
+      lMLCATgt.M_GeneralSection.wSectionSortOrder     = lSortSectionNbr
+      lMLCATgt.ComparisonDifference.SortSectionNumber = lSortSectionNbr
+      szSortTitle = "1General" //+ lMLCATgt.ComparisonDifference.Title
+      SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+
+      IF lMLCATgt.MP_GeneralSection EXISTS
+         // This section was created from a Source, so see if Title and Statement match.
+         IF lMLCATgt.M_GeneralSection.Title != lMLCATgt.MP_GeneralSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...General Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_GeneralSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lMLCATgt.M_GeneralStatement
+            IF lMLCATgt.MP_GeneralStatement EXISTS
+               IF lMLCATgt.M_GeneralStatement.Text != lMLCATgt.MP_GeneralStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_GeneralStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // Statement is new.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // This section is new (NOT created from a Source), so list each Title and Statement text as differences.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...General Section Title"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralSection.Title
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCATgt.M_GeneralStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+   // Process each source Section and Statement that doesn't have a corresponding Target entry.
+   FOR EACH lMLCASrc.M_GeneralSection
+      IF lMLCASrc.MN_GeneralSection EXISTS
+         // Section exists in Target, check for each Statement.
+         FOR EACH lMLCASrc.M_GeneralStatement
+            IF lMLCASrc.MN_GeneralStatement DOES NOT EXIST
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_GeneralStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+
+      ELSE
+         // Section and Statements do not exist in in Target.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...General Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_GeneralSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCASrc.M_GeneralStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_GeneralStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // INGREDIENTS
+
+   // Ingredients differences are only in Statement ChemicalName and Percent.
+   // Title
+   CREATE ENTITY lMLCATgt.ComparisonDifference
+   lMLCATgt.ComparisonDifference.Title = "Ingredients"
+   lSortSectionNbr = lSortSectionNbr + 1
+   lMLCATgt.M_IngredientsSection.wSectionSortOrder = lSortSectionNbr
+   lMLCATgt.ComparisonDifference.SortSectionNumber = lSortSectionNbr
+   SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, "2Ingredients" )
+   lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+   szSortTitle = "2Ingredients" //+ lMLCATgt.ComparisonDifference.Title
+
+   // First check Target.
+   FOR EACH lMLCATgt.M_IngredientsStatement
+      // SystemChemical Name
+      IF lMLCATgt.MP_IngredientsStatement EXISTS
+         // SystemChemical Name
+         IF lMLCATgt.M_IngredientsStatement.ChemicalName != lMLCATgt.MP_IngredientsStatement.ChemicalName
+            // SystemChemical Name has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Ingredient SystemChemical"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_IngredientsStatement.ChemicalName
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_IngredientsStatement.ChemicalName
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         // Percent
+         IF lMLCATgt.M_IngredientsStatement.Percent != lMLCATgt.MP_IngredientsStatement.Percent
+            // Percent has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Ingredient Percent"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_IngredientsStatement.Percent
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_IngredientsStatement.Percent
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      ELSE
+         // Statement does not exist in Source.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Ingredient/Percent"
+         GetStringFromAttributeByContext( szPercent, lMLCATgt, "M_IngredientsStatement", "Percent", "", 20 )
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_IngredientsStatement.ChemicalName + ": " + szPercent
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+   // Next check Source
+   FOR EACH lMLCASrc.M_IngredientsStatement
+      IF lMLCASrc.MN_IngredientsStatement DOES NOT EXIST
+         // Statement does not exist in Target.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Ingredient/Percent"
+         GetStringFromAttributeByContext( szPercent, lMLCASrc, "M_IngredientsStatement", "Percent", "", 20 )
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_IngredientsStatement.ChemicalName + ": " + szPercent
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+
+   // USAGE STATEMENTS
+
+   // List any Usage statements that are in Target but not is Source and vice versa.
+   // First check Target Usages.
+
+   // Title
+   CREATE ENTITY lMLCATgt.ComparisonDifference
+   lMLCATgt.ComparisonDifference.Title = "Usages"
+   szSortTitle = "Usages" //+ lMLCATgt.ComparisonDifference.Title
+   SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+   lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+
+   FOR EACH lMLCATgt.M_Usage
+      SET CURSOR FIRST lMLCASrc.M_Usage
+                 WHERE lMLCASrc.M_Usage.UsageType = lMLCATgt.M_Usage.UsageType
+                   AND lMLCASrc.M_Usage.Name = lMLCATgt.M_Usage.Name
+      IF RESULT < zCURSOR_SET
+         GetStringFromAttributeByContext( szUsageType, lMLCATgt, "M_Usage", "UsageType", "", 20 )
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "..." + szUsageType
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_Usage.Name
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+
+   // Next check Source Usages.
+   FOR EACH lMLCASrc.M_Usage
+      SET CURSOR FIRST lMLCATgt.M_Usage
+                 WHERE lMLCATgt.M_Usage.UsageType = lMLCASrc.M_Usage.UsageType
+                   AND lMLCATgt.M_Usage.Name = lMLCASrc.M_Usage.Name
+      IF RESULT < zCURSOR_SET
+         GetStringFromAttributeByContext( szUsageType, lMLCASrc, "M_Usage", "UsageType", "", 20 )
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "..." + szUsageType
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_Usage.Name
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+
+   // STORAGE AND DISPOSAL
+
+   // First Process each Target entry against the corresponding Source entry.
+   FOR EACH lMLCATgt.M_StorageDisposalSection
+      // Title
+      CREATE ENTITY lMLCATgt.ComparisonDifference
+      lMLCATgt.ComparisonDifference.Title = "Storage + Disposal: " + lMLCATgt.M_StorageDisposalSection.Title
+      lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+      lSortSectionNbr = lSortSectionNbr + 1
+      lMLCATgt.M_StorageDisposalSection.wSectionSortOrder = lSortSectionNbr
+      lMLCATgt.ComparisonDifference.SortSectionNumber     = lSortSectionNbr
+      szSortTitle = "3Storage + Disposal" //+ lMLCATgt.ComparisonDifference.Title
+      SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+
+      IF lMLCATgt.MP_StorageDisposalSection EXISTS
+         // This section was created from a Source, so see if Title and Statement match.
+         IF lMLCATgt.M_StorageDisposalSection.Title != lMLCATgt.MP_StorageDisposalSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_StorageDisposalSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lMLCATgt.M_StorageDisposalStatement
+            IF lMLCATgt.MP_StorageDisposalStatement EXISTS
+               IF lMLCATgt.M_StorageDisposalStatement.Text != lMLCATgt.MP_StorageDisposalStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_StorageDisposalStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // Statement is new.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Statement Text"
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // This section is new (NOT created from a Source), so list each Title and Statement text as differences.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Section Title"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCATgt.M_StorageDisposalStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Statement Text"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+   // Process each source Section and Statement that doesn't have a corresponding Target entry.
+   FOR EACH lMLCASrc.M_StorageDisposalSection
+      IF lMLCASrc.MN_StorageDisposalSection EXISTS
+         // Section exists in Target, check for each Statement.
+         FOR EACH lMLCASrc.M_StorageDisposalStatement
+            IF lMLCASrc.MN_StorageDisposalStatement DOES NOT EXIST
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_StorageDisposalStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+
+      ELSE
+         // Section and Statements do not exist in in Target.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_StorageDisposalSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCASrc.M_StorageDisposalStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Storage Disposal Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_StorageDisposalStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // DIRECTIONS FOR USE
+
+   // First Process each Target entry against the corresponding Source entry.
+   FOR EACH lMLCATgt.M_DirectionsForUseSection
+      // Title
+      CREATE ENTITY lMLCATgt.ComparisonDifference
+      lMLCATgt.ComparisonDifference.Title = "Directions for Use: " + lMLCATgt.M_DirectionsForUseSection.Title
+      lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+      lSortSectionNbr = lSortSectionNbr + 1
+      lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder = lSortSectionNbr
+      lMLCATgt.ComparisonDifference.SortSectionNumber      = lSortSectionNbr
+      szSortTitle = "4Directions" //+ lMLCATgt.ComparisonDifference.Title
+      SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+
+      IF lMLCATgt.MP_DirectionsForUseSection EXISTS
+         // This section was created from a Source, so see if Title and Statement match.
+         IF lMLCATgt.M_DirectionsForUseSection.Title != lMLCATgt.MP_DirectionsForUseSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Directions Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_DirectionsForUseSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lMLCATgt.M_DirectionsForUseStatement
+            IF lMLCATgt.MP_DirectionsForUseStatement EXISTS
+               IF lMLCATgt.M_DirectionsForUseStatement.Text != lMLCATgt.MP_DirectionsForUseStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_DirectionsForUseStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // Statement is new.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+         // Target Usages not in Source
+         SET CURSOR FIRST lMLCASrc.M_DirectionsForUseSection WHERE lMLCASrc.M_DirectionsForUseSection.ID = lMLCATgt.MP_DirectionsForUseSection.ID
+         FOR EACH lMLCATgt.M_DirectionsUsage WITHIN lMLCATgt.M_DirectionsForUseSection
+            SET CURSOR FIRST lMLCASrc.M_DirectionsUsage WITHIN lMLCASrc.M_DirectionsForUseSection
+                       WHERE lMLCASrc.M_DirectionsUsage.UsageType = lMLCATgt.M_DirectionsUsage.UsageType
+                         AND lMLCASrc.M_DirectionsUsage.Name = lMLCATgt.M_DirectionsUsage.Name
+            IF RESULT < zCURSOR_SET
+               GetStringFromAttributeByContext( szUsageType, lMLCATgt, "M_DirectionsUsage", "UsageType", "", 20 )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Directions " + szUsageType
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsUsage.Name
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+         // Source Usages not in Target
+         FOR EACH lMLCASrc.M_DirectionsUsage WITHIN lMLCASrc.M_DirectionsForUseSection
+            SET CURSOR FIRST lMLCATgt.M_DirectionsUsage WITHIN lMLCATgt.M_DirectionsForUseSection
+                       WHERE lMLCATgt.M_DirectionsUsage.UsageType = lMLCASrc.M_DirectionsUsage.UsageType
+                         AND lMLCATgt.M_DirectionsUsage.Name = lMLCASrc.M_DirectionsUsage.Name
+            IF RESULT < zCURSOR_SET
+               GetStringFromAttributeByContext( szUsageType, lMLCASrc, "M_DirectionsUsage", "UsageType", "", 20 )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Directions " + szUsageType
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_DirectionsUsage.Name
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // This section is new (NOT created from the Source MLC), so list each Title and Statement text as differences.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...DirectionsForUse Section Title"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCATgt.M_DirectionsForUseStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+   // Process each source Section and Statement that doesn't have a corresponding Target entry.
+   FOR EACH lMLCASrc.M_DirectionsForUseSection
+      IF lMLCASrc.MN_DirectionsForUseSection EXISTS
+         // Section exists in Target, check for each Statement.
+         FOR EACH lMLCASrc.M_DirectionsForUseStatement
+            IF lMLCASrc.MN_DirectionsForUseStatement DOES NOT EXIST
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_DirectionsForUseStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+
+      ELSE
+         // Section and Statements do not exist in in Target.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Directions Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_DirectionsForUseSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCASrc.M_DirectionsForUseStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_DirectionsForUseStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // MARKETING
+
+   // First Process each Target entry against the corresponding Source entry.
+   FOR EACH lMLCATgt.M_MarketingSection
+      // Title
+      CREATE ENTITY lMLCATgt.ComparisonDifference
+      lMLCATgt.ComparisonDifference.Title = "Marketing: " + lMLCATgt.M_MarketingSection.Title
+      lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+      lSortSectionNbr = lSortSectionNbr + 1
+      lMLCATgt.M_MarketingSection.wSectionSortOrder   = lSortSectionNbr
+      lMLCATgt.ComparisonDifference.SortSectionNumber = lSortSectionNbr
+      szSortTitle = "5Marketing" //+ lMLCATgt.ComparisonDifference.Title
+      SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+
+      IF lMLCATgt.MP_MarketingSection EXISTS
+         // This section was created from a Source, so see if Title and Statement match.
+         IF lMLCATgt.M_MarketingSection.Title != lMLCATgt.MP_MarketingSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Marketing Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_MarketingSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lMLCATgt.M_MarketingStatement
+            IF lMLCATgt.MP_MarketingStatement EXISTS
+               IF lMLCATgt.M_MarketingStatement.Text != lMLCATgt.MP_MarketingStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "....Marketing Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_MarketingStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // Statement is new.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+         // Target Usages not in Source
+         SET CURSOR FIRST lMLCASrc.M_MarketingSection WHERE lMLCASrc.M_MarketingSection.ID = lMLCATgt.MP_MarketingSection.ID
+         FOR EACH lMLCATgt.M_MarketingUsage WITHIN lMLCATgt.M_MarketingSection
+            SET CURSOR FIRST lMLCASrc.M_MarketingUsage WITHIN lMLCASrc.M_MarketingSection
+                       WHERE lMLCASrc.M_MarketingUsage.UsageType = lMLCATgt.M_MarketingUsage.UsageType
+                         AND lMLCASrc.M_MarketingUsage.Name = lMLCATgt.M_MarketingUsage.Name
+            IF RESULT < zCURSOR_SET
+               GetStringFromAttributeByContext( szUsageType, lMLCATgt, "M_MarketingUsage", "UsageType", "", 20 )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Marketing " + szUsageType
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingUsage.Name
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+         // Source Usages not in Target
+         FOR EACH lMLCASrc.M_MarketingUsage WITHIN lMLCASrc.M_MarketingSection
+            SET CURSOR FIRST lMLCATgt.M_MarketingUsage WITHIN lMLCATgt.M_MarketingSection
+                       WHERE lMLCATgt.M_MarketingUsage.UsageType = lMLCASrc.M_MarketingUsage.UsageType
+                         AND lMLCATgt.M_MarketingUsage.Name = lMLCASrc.M_MarketingUsage.Name
+            IF RESULT < zCURSOR_SET
+               GetStringFromAttributeByContext( szUsageType, lMLCASrc, "M_MarketingUsage", "UsageType", "", 20 )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Marketing " + szUsageType
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_MarketingUsage.Name
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // This section is new (NOT created from a Source), so list each Title and Statement text as differences.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Marketing Section Title"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCATgt.M_MarketingStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+   // Process each source Section and Statement that doesn't have a corresponding Target entry.
+   FOR EACH lMLCASrc.M_MarketingSection
+      IF lMLCASrc.MN_MarketingSection EXISTS
+         // Section exists in Target, check for each Statement.
+         FOR EACH lMLCASrc.M_MarketingStatement
+            IF lMLCASrc.MN_MarketingStatement DOES NOT EXIST
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_MarketingStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // Section and Statements do not exist in in Target.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Marketing Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_MarketingSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lMLCASrc.M_MarketingStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_MarketingStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // HUMAN HAZARD
+
+   // First Process each Target entry against the corresponding Source entry.
+   FOR EACH lMLCATgt.M_HumanHazardSection
+      // Title
+      CREATE ENTITY lMLCATgt.ComparisonDifference
+      lMLCATgt.ComparisonDifference.Title = "Human Hazard: " + lMLCATgt.MP_HumanHazardSection.EPA_SignalWord
+      lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+      lSortSectionNbr = lSortSectionNbr + 1
+      lMLCATgt.M_HumanHazardSection.wSectionSortOrder = lSortSectionNbr
+      lMLCATgt.ComparisonDifference.SortSectionNumber = lSortSectionNbr
+      szSortTitle = "6Hazards" //+ lMLCATgt.ComparisonDifference.Title
+      SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+
+      IF lMLCATgt.MP_HumanHazardSection EXISTS
+         // This section was created from a Source, so see if EPA_SignalWord and EPA_ChildHazardWarning match.
+         IF lMLCATgt.M_HumanHazardSection.EPA_SignalWord != lMLCATgt.MP_HumanHazardSection.EPA_SignalWord
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Signal Word"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_SignalWord
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_HumanHazardSection.EPA_SignalWord
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         IF lMLCATgt.M_HumanHazardSection.EPA_ChildHazardWarning != lMLCATgt.MP_HumanHazardSection.EPA_ChildHazardWarning
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Warning"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_ChildHazardWarning
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCATgt.MP_HumanHazardSection.EPA_ChildHazardWarning
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      ELSE
+         // This section is new (NOT created from a Source), so list each EPA_SignalWord and EPA_ChildHazardWarning as differences.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Signal Word"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_SignalWord
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Warning"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_ChildHazardWarning
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+   // Process each source Section and Statement that doesn't have a corresponding Target entry.
+   FOR EACH lMLCASrc.M_HumanHazardSection
+      IF lMLCASrc.MN_HumanHazardSection DOES NOT EXIST
+         // Section and Statements do not exist in in Target.
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Signal Word"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_HumanHazardSection.EPA_SignalWord
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Warning"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_HumanHazardSection.EPA_ChildHazardWarning
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+
+   OrderEntityForView( lMLCATgt, "ComparisonDifference", "SortSectionTitle A SortEntryNumber A" )
+   lMLCATgt.MasterLabelContent.wLastSortNumber = lSortEntryNbr
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildDifferencesSLC
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildDifferencesSLC( VIEW lMLCATgt BASED ON LOD lMLCATgt,
+                     VIEW lMLCASrc BASED ON LOD lMLCASrc,
+                     VIEW lSLCAnal BASED ON LOD lSLCAnal )
+
+   STRING ( 20 ) szUsageType
+   STRING ( 20 ) szPercent
+   STRING ( 50 ) szSortTitle
+   INTEGER       lSortEntryNbr
+
+   // Build a difference subobject in the Target object that shows the differences between an SLC and
+   // a new MLC. For this analysis, we must progress from the SLC to its related MLC (lMLCASrc) and then to the new MLC (lMLCATgt).
+   // There are three kinds of differences:
+   // 1. There are new entries in the new MLC. For this we will run BuildDifferencesMLC and keep just the new entries.
+   // 2. There are differences between what was used for the SLC and the new MLC.
+   // 3. There are entries in the SLC that have been deleted from the MLC.
+
+   // Sorting: Note that we use SetDifferencesSortVs operation to set sort values that will put all the Difference entries for a Section
+   // together even though they were constructed separately.
+
+   // NEW MLC ENTRIES
+
+   // First execute BuildDifferencesMLC to build MLC differences and delete all resulting entries except those for new MLC entries.
+   BuildDifferencesMLC( lMLCATgt, lMLCASrc )
+   FOR EACH lMLCATgt.ComparisonDifference
+      IF lMLCATgt.ComparisonDifference.SourceStatementValue != ""
+         DELETE ENTITY lMLCATgt.ComparisonDifference NONE
+      END
+   END
+   lSortEntryNbr = lMLCATgt.MasterLabelContent.wLastSortNumber
+
+   // GENERAL
+
+   // Compare SLC data to new MLC data through the SLC's associated MLC.
+   FOR EACH lSLCAnal.S_GeneralSection
+
+      // Set up sort value so entries in this Operaiton sort with entries created earlier.
+      szSortTitle = "1General: " //+ lSLCAnal.M_GeneralSection.Title
+
+      // Follow SLC Section to related MLC and then to new MLC.
+      SET CURSOR FIRST lMLCASrc.M_GeneralSection WHERE lMLCASrc.M_GeneralSection.ID = lSLCAnal.M_GeneralSection.ID
+      SET CURSOR FIRST lMLCATgt.M_GeneralSection WHERE lMLCATgt.M_GeneralSection.ID = lMLCASrc.MN_GeneralSection.ID
+      IF RESULT >= zCURSOR_SET
+         // The SLC Section exists in the new MLC.
+         IF lMLCATgt.M_GeneralSection.Title != lSLCAnal.S_GeneralSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...General Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_GeneralSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_GeneralStatement
+            SET CURSOR FIRST lMLCASrc.M_GeneralStatement WHERE lMLCASrc.M_GeneralStatement.ID = lSLCAnal.M_GeneralStatement.ID
+            IF lMLCASrc.MN_GeneralStatement EXISTS
+               SET CURSOR FIRST lMLCATgt.M_GeneralStatement WHERE lMLCATgt.M_GeneralStatement.ID = lMLCASrc.MN_GeneralStatement.ID
+               IF lMLCATgt.M_GeneralStatement.Text != lSLCAnal.S_GeneralStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_GeneralStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_GeneralStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // SLC Statement has been deleted.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_GeneralStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // The SLC Section DOES NOT exist in the new MLC. (It has been deleted.)
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...General Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_GeneralSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lSLCAnal.S_GeneralStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...General Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_GeneralStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_GeneralSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // INGREDIENTS
+
+   // Ingredients differences are only in Statement ChemicalName and Percent.
+   // Compare SLC data to new MLC data through the SLC's associated MLC.
+
+   // Set up sort value so entries in this Operaiton sort with entries created earlier.
+   szSortTitle = "2Ingredients"
+
+   FOR EACH lSLCAnal.M_IngredientsStatement
+
+      // Follow SLC Section to related MLC and then to new MLC.
+      SET CURSOR FIRST lMLCASrc.M_IngredientsSection WHERE lMLCASrc.M_IngredientsSection.ID = lSLCAnal.M_IngredientsSection.ID
+      SET CURSOR FIRST lMLCATgt.M_IngredientsSection WHERE lMLCATgt.M_IngredientsSection.ID = lMLCASrc.MN_IngredientsSection.ID
+      IF RESULT >= zCURSOR_SET
+         // The SLC Section exists in the new MLC.
+         IF lMLCATgt.M_IngredientsSection.ActiveTitle != lSLCAnal.S_IngredientsSection.ActiveTitle
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Ingredients Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_IngredientsSection.ActiveTitle
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsSection.ActiveTitle
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_IngredientsStatement
+            SET CURSOR FIRST lMLCASrc.M_IngredientsStatement WHERE lMLCASrc.M_IngredientsStatement.ID = lSLCAnal.M_IngredientsStatement.ID
+            IF lMLCASrc.MN_IngredientsStatement EXISTS
+               SET CURSOR FIRST lMLCATgt.M_IngredientsStatement WHERE lMLCATgt.M_IngredientsStatement.ID = lMLCASrc.MN_IngredientsStatement.ID
+               IF lMLCATgt.M_IngredientsStatement.ChemicalName != lSLCAnal.S_IngredientsStatement.ChemicalName
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Ingredients Statement SystemChemical"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_IngredientsStatement.ChemicalName
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsStatement.ChemicalName
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+               IF lMLCATgt.M_IngredientsStatement.Percent != lSLCAnal.S_IngredientsStatement.Percent
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Ingredients Statement Percent"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_IngredientsStatement.Percent
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsStatement.Percent
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // SLC Statement has been deleted.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Ingredients Statement SystemChemical"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsStatement.ChemicalName
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Ingredients Statement Percent"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsStatement.Percent
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // The SLC Section DOES NOT exist in the new MLC. (It has been deleted.)
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Ingredients Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsSection.ActiveTitle
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lSLCAnal.S_IngredientsStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Ingredients Statement SystemChemical"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsStatement.ChemicalName
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Ingredients Statement Percent"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_IngredientsStatement.Percent
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_IngredientsSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // USAGE STATEMENTS
+
+   // List any Usage statements that are in SLC (which is same as those in source MLC) but not in Target MLC. Those new to
+   // Target MLC were created in operation, BuildDifferencesMLC.
+
+   // Set up sort value so entries in this Operaiton sort with entries created earlier.
+   szSortTitle = "9Usages"
+
+   FOR EACH lMLCASrc.M_Usage
+      SET CURSOR FIRST lMLCATgt.M_Usage
+                 WHERE lMLCATgt.M_Usage.UsageType = lMLCASrc.M_Usage.UsageType
+                   AND lMLCATgt.M_Usage.Name = lMLCASrc.M_Usage.Name
+      IF RESULT < zCURSOR_SET
+         GetStringFromAttributeByContext( szUsageType, lMLCASrc, "M_Usage", "UsageType", "", 20 )
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "..." + szUsageType
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lMLCASrc.M_Usage.Name
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+
+   // STORAGE AND DISPOSAL
+
+   // Compare SLC data to new MLC data through the SLC's associated MLC.
+   FOR EACH lSLCAnal.S_StorageDisposalSection
+
+      // Set up sort value so entries in this Operaiton sort with entries created earlier.
+      szSortTitle = "3Storage + Disposal: " //+ lSLCAnal.M_StorageDisposalSection.Title
+
+      // Follow SLC Section to related MLC and then to new MLC.
+      SET CURSOR FIRST lMLCASrc.M_StorageDisposalSection WHERE lMLCASrc.M_StorageDisposalSection.ID = lSLCAnal.M_StorageDisposalSection.ID
+      SET CURSOR FIRST lMLCATgt.M_StorageDisposalSection WHERE lMLCATgt.M_StorageDisposalSection.ID = lMLCASrc.MN_StorageDisposalSection.ID
+      IF RESULT >= zCURSOR_SET
+         // The SLC Section exists in the new MLC.
+         IF lMLCATgt.M_StorageDisposalSection.Title != lSLCAnal.S_StorageDisposalSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Storage/Disposal Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_StorageDisposalSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_StorageDisposalStatement
+            SET CURSOR FIRST lMLCASrc.M_StorageDisposalStatement WHERE lMLCASrc.M_StorageDisposalStatement.ID = lSLCAnal.M_StorageDisposalStatement.ID
+            IF lMLCASrc.MN_StorageDisposalStatement EXISTS
+               SET CURSOR FIRST lMLCATgt.M_StorageDisposalStatement WHERE lMLCATgt.M_StorageDisposalStatement.ID = lMLCASrc.MN_StorageDisposalStatement.ID
+               IF lMLCATgt.M_StorageDisposalStatement.Text != lSLCAnal.S_StorageDisposalStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Storage/Disposal Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_StorageDisposalStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_StorageDisposalStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // SLC Statement has been deleted.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Storage/Disposal Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_StorageDisposalStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // The SLC Section DOES NOT exist in the new MLC. (It has been deleted.)
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Storage/Disposal Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_StorageDisposalSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lSLCAnal.S_StorageDisposalStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Storage/Disposal Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_StorageDisposalStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_StorageDisposalSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // DIRECTIONS FOR USE
+
+   // Compare SLC data to new MLC data through the SLC's associated MLC.
+   FOR EACH lSLCAnal.S_DirectionsForUseSection
+
+      // Set up sort value so entries in this Operaiton sort with entries created earlier.
+      szSortTitle = "4Directions" //+ lSLCAnal.M_DirectionsForUseSection.Title
+
+      // Follow SLC Section to related MLC and then to new MLC.
+      SET CURSOR FIRST lMLCASrc.M_DirectionsForUseSection WHERE lMLCASrc.M_DirectionsForUseSection.ID = lSLCAnal.M_DirectionsForUseSection.ID
+      SET CURSOR FIRST lMLCATgt.M_DirectionsForUseSection WHERE lMLCATgt.M_DirectionsForUseSection.ID = lMLCASrc.MN_DirectionsForUseSection.ID
+      IF RESULT >= zCURSOR_SET
+         // The SLC Section exists in the new MLC.
+         IF lMLCATgt.M_DirectionsForUseSection.Title != lSLCAnal.S_DirectionsForUseSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Directions Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_DirectionsForUseSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_DirectionsForUseStatement
+            SET CURSOR FIRST lMLCASrc.M_DirectionsForUseStatement WHERE lMLCASrc.M_DirectionsForUseStatement.ID = lSLCAnal.M_DirectionsForUseStatement.ID
+            IF lMLCASrc.MN_DirectionsForUseStatement EXISTS
+               SET CURSOR FIRST lMLCATgt.M_DirectionsForUseStatement WHERE lMLCATgt.M_DirectionsForUseStatement.ID = lMLCASrc.MN_DirectionsForUseStatement.ID
+               IF lMLCATgt.M_DirectionsForUseStatement.Text != lSLCAnal.S_DirectionsForUseStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_DirectionsForUseStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_DirectionsForUseStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // SLC Statement has been deleted.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_DirectionsForUseStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+         // Check if any Source Usages are not in new Target. (Those new to Target were processed in BuildDifferencesMLC.)
+         FOR EACH lSLCAnal.S_DirectionsUsage WITHIN lSLCAnal.S_DirectionsForUseSection
+            SET CURSOR FIRST lMLCATgt.M_DirectionsUsage WITHIN lMLCATgt.M_DirectionsForUseSection
+                       WHERE lMLCATgt.M_DirectionsUsage.Name = lSLCAnal.S_DirectionsUsage.Name
+                         AND lMLCATgt.M_DirectionsUsage.UsageType = lSLCAnal.S_DirectionsUsage.UsageType
+            IF RESULT < zCURSOR_SET
+               GetStringFromAttributeByContext( szUsageType, lSLCAnal, "S_DirectionsUsage", "UsageType", "", 20 )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Directions " + szUsageType
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_DirectionsUsage.Name
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // The SLC Section DOES NOT exist in the new MLC. (It has been deleted.)
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Directions Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_DirectionsForUseSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lSLCAnal.S_DirectionsForUseStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Directions Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_DirectionsForUseStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_DirectionsUsage WITHIN lSLCAnal.S_DirectionsForUseSection
+            GetStringFromAttributeByContext( szUsageType, lSLCAnal, "S_DirectionsUsage", "UsageType", "", 20 )
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Directions " + szUsageType
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lSLCAnal.S_DirectionsUsage.Name
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_DirectionsForUseSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // MARKETING
+
+   // Compare SLC data to new MLC data through the SLC's associated MLC.
+   FOR EACH lSLCAnal.S_MarketingSection
+
+      // Set up sort value so entries in this Operaiton sort with entries created earlier.
+      szSortTitle = "5Marketing: " //+ lSLCAnal.M_MarketingSection.Title
+
+      // Follow SLC Section to related MLC and then to new MLC.
+      SET CURSOR FIRST lMLCASrc.M_MarketingSection WHERE lMLCASrc.M_MarketingSection.ID = lSLCAnal.M_MarketingSection.ID
+      SET CURSOR FIRST lMLCATgt.M_MarketingSection WHERE lMLCATgt.M_MarketingSection.ID = lMLCASrc.MN_MarketingSection.ID
+      IF RESULT >= zCURSOR_SET
+         // The SLC Section exists in the new MLC.
+         IF lMLCATgt.M_MarketingSection.Title != lSLCAnal.S_MarketingSection.Title
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Marketing Section Title"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingSection.Title
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_MarketingSection.Title
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_MarketingStatement
+            SET CURSOR FIRST lMLCASrc.M_MarketingStatement WHERE lMLCASrc.M_MarketingStatement.ID = lSLCAnal.M_MarketingStatement.ID
+            IF lMLCASrc.MN_MarketingStatement EXISTS
+               SET CURSOR FIRST lMLCATgt.M_MarketingStatement WHERE lMLCATgt.M_MarketingStatement.ID = lMLCASrc.MN_MarketingStatement.ID
+               IF lMLCATgt.M_MarketingStatement.Text != lSLCAnal.S_MarketingStatement.Text
+                  // Statement Text has changed
+                  CREATE ENTITY lMLCATgt.ComparisonDifference
+                  lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+                  lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_MarketingStatement.Text
+                  lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_MarketingStatement.Text
+                  lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+                  SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+               END
+            ELSE
+               // SLC Statement has been deleted.
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+               lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_MarketingStatement.Text
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+         // Check if any Source Usages are not in new Target. (Those new to Target were processed in BuildDifferencesMLC.
+         FOR EACH lSLCAnal.S_MarketingUsage WITHIN lSLCAnal.S_MarketingSection
+            SET CURSOR FIRST lMLCATgt.M_MarketingUsage WITHIN lMLCATgt.M_MarketingSection
+                       WHERE lMLCATgt.M_MarketingUsage.Name = lSLCAnal.S_MarketingUsage.Name
+                         AND lMLCATgt.M_MarketingUsage.UsageType = lSLCAnal.S_MarketingUsage.UsageType
+            IF RESULT < zCURSOR_SET
+               GetStringFromAttributeByContext( szUsageType, lSLCAnal, "S_MarketingUsage", "UsageType", "", 20 )
+               CREATE ENTITY lMLCATgt.ComparisonDifference
+               lMLCATgt.ComparisonDifference.Title                = "...Marketing " + szUsageType
+               lMLCATgt.ComparisonDifference.TargetStatementValue = lSLCAnal.S_MarketingUsage.Name
+               lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+               SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+            END
+         END
+      ELSE
+         // The SLC Section DOES NOT exist in the new MLC. (It has been deleted.)
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Marketing Section Title"
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_MarketingSection.Title
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         FOR EACH lSLCAnal.S_MarketingStatement
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Marketing Statement Text"
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_MarketingStatement.Text
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         FOR EACH lSLCAnal.S_MarketingUsage
+            GetStringFromAttributeByContext( szUsageType, lSLCAnal, "M_MarketingUsage", "UsageType", "", 20 )
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Marketing " + szUsageType
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lSLCAnal.S_MarketingUsage.Name
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_MarketingSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      END
+   END
+
+   // HUMAN HAZARD
+
+   // Compare SLC data to new MLC data through the SLC's associated MLC.
+   FOR EACH lSLCAnal.S_HumanHazardSection
+
+      // Set up sort value so entries in this Operaiton sort with entries created earlier.
+      szSortTitle = "6Human Hazard: " //+ lSLCAnal.M_HumanHazardSection.EPA_SignalWord
+
+      // Follow SLC Section to related MLC and then to new MLC.
+      SET CURSOR FIRST lMLCASrc.M_HumanHazardSection WHERE lMLCASrc.M_HumanHazardSection.ID = lSLCAnal.M_HumanHazardSection.ID
+      SET CURSOR FIRST lMLCATgt.M_HumanHazardSection WHERE lMLCATgt.M_HumanHazardSection.ID = lMLCASrc.MN_HumanHazardSection.ID
+      IF RESULT >= zCURSOR_SET
+         // The SLC Section exists in the new MLC.
+         IF lMLCATgt.M_HumanHazardSection.EPA_SignalWord != lSLCAnal.S_HumanHazardSection.EPA_SignalWord
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Signal Word"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_SignalWord
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_HumanHazardSection.EPA_SignalWord
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+         IF lMLCATgt.M_HumanHazardSection.EPA_ChildHazardWarning != lSLCAnal.S_HumanHazardSection.EPA_ChildHazardWarning
+            // Section Title has changed
+            CREATE ENTITY lMLCATgt.ComparisonDifference
+            lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Warning"
+            lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_ChildHazardWarning
+            lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_HumanHazardSection.EPA_ChildHazardWarning
+            lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+            SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         END
+      ELSE
+         // The SLC Section DOES NOT exist in the new MLC. (It has been deleted.)
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Signal Word"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_SignalWord
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_HumanHazardSection.EPA_SignalWord
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+         // Section Title has changed
+         CREATE ENTITY lMLCATgt.ComparisonDifference
+         lMLCATgt.ComparisonDifference.Title                = "...Hazards EPA Warning"
+         lMLCATgt.ComparisonDifference.TargetStatementValue = lMLCATgt.M_HumanHazardSection.EPA_ChildHazardWarning
+         lMLCATgt.ComparisonDifference.SourceStatementValue = lSLCAnal.S_HumanHazardSection.EPA_ChildHazardWarning
+         lMLCATgt.ComparisonDifference.SortSectionNumber    = lMLCATgt.M_HumanHazardSection.wSectionSortOrder
+         SetDifferencesSortVs( lMLCATgt, lSortEntryNbr, szSortTitle )
+      END
+   END
+
+   // Order the entries so that the entries added in this operation are integrated with the entries added during the
+   // operation, BuildDifferencesMLC.
+   OrderEntityForView( lMLCATgt, "ComparisonDifference", "SortSectionTitle A SortSectionNumber A SortEntryNumber A" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SetDifferencesSortVs
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+SetDifferencesSortVs( VIEW lMLCATgt BASED ON LOD lMLCATgt,
+                      INTEGER lSortNbr,
+                      STRING ( 20 ) szTitle )
+
+   // Set values that are used for sorting Difference entries by sequence number within Section Title.
+   lSortNbr = lSortNbr + 1
+   lMLCATgt.ComparisonDifference.SortEntryNumber  = lSortNbr
+   lMLCATgt.ComparisonDifference.SortSectionTitle = szTitle
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteEmptyTitles
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+DeleteEmptyTitles( VIEW lMLCATgt BASED ON LOD lMLCATgt )
+
+   VIEW lMLCATgt2 BASED ON LOD lMLCATgt
+
+   // Remove any Title Difference enties that don't have any details following them.
+   // These are those where the next entry is also a Title.
+   FOR EACH lMLCATgt.ComparisonDifference
+      IF lMLCATgt.ComparisonDifference.TitleFlag = "Y"
+         CreateViewFromView( lMLCATgt2, lMLCATgt )
+         SET CURSOR NEXT lMLCATgt2.ComparisonDifference
+         IF lMLCATgt2.ComparisonDifference.TitleFlag = "Y"
+            DELETE ENTITY lMLCATgt.ComparisonDifference NONE
+         END
+         DropView( lMLCATgt2 )
+      END
+   END
+
+END

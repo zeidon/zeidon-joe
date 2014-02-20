@@ -1,0 +1,36 @@
+z0000-Zeidon    temp.por KZDBHQUA 2010/06/16 14:58:56
+eEntitySpec 1
+aEntityName Employee
+
+eQualAttrib 2
+aEntityName Employee
+aAttributeName ID
+aValue     1
+aOper      =
+
+eQualAttrib 2
+aOper      and
+
+eQualAttrib 2
+aEntityName EmployeePerson
+aAttributeName LastName
+aValue     Smith
+aOper      =
+
+eQualAttrib 2
+aOper      and
+
+eQualAttrib 2
+aEntityName HistoricalContract
+aAttributeName ContractYear
+aValue     2010
+aOper      =
+
+eEntitySpec 1
+aEntityName HistoricalContract
+
+eQualAttrib 2
+aEntityName HistoricalContract
+aAttributeName ContractYear
+aValue     2010
+aOper      =

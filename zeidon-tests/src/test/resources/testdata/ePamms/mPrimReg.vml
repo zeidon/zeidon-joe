@@ -1,0 +1,140 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    mPrimReg      - Primary Registrant maintenance operations
+// FILE:         mPrimReg.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameLFM
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameLFM( VIEW mPrimReg BASED ON LOD mPrimReg,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_LastFirstMiddle( mPrimReg, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameFML
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameFML( VIEW mPrimReg BASED ON LOD mPrimReg,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_FirstMiddleLast( mPrimReg, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dRegistrantNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dRegistrantNameID( VIEW mPrimReg BASED ON LOD mPrimReg,
+                   STRING ( 32 ) InternalEntityStructure,
+                   STRING ( 32 ) InternalAttribStructure,
+                   SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mPrimReg.Organization EXISTS
+         szString = mPrimReg.Organization.Name
+         IF mPrimReg.PrimaryRegistrant.EPA_CompanyNumber = ""
+            szString = szString + " (Non EPA)"
+         ELSE
+            szString = szString + " (" +
+                    mPrimReg.PrimaryRegistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mPrimReg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProductNameNbr( VIEW mPrimReg BASED ON LOD mPrimReg,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mPrimReg.MasterProduct  EXISTS
+         szString = mPrimReg.MasterProduct.Name + " (" +
+                    mPrimReg.PrimaryRegistrant.EPA_CompanyNumber + "-" +
+                    mPrimReg.MasterProduct.Number + ")"
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mPrimReg,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

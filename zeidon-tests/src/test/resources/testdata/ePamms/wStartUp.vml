@@ -1,0 +1,3923 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    wStartUp      - ePamms startup operations
+// FILE:         wStartUp.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ContrivedError
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ContrivedError( VIEW ViewToWindow )
+
+   MessageSend( ViewToWindow, "", "Cause Error",
+                "Contrived Error!!!", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ProcessLogout
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ProcessLogout( VIEW ViewToWindow )
+
+   VIEW mCurrentUser BASED ON LOD mUser
+   VIEW wWebXfer BASED ON LOD  wWebXfer
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW KZXMLPGO
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu Logout" )
+
+   GET VIEW mCurrentUser NAMED "mCurrentUser"
+   IF mCurrentUser != 0
+      DropObjectInstance( mCurrentUser )
+   END
+
+   GET VIEW wWebXfer NAMED "wWebXfer"
+   IF wWebXfer != 0
+      DropObjectInstance( wWebXfer )
+   END
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+   IF KZXMLPGO != 0
+      FOR EACH KZXMLPGO.NextDialogWindow
+         DELETE ENTITY KZXMLPGO.NextDialogWindow
+      END
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitLoginWindow
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitLoginWindow( VIEW ViewToWindow )
+
+   VIEW wWebXfer BASED ON LOD wWebXfer
+   VIEW qOrganiz BASED ON LOD qOrganiz
+   VIEW mOrganiz BASED ON LOD mOrganiz
+
+   VIEW mTempl   BASED ON LOD  mTempl
+   VIEW mSubLC BASED ON LOD mSubLC
+
+   ActivateOI_FromFile( mSubLC, "mSubLC", ViewToWindow,
+                        "c:\lplr\epamms\mSubLC.por", zIGNORE_ERRORS )
+   CommitOI_ToXML_File( mSubLC, "c:\lplr\epamms\mSubLC.xml", 0 )
+   ActivateOI_FromFile( mTempl, "mTempl", ViewToWindow,
+                        "c:\lplr\epamms\bin\mTempl1.por", zIGNORE_ERRORS )
+   CommitOI_ToXML_File( mTempl, "c:\lplr\epamms\mTempl.xml", 0 )
+
+/*
+   GET VIEW mTempl NAMED "mTempl"
+   IF mTempl != 0
+      DropObjectInstance( mTempl )
+   END
+   ActivateOI_FromFile( mTempl, "mTempl", ViewToWindow,
+                        "c:\lplr\epamms\bin\mTempl1.por", zIGNORE_ERRORS )
+   SetNameForView( mTempl, "mTempl", 0, zLEVEL_TASK )
+   MiSetInstanceUpdateFlag( mTempl, 1 )
+// MessageSend( ViewToWindow, "", "Save Template",
+//              "Check view: mTempl", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   COMMIT mTempl
+// DropObjectInstance( mTempl )
+*/
+
+   ProcessLogout( ViewToWindow )  // just to ensure clean up
+
+   ACTIVATE wWebXfer EMPTY
+   NAME VIEW wWebXfer "wWebXfer"
+   CREATE ENTITY wWebXfer.Root
+
+   ACTIVATE qOrganiz WHERE qOrganiz.Organization.LoginName = "Admin"
+   NAME VIEW qOrganiz "qOrganiz"
+   IF qOrganiz.Organization EXISTS AND qOrganiz.Organization.LoginName = "Admin"
+
+      wWebXfer.Root.KeyRole = ""
+
+   ELSE
+
+      // No administrator found!  We need to bootstrap here.
+      TraceLineS( "InitLoginWindow: ", "No Administrator found!!!" )
+      wWebXfer.Root.KeyRole = "U"
+
+   END
+
+   DropObjectInstance( qOrganiz )
+
+   GET VIEW mOrganiz NAMED "mOrganiz"
+   IF mOrganiz = 0
+      ACTIVATE mOrganiz EMPTY
+      NAME VIEW mOrganiz "mOrganiz"
+      CREATE ENTITY mOrganiz.Organization
+   END
+
+   wWebXfer.Root.Banner1 = ""
+   wWebXfer.Root.Banner2 = ""
+   wWebXfer.Root.Banner3 = ""
+   wWebXfer.Root.Banner4 = ""
+   wWebXfer.Root.Banner5 = ""
+   wWebXfer.Root.Banner6 = ""
+
+   // Remove these lines prior to deployment!!!
+   wWebXfer.Root.AttemptLoginName = "Lonza"
+   wWebXfer.Root.AttemptUserName = "Admin"
+   wWebXfer.Root.AttemptPassword = "xxxxxxxx"
+   // End of: Remove these lines prior to deployment!!!
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Default" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitAdminLoginWindow
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitAdminLoginWindow( VIEW ViewToWindow )
+
+   VIEW wWebXfer BASED ON LOD wWebXfer
+
+   ProcessLogout( ViewToWindow )  // clean up
+
+   ACTIVATE wWebXfer EMPTY
+   NAME VIEW wWebXfer "wWebXfer"
+   CREATE ENTITY wWebXfer.Root
+
+   // Remove these lines prior to deployment!!!
+   wWebXfer.Root.AttemptLoginName = "Admin"
+   wWebXfer.Root.AttemptUserName = "Admin"
+   wWebXfer.Root.AttemptPassword = "xxxxxxxx"
+   // End of: Remove these lines prior to deployment!!!
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Default" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ProcessAdministratorLogin
+// First time in login (to set up the administrator)
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ProcessAdministratorLogin( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW qSubreg  BASED ON LOD  qSubreg
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   VIEW KZXMLPGO
+   STRING (  50  ) szLoginName
+   STRING (  50  ) szUserName
+   STRING (   1  ) szKeyRole
+   INTEGER       lControl
+   INTEGER       lID
+   SHORT         nRC
+
+   IF wWebXfer = 0
+      TraceLineS( "wStartUp.ProcessAdministratorLogin cannot find Transfer View", "" )
+      RETURN 2
+   END
+
+   GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+   IF KZXMLPGO != 0
+      FOR EACH KZXMLPGO.NextDialogWindow
+         DELETE ENTITY KZXMLPGO.NextDialogWindow
+      END
+   END
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   GET VIEW qSubreg NAMED "qSubregLogin"
+   IF qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   IF qOrganiz != 0
+      DropObjectInstance( qOrganiz )
+   END
+
+   GET VIEW qPrimReg NAMED "lPrimReg"
+   IF lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   SfSetUserIdForTask( ViewToWindow, "Admin" )
+   wWebXfer.Root.AttemptUserName = "Admin"
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+   wWebXfer.Root.KeyRole = "U"  // should already be set
+
+   // Trace Login.
+   TraceLineS( "Login going to administration to setup Administrator", "" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ProcessUserLogin
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ProcessUserLogin( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   VIEW mOrganizInit BASED ON LOD  mOrganiz
+   VIEW mOrganiz BASED ON LOD  mOrganiz
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW qSubreg  BASED ON LOD  qSubreg
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   VIEW KZXMLPGO
+   STRING (  50  ) szLoginName
+   STRING (  50  ) szUserName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   STRING (   1  ) szKeyRole
+   INTEGER       lControl
+   INTEGER       lID
+   SHORT         nRC
+
+   IF wWebXfer = 0
+      TraceLineS( "wStartUp.ProcessUserLogin cannot find Transfer View", "" )
+      RETURN 2
+   END
+
+   wWebXfer.Root.MoveIncrement = 1  // number of positions an entity will move
+
+   GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+   IF KZXMLPGO != 0
+      FOR EACH KZXMLPGO.NextDialogWindow
+         DELETE ENTITY KZXMLPGO.NextDialogWindow
+      END
+   END
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   GET VIEW qSubreg NAMED "qSubregLogin"
+   IF qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   IF qOrganiz != 0
+      DropObjectInstance( qOrganiz )
+   END
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   // Note that Activate always returns at least an empty view.
+   ACTIVATE qOrganiz WHERE qOrganiz.Organization.LoginName = "Admin"
+   NAME VIEW qOrganiz "qOrganiz"
+   IF qOrganiz.Organization DOES NOT EXIST
+
+      // No administrator found!  We need to bootstrap here.
+      TraceLineS( "ProcessAdministratorLogin: ", "No Administrator found!!!" )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wStartUp", "AdminNewPrimaryRegistrant" )
+      DropObjectInstance( qOrganiz )
+      RETURN 1
+   END
+
+   DropObjectInstance( qOrganiz )
+
+   // Note that Activate always returns at least an empty view.
+   szLoginName = wWebXfer.Root.AttemptLoginName  // e.g. Lonza
+   ACTIVATE qOrganiz WHERE qOrganiz.Organization.LoginName = szLoginName
+   NAME VIEW qOrganiz "qOrganizLogin"
+   IF qOrganiz.Organization DOES NOT EXIST
+      // Organization not found!
+      TraceLineS( "Login Organization not found: ", szLoginName )
+      MessageSend( ViewToWindow, "", "User Login",
+                   "Invalid User Login.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      DropObjectInstance( qOrganiz )
+      RETURN 2
+   END
+
+   wWebXfer.Root.LoginName = qOrganiz.Organization.LoginName // e.g. Lonza
+   szUserName = wWebXfer.Root.AttemptUserName  // e.g. Admin
+   szKeyRole = wWebXfer.Root.KeyRole
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   nRC = 0  // initialize to normal processing
+
+   // Cannot use szLoginName since we need a case insensitive comparison.
+   IF wWebXfer.Root.AttemptUserName = "Admin"
+
+      wWebXfer.Root.LoginUser = "Admin"
+
+      // Match the password.
+      nRC = CompareAttributeToString( qOrganiz, "Organization", "AdministratorPassword", szAttemptPassword )
+      IF nRC != 0
+
+         // Remove these lines prior to deployment!!!
+      // TraceLineS( "//////* Invalid Login Password: ", szAttemptPassword )
+      // szConfirmPassword = qOrganiz.Organization.AdministratorPassword
+      // wWebXfer.Root.TracePassword = szAttemptPassword
+      // szAttemptPassword = wWebXfer.Root.TracePassword
+      // TraceLineS( "//////*+++++ CurrentUser: ", szConfirmPassword )
+      // TraceLineS( "//////*+++++ Attempted  : ", szAttemptPassword )
+         // End of: Remove these lines prior to deployment!!!
+
+         MessageSend( ViewToWindow, "", "Login",
+                      "Invalid Administrator Login",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         DropObjectInstance( qOrganiz )
+         RETURN 2
+      END
+
+      // Cannot use szLoginUser since we need a case insensitive comparison.
+      IF qOrganiz.Organization.LoginName = "Admin"
+
+         wWebXfer.Root.LoginName = "Admin"
+         wWebXfer.Root.KeyRole = "P"
+
+         ACTIVATE lPrimReg
+         NAME VIEW lPrimReg "lPrimReg"
+         SetWindowActionBehavior( ViewToWindow, zWAB_ResetTopWindow,
+                                  "wSystem", "ListPrimaryRegistrants" )
+         nRC = 1  // not going to normal window
+
+      ELSE
+
+         IF qOrganiz.PrimaryRegistrant EXISTS
+            IF qOrganiz.Subregistrant EXISTS
+               wWebXfer.Root.KeyRole = "D"
+            ELSE
+               wWebXfer.Root.KeyRole = "P"
+            END
+         ELSE
+            IF qOrganiz.Subregistrant EXISTS
+               wWebXfer.Root.KeyRole = "S"  // for now
+            ELSE
+               wWebXfer.Root.KeyRole = qOrganiz.Organization.Role
+            END
+         END
+
+      END
+
+      wWebXfer.Root.UserStatus = "X"  // expert
+
+   ELSE
+
+      lControl = zQUAL_STRING + zPOS_FIRST + zQUAL_SCOPE_OI + zTEST_CSR_RESULT
+      IF SetEntityCursor( qOrganiz, "User", "UserName", lControl,
+                          szUserName, "", "", 0, "", "" ) < zCURSOR_SET
+         // Organization user not found!
+      // TraceLineS( "Login User not found: ", szUserName )
+         MessageSend( ViewToWindow, "", "User Login",
+                      "Invalid User Login.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         DropObjectInstance( qOrganiz )
+         RETURN 2
+
+      END
+
+      // Match the password.
+      nRC = CompareAttributeToString( qOrganiz, "User", "UserPassword", szAttemptPassword )
+      IF nRC != 0
+      
+      // TraceLineS( "//////* Invalid Login Password: ", szAttemptPassword )
+         MessageSend( ViewToWindow, "", "Login",
+                      "Invalid User Login",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         DropObjectInstance( qOrganiz )
+         RETURN 2
+      END
+
+      wWebXfer.Root.LoginName = qOrganiz.User.UserName
+      wWebXfer.Root.KeyRole = qOrganiz.Organization.Role
+      wWebXfer.Root.UserStatus = qOrganiz.User.Status
+
+   END
+
+   GET VIEW mOrganizInit NAMED "mOrganiz"
+
+   ACTIVATE mOrganiz WHERE mOrganiz.Organization.ID = qOrganiz.Organization.ID
+   NAME VIEW mOrganiz "mOrganiz"
+   IF mOrganizInit != 0
+      FOR EACH mOrganizInit.Feedback
+         CREATE ENTITY mOrganiz.Feedback LAST
+         szLoginName = wWebXfer.Root.LoginName
+         mOrganizInit.Feedback.UserId = szLoginName
+         SetMatchingAttributesByName( mOrganiz, "Feedback",
+                                      mOrganizInit, "Feedback", zSET_NOTNULL )
+         COMMIT mOrganiz
+      END
+
+      DropObjectInstance( mOrganizInit )
+   END
+
+   SfSetUserIdForTask( ViewToWindow, wWebXfer.Root.LoginUser )
+   wWebXfer.Root.AttemptUserName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   // Trace Login.
+   TraceLineS( "Login successful for user: ", szUserName )
+
+   wWebXfer.Root.Banner1 = qOrganiz.Organization.dLoginUserName
+   wWebXfer.Root.Banner2 = ""
+   wWebXfer.Root.Banner3 = ""
+   wWebXfer.Root.Banner4 = ""
+   wWebXfer.Root.Banner5 = ""
+   wWebXfer.Root.Banner6 = ""
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPortal
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPortal( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   STRING (   1  ) szKeyRole
+
+   szKeyRole = wWebXfer.Root.KeyRole
+   IF szKeyRole = "S"
+      SetDynamicBannerName( ViewToWindow, "wStartUp", "Subregistrant" )
+   ELSE
+      SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ProductManagement
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ProductManagement( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW qSubreg  BASED ON LOD  qSubreg
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   STRING (   1  ) szKeyRole
+   INTEGER       lID
+
+   IF wWebXfer = 0
+      TraceLineS( "wStartUp.ProductManagement cannot find Transfer View", "" )
+      MessageSend( ViewToWindow, "", "Product Management",
+                   "Invalid Communications View ... being redirected to Login",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_ResetTopWindow,
+                               "wStartUp", "UserLogin" )
+      RETURN 1
+   END
+
+   wWebXfer.Root.Banner1 = ""
+   wWebXfer.Root.Banner2 = ""
+   wWebXfer.Root.Banner3 = ""
+   wWebXfer.Root.Banner4 = ""
+   wWebXfer.Root.Banner5 = ""
+   wWebXfer.Root.Banner6 = ""
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   IF qOrganiz = 0
+      TraceLineS( "wStartUp.ProductManagement cannot find Organization View", "" )
+      MessageSend( ViewToWindow, "", "Product Management",
+                   "Invalid Organization View ... being redirected to Login",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_ResetTopWindow,
+                               "wStartUp", "UserLogin" )
+      RETURN 1
+   END
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu ProductManagement" )
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   GET VIEW qSubreg NAMED "qSubregLogin"
+   IF qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   GET VIEW qPrimReg NAMED "lPrimReg"
+   IF lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   szKeyRole = wWebXfer.Root.KeyRole
+   IF szKeyRole = "D" OR szKeyRole = "P"
+
+      // Cannot use szLoginName since we need a case insensitive comparison.
+      IF wWebXfer.Root.LoginName = "Admin"
+
+         ACTIVATE lPrimReg
+         NAME VIEW lPrimReg "lPrimReg"
+         SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                                  "wStartUp", "AdminListPrimaryRegistrants" )
+
+      ELSE
+
+         ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = qOrganiz.PrimaryRegistrant.ID
+         NAME VIEW lPrimReg "lPrimReg"
+         SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                                  "wMLC", "ListMasterProducts" )
+      END
+
+      wWebXfer.Root.Banner1 = lPrimReg.PrimaryRegistrant.dRegistrantNameID
+      wWebXfer.Root.UserStatus = "X"  // expert
+      SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrantProduct" )
+
+   ELSE  // IF wWebXfer.Root.KeyRole = "S"
+
+      ACTIVATE lSubreg WHERE lSubreg.Subregistrant.ID = qOrganiz.Subregistrant.ID
+      NAME VIEW lSubreg "lSubreg"
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wSLC", "ListSubregProducts" )
+      wWebXfer.Root.Banner1 = lSubreg.Subregistrant.dNameEPA_Number
+      SetDynamicBannerName( ViewToWindow, "wStartUp", "SubregistrantProduct" )
+
+   END
+
+   RETURN 1
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectListMasterProducts
+// Need to get proper position ... prevent Admin from going there
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectListMasterProducts( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF lPrimReg.Organization.LoginName = "Admin"
+      MessageSend( ViewToWindow, "", "List Master Products",
+                   "Admin does not have Master Products",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ReturnFromAdminPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ReturnFromAdminPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   IF qOrganiz != 0 AND qOrganiz.Organization.LoginName = "Admin"
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wStartUp", "AdminListPrimaryRegistrants" )
+      RETURN 1
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ReturnFromAdminSubregistrantList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ReturnFromAdminSubregistrantList( VIEW ViewToWindow )
+
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   IF qOrganiz != 0 AND qOrganiz.Organization.LoginName = "Admin"
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wStartUp", "AdminListPrimaryRegistrants" )
+      RETURN 1
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AutoLoginPrimaryRegistrant  THIS IS FOR TESTING ONLY ... REMOVE FOR DEPLOYMENT!!!
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AutoLoginPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.AttemptLoginName = "Lonza"
+   wWebXfer.Root.AttemptUserName = "Admin"
+   wWebXfer.Root.AttemptPassword = "xxxxxxxx"
+   RefreshWindow( ViewToWindow )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AutoLoginSubregistrant  THIS IS FOR TESTING ONLY ... REMOVE FOR DEPLOYMENT!!!
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AutoLoginSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.AttemptLoginName = "SmallCorp"
+   wWebXfer.Root.AttemptUserName = "Admin"
+   wWebXfer.Root.AttemptPassword = "xxxxxxxx"
+   RefreshWindow( ViewToWindow )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: PrimaryRegistrantCompanySetup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+PrimaryRegistrantCompanySetup( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   STRING (   1  ) szKeyRole
+   SHORT nRC
+
+   IF wWebXfer = 0
+      TraceLineS( "wStartUp.PrimaryRegistrantCompanySetup cannot find Transfer View", "" )
+      MessageSend( ViewToWindow, "", "Product Management",
+                   "Invalid Communications View ... being redirected to Login",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_ResetTopWindow,
+                               "wStartUp", "UserLogin" )
+      RETURN 1
+   END
+
+   wWebXfer.Root.Banner1 = ""
+   wWebXfer.Root.Banner2 = ""
+   wWebXfer.Root.Banner3 = ""
+   wWebXfer.Root.Banner4 = ""
+   wWebXfer.Root.Banner5 = ""
+   wWebXfer.Root.Banner6 = ""
+
+   // We need to set up the proper view and go the the appropriate window.
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF  lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF  lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu CompanySetup" )
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   szKeyRole = wWebXfer.Root.KeyRole
+
+   IF qOrganiz.PrimaryRegistrant EXISTS AND szKeyRole != "S"
+
+      IF wWebXfer.Root.LoginName = "Admin"
+         ACTIVATE lPrimReg
+         NAME VIEW lPrimReg "lPrimReg"
+         SetWindowActionBehavior( ViewToWindow, zWAB_ReplaceWindowWithModalWindow,
+                                  "wStartUp", "AdminListPrimaryRegistrants" )
+      ELSE
+         ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = qOrganiz.PrimaryRegistrant.ID
+         NAME VIEW lPrimReg "lPrimReg"
+         SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                                  "wStartUp", "AdminUpdatePrimaryRegistrant" )
+      END
+
+      wWebXfer.Root.Banner1 = lPrimReg.PrimaryRegistrant.dRegistrantNameID
+
+      RETURN 1
+
+   ELSE
+      IF qOrganiz.Subregistrant EXISTS AND szKeyRole != "P"
+
+         ACTIVATE lSubreg WHERE lSubreg.Subregistrant.ID = qOrganiz.Subregistrant.ID
+         NAME VIEW lSubreg "lSubreg"
+         SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                                  "wStartUp", "AdminUpdateSubregistrant" )
+         wWebXfer.Root.Banner1 = lSubreg.Subregistrant.dNameEPA_Number
+         RETURN 1
+
+      ELSE
+
+         MessageSend( ViewToWindow, "", "Primary Registrant Company Setup",
+                      "Registrant corresponding to role does not exist ... please go to Administration.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF  mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+
+   IF mPrimReg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mPrimReg.MailingAddress
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mPrimReg, "MailingAddress",
+                                   mPrimReg, "PhysicalAddress", zSET_NOTNULL )
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSelectPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSelectPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF  lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   ACTIVATE lPrimReg ROOTONLYMULTIPLE
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSelectSubregistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSelectSubregistrants( VIEW ViewToWindow )
+
+   VIEW qSubreg BASED ON LOD qSubreg
+
+   GET VIEW qSubreg NAMED "qSubreg"
+   IF  qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   ACTIVATE qSubreg ROOTONLYMULTIPLE
+   NAME VIEW qSubreg "qSubreg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CheckExistencePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CheckExistencePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW qPrimReg BASED ON LOD qPrimReg
+
+   GET VIEW qPrimReg NAMED "qPrimReg"
+   IF  qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   // Ensure that at least the primary registrant exists.
+   ACTIVATE qPrimReg ROOTONLY
+   NAME VIEW qPrimReg "qPrimReg"
+   IF RESULT < 0
+
+      MessageSend( ViewToWindow, "", "Select Primary Registrant",
+                   "No Primary Registrants exist ... please go to Administration.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      DropObjectInstance( qPrimReg )
+      RETURN 2
+
+   END
+
+   DropObjectInstance( qPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CheckExistenceSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CheckExistenceSubregistrant( VIEW ViewToWindow )
+
+   VIEW qSubreg BASED ON LOD qSubreg
+
+   GET VIEW qSubreg NAMED "qSubreg"
+   IF  qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   ACTIVATE qSubreg ROOTONLY
+   NAME VIEW qSubreg "qSubreg"
+
+   IF qSubreg.Subregistrant DOES NOT EXIST
+
+      MessageSend( ViewToWindow, "", "Select Subregistrant",
+                   "No Subregistrants exist ... please go to Administration.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      DropObjectInstance( qSubreg )
+      RETURN 2
+
+   END
+
+   DropObjectInstance( qSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListPrimaryRegistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListPrimaryRegistrants( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF  lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   // Activate all primary registrants.
+   ACTIVATE lPrimReg MULTIPLE
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddNewPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddNewPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ACTIVATE mPrimReg EMPTY
+   NAME VIEW mPrimReg "mPrimReg"
+
+   CREATE ENTITY mPrimReg.PrimaryRegistrant
+   CREATE ENTITY mPrimReg.Organization
+   CREATE ENTITY mPrimReg.PhysicalAddress
+   CREATE ENTITY mPrimReg.MailingAddress
+   CREATE ENTITY mPrimReg.ContactPerson
+
+   mPrimReg.PhysicalAddress.Country = "USA"
+   mPrimReg.MailingAddress.Country = "USA"
+   wWebXfer.Root.SameAs = "Y"
+
+   wWebXfer.Root.AttemptLoginName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   CreateTemporalSubobjectVersion( mPrimReg, "PrimaryRegistrant" )
+// CreateTemporalSubobjectVersion( mPrimReg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "ContactPerson" )
+
+   IF wWebXfer.Root.KeyRole = "U"
+
+      mPrimReg.Organization.LoginName = "Admin"
+      mPrimReg.Organization.Name = "Administrator"
+      mPrimReg.Organization.Description = "ePamms Administrator"
+      mPrimReg.Organization.Role = "P"
+
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectPrimaryRegistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectPrimaryRegistrantForUpdate( VIEW ViewToWindow )
+
+   // Nothing to do here other than to get proper position
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectPrimaryRegistrantForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectPrimaryRegistrantForDelete( VIEW ViewToWindow )
+
+   // Nothing to do here other than to get proper position
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrantForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   // If this is the first time into the system, this is the administrator.
+   // Otherwise, just create a new primary registrant.
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+
+   IF mPrimReg.PrimaryRegistrant DOES NOT EXIST
+
+      CREATE ENTITY mPrimReg.PrimaryRegistrant
+      CREATE ENTITY mPrimReg.Organization
+      CREATE ENTITY mPrimReg.PhysicalAddress
+      CREATE ENTITY mPrimReg.MailingAddress
+      CREATE ENTITY mPrimReg.ContactPerson
+      mPrimReg.PhysicalAddress.Country = "USA"
+      mPrimReg.MailingAddress.Country = "USA"
+      wWebXfer.Root.SameAs = "Y"
+
+   ELSE
+      wWebXfer.Root.SameAs = ""
+   END
+
+   IF mPrimReg.PhysicalAddress DOES NOT EXIST
+      CREATE ENTITY mPrimReg.PhysicalAddress
+      mPrimReg.PhysicalAddress.Country = "USA"
+   END
+
+   IF mPrimReg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mPrimReg.MailingAddress
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mPrimReg, "MailingAddress",
+                                   mPrimReg, "PhysicalAddress", zSET_NOTNULL )
+   END
+
+   IF mPrimReg.ContactPerson DOES NOT EXIST
+      CREATE ENTITY mPrimReg.ContactPerson
+   END
+
+   wWebXfer.Root.AttemptLoginName = mPrimReg.Organization.LoginName
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   CreateTemporalSubobjectVersion( mPrimReg, "PrimaryRegistrant" )
+// CreateTemporalSubobjectVersion( mPrimReg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "ContactPerson" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mUser    BASED ON LOD  mUser
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   STRING (  50  ) szRegistrantName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lRegistrantNameLth
+   INTEGER         lPasswordLth
+   SHORT           nRC
+
+   // Ensure registrant login name is not blank and is unique.
+   szRegistrantName = mPrimReg.Organization.LoginName
+   lRegistrantNameLth = zGetStringLen( szRegistrantName )
+   TraceLineS( "Registrant Login Name: ", szRegistrantName )
+   TraceLineI( "Registrant Login Name Length: ", lRegistrantNameLth )
+   IF lRegistrantNameLth < 1
+      MessageSend( ViewToWindow, "", "New Primary Registrant",
+                   "The registrant Login Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   ELSE
+      ACTIVATE lPrimReg WHERE lPrimReg.Organization.LoginName = szRegistrantName
+      NAME VIEW lPrimReg "lPrimRegX"
+      IF lPrimReg.PrimaryRegistrant EXISTS
+         MessageSend( ViewToWindow, "", "New Primary Registrant",
+                      "The registrant Login Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         DropObjectInstance( lPrimReg )
+         RETURN 2
+      END
+
+      DropObjectInstance( lPrimReg )
+   END
+
+   // Note that Activate always returns at least an empty view.
+   ACTIVATE qPrimReg WHERE qPrimReg.Organization.LoginName = "Admin"
+   NAME VIEW qPrimReg "qPrimReg"
+   IF qPrimReg.PrimaryRegistrant DOES NOT EXIST
+      // No primary registrant found!  The first login name must be "Admin".
+      nRC = zstrcmpi( szRegistrantName, "Admin" )
+      IF nRC != 0
+         TraceLineS( "ProcessAdministratorLogin: ", "Admin must be first login found!!!" )
+         MessageSend( ViewToWindow, "", "New Primary Registrant",
+                      "The first registrant Login Name must be 'Admin'.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      // SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+      //                          "wStartUp", "AdminNewPrimaryRegistrant" )
+         DropObjectInstance( qPrimReg )
+         RETURN 2
+      ELSE
+         mPrimReg.Organization.LoginName = "Admin"
+      END
+   END
+
+   DropObjectInstance( qPrimReg )
+
+   // Ensure registrant name is not blank.
+   szRegistrantName = mPrimReg.Organization.Name
+   lRegistrantNameLth = zGetStringLen( szRegistrantName )
+   TraceLineS( "Registrant Name: ", szRegistrantName )
+   TraceLineI( "Registrant Name Length: ", lRegistrantNameLth )
+   IF lRegistrantNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The registrant Organization Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( mPrimReg, "User", "UserPassword", szVerifyPassword, "Password" )
+   mPrimReg.Organization.AdministratorPassword = szConfirmPassword
+
+// AcceptSubobject( mPrimReg, "ContactPerson" )
+// AcceptSubobject( mPrimReg, "PhysicalAddress" )
+// AcceptSubobject( mPrimReg, "MailingAddress" )
+// AcceptSubobject( mPrimReg, "Organization" )
+   AcceptSubobject( mPrimReg, "PrimaryRegistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mPrimReg.MailingAddress
+   END
+
+   Commit mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ValidatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ValidatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mUser    BASED ON LOD  mUser
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   STRING (  50  ) szRegistrantName
+   STRING (  50  ) szAttemptRegistrantName
+   INTEGER         lRegistrantNameLth
+   INTEGER         lPasswordLth
+
+   // Ensure registrant login name is not blank and is unique.
+   szAttemptRegistrantName = mPrimReg.Organization.LoginName
+   lRegistrantNameLth = zGetStringLen( szAttemptRegistrantName )
+   TraceLineI( "Registrant Login Name Length: ", lRegistrantNameLth )
+   IF lRegistrantNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The registrant Login Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szRegistrantName = wWebXfer.Root.AttemptLoginName
+   IF szRegistrantName != szAttemptRegistrantName
+      ACTIVATE lPrimReg WHERE lPrimReg.Organization.LoginName = szAttemptRegistrantName
+      NAME VIEW lPrimReg "lPrimRegX"
+      IF RESULT >= 0
+         MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                      "The registrant Login Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         DropObjectInstance( lPrimReg )
+         RETURN 2
+      END
+
+      DropObjectInstance( lPrimReg )
+   END
+
+   // Ensure registrant name is not blank.
+   szAttemptRegistrantName = mPrimReg.Organization.Name
+   lRegistrantNameLth = zGetStringLen( szAttemptRegistrantName )
+   TraceLineI( "Registrant Name Length: ", lRegistrantNameLth )
+   IF lRegistrantNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The registrant Organization Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Ensure password matches primary registrant password.
+// IF mPrimReg.PrimaryRegistrant.AdministratorPassword != wWebXfer.Root.VerifiedPassword
+//
+//    MessageSend( ViewToWindow, "", "Update Primary Registrant",
+//                 "Invalid password.",
+//                 zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+//    RETURN 2
+// END
+
+// AcceptSubobject( mPrimReg, "ContactPerson" )
+// AcceptSubobject( mPrimReg, "PhysicalAddress" )
+// AcceptSubobject( mPrimReg, "MailingAddress" )
+// AcceptSubobject( mPrimReg, "Organization" )
+   AcceptSubobject( mPrimReg, "PrimaryRegistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mPrimReg.MailingAddress
+   END
+
+   Commit mPrimReg
+   RETURN 0
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   SHORT nRC
+
+   nRC = ValidatePrimaryRegistrant( ViewToWindow )
+   IF nRC = 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+// CancelSubobject( mPrimReg, "ContactPerson" )
+// CancelSubobject( mPrimReg, "PhysicalAddress" )
+// CancelSubobject( mPrimReg, "MailingAddress" )
+// CancelSubobject( mPrimReg, "Organization" )
+   CancelSubobject( mPrimReg, "PrimaryRegistrant" )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+// CancelSubobject( mPrimReg, "ContactPerson" )
+// CancelSubobject( mPrimReg, "PhysicalAddress" )
+// CancelSubobject( mPrimReg, "MailingAddress" )
+// CancelSubobject( mPrimReg, "Organization" )
+   CancelSubobject( mPrimReg, "PrimaryRegistrant" )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrantForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrantForDelete( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   // If the primary registrant is not found, kind of a surprise!!!
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+   IF mPrimReg.PrimaryRegistrant DOES NOT EXIST
+
+      // Cannot find primary registrant ... go back.
+      MessageSend( ViewToWindow, "", "Delete Primary Registrant",
+                   "Primary Registrant not found",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wStartUp", "ListPrimaryRegistrants" )
+      DropObjectInstance( mPrimReg )
+      RETURN 1
+
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Administration" )
+
+   wWebXfer.Root.AttemptLoginName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeletePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeletePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   STRING ( 128 ) szAttemptPassword
+   SHORT  nRC
+
+   IF mPrimReg.PrimarySub EXISTS
+
+      MessageSend( ViewToWindow, "", "Delete Primary Registrant",
+                   "Subregistrants exist for primary registrant.  Delete Cancelled",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   IF mPrimReg.MasterLabelContent EXISTS
+
+      MessageSend( ViewToWindow, "", "Delete Primary Registrant",
+                   "Primary Label Data Definitions exist for primary registrant.  Delete Cancelled",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   // Match the password.
+// IF mPrimReg.Organization.AdministratorPassword != wWebXfer.Root.VerifiedPassword
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   nRC = CompareAttributeToString( mPrimReg, "Organization", "AdministratorPassword", szAttemptPassword )
+   IF nRC != 0
+
+   // TraceLineS( "//////* Invalid Administrator Password: ", szAttemptPassword )
+      MessageSend( ViewToWindow, "", "Delete Primary Registrant",
+                   "Current password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   DELETE ENTITY mPrimReg.PrimaryRegistrant
+   COMMIT mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitChangePrimRegPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitChangePrimRegPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmChangePrimRegPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmChangePrimRegPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lPasswordLth
+   SHORT   nRC
+
+   // 1: Ensure old password is correct.
+// IF mPrimReg.Organization.AdministratorPassword != wWebXfer.Root.CurrentPassword
+   szAttemptPassword = wWebXfer.Root.CurrentPassword
+   nRC = CompareAttributeToString( mPrimReg, "Organization", "AdministratorPassword", szAttemptPassword )
+   IF nRC != 0
+
+   // TraceLineS( "//////* Invalid Current User Password: ", szAttemptPassword )
+      MessageSend( ViewToWindow, "", "Change Primary Registrant User Password",
+                   "Current password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 2: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 3: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   mPrimReg.Organization.AdministratorPassword = szConfirmPassword
+   COMMIT mPrimReg
+   DropObjectInstance( mPrimReg )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelChangePrimRegPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelChangePrimRegPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+   DropObjectInstance( mPrimReg )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitChangePrimRegUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitChangePrimRegUserPassword( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelChangePrimRegUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelChangePrimRegUserPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+   DropObjectInstance( mPrimReg )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmChangePrimRegUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmChangePrimRegUserPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+   DropObjectInstance( mPrimReg )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SubregistrantManagement
+// This may be the same as ListSubregistrants below.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SubregistrantManagement( VIEW ViewToWindow )
+
+   VIEW qOrganiz REGISTERED AS qOrganizLogin
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   INTEGER lID
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = qOrganiz.PrimaryRegistrant.ID
+   NAME VIEW lPrimReg "lPrimReg"
+
+   // Need to create the mSubreg view
+   ACTIVATE lSubreg MULTIPLE WHERE lSubreg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW lSubreg "lSubreg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ListSubregistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ListSubregistrants( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+   VIEW lSubreg  BASED ON LOD lSubreg
+   INTEGER lID
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   // Need to create the mSubreg view
+   ACTIVATE lSubreg WHERE lSubreg.Subregistrant.ID = lPrimReg.Subregistrant.ID
+   NAME VIEW lSubreg "lSubreg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListSubregistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListSubregistrants( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg BASED ON LOD lPrimReg
+   INTEGER lID
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   lID = lPrimReg.PrimaryRegistrant.ID
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... just in case someone added or
+   // deleted a subregistrant.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+   wWebXfer.Root.Banner4 = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddNewSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddNewSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   ACTIVATE mSubreg EMPTY
+   NAME VIEW mSubreg "mSubreg"
+
+   CREATE ENTITY mSubreg.Subregistrant
+   CREATE ENTITY mSubreg.SubregOrganization
+   CREATE ENTITY mSubreg.PhysicalAddress
+   CREATE ENTITY mSubreg.MailingAddress
+   CREATE ENTITY mSubreg.ContactPerson
+
+   mSubreg.PhysicalAddress.Country = "USA"
+   mSubreg.MailingAddress.Country = "USA"
+   wWebXfer.Root.SameAs = "Y"
+
+   wWebXfer.Root.AttemptLoginName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   CreateTemporalSubobjectVersion( mSubreg, "Subregistrant" )
+// CreateTemporalSubobjectVersion( mSubreg, "SubregOrganization" )
+// CreateTemporalSubobjectVersion( mSubreg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mSubreg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mSubreg, "ContactPerson" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregistrantForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lSubreg  REGISTERED AS lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   STRING (   1  ) szKeyRole
+   INTEGER lID
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   // If this is the first time into the system, this is the administrator.
+   // Otherwise, just create a new primary registrant.
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lSubreg.Subregistrant.ID
+   NAME VIEW mSubreg "mSubreg"
+   IF mSubreg.Subregistrant DOES NOT EXIST
+
+      // This should never happen!!!
+      CREATE ENTITY mSubreg.Subregistrant
+      CREATE ENTITY mSubreg.SubregOrganization
+      CREATE ENTITY mSubreg.PhysicalAddress
+      CREATE ENTITY mSubreg.MailingAddress
+      CREATE ENTITY mSubreg.ContactPerson
+      mSubreg.PhysicalAddress.Country = "USA"
+      mSubreg.MailingAddress.Country = "USA"
+      wWebXfer.Root.SameAs = "Y"
+
+   ELSE
+      wWebXfer.Root.SameAs = ""
+   END
+
+   IF mSubreg.PhysicalAddress DOES NOT EXIST
+      CREATE ENTITY mSubreg.PhysicalAddress
+      mSubreg.PhysicalAddress.Country = "USA"
+   END
+
+   IF mSubreg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mSubreg.MailingAddress
+      lID = mSubreg.MailingAddress.ID
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mSubreg, "MailingAddress",
+                                   mSubreg, "PhysicalAddress", zSET_NOTNULL )
+      lID = mSubreg.MailingAddress.ID
+   // mSubreg.MailingAddress.ID = lID
+   END
+
+   IF mSubreg.ContactPerson DOES NOT EXIST
+      CREATE ENTITY mSubreg.ContactPerson
+   END
+
+   wWebXfer.Root.AttemptLoginName = mSubreg.SubregOrganization.LoginName
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   CreateTemporalSubobjectVersion( mSubreg, "Subregistrant" )
+// CreateTemporalSubobjectVersion( mSubreg, "SubregOrganization" )
+// CreateTemporalSubobjectVersion( mSubreg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mSubreg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mSubreg, "ContactPerson" )
+
+   szKeyRole = wWebXfer.Root.KeyRole
+   IF szKeyRole = "S"
+      SetDynamicBannerName( ViewToWindow, "wStartUp", "Subregistrant" )
+   ELSE
+      SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+   END
+
+   wWebXfer.Root.Banner4 = mSubreg.Subregistrant.dNameEPA_Number
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mSubreg  REGISTERED AS mSubreg
+   STRING (  50  ) szAttemptLoginName
+   STRING (  50  ) szRegistrantName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lAttemptLoginNameLth
+   INTEGER         lRegistrantNameLth
+   INTEGER         lPasswordLth
+   INTEGER         lID
+
+   // Ensure registrant login name is not blank and is unique.
+   szAttemptLoginName = wWebXfer.Root.AttemptLoginName
+   lAttemptLoginNameLth = zGetStringLen( szAttemptLoginName )
+   TraceLineS( "Registrant Login Name: ", szAttemptLoginName )
+   TraceLineI( "Registrant Login Name Length: ", lAttemptLoginNameLth )
+   IF lAttemptLoginNameLth < 1
+      MessageSend( ViewToWindow, "", "New Subregistrant",
+                   "The registrant Login Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   ELSE
+      SET CURSOR FIRST lPrimReg.Subregistrant WHERE lPrimReg.SubregOrganization.LoginName = szAttemptLoginName
+      IF RESULT >= 0
+         MessageSend( ViewToWindow, "", "New Subregistrant",
+                      "The registrant Login Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+      END
+   END
+
+   // Ensure registrant name is not blank.
+   szRegistrantName = mSubreg.SubregOrganization.Name
+   lRegistrantNameLth = zGetStringLen( szRegistrantName )
+   TraceLineS( "Registrant Name: ", szRegistrantName )
+   TraceLineI( "Registrant Name Length: ", lRegistrantNameLth )
+   IF lRegistrantNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Subregistrant",
+                   "The registrant Organization Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Update Subregistrant",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Update Subregistrant",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Set login name to new login name.
+   mSubreg.SubregOrganization.LoginName = szAttemptLoginName
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( mSubreg, "User", "UserPassword", szConfirmPassword, "Password" )
+   mSubreg.SubregOrganization.AdministratorPassword = szConfirmPassword
+
+// AcceptSubobject( mSubreg, "ContactPerson" )
+// AcceptSubobject( mSubreg, "PhysicalAddress" )
+// AcceptSubobject( mSubreg, "MailingAddress" )
+   AcceptSubobject( mSubreg, "Subregistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mSubreg.MailingAddress
+   END
+
+   CREATE ENTITY mSubreg.PrimarySub
+   IncludeSubobjectFromSubobject( mSubreg, "PrimaryRegistrant",
+                                  lPrimReg, "PrimaryRegistrant", zPOS_LAST )
+// MessageSend( ViewToWindow, ", "Accept New Subregistrant",
+//              "Check out mPrimReg in Object Browser.",
+//              zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+   Commit mSubreg
+
+   lID = lPrimReg.PrimaryRegistrant.ID
+   DropObjectInstance( mSubreg )
+   DropObjectInstance( lPrimReg )
+
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+// MessageSend( ViewToWindow, ", "Accept New Subregistrant",
+//              "Check out lPrimReg in Object Browser.",
+//              zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ValidateSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ValidateSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  REGISTERED AS mSubreg
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   STRING (  50  ) szAttemptLoginName
+   STRING (  50  ) szRegistrantName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lAttemptLoginNameLth
+   INTEGER         lRegistrantNameLth
+   INTEGER         lPasswordLth
+
+   // Ensure registrant login name is not blank and is unique.
+   szAttemptLoginName = wWebXfer.Root.AttemptLoginName
+   lAttemptLoginNameLth = zGetStringLen( szAttemptLoginName )
+   TraceLineS( "Registrant Login Name: ", szAttemptLoginName )
+   TraceLineI( "Registrant Login Name Length: ", lAttemptLoginNameLth )
+   IF lAttemptLoginNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Subregistrant",
+                   "The registrant Login Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szRegistrantName = mSubreg.SubregOrganization.LoginName
+   IF szRegistrantName != szAttemptLoginName
+      ACTIVATE qOrganiz WHERE qOrganiz.Organization.LoginName = szAttemptLoginName
+      IF qOrganiz.Organization EXISTS
+
+         DropObjectInstance( qOrganiz )
+         MessageSend( ViewToWindow, "", "Update Subregistrant",
+                      "The registrant Login Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+
+      DropObjectInstance( qOrganiz )
+   END
+
+   // Ensure registrant name is not blank.
+   szRegistrantName = mSubreg.SubregOrganization.Name
+   lRegistrantNameLth = zGetStringLen( szRegistrantName )
+   TraceLineI( "Registrant Name Length: ", lRegistrantNameLth )
+   IF lRegistrantNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Subregistrant",
+                   "The registrant Organization Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Ensure password matches primary registrant password.
+// IF mSubreg.Subregistrant.AdministratorPassword != wWebXfer.Root.AttemptPassword
+//
+//    MessageSend( ViewToWindow, "", "Update Subregistrant",
+//                 "Invalid password.",
+//                 zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+//    RETURN 2
+// END
+
+   // Set login name just in case it's new.
+   mSubreg.SubregOrganization.LoginName = szAttemptLoginName
+
+// AcceptSubobject( mSubreg, "ContactPerson" )
+// AcceptSubobject( mSubreg, "PhysicalAddress" )
+// AcceptSubobject( mSubreg, "MailingAddress" )
+   AcceptSubobject( mSubreg, "Subregistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mSubreg.MailingAddress
+   END
+
+   mSubreg.SubregOrganization.Role = "S"
+   Commit mSubreg
+   RETURN 0
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregistrant( VIEW ViewToWindow )
+
+   VIEW mSubreg  REGISTERED AS mSubreg
+   SHORT nRC
+
+   nRC = ValidateSubregistrant( ViewToWindow )
+   IF nRC = 0
+      DropObjectInstance( mSubreg )
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSubregistrant( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+// CancelSubobject( mSubreg, "ContactPerson" )
+// CancelSubobject( mSubreg, "PhysicalAddress" )
+// CancelSubobject( mSubreg, "MailingAddress" )
+   CancelSubobject( mSubreg, "Subregistrant" )
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregistrant( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+// CancelSubobject( mSubreg, "ContactPerson" )
+// CancelSubobject( mSubreg, "PhysicalAddress" )
+// CancelSubobject( mSubreg, "MailingAddress" )
+   CancelSubobject( mSubreg, "Subregistrant" )
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregistrantForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregistrantForDelete( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   STRING ( 128 ) szAttemptPassword
+   INTEGER lID
+   INTEGER lSubregID
+   INTEGER lControl
+   SHORT   nRC
+
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lPrimReg.Subregistrant.ID
+   NAME VIEW mSubreg "mSubreg"
+   IF mSubreg.SubregProduct EXISTS
+
+       MessageSend( ViewToWindow, "", "Delete Subregistrant",
+                   "Product Definitions exist for subregistrant.  Delete Cancelled",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      DropObjectInstance( mSubreg )
+      RETURN 2
+
+   END
+
+   // Match the password.
+// IF mSubreg.Organization.AdministratorPassword != wWebXfer.Root.AttemptPassword
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   nRC = CompareAttributeToString( mSubreg, "Organization", "AdministratorPassword", szAttemptPassword )
+   IF nRC != 0
+
+   // TraceLineS( "//////* Invalid Administrator Password: ", szAttemptPassword )
+      MessageSend( ViewToWindow, "", "Delete Subregistrant",
+                   "Current password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      DropObjectInstance( mSubreg )
+      RETURN 2
+
+   END
+
+   lID = lPrimReg.PrimaryRegistrant.ID
+   lSubregID = mSubreg.Subregistrant.ID
+
+   DELETE ENTITY mSubreg.Subregistrant
+   COMMIT mSubreg
+
+   DropObjectInstance( mSubreg )
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... because we just deleted
+   // a subregistrant.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitChangeSubregPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitChangeSubregPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmChangeSubregPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmChangeSubregPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  REGISTERED AS mSubreg
+   STRING ( 128 ) szAttemptPassword
+   STRING ( 128 ) szConfirmPassword
+   INTEGER        lPasswordLth
+   SHORT  nRC
+
+   // 1: Ensure old password is correct.
+// IF mSubreg.SubregOrganization.AdministratorPassword != wWebXfer.Root.AttemptPassword
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   nRC = CompareAttributeToString( mSubreg, "SubregOrganization", "AdministratorPassword", szAttemptPassword )
+   IF nRC != 0
+
+   // TraceLineS( "//////* Invalid Current User Password", szAttemptPassword )
+      MessageSend( ViewToWindow, "", "Change Subregistrant User Password",
+                   "Current password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+// szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 2: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 3: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   mSubreg.SubregOrganization.AdministratorPassword = szConfirmPassword
+   COMMIT mSubreg
+   DropObjectInstance( mSubreg )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelChangeSubregPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelChangeSubregPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  REGISTERED AS mSubreg
+
+   DropObjectInstance( mSubreg )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmChangeSubregUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmChangeSubregUserPassword( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitEmailProspects
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitEmailProspects( VIEW ViewToWindow )
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.EmailSubjectLine = ""
+   wWebXfer.Root.EmailMessage = ""
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: EmailSelectedSubregistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+EmailSelectedSubregistrants( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+// INTEGER lCount
+   STRING ( 1000 ) szEmailErrors
+   STRING ( 2000 ) szErrorMsg
+
+   szEmailErrors = ""
+
+/* Done in jsp
+   // Make sure at least one Subregistrant was selected.
+   lCount = 0
+   FOR EACH lPrimReg.PrimarySub
+      IF lPrimReg.Subregistrant.wkSelected = "Y"
+         lCount = lCount + 1
+      END
+   END
+   IF lCount = 0
+      MessageSend( ViewToWindow, "", "Email Selected Subregistrants",
+                   "At least one Subregistrant must be selected.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+*/
+
+   // Create subobject of email addresses for each SELECTED Subregistrant.
+
+   FOR EACH wWebXfer.EmailListEntry
+      DELETE ENTITY wWebXfer.EmailListEntry NONE
+   END
+
+   FOR EACH lPrimReg.PrimarySub
+      IF lPrimReg.Subregistrant.wkSelected = "Y" AND
+         lPrimReg.SubregContactPerson.EmailAddress != ""
+
+         CREATE ENTITY wWebXfer.EmailListEntry
+         wWebXfer.EmailListEntry.FirstName    = lPrimReg.SubregContactPerson.FirstName
+         wWebXfer.EmailListEntry.MiddleName   = lPrimReg.SubregContactPerson.MiddleName
+         wWebXfer.EmailListEntry.LastName     = lPrimReg.SubregContactPerson.LastName
+         wWebXfer.EmailListEntry.EmailAddress = lPrimReg.SubregContactPerson.EmailAddress
+         wWebXfer.EmailListEntry.ID           = lPrimReg.Subregistrant.ID
+      END
+
+      IF lPrimReg.Subregistrant.wkSelected = "Y" AND
+         lPrimReg.SubregContactPerson.EmailAddress = ""
+         IF  szEmailErrors != ""
+           szEmailErrors = szEmailErrors + "," + NEW_LINE
+         END
+
+         // We must give an error for each Subregistrant that was not emailed.
+         szEmailErrors = szEmailErrors + lPrimReg.SubregContactPerson.LastName
+         szEmailErrors = szEmailErrors + ", "
+         szEmailErrors = szEmailErrors + lPrimReg.SubregContactPerson.FirstName
+      END
+
+      lPrimReg.Subregistrant.wkSelected = ""
+   END
+
+   wWebXfer.Root.RecipientEmailAddress = wWebXfer.Root.UserEmailAddress
+
+   IF  szEmailErrors != ""
+      // The following line causes extensive errors.
+      // szEmailErrors = "The was an error sending emails to the following Subregistrant(s): " + NEW_LINE + szEmailErrors
+      szErrorMsg = "The following Subregistrants had no email address and are not shown in list below: " + NEW_LINE + NEW_LINE + szEmailErrors
+      MessageSend( ViewToWindow, "", "Send Email",
+                   szErrorMsg,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectPrimRegUserForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectPrimRegUserForUpdate( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectPrimRegUserForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectPrimRegUserForDelete( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListPrimRegUsers
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListPrimRegUsers( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+   INTEGER lID
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   lID = lPrimReg.PrimaryRegistrant.ID
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... just in case someone added or
+   // deleted a primary registrant user.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddNewPrimRegUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddNewPrimRegUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mCurrentUser BASED ON LOD  mUser
+   VIEW mPerson  BASED ON LOD  mPerson
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg REGISTERED AS lPrimReg
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   IF lPrimReg = 0
+      MessageSend( ViewToWindow, "", "Initialize Primary Registrant User",
+                   "The registrant list is empty.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   GET VIEW qPrimReg NAMED "qPrimReg"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   ACTIVATE qPrimReg WHERE qPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW qPrimReg "qPrimReg"
+
+   IF qPrimReg.PrimaryRegistrant DOES NOT EXIST
+      TraceLineI( "InitializePrimRegUser cannot activate Primary Registrant: ",
+                  lPrimReg.PrimaryRegistrant.ID )
+      MessageSend( ViewToWindow, "", "Initialize New Primary Registrant User",
+                   "Cannot activate Primary Registrant.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      DropObjectInstance( qPrimReg )
+      RETURN 2
+   END
+
+   DropObjectInstance( qPrimReg )
+
+   GET VIEW mCurrentUser NAMED "mCurrentUser"
+   IF mCurrentUser != 0
+      DropObjectInstance( mCurrentUser )
+   END
+
+   GET VIEW mPerson NAMED "mPerson"
+   IF mPerson != 0
+      DropObjectInstance( mPerson )
+   END
+
+   // We are activating empty OI's, so create all the entities.
+   ACTIVATE mCurrentUser EMPTY
+   NAME VIEW mCurrentUser "mCurrentUser"
+   CREATE ENTITY mCurrentUser.User
+   mCurrentUser.User.Status = "B"  // beginner
+
+   ACTIVATE mPerson EMPTY
+   NAME VIEW mPerson "mPerson"
+   CREATE ENTITY mPerson.Person
+   CREATE ENTITY mPerson.Address
+
+   wWebXfer.Root.AttemptUserName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   mPerson.Address.Country = "USA"
+
+// CreateTemporalSubobjectVersion( mPerson, "Address" )
+   CreateTemporalSubobjectVersion( mPerson, "Person" )
+   CreateTemporalSubobjectVersion( mCurrentUser, "User" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimRegUserForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimRegUserForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mCurrentUser BASED ON LOD  mUser
+   VIEW mPerson  BASED ON LOD  mPerson
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg REGISTERED AS lPrimReg
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   IF lPrimReg = 0
+      MessageSend( ViewToWindow, "", "Initialize Primary Registrant User",
+                   "The registrant list is empty.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   GET VIEW qPrimReg NAMED "qPrimReg"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   ACTIVATE qPrimReg WHERE qPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW qPrimReg "qPrimReg"
+
+   IF qPrimReg.PrimaryRegistrant DOES NOT EXIST
+      TraceLineI( "InitPrimRegUserForUpdate cannot activate Primary Registrant: ",
+                  lPrimReg.PrimaryRegistrant.ID )
+      MessageSend( ViewToWindow, "", "Initialize Primary Registrant User",
+                   "Cannot activate Primary Registrant.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   DropObjectInstance( qPrimReg )
+
+   GET VIEW mCurrentUser NAMED "mCurrentUser"
+   IF mCurrentUser != 0
+      DropObjectInstance( mCurrentUser )
+   END
+
+   // We are activating a User instance for update.
+   ACTIVATE mCurrentUser WHERE mCurrentUser.User.ID = lPrimReg.User.ID
+   NAME VIEW mCurrentUser "mCurrentUser"
+   ACTIVATE mPerson WHERE mPerson.Person.ID = mCurrentUser.Employee.ID
+   NAME VIEW mPerson "mPerson"
+
+   wWebXfer.Root.AttemptUserName = mCurrentUser.User.UserName
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+   wWebXfer.Root.CurrentPassword = ""
+
+   CreateTemporalSubobjectVersion( mCurrentUser, "User" )
+// CreateTemporalSubobjectVersion( mPerson, "Person" )
+// CreateTemporalSubobjectVersion( mPerson, "Address" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewPrimRegUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewPrimRegUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW mPerson  REGISTERED AS mPerson
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+// VIEW mPrimReg BASED ON LOD  mPrimReg
+   STRING (  50  ) szUserName
+   STRING ( 128 ) szAttemptPassword
+   STRING ( 128 ) szConfirmPassword
+   INTEGER         lUserNameLth
+   INTEGER         lPasswordLth
+   INTEGER         lControl
+   INTEGER         lID
+   SHORT           nRC
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+
+   // Ensure user login name is not blank and is unique.
+   szUserName = mCurrentUser.User.UserName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "User Login Name: ", szUserName )
+   TraceLineI( "User Login Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+
+      MessageSend( ViewToWindow, "", "New Primary Registrant User",
+                   "The User Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+      IF SetEntityCursor( lPrimReg, "User", "UserName", lControl,
+                          szUserName, "", "", 0, "", "" ) >= zCURSOR_SET
+         MessageSend( ViewToWindow, "", "New Primary Registrant User",
+                      "The User Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+   END
+
+   // Ensure user first and last names are not blank.
+   szUserName = mPerson.Person.FirstName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "First Name: ", szUserName )
+   TraceLineI( "First Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "New Primary Registrant User",
+                   "The user First Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szUserName = mPerson.Person.LastName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "Last Name: ", szUserName )
+   TraceLineI( "Last Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "New Primary Registrant User",
+                   "The user Last Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "New Primary Registrant User",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "New Primary Registrant User",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( qPrimReg, "User", "UserPassword", szConfirmPassword, "Password" )
+   mCurrentUser.User.UserPassword = szConfirmPassword
+
+   ACTIVATE qPrimReg WHERE qPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW qPrimReg "qPrimReg"
+
+// AcceptSubobject( mPerson, "Address" )
+   AcceptSubobject( mPerson, "Person" )
+   IncludeSubobjectFromSubobject( mPerson, "PrimaryRegistrant",
+                                  qPrimReg, "PrimaryRegistrant", zPOS_LAST )
+   Commit mPerson
+
+   AcceptSubobject( mCurrentUser, "User" )
+   IncludeSubobjectFromSubobject( mCurrentUser, "Person",
+                                  mPerson, "Person", zPOS_BEFORE )
+   Commit mCurrentUser
+
+   lID = lPrimReg.PrimaryRegistrant.ID
+
+   DropObjectInstance( mPerson )
+   DropObjectInstance( mCurrentUser )
+   DropObjectInstance( qPrimReg )
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... just in case someone added or
+   // deleted a primary registrant user.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdatePrimRegUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdatePrimRegUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW mPerson  REGISTERED AS mPerson
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   STRING (  50  ) szUserName
+   STRING (  50  ) szAttemptUserName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lUserNameLth
+   INTEGER         lPasswordLth
+   INTEGER         lControl
+   INTEGER         lID
+   SHORT           nRC
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+
+   // Ensure the user is the same one that logged in, or that the user knows
+   // the password of this user in order to update the information.
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+// IF qPrimReg.PrimaryRegistrant.ID != lPrimReg.PrimaryRegistrant.ID AND
+//    lPrimReg.User.UserPassword != wWebXfer.Root.AttemptPassword
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   nRC = CompareAttributeToString( lPrimReg, "User", "UserPassword", szAttemptPassword )
+   IF nRC != 0 AND
+      qPrimReg.PrimaryRegistrant.ID != lPrimReg.PrimaryRegistrant.ID
+
+      MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                   "Verification password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Ensure user login name is not blank and is unique.
+   szUserName = mCurrentUser.User.UserName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "User Login Name: ", szUserName )
+   TraceLineI( "User Login Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+
+      MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                   "The User Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      szAttemptUserName = wWebXfer.Root.AttemptUserName
+      IF szUserName != szAttemptUserName
+
+         lControl = zQUAL_STRING + zPOS_FIRST + zQUAL_SCOPE_OI + zTEST_CSR_RESULT
+         IF SetEntityCursor( lPrimReg, "User", "UserName", lControl,
+                             szUserName, "", "", 0, "", "" ) >= zCURSOR_SET
+            MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                         "The User Name must be unique.",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+
+         END
+      END
+   END
+
+   // Ensure user first and last names are not blank.
+   szUserName = mPerson.Person.FirstName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "First Name: ", szUserName )
+   TraceLineI( "First Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                   "The user First Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szUserName = mPerson.Person.LastName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "Last Name: ", szUserName )
+   TraceLineI( "Last Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant User",
+                   "The user Last Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+// AcceptSubobject( mPerson, "Person" )
+// AcceptSubobject( mPerson, "Address" )
+   AcceptSubobject( mCurrentUser, "User" )
+
+   Commit mPerson
+   Commit mCurrentUser
+
+   lID = lPrimReg.PrimaryRegistrant.ID
+
+   DropObjectInstance( mPerson )
+   DropObjectInstance( mCurrentUser )
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... just in case someone added or
+   // deleted a primary registrant user.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewPrimRegUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewPrimRegUser( VIEW ViewToWindow )
+
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW mPerson REGISTERED AS mPerson
+
+// CancelSubobject( mPerson, "Address" )
+   CancelSubobject( mPerson, "Person" )
+   CancelSubobject( mCurrentUser, "User" )
+   DropObjectInstance( mCurrentUser )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdatePrimRegUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdatePrimRegUser( VIEW ViewToWindow )
+
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW mPerson REGISTERED AS mPerson
+
+// CancelSubobject( mPerson, "Address" )
+   CancelSubobject( mPerson, "Person" )
+   CancelSubobject( mCurrentUser, "User" )
+   DropObjectInstance( mCurrentUser )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeletePrimRegUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeletePrimRegUser( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+   DELETE ENTITY mPrimReg.User
+   COMMIT mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSelectPrimRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSelectPrimRegistrant( VIEW ViewToWindow )
+
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListMasterLabels
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListMasterLabels( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+   INTEGER lID
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   lID = lPrimReg.PrimaryRegistrant.ID
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... just in case someone added or
+   // deleted a primary registrant label.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddNewMasterLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddNewMasterLabel( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   BASED ON LOD  mMasLC
+
+   GET VIEW mMasLC NAMED "mMasLC"
+   IF mMasLC != 0
+      DropObjectInstance( mMasLC )
+   END
+
+   // We are activating an empty OI, so create all the entities.
+   ACTIVATE mMasLC EMPTY
+   NAME VIEW mMasLC "mMasLC"
+   CREATE ENTITY mMasLC.MasterLabelContent
+// CREATE ENTITY mMasLC.MasterLabelSection
+// CREATE ENTITY mMasLC.MasterLabelSection
+
+   wWebXfer.Root.AttemptProductName = ""
+
+   CreateTemporalSubobjectVersion( mMasLC, "MasterLabelContent" )
+// CreateTemporalSubobjectVersion( mMasLC, "MasterLabelSection" )
+// CreateTemporalSubobjectVersion( mMasLC, "MasterLabelSection" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitMasterLabelForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterLabelForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   BASED ON LOD  mMasLC
+   VIEW lPrimReg REGISTERED AS lPrimReg
+
+   GET VIEW mMasLC NAMED "mMasLC"
+   IF mMasLC != 0
+      DropObjectInstance( mMasLC )
+   END
+
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lPrimReg.MasterLabelContent.ID
+   NAME VIEW mMasLC "mMasLC"
+
+// IF mMasLC.MasterLabelSection DOES NOT EXIST
+//    CREATE ENTITY mMasLC.MasterLabelSection
+// END
+
+// IF mMasLC.MasterLabelSection DOES NOT EXIST
+//    CREATE ENTITY mMasLC.MasterLabelSection
+// END
+
+   wWebXfer.Root.AttemptProductName = mMasLC.MasterProduct.Name
+
+   CreateTemporalSubobjectVersion( mMasLC, "MasterLabelContent" )
+// CreateTemporalSubobjectVersion( mMasLC, "MasterLabelSection" )
+// CreateTemporalSubobjectVersion( mMasLC, "MasterLabelSection" )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewMasterLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewMasterLabel( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   STRING (  50  ) szProductName
+   INTEGER         lProductNameLth
+   INTEGER         lControl
+   INTEGER         lID
+   SHORT           nRC
+
+   // Ensure user login name is not blank and is unique.
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   szProductName = mMasLC.MasterProduct.Name
+   lProductNameLth = zGetStringLen( szProductName )
+   TraceLineS( "Label Name: ", szProductName )
+   TraceLineI( "Label Name Length: ", lProductNameLth )
+   IF lProductNameLth < 1
+
+      MessageSend( ViewToWindow, "", "New Primary Registrant Label",
+                   "The Label Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+      IF SetEntityCursor( lPrimReg, "MasterLabelContent", "ProductName", lControl,
+                          szProductName, "", "", 0, "", "" ) >= zCURSOR_SET
+         MessageSend( ViewToWindow, "", "New Primary Registrant Label",
+                      "The Label Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+   END
+
+   lID = lPrimReg.PrimaryRegistrant.ID
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW mPrimReg "mPrimReg"
+
+   IncludeSubobjectFromSubobject( mMasLC, "PrimaryRegistrant",
+                                  mPrimReg, "PrimaryRegistrant", zPOS_LAST )
+
+   AcceptSubobject( mMasLC, "MasterLabelContent" )
+// AcceptSubobject( mMasLC, "MasterLabelSection" )
+// AcceptSubobject( mMasLC, "MasterLabelSection" )
+
+   Commit mMasLC
+
+   DropObjectInstance( mMasLC )
+   DropObjectInstance( mPrimReg )
+   DropObjectInstance( lPrimReg )
+
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateMasterLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateMasterLabel( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   STRING (  50  ) szProductName
+   STRING (  50  ) szAttemptProductName
+   INTEGER         lProductNameLth
+   INTEGER         lPasswordLth
+   INTEGER         lControl
+   INTEGER         lID
+   SHORT           nRC
+
+   // Ensure user login name is not blank and is unique.
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   szProductName = mMasLC.MasterProduct.Name
+   lProductNameLth = zGetStringLen( szProductName )
+   TraceLineS( "User Login Name: ", szProductName )
+   TraceLineI( "User Login Name Length: ", lProductNameLth )
+   IF lProductNameLth < 1
+
+      MessageSend( ViewToWindow, "", "Update Primary Registrant Label",
+                   "The Label Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      szAttemptProductName = wWebXfer.Root.AttemptProductName
+      IF szProductName != szAttemptProductName
+
+         lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+         IF SetEntityCursor( lPrimReg, "MasterLabelContent", "ProductName", lControl,
+                             szProductName, "", "", 0, "", "" ) >= zCURSOR_SET
+            MessageSend( ViewToWindow, "", "Update Primary Registrant Label",
+                         "The Label Name must be unique.",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+
+         END
+      END
+   END
+
+   lID = lPrimReg.PrimaryRegistrant.ID
+
+   AcceptSubobject( mMasLC, "MasterLabelContent" )
+// AcceptSubobject( mMasLC, "MasterLabelSection" )
+// AcceptSubobject( mMasLC, "MasterLabelSection" )
+
+   Commit mMasLC
+
+   DropObjectInstance( mMasLC )
+   DropObjectInstance( lPrimReg )
+
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewMasterLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewMasterLabel( VIEW ViewToWindow )
+
+   VIEW mMasLC   REGISTERED AS mMasLC
+
+   CancelSubobject( mMasLC, "MasterLabelContent" )
+// CancelSubobject( mMasLC, "MasterLabelSection" )
+// CancelSubobject( mMasLC, "MasterLabelSection" )
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateMasterLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateMasterLabel( VIEW ViewToWindow )
+
+   VIEW mMasLC   REGISTERED AS mMasLC
+
+   CancelSubobject( mMasLC, "MasterLabelContent" )
+// CancelSubobject( mMasLC, "MasterLabelSection" )
+// CancelSubobject( mMasLC, "MasterLabelSection" )
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteMasterLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteMasterLabel( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+   DELETE ENTITY mPrimReg.MasterLabelContent
+   COMMIT mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ChangeUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ChangeUserPassword( VIEW ViewToWindow )
+
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lPasswordLth
+   SHORT  nRC
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+
+   // 1: Ensure old password is correct.
+// IF mCurrentUser.User.UserPassword != mCurrentUser.User.AttemptPassword
+   nRC = CompareAttributeToString( mCurrentUser, "User", "UserPassword", szAttemptPassword )
+   IF nRC != 0
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "Current password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 2: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 3: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( mCurrentUser, "User", "UserPassword", szConfirmPassword, "Password" )
+   mCurrentUser.User.UserPassword = szConfirmPassword
+
+// TraceLineS( "Newly Set Password:", mCurrentUser.User.UserPassword )
+
+   // Commit change
+   COMMIT mCurrentUser
+   mCurrentUser.User.AttemptPassword = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ValidatePrimRegistrantPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ValidatePrimRegistrantPassword( VIEW ViewToWindow )
+
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ValidateSubregistrantPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ValidateSubregistrantPassword( VIEW ViewToWindow )
+
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectListSubregistrants
+// Need to get proper position ... prevent Admin from going there
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectListSubregistrants( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+   VIEW qSubreg  BASED ON LOD  qSubreg
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   STRING ( 1  ) szKeyRole
+   INTEGER       lID
+   SHORT         nRC
+
+   IF wWebXfer = 0
+      TraceLineS( "wStartUp.SelectListSubregistrants cannot find Transfer View", "" )
+      MessageSend( ViewToWindow, "", "Product Management",
+                   "Invalid Transfer View ... being redirected to Login",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_ResetTopWindow,
+                               "wStartUp", "UserLogin" )
+      RETURN 1
+   END
+
+   GET VIEW qOrganiz NAMED "qOrganizLogin"
+   IF qOrganiz = 0
+      TraceLineS( "wStartUp.SelectListSubregistrants cannot find Organization View", "" )
+      MessageSend( ViewToWindow, "", "Product Management",
+                   "Invalid Organization View ... being redirected to Login",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_ResetTopWindow,
+                               "wStartUp", "UserLogin" )
+      RETURN 1
+   END
+
+   IF wWebXfer.Root.LoginName = "Admin"
+
+      MessageSend( ViewToWindow, "", "List Subregistrants",
+                   "Admin does not have Subregistrants",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu List Subregistrants" )
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   GET VIEW qSubreg NAMED "qSubregLogin"
+   IF qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   GET VIEW qPrimReg NAMED "lPrimReg"
+   IF lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "PrimaryRegistrant" )
+
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = qOrganiz.PrimaryRegistrant.ID
+   NAME VIEW lPrimReg "lPrimReg"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectListPrimRegUser
+// Need to get proper position ... prevent Admin from going there
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectListPrimRegUser( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF lPrimReg.Organization.LoginName = "Admin"
+      MessageSend( ViewToWindow, "", "List Primary Registrant User",
+                   "Admin does not have Users",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectListSubregistrantUsers
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectListSubregistrantUsers( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectListSubregistrantProducts
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectListSubregistrantProducts( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSelectSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSelectSubregistrant( VIEW ViewToWindow )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectSubregProductForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectSubregProductForUpdate( VIEW ViewToWindow )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectSubregProductForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectSubregProductForDelete( VIEW ViewToWindow )
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddNewMasterProduct
+// Prevent Admin from going there
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddNewMasterProduct( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD  lPrimReg
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF lPrimReg.Organization.LoginName = "Admin"
+      MessageSend( ViewToWindow, "", "New Master Product",
+                   "Admin does not have Master Products",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateMasterProduct( VIEW ViewToWindow )
+
+   // nothing to do here ... just for positioning
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteMasterProduct( VIEW ViewToWindow )
+
+   // nothing to do here ... just for positioning
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveMasterProductUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveMasterProductUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mTempReg BASED ON LOD  mPrimReg
+   INTEGER lMove
+
+   CreateViewFromView( mTempReg, mPrimReg )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempReg.MasterProduct
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempReg, "MasterProduct",
+                  mPrimReg, "MasterProduct",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempReg )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mPrimReg
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveMasterProductDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveMasterProductDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mTempReg BASED ON LOD  mPrimReg
+   INTEGER lMove
+
+   CreateViewFromView( mTempReg, mPrimReg )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempReg.MasterProduct
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempReg, "MasterProduct",
+                  mPrimReg, "MasterProduct",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempReg )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mPrimReg
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: WebDevelopment
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+WebDevelopment( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu WebDevelopment" )
+
+   MessageSend( ViewToWindow, "", "Web Development",
+                "Web Development and Maintenance not yet implemented.",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MarketingFulfillment
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MarketingFulfillment( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu MarketingFulfillment" )
+
+   MessageSend( ViewToWindow, "", "Marketing & Fulfillment",
+                "Marketing and Fulfillment not yet implemented.",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: StateRegistrations
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+StateRegistrations( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu StateRegistrations" )
+
+   MessageSend( ViewToWindow, "", "State Registrations",
+                "State Registrations not yet implemented.",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: TrackingNotificationCompliance
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+TrackingNotificationCompliance( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu TrackingNotificationCompliance" )
+
+   MessageSend( ViewToWindow, "", "Tracking/Notification/Compliance",
+                "Tracking/Notification/Compliance not yet implemented.",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SubregistrantMaintenance
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SubregistrantMaintenance( VIEW ViewToWindow )
+
+   MessageSend( ViewToWindow, "", "Subregistrant Maintenance",
+                "Subregistrant Maintenance not yet implemented.",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ProcessLogin
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ProcessLogin( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "TopMenu Login" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ListSubregProducts
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ListSubregProducts( VIEW ViewToWindow )
+
+   // Nothing to do at this point.
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListSubregProducts
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListSubregProducts( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   INTEGER lID
+   SHORT   nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   // Activate the "selected" Subregistrant.
+   lID = lPrimReg.Subregistrant.ID
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lID
+   NAME VIEW mSubreg "mSubreg"
+
+   nRC = SetCursorFirstEntity( mSubreg, "ListMasterProduct", "Subregistrant" )
+   LOOP WHILE nRC = 0
+      lID = mSubreg.ListMasterProduct.ID
+      nRC = SetCursorFirstEntityByInteger( mSubreg, "ValidMasterProduct", "ID", lID, "" )
+      IF nRC = 0
+         mSubreg.ListMasterProduct.wkSelected = "Y"
+      END
+
+      nRC = SetCursorNextEntity( mSubreg, "ListMasterProduct", "Subregistrant" )
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wStartUp", "Subregistrant" )
+   wWebXfer.Root.Banner4 = mSubreg.Subregistrant.dNameEPA_Number
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregProducts
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregProducts( VIEW ViewToWindow )
+
+   VIEW mSubreg  REGISTERED AS mSubreg
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregProduct
+//
+// For this to work, the runtime permissions for the ValidMasterProduct
+// entity in the LOD must be marked as updatable (not solely Include,
+// Include Source, and Exclude).
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg  REGISTERED AS mSubreg
+   INTEGER lID
+   SHORT   nRC
+
+   nRC = SetCursorFirstEntity( mSubreg, "ListMasterProduct", "Subregistrant" )
+   LOOP WHILE nRC = 0
+      lID = mSubreg.ListMasterProduct.ID
+      nRC = SetCursorFirstEntityByInteger( mSubreg, "ValidMasterProduct", "ID", lID, "" )
+      IF mSubreg.ListMasterProduct.wkSelected = "Y"
+         IF nRC != 0
+            IncludeSubobjectFromSubobject( mSubreg, "ValidMasterProduct",
+                                           mSubreg, "ListMasterProduct", zPOS_LAST )
+         END
+      ELSE
+         IF nRC = 0
+            ExcludeEntity( mSubreg, "ValidMasterProduct", zREPOS_NONE )
+         END
+      END
+
+      nRC = SetCursorNextEntity( mSubreg, "ListMasterProduct", "Subregistrant" )
+   END
+
+   COMMIT mSubreg
+
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: LoadCommitForTestPurposes
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+LoadCommitForTestPurposes( VIEW ViewToWindow )
+
+   VIEW mTempl   BASED ON LOD  mTempl
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mEPA     BASED ON LOD  mEPA
+   VIEW mMasLC   BASED ON LOD  mMasLC
+   VIEW mMasProd BASED ON LOD  mMasProd
+
+   GET VIEW mTempl NAMED "mTempl"
+   IF mTempl != 0
+      DropObjectInstance( mTempl )
+   END
+
+   ActivateOI_FromFile( mTempl, "mTempl", ViewToWindow,
+                        "c:\lplr\epamms\bin\mTempl1.por", zIGNORE_ERRORS )
+   SetNameForView( mTempl, "mTempl", 0, zLEVEL_TASK )
+   MiSetInstanceUpdateFlag( mTempl, 1 )
+// MessageSend( ViewToWindow, "", "Save Template",
+//              "Check view: mTempl", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   COMMIT mTempl
+// DropObjectInstance( mTempl )
+
+
+   GET VIEW mEPA NAMED "mEPA"
+   IF mEPA != 0
+      DropObjectInstance( mEPA )
+   END
+
+   ActivateOI_FromFile( mEPA, "mEPA", ViewToWindow,
+                        "c:\lplr\epamms\bin\mEPA.por", zIGNORE_ERRORS )
+   SetNameForView( mEPA, "mEPA", 0, zLEVEL_TASK )
+   MiSetInstanceUpdateFlag( mEPA, 1 )
+// MessageSend( ViewToWindow, "", "Save mEPA",
+//              "Check view: mEPA", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   COMMIT mEPA
+// DropObjectInstance( mEPA )
+
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF  mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ActivateOI_FromFile( mPrimReg, "mPrimReg", ViewToWindow,
+                        "c:\lplr\epamms\bin\mPrimReg.por", zIGNORE_ERRORS )
+   SetNameForView( mPrimReg, "mPrimReg", 0, zLEVEL_TASK )
+   MiSetInstanceUpdateFlag( mPrimReg, 1 )
+// MessageSend( ViewToWindow, "", "Save mPrimReg",
+//              "Check view: mPrimReg", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   COMMIT mPrimReg
+// DropObjectInstance( mPrimReg )
+
+
+   GET VIEW mMasProd NAMED "mMasProd"
+   IF mMasProd != 0
+      DropObjectInstance( mMasProd )
+   END
+
+   ActivateOI_FromFile( mMasProd, "mMasProd", ViewToWindow,
+                        "c:\lplr\epamms\bin\mMasProd.por", zIGNORE_ERRORS )
+   SetNameForView( mMasProd, "mMasProd", 0, zLEVEL_TASK )
+   MiSetInstanceUpdateFlag( mMasProd, 1 )
+// MessageSend( ViewToWindow, "", "Save mMasProd",
+//              "Check view: mMasProd", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   COMMIT mMasProd
+// DropObjectInstance( mMasProd )
+
+
+   GET VIEW mMasLC NAMED "mMasLC"
+   IF mMasLC != 0
+      DropObjectInstance( mMasLC )
+   END
+
+   ActivateOI_FromFile( mMasLC, "mMasLC", ViewToWindow,
+                        "c:\lplr\epamms\bin\mMasLC.por", zIGNORE_ERRORS )
+   SetNameForView( mMasLC, "mMasLC", 0, zLEVEL_TASK )
+   MiSetInstanceUpdateFlag( mMasLC, 1 )
+// MessageSend( ViewToWindow, "", "Save mMasLC",
+//              "Check view: mMasLC", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   COMMIT mMasLC
+// DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectSubregUserForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectSubregUserForUpdate( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectSubregUserForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectSubregUserForDelete( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectSubregistrantForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectSubregistrantForDelete( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregUserForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregUserForInsert( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregUserForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregUserForUpdate( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSubregUser( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregUser( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSubregUser( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregUser( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectSubregistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectSubregistrantForUpdate( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSubregUser( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//    
+// OPERATION: Template
+//    
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+Template( VIEW ViewToWindow )
+
+END

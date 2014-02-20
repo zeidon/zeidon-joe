@@ -1,0 +1,2 @@
+This project is an example of creating a JAR file with all required dependencies
+and starting a Sinatra server to act as a LOD server.

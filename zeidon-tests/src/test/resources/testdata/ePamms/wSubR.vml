@@ -1,0 +1,1565 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    wSubR         - Subregistrant Maintenance operations
+// FILE:         wSubR.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregDetail
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregDetail( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lSubreg  REGISTERED AS lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   INTEGER       lID
+
+   IF wWebXfer = 0
+      TraceLineS( "wSubR.InitSubregDetail cannot find Transfer View", "" )
+      RETURN 2
+   END
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lSubreg.Subregistrant.ID
+   NAME VIEW mSubreg "mSubreg"
+
+   IF mSubreg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mSubreg.MailingAddress
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mSubreg, "MailingAddress",
+                                   mSubreg, "PhysicalAddress", zSET_NOTNULL )
+      wWebXfer.Root.SameAs = "Y"
+   ELSE
+      wWebXfer.Root.SameAs = ""
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListSubregistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListSubregistrants( VIEW ViewToWindow )
+
+   VIEW qSubreg BASED ON LOD qSubreg
+
+   GET VIEW qSubreg NAMED "qSubreg"
+   IF  qSubreg != 0
+      DropObjectInstance( qSubreg )
+   END
+
+   // Activate all subregistrants at the root level.
+   ACTIVATE qSubreg ROOTONLYMULTIPLE
+   NAME VIEW qSubreg "qSubreg"
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lSubreg  REGISTERED AS lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   INTEGER       lID
+
+   IF wWebXfer = 0
+      TraceLineS( "wSubR.InitSubregistrant cannot find Transfer View", "" )
+      RETURN 2
+   END
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lSubreg.Subregistrant.ID
+   NAME VIEW mSubreg "mSubreg"
+
+   IF mSubreg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mSubreg.MailingAddress
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mSubreg, "MailingAddress",
+                                   mSubreg, "PhysicalAddress", zSET_NOTNULL )
+      wWebXfer.Root.SameAs = "Y"
+   ELSE
+      wWebXfer.Root.SameAs = ""
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ReturnFromSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ReturnFromSubregistrant( VIEW ViewToWindow )
+
+   VIEW lSubreg  BASED ON LOD  lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+
+   GET VIEW lSubreg NAMED "lSubreg"
+   IF lSubreg != 0
+      DropObjectInstance( lSubreg )
+   END
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregistrantForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregistrantForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   INTEGER       lID
+
+   IF wWebXfer = 0
+      TraceLineS( "wSubR.InitSubregistrantForInsert cannot find Transfer View", "" )
+      RETURN 2
+   END
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg = 0
+      MessageSend( ViewToWindow, "", "Subregistrant",
+                   "Invalid Subregistrant.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   ACTIVATE mSubreg EMPTY
+   NAME VIEW mSubreg "mSubreg"
+   CreateTemporalEntity( mSubreg, "Subregistrant", zPOS_LAST )
+   CreateTemporalEntity( mSubreg, "PhysicalAddress", zPOS_LAST )
+   CreateTemporalEntity( mSubreg, "MailingAddress", zPOS_LAST )
+   CreateTemporalEntity( mSubreg, "ContactPerson", zPOS_LAST )
+   mSubreg.PhysicalAddress.Country = "USA"
+   mSubreg.MailingAddress.Country = "USA"
+   wWebXfer.Root.SameAs = "Y"
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregistrantForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lSubreg  REGISTERED AS lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   INTEGER lID
+
+   IF wWebXfer = 0
+      TraceLineS( "wSubR.InitSubregistrantForUpdate cannot find Transfer View", "" )
+      RETURN 2
+   END
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   // If this is the first time into the system, this is the administrator.
+   // Otherwise, just create a new new registrant.
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lSubreg.Subregistrant.ID
+   NAME VIEW mSubreg "mSubreg"
+   IF mSubreg.Subregistrant DOES NOT EXIST
+
+      // This should never happen!!!
+      CREATE ENTITY mSubreg.Subregistrant
+      CREATE ENTITY mSubreg.SubregOrganization
+      CREATE ENTITY mSubreg.PhysicalAddress
+      CREATE ENTITY mSubreg.MailingAddress
+      CREATE ENTITY mSubreg.ContactPerson
+      mSubreg.PhysicalAddress.Country = "USA"
+      mSubreg.MailingAddress.Country = "USA"
+      wWebXfer.Root.SameAs = "Y"
+   ELSE
+      wWebXfer.Root.SameAs = ""
+   END
+
+   IF mSubreg.PhysicalAddress DOES NOT EXIST
+      CREATE ENTITY mSubreg.PhysicalAddress
+      mSubreg.PhysicalAddress.Country = "USA"
+   END
+
+   IF mSubreg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mSubreg.MailingAddress
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mSubreg, "MailingAddress",
+                                   mSubreg, "PhysicalAddress", zSET_NOTNULL )
+   END
+
+   IF mSubreg.ContactPerson DOES NOT EXIST
+      CREATE ENTITY mSubreg.ContactPerson
+   END
+
+   wWebXfer.Root.AttemptLoginName = mSubreg.SubregOrganization.LoginName
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   CreateTemporalSubobjectVersion( mSubreg, "Subregistrant" )
+// CreateTemporalSubobjectVersion( mSubreg, "SubregOrganization" )  // done by "Registrant"
+// CreateTemporalSubobjectVersion( mSubreg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mSubreg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mSubreg, "ContactPerson" )
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "Subregistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   STRING (  50  ) szAttemptLoginName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lPasswordLth
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "New Subregistrant",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "New Subregistrant",
+                   "The password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   szAttemptLoginName = wWebXfer.Root.AttemptUserName
+   ACTIVATE qOrganiz WHERE qOrganiz.Organization.LoginName = szAttemptLoginName
+   IF qOrganiz.Organization EXISTS
+
+      DropObjectInstance( qOrganiz )
+      MessageSend( ViewToWindow, "", "Update Subregistrant User",
+                   "The Login Name must be unique.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   DropObjectInstance( qOrganiz )
+
+   // Set LoginName
+   mSubreg.SubregOrganization.LoginName = szAttemptLoginName
+
+   // Set user password to new password.
+   mSubreg.User.UserPassword = szConfirmPassword
+
+// AcceptSubobject( mSubreg, "User" )
+// AcceptSubobject( mSubreg, "Person" )
+// AcceptSubobject( mSubreg, "PhysicalAddress" )
+// AcceptSubobject( mSubreg, "MailingAddress" )
+   AcceptSubobject( mSubreg, "Subregistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mSubreg.MailingAddress
+   END
+
+   mSubreg.SubregOrganization.Role = "S"
+   Commit mSubreg
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregistrant( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   VIEW qOrganiz BASED ON LOD  qOrganiz
+   STRING (  50  ) szLoginName
+   STRING (  50  ) szAttemptLoginName
+   INTEGER         lControl
+
+   GET VIEW mSubreg NAMED "mSubreg"
+
+   szLoginName = mSubreg.SubregOrganization.LoginName
+   szAttemptLoginName = wWebXfer.Root.AttemptUserName
+   IF szLoginName != szAttemptLoginName
+
+      ACTIVATE qOrganiz WHERE qOrganiz.Organization.LoginName = szAttemptLoginName
+      IF qOrganiz.Organization EXISTS
+
+         DropObjectInstance( qOrganiz )
+         MessageSend( ViewToWindow, "", "Update Subregistrant User",
+                      "The Login Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+
+      DropObjectInstance( qOrganiz )
+
+      // Set changed LoginName
+      mSubreg.SubregOrganization.LoginName = szAttemptLoginName
+
+   END
+
+
+// AcceptSubobject( mSubreg, "User" )
+// AcceptSubobject( mSubreg, "Person" )
+// AcceptSubobject( mSubreg, "PhysicalAddress" )
+// AcceptSubobject( mSubreg, "MailingAddress" )
+   AcceptSubobject( mSubreg, "Subregistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mSubreg.MailingAddress
+   END
+
+   mSubreg.SubregOrganization.Role = "S"
+   Commit mSubreg
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSubregistrant( VIEW ViewToWindow )
+
+   VIEW mSubreg BASED ON LOD mSubreg
+
+   GET VIEW mSubreg NAMED "mSubreg"
+// CancelSubobject( mSubreg, "User" )
+// CancelSubobject( mSubreg, "Person" )
+// CancelSubobject( mSubreg, "PhysicalAddress" )
+// CancelSubobject( mSubreg, "MailingAddress" )
+   CancelSubobject( mSubreg, "Subregistrant" )
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregistrant( VIEW ViewToWindow )
+
+   VIEW mSubreg BASED ON LOD mSubreg
+
+   GET VIEW mSubreg NAMED "mSubreg"
+// CancelSubobject( mSubreg, "User" )
+// CancelSubobject( mSubreg, "Person" )
+// CancelSubobject( mSubreg, "PhysicalAddress" )
+// CancelSubobject( mSubreg, "MailingAddress" )
+   CancelSubobject( mSubreg, "Subregistrant" )
+   DropObjectInstance( mSubreg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListSubregUsers
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListSubregUsers( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lSubreg  REGISTERED AS lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   IF mSubreg != 0
+      DropObjectInstance( mSubreg )
+   END
+
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lSubreg.Subregistrant.ID
+   NAME VIEW mSubreg "mSubreg"
+
+   wWebXfer.Root.Banner4 = mSubreg.Subregistrant.dNameEPA_Number
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSubregUser( VIEW ViewToWindow )
+
+  // shouldn't need to do anything here ... just for positioning
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregUserForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregUserForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  REGISTERED AS mSubreg
+// VIEW qSubreg  BASED ON LOD  qSubreg
+
+   wWebXfer.Root.AttemptUserName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   IF mSubreg = 0 OR mSubreg.Subregistrant DOES NOT EXIST
+      MessageSend( ViewToWindow, "", "Initialize Subregistrant User",
+                   "The registrant list is empty.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+// GET VIEW qSubreg NAMED "qSubreg"
+// IF qSubreg != 0
+//    DropObjectInstance( qSubreg )
+// END
+//
+// ACTIVATE qSubreg WHERE qSubreg.Subregistrant.ID = mSubreg.Subregistrant.ID
+// NAME VIEW qSubreg "qSubreg"
+//
+// IF qSubreg.Subregistrant DOES NOT EXIST
+//    TraceLineI( "InitSubregUser cannot activate Subregistrant: ",
+//                mSubreg.Subregistrant.ID )
+//    MessageSend( ViewToWindow, "", "Initialize Subregistrant User",
+//                 "Cannot activate Subregistrant.",
+//                 zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+//    DropObjectInstance( qSubreg )
+//    RETURN 2
+// END
+//
+// DropObjectInstance( qSubreg )
+
+
+   CreateTemporalEntity( mSubreg, "Employee", zPOS_FIRST )
+   CreateTemporalEntity( mSubreg, "User", zPOS_FIRST )
+   CreateTemporalEntity( mSubreg, "Address", zPOS_FIRST )
+
+   mSubreg.User.Status = "B"  // beginner
+   mSubreg.Address.Country = "USA"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregUserForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregUserForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  REGISTERED AS mSubreg
+// VIEW qSubreg  BASED ON LOD  qSubreg
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   IF mSubreg = 0
+      MessageSend( ViewToWindow, "", "Initialize Subregistrant User",
+                   "The registrant list is empty.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+// GET VIEW qSubreg NAMED "qSubreg"
+// IF qSubreg != 0
+//    DropObjectInstance( qSubreg )
+// END
+//
+// ACTIVATE qSubreg WHERE qSubreg.Subregistrant.ID = lSubreg.Subregistrant.ID
+// NAME VIEW qSubreg "qSubreg"
+//
+// IF qSubreg.Subregistrant DOES NOT EXIST
+//    TraceLineI( "InitSubregUserForUpdate cannot activate Subregistrant: ",
+//                lSubreg.Subregistrant.ID )
+//    MessageSend( ViewToWindow, "", "Initialize Subregistrant User",
+//                 "Cannot activate Subregistrant.",
+//                 zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+//    RETURN 2
+// END
+//
+// DropObjectInstance( qSubreg )
+
+   DisplayObjectInstance( mSubreg, "", "" )
+   wWebXfer.Root.AttemptUserName = mSubreg.User.UserName
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   CreateTemporalSubobjectVersion( mSubreg, "Employee" )
+// CreateTemporalSubobjectVersion( mPerson, "Person" )
+// CreateTemporalSubobjectVersion( mPerson, "Address" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSubregUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   VIEW qSubreg  BASED ON LOD  qSubreg
+   STRING (  50  ) szUserName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lUserNameLth
+   INTEGER         lPasswordLth
+   INTEGER         lControl
+   INTEGER         lID
+   INTEGER         lPersonID
+   SHORT           nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+
+   // Ensure user login name is not blank and is unique.
+   szUserName = wWebXfer.Root.AttemptUserName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "User Login Name: ", szUserName )
+   TraceLineI( "User Login Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+
+      MessageSend( ViewToWindow, "", "New Subregistrant User",
+                   "The User Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+      IF SetEntityCursor( mSubreg, "User", "UserName", lControl,
+                          szUserName, "", "", 0, "", "" ) >= zCURSOR_SET
+         MessageSend( ViewToWindow, "", "New Subregistrant User",
+                      "The User Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+   END
+
+   // Note that Activate always returns at least an empty view.
+   ACTIVATE qSubreg WHERE qSubreg.SubregOrganization.LoginName = "Admin"
+   NAME VIEW qSubreg "qSubreg"
+   IF qSubreg.Subregistrant DOES NOT EXIST
+      // No subregistrant found!  The first login name must be "Admin".
+      nRC = zstrcmpi( szUserName, "Admin" )
+      IF nRC != 0
+         TraceLineS( "AcceptNewSubregUser: ", "Admin must be first login found!!!" )
+         MessageSend( ViewToWindow, "", "New Subregistrant User",
+                      "The first User Login Name must be 'Admin'.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         DropObjectInstance( qSubreg )
+         RETURN 2
+      ELSE
+         szUserName = "Admin"
+      END
+   END
+
+   DropObjectInstance( qSubreg )
+
+   mSubreg.User.UserName = szUserName
+
+   // Ensure user first and last names are not blank.
+   szUserName = mSubreg.Employee.FirstName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "First Name: ", szUserName )
+   TraceLineI( "First Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "New Subregistrant User",
+                   "The user First Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szUserName = mSubreg.Employee.LastName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "Last Name: ", szUserName )
+   TraceLineI( "Last Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "New Subregistrant User",
+                   "The user Last Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "New Subregistrant User",
+                   "The password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 2: Ensure password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "New Subregistrant User",
+                   "The password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( qSubreg, "User", "UserPassword", szVerifyPassword, "Password" )
+   mSubreg.User.UserPassword = szConfirmPassword
+
+   AcceptSubobject( mSubreg, "Employee" )
+   Commit mSubreg
+
+// IF wWebXfer.Root.LoginName = "Admin"
+//
+//    // Activate the "selected" subregistrant ... just in case someone added or
+//    // deleted a subregistrant user.
+//    ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lID
+//    NAME VIEW mSubreg "mSubreg"
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+//                             "wSubR", "SubregUsers" )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+// VIEW lSubreg  BASED ON LOD  lSubreg
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   STRING (  50  ) szUserName
+   STRING (  50  ) szAttemptUserName
+   INTEGER         lUserNameLth
+   INTEGER         lControl
+   INTEGER         lID
+   SHORT           nRC
+
+// GET VIEW lSubreg NAMED "lSubreg"
+   GET VIEW mSubreg NAMED "mSubreg"
+
+   // Ensure user login name is not blank and is unique.
+   szUserName = mSubreg.User.UserName
+   lUserNameLth = zGetStringLen( szUserName )
+   TraceLineS( "User Login Name: ", szUserName )
+   TraceLineI( "User Login Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+
+      MessageSend( ViewToWindow, "", "Update Subregistrant User",
+                   "The User Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      szAttemptUserName = wWebXfer.Root.AttemptUserName
+      nRC = zstrcmpi( szUserName, szAttemptUserName )
+      IF nRC != 0
+
+         lControl = zQUAL_STRING + zPOS_FIRST + zQUAL_SCOPE_OI + zTEST_CSR_RESULT
+         IF SetEntityCursor( mSubreg, "User", "UserName", lControl,
+                             szUserName, "", "", 0, "", "" ) >= zCURSOR_SET
+            MessageSend( ViewToWindow, "", "Update Subregistrant User",
+                         "The User Name must be unique.",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+
+         ELSE
+            szUserName = szAttemptUserName
+         END
+      END
+   END
+
+   mSubreg.User.UserName = szUserName
+
+   // Ensure user first and last names are not blank.
+   szAttemptUserName = mSubreg.Employee.FirstName
+   lUserNameLth = zGetStringLen( szAttemptUserName )
+   TraceLineS( "First Name: ", szAttemptUserName )
+   TraceLineI( "First Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Subregistrant User",
+                   "The user First Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szAttemptUserName = mSubreg.Employee.LastName
+   lUserNameLth = zGetStringLen( szAttemptUserName )
+   TraceLineS( "Last Name: ", szAttemptUserName )
+   TraceLineI( "Last Name Length: ", lUserNameLth )
+   IF lUserNameLth < 1
+      MessageSend( ViewToWindow, "", "Update Subregistrant User",
+                   "The user Last Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   AcceptSubobject( mSubreg, "Employee" )
+
+   Commit mSubreg
+
+   lID = mSubreg.Subregistrant.ID
+
+   DropObjectInstance( mSubreg )
+
+   // Activate the "selected" subregistrant ... just in case someone added or
+   // deleted a subregistrant user.
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lID
+   NAME VIEW mSubreg "mSubreg"
+   SET CURSOR FIRST mSubreg.Employee WHERE mSubreg.Employee.ID = lID
+
+// IF szUserName = "Admin"
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+//                             "wSubR", "SubregUsers" )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSubregUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   CancelSubobject( mSubreg, "Employee" )
+
+// IF wWebXfer.Root.LoginName = "Admin"
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+//                             "wSubR", "SubregUsers" )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregUser( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   CancelSubobject( mSubreg, "Employee" )
+
+// IF wWebXfer.Root.LoginName = "Admin"
+//    SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+//                             "wSubR", "SubregUsers" )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSubregUser( VIEW ViewToWindow )
+
+   // Just for positioning ...
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmDeleteSubregUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmDeleteSubregUser( VIEW ViewToWindow )
+
+   VIEW mCurrentUser BASED ON LOD  mUser
+   VIEW mSubreg  REGISTERED AS mSubreg
+
+   // We are activating a User instance for delete.
+   ACTIVATE mCurrentUser WHERE mCurrentUser.User.ID = mSubreg.User.ID
+
+   DELETE ENTITY mSubreg.User
+   DELETE ENTITY mSubreg.Employee
+   DELETE ENTITY mCurrentUser.User
+
+   COMMIT mSubreg
+   COMMIT mCurrentUser
+
+   DropObjectInstance( mSubreg )
+   DropObjectInstance( mCurrentUser )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListSubregProducts
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListSubregProducts( VIEW ViewToWindow )
+
+   // we get the list from the mSubreg view ... so nothing to do
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "Subregistrant" )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSubregProduct( VIEW ViewToWindow )
+
+   // Just for positioning ...
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmDeleteSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmDeleteSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   VIEW mSubProd BASED ON LOD  mSubProd
+   INTEGER lID
+   SHORT   nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   lID = mSubreg.SubregProduct.ID
+
+// // We have to make sure the Product is in good shape before we go on!
+// nRC = AcceptUpdateSubregProduct( ViewToWindow )
+// IF nRC = 0
+      ACTIVATE mSubProd WHERE mSubProd.SubregProduct.ID = lID
+      DELETE ENTITY mSubProd.SubregProduct
+      COMMIT mSubProd
+      DropObjectInstance( mSubProd )
+// END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ReturnFromSubregUsersList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ReturnFromSubregUsersList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wStartUp", "AdminListSubregistrants" )
+   ELSE
+      IF wWebXfer.Root.LoginName = "Admin"
+         SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                                  "wSubR", "SubregDetail" )
+      END
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ReturnFromProductList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ReturnFromProductList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+
+   GET VIEW qPrimReg NAMED "qPrimRegLogin"
+   IF qPrimReg != 0
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wStartUp", "AdminListSubregistrants" )
+   ELSE
+   IF wWebXfer.Root.LoginName = "Admin"
+      SetWindowActionBehavior( ViewToWindow, zWAB_StartTopWindow,
+                               "wSubR", "SubregDetail" )
+   END
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   IF mSubreg.PrimaryRegistrant EXISTS
+      IF mSubreg.ListMasterProduct EXISTS
+         RETURN 0
+      ELSE
+         MessageSend( ViewToWindow, "", "New Subregistrant Product",
+                      "Primary Registrant must have at least one\nMaster Product to create a Subregistrant Product.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+      END
+   ELSE
+      // This should not be possible.
+      MessageSend( ViewToWindow, "", "New Subregistrant Product",
+                   "Subregistrant must be associated with a Primary Registrant\nto create a Subregistrant Product.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSubregProduct( VIEW ViewToWindow )
+
+   // Just here to cause selection processing
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregProductForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregProductForInsert( VIEW ViewToWindow )
+
+   VIEW mSubreg  REGISTERED AS mSubreg
+
+   // We need to create a new SubregProduct entity.
+   CreateTemporalEntity( mSubreg, "SubregProduct", zPOS_AFTER )
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "SubregistrantProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregProductForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregProductForUpdate( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   // We need to update the existing SubregProduct entity.
+   CreateTemporalSubobjectVersion( mSubreg, "SubregProduct" )
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "SubregistrantProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   // Preliminary check is performed by the JSP to ensure that exactly one Master Product is selected.
+   IF mSubreg.PrimaryRegistrant EXISTS
+
+      SET CURSOR FIRST mSubreg.ListMasterProduct WHERE mSubreg.ListMasterProduct.wkSelected = "Y"
+      IF RESULT = 0
+         mSubreg.SubregProduct.ChemicalFamily = mSubreg.ListMasterProduct.ChemicalFamily
+         IncludeSubobjectFromSubobject( mSubreg, "MasterProduct",
+                                        mSubreg, "ListMasterProduct", zPOS_BEFORE )
+         AcceptSubobject( mSubreg, "SubregProduct" )
+         Commit mSubreg
+         RETURN 0
+      END
+   END
+
+   MessageSend( ViewToWindow, "", "New Subregistrant Product",
+                "One Master Product must be selected.",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+   SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+   RETURN 2
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   AcceptSubobject( mSubreg, "SubregProduct" )
+   Commit mSubreg
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   CancelSubobject( mSubreg, "SubregProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregProduct( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+
+   CancelSubobject( mSubreg, "SubregProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewSubregLabelX
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewSubregLabelX( VIEW ViewToWindow )
+
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   INTEGER lProductID
+   SHORT   nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   lProductID = mSubreg.SubregProduct.ID
+
+   // If there was a problem in the accept, the messages and action behavior
+   // are set in the accept code.
+   nRC = AcceptUpdateSubregProduct( ViewToWindow )
+   IF nRC = 0
+      // Reposition on the "correct" SubregLabelContent.
+      GET VIEW mSubreg NAMED "mSubreg"  // it was re-activated, so need to get the view
+      SET CURSOR FIRST mSubreg.SubregProduct WHERE mSubreg.SubregProduct.ID = lProductID
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewSubregLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewSubregLabelContent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+
+   INTEGER lProductID
+   SHORT   nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+   lProductID = mSubreg.SubregProduct.ID
+
+   // If there was a problem in the accept, the messages and action behavior
+   // should have been set in the accept code.
+   nRC = AcceptUpdateSubregProduct( ViewToWindow )
+   IF nRC = 0
+      // Reposition on the "correct" SubregLabelContent.
+      GET VIEW mSubreg NAMED "mSubreg"  // it was re-activated, so need to get the view
+      SET CURSOR FIRST mSubreg.SubregProduct WHERE mSubreg.SubregProduct.ID = lProductID
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSubregLabelContent
+// Needed to cause positioning, but we also want to accept the update.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSubregLabelContent( VIEW ViewToWindow )
+
+   SHORT   nRC
+
+   // If there was a problem in the accept, the messages and action behavior
+   // should have been set in the accept code.
+   nRC = AcceptUpdateSubregProduct( ViewToWindow )
+
+   // Nothing to do except go ...
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregLabelContentForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregLabelContentForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   VIEW mMasProd BASED ON LOD  mMasProd
+   VIEW mMasLC   BASED ON LOD  mMasLC
+   VIEW mSubLC   BASED ON LOD  mSubLC
+   SHORT   nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+
+   AcceptSubobject( mSubreg, "SubregProduct" )
+   COMMIT mSubreg
+
+// // We need to create a new SubregLabelContent entity.
+// CreateEntity( mSubreg, "SubregLabelContent", zPOS_LAST )
+
+   // It is now time to initialize a new Product Label Content.  That is a
+   // bit of work, but here goes ...
+   // First, activate a MasterProduct OI so we can figure out the latest
+   // Master Label Content version.
+   ACTIVATE mMasProd WHERE mMasProd.MasterProduct.ID = mSubreg.MasterProduct.ID
+   NAME VIEW mMasProd "mMasProd"
+
+   // Let's first get rid of all Product Label Content definitions for this product
+   // since we only want one???
+   ACTIVATE mSubLC WHERE mSubLC.SubregProduct.ID = mSubreg.SubregProduct.ID
+   LOOP WHILE mSubLC.SubregLabelContent EXISTS
+      DeleteEntity( mSubLC, "SubregLabelContent", zREPOS_NONE )
+      COMMIT mSubLC
+      DropObjectInstance( mSubLC )
+      ACTIVATE mSubLC WHERE mSubLC.SubregProduct.ID = mSubreg.SubregProduct.ID
+   END
+
+   IF mSubLC != 0
+      DropObjectInstance( mSubLC )
+   END
+
+   // Now because we keep the latest version of the Master Product Label
+   // first in the list, we will just make sure we have an entity and use it.
+   IF mMasProd.MasterLabelContent EXISTS
+
+      // Now activate the latest Master Label Content OI.
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = mMasProd.MasterLabelContent.ID
+      NAME VIEW mMasLC "mMasLC_NewPLC"
+
+      // We need to create and initialize a new SubregLabelContent entity.
+      ACTIVATE mSubLC EMPTY
+      NAME VIEW mSubLC "mSubLC"
+      CREATE ENTITY mSubLC.SubregLabelContent
+      SetMatchingAttributesByName( mSubLC, "SubregLabelContent",
+                                   mMasLC, "MasterLabelContent", zSET_NOTNULL )
+      SetMatchingAttributesByName( mSubLC, "SubregLabelContent",
+                                   mMasLC, "MasterProduct", zSET_NOTNULL )
+      IncludeSubobjectFromSubobject( mSubLC, "SubregProduct",
+                                     mSubreg, "SubregProduct", zPOS_BEFORE )
+
+      // Now run through the Master Label Content entities and create the
+      // corresponding Subregistrant Label Content entities.
+      BuildSLC_FromMLC( mSubLC, mMasLC )
+
+      DropObjectInstance( mMasLC )
+
+   END
+
+   DropObjectInstance( mMasProd )
+   COMMIT mSubLC
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "SubregistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSubregLabelContentForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSubregLabelContentForUpdate( VIEW ViewToWindow )
+
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubreg  BASED ON LOD  mSubreg
+   VIEW mSubProd BASED ON LOD  mSubProd
+   VIEW mMasLC   BASED ON LOD  mMasLC
+   VIEW mSubLC   BASED ON LOD  mSubLC
+   SHORT   nRC
+
+   GET VIEW mSubreg NAMED "mSubreg"
+
+   // We need to update the existing SubregLabelContent entity.
+   CreateTemporalSubobjectVersion( mSubreg, "SubregLabelContent" )
+
+   ACTIVATE mSubLC WHERE mSubLC.SubregLabelContent.ID = mSubreg.SubregLabelContent.ID
+   NAME VIEW mSubLC "mSubLC"
+
+   ACTIVATE mSubProd WHERE mSubProd.SubregProduct.ID = mSubLC.SubregProduct.ID
+   NAME VIEW mSubProd "mSubProd"
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "SubregistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSubregLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSubregLabelContent( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+   VIEW mSubLC  REGISTERED AS mSubLC
+   INTEGER lID
+   INTEGER lLabelID
+
+   lID = mSubreg.Subregistrant.ID
+   lLabelID = mSubreg.SubregLabelContent.ID
+
+   AcceptSubobject( mSubreg, "SubregLabelContent" )
+   COMMIT mSubreg
+   COMMIT mSubLC
+   DropObjectInstance( mSubreg )
+   DropObjectInstance( mSubLC )
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lID
+   NAME VIEW mSubreg "mSubreg"
+   SET CURSOR FIRST mSubreg.SubregLabelContent WHERE mSubreg.SubregLabelContent.ID = lLabelID
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSubregLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSubregLabelContent( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+   VIEW mSubLC  REGISTERED AS mSubLC
+   INTEGER lID
+   INTEGER lLabelID
+
+   lID = mSubreg.Subregistrant.ID
+   lLabelID = mSubreg.SubregLabelContent.ID
+
+   AcceptSubobject( mSubreg, "SubregLabelContent" )
+   COMMIT mSubreg
+   COMMIT mSubLC
+   DropObjectInstance( mSubreg )
+   DropObjectInstance( mSubLC )
+   ACTIVATE mSubreg WHERE mSubreg.Subregistrant.ID = lID
+   NAME VIEW mSubreg "mSubreg"
+   SET CURSOR FIRST mSubreg.SubregLabelContent WHERE mSubreg.SubregLabelContent.ID = lLabelID
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSubregLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSubregLabelContent( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+   VIEW mSubLC  REGISTERED AS mSubLC
+
+   CancelSubobject( mSubreg, "SubregLabelContent" )
+   DropObjectInstance( mSubLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSubregLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSubregLabelContent( VIEW ViewToWindow )
+
+   VIEW mSubreg REGISTERED AS mSubreg
+   VIEW mSubLC  REGISTERED AS mSubLC
+
+   CancelSubobject( mSubreg, "SubregLabelContent" )
+   DropObjectInstance( mSubLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitChangeSubregUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitChangeSubregUserPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mCurrentUser BASED ON LOD  mUser
+   VIEW mSubreg  REGISTERED AS mSubreg
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   // We are activating a User instance for update.
+   ACTIVATE mCurrentUser WHERE mCurrentUser.User.ID = mSubreg.User.ID
+   NAME VIEW mCurrentUser "mCurrentUser"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmChangeSubregUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmChangeSubregUserPassword( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lPasswordLth
+   SHORT   nRC
+
+   // 1: Ensure old password is correct.
+// IF mCurrentUser.User.UserPassword != wWebXfer.Root.VerifiedPassword
+   szAttemptPassword = wWebXfer.Root.CurrentPassword
+   nRC = CompareAttributeToString( mCurrentUser, "User", "UserPassword", szAttemptPassword )
+   IF nRC != 0
+
+   // TraceLineS( "//////* ", "Invalid Current User Password" )
+      MessageSend( ViewToWindow, "", "Change Subregistrant User Password",
+                   "Current password is not correct.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   END
+
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   // 3: Ensure new password is at least 8 characters long.
+   lPasswordLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lPasswordLth )
+   IF lPasswordLth < 8
+      MessageSend( ViewToWindow, "", "Change Password",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   mCurrentUser.User.UserPassword = szConfirmPassword
+   COMMIT mCurrentUser
+   DropObjectInstance( mCurrentUser )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelChangeSubregUserPassword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelChangeSubregUserPassword( VIEW ViewToWindow )
+
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   DropObjectInstance( mCurrentUser )
+
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DesignSubregProductLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DesignSubregProductLabel( VIEW ViewToWindow )
+
+   // Just here to cause selection processing
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitDesignSubregProductLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitDesignSubregProductLabel( VIEW ViewToWindow )
+
+   SetDynamicBannerName( ViewToWindow, "wSubR", "SubregistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptDesignSubregProductLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptDesignSubregProductLabel( VIEW ViewToWindow )
+
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelSubregDesignProductLabel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelDesignSubregProductLabel( VIEW ViewToWindow )
+
+
+END

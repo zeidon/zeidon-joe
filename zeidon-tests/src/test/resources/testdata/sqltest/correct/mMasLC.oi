@@ -1,0 +1,2876 @@
+z01001Zeidon    temp.por MMASLC 2011/10/27 18:12:22
+mOIFLAGS    0
+eMasterLabelContent 1,0
+aID,1      1
+aVersion,1 1.1
+aRevisionDate,1 20110825
+aCreatedDateTime,1 20110825
+aFinalized,1 N
+aFK_ID_MASTERPRODUC,1 1
+
+eMasterProduct 2,0
+aID,1      1
+aName,1    HWS-256
+aNumber,1  129
+aDescription,1 57
+One-Step Disinfectant
+Germicidal Detergent and Deodorant
+aChemicalFamily,1 P
+aEPA_EstablishmentNumber,1 04/26/07 
+aFKIDPRIMARYREGISTR,1 2
+
+ePrimaryRegistrant 3,0
+aID,1      2
+aEPA_CompanyNumber,1 47371
+aFK_ID_ORGANIZATION,1 3
+
+eOrganization 4,0
+aID,1      3
+aLoginName,1 Lonza
+aName,1    Lonza, Inc.
+aDescription,1 H&S Chemicals Division
+aAdministratorPassword,1 zPrefixbBfh4qiMUx0AQzr81HHq9upjgtclfHEQrHFQxcdxt8jbEwAx52+UOA==
+aRole,1    P
+
+eM_GeneralSection 2,0
+aID,1      1
+aTitle,1   PRECAUTIONARY STATEMENTS
+aSubtitle,1 HAZARDS TO HUMANS AND DOMESTIC ANIMALS
+aBoldItalic,1 R
+aSectionType,1 P
+aAUTOSEQ,1 1
+aFKIDMASTERLABELCON,1 1
+
+eM_GeneralStatement 3,0
+aID,1      5
+aText,1    429
+<p><strong>DANGER</strong>. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.</p>
+aBoldItalic,1 R
+aFKIDMGENERALSECTIO,1 1
+
+eM_GeneralSection 2,0
+aID,1      2
+aTitle,1   FIRST AID
+aBoldItalic,1 R
+aSectionType,1 F
+aContactNote,1 <p>Call a poison control center or doctor for treatment advice. Have the product container or label with you when calling a poison control center or doctor, or going for treatment.</p>
+aNoteToPhysician,1 <p>Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depressioin and convulsion may be needed.</p>
+aAUTOSEQ,1 2
+aFKIDMASTERLABELCON,1 1
+
+eM_GeneralStatement 3,0
+aID,1      4
+aText,1    177
+If inhaled
+   - Move person to fresh air.
+   - If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible.
+aAUTOSEQ,1 1
+aFKIDMGENERALSECTIO,1 2
+
+eM_GeneralStatement 3,0
+aID,1      3
+aText,1    127
+If on skin or clothing
+   - Take off contaminated clothing.
+   - Rinse skin immediately with plenty of water for 15-20 minutes.
+aAUTOSEQ,1 2
+aFKIDMGENERALSECTIO,1 2
+
+eM_GeneralStatement 3,0
+aID,1      2
+aText,1    298
+If swallowed
+   - Call a poison control center or doctor immediately for treatment advice.
+   - Have person sip a glass of water if able to swallow.
+   - Do not induce vomiting unless told to do so by the poison control center or doctor.
+   - Do not give anything by mouth to an unconscious person.
+aAUTOSEQ,1 3
+aFKIDMGENERALSECTIO,1 2
+
+eM_GeneralStatement 3,0
+aID,1      1
+aText,1    181
+If in eyes
+   - Hold eye open and rinse slowly and gently with water for 15-20 minutes.
+   - Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.
+aAUTOSEQ,1 4
+aFKIDMGENERALSECTIO,1 2
+
+eM_GeneralSection 2,0
+aID,1      3
+aTitle,1   ENVIRONMENTAL HAZARDS
+aBoldItalic,1 R
+aSectionType,1 E
+aReviewerNote,1 (Note to reviewer: If container size is 5 gallons or greater, the following Environmental Hazards statements will be used:)
+aAUTOSEQ,1 3
+aFKIDMASTERLABELCON,1 1
+
+eM_GeneralStatement 3,0
+aID,1      6
+aText,1    520
+Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge.  Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority.  For guidance contact your State Water Board or Regional Office of the EPA.
+
+aBoldItalic,1 R
+aFKIDMGENERALSECTIO,1 3
+
+eM_IngredientsSection 2,0
+aID,1      1
+aActiveTitle,1 Active Ingredients
+aActiveBoldItalic,1 R
+aInertTitle,1 Inert Ingredients
+aGeneralInactivePercent,1 83.1
+aFKIDMASTERLABELCON,1 1
+
+eM_IngredientsStatement 3,0
+aID,1      1
+aChemicalName,1 <p style="margin-bottom: 0in;" align="JUSTIFY"><font face="Arial, sans-serif">Didecyl dimethyl ammonium chloride</font></p>
+aBoldItalic,1 R
+aActive,1  A
+aPercent,1 10.14
+aAUTOSEQ,1 1
+aFKIDMINGREDIENTSSE,1 1
+
+eM_IngredientsStatement 3,0
+aID,1      9
+aChemicalName,1 96
+<p>n-Alkyl (C14 50%, C12 40%, C16 10%) dimethyl benzyl ammonium chloride</p>
+<p> </p>
+<p> </p>
+aBoldItalic,1 R
+aActive,1  A
+aPercent,1 6.76
+aAUTOSEQ,1 2
+aFKIDMINGREDIENTSSE,1 1
+
+eM_StorageDisposalSection 2,0
+aID,1      1
+aContainerVolume,1 1
+aSDSectionType,1 StorageDisposal1
+aTitle,1   STORAGE AND DISPOSAL
+aBoldItalic,1 R
+aReviewerNote,1 (Note to reviewer: If the container size is one gallon or less, the following Storage and Disposal directions will be used:)
+aAUTOSEQ,1 1
+aFKIDMASTERLABELCON,1 1
+
+eM_StorageDisposalStatement 3,0
+aID,1      25
+aTitle,1   this is a another test
+aBoldItalic,1 R
+aText,1    Store in original container in areas inaccessible to children. Do not reuse empty container.  (Wrap and) Discard in trash or recycle.
+aFKIDMSTORAGEDISPOS,1 1
+
+eM_StorageDisposalSection 2,0
+aID,1      2
+aContainerVolume,1 5
+aSDSectionType,1 StorageDisposal2
+aTitle,1   STORAGE AND DISPOSAL
+aSubtitle,1 Do not contaminate water, food, or feed by storage or disposal. 
+aBoldItalic,1 R
+aReviewerNote,1 (Note to reviewer: If the container size is greater than one gallon, the following Storage and Disposal directions will be used:)
+aAUTOSEQ,1 2
+aFKIDMASTERLABELCON,1 1
+
+eM_StorageDisposalStatement 3,0
+aID,1      26
+aBoldItalic,1 R
+aText,1    140
+Pesticide Storage
+Store in original container in areas inaccessible to children. Open dumping is prohibited.  Do not reuse empty container.
+aAUTOSEQ,1 1
+aFKIDMSTORAGEDISPOS,1 2
+
+eM_StorageDisposalStatement 3,0
+aID,1      27
+aBoldItalic,1 R
+aText,1    384
+Pesticide Disposal
+Pesticide wastes are acutely hazardous.  Improper disposal of excess pesticide, spray mixture, or rinsate is a violation of Federal law.  If these wastes cannot be disposed of by use according to label instructions, contact your State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.
+aAUTOSEQ,1 2
+aFKIDMSTORAGEDISPOS,1 2
+
+eM_StorageDisposalStatement 3,0
+aID,1      28
+aBoldItalic,1 R
+aText,1    1139
+Container Disposal
+(Plastic containers:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning, or puncture and dispose of in a sanitary landfill, or incinerate, or if allowed by state and local authorities, burn.  If burned, stay out of smoke.
+(Fiber Drums With Liner:) Completely empty liner by shaking and tapping sides and bottom to loosen clinging particles.  Empty residue into application equipment.  Then dispose of liner in a sanitary landfill or by incineration if allowed by state and local authorities.  If drum is contaminated and cannot by reused, dispose of in the same manner.
+(Metal Container:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning or puncture and dispose of in a sanitary landfill, or dispose of by other procedures approved by state and local authorities.
+(For Bag-in-Box Containers:) Completely empty bag into application equipment. Dispose of empty bag in a sanitary landfill or by incineration, or if allowed by state and local authorities by burning or dispose of by other procedures approved by state and local authorities.  If burned, stay out of smoke.
+aAUTOSEQ,1 3
+aFKIDMSTORAGEDISPOS,1 2
+
+eM_DirectionsForUseSection 2,0
+aID,1      1
+aBoldItalic,1 R
+aFKIDMASTERLABELCON,1 1
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      464
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1                         (1)  ATCC & antibiotic-resistant strain
+aAUTOSEQ,1 1
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      463
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Steptococcus pyogenes [cause of Scarlet fever]
+aAUTOSEQ,1 2
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      462
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Streptococcus faecalis (1)
+aAUTOSEQ,1 3
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      460
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Staphylococcus aureus- Vancomycin Intermediate Resistant (VISA)
+aAUTOSEQ,1 4
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      461
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Staphylococcus epidermidis (2)
+aAUTOSEQ,1 5
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      344
+aUsageType,1 U
+aName,1    Airplanes
+aAUTOSEQ,1 6
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      345
+aUsageType,1 U
+aName,1    Airports
+aAUTOSEQ,1 7
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      346
+aUsageType,1 U
+aName,1    Animal Laboratories
+aAUTOSEQ,1 8
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      347
+aUsageType,1 U
+aName,1    Animal Life Science Laboratories
+aAUTOSEQ,1 9
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      348
+aUsageType,1 U
+aName,1    Athletic Facilities
+aAUTOSEQ,1 10
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      349
+aUsageType,1 U
+aName,1    Automotive Industy
+aAUTOSEQ,1 11
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      350
+aUsageType,1 U
+aName,1    Barber Shops
+aAUTOSEQ,1 12
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      351
+aUsageType,1 U
+aName,1    Bars
+aAUTOSEQ,1 13
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      352
+aUsageType,1 U
+aName,1    Bathrooms
+aAUTOSEQ,1 14
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      353
+aUsageType,1 U
+aName,1    Beverage Plants
+aAUTOSEQ,1 15
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      354
+aUsageType,1 U
+aName,1    Boats
+aAUTOSEQ,1 16
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      355
+aUsageType,1 U
+aName,1    Breeding and Grooming Establishments
+aAUTOSEQ,1 17
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      356
+aUsageType,1 U
+aName,1    Breweries
+aAUTOSEQ,1 18
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      357
+aUsageType,1 U
+aName,1    Buses
+aAUTOSEQ,1 19
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      358
+aUsageType,1 U
+aName,1    Business and Office Buildings
+aAUTOSEQ,1 20
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      359
+aUsageType,1 U
+aName,1    Cafeterias
+aAUTOSEQ,1 21
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      360
+aUsageType,1 U
+aName,1    Camp Grounds
+aAUTOSEQ,1 22
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      361
+aUsageType,1 U
+aName,1    Campers
+aAUTOSEQ,1 23
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      362
+aUsageType,1 U
+aName,1    Carpeting
+aAUTOSEQ,1 24
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      363
+aUsageType,1 U
+aName,1    Cars
+aAUTOSEQ,1 25
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      364
+aUsageType,1 U
+aName,1    Citus Plants 
+aAUTOSEQ,1 26
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      365
+aUsageType,1 U
+aName,1    Colleges
+aAUTOSEQ,1 27
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      366
+aUsageType,1 U
+aName,1    Commercial Institutions
+aAUTOSEQ,1 28
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      367
+aUsageType,1 U
+aName,1    Convenience Stores
+aAUTOSEQ,1 29
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      368
+aUsageType,1 U
+aName,1    Correctional Facilities
+aAUTOSEQ,1 30
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      369
+aUsageType,1 U
+aName,1    Dairy Farms
+aAUTOSEQ,1 31
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      370
+aUsageType,1 U
+aName,1    Day Care Centers
+aAUTOSEQ,1 32
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      371
+aUsageType,1 U
+aName,1    Dental Offices
+aAUTOSEQ,1 33
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      372
+aUsageType,1 U
+aName,1    Emergency Vehicles
+aAUTOSEQ,1 34
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      373
+aUsageType,1 U
+aName,1    Equine Farms
+aAUTOSEQ,1 35
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      374
+aUsageType,1 U
+aName,1    Factories
+aAUTOSEQ,1 36
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      375
+aUsageType,1 U
+aName,1    Farms
+aAUTOSEQ,1 37
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      376
+aUsageType,1 U
+aName,1    Federally Inspected Meat and Poultry Plants
+aAUTOSEQ,1 38
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      377
+aUsageType,1 U
+aName,1    Food Processing Plants
+aAUTOSEQ,1 39
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      378
+aUsageType,1 U
+aName,1    Food Storage Areas
+aAUTOSEQ,1 40
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      379
+aUsageType,1 U
+aName,1    Funeral Homes
+aAUTOSEQ,1 41
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      380
+aUsageType,1 U
+aName,1    Health Care Facilities
+aAUTOSEQ,1 42
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      381
+aUsageType,1 U
+aName,1    Hog Farms
+aAUTOSEQ,1 43
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      382
+aUsageType,1 U
+aName,1    Homes (Households)
+aAUTOSEQ,1 44
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      383
+aUsageType,1 U
+aName,1    Hospitals
+aAUTOSEQ,1 45
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      384
+aUsageType,1 U
+aName,1    Hotels
+aAUTOSEQ,1 46
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      385
+aUsageType,1 U
+aName,1    Industrial Institutions
+aAUTOSEQ,1 47
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      386
+aUsageType,1 U
+aName,1    Institutional Facilities
+aAUTOSEQ,1 48
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      387
+aUsageType,1 U
+aName,1    Institutional Kitchens
+aAUTOSEQ,1 49
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      388
+aUsageType,1 U
+aName,1    Institutions
+aAUTOSEQ,1 50
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      389
+aUsageType,1 U
+aName,1    Kennels
+aAUTOSEQ,1 51
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      390
+aUsageType,1 U
+aName,1    Kitchens
+aAUTOSEQ,1 52
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      391
+aUsageType,1 U
+aName,1    Laundry Industry
+aAUTOSEQ,1 53
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      392
+aUsageType,1 U
+aName,1    Locker Rooms
+aAUTOSEQ,1 54
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      393
+aUsageType,1 U
+aName,1    Medical Clinics
+aAUTOSEQ,1 55
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      394
+aUsageType,1 U
+aName,1    Medical Offices
+aAUTOSEQ,1 56
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      395
+aUsageType,1 U
+aName,1    Mobile Homes
+aAUTOSEQ,1 57
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      396
+aUsageType,1 U
+aName,1    Morgues
+aAUTOSEQ,1 58
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      397
+aUsageType,1 U
+aName,1    Mortuaries
+aAUTOSEQ,1 59
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      398
+aUsageType,1 U
+aName,1    Motels
+aAUTOSEQ,1 60
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      399
+aUsageType,1 U
+aName,1    Mushroom Farms
+aAUTOSEQ,1 61
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      400
+aUsageType,1 U
+aName,1    Nurseries
+aAUTOSEQ,1 62
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      401
+aUsageType,1 U
+aName,1    Nursing Homes
+aAUTOSEQ,1 63
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      402
+aUsageType,1 U
+aName,1    Office Buildings
+aAUTOSEQ,1 64
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      403
+aUsageType,1 U
+aName,1    Pet Animal Quarters
+aAUTOSEQ,1 65
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      404
+aUsageType,1 U
+aName,1    Pet Shops
+aAUTOSEQ,1 66
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      405
+aUsageType,1 U
+aName,1    Playground Equipment
+aAUTOSEQ,1 67
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      406
+aUsageType,1 U
+aName,1    Poultry Farms
+aAUTOSEQ,1 68
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      407
+aUsageType,1 U
+aName,1    Prisons
+aAUTOSEQ,1 69
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      408
+aUsageType,1 U
+aName,1    Protective Safety Gear
+aAUTOSEQ,1 70
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      409
+aUsageType,1 U
+aName,1    Public Facilities
+aAUTOSEQ,1 71
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      410
+aUsageType,1 U
+aName,1    Public Rest Rooms
+aAUTOSEQ,1 72
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      411
+aUsageType,1 U
+aName,1    Recreational Vehicle Use
+aAUTOSEQ,1 73
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      412
+aUsageType,1 U
+aName,1    Restaurants
+aAUTOSEQ,1 74
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      413
+aUsageType,1 U
+aName,1    Salons (Beauty)
+aAUTOSEQ,1 75
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      414
+aUsageType,1 U
+aName,1    Schools
+aAUTOSEQ,1 76
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      415
+aUsageType,1 U
+aName,1    Schools
+aAUTOSEQ,1 77
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      416
+aUsageType,1 U
+aName,1    Ships
+aAUTOSEQ,1 78
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      417
+aUsageType,1 U
+aName,1    Shower and Bath Areas
+aAUTOSEQ,1 79
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      418
+aUsageType,1 U
+aName,1    Tack Shops
+aAUTOSEQ,1 80
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      419
+aUsageType,1 U
+aName,1    Tanning Salons
+aAUTOSEQ,1 81
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      420
+aUsageType,1 U
+aName,1    Taxis
+aAUTOSEQ,1 82
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      421
+aUsageType,1 U
+aName,1    Trailers
+aAUTOSEQ,1 83
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      422
+aUsageType,1 U
+aName,1    Trains
+aAUTOSEQ,1 84
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      423
+aUsageType,1 U
+aName,1    Transportation Terminals
+aAUTOSEQ,1 85
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      424
+aUsageType,1 U
+aName,1    Turkey Farms
+aAUTOSEQ,1 86
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      425
+aUsageType,1 U
+aName,1    USDA Inspected Food Processing Facilities
+aAUTOSEQ,1 87
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      426
+aUsageType,1 U
+aName,1    Verterinary Clinics
+aAUTOSEQ,1 88
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      427
+aUsageType,1 U
+aName,1    Whirlpool and Foot Spa Use
+aAUTOSEQ,1 89
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      428
+aUsageType,1 U
+aName,1    Zoos
+aAUTOSEQ,1 90
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAreasOfUse 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      429
+aUsageType,1 T
+aName,1    Disinfectant
+aAUTOSEQ,1 91
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      430
+aUsageType,1 T
+aName,1    Sanitizer
+aAUTOSEQ,1 92
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      431
+aUsageType,1 T
+aName,1    Viruscide
+aAUTOSEQ,1 93
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      432
+aUsageType,1 T
+aName,1    Fungicide
+aAUTOSEQ,1 94
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      433
+aUsageType,1 T
+aName,1    Algaecide
+aAUTOSEQ,1 95
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      434
+aUsageType,1 T
+aName,1    General Purpose Anti-microbial
+aAUTOSEQ,1 96
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      435
+aUsageType,1 T
+aName,1    Tuberculocide
+aAUTOSEQ,1 97
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsAppType 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      436
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Pseudomonas aeruginosa (1)
+aAUTOSEQ,1 98
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      437
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Staphylococcus aureus (1)
+aAUTOSEQ,1 99
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      438
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Salmonella choleraesuis
+aAUTOSEQ,1 100
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      439
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Acinetobacter calcoaceticus
+aAUTOSEQ,1 101
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      440
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Bordetella bronchiseptica
+aAUTOSEQ,1 102
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      441
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Chlamydia psittaci
+aAUTOSEQ,1 103
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      442
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Enterobacter aerogenes
+aAUTOSEQ,1 104
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      443
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Enterobacter cloacae
+aAUTOSEQ,1 105
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      444
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Enterococcus faecalis- Vancomycin Resistant (VRE)
+aAUTOSEQ,1 106
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      445
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Escherichia coli (1)
+aAUTOSEQ,1 107
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      446
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Fusobacterium necrophorum
+aAUTOSEQ,1 108
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      447
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Kiebsiella pneumoniae (1)
+aAUTOSEQ,1 109
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      448
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Legionella pneumophilia
+aAUTOSEQ,1 110
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      449
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Listeria monocytogenes
+aAUTOSEQ,1 111
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      450
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Pasteurella multocida 
+aAUTOSEQ,1 112
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      451
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Proteus mirabilis
+aAUTOSEQ,1 113
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      452
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Proteus vulgaris
+aAUTOSEQ,1 114
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      453
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Salmonella enteritidis
+aAUTOSEQ,1 115
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      454
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Salmonella typhi
+aAUTOSEQ,1 116
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      455
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Salmonella typhimurium
+aAUTOSEQ,1 117
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      456
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Serratia marcescens
+aAUTOSEQ,1 118
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      457
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Shigella fiexneri
+aAUTOSEQ,1 119
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      458
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Shigella sonnei
+aAUTOSEQ,1 120
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      459
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1     Staphylococcus aureus- Methicillin resistant (MRSA)
+aAUTOSEQ,1 121
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      465
+aUsageType,1 C
+aClaimsClassification,1 Bacteria
+aName,1                         (2)  antibiotic-resistant strain only
+aAUTOSEQ,1 122
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsBacteria 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      466
+aUsageType,1 C
+aClaimsClassification,1 Fungi
+aName,1     Aspergillus niger
+aAUTOSEQ,1 123
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsFungi 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      467
+aUsageType,1 C
+aClaimsClassification,1 Fungi
+aName,1     Candida albicans
+aAUTOSEQ,1 124
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsFungi 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      468
+aUsageType,1 C
+aClaimsClassification,1 Fungi
+aName,1     Trichophyton mentagrophytes [Athlete's Foot Fungus]
+aAUTOSEQ,1 125
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsFungi 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      469
+aUsageType,1 C
+aClaimsClassification,1 Fungi
+aName,1     [a cause of Ringworm] [a cause of Ringworm of the foot]
+aAUTOSEQ,1 126
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsFungi 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      470
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Adenovirus Type 4
+aAUTOSEQ,1 127
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      471
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Hepatitis B Virus (HBV)
+aAUTOSEQ,1 128
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      472
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Hepatitis C Virus (HCV)
+aAUTOSEQ,1 129
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      473
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Herpes Simplex Type 1
+aAUTOSEQ,1 130
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      474
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Herpes Simplex Type 2
+aAUTOSEQ,1 131
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      475
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Human coronavirus 
+aAUTOSEQ,1 132
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      476
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *HIV-1 (AIDS virus)
+aAUTOSEQ,1 133
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      477
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Influenza A/ Hong Kong
+aAUTOSEQ,1 134
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      478
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Respiratory Syncytial Virus (RSV)
+aAUTOSEQ,1 135
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      479
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Rubella (German Measles)
+aAUTOSEQ,1 136
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      480
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Vaccinia [Pox virus]
+aAUTOSEQ,1 137
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      481
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Avian polyomavirus
+aAUTOSEQ,1 138
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      482
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Canine distemper
+aAUTOSEQ,1 139
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      483
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Canine parvovirus- at 2 oz. per gallon
+aAUTOSEQ,1 140
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      484
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Feline leukemia
+aAUTOSEQ,1 141
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      485
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Feline picomavirus
+aAUTOSEQ,1 142
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      486
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Infectious bovine rhinotracheitis
+aAUTOSEQ,1 143
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      487
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Infectious bronchitis (Avian IBV)
+aAUTOSEQ,1 144
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      488
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Pseudorabies (PRV)
+aAUTOSEQ,1 145
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      489
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Rabies
+aAUTOSEQ,1 146
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      490
+aUsageType,1 C
+aClaimsClassification,1 Viruses
+aName,1     *Transmissible gastroenteritis virus (TGE)
+aAUTOSEQ,1 147
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsViruses 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      491
+aUsageType,1 S
+aName,1    Appliances
+aAUTOSEQ,1 148
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      492
+aUsageType,1 S
+aName,1    Bathroom fixtures
+aAUTOSEQ,1 149
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      493
+aUsageType,1 S
+aName,1    Bathtubs (Fiberglass)
+aAUTOSEQ,1 150
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      494
+aUsageType,1 S
+aName,1    Cabinets
+aAUTOSEQ,1 151
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      495
+aUsageType,1 S
+aName,1    Cages
+aAUTOSEQ,1 152
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      496
+aUsageType,1 S
+aName,1    Chairs
+aAUTOSEQ,1 153
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      497
+aUsageType,1 S
+aName,1    Coils and drain pans of air conditioning and refrigeration equipment and heat pumps
+aAUTOSEQ,1 154
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      498
+aUsageType,1 S
+aName,1    Conductive flooring
+aAUTOSEQ,1 155
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      499
+aUsageType,1 S
+aName,1    Counters (countertops)
+aAUTOSEQ,1 156
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      500
+aUsageType,1 S
+aName,1    Countertop laminates
+aAUTOSEQ,1 157
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      501
+aUsageType,1 S
+aName,1    Desks
+aAUTOSEQ,1 158
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      502
+aUsageType,1 S
+aName,1    Doorknobs
+aAUTOSEQ,1 159
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      503
+aUsageType,1 S
+aName,1    Floors
+aAUTOSEQ,1 160
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      504
+aUsageType,1 S
+aName,1    Garbage cans
+aAUTOSEQ,1 161
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      505
+aUsageType,1 S
+aName,1    Glazed ceramic
+aAUTOSEQ,1 162
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      506
+aUsageType,1 S
+aName,1    Glazed enameled surfaces
+aAUTOSEQ,1 163
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      507
+aUsageType,1 S
+aName,1    Highchairs
+aAUTOSEQ,1 164
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      508
+aUsageType,1 S
+aName,1    Kennel runs
+aAUTOSEQ,1 165
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      509
+aUsageType,1 S
+aName,1    Laminated surfaces
+aAUTOSEQ,1 166
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      510
+aUsageType,1 S
+aName,1    Metal
+aAUTOSEQ,1 167
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      511
+aUsageType,1 S
+aName,1    Microwave ovens
+aAUTOSEQ,1 168
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      512
+aUsageType,1 S
+aName,1    Other hard nonporous surfaces made of:
+aAUTOSEQ,1 169
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      513
+aUsageType,1 S
+aName,1    Outdoor furniture
+aAUTOSEQ,1 170
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      514
+aUsageType,1 S
+aName,1    Plastic (such as polystyrene or polypropylene)
+aAUTOSEQ,1 171
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      515
+aUsageType,1 S
+aName,1    Refrigerated storage and display equipment
+aAUTOSEQ,1 172
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      516
+aUsageType,1 S
+aName,1    Refrigerators
+aAUTOSEQ,1 173
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      517
+aUsageType,1 S
+aName,1    Sealed granite
+aAUTOSEQ,1 174
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      518
+aUsageType,1 S
+aName,1    Sealed limestone
+aAUTOSEQ,1 175
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      519
+aUsageType,1 S
+aName,1    Sealed marble
+aAUTOSEQ,1 176
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      520
+aUsageType,1 S
+aName,1    Sealed slate
+aAUTOSEQ,1 177
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      521
+aUsageType,1 S
+aName,1    Sealed stone
+aAUTOSEQ,1 178
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      522
+aUsageType,1 S
+aName,1    Sealed terra cotta
+aAUTOSEQ,1 179
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      523
+aUsageType,1 S
+aName,1    Sealed terrazzo
+aAUTOSEQ,1 180
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      524
+aUsageType,1 S
+aName,1    Stainless steel
+aAUTOSEQ,1 181
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      525
+aUsageType,1 S
+aName,1    Tanning Beds
+aAUTOSEQ,1 182
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      526
+aUsageType,1 S
+aName,1    Tanning Equipment
+aAUTOSEQ,1 183
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      527
+aUsageType,1 S
+aName,1    Telephones
+aAUTOSEQ,1 184
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      528
+aUsageType,1 S
+aName,1    Upholstery
+aAUTOSEQ,1 185
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_DirectionsUsageOrdering 3,0
+
+eM_DirectionsUsage 4,0
+aID,1      529
+aUsageType,1 S
+aName,1    Woodwork
+aAUTOSEQ,1 186
+aFKIDMASTERLABELCON,1 1
+
+eDirectionsSurface 5,0
+
+eM_HumanHazardSection 2,0
+aID,1      1
+aPrecautionaryStatement,1 DANGER. CORROSIVE
+aBoldItalic,1 R
+aLocation1,1 Back
+aLocation2,1 Side
+aLocation3,1 Left
+aLocation4,1 Right
+aFKIDMASTERLABELCON,1 1
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+eM_Usage   2,0
+
+i582       24
+i583       27
+i584       30
+i585       33
+i586       36
+i587       39
+i588       42
+i589       45
+i590       48
+i591       51
+i592       54
+i593       57
+i594       60
+i595       63
+i596       66
+i597       69
+i598       72
+i599       75
+i600       78
+i601       81
+i602       84
+i603       87
+i604       90
+i605       93
+i606       96
+i607       99
+i608       102
+i609       105
+i610       108
+i611       111
+i612       114
+i613       117
+i614       120
+i615       123
+i616       126
+i617       129
+i618       132
+i619       135
+i620       138
+i621       141
+i622       144
+i623       147
+i624       150
+i625       153
+i626       156
+i627       159
+i628       162
+i629       165
+i630       168
+i631       171
+i632       174
+i633       177
+i634       180
+i635       183
+i636       186
+i637       189
+i638       192
+i639       195
+i640       198
+i641       201
+i642       204
+i643       207
+i644       210
+i645       213
+i646       216
+i647       219
+i648       222
+i649       225
+i650       228
+i651       231
+i652       234
+i653       237
+i654       240
+i655       243
+i656       246
+i657       249
+i658       252
+i659       255
+i660       258
+i661       261
+i662       264
+i663       267
+i664       270
+i665       273
+i666       276
+i667       279
+i668       282
+i669       285
+i670       288
+i671       291
+i672       294
+i673       297
+i674       300
+i675       303
+i676       306
+i677       309
+i678       312
+i679       315
+i680       318
+i681       321
+i682       324
+i683       327
+i684       330
+i685       333
+i686       336
+i687       339
+i688       342
+i689       345
+i690       348
+i691       351
+i692       354
+i693       357
+i694       360
+i695       363
+i696       366
+i697       369
+i698       372
+i699       375
+i700       378
+i701       381
+i702       384
+i703       387
+i704       390
+i705       393
+i706       396
+i707       399
+i708       402
+i709       405
+i710       408
+i711       411
+i712       414
+i713       417
+i714       420
+i715       423
+i716       426
+i717       429
+i718       432
+i719       435
+i720       438
+i721       441
+i722       444
+i723       447
+i724       450
+i725       453
+i726       456
+i727       459
+i728       462
+i729       465
+i730       468
+i731       471
+i732       474
+i733       477
+i734       480
+i735       483
+i736       486
+i737       489
+i738       492
+i739       495
+i740       498
+i741       501
+i742       504
+i743       507
+i744       510
+i745       513
+i746       516
+i747       519
+i748       522
+i749       525
+i750       528
+i751       531
+i752       534
+i753       537
+i754       540
+i755       543
+i756       546
+i757       549
+i758       552
+i759       555
+i760       558
+i761       561
+i762       564
+i763       567
+i764       570
+i765       573
+i766       576
+i767       579

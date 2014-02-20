@@ -1,0 +1,140 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dLoginUserName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dLoginUserName( VIEW qOrganiz BASED ON LOD qOrganiz,
+                STRING ( 32 ) InternalEntityStructure,
+                STRING ( 32 ) InternalAttribStructure,
+                SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+   STRING (   32 ) szRole
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF qOrganiz.Organization  EXISTS
+         GetStringFromAttributeByContext( szString, qOrganiz, "Organization", "Role", "RegistrantRole", 32 )
+         szString = szString + ": " + qOrganiz.Organization.Name
+         IF qOrganiz.PrimaryRegistrant EXISTS
+            IF qOrganiz.PrimaryRegistrant.EPA_CompanyNumber != ""
+               szString = szString + " (" +
+                       qOrganiz.PrimaryRegistrant.EPA_CompanyNumber + ")"
+            END
+         END
+
+         IF qOrganiz.Subregistrant EXISTS
+            IF qOrganiz.Subregistrant.EPA_CompanyNumber != ""
+               szString = szString + " (" +
+                       qOrganiz.Subregistrant.EPA_CompanyNumber + ")"
+            END
+         END
+
+      ELSE
+         szString = ""
+      END
+
+       // Store the calculated value in the object.
+      StoreStringInRecord( qOrganiz,
+                           InternalEntityStructure,
+                           InternalAttribStructure, szString )
+      RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dLoginUserRole
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dLoginUserRole( VIEW qOrganiz BASED ON LOD qOrganiz,
+                STRING ( 32 ) InternalEntityStructure,
+                STRING ( 32 ) InternalAttribStructure,
+                SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+   STRING (   32 ) szRole
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF qOrganiz.Organization  EXISTS
+         GetStringFromAttributeByContext( szRole, qOrganiz, "Organization", "Role", "RegistrantRole", 32 )
+         szString = "Role: " + szRole
+      ELSE
+         szString = ""
+      END
+
+       // Store the calculated value in the object.
+      StoreStringInRecord( qOrganiz,
+                           InternalEntityStructure,
+                           InternalAttribStructure, szString )
+      RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dLoginUserName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dLoginUserNameRole( VIEW qOrganiz BASED ON LOD qOrganiz,
+                    STRING ( 32 ) InternalEntityStructure,
+                    STRING ( 32 ) InternalAttribStructure,
+                    SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+   STRING (   32 ) szRole
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF qOrganiz.Organization  EXISTS
+         szString = "Registrant: " + qOrganiz.Organization.Name
+         IF qOrganiz.PrimaryRegistrant EXISTS
+            IF qOrganiz.PrimaryRegistrant.EPA_CompanyNumber != ""
+               szString = szString + " (" +
+                       qOrganiz.PrimaryRegistrant.EPA_CompanyNumber + ")"
+            END
+         END
+
+         IF qOrganiz.Subregistrant EXISTS
+            IF qOrganiz.Subregistrant.EPA_CompanyNumber != ""
+               szString = szString + " (" +
+                       qOrganiz.Subregistrant.EPA_CompanyNumber + ")"
+            END
+         END
+
+         GetStringFromAttributeByContext( szRole, qOrganiz, "Organization", "Role", "RegistrantRole", 32 )
+         szString = szString + "    Role: " + szRole
+
+      ELSE
+         szString = ""
+      END
+
+       // Store the calculated value in the object.
+      StoreStringInRecord( qOrganiz,
+                           InternalEntityStructure,
+                           InternalAttribStructure, szString )
+      RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

@@ -1,0 +1,3529 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_Label
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_Label( VIEW mSPLDef BASED ON LOD mSPLDef )
+
+   VIEW mSPLDefPanel BASED ON LOD mSPLDef
+   STRING ( 32000 ) szWriteBuffer
+   INTEGER lFile
+   INTEGER lControl
+   STRING ( 50 ) szLeadingBlanks
+   STRING ( 10 ) szSize
+   STRING ( 10 ) szTop
+   STRING ( 10 ) szHeight
+   STRING ( 10 ) szWidth
+   STRING ( 10 ) szLeft
+   STRING ( 32 ) szLastSectionType
+   STRING ( 32 ) szVoid
+   STRING ( 2 )  szCount
+   STRING ( 40 ) szPanelDottedBorder
+   INTEGER       lCount
+   SHORT         nRC
+   DECIMAL       InterPanelSpace
+   DECIMAL       Left
+
+   // Generate an PDF Label from the SPLD.
+
+   // Open the File (use szWriteBuffer to hold FileName).
+   szWriteBuffer = "c:\XSL\TestLabel.xsl"
+   TraceLineS( "Output Filename: ", szWriteBuffer )
+   lFile = SysOpenFile( mSPLDef, szWriteBuffer, COREFILE_DELETE )
+   lFile = SysOpenFile( mSPLDef, szWriteBuffer, COREFILE_WRITE )
+
+   // Put out header data.
+   szWriteBuffer = "<?xml version=^1.0^ encoding=^iso-8859-1^?>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "<xsl:stylesheet version=^1.0^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   xmlns:xsl=^http://www.w3.org/1999/XSL/Transform^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   xmlns:fo=^http://www.w3.org/1999/XSL/Format^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   xmlns:fox=^http://xml.apache.org/fop/extensions^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   xmlns:exslt=^http://exslt.org/common^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   xmlns:exsl=^http://exslt.org/common^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   extension-element-prefixes=^exsl^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   xmlns:msxsl=^urn:schemas-microsoft-com:xslt^"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   exclude-result-prefixes=^msxsl^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = ""
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   <xsl:output method=^xml^ indent=^yes^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Beginning of XSL Label Definition
+   szWriteBuffer = "   <xsl:template match=^/SubregPhysicalLabelDef^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "      <fo:root>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "         <fo:layout-master-set>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "            <fo:simple-page-master master-name=^p1^ page-width=^25.5in^ page-height=^9.5in^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "               <fo:region-body region-name=^xsl-region-body^ margin=^0.2in^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "            </fo:simple-page-master>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "         </fo:layout-master-set>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "         <fo:page-sequence master-reference=^p1^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "            <fo:flow flow-name=^xsl-region-body^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Generate printer location icons.
+   FormatPrintIcons( mSPLDef, lFile, szWriteBuffer )
+   
+   // Loop through each PANEL, creating a Panel with Block containers.
+   lCount          = 0
+   Left            = 1.0
+   InterPanelSpace = 0.75
+   IF mSPLDef.SubregPhysicalLabelDef.wFormatWithDottedBorders = "Y"
+      szPanelDottedBorder = " border=^1.0pt dotted green^"
+   END
+   FOR EACH mSPLDef.Panel 
+   
+      lCount = lCount + 1
+      szCount = lCount
+      szLeft = Left
+      
+      // Panel Container
+      szTop        = "1.0"
+      szHeight     = mSPLDef.Panel.Height 
+      szWidth      = mSPLDef.Panel.Width 
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + 
+                      "in^ height=^" + szHeight + "in^ width=^" + szWidth + "in^" + szPanelDottedBorder + ">"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = ""
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Panel Number
+      szWriteBuffer = "                  <!-- Panel Number " + szCount + " -->"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block-container position=^absolute^ top=^-0.2in^ left=^-0.2in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                        " + szCount
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = ""
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Process each Block within the Panel.
+      szLeadingBlanks = "               "
+      CreateViewFromView( mSPLDefPanel, mSPLDef )
+      NAME VIEW mSPLDefPanel "mSPLDefPanel"
+      NAME VIEW mSPLDef "mSPLDef"
+      ProcessPDF_Block( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+      DropView( mSPLDefPanel )
+      
+      // Close Panel Container.
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Increment Left position for next Panel.
+      Left = Left + InterPanelSpace + mSPLDef.Panel.Width
+      
+   END
+   
+   // Close XSL body.
+   szWriteBuffer = "            </fo:flow>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "         </fo:page-sequence>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "      </fo:root>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   </xsl:template>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = ""
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Sub Template.
+   szWriteBuffer = "   <xsl:template match=^sub^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "      <fo:inline vertical-align=^sub^ font-size=^75%^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "         <xsl:apply-templates select=^*||text()^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "      </fo:inline>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "   </xsl:template>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Conclude XSLT.
+   szWriteBuffer = ""
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "</xsl:stylesheet>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   
+   // Close the file.
+   SysCloseFile( mSPLDef, lFile, 0 )
+   
+   // Generate XML. We do this at the end because the process above built data (ex., DisplayText attributes) in the mSPLDef object instance.
+   szWriteBuffer = "c:\XSL\TestLabel.xml"
+   CommitOI_ToXML_File( mSPLDef, szWriteBuffer, 0 )
+   //GenerateXML_File( mSPLDef, "SubregPhysicalLabelDef", szWriteBuffer )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: FormatPrintIcons
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+FormatPrintIcons( VIEW mSPLDef BASED ON LOD mSPLDef,
+                  INTEGER lFile,
+                  STRING ( 32000 ) szWriteBuffer )
+
+   INTEGER PanelNumber
+   DECIMAL PanelHeight
+   DECIMAL PanelWidth
+   DECIMAL InterPanelSpace
+   DECIMAL TopMargin
+   DECIMAL LeftMargin
+   
+   DECIMAL IconTopLeftTop
+   DECIMAL IconBottomLeftTop
+   DECIMAL IconTopRightTop
+   DECIMAL IconBottomRightTop
+   DECIMAL IconCenterTopTop
+   DECIMAL IconCenterLeftTop
+   DECIMAL IconCenterRightTop
+   DECIMAL IconCenterBottomTop
+   
+   DECIMAL IconTopLeftLeft
+   DECIMAL IconBottomLeftLeft
+   DECIMAL IconTopRightLeft
+   DECIMAL IconBottomRightLeft
+   DECIMAL IconCenterTopLeft
+   DECIMAL IconCenterLeftLeft
+   DECIMAL IconCenterRightLeft
+   DECIMAL IconCenterBottomLeft
+   
+   STRING ( 10 ) szTop
+   STRING ( 10 ) szLeft
+   STRING ( 30 ) szDateTime
+   STRING ( 30 ) szDateTimeDisplay
+   STRING ( 90 ) szProductIdentifier
+
+   // Format the printer icons based on number and size of Panels.
+   
+   // Count Panels.
+   FOR EACH mSPLDef.Panel 
+      PanelNumber = PanelNumber + 1
+   END
+   
+   // Format for 4 Panel.
+   IF PanelNumber = 4
+      // For Four Panels, there are 4 corner icons and 4 Center line icons, all of which
+      // identify the boundaries of the 4 panel images. Their positions depend on the height and width
+      // of the Panels.
+      // Each Panel will be positioned 1 inch from the top and the first Panel 1 inch from the left. The horizontal
+      // space between Panels will be 0.75 inches.
+      //
+      // The total width of the combined image should thus be:
+      //       LeftMargin (1.0) + 4 * PanelWidth + 3 * InterPanelSpace + RightMargin (1.0)
+      // The total height of the combined imarge should be:
+      //       TopMargin (1.0) + PanelHeight + BottomMargin (1.0)
+      //
+      // The 4 corner icons will be positioned:
+      //       TopLeft     Top:  0.2 
+      //                   Left: 0.2
+      //       BottomLeft  Top:  TopMargin + PanelHeight + 0.2
+      //                   Left: 0.2
+      //       TopRight    Top:  0.2
+      //                   Left: LeftMargin + 4 * PanelWidth + 3 * InterPanelSpace + 0.1
+      //       BottomRight Top:  TopMargin + PanelHeight + 0.2
+      //                   Left: LeftMargin + 4 * PanelWidth + 3 * InterPanelSpace + 0.1
+      //
+      // The 4 mid-point icons will be positioned:
+      //       CenterTop    Top:  0.4 
+      //                    Left: LeftMargin + 2 * PanelWidth + InterPanelSpace - 0.1 
+      //       CenterLeft   Top:  TopMargin + PanelHeight/2 - 0.5
+      //                    Left: 0.2
+      //       CenterRight  Top:  TopMargin + PanelHeight/2 - 0.5
+      //                    Left: LeftMargin + 4 * PanelWidth + 3 * InterPanelSpace + 0.1
+      //       CenterBottom Top:  TopMargin + PanelHeight + 0.2
+      //                    Left: LeftMargin + 2 * PanelWidth + InterPanelSpace - 0.1 
+      // 
+      // In addition, a PDF identifier showing company and date/time is displayed in upper left.
+      
+      SET CURSOR FIRST mSPLDef.Panel 
+      
+      // Compute Top and Left icon margin values.
+      
+      InterPanelSpace = 0.75
+      TopMargin       = 1
+      LeftMargin      = 1
+      PanelWidth      = mSPLDef.Panel.Width 
+      PanelHeight     = mSPLDef.Panel.Height 
+      
+      IconTopLeftTop         = 0.2
+      IconTopLeftLeft        = 0.2
+      
+      IconBottomLeftTop      = TopMargin + PanelHeight + 0.2
+      IconBottomLeftLeft     = 0.2
+      
+      IconTopRightTop        = 0.2
+      IconTopRightLeft       = LeftMargin + (4 * PanelWidth) + (3 * InterPanelSpace) + 0.1
+      
+      IconBottomRightTop     = TopMargin + PanelHeight + 0.2
+      IconBottomRightLeft    = LeftMargin + (4 * PanelWidth) + (3 * InterPanelSpace) + 0.1
+      
+      IconCenterTopTop       = 0.4 
+      IconCenterTopLeft      = LeftMargin + (2 * PanelWidth) + InterPanelSpace - 0.1 
+      
+      IconCenterLeftTop      = TopMargin + (PanelHeight / 2) - 0.5
+      IconCenterLeftLeft     = 0.2
+      
+      IconCenterRightTop     = TopMargin + (PanelHeight / 2) - 0.5
+      IconCenterRightLeft    = LeftMargin + (4 * PanelWidth) + (3 * InterPanelSpace) + 0.1
+      
+      IconCenterBottomTop    = TopMargin + PanelHeight + 0.2
+      IconCenterBottomLeft   = LeftMargin + (2 * PanelWidth) + InterPanelSpace - 0.1 
+      
+      // Generate Icons
+      
+      szWriteBuffer = "               <!-- Printer Location Icon Generation -->"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Top Left
+      szTop  = IconTopLeftTop
+      szLeft = IconTopLeftLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/TopLeft.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Top Right
+      szTop  = IconTopRightTop
+      szLeft = IconTopRightLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/TopRight.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Bottom Left
+      szTop  = IconBottomLeftTop
+      szLeft = IconBottomLeftLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/BottomLeft.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Bottom Right
+      szTop  = IconBottomRightTop
+      szLeft = IconBottomRightLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/BottomRight.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Top Center
+      szTop  = IconCenterTopTop
+      szLeft = IconCenterTopLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/CenterH.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Bottom Center
+      szTop  = IconCenterBottomTop
+      szLeft = IconCenterBottomLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/CenterH.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Left Center
+      szTop  = IconCenterLeftTop
+      szLeft = IconCenterLeftLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/CenterV.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      // Icon Right Center
+      szTop  = IconCenterRightTop
+      szLeft = IconCenterRightLeft
+      szWriteBuffer = "               <fo:block-container position=^absolute^ top=^" + szTop + "in^ left=^" + szLeft + "in^>" 
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  <fo:block text-align=^left^>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                     <fo:external-graphic src=^./images/CenterV.png^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "                  </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szWriteBuffer = "               </fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+   END
+   
+   // Company and Date/Time Identifier
+   SysGetDateTime( szDateTime )
+   mSPLDef.SubregPhysicalLabelDef.wDateTime = szDateTime
+   GetStringFromAttributeByContext( szDateTimeDisplay, mSPLDef, "SubregPhysicalLabelDef", "wDateTime", "DD/MM/YYYY HH:MM:SS.S AM", 30 )
+   szProductIdentifier = mSPLDef.SubregOrganization.Name + " " + szDateTimeDisplay
+   szWriteBuffer = "               <fo:block-container position=^absolute^ top=^0.4in^ left=^1.0in^>" 
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "                  <fo:block font-size=^7pt^ letter-spacing=^.2em^ text-align=^left^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "                     " + szProductIdentifier
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "                  </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   szWriteBuffer = "               </fo:block-container>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: FormatContinueBlock
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+FormatContinueBlock( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                     VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                     INTEGER lFile,
+                     STRING ( 50 )    szPassedBlanks,
+                     STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 32000 )  szStatementText
+   STRING ( 32000 )  szTemporaryText
+   STRING ( 256 )    szStatementTitle
+   STRING ( 10 )     szSeparatorCharacters
+   STRING ( 2 )      szTitleFormat
+   STRING ( 2 )      szStatementFormat
+   STRING ( 50 )     szLeadingBlanks
+   SHORT             nRC
+   
+   // Process Directions for Use or Marketing Continuation Statements from previous Panel..
+   
+   szLeadingBlanks = szPassedBlanks
+   
+   // Create Block Container. Top is overridden to top of Panel.
+   
+   FormatBlockContainer( mSPLDefPanel, mSPLDef, lFile, szLeadingBlanks, szWriteBuffer )
+   
+   // First put out Continuation text.
+   // Add the Continuation verbage to the current Panel.
+   szWriteBuffer = szLeadingBlanks + "   <fo:block margin-bottom=^.05in^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   IF mSPLDefPanel.Block.LLD_SectionType = "DirectionsForUse"
+      szWriteBuffer = szLeadingBlanks + "      " + mSPLDef.SPLD_LLD.ContNextPageTextDirForUse 
+   ELSE
+      szWriteBuffer = szLeadingBlanks + "      " + mSPLDef.SPLD_LLD.ContNextPageTextMarketing 
+   END
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+   szStatementFormat     = "SP"
+   szSeparatorCharacters = ", "
+   
+   // Format each Statement, with Title, if requested.
+   FOR EACH mSPLDefPanel.ContinuationStatement 
+      
+      szStatementText  = mSPLDefPanel.ContinuationStatement.Text 
+      szStatementTitle = mSPLDefPanel.ContinuationStatement.Title 
+
+      IF szTitleFormat = "PU"
+         
+         
+   
+      ELSE
+            
+         IF szStatementFormat = "SN"
+      
+            // This will be skipped for now.
+            // SN - Separate Numbered Paragraph
+            // Process each Statement within the Section, indenting any text that follows a number.
+            // We will do this by determining if the first character in the text is a number.
+            // If it is not, we'll simply format as for SP above.
+            // If it is, we'll find the first character after any spaces following the number and indent that text, after the number.
+         
+         
+         END
+      END
+      
+      // Combine Title in text if specified.
+      IF szStatementTitle != "" AND szTitleFormat = "CT"
+         // Title is combined with Text.
+         szTemporaryText = szStatementText
+         szStatementText = szStatementTitle + " " + szTemporaryText
+      ELSE
+         // Format Title, if it exists.
+         IF szStatementTitle != "" 
+            szWriteBuffer = szLeadingBlanks + "   <fo:block "
+            AddFormatToSpecialText( mSPLDefPanel, "Statement Title", szWriteBuffer )
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szLeadingBlanks + "      " + szStatementTitle
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         END
+      END
+
+      // Format Statement Text
+      szWriteBuffer = szLeadingBlanks + "   <fo:block "
+      AddFormatToSpecialText( mSPLDefPanel, "Statement Text", szWriteBuffer )
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "      " + szStatementText
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         
+   END
+   
+   // Process Termination.
+   szWriteBuffer = szLeadingBlanks + "</fo:block-container>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ProcessPDF_Block
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+ProcessPDF_Block( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                  VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                  INTEGER lFile,
+                  STRING ( 50 )    szPassedBlanks,
+                  STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 ) szLeadingBlanks
+   STRING ( 50 ) szBlockBlanks
+   STRING ( 10 ) szHeight
+   STRING ( 10 ) szWidth
+   STRING ( 10 ) szTop
+   STRING ( 50 ) szSectionType
+   STRING ( 50 ) szLeft
+
+   // Process each Block Container and subobject data.
+   szLeadingBlanks = szPassedBlanks + "   "
+   
+   // If the first Block is a Continuation Block from the previous Panel, process it first.
+   IF mSPLDefPanel.Block.ContinuationBlockFlag = "Y"
+      FormatContinueBlock( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+   END
+   
+   FOR EACH mSPLDefPanel.Block WHERE mSPLDefPanel.Block.ContinuationBlockFlag = ""
+   
+      // Create Block Container.
+      FormatBlockContainer( mSPLDefPanel, mSPLDef, lFile, szLeadingBlanks, szWriteBuffer )
+      
+      // Processing depends on which kind of Block this is.
+      // If it is just a Container, then format the Block and process each SubBlock.
+      // Otherwise, go to the proper suboperation for processing the type of Block.
+      IF mSPLDefPanel.SubBlock EXISTS
+         // Process each SubBlock as regular Block, after stepping into subobject.
+         SetViewToSubobject( mSPLDefPanel, "SubBlock" )
+         ProcessPDF_Block( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+         ResetViewFromSubobject( mSPLDefPanel )
+      ELSE
+         // Determine what kind of Block it is and go to process accordingly.
+         
+         szSectionType = mSPLDefPanel.Block.LLD_SectionType 
+         
+         // IMAGE
+         IF mSPLDefPanel.Block.ImageName != ""
+            szHeight = mSPLDefPanel.Block.Height 
+            szWidth  = mSPLDefPanel.Block.Width 
+            szTop    = mSPLDefPanel.Block.Top 
+            szLeft   = mSPLDefPanel.Block.Left 
+            
+            szWriteBuffer = "                     <fo:block text-align=^left^>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+            szWriteBuffer = "                        <fo:external-graphic src=^./images/" + mSPLDefPanel.Block.ImageName +
+                            "^ height=^" + szHeight + "in^ width=^" + szWidth + "in^ content-height=^scale-to-fit^ content-width=^scale-to-fit^/>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = "                     </fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+         ELSE
+      
+         // DIRECTIONS FOR USE
+         IF szSectionType = "DirectionsForUse"
+            TraceLineS( "Major Block: ", szSectionType )
+            SET CURSOR FIRST mSPLDef.SPLD_DirectionsForUseSection WHERE mSPLDef.SPLD_DirectionsForUseSection.Title = mSPLDefPanel.Block.BlockTitle 
+            IF RESULT >= zCURSOR_SET 
+               GeneratePDF_DFU( mSPLDef, mSPLDefPanel, lFile,
+                                 "SPLD_DirectionsForUseSection",
+                                 "SPLD_DirectionsForUseStatement",
+                                 "SPLD_DirectionsUsage",
+                                 "SPLD_DirectionsForUseSection",
+                                 szLeadingBlanks,
+                                 szWriteBuffer )
+            END
+         ELSE
+      
+         // MARKETING
+         IF szSectionType = "Marketing"
+            TraceLineS( "Major Block: ", szSectionType )
+            SET CURSOR FIRST mSPLDef.SPLD_MarketingSection WHERE mSPLDef.SPLD_MarketingSection.Title = mSPLDefPanel.Block.BlockTitle 
+            IF RESULT >= zCURSOR_SET 
+               GeneratePDF_DFU( mSPLDef, mSPLDefPanel, lFile,
+                                 "SPLD_MarketingSection",
+                                 "SPLD_MarketingStatement",
+                                 "SPLD_MarketingUsage",
+                                 "SPLD_MarketingSection",
+                                 szLeadingBlanks,
+                                 szWriteBuffer )
+            END
+         ELSE
+      
+         // GENERAL (ENVIRONMENTAL/PHYSICAL HAZARD, FIRST AID or PRECAUTIONARY)
+         IF szSectionType = "OtherHazard" OR
+            szSectionType = "FirstAid" OR
+            szSectionType = "Precautionary"
+      
+            // We can get by using the same operation because all 3 Section Types are handled the same way and the child entity,
+            // SPLDT_GeneralSection, is pointing to the instance of the correct Type.
+            TraceLineS( "Major Block: ", szSectionType )
+            //FOR EACH mSPLDef.SPLDT_GeneralSection
+               GeneratePDF_General( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+            //END
+         ELSE
+      
+         // STORAGE AND DISPOSAL
+         IF szSectionType = "Storage" OR
+            szSectionType = "Disposal" OR
+            szSectionType = "ContainerDisposal" OR
+            szSectionType = "StorageDisposal1" OR
+            szSectionType = "StorageDisposal2"
+      
+            TraceLineS( "Major Block: ", szSectionType )
+            GeneratePDF_StorDisp( mSPLDef, mSPLDefPanel, lFile, szSectionType, szLeadingBlanks, szWriteBuffer )
+      
+         ELSE
+      
+         // HUMAN HAZARD
+         IF szSectionType = "HumanHazard"  // initial check out!!!
+      
+            // Generate the single Hazards entry.
+            TraceLineS( "Major Block: ", szSectionType )
+            GeneratePDF_Hazards( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+      
+         ELSE
+      
+         // INGREDIENTS
+         IF szSectionType = "Ingredients"  // initial check out!!!
+      
+            // Go to generate Active Ingredients.
+            TraceLineS( "Major Block: ", szSectionType )
+            GeneratePDF_Ingred( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+      
+         ELSE
+      
+         // NET CONTENTS
+         IF szSectionType = "NetContents"  // initial check out!!!
+      
+            // Go to generate Net Contents.
+            TraceLineS( "Major Block: ", szSectionType )
+            GeneratePDF_Content( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+      
+         ELSE
+      
+         // EPA REGISTRATION AND ESTABLISHMENT NUMBERS
+         IF szSectionType = "EPA_RegAndEstNbr"  // initial check out!!!
+      
+            // Go to generate EPA Reg and Est Numbers.
+            TraceLineS( "Major Block: ", szSectionType )
+            GeneratePDF_EPA_Reg( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+      
+         ELSE
+      
+         // CLAIMS LIST - 3 COLUMN
+         IF szSectionType = "Claims List - Column 3"  // initial check out!!!
+      
+            // Go to generate EPA Reg and Est Numbers.
+            TraceLineS( "Major Block: ", szSectionType )
+            GeneratePDF_ClmList3( mSPLDef, mSPLDefPanel, lFile, szLeadingBlanks, szWriteBuffer )
+      
+         ELSE
+      
+         // PRODUCT NAME
+         IF szSectionType = "Product Name"  // initial check out!!!
+      
+            TraceLineS( "Major Block: ", szSectionType )
+            szBlockBlanks = szLeadingBlanks + "   "
+            szWriteBuffer = szBlockBlanks + "<fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szBlockBlanks + "   <xsl:value-of select=^SubregLabelContent/SubregProduct/Name^/>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szBlockBlanks + "</fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+         ELSE
+      
+         // PRODUCT DESCRIPTION
+         IF szSectionType = "Product Description"  // initial check out!!!
+      
+            TraceLineS( "Major Block: ", szSectionType )
+            szBlockBlanks = szLeadingBlanks + "   "
+            szWriteBuffer = szBlockBlanks + "<fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szBlockBlanks + "   <xsl:value-of select=^SubregLabelContent/SubregProduct/Description^/>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szBlockBlanks + "</fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+         END
+         END
+         END
+         END
+         END
+         END
+         END
+         END
+         END
+         END
+         END
+         END
+         
+      END
+      
+      // Process Termination.
+      szWriteBuffer = szLeadingBlanks + "</fo:block-container>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: FormatBlockContainer
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+FormatBlockContainer( VIEW mSPLDef     BASED ON LOD mSPLDef,
+                      VIEW mSPLDefRoot BASED ON LOD mSPLDef,
+                      INTEGER lFile,
+                      STRING ( 50 )    szLeadingBlanks,
+                      STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 32 )  szSectionType
+   STRING ( 10 )  szTop
+   STRING ( 10 )  szHeight
+   STRING ( 10 )  szWidth
+   STRING ( 10 )  szLeft
+   STRING ( 10 )  szBorderStyle
+   STRING ( 10 )  szColor
+   STRING ( 10 )  szFontFamily
+   STRING ( 10 )  szFontSize
+   STRING ( 10 )  szFontWeight
+   STRING ( 10 )  szMarginTop
+   STRING ( 10 )  szMarginBottom
+   STRING ( 10 )  szMarginLeft
+   STRING ( 10 )  szMarginRight
+   STRING ( 10 )  szTextAlign
+
+   STRING ( 256 ) szImg
+
+   // Process a Block and its subcomponents.
+
+   // Block Container Start
+   IF mSPLDef.Block.Top = ""
+      // Position is relative.
+      szWriteBuffer = szLeadingBlanks + "<fo:block-container"
+   ELSE
+      // Position is absolute.
+      szWriteBuffer = szLeadingBlanks + "<fo:block-container position=^absolute^"
+   END
+   
+   szTop = mSPLDef.Block.Top 
+   IF szTop != ""
+      szWriteBuffer = szWriteBuffer + " top=^" + szTop + "in^" 
+   END
+   
+   szHeight = mSPLDef.Block.Height 
+   IF szHeight != ""
+      szWriteBuffer = szWriteBuffer + " height=^" + szHeight + "in^" 
+   END
+   
+   szWidth = mSPLDef.Block.Width 
+   IF szWidth != ""
+      szWriteBuffer = szWriteBuffer + " width=^" + szWidth + "in^" 
+   END
+   
+   szLeft = mSPLDef.Block.Left 
+   IF szLeft != ""
+      szWriteBuffer = szWriteBuffer + " left=^" + szLeft + "in^" 
+   END
+   
+   szBorderStyle = mSPLDef.Block.BorderStyle 
+   IF szBorderStyle != ""
+      szWriteBuffer = szWriteBuffer + " border-style=^" + szBorderStyle + "^" 
+   END
+   
+   szWidth = mSPLDef.Block.BorderWidth
+   IF szWidth != ""
+      szWriteBuffer = szWriteBuffer + " border-width=^" + szWidth + "^" 
+   END
+   
+   szColor = mSPLDef.Block.BorderColor 
+   IF szColor != ""
+      szWriteBuffer = szWriteBuffer + " border-color=^" + szColor + "^" 
+   END
+   
+   szColor = mSPLDef.Block.Color 
+   IF szColor != ""
+      szWriteBuffer = szWriteBuffer + " color=^" + szColor + "^" 
+   END
+   
+   szFontFamily = mSPLDef.Block.FontFamily 
+   IF szFontFamily != ""
+      szWriteBuffer = szWriteBuffer + " font-family=^" + szFontFamily + "^" 
+   END
+   
+   szFontSize = mSPLDef.Block.FontSize 
+   IF szFontSize != ""
+      szWriteBuffer = szWriteBuffer + " font-size=^" + szFontSize + "^" 
+   END
+   
+   szFontWeight = mSPLDef.Block.FontWeight 
+   IF szFontWeight != ""
+      szWriteBuffer = szWriteBuffer + " font-weight=^" + szFontWeight + "^" 
+   END
+   
+   szMarginTop = mSPLDef.Block.MarginTop 
+   IF szMarginTop != ""
+      szWriteBuffer = szWriteBuffer + " margin-top=^" + szMarginTop + "in^" 
+   END
+   
+   szMarginBottom = mSPLDef.Block.MarginBottom 
+   IF szMarginBottom != ""
+      szWriteBuffer = szWriteBuffer + " margin-bottom=^" + szMarginBottom + "in^" 
+   END
+   
+   szMarginLeft = mSPLDef.Block.MarginLeft 
+   IF szMarginLeft != ""
+      szWriteBuffer = szWriteBuffer + " margin-left=^" + szMarginLeft + "in^" 
+   END
+   
+   szMarginRight = mSPLDef.Block.MarginRight 
+   IF szMarginRight != ""
+      szWriteBuffer = szWriteBuffer + " margin-right=^" + szMarginRight + "in^" 
+   END
+   
+   szTextAlign = mSPLDef.Block.TextAlign 
+   IF szTextAlign != ""
+      szWriteBuffer = szWriteBuffer + " text-align=^" + szTextAlign + "^" 
+   END
+   
+   // Add a border if requested.
+   IF mSPLDefRoot.SubregPhysicalLabelDef.wFormatWithDottedBorders = "Y"
+      szWriteBuffer = szWriteBuffer + " border=^1.0pt dotted red^"
+   END
+   
+   // Close the entry.
+   szWriteBuffer = szWriteBuffer + ">"
+   
+   // Write out the combined Block value.
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: FormatBlock
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+FormatBlock( VIEW mSPLDef BASED ON LOD mSPLDef,
+             INTEGER lFile,
+             STRING ( 50 )    szLeadingBlanks,
+             STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 32 )  szSectionType
+   STRING ( 10 )  szTop
+   STRING ( 10 )  szHeight
+   STRING ( 10 )  szWidth
+   STRING ( 10 )  szLeft
+   STRING ( 10 )  szBorderStyle
+   STRING ( 10 )  szColor
+   STRING ( 10 )  szFontFamily
+   STRING ( 10 )  szFontSize
+   STRING ( 10 )  szFontWeight
+   STRING ( 10 )  szMarginTop
+   STRING ( 10 )  szMarginBottom
+   STRING ( 10 )  szMarginLeft
+   STRING ( 10 )  szMarginRight
+   STRING ( 10 )  szTextAlign
+
+   STRING ( 256 ) szImg
+
+   // Process a Block and its subcomponents.
+
+   // Block Container Start
+   szWriteBuffer = szLeadingBlanks + "<fo:block"
+   
+   szTop = mSPLDef.Block.Top 
+   IF szTop != ""
+      szWriteBuffer = szWriteBuffer + " top=^" + szTop + "in^" 
+   END
+   
+   szHeight = mSPLDef.Block.Height 
+   IF szHeight != ""
+      szWriteBuffer = szWriteBuffer + " height=^" + szHeight + "in^" 
+   END
+   
+   szWidth = mSPLDef.Block.Width 
+   IF szWidth != ""
+      szWriteBuffer = szWriteBuffer + " width=^" + szWidth + "in^" 
+   END
+   
+   szLeft = mSPLDef.Block.Left 
+   IF szLeft != ""
+      szWriteBuffer = szWriteBuffer + " left=^" + szLeft + "in^" 
+   END
+   
+   szBorderStyle = mSPLDef.Block.BorderStyle 
+   IF szBorderStyle != ""
+      szWriteBuffer = szWriteBuffer + " border-style=^" + szBorderStyle + "^" 
+   END
+   
+   szColor = mSPLDef.Block.BorderColor 
+   IF szColor != ""
+      szWriteBuffer = szWriteBuffer + " border-color=^" + szColor + "^" 
+   END
+   
+   szColor = mSPLDef.Block.Color 
+   IF szColor != ""
+      szWriteBuffer = szWriteBuffer + " color=^" + szColor + "^" 
+   END
+   
+   szFontFamily = mSPLDef.Block.FontFamily 
+   IF szFontFamily != ""
+      szWriteBuffer = szWriteBuffer + " font-family=^" + szFontFamily + "^" 
+   END
+   
+   szFontSize = mSPLDef.Block.FontSize 
+   IF szFontSize != ""
+      szWriteBuffer = szWriteBuffer + " font-size=^" + szFontSize + "^" 
+   END
+   
+   szFontWeight = mSPLDef.Block.FontWeight 
+   IF szFontWeight != ""
+      szWriteBuffer = szWriteBuffer + " font-weight=^" + szFontWeight + "^" 
+   END
+   
+   szMarginTop = mSPLDef.Block.MarginTop 
+   IF szMarginTop != ""
+      szWriteBuffer = szWriteBuffer + " margin-top=^" + szMarginTop + "in^" 
+   END
+   
+   szMarginBottom = mSPLDef.Block.MarginBottom 
+   IF szMarginBottom != ""
+      szWriteBuffer = szWriteBuffer + " margin-bottom=^" + szMarginBottom + "in^" 
+   END
+   
+   szMarginLeft = mSPLDef.Block.MarginLeft 
+   IF szMarginLeft != ""
+      szWriteBuffer = szWriteBuffer + " margin-left=^" + szMarginLeft + "in^" 
+   END
+   
+   szMarginRight = mSPLDef.Block.MarginRight 
+   IF szMarginRight != ""
+      szWriteBuffer = szWriteBuffer + " margin-right=^" + szMarginRight + "in^" 
+   END
+   
+   szTextAlign = mSPLDef.Block.TextAlign 
+   IF szTextAlign != ""
+      szWriteBuffer = szWriteBuffer + " text-align=^" + szTextAlign + "^" 
+   END
+   
+   // Close the entry.
+   szWriteBuffer = szWriteBuffer + ">"
+   
+   // Write out the combined Block value.
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddFormatToSpecialText
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+AddFormatToSpecialText( VIEW mSPLDef BASED ON LOD mSPLDef,
+                        STRING ( 32 )    SpecialTextTitle,
+                        STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 32 )  szSectionType
+   STRING ( 10 )  szTop
+   STRING ( 10 )  szHeight
+   STRING ( 10 )  szWidth
+   STRING ( 10 )  szLeft
+   STRING ( 10 )  szBorderStyle
+   STRING ( 10 )  szColor
+   STRING ( 10 )  szFontFamily
+   STRING ( 10 )  szFontSize
+   STRING ( 10 )  szFontWeight
+   STRING ( 10 )  szMarginTop
+   STRING ( 10 )  szMarginBottom
+   STRING ( 10 )  szMarginLeft
+   STRING ( 10 )  szMarginRight
+   STRING ( 10 )  szTextAlign
+   STRING ( 200 ) szMsg
+
+   STRING ( 256 ) szImg
+
+   // Add any Special Attribute Block formatting variables to the text statement passed in szWriteBuffer.
+   // Skip if the Special Text Attribute hasn't been defined.
+   
+   SET CURSOR FIRST mSPLDef.BlockSpecialSectionAttribute WHERE mSPLDef.BlockSpecialSectionAttribute.Name = SpecialTextTitle
+   IF RESULT >= zCURSOR_SET 
+   
+      szColor = mSPLDef.BlockSpecialAttributeBlock.Color 
+      IF szColor != ""
+         szWriteBuffer = szWriteBuffer + " color=^" + szColor + "^" 
+      END
+      
+      szFontFamily = mSPLDef.BlockSpecialAttributeBlock.FontFamily 
+      IF szFontFamily != ""
+         szWriteBuffer = szWriteBuffer + " font-family=^" + szFontFamily + "^" 
+      END
+      
+      szFontSize = mSPLDef.BlockSpecialAttributeBlock.FontSize 
+      IF szFontSize != ""
+         szWriteBuffer = szWriteBuffer + " font-size=^" + szFontSize + "^" 
+      END
+      
+      szFontWeight = mSPLDef.BlockSpecialAttributeBlock.FontWeight 
+      IF szFontWeight != ""
+         szWriteBuffer = szWriteBuffer + " font-weight=^" + szFontWeight + "^" 
+      END
+      
+      szMarginTop = mSPLDef.BlockSpecialAttributeBlock.MarginTop 
+      IF szMarginTop != ""
+         szWriteBuffer = szWriteBuffer + " margin-top=^" + szMarginTop + "in^" 
+      END
+      
+      szMarginBottom = mSPLDef.BlockSpecialAttributeBlock.MarginBottom 
+      IF szMarginBottom != ""
+         szWriteBuffer = szWriteBuffer + " margin-bottom=^" + szMarginBottom + "in^" 
+      END
+      
+      szMarginLeft = mSPLDef.BlockSpecialAttributeBlock.MarginLeft 
+      IF szMarginLeft != ""
+         szWriteBuffer = szWriteBuffer + " margin-left=^" + szMarginLeft + "in^" 
+      END
+      
+      szMarginRight = mSPLDef.BlockSpecialAttributeBlock.MarginRight 
+      IF szMarginRight != ""
+         szWriteBuffer = szWriteBuffer + " margin-right=^" + szMarginRight + "in^" 
+      END
+      
+      szTextAlign = mSPLDef.BlockSpecialAttributeBlock.TextAlign 
+      IF szTextAlign != ""
+         szWriteBuffer = szWriteBuffer + " text-align=^" + szTextAlign + "^" 
+      END
+   
+   ELSE
+      szMsg = "AddFormatToSpecialText Error: Could not locate Block Variable = '" + SpecialTextTitle + "'."
+      TraceLineS( "*** ", szMsg )
+      //IssueError( mSPLDef,0,0, szMsg )
+   END
+   
+   // Close the Block.
+   szWriteBuffer = szWriteBuffer + ">" 
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_DFU
+//    Generate both Directions For Use and Marketing
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_DFU( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                 VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                 INTEGER lFile,
+                 STRING ( 32 ) szSPLD_SectionName,
+                 STRING ( 32 ) szStatementName,
+                 STRING ( 32 ) szUsageName,
+                 STRING ( 32 ) szUsageNameScope,
+                 STRING ( 50 ) szPassedBlanks,
+                 STRING ( 32000 ) szWriteBuffer )
+
+   VIEW mSPLDefPanel2 BASED ON LOD mSPLDef
+   STRING ( 32000 )  szStatementText
+   STRING ( 32000 )  szTemporaryText
+   STRING ( 256 )    szStatementTitle
+   STRING ( 50 )     szSectionTitle
+   STRING ( 10 )     szSeparatorCharacters
+   STRING ( 10 )     szNumberedText
+   STRING ( 32 )     szLineHeight
+   STRING ( 10 )     szStatementLeading
+   STRING ( 2 )      szTitleFormat
+   STRING ( 2 )      szStatementFormat
+   STRING ( 1 )      szFoundFirstNumberedEntryFlag
+   STRING ( 50 )     szLeadingBlanks
+   STRING ( 1 )      szContinuationFlag
+   INTEGER           lCnt
+   SHORT             nRC
+
+   // Generate PDF for a "Directions of Use" or "Marketing" Section.
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+   
+   // We need to decide where the Statement Format type is being specified. It was stored in the TemplateSection.StatementFormat
+   // attribute, but the TemplateSection entity is being eliminated. Maybe it should just go with the Block.
+   // The same is true for szSeparatorCharacters = mSPLDef.SPLD_TemplateSection.UsageSeparatorCharacters
+   szStatementFormat     = "SP"
+   szSeparatorCharacters = ", "
+   
+   // Position on correct entity by section Title.
+   szSectionTitle = mSPLDefPanel.Block.LLD_SectionType 
+   SetCursorFirstEntityByString( mSPLDef, szSPLD_SectionName, "Title", szSectionTitle, "" )
+   
+   szTitleFormat = mSPLDefPanel.Block.TitleFormat
+   IF szTitleFormat = ""
+      szTitleFormat = "SL"    // Default will put the Title on a separate line.   
+   END
+   
+   // Format Section Title.
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Section Title", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   " + szSectionTitle
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Format each Statement, with Title, if requested.
+   nRC = SetCursorFirstEntity( mSPLDef, szStatementName, "" )
+   LOOP WHILE nRC >= zCURSOR_SET
+      GetStringFromAttribute( szStatementText, mSPLDef, szStatementName, "Text" )
+      GetStringFromAttribute( szStatementTitle, mSPLDef, szStatementName, "Title" )
+      IF szTitleFormat = "PU"
+         
+         
+   
+      ELSE
+            
+         IF szStatementFormat = "SN"
+      
+            // This will be skipped for now.
+            // SN - Separate Numbered Paragraph
+            // Process each Statement within the Section, indenting any text that follows a number.
+            // We will do this by determining if the first character in the text is a number.
+            // If it is not, we'll simply format as for SP above.
+            // If it is, we'll find the first character after any spaces following the number and indent that text, after the number.
+         
+         
+         END
+      END
+      
+      // Combine Title in text if specified.
+      IF szStatementTitle != "" AND szTitleFormat = "CT"
+         // Title is combined with Text.
+         szTemporaryText = szStatementText
+         szStatementText = szStatementTitle + " " + szTemporaryText
+      ELSE
+         // Format Title, if it exists and is requested.
+         IF szStatementTitle != "" AND szTitleFormat = "SL" 
+            szWriteBuffer = szLeadingBlanks + "   <fo:block "
+            AddFormatToSpecialText( mSPLDefPanel, "Statement Title", szWriteBuffer )
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szLeadingBlanks + "      " + szStatementTitle
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         END
+      END
+      
+      // Process any merged Usage entries.
+      // Directions for Use can have "Usage" words merged into the regular paragraph text. This is managed through the following key words.
+      // {{Usage}} This merges all the Usage statements together in their entity order.
+      // For the following, only that type is merged:
+      //    {{Usage}}
+      //    {{Claim}}
+      //    {{Surface}}
+      //    {{Area Of Use}}
+      //    {{Application Type}}
+      //    {{Product Name}}
+      //    {{Master Product}}
+      //    {{Primary Registrant}}
+      //    {{Subregistrant}}
+      //
+      // We will process this by calling the Operation, MergeUsageParagraph, for each keyword.
+      nRC = CheckExistenceOfEntity( mSPLDef, szUsageName )
+      IF nRC >= zCURSOR_SET
+         InsertUsageWordsIntoString( mSPLDef, szStatementText, 32000, "A", "{{Usage}}", szUsageName, szUsageNameScope, szSeparatorCharacters )
+         InsertUsageWordsIntoString( mSPLDef, szStatementText, 32000, "C", "{{Claim}}", szUsageName, szUsageNameScope, szSeparatorCharacters )
+         InsertUsageWordsIntoString( mSPLDef, szStatementText, 32000, "S", "{{Surface}}", szUsageName, szUsageNameScope, szSeparatorCharacters )
+         InsertUsageWordsIntoString( mSPLDef, szStatementText, 32000, "U", "{{Area Of Use}}", szUsageName, szUsageNameScope, szSeparatorCharacters )
+         InsertUsageWordsIntoString( mSPLDef, szStatementText, 32000, "T", "{{Application Type}}", szUsageName, szUsageNameScope, szSeparatorCharacters )
+      END
+      SetAttributeFromString( mSPLDef, szStatementName, "DisplayText", szStatementText )
+      
+      // If Statement is flagged as Continuation, process as:
+      // If the Statement has Continuation Text, format the regular text here, and set up the Continuation subobject for continuation
+      // on the next Panel for all remaining Statement entities.
+      // If the Statement does NOT have Continuation Text, format this and all remaining Statement entities on next Panel.
+      GetStringFromAttribute( szContinuationFlag, mSPLDef, szStatementName, "ContinuationBreakFlag" )
+      IF szContinuationFlag = ""
+         
+         // Format regular Statement Text.
+         szWriteBuffer = szLeadingBlanks + "   <fo:block "
+         AddFormatToSpecialText( mSPLDefPanel, "Statement Text", szWriteBuffer )
+         WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         
+         szWriteBuffer = szLeadingBlanks + "      " + szStatementText
+         WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         
+         szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+         WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         
+      ELSE
+         
+         // Process Continuation.
+         
+         // Add data to Continuation Block on next Panel, if there is such a Block.
+         CreateViewFromView( mSPLDefPanel2, mSPLDefPanel )
+         NAME VIEW mSPLDefPanel2 "mSPLDefPanel2"
+         SET CURSOR NEXT mSPLDefPanel2.Panel 
+         
+         // Remove any existing Continuation Statements.
+         FOR EACH mSPLDefPanel2.ContinuationStatement 
+            DELETE ENTITY mSPLDefPanel2.ContinuationStatement NONE 
+         END
+         
+         IF mSPLDefPanel2.Block.ContinuationBlockFlag = "Y" 
+            
+            GetStringFromAttribute( szTemporaryText, mSPLDef, szStatementName, "ContinuationText" )
+            IF szTemporaryText != ""
+               
+               // Format regular text and initialize Continuation entry with Continuation Text..
+               szWriteBuffer = szLeadingBlanks + "   <fo:block "
+               AddFormatToSpecialText( mSPLDefPanel, "Statement Text", szWriteBuffer )
+               WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+               
+               szWriteBuffer = szLeadingBlanks + "      " + szStatementText
+               WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+               
+               szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+               WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+               
+               CREATE ENTITY mSPLDefPanel2.ContinuationStatement 
+               mSPLDefPanel2.ContinuationStatement.Text = szTemporaryText
+            ELSE
+            
+               // Initialize Continuation entry with Regular Text.
+               CREATE ENTITY mSPLDefPanel2.ContinuationStatement 
+               IF szStatementTitle != "" AND szTitleFormat = "SL" 
+                  mSPLDefPanel2.ContinuationStatement.Title = szStatementTitle
+               END
+               mSPLDefPanel2.ContinuationStatement.Text = szStatementText
+            END
+            
+            // Copy BlockSpecialAttributeBlock entries.
+            FOR EACH mSPLDefPanel.BlockSpecialSectionAttribute 
+               CREATE ENTITY mSPLDefPanel2.BlockSpecialSectionAttribute 
+               CREATE ENTITY mSPLDefPanel2.BlockSpecialAttributeBlock 
+               SetMatchingAttributesByName( mSPLDefPanel2, "BlockSpecialAttributeBlock", mSPLDefPanel, "BlockSpecialAttributeBlock", zSET_NULL )   
+            END
+            
+            // Add any remaining Statement entries to continuation.
+            nRC = SetCursorNextEntity( mSPLDef, szStatementName, "" )
+            LOOP WHILE nRC >= zCURSOR_SET
+               GetStringFromAttribute( szStatementText, mSPLDef, szStatementName, "Text" )
+               GetStringFromAttribute( szStatementTitle, mSPLDef, szStatementName, "Title" )
+               CREATE ENTITY mSPLDefPanel2.ContinuationStatement 
+               IF szStatementTitle != "" AND szTitleFormat = "SL" 
+                  mSPLDefPanel2.ContinuationStatement.Title = szStatementTitle
+               END
+               mSPLDefPanel2.ContinuationStatement.Text = szStatementText
+               
+               nRC = SetCursorNextEntity( mSPLDef, szStatementName, "" )
+            END
+            
+            // Add the Continuation verbage to the current Panel.
+            szWriteBuffer = szLeadingBlanks + "   <fo:block margin-top=^.05in^>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szLeadingBlanks + "      " + mSPLDef.SPLD_LLD.ContinuationPreviousPageText 
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+            szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+            WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         
+         END
+
+         DropView( mSPLDefPanel2 )
+         
+      END
+      
+      nRC = SetCursorNextEntity( mSPLDef, szStatementName, "" )
+   END
+   
+   // Format for-each for all selected Statements within Section.
+            
+   /*szWriteBuffer = szLeadingBlanks + "<xsl:for-each select=^" + szSPLD_SectionName + "/" + szStatementName + "^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   <fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Statement Title", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <xsl:apply-templates select=^Title^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   <fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Statement Text", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <xsl:apply-templates select=^DisplayText^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</xsl:for-each>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_ClmList3
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_ClmList3( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                      VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                      INTEGER lFile,
+                      STRING ( 256 )   szPassedBlanks,
+                      STRING ( 32000 ) szWriteBuffer )
+
+   VIEW mSPLDef2 BASED ON LOD mSPLDef
+   STRING ( 50 )     szLeadingBlanks
+   STRING ( 50 )     szBreakName1
+   STRING ( 50 )     szBreakName2
+   STRING ( 10 )     szMarginRight
+   STRING ( 10 )     szMarginLeft
+   SHORT             nRC
+   INTEGER           CurrentColumnNumber
+   INTEGER           Count
+   INTEGER           Column1Count
+   INTEGER           Column2Count
+   INTEGER           ColumnTotal
+   DECIMAL           ContainingBlockWidth
+   DECIMAL           ColumnWidth
+   DECIMAL           ColumnHeight
+
+   // Generate PDF for a "Directory of Use" or "Marketing" Section.
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+
+   // LIST3 - 3 Column List of Claim Usage Statements
+   // The dependent Claim Usage statements are to be listed in 3 columns, after any regular Statements
+   // and organized by Claims Classifications.
+   
+   // Remove any existing work entities.
+   FOR EACH mSPLDef.DisplayUsageColumn1 
+      DELETE ENTITY mSPLDef.DisplayUsageColumn1 NONE 
+   END
+   FOR EACH mSPLDef.DisplayUsageColumn2 
+      DELETE ENTITY mSPLDef.DisplayUsageColumn2 NONE 
+   END
+   FOR EACH mSPLDef.DisplayUsageColumn3
+      DELETE ENTITY mSPLDef.DisplayUsageColumn3 NONE 
+   END
+   
+   // Position on the correct Marketing Section.
+   SET CURSOR FIRST mSPLDef.SPLD_MarketingSection WHERE mSPLDef.SPLD_MarketingSection.Title = mSPLDefPanel.Block.BlockTitle  
+   
+   // Add subtitle if it exists.
+   SET CURSOR FIRST mSPLDefPanel.BlockSpecialSectionAttribute WHERE mSPLDefPanel.BlockSpecialSectionAttribute.Name = "Subtitle"
+   IF RESULT >= zCURSOR_SET
+   
+      szWriteBuffer = szLeadingBlanks + "<fo:block "
+      AddFormatToSpecialText( mSPLDefPanel, "Subtitle", szWriteBuffer )
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+      szWriteBuffer = szLeadingBlanks + "   <xsl:value-of select=^SPLD_MarketingSection/Subtitle^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "</fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   END 
+   
+   // Add Market Statement Text values if they exist.
+   SET CURSOR FIRST mSPLDefPanel.BlockSpecialSectionAttribute WHERE mSPLDefPanel.BlockSpecialSectionAttribute.Name = "Marketing Statements"
+   IF RESULT >= zCURSOR_SET
+   
+      szWriteBuffer = szLeadingBlanks + "<fo:block "
+      AddFormatToSpecialText( mSPLDefPanel, "Marketing Statements", szWriteBuffer )
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+            
+      szWriteBuffer = szLeadingBlanks + "   <xsl:value-of select=^SPLD_MarketingSection/SPLD_MarketingStatement/Text^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "</fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   END 
+
+   // Build the three columns subobjects from the SPLD_MarketingOrdering entities.
+   // If specific breaks have been specified, break there. If not, put the same number of entries in each column.
+   IF mSPLDefPanel.Block.UsageColumn1BreakName = ""
+      Count = 0
+      FOR EACH mSPLDef.SPLD_MarketingOrdering
+         IF mSPLDef.SPLD_MarketingUsage.UsageType = "C"
+            Count = Count + 1
+         END
+      END
+      Column1Count = Count / 3
+      ColumnTotal = Column1Count + 3
+      IF ColumnTotal < Count
+         // Since column aren't going to be equal, add one to first and second columns.
+         Column1Count = Column1Count + 1
+         Column2Count = Column1Count * 2
+      END
+      Count = 0
+      FOR EACH mSPLDef.SPLD_MarketingOrdering
+         IF mSPLDef.SPLD_MarketingUsage.UsageType = "C"
+            Count = Count + 1
+            IF Count <= Column1Count
+               CREATE ENTITY mSPLDef.DisplayUsageColumn1 
+               mSPLDef.DisplayUsageColumn1.Name = mSPLDef.SPLD_MarketingUsage.Name 
+            ELSE
+               IF Count > Column1Count AND Count <= Column2Count
+                  CREATE ENTITY mSPLDef.DisplayUsageColumn2 
+                  mSPLDef.DisplayUsageColumn2.Name = mSPLDef.SPLD_MarketingUsage.Name 
+               ELSE
+                  CREATE ENTITY mSPLDef.DisplayUsageColumn3  
+                  mSPLDef.DisplayUsageColumn3.Name = mSPLDef.SPLD_MarketingUsage.Name 
+               END 
+            END
+         END
+      END
+      
+      
+   ELSE
+      // Specific Breaks have been specified.
+      szBreakName1 = mSPLDefPanel.Block.UsageColumn1BreakName 
+      szBreakName2 = mSPLDefPanel.Block.UsageColumn2BreakName 
+      CurrentColumnNumber = 1
+      FOR EACH mSPLDef.SPLD_MarketingOrdering 
+         IF mSPLDef.SPLD_MarketingUsage.UsageType = "C"
+     TraceLineS( "*** szBreakName1: ", szBreakName1 )
+     TraceLineS( "*** szBreakName2: ", szBreakName2 )
+     TraceLineS( "*** Claim Name ", mSPLDef.SPLD_MarketingUsage.Name )
+            IF mSPLDef.SPLD_MarketingUsage.Name = szBreakName1
+       IssueError( mSPLDef,0,0, "Breakname 1" )
+               CurrentColumnNumber = 2
+            ELSE
+               IF mSPLDef.SPLD_MarketingUsage.Name = szBreakName2
+       IssueError( mSPLDef,0,0, "Breakname 2" )
+                  CurrentColumnNumber = 3
+               END
+            END
+            IF CurrentColumnNumber = 1
+               CREATE ENTITY mSPLDef.DisplayUsageColumn1 
+               mSPLDef.DisplayUsageColumn1.Name = mSPLDef.SPLD_MarketingUsage.Name 
+            ELSE
+               IF CurrentColumnNumber = 2
+                  CREATE ENTITY mSPLDef.DisplayUsageColumn2 
+                  mSPLDef.DisplayUsageColumn2.Name = mSPLDef.SPLD_MarketingUsage.Name 
+               ELSE
+                  CREATE ENTITY mSPLDef.DisplayUsageColumn3  
+                  mSPLDef.DisplayUsageColumn3.Name = mSPLDef.SPLD_MarketingUsage.Name 
+               END
+            END
+         END
+      END
+   END
+   
+   // Build the three Blocks listing the entries in each of the three work subobjects.
+   // If there is a Column definition entry, we will get the Top, Width and LeftMargin values from there.
+   // If not, the width of each Block (column) will be one third of the width of the source Block, minus the left margin,
+   // which is from the main block.
+   // We will create a temporary Block, initialized from the source Block, with the modified values for
+   // each of the three columns.
+   
+   CreateViewFromView( mSPLDef2, mSPLDefPanel ) 
+   NAME VIEW mSPLDef2 "mSPLDef2"
+   CREATE ENTITY mSPLDef2.Block 
+   SetMatchingAttributesByName( mSPLDef2, "Block", mSPLDefPanel, "Block", zSET_ALL ) 
+   
+   ContainingBlockWidth = mSPLDefPanel.Block.Width
+   ColumnWidth = ContainingBlockWidth / 3
+   mSPLDef2.Block.Width = ColumnWidth
+   mSPLDef2.Block.Left  = 0
+      
+   SET CURSOR FIRST mSPLDefPanel.BlockSpecialSectionAttribute WHERE mSPLDefPanel.BlockSpecialSectionAttribute.Name = "Column"
+   IF RESULT >= zCURSOR_SET
+      mSPLDef2.Block.Top = mSPLDefPanel.BlockSpecialAttributeBlock.Top 
+      szMarginLeft       = mSPLDefPanel.BlockSpecialAttributeBlock.MarginLeft 
+      szMarginRight      = mSPLDefPanel.BlockSpecialAttributeBlock.MarginRight
+   ELSE
+      
+      mSPLDef2.Block.Top   = 0
+      szMarginLeft  = ".01"
+      szMarginRight = ".01"
+   END
+   ColumnHeight = mSPLDefPanel.Block.Height - mSPLDef2.Block.Top
+   mSPLDef2.Block.Height = ColumnHeight
+   
+   // Generate column 1 Block.
+   FormatBlockContainer( mSPLDef2, mSPLDef, lFile, szLeadingBlanks, szWriteBuffer )
+   
+   szWriteBuffer = szLeadingBlanks + "   <xsl:for-each select=^SPLD_MarketingSection/DisplayUsageColumn1^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <fo:block text-align=^left^ margin-left=^" + szMarginLeft + "in^ margin-right=^" + szMarginRight + "in^>" 
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "         <xsl:value-of select=^Name^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+   szWriteBuffer = szLeadingBlanks + "      </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </xsl:for-each>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block-container>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Generate column 2 Block.
+   mSPLDef2.Block.Left = mSPLDef2.Block.Left + ColumnWidth
+   FormatBlockContainer( mSPLDef2, mSPLDef, lFile, szLeadingBlanks, szWriteBuffer )
+   
+   szWriteBuffer = szLeadingBlanks + "   <xsl:for-each select=^SPLD_MarketingSection/DisplayUsageColumn2^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <fo:block text-align=^left^ margin-left=^" + szMarginLeft + "in^ margin-right=^" + szMarginRight + "in^>" 
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "         <xsl:value-of select=^Name^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+   szWriteBuffer = szLeadingBlanks + "      </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </xsl:for-each>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block-container>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Generate column 3 Block.
+   mSPLDef2.Block.Left = mSPLDef2.Block.Left + ColumnWidth
+   FormatBlockContainer( mSPLDef2, mSPLDef, lFile, szLeadingBlanks, szWriteBuffer )
+   
+   szWriteBuffer = szLeadingBlanks + "   <xsl:for-each select=^SPLD_MarketingSection/DisplayUsageColumn3^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <fo:block text-align=^left^ margin-left=^" + szMarginLeft + "in^ margin-right=^" + szMarginRight + "in^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "         <xsl:value-of select=^Name^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+   szWriteBuffer = szLeadingBlanks + "      </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </xsl:for-each>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block-container>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   DELETE ENTITY mSPLDef2.Block NONE
+   DropView( mSPLDef2 )
+
+   // Build the work object containing each Claim under the appropriate Classification.
+   // Type: C - Claim;  S - Surface;  T - Application Type;  U - Area of Use.
+   // ClaimsClassification: Bacteria; Protozoa; Viruses; Fungi.
+   // First delete any existing entries.
+   FOR EACH mSPLDef.SPLDI_ClaimsClassification 
+      DELETE ENTITY mSPLDef.SPLDI_ClaimsClassification NONE 
+   END
+   FOR EACH mSPLDef.SPLD_MarketingOrdering WHERE mSPLDef.SPLD_MarketingUsage.UsageType = "C" // just looking for Type=Claim
+      SET CURSOR FIRST mSPLDef.SPLDI_ClaimsClassification
+                 WHERE mSPLDef.SPLDI_ClaimsClassification.ClaimsClassification = mSPLDef.SPLD_MarketingUsage.ClaimsClassification
+      IF RESULT < zCURSOR_SET
+         // Did not find the entity of the proper ClaimsClassification, so create one.
+         CREATE ENTITY mSPLDef.SPLDI_ClaimsClassification
+         mSPLDef.SPLDI_ClaimsClassification.ClaimsClassification = mSPLDef.SPLD_MarketingUsage.ClaimsClassification
+         INCLUDE mSPLDef.SPLDI_ClaimsUsage FROM mSPLDef.SPLD_MarketingUsage
+         IF RESULT < 0
+            TraceLineS( "GeneratePDF_ClmList3 Include SPLDI_ClaimsUsage FROM SPLD_MarketingUsage", " ======== CAN'T HAPPEN ===========================" )
+            DisplayEntityInstance( mSPLDef, "SPLDI_ClaimsUsage" )
+            DisplayEntityInstance( mSPLDef, "SPLD_MarketingUsage" )
+            IssueError( mSPLDef, 0, 0, "Include Error" )
+         END
+      ELSE
+         // Check to see if the SPLD_MarketingUsage has already been included under the current ClaimsClassification.
+         SET CURSOR FIRST mSPLDef.SPLDI_ClaimsUsage WHERE mSPLDef.SPLDI_ClaimsUsage.ID = mSPLDef.SPLD_MarketingUsage.ID
+         IF RESULT < zCURSOR_SET
+            // Not already included so set cursor to the last included to include the entity at the end.
+            SET CURSOR LAST mSPLDef.SPLDI_ClaimsUsage
+            INCLUDE mSPLDef.SPLDI_ClaimsUsage FROM mSPLDef.SPLD_MarketingUsage
+            IF RESULT < 0
+               TraceLineS( "GeneratePDF_ClmList3 Include SPLDI_ClaimsUsage FROM SPLD_MarketingUsage", " ===========CAN'T HAPPEN EITHER ========================" )
+               DisplayEntityInstance( mSPLDef, "SPLDI_ClaimsUsage" )
+               DisplayEntityInstance( mSPLDef, "SPLD_MarketingUsage" )
+               IssueError( mSPLDef, 0, 0, "Include Error" )
+            END
+         ELSE
+            TraceLineS( "GeneratePDF_ClmList3 Include SPLDI_ClaimsUsage FROM SPLD_MarketingUsage", " ====== ALREADY INCLUDED ... COULD HAPPEN =============================" )
+         // DisplayEntityInstance( mSPLDef, "SPLDI_ClaimsUsage" )
+            DisplayEntityInstance( mSPLDef, "SPLD_MarketingUsage" )
+         END
+      END
+   END
+   
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_Ingred
+//    Generate Active Ingredients
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_Ingred( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                    VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                    INTEGER lFile,
+                    STRING ( 50 )    szPassedBlanks,
+                    STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 )    szLeadingBlanks
+   STRING ( 512 )   szIngredientsText
+   STRING ( 256 )   szPeriodFiller
+   STRING ( 16 )    szPercent
+
+   // Generate XSL Statements for a "Active Ingredients" Section.
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+
+   SET CURSOR FIRST mSPLDef.SPLD_IngredientsSection
+
+   szWriteBuffer = szLeadingBlanks + "<!-- Incredients Section using Leader -->"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   //FormatBlockContainer( mSPLDef, mSPLDef, lFile, szLeadingBlanks, szWriteBuffer )
+   
+   // Ingredients Title
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Ingredients Title", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   <xsl:value-of select=^SPLD_IngredientsSection/ActiveTitle^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Ingredients Percent
+   // Use XSL Leader for formatting.
+   szWriteBuffer = szLeadingBlanks + "<xsl:for-each select=^SPLD_IngredientsSection/SPLD_IngredientsStatement^>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   <fo:block text-align-last=^justify^"
+   AddFormatToSpecialText( mSPLDefPanel, "Ingredients Items", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <xsl:apply-templates select=^ChemicalName^/>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <fo:leader leader-pattern=^dots^ />"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "      <xsl:value-of select=^Percent^/>%"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   </fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</xsl:for-each>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Inert Percent
+   IF mSPLDef.SPLD_IngredientsSection.GeneralInactivePercent > 0 
+      szWriteBuffer = szLeadingBlanks + "<fo:block text-align-last=^justify^"
+      AddFormatToSpecialText( mSPLDefPanel, "Ingredients Inert", szWriteBuffer )
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "   <xsl:apply-templates select=^SPLD_IngredientsSection/InertTitle^/>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "   <fo:leader leader-pattern=^dots^ />"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "   <xsl:value-of select=^SPLD_IngredientsSection/GeneralInactivePercent^/>%"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      
+      szWriteBuffer = szLeadingBlanks + "</fo:block>"
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   END
+   
+   // Total
+   szWriteBuffer = szLeadingBlanks + "<fo:block text-align-last=^justify^"
+   AddFormatToSpecialText( mSPLDefPanel, "Ingredients Total", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   TOTAL"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   <fo:leader leader-pattern=^dots^ />100%"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Close opening Block.
+   //szWriteBuffer = szLeadingBlanks + "</fo:block-container>"
+   //WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_Content
+//    Generate Net Contents
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_Content( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                     VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                     INTEGER lFile,
+                     STRING ( 50 )    szPassedBlanks,
+                     STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 )    szLeadingBlanks
+   STRING ( 512 )   szNetContentsText
+
+   // Generate PDF for "NetContents".
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+   
+   //szNetContentsText = mSPLDef.SPLD_TemplateSection.TitleOverride
+   IF szNetContentsText = ""
+      szNetContentsText = "Net Contents: One Gallon (3.784 litres)"
+   END
+   
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Net Contents", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   " + szNetContentsText
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_EPA_Reg( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                     VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                     INTEGER lFile,
+                     STRING ( 50 )    szPassedBlanks,
+                     STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 )    szLeadingBlanks
+   STRING ( 32000 ) szStatementText
+   STRING ( 20 )    szEPA_RegNbr
+   STRING ( 20 )    szEPA_EstNbr
+
+   // Generate PDF for EPA Reg. No. and EPA Est. No..
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+
+   SET CURSOR FIRST mSPLDef.SPLD_HumanHazardSection
+
+   szEPA_RegNbr = mSPLDef.SubregProduct.EPA_RegistrationNumber
+   IF szEPA_RegNbr = ""
+      szEPA_RegNbr = "*****"
+   END
+   szEPA_EstNbr = mSPLDef.SubregProduct.EPA_EstablishmentNumber
+   IF szEPA_EstNbr = ""
+      szEPA_EstNbr = "*****"
+   END
+   szStatementText = "EPA Reg. No. " + szEPA_RegNbr + "   EPA Est. No. " + szEPA_EstNbr
+   
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "EPA Reg / Est No.", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   " + szStatementText
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_Hazards
+//    Generate Hazards
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_Hazards( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                     VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                     INTEGER lFile,
+                     STRING ( 50 )    szPassedBlanks,
+                     STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 )   szLeadingBlanks
+   STRING ( 90 )   szChildHazardWarning
+   STRING ( 90 )   szEPA_SignalWord
+   STRING ( 1000 ) szStatementText
+
+   // Generate PDF for each Hazards key word.
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+
+   SET CURSOR FIRST mSPLDef.SPLD_HumanHazardSection
+   GetStringFromAttributeByContext( szChildHazardWarning, mSPLDef, "SPLD_HumanHazardSection", "EPA_ChildHazardWarning", "", 90 )
+   szEPA_SignalWord     = mSPLDef.SPLD_HumanHazardSection.EPA_SignalWord 
+   szStatementText      = mSPLDef.SPLD_HumanHazardSection.dSelectedStatement 
+   
+   // Child Hazard Warning
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Child Hazard Warning", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   " + szChildHazardWarning
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // EPA Signal Word
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "EPA Signal Word", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   " + szEPA_SignalWord
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   // Precautionary Statement
+   szWriteBuffer = szLeadingBlanks + "<fo:block "
+   AddFormatToSpecialText( mSPLDefPanel, "Precautionary Statement", szWriteBuffer )
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "   " + szStatementText
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+   szWriteBuffer = szLeadingBlanks + "</fo:block>"
+   WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+   
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_General
+//    Generate  Precautionary, Environmental/Physical Hazard or First Aid Statements
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_General( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                     VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                     INTEGER lFile,
+                     STRING ( 50 )    szPassedBlanks,
+                     STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 )     szLeadingBlanks
+   STRING ( 32000 )  szStatementText
+   STRING ( 256 )    szCombinedTitle
+   STRING ( 32 )     szLineHeight
+   STRING ( 10 )     szStatementLeading
+
+   // Generate PDF for a "General" Section, which can be Precautionary, Environmental/Physical Hazard or First Aid.
+   
+   /*szLeadingBlanks = szPassedBlanks + "   "
+   szLineHeight = ""
+   szStatementLeading = mSPLDef.SPLD_TemplateSection.dStatementLeading
+   IF szStatementLeading != ""
+      szLineHeight = "line-height:" + szStatementLeading +";"
+   ELSE
+      szStatementLeading = mSPLDef.SPLD_TemplatePanel.dStatementLeadingDefault
+      IF szStatementLeading != ""
+         szLineHeight = "line-height:" + szStatementLeading +";"
+      END
+   END
+   //SET CURSOR FIRST mSPLDef.SPLD_GeneralSection WHERE mSPLDef.SPLD_GeneralSection.ID = mSPLDef.SPLDT_GeneralSection.ID
+// DisplayEntityInstance( mSPLDef, "SPLD_GeneralSection" )
+   GeneratePDF_Title( mSPLDef, lFile, "SPLD_GeneralSection", szCombinedTitle, szWriteBuffer )
+   FOR EACH mSPLDef.SPLD_GeneralStatement
+      szStatementText = szCombinedTitle + mSPLDef.SPLD_GeneralStatement.Text
+      szWriteBuffer = szCombinedTitle + szStatementText
+      IF szLineHeight != ""
+         AddHTML_TagAttribute( mSPLDef, szWriteBuffer, 32000, "p", "style", szLineHeight, zQUOTES, 2 )
+      ELSE
+         AddHTML_TagAttribute( mSPLDef, szWriteBuffer, 32000, "p", "", "", "", 0 )
+      END
+      WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+      szCombinedTitle = ""    // null out any combined Title that was to be included on the first statement
+   END*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GeneratePDF_StorDisp
+//    Generate Storage and Disposal Statements
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+GeneratePDF_StorDisp( VIEW mSPLDef      BASED ON LOD mSPLDef,
+                      VIEW mSPLDefPanel BASED ON LOD mSPLDef,
+                      INTEGER lFile,
+                      STRING ( 32 )    szSectionType,
+                      STRING ( 50 )    szPassedBlanks,
+                      STRING ( 32000 ) szWriteBuffer )
+
+   STRING ( 50 )     szLeadingBlanks
+   STRING ( 32000 )  szStatementText
+   STRING ( 32 )     szType
+   STRING ( 512 )    szCombinedTitle
+   STRING ( 32 )     szLineHeight
+   STRING ( 10 )     szStatementLeading
+
+   // Only generate the section if its Container Volume matches that for the Template.
+
+   // Generate PDF for Storage and Disposal Section.
+   
+   szLeadingBlanks = szPassedBlanks + "   "
+
+   /*szLineHeight = ""
+   szStatementLeading = mSPLDef.SPLD_TemplateSection.dStatementLeading
+   IF szStatementLeading != ""
+      szLineHeight = "line-height:" + szStatementLeading +";"
+   ELSE
+      szStatementLeading = mSPLDef.SPLD_TemplatePanel.dStatementLeadingDefault
+      IF szStatementLeading != ""
+         szLineHeight = "line-height:" + szStatementLeading +";"
+      END
+   END
+   SET CURSOR FIRST mSPLDef.SPLD_StorageDisposalSection WHERE mSPLDef.SPLD_StorageDisposalSection.ID = mSPLDef.SPLDT_StorageDisposalSection.ID
+// DisplayEntityInstance( mSPLDef, "SPLD_StorageDisposalSection" )
+   szType = mSPLDef.SPLD_StorageDisposalSection.SDSectionType
+   IF szType = szSectionType
+      GeneratePDF_Title( mSPLDef, lFile, "SPLD_StorageDisposalSection", szCombinedTitle, szWriteBuffer )
+      FOR EACH mSPLDef.SPLD_StorageDisposalStatement
+         szStatementText = szCombinedTitle + mSPLDef.SPLD_StorageDisposalStatement.Text
+         szWriteBuffer = szCombinedTitle + szStatementText
+         IF szLineHeight != ""
+            AddHTML_TagAttribute( mSPLDef, szWriteBuffer, 32000, "p", "style", szLineHeight, zQUOTES, 2 )
+         ELSE
+            AddHTML_TagAttribute( mSPLDef, szWriteBuffer, 32000, "p", "", "", "", 0 )
+         END
+         WL_QC( mSPLDef, lFile, szWriteBuffer, "^", 0 )
+         szCombinedTitle = ""    // null out any combined Title that was to be included on the first statement
+      END
+   END*/
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildSPLD_FromSLC
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildSPLD_FromSLC( VIEW NewSPLD   BASED ON LOD mSPLDef,
+                   VIEW SourceSLC BASED ON LOD mSubLC )
+
+   VIEW mSPLDef2 BASED ON LOD mSPLDef
+
+// IssueError( NewSLC, 0, 0, "Start of Build SPLD" )
+
+   // Build a new SPLD from the selected Subregistrant Label Content entry.
+
+   // Tie back to SLC.
+   IF NewSPLD.SubregLabelContent DOES NOT EXIST
+      INCLUDE NewSPLD.SubregLabelContent FROM SourceSLC.SubregLabelContent
+   END
+
+   IF NewSPLD.MasterLabelContent DOES NOT EXIST
+      INCLUDE NewSPLD.MasterLabelContent FROM SourceSLC.MasterLabelContent
+   END
+
+   // Usage Entries ... Surface, Application Type, Area of Use, Organism Claim
+   FOR EACH SourceSLC.S_Usage
+      // Check for duplicates.
+   // IF SourceSLC.S_Usage.Selected = "Y"  we want all usages (at least for the moment)!!!
+         SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.UsageType = SourceSLC.S_Usage.UsageType
+                                               AND NewSPLD.SPLD_Usage.Name = SourceSLC.S_Usage.Name
+         IF RESULT < zCURSOR_SET
+            SET CURSOR LAST NewSPLD.SPLD_Usage
+            CREATE ENTITY NewSPLD.SPLD_Usage
+            SetMatchingAttributesByName( NewSPLD, "SPLD_Usage", SourceSLC, "S_Usage", zSET_NULL )
+         END
+   // END
+   END
+
+   // General Section ... Precautionary, First Aid, Other Hazard
+   FOR EACH SourceSLC.S_GeneralSection
+   // IF SourceSLC.S_GeneralSection.Selected = "Y"  we want 'em all
+         CREATE ENTITY NewSPLD.SPLD_GeneralSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_GeneralSection", SourceSLC, "S_GeneralSection", zSET_NULL )
+         INCLUDE NewSPLD.S_GeneralSection FROM SourceSLC.S_GeneralSection
+         FOR EACH SourceSLC.S_GeneralStatement
+            CREATE ENTITY NewSPLD.SPLD_GeneralStatement
+            SetMatchingAttributesByName( NewSPLD, "SPLD_GeneralStatement", SourceSLC, "S_GeneralStatement", zSET_NULL )
+            INCLUDE NewSPLD.S_GeneralStatement FROM SourceSLC.S_GeneralStatement
+         END
+   // END
+   END
+
+   // Ingredients Section
+   FOR EACH SourceSLC.S_IngredientsSection
+   // IF SourceSLC.S_IngredientsSection.Selected = "Y"  we want all ingredients!!!
+         CREATE ENTITY NewSPLD.SPLD_IngredientsSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_IngredientsSection", SourceSLC, "S_IngredientsSection", zSET_NULL )
+         INCLUDE NewSPLD.S_IngredientsSection FROM SourceSLC.S_IngredientsSection
+         FOR EACH SourceSLC.S_IngredientsStatement
+            CREATE ENTITY NewSPLD.SPLD_IngredientsStatement
+            SetMatchingAttributesByName( NewSPLD, "SPLD_IngredientsStatement", SourceSLC, "S_IngredientsStatement", zSET_NULL )
+            INCLUDE NewSPLD.S_IngredientsStatement FROM SourceSLC.S_IngredientsStatement
+         END
+   // END
+   END
+
+   // StorageDisposal Section
+   FOR EACH SourceSLC.S_StorageDisposalSection
+      //IF SourceSLC.S_StorageDisposalSection.Selected = "Y"  we want all storage/disposal!!!
+         CREATE ENTITY NewSPLD.SPLD_StorageDisposalSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_StorageDisposalSection", SourceSLC, "S_StorageDisposalSection", zSET_NULL )
+         INCLUDE NewSPLD.S_StorageDisposalSection FROM SourceSLC.S_StorageDisposalSection
+         FOR EACH SourceSLC.S_StorageDisposalStatement
+            CREATE ENTITY NewSPLD.SPLD_StorageDisposalStatement
+            SetMatchingAttributesByName( NewSPLD, "SPLD_StorageDisposalStatement", SourceSLC, "S_StorageDisposalStatement", zSET_NULL )
+            INCLUDE NewSPLD.S_StorageDisposalStatement FROM SourceSLC.S_StorageDisposalStatement
+         END
+      //END
+   END
+
+   // DirectionsForUse Section
+   FOR EACH SourceSLC.S_DirectionsForUseSection
+      IF SourceSLC.S_DirectionsForUseSection.Selected = "Y"  // get only those selected
+         CREATE ENTITY NewSPLD.SPLD_DirectionsForUseSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_DirectionsForUseSection", SourceSLC, "S_DirectionsForUseSection", zSET_NULL )
+         INCLUDE NewSPLD.S_DirectionsForUseSection FROM SourceSLC.S_DirectionsForUseSection
+         FOR EACH SourceSLC.S_DirectionsForUseStatement
+            CREATE ENTITY NewSPLD.SPLD_DirectionsForUseStatement
+            SetMatchingAttributesByName( NewSPLD, "SPLD_DirectionsForUseStatement", SourceSLC, "S_DirectionsForUseStatement", zSET_NULL )
+            INCLUDE NewSPLD.S_DirectionsForUseStatement FROM SourceSLC.S_DirectionsForUseStatement
+         END
+
+         FOR EACH SourceSLC.S_DirectionsUsage WITHIN SourceSLC.S_DirectionsForUseSection
+            SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.UsageType = SourceSLC.S_DirectionsUsage.UsageType
+                                                  AND NewSPLD.SPLD_Usage.Name = SourceSLC.S_DirectionsUsage.Name
+            IF RESULT >= zCURSOR_SET
+               // Check duplicates.
+               SET CURSOR FIRST NewSPLD.SPLD_OriginalDirectionsUsage WHERE NewSPLD.SPLD_OriginalDirectionsUsage.UsageType = SourceSLC.S_DirectionsUsage.UsageType
+                                                                       AND NewSPLD.SPLD_OriginalDirectionsUsage.Name = SourceSLC.S_DirectionsUsage.Name
+               IF RESULT < zCURSOR_SET
+                  CREATE ENTITY NewSPLD.SPLD_DirectionsOrdering
+                  INCLUDE NewSPLD.SPLD_DirectionsUsage         FROM NewSPLD.SPLD_Usage
+                  CREATE ENTITY NewSPLD.SPLD_OriginalDirectionsOrdering
+                  INCLUDE NewSPLD.SPLD_OriginalDirectionsUsage FROM NewSPLD.SPLD_Usage
+               END
+            END
+         END
+      END
+   END
+
+   // DirectionsForUse Usage
+   FOR EACH SourceSLC.S_DirectionsForUseSection
+      IF SourceSLC.S_DirectionsForUseSection.Selected = "Y"  // get only those selected
+         SET CURSOR FIRST NewSPLD.SPLD_DirectionsForUseSection
+                    WHERE NewSPLD.SPLD_DirectionsForUseSection.Title = SourceSLC.S_DirectionsForUseSection.Title
+         FOR EACH SourceSLC.S_DirectionsUsage WITHIN SourceSLC.S_DirectionsForUseSection
+            CreateViewFromView( mSPLDef2, NewSPLD )
+            SET CURSOR FIRST mSPLDef2.SPLD_DirectionsUsage WITHIN mSPLDef2.SPLD_DirectionsForUseSection
+                       WHERE mSPLDef2.SPLD_DirectionsUsage.UsageType = SourceSLC.S_DirectionsUsage.UsageType
+                         AND mSPLDef2.SPLD_DirectionsUsage.Name = SourceSLC.S_DirectionsUsage.Name
+            IF RESULT < zCURSOR_SET
+               SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.Name = SourceSLC.S_DirectionsUsage.Name
+                                                     AND NewSPLD.SPLD_Usage.UsageType = SourceSLC.S_DirectionsUsage.UsageType
+               IF RESULT < zCURSOR_SET
+                  IssueError( NewSPLD, 0, 0, "Programming Error 1" )
+               END
+
+               CREATE ENTITY NewSPLD.SPLD_DirectionsOrdering
+               INCLUDE NewSPLD.SPLD_DirectionsUsage FROM NewSPLD.SPLD_Usage
+            END
+
+            DropView( mSPLDef2 )
+         END
+      END
+   END
+
+   // Marketing Section
+   FOR EACH SourceSLC.S_MarketingSection
+      IF SourceSLC.S_MarketingSection.Selected = "Y"  // get only those selected
+         CREATE ENTITY NewSPLD.SPLD_MarketingSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_MarketingSection", SourceSLC, "S_MarketingSection", zSET_NULL )
+         INCLUDE NewSPLD.S_MarketingSection FROM SourceSLC.S_MarketingSection
+         FOR EACH SourceSLC.S_MarketingStatement
+            CREATE ENTITY NewSPLD.SPLD_MarketingStatement
+            SetMatchingAttributesByName( NewSPLD, "SPLD_MarketingStatement", SourceSLC, "S_MarketingStatement", zSET_NULL )
+            INCLUDE NewSPLD.S_MarketingStatement FROM SourceSLC.S_MarketingStatement
+         END
+
+         FOR EACH SourceSLC.S_MarketingUsage WITHIN SourceSLC.S_MarketingSection
+            SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.UsageType = SourceSLC.S_MarketingUsage.UsageType
+                                                  AND NewSPLD.SPLD_Usage.Name = SourceSLC.S_MarketingUsage.Name
+            IF RESULT >= zCURSOR_SET
+               // Check duplicates.
+               SET CURSOR FIRST NewSPLD.SPLD_OriginalMarketingUsage WHERE NewSPLD.SPLD_OriginalMarketingUsage.UsageType = SourceSLC.S_MarketingUsage.UsageType
+                                                                      AND NewSPLD.SPLD_OriginalMarketingUsage.Name = SourceSLC.S_MarketingUsage.Name
+               IF RESULT < zCURSOR_SET
+                  CREATE ENTITY NewSPLD.SPLD_MarketingOrdering
+                  INCLUDE NewSPLD.SPLD_MarketingUsage         FROM NewSPLD.SPLD_Usage
+                  CREATE ENTITY NewSPLD.SPLD_OriginalMarketingOrdering
+                  INCLUDE NewSPLD.SPLD_OriginalMarketingUsage FROM NewSPLD.SPLD_Usage
+               END
+            END
+         END
+      END
+   END
+
+   // Marketing Usage
+   FOR EACH SourceSLC.S_MarketingSection
+      IF SourceSLC.S_MarketingSection.Selected = "Y"  // get only those selected
+         SET CURSOR FIRST NewSPLD.SPLD_MarketingSection
+                    WHERE NewSPLD.SPLD_MarketingSection.Title = SourceSLC.S_MarketingSection.Title
+         FOR EACH SourceSLC.S_MarketingUsage WITHIN SourceSLC.S_MarketingSection
+            CreateViewFromView( mSPLDef2, NewSPLD )
+            SET CURSOR FIRST mSPLDef2.SPLD_MarketingUsage WITHIN mSPLDef2.SPLD_MarketingSection
+                       WHERE mSPLDef2.SPLD_MarketingUsage.UsageType = SourceSLC.S_MarketingUsage.UsageType
+                         AND mSPLDef2.SPLD_MarketingUsage.Name = SourceSLC.S_MarketingUsage.Name
+            IF RESULT < zCURSOR_SET
+               SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.Name = SourceSLC.S_MarketingUsage.Name
+                                                     AND NewSPLD.SPLD_Usage.UsageType = SourceSLC.S_MarketingUsage.UsageType
+               IF RESULT < zCURSOR_SET
+                  IssueError( NewSPLD, 0, 0, "Programming Error 2" )
+               END
+
+               CREATE ENTITY NewSPLD.SPLD_MarketingOrdering
+               INCLUDE NewSPLD.SPLD_MarketingUsage FROM NewSPLD.SPLD_Usage
+            END
+
+            DropView( mSPLDef2 )
+         END
+      END
+   END
+
+   // HumanHazard Section
+   FOR EACH SourceSLC.S_HumanHazardSection
+   // IF SourceSLC.S_HumanHazardSection.Selected = "Y"  we want all human hazards!!!
+         CREATE ENTITY NewSPLD.SPLD_HumanHazardSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_HumanHazardSection", SourceSLC, "S_HumanHazardSection", zSET_NULL )
+         INCLUDE NewSPLD.S_HumanHazardSection FROM SourceSLC.S_HumanHazardSection
+   // END
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildSPLD_Template
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildSPLD_Template( VIEW mSPLDef  BASED ON LOD mSPLDef,
+                    INTEGER TemplID )
+
+   /*VIEW mTempl BASED ON LOD mTempl
+   STRING ( 32 ) szSectionType
+   STRING ( 32 ) szType
+   STRING ( 1 )  szMarketingProcessedFlag
+   STRING ( 1 )  szDirectionsProcessedFlag
+   // Build SPLD Components (subobject SPLD_Template) from a Template.
+   ACTIVATE mTempl WHERE mTempl.Template.ID = TemplID
+   NAME VIEW mTempl "mTempl"
+   // Delete any current structure.
+   IF mSPLDef.SPLD_Template EXISTS
+      DELETE ENTITY mSPLDef.SPLD_Template
+   END
+   // Build basic Template structure, without ties to Sections.
+   CREATE ENTITY mSPLDef.SPLD_Template
+   SetMatchingAttributesByName( mSPLDef, "SPLD_Template", mTempl, "Template", zSET_NULL )
+   FOR EACH mTempl.TemplatePanel
+      CREATE ENTITY mSPLDef.SPLD_TemplatePanel
+      SetMatchingAttributesByName( mSPLDef, "SPLD_TemplatePanel", mTempl, "TemplatePanel", zSET_NULL )
+      FOR EACH mTempl.TemplateGroup
+         CREATE ENTITY mSPLDef.SPLD_TemplateGroup
+         SetMatchingAttributesByName( mSPLDef, "SPLD_TemplateGroup", mTempl, "TemplateGroup", zSET_NULL )
+         FOR EACH mTempl.TemplateSection
+            CREATE ENTITY mSPLDef.SPLD_TemplateSection
+            SetMatchingAttributesByName( mSPLDef, "SPLD_TemplateSection", mTempl, "TemplateSection", zSET_NULL )
+         END
+      END
+   END
+   szMarketingProcessedFlag = ""
+   szDirectionsProcessedFlag = ""
+   // Next, create relationships to Sections for General, Ingredients and Storage Disposal.
+   // Also, put all Directions for Use Sections under the first SPLD_TemplateSection that is for DirectionsForUse.
+   // Note that we will not tie Marketing Sections to the Template structure.
+   FOR EACH mSPLDef.SPLD_TemplateSection WITHIN mSPLDef.SPLD_Template
+      szSectionType = mSPLDef.SPLD_TemplateSection.TSectionType
+      TraceLineS( "BuildSPLD_Template: ", szSectionType )
+      // Precautionary, Physical Hazard and First Aid.
+      IF szSectionType = "Precautionary"
+         SET CURSOR FIRST mSPLDef.SPLD_GeneralSection WHERE mSPLDef.SPLD_GeneralSection.SectionType = "P" // P is Precautionary
+         IF RESULT >= zCURSOR_SET
+            INCLUDE mSPLDef.SPLDT_GeneralSection FROM mSPLDef.SPLD_GeneralSection
+         END
+      ELSE
+      IF szSectionType = "OtherHazard" // Environmental and Physical Hazard
+         SET CURSOR FIRST mSPLDef.SPLD_GeneralSection WHERE mSPLDef.SPLD_GeneralSection.SectionType = "E" // E is Environmental/Physical Hazard
+         IF RESULT >= zCURSOR_SET
+            INCLUDE mSPLDef.SPLDT_GeneralSection FROM mSPLDef.SPLD_GeneralSection
+         END
+      ELSE
+      IF szSectionType = "FirstAid"
+         SET CURSOR FIRST mSPLDef.SPLD_GeneralSection WHERE mSPLDef.SPLD_GeneralSection.SectionType = "F" // F is First Aid
+         IF RESULT >= zCURSOR_SET
+            INCLUDE mSPLDef.SPLDT_GeneralSection FROM mSPLDef.SPLD_GeneralSection
+         END
+      ELSE
+         // Ingredients
+         IF szSectionType = "Ingredients"
+            FOR EACH mSPLDef.SPLD_IngredientsSection
+               INCLUDE mSPLDef.SPLDT_IngredientsSection FROM mSPLDef.SPLD_IngredientsSection
+            END
+         ELSE
+            // Storage & Disposal
+            IF szSectionType = "Storage" OR
+               szSectionType = "Disposal" OR
+               szSectionType = "ContainerDisposal" OR
+               szSectionType = "StorageDisposal1" OR
+               szSectionType = "StorageDisposal2"
+               FOR EACH mSPLDef.SPLD_StorageDisposalSection
+                  szType = mSPLDef.SPLD_StorageDisposalSection.SDSectionType
+                  IF szType = szSectionType OR szType = ""
+                     INCLUDE mSPLDef.SPLDT_StorageDisposalSection FROM mSPLDef.SPLD_StorageDisposalSection
+                  END
+               END
+            ELSE
+               // Human Hazard
+               IF szSectionType = "HumanHazard"
+               ELSE
+                  // Marketing ... only do for first Marketing Section
+                  IF szSectionType = "Marketing"
+                     IF szMarketingProcessedFlag = ""
+                        FOR EACH mSPLDef.SPLD_MarketingSection
+                           INCLUDE mSPLDef.SPLDT_MarketingSection FROM mSPLDef.SPLD_MarketingSection
+                        END
+                        szMarketingProcessedFlag = "Y"
+                     END
+                  ELSE
+                     // Directions for Use ... only do for first DirectionsForUse Section
+                     IF szSectionType = "DirectionsForUse"
+                        IF szDirectionsProcessedFlag = ""
+                           FOR EACH mSPLDef.SPLD_DirectionsForUseSection
+                              INCLUDE mSPLDef.SPLDT_DirectionsForUseSection FROM mSPLDef.SPLD_DirectionsForUseSection
+                           END
+                           szDirectionsProcessedFlag = "Y"
+                        END
+                     END
+                  END
+               END
+            END
+         END
+      END
+      END
+      END
+   END*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildSPLD_FromSPLD
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildSPLD_FromSPLD( VIEW NewSPLD    BASED ON LOD mSPLDef,
+                    VIEW SourceSPLD BASED ON LOD mSPLDef,
+                    VIEW ParentSLC  BASED ON LOD mSubLC )
+
+   // Build an new SPLD from a previous SPLD.
+   // Most of the component construction is the same as that in BuildSPLD_FromSLC, or nearly
+   // the same. Only the Marketing Section is completely driven from the source SPLD. These are
+   // explained for each section below.
+
+   // Set root attributes and tie back to Parent SLC.
+   SetMatchingAttributesByName( NewSPLD, "SubregPhysicalLabelDef", SourceSPLD, "SubregPhysicalLabelDef", zSET_NULL )
+   INCLUDE NewSPLD.SubregLabelContent FROM ParentSLC.SubregLabelContent
+
+   // Usage Entries.
+   // Usage Entries come from original SPLD. Only those in ParentSLC, however, are used to create Usages in the new SPLD.
+   FOR EACH SourceSPLD.SPLD_Usage
+      SET CURSOR FIRST ParentSLC.S_Usage WHERE ParentSLC.S_Usage.UsageType = SourceSPLD.SPLD_Usage.UsageType
+                                           AND ParentSLC.S_Usage.Name = SourceSPLD.SPLD_Usage.Name
+      IF RESULT >= zCURSOR_SET
+         CREATE ENTITY NewSPLD.SPLD_Usage
+         SetMatchingAttributesByName( NewSPLD, "SPLD_Usage", ParentSLC, "S_Usage", zSET_NULL )
+      END
+   END
+
+   // General Section
+   // Build from SLC, same as in BuildSPLD_FromSLC.
+   FOR EACH ParentSLC.S_GeneralSection
+      CREATE ENTITY NewSPLD.SPLD_GeneralSection
+      SetMatchingAttributesByName( NewSPLD, "SPLD_GeneralSection", ParentSLC, "S_GeneralSection", zSET_NULL )
+      INCLUDE NewSPLD.S_GeneralSection FROM ParentSLC.S_GeneralSection
+      FOR EACH ParentSLC.S_GeneralStatement
+         CREATE ENTITY NewSPLD.SPLD_GeneralStatement
+         SetMatchingAttributesByName( NewSPLD, "SPLD_GeneralStatement", ParentSLC, "S_GeneralStatement", zSET_NULL )
+         INCLUDE NewSPLD.S_GeneralStatement FROM ParentSLC.S_GeneralStatement
+      END
+   END
+
+   // Ingredients Section
+   // Build from SLC, same as in BuildSPLD_FromSLC.
+   FOR EACH ParentSLC.S_IngredientsSection
+      CREATE ENTITY NewSPLD.SPLD_IngredientsSection
+      SetMatchingAttributesByName( NewSPLD, "SPLD_IngredientsSection", ParentSLC, "S_IngredientsSection", zSET_NULL )
+      INCLUDE NewSPLD.S_IngredientsSection FROM ParentSLC.S_IngredientsSection
+      FOR EACH ParentSLC.S_IngredientsStatement
+         CREATE ENTITY NewSPLD.SPLD_IngredientsStatement
+         SetMatchingAttributesByName( NewSPLD, "SPLD_IngredientsStatement", ParentSLC, "S_IngredientsStatement", zSET_NULL )
+         INCLUDE NewSPLD.S_IngredientsStatement FROM ParentSLC.S_IngredientsStatement
+      END
+   END
+
+   // StorageDisposal Section
+   // Build from SLC, same as in BuildSPLD_FromSLC, except that the container size is driven from the source SPLD.
+   SET CURSOR FIRST ParentSLC.S_StorageDisposalSection WHERE ParentSLC.S_StorageDisposalSection.ContainerVolume = SourceSPLD.SPLD_StorageDisposalSection.ContainerVolume
+   CREATE ENTITY NewSPLD.SPLD_StorageDisposalSection
+   SetMatchingAttributesByName( NewSPLD, "SPLD_StorageDisposalSection", ParentSLC, "S_StorageDisposalSection", zSET_NULL )
+   INCLUDE NewSPLD.S_StorageDisposalSection FROM ParentSLC.S_StorageDisposalSection
+   FOR EACH ParentSLC.S_StorageDisposalStatement
+      CREATE ENTITY NewSPLD.SPLD_StorageDisposalStatement
+      SetMatchingAttributesByName( NewSPLD, "SPLD_StorageDisposalStatement", ParentSLC, "S_StorageDisposalStatement", zSET_NULL )
+      INCLUDE NewSPLD.S_StorageDisposalStatement FROM ParentSLC.S_StorageDisposalStatement
+   END
+
+   // DirectionsForUse Section
+   // Build from SLC, same as in BuildSPLD_FromSLC, except that the Directions sections selected are driven by the Usages from
+   // the source SPLD, which have already be copied to new SPLD..
+   FOR EACH ParentSLC.S_DirectionsForUseSection
+      CREATE ENTITY NewSPLD.SPLD_DirectionsForUseSection
+      SetMatchingAttributesByName( NewSPLD, "SPLD_DirectionsForUseSection", ParentSLC, "S_DirectionsForUseSection", zSET_NULL )
+      INCLUDE NewSPLD.S_DirectionsForUseSection FROM ParentSLC.S_DirectionsForUseSection
+      FOR EACH ParentSLC.S_DirectionsForUseStatement
+         CREATE ENTITY NewSPLD.SPLD_DirectionsForUseStatement
+         SetMatchingAttributesByName( NewSPLD, "SPLD_DirectionsForUseStatement", ParentSLC, "S_DirectionsForUseStatement", zSET_NULL )
+         INCLUDE NewSPLD.S_DirectionsForUseStatement FROM ParentSLC.S_DirectionsForUseStatement
+      END
+      // Add each Usage from the SLC that is one of the Usages in new the SPLD.
+      FOR EACH ParentSLC.S_DirectionsUsage WITHIN ParentSLC.S_DirectionsForUseSection
+         SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.UsageType = ParentSLC.S_DirectionsUsage.UsageType
+                                               AND NewSPLD.SPLD_Usage.Name = ParentSLC.S_DirectionsUsage.Name
+         IF RESULT >= zCURSOR_SET
+            CREATE ENTITY NewSPLD.SPLD_DirectionsOrdering
+            INCLUDE NewSPLD.SPLD_DirectionsUsage FROM NewSPLD.SPLD_Usage
+         END
+      END
+   END
+
+   // Now delete any "NON General" Directions for Use that have no Usages remaining.
+   FOR EACH NewSPLD.SPLD_DirectionsForUseSection WHERE NewSPLD.SPLD_DirectionsForUseSection.GeneralUse != "Y"
+      IF NewSPLD.SPLD_DirectionsUsage DOES NOT EXIST
+         DELETE ENTITY NewSPLD.SPLD_DirectionsForUseSection NONE
+      END
+   END
+
+   // Marketing Section
+   // These are driven  from the original SPLD. We progress from the original SPLD to its SLC, then to the S_MarketingSection of the
+   // new SLC and generate the new SPLD Marketing Section from the S_MarketingSection of the new SLC.
+   // Note that we won't recreate a Marketing Section that is not in the new SLC.
+   FOR EACH SourceSPLD.SPLD_MarketingSection
+      SET CURSOR FIRST ParentSLC.SP_MarketingSection WITHIN ParentSLC.SubregLabelContent
+                 WHERE ParentSLC.SP_MarketingSection.ID = SourceSPLD.S_MarketingSection.ID
+      IF RESULT >= zCURSOR_SET
+         CREATE ENTITY NewSPLD.SPLD_MarketingSection
+         SetMatchingAttributesByName( NewSPLD, "SPLD_MarketingSection", ParentSLC, "S_MarketingSection", zSET_NULL )
+         INCLUDE NewSPLD.S_MarketingSection FROM ParentSLC.S_MarketingSection
+         FOR EACH ParentSLC.S_MarketingStatement
+            CREATE ENTITY NewSPLD.SPLD_MarketingStatement
+            SetMatchingAttributesByName( NewSPLD, "SPLD_MarketingStatement", ParentSLC, "S_MarketingStatement", zSET_NULL )
+            INCLUDE NewSPLD.S_MarketingStatement FROM ParentSLC.S_MarketingStatement
+         END
+
+         // Add each Usage from the SLC that is one of the Usages in new the SPLD.
+         // They are handled the same as for Marketing For Use above.
+         FOR EACH ParentSLC.S_MarketingUsage WITHIN ParentSLC.S_MarketingSection
+            SET CURSOR FIRST NewSPLD.SPLD_Usage WHERE NewSPLD.SPLD_Usage.UsageType = ParentSLC.S_MarketingUsage.UsageType
+                                                  AND NewSPLD.SPLD_Usage.Name = ParentSLC.S_MarketingUsage.Name
+            IF RESULT >= zCURSOR_SET
+               CREATE ENTITY NewSPLD.SPLD_MarketingOrdering
+               INCLUDE NewSPLD.SPLD_MarketingUsage FROM NewSPLD.SPLD_Usage
+            END
+         END
+      END
+   END
+
+   // HumanHazard Section
+   // Build from SLC, same as in BuildSPLD_FromSLC.
+   FOR EACH ParentSLC.S_HumanHazardSection
+      CREATE ENTITY NewSPLD.SPLD_HumanHazardSection
+      SetMatchingAttributesByName( NewSPLD, "SPLD_HumanHazardSection", ParentSLC, "S_HumanHazardSection", zSET_NULL )
+      INCLUDE NewSPLD.S_HumanHazardSection FROM ParentSLC.S_HumanHazardSection
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameLFM
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameLFM( VIEW mSPLDef BASED ON LOD mSPLDef,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_LastFirstMiddle( mSPLDef, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: dFullNameFML
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullNameFML( VIEW mSPLDef BASED ON LOD mSPLDef,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+        PersonName_FirstMiddleLast( mSPLDef, InternalEntityStructure,
+                                    InternalAttribStructure, GetOrSetFlag )
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dPrimRegNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dPrimRegNameID( VIEW mSPLDef BASED ON LOD mSPLDef,
+                STRING ( 32 ) InternalEntityStructure,
+                STRING ( 32 ) InternalAttribStructure,
+                SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSPLDef.Organization EXISTS
+         szString = mSPLDef.Organization.Name
+         IF mSPLDef.PrimaryRegistrant.EPA_CompanyNumber != ""
+            szString = szString + " (" +
+                       mSPLDef.PrimaryRegistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSPLDef,
+                            InternalEntityStructure, InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregNameID( VIEW mSPLDef BASED ON LOD mSPLDef,
+               STRING ( 32 ) InternalEntityStructure,
+               STRING ( 32 ) InternalAttribStructure,
+               SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSPLDef.SubregOrganization EXISTS
+         szString = mSPLDef.SubregOrganization.Name
+         IF mSPLDef.Subregistrant.EPA_CompanyNumber != ""
+            szString = szString + " (" +
+                       mSPLDef.Subregistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSPLDef,
+                            InternalEntityStructure, InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dIngredientName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dIngredientName( VIEW mSPLDef BASED ON LOD mSPLDef,
+                 STRING ( 32 ) InternalEntityStructure,
+                 STRING ( 32 ) InternalAttribStructure,
+                 SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSPLDef.S_IngredientsStatement EXISTS
+         szString = mSPLDef.SPLD_IngredientsStatement.CommonName
+      IF szString = ""
+            szString = mSPLDef.SPLD_IngredientsStatement.ChemicalName
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSPLDef,
+                            InternalEntityStructure, InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dPanelName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dPanelName( VIEW mSPLDef BASED ON LOD mSPLDef,
+            STRING ( 32 ) InternalEntityStructure,
+            STRING ( 32 ) InternalAttribStructure,
+            SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szPanelName
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Currently the Panel Name is just the "panel" + Panel Number.
+   szPanelName = "Panel"
+   //szPanelName = szPanelName + mSPLDef.SPLD_TemplatePanel.wSequentialPanelNumber
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mSPLDef,
+                        InternalEntityStructure, InternalAttribStructure, szPanelName )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProductNameNbr( VIEW mSPLDef BASED ON LOD mSPLDef,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSPLDef.MasterProduct  EXISTS
+         szString = mSPLDef.MasterProduct.Name + " (" +
+                    mSPLDef.PrimaryRegistrant.EPA_CompanyNumber + "-" +
+                    mSPLDef.MasterProduct.Number + ")"
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSPLDef,
+                            InternalEntityStructure, InternalAttribStructure, szString )
+       RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSubregProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSubregProductNameNbr( VIEW mSPLDef BASED ON LOD mSPLDef,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+       szString = mSPLDef.SubregProduct.Name
+       IF mSPLDef.SubregProduct.Number != 0
+          szString = szString + " (" + mSPLDef.SubregProduct.Number + ")"
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord( mSPLDef,
+                            InternalEntityStructure, InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dFullHazardStatement
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dFullHazardStatement( VIEW mSPLDef BASED ON LOD mSPLDef,
+                      STRING ( 32 ) InternalEntityStructure,
+                      STRING ( 32 ) InternalAttribStructure,
+                      SHORT GetOrSetFlag )
+
+   STRING ( 256 ) szString
+   STRING ( 256 ) szReplaceString
+   STRING ( 256 ) szLocation
+   SHORT nPosStart
+   SHORT nPosEnd
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mSPLDef.SPLD_HumanHazardSection  EXISTS
+
+         szString = mSPLDef.SPLD_HumanHazardSection.PrecautionaryStatement
+         nPosStart  = zSearchSubString( szString, "{{Precautionary Position}}", "f", 0 )
+         IF nPosStart >= 0
+
+            nPosEnd = nPosStart + 26 // length of "{{Precautionary Position}}"
+            szReplaceString = ""
+            szLocation = mSPLDef.SPLD_HumanHazardSection.Location1
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSPLDef.SPLD_HumanHazardSection.Location2
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSPLDef.SPLD_HumanHazardSection.Location3
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSPLDef.SPLD_HumanHazardSection.Location4
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            szLocation = mSPLDef.SPLD_HumanHazardSection.Location5
+            IF szLocation != ""
+               szReplaceString = szReplaceString + "[" + szLocation + "]"
+            END
+
+            zReplaceSubString( szString, nPosStart, nPosEnd, szReplaceString )
+         END
+
+      ELSE
+         szString = ""
+      END
+
+      // Store the calculated value in the object.
+      StoreStringInRecord( mSPLDef,
+                           InternalEntityStructure, InternalAttribStructure, szString )
+      RETURN 0
+
+      /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dSelectedHazardStmt
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dSelectedHazardStmt( VIEW mSPLDef BASED ON LOD mSPLDef,
+                     STRING ( 32 ) InternalEntityStructure,
+                     STRING ( 32 ) InternalAttribStructure,
+                     SHORT GetOrSetFlag )
+
+   STRING ( 256 ) szString
+   STRING ( 256 ) szReplaceString
+   STRING ( 256 ) szLocation
+   INTEGER lLocation
+   SHORT nPosStart
+   SHORT nPosEnd
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      // Build Precautionary Statement by inserting correct Location within general statement, so that a
+      // statement such as, "See {{Precautionary Position}}" for Precautionary Statements and First Aid." becomes
+      // "See side panel for Precautionary Statements and First Aid."
+      IF mSPLDef.SPLD_HumanHazardSection  EXISTS
+
+         szString = mSPLDef.SPLD_HumanHazardSection.PrecautionaryStatement
+
+         //IF mSPLDef.SPLD_Template  EXISTS
+         //   lLocation = mSPLDef.SPLD_Template.HazardPanel
+         //ELSE
+         //   lLocation = 0
+         //END
+         lLocation = 1
+         nPosStart  = zSearchSubString( szString, "{{Precautionary Position}}", "f", 0 )
+         IF nPosStart >= 0
+            nPosEnd = nPosStart + 26 // length of "{{Precautionary Position}}"
+            szLocation = ""
+            IF lLocation = 1
+               szLocation = mSPLDef.SPLD_HumanHazardSection.Location1
+            ELSE
+               IF lLocation = 2
+                  szLocation = mSPLDef.SPLD_HumanHazardSection.Location2
+               ELSE
+                  IF lLocation = 3
+                     szLocation = mSPLDef.SPLD_HumanHazardSection.Location3
+                  ELSE
+                     IF lLocation = 4
+                        szLocation = mSPLDef.SPLD_HumanHazardSection.Location4
+                     ELSE
+                        IF lLocation = 5
+                           szLocation = mSPLDef.SPLD_HumanHazardSection.Location5
+                        END
+                     END
+                  END
+               END
+            END
+            zReplaceSubString( szString, nPosStart, nPosEnd, szLocation )
+         ELSE
+            szString = ""
+         END
+
+      ELSE
+         szString = ""
+      END
+ TraceLineS( "Hazard Statement: ", szString )
+
+      // Store the calculated value in the object.
+      StoreStringInRecord( mSPLDef,
+                           InternalEntityStructure, InternalAttribStructure, szString )
+
+
+      /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/*************************************************************************************************
+**
+**    OPERATION: GetLPLR_SourceDirectory
+**
+**
+*************************************************************************************************/
+LOCAL OPERATION
+GetLPLR_SourceDirectory( VIEW mSPLDef BASED ON LOD mSPLDef,
+                         STRING ( 400 ) ReturnedDirectory )
+
+   VIEW vTZZOLFLO
+   STRING ( 400 ) szFileName
+   STRING ( 32 )  szApplicationName
+   STRING ( 200 ) szMsg
+   SHORT          nRC
+
+   // Return the LPLR Source directory to the caller.
+   // We will get it from the MetaSource directory in the XLP, which speicifies the source of the Query
+   // View list for both read and write.
+
+   // Try to use the existing view.
+   GET VIEW vTZZOLFLO NAMED "TZZOLFLO"
+   IF RESULT < 0
+      // Get the XLP directory structure and file name.
+      GetApplDirectoryFromView( szFileName, mSPLDef, zAPPL_DIR_OBJECT, 400 )
+      GetCurrentApplicationName( szApplicationName, 32, mSPLDef )
+      szFileName = szFileName + szApplicationName + ".XLP"
+
+      // Activate the XLP to the query LODs.
+      // 536870912 is ACTIVATE_SYSTEM in the following activate statement.
+      nRC = ActivateOI_FromFile( vTZZOLFLO, "TZCMLPLO", mSPLDef, szFileName, 536870912 )
+      IF nRC < 0
+         szMsg = "Cannot activate the Query .XLP from executable directory, " + szFileName + "."
+         MessageSend( mSPLDef, "", "Open Query",
+                      szMsg,
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( mSPLDef, zWAB_StayOnWindow, "", "" )
+         RETURN -1
+      END
+      NAME VIEW vTZZOLFLO "TZZOLFLO"
+   END
+
+   // Get the Meta Source name from the root.
+   GetStringFromAttribute( ReturnedDirectory, vTZZOLFLO, "LPLR", "MetaSrcDir" )
+
+END
+
+
+/*************************************************************************************************
+**    
+**    OPERATION: GenerateXML_File
+**    
+*************************************************************************************************/
+TRANSFORMATION OPERATION
+GenerateXML_File( VIEW mSPLDef BASED ON LOD mSPLDef,
+                  STRING ( 32 )  szTopEntityName,
+                  STRING ( 300 ) szDirectoryAndFileName )
+
+   VIEW mSPLDefHier
+   VIEW mSPLDefLOD
+   STRING ( 200 )  szMsg
+   STRING ( 32 )   szEntityName
+   STRING ( 32 )   szReturnedEntityName
+   STRING ( 32 )   szAttributeName
+   STRING ( 32 )   szXML_SimpleName
+   STRING ( 50 )   szIndentValue
+   STRING ( 400 ) szFileName
+   STRING ( 5000 ) szAttributeValue
+   STRING ( 5000 ) szOutputLine
+   INTEGER         lFileHandle
+   INTEGER         Indentation
+   SHORT           ReturnedHierLevel
+   SHORT           LastHierLevel
+   SHORT           nRC
+   
+   // Build an XML object from the mSPLDef object instance.
+
+   // Activate the mSPLDef LOD which is used in formatting the XML file.
+   GetLPLR_SourceDirectory( mSPLDef, szFileName )
+   szFileName = szFileName + "\" + "mSPLDef.LOD"
+   // 536870912 is ACTIVATE_SYSTEM in the following activate statement.
+   nRC = ActivateOI_FromFile( mSPLDefLOD, "TZZOLODO", mSPLDef, szFileName, 536870912 )
+   IF nRC < 0
+      MessageSend( mSPLDef, "", "Open Query",
+                   "Error opening related Query View.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( mSPLDef, zWAB_StayOnWindow, "", "" )
+      RETURN -1
+   END
+   NAME VIEW mSPLDefLOD "mSPLDefLOD"
+
+   // Open XML output file.
+   lFileHandle = SysOpenFile( mSPLDef, szDirectoryAndFileName, COREFILE_WRITE )
+   IF lFileHandle < 0
+      szMsg = "Cannot open XML Output File, " + szDirectoryAndFileName
+      MessageSend( mSPLDef, "", "Generate XSLT",
+                   szMsg, zMSGQ_OBJECT_CONSTRAINT_WARNING, 0 )
+      RETURN -1
+   END
+
+   // Navigate the mSPLDef object/subobject hierarchically and create an XML node for each entity.
+   SetCursorFirstEntity( mSPLDef, szTopEntityName, "" )
+
+   // Generate Header.
+   szOutputLine = "<?xml version=" + QUOTES + "1.0" + QUOTES + "?>"
+   GenerateLine( mSPLDef, lFileHandle, szOutputLine )
+   szOutputLine = "<!-- Output created by OpenCUAS -->"
+   GenerateLine( mSPLDef, lFileHandle, szOutputLine )
+
+   // Process each subentity Hierarchically
+   CreateViewFromView( mSPLDefHier, mSPLDef )
+   NAME VIEW mSPLDefHier "mSPLDefHier"
+   DefineHierarchicalCursor( mSPLDefHier, szTopEntityName )
+   
+   // First process the root entity.
+   GenerateXML_Entity( mSPLDefHier,        // The mSPLDef object.
+                       mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                       szTopEntityName,      // Current Entity Name
+                       szReturnedEntityName, // Just passed for reuse.
+                       szOutputLine,         // Just passed for reuse.
+                       szAttributeValue,     // Just passed for reuse.
+                       lFileHandle  )        // Just passed for reuse.
+   
+   // Process each subentity hierarchically.
+   nRC = SetCursorNextEntityHierarchical( ReturnedHierLevel, szReturnedEntityName, mSPLDefHier )
+   ReturnedHierLevel = GenerateXML_EntityR( mSPLDefHier, 
+                                            mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                                            szReturnedEntityName, // The Entity Name just returned.
+                                            szReturnedEntityName, // Entity Name to be returned by subfunction.
+                                            szOutputLine,         // Just passed for reuse.
+                                            szAttributeValue,     // Just passed for reuse.
+                                            lFileHandle,          // Just passed for reuse.
+                                            2 )                   // Hier level just returned.
+
+   // Terminate and close the XML file.
+   szOutputLine = "</" + szTopEntityName + ">"
+   GenerateLine( mSPLDef, lFileHandle, szOutputLine )
+   SysCloseFile( mSPLDef, lFileHandle, 0 )
+   
+   DropObjectInstance( mSPLDefLOD )
+
+END
+
+/*************************************************************************************************
+**
+**    OPERATION: GenerateXML_EntityR
+**
+*************************************************************************************************/
+TRANSFORMATION OPERATION
+GenerateXML_EntityR( VIEW mSPLDefHier BASED ON LOD mSPLDef,
+                     VIEW mSPLDefLOD,
+                     STRING ( 32 )   szPassedInEntityName,
+                     STRING ( 32 )   szReturnedEntityName,
+                     STRING ( 5000 ) szOutputLine,
+                     STRING ( 5000 ) szAttributeValue,
+                     INTEGER         lFileHandle,
+                     SHORT           CurrentHierLevel )
+
+   VIEW mSPLDef
+   STRING ( 50 )   szIndentValue
+   STRING ( 32 )   XML_EntityName
+   STRING ( 32 )   szCurrentEntityName
+   STRING ( 32 )   szNextEntityName
+   SHORT           ReturnedHierLevel
+   SHORT           SubEntityHierLevel
+   SHORT           nRC
+   SHORT           nRCA
+   
+   // Process the object hierarchically from the current position.
+   // If the next entity hierarchically has a higher hierarchical level, reprocess this routine recursively.
+   // If the next entity hierarchically has a lower hierarchical level, return to the calling routine.
+   // If it's at the same level, close any previous entity and continue.
+   
+   szCurrentEntityName   = szPassedInEntityName
+
+   // Process the Entity just returned from parent operation.
+   SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+   szReturnedEntityName = szCurrentEntityName
+   nRC = GenerateXML_Entity( mSPLDefHier,        // The mSPLDef object.
+                             mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                             szCurrentEntityName,  // Current Entity Name passed in
+                             szReturnedEntityName, // The Entity Name returned from a set cursor.
+                             szOutputLine,         // Just passed for reuse.
+                             szAttributeValue,     // Just passed for reuse.
+                             lFileHandle  )        // Just passed for reuse.
+   IF nRC = 0
+      // Normal return from GenerateXML_Entity.
+      nRC = SetCursorNextEntityHierarchical( ReturnedHierLevel, szReturnedEntityName, mSPLDefHier )
+   ELSE
+      // Special return from GenerateXML_Entity where the next hierarchical entity was retrieved.
+      ReturnedHierLevel = nRC
+   END
+      
+   // Continue to loop through each entity hierarchically,
+   LOOP WHILE nRC >= zCURSOR_SET 
+   
+      // If the Entity just accessed is for a higher level, close the current Entity and return.
+      IF ReturnedHierLevel < CurrentHierLevel
+         // Get correct XML_EntityName to set.
+         SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+         GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+         IF XML_EntityName = "" 
+            XML_EntityName = szCurrentEntityName
+         END
+         IF XML_EntityName != "XML_WorkOnlyEntity"
+            szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+            GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+         END
+         
+         RETURN ReturnedHierLevel
+      END
+
+      // Go down a level if necessary.
+      IF ReturnedHierLevel > CurrentHierLevel
+
+         // Process entity just read at next level.
+         SubEntityHierLevel = ReturnedHierLevel
+         szNextEntityName   = szReturnedEntityName
+         ReturnedHierLevel = GenerateXML_EntityR( mSPLDefHier, 
+                                                  mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                                                  szNextEntityName,     // The Entity Name just returned.
+                                                  szReturnedEntityName, // Entity Name to be returned by subfunction.
+                                                  szOutputLine,         // Just passed for reuse.
+                                                  szAttributeValue,     // Just passed for reuse.
+                                                  lFileHandle,          // Just passed for reuse.
+                                                  SubEntityHierLevel )  // Hier level just returned.
+
+         // Return if the next hier level is higher than the current.
+         IF ReturnedHierLevel < CurrentHierLevel
+         
+            // We also need to close the last entity here.
+
+            // Get correct XML_EntityName to set.
+            SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+            GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+            IF XML_EntityName = "" 
+               XML_EntityName = szCurrentEntityName
+            END
+            IF XML_EntityName != "XML_WorkOnlyEntity"
+               szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+               GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+            END
+            
+            RETURN ReturnedHierLevel
+         END
+      
+      END
+      
+      // If we've fallen through to here, we're continuing to process entities at the same level.
+      
+      // Close the last entity, unless this is the first entity being processed.
+      // Get correct XML_EntityName to set.
+      SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+      GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+      IF XML_EntityName = "" 
+         XML_EntityName = szCurrentEntityName
+      END
+      IF XML_EntityName != "XML_WorkOnlyEntity"
+      
+         // Add any manual Attributes to be added before the entity close.
+         IF szCurrentEntityName = "DLPLUS_Borrower"
+            CreateViewFromView( mSPLDef, mSPLDefHier )
+            GetStringFromAttribute( szAttributeValue, mSPLDef, "DLPLUS_Borrower", "DefaultOverpayCode" )  // Attrbute value without Context.    
+            szOutputLine = szIndentValue + "<DefaultOverpayCode>" + szAttributeValue + "</DefaultOverpayCode>"
+            GenerateLine( mSPLDef, lFileHandle, szOutputLine )
+            DropView( mSPLDef )
+         END
+
+         szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+         GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+   
+      END
+      
+      // Change current entity name if necessary.
+      IF szReturnedEntityName != szCurrentEntityName
+         szCurrentEntityName = szReturnedEntityName
+      END
+      
+      // Process the Entity just returned.
+      nRC = GenerateXML_Entity( mSPLDefHier,        // The mSPLDef object.
+                                mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                                szCurrentEntityName,  // Current Entity Name
+                                szReturnedEntityName, // Used when GenerateXML_Entity has issued the next set cursor hierarchical.
+                                szOutputLine,         // Just passed for reuse.
+                                szAttributeValue,     // Just passed for reuse.
+                                lFileHandle  )        // Just passed for reuse.
+      IF nRC = 0
+         // Normal return from GenerateXML_Entity.
+         nRC = SetCursorNextEntityHierarchical( ReturnedHierLevel, szReturnedEntityName, mSPLDefHier )
+      ELSE
+         // Special return from GenerateXML_Entity where the next hierarchical entity was retrieved.
+         ReturnedHierLevel = nRC
+      END
+      
+   END
+   
+   // The last entity must be for a lower level, so return.
+   // Also close the current entity.
+   // Get correct XML_EntityName to set.
+   SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+   GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+   IF XML_EntityName = "" 
+      XML_EntityName = szCurrentEntityName
+   END
+   IF XML_EntityName != "XML_WorkOnlyEntity"
+      szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+      GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+   END
+
+   RETURN 1
+
+END
+
+/*************************************************************************************************
+**
+**    OPERATION: GenerateXML_EntityS
+**
+*************************************************************************************************/
+TRANSFORMATION OPERATION
+GenerateXML_EntityS( VIEW mSPLDefHier BASED ON LOD mSPLDef,
+                     VIEW mSPLDefLOD,
+                     STRING ( 32 )   szPassedInEntityName,
+                     STRING ( 32 )   szReturnedEntityName,
+                     STRING ( 5000 ) szOutputLine,
+                     STRING ( 5000 ) szAttributeValue,
+                     INTEGER         lFileHandle,
+                     SHORT           CurrentHierLevel )
+
+   VIEW mSPLDef
+   STRING ( 50 )   szIndentValue
+   STRING ( 32 )   XML_EntityName
+   STRING ( 32 )   szCurrentEntityName
+   STRING ( 32 )   szNextEntityName
+   SHORT           ReturnedHierLevel
+   SHORT           SubEntityHierLevel
+   SHORT           nRC
+   SHORT           nRCA
+   
+   // This operation is the same as GenerateXML_EntityR, except that it returns to the calling operation whenever
+   // the Entity Name at the current level changes.
+   
+TraceLineI( "*** S HierLevel: ", CurrentHierLevel )
+TraceLineS( "*** Passed Entity", szPassedInEntityName )
+   
+   szCurrentEntityName = szPassedInEntityName
+
+   // Process the Entity just returned from parent operation.
+   SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+   nRC = GenerateXML_Entity( mSPLDefHier,        // The mSPLDef object.
+                             mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                             szCurrentEntityName,  // Current Entity Name passed in
+                             szReturnedEntityName, // The Entity Name returned from a set cursor.
+                             szOutputLine,         // Just passed for reuse.
+                             szAttributeValue,     // Just passed for reuse.
+                             lFileHandle  )        // Just passed for reuse.
+   IF nRC = 0
+      // Normal return from GenerateXML_Entity.
+      nRC = SetCursorNextEntityHierarchical( ReturnedHierLevel, szReturnedEntityName, mSPLDefHier )
+  
+      // If this is NOT a higher entity level, close entity and return.
+      IF ReturnedHierLevel <= CurrentHierLevel
+         SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+         GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+         IF XML_EntityName = "" 
+            XML_EntityName = szCurrentEntityName
+         END
+         IF XML_EntityName != "XML_WorkOnlyEntity"
+            szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+            GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+         END
+      
+         RETURN ReturnedHierLevel
+      END
+   ELSE
+      // Special return from GenerateXML_Entity where the next hierarchical entity was retrieved.
+      ReturnedHierLevel = nRC
+   END
+      
+   // Continue to loop through each entity hierarchically,
+   LOOP WHILE nRC >= zCURSOR_SET 
+   
+      // If the Entity just accessed is for a higher level, close the current Entity and return.
+      IF ReturnedHierLevel < CurrentHierLevel
+  
+         // Get correct XML_EntityName to set.
+         SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+         GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+         IF XML_EntityName = "" 
+            XML_EntityName = szCurrentEntityName
+         END
+         IF XML_EntityName != "XML_WorkOnlyEntity"
+            szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+            GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+         END
+         
+         RETURN ReturnedHierLevel
+      END
+
+      // Go down a level if necessary.
+      IF ReturnedHierLevel > CurrentHierLevel
+
+         // Process entity just read at next level.
+         SubEntityHierLevel = ReturnedHierLevel
+         szNextEntityName   = szReturnedEntityName
+         ReturnedHierLevel = GenerateXML_EntityS( mSPLDefHier, 
+                                                  mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                                                  szNextEntityName,     // The Entity Name just returned.
+                                                  szReturnedEntityName, // Entity Name to be returned by subfunction.
+                                                  szOutputLine,         // Just passed for reuse.
+                                                  szAttributeValue,     // Just passed for reuse.
+                                                  lFileHandle,          // Just passed for reuse.
+                                                  SubEntityHierLevel )  // Hier level just returned.
+  
+         // If the Entity just accessed does not have the same name, close the current Entity and return.
+         IF szReturnedEntityName != szCurrentEntityName
+         
+            // We also need to close the last entity here.
+   
+            // Get correct XML_EntityName to set.
+            SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+            GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+            IF XML_EntityName = "" 
+               XML_EntityName = szCurrentEntityName
+            END
+            IF XML_EntityName != "XML_WorkOnlyEntity"
+               szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+               GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+            END
+            
+            RETURN ReturnedHierLevel
+         END
+      
+      END
+      
+      // If we've fallen through to here, we're continuing to process entities at the same level.
+      
+      // Close the last entity, unless this is the first entity being processed.
+      // Get correct XML_EntityName to set.
+      SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szCurrentEntityName, "" )
+      GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+      IF XML_EntityName = "" 
+         XML_EntityName = szCurrentEntityName
+      END
+      IF XML_EntityName != "XML_WorkOnlyEntity"
+         szOutputLine = szIndentValue + "</" + XML_EntityName + ">" 
+         GenerateLine( mSPLDefHier, lFileHandle, szOutputLine )
+      END
+      
+      // Change current entity name if necessary.
+      IF szReturnedEntityName != szCurrentEntityName
+         szCurrentEntityName = szReturnedEntityName
+      END
+      
+      // Process the Entity just returned.
+      nRC = GenerateXML_Entity( mSPLDefHier,        // The mSPLDef object.
+                                mSPLDefLOD,              // The view to the LOD. Just passed for reuse.
+                                szCurrentEntityName,  // Current Entity Name
+                                szReturnedEntityName, // Used when GenerateXML_Entity has issued the next set cursor hierarchical.
+                                szOutputLine,         // Just passed for reuse.
+                                szAttributeValue,     // Just passed for reuse.
+                                lFileHandle  )        // Just passed for reuse.
+      IF nRC = 0
+         // Normal return from GenerateXML_Entity.
+         nRC = SetCursorNextEntityHierarchical( ReturnedHierLevel, szReturnedEntityName, mSPLDefHier )
+      ELSE
+         // Special return from GenerateXML_Entity where the next hierarchical entity was retrieved.
+         ReturnedHierLevel = nRC
+      END
+      
+   END
+   
+   // The last entity must be for a lower level, so return.
+  RETURN 1
+
+END
+
+/*************************************************************************************************
+**
+**    OPERATION: GenerateXML_Entity
+**
+*************************************************************************************************/
+TRANSFORMATION OPERATION
+GenerateXML_Entity( VIEW mSPLDefHier BASED ON LOD mSPLDef,
+                    VIEW mSPLDefLOD,
+                    STRING ( 32 )   szEntityName,
+                    STRING ( 32 )   szReturnedEntityName,
+                    STRING ( 5000 ) szOutputLine,
+                    STRING ( 5000 ) szAttributeValue,
+                    INTEGER         lFileHandle )
+
+   VIEW mSPLDef BASED ON LOD mSPLDef
+   VIEW mSPLDefLODSub
+   STRING ( 32 )   XML_EntityName
+   STRING ( 32 )   szAttributeName
+   STRING ( 32 )   szXML_SimpleName
+   STRING ( 50 )   szXML_NameExternal
+   STRING ( 32 )   szNextEntityName
+   STRING ( 32 )   szDomainName
+   STRING ( 32 )   szSubobjectEntityName
+   STRING ( 50 )   szIndentValue
+   STRING ( 1 )    szCalledSetCursorFlag
+   INTEGER         Indentation
+   SHORT           ReturnedHierLevel
+   SHORT           nRC
+   SHORT           nRCA
+   
+   // Generate the entity and attribute values for the szEntityName passed in.
+   
+   // Initialize szReturnedEntityName for later compare.
+   szReturnedEntityName = ""
+   
+   CreateViewFromView( mSPLDef, mSPLDefHier )   // We will use a non-hierarchical view for accessing attribute.
+   NAME VIEW mSPLDef "mSPLDef"
+   
+   // Make sure we're positioned on correct mSPLDefLOD entity.
+   SetCursorFirstEntityByString( mSPLDefLOD, "LOD_Entity", "Name", szEntityName, "" )
+   
+   // If this entity is indicated as a work only entity, don't generate XML statements for it.
+   GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+   IF XML_EntityName = "XML_WorkOnlyEntity" 
+      RETURN 0
+   END
+      
+   // Generate beginning of XML Open Entity entry.
+   GetStringFromAttribute( XML_EntityName, mSPLDefLOD, "LOD_Entity", "XML_Name" )
+   IF XML_EntityName = "" 
+      XML_EntityName = szEntityName
+   END
+   szOutputLine = szIndentValue + "<" + XML_EntityName
+   
+   // Add each inline attribute value.
+   nRC = SetCursorFirstEntity( mSPLDefLOD, "LOD_Attribute", "" )
+   LOOP WHILE nRC >= 0
+      GetStringFromAttribute( szXML_SimpleName, mSPLDefLOD, "ER_Attribute", "XML_SimpleName" )    // Check for inline attribute.
+      IF szXML_SimpleName != ""
+         GetStringFromAttribute( szAttributeName, mSPLDefLOD, "ER_Attribute", "Name" )    // Attribute Name from LOD
+         GetStringFromAttributeByContext( szAttributeValue, mSPLDef, szEntityName, szAttributeName, "", 5000 )
+         
+         szOutputLine = szOutputLine + " " + szXML_SimpleName + "=" + QUOTES + szAttributeValue + QUOTES
+      END
+      
+      nRC = SetCursorNextEntity( mSPLDefLOD, "LOD_Attribute", "" )
+   END
+   
+   // Generate end of XML Open Entity entry.
+   szOutputLine = szOutputLine + ">" 
+   GenerateLine( mSPLDef, lFileHandle, szOutputLine )
+   
+   // Generate not-null attribute entries. Skip any inline attributes processed above.
+   nRC = SetCursorFirstEntity( mSPLDefLOD, "LOD_Attribute", "" )
+   LOOP WHILE nRC >= 0
+      
+      // If we have a substructure that needs to be inserted here to maintain required sequence, go to process substructure.
+      GetStringFromAttribute( szDomainName, mSPLDefLOD, "Domain", "Name" )
+      IF szDomainName = "XML_SubentityPosition"
+         // Process substructure Attribute, if an instance of the subobject exists. Note that Entity Name is Attribute Name just processed.
+         GetStringFromAttribute( szSubobjectEntityName, mSPLDefLOD, "ER_Attribute", "Name" )
+         nRC = CheckExistenceOfEntity( mSPLDef, szSubobjectEntityName )
+         IF nRC >= zCURSOR_SET
+            GetStringFromAttribute( szAttributeName, mSPLDefLOD, "ER_Attribute", "Name" )
+            IF szAttributeName != szReturnedEntityName
+               nRC = SetCursorNextEntityHierarchical( ReturnedHierLevel, szReturnedEntityName, mSPLDefHier )
+            END
+            szNextEntityName = szReturnedEntityName
+            szCalledSetCursorFlag = "Y"
+            CreateViewFromView( mSPLDefLODSub, mSPLDefLOD)
+            ReturnedHierLevel = GenerateXML_EntityS( mSPLDefHier, 
+                                                     mSPLDefLODSub,              // The view to the LOD. Just passed for reuse.
+                                                     szNextEntityName,     // The Entity Name just returned.
+                                                     szReturnedEntityName, // Entity Name to be returned by subfunction.
+                                                     szOutputLine,         // Just passed for reuse.
+                                                     szAttributeValue,     // Just passed for reuse.
+                                                     lFileHandle,          // Just passed for reuse.
+                                                     ReturnedHierLevel )   // Hier level just returned.
+            
+            // Drop the mSPLDefLOD view with the modified position.
+            DropView( mSPLDefLODSub )
+         END
+      ELSE
+         
+         // Check for inline attributes.
+         GetStringFromAttribute( szXML_SimpleName, mSPLDefLOD, "ER_Attribute", "XML_SimpleName" )    // Check for inline attribute.
+         IF szXML_SimpleName = ""
+         
+            // Process regular Attribute.
+            
+            GetStringFromAttribute( szAttributeName, mSPLDefLOD, "ER_Attribute", "Name" )    // Attribute Name from LOD
+            
+            // Skip specified attributes to be added later.
+            IF szEntityName = "DLPLUS_Borrower" AND szAttributeName = "DefaultOverpayCode"
+            
+            ELSE 
+            
+               // Get Attribute value and generate if NOT NULL.
+               GetStringFromAttribute( szAttributeValue, mSPLDef, szEntityName, szAttributeName )  // Attrbute value without Context.    
+               IF szAttributeValue != ""
+               
+                  GetStringFromAttribute( szXML_NameExternal, mSPLDefLOD, "ER_Attribute", "XML_NameExternal" )    // Alternate Attribute Name
+                  IF szXML_NameExternal = ""
+                     // Use regular Attribute Name.
+                     szOutputLine = szIndentValue + "<" + szAttributeName + ">" + szAttributeValue + "</" + szAttributeName + ">"
+                  ELSE
+                     // Use XML alternate Attribute Name.
+                     szOutputLine = szIndentValue + "<" + szXML_NameExternal + ">" + szAttributeValue + "</" + szXML_NameExternal + ">"
+                  END
+                  GenerateLine( mSPLDef, lFileHandle, szOutputLine )
+               END
+               
+            END
+         END
+         
+      END
+      
+      nRC = SetCursorNextEntity( mSPLDefLOD, "LOD_Attribute", "" )
+      
+   END
+   
+   DropView( mSPLDef )
+   
+   IF szCalledSetCursorFlag = "Y"
+      // Return hierarchal level for set cursor call.
+      RETURN ReturnedHierLevel
+   ELSE
+      // Regular return without issuing set cursor.
+      RETURN 0
+   END
+
+END
+
+/*************************************************************************************************
+**
+**    OPERATION: GenerateLine
+**
+*************************************************************************************************/
+LOCAL OPERATION
+GenerateLine( VIEW mSPLDef BASED ON LOD mSPLDef,
+              INTEGER lFileHandle,
+              STRING ( 5000 ) szOutputLine )
+
+   // This is just a SysWriteLine with an options TraceLineS statement.
+   TraceLineS( "*** Line: ", szOutputLine )
+   SysWriteLine( mSPLDef, lFileHandle, szOutputLine )
+
+END

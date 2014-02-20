@@ -1,0 +1,2190 @@
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: TEST_XSLT_Generation
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+TEST_XSLT_Generation( VIEW ViewToWindow )
+
+   VIEW mSPLDef BASED ON LOD mSPLDef
+
+   // Test XSLT generation against a test object.
+   
+   // Activate test SPLD.
+   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\lplr\epamms\XSL\mSPLDef.por", zSINGLE )
+   NAME VIEW mSPLDef "mSPLDef"
+
+   // Initialize to format with Borders.
+   mSPLDef.SubregPhysicalLabelDef.wFormatWithDottedBorders = "Y"
+
+   // Call the generation routine.
+   GeneratePDF_Label( mSPLDef )
+
+END
+
+/*
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: COPY_MLC      deprecated!!!
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+COPY_MLC( VIEW ViewToWindow )
+   VIEW mMasLC_From BASED ON LOD mMasLC
+   VIEW mMasLC_To   BASED ON LOD mMasLC
+   VIEW mMasLC_To2  BASED ON LOD mMasLC
+   ACTIVATE mMasLC_From WHERE mMasLC_From.MasterLabelContent.ID = 1
+   NAME VIEW mMasLC_From "mMasLC_From"
+   ACTIVATE mMasLC_To WHERE mMasLC_To.MasterLabelContent.ID = 2
+   NAME VIEW mMasLC_To "mMasLC_To"
+   IssueError( ViewToWindow,0,0, "After activate" )
+   // Delete the substructure of sections.
+   FOR EACH mMasLC_To.M_GeneralSection
+      DELETE ENTITY mMasLC_To.M_GeneralSection NONE
+   END
+   FOR EACH mMasLC_To.M_IngredientsSection
+      DELETE ENTITY mMasLC_To.M_IngredientsSection NONE
+   END
+   FOR EACH mMasLC_To.M_StorageDisposalSection
+      DELETE ENTITY mMasLC_To.M_StorageDisposalSection NONE
+   END
+   FOR EACH mMasLC_To.M_DirectionsForUseSection
+      DELETE ENTITY mMasLC_To.M_DirectionsForUseSection NONE
+   END
+   FOR EACH mMasLC_To.M_MarketingSection
+      DELETE ENTITY mMasLC_To.M_MarketingSection NONE
+   END
+   FOR EACH mMasLC_To.M_HumanHazardSection
+      DELETE ENTITY mMasLC_To.M_HumanHazardSection NONE
+   END
+   // General Section
+   FOR EACH mMasLC_From.M_GeneralSection
+      CREATE ENTITY mMasLC_To.M_GeneralSection
+      SetMatchingAttributesByName( mMasLC_To, "M_GeneralSection", mMasLC_From, "M_GeneralSection", zSET_NULL )
+      FOR EACH mMasLC_From.M_GeneralStatement
+         CREATE ENTITY mMasLC_To.M_GeneralStatement
+         SetMatchingAttributesByName( mMasLC_To, "M_GeneralStatement", mMasLC_From, "M_GeneralStatement", zSET_NULL )
+      END
+   END
+   // Ingredients Section
+   FOR EACH mMasLC_From.M_IngredientsSection
+      CREATE ENTITY mMasLC_To.M_IngredientsSection
+      SetMatchingAttributesByName( mMasLC_To, "M_IngredientsSection", mMasLC_From, "M_IngredientsSection", zSET_NULL )
+      FOR EACH mMasLC_From.M_IngredientsStatement
+         CREATE ENTITY mMasLC_To.M_IngredientsStatement
+         SetMatchingAttributesByName( mMasLC_To, "M_IngredientsStatement", mMasLC_From, "M_IngredientsStatement", zSET_NULL )
+      END
+   END
+   // StorageDisposal Section
+   FOR EACH mMasLC_From.M_StorageDisposalSection
+      CREATE ENTITY mMasLC_To.M_StorageDisposalSection
+      SetMatchingAttributesByName( mMasLC_To, "M_StorageDisposalSection", mMasLC_From, "M_StorageDisposalSection", zSET_NULL )
+      FOR EACH mMasLC_From.M_StorageDisposalStatement
+         CREATE ENTITY mMasLC_To.M_StorageDisposalStatement
+         SetMatchingAttributesByName( mMasLC_To, "M_StorageDisposalStatement", mMasLC_From, "M_StorageDisposalStatement", zSET_NULL )
+      END
+   END
+   // DirectionsForUse Section
+   FOR EACH mMasLC_From.M_DirectionsForUseSection
+      CREATE ENTITY mMasLC_To.M_DirectionsForUseSection
+      SetMatchingAttributesByName( mMasLC_To, "M_DirectionsForUseSection", mMasLC_From, "M_DirectionsForUseSection", zSET_NULL )
+      FOR EACH mMasLC_From.M_DirectionsForUseStatement
+         CREATE ENTITY mMasLC_To.M_DirectionsForUseStatement
+         SetMatchingAttributesByName( mMasLC_To, "M_DirectionsForUseStatement", mMasLC_From, "M_DirectionsForUseStatement", zSET_NULL )
+      END
+   END
+   // Marketing Section
+   FOR EACH mMasLC_From.M_MarketingSection
+      CREATE ENTITY mMasLC_To.M_MarketingSection
+      SetMatchingAttributesByName( mMasLC_To, "M_MarketingSection", mMasLC_From, "M_MarketingSection", zSET_NULL )
+      FOR EACH mMasLC_From.M_MarketingStatement
+         CREATE ENTITY mMasLC_To.M_MarketingStatement
+         SetMatchingAttributesByName( mMasLC_To, "M_MarketingStatement", mMasLC_From, "M_MarketingStatement", zSET_NULL )
+      END
+   END
+   // HumanHazard Section
+   FOR EACH mMasLC_From.M_HumanHazardSection
+      CREATE ENTITY mMasLC_To.M_HumanHazardSection
+      SetMatchingAttributesByName( mMasLC_To, "M_HumanHazardSection", mMasLC_From, "M_HumanHazardSection", zSET_NULL )
+   END
+   // DirectionsForUse Usage
+   FOR EACH mMasLC_From.M_DirectionsForUseSection
+      SET CURSOR FIRST mMasLC_To.M_DirectionsForUseSection
+                 WHERE mMasLC_To.M_DirectionsForUseSection.Title = mMasLC_From.M_DirectionsForUseSection.Title
+      FOR EACH mMasLC_From.M_DirectionsUsage
+         CreateViewFromView( mMasLC_To2, mMasLC_To )
+         SET CURSOR FIRST mMasLC_To2.M_DirectionsUsage
+                    WHERE mMasLC_To2.M_DirectionsUsage.UsageType = mMasLC_From.M_DirectionsUsage.UsageType
+                      AND mMasLC_To2.M_DirectionsUsage.Name = mMasLC_From.M_DirectionsUsage.Name
+         IF RESULT < zCURSOR_SET
+            SET CURSOR FIRST mMasLC_To.M_Usage WHERE mMasLC_To.M_Usage.Name = mMasLC_From.M_DirectionsUsage.Name
+                                                 AND mMasLC_To.M_Usage.UsageType = mMasLC_From.M_DirectionsUsage.UsageType
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 1" )
+            END
+            INCLUDE mMasLC_To.M_DirectionsUsage FROM mMasLC_To.M_Usage
+         END
+         DropView( mMasLC_To2 )
+      END
+   END
+   // Marketing Usage
+   FOR EACH mMasLC_From.M_MarketingSection
+      SET CURSOR FIRST mMasLC_To.M_MarketingSection
+                 WHERE mMasLC_To.M_MarketingSection.Title = mMasLC_From.M_MarketingSection.Title
+      FOR EACH mMasLC_From.M_MarketingUsage
+         CreateViewFromView( mMasLC_To2, mMasLC_To )
+         SET CURSOR FIRST mMasLC_To2.M_MarketingUsage
+                    WHERE mMasLC_To2.M_MarketingUsage.UsageType = mMasLC_From.M_MarketingUsage.UsageType
+                      AND mMasLC_To2.M_MarketingUsage.Name = mMasLC_From.M_MarketingUsage.Name
+         IF RESULT < zCURSOR_SET
+            SET CURSOR FIRST mMasLC_To.M_Usage WHERE mMasLC_To.M_Usage.Name = mMasLC_From.M_MarketingUsage.Name
+                                                 AND mMasLC_To.M_Usage.UsageType = mMasLC_From.M_MarketingUsage.UsageType
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 1" )
+            END
+            INCLUDE mMasLC_To.M_MarketingUsage FROM mMasLC_To.M_Usage
+         END
+         DropView( mMasLC_To2 )
+      END
+   END
+   IssueError( ViewToWindow,0,0, "Before Commit" )
+   COMMIT mMasLC_To
+   IF RESULT < 0
+      IssueError( ViewToWindow,0,0, "Database Write Error" )
+   END
+   DropObjectInstance( mMasLC_To )
+   ACTIVATE mMasLC_To WHERE mMasLC_To.MasterLabelContent.ID = 2
+   NAME VIEW mMasLC_To "mMasLC_To"
+END
+*/
+
+/*
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CREATE_SPLDef      deprecated!!!
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CREATE_SPLDef( VIEW ViewToWindow )
+   VIEW mMasLC  BASED ON LOD mMasLC
+   VIEW mSubLC  BASED ON LOD mSubLC
+   VIEW mSubLC2 BASED ON LOD mSubLC
+   VIEW mSPLDef BASED ON LOD mSPLDef
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = 1
+   NAME VIEW mMasLC "mMasLC"
+   ACTIVATE mSubLC EMPTY
+   NAME VIEW mSubLC "mSubLC"
+   CREATE ENTITY mSubLC.SubregLabelContent
+   // General Section
+   FOR EACH mMasLC.M_GeneralSection
+      CREATE ENTITY mSubLC.S_GeneralSection
+      SetMatchingAttributesByName( mSubLC, "S_GeneralSection", mMasLC, "M_GeneralSection", zSET_NULL )
+      FOR EACH mMasLC.M_GeneralStatement
+         CREATE ENTITY mSubLC.S_GeneralStatement
+         SetMatchingAttributesByName( mSubLC, "S_GeneralStatement", mMasLC, "M_GeneralStatement", zSET_NULL )
+      END
+   END
+   // Ingredients Section
+   FOR EACH mMasLC.M_IngredientsSection
+      CREATE ENTITY mSubLC.S_IngredientsSection
+      SetMatchingAttributesByName( mSubLC, "S_IngredientsSection", mMasLC, "M_IngredientsSection", zSET_NULL )
+      FOR EACH mMasLC.M_IngredientsStatement
+         CREATE ENTITY mSubLC.S_IngredientsStatement
+         SetMatchingAttributesByName( mSubLC, "S_IngredientsStatement", mMasLC, "M_IngredientsStatement", zSET_NULL )
+      END
+   END
+   // StorageDisposal Section
+   FOR EACH mMasLC.M_StorageDisposalSection
+      CREATE ENTITY mSubLC.S_StorageDisposalSection
+      SetMatchingAttributesByName( mSubLC, "S_StorageDisposalSection", mMasLC, "M_StorageDisposalSection", zSET_NULL )
+      FOR EACH mMasLC.M_StorageDisposalStatement
+         CREATE ENTITY mSubLC.S_StorageDisposalStatement
+         SetMatchingAttributesByName( mSubLC, "S_StorageDisposalStatement", mMasLC, "M_StorageDisposalStatement", zSET_NULL )
+      END
+   END
+   // DirectionsForUse Section
+   FOR EACH mMasLC.M_DirectionsForUseSection
+      CREATE ENTITY mSubLC.S_DirectionsForUseSection
+      SetMatchingAttributesByName( mSubLC, "S_DirectionsForUseSection", mMasLC, "M_DirectionsForUseSection", zSET_NULL )
+      FOR EACH mMasLC.M_DirectionsForUseStatement
+         CREATE ENTITY mSubLC.S_DirectionsForUseStatement
+         SetMatchingAttributesByName( mSubLC, "S_DirectionsForUseStatement", mMasLC, "M_DirectionsForUseStatement", zSET_NULL )
+      END
+   END
+   // Marketing Section
+   FOR EACH mMasLC.M_MarketingSection
+      CREATE ENTITY mSubLC.S_MarketingSection
+      SetMatchingAttributesByName( mSubLC, "S_MarketingSection", mMasLC, "M_MarketingSection", zSET_NULL )
+      FOR EACH mMasLC.M_MarketingStatement
+         CREATE ENTITY mSubLC.S_MarketingStatement
+         SetMatchingAttributesByName( mSubLC, "S_MarketingStatement", mMasLC, "M_MarketingStatement", zSET_NULL )
+      END
+   END
+   // HumanHazard Section
+   FOR EACH mMasLC.M_HumanHazardSection
+      CREATE ENTITY mSubLC.S_HumanHazardSection
+      SetMatchingAttributesByName( mSubLC, "S_HumanHazardSection", mMasLC, "M_HumanHazardSection", zSET_NULL )
+   END
+   // Usage Section
+// FOR EACH mMasLC.M_Usage
+//    CREATE ENTITY mSubLC.S_Usage
+//    SetMatchingAttributesByName( mSubLC, "S_Usage", mMasLC, "M_Usage", zSET_NULL )
+// END
+//
+// // Eliminate any duplicate Usages.
+// CreateViewFromView( mSubLC2, mSubLC )
+// FOR EACH mSubLC.S_Usage
+//    SET CURSOR FIRST mSubLC2.S_Usage
+//               WHERE mSubLC2.S_Usage.UsageType = mSubLC.S_Usage.UsageType
+//                 AND mSubLC2.S_Usage.Name = mSubLC.S_Usage.Name
+//                 AND mSubLC2.S_Usage.ID  != mSubLC.S_Usage.ID
+//    IF RESULT >= zCURSOR_SET
+//       IssueError( ViewToWindow,0,0, mSubLC.S_Usage.Name )
+//       DELETE ENTITY mSubLC2.S_Usage NONE
+//    END
+// END
+// DropView( mSubLC2 )
+   // DirectionsForUse Usage
+   FOR EACH mMasLC.M_DirectionsForUseSection
+      SET CURSOR FIRST mSubLC.S_DirectionsForUseSection
+                 WHERE mSubLC.S_DirectionsForUseSection.Title = mMasLC.M_DirectionsForUseSection.Title
+      FOR EACH mMasLC.M_DirectionsUsage
+         CreateViewFromView( mSubLC2, mSubLC )
+         SET CURSOR FIRST mSubLC2.S_DirectionsUsage
+                    WHERE mSubLC2.S_DirectionsUsage.UsageType = mMasLC.M_DirectionsUsage.UsageType
+                      AND mSubLC2.S_DirectionsUsage.Name = mMasLC.M_DirectionsUsage.Name
+         IF RESULT < zCURSOR_SET
+            SET CURSOR FIRST mSubLC.S_Usage WHERE mSubLC.S_Usage.Name = mMasLC.M_DirectionsUsage.Name
+                                                 AND mSubLC.S_Usage.UsageType = mMasLC.M_DirectionsUsage.UsageType
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 1" )
+            END
+            INCLUDE mSubLC.S_DirectionsUsage FROM mSubLC.S_Usage
+         END
+         DropView( mSubLC2 )
+      END
+   END
+   // Marketing Usage
+   FOR EACH mMasLC.M_MarketingSection
+      SET CURSOR FIRST mSubLC.S_MarketingSection
+                 WHERE mSubLC.S_MarketingSection.Title = mMasLC.M_MarketingSection.Title
+      FOR EACH mMasLC.M_MarketingUsage
+         CreateViewFromView( mSubLC2, mSubLC )
+         SET CURSOR FIRST mSubLC2.S_MarketingUsage
+                    WHERE mSubLC2.S_MarketingUsage.UsageType = mMasLC.M_MarketingUsage.UsageType
+                      AND mSubLC2.S_MarketingUsage.Name = mMasLC.M_MarketingUsage.Name
+         IF RESULT < zCURSOR_SET
+            SET CURSOR FIRST mSubLC.S_Usage WHERE mSubLC.S_Usage.Name = mMasLC.M_MarketingUsage.Name
+                                                 AND mSubLC.S_Usage.UsageType = mMasLC.M_MarketingUsage.UsageType
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 1" )
+            END
+            INCLUDE mSubLC.S_MarketingUsage FROM mSubLC.S_Usage
+         END
+         DropView( mSubLC2 )
+      END
+   END
+   IssueError( ViewToWindow,0,0, "Before Commit" )
+   COMMIT mSubLC
+   IF RESULT < 0
+      IssueError( ViewToWindow,0,0, "Database Write Error" )
+   END
+END
+*/
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_NewSPLD
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_NewSPLD( VIEW ViewToWindow )
+
+   VIEW mSPLDef   BASED ON LOD mSPLDef
+   VIEW lSLC      BASED ON LOD lSLC
+   VIEW lTemplLST BASED ON LOD lTempl
+
+   // Initialize a new SPLD.
+   ACTIVATE mSPLDef EMPTY
+   NAME VIEW mSPLDef "mSPLDef"
+   CREATE ENTITY mSPLDef.SubregPhysicalLabelDef
+
+   // Make sure select lists of SLC and Template entries exist.
+   GET VIEW lTemplLST NAMED "lTemplLST"
+   IF RESULT < 0
+      ACTIVATE lTemplLST RootOnlyMultiple
+      NAME VIEW lTemplLST "lTemplLST"
+   END
+   GET VIEW lSLC NAMED "lSLC"
+   IF RESULT < 0
+      ACTIVATE lSLC Multiple
+      NAME VIEW lSLC "lSLC"
+      FOR EACH lSLC.SubregLabelContent
+         lSLC.SubregLabelContent.wProductNameVersion = lSLC.SubregProduct.Name + " " + lSLC.SubregLabelContent.Version
+      END
+      SET CURSOR FIRST lSLC.SubregLabelContent
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CREATE_SPLD
+//
+// Creates an SPLD from a Template and SLC and also changes an existing SPLD
+// to use a new Template.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CREATE_SPLD( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW lSLC     REGISTERED AS lSLC
+   VIEW lSPLDLST BASED ON LOD  lSPLDLST
+   VIEW mSubLC   BASED ON LOD  mSubLC
+   // Use the selected Template and SLC to build a new SPLD.
+   ACTIVATE mSubLC WHERE mSubLC.SubregLabelContent.ID = lSLC.SubregLabelContent.ID
+   NAME VIEW mSubLC "mSubLC"
+   // Build the main part of the SPLD from the selected SLC.
+   BuildSPLD_FromSLC( mSPLDef, mSubLC )
+   // Add the Template subobject to the SPLD from the selected Template
+   BuildSPLD_Template( mSPLDef, mSPLDef.SelectedTemplate.ID )
+   COMMIT mSPLDef
+   // Build Display Structure.
+   BuildDisplayStructure( mSPLDef )
+   // Reset cursor to beginning for all entties.
+   SET CURSOR FIRST mSPLDef.SubregPhysicalLabelDef
+   // Rebuild SPLD list.
+   GET VIEW lSPLDLST NAMED "lSPLDLST"
+   IF RESULT >= 0
+      DropObjectInstance( lSPLDLST )
+   END
+   ACTIVATE lSPLDLST Multiple
+   NAME VIEW lSPLDLST "lSPLDLST"*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: RESELECT_Template
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+RESELECT_Template( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef REGISTERED AS mSPLDef
+   // Use the selected Template to rebuild that part of the SPLD.
+   BuildSPLD_Template( mSPLDef, mSPLDef.SelectedTemplate.ID )
+   COMMIT mSPLDef
+   // Build Display Structure.
+   BuildDisplayStructure( mSPLDef )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: PostbuildSPLD_List
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+PostbuildSPLD_List( VIEW ViewToWindow )
+
+   VIEW lSPLDLST BASED ON LOD lSPLDLST
+
+   GET VIEW lSPLDLST NAMED "lSPLDLST"
+   IF RESULT >= 0
+      DropObjectInstance( lSPLDLST )
+   END
+   ACTIVATE lSPLDLST Multiple
+   NAME VIEW lSPLDLST "lSPLDLST"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateSPLD
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateSPLD( VIEW ViewToWindow )
+
+   /*VIEW lSPLDLST REGISTERED AS lSPLDLST
+   VIEW mSPLDef  BASED ON LOD  mSPLDef
+   ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
+   NAME VIEW mSPLDef "mSPLDef"
+   // Build Display Structure.
+   IF mSPLDef.SPLD_Template EXISTS
+      BuildDisplayStructure( mSPLDef )
+   END
+   SET CURSOR FIRST mSPLDef.SubregPhysicalLabelDef*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_SPLD
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_SPLD( VIEW ViewToWindow )
+
+   VIEW lSPLDLST REGISTERED AS lSPLDLST
+   VIEW mSPLDef  BASED ON LOD  mSPLDef
+   SHORT nRC
+
+   nRC = MessagePrompt( ViewToWindow, "", "Delete", "OK to delete SPLD?", 0, zBUTTONS_YESNO, zRESPONSE_YES, 0 )
+   IF nRC = zRESPONSE_NO
+      RETURN -1
+   END
+   ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
+   NAME VIEW mSPLDef "mSPLDef"
+   DELETE ENTITY mSPLDef.SubregPhysicalLabelDef
+   COMMIT mSPLDef
+   DropObjectInstance( mSPLDef )
+   DropEntity( lSPLDLST, "SubregPhysicalLabelDef", zREPOS_NONE )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_ReselectTemplate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_ReselectTemplate( VIEW ViewToWindow )
+
+   VIEW lTemplLST BASED ON LOD lTempl
+
+   // Make sure that Template list exists.
+   GET VIEW lTemplLST NAMED "lTemplLST"
+   IF RESULT < 0
+      ACTIVATE lTemplLST RootOnlyMultiple
+      NAME VIEW lTemplLST "lTemplLST"
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_AddMarketingGroup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_AddMarketingGroup( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW mSPLDefT BASED ON LOD  mSPLDef
+   // We must be positioned on a Template Group
+   IF mSPLDef.DisplayTemplateStatement.EntityType != "Group"
+      MessageSend( ViewToWindow, "", "Add Marketing Group",
+                   "You must be positioned on a valid Group.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+   SET CURSOR FIRST mSPLDef.SPLD_TemplateGroup WITHIN mSPLDef.SPLD_Template
+              WHERE mSPLDef.SPLD_TemplateGroup.ID = mSPLDef.DisplayTemplateStatement.EntityID
+   IF RESULT < zCURSOR_SET
+      IssueError( ViewToWindow,0,0, "Programming Error 15" )
+   ELSE
+      // Check if the last Section for the current Group and the first Section of the next Group
+      // are both Directions for Use. This is invalid as it would place a Marketing Section within
+      // Directions for Use Sections.
+      CreateViewFromView( mSPLDefT, mSPLDef )
+      SET CURSOR LAST mSPLDef.SPLD_TemplateSection
+      SET CURSOR NEXT mSPLDefT.SPLD_TemplateGroup WITHIN mSPLDefT.SPLD_Template
+      IF mSPLDef.SPLD_TemplateSection.TSectionType  = "DirectionsForUse" AND
+         mSPLDefT.SPLD_TemplateSection.TSectionType = "DirectionsForUse"
+         MessageSend( ViewToWindow, "", "Add Marketing Group",
+                      "You cannot add a Marketing Section in the middle of Directions for Use.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+      END
+      DropView( mSPLDefT )
+   END
+   // Simply add the single Marketing Group and Section.
+   CREATE ENTITY mSPLDef.SPLD_TemplateGroup
+   mSPLDef.SPLD_TemplateGroup.Name = "Marketing"
+   CREATE ENTITY mSPLDef.SPLD_TemplateSection
+   mSPLDef.SPLD_TemplateSection.TSectionType = "Marketing"
+   mSPLDef.SubregPhysicalLabelDef.wNextwTemplIDValue = mSPLDef.SubregPhysicalLabelDef.wNextwTemplIDValue + 1
+   mSPLDef.SPLD_TemplateSection.wTempID = mSPLDef.SubregPhysicalLabelDef.wNextwTemplIDValue
+   // Rebuild the display structure.
+   BuildDisplayStructure( mSPLDef )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_SelectMarketingSections
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_SelectMarketingSections( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW mSPLDefT BASED ON LOD  mSPLDef
+   // We must be positioned on a Template Marketing Section.
+   IF mSPLDef.DisplayTemplateStatement.EntityType != "Section"
+      MessageSend( ViewToWindow, "", "Select Marketing Sections",
+                   "You must be positioned on a valid Marketing Section.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+   SET CURSOR FIRST mSPLDef.SPLD_TemplateSection WITHIN mSPLDef.SPLD_Template
+              WHERE mSPLDef.SPLD_TemplateSection.ID = mSPLDef.DisplayTemplateStatement.EntityID
+   IF RESULT < zCURSOR_SET
+      SET CURSOR FIRST mSPLDef.SPLD_TemplateSection WITHIN mSPLDef.SPLD_Template
+                 WHERE mSPLDef.SPLD_TemplateSection.wTempID = mSPLDef.DisplayTemplateStatement.wTempID
+   END
+   IF RESULT < zCURSOR_SET
+      IssueError( ViewToWindow,0,0, "Programming Error 10" )
+   ELSE
+      IF mSPLDef.SPLD_TemplateSection.TSectionType != "Marketing"
+         MessageSend( ViewToWindow, "", "Select Marketing Sections",
+                      "You must be positioned on a valid Marketing Section.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+      END
+   END
+   // Create a list of Marketing Sections that are not already used in the SPLD.
+   FOR EACH mSPLDef.SelectableMarketingSection
+      EXCLUDE mSPLDef.SelectableMarketingSection NONE
+   END
+   CreateViewFromView( mSPLDefT, mSPLDef )
+   FOR EACH mSPLDef.SPLD_MarketingSection
+      SET CURSOR FIRST mSPLDefT.SPLDT_MarketingSection WITHIN mSPLDefT.SPLD_Template
+                 WHERE mSPLDefT.SPLDT_MarketingSection.ID = mSPLDef.SPLD_MarketingSection.ID
+      IF RESULT < zCURSOR_SET
+         INCLUDE mSPLDef.SelectableMarketingSection FROM mSPLDef.SPLD_MarketingSection
+      END
+   END
+   DropView( mSPLDefT )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SELECT_MarketingSections
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SELECT_MarketingSections( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef REGISTERED AS mSPLDef
+   SHORT nRC
+   // Include each selected Marketing Section under the Template Section.
+   FOR EACH mSPLDef.SelectableMarketingSection
+      nRC = GetSelectStateOfEntity( mSPLDef, "SelectableMarketingSection" )
+      IF nRC = 1
+         INCLUDE mSPLDef.SPLDT_MarketingSection FROM mSPLDef.SelectableMarketingSection
+      END
+   END
+   // Rebuild the display structure.
+   BuildDisplayStructure( mSPLDef )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SAVE_SPLD
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SAVE_SPLD( VIEW ViewToWindow )
+
+   VIEW mSPLDef REGISTERED AS mSPLDef
+
+   COMMIT mSPLDef
+   DropObjectInstance( mSPLDef )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SAVE_MLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SAVE_MLC( VIEW ViewToWindow )
+
+   VIEW mMasLC REGISTERED AS mMasLC
+
+   COMMIT mMasLC
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CANCEL_MLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CANCEL_MLC( VIEW ViewToWindow )
+
+   VIEW mMasLC REGISTERED AS mMasLC
+
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SAVE_SLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SAVE_SLC( VIEW ViewToWindow )
+
+   VIEW mSubLC REGISTERED AS mSubLC
+
+   COMMIT mSubLC
+   DropObjectInstance( mSubLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CANCEL_SLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CANCEL_SLC( VIEW ViewToWindow )
+
+   VIEW mSubLC REGISTERED AS mSubLC
+
+   DropObjectInstance( mSubLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_MoveDirectionsUseSections
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_MoveDirectionsUseSections( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW mSPLDefT BASED ON LOD  mSPLDef
+   SHORT nRC
+   // First validate that only Directions for Use Sections have been selected.
+   FOR EACH mSPLDef.DisplayTemplateStatement
+      nRC = GetSelectStateOfEntity( mSPLDef, "DisplayTemplateStatement" )
+      IF nRC = 1
+         IF mSPLDef.DisplayTemplateStatement.EntityType != "DirectionsForUseSection"
+            MessageSend( ViewToWindow, "", "Select Directions Sections",
+                         "You can only select 'Directions for Use' Sections.",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+         END
+      END
+   END
+   // Position on TemplateSection for selected entries.
+   nRC = SetCursorFirstSelectedEntity( mSPLDef, "DisplayTemplateStatement", "" )
+   IF nRC < zCURSOR_SET
+      MessageSend( ViewToWindow, "", "Select Directions Sections",
+                   "You must select at least one 'Directions for Use' Section.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+   SET CURSOR FIRST mSPLDef.SPLDT_DirectionsForUseSection WITHIN mSPLDef.SPLD_Template
+              WHERE mSPLDef.SPLDT_DirectionsForUseSection.ID = mSPLDef.DisplayTemplateStatement.EntityID
+   IF RESULT < zCURSOR_SET
+      IssueError( ViewToWindow,0,0, "Programming Error 11 " )
+   END
+   // Create list of Directions for Use Template Sections.
+   // Note that each entry points to the TemplateSection we just positioned on.
+   FOR EACH mSPLDef.SelectDirectionsForUse
+      DELETE ENTITY mSPLDef.SelectDirectionsForUse NONE
+   END
+   CreateViewFromView( mSPLDefT, mSPLDef )
+   FOR EACH mSPLDefT.SPLD_TemplateSection WITHIN mSPLDefT.SPLD_Template
+      IF mSPLDefT.SPLD_TemplateSection.TSectionType = "DirectionsForUse" AND
+         mSPLDefT.SPLD_TemplateSection.ID != mSPLDef.SPLD_TemplateSection.ID
+         // Create three entries for Panel, Group and Section.
+         CREATE ENTITY mSPLDef.SelectDirectionsForUse
+         mSPLDef.SelectDirectionsForUse.TemplateSectionID = mSPLDefT.SPLD_TemplateSection.ID
+         mSPLDef.SelectDirectionsForUse.DisplayEntry = "Panel:   " + mSPLDefT.SPLD_TemplatePanel.dPanelName
+         CREATE ENTITY mSPLDef.SelectDirectionsForUse
+         mSPLDef.SelectDirectionsForUse.TemplateSectionID = mSPLDefT.SPLD_TemplateSection.ID
+         mSPLDef.SelectDirectionsForUse.DisplayEntry = "...Group:   " + mSPLDefT.SPLD_TemplateGroup.Name
+         CREATE ENTITY mSPLDef.SelectDirectionsForUse
+         mSPLDef.SelectDirectionsForUse.TemplateSectionID = mSPLDefT.SPLD_TemplateSection.ID
+         mSPLDef.SelectDirectionsForUse.DisplayEntry = "......Section:      Directions for Use"
+      END
+   END
+   DropView( mSPLDefT )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SELECT_DirectionsUseSect
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SELECT_DirectionsUseSect( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW mSPLDefT BASED ON LOD  mSPLDef
+   SHORT nRC
+   // Move each selected Directions for Use Section from the previous window to the Template
+   // Section selected.
+   // Position on Template Section that is the target of move.
+   SET CURSOR FIRST mSPLDef.SPLD_TemplateSection WITHIN mSPLDef.SPLD_Template
+              WHERE mSPLDef.SPLD_TemplateSection.ID = mSPLDef.SelectDirectionsForUse.TemplateSectionID
+   IF RESULT < zCURSOR_SET
+      IssueError( ViewToWindow,0,0, "Programming Error 12" )
+   ELSE
+      CreateViewFromView( mSPLDefT, mSPLDef )
+      FOR EACH mSPLDef.DisplayTemplateStatement
+         nRC = GetSelectStateOfEntity( mSPLDef, "DisplayTemplateStatement" )
+         IF nRC = 1
+            // Position on entity to be included.
+            SET CURSOR FIRST mSPLDefT.SPLD_DirectionsForUseSection
+                       WHERE mSPLDefT.SPLD_DirectionsForUseSection.ID = mSPLDef.DisplayTemplateStatement.EntityID
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 13" )
+               RETURN
+            END
+            // Position on entity to be excluded.
+            SET CURSOR FIRST mSPLDefT.SPLDT_DirectionsForUseSection WITHIN mSPLDefT.SPLD_Template
+                       WHERE mSPLDefT.SPLDT_DirectionsForUseSection.ID = mSPLDef.DisplayTemplateStatement.EntityID
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 14" )
+               RETURN
+            END
+            EXCLUDE mSPLDefT.SPLDT_DirectionsForUseSection
+            INCLUDE mSPLDef.SPLDT_DirectionsForUseSection FROM mSPLDefT.SPLD_DirectionsForUseSection
+         END
+      END
+      DropView( mSPLDefT  )
+   END
+   // Rebuild the display structure.
+   BuildDisplayStructure( mSPLDef )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_ShowDirectionsUsages
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_ShowDirectionsUsages( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   STRING ( 20 ) szUsageType
+   // Build the display entities for Directions of Use and related Usages.
+   // First delete existing entries.
+   FOR EACH mSPLDef.DirectionsUsage
+      DELETE ENTITY mSPLDef.DirectionsUsage NONE
+   END
+   FOR EACH mSPLDef.SPLD_DirectionsForUseSection
+      CREATE ENTITY mSPLDef.DirectionsUsage
+      mSPLDef.DirectionsUsage.DirectionsSectionID = mSPLDef.SPLD_DirectionsForUseSection.ID
+      mSPLDef.DirectionsUsage.DisplayEntry        = mSPLDef.SPLD_DirectionsForUseSection.Title
+      FOR EACH mSPLDef.SPLD_DirectionsUsage
+         CREATE ENTITY mSPLDef.DirectionsUsage
+         mSPLDef.DirectionsUsage.DirectionsSectionID = mSPLDef.SPLD_DirectionsForUseSection.ID
+         mSPLDef.DirectionsUsage.UsageID             = mSPLDef.SPLD_DirectionsUsage.ID
+         GetStringFromAttributeByContext( szUsageType, mSPLDef, "SPLD_DirectionsUsage", "UsageType", "", 20 )
+         mSPLDef.DirectionsUsage.DisplayEntry        = "......" + szUsageType + ": " + mSPLDef.SPLD_DirectionsUsage.Name
+      END
+   END*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: REMOVE_DirectionsUsages
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+REMOVE_DirectionsUsages( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   SHORT nRC
+   // For each selected Usage work entitiy, position on the corresponding Usage under Directions for Use and
+   // remove it. We will ignore any Directions for Use entries that are selected.
+   FOR EACH mSPLDef.DirectionsUsage
+      nRC = GetSelectStateOfEntity( mSPLDef, "DirectionsUsage" )
+      IF nRC = 1
+         // A work entity with a null UsageID is a Directions for Use entry.
+         IF mSPLDef.DirectionsUsage.UsageID != ""
+            SET CURSOR FIRST mSPLDef.SPLD_DirectionsForUseSection WHERE mSPLDef.SPLD_DirectionsForUseSection.ID = mSPLDef.DirectionsUsage.DirectionsSectionID
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 13" )
+            END
+            SET CURSOR FIRST mSPLDef.SPLD_DirectionsUsage WHERE mSPLDef.SPLD_DirectionsUsage.ID = mSPLDef.DirectionsUsage.UsageID
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 14" )
+            END
+            EXCLUDE mSPLDef.SPLD_DirectionsUsage
+         END
+      END
+   END
+   // Rebuild work structure for display.
+   GOTO_ShowDirectionsUsages( ViewToWindow )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_ShowMarketingUsages
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_ShowMarketingUsages( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   STRING ( 20 ) szUsageType
+   // Build the display entities for Marketing and related Usages.
+   // First delete existing entries.
+   FOR EACH mSPLDef.MarketingUsage
+      DELETE ENTITY mSPLDef.MarketingUsage NONE
+   END
+   FOR EACH mSPLDef.SPLD_MarketingSection
+      CREATE ENTITY mSPLDef.MarketingUsage
+      mSPLDef.MarketingUsage.MarketingSectionID = mSPLDef.SPLD_MarketingSection.ID
+      mSPLDef.MarketingUsage.DisplayEntry       = mSPLDef.SPLD_MarketingSection.Title
+      FOR EACH mSPLDef.SPLD_MarketingUsage
+         CREATE ENTITY mSPLDef.MarketingUsage
+         mSPLDef.MarketingUsage.MarketingSectionID = mSPLDef.SPLD_MarketingSection.ID
+         mSPLDef.MarketingUsage.UsageID            = mSPLDef.SPLD_MarketingUsage.ID
+         GetStringFromAttributeByContext( szUsageType, mSPLDef, "SPLD_MarketingUsage", "UsageType", "", 20 )
+         mSPLDef.MarketingUsage.DisplayEntry        = "......" + szUsageType + ": " + mSPLDef.SPLD_MarketingUsage.Name
+      END
+   END*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: REMOVE_MarketingUsages
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+REMOVE_MarketingUsages( VIEW ViewToWindow )
+
+   /*VIEW mSPLDef  REGISTERED AS mSPLDef
+   SHORT nRC
+   // For each selected Usage work entitiy, position on the corresponding Usage under Marketing for Use and
+   // remove it. We will ignore any Marketing for Use entries that are selected.
+   FOR EACH mSPLDef.MarketingUsage
+      nRC = GetSelectStateOfEntity( mSPLDef, "MarketingUsage" )
+      IF nRC = 1
+         // A work entity with a null UsageID is a Marketing for Use entry.
+         IF mSPLDef.MarketingUsage.UsageID != ""
+            SET CURSOR FIRST mSPLDef.SPLD_MarketingSection WHERE mSPLDef.SPLD_MarketingSection.ID = mSPLDef.MarketingUsage.MarketingSectionID
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 13" )
+            END
+            SET CURSOR FIRST mSPLDef.SPLD_MarketingUsage WHERE mSPLDef.SPLD_MarketingUsage.ID = mSPLDef.MarketingUsage.UsageID
+            IF RESULT < zCURSOR_SET
+               IssueError( ViewToWindow,0,0, "Programming Error 14" )
+            END
+            EXCLUDE mSPLDef.SPLD_MarketingUsage
+         END
+      END
+   END
+   // Rebuild work structure for display.
+   GOTO_ShowMarketingUsages( ViewToWindow )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GENERATE_SelectedSPLD
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GENERATE_SelectedSPLD( VIEW ViewToWindow )
+
+   /*VIEW lSPLDLST REGISTERED AS lSPLDLST
+   VIEW mSPLDef  BASED ON LOD  mSPLDef
+   ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
+   NAME VIEW mSPLDef "mSPLDef"
+   mSPLDef.SPLD_TemplateGroup.ExternalGraphicFileName = "KennelSolHeader.jpg"
+   SET CURSOR NEXT mSPLDef.SPLD_TemplateGroup
+   mSPLDef.SPLD_TemplateGroup.ShowBox = "Y"
+   FOR EACH mSPLDef.SPLD_TemplatePanel
+      mSPLDef.SPLD_TemplatePanel.SizeX = 620
+   END
+   FOR EACH mSPLDef.SPLD_TemplateSection WITHIN mSPLDef.SubregPhysicalLabelDef
+      IF mSPLDef.SPLD_TemplateSection.TSectionType = "Marketing" OR
+         mSPLDef.SPLD_TemplateSection.TSectionType = "DirectionsForUse"
+         IF mSPLDef.SPLD_TemplateSection.StatementFormat != "L3"
+            mSPLDef.SPLD_TemplateSection.StatementFormat = "PU"
+         END
+      END
+   END
+   // Build Display Structure.
+   GenerateHTML_Label( mSPLDef )*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: LIST_MLCs
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+LIST_MLCs( VIEW ViewToWindow )
+
+   VIEW lMLC BASED ON LOD lMLC
+
+   GET VIEW lMLC NAMED "lMLC"
+   IF RESULT >= 0
+      DropObjectInstance( lMLC )
+   END
+   ACTIVATE lMLC Multiple
+   NAME VIEW lMLC "lMLC"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GENERATE_NewMLC_Version
+//
+// Creates a new version of an MLC from a previous version. It copies one
+// MLC to another and ties the second back to the first.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GENERATE_NewMLC_Version( VIEW ViewToWindow )
+
+   VIEW lMLC        REGISTERED AS lMLC
+   VIEW OriginalMLC BASED ON LOD  mMasLC
+   VIEW NewMLC      BASED ON LOD  mMasLC
+
+   // Generate new MLC from the selected MLC.
+   ACTIVATE OriginalMLC WHERE OriginalMLC.MasterLabelContent.ID = lMLC.MasterLabelContent.ID
+   NAME VIEW OriginalMLC "OriginalMLC"
+
+   ACTIVATE NewMLC EMPTY
+   NAME VIEW NewMLC "NewMLC"
+
+   BuildNewMLC_Version( NewMLC, OriginalMLC )    // Create NewMLC from OriginalMLC
+
+   // Make modifications to Target for compare purposes.
+   NewMLC.M_IngredientsStatement.Percent = 20.14
+   NewMLC.M_IngredientsStatement.ChemicalName = "Didecyl dimethyl ammonium bromide"
+   NewMLC.M_StorageDisposalSection.Title = "STORAGE AND DISPOSAL II"
+   SET CURSOR FIRST NewMLC.M_DirectionsForUseSection
+   SET CURSOR NEXT NewMLC.M_DirectionsForUseSection
+   NewMLC.M_DirectionsForUseStatement.Text = "Don Directions Test"
+   CREATE ENTITY NewMLC.M_Usage
+   NewMLC.M_Usage.UsageType = "C"
+   NewMLC.M_Usage.Name = "Don Claim"
+   NewMLC.M_Usage.BoldItalic = "R"
+   CREATE ENTITY NewMLC.M_MarketingUsageOrdering
+   INCLUDE NewMLC.M_MarketingUsage FROM NewMLC.M_Usage
+
+   COMMIT NewMLC
+
+   LIST_MLCs( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: COMPARE_ToPreviousMLC
+//
+// Used by the Primary Registrant to analyze changes made to an MLC by
+// comparing it to the MLC from which it was created. It's not for comparing
+// any two MLC's, but only two MLC's where one was created from the other.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+COMPARE_ToPreviousMLC( VIEW ViewToWindow )
+
+   VIEW lMLC     REGISTERED AS lMLC
+   VIEW lMLCATgt BASED ON LOD  lMLCATgt
+   VIEW lMLCASrc BASED ON LOD  lMLCASrc
+
+   ACTIVATE lMLCATgt WHERE lMLCATgt.MasterLabelContent.ID = lMLC.MasterLabelContent.ID
+   NAME VIEW lMLCATgt "lMLCATgt"
+
+   IF lMLCATgt.MP_MasterLabelContent DOES NOT EXIST
+      MessageSend( ViewToWindow, "", "Compare MLS's",
+                   "The selected MLC does not have a source MLC.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   ACTIVATE lMLCASrc WHERE lMLCASrc.MasterLabelContent.ID = lMLCATgt.MP_MasterLabelContent.ID
+   NAME VIEW lMLCASrc "lMLCASrc"
+
+   BuildDifferencesMLC( lMLCATgt, lMLCASrc )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_MLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_MLC( VIEW ViewToWindow )
+
+   VIEW lMLC   REGISTERED AS lMLC
+   VIEW mMasLC BASED ON LOD  mMasLC
+   SHORT nRC
+
+   nRC = MessagePrompt( ViewToWindow, "", "Delete", "OK to delete MLC?", 0, zBUTTONS_YESNO, zRESPONSE_YES, 0 )
+   IF nRC = zRESPONSE_NO
+      RETURN -1
+   END
+
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lMLC.MasterLabelContent.ID
+   NAME VIEW mMasLC "mMasLC"
+   DELETE ENTITY mMasLC.MasterLabelContent
+   COMMIT mMasLC
+   DropObjectInstance( mMasLC )
+
+   LIST_MLCs( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateMLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateMLC( VIEW ViewToWindow )
+
+   VIEW lMLC   REGISTERED AS lMLC
+   VIEW mMasLC BASED ON LOD  mMasLC
+
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lMLC.MasterLabelContent.ID
+   NAME VIEW mMasLC "mMasLC"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateSLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateSLC( VIEW ViewToWindow )
+
+   VIEW lSLC   REGISTERED AS lSLC
+   VIEW mSubLC BASED ON LOD  mSubLC
+
+   ACTIVATE mSubLC WHERE mSubLC.SubregLabelContent.ID = lSLC.SubregLabelContent.ID
+   NAME VIEW mSubLC "mSubLC"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GENERATE_NewSLC_Version
+//
+// Generates a new version of an SLC from an existing SLC by following the
+// path from the original SLC to its parent MLC and to the next version of
+// that MLC.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GENERATE_NewSLC_Version( VIEW ViewToWindow )
+
+   VIEW lSLC        REGISTERED AS lSLC
+   VIEW OriginalSLC BASED ON LOD  mSubLC
+   VIEW NewSLC      BASED ON LOD  mSubLC
+   VIEW SourceMLC   BASED ON LOD  mMasLC
+   VIEW PreviousMLC BASED ON LOD  lMLCASrc
+
+   // Generate new SLC from the selected SLC.
+
+   // Source SLC
+   ACTIVATE OriginalSLC WHERE OriginalSLC.SubregLabelContent.ID = lSLC.SubregLabelContent.ID
+   NAME VIEW OriginalSLC "OriginalSLC"
+
+   // MLC for Source SLC
+   ACTIVATE PreviousMLC WHERE PreviousMLC.MasterLabelContent.ID = OriginalSLC.MasterLabelContent.ID
+   NAME VIEW PreviousMLC "PreviousMLC"
+
+   // MLC for next version of MLC
+   IF PreviousMLC.MN_MasterLabelContent DOES NOT EXIST
+      MessageSend( ViewToWindow, "", "Generate SLC",
+                   "The MLC for the selected SLC does not have a next version.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   ACTIVATE SourceMLC WHERE SourceMLC.MasterLabelContent.ID = PreviousMLC.MN_MasterLabelContent.ID
+   NAME VIEW SourceMLC "SourceMLC"
+
+   ACTIVATE NewSLC EMPTY
+   NAME VIEW NewSLC "NewSLC"
+
+   BuildNewSLC_Version( NewSLC, OriginalSLC, SourceMLC, PreviousMLC )    // Create NewSLC from OriginalSLC
+
+   COMMIT NewSLC
+
+   LIST_SLCs( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: COMPARE_SLC_ToNextMLC
+//
+// Used by the Subregistrant to understand the impact of going to a new SLC
+// version. It identifies the differences between two SLC versions, where one
+// version was created from the other.  The list of differences shows ALL
+// Section Titles, whether or not there are any changes to the section data.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+COMPARE_SLC_ToNextMLC( VIEW ViewToWindow )
+
+   VIEW lSLC     REGISTERED AS lSLC
+   VIEW lSLCAnal BASED ON LOD  lSLCAnal
+   VIEW lMLCATgt BASED ON LOD  lMLCATgt
+   VIEW lMLCASrc BASED ON LOD  lMLCASrc
+
+   // Compare SLC (source) to MLC (target)
+   // Three objects are involved in the comparison.
+   //   lSLCAnal - The SLC being analyzed
+   //   lMLCASrc - The MLC that is was created from
+   //   lMLCATgt - The new MLC generated from lMLCASrc, which is the target of the compare.
+
+   ACTIVATE lSLCAnal WHERE lSLCAnal.SubRegLabelContent.ID = lSLC.SubregLabelContent.ID
+   NAME VIEW lSLCAnal "lSLCAnal"
+
+   IF lSLCAnal.MN_MasterLabelContent DOES NOT EXIST
+      MessageSend( ViewToWindow, "", "Compare MLS's",
+                   "The MLC for the selected SLC does not have an MLC generated from it.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   ACTIVATE lMLCASrc WHERE lMLCASrc.MasterLabelContent.ID = lSLCAnal.MasterLabelContent.ID
+   NAME VIEW lMLCASrc "lMLCASrc"
+
+   ACTIVATE lMLCATgt WHERE lMLCATgt.MasterLabelContent.ID = lSLCAnal.MN_MasterLabelContent.ID
+   NAME VIEW lMLCATgt "lMLCATgt"
+
+   BuildDifferencesSLC( lMLCATgt, lMLCASrc, lSLCAnal )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: COMPARE_SLC_MLC_Net
+//
+// Used by the Subregistrant to understand the impact of going to a new SLC
+// version. It identifies the differences between two SLC versions, where one
+// version was created from the other.  The list of differences shows ONLY
+// those Section Titles where there are changes in section data.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+COMPARE_SLC_MLC_Net( VIEW ViewToWindow )
+
+   VIEW lSLC     REGISTERED AS lSLC
+   VIEW lSLCAnal BASED ON LOD  lSLCAnal
+   VIEW lMLCATgt BASED ON LOD  lMLCATgt
+   VIEW lMLCASrc BASED ON LOD  lMLCASrc
+
+   // Compare SLC (source) to MLC (target)
+   // Three objects are involved in the comparison.
+   //   lSLCAnal - The SLC being analyzed
+   //   lMLCASrc - The MLC that is was created from
+   //   lMLCATgt - The new MLC generated from lMLCASrc, which is the target of the compare.
+
+   ACTIVATE lSLCAnal WHERE lSLCAnal.SubRegLabelContent.ID = lSLC.SubregLabelContent.ID
+   NAME VIEW lSLCAnal "lSLCAnal"
+
+   IF lSLCAnal.MN_MasterLabelContent DOES NOT EXIST
+      MessageSend( ViewToWindow, "", "Compare MLS's",
+                   "The MLC for the selected SLC does not have an MLC generated from it.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   ACTIVATE lMLCASrc WHERE lMLCASrc.MasterLabelContent.ID = lSLCAnal.MasterLabelContent.ID
+   NAME VIEW lMLCASrc "lMLCASrc"
+
+   ACTIVATE lMLCATgt WHERE lMLCATgt.MasterLabelContent.ID = lSLCAnal.MN_MasterLabelContent.ID
+   NAME VIEW lMLCATgt "lMLCATgt"
+
+   BuildDifferencesSLC( lMLCATgt, lMLCASrc, lSLCAnal )
+
+   DeleteEmptyTitles( lMLCATgt )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_SLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_SLC( VIEW ViewToWindow )
+
+   VIEW lSLC   REGISTERED AS lSLC
+   VIEW mSubLC BASED ON LOD  mSubLC
+   SHORT nRC
+
+   nRC = MessagePrompt( ViewToWindow, "", "Delete", "OK to delete SLC?", 0, zBUTTONS_YESNO, zRESPONSE_YES, 0 )
+   IF nRC = zRESPONSE_NO
+      RETURN -1
+   END
+
+   ACTIVATE mSubLC WHERE mSubLC.SubregLabelContent.ID = lSLC.SubregLabelContent.ID
+   NAME VIEW mSubLC "mSubLC"
+   DELETE ENTITY mSubLC.SubregLabelContent
+   COMMIT mSubLC
+   DropObjectInstance( mSubLC )
+
+   LIST_SLCs( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: LIST_SLCs
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+LIST_SLCs( VIEW ViewToWindow )
+
+   VIEW lSLC BASED ON LOD lSLC
+
+   ACTIVATE lSLC Multiple
+   NAME VIEW lSLC "lSLC"
+   FOR EACH lSLC.SubregLabelContent
+      lSLC.SubregLabelContent.wProductNameVersion = lSLC.SubregProduct.Name + " " + lSLC.SubregLabelContent.Version
+   END
+   SET CURSOR FIRST lSLC.SubregLabelContent
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_CopyNewProductMLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_CopyNewProductMLC( VIEW ViewToWindow )
+
+   VIEW lMLC     REGISTERED AS lMLC
+   VIEW mMasProd BASED ON LOD  mMasProd
+   VIEW mMasLC   BASED ON LOD  mMasLC
+
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lMLC.MasterLabelContent.ID
+   NAME VIEW mMasLC "mMasLC"
+
+   ACTIVATE mMasProd EMPTY
+   CREATE ENTITY mMasProd.MasterProduct
+   NAME VIEW mMasProd "mMasProd"
+   INCLUDE mMasProd.PrimaryRegistrant FROM mMasLC.PrimaryRegistrant
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: COPY_MLC_ToNewProductMLC
+//
+// Creates a new MLC for one Product by copying an MLC from a different
+// Product. The two MLC's are not tied together.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+COPY_MLC_ToNewProductMLC( VIEW ViewToWindow )
+
+   VIEW mMasProd  REGISTERED AS mMasProd
+   VIEW mMasProd2 BASED ON LOD  mMasProd
+   VIEW mMasLC    REGISTERED AS mMasLC
+   VIEW NewMLC    BASED ON LOD  mMasLC
+
+   IF mMasProd.MasterProduct.Name = ""
+      MessageSend( ViewToWindow, "", "Copy Product MLC",
+                   "A name must be specified.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   ACTIVATE NewMLC EMPTY
+   CREATE ENTITY NewMLC.MasterLabelContent
+   NAME VIEW NewMLC "NewMLC"
+
+   // If a Product by same name exists, use it.
+   ACTIVATE mMasProd2 WHERE mMasProd2.MasterProduct.Name = mMasProd.MasterProduct.Name
+   IF RESULT >= 0
+      INCLUDE NewMLC.MasterProduct FROM mMasProd2.MasterProduct
+      DropObjectInstance( mMasProd2 )
+      DropObjectInstance( mMasProd )
+   ELSE
+      SetMatchingAttributesByName( mMasProd, "MasterProduct", mMasLC, "MasterProduct", zSET_NULL )
+      COMMIT mMasProd
+      INCLUDE NewMLC.MasterProduct FROM mMasProd.MasterProduct
+      DropObjectInstance( mMasProd )
+   END
+
+   CopyMLCToNewProduct( NewMLC, mMasLC )
+
+   COMMIT NewMLC
+
+   LIST_MLCs( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GENERATE_NewSLC_FromMLC
+//
+// Generates an SLC from an MLC.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GENERATE_NewSLC_FromMLC( VIEW ViewToWindow )
+
+   VIEW lMLC      REGISTERED AS lMLC
+   VIEW mMasLC    BASED ON LOD  mMasLC
+   VIEW mSubLC    BASED ON LOD  mSubLC
+   VIEW mSubProd  REGISTERED AS mSubProd
+   VIEW mSubProd2 BASED ON LOD  mSubProd
+   VIEW mSubreg   BASED ON LOD  mSubreg
+   STRING ( 20 ) szVersion
+
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lMLC.MasterLabelContent.ID
+   NAME VIEW mMasLC "mMasLC"
+
+   ACTIVATE mSubLC EMPTY
+   NAME VIEW mSubLC "mSubLC"
+   CREATE ENTITY mSubLC.SubregLabelContent
+   SetAttributeFromCurrentDateTime( mSubLC, "SubregLabelContent", "RevisionDate" )
+   szVersion = mSubLC.SubregLabelContent.RevisionDate
+   mSubLC.SubregLabelContent.Version = szVersion
+   mSubLC.SubregLabelContent.Description = mSubProd.SubregProduct.Name
+
+   ACTIVATE mSubProd2 WHERE mSubProd2.SubregProduct.Name = mSubProd.SubregProduct.Name
+   IF RESULT >= 0
+      INCLUDE mSubLC.SubregProduct FROM mSubProd2.SubregProduct
+   ELSE
+      DropObjectInstance( mSubProd2 )
+      SetMatchingAttributesByName( mSubProd, "SubregProduct", mMasLC, "MasterProduct", zSET_NULL )
+      INCLUDE mSubProd.MasterProduct FROM mMasLC.MasterProduct
+      ACTIVATE mSubreg
+      INCLUDE mSubProd.Subregistrant FROM mSubreg.Subregistrant
+      COMMIT mSubProd
+      INCLUDE mSubLC.SubregProduct FROM mSubProd.SubregProduct
+   END
+
+   BuildSLC_FromMLC( mSubLC, mMasLC )
+   IssueError( ViewToWindow,0,0, "Before Commit" )
+   COMMIT mSubLC
+   IssueError( ViewToWindow,0,0, "After Commit" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_CopyNewProductSLC
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_CopyNewProductSLC( VIEW ViewToWindow )
+
+   VIEW mSubProd BASED ON LOD  mSubProd
+
+   ACTIVATE mSubProd EMPTY
+   NAME VIEW mSubProd "mSubProd"
+   CREATE ENTITY mSubProd.SubregProduct
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GENERATE_NewSPLD_Version
+//
+// Generates a new version of an SPLD from an existing SPLD by following the
+// path from the original SPLD to its parent SLC and to the next version of
+// that SLC.
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GENERATE_NewSPLD_Version( VIEW ViewToWindow )
+
+   /*VIEW lSPLDLST   REGISTERED AS lSPLDLST
+   VIEW NewSPLD    BASED ON LOD  mSPLDef
+   VIEW SourceSPLD BASED ON LOD  mSPLDef
+   VIEW SourceSLC  BASED ON LOD  mSubLC
+   VIEW ParentSLC  BASED ON LOD  mSubLC   // This is the parent SLC of the SPLD to be created.
+   VIEW mTempl     BASED ON LOD  mTempl
+   // Build a new SPLD version from an existing SPLD.
+   // Activate selected SPLD, which will be source of new SPLD.
+   ACTIVATE SourceSPLD WHERE SourceSPLD.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
+   NAME VIEW SourceSPLD "SourceSPLD"
+   // Activate Source SLC of source SPLD just activated.
+   ACTIVATE SourceSLC WHERE SourceSLC.SubregLabelContent.ID = SourceSPLD.SubregLabelContent.ID
+   NAME VIEW SourceSLC "SourceSLC"
+   // Activate the next version of the Source SLC, which will become the Parent SLC of new SPLD.
+   ACTIVATE ParentSLC WHERE ParentSLC.SubregLabelContent.ID = SourceSLC.SN_SubregLabelContent.ID
+   NAME VIEW ParentSLC "ParentSLC"
+   // Activate new empty SPLD.
+   ACTIVATE NewSPLD EMPTY
+   CREATE ENTITY NewSPLD.SubregPhysicalLabelDef
+   NAME VIEW NewSPLD "NewSPLD"
+   // Build the main part of the SPLD from the Source SPLD.
+   BuildSPLD_FromSPLD( NewSPLD, SourceSPLD, ParentSLC )
+   // Add the Template subobject to the SPLD from the original SPLD. We will activate mTempl so we
+   // can pass the Template ID into the operation.
+   ACTIVATE mTempl RootOnly WHERE mTempl.Template.Name = SourceSPLD.SPLD_Template.Name
+   NAME VIEW mTempl "mTempl"
+   BuildSPLD_Template( NewSPLD, mTempl.Template.ID )
+   COMMIT NewSPLD
+   // Build Display NewSPLD.
+   BuildDisplayStructure( NewSPLD )
+   // Reset cursor to beginning for all entties.
+   SET CURSOR FIRST NewSPLD.SubregPhysicalLabelDef
+   // Rebuild SPLD list.
+   GET VIEW lSPLDLST NAMED "lSPLDLST"
+   IF RESULT >= 0
+      DropObjectInstance( lSPLDLST )
+   END
+   ACTIVATE lSPLDLST Multiple
+   NAME VIEW lSPLDLST "lSPLDLST"*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: INITIALIZE_Usages
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+INITIALIZE_Usages( VIEW ViewToWindow )
+
+   VIEW mMasLC REGISTERED AS mMasLC
+   STRING ( 15 ) szClassification
+   STRING ( 1 )  CompareResult
+
+   // Because we lost Usages under Directions and Marketing, we initialize some test data here.
+   // We will add Areas of Use to the first Directions and Marketing Sections, Surfaces to the second, etc.
+   /*SET CURSOR FIRST mMasLC.M_DirectionsForUseSection
+   SET CURSOR FIRST mMasLC.M_MarketingSection
+   FOR EACH mMasLC.M_Usage WHERE mMasLC.M_Usage.UsageType = "U"
+      CREATE ENTITY mMasLC.M_DirectionsUsageOrdering
+      INCLUDE mMasLC.M_DirectionsUsage FROM mMasLC.M_Usage
+      CREATE ENTITY mMasLC.M_MarketingUsageOrdering
+      INCLUDE mMasLC.M_MarketingUsage FROM mMasLC.M_Usage
+   END
+   SET CURSOR NEXT mMasLC.M_DirectionsForUseSection
+   SET CURSOR NEXT mMasLC.M_MarketingSection
+   FOR EACH mMasLC.M_Usage WHERE mMasLC.M_Usage.UsageType = "S"
+      CREATE ENTITY mMasLC.M_DirectionsUsageOrdering
+      INCLUDE mMasLC.M_DirectionsUsage FROM mMasLC.M_Usage
+      CREATE ENTITY mMasLC.M_MarketingUsageOrdering
+      INCLUDE mMasLC.M_MarketingUsage FROM mMasLC.M_Usage
+   END
+   SET CURSOR NEXT mMasLC.M_DirectionsForUseSection
+   SET CURSOR NEXT mMasLC.M_MarketingSection
+   FOR EACH mMasLC.M_Usage WHERE mMasLC.M_Usage.UsageType = "C"
+      CREATE ENTITY mMasLC.M_DirectionsUsageOrdering
+      INCLUDE mMasLC.M_DirectionsUsage FROM mMasLC.M_Usage
+      CREATE ENTITY mMasLC.M_MarketingUsageOrdering
+      INCLUDE mMasLC.M_MarketingUsage FROM mMasLC.M_Usage
+   END*/
+
+   // Add Classifications to each Claim. If we haven't come across a Classification yet, delete the entry.
+   /*FOR EACH mMasLC.M_Usage WHERE mMasLC.M_Usage.UsageType = "C"
+      CompareResult = ""
+      IF mMasLC.M_Usage.Name = "(Bacteria:)"
+         szClassification = "Bacteria"
+         CompareResult = "L"
+      ELSE
+      IF mMasLC.M_Usage.Name = "(Viruses:)"
+         szClassification = "Viruses"
+         CompareResult = "L"
+      ELSE
+      IF mMasLC.M_Usage.Name = "(Fungi:)"
+         szClassification = "Fungi"
+         CompareResult = "L"
+      END
+      END
+      END
+      IF szClassification = ""
+         DELETE ENTITY mMasLC.M_Usage NONE
+      ELSE
+         mMasLC.M_Usage.ClaimsClassification = szClassification
+      END
+   END*/
+   OrderEntityForView( mMasLC, "M_Usage", "Type A ClaimsClassification A Name" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateClaims
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateClaims( VIEW ViewToWindow )
+
+   VIEW mMasLC REGISTERED AS mMasLC
+
+   // Build the Claim Classification work structure, if it's not there.
+   // If it's there, it will be OK from last time.
+
+   IF mMasLC.MI_ClaimsClassification DOES NOT EXIST
+      // First create the four Classification entities.
+      CREATE ENTITY mMasLC.MI_ClaimsClassification
+      mMasLC.MI_ClaimsClassification.ClaimsClassification = "Bacteria"
+      CREATE ENTITY mMasLC.MI_ClaimsClassification
+      mMasLC.MI_ClaimsClassification.ClaimsClassification = "Protozoa"
+      CREATE ENTITY mMasLC.MI_ClaimsClassification
+      mMasLC.MI_ClaimsClassification.ClaimsClassification = "Viruses"
+      CREATE ENTITY mMasLC.MI_ClaimsClassification
+      mMasLC.MI_ClaimsClassification.ClaimsClassification = "Fungi"
+
+      // Next include each claim under its Classification.
+      FOR EACH mMasLC.M_Usage WHERE mMasLC.M_Usage.UsageType = "C"
+         SET CURSOR FIRST mMasLC.MI_ClaimsClassification
+                    WHERE mMasLC.MI_ClaimsClassification.ClaimsClassification = mMasLC.M_Usage.ClaimsClassification
+         SET CURSOR LAST mMasLC.MI_ClaimsUsage
+         INCLUDE mMasLC.MI_ClaimsUsage FROM mMasLC.M_Usage
+      END
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ADD_Claim
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ADD_Claim( VIEW ViewToWindow )
+
+   VIEW mMasLC REGISTERED AS mMasLC
+
+   // Add the M_Usage Claim in its correct position and include it under the Classification.
+   IF mMasLC.MI_ClaimsUsage EXISTS
+      SetCursorFirstEntityByEntityCsr( mMasLC, "M_Usage", mMasLC, "MI_ClaimsUsage", "" )
+   ELSE
+      // Since there are yet no Claims of this Classification, it doesn't matter where we add it, so
+      // we'll just add it to the end.
+      SET CURSOR LAST mMasLC.M_Usage
+   END
+   CREATE ENTITY mMasLC.M_Usage
+   mMasLC.M_Usage.UsageType = "C"
+   mMasLC.M_Usage.ClaimsClassification = mMasLC.MI_ClaimsClassification.ClaimsClassification
+   INCLUDE mMasLC.MI_ClaimsUsage FROM mMasLC.M_Usage
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_Claim
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_Claim( VIEW ViewToWindow )
+
+   VIEW mMasLC REGISTERED AS mMasLC
+
+   SetCursorFirstEntityByEntityCsr( mMasLC, "M_Usage", mMasLC, "MI_ClaimsUsage", "" )
+   IssueError( ViewToWindow,0,0,"Before Delete" )
+   DELETE ENTITY mMasLC.M_Usage
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SORT_SPLD_Usages
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SORT_SPLD_Usages( VIEW ViewToWindow )
+
+   VIEW mSPLDef REGISTERED AS mSPLDef
+
+   FOR EACH mSPLDef.SPLD_DirectionsForUseSection
+      IF mSPLDef.SPLD_DirectionsOrdering EXISTS
+         OrderEntityForView( mSPLDef, "SPLD_DirectionsOrdering", "SPLD_DirectionsUsage.ClaimsClassification A SPLD_DirectionsUsage.Name A" )
+      END
+   END
+   FOR EACH mSPLDef.SPLD_MarketingSection
+      IF mSPLDef.SPLD_MarketingOrdering EXISTS
+         OrderEntityForView( mSPLDef, "SPLD_MarketingOrdering", "SPLD_MarketingUsage.ClaimsClassification A SPLD_MarketingUsage.Name A" )
+      END
+   END
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: UPDATE_SLC_Test
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+UPDATE_SLC_Test( VIEW ViewToWindow )
+
+   VIEW mSubLC  BASED ON LOD mSubLC
+   
+   ActivateOI_FromFile( mSubLC, "mSubLC", ViewToWindow, "c:\lplr\epamms\XSL\mSubLC.por", zSINGLE )
+   NAME VIEW mSubLC "mSubLC"
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: SAVE_SLC_Test
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+SAVE_SLC_Test( VIEW ViewToWindow )
+
+   VIEW mSubLC  BASED ON LOD mSubLC
+   
+   GET VIEW mSubLC NAMED "mSubLC"
+   CommitOI_ToFile( mSubLC, "c:\lplr\epamms\XSL\mSubLC.por", zASCII )
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: SAVE_SPLD_Test
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+SAVE_SPLD_Test( VIEW ViewToWindow )
+
+   VIEW mSPLDef  BASED ON LOD mSPLDef
+   
+   GET VIEW mSPLDef NAMED "mSPLDef"
+   CommitOI_ToFile( mSPLDef, "c:\lplr\epamms\XSL\mSPLDef.por", zASCII )
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: BUILD_SPLD_FromSLC
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+BUILD_SPLD_FromSLC( VIEW ViewToWindow )
+
+   VIEW mSubLC  BASED ON LOD mSubLC
+   VIEW mSPLDef BASED ON LOD mSPLDef
+   SHORT nRC
+   
+   nRC = MessagePrompt( ViewToWindow, "", "Build SPLD", "OK to rebuild SPLD?", 0, zBUTTONS_YESNO, zRESPONSE_YES, 0 )
+   IF nRC = zRESPONSE_NO
+      RETURN -1
+   END
+   
+   ActivateOI_FromFile( mSubLC, "mSubLC", ViewToWindow, "c:\lplr\epamms\XSL\mSubLC.por", zSINGLE )
+   NAME VIEW mSubLC "mSubLC"
+   
+   ACTIVATE mSPLDef EMPTY 
+   NAME VIEW mSPLDef "mSPLDef"
+   CREATE ENTITY mSPLDef.SubregPhysicalLabelDef 
+   mSPLDef.SubregPhysicalLabelDef.Name = "Don KennelSol"
+   FOR EACH mSubLC.S_DirectionsForUseSection 
+      mSubLC.S_DirectionsForUseSection.Selected = "Y"
+   END
+   FOR EACH mSubLC.S_MarketingSection 
+      mSubLC.S_MarketingSection.Selected = "Y"
+   END
+   
+   BuildSPLD_FromSLC( mSPLDef, mSubLC ) 
+   
+   CommitOI_ToFile( mSPLDef, "c:\lplr\epamms\XSL\mSPLDef.por", zASCII )
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: GOTO_UpdateTestSPLD
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+GOTO_UpdateTestSPLD( VIEW ViewToWindow )
+
+   VIEW mSPLDef BASED ON LOD mSPLDef
+   
+   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\lplr\epamms\XSL\mSPLDef.por", zSINGLE )
+   NAME VIEW mSPLDef "mSPLDef"
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: REBUILD_LLD
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+REBUILD_LLD( VIEW ViewToWindow )
+
+   VIEW mSubLC  BASED ON LOD mSubLC
+   VIEW mSPLDef BASED ON LOD mSPLDef
+
+   // Test XSLT generation against a test object.
+   
+   // Activate test SPLD.
+   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\lplr\epamms\XSL\mSPLDef.por", zSINGLE )
+
+   // Get rid of any current LLD.
+   IF mSPLDef.SPLD_LLD  EXISTS
+      DELETE ENTITY mSPLDef.SPLD_LLD  
+   END
+   
+   // Build LLD subobject.
+   CREATE ENTITY mSPLDef.SPLD_LLD 
+   mSPLDef.SPLD_LLD.Name = "KennelSol Test" 
+   
+   // First Page
+   CREATE ENTITY mSPLDef.Panel 
+   mSPLDef.Panel.Width  = 5.25
+   mSPLDef.Panel.Height = 7
+   
+   // KennelSol Image
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.Name       = "Large Image"
+   mSPLDef.Block.BlockTitle = mSPLDef.Block.Name 
+   mSPLDef.Block.ImageName  = "KennelSolHeader.jpg" 
+   mSPLDef.Block.Top        = 0.0
+   mSPLDef.Block.Left       = 0.1
+   mSPLDef.Block.Height     = 3
+   mSPLDef.Block.Width      = 5
+   
+   // Ingredients / Hazards / Contents
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.Top    = 3.2
+   mSPLDef.Block.Height = 3.5
+   mSPLDef.Block.Width  = 5.25
+   mSPLDef.Block.BorderStyle = "solid"
+   mSPLDef.Block.BorderColor = "blue"
+   mSPLDef.Block.BorderWidth = 1
+   mSPLDef.Block.FontFamily = "Verdana"
+   mSPLDef.Block.FontSize   = "8pt"
+   
+   // Ingredients
+   SetViewToSubobject( mSPLDef, "SubBlock" )
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "Ingredients"
+   mSPLDef.Block.MarginTop    = .4
+   mSPLDef.Block.MarginLeft   = .25
+   mSPLDef.Block.MarginRight  = .25
+   mSPLDef.Block.MarginBottom = .25
+   mSPLDef.Block.FontFamily   = "Verdana"
+   mSPLDef.Block.FontSize     = "8pt"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Ingredients Title"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.MarginTop    = .2
+   mSPLDef.BlockSpecialAttributeBlock.MarginBottom = .2
+   mSPLDef.BlockSpecialAttributeBlock.FontWeight   = "bold"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Ingredients Items"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.MarginBottom = .1
+   mSPLDef.BlockSpecialAttributeBlock.FontFamily = "Arial"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Ingredients Inert"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.MarginBottom = .15
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Ingredients Total"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.MarginBottom = .15
+   
+   // Hazards
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "HumanHazard" 
+   mSPLDef.Block.MarginTop  = .25
+   mSPLDef.Block.Height     = 1
+   mSPLDef.Block.Width      = 5.25
+   mSPLDef.Block.TextAlign  = "center"
+   mSPLDef.Block.FontFamily = "Verdana"
+   mSPLDef.Block.FontSize   = "8pt"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Child Hazard Warning"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.FontFamily = "Arial"
+   mSPLDef.BlockSpecialAttributeBlock.FontSize   = "16pt"
+   mSPLDef.BlockSpecialAttributeBlock.Color      = "blue"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "EPA Signal Word"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.FontFamily = "Arial"
+   mSPLDef.BlockSpecialAttributeBlock.FontSize   = "20pt"
+   mSPLDef.BlockSpecialAttributeBlock.Color      = "red"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Precautionary Statement"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   
+   // Net Contents
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "NetContents" 
+   mSPLDef.Block.MarginTop  = 0.0
+   mSPLDef.Block.Height     = 0.1
+   mSPLDef.Block.Width      = 5.25
+   mSPLDef.Block.TextAlign  = "center"
+   mSPLDef.Block.FontFamily = "Verdana"
+   mSPLDef.Block.FontSize   = "8pt"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Net Contents"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   
+   // EPA Reg. and Est. Nos.
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "EPA_RegAndEstNbr" 
+   mSPLDef.Block.MarginTop = 0.0
+   mSPLDef.Block.Height    = 0.1
+   mSPLDef.Block.Width     = 5.25
+   mSPLDef.Block.TextAlign = "center"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "EPA Reg / Est No."
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   
+   ResetViewFromSubobject( mSPLDef )
+   
+   // Panel 2
+   
+   CREATE ENTITY mSPLDef.Panel 
+   mSPLDef.Panel.Width  = 5.25
+   mSPLDef.Panel.Height = 7
+   
+   // Marketing Recommended for Use Block
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "Marketing"
+   mSPLDef.Block.Name            = "Recommended Use"
+   mSPLDef.Block.BlockTitle      = mSPLDef.Block.Name 
+   mSPLDef.Block.Top         = 0.1
+   mSPLDef.Block.Left        = 0.125
+   mSPLDef.Block.Height      = 1.5
+   mSPLDef.Block.Width       = 5
+   mSPLDef.Block.FontFamily  = "Verdana"
+   mSPLDef.Block.Color       = "blue"
+   mSPLDef.Block.FontSize    = "8pt"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Statement Title"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.FontSize = "10pt"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Statement Text"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.MarginTop = 0.005
+   
+   // Directions for Use Block
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "DirectionsForUse"
+   mSPLDef.Block.Name            = "DIRECTIONS FOR USE"
+   mSPLDef.Block.BlockTitle      = mSPLDef.Block.Name 
+   mSPLDef.Block.Top         = 1.6
+   mSPLDef.Block.Left        = 0.125
+   mSPLDef.Block.Height      = 4.15
+   mSPLDef.Block.Width       = 5
+   mSPLDef.Block.FontFamily  = "Verdana"
+   mSPLDef.Block.Color       = "blue"
+   mSPLDef.Block.FontSize    = "8pt"
+   
+   // Panel 3
+   
+   CREATE ENTITY mSPLDef.Panel 
+   mSPLDef.Panel.Width  = 5.25
+   mSPLDef.Panel.Height = 7
+   
+   // Continuation Block
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "DirectionsForUse"
+   mSPLDef.Block.Top         = 0.1
+   mSPLDef.Block.Left        = 0.125
+   mSPLDef.Block.Height      = 4.0
+   mSPLDef.Block.Width       = 5
+   mSPLDef.Block.FontFamily  = "Verdana"
+   mSPLDef.Block.Color       = "blue"
+   mSPLDef.Block.FontSize    = "8pt"
+   mSPLDef.Block.ContinuationBlockFlag = "Y"
+   
+   // Marketing Block
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "Marketing"
+   mSPLDef.Block.Name            = "(AREAS OF USE:)"
+   mSPLDef.Block.BlockTitle      = "(AREAS OF USE:)"
+   mSPLDef.Block.Top         = 4.25
+   mSPLDef.Block.Left        = 0.125
+   mSPLDef.Block.Height      = 1
+   mSPLDef.Block.Width       = 5
+   mSPLDef.Block.FontFamily  = "Verdana"
+   mSPLDef.Block.Color       = "blue"
+   mSPLDef.Block.FontSize    = "8pt"
+   
+   // Panel 4
+   
+   CREATE ENTITY mSPLDef.Panel 
+   mSPLDef.Panel.Width  = 5.25
+   mSPLDef.Panel.Height = 7
+   
+   // Pathogen Claims
+   SET CURSOR FIRST mSPLDef.SPLD_MarketingSection WHERE mSPLDef.SPLD_MarketingSection.Title = "Organism Claims:" 
+   FOR EACH mSPLDef.SPLD_MarketingOrdering 
+      IF mSPLDef.SPLD_MarketingUsage.UsageType != "C"
+         DELETE ENTITY mSPLDef.SPLD_MarketingOrdering NONE 
+      END
+   END
+   
+   // Marketing with Claims List Block
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.Top         = 0.1
+   mSPLDef.Block.Left        = 0.125
+   mSPLDef.Block.Height      = 5.75
+   mSPLDef.Block.Width       = 5
+   mSPLDef.Block.BorderStyle = "solid"
+   mSPLDef.Block.BorderColor = "red"
+   mSPLDef.Block.BorderWidth = 2
+   mSPLDef.Block.FontFamily  = "Verdana"
+   mSPLDef.Block.FontSize    = "8pt"
+   
+   // Product Name
+   SetViewToSubobject( mSPLDef, "SubBlock" )
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "Product Name"
+   mSPLDef.Block.Height          = 0.2
+   mSPLDef.Block.MarginTop       = 0.2
+   mSPLDef.Block.MarginLeft      = 0.2
+   mSPLDef.Block.MarginRight     = 0.1
+   mSPLDef.Block.FontWeight      = "bold"
+   mSPLDef.Block.FontSize        = "14pt"
+   mSPLDef.Block.Color           = "red"
+   mSPLDef.Block.TextAlign       = "center"
+   
+   // Product Description
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "Product Description"
+   mSPLDef.Block.Height          = 0.2
+   mSPLDef.Block.MarginTop       = 0.1
+   mSPLDef.Block.MarginLeft      = 0.01
+   mSPLDef.Block.MarginRight     = 0.1
+   mSPLDef.Block.FontWeight      = "bold"
+   mSPLDef.Block.FontSize        = "14pt"
+   mSPLDef.Block.Color           = "red"
+   mSPLDef.Block.TextAlign       = "center"
+   
+   // Claims Usage Block
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.LLD_SectionType = "Claims List - Column 3"
+   mSPLDef.Block.Name            = "Organism Claims"
+   mSPLDef.Block.BlockTitle      = mSPLDef.Block.Name 
+   
+   mSPLDef.Block.Top             = 1.0
+   mSPLDef.Block.Left            = 0.2
+   mSPLDef.Block.Height          = 4.3
+   mSPLDef.Block.Width           = 4.5
+   mSPLDef.Block.Color           = "blue"
+   mSPLDef.Block.FontSize        = "8pt"
+   mSPLDef.Block.FontFamily      = "Verdana"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Subtitle"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.TextAlign = "center"
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Marketing Statements"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.TextAlign = "left"
+   mSPLDef.BlockSpecialAttributeBlock.MarginTop = 0.1
+   
+   CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+   mSPLDef.BlockSpecialSectionAttribute.Name = "Column"
+   CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+   mSPLDef.BlockSpecialAttributeBlock.TextAlign   = "left"
+   mSPLDef.BlockSpecialAttributeBlock.Top         = 1
+   mSPLDef.BlockSpecialAttributeBlock.MarginRight = 0.05
+   mSPLDef.BlockSpecialAttributeBlock.MarginLeft  = 0.05
+   
+   ResetViewFromSubobject( mSPLDef )
+   
+   // Trailing KennelSol Image
+   CREATE ENTITY mSPLDef.Block 
+   mSPLDef.Block.Name       = "Large Image"
+   mSPLDef.Block.BlockTitle = mSPLDef.Block.Name 
+   mSPLDef.Block.ImageName  = "AlphaTechPetBase.jpg" 
+   mSPLDef.Block.Top     = 6
+   mSPLDef.Block.Left    = 0.125
+   mSPLDef.Block.Height  = 1
+   mSPLDef.Block.Width   = 5
+   
+   // Save the file.
+   CommitOI_ToFile( mSPLDef, "c:\lplr\epamms\XSL\mSPLDef.por", zASCII )
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: GOTO_UpdateTestLLD
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+GOTO_UpdateTestLLD( VIEW ViewToWindow )
+
+   VIEW mSPLDef      BASED ON LOD mSPLDef
+   VIEW mSPLDefPanel BASED ON LOD mSPLDef
+   INTEGER      PanelCount
+   STRING ( 2 ) szPanelCount
+
+   // Activate Test LLD for update dialog.
+   
+   // Activate test SPLD.
+   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\lplr\epamms\XSL\mSPLDef.por", zSINGLE )
+   NAME VIEW mSPLDef "mSPLDef"
+   CreateViewFromView( mSPLDefPanel, mSPLDef )
+   NAME VIEW mSPLDefPanel "mSPLDefPanel"
+   
+   // Set Panel Number.
+   FOR EACH mSPLDef.Panel 
+      PanelCount = PanelCount + 1
+      szPanelCount = PanelCount
+      mSPLDef.Panel.PanelNumber = szPanelCount
+   END
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: PICK_LLD_Entry
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+PICK_LLD_Entry( VIEW ViewToWindow )
+
+   VIEW mSPLDef      REGISTERED AS mSPLDef
+   VIEW mSPLDefPanel REGISTERED AS mSPLDefPanel
+   VIEW vSubwindow
+   STRING ( 32 ) szEntityName
+   INTEGER lSelectCnt
+   
+   // Transfer to either the Panel or Block Detail window, depending on which entity was selected.
+   // Get the name of the entity selected.
+   lSelectCnt = OL_GetCurrentEntityName( ViewToWindow, "OLContactList",
+                                         mSPLDef, szEntityName )
+   IF lSelectCnt = 1
+      IF szEntityName = "Block"
+         GET VIEW vSubwindow NAMED "LLD_BlockDetail"
+         IF RESULT >= 0 
+            RefreshWindow( vSubwindow )
+         ELSE
+            SetWindowActionBehavior( ViewToWindow, zWAB_StartModelessSubwindow, "TestGenD", "LLD_BlockDetail" )
+         END
+      END
+      IF szEntityName = "Panel"
+         SetWindowActionBehavior( ViewToWindow, zWAB_StartModalSubwindow, "TestGenD", "LLD_PanelDetail" )
+      END
+   END
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: PostbuildBlockDetail
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+PostbuildBlockDetail( VIEW ViewToWindow )
+
+   VIEW mSPLDef REGISTERED AS mSPLDef
+
+   // Name the window view for later refresh.
+   NAME VIEW ViewToWindow "LLD_BlockDetail"
+   
+   // If this is a Marketing or DirectionsForUse Block, make sure that Title and Text special component
+   // entities exist.
+   IF mSPLDef.Block.LLD_SectionType = "Marketing" OR mSPLDef.Block.LLD_SectionType = "DirectionsForUse"
+      IF mSPLDef.BlockSpecialSectionAttribute DOES NOT EXIST 
+         CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+         mSPLDef.BlockSpecialSectionAttribute.Name = "Statement Title"
+         CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+         mSPLDef.BlockSpecialAttributeBlock.FontSize = "10pt"
+         
+         CREATE ENTITY mSPLDef.BlockSpecialSectionAttribute 
+         mSPLDef.BlockSpecialSectionAttribute.Name = "Statement Text"
+         CREATE ENTITY mSPLDef.BlockSpecialAttributeBlock 
+         mSPLDef.BlockSpecialAttributeBlock.MarginTop = 0.005 
+      END
+   END
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: PostbuildPanelDetail
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+PostbuildPanelDetail( VIEW ViewToWindow )
+
+   // Name the window view for later refresh.
+   NAME VIEW ViewToWindow "LLD_PanelDetail"
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: CLOSE_Block
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+CLOSE_Block( VIEW ViewToWindow )
+
+   VIEW mSPLDef REGISTERED AS mSPLDef
+   
+   // Reset recursive view to top.
+   ResetView( mSPLDef )
+
+END
+
+/*************************************************************************************************
+**    
+**    OPERATION: GENERATE_XSLT_Files
+**    
+*************************************************************************************************/
+DIALOG OPERATION
+GENERATE_XSLT_Files( VIEW ViewToWindow )
+
+   VIEW mSPLDef      REGISTERED AS mSPLDef
+   VIEW mSPLDefPanel BASED ON LOD  mSPLDef
+
+   // Initialize to format with Borders.
+   mSPLDef.SubregPhysicalLabelDef.wFormatWithDottedBorders = "Y"
+
+   // Call the generation routine.
+   GeneratePDF_Label( mSPLDef )
+   
+   CreateViewFromView( mSPLDefPanel, mSPLDef )
+   NAME VIEW mSPLDefPanel "mSPLDefPanel"
+
+END

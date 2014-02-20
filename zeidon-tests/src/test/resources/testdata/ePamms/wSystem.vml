@@ -1,0 +1,2743 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: LoginClose
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+LoginClose( VIEW ViewToWindow )
+
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   DropObjectInstance( mCurrentUser )
+   DropObjectInstance( wWebXfer )
+
+END
+
+/////////////////////////////////////// Person //////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: PostBuildPerson
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+PostBuildPerson( VIEW ViewToWindow )
+
+   VIEW lPersonLST   BASED ON LOD  mPerson
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+
+   ACTIVATE lPersonLST MULTIPLE
+   NAME VIEW lPersonLST "lPersonLST"
+
+// LoadPersonList( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdatePerson
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdatePerson( VIEW ViewToWindow )
+
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+   VIEW lPersonLST   REGISTERED AS lPersonLST
+   VIEW mPerson      BASED ON LOD  mPerson
+// VIEW lDivSelect   REGISTERED AS lDivSelect
+   VIEW wWebXfer     REGISTERED AS wWebXfer
+
+   ACTIVATE mPerson WHERE mPerson.Person.ID = lPersonLST.Person.ID
+   NAME VIEW mPerson "mPerson"
+   mPerson.Person.ModifiedDateTime = wWebXfer.Root.dCurrentDateTime
+/*
+   mPerson.Person.ModifiedUser = mCurrentUser.User.UserName
+   FOR EACH lDivSelect.Division
+     SET CURSOR FIRST mPerson.Division
+        WHERE mPerson.Division.DivisionID = lDivSelect.Division.DivisionID
+     IF RESULT >= zCURSOR_SET
+        lDivSelect.Division.wkSelected = "Y"
+     END
+   END
+   IF mPerson.Division EXISTS
+      SET CURSOR FIRST mCurrentUser.Division
+         WHERE mCurrentUser.Division.DivisionID = mPerson.Division.DivisionID
+   END
+*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeletePrePerson
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeletePrePerson( VIEW ViewToWindow )
+   VIEW lPersonLST REGISTERED AS lPersonLST
+   VIEW mPerson    BASED ON LOD mPerson
+
+   ACTIVATE mPerson
+      WHERE mPerson.Person.ID = lPersonLST.Person.ID
+   NAME VIEW mPerson "mPerson"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeletePerson
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeletePerson( VIEW ViewToWindow )
+
+   VIEW mPerson    REGISTERED AS mPerson
+
+   IF mPerson.Person EXISTS
+      DELETE ENTITY mPerson.Person
+      COMMIT mPerson
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddPerson
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddPerson( VIEW ViewToWindow )
+
+   VIEW mPerson      BASED ON LOD  mPerson
+   VIEW wWebXfer     REGISTERED AS wWebXfer
+   VIEW mCurrentUser REGISTERED AS mCurrentUser
+
+   ACTIVATE mPerson EMPTY
+   NAME VIEW mPerson "mPerson"
+   CREATE ENTITY  mPerson.Person
+   mPerson.Person.CreatedDateTime = wWebXfer.Root.dCurrentDateTime
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: PostBuildPersons
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+PostBuildPersons( VIEW ViewToWindow )
+
+   VIEW lPersonLST    BASED ON LOD mPerson
+   VIEW mCurrentUser  REGISTERED AS mCurrentUser
+
+   ACTIVATE lPersonLST MULTIPLE
+   NAME VIEW lPersonLST "lPersonLST"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SavePerson
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SavePerson( VIEW ViewToWindow )
+   VIEW mPerson REGISTERED AS mPerson
+   VIEW lPersonLST BASED ON LOD mPerson
+   STRING (  50  ) szNewCode
+
+// IncludePersonDivision( ViewToWindow )
+   COMMIT mPerson
+
+   GET VIEW  lPersonLST   NAMED "lPersonLST"
+   IF RESULT > 0
+      SET CURSOR FIRST lPersonLST.Person
+         WHERE lPersonLST.Person.ID = mPerson.Person.ID
+      IF RESULT < zCURSOR_SET
+         INCLUDE  lPersonLST.Person FROM  mPerson.Person
+         OrderEntityForView( lPersonLST, "Person", "LastName A" )
+         SET CURSOR FIRST lPersonLST.Person
+            WHERE lPersonLST.Person.ID = mPerson.Person.ID
+      END
+   END
+
+END
+
+/////////////////////////////////////// USER ////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: PostBuildUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+PostBuildUser( VIEW ViewToWindow )
+
+   VIEW lUserLST BASED ON LOD mUser
+
+   ACTIVATE lUserLST MULTIPLE
+   NAME VIEW lUserLST "lUserLST"
+
+// LoadPersonList( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateUser( VIEW ViewToWindow )
+
+   VIEW mUser      BASED ON LOD  mUser
+   VIEW lUserLST   REGISTERED AS lUserLST
+
+   ACTIVATE mUser WHERE mUser.User.ID = lUserLST.User.ID
+   NAME VIEW mUser "mUser"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeletePreUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeletePreUser( VIEW ViewToWindow )
+
+   VIEW lUserLST REGISTERED AS lUserLST
+   VIEW mUser    BASED ON LOD  mUser
+
+   ACTIVATE mUser WHERE mUser.User.ID = lUserLST.User.ID
+   NAME VIEW mUser "mUser"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteUser( VIEW ViewToWindow )
+
+   VIEW mUser REGISTERED AS mUser
+
+   IF mUser.User EXISTS
+      DELETE ENTITY mUser.User
+      COMMIT mUser
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddUser( VIEW ViewToWindow )
+
+   VIEW mUser BASED ON LOD mUser
+
+   ACTIVATE mUser EMPTY
+   NAME VIEW mUser "mUser"
+   CREATE ENTITY mUser.User
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SaveUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SaveUser( VIEW ViewToWindow )
+
+   VIEW mUser REGISTERED AS mUser
+
+   COMMIT mUser
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUser
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUser( VIEW ViewToWindow )
+
+   VIEW mUser REGISTERED AS mUser
+
+   DropView( mUser )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectDeletePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectDeletePrimaryRegistrant( VIEW ViewToWindow )
+
+   // Nothing to do here other than to get proper position
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListPrimaryRegistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListPrimaryRegistrants( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   IF  lPrimReg != 0
+      DropObjectInstance( lPrimReg )
+   END
+
+   // Activate all primary registrants.
+   ACTIVATE lPrimReg MULTIPLE
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wSystem", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SelectUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SelectUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   // Nothing to do here other than to get proper position
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewAreasOfUse
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewAreasOfUse( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Name guaranteed to be non-blank in JSP
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "NewAreasOfUse: " )
+   CREATE ENTITY mEPA.EPA_AreaOfUse
+   mEPA.EPA_AreaOfUse.Name = wWebXfer.Root.CurrentStatement
+   mEPA.EPA_AreaOfUse.BoldItalic = wWebXfer.Root.CurrentBoldItalic
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.CurrentBoldItalic = ""
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportAreasOfUseList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportAreasOfUseList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   wWebXfer.Root.String = ""
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "ImportAreasOfUseList: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitImportAreasOfUseList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitImportAreasOfUseList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Set up Areas of Use list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.String = "AreasOfUse.epa"
+   BuildCSV_FromEntityAttribute( wWebXfer, "Root",
+                                 "CurrentStatementText",
+                                 mEPA, "EPA_AreaOfUse", "Name", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportAreasOfUseFromFile
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportAreasOfUseFromFile( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 512 ) szMessage
+   STRING ( 512 ) szDirectoryName
+   STRING ( 256 ) szFileName
+   SHORT   nRC
+
+   // Initialize Input FileName.
+   szDirectoryName = ""
+   SysReadZeidonIni( -1, "App.ePamms", "WebDirectory", szDirectoryName )
+   IF szDirectoryName = ""
+      MessageSend( ViewToWindow, "", "Import Areas Of Use Statements",
+                   "Zeidon INI file does not have WebDirectory entry in Application: App.ePamms.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szFileName = wWebXfer.Root.String
+   IF szFileName = ""
+      MessageSend( ViewToWindow, "", "Import Areas Of Use Statements",
+                   "The Import File Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szDirectoryName = szDirectoryName + szFileName
+   nRC = ImportCSV_ToZeidonOI( mEPA, szDirectoryName )
+   IF nRC < 0
+      IF nRC = -1
+         szMessage = "The Import File " + szDirectoryName + " cannot be opened."
+      ELSE
+         szMessage = "The Import File " + szDirectoryName + " does not contain a valid entity.attribute header."
+      END
+
+      MessageSend( ViewToWindow, "", "Import Areas Of Use Statements",
+                   szMessage,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelImportAreasOfUseList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelImportAreasOfUseList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.CurrentStatement = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmImportAreasOfUseList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmImportAreasOfUseList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   SHORT nRC
+
+   // Clean out previous list of areas of use.
+   nRC = SetCursorFirstEntity( mEPA, "EPA_AreaOfUse", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      DeleteEntity( mEPA, "EPA_AreaOfUse", zREPOS_NONE )
+      nRC = SetCursorNextEntity( mEPA, "EPA_AreaOfUse", "" )
+   END
+
+   // Set up Areas of Use list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   BuildEntityAttributeFromCSV( wWebXfer, "Root",
+                                "CurrentStatementText",
+                                mEPA, "EPA_AreaOfUse", "Name", 0 )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitAreasOfUseForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitAreasOfUseForUpdate( VIEW ViewToWindow )
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_AreaOfUse", "InitAreasOfUseForUpdate: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewAppType
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewAppType( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Name guaranteed to be non-blank in JSP
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "NewAppType: " )
+   CREATE ENTITY mEPA.EPA_ApplicationType
+   mEPA.EPA_ApplicationType.Name = wWebXfer.Root.CurrentStatement
+   mEPA.EPA_ApplicationType.BoldItalic = wWebXfer.Root.CurrentBoldItalic
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.CurrentBoldItalic = ""
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportAppTypesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportAppTypesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   wWebXfer.Root.String = ""
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "ImportAppTypesList: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitImportAppTypesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitImportAppTypesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Set up Areas of Use list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.String = "AppTypes.epa"
+   BuildCSV_FromEntityAttribute( wWebXfer, "Root",
+                                 "CurrentStatementText",
+                                 mEPA, "EPA_ApplicationType", "Name", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportAppTypesFromFile
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportAppTypesFromFile( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 512 ) szMessage
+   STRING ( 512 ) szDirectoryName
+   STRING ( 256 ) szFileName
+   SHORT   nRC
+
+   // Initialize Input FileName.
+   szDirectoryName = ""
+   SysReadZeidonIni( -1, "App.ePamms", "WebDirectory", szDirectoryName )
+   IF szDirectoryName = ""
+      MessageSend( ViewToWindow, "", "Import Application Types Statements",
+                   "Zeidon INI file does not have WebDirectory entry in Application: App.ePamms.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szFileName = wWebXfer.Root.String
+   IF szFileName = ""
+      MessageSend( ViewToWindow, "", "Import Application Types Statements",
+                   "The Import File Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szDirectoryName = szDirectoryName + szFileName
+   nRC = ImportCSV_ToZeidonOI( mEPA, szDirectoryName )
+   IF nRC < 0
+      IF nRC = -1
+         szMessage = "The Import File " + szDirectoryName + " cannot be opened."
+      ELSE
+         szMessage = "The Import File " + szDirectoryName + " does not contain a valid entity.attribute header."
+      END
+
+      MessageSend( ViewToWindow, "", "Import Application Types Statements",
+                   szMessage,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelImportAppTypesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelImportAppTypesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.CurrentStatement = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmImportAppTypesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmImportAppTypesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   SHORT nRC
+
+   // Clean out previous list of areas of use.
+   nRC = SetCursorFirstEntity( mEPA, "EPA_ApplicationType", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      DeleteEntity( mEPA, "EPA_ApplicationType", zREPOS_NONE )
+      nRC = SetCursorNextEntity( mEPA, "EPA_ApplicationType", "" )
+   END
+
+   // Set up Areas of Use list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   BuildEntityAttributeFromCSV( wWebXfer, "Root",
+                                "CurrentStatementText",
+                                mEPA, "EPA_ApplicationType", "Name", 0 )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitAppTypesForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitAppTypesForUpdate( VIEW ViewToWindow )
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_ApplicationType", "InitAppTypesForUpdate: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewBacteria
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewBacteria( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Name guaranteed to be non-blank in JSP
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "NewBacteria: " )
+   CREATE ENTITY mEPA.EPA_Claim
+   mEPA.EPA_Claim.Name = wWebXfer.Root.CurrentStatement
+   mEPA.EPA_Claim.BoldItalic = wWebXfer.Root.CurrentBoldItalic
+   mEPA.EPA_Claim.ClaimsClassification = "Bacteria"
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.CurrentBoldItalic = ""
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportBacteriaStatementList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportBacteriaList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   wWebXfer.Root.String = ""
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "ImportBacteriaStatementList: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitImportBacteriaList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitImportBacteriaList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Set up Bacteria list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.String = "Bacteria.epa"
+
+   LoadUsageList( ViewToWindow, mEPA, "Bacteria" )
+   BuildCSV_FromEntityAttribute( wWebXfer, "Root",
+                                 "CurrentStatementText",
+                                 mEPA, "Bacteria.EPA_ChemicalFamily", "EPA_Claim.Name", 0 )
+   LoadUsageList( ViewToWindow, mEPA, "" )  // just delete Bacteria entities
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportBacteriaFromFile
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportBacteriaFromFile( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 512 ) szMessage
+   STRING ( 512 ) szDirectoryName
+   STRING ( 256 ) szFileName
+   SHORT   nRC
+
+   // Initialize Input FileName.
+   szDirectoryName = ""
+   SysReadZeidonIni( -1, "App.ePamms", "WebDirectory", szDirectoryName )
+   IF szDirectoryName = ""
+      MessageSend( ViewToWindow, "", "Import Bacteria Statements",
+                   "Zeidon INI file does not have WebDirectory entry in Application: App.ePamms.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szFileName = wWebXfer.Root.String
+   IF szFileName = ""
+      MessageSend( ViewToWindow, "", "Import Bacteria Statements",
+                   "The Import File Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szDirectoryName = szDirectoryName + szFileName
+   nRC = ImportCSV_ToZeidonOI( mEPA, szDirectoryName )
+   IF nRC < 0
+      IF nRC = -1
+         szMessage = "The Import File " + szDirectoryName + " cannot be opened."
+      ELSE
+         szMessage = "The Import File " + szDirectoryName + " does not contain a valid entity.attribute header."
+      END
+
+      MessageSend( ViewToWindow, "", "Import Bacteria Statements",
+                   szMessage,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelImportBacteriaList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelImportBacteriaList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.CurrentStatement = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmImportBacteriaList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmImportBacteriaList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   SHORT nRC
+
+   wWebXfer.Root.CurrentStatement = ""
+
+   // Clean out previous list of Bacteria.
+   nRC = SetCursorFirstEntity( mEPA, "EPA_Claim", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      IF mEPA.EPA_Claim.ClaimsClassification = "Bacteria"
+         DeleteEntity( mEPA, "EPA_Claim", zREPOS_NONE )
+      END
+
+      nRC = SetCursorNextEntity( mEPA, "EPA_Claim", "" )
+   END
+
+   // Set up Bacteria list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   BuildEntityAttributeFromCSV( wWebXfer, "Root",
+                                "CurrentStatementText",
+                                mEPA, "EPA_Claim", "ClaimsClassification=Bacteria,Name", 0 )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitBacteriaForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitBacteriaForUpdate( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_Claim", "InitBacteriaForUpdate: " )
+   FOR EACH mEPA.EPA_Claim WHERE mEPA.EPA_Claim.ClaimsClassification = "Bacteria"
+      IF mEPA.Bacteria DOES NOT EXIST
+         CREATE ENTITY mEPA.Bacteria
+      END
+   END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitBacteriaForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitBacteriaForDelete( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_Claim", "InitBacteriaForDelete: " )
+   FOR EACH mEPA.EPA_Claim WHERE mEPA.EPA_Claim.ClaimsClassification = "Bacteria"
+      IF mEPA.Bacteria DOES NOT EXIST
+         CREATE ENTITY mEPA.Bacteria
+      END
+   END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: LoadUsageList
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadUsageList( VIEW ViewToWindow,
+               VIEW mEPA BASED ON LOD mEPA,
+               STRING ( 32 ) szClaimsClassification )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPosEPA  BASED ON LOD  mEPA
+   STRING ( 32 )  szCurrentClaimsClassification
+   INTEGER  lID
+
+   CreateViewFromView( mPosEPA, mEPA )
+   NAME VIEW mPosEPA "mPosEPA"
+
+   // Create Classification entities for each matching EPA_Claim entity.
+   FOR EACH mPosEPA.EPA_Claim
+
+      IF mPosEPA.Bacteria EXISTS
+         DELETE ENTITY mPosEPA.Bacteria
+      END
+
+      IF mPosEPA.Fungi EXISTS
+         DELETE ENTITY mPosEPA.Fungi
+      END
+
+      IF mPosEPA.Viruses EXISTS
+         DELETE ENTITY mPosEPA.Viruses
+      END
+
+      IF mPosEPA.Protozoa EXISTS
+         DELETE ENTITY mPosEPA.Protozoa
+      END
+
+      IF szClaimsClassification != ""
+         szCurrentClaimsClassification = mPosEPA.EPA_Claim.ClaimsClassification
+         IF szCurrentClaimsClassification = szClaimsClassification
+            CreateEntity( mPosEPA, szClaimsClassification, zPOS_AFTER )
+         END
+      END
+   END
+
+   DropView( mPosEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewFungi
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewFungi( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Name guaranteed to be non-blank in JSP
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "NewFungi: " )
+   CREATE ENTITY mEPA.EPA_Claim
+   mEPA.EPA_Claim.Name = wWebXfer.Root.CurrentStatement
+   mEPA.EPA_Claim.BoldItalic = wWebXfer.Root.CurrentBoldItalic
+   mEPA.EPA_Claim.ClaimsClassification = "Fungi"
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.CurrentBoldItalic = ""
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportFungiStatementList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportFungiList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   wWebXfer.Root.String = ""
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "ImportFungiStatementList: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitImportFungiList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitImportFungiList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Set up Fungi list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.String = "Fungi.epa"
+
+   LoadUsageList( ViewToWindow, mEPA, "Fungi" )
+   BuildCSV_FromEntityAttribute( wWebXfer, "Root",
+                                 "CurrentStatementText",
+                                 mEPA, "Fungi.EPA_ChemicalFamily", "EPA_Claim.Name", 0 )
+   LoadUsageList( ViewToWindow, mEPA, "" )  // just delete Fungi entities
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportFungiFromFile
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportFungiFromFile( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 512 ) szMessage
+   STRING ( 512 ) szDirectoryName
+   STRING ( 256 ) szFileName
+   SHORT   nRC
+
+   // Initialize Input FileName.
+   szDirectoryName = ""
+   SysReadZeidonIni( -1, "App.ePamms", "WebDirectory", szDirectoryName )
+   IF szDirectoryName = ""
+      MessageSend( ViewToWindow, "", "Import Fungi Statements",
+                   "Zeidon INI file does not have WebDirectory entry in Application: App.ePamms.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szFileName = wWebXfer.Root.String
+   IF szFileName = ""
+      MessageSend( ViewToWindow, "", "Import Fungi Statements",
+                   "The Import File Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szDirectoryName = szDirectoryName + szFileName
+   nRC = ImportCSV_ToZeidonOI( mEPA, szDirectoryName )
+   IF nRC < 0
+      IF nRC = -1
+         szMessage = "The Import File " + szDirectoryName + " cannot be opened."
+      ELSE
+         szMessage = "The Import File " + szDirectoryName + " does not contain a valid entity.attribute header."
+      END
+
+      MessageSend( ViewToWindow, "", "Import Fungi Statements",
+                   szMessage,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelImportFungiList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelImportFungiList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.CurrentStatement = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmImportFungiList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmImportFungiList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   SHORT nRC
+
+   wWebXfer.Root.CurrentStatement = ""
+
+   // Clean out previous list of Fungi.
+   nRC = SetCursorFirstEntity( mEPA, "EPA_Claim", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      IF mEPA.EPA_Claim.ClaimsClassification = "Fungi"
+         DeleteEntity( mEPA, "EPA_Claim", zREPOS_NONE )
+      END
+
+      nRC = SetCursorNextEntity( mEPA, "EPA_Claim", "" )
+   END
+
+   // Set up Fungi list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   BuildEntityAttributeFromCSV( wWebXfer, "Root",
+                                "CurrentStatementText",
+                                mEPA, "EPA_Claim", "ClaimsClassification=Fungi,Name", 0 )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitFungiForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitFungiForUpdate( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_Claim", "InitFungiForUpdate: " )
+   FOR EACH mEPA.EPA_Claim WHERE mEPA.EPA_Claim.ClaimsClassification = "Fungi"
+      IF mEPA.Fungi DOES NOT EXIST
+         CREATE ENTITY mEPA.Fungi
+      END
+   END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewUirus
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewVirus( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Name guaranteed to be non-blank in JSP
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "NewVirus: " )
+   CREATE ENTITY mEPA.EPA_Claim
+   mEPA.EPA_Claim.Name = wWebXfer.Root.CurrentStatement
+   mEPA.EPA_Claim.BoldItalic = wWebXfer.Root.CurrentBoldItalic
+   mEPA.EPA_Claim.ClaimsClassification = "Viruses"
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.CurrentBoldItalic = ""
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportVirusesStatementList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportVirusesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   wWebXfer.Root.String = ""
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "ImportVirusesStatementList: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitImportVirusesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitImportVirusesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Set up Viruses list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.String = "Viruses.epa"
+
+   LoadUsageList( ViewToWindow, mEPA, "Viruses" )
+   BuildCSV_FromEntityAttribute( wWebXfer, "Root",
+                                 "CurrentStatementText",
+                                 mEPA, "Viruses.EPA_ChemicalFamily", "EPA_Claim.Name", 0 )
+   LoadUsageList( ViewToWindow, mEPA, "" )  // just delete Viruses entities
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportVirusesFromFile
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportVirusesFromFile( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 512 ) szMessage
+   STRING ( 512 ) szDirectoryName
+   STRING ( 256 ) szFileName
+   SHORT   nRC
+
+   // Initialize Input FileName.
+   szDirectoryName = ""
+   SysReadZeidonIni( -1, "App.ePamms", "WebDirectory", szDirectoryName )
+   IF szDirectoryName = ""
+      MessageSend( ViewToWindow, "", "Import Viruses Statements",
+                   "Zeidon INI file does not have WebDirectory entry in Application: App.ePamms.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szFileName = wWebXfer.Root.String
+   IF szFileName = ""
+      MessageSend( ViewToWindow, "", "Import Viruses Statements",
+                   "The Import File Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szDirectoryName = szDirectoryName + szFileName
+   nRC = ImportCSV_ToZeidonOI( mEPA, szDirectoryName )
+   IF nRC < 0
+      IF nRC = -1
+         szMessage = "The Import File " + szDirectoryName + " cannot be opened."
+      ELSE
+         szMessage = "The Import File " + szDirectoryName + " does not contain a valid entity.attribute header."
+      END
+
+      MessageSend( ViewToWindow, "", "Import Viruses Statements",
+                   szMessage,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelImportVirusesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelImportVirusesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.CurrentStatement = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmImportVirusesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmImportVirusesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   SHORT nRC
+
+   wWebXfer.Root.CurrentStatement = ""
+
+   // Clean out previous list of Viruses.
+   nRC = SetCursorFirstEntity( mEPA, "EPA_Claim", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      IF mEPA.EPA_Claim.ClaimsClassification = "Viruses"
+         DeleteEntity( mEPA, "EPA_Claim", zREPOS_NONE )
+      END
+
+      nRC = SetCursorNextEntity( mEPA, "EPA_Claim", "" )
+   END
+
+   // Set up Viruses list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   BuildEntityAttributeFromCSV( wWebXfer, "Root",
+                                "CurrentStatementText",
+                                mEPA, "EPA_Claim", "ClaimsClassification=Viruses,Name", 0 )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitVirusesForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitVirusesForUpdate( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_Claim", "InitVirusesForUpdate: " )
+   FOR EACH mEPA.EPA_Claim WHERE mEPA.EPA_Claim.ClaimsClassification = "Viruses"
+      IF mEPA.Viruses DOES NOT EXIST
+         CREATE ENTITY mEPA.Viruses
+      END
+   END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewSurface
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewSurface( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Name guaranteed to be non-blank in JSP
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "NewSurface: " )
+   CREATE ENTITY mEPA.EPA_Surface
+   mEPA.EPA_Surface.Name = wWebXfer.Root.CurrentStatement
+   mEPA.EPA_Surface.BoldItalic = wWebXfer.Root.CurrentBoldItalic
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.CurrentBoldItalic = ""
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportSurfacesStatementList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportSurfacesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   wWebXfer.Root.String = ""
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "ImportSurfacesStatementList: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitImportSurfacesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitImportSurfacesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // Set up Surfaces list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   wWebXfer.Root.CurrentStatement = ""
+   wWebXfer.Root.String = "Surfaces.epa"
+   BuildCSV_FromEntityAttribute( wWebXfer, "Root",
+                                 "CurrentStatementText",
+                                 mEPA, "EPA_Surface", "Name", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ImportSurfacesFromFile
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ImportSurfacesFromFile( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 512 ) szMessage
+   STRING ( 512 ) szDirectoryName
+   STRING ( 256 ) szFileName
+   SHORT   nRC
+
+   // Initialize Input FileName.
+   szDirectoryName = ""
+   SysReadZeidonIni( -1, "App.ePamms", "WebDirectory", szDirectoryName )
+   IF szDirectoryName = ""
+      MessageSend( ViewToWindow, "", "Import Surfaces Statements",
+                   "Zeidon INI file does not have WebDirectory entry in Application: App.ePamms.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szFileName = wWebXfer.Root.String
+   IF szFileName = ""
+      MessageSend( ViewToWindow, "", "Import Surfaces Statements",
+                   "The Import File Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+   szDirectoryName = szDirectoryName + szFileName
+   nRC = ImportCSV_ToZeidonOI( mEPA, szDirectoryName )
+   IF nRC < 0
+      IF nRC = -1
+         szMessage = "The Import File " + szDirectoryName + " cannot be opened."
+      ELSE
+         szMessage = "The Import File " + szDirectoryName + " does not contain a valid entity.attribute header."
+      END
+
+      MessageSend( ViewToWindow, "", "Import Surfaces Statements",
+                   szMessage,
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelImportSurfacesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelImportSurfacesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+   wWebXfer.Root.CurrentStatement = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmImportSurfacesList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmImportSurfacesList( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   SHORT nRC
+
+   // Clean out previous list of surfaces.
+   nRC = SetCursorFirstEntity( mEPA, "EPA_Surface", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      DeleteEntity( mEPA, "EPA_Surface", zREPOS_NONE )
+      nRC = SetCursorNextEntity( mEPA, "EPA_Surface", "" )
+   END
+
+   // Set up Surfaces list in wWebXfer.Root.CurrentStatementText
+   // to be set to multiline edit box.
+   BuildEntityAttributeFromCSV( wWebXfer, "Root",
+                                "CurrentStatementText",
+                                mEPA, "EPA_Surface", "Name", 0 )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSurfacesForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSurfacesForUpdate( VIEW ViewToWindow )
+
+// CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_Surface", "InitSurfacesForUpdate: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrantForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrantForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ACTIVATE mPrimReg EMPTY
+   NAME VIEW mPrimReg "mPrimReg"
+
+   CREATE ENTITY mPrimReg.PrimaryRegistrant
+   CREATE ENTITY mPrimReg.Organization
+   CREATE ENTITY mPrimReg.PhysicalAddress
+   CREATE ENTITY mPrimReg.MailingAddress
+   CREATE ENTITY mPrimReg.ContactPerson
+
+   mPrimReg.PhysicalAddress.Country = "USA"
+   mPrimReg.MailingAddress.Country = "USA"
+   wWebXfer.Root.SameAs = "Y"
+
+   wWebXfer.Root.AttemptLoginName = ""
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   CreateTemporalSubobjectVersion( mPrimReg, "PrimaryRegistrant" )
+// CreateTemporalSubobjectVersion( mPrimReg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "ContactPerson" )
+
+   IF wWebXfer.Root.KeyRole = "U"
+
+      mPrimReg.Organization.LoginName = "Admin"
+      mPrimReg.Organization.Name = "Administrator"
+      mPrimReg.Organization.Description = "ePamms Administrator"
+      mPrimReg.Organization.Role = "P"
+
+   END
+
+   SetDynamicBannerName( ViewToWindow, "wSystem", "Administration" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteAreasOfUse
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteAreasOfUse( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   DELETE ENTITY mEPA.EPA_AreaOfUse
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteAreasOfUse: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteClaim
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteClaim( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   DELETE ENTITY mEPA.EPA_Claim
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteClaim: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSurface
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSurface( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   DELETE ENTITY mEPA.EPA_Surface
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteSurface: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSelectedBacteria
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSelectedBacteria( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 1 )  szSelected
+   SHORT nRC
+
+   nRC = SetCursorFirstEntity( mEPA, "EPA_Claim", "" )
+   LOOP WHILE nRC = zCURSOR_SET
+      szSelected = mEPA.EPA_Claim.wkSelected
+      IF szSelected = "Y"
+         IF mEPA.EPA_Claim EXISTS
+            DeleteEntity( mEPA, "EPA_Claim", zREPOS_NONE )
+         ELSE
+            DisplayObjectInstance( mEPA, "", "" )
+            MessageSend( ViewToWindow, "", "Delete Selected Bacteria",
+                         "Found Selection that was not Bacteria?",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+         END
+      END
+
+      nRC = SetCursorNextEntity( mEPA, "EPA_Claim", "" )
+   END
+
+   Commit mEPA
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveAreasOfUseUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveAreasOfUseUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveAreasOfUseUp: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempEPA.EPA_AreaOfUse
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempEPA, "EPA_AreaOfUse",
+                  mEPA, "EPA_AreaOfUse",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveAreasOfUseDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveAreasOfUseDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveAreasOfUseDown: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempEPA.EPA_AreaOfUse
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempEPA, "EPA_AreaOfUse",
+                  mEPA, "EPA_AreaOfUse",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempEPA )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveClaimUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveClaimUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveClaimUp: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempEPA.EPA_Claim
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveClaimDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveClaimDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveClaimDown: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempEPA.EPA_Claim
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempEPA )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveBacteriaUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveBacteriaUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveBacteriaUp: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempEPA.EPA_Claim
+      IF RESULT < 0 OR mTempEPA.Bacteria EXISTS
+         lMove = lMove - 1
+      END
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveBacteriaDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveBacteriaDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveBacteriaDown: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempEPA.EPA_Claim
+      IF RESULT < 0 OR mTempEPA.Bacteria EXISTS
+         lMove = lMove - 1
+      END
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempEPA )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveBacteriaUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveFungiUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveFungiUp: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempEPA.EPA_Claim
+      IF RESULT < 0 OR mTempEPA.Fungi EXISTS
+         lMove = lMove - 1
+      END
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveFungiDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveFungiDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveFungiDown: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempEPA.EPA_Claim
+      IF RESULT < 0 OR mTempEPA.Fungi EXISTS
+         lMove = lMove - 1
+      END
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempEPA )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveVirusUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveVirusUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveVirusUp: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempEPA.EPA_Claim
+      IF RESULT < 0 OR mTempEPA.Viruses EXISTS
+         lMove = lMove - 1
+      END
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveVirusDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveVirusDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveVirusDown: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempEPA.EPA_Claim
+      IF RESULT < 0 OR mTempEPA.Viruses EXISTS
+         lMove = lMove - 1
+      END
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Claim",
+                  mEPA, "EPA_Claim",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempEPA )
+
+   // We now accept the Master Label to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveSurfaceUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveSurfaceUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveSurfaceUp: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempEPA.EPA_Surface
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Surface",
+                  mEPA, "EPA_Surface",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveSurfaceDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveSurfaceDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mTempEPA REGISTERED AS mEPA
+   INTEGER lMove
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "MoveSurfaceDown: " )
+   CreateViewFromView( mTempEPA, mEPA )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempEPA.EPA_Surface
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempEPA, "EPA_Surface",
+                  mEPA, "EPA_Surface",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempEPA )
+
+   // We now accept the EPA OI to maintain order!
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateAppTypeFromCurrent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateAppTypeFromCurrent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "UpdateAppTypeFromCurrent: " )
+   mEPA.EPA_ApplicationType.Name = wWebXfer.Root.CurrentStatement
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateAppType
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateAppType( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateAppType: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateAreasOfUseFromCurrent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateAreasOfUseFromCurrent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "UpdateAreasOfUseFromCurrent: " )
+   mEPA.EPA_AreaOfUse.Name = wWebXfer.Root.CurrentStatement
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateAreasOfUse
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateAreasOfUse( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateAreasOfUse: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateBacteriaFromCurrent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateBacteriaFromCurrent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "UpdateBacteriaFromCurrent: " )
+   mEPA.EPA_Claim.Name = wWebXfer.Root.CurrentStatement
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateBacteria
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateBacteria( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateBacteria: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateFungiFromCurrent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateFungiFromCurrent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "UpdateFungiFromCurrent: " )
+   mEPA.EPA_Claim.Name = wWebXfer.Root.CurrentStatement
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateFungi
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateFungi( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateFungi: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateVirusesFromCurrent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateVirusesFromCurrent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "UpdateVirusesFromCurrent: " )
+   mEPA.EPA_Claim.Name = wWebXfer.Root.CurrentStatement
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateViruses
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateViruses( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateViruses: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSurfaceFromCurrent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSurfaceFromCurrent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, FALSE, "UpdateSurfaceFromCurrent: " )
+   mEPA.EPA_Surface.Name = wWebXfer.Root.CurrentStatement
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSurface
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSurface( VIEW ViewToWindow )
+
+   VIEW mEPA   REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateSurface: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitAnalysisDifferences
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitAnalysisDifferences( VIEW ViewToWindow )
+
+   SetDynamicBannerName( ViewToWindow, "wSystem", "PrimaryRegistrantLabel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ReturnFromAnalysis
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ReturnFromAnalysis( VIEW ViewToWindow )
+
+   VIEW lMLCATgt BASED ON LOD  lMLCATgt
+
+   GET VIEW lMLCATgt NAMED "lMLCATgt"
+   IF lMLCATgt != 0
+      DropObjectInstance( lMLCATgt )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitShowFeedback
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitShowFeedback( VIEW ViewToWindow )
+
+   VIEW mOrganiz BASED ON LOD  mOrganiz
+
+   GET VIEW mOrganiz NAMED "mOrganiz"
+   IF mOrganiz != 0
+      DropObjectInstance( mOrganiz )
+   END
+
+   ACTIVATE mOrganiz MULTIPLE
+   NAME VIEW mOrganiz "mOrganiz"
+
+   SetDynamicBannerName( ViewToWindow, "wSystem", "InitShowFeedback" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteFeedbackComment
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteFeedbackComment( VIEW ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitFeedbackCommentForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitFeedbackCommentForDelete( VIEW ViewToWindow )
+
+   // nothing to do here
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelDeleteFeedbackComment
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelDeleteFeedbackComment( VIEW ViewToWindow )
+
+   VIEW mOrganiz REGISTERED AS mOrganiz
+
+   DropObjectInstance( mOrganiz )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmDeleteFeedbackComment
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmDeleteFeedbackComment( VIEW ViewToWindow )
+
+   VIEW mOrganiz REGISTERED AS mOrganiz
+
+   // We will cancel any changes including those for entities that may be involved.
+   // We could accept, but a problem could arise if the accept triggered an error.
+   CancelCurrentTemporalSubobject( ViewToWindow, "ConfirmDeleteFeedbackComment: " )
+   DELETE ENTITY mOrganiz.Feedback
+   COMMIT mOrganiz
+   DropObjectInstance( mOrganiz )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteAllFeedbackComments
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteAllFeedbackComments( VIEW ViewToWindow )
+
+   VIEW mOrganiz REGISTERED AS mOrganiz
+
+   // Validated that user wants to delete all Feedback Comments in JSP.
+   FOR EACH mOrganiz.Organization
+      FOR EACH mOrganiz.Feedback
+         DELETE ENTITY mOrganiz.Feedback NONE
+      END
+   END
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteAllFeedbackComments: " )
+   COMMIT mOrganiz
+   DropObjectInstance( mOrganiz )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteBlankFeedback
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteBlankFeedback( VIEW ViewToWindow )
+
+   VIEW mOrganiz REGISTERED AS mOrganiz
+
+   FOR EACH mOrganiz.Organization
+      FOR EACH mOrganiz.Feedback
+         IF mOrganiz.Feedback.Comment = ""
+            DELETE ENTITY mOrganiz.Feedback NONE
+         END
+      END
+   END
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteBlankFeedback: " )
+   COMMIT mOrganiz
+   DropObjectInstance( mOrganiz )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSystemProperties
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSystemProperties( VIEW ViewToWindow )
+
+   VIEW mEPA   BASED ON LOD  mEPA
+
+   GET VIEW  mEPA   NAMED "mEPA"
+   IF mEPA != 0
+      DropObjectInstance( mEPA )
+   END
+
+   ACTIVATE mEPA MULTIPLE
+   NAME VIEW mEPA "mEPA"
+   IF mEPA.ePamms DOES NOT EXIST
+      CREATE ENTITY mEPA.ePamms
+   END
+
+   CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "ePamms", "InitSystemProperties: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptSystemProperties
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptSystemProperties( VIEW ViewToWindow )
+
+   VIEW mEPA   REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "AcceptSystemProperties: " )
+   COMMIT mEPA
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelSystemProperties
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelSystemProperties( VIEW ViewToWindow )
+
+   VIEW mEPA   REGISTERED AS mEPA
+
+   CancelCurrentTemporalSubobject( ViewToWindow, "CancelSystemProperties: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewSystemChemical( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "NewSystemChemical: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSystemChemical( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateSystemChemical: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSystemChemicalForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSystemChemicalForInsert( VIEW ViewToWindow )
+
+   CreateCurrentTemporalVersion( ViewToWindow, zPOS_LAST, "mEPA", "EPA_ChemicalFamily", "InitSystemChemicalForInsert: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSystemChemicalForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSystemChemicalForUpdate( VIEW ViewToWindow )
+
+   CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "EPA_ChemicalFamily", "InitSystemChemicalForUpdate: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "AcceptNewSystemChemical: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   CancelCurrentTemporalSubobject( ViewToWindow, "CancelNewSystemChemical: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "AcceptUpdateSystemChemical: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   CancelCurrentTemporalSubobject( ViewToWindow, "CancelNewSystemChemical: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteSystemChemical: " )
+   COMMIT mEPA
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSystemChemicalForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSystemChemicalForDelete( VIEW ViewToWindow )
+
+   // nothing to do here
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelDeleteSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelDeleteSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmDeleteSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmDeleteSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   // We will cancel any changes including those for entities that may be involved.
+   // We could accept, but a problem could arise if the accept triggered an error.
+   CancelCurrentTemporalSubobject( ViewToWindow, "AcceptUpdateSystemChemical: " )
+   DELETE ENTITY mEPA.EPA_ChemicalFamily
+   COMMIT mEPA
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CopyToNewSystemChemical
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CopyToNewSystemChemical( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+   VIEW mNew     BASED ON LOD  mEPA
+
+   COMMIT mEPA
+
+   CreateViewFromView( mNew, mEPA )
+   CreateCurrentTemporalVersion( ViewToWindow, zPOS_NEXT, "mEPA", "EPA_ChemicalFamily", "CopyToNewSystemChemical: " )
+   SetMatchingAttributesByName( mNew, "EPA_ChemicalFamily",
+                                mEPA, "EPA_ChemicalFamily", zSET_ALL )
+   mNew.EPA_ChemicalFamily.Name = ""
+
+   FOR EACH mEPA.EPA_StorageDisposal
+      CREATE ENTITY mNew.EPA_StorageDisposal
+      SetMatchingAttributesByName( mNew, "EPA_StorageDisposal",
+                                   mEPA, "EPA_StorageDisposal", zSET_ALL )
+   END
+
+   FOR EACH mEPA.EPA_AreaOfUse
+      CREATE ENTITY mNew.EPA_AreaOfUse
+      SetMatchingAttributesByName( mNew, "EPA_AreaOfUse",
+                                   mEPA, "EPA_AreaOfUse", zSET_ALL )
+   END
+
+   FOR EACH mEPA.EPA_Surface
+      CREATE ENTITY mNew.EPA_Surface
+      SetMatchingAttributesByName( mNew, "EPA_Surface",
+                                   mEPA, "EPA_Surface", zSET_ALL )
+   END
+
+   FOR EACH mEPA.EPA_Claim
+      CREATE ENTITY mNew.EPA_Claim
+      SetMatchingAttributesByName( mNew, "EPA_Claim",
+                                   mEPA, "EPA_Claim", zSET_ALL )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewSystemKeyword( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "NewSystemKeyword: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateSystemKeyword( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateSystemKeyword: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSystemKeywordForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSystemKeywordForInsert( VIEW ViewToWindow )
+
+   CreateCurrentTemporalVersion( ViewToWindow, zPOS_LAST, "mEPA", "Keyword", "InitSystemKeywordForInsert: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitSystemKeywordForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitSystemKeywordForUpdate( VIEW ViewToWindow )
+
+   CreateCurrentTemporalVersion( ViewToWindow, 0, "mEPA", "Keyword", "InitSystemKeywordForUpdate: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewSystemKeyword( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "AcceptNewSystemKeyword: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AddKeywordAndAddNew
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AddKeywordAndAddNew( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "AddKeywordAndAddNew: " )
+// CreateCurrentTemporalVersion( ViewToWindow, zPOS_NEXT, "mEPA", "Keyword", "AddKeywordAndAddNew: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewSystemKeyword( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   CancelCurrentTemporalSubobject( ViewToWindow, "CancelNewSystemKeyword: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdateSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateSystemKeyword( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "AcceptNewSystemKeyword: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateKeywordAndAddNew
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateKeywordAndAddNew( VIEW ViewToWindow )
+
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "UpdateKeywordAndAddNew: " )
+// CreateCurrentTemporalVersion( ViewToWindow, zPOS_NEXT, "mEPA", "Keyword", "UpdateKeywordAndAddNew: " )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdateSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateSystemKeyword( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   CancelCurrentTemporalSubobject( ViewToWindow, "CancelNewSystemKeyword: " )
+   DropObjectInstance( mEPA )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteSystemKeyword
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteSystemKeyword( VIEW ViewToWindow )
+
+   VIEW mEPA     REGISTERED AS mEPA
+
+   DELETE ENTITY mEPA.Keyword
+   AcceptCurrentTemporalSubobject( ViewToWindow, TRUE, "DeleteSystemKeyword: " )
+   COMMIT mEPA
+   DropObjectInstance( mEPA )
+
+END

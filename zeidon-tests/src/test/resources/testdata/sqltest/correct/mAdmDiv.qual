@@ -1,0 +1,28 @@
+z0000-Zeidon    temp.por KZDBHQUA 2010/06/16 14:58:56
+eEntitySpec 1
+aEntityName AdministrativeDivision
+
+eQualAttrib 2
+aEntityName AdministrativeDivision
+aAttributeName ID
+aValue     1
+aOper      =
+
+eEntitySpec 1
+aEntityName AdmissionTrack
+
+eQualAttrib 2
+aEntityName AdmissionTrack
+aAttributeName ID
+aValue     0
+aOper      =
+
+eEntitySpec 1
+aEntityName FinAidTrack
+
+eQualAttrib 2
+aEntityName FinAidTrack
+aAttributeName ID
+aValue     0
+aOper      =
+

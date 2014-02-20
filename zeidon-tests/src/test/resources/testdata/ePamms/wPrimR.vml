@@ -1,0 +1,1415 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    wPrimR        - Primary Registrant Maintenance operations
+// FILE:         wPrimR.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListPrimaryRegistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListPrimaryRegistrants( VIEW ViewToWindow )
+
+   VIEW qPrimReg BASED ON LOD  qPrimReg
+
+   GET VIEW qPrimReg NAMED "qPrimReg"
+   IF  qPrimReg != 0
+      DropObjectInstance( qPrimReg )
+   END
+
+   // Activate all primary registrants at the root level.
+   ACTIVATE qPrimReg ROOTONLYMULTIPLE
+   NAME VIEW qPrimReg "qPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   // Don't need to do anything except have this operation to cause
+   // positioning code to be done in the JSP.
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrantForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrantForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ACTIVATE mPrimReg EMPTY
+   NAME VIEW mPrimReg "mPrimReg"
+
+   CREATE ENTITY mPrimReg.PrimaryRegistrant
+   CREATE ENTITY mPrimReg.PhysicalAddress
+   CREATE ENTITY mPrimReg.MailingAddress
+   CREATE ENTITY mPrimReg.Employee
+   CREATE ENTITY mPrimReg.User
+
+   mPrimReg.PhysicalAddress.Country = "USA"
+   mPrimReg.MailingAddress.Country = "USA"
+   wWebXfer.Root.SameAs = "Y"
+
+   CreateTemporalSubobjectVersion( mPrimReg, "PrimaryRegistrant" )
+// CreateTemporalSubobjectVersion( mPrimReg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "Person" )
+// CreateTemporalSubobjectVersion( mPrimReg, "User" )
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitPrimaryRegistrantForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitPrimaryRegistrantForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   INTEGER lID
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   // If this is the first time into the system, this is the administrator.
+   // Otherwise, just create a new primary registrant.
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+   IF mPrimReg.PrimaryRegistrant DOES NOT EXIST
+
+      CREATE ENTITY mPrimReg.PrimaryRegistrant
+      CREATE ENTITY mPrimReg.PhysicalAddress
+      CREATE ENTITY mPrimReg.MailingAddress
+      CREATE ENTITY mPrimReg.ContactPerson
+      mPrimReg.PhysicalAddress.Country = "USA"
+      mPrimReg.MailingAddress.Country = "USA"
+      wWebXfer.Root.SameAs = "Y"
+
+   ELSE
+      wWebXfer.Root.SameAs = ""
+   END
+
+   IF mPrimReg.PhysicalAddress DOES NOT EXIST
+      CREATE ENTITY mPrimReg.PhysicalAddress
+      mPrimReg.PhysicalAddress.Country = "USA"
+   END
+
+   IF mPrimReg.MailingAddress DOES NOT EXIST
+      CREATE ENTITY mPrimReg.MailingAddress
+      lID = mPrimReg.MailingAddress.ID
+      wWebXfer.Root.SameAs = "Y"
+      SetMatchingAttributesByName( mPrimReg, "MailingAddress",
+                                   mPrimReg, "PhysicalAddress", zSET_NOTNULL )
+      lID = mPrimReg.MailingAddress.ID
+   // mPrimReg.MailingAddress.ID = lID
+   END
+
+   IF mPrimReg.ContactPerson DOES NOT EXIST
+      CREATE ENTITY mPrimReg.ContactPerson
+   END
+
+   wWebXfer.Root.AttemptLoginName = mPrimReg.Organization.LoginName
+   wWebXfer.Root.AttemptPassword = ""
+   wWebXfer.Root.ConfirmPassword = ""
+
+   CreateTemporalSubobjectVersion( mPrimReg, "PrimaryRegistrant" )
+// CreateTemporalSubobjectVersion( mPrimReg, "PhysicalAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "MailingAddress" )
+// CreateTemporalSubobjectVersion( mPrimReg, "ContactPerson" )
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptNewPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   STRING ( 256  ) szName
+   STRING ( 128  ) szAttemptPassword
+   STRING ( 128  ) szConfirmPassword
+   INTEGER         lLth
+
+
+   // Ensure registrant name is not blank.
+   szName = mPrimReg.Organization.Name
+   lLth = zGetStringLen( szName )
+   TraceLineI( "Registrant Name Length: ", lLth )
+   IF lLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The registrant name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // Ensure user name is not blank.
+   szName = mPrimReg.User.UserName
+   lLth = zGetStringLen( szName )
+   TraceLineI( "Registrant User Name Length: ", lLth )
+   IF lLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The User Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // Validate password.
+   szAttemptPassword = wWebXfer.Root.AttemptPassword
+   szConfirmPassword = wWebXfer.Root.ConfirmPassword
+
+   // 1: Ensure attempted password matches confirm password.
+   IF szAttemptPassword != szConfirmPassword
+   // TraceLineS( szAttemptPassword, szConfirmPassword )
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The new password and the confirmation password do not match.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // 2: Ensure new password is at least 8 characters long.
+   lLth = zGetStringLen( szConfirmPassword )
+   TraceLineI( "Password Length: ", lLth )
+   IF lLth < 8
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The new password must be at least 8 characters long.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+   // Set user password to new password.
+// SetAttrFromStrByContext( mPrimReg, "User", "UserPassword", szVerifyPassword, "Password" )
+   mPrimReg.User.UserPassword = szConfirmPassword
+
+// AcceptSubobject( mPrimReg, "User" )
+// AcceptSubobject( mPrimReg, "Person" )
+// AcceptSubobject( mPrimReg, "PhysicalAddress" )
+// AcceptSubobject( mPrimReg, "MailingAddress" )
+   AcceptSubobject( mPrimReg, "PrimaryRegistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mPrimReg.MailingAddress
+   END
+
+   Commit mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   STRING (  32  ) szName
+   INTEGER         lLth
+
+   szName = mPrimReg.Organization.Name
+
+   // Ensure registrant name is not blank.
+   lLth = zGetStringLen( szName )
+   TraceLineI( "Registrant Name Length: ", lLth )
+   IF lLth < 1
+      MessageSend( ViewToWindow, "", "Update Primary Registrant",
+                   "The registrant name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2
+   END
+
+// AcceptSubobject( mPrimReg, "User" )
+// AcceptSubobject( mPrimReg, "Person" )
+// AcceptSubobject( mPrimReg, "PhysicalAddress" )
+// AcceptSubobject( mPrimReg, "MailingAddress" )
+   AcceptSubobject( mPrimReg, "PrimaryRegistrant" )
+   IF wWebXfer.Root.SameAs = "Y"
+      DELETE ENTITY mPrimReg.MailingAddress
+   END
+
+   Commit mPrimReg
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelNewPrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewPrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW wWebXfer REGISTERED AS wWebXfer
+
+// CancelSubobject( mPrimReg, "User" )
+// CancelSubobject( mPrimReg, "Person" )
+// CancelSubobject( mPrimReg, "PhysicalAddress" )
+// CancelSubobject( mPrimReg, "MailingAddress" )
+   CancelSubobject( mPrimReg, "PrimaryRegistrant" )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelUpdatePrimaryRegistrant
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdatePrimaryRegistrant( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+// CancelSubobject( mPrimReg, "User" )
+// CancelSubobject( mPrimReg, "Person" )
+// CancelSubobject( mPrimReg, "PhysicalAddress" )
+// CancelSubobject( mPrimReg, "MailingAddress" )
+   CancelSubobject( mPrimReg, "PrimaryRegistrant" )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListMasterProducts
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListMasterProducts( VIEW ViewToWindow )
+
+   VIEW lPrimReg REGISTERED AS lPrimReg
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = lPrimReg.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrantProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateMasterProduct( VIEW ViewToWindow )
+
+   // Don't need to do anything except have this operation to cause
+   // positioning code to be done in the JSP.
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION InitMasterProductForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterProductForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasProd BASED ON LOD  mMasProd
+
+   // We need to create a new MasterLabelContent entity.
+   ACTIVATE mMasProd EMPTY
+   NAME VIEW mMasProd "mMasProd"
+
+   CREATE ENTITY mMasProd.MasterProduct
+   IncludeSubobjectFromSubobject( mMasProd, "PrimaryRegistrant",
+                                  mPrimReg, "PrimaryRegistrant", zPOS_BEFORE )
+   wWebXfer.Root.AttemptProductName = ""
+   CreateTemporalSubobjectVersion( mMasProd, "MasterProduct" )
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrantProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION InitMasterProductForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterProductForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasProd BASED ON LOD  mMasProd
+
+   // We need to update the existing MasterLabelContent entity.
+   ACTIVATE mMasProd WHERE mMasProd.MasterProduct.ID = mPrimReg.MasterProduct.ID
+   NAME VIEW mMasProd "mMasProd"
+
+   wWebXfer.Root.AttemptProductName = mMasProd.MasterProduct.Name
+   CreateTemporalSubobjectVersion( mMasProd, "MasterProduct" )
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrantProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION AcceptNewMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewMasterProduct( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasProd REGISTERED AS mMasProd
+   STRING (  50  ) szProductName
+   INTEGER lProductNameLth
+   INTEGER lControl
+   INTEGER ViewCluster
+   INTEGER Ignore
+   SHORT   nRC
+
+   // Ensure label name is not blank and is unique.
+   szProductName = wWebXfer.Root.AttemptProductName
+   lProductNameLth = zGetStringLen( szProductName )
+   TraceLineS( "Product Product Name: ", szProductName )
+   TraceLineI( "Product Product Length: ", lProductNameLth )
+   IF lProductNameLth < 1
+
+      MessageSend( ViewToWindow, "", "New Master Product",
+                   "The Master Product Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+      IF SetEntityCursor( mMasProd, "MasterProduct", "Name", lControl,
+                          szProductName, "", "", 0, "", "" ) >= zCURSOR_SET
+         MessageSend( ViewToWindow, "", "New Master Product",
+                      "The Master Product Name must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+   END
+
+   mMasProd.MasterProduct.Name = szProductName
+   AcceptSubobject( mMasProd, "MasterProduct" )
+// IncludeSubobjectFromSubobject( mPrimReg, "MasterProduct",
+//                                mMasProd, "MasterProduct", zPOS_BEFORE )
+
+// Commit mMasProd
+// Commit mPrimReg
+   CreateViewCluster( ViewToWindow, ViewCluster )
+   AddToViewCluster( ViewCluster, mMasProd, zCOMMIT_KEEPLOCKS )
+   AddToViewCluster( ViewCluster, mPrimReg, zCOMMIT_KEEPLOCKS )
+   nRC = CommitMultipleObjectInstances( ViewCluster, Ignore )
+   DropViewCluster( ViewCluster )
+
+   DropObjectInstance( mMasProd )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION AcceptUpdateMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateMasterProduct( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasProd REGISTERED AS mMasProd
+   STRING (  50  ) szProductName
+   INTEGER lProductNameLth
+   INTEGER lControl
+
+   // Ensure label name is not blank and is unique.
+   szProductName = wWebXfer.Root.AttemptProductName
+   lProductNameLth = zGetStringLen( szProductName )
+   TraceLineS( "Product Product Name: ", szProductName )
+   TraceLineI( "Product Product Length: ", lProductNameLth )
+   IF lProductNameLth < 1
+
+      MessageSend( ViewToWindow, "", "New Master Product",
+                   "The Master Product Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      IF mMasProd.MasterProduct.Name != szProductName
+
+         lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+         IF SetEntityCursor( mMasProd, "MasterProduct", "ProductName",
+                             lControl, szProductName, "", "", 0, "", "" ) >= zCURSOR_SET
+            MessageSend( ViewToWindow, "", "New Master Product",
+                         "The Master Product Name must be unique.",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+
+         END
+
+         mMasProd.MasterProduct.Name = szProductName
+      END
+   END
+
+   IF mMasProd.MasterLabelContent EXISTS                 // for the case when the Content
+      AcceptSubobject( mMasProd, "MasterLabelContent" )  // is versioned, but not the Product
+   END
+
+   AcceptSubobject( mMasProd, "MasterProduct" )
+   Commit mMasProd
+   DropObjectInstance( mMasProd )
+   IF mPrimReg != 0
+      DropObjectInstance( mPrimReg )
+   END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION CancelNewMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewMasterProduct( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasProd REGISTERED AS mMasProd
+
+   CancelSubobject( mMasProd, "MasterProduct" )
+   DropObjectInstance( mMasProd )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION CancelUpdateMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateMasterProduct( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasProd REGISTERED AS mMasProd
+
+   CancelSubobject( mMasProd, "MasterProduct" )
+   DropObjectInstance( mMasProd )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitListSubregistrants
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitListSubregistrants( VIEW ViewToWindow )
+
+   VIEW lPrimReg BASED ON LOD lPrimReg
+   INTEGER lID
+
+   GET VIEW lPrimReg NAMED "lPrimReg"
+   lID = lPrimReg.PrimaryRegistrant.ID
+   DropObjectInstance( lPrimReg )
+
+   // Activate the "selected" primary registrant ... just in case someone added or
+   // deleted a subregistrant.
+   ACTIVATE lPrimReg WHERE lPrimReg.PrimaryRegistrant.ID = lID
+   NAME VIEW lPrimReg "lPrimReg"
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NewMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NewMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC   REGISTERED AS mMasLC
+   INTEGER lID
+   SHORT   nRC
+
+   lID = mMasLC.MasterLabelContent.ID
+
+   // We have to make sure the Product is in good shape before we go on!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+   IF nRC = 0
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+      NAME VIEW mMasLC "mMasLC"
+   END
+
+   RETURN nRC
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: UpdateMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+UpdateMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC   REGISTERED AS mMasLC
+   INTEGER lID
+   INTEGER lContentID
+   SHORT   nRC
+
+   lID = mMasLC.MasterLabelContent.ID
+   lContentID = mMasLC.MasterLabelContent.ID
+
+   // We have to make sure the Product is in good shape before we go on!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+   IF nRC = 0
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+      NAME VIEW mMasLC "mMasLC"
+      SET CURSOR FIRST mMasLC.MasterLabelContent
+          WHERE mMasLC.MasterLabelContent.ID = lContentID
+   END
+
+   RETURN nRC
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION InitMasterLabelContentForInsert
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterLabelContentForInsert( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+
+   wWebXfer.Root.AttemptContentVersion = ""
+
+   // We need to create a new MasterLabelContent entity.
+   CREATE ENTITY mMasLC.MasterLabelContent
+   CreateTemporalSubobjectVersion( mMasLC, "MasterLabelContent" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION InitMasterLabelContentForUpdate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterLabelContentForUpdate( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+
+   wWebXfer.Root.AttemptContentVersion = mMasLC.MasterLabelContent.Version
+
+   // We need to update the existing MasterLabelContent entity.
+   CreateTemporalSubobjectVersion( mMasLC, "MasterLabelContent" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION AcceptNewMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptNewMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   STRING (  50  ) szContentVersion
+   INTEGER         lContentVersionLth
+   INTEGER         lControl
+   SHORT   nRC
+
+   // Ensure section name is not blank and is unique.
+   szContentVersion = wWebXfer.Root.AttemptContentVersion
+   lContentVersionLth = zGetStringLen( szContentVersion )
+   TraceLineS( "Product Content Name: ", szContentVersion )
+   TraceLineI( "Product Content Length: ", lContentVersionLth )
+   IF lContentVersionLth < 1
+
+      MessageSend( ViewToWindow, "", "New Master Product Content",
+                   "The Master Product Content Name cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+      IF SetEntityCursor( mMasLC, "MasterLabelContent", "Version", lControl,
+                          szContentVersion, "", "", 0, "", "" ) >= zCURSOR_SET
+         MessageSend( ViewToWindow, "", "New Master Product Content",
+                      "The Master Product Content Version must be unique.",
+                      zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+         SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+         RETURN 2
+
+      END
+   END
+
+   mMasLC.MasterLabelContent.Version = szContentVersion
+   AcceptSubobject( mMasLC, "MasterLabelContent" )
+   Commit mMasLC
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = mMasLC.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+   SET CURSOR FIRST mPrimReg.MasterLabelContent
+       WHERE mPrimReg.MasterLabelContent.ID = mMasLC.MasterLabelContent.ID
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION AcceptUpdateMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptUpdateMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   STRING (  50  ) szContentVersion
+   INTEGER         lContentVersionLth
+   INTEGER         lControl
+   SHORT   nRC
+
+   // Ensure section name is not blank and is unique.
+   szContentVersion = wWebXfer.Root.AttemptContentVersion
+   lContentVersionLth = zGetStringLen( szContentVersion )
+   TraceLineS( "Product Content Name: ", szContentVersion )
+   TraceLineI( "Product Content Length: ", lContentVersionLth )
+   IF lContentVersionLth < 1
+
+      MessageSend( ViewToWindow, "", "Update Master Product Content",
+                   "The Master Product Content Version cannot be blank.",
+                   zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+      RETURN 2
+
+   ELSE
+
+      IF mMasLC.MasterLabelContent.Version != szContentVersion
+
+         lControl = zQUAL_STRING + zPOS_FIRST + zTEST_CSR_RESULT
+         IF SetEntityCursor( mMasLC, "MasterLabelContent", "Version", lControl,
+                             szContentVersion, "", "", 0, "", "" ) >= zCURSOR_SET
+            MessageSend( ViewToWindow, "", "Update Master Product Content",
+                         "The Master Product Content Version must be unique.",
+                         zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+            SetWindowActionBehavior( ViewToWindow, zWAB_StayOnWindow, "", "" )
+            RETURN 2
+
+         END
+
+         mMasLC.MasterLabelContent.Version = szContentVersion
+
+      END
+   END
+
+   AcceptSubobject( mMasLC, "MasterLabelContent" )
+   Commit mMasLC
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = mMasLC.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+   SET CURSOR FIRST mPrimReg.MasterLabelContent
+       WHERE mPrimReg.MasterLabelContent.ID = mMasLC.MasterLabelContent.ID
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION CancelNewMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelNewMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+
+   CancelSubobject( mMasLC, "MasterLabelContent" )
+   DELETE ENTITY mMasLC.MasterLabelContent
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = mMasLC.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+   SET CURSOR FIRST mPrimReg.MasterLabelContent
+       WHERE mPrimReg.MasterLabelContent.ID = mMasLC.MasterLabelContent.ID
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION CancelUpdateMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelUpdateMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC   REGISTERED AS mMasLC
+
+   CancelSubobject( mMasLC, "MasterLabelContent" )
+   ACTIVATE mPrimReg WHERE mPrimReg.PrimaryRegistrant.ID = mMasLC.PrimaryRegistrant.ID
+   NAME VIEW mPrimReg "mPrimReg"
+   SET CURSOR FIRST mPrimReg.MasterLabelContent
+       WHERE mPrimReg.MasterLabelContent.ID = mMasLC.MasterLabelContent.ID
+   DropObjectInstance( mMasLC )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DesignMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DesignMasterProduct( VIEW ViewToWindow )
+
+   // Don't need to do anything except have this operation to cause
+   // positioning code to be done in the JSP.
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitDesignMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitDesignMasterProduct( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasLC BASED ON LOD    mMasLC
+   INTEGER hMemory
+   STRING ( 32 ) szLDD
+   STRING ( 64 ) szContent
+   STRING ( 96 ) szSection
+
+   // We need to update the existing MasterLabelContent entity.
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = mPrimReg.MasterLabelContent.ID
+   NAME VIEW mMasLC "mMasLC"
+   CreateTemporalSubobjectVersion( mMasLC, "MasterLabelContent" )
+
+   hMemory = CreateMemoryHandle( 32000 )
+   FOR EACH mMasLC.MasterLabelContent
+      szLDD = mMasLC.MasterLabelContent.ID
+      AddStringToMemory( hMemory, "<div zid=", 0 )
+      AddStringToMemory( hMemory, szLDD, 2 )
+      AddStringToMemory( hMemory, " style=", 0 )
+      AddStringToMemory( hMemory, "border:0px; margin:0px;", 2 )
+      AddStringToMemory( hMemory, ">", 4 )
+
+      FOR EACH mMasLC.MasterLabelContent
+         szContent = szLDD + "."
+         szContent = szContent + mMasLC.MasterLabelContent.ID
+         AddStringToMemory( hMemory, "<div zid=", 0 )
+         AddStringToMemory( hMemory, szContent, 2 )
+         AddStringToMemory( hMemory, " style=", 0 )
+         AddStringToMemory( hMemory, "border:0px; margin:0px;", 2 )
+         AddStringToMemory( hMemory, ">", 4 )
+
+      // FOR EACH mMasLC.MasterProductSection
+      //    szSection = szContent + "."
+      //    szSection = szSection + mMasLC.MasterProductSection.ID
+      //    AddStringToMemory( hMemory, "<div zid=", 0 )
+      //    AddStringToMemory( hMemory, szSection, 2 )
+      //    AddStringToMemory( hMemory, " style=", 0 )
+      //    AddStringToMemory( hMemory, "border:0px; margin:0px;", 2 )
+      //    AddStringToMemory( hMemory, ">", 4 )
+
+      //    AddAttributeToMemory( hMemory, mMasLC, "MasterProductSection", "SectionText", 0 )
+      //    AddStringToMemory( hMemory, "</div>", 4 )
+      // END
+
+         AddStringToMemory( hMemory, "</div>", 4 )
+      END
+
+      AddStringToMemory( hMemory, "</div>", 4 )
+   END
+
+   SetMemoryToAttribute( hMemory, wWebXfer, "Root", "SplitHTML_Before" )
+   DeleteMemoryHandle( hMemory )
+
+   ParseHTML_AttrToZeidonOI( wWebXfer, "Root", "SplitHTML_Before",
+                             wWebXfer, "Div", "zid", "Tag", "Name", "Value", "Level", "TagYN", "UsageType",
+                             "Attribute", "Name", "Value", "Delimiter" )
+   ConstructHTML_AttrFromZeidonOI( wWebXfer, "Root", "wHTML",
+                                   wWebXfer, "Div", "zid", "Tag", "Name", "Value", "Level", "TagYN", "UsageType",
+                                   "Attribute", "Name", "Value", "Delimiter" )
+
+   // Clean up work entities.
+// FOR EACH wWebXfer.Div
+//    DELETE ENTITY wWebXfer.Div NONE
+// END
+
+// wWebXfer.Root.SplitHTML_Before = ""
+// wWebXfer.Root.wHTML = ""
+// wWebXfer.Root.SplitHTML_After = ""
+// FindLinks( mMasLC, "MasterProductSection", "SectionText" );
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrant" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: IsDivZID
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+IsDivZID( VIEW vHTML )
+
+   SHORT nRC
+
+   nRC = CheckExistenceOfEntity( vHTML, "Attribute" )
+   IF nRC = 0
+      nRC = CompareAttributeToString( vHTML, "Attribute", "Name", "<zid>" )
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptDesignMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+AcceptDesignMasterProduct( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC REGISTERED AS mMasLC
+   STRING ( 500000 ) szTempString  // use this to prevent stack overflow
+   SHORT nRC
+
+   // Clean up work entities.
+   FOR EACH wWebXfer.Div
+      DELETE ENTITY wWebXfer.Div NONE
+   END
+
+   ParseHTML_AttrToZeidonOI( wWebXfer, "Root", "wHTML",
+                             wWebXfer, "Div", "zid", "Tag", "Name", "Value", "Level", "TagYN", "UsageType",
+                             "Attribute", "Name", "Value", "Delimiter" )
+
+   MessageSend( ViewToWindow, "", "AcceptDesignMasterProduct",
+                "Check out WebXfer.Div entities!!!",
+                zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+   FOR EACH wWebXfer.Div
+      nRC = PositionOnEntityByZID( mMasLC, wWebXfer.Div.zid )
+      IF nRC <= 0  // error
+         IF nRC = 0  // on normal div (part of original html)
+            // don't know what to do yet.
+         ELSE
+            TraceLineS( "AcceptDesignMasterProduct zid error: ", wWebXfer.Div.zid )
+         END
+      ELSE
+         // If positioned on MasterLabelContent or MasterLabelContent, there
+         // should be nothing to do (just for verification of position).
+         IF nRC = 1 OR nRC = 2
+
+            IF wWebXfer.Tag EXISTS
+            // TraceLineS( "AcceptDesignMasterProduct Tag error: ", wWebXfer.Tag.Name ) // causes stack overflow
+               GetStringFromAttribute( szTempString, wWebXfer, "Tag", "Name" )
+               TraceLineS( "AcceptDesignMasterProduct Tag error: ", szTempString )
+            END
+
+         ELSE
+
+            // nRC is 3 ==> positioned on MasterProductSection
+            FOR EACH wWebXfer.Tag
+
+               nRC = IsDivZID( wWebXfer )
+               IF  nRC != 0  // not a Zeidon constructed div ==> process entity/attributes
+
+               // IF wWebXfer.Tag.TagYN = "Y"
+               //    // Check each attribute for change.
+               //    FOR EACH wWebXfer.Attribute
+               //       IF wWebXfer.Tag.Value != mMasLC.MasterProductSection.SectionText
+
+               //       // TraceLineS( "wWebXfer.Tag.Value: ", wWebXfer.Tag.Value )  // causes stack overflow
+               //          GetStringFromAttribute( szTempString, wWebXfer, "Tag", "Value" )
+               //          TraceLineS( "wWebXfer.Tag.Value: ", szTempString )
+               //       // TraceLineS( "SectionText: ", mMasLC.MasterProductSection.SectionText ) // causes stack overflow
+               //          GetStringFromAttribute( szTempString, mMasLC, "MasterProductSection", "SectionText" )
+               //          TraceLineS( "SectionText: ", szTempString )
+               //          MessageSend( ViewToWindow, "", "Value Check",
+               //                       "Attributes do not match ... see Zeidon Trace!!!",
+               //                       zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+               //       END
+               //    END
+               // ELSE
+               //    // Check name only
+               //    IF wWebXfer.Tag.Name != mMasLC.MasterProductSection.SectionText
+
+               //    // TraceLineS( "wWebXfer.Tag.Name: ", wWebXfer.Tag.Name )  // causes stack overflow
+               //       GetStringFromAttribute( szTempString, wWebXfer, "Tag", "Name" )
+               //       TraceLineS( "wWebXfer.Tag.Name: ", szTempString )
+               //    // TraceLineS( "SectionText: ", mMasLC.MasterProductSection.SectionText ) // causes stack overflow
+               //       GetStringFromAttribute( szTempString, mMasLC, "MasterProductSection", "SectionText" )
+               //       TraceLineS( "SectionText: ", szTempString )
+               //       MessageSend( ViewToWindow, "", "Name Check",
+               //                    "Attributes do not match!!!",
+               //                    zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+               //    END
+               // END
+
+               END
+            END
+         END
+      END
+   END
+
+   AcceptSubobject( mMasLC, "MasterLabelContent" )
+   Commit mMasLC
+   DropObjectInstance( mMasLC )
+
+   // Clean up work entities.
+   FOR EACH wWebXfer.Div
+      DELETE ENTITY wWebXfer.Div NONE
+   END
+
+   wWebXfer.Root.SplitHTML_Before = ""
+   wWebXfer.Root.HTML = ""
+   wWebXfer.Root.SplitHTML_After = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelDesignMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelDesignMasterProduct( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC REGISTERED AS mMasLC
+
+   CancelSubobject( mMasLC, "MasterLabelContent" )
+   DropObjectInstance( mMasLC )
+
+   // Clean up work entities.
+   FOR EACH wWebXfer.Div
+      DELETE ENTITY wWebXfer.Div NONE
+   END
+
+   wWebXfer.Root.SplitHTML_Before = ""
+   wWebXfer.Root.HTML = ""
+   wWebXfer.Root.SplitHTML_After = ""
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC BASED ON LOD    mMasLC
+   INTEGER lID
+   INTEGER lContentID
+   SHORT   nRC
+
+   GET VIEW mMasLC NAMED "mMasLC"
+   lID = mMasLC.MasterLabelContent.ID
+   lContentID = mMasLC.MasterLabelContent.ID
+
+   // We have to make sure the Product is in good shape before we go on!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+   IF nRC = 0
+      InitListMasterProducts( ViewToWindow )
+      GET VIEW mPrimReg NAMED "mPrimReg"
+      SET CURSOR FIRST mPrimReg.MasterLabelContent
+          WHERE mPrimReg.MasterLabelContent.ID = lID
+
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+      NAME VIEW mMasLC "mMasLC"
+      SET CURSOR FIRST mMasLC.MasterLabelContent
+          WHERE mMasLC.MasterLabelContent.ID = lContentID
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitMasterLabelContentForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterLabelContentForDelete( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+// VIEW mMasLC REGISTERED AS mMasLC
+
+// TraceLineS( "", "" )
+// TraceLineS( "InitMasterLabelContentForDelete", "" )
+// DisplayObjectInstance( mMasLC, "", "" )
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrantContent" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmDeleteMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmDeleteMasterLabelContent( VIEW ViewToWindow )
+
+   VIEW mMasLC   REGISTERED AS mMasLC
+
+   // We will cancel any changes including those for entities that may be involved.
+   // We could accept, but a problem could arise if the accept triggered an error.
+   CancelCurrentTemporalSubobject( ViewToWindow, "ConfirmDeleteMasterLabelContent: " )
+   DELETE ENTITY mMasLC.MasterLabelContent
+   COMMIT mMasLC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelDeleteMasterLabelContent
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelDeleteMasterLabelContent( VIEW ViewToWindow )
+
+// VIEW mMasLC REGISTERED AS mMasLC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveMasterLabelContentUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveMasterLabelContentUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW mTempLDD BASED ON LOD  mMasLC
+   INTEGER lID
+   INTEGER lContentID
+   INTEGER lMove
+   SHORT   nRC
+
+   lID = mMasLC.MasterLabelContent.ID
+   lContentID = mMasLC.MasterLabelContent.ID
+
+   // We have to make sure the Product is in good shape before we go on!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+   IF nRC = 0
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+      NAME VIEW mMasLC "mMasLC"
+      SET CURSOR FIRST mMasLC.MasterLabelContent
+          WHERE mMasLC.MasterLabelContent.ID = lContentID
+
+      CreateViewFromView( mTempLDD, mMasLC )
+      lMove = wWebXfer.Root.MoveIncrement
+      IF lMove <= 0
+         lMove = 1
+      END
+
+      LOOP WHILE lMove > 0
+         SET CURSOR PREVIOUS mTempLDD.MasterLabelContent
+         lMove = lMove - 1
+      END
+
+      MoveSubobject( mTempLDD, "MasterLabelContent",
+                     mMasLC, "MasterLabelContent",
+                     zPOS_PREV, zREPOS_PREV )
+      DropView( mTempLDD )
+      Commit mMasLC
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveMasterLabelContentDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveMasterLabelContentDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC   REGISTERED AS mMasLC
+   VIEW mTempLDD BASED ON LOD  mMasLC
+   INTEGER lID
+   INTEGER lContentID
+   INTEGER lMove
+   SHORT   nRC
+
+   lID = mMasLC.MasterLabelContent.ID
+   lContentID = mMasLC.MasterLabelContent.ID
+
+   // We have to make sure the Product is in good shape before we go on!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+   IF nRC = 0
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+      NAME VIEW mMasLC "mMasLC"
+      SET CURSOR FIRST mMasLC.MasterLabelContent
+          WHERE mMasLC.MasterLabelContent.ID = lContentID
+
+      CreateViewFromView( mTempLDD, mMasLC )
+      lMove = wWebXfer.Root.MoveIncrement
+      IF lMove <= 0
+         lMove = 1
+      END
+
+      LOOP WHILE lMove > 0
+         SET CURSOR NEXT mTempLDD.MasterLabelContent
+         lMove = lMove - 1
+      END
+
+      MoveSubobject( mTempLDD, "MasterLabelContent",
+                     mMasLC, "MasterLabelContent",
+                     zPOS_NEXT, zREPOS_NEXT )
+      DropView( mTempLDD )
+      Commit mMasLC
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveMasterProductUp
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveMasterProductUp( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mTempReg BASED ON LOD  mPrimReg
+   INTEGER lMove
+   SHORT   nRC
+
+   CreateViewFromView( mTempReg, mPrimReg )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR PREVIOUS mTempReg.MasterLabelContent
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempReg, "MasterLabelContent",
+                  mPrimReg, "MasterLabelContent",
+                  zPOS_PREV, zREPOS_PREV )
+   DropView( mTempReg )
+
+   // We now accept the Master Product to maintain order!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: MoveMasterProductDown
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+MoveMasterProductDown( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mTempReg BASED ON LOD  mPrimReg
+   INTEGER lMove
+   SHORT   nRC
+
+   CreateViewFromView( mTempReg, mPrimReg )
+   lMove = wWebXfer.Root.MoveIncrement
+   IF lMove <= 0
+      lMove = 1
+   END
+
+   LOOP WHILE lMove > 0
+      SET CURSOR NEXT mTempReg.MasterLabelContent
+      lMove = lMove - 1
+   END
+
+   MoveSubobject( mTempReg, "MasterLabelContent",
+                  mPrimReg, "MasterLabelContent",
+                  zPOS_NEXT, zREPOS_NEXT )
+   DropView( mTempReg )
+
+   // We now accept the Master Product to maintain order!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DeleteMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DeleteMasterProduct( VIEW ViewToWindow )
+
+   VIEW mPrimReg BASED ON LOD  mPrimReg
+   VIEW mMasLC BASED ON LOD    mMasLC
+   INTEGER lID
+   SHORT   nRC
+
+   GET VIEW mPrimReg NAMED "mPrimReg"
+   lID = mPrimReg.MasterLabelContent.ID
+
+   // We have to make sure the Product is in good shape before we go on!
+   nRC = AcceptUpdateMasterProduct( ViewToWindow )
+   IF nRC = 0
+      InitListMasterProducts( ViewToWindow )
+      GET VIEW mPrimReg NAMED "mPrimReg"
+      SET CURSOR FIRST mPrimReg.MasterLabelContent
+          WHERE mPrimReg.MasterLabelContent.ID = lID
+
+      ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+      NAME VIEW mMasLC "mMasLC"
+   END
+
+   RETURN nRC
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitMasterProductForDelete
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+InitMasterProductForDelete( VIEW ViewToWindow )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+// VIEW mMasLC REGISTERED AS mMasLC
+
+// TraceLineS( "", "" )
+// TraceLineS( "InitMasterProductForDelete", "" )
+// DisplayObjectInstance( mMasLC, "", "" )
+
+   SetDynamicBannerName( ViewToWindow, "wPrimR", "PrimaryRegistrantProduct" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ConfirmDeleteMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ConfirmDeleteMasterProduct( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+   VIEW mMasLC REGISTERED AS mMasLC
+   INTEGER lID
+
+   lID = mPrimReg.MasterLabelContent.ID
+   ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = lID
+   NAME VIEW mMasLC "mMasLC"
+
+   DELETE ENTITY mMasLC.MasterLabelContent
+   COMMIT mMasLC
+   DropObjectInstance( mMasLC )
+   DropObjectInstance( mPrimReg )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: CancelDeleteMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelDeleteMasterProduct( VIEW ViewToWindow )
+
+   VIEW mPrimReg REGISTERED AS mPrimReg
+
+   DropObjectInstance( mPrimReg )
+
+END
+

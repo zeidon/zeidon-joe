@@ -1,0 +1,3619 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: ActivateDomainList
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+ActivateDomainList( VIEW DOMAINTLST BASED ON LOD DOMAINT,
+                    VIEW zAnyView )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+
+   ACTIVATE DOMAINTLST RootOnlyMultiple
+
+   GET VIEW DOMAINT NAMED "DOMAINT"
+   IF RESULT >= 0
+      IF DOMAINTLST.Domain EXISTS
+         SET CURSOR FIRST DOMAINTLST.Domain WHERE
+            DOMAINT.Domain.Name = DOMAINTLST.Domain.Name
+      END
+      DropView ( DOMAINT )
+   END
+
+   NAME VIEW DOMAINTLST "DOMAINTLST"
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: PreloadSystemDomains
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+PreloadSystemDomainsR( VIEW DOMAINTLST  BASED ON LOD DOMAINT,
+                      VIEW AnyReferenceView,
+                      STRING ( 32 ) InstallApp )
+   ACTIVATE DOMAINTLST RootOnlyMultiple
+
+   // ActivityStatus
+   LoadActivityStatus( DOMAINTLST  )
+   LoadActivityType( DOMAINTLST   )
+   LoadCommPlanType( DOMAINTLST   )
+   LoadContactActType( DOMAINTLST   )
+   LoadEventCode( DOMAINTLST  )
+   LoadFacultyStatus( DOMAINTLST  )
+   LoadFacultyType( DOMAINTLST  )
+   LoadFundRestrictions( DOMAINTLST  )
+   LoadProspectStatus( DOMAINTLST  )
+   LoadProspectType( DOMAINTLST  )
+   LoadStaffStatus( DOMAINTLST  )
+   LoadStaffType( DOMAINTLST  )
+
+END
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: PreloadSystemDomains
+//
+//    OPTIONAL
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+PreloadSystemDomainsO( VIEW DOMAINTLST  BASED ON LOD DOMAINT,
+                      VIEW AnyReferenceView,
+                      STRING ( 32 ) InstallApp )
+   ACTIVATE DOMAINTLST RootOnlyMultiple
+
+   LoadDenomination( DOMAINTLST   )
+   LoadChurchRelatedRole( DOMAINTLST   )
+   LoadDegreeEarned( DOMAINTLST   )
+   LoadDistrictCode( DOMAINTLST   )
+   LoadExamType( DOMAINTLST   )
+   LoadIndustry( DOMAINTLST   )
+   LoadInfluencerType( DOMAINTLST   )
+   LoadInterestType( DOMAINTLST   )
+   LoadOrgRelatedRole( DOMAINTLST   )
+   LoadParentGuardianRole( DOMAINTLST   )
+   LoadSchoolCategory( DOMAINTLST   )
+   LoadSchoolRelatedRole( DOMAINTLST   )
+   LoadCountry( DOMAINTLST   )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadActivityStatus( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = "ActivityStatus"
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = "ActivityStatus"
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = "ActivityStatus"
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Scheduled"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "0"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Completed"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "0"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadActivityType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ActivityType"
+
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "ContactList"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Meeting"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Appointment"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "PhoneCall"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "5"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Fax"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "5"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "6"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "EMail"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "6"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "7"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Mailing"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "7"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "8"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Todo"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "8"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//    OPTIONAL
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadDenomination( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ChurchDenomination"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Church of the Nazarene"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Advent Christian Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Anglican Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Assembly of God Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "5"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Baptist Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "5"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "6"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Church of the Brethren"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "6"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "7"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Catholic Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "7"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "8"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Community Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "8"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "9"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Christian Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "9"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "10"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Christian Missionary Alliance"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "10"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "11"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Congregational Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "11"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "12"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Episcopal Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "12"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "13"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Free Methodist"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "13"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "14"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Church of God"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "14"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "15"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Greek Evangelical Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "15"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "16"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Greek Orthodox Church"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "16"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "17"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Southern Baptist"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "17"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "18"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Roman Catholic"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "18"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "19"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Independent"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "19"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "20"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Presbyterian"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "20"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+// OPTIONAL
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadChurchRelatedRole( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ChurchRelatedRole"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Senior Pastor"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Youth Pastor"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadCommPlanType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "CommunicationPlanType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Admissions"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Development"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Alumni"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadContactActType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ContactActivityType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "ContactList"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Meeting"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Appointment"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "PhoneCall"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "5"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Fax"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "5"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "6"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "EMail"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "6"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "7"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Mailing"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "7"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadDegreeEarned( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "DegreeEarned"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "AA"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Associate in Arts"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "AA"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "AB"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Bachelor of Arts"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "AB"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "AS"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Associate in Science"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "AS"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "BA"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Bachelor of Arts"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "BA"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "BAS"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Bachelor of Arts/Bachelor of Science"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "BAS"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "BMU"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Bachelor of Music"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "BAM"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "BS"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Bachelor of Science"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "BAM"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "BSBA"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Bachelor of Science/ Business Administration"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "BSBA"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "MA"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Master of Arts"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "MA"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "MED"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Master of Education"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "MED"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadDistrictCode( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "DistrictCode"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "01"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "District 01"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "01"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadEventCode( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "EventCode"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "College Faire"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Print Advertisment"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "TV/Radio Advertisment"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Mailing"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "5"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Contact List"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "5"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "6"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Other"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "6"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadExamType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ExamType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "S"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "SAT"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "S"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "A"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "ACT"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "A"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadFacultyStatus( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "FacultyStatus"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Active"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "0"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Inactive"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "0"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadFacultyType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "FacultyType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Professor"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Assistant Professor"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Associate Professor"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Lecturer"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "5"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Adjunct Instructor"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "5"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadFundRestrictions( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "FundRestrictions"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "R"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Restricted"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "R"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "U"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Unrestricted"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "U"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "C"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Capital"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "C"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "O"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Other"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "O"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadIndustry( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "Industry"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "General"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadInfluencerType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "InfluencerType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "General"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadInterestType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "InterestType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Sports"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadOrgRelatedRole( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "OrgRelatedRole"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Owner"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Officer"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Other"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadParentGuardianRole( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ParentGuardianRole"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Father"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Mother"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Guardian"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Grandparent"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadProspectStatus( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ProspectStatus"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Active"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "0"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Inactive"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "0"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadProspectType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "ProspectType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Inquiry"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Lead"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "3"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Prospect"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "3"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Applied"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "5"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Accepted"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "5"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadSchoolCategory( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "SchoolCategory"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "COLCOMM"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "College - Community"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "COLCOMM"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "COLPRIV2"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "College - Two Year Private"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "COLPRIV2"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "COLPRIV4"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "College - Four Year Private"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "COLPRIV4"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "COLSTATE"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "College - State"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "COLSTATE"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "PRIMPRIV"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Primary Private (K-8)"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "PRIMPRIV"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "PRIMPUB"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Primary Public (K-8)"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "PRIMPUB"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "SECONPRIV"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Secondary Private (9-12)"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "SECONPRIV"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "SECONPUB"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Secondary Public (9-12)"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "SECONPUB"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadSchoolRelatedRole( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "SchoolRelatedRole"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Principal"
+   END
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadStaffStatus( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "StaffStatus"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Active"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "1"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "0"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Inactive"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "0"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadStaffType( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = "StaffType"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "F"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "FullTime"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "F"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "P"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = "Parttime"
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = "P"
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+Load( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   szDomainName = ""
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = ""
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = ""
+   DOMAINT.DomainValue.WorkDecimal = ""
+
+
+   COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//    OPERATION: LoadDomainByName
+//
+// oPTIONAL
+/////////////////////////////////////////////////////////////////////////////
+LOCAL OPERATION
+LoadCountry( VIEW DOMAINTLST BASED ON LOD DOMAINT )
+
+   VIEW DOMAINT BASED ON LOD DOMAINT
+   STRING (  30  ) szDomainName
+
+   // because country is so large, we will delete the list and re-add it
+   szDomainName = "Country"
+   // Go through the domain list Manually and activate each domain.
+   // If the system required values are not there, insert and save them
+   // load ... First
+   SET CURSOR FIRST DOMAINTLST.Domain
+      WHERE DOMAINTLST.Domain.Name = szDomainName
+   IF RESULT < zCURSOR_SET
+      ACTIVATE  DOMAINT EMPTY
+      CREATE ENTITY DOMAINT.Domain
+      DOMAINT.Domain.Name = szDomainName
+      DOMAINT.Domain.SystemRequired = "Y"
+   ELSE
+      ACTIVATE  DOMAINT
+         WHERE DOMAINT.Domain.Name = szDomainName
+   END
+
+   SET CURSOR FIRST DOMAINT.DomainValue
+      WHERE DOMAINT.DomainValue.InternalStringValue = "1"
+   IF RESULT < zCURSOR_SET
+      CREATE ENTITY  DOMAINT.DomainValue
+      DOMAINT.DomainValue.ExternalDescription = ""
+   END
+   DOMAINT.DomainValue.SystemRequired = "Y"
+   DOMAINT.DomainValue.InternalIntegerValue = ""
+   DOMAINT.DomainValue.InternalStringValue = ""
+   DOMAINT.DomainValue.WorkDecimal = ""
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Antigua"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AF"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Afghanistan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AF"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Algeria"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Albania"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Andorra"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Angola"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "American Samoa"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Argentina"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Australia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ashmore And Cartier Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Austria"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "AY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Antarctica"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "AY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bahrein Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BB"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Barbados"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BB"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Botswana"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BD"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bermuda"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BD"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Belgium"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BF"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bahamas"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BF"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "British Honduras"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bolivia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BM"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Burma"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BM"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bangladesh"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "British Solomon Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "US Caribbean Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Brazil"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bhutan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bulgaria"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BV"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Bouvet Island"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BV"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BX"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Brunei"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BX"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Burundi"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "BZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Belize"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "BZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Canada"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CB"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cambodia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CB"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "China, Mainland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CD"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Chad"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CD"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ceylon"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CF"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Congo (Brazza Ville)"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CF"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Congo (Kinshasa)"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "People's Republic of China"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Chile"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CJ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cayman Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CJ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cocos Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Central/Southern Line Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CM"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cameroon"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CM"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Comoro Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Colombia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Costa Rica"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Central African Republic"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cuba"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CV"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cape Verde"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CV"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CW"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cook Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CW"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Cyprus"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "CZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Czechoslovakia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "CZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "DA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Denmark"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "DA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "DM"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Dahomey"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "DM"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "DO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Dominica"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "DO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "DR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Dominican Republic"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "DR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "EC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ecuador"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "EC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "EG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "United Arab Rep. (Egypt)"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "EG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "EK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Equatorial Guinea"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "EK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "EN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "England"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "EN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "EQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Canton And Enderbury Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "EQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ES"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "El Salvador"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ES"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ET"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ethiopia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ET"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Falkland Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "French Guiana"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Finland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FJ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Fiji"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FJ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Faeroe Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "French Polynesia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "France"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "French So./Antartic Lands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "FT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Afars/Issas"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "FT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Gambia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GB"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Gabon"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GB"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Germany, Soviet Zone Of"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Germany"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ghana"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Gibraltar"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GJ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Grenada"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GJ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Greenland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Gilbert/Ellice Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Guadeloupe"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Guam"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Greece"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Guatemala"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Guinea"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Guyana"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "GZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Gaza Strip"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "GZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "HA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Haiti"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "HA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "HK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Hong Kong"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "HK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "HM"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Heard/McDonald Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "HM"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "HO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Honduras"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "HO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "HU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Hungary"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "HU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Iceland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ID"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Indonesia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ID"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ireland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "India"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "British Indian Ocean Terr"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Iran"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Israel"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Italy"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Israel - Syria DMZ"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IV"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Ivory Coast"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IV"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Iraq - Saudia Arabia DMZ"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "IZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Iraq"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "IZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "JA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Japan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "JA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "JM"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Jamaica"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "JM"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "JN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Jan Mayen"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "JN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "JO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Jordan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "JO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "JQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Johnston Atoll"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "JQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "KE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Kenya"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "KE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "KN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Korea, North"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "KN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "KS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Korea, Republic Of"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "KS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "KT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Christmas Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "KT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "KU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Kuwait"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "KU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Laos"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Lebanon"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Liberia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Liechtenstein"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Lesotho"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Luxembourg"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "LY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Libya"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "LY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Madagascar"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MB"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Martinque"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MB"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Macao"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ME"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Northern Morocco"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ME"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Mongolia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Montserrat"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Malawi"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ML"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Mali"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ML"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Monaco"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Morocco"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Mauritius"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Midway Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Mauritania"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Malta"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Muscat And Oman"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MV"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Maldives"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MV"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MX"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Mexico"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MX"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Malaysia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "MZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Mozambique"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "MZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Netherlands, Antilles"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "New Caledonia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Niue"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NF"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Norfolk Island"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NF"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Niger"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "New Hebrides"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Nigeria"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Netherlands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Norway"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Nepal"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Nauru"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Nicaragua"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "NZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "New Zealand"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "NZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Paraguay"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Pitcairn Island"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Peru"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PF"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Paracal Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PF"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Philippines"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Pakistan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Poland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Panama"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Portugal"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Papau And New Guinea"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Puerto Rico"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "PU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Portuguese Guinea"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "PU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "QA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Qatar"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "QA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "RE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Reunion"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "RE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "RH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Rhodesia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "RH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "RO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Romania"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "RO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "RU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Russia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "RU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "RW"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Rwanda"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "RW"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Saudi Arabia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SB"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "St. Pierre/Miquelon"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SB"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "St. Christopher/Nevis"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Seychelles"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SF"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "South Africa"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SF"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Senegal"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "St. Helena"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Sri Lanka"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Sikkim"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Sierra Leone"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SM"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "San Marino"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SM"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Singapore"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Solmalia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Spain"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Swan Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SR"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Surinam"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SR"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Spanish Sahara"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ST"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "St. Lucia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ST"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Sudan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SV"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Svalbard"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SV"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SW"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Sweden"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SW"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SX"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Swaziland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SX"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SY"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Syria"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SY"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "SZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Switzerland"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "SZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Tasmania"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TC"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Trucial States"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TC"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TD"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Trinidad And Tobago"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TD"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TH"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Thailand"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TH"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Turks/ Caicos Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TL"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Tokelau Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TL"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TN"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Tonga"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TN"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TO"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Toga"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TO"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TP"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Sao Tome And Principe"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TP"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Trust Terr. of Pacific Islands"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Tunisia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Turkey"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TW"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Taiwan"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TW"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "TZ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Tanzania"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "TZ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "UG"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Uganda"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "UG"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "UK"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "United Kingdom"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "UK"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "US"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "US"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "US"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "VI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "US Virgin Island"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "VI"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "VS"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Vietnam, Republic Of"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "VS"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "VT"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Vatican City"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "VT"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "WA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Wallis And Futuna"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "WA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "WQ"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Wake Island"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "WQ"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "YE"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Yemen"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "YE"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "YU"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Yugoslavia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "YU"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ZA"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Zambia"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ZA"
+   SET CURSOR FIRST DOMAINT.DomainValue WHERE DOMAINT.DomainValue.InternalStringValue = "ZI"
+IF RESULT < zCURSOR_SET
+   CREATE ENTITY  DOMAINT.DomainValue
+   DOMAINT.DomainValue.ExternalDescription = "Zaire"
+END
+DOMAINT.DomainValue.SystemRequired = "Y"
+DOMAINT.DomainValue.InternalStringValue = "ZI"
+      COMMIT DOMAINT
+   DropView( DOMAINT )
+
+END

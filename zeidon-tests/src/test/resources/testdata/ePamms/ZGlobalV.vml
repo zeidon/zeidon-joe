@@ -1,0 +1,1240 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    ZGlobalV      - Application global operations
+// FILE:         ZGlobalV.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SetDynamicBannerName
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+SetDynamicBannerName( VIEW  ViewToWindow,
+                      STRING ( 32 ) szDialogName,
+                      STRING ( 32 ) szBannerName )
+
+   VIEW KZXMLPGO
+   STRING ( 64 )  szFullBannerName
+   STRING ( 128 ) szTraceString
+
+   GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+
+   IF KZXMLPGO != 0
+      // We should ever have at most one DynamicBannerName entity, so check first to see if it exists.
+      SET CURSOR FIRST KZXMLPGO.DynamicBannerName
+      IF RESULT < zCURSOR_SET
+         CREATE ENTITY KZXMLPGO.DynamicBannerName
+      END
+
+      KZXMLPGO.DynamicBannerName.DialogName = szDialogName
+      szFullBannerName = "./include/ePammsBanner" + szBannerName + ".inc"
+      KZXMLPGO.DynamicBannerName.BannerName = szFullBannerName
+      szTraceString = "SetDynamicBanner: " + szFullBannerName
+      szTraceString = szTraceString + "  for Dialog: "
+      TraceLineS( szTraceString, szDialogName )
+
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CopyMLC_EntityToSLC
+// If the Flag is 0, we want to copy the entity as specified.
+// If the Flag is 1, we want to copy the entity (building the Section name).
+// If the Flag is 2, we want to copy the sub-entity (building the Statement name).
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CopyMLC_EntityToSLC( VIEW  mMasLC,
+                     VIEW  mSubLC,
+                     STRING ( 32 ) szEntity,
+                     SHORT nFlag )
+
+   STRING ( 32 ) szM_SectionName
+   STRING ( 32 ) szS_SectionName
+   STRING ( 32 ) szM_StatementName
+   STRING ( 32 ) szS_StatementName
+   INTEGER lID
+   SHORT   nRC
+
+   IF nFlag = 2 OR nFlag = 1
+
+      // If the Flag is 1, we want to copy the Section entity (building the name).
+      szM_SectionName = "M_" + szEntity + "Section"
+      szS_SectionName = "S_" + szEntity + "Section"
+      szM_StatementName = "M_" + szEntity + "Statement"
+      szS_StatementName = "S_" + szEntity + "Statement"
+      nRC = SetCursorFirstEntity( mMasLC, szM_SectionName, "" )
+      LOOP WHILE nRC >= 0
+
+         CreateEntity( mSubLC, szS_SectionName, zPOS_AFTER )
+         SetMatchingAttributesByName( mSubLC, szS_SectionName,
+                                      mMasLC, szM_SectionName, zSET_NOTNULL )
+         SetAttributeFromString( mSubLC, szS_SectionName, "Selected", "Y" )
+         IncludeSubobjectFromSubobject( mSubLC, szM_SectionName,
+                                        mMasLC, szM_SectionName, zPOS_BEFORE )
+         // If the Flag is 2, we want to copy the Statement entity (building the name).
+         IF nFlag = 2
+
+            nRC = SetCursorFirstEntity( mMasLC, szM_StatementName, "" )
+            LOOP WHILE nRC >= 0
+
+               CreateEntity( mSubLC, szS_StatementName, zPOS_AFTER )
+               SetMatchingAttributesByName( mSubLC, szS_StatementName,
+                                            mMasLC, szM_StatementName, zSET_NOTNULL )
+               SetAttributeFromString( mSubLC, szS_StatementName, "Selected", "Y" )
+               IncludeSubobjectFromSubobject( mSubLC, szM_StatementName,
+                                              mMasLC, szM_StatementName, zPOS_BEFORE )
+
+               nRC = SetCursorNextEntity( mMasLC, szM_StatementName, "" )
+            END
+         END
+
+         nRC = SetCursorNextEntity( mMasLC, szM_SectionName, "" )
+      END
+
+   ELSE
+
+      // If the Flag is 0, we want to copy the specified entity.
+      szM_SectionName = "M_" + szEntity
+      szS_SectionName = "S_" + szEntity
+      nRC = SetCursorFirstEntity( mMasLC, szM_SectionName, "" )
+      LOOP WHILE nRC >= 0
+
+         CreateEntity( mSubLC, szS_SectionName, zPOS_AFTER )
+         SetAttributeFromString( mSubLC, szS_SectionName, "Selected", "Y" )
+         SetMatchingAttributesByName( mSubLC, szS_SectionName,
+                                      mMasLC, szM_SectionName, zSET_NOTNULL )
+         IncludeSubobjectFromSubobject( mSubLC, szM_SectionName,
+                                        mMasLC, szM_SectionName, zPOS_BEFORE )
+      // MessageSend( mMasLC, "", szM_SectionName,
+      //              "Check mSubLC and mMasLC for entity - CopyMLC_EntityToSLC.",
+      //              zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+         GetIntegerFromAttribute( lID, mMasLC, szM_SectionName, "ID" )
+      // IF SetCursorFirstEntityByEntityCsr( mMasLC, "M_MarketingUsage", mMasLC, szM_SectionName, "" ) = 0
+         SET CURSOR FIRST mMasLC.M_MarketingUsage WHERE mMasLC.M_MarketingUsage.ID = lID
+         IF RESULT = 0
+            IncludeSubobjectFromSubobject( mSubLC, "S_OriginalMarketingUsage",
+                                           mSubLC, szS_SectionName, zPOS_BEFORE )
+            IncludeSubobjectFromSubobject( mSubLC, "S_MarketingUsage",
+                                           mSubLC, szS_SectionName, zPOS_BEFORE )
+         END
+
+      // IF SetCursorFirstEntityByEntityCsr( mMasLC, "M_DirectionsUsage", mMasLC, szM_SectionName, "" ) = 0
+         SET CURSOR FIRST mMasLC.M_DirectionsUsage WHERE mMasLC.M_DirectionsUsage.ID = lID
+         IF RESULT = 0
+            IncludeSubobjectFromSubobject( mSubLC, "S_OriginalDirectionsUsage",
+                                           mSubLC, szS_SectionName, zPOS_BEFORE )
+            IncludeSubobjectFromSubobject( mSubLC, "S_DirectionsUsage",
+                                           mSubLC, szS_SectionName, zPOS_BEFORE )
+         END
+
+         nRC = SetCursorNextEntity( mMasLC, szM_SectionName, "" )
+
+      END
+
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitializeSLC_FromMLC
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+InitializeSLC_FromMLC( VIEW mMasLC,
+                       VIEW mSubLC )
+
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "General", 2 )
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "Ingredients", 2 )
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "StorageDisposal", 2 )
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "DirectionsForUse", 2 )
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "Marketing", 2 )
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "HumanHazard", 1 )
+   CopyMLC_EntityToSLC( mMasLC, mSubLC, "Usage", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CopySLC_EntityToSPLD
+// If the Flag is 0, we want to copy the entity as specified.
+// If the Flag is 1, we want to copy the entity (building the Section name).
+// If the Flag is 2, we want to copy the sub-entity (building the Statement name).
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CopySLC_EntityToSPLD( VIEW  mSubLC,
+                      VIEW  mSPLDef,
+                      STRING ( 32 ) szEntity,
+                      SHORT nFlag )
+
+   STRING ( 32 ) szM_SectionName
+   STRING ( 32 ) szS_SectionName
+   STRING ( 32 ) szM_StatementName
+   STRING ( 32 ) szS_StatementName
+   INTEGER lID
+   SHORT   nRC
+
+   IF nFlag = 2 OR nFlag = 1
+
+      // If the Flag is 1, we want to copy the Section entity (building the name).
+      szM_SectionName = "S_" + szEntity + "Section"
+      szS_SectionName = "SPLD_" + szEntity + "Section"
+      szM_StatementName = "S_" + szEntity + "Statement"
+      szS_StatementName = "SPLD_" + szEntity + "Statement"
+      nRC = SetCursorFirstEntity( mSubLC, szM_SectionName, "" )
+      LOOP WHILE nRC >= 0
+
+         CreateEntity( mSPLDef, szS_SectionName, zPOS_AFTER )
+         SetMatchingAttributesByName( mSPLDef, szS_SectionName,
+                                      mSubLC, szM_SectionName, zSET_NOTNULL )
+         SetAttributeFromString( mSPLDef, szS_SectionName, "Selected", "Y" )
+         IncludeSubobjectFromSubobject( mSPLDef, szM_SectionName,
+                                        mSubLC, szM_SectionName, zPOS_BEFORE )
+         // If the Flag is 2, we want to copy the Statement entity (building the name).
+         IF nFlag = 2
+
+            nRC = SetCursorFirstEntity( mSubLC, szM_StatementName, "" )
+            LOOP WHILE nRC >= 0
+
+               CreateEntity( mSPLDef, szS_StatementName, zPOS_AFTER )
+               SetMatchingAttributesByName( mSPLDef, szS_StatementName,
+                                            mSubLC, szM_StatementName, zSET_NOTNULL )
+               SetAttributeFromString( mSPLDef, szS_StatementName, "Selected", "Y" )
+               IncludeSubobjectFromSubobject( mSPLDef, szM_StatementName,
+                                              mSubLC, szM_StatementName, zPOS_BEFORE )
+
+               nRC = SetCursorNextEntity( mSubLC, szM_StatementName, "" )
+            END
+         END
+
+         nRC = SetCursorNextEntity( mSubLC, szM_SectionName, "" )
+      END
+
+   ELSE
+
+      // If the Flag is 0, we want to copy the specified entity.  Even though the names
+      // are not quite right, in order to maintain parallel code with the above IF, keep
+      // the names as in the code above.
+      szM_SectionName = "S_" + szEntity
+      szS_SectionName = "SPLD_" + szEntity
+      nRC = SetCursorFirstEntity( mSubLC, szM_SectionName, "" )
+      LOOP WHILE nRC >= 0
+
+         CreateEntity( mSPLDef, szS_SectionName, zPOS_AFTER )
+         SetAttributeFromString( mSPLDef, szS_SectionName, "Selected", "Y" )
+         SetMatchingAttributesByName( mSPLDef, szS_SectionName,
+                                      mSubLC, szM_SectionName, zSET_NOTNULL )
+         IncludeSubobjectFromSubobject( mSPLDef, szM_SectionName,
+                                        mSubLC, szM_SectionName, zPOS_BEFORE )
+      // MessageSend( mMasLC, "", szM_SectionName,
+      //              "Check mSPLDef and mSubLC for entity - CopySLC_EntityToSPLD.",
+      //              zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+         GetIntegerFromAttribute( lID, mSubLC, szM_SectionName, "ID" )
+      // IF SetCursorFirstEntityByEntityCsr( mSubLC, "S_MarketingUsage", mSubLC, szM_SectionName, "" ) = 0
+         SET CURSOR FIRST mSubLC.S_MarketingUsage WHERE mSubLC.S_MarketingUsage.ID = lID
+         IF RESULT = 0
+            IncludeSubobjectFromSubobject( mSPLDef, "SPLD_OriginalMarketingUsage",
+                                           mSPLDef, szS_SectionName, zPOS_BEFORE )
+            IncludeSubobjectFromSubobject( mSPLDef, "SPLD_MarketingUsage",
+                                           mSPLDef, szS_SectionName, zPOS_BEFORE )
+         END
+
+      // IF SetCursorFirstEntityByEntityCsr( mSubLC, "S_DirectionsUsage", mSubLC, szM_SectionName, "" ) = 0
+         SET CURSOR FIRST mSubLC.S_DirectionsUsage WHERE mSubLC.S_DirectionsUsage.ID = lID
+         IF RESULT = 0
+            IncludeSubobjectFromSubobject( mSPLDef, "SPLD_OriginalDirectionsUsage",
+                                           mSPLDef, szS_SectionName, zPOS_BEFORE )
+            IncludeSubobjectFromSubobject( mSPLDef, "SPLD_DirectionsUsage",
+                                           mSPLDef, szS_SectionName, zPOS_BEFORE )
+         END
+
+         nRC = SetCursorNextEntity( mSubLC, szM_SectionName, "" )
+
+      END
+
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: InitializeSPLD_FromSLC  DEPRECATED!!!
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+InitializeSPLD_FromSLC( VIEW mSubLC,
+                        VIEW mSPLDef )
+
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "General", 2 )
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "Ingredients", 2 )
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "StorageDisposal", 2 )
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "DirectionsForUse", 2 )
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "Marketing", 2 )
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "HumanHazard", 1 )
+   CopySLC_EntityToSPLD( mSubLC, mSPLDef, "Usage", 0 )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SyncPhysicalLabel  DEPRECATED
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+SyncPhysicalLabel( VIEW  mSPLDef,
+                   VIEW  mSubLC,
+                   SHORT bFlag )  // TRUE ==> from SubLC to SPLDef
+
+   IF bFlag = TRUE
+
+      IF mSPLDef.SubregLabelContent DOES NOT EXIST
+         CreateEntity( mSPLDef, "SubregLabelContent", zPOS_FIRST )
+      END
+
+      IF mSPLDef.SubregProduct DOES NOT EXIST
+         CreateEntity( mSPLDef, "SubregProduct", zPOS_FIRST )
+      END
+
+      IF mSPLDef.Subregistrant DOES NOT EXIST
+         CreateEntity( mSPLDef, "Subregistrant", zPOS_FIRST )
+      END
+
+      IF mSPLDef.MasterProduct DOES NOT EXIST
+         CreateEntity( mSPLDef, "MasterProduct", zPOS_FIRST )
+      END
+
+      IF mSPLDef.PrimaryRegistrant DOES NOT EXIST
+         CreateEntity( mSPLDef, "PrimaryRegistrant", zPOS_FIRST )
+      END
+
+      IF mSPLDef.MasterLabelContent DOES NOT EXIST
+         CreateEntity( mSPLDef, "MasterLabelContent", zPOS_FIRST )
+      END
+
+      SetMatchingAttributesByName( mSPLDef, "SubregLabelContent",
+                                   mSubLC, "SubregLabelContent", zSET_ALL )
+      SetMatchingAttributesByName( mSPLDef, "SubregProduct",
+                                   mSubLC, "SubregProduct", zSET_ALL )
+      SetMatchingAttributesByName( mSPLDef, "Subregistrant",
+                                   mSubLC, "Subregistrant", zSET_ALL )
+      SetMatchingAttributesByName( mSPLDef, "MasterProduct",
+                                   mSubLC, "MasterProduct", zSET_ALL )
+      SetMatchingAttributesByName( mSPLDef, "PrimaryRegistrant",
+                                   mSubLC, "PrimaryRegistrant", zSET_ALL )
+      SetMatchingAttributesByName( mSPLDef, "MasterLabelContent",
+                                   mSubLC, "MasterLabelContent", zSET_ALL )
+
+   ELSE
+
+      SetMatchingAttributesByName( mSubLC, "SubregLabelContent",
+                                   mSPLDef, "SubregLabelContent", zSET_ALL )
+   // SetMatchingAttributesByName( mSubLC, "SubregProduct",
+   //                              mSPLDef, "SubregProduct", zSET_ALL )
+   // SetMatchingAttributesByName( mSubLC, "Subregistrant",
+   //                              mSPLDef, "Subregistrant", zSET_ALL )
+   // SetMatchingAttributesByName( mSubLC, "MasterProduct",
+   //                              mSPLDef, "MasterProduct", zSET_ALL )
+   // SetMatchingAttributesByName( mSubLC, "PrimaryRegistrant",
+   //                              mSPLDef, "PrimaryRegistrant", zSET_ALL )
+   // SetMatchingAttributesByName( mSubLC, "MasterLabelContent",
+   //                              mSPLDef, "MasterLabelContent", zSET_ALL )
+      COMMIT mSubLC
+
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptSPLDef_TemporalSubobject
+//
+//    IF mSPLDef.SPLD_Usage.UsageType = "S" // "Surface"
+//    IF mSPLDef.SPLD_Usage.UsageType = "U" // "AreasOfUse"
+//    IF mSPLDef.SPLD_Usage.UsageType = "C" // "Claim"
+//       IncludeSubobjectFromSubobject( mSPLDef, "SPLDI_UsageList",
+//                                      mSPLDef, "SPLD_Usage", zPOS_LAST )
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptSPLDef_TemporalSubobject( VIEW  ViewToWindow,
+                                STRING ( 32 )  szEntityName,
+                                SHORT bCommit,
+                                STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubLC   BASED ON LOD  mSubLC
+   VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW mTempPL  BASED ON LOD  mSPLDef
+   STRING ( 32 )  szEntitySection
+   STRING ( 32 )  szEntityStatement
+   STRING ( 300 ) szFullComment
+   STRING ( 1 )   szSelected
+   INTEGER lID
+   SHORT   nRC
+
+   IF szEntityName != "" AND mSPLDef != 0
+
+      IF szEntityName = "SPLDI_FirstAidSection" OR
+         szEntityName = "SPLDI_PrecautionarySection" OR
+         szEntityName = "SPLDI_HazardSection" OR
+         szEntityName = "SPLDI_UsageList"
+
+         szEntitySection = szEntityName
+         CreateViewFromView( mTempPL, mSPLDef )
+
+         IF szEntitySection = "SPLDI_UsageList"
+
+            nRC = SetCursorFirstEntity( mTempPL, szEntitySection, "" )
+            LOOP WHILE nRC = 0
+               AcceptSubobject( mTempPL, szEntitySection )
+               nRC = SetCursorFirstEntityByEntityCsr( mTempPL, "SPLD_Usage", mTempPL, szEntitySection, "" )
+               IF nRC = 0
+                  SetMatchingAttributesByName( mTempPL, "SPLD_Usage",
+                                               mTempPL, szEntitySection, zSET_NOTNULL )
+                  GetStringFromAttribute( szSelected, mTempPL, szEntitySection, "Selected" )
+                  mTempPL.SPLD_Usage.Selected = szSelected
+               END
+
+               ExcludeEntity( mTempPL, szEntitySection, zREPOS_NONE )
+               nRC = SetCursorFirstEntity( mTempPL, szEntitySection, "" )
+            END
+
+         ELSE
+
+            IF szEntitySection = "SPLDI_FirstAidSection"
+               szEntityStatement = "SPLD_FirstAidStatement"
+            ELSE
+            IF szEntitySection = "SPLDI_PrecautionarySection"
+               szEntityStatement = "SPLD_PrecautionaryStatement"
+            ELSE
+            IF szEntitySection = "SPLDI_HazardSection"
+               szEntityStatement = "SPLD_HazardStatement"
+            END
+            END
+            END
+
+            nRC = SetCursorFirstEntity( mTempPL, szEntitySection, "" )
+            LOOP WHILE nRC = 0
+               GetIntegerFromAttribute( lID, mTempPL, szEntitySection, "ID" )
+               SetCursorFirstEntityByInteger( mTempPL, "SPLD_GeneralSection", "ID", lID, "" )
+               nRC = AcceptSubobject( mTempPL, szEntitySection )
+               szFullComment = "AcceptSubobject Prior to second Loop ====> " + szEntitySection + "." + szEntityStatement + "  RC: "
+               TraceLineI( szFullComment, nRC )
+               SetMatchingAttributesByName( mTempPL, "SPLD_GeneralSection",
+                                            mTempPL, szEntitySection, zSET_NOTNULL )
+            // DisplayEntityInstance( mTempPL, szEntitySection )
+               nRC = SetCursorFirstEntity( mTempPL, szEntityStatement, "" )
+               LOOP WHILE nRC = 0
+
+               // DisplayEntityInstance( mTempPL, szEntityStatement )
+               // TraceLineS( "", "" )
+
+               // nRC = SetCursorFirstEntityByEntityCsr( mTempPL, "SPLD_GeneralStatement", mTempPL, szEntityStatement, "" )
+                  GetIntegerFromAttribute( lID, mTempPL, szEntityStatement, "ID" )
+                  nRC = SetCursorFirstEntityByInteger( mTempPL, "SPLD_GeneralStatement", "ID", lID, "" )
+                  IF nRC = 0
+                     // We are situated on the right statement and thereby the right section.
+                     TraceLineS( "Situated on the right statement", " and thereby the right section" )
+                  // DisplayEntityInstance( mTempPL, "SPLD_GeneralStatement" )
+                  // TraceLineS( "", "" )
+                     SetMatchingAttributesByName( mTempPL, "SPLD_GeneralStatement",
+                                                  mTempPL, szEntityStatement, zSET_NOTNULL )
+                     GetStringFromAttribute( szSelected, mTempPL, szEntityStatement, "Selected" )
+                     IF szSelected = ""
+                        szSelected = "N"
+                     END
+
+                     mTempPL.SPLD_GeneralStatement.Selected = szSelected
+                     TraceLineS( "After set matching ////////////////* selected: ", szSelected )
+                  // DisplayEntityInstance( mTempPL, "SPLD_GeneralStatement" )
+                  // TraceLineS( "", "" )
+                  ELSE
+                     szFullComment = "AcceptSubobject SetCursorFirstEntityByInteger FAILURE ====> " + szEntityStatement + "  ID: "
+                     TraceLineI( szFullComment, lID )
+                     MessageSend( ViewToWindow, "", szEntitySection, szFullComment,
+                                  zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+                  END
+
+                  nRC = SetCursorNextEntity( mTempPL, szEntityStatement, "" )
+
+               END
+
+               ExcludeEntity( mTempPL, szEntitySection, zREPOS_NONE )
+               nRC = SetCursorFirstEntity( mTempPL, szEntitySection, "" )
+            END
+
+         END
+
+         DropView( mTempPL )
+
+      ELSE
+
+      // IF szEntityName = "SubregPhysicalLabelDef"
+      //    GET VIEW mSubLC NAMED "mSubLC"
+      //    SyncPhysicalLabel( mSPLDef, mSubLC, FALSE )  // FALSE ==> from SPLDef to SubLC
+      // END
+
+         AcceptSubobject( mSPLDef, szEntityName )
+      END
+
+      IF bCommit = TRUE
+         MiSetInstanceUpdateFlag( mSPLDef, TRUE ) // here because the update flag was not always set automatically
+         COMMIT mSPLDef
+         szFullComment = "Accept/Commit"
+      ELSE
+         szFullComment = "Accept"
+      END
+
+      szFullComment = szFullComment + " mSPLDef." + szEntityName + " =====================> "
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+   // MessageSend( ViewToWindow, "", szEntityName, szFullComment,
+   //              zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+   ELSE
+
+      szFullComment = "Nothing to accept mSPLDef." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptSubLC_TemporalSubobject
+//
+//    IF mSubLC.S_Usage.UsageType = "S" // "Surface"
+//    IF mSubLC.S_Usage.UsageType = "U" // "AreasOfUse"
+//    IF mSubLC.S_Usage.UsageType = "C" // "Claim"
+//       IncludeSubobjectFromSubobject( mSubLC, "SI_UsageList",
+//                                      mSubLC, "S_Usage", zPOS_LAST )
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptSubLC_TemporalSubobject( VIEW  ViewToWindow,
+                               STRING ( 32 )  szEntityName,
+                               SHORT bCommit,
+                               STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubLC   REGISTERED AS mSubLC
+   VIEW mTempLC  BASED ON LOD  mSubLC
+   STRING ( 32 )  szEntitySection
+   STRING ( 32 )  szEntityStatement
+   STRING ( 300 ) szFullComment
+   STRING ( 1 )   szSelected
+   INTEGER lID
+   SHORT   nRC
+
+   IF szEntityName != "" AND mSubLC != 0
+
+      IF szEntityName = "SI_FirstAidSection" OR
+         szEntityName = "SI_PrecautionarySection" OR
+         szEntityName = "SI_HazardSection" OR
+         szEntityName = "SI_UsageList"
+
+         szEntitySection = szEntityName
+         CreateViewFromView( mTempLC, mSubLC )
+
+         IF szEntitySection = "SI_UsageList"
+
+            nRC = SetCursorFirstEntity( mTempLC, szEntitySection, "" )
+            LOOP WHILE nRC = 0
+               AcceptSubobject( mTempLC, szEntitySection )
+               nRC = SetCursorFirstEntityByEntityCsr( mTempLC, "S_Usage", mTempLC, szEntitySection, "" )
+               IF nRC = 0
+                  SetMatchingAttributesByName( mTempLC, "S_Usage",
+                                               mTempLC, szEntitySection, zSET_NOTNULL )
+                  GetStringFromAttribute( szSelected, mTempLC, szEntitySection, "Selected" )
+                  mTempLC.S_Usage.Selected = szSelected
+               END
+
+               ExcludeEntity( mTempLC, szEntitySection, zREPOS_NONE )
+               nRC = SetCursorFirstEntity( mTempLC, szEntitySection, "" )
+            END
+
+         ELSE
+
+            IF szEntitySection = "SI_FirstAidSection"
+               szEntityStatement = "S_FirstAidStatement"
+            ELSE
+            IF szEntitySection = "SI_PrecautionarySection"
+               szEntityStatement = "S_PrecautionaryStatement"
+            ELSE
+            IF szEntitySection = "SI_HazardSection"
+               szEntityStatement = "S_HazardStatement"
+            END
+            END
+            END
+
+            nRC = SetCursorFirstEntity( mTempLC, szEntitySection, "" )
+            LOOP WHILE nRC = 0
+               GetIntegerFromAttribute( lID, mTempLC, szEntitySection, "ID" )
+               SetCursorFirstEntityByInteger( mTempLC, "S_GeneralSection", "ID", lID, "" )
+               nRC = AcceptSubobject( mTempLC, szEntitySection )
+            // szFullComment = "AcceptSubobject Prior to second Loop ====> " + szEntitySection + "." + szEntityStatement + "  RC: "
+            // TraceLineI( szFullComment, nRC )
+               SetMatchingAttributesByName( mTempLC, "S_GeneralSection",
+                                            mTempLC, szEntitySection, zSET_NOTNULL )
+            // DisplayEntityInstance( mTempLC, szEntitySection )
+               nRC = SetCursorFirstEntity( mTempLC, szEntityStatement, "" )
+               LOOP WHILE nRC = 0
+
+               // DisplayEntityInstance( mTempLC, szEntityStatement )
+               // TraceLineS( "", "" )
+
+               // nRC = SetCursorFirstEntityByEntityCsr( mTempLC, "S_GeneralStatement", mTempLC, szEntityStatement, "" )
+                  GetIntegerFromAttribute( lID, mTempLC, szEntityStatement, "ID" )
+                  nRC = SetCursorFirstEntityByInteger( mTempLC, "S_GeneralStatement", "ID", lID, "" )
+                  IF nRC = 0
+                     // We are situated on the right statement and thereby the right section.
+                  // TraceLineS( "Situated on the right statement", " and thereby the right section" )
+                  // DisplayEntityInstance( mTempLC, "S_GeneralStatement" )
+                  // TraceLineS( "", "" )
+                     SetMatchingAttributesByName( mTempLC, "S_GeneralStatement",
+                                                  mTempLC, szEntityStatement, zSET_NOTNULL )
+                     GetStringFromAttribute( szSelected, mTempLC, szEntityStatement, "Selected" )
+                     IF szSelected = ""
+                        szSelected = "N"
+                     END
+
+                     mTempLC.S_GeneralStatement.Selected = szSelected
+                  // TraceLineS( "After set matching ////////////////* selected: ", szSelected )
+                  // DisplayEntityInstance( mTempLC, "S_GeneralStatement" )
+                  // TraceLineS( "", "" )
+                  ELSE
+                     szFullComment = "AcceptSubobject SetCursorFirstEntityByInteger FAILURE ====> " + szEntityStatement + "  ID: "
+                     TraceLineI( szFullComment, lID )
+                     MessageSend( ViewToWindow, "", szEntitySection, szFullComment,
+                                  zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+                  END
+
+                  nRC = SetCursorNextEntity( mTempLC, szEntityStatement, "" )
+
+               END
+
+               ExcludeEntity( mTempLC, szEntitySection, zREPOS_NONE )
+               nRC = SetCursorFirstEntity( mTempLC, szEntitySection, "" )
+            END
+
+         END
+
+         DropView( mTempLC )
+      ELSE
+         AcceptSubobject( mSubLC, szEntityName )
+      END
+
+      IF bCommit = TRUE
+         MiSetInstanceUpdateFlag( mSubLC, TRUE )  // here because the update flag was not always set automatically
+         COMMIT mSubLC
+         szFullComment = "Accept/Commit"
+      ELSE
+         szFullComment = "Accept"
+      END
+
+      szFullComment = szFullComment + " mSubLC." + szEntityName + " ========================> "
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+   // MessageSend( ViewToWindow, "", szEntityName, szFullComment,
+   //              zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+   ELSE
+
+      szFullComment = "Nothing to accept mSubLC." + szEntityName + "  //////////////////////////////*> "
+
+   END
+
+// TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptMasLC_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptMasLC_TemporalSubobject( VIEW  ViewToWindow,
+                               STRING ( 32 )  szEntityName,
+                               SHORT bCommit,
+                               STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mMasLC != 0
+
+      AcceptSubobject( mMasLC, szEntityName )
+      IF bCommit = TRUE
+         COMMIT mMasLC
+         szFullComment = "Accept/Commit"
+      ELSE
+         szFullComment = "Accept"
+      END
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = szFullComment + " mMasLC." + szEntityName + "  =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to accept mMasLC." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+   IF bCommit = TRUE AND ZeidonStringFind( szEntityName, 1, "MI_" ) > 0
+      DisplayObjectInstance( mMasLC, szEntityName, "" )
+   END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptMasProd_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptMasProd_TemporalSubobject( VIEW  ViewToWindow,
+                                 STRING ( 32 )  szEntityName,
+                                 SHORT bCommit,
+                                 STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasProd REGISTERED AS mMasProd
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mMasProd != 0
+
+      AcceptSubobject( mMasProd, szEntityName )
+      IF bCommit = TRUE
+         COMMIT mMasProd
+         szFullComment = "Accept/Commit"
+      ELSE
+         szFullComment = "Accept"
+      END
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = szFullComment + " mMasProd." + szEntityName + "  =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to accept mMasProd." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptEPA_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptEPA_TemporalSubobject( VIEW  ViewToWindow,
+                             STRING ( 32 )  szEntityName,
+                             SHORT bCommit,
+                             STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mEPA != 0
+
+      AcceptSubobject( mEPA, szEntityName )
+      IF bCommit = TRUE
+         COMMIT mEPA
+         szFullComment = "Accept/Commit"
+      ELSE
+         szFullComment = "Accept"
+      END
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = szFullComment + " mEPA." + szEntityName + "  =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to accept mEPA." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptTemplateTemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptTemplateTemporalSubobject( VIEW  ViewToWindow,
+                                 STRING ( 32 )  szEntityName,
+                                 SHORT bCommit,
+                                 STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mTempl   REGISTERED AS mTempl
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mTempl != 0
+
+      AcceptSubobject( mTempl, szEntityName )
+      IF bCommit = TRUE
+         COMMIT mTempl
+         szFullComment = "Accept/Commit"
+      ELSE
+         szFullComment = "Accept"
+      END
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = szFullComment + " mTempl." + szEntityName + "  =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to accept mTempl." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: AcceptCurrentTemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+AcceptCurrentTemporalSubobject( VIEW  ViewToWindow,
+                                SHORT bCommit,
+                                STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   STRING ( 32 )  szFormValidationDLL
+   STRING ( 32 )  szFormValidationOperation
+   STRING ( 64 )  szViewName
+   STRING ( 32 )  szEntityName
+   STRING ( 300 ) szFullComment
+   SHORT  nRC
+
+   nRC = 0
+   IF wWebXfer != 0
+
+      szFormValidationDLL = wWebXfer.Root.FormValidationDLL
+      szFormValidationOperation = wWebXfer.Root.FormValidationOperation
+      IF szFormValidationDLL != "" AND szFormValidationOperation != ""
+         nRC = CallDialogOperation( ViewToWindow, szFormValidationDLL, szFormValidationOperation )
+      // TraceLine( "CallDialogOperation: %s.%s  RC: %d", szFormValidationDLL, szFormValidationOperation, nRC );
+         IF nRC != 0
+            RETURN nRC
+         END
+
+         wWebXfer.Root.FormValidationDLL = ""
+         wWebXfer.Root.FormValidationOperation = ""
+      END
+
+      szViewName = wWebXfer.Root.CurrentTemporalViewName
+      szEntityName = wWebXfer.Root.CurrentTemporalEntity
+      szFullComment = "Accepting " + szViewName + "." + szEntityName +  "//////////////////////////////*> "
+
+      IF szViewName = "mMasLC"
+         AcceptMasLC_TemporalSubobject( ViewToWindow, szEntityName, bCommit, szComment )
+      ELSE
+         IF szViewName = "mSubLC"
+            AcceptSubLC_TemporalSubobject( ViewToWindow, szEntityName, bCommit, szComment )
+         ELSE
+            IF szViewName = "mSPLDef"
+               AcceptSPLDef_TemporalSubobject( ViewToWindow, szEntityName, bCommit, szComment )
+            ELSE
+               IF szViewName = "mMasProd"
+                  AcceptMasProd_TemporalSubobject( ViewToWindow, szEntityName, bCommit, szComment )
+               ELSE
+                  IF szViewName = "mEPA"
+                     AcceptEPA_TemporalSubobject( ViewToWindow, szEntityName, bCommit, szComment )
+                  ELSE
+                     IF szViewName = "mTempl"
+                        AcceptTemplateTemporalSubobject( ViewToWindow, szEntityName, bCommit, szComment )
+                     ELSE
+                        szFullComment = "Nothing to accept " + szViewName + "." + szEntityName +  "//////////////////////////////*> "
+                     END
+                  END
+               END
+            END
+         END
+      END
+
+      TraceLineS( szFullComment, szComment )
+      wWebXfer.Root.CurrentUpdate = ""
+      wWebXfer.Root.CurrentTemporalViewName = ""
+      wWebXfer.Root.CurrentTemporalEntity = ""
+
+   END
+
+   RETURN nRC
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelSPLDef_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelSPLDef_TemporalSubobject( VIEW  ViewToWindow,
+                                STRING ( 32 ) szEntityName,
+                                STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSPLDef  REGISTERED AS mSPLDef
+   VIEW mTempPL  BASED ON LOD  mSPLDef
+   STRING ( 300 ) szFullComment
+   SHORT  nRC
+
+   IF szEntityName != "" AND mSPLDef != 0
+
+      IF szEntityName = "SPLDI_FirstAidSection" OR
+         szEntityName = "SPLDI_PrecautionarySection" OR
+         szEntityName = "SPLDI_HazardSection"
+
+         CreateViewFromView( mTempPL, mSPLDef )
+         nRC = SetCursorFirstEntity( mTempPL, szEntityName, "" )
+         LOOP WHILE nRC = 0
+            CancelSubobject( mTempPL, szEntityName )
+            ExcludeEntity( mTempPL, szEntityName, zREPOS_NONE )
+            nRC = SetCursorNextEntity( mTempPL, szEntityName, "" )
+         END
+
+         DropView( mTempPL )
+      ELSE
+         CancelSubobject( mSPLDef, szEntityName )
+      END
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = "Cancel mSPLDef." + szEntityName + " =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to cancel mSPLDef." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelSubLC_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelSubLC_TemporalSubobject( VIEW  ViewToWindow,
+                               STRING ( 32 ) szEntityName,
+                               STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mSubLC   REGISTERED AS mSubLC
+   VIEW mTempLC  BASED ON LOD  mSubLC
+   STRING ( 300 ) szFullComment
+   SHORT  nRC
+
+   IF szEntityName != "" AND mSubLC != 0
+
+      IF szEntityName = "SI_FirstAidSection" OR
+         szEntityName = "SI_PrecautionarySection" OR
+         szEntityName = "SI_HazardSection"
+
+         CreateViewFromView( mTempLC, mSubLC )
+         nRC = SetCursorFirstEntity( mTempLC, szEntityName, "" )
+         LOOP WHILE nRC = 0
+            CancelSubobject( mTempLC, szEntityName )
+            ExcludeEntity( mTempLC, szEntityName, zREPOS_NONE )
+            nRC = SetCursorNextEntity( mTempLC, szEntityName, "" )
+         END
+
+         DropView( mTempLC )
+      ELSE
+         CancelSubobject( mSubLC, szEntityName )
+      END
+
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = "Cancel mSubLC." + szEntityName + " =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to cancel mSubLC." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelMasLC_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelMasLC_TemporalSubobject( VIEW  ViewToWindow,
+                               STRING ( 32 ) szEntityName,
+                               STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasLC   REGISTERED AS mMasLC
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mMasLC != 0
+
+      CancelSubobject( mMasLC, szEntityName )
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = "Cancel mMasLC." + szEntityName + " =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to cancel mMasLC." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelMasProd_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelMasProd_TemporalSubobject( VIEW  ViewToWindow,
+                                 STRING ( 32 ) szEntityName,
+                                 STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mMasProd REGISTERED AS mMasProd
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mMasProd != 0
+
+      CancelSubobject( mMasProd, szEntityName )
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = "Cancel mMasProd." + szEntityName + " =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to cancel mMasProd." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelEPA_TemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelEPA_TemporalSubobject( VIEW  ViewToWindow,
+                             STRING ( 32 ) szEntityName,
+                             STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mEPA     REGISTERED AS mEPA
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mEPA != 0
+
+      CancelSubobject( mEPA, szEntityName )
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = "Cancel mEPA." + szEntityName + " =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to cancel mEPA." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelTemplateTemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelTemplateTemporalSubobject( VIEW  ViewToWindow,
+                                 STRING ( 32 ) szEntityName,
+                                 STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mTempl   REGISTERED AS mTempl
+   STRING ( 300 ) szFullComment
+
+   IF szEntityName != "" AND mTempl != 0
+
+      CancelSubobject( mTempl, szEntityName )
+      wWebXfer.Root.CurrentTemporalEntity = ""
+      szFullComment = "Cancel mTempl." + szEntityName + " =================================> "
+
+   ELSE
+
+      szFullComment = "Nothing to cancel mTempl." + szEntityName + " //////////////////////////////*> "
+
+   END
+
+   TraceLineS( szFullComment, szComment )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelCurrentTemporalSubobject
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CancelCurrentTemporalSubobject( VIEW  ViewToWindow,
+                                STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   STRING ( 64 )  szViewName
+   STRING ( 32 )  szEntityName
+   STRING ( 300 ) szFullComment
+   SHORT  nRC
+
+   nRC = 0
+   IF wWebXfer != 0
+
+      wWebXfer.Root.FormValidationDLL = ""
+      wWebXfer.Root.FormValidationOperation = ""
+      szViewName = wWebXfer.Root.CurrentTemporalViewName
+      szEntityName = wWebXfer.Root.CurrentTemporalEntity
+
+      szFullComment = "Canceling " + szViewName + "." + szEntityName +  "//////////////////////////////*> "
+      IF szViewName = "mMasLC"
+         CancelMasLC_TemporalSubobject( ViewToWindow, szEntityName, szComment )
+      ELSE
+         IF szViewName = "mSubLC"
+            CancelSubLC_TemporalSubobject( ViewToWindow, szEntityName, szComment )
+         ELSE
+            IF szViewName = "mSPLDef"
+               CancelSPLDef_TemporalSubobject( ViewToWindow, szEntityName, szComment )
+            ELSE
+               IF szViewName = "mMasProd"
+                  CancelMasProd_TemporalSubobject( ViewToWindow, szEntityName, szComment )
+               ELSE
+                  IF szViewName = "mEPA"
+                     CancelEPA_TemporalSubobject( ViewToWindow, szEntityName, szComment )
+                  ELSE
+                     IF szViewName = "mTempl"
+                        CancelTemplateTemporalSubobject( ViewToWindow, szEntityName, szComment )
+                     ELSE
+                        szFullComment = "Nothing to cancel " + szViewName + "." + szEntityName +  "//////////////////////////////*> "
+                     END
+                  END
+               END
+            END
+         END
+      END
+
+      TraceLineS( szFullComment, szComment )
+      wWebXfer.Root.CurrentUpdate = ""
+      wWebXfer.Root.CurrentTemporalViewName = ""
+      wWebXfer.Root.CurrentTemporalEntity = ""
+
+   END
+
+   RETURN nRC
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CreateCurrentTemporalVersion
+//
+/////////////////////////////////////////////////////////////////////////////
+GLOBAL OPERATION
+CreateCurrentTemporalVersion( VIEW  ViewToWindow,
+                              SHORT nPos,
+                              STRING ( 64 )  szViewName,
+                              STRING ( 32 )  szEntityName,
+                              STRING ( 256 ) szComment )
+
+   VIEW wWebXfer REGISTERED AS wWebXfer
+   VIEW mOI
+// VIEW mSubLC   BASED ON LOD  mSubLC
+   STRING ( 64 )  szViewName1
+   STRING ( 32 )  szEntityName1
+   STRING ( 300 ) szFullComment
+
+   GET VIEW mOI NAMED szViewName
+
+   szViewName1 = wWebXfer.Root.CurrentTemporalViewName
+   szEntityName1 = wWebXfer.Root.CurrentTemporalEntity
+   IF szViewName1 != "" OR szEntityName1 != ""
+      szFullComment = "CreateCurrentTemporalVersion found unexpected Temporal Version of: " + szViewName1
+      szFullComment = szFullComment + "." + szEntityName1
+      szFullComment = szFullComment + "  while creating: " + szViewName
+      szFullComment = szFullComment + "." + szEntityName
+      IF MiEntityVersioned( mOI, szEntityName ) > 0
+         szFullComment = szFullComment + " @@@@@@@@@@  Entity already versioned  @@@@@@@@@@-->> "
+         TraceLineS( szFullComment, szComment )
+         RETURN
+      ELSE
+         szFullComment = szFullComment + " ##########  ERROR  ###############-->> "
+         TraceLineS( szFullComment, szComment )
+      END
+
+   END
+
+   IF nPos = 0 AND CheckExistenceOfEntity( mOI, szEntityName ) = 0
+
+      CreateTemporalSubobjectVersion( mOI, szEntityName )
+      wWebXfer.Root.CurrentUpdate = "Y"
+      szFullComment = "CreateTemporalSubobject "
+
+   ELSE
+
+      IF nPos = 0
+         nPos = zPOS_AFTER
+      END
+
+      CreateTemporalEntity( mOI, szEntityName, nPos )
+      wWebXfer.Root.CurrentUpdate = "N"
+      szFullComment = "CreateTemporalEntity "
+
+   END
+
+   szFullComment = szFullComment + szViewName + "." + szEntityName + " =========================> "
+   TraceLineS( szFullComment, szComment )
+
+// IF szViewName = "mSPLDef" AND szEntityName = "SubregPhysicalLabelDef"
+//    GET VIEW mSubLC NAMED "mSubLC"
+//    SyncPhysicalLabel( mOI, mSubLC, TRUE )  // TRUE ==> from SubLC to SPLDef
+// END
+
+   wWebXfer.Root.CurrentTemporalViewName = szViewName
+   wWebXfer.Root.CurrentTemporalEntity = szEntityName
+
+END

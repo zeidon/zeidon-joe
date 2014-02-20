@@ -1,0 +1,484 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: BuildDisplayStructure
+//
+/////////////////////////////////////////////////////////////////////////////
+TRANSFORMATION OPERATION
+BuildDisplayStructure( VIEW mTemplIn BASED ON LOD mTempl )
+
+   VIEW mTempl BASED ON LOD mTempl
+   VIEW mTemplHier BASED ON LOD  mTempl
+   STRING ( 20 ) szPanelName
+   STRING ( 32 ) szEntityName
+   STRING ( 50 ) szSectionType
+   INTEGER       lTempID  // used to set the work attribute in the Templ entity and the EntityID in
+                          // the DisplayStatement entity so we can get to original Templ entity
+   INTEGER       lCnt
+   SHORT         lLevel
+   SHORT         nRC
+
+   CreateViewFromView( mTempl, mTemplIn )  // try to hold onto current position
+
+   // Remove any old entries.
+   FOR EACH mTempl.DisplayStatement
+      DELETE ENTITY mTempl.DisplayStatement NONE
+   END
+
+   // Set the Panel Count number.
+   lCnt = 0
+   FOR EACH mTempl.TemplatePanel
+      lCnt = lCnt + 1
+      mTempl.TemplatePanel.wSequentialPanelNumber = lCnt
+   END
+
+   // Build the DisplayStatement structure, which is a single list of all Panel, Group and Section entries.
+   SET CURSOR FIRST mTempl.TemplatePanel
+   CreateViewFromView( mTemplHier, mTempl )
+   DefineHierarchicalCursor( mTemplHier, "Template" )
+   lTempID = 0
+   nRC = SetCursorNextEntityHierarchical( lLevel, szEntityName, mTemplHier )
+   LOOP WHILE nRC >= zCURSOR_SET
+
+      lTempID = lTempID + 1
+      IF szEntityName = "TemplatePanel"
+         // PANEL
+         CREATE ENTITY mTempl.DisplayStatement
+         mTempl.DisplayStatement.EntityType = "Panel"
+         mTemplHier.TemplatePanel.wTempID = lTempID
+         mTempl.DisplayStatement.EntityID = lTempID
+         mTempl.DisplayStatement.DisplayText = "Panel:   " + mTemplHier.TemplatePanel.dPanelName
+      ELSE
+      IF szEntityName = "TemplateGroup"
+         // GROUP
+         CREATE ENTITY mTempl.DisplayStatement
+         mTempl.DisplayStatement.EntityType = "Group"
+         mTemplHier.TemplateGroup.wTempID = lTempID
+         mTempl.DisplayStatement.EntityID = lTempID
+         mTempl.DisplayStatement.DisplayText = "..Group:   " + mTemplHier.TemplateGroup.Name
+      ELSE
+      IF szEntityName = "TemplateSection"
+         // SECTION
+         CREATE ENTITY mTempl.DisplayStatement
+         mTempl.DisplayStatement.EntityType = "Section"
+         GetStringFromAttributeByContext( szSectionType, mTemplHier, "TemplateSection", "SectionType", "", 50 )
+         mTemplHier.TemplateSection.wTempID = lTempID
+         mTempl.DisplayStatement.EntityID = lTempID
+         mTempl.DisplayStatement.DisplayText = "....Section:      " + szSectionType
+      END
+      END
+      END
+
+      nRC = SetCursorNextEntityHierarchical( lLevel, szEntityName, mTemplHier )
+   END
+
+   DropHierarchicalCursor( mTemplHier )
+   DropView( mTemplHier )
+   DropView( mTempl )
+
+// SET CURSOR FIRST mTempl.TemplatePanel    we are trying to hold onto position
+
+   // Save generated ID for next assignment.
+   //lTempID = lTempID + 1
+   //mTempl.Template.wNextTempID = lTempID
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dPanelName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dPanelName( VIEW mTemplOrig BASED ON LOD mTempl,
+            STRING ( 32 ) InternalEntityStructure,
+            STRING ( 32 ) InternalAttribStructure,
+            SHORT GetOrSetFlag )
+
+   VIEW mTempl  BASED ON LOD mTempl
+   VIEW mTempl2 BASED ON LOD mTempl
+   STRING ( 50 ) szPanelName
+   STRING ( 10 ) szPanelNumber
+   INTEGER       lPanelNumber
+   INTEGER       lTempID
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Currently the Panel Name is just the Panel Number.
+   // We will use the named view in memory for creating mTempl2, as the view in the operation may be hierarchical.
+   /*GET VIEW mTempl NAMED "mTempl"
+   CreateViewFromView( mTempl2, mTempl )
+   lTempID = mTemplOrig.TemplatePanel.wTempID
+   FOR EACH mTempl2.TemplatePanel
+      lPanelNumber = lPanelNumber + 1
+      IF mTempl2.TemplatePanel.wTempID = lTempID
+         szPanelNumber = lPanelNumber
+         szPanelName = "panel" + szPanelNumber
+      END
+   END
+   DropView( mTempl2 )*/
+   // Right now we'll assume no hierarchical subobject.
+   szPanelNumber = mTemplOrig.TemplatePanel.wSequentialPanelNumber
+   szPanelName = "panel" + szPanelNumber
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTemplOrig,
+                        InternalEntityStructure, InternalAttribStructure, szPanelName )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dPanelUpdateName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dPanelUpdateName( VIEW mTemplOrig BASED ON LOD mTempl,
+                  STRING ( 32 ) InternalEntityStructure,
+                  STRING ( 32 ) InternalAttribStructure,
+                  SHORT GetOrSetFlag )
+
+   VIEW mTempl2 BASED ON LOD mTempl
+   STRING ( 50 ) szPanelName
+   STRING ( 10 ) szPanelNumber
+   INTEGER       lPanelNumber
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Currently the Panel Name is just the Panel Number.
+   CreateViewFromView( mTempl2, mTemplOrig )
+   lPanelNumber = 1
+   SET CURSOR PREVIOUS mTempl2.TemplatePanel
+   LOOP WHILE RESULT >= zCURSOR_SET
+      lPanelNumber = lPanelNumber + 1
+      SET CURSOR PREVIOUS mTempl2.TemplatePanel
+   END
+   DropView( mTempl2 )
+   szPanelNumber = lPanelNumber
+   szPanelName = "Page " + szPanelNumber
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTemplOrig,
+                        InternalEntityStructure, InternalAttribStructure, szPanelName )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dGroupName
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dGroupName( VIEW mTemplOrig BASED ON LOD mTempl,
+            STRING ( 32 ) InternalEntityStructure,
+            STRING ( 32 ) InternalAttribStructure,
+            SHORT GetOrSetFlag )
+
+   VIEW mTempl  BASED ON LOD mTempl
+   VIEW mTempl2 BASED ON LOD mTempl
+   STRING ( 50 ) szGroupName
+   STRING ( 10 ) szGroupNumber
+   INTEGER       lGroupNumber
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Currently the Group Name is just the Group Number.
+   // We will use the named view in memory for creating mTempl2, as the view in the operation may be hierarchical.
+   GET VIEW mTempl NAMED "mTempl"
+   CreateViewFromView( mTempl2, mTempl )
+   mTempl.TemplateGroup.wCurrentFlag = "Y"
+   FOR EACH mTempl2.TemplateGroup
+      lGroupNumber = lGroupNumber + 1
+      IF mTempl2.TemplateGroup.wCurrentFlag = "Y"
+         szGroupNumber = lGroupNumber
+         szGroupName = "Group " + szGroupNumber
+         mTempl.TemplateGroup.wCurrentFlag = ""
+      END
+   END
+   DropView( mTempl2 )
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTemplOrig,
+                        InternalEntityStructure, InternalAttribStructure, szGroupName )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dKerning
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dKerning( VIEW mTempl BASED ON LOD mTempl,
+          STRING ( 32 ) InternalEntityStructure,
+          STRING ( 32 ) InternalAttribStructure,
+          SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szKerningWidth
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Kerning Units to Kerning Width if the width is not 0.
+   IF mTempl.TemplatePanel.KerningWidth = 0.0
+      szKerningWidth = ""
+   ELSE
+      szKerningWidth = mTempl.TemplatePanel.KerningWidth
+      zSearchAndReplace( szKerningWidth, 10, ".0", "" )  // make #.0 -> #
+      szKerningWidth = szKerningWidth + mTempl.TemplatePanel.KerningUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szKerningWidth )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dWordSpacing
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dWordSpacing( VIEW mTempl BASED ON LOD mTempl,
+              STRING ( 32 ) InternalEntityStructure,
+              STRING ( 32 ) InternalAttribStructure,
+              SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szWordSpacing
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Word Spacing Units to Word Spacing Width if the width is not 0.
+   IF mTempl.TemplatePanel.WordSpacingWidth = 0.0
+      szWordSpacing = ""
+   ELSE
+      szWordSpacing = mTempl.TemplatePanel.WordSpacingWidth
+      zSearchAndReplace( szWordSpacing, 10, ".0", "" )  // make #.0 -> #
+      szWordSpacing = szWordSpacing + mTempl.TemplatePanel.WordSpacingUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szWordSpacing )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dLeading
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dLeading( VIEW mTempl BASED ON LOD mTempl,
+          STRING ( 32 ) InternalEntityStructure,
+          STRING ( 32 ) InternalAttribStructure,
+          SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szLeadingHeight
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Leading Units to Leading Height if the height is not 0.
+   IF mTempl.TemplatePanel.LeadingHeight = 0.0
+      szLeadingHeight = ""
+   ELSE
+      szLeadingHeight = mTempl.TemplatePanel.LeadingHeight
+      zSearchAndReplace( szLeadingHeight, 10, ".0", "" )  // make #.0 -> #
+      szLeadingHeight = szLeadingHeight + mTempl.TemplatePanel.LeadingUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szLeadingHeight )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dTitleLeadingDefault
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dTitleLeadingDefault( VIEW mTempl BASED ON LOD mTempl,
+                      STRING ( 32 ) InternalEntityStructure,
+                      STRING ( 32 ) InternalAttribStructure,
+                      SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szTitleLeadingHeightDefault
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Leading Units to Leading Height if the height is not 0.
+   IF mTempl.TemplatePanel.TitleLeadingHeightDefault = 0.0
+      szTitleLeadingHeightDefault = ""
+   ELSE
+      szTitleLeadingHeightDefault = mTempl.TemplatePanel.TitleLeadingHeightDefault
+      zSearchAndReplace( szTitleLeadingHeightDefault, 10, ".0", "" )  // make #.0 -> #
+      szTitleLeadingHeightDefault = szTitleLeadingHeightDefault + mTempl.TemplatePanel.LeadingUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szTitleLeadingHeightDefault )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dStmtLeadingDefault
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dStmtLeadingDefault( VIEW mTempl BASED ON LOD mTempl,
+                     STRING ( 32 ) InternalEntityStructure,
+                     STRING ( 32 ) InternalAttribStructure,
+                     SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szStmtLeadingHeightDefault
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Leading Units to Leading Height if the Height is not 0.
+   IF mTempl.TemplatePanel.StatementLeadingHeightDefault = 0.0
+      szStmtLeadingHeightDefault = ""
+   ELSE
+      szStmtLeadingHeightDefault = mTempl.TemplatePanel.StatementLeadingHeightDefault
+      zSearchAndReplace( szStmtLeadingHeightDefault, 10, ".0", "" )  // make #.0 -> #
+      szStmtLeadingHeightDefault = szStmtLeadingHeightDefault + mTempl.TemplatePanel.LeadingUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szStmtLeadingHeightDefault )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dStatementLeading
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dStatementLeading( VIEW mTempl BASED ON LOD mTempl,
+                   STRING ( 32 ) InternalEntityStructure,
+                   STRING ( 32 ) InternalAttribStructure,
+                   SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szStatementLeading
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Leading Units to Leading Height if the height is not 0.
+   IF mTempl.TemplateSection.LeadingHeight = 0.0
+      szStatementLeading = ""
+   ELSE
+      szStatementLeading = mTempl.TemplateSection.LeadingHeight
+      zSearchAndReplace( szStatementLeading, 10, ".0", "" )  // make #.0 -> #
+      szStatementLeading = szStatementLeading + mTempl.TemplateSection.LeadingUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szStatementLeading )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dStatementKerning
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dStatementKerning( VIEW mTempl BASED ON LOD mTempl,
+                   STRING ( 32 ) InternalEntityStructure,
+                   STRING ( 32 ) InternalAttribStructure,
+                   SHORT GetOrSetFlag )
+
+   STRING ( 16 ) szStatementKerning
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+   // Add Kerning Units to Kerning Width if the width is not 0.
+   IF mTempl.TemplateSection.KerningWidth = 0.0
+      szStatementKerning = ""
+   ELSE
+      szStatementKerning = mTempl.TemplateSection.KerningWidth
+      zSearchAndReplace( szStatementKerning, 10, ".0", "" )  // make #.0 -> #
+      szStatementKerning = szStatementKerning + mTempl.TemplateSection.KerningUnits
+   END
+
+   // Store the calculated value in the object.
+   StoreStringInRecord( mTempl,
+                        InternalEntityStructure, InternalAttribStructure, szStatementKerning )
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+

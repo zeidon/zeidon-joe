@@ -1,0 +1,535 @@
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: PostbuildTemplateList
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+PostbuildTemplateList( VIEW ViewToWindow )
+
+   VIEW lTemplLST BASED ON LOD lTempl
+
+   GET VIEW lTemplLST NAMED "lTemplLST"
+   IF RESULT >= 0
+      DropObjectInstance( lTemplLST )
+   END
+   ACTIVATE lTemplLST RootOnlyMultiple
+   NAME VIEW lTemplLST "lTemplLST"
+   SetDynamicBannerName( ViewToWindow, "mTemplD", "LabelTemplate" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_CreateTemplate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_CreateTemplate( VIEW ViewToWindow )
+
+   VIEW mTempl BASED ON LOD mTempl
+
+   ACTIVATE mTempl EMPTY
+   NAME VIEW mTempl "mTempl"
+   CREATE ENTITY mTempl.Template
+   CREATE ENTITY mTempl.TemplatePanel
+   CREATE ENTITY mTempl.TemplateGroup
+   mTempl.TemplateGroup.Name = "New"
+   CREATE ENTITY mTempl.TemplateSection
+   mTempl.TemplateSection.TSectionType = "Marketing"
+   BuildDisplayStructure( mTempl )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_Template
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_Template( VIEW ViewToWindow )
+
+   VIEW lTemplLST REGISTERED AS lTemplLST
+   VIEW mTempl    BASED ON LOD  mTempl
+
+   ACTIVATE mTempl WHERE mTempl.Template.ID =  lTemplLST.Template.ID
+   NAME VIEW mTempl "mTempl"
+   DELETE ENTITY mTempl.Template
+   COMMIT mTempl
+   IF RESULT < 0
+      MessageSend( ViewToWindow, "", "Delete Template", "A database error occurred during the delete. Please notify Systems Suppoart.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2      // Return 2 to indicate Web client must prompt operator.
+   END
+   DropObjectInstance( mTempl )
+   DropEntity( lTemplLST, "Template", zREPOS_NONE )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_StatementListAll
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_StatementListAll( VIEW ViewToWindow )
+
+   /*VIEW mTempl     REGISTERED AS mTempl
+   VIEW mTemplHier BASED ON LOD mTempl
+   STRING ( 32 ) szEntityName
+   STRING ( 50 ) szSectionType
+   SHORT         lLevel
+   SHORT         nRC
+   INTEGER       TempID
+   // Build the DisplayStatement structure, which is a single list of all Panel, Group and Section entries.
+   SET CURSOR FIRST mTempl.TemplatePanel
+   CreateViewFromView( mTemplHier, mTempl )
+   DefineHierarchicalCursor( mTemplHier, "Template" )
+   TempID = 0
+   nRC = SetCursorNextEntityHierarchical( lLevel, szEntityName, mTemplHier )
+   LOOP WHILE nRC >= zCURSOR_SET
+      TempID = TempID + 1
+      IF szEntityName = "TemplatePanel"
+         // PANEL
+         CREATE ENTITY mTempl.DisplayStatement
+         mTempl.DisplayStatement.EntityType = "Panel"
+         mTempl.DisplayStatement.DisplayText = mTemplHier.TemplatePanel.dPanelName
+         mTempl.TemplatePanel.wTempID = TempID
+         mTempl.DisplayStatement.EntityID = TempID
+      ELSE
+      IF szEntityName = "TemplateGroup"
+         // GROUP
+         CREATE ENTITY mTempl.DisplayStatement
+         mTempl.DisplayStatement.EntityType = "Group"
+         mTempl.DisplayStatement.DisplayText = "    " + mTemplHier.TemplateGroup.dGroupName
+         mTempl.TemplateGroup.wTempID = TempID
+         mTempl.DisplayStatement.EntityID = TempID
+      ELSE
+      IF szEntityName = "TemplateSection"
+         // SECTION
+         CREATE ENTITY mTempl.DisplayStatement
+         mTempl.DisplayStatement.EntityType = "Section"
+         GetStringFromAttributeByContext( szSectionType, mTempl, "TemplateSection", "SectionType", "", 50 )
+         mTempl.DisplayStatement.DisplayText = "        " + szSectionType
+         mTempl.TemplateSection.wTempID = TempID
+         mTempl.DisplayStatement.EntityID = TempID
+      END
+      END
+      END
+      nRC = SetCursorNextEntityHierarchical( lLevel, szEntityName, mTemplHier )
+   END
+   DropHierarchicalCursor( mTemplHier )
+   DropView( mTemplHier )
+
+   // Save generated ID for next assignment.
+   TempID = TempID + 1
+   mTempl.Template.wNextTempID = TempID*/
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CancelAndReturnTemplate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CancelAndReturnTemplate( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   DropObjectInstance( mTempl )
+   PostbuildTemplateList( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: SaveAndReturnTemplate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+SaveAndReturnTemplate( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   IF mTempl.Template.Name = ""
+      MessageSend( ViewToWindow, "", "Save Template", "The Template Name cannot be blank.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+      RETURN 2      // Return 2 to indicate Web client must prompt operator
+   END
+
+   COMMIT mTempl
+   DropObjectInstance( mTempl )
+   PostbuildTemplateList( ViewToWindow )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateTemplate
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateTemplate( VIEW ViewToWindow )
+
+   VIEW lTemplLST  REGISTERED AS lTemplLST
+   VIEW mTempl     BASED ON LOD  mTempl
+   VIEW mTemplHier BASED ON LOD  mTempl
+   STRING ( 20 ) szPanelName
+   STRING ( 32 ) szEntityName
+   STRING ( 50 ) szSectionType
+   SHORT         lLevel
+   SHORT         nRC
+   INTEGER       TempID
+   INTEGER       Count
+
+   ACTIVATE mTempl WHERE mTempl.Template.ID = lTemplLST.Template.ID
+   NAME VIEW mTempl "mTempl"
+
+   BuildDisplayStructure( mTempl )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NEW_TemplatePanel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NEW_TemplatePanel( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CreateTemporalEntity( mTempl, "TemplatePanel", zPOS_AFTER )
+   CREATE ENTITY mTempl.TemplateGroup
+   CREATE ENTITY mTempl.TemplateSection
+   mTempl.TemplateSection.TSectionType = "Hazards"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ACCEPT_TemplatePanel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ACCEPT_TemplatePanel( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+// VIEW KZXMLPGO
+   INTEGER Count
+
+   AcceptSubobject( mTempl, "TemplatePanel" )
+   // If the previous window is the Display List, then rebuild the list.
+// GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+// IF KZXMLPGO.PagePath.LastPageName = "mTemplDTemplateStatementListAll"
+      BuildDisplayStructure( mTempl )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CANCEL_TemplatePanel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CANCEL_TemplatePanel( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CancelSubobject( mTempl, "TemplatePanel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_TemplatePanel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_TemplatePanel( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   DELETE ENTITY mTempl.TemplatePanel
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdatePanel
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdatePanel( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CreateTemporalSubobjectVersion( mTempl, "TemplatePanel" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NEW_TemplateGroup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NEW_TemplateGroup( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CreateTemporalEntity( mTempl, "TemplateGroup", zPOS_AFTER )
+   CREATE ENTITY mTempl.TemplateSection
+   mTempl.TemplateSection.TSectionType = "Hazards"
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ACCEPT_TemplateGroup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ACCEPT_TemplateGroup( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+// VIEW KZXMLPGO
+
+   AcceptSubobject( mTempl, "TemplateGroup" )
+
+   // If the previous window is the Display List, then rebuild the list.
+// GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+// IF KZXMLPGO.PagePath.LastPageName = "mTemplDTemplateStatementListAll"
+      BuildDisplayStructure( mTempl )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CANCEL_TemplateGroup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CANCEL_TemplateGroup( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CancelSubobject( mTempl, "TemplateGroup" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_TemplateGroup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_TemplateGroup( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   DELETE ENTITY mTempl.TemplateGroup
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateGroup
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateGroup( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CreateTemporalSubobjectVersion( mTempl, "TemplateGroup" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NEW_TemplateSection
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NEW_TemplateSection( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CreateTemporalEntity( mTempl, "TemplateSection", zPOS_AFTER )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ACCEPT_TemplateSection
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ACCEPT_TemplateSection( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+// VIEW KZXMLPGO
+   STRING ( 30 ) szSectionType
+
+   AcceptSubobject( mTempl, "TemplateSection" )
+
+   // If the previous window is the Display List, then rebuild the list.
+// GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+// IF KZXMLPGO.PagePath.LastPageName = "mTemplDTemplateStatementListAll"
+      BuildDisplayStructure( mTempl )
+// END
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: CANCEL_TemplateSection
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+CANCEL_TemplateSection( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CancelSubobject( mTempl, "TemplateSection" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: DELETE_TemplateSection
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+DELETE_TemplateSection( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   DELETE ENTITY mTempl.TemplateSection
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateSection
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateSection( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+
+   CreateTemporalSubobjectVersion( mTempl, "TemplateSection" )
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: GOTO_UpdateDisplayStatement
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+GOTO_UpdateDisplayStatement( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+// VIEW KZXMLPGO
+
+// GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+// CREATE ENTITY KZXMLPGO.NextDialogWindow
+// KZXMLPGO.NextDialogWindow.DialogName = "mTemplD"
+// CREATE ENTITY KZXMLPGO.PagePath
+// KZXMLPGO.PagePath.LastPageName = "mTemplDTemplateStatementListAll"
+
+   // Position on the real entity in the hierarchical structure.
+   // Then, create that entity as temporal and go to the correct window based on type.
+   IF mTempl.DisplayStatement.EntityType = "Panel"
+
+      // Panel
+      SET CURSOR FIRST mTempl.TemplatePanel
+                 WHERE mTempl.TemplatePanel.wTempID = mTempl.DisplayStatement.EntityID
+      CreateTemporalSubobjectVersion( mTempl, "TemplatePanel" )
+//    KZXMLPGO.NextDialogWindow.WindowName = "TemplatePanelDetail"
+
+   ELSE
+   IF mTempl.DisplayStatement.EntityType = "Group"
+
+      // Group
+      SET CURSOR FIRST mTempl.TemplateGroup WITHIN mTempl.Template
+                 WHERE mTempl.TemplateGroup.wTempID = mTempl.DisplayStatement.EntityID
+      CreateTemporalSubobjectVersion( mTempl, "TemplateGroup" )
+//    KZXMLPGO.NextDialogWindow.WindowName = "TemplateGroupDetail"
+
+   ELSE
+      // Section
+      SET CURSOR FIRST mTempl.TemplateSection WITHIN mTempl.Template
+                 WHERE mTempl.TemplateSection.wTempID = mTempl.DisplayStatement.EntityID
+      CreateTemporalSubobjectVersion( mTempl, "TemplateSection" )
+//    KZXMLPGO.NextDialogWindow.WindowName = "TemplateSectionDetail"
+
+   END
+   END
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: NEW_DisplayStatement
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+NEW_DisplayStatement( VIEW ViewToWindow )
+
+   VIEW mTempl REGISTERED AS mTempl
+// VIEW KZXMLPGO
+
+// GET VIEW KZXMLPGO NAMED "KZXMLPGO"
+// CREATE ENTITY KZXMLPGO.NextDialogWindow
+// KZXMLPGO.NextDialogWindow.DialogName = "mTemplD"
+// CREATE ENTITY KZXMLPGO.PagePath
+// KZXMLPGO.PagePath.LastPageName = "mTemplDTemplateStatementListAll"
+
+   // Position on the real entity in the hierarchical structure.
+   // Then, create that entity as temporal and go to the correct window based on type.
+   IF mTempl.DisplayStatement.EntityType = "Panel"
+
+      // Panel
+      SET CURSOR FIRST mTempl.TemplatePanel
+                 WHERE mTempl.TemplatePanel.wTempID = mTempl.DisplayStatement.EntityID
+      CreateTemporalEntity( mTempl, "TemplatePanel", zPOS_AFTER )
+      CREATE ENTITY mTempl.TemplateGroup
+      mTempl.TemplateGroup.Name = "New"
+      CREATE ENTITY mTempl.TemplateSection
+      mTempl.TemplateSection.TSectionType = "Marketing"
+
+//    KZXMLPGO.NextDialogWindow.WindowName = "TemplatePanelDetail"
+
+   ELSE
+   IF mTempl.DisplayStatement.EntityType = "Group"
+
+      // Group
+      SET CURSOR FIRST mTempl.TemplateGroup WITHIN mTempl.Template
+                 WHERE mTempl.TemplateGroup.wTempID = mTempl.DisplayStatement.EntityID
+      CreateTemporalEntity( mTempl, "TemplateGroup", zPOS_AFTER )
+      mTempl.TemplateGroup.Name = "New"
+      CREATE ENTITY mTempl.TemplateSection
+      mTempl.TemplateSection.TSectionType = "Marketing"
+
+//    KZXMLPGO.NextDialogWindow.WindowName = "TemplateGroupDetail"
+
+   ELSE
+      // Section
+      SET CURSOR FIRST mTempl.TemplateSection WITHIN mTempl.Template
+                 WHERE mTempl.TemplateSection.wTempID = mTempl.DisplayStatement.EntityID
+      CreateTemporalEntity( mTempl, "TemplateSection", zPOS_AFTER )
+      mTempl.TemplateSection.TSectionType = "Marketing"
+
+//    KZXMLPGO.NextDialogWindow.WindowName = "TemplateSectionDetail"
+
+   END
+   END
+
+END
+

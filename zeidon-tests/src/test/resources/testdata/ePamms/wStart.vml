@@ -1,0 +1,28 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    wStart      - ePamms start operations
+// FILE:         wStart.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: ContrivedError
+//
+/////////////////////////////////////////////////////////////////////////////
+DIALOG OPERATION
+ContrivedError( VIEW ViewToWindow )
+
+   MessageSend( ViewToWindow, "", "Cause Error",
+                "Contrived Error!!!", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+
+   RETURN 2
+
+END
+

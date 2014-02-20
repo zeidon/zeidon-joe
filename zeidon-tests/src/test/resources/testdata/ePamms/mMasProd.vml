@@ -1,0 +1,210 @@
+/////////////////////////////////////////////////////////////////////////////
+// Project ePamms
+//
+// This is a part of the ePamms applications package.
+// Copyright © 2007 - 2012 Arksoft, Inc.
+// All Rights Reserved.
+//
+// SUBSYSTEM:    mMasProd      - Primary Registrant Master Product operations
+// FILE:         mMasProd.vml
+// AUTHOR:       Doug Sorensen
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProductNameNbr
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProductNameNbr( VIEW mMasProd BASED ON LOD mMasProd,
+                       STRING ( 32 ) InternalEntityStructure,
+                       STRING ( 32 ) InternalAttribStructure,
+                       SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mMasProd.MasterProduct  EXISTS
+         szString = mMasProd.MasterProduct.Name + " (" +
+                    mMasProd.PrimaryRegistrant.EPA_CompanyNumber + "-" +
+                    mMasProd.MasterProduct.Number + ")"
+      ELSE
+         szString = ""
+      END
+
+      // Store the calculated value in the object.
+      StoreStringInRecord ( mMasProd,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+      RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dRegistrantNameID
+// Registrant Name + EPA Registrant Number
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dRegistrantNameID( VIEW mMasProd BASED ON LOD mMasProd,
+                   STRING ( 32 ) InternalEntityStructure,
+                   STRING ( 32 ) InternalAttribStructure,
+                   SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mMasProd.Organization EXISTS
+         szString = mMasProd.Organization.Name
+         IF mMasProd.PrimaryRegistrant.EPA_CompanyNumber = ""
+            szString = szString + " (Non EPA)"
+         ELSE
+            szString = szString + " (" +
+                    mMasProd.PrimaryRegistrant.EPA_CompanyNumber + ")"
+         END
+       ELSE
+          szString = ""
+       END
+
+       // Store the calculated value in the object.
+       StoreStringInRecord ( mMasProd,
+                             InternalEntityStructure,
+                             InternalAttribStructure, szString )
+       RETURN 0
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProduct
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProduct( VIEW mMasProd BASED ON LOD mMasProd,
+                STRING ( 32 ) InternalEntityStructure,
+                STRING ( 32 ) InternalAttribStructure,
+                SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mMasProd.MasterProduct  EXISTS
+         szString = "Prod: " + mMasProd.MasterProduct.Name + " (" +
+                    mMasProd.MasterProduct.Number + ")"
+      ELSE
+         szString = ""
+      END
+
+      // Store the calculated value in the object.
+      StoreStringInRecord ( mMasProd,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+      RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dMasterProductDesc
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dMasterProductDesc( VIEW mMasProd BASED ON LOD mMasProd,
+                    STRING ( 32 ) InternalEntityStructure,
+                    STRING ( 32 ) InternalAttribStructure,
+                    SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+      IF mMasProd.MasterProduct  EXISTS
+         szString = "Desc: " + mMasProd.MasterProduct.Description
+      ELSE
+         szString = ""
+      END
+
+      // Store the calculated value in the object.
+      StoreStringInRecord ( mMasProd,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+      RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OPERATION: dContentVersionRevDate
+//
+/////////////////////////////////////////////////////////////////////////////
+DERIVED ATTRIBUTE OPERATION
+dContentVersionRevDate( VIEW mMasProd BASED ON LOD mMasProd,
+                        STRING ( 32 ) InternalEntityStructure,
+                        STRING ( 32 ) InternalAttribStructure,
+                        SHORT GetOrSetFlag )
+
+   STRING ( 1000 ) szString
+   STRING ( 32 )   szDate
+
+   CASE GetOrSetFlag
+   OF   zDERIVED_GET:
+
+
+      IF mMasProd.MasterProduct EXISTS
+         szString = mMasProd.MasterProduct.Name
+         IF mMasProd.MasterLabelContent EXISTS
+            szString = szString + "   Vers: " + mMasProd.MasterLabelContent.Version
+            szString = szString + "   REV"
+            GetStringFromAttributeByContext( szDate, mMasProd, "MasterLabelContent", "RevisionDate", "yyyyMMdd", 32 )
+            zExpungeAllSubstring( szDate, "-" )
+            szString = szString + szDate
+         END
+      ELSE
+         szString = ""
+      END
+
+      // Store the calculated value in the object.
+      StoreStringInRecord ( mMasProd,
+                            InternalEntityStructure,
+                            InternalAttribStructure, szString )
+      RETURN 0
+
+        /* end zDERIVED_GET */
+   OF   zDERIVED_SET:
+
+        /* end zDERIVED_SET */
+   END  /* case */
+
+END

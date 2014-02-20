@@ -1,0 +1,163 @@
+z1000-Zeidon    ZMONITOR TZWDLGSO 09/17/09   09:29:48 1.0a2    
+eDialog    1
+aTag       ZMonitor
+aDLL_Name  ZMonitor
+aZKey      4094503
+aDesc      Monitor DB for scheduled tasks
+
+eDfltWnd   2
+aTag       ZMonitor
+aCaption   Monitor DB for scheduled tasks
+aPSDLG_X   2
+aPSDLG_Y   2
+aSZDLG_X   66584856
+aSZDLG_Y   31457408
+aZKey      4094505
+aGeneralFlag 0
+
+eWindow    2
+
+eWndEvent  3
+aType      2
+aZKey      4094506
+
+eWndAct    4
+aTag       PostBuild
+aNoMap     Y
+aType      1
+aZKey      4094507
+aSB_ActionDisabling 0
+
+eWndEvent  3
+aType      4194304
+aZKey      4094512
+
+eWndAct    4
+aTag       Cleanup
+aType      1
+aZKey      4094513
+aSB_ActionDisabling 0
+
+eAction    3
+
+eActWndEvent 4
+
+eActOper   4
+aName      PostBuild
+aZKey      4094510
+aType      D
+aReturnDataType N
+
+eSourceFileForOper 5
+aZKey      4094504
+aLanguageType C
+aName      ZMonitor
+aExtension C
+
+eAction    3
+
+eActWndEvent 4
+
+eActOper   4
+aName      Cleanup
+aZKey      4094516
+aType      D
+aReturnDataType N
+
+eSourceFileForOper 5
+
+eAction    3
+aTag       Exit
+aType      1
+aZKey      4094523
+aSB_ActionDisabling 0
+
+eActOpt    4
+aTag       Exit
+aText      Exit
+aZKey      4094522
+
+eActOper   4
+aName      Exit
+aZKey      4094526
+aType      D
+aReturnDataType N
+
+eSourceFileForOper 5
+
+eMenu      3
+aTag       MainMenu
+aZKey      4094520
+
+eOption    4
+aTag       File
+aText      &File...
+aZKey      4094521
+
+eOptOpt    5
+
+eOptAct    6
+
+eDfltMenu  3
+
+eWndStyle  3
+aTag       Primary Window
+aZKey      7008558
+aStyle     13565952
+aDesc      Overlapped window with caption, system menu, sizing border, min/
+
+eSourceFile 2
+
+eOperation 3
+
+eParameter 4
+aShortDesc View To Window
+aDataType  V
+aZKey      4094511
+
+eOperation 3
+
+eParameter 4
+aShortDesc View To Window
+aDataType  V
+aZKey      4094527
+
+eOperation 3
+
+eParameter 4
+aShortDesc View To Window
+aDataType  V
+aZKey      4094517
+
+eOperationList 2
+
+eOperSourceFile 3
+
+eOperationList 2
+
+eOperSourceFile 3
+
+eOperationList 2
+
+eOperSourceFile 3
+
+i2         1
+i7         4
+i8         3
+i11        6
+i12        5
+i14        10
+i18        10
+i21        16
+i22        15
+i23        19
+i25        10
+i26        9
+i28        17
+i30        13
+i32        13
+i33        10
+i34        17
+i35        10
+i36        9
+i37        10
