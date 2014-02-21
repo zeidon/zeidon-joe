@@ -4,11 +4,15 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -17,28 +21,33 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author dgc
  *
  */
-class WriteOiToJsonStream
+public class WriteOiToJsonStream
 {
-    private final static EnumSet<WriteOiFlags> defaultFlags = EnumSet.noneOf( WriteOiFlags.class );
-
-    private final ViewImpl view;
+    private final Collection<View> viewList;
     private final Writer writer;
-    private final EnumSet<WriteOiFlags> control;
+    private final WriteOiOptions options;
+    private final EnumSet<WriteOiFlags> flags;
     private final boolean incremental;
 
     private JsonGenerator jg;
 
     private boolean entityMetaStarted;
 
-    WriteOiToJsonStream(ViewImpl view, Writer writer, EnumSet<WriteOiFlags> control )
+    public WriteOiToJsonStream( Collection<View> viewList, Writer writer, WriteOiOptions options )
     {
-        this.view = view;
+        this.viewList = viewList;
         this.writer = writer;
-        this.control = control == null ? defaultFlags : control;
-        incremental = this.control.contains( WriteOiFlags.fINCREMENTAL );
+        this.options = options;
+        this.flags = options.getFlags();
+        incremental = this.flags.contains( WriteOiFlags.fINCREMENTAL );
     }
 
-    void writeToStream()
+    public WriteOiToJsonStream(View view, Writer writer, WriteOiOptions options )
+    {
+        this( viewToCollection( view ), writer, options );
+    }
+
+    public void writeToStream()
     {
         JsonFactory jsonF = new JsonFactory();
         try
@@ -47,7 +56,9 @@ class WriteOiToJsonStream
             jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
 
             jg.writeStartObject();
-            writeOi();
+            for ( View view : viewList )
+                writeOi( view );
+            
             jg.writeEndObject();
             jg.close();
         }
@@ -57,13 +68,14 @@ class WriteOiToJsonStream
         }
     }
 
-    private void writeOi() throws Exception
+    private void writeOi( View view ) throws Exception
     {
-        writeOiMeta();
+        writeOiMeta( view );
 
         ViewEntity lastViewEntity = null;
 
-        for ( EntityInstanceImpl ei = view.getObjectInstance().getRootEntityInstance();
+        ViewImpl viewImpl = ((InternalView)view).getViewImpl();
+        for ( EntityInstanceImpl ei = viewImpl.getObjectInstance().getRootEntityInstance();
               ei != null;
               ei = ei.getNextTwin() )
         {
@@ -75,7 +87,7 @@ class WriteOiToJsonStream
             jg.writeEndArray();
     }
 
-    private void writeOiMeta() throws Exception
+    private void writeOiMeta( View view ) throws Exception
     {
         jg.writeObjectFieldStart( ".oimeta" );
         jg.writeStringField( "application", view.getViewOd().getApplication().getName() );
@@ -107,7 +119,7 @@ class WriteOiToJsonStream
             for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
             {
                 AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
-                String value = attrib.getString( view.getTask(), viewAttribute );
+                String value = attrib.getString( ei.getTask(), viewAttribute );
                 jg.writeStringField( viewAttribute.getName(), value );
                 if ( incremental )
                 {
@@ -165,5 +177,18 @@ class WriteOiToJsonStream
         }
 
         jg.writeBooleanField( flagName, value );
+    }
+    
+    /**
+     * Convenience method to turn a single view into a collection.
+     * 
+     * @param view
+     * @return
+     */
+    private static Collection<View> viewToCollection( View view )
+    {
+        ArrayList<View> list = new ArrayList<View>();
+        list.add( view );
+        return list;
     }
 }

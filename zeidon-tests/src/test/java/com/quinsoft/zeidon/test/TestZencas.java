@@ -3,11 +3,15 @@
  */
 package com.quinsoft.zeidon.test;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
@@ -24,7 +28,9 @@ import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.standardoe.WriteOiToJsonStream;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.Timer;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
@@ -123,6 +129,31 @@ public class TestZencas
         System.out.println("===== Finished testRecursiveEntities ========");
 	}
 
+	@Test
+	public void testJson() throws IOException
+	{
+        View stud = new QualificationBuilder( zencas )
+                            .setViewOd( "lStudDpt" )
+                            .addAttribQual( "Status", "A" )
+                            .addAttribQual( "AND" )
+                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+                            .activate();
+
+        WriteOiOptions options = new WriteOiOptions();
+        options.setIncremental();
+        BufferedWriter stream = null;
+        try
+        {
+            stream = new BufferedWriter( new FileWriter( "/tmp/stud.json" ) );
+            WriteOiToJsonStream writer = new WriteOiToJsonStream( stud, stream, options );
+            writer.writeToStream();
+        }
+        finally
+        {
+            IOUtils.closeQuietly( stream );
+        }
+	}
+	
 	@Test
 	public void testSelectSet()
 	{
