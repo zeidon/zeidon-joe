@@ -11,7 +11,7 @@
     <dependencies>
       <dependency>
 	<groupId>com.quinsoft.zeidon</groupId>
-	<artifactId>restserver</artifactId>
+	<artifactId>zeidon-restserver</artifactId>
 	<version>1.0.6-SNAPSHOT</version>
 	<type>war</type>
       </dependency>

@@ -8,7 +8,7 @@
   </parent>
 
   <groupId>com.quinsoft.zeidon</groupId>
-  <artifactId>scala</artifactId>
+  <artifactId>zeidon-scala</artifactId>
 
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>

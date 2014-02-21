@@ -37,6 +37,7 @@
 			<plugin>
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-install-plugin</artifactId>
+			  <version>2.5.1</version>
 			  <executions>
 			    <execution>
 			      <goals>
@@ -58,6 +59,10 @@
 		<module>zeidon-tests</module>
 		<module>restserver</module>
 		<module>zeidon-tests/rest-server</module>
+<!--
+		<module>scala</module>
+-->
+		<module>android</module>
 		<module>zruby</module>
 <!-- Sinatra server only needs to be built once.
 		<module>sinatra-server</module>

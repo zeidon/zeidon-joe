@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.quinsoft.zeidon</groupId>
-  <artifactId>restserver</artifactId>
+  <artifactId>zeidon-restserver</artifactId>
   <packaging>war</packaging>
   <version>1.0.6-SNAPSHOT</version>
   <name>Zeidon REST webserver</name>
@@ -28,8 +28,8 @@
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
-                        <artifactId>javax.servlet-api</artifactId>
-                        <version>3.0.1</version>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
     </dependency>
  </dependencies>
 

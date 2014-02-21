@@ -14,7 +14,7 @@
 	<dependencies>
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
-	    <artifactId>sinatra-server</artifactId>
+	    <artifactId>zeidon-sinatra-server</artifactId>
 	    <version>1.0.2</version>
 	  </dependency>
 	  <dependency>
