@@ -294,7 +294,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         for ( View view : task.getViewList() )
         {
             Collection<String> nameList = view.getNameList();
-            task.log().info( "View %s (%d)  Names = %s", view.getId(), view.getViewOd(), nameList );
+            task.log().info( "View %s (%s)  Names = %s", view.getId(), view.getViewOd(), nameList );
         }
 
         return "Views listed in log";
