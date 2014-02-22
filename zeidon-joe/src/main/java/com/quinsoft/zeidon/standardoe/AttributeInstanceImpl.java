@@ -269,7 +269,8 @@ class AttributeInstanceImpl implements AttributeInstance
     public EntityInstanceImpl setInternalValue( Object value, boolean setIncremental )
     {
         Object oldValue = attributeValue.getInternalValue();
-        if ( attributeValue.setInternalValue( getTask(), viewAttribute, value, setIncremental ) )
+        Object internalValue = viewAttribute.getDomain().convertInternalValue( getTask(), viewAttribute, value );
+        if ( attributeValue.setInternalValue( getTask(), viewAttribute, internalValue, setIncremental ) )
         {
             if ( ! viewAttribute.isDerived() )
                 entityInstance.setUpdated( true, true, viewAttribute.isPersistent() );

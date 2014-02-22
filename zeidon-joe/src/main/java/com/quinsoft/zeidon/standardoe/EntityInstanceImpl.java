@@ -210,6 +210,15 @@ class EntityInstanceImpl implements EntityInstance
         this.attributeHashkeyMap = null;
     }
 
+    /**
+     * Creates an entity instance and adds it to the OI.
+     *
+     * @param objectInstance
+     * @param viewEntity
+     * @param parentInstance
+     * @param relativeInstance
+     * @param position
+     */
     EntityInstanceImpl(ObjectInstance        objectInstance,
                        ViewEntity            viewEntity,
                        EntityInstanceImpl    parentInstance,
@@ -222,6 +231,7 @@ class EntityInstanceImpl implements EntityInstance
 
     /**
      * Creates an entity instance without inserting it into the chain.
+     *
      * @param objectInstance
      * @param viewEntity
      * @param parentInstance
@@ -2144,7 +2154,7 @@ class EntityInstanceImpl implements EntityInstance
 
             if ( search.getHierIndex() > index )
             {
-                EntityInstanceImpl returnInst = null; 
+                EntityInstanceImpl returnInst = null;
                 search = search.getParent();
                 if ( lst.indexOf( search.getHierIndex() ) >= 0 ) {
                    // we have a problem (infinite loop in process) ... get to the top and display the hierarchy
