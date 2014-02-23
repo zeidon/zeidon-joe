@@ -4,9 +4,12 @@
 package com.quinsoft.zeidon.test;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -29,6 +32,7 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiOptions;
+import com.quinsoft.zeidon.standardoe.ActivateOisFromJsonStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.standardoe.WriteOiToJsonStream;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -134,10 +138,19 @@ public class TestZencas
 	{
         View stud = new QualificationBuilder( zencas )
                             .setViewOd( "lStudDpt" )
+                            .singleRoot()
                             .addAttribQual( "Status", "A" )
                             .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
+        stud.relinkOis( (View[]) null );
+
+        View person = new QualificationBuilder( zencas )
+                            .setViewOd( "mPerson" )
+                            .addAttribQual( "ID", 50 )
+                            .activate();
+
+        stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
 
         WriteOiOptions options = new WriteOiOptions();
         options.setIncremental();
@@ -145,15 +158,30 @@ public class TestZencas
         try
         {
             stream = new BufferedWriter( new FileWriter( "/tmp/stud.json" ) );
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( stud, stream, options );
+            List<View> list = Arrays.asList( stud, person );
+            WriteOiToJsonStream writer = new WriteOiToJsonStream( list, stream, options );
             writer.writeToStream();
         }
         finally
         {
             IOUtils.closeQuietly( stream );
         }
+
+        FileInputStream inputStream = new FileInputStream( "/tmp/stud.json" );
+        try
+        {
+            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( zencas, inputStream, null );
+            List<View> viewList = activator.read();
+            for ( View v : viewList )
+                v.logObjectInstance();
+        }
+        finally
+        {
+            IOUtils.closeQuietly( inputStream );
+        }
+
 	}
-	
+
 	@Test
 	public void testSelectSet()
 	{

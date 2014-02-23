@@ -219,12 +219,11 @@ public interface View extends TaskQualification, CacheMap
     /**
      * Relinks all the OIs specified in the view list with this one.
      *
-     * @param view view to relink with.
      * @param otherViews other, optional, views that can be relinked all at once.
      *
      * @return total number of entities relinked.
      */
-    int relinkOis( View view, View...otherViews );
+    int relinkOis( View... views );
     //
     // View name methods.
     //

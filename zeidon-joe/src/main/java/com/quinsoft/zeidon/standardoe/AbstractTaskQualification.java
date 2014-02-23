@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
@@ -414,9 +415,16 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     @Override
     public View activateOiFromJsonStream( InputStream stream, EnumSet<ActivateFlags> control )
     {
-        ActivateOiFromJsonStream activator = new ActivateOiFromJsonStream( getTask(), stream, control );
-        ViewImpl v = activator.read();
-        return v;
+        try
+        {
+            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( getTask(), stream, control );
+            List<View> v = activator.read();
+            return v.get( 0 );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( stream );
+        }
     }
 
     /* (non-Javadoc)

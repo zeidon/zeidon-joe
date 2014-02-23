@@ -65,7 +65,7 @@ public class ActivateOiFromRestServer implements Activator
      * @see com.quinsoft.zeidon.standardoe.Activator#activate()
      */
     @Override
-    public ViewImpl activate()
+    public View activate()
     {
         ViewOd viewOd = view.getViewOd();
         Application application = viewOd.getApplication();
@@ -100,8 +100,8 @@ public class ActivateOiFromRestServer implements Activator
             // Since we expect multiple OIs in a single stream, create a stream reader to share
             // between activates.
 
-            ActivateOiFromJsonStream activator = new ActivateOiFromJsonStream(getTask(), stream, null );
-            ViewImpl restRc = activator.read();
+            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
+            View restRc = activator.read().get( 0 );
             restRc.logObjectInstance();
             return restRc;
 

@@ -508,9 +508,9 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     @Override
-    public int relinkOis( View view, View... otherViews )
+    public int relinkOis( View... otherViews )
     {
-        return getView().relinkOis( view, otherViews );
+        return getView().relinkOis( otherViews );
     }
 
     protected ViewImpl getView()

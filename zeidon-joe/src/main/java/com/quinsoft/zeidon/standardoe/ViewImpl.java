@@ -859,13 +859,15 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * @see com.quinsoft.zeidon.View#relinkOis(com.quinsoft.zeidon.View, com.quinsoft.zeidon.View[])
      */
     @Override
-    public int relinkOis( View view, View... otherViews )
+    public int relinkOis( View... views )
     {
         OiRelinker linker = new OiRelinker( this );
-        linker.add( this.getObjectInstance() )
-              .add( (((InternalView) view).getViewImpl()).getObjectInstance() );
-        for ( View v : otherViews )
-            linker.add( (((InternalView) v).getViewImpl()).getObjectInstance() );
+        linker.add( this.getObjectInstance() );
+        if ( views != null )
+        {
+            for ( View v : views )
+                linker.add( (((InternalView) v).getViewImpl()).getObjectInstance() );
+        }
 
         return linker.relinkOis();
     }

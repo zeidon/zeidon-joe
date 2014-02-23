@@ -3,12 +3,16 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
@@ -28,17 +32,16 @@ public class WriteOiToJsonStream
     private final WriteOiOptions options;
     private final EnumSet<WriteOiFlags> flags;
     private final boolean incremental;
+    private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
 
     private JsonGenerator jg;
-
-    private boolean entityMetaStarted;
 
     public WriteOiToJsonStream( Collection<View> viewList, Writer writer, WriteOiOptions options )
     {
         this.viewList = viewList;
         this.writer = writer;
         this.options = options;
-        this.flags = options.getFlags();
+        this.flags = this.options.getFlags();
         incremental = this.flags.contains( WriteOiFlags.fINCREMENTAL );
     }
 
@@ -49,6 +52,16 @@ public class WriteOiToJsonStream
 
     public void writeToStream()
     {
+        // Create a set of all the OIs and turn off the record owner flag.  The record owner
+        // flag will be used to determine if a linked EI has been written to the stream.
+        for ( View view : viewList )
+        {
+            ObjectInstance oi = ((InternalView) view).getViewImpl().getObjectInstance();
+            ois.add( oi );
+            for ( EntityInstanceImpl ei = oi.getRootEntityInstance(); ei != null; ei = ei.getNextTwin() )
+                ei.setRecordOwner( false );
+        }
+
         JsonFactory jsonF = new JsonFactory();
         try
         {
@@ -56,9 +69,14 @@ public class WriteOiToJsonStream
             jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
 
             jg.writeStartObject();
+            jg.writeArrayFieldStart( "OIs" );
             for ( View view : viewList )
+            {
+                jg.writeStartObject();
                 writeOi( view );
-            
+                jg.writeEndObject();
+            }
+            jg.writeEndArray();
             jg.writeEndObject();
             jg.close();
         }
@@ -111,18 +129,17 @@ public class WriteOiToJsonStream
                 jg.writeArrayFieldStart( viewEntity.getName() );
             }
 
-            jg.writeStartObject(); // TODO: Write meta/incremental information.
-
-            writeEntityMeta( ei );
-
-            String[] attrIncr = new String[] { "Updated", null };
+            jg.writeStartObject();
+            boolean writePersistent = writeEntityMeta( ei );
             for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
             {
                 AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
-                String value = attrib.getString( ei.getTask(), viewAttribute );
-                jg.writeStringField( viewAttribute.getName(), value );
-                if ( incremental )
+                if ( writePersistent || ! viewAttribute.isPersistent() )
                 {
+                    String value = attrib.getString( ei.getTask(), viewAttribute );
+                    jg.writeStringField( viewAttribute.getName(), value );
+                    if ( incremental && viewAttribute.isPersistent() )
+                        writeAttributeMeta( attrib, viewAttribute );
                 }
             }
 
@@ -147,41 +164,122 @@ public class WriteOiToJsonStream
         }
     }
 
-    private void writeEntityMeta( EntityInstanceImpl ei ) throws Exception
+    private void writeAttributeMeta( AttributeValue attrib, ViewAttribute viewAttribute )
+                        throws JsonGenerationException, IOException
     {
-        if ( ! incremental )
-            return;  // Nothing to do if we're not writing incrementals.
-
-        // Keep track of whether we started a .meta tag.  We'll only create one if we need to.
-        entityMetaStarted = false;
-
-        writeEntityFlag( ei, "updated", ei.isUpdated() );
-        writeEntityFlag( ei, "created", ei.isCreated() );
-        writeEntityFlag( ei, "deleted", ei.isDeleted() );
-        writeEntityFlag( ei, "included", ei.isIncluded() );
-        writeEntityFlag( ei, "excluded", ei.isExcluded() );
-
-        if ( entityMetaStarted )
-            jg.writeEndObject();
-    }
-
-    private void writeEntityFlag( EntityInstanceImpl ei, String flagName, boolean value ) throws Exception
-    {
-        if ( ! value )
+        if ( ! attrib.isUpdated() )
             return;
 
-        if ( ! entityMetaStarted )
+        jg.writeObjectFieldStart( "." + viewAttribute.getName() );
+        jg.writeStringField( "updated", "true" );
+        jg.writeEndObject();
+    }
+
+    private String createIncrementalStr( EntityInstanceImpl ei )
+    {
+        char[] str = { '_', '_', '_', '_', '_' };
+
+        if ( ei.isUpdated() )
+            str[0] = 'U';
+
+        if ( ei.isCreated() )
+            str[1] = 'C';
+
+        if ( ei.isDeleted() )
+            str[2] = 'D';
+
+        if ( ei.isIncluded() )
+            str[3] = 'I';
+
+        if ( ei.isExcluded() )
+            str[4] = 'X';
+
+        return new String( str );
+    }
+
+    /**
+     * If this EI is linked with another EI in the OI set then this returns the record owner.
+     * If no record owner, returns EI.
+     *
+     * @param ei
+     * @return
+     */
+    private EntityInstanceImpl findLinkedRecordOwner( EntityInstanceImpl ei )
+    {
+        // Keep track of whether we found another EI linked with this one.
+        boolean foundLinked = false;
+
+        // Run through the list of the other linked instances.
+        for ( EntityInstanceImpl linked : ei.getLinkedInstances() )
         {
-            jg.writeObjectFieldStart( ".meta" );
-            entityMetaStarted = true;
+            if ( ois.contains( linked.getObjectInstance() ) )
+            {
+                foundLinked = true;
+                if ( linked.isRecordOwner() )
+                    return linked;
+            }
         }
 
-        jg.writeBooleanField( flagName, value );
+        // If we get here then we didn't find a record owner.  if foundLinked is true
+        // then we did find a linked EI.
+        if ( foundLinked )
+            return ei;
+
+        // Didn't find any EI's that are linked with ei.
+        return null;
     }
-    
+
+    /**
+     * Returns true if we should also write the persistent attributes of the EI.  We
+     * don't write the persistent attributes if the EI is linked and it's not the
+     * record owner.
+     *
+     * @param ei
+     * @return
+     * @throws Exception
+     */
+    private boolean writeEntityMeta( EntityInstanceImpl ei ) throws Exception
+    {
+        boolean writeAttributes = true;
+        EntityInstanceImpl recordOwner = findLinkedRecordOwner( ei );
+
+        if ( ! incremental && recordOwner == null )
+            return writeAttributes;  // Nothing to do if we're not writing incrementals.
+
+        String str = createIncrementalStr( ei );
+        if ( "_____".equals( str ) && recordOwner == null )
+            return writeAttributes;
+
+        jg.writeObjectFieldStart( ".meta" );
+
+        if ( ! "_____".equals( str )  )
+            jg.writeStringField( "incrementals", str );
+
+        if ( recordOwner != null )
+        {
+            if ( recordOwner == ei )
+            {
+                // TODO: validate that ei.viewEntity has all the attributes in the shared
+                // attribute hash.
+                ei.setRecordOwner( true );
+                jg.writeStringField( "isLinkedSource", "true" );
+                jg.writeStringField( "entityKey", Long.toString( ei.getEntityKey() ));
+            }
+            else
+            {
+                // Write the entity key of the record owner.
+                jg.writeStringField( "linkedSource", Long.toString( recordOwner.getEntityKey() ));
+                writeAttributes = false;
+            }
+        }
+
+        jg.writeEndObject();
+        return writeAttributes;
+    }
+
     /**
      * Convenience method to turn a single view into a collection.
-     * 
+     *
      * @param view
      * @return
      */

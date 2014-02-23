@@ -272,7 +272,8 @@ class AttributeListInstance
     }
 
     /**
-     * Returns a list of non-null attributes.
+     * Returns a list of attributes that are not null or have been updated.
+     *
      * @param task TODO
      */
     Iterable<ViewAttribute> getNonNullAttributeList(final Task task)
@@ -296,7 +297,8 @@ class AttributeListInstance
                             while ( nextAttributeNumber < getViewEntity().getAttributeCount() )
                             {
                                 ViewAttribute viewAttribute = getViewEntity().getAttribute( nextAttributeNumber );
-                                if ( !getAttribute( viewAttribute ).isNull(task, viewAttribute) )
+                                AttributeValue attrib = getAttribute( viewAttribute );
+                                if ( ! attrib.isNull(task, viewAttribute) || attrib.isUpdated() )
                                     break;
 
                                 nextAttributeNumber++;

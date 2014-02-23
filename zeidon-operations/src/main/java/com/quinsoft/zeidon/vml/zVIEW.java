@@ -562,9 +562,9 @@ public class zVIEW extends VmlOperation implements View
      * @see com.quinsoft.zeidon.View#relinkOis(com.quinsoft.zeidon.View, com.quinsoft.zeidon.View[])
      */
     @Override
-    public int relinkOis( View view, View... otherViews )
+    public int relinkOis( View... otherViews )
     {
-        return this.view.relinkOis( view, otherViews );
+        return this.view.relinkOis( otherViews );
     }
 
     /* (non-Javadoc)
