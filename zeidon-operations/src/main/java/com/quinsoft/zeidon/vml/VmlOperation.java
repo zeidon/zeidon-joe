@@ -5607,7 +5607,23 @@ public abstract class VmlOperation
       hierInstanceIterator = null;  // Allows GC to clean up the iterator.
       return 0;
    }
+/*
+   public int SetSelectStateOfEntityForSet( View view, String entityName, int nState, int nSelectSet )
+   {
+      
+      Object oldSelectSet = view.setCurrentSelectSet( nSelectSet );
+      EntityCursor cursor = view.cursor( entityName );
+      SelectSet selectSet = cursor.getSelectSet( nSelectSet );
+      if ( nRC >= 0 )
+      {
+         nSelectSet = nRC;
+         nRC = SetSelectStateOfEntity( view, entityName, nState );
+         SetSelectSetForView( view, nSelectSet );
+      }
 
+      return( nRC );
+   }
+*/
    private CursorResult setSelected( View view, EntityCursor cursor, CursorResult rc )
    {
       SelectSet selectSet = view.getSelectSet();
