@@ -5607,23 +5607,29 @@ public abstract class VmlOperation
       hierInstanceIterator = null;  // Allows GC to clean up the iterator.
       return 0;
    }
-/*
+
    public int SetSelectStateOfEntityForSet( View view, String entityName, int nState, int nSelectSet )
    {
-      
-      Object oldSelectSet = view.setCurrentSelectSet( nSelectSet );
-      EntityCursor cursor = view.cursor( entityName );
-      SelectSet selectSet = cursor.getSelectSet( nSelectSet );
-      if ( nRC >= 0 )
-      {
-         nSelectSet = nRC;
-         nRC = SetSelectStateOfEntity( view, entityName, nState );
-         SetSelectSetForView( view, nSelectSet );
-      }
+       SelectSet selectSet = view.getSelectSet( nSelectSet );
+       EntityCursor cursor = view.cursor( entityName );
+       if ( nState == 0 )
+       {
+           // Is it off?
+           if ( ! selectSet.isSelected( cursor ) )
+               return 1;  // Yes.  Return 1 to indicate it was already off.
 
-      return( nRC );
+           selectSet.deselect( cursor );
+           return 0;
+       }
+
+       // Is it on?
+       if ( selectSet.isSelected( cursor ) )
+           return 1;  // Yes.  Return 1 to indicate it was already on.
+
+       selectSet.select( cursor );
+       return 0;
    }
-*/
+
    private CursorResult setSelected( View view, EntityCursor cursor, CursorResult rc )
    {
       SelectSet selectSet = view.getSelectSet();
