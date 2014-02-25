@@ -12,9 +12,7 @@ import com.google.common.cache.RemovalCause;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.quinsoft.zeidon.ObjectEngine;
-import com.quinsoft.zeidon.ObjectEngineEventListener;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.jmx.JmxObjectEngineMonitor;
 import com.quinsoft.zeidon.standardoe.DefaultJavaOeConfiguration;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 
@@ -36,18 +34,6 @@ public class ZeidonObjectEngineConfiguration extends DefaultJavaOeConfiguration
     public final static ObjectEngine getObjectEngine()
     {
         return s_objectEngine;
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.standardoe.JavaOeOptions#getObjectEngineListener()
-     */
-    @Override
-    public ObjectEngineEventListener getObjectEngineListener()
-    {
-        if ( oeListener == null )
-            oeListener = new JmxObjectEngineMonitor();
-
-        return oeListener;
     }
 
     /**
