@@ -1840,8 +1840,7 @@ public class KZOEP1AA extends VmlOperation
    //             name is created for it in the configuration management
    //             subtask.
    //
-   //             This function links up to any memory active
-   //             Domains, and LODS.
+   //             This function links up to any memory active Domains and LODS.
    //
    //             Additionally, if the ER/MODEL incremental file's last
    //             refresh date is less than the LPLR's last refresh date,
@@ -1887,7 +1886,6 @@ public class KZOEP1AA extends VmlOperation
             nRC >= zCURSOR_SET;
             nRC = SetCursorNextEntity( vTZEREMDO_Temp, "Domain", "EntpER_Model" ) )
       {
-
          lZKey = GetIntegerFromAttribute( vTZEREMDO_Temp, "Domain", "ZKey" );
          TraceLineI( "cfTZEREMDO_PostActivate Relinking ZKey: ", lZKey );
          nRC = ActivateMetaOI_ByZKey( vSubtask, vTZDMSRCO, null, zREFER_DOMAIN_META, zSINGLE, lZKey, 0 );
@@ -6765,13 +6763,8 @@ public class KZOEP1AA extends VmlOperation
       return( nRC );
    }
 
-   /////////////////////////////////////////////////////////////////////////////
-   // OPERATION:  zwTZWDVORD_IncludeVOR_Entity
-   // PURPOSE:    Include the ViewObjRef entity from an Application
-   //             VOR to the dialog.
-   /////////////////////////////////////////////////////////////////////////////
-   public int
-   IncludeVOR_Entity( View vSubtask, View vVOR_Parent, int lZKey )
+   // Include the ViewObjRef entity from an Application VOR to the dialog.
+    public int IncludeVOR_Entity( View vSubtask, View vVOR_Parent, int lZKey )
    {
       zVIEW    vLPLR_VOR_Meta = new zVIEW();
    // zVIEW    vTZWINDOW = new zVIEW();
@@ -6782,7 +6775,7 @@ public class KZOEP1AA extends VmlOperation
       if ( nRC == -1 )
       {
          RetrieveViewForMetaList( vSubtask, vLPLR_VOR_Meta, zREFER_VOR_META );
-         nRC = SetNameForView( vLPLR_VOR_Meta, "LPLR_VOR_Meta", vSubtask, zLEVEL_TASK );
+         SetNameForView( vLPLR_VOR_Meta, "LPLR_VOR_Meta", vSubtask, zLEVEL_TASK );
          OrderEntityForView( vLPLR_VOR_Meta, "W_MetaDef", "Name A" );
       }
 
@@ -6810,8 +6803,464 @@ public class KZOEP1AA extends VmlOperation
       return( 0 );
    }
 
-   //BL, 2000.01.04 Bugfix for Repository
-   //If an Entity is included and created, then remove the create flag.
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    SEL_ATTR_SelectView
+   //
+   // PURPOSE:  This function
+   //           1. Does the necessary exclude/include of CtrlMapView.
+   //           2. Activates the LOD for the View just selected.
+   //           3. Refreshes the Entity and Attribute List Boxes and sets
+   //              the LOD Entity and Attribute select states.
+   //
+   //           Note that steps 2 and 3 are not done if the include is
+   //           to the same LOD type as for the previous CtrlMapView.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_SelectView( View vSubtask, View vVOR_Parent )
+   {
+      zVIEW    vLOD = new zVIEW();
+      zVIEW    vCM_List = new zVIEW();
+      zVIEW    vDialogW = new zVIEW();
+      zVIEW    vDomain = new zVIEW();
+      int      lZKey;
+      int      nRC;
+      StringBuilder sbObjectName = new StringBuilder();
+
+  //x GetViewByName( vVOR_Parent, "TZCONTROL", vSubtask, zLEVEL_TASK );
+  //x GetViewByName( vDialogW, "TZWINDOW", vSubtask, zLEVEL_TASK );
+
+      // Drop the SEL_LOD meta OI, if it exists.
+      nRC = GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+      if ( nRC >= 0 )
+         DropMetaOI( vSubtask, vLOD );
+
+      if ( CheckExistenceOfEntity( vVOR_Parent, "CtrlMapView" ) == zCURSOR_SET )
+      {
+         // Activate the LOD for the current ViewObjRef subobject.
+         RetrieveViewForMetaList( vSubtask, vCM_List, zREFER_LOD_META );
+         lZKey = GetIntegerFromAttribute( vDialogW, "LOD", "ZKey" );
+         SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+         ActivateMetaOI( vSubtask, vLOD, vCM_List, zREFER_LOD_META, 0 );
+         SetNameForView( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+     //x SetSelectStateOfEntityForSet( vLOD, "LOD_Entity", 1, 1 );
+     //x if ( CheckExistenceOfEntity( vLOD, "LOD_Attribute" ) == zCURSOR_SET )
+     //x    SetSelectStateOfEntityForSet( vLOD, "LOD_Attribute", 1, 1 );
+
+     //x RefreshCtrl( vSubtask, "EntityList" );
+     //x RefreshCtrl( vSubtask, "AttributeList" );
+      }
+
+      // Make sure MapDomain2 view exists for current Attribute, but no current context exists.
+
+      if ( GetViewByName( vDomain, "MapDomain2", vSubtask, zLEVEL_TASK ) >= 0 )
+         DropMetaOI( vSubtask, vDomain );
+
+      if ( CheckExistenceOfEntity( vVOR_Parent, "CtrlMapView" ) == zCURSOR_SET )
+      {
+         RetrieveViewForMetaList( vSubtask, vCM_List, zREFER_DOMAIN_META );
+         GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+         // Activate the Domain list for the current vLOD Attribute.
+         lZKey = GetIntegerFromAttribute( vLOD, "Domain", "ZKey" );
+         SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+         ActivateMetaOI( vSubtask, vDomain, vCM_List, zREFER_DOMAIN_META, 0 );
+         SetNameForView( vDomain, "MapDomain2", vSubtask, zLEVEL_TASK );
+      }
+
+      // For Dialogs (ObjectName: TZWDLGSO), remove work Context, if it exists.
+//x   MiGetObjectNameForView( sbObjectName, vVOR_Parent );
+//x   if ( zstrcmp( sbObjectName.toString(), "TZWDLGSO" ) == 0 )
+//x      if ( CheckExistenceOfEntity( vVOR_Parent, "TempMappingContext" ) >= zCURSOR_SET )
+//x         ExcludeEntity( vVOR_Parent, "TempMappingContext", zREPOS_PREV );
+
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    SEL_ATTR_SelectEntity
+   //
+   // PURPOSE:  This function refreshes the Entity and Attribute List
+   //           Boxes.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_SelectEntity( View vSubtask )
+   {
+      zVIEW    vLOD = new zVIEW();
+      zVIEW    vDomain = new zVIEW();
+      zVIEW    vDialogC = new zVIEW();
+      zVIEW    vCM_List = new zVIEW();
+      int      lZKey;
+      StringBuilder sbObjectName = new StringBuilder();
+
+      GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+ //x  if ( CheckExistenceOfEntity( vLOD, "LOD_Attribute" ) == zCURSOR_SET )
+ //x     SetSelectStateOfEntityForSet( vLOD, "LOD_Attribute", 1, 1 );
+
+      // Make sure MapDomain2 view exists for current Attribute, but no current context exists.
+
+      if ( GetViewByName( vDomain, "MapDomain2", vSubtask, zLEVEL_TASK ) >= 0 )
+         DropMetaOI( vSubtask, vDomain );
+
+      RetrieveViewForMetaList( vSubtask, vCM_List, zREFER_DOMAIN_META );
+      GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+      // Activate the Domain list for the current vLOD Attribute.
+      lZKey = GetIntegerFromAttribute( vLOD, "Domain", "ZKey" );
+      SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+      ActivateMetaOI( vSubtask, vDomain, vCM_List, zREFER_DOMAIN_META, 0 );
+      SetNameForView( vDomain, "MapDomain2", vSubtask, zLEVEL_TASK );
+
+      // Remove work Context, if it exists.
+      GetViewByName( vDialogC, "TZCONTROL", vSubtask, zLEVEL_TASK );
+      MiGetObjectNameForView( sbObjectName, vDialogC );
+      if ( zstrcmp( sbObjectName.toString(), "TZWDLGSO" ) == 0 )
+         if ( CheckExistenceOfEntity( vDialogC, "TempMappingContext" ) >= zCURSOR_SET )
+            ExcludeEntity( vDialogC, "TempMappingContext", zREPOS_PREV );
+
+//x   RefreshCtrl( vSubtask, "AttributeList" );
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    SEL_ATTR_SelectAttribute
+   //
+   // PURPOSE:  This function refreshes the Entity and Attribute List
+   //           Boxes.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_SelectAttribute( View vSubtask )
+   {
+      zVIEW    vLOD = new zVIEW();
+      zVIEW    vDomain = new zVIEW();
+      zVIEW    vCM_List = new zVIEW();
+      zVIEW    vDialogC = new zVIEW();
+      int      lZKey;
+      StringBuilder sbObjectName = new StringBuilder();
+
+      // Make sure MapDomain2 view exists for current Attribute, but no current context exists.
+
+      if ( GetViewByName( vDomain, "MapDomain2", vSubtask, zLEVEL_TASK ) >= 0 )
+         DropMetaOI( vSubtask, vDomain );
+
+      RetrieveViewForMetaList( vSubtask, vCM_List, zREFER_DOMAIN_META );
+      GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+      // Activate the Domain list for the current vLOD Attribute.
+      lZKey = GetIntegerFromAttribute( vLOD, "Domain", "ZKey" );
+      SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+      ActivateMetaOI( vSubtask, vDomain, vCM_List, zREFER_DOMAIN_META, 0 );
+      SetNameForView( vDomain, "MapDomain2", vSubtask, zLEVEL_TASK );
+
+      // Remove work Context, if it exists.
+      GetViewByName( vDialogC, "TZCONTROL", vSubtask, zLEVEL_TASK );
+      MiGetObjectNameForView( sbObjectName, vDialogC );
+//x   if ( zstrcmp( sbObjectName.toString(), "TZWDLGSO" ) == 0 )
+//x       if ( CheckExistenceOfEntity( vDialogC, "TempMappingContext" ) >= zCURSOR_SET )
+//x          ExcludeEntity( vDialogC, "TempMappingContext", zREPOS_PREV );
+
+   //xRefreshCtrl( vSubtask, "AttributeList" );
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    SEL_ATTR_SelectMapping
+   //
+   // PURPOSE:  This function does the necessary exclude/includes
+   //           to set up attribute mapping.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_SelectMapping( View vSubtask )
+   {
+      zVIEW    vDialog = new zVIEW();
+      zVIEW    vLOD = new zVIEW();
+      zVIEW    vTZWINDOWL = new zVIEW();
+      zVIEW    vTZPNTROO = new zVIEW();
+      int      nRC;
+
+      GetViewByName( vTZPNTROO, "TZPNTROO", vSubtask, zLEVEL_ANY );
+      GetViewByName( vDialog, "TZCONTROL", vSubtask, zLEVEL_TASK );
+      GetViewByName( vTZWINDOWL, "TZWINDOWL", vSubtask, zLEVEL_TASK );
+      nRC = GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+      if ( isValid( vLOD ) && CheckExistenceOfEntity( vLOD, "LOD" ) < zCURSOR_SET )
+      {
+         nRC = -1;
+         DropView( vLOD );
+      }
+
+      // If CtrlMap exists, Accept CtrlMap
+      if ( CheckExistenceOfEntity( vDialog, "CtrlMap" ) >= zCURSOR_SET )
+         AcceptSubobject( vDialog, "CtrlMap" );
+
+      if ( MiGetUpdateForView( vDialog ) == 0 )
+         return( 0 );
+
+      // There is no mapping view.
+      if ( nRC <= 0 )
+      {
+         // If current CtrlMapContext exists, exclude it.
+         if ( CheckExistenceOfEntity( vDialog, "CtrlMapContext" ) == zCURSOR_SET )
+            ExcludeEntity( vDialog, "CtrlMapContext", zREPOS_PREV );
+
+         // If current CtrlMapLOD_Attribute exists, exclude it.
+         if ( CheckExistenceOfEntity( vDialog, "CtrlMapLOD_Attribute" ) == zCURSOR_SET )
+         {
+            ExcludeEntity( vDialog, "CtrlMapLOD_Attribute", zREPOS_PREV );
+         }
+
+         DeleteEntity( vTZPNTROO, "CtrlWork", zPOS_AFTER );
+         return( 0 );
+      }
+
+      // Alter mapping only if it changed from existing.
+      if ( CheckExistenceOfEntity( vDialog, "CtrlMapLOD_Attribute" ) != zCURSOR_SET ||
+           CompareAttributeToAttribute( vDialog, "CtrlMapLOD_Attribute", "ZKey",
+                                        vLOD, "LOD_Attribute", "ZKey" ) != 0 )
+      {
+         // If current CtrlMapContext exists, exclude it.
+         if ( CheckExistenceOfEntity( vDialog, "CtrlMapContext" ) == zCURSOR_SET )
+            ExcludeEntity( vDialog, "CtrlMapContext", zREPOS_PREV );
+
+         // If current CtrlMapLOD_Attribute exists, exclude it.
+         if ( CheckExistenceOfEntity( vDialog, "CtrlMapLOD_Attribute" ) == zCURSOR_SET )
+         {
+            ExcludeEntity( vDialog, "CtrlMapLOD_Attribute", zREPOS_PREV );
+         }
+
+         IncludeSubobjectFromSubobject( vDialog, "CtrlMapLOD_Attribute",
+                                        vLOD, "LOD_Attribute", zPOS_AFTER );
+      }
+
+      // Set up default View Obj Ref and Entity for next mapping.
+      if ( CheckExistenceOfEntity( vTZPNTROO, "CtrlWork" ) != zCURSOR_SET )
+         CreateEntity( vTZPNTROO, "CtrlWork", zPOS_AFTER );
+
+      SetAttributeFromAttribute( vTZPNTROO, "CtrlWork", "LastMapViewZKey",
+                                 vDialog, "CtrlMapView", "ZKey" );
+      SetAttributeFromAttribute( vTZPNTROO, "CtrlWork", "LastMapEntityZKey",
+                                 vDialog, "CtrlMapRelatedEntity", "ZKey" );
+
+      DropMetaOI( vSubtask, vLOD );
+
+      // Set up Domain Context mapping.
+      CtrlContextMappingInit( vSubtask );
+
+      // Accept control subobject
+      // Removed 4/20/07 by DonC because the accept is done when the Control window is OK'd.
+   // AcceptSubobject( vDialog, "CtrlMap" );
+
+  //x if ( GetViewByName( vDialog, "NoRefresh", vSubtask, zLEVEL_TASK ) > 0 )
+  //x    SetWindowActionBehavior( vSubtask, zWAB_ReturnToParentWithRefresh, 0, 0 );
+
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    CtrlContextMappingInit
+   //
+   // PURPOSE:  This function builds the MapDomain View for the Context
+   //           Combo Box, if there is current mapping.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int CtrlContextMappingInit( View vSubtask )
+   {
+      zVIEW    vDialog = new zVIEW();
+      zVIEW    vCM_List = new zVIEW();
+      zVIEW    vDomain = new zVIEW();
+      int      lZKey;
+
+      GetViewByName( vDialog, "TZCONTROL", vSubtask, zLEVEL_TASK );
+      RetrieveViewForMetaList( vSubtask, vCM_List, zREFER_DOMAIN_META );
+
+      if ( CheckExistenceOfEntity( vDialog, "CtrlMapER_Attribute" ) == zCURSOR_SET )
+      {
+         // Activate the Domain for the current CtrlMapER_Domain.
+         lZKey = GetIntegerFromAttribute( vDialog, "CtrlMapER_Domain", "ZKey" );
+         SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+         ActivateMetaOI( vSubtask, vDomain, vCM_List, zREFER_DOMAIN_META, 0 );
+      }
+      else
+         ActivateEmptyObjectInstance( vDomain, "TZDGSRCO", vSubtask, 0 );
+
+      SetNameForView( vDomain, "MapDomain", vSubtask, zLEVEL_TASK );
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    SEL_ATTR_InitReuse
+   //
+   // PURPOSE:  This function activates the LOD associated with the
+   //           current view.  If no view is currently defined, it
+   //           temporarily sets up a dummy view.  I'm not sure what
+   //           it should eventually do.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_InitReuse( View vSubtask )
+   {
+      zVIEW    vDialogC = new zVIEW();
+      zVIEW    vDialogW = new zVIEW();
+      zVIEW    vLOD = new zVIEW();
+      zVIEW    vCM_List = new zVIEW();
+      zVIEW    vTZPNTROO = new zVIEW();
+      int      lZKey;
+
+      GetViewByName( vDialogW, "TZWINDOW", vSubtask, zLEVEL_TASK );
+      GetViewByName( vDialogC, "TZCONTROL", vSubtask, zLEVEL_TASK );
+      RetrieveViewForMetaList( vSubtask, vCM_List, zREFER_LOD_META );
+
+      // If CtrlMapView exists, use the corresponding LOD for mapping.
+      // Use CtrlMapView ZKey to locate ViewObjRef and then
+      // LOD ZKey to locate LPLR LOD meta.
+      if ( CheckExistenceOfEntity( vDialogC, "CtrlMapView" ) == zCURSOR_SET )
+      {
+         lZKey = GetIntegerFromAttribute( vDialogC, "CtrlMapView", "ZKey" );
+
+         // Make sure we find the right ViewObjRef!  If not we will assume that
+         // something has happened to the mapping and we will do the default
+         // processing below. // DKS 2001.01.09
+         if ( SetCursorFirstEntityByInteger( vDialogW, "ViewObjRef", "ZKey",
+                                             lZKey, "" ) >= zCURSOR_SET )
+         {
+            lZKey = GetIntegerFromAttribute( vDialogW, "LOD", "ZKey" );
+            SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+            ActivateMetaOI( vSubtask, vLOD, vCM_List, zREFER_LOD_META, 0 );
+            SetNameForView( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+            // Select current mapping in LOD.
+            if ( CheckExistenceOfEntity( vDialogC, "CtrlMapLOD_Attribute" ) == zCURSOR_SET )
+            {
+               lZKey = GetIntegerFromAttribute( vDialogC, "CtrlMapRelatedEntity", "ZKey" );
+               if ( SetCursorFirstEntityByInteger( vLOD, "LOD_Entity", "ZKey", lZKey, "" ) != zCURSOR_SET )
+               {
+                  String pchEntity;
+
+                  pchEntity = GetAddrForAttribute( "", vDialogC, "CtrlMapRelatedEntity", "Name" );
+                  SetCursorFirstEntityByString( vLOD, "LOD_Entity", "Name", pchEntity, "" );
+                  TraceLineS( "LOD Entity not located by ZKey: ", pchEntity );
+               }
+
+            //xSetSelectStateOfEntityForSet( vLOD, "LOD_Entity", 1, 1 );
+               GetIntegerFromAttribute( lZKey, vDialogC, "CtrlMapLOD_Attribute", "ZKey" );
+               if ( SetCursorFirstEntityByInteger( vLOD, "LOD_Attribute", "ZKey", lZKey, "" ) != zCURSOR_SET )
+               {
+                  String pchAttribute;
+
+                  pchAttribute = GetAddrForAttribute( "", vDialogC, "CtrlMapER_Attribute", "Name" );
+                  SetCursorFirstEntityByString( vLOD, "ER_Attribute", "Name", pchAttribute, "LOD_Entity" );
+                  TraceLineS( "LOD Attribute not located by ZKey: ", pchAttribute );
+               }
+
+            //xSetSelectStateOfEntityForSet( vLOD, "LOD_Attribute", 1, 1 );
+            }
+
+            return( 0 );
+         }
+      }
+
+      // If no current mapping exists, try to use the last mapping
+      // specified for the Entity and Attribute list boxes.  Also
+      // set view to last view used.
+      GetViewByName( vTZPNTROO, "TZPNTROO", vSubtask, zLEVEL_ANY );
+      lZKey = GetIntegerFromAttribute( vTZPNTROO, "CtrlWork", "LastMapViewZKey" );
+      if ( SetCursorFirstEntityByInteger( vDialogW, "ViewObjRef", "ZKey", lZKey, "" ) == zCURSOR_SET )
+      {
+         if ( CheckExistenceOfEntity( vDialogC, "CtrlMapView" ) == zCURSOR_SET )
+            ExcludeEntity( vDialogC, "CtrlMapView", zREPOS_PREV );
+
+         IncludeSubobjectFromSubobject( vDialogC, "CtrlMapView", vDialogW, "ViewObjRef", zPOS_AFTER );
+         lZKey = GetIntegerFromAttribute( vDialogW, "LOD", "ZKey" );
+         SetCursorFirstEntityByInteger( vCM_List, "W_MetaDef", "CPLR_ZKey", lZKey, "" );
+         ActivateMetaOI( vSubtask, vLOD, vCM_List, zREFER_LOD_META, 0 );
+         SetNameForView( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+
+         // Position on correct LOD_Entity
+         lZKey = GetIntegerFromAttribute( vTZPNTROO, "CtrlWork", "LastMapEntityZKey" );
+         SetCursorFirstEntityByInteger( vLOD, "LOD_Entity", "ZKey", lZKey, "" );
+      //xSetSelectStateOfEntityForSet( vLOD, "LOD_Entity", 1, 1 );
+      }
+      else
+      {
+         // Drop the SEL_LOD meta OI, if it exists.
+         GetViewByName( vLOD, "SEL_LOD", vSubtask, zLEVEL_TASK );
+         if ( isValid( vLOD ) )
+            DropMetaOI( vSubtask, vLOD );
+      }
+
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   // ENTRY:    SEL_ATTR_Init
+   //
+   // PURPOSE:  This function activates the LOD associated with the
+   //           current view.  If no view is currently defined, it
+   //           temporarily sets up a dummy view.  I'm not sure what
+   //           it should eventually do.
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_Init( View vSubtask )
+   {
+      zVIEW    vDialogC = new zVIEW();
+      zVIEW    vTZPNTROO = new zVIEW();
+
+      GetViewByName( vDialogC, "TZCONTROL", vSubtask, zLEVEL_TASK );
+
+      // Create work entity, if it doesn't exist.
+      GetViewByName( vTZPNTROO, "TZPNTROO", vSubtask, zLEVEL_ANY );
+      if ( CheckExistenceOfEntity( vTZPNTROO, "CtrlWork" ) != zCURSOR_SET )
+         CreateEntity( vTZPNTROO, "CtrlWork", zPOS_AFTER );
+
+   //xif ( MiGetUpdateForView( vDialogC ) )
+      {
+         // If CtrlMap doesn't exist, create it.
+         if ( CheckExistenceOfEntity( vDialogC, "CtrlMap" ) != zCURSOR_SET )
+         {
+            CreateTemporalMetaEntity( vSubtask, vDialogC, "CtrlMap", zPOS_AFTER );
+         }
+         else
+         {
+            CreateTemporalSubobjectVersion( vDialogC, "CtrlMap" );
+         }
+      }
+
+      // Continue initialization in reusable operation.
+      SEL_ATTR_InitReuse( vSubtask );
+
+      return( 0 );
+   }
+
+   /////////////////////////////////////////////////////////////////////////////
+   //
+   //    OPERATION: SEL_ATTR_Postbuild
+   //
+   /////////////////////////////////////////////////////////////////////////////
+   public int SEL_ATTR_Postbuild( View vSubtask )
+   {
+      zVIEW  vDialog = new zVIEW();
+
+      GetViewByName( vDialog, "TZWINDOW", vSubtask, zLEVEL_TASK );
+
+      if ( MiGetUpdateForView( vDialog ) == 0 )
+      {
+      //xSetCtrlState( vSubtask, "ViewName", zCONTROL_STATUS_ENABLED, FALSE );
+      //xSetCtrlState( vSubtask, "EntityList", zCONTROL_STATUS_ENABLED, FALSE );
+      //xSetCtrlState( vSubtask, "AttributeList", zCONTROL_STATUS_ENABLED, FALSE );
+      }
+
+      return( 0 );
+
+   } // SEL_ATTR_Postbuild
+
+   //BL, 2000.01.04 Bugfix for Repository -- If an Entity is included and created, then remove the create flag.
    private int fnRemoveCreateFlag( View pvMOI )
    {
       StringBuilder sbEntityName = new StringBuilder();
