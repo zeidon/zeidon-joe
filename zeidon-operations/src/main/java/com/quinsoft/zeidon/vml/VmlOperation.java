@@ -5630,10 +5630,10 @@ public abstract class VmlOperation
        return 0;
    }
 
-   private CursorResult setSelected( View view, EntityCursor cursor, CursorResult rc )
+   private CursorResult findSelectedEntity( View view, EntityCursor cursor, CursorResult rc )
    {
       SelectSet selectSet = view.getSelectSet();
-      while ( rc.isSet() && ! selectSet.isSelected( cursor ) )
+      while ( rc.isSet() && ! selectSet.isSelected( cursor ) )  // isSet ==> set, setNewParent, setRecursiveChild
       {
          rc = cursor.setNextContinue();
       }
@@ -5648,7 +5648,7 @@ public abstract class VmlOperation
    protected int SetCursorFirstSelectedEntity( View view, String entityName, String scopingEntity )
    {
       EntityCursor cursor = view.cursor( entityName );
-      return setSelected( view, cursor, cursor.setFirst( scopingEntity ) ).toInt();
+      return findSelectedEntity( view, cursor, cursor.setFirst( scopingEntity ) ).toInt();
    }
 
    //  RETURNS: zCURSOR_NULL          - No entity instances exist
@@ -5659,7 +5659,7 @@ public abstract class VmlOperation
    protected int SetCursorNextSelectedEntity( View view, String entityName, String scopingEntity )
    {
       EntityCursor cursor = view.cursor( entityName );
-      return setSelected( view, cursor, cursor.setNextContinue() ).toInt();
+      return findSelectedEntity( view, cursor, cursor.setNextContinue() ).toInt();
    }
 
    //  RETURNS: 0           - Entity Instance has not been selected
@@ -5701,17 +5701,16 @@ public abstract class VmlOperation
       return 0;
    }
 
-   //  RETURNS: 0           - OK.
-   //           zCALL_ERROR - Error.
    protected int SetAllSelectStatesForEntity( View view, String entityName, int selectState, String scopingEntity )
    {
       SelectSet selectSet = view.getSelectSet();
 
       view = view.newView(); // Create a copy so we can muck the cursors.
       EntityCursor cursor = view.cursor( entityName );
-      for ( int rc = cursor.setFirst( scopingEntity ).toInt();
-            rc >= zCURSOR_SET;
-            rc = cursor.setNextContinue().toInt() )
+      
+      for ( CursorResult rc = cursor.setFirst( scopingEntity );
+            rc.isSet(); // isSet ==> set, setNewParent, setRecursiveChild
+            rc = cursor.setNextContinue() )
       {
          if ( selectState == 1 )
          {
@@ -5739,24 +5738,22 @@ public abstract class VmlOperation
    }
 
    //  RETURNS: >= 0                  - Absolute Entity number of returned ok
-   //           zCURSOR_UNDEFINED     - Entity cursor is undefined
    //           zCURSOR_NULL          - Entity cursor is null
-   //           zCALL_ERROR           - Error in call
-   protected int GetAbsolutePositionForEntity( MutableInt position, View view, String entityName )
+   protected long GetAbsolutePositionForEntity( MutableInt position, View view, String entityName )
    {
-      int nRC;
+      long lRC;
       EntityCursor cursor = view.cursor( entityName );
       if ( cursor.hasAny() == false )
       {
-         nRC = zCURSOR_NULL;
+         lRC = zCURSOR_NULL;
       }
       else
       {
-         nRC = 0;
-         position.setValue( cursor.getHierPosition( ) );
+         lRC = cursor.getHierPosition( );
+         position.setValue( lRC );
       }
 
-      return nRC;
+      return lRC;
    }
 
    //  RETURNS: zCURSOR_NULL          - Entity cursor is null
