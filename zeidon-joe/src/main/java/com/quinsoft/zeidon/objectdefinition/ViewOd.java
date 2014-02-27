@@ -45,6 +45,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.standardoe.ScalaHelper;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
@@ -70,6 +71,7 @@ public class ViewOd implements PortableFileAttributeHandler
     private String       constraintOper;
     private int          height = 0;
     private LockingLevel lockingLevel = LockingLevel.NONE;
+    private SourceFileType sourceFileType = SourceFileType.VML;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
     static private final Class<?>[] constructorArgTypes2 = new Class<?>[] { Task.class };
@@ -218,7 +220,11 @@ public class ViewOd implements PortableFileAttributeHandler
         {
             commitConstraint = reader.getAttributeValue().startsWith( "Y" );
         }
-
+        else
+        if ( reader.getAttributeName().equals( "OCSRCTYPE" ))
+        {
+            sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
+        }
     }
 
     public List<ViewEntity> getViewEntitiesHier()
@@ -355,6 +361,9 @@ public class ViewOd implements PortableFileAttributeHandler
 
     private int executeConstraint( View view, ObjectConstraintType type )
     {
+        if ( getSourceFileType() == SourceFileType.SCALA )
+            return executeScalaConstraint( view, type );
+
         Object object = getConstraintObject( view );
 
         try
@@ -378,6 +387,33 @@ public class ViewOd implements PortableFileAttributeHandler
             throw ZeidonException.wrapException( e )
                                  .appendMessage( "Class = %s", object.getClass().getCanonicalName() )
                                  .appendMessage( "Method name = %s", getConstraintOper() );
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private int executeScalaConstraint( View view, ObjectConstraintType type )
+    {
+        String className = "com.quinsoft.zeidon.scala.ScalaHelperImpl";
+        ObjectEngine oe = view.getObjectEngine();
+        ClassLoader classLoader = oe.getClassLoader( className );
+        Class<ScalaHelper> operationsClass;
+        try
+        {
+            operationsClass = (Class<ScalaHelper>) classLoader.loadClass( className );
+        }
+        catch ( ClassNotFoundException e )
+        {
+            throw new ZeidonException("Couldn't load %s.  Do you have zeidon-scala in your classpath?", className );
+        }
+
+        try
+        {
+            ScalaHelper instance = operationsClass.newInstance();
+            return instance.executeObjectConstraint( view, type, classLoader );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e );
         }
     }
 
@@ -590,5 +626,10 @@ public class ViewOd implements PortableFileAttributeHandler
     public String getGenkeyHandler()
     {
         return genkeyHandler;
+    }
+
+    public SourceFileType getSourceFileType()
+    {
+        return sourceFileType;
     }
 }

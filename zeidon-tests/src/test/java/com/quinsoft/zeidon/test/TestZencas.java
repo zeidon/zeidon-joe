@@ -157,7 +157,7 @@ public class TestZencas
         BufferedWriter stream = null;
         try
         {
-            stream = new BufferedWriter( new FileWriter( "/tmp/stud.json" ) );
+            stream = new BufferedWriter( new FileWriter( getTempDir() + "/stud.json" ) );
             List<View> list = Arrays.asList( stud, person );
             WriteOiToJsonStream writer = new WriteOiToJsonStream( list, stream, options );
             writer.writeToStream();
@@ -167,7 +167,7 @@ public class TestZencas
             IOUtils.closeQuietly( stream );
         }
 
-        FileInputStream inputStream = new FileInputStream( "/tmp/stud.json" );
+        FileInputStream inputStream = new FileInputStream( getTempDir() + "/stud.json" );
         try
         {
             ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( zencas, inputStream, null );
@@ -861,6 +861,11 @@ public class TestZencas
         view.cursor( "ClassRoomSession" ).createEntity( CursorPosition.LAST );
         view.commit();
 	    view.logObjectInstance();
+    }
+
+    private String getTempDir()
+    {
+        return System.getProperty("java.io.tmpdir");
     }
 
 	private class VmlTester extends VmlObjectOperations

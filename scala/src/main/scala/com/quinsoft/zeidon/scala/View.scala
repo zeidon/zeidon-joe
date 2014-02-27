@@ -12,7 +12,13 @@ import com.quinsoft.zeidon.scala.EntityCursor
  *
  */
 class View( val task: Task ) extends Task(task) {
-    
+
+    def this( jv: com.quinsoft.zeidon.View ) = {
+      this( new Task( jv.getTask() ) )
+      jviewOd = jv.getViewOd()
+      jview = jv
+    }
+
     var jviewOd: ViewOd = null
     var jview:   com.quinsoft.zeidon.View = null
 
@@ -29,21 +35,23 @@ class View( val task: Task ) extends Task(task) {
     def copyCursors( view: View ) {
         if ( jview == null )
             throw new ZeidonException( "View has no OI" )
-        
+
         jview.copyCursors(view.jview)
     }
 
     def activateEmpty(): Unit = {
         validateViewOd
         jview = jtask.activateEmptyObjectInstance( jviewOd )
-    } 
+    }
 
     def activateWhere( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
         validateViewOd
         val builder = new QualBuilder( this, jviewOd )
         addQual( builder )
-    } 
-    
+    }
+
+    def logObjectInstance = jview.logObjectInstance()
+
     def selectDynamic(entityName: String): EntityCursor = {
         validateViewOd
         val jviewEntity = jviewOd.getViewEntity(entityName)

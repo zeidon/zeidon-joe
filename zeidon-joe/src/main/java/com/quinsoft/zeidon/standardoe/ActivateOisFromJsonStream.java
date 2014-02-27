@@ -281,22 +281,13 @@ public class ActivateOisFromJsonStream
 
     private void readIncrementals( EntityMeta meta ) throws JsonParseException, IOException
     {
-        String increStr = jp.getText();
+        String increStr = jp.getText().toLowerCase();
 
-        if ( increStr.charAt( 0 ) == 'U' )
-            meta.updated = true;
-
-        if ( increStr.charAt( 1 ) == 'C' )
-            meta.created = true;
-
-        if ( increStr.charAt( 2 ) == 'D' )
-            meta.deleted = true;
-
-        if ( increStr.charAt( 3 ) == 'I' )
-            meta.included = true;
-
-        if ( increStr.charAt( 4 ) == 'X' )
-            meta.excluded = true;
+        meta.updated  = increStr.contains( "u" );
+        meta.created  = increStr.contains( "c" );
+        meta.deleted  = increStr.contains( "d" );
+        meta.included = increStr.contains( "i" );
+        meta.excluded = increStr.contains( "x" );
     }
 
     private void readOiMeta() throws Exception

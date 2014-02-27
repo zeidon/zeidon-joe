@@ -10,8 +10,12 @@ import com.quinsoft.zeidon._
  *
  */
 class ZeidonOperations ( val task: Task ) {
+
+    def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
+
     val NEXT = CursorPosition.NEXT
-    
+
     def VIEW: View = new View( task )
 
+    def log = task.jtask.log()
 }

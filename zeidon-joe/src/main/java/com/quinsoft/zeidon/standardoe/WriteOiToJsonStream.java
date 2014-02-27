@@ -11,6 +11,8 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -177,24 +179,24 @@ public class WriteOiToJsonStream
 
     private String createIncrementalStr( EntityInstanceImpl ei )
     {
-        char[] str = { '_', '_', '_', '_', '_' };
+        String str = "";
 
         if ( ei.isUpdated() )
-            str[0] = 'U';
+            str += 'U';
 
         if ( ei.isCreated() )
-            str[1] = 'C';
+            str += 'C';
 
         if ( ei.isDeleted() )
-            str[2] = 'D';
+            str += 'D';
 
         if ( ei.isIncluded() )
-            str[3] = 'I';
+            str += 'I';
 
         if ( ei.isExcluded() )
-            str[4] = 'X';
+            str += 'X';
 
-        return new String( str );
+        return str;
     }
 
     /**
@@ -247,12 +249,12 @@ public class WriteOiToJsonStream
             return writeAttributes;  // Nothing to do if we're not writing incrementals.
 
         String str = createIncrementalStr( ei );
-        if ( "_____".equals( str ) && recordOwner == null )
+        if ( StringUtils.isBlank( str ) && recordOwner == null )
             return writeAttributes;
 
         jg.writeObjectFieldStart( ".meta" );
 
-        if ( ! "_____".equals( str )  )
+        if ( ! StringUtils.isBlank( str )  )
             jg.writeStringField( "incrementals", str );
 
         if ( recordOwner != null )
