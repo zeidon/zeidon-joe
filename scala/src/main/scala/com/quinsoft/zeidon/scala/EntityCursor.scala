@@ -12,18 +12,18 @@ import com.quinsoft.zeidon.objectdefinition._
  * @author dgc
  *
  */
-class EntityCursor( private[this] val view: View, 
-                     val jentityCursor: com.quinsoft.zeidon.EntityCursor ) 
-            extends AbstractEntity( jentityCursor.getViewEntity() ) 
+class EntityCursor( private[this] val view: View,
+                     val jentityCursor: com.quinsoft.zeidon.EntityCursor )
+            extends AbstractEntity( jentityCursor.getViewEntity() )
             with Iterable[EntityInstance]
 {
-    def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance() 
-        
+    def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
+
     def create(): EntityCursor = {
         jentityCursor.createEntity()
         this
     }
-    
+
     def create( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
         jentityCursor.createEntity()
         this
@@ -31,12 +31,12 @@ class EntityCursor( private[this] val view: View,
 
     def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
 
-    def include( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = { 
+    def include( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = {
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
-    
+
     def where( predicate: (EntityInstance) => Boolean ) = iterator.filter( predicate )
-    
+
     def setFirst: CursorResult = jentityCursor.setFirst()
 
     def setFirst( predicate: (View) => Boolean, scopingEntity: String = null ): Boolean = {
@@ -53,6 +53,14 @@ class EntityCursor( private[this] val view: View,
 
     def iterator = {
         val iter = jentityCursor.eachEntity
+        new Iterator[EntityInstance] {
+            def hasNext = iter.hasNext()
+            def next = new EntityInstance( iter.next() )
+        }
+    }
+
+    def iterator( scopingEntity: String ) = {
+        val iter = jentityCursor.eachEntity( scopingEntity )
         new Iterator[EntityInstance] {
             def hasNext = iter.hasNext()
             def next = new EntityInstance( iter.next() )

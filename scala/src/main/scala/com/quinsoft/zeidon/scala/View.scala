@@ -24,6 +24,9 @@ class View( val task: Task ) extends Task(task) {
 
 	def basedOnLod( lodName: String ): View = {
 		jviewOd = task.jtask.getApplication().getViewOd( task.jtask, lodName )
+		if ( jview != null && jview.getViewOd() != jviewOd )
+		  throw new ZeidonException( "ViewOD set by basedOnLod doesn't match view." )
+
 		return this
 	}
 
@@ -48,6 +51,17 @@ class View( val task: Task ) extends Task(task) {
         validateViewOd
         val builder = new QualBuilder( this, jviewOd )
         addQual( builder )
+    }
+
+    def buildQual( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
+        val builder = buildQual()
+        addQual( builder )
+    }
+
+    def buildQual(): QualBuilder = {
+        validateViewOd
+        val builder = new QualBuilder( this, jviewOd )
+        return builder
     }
 
     def logObjectInstance = jview.logObjectInstance()

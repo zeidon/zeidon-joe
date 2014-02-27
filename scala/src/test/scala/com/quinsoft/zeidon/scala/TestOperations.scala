@@ -51,6 +51,10 @@ class TestOperations ( task: Task ) extends ZeidonOperations( task ) {
 		               .and( q => q.Person.PersonID = q.Person.LastName )
 		               .activate
 
+		FOREACH ( view.Person ) UNDER view.Person DO {
+		  view.Person.Id = 0
+		}
+
 		println( view )
 	}
 }

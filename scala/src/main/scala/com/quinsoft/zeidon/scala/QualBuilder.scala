@@ -63,8 +63,18 @@ class QualBuilder(private val view: View,
         return this
     }
 
-    def asRootOnlyMultiple(): QualBuilder = {
+    def rootOnlyMultiple(): QualBuilder = {
         jqual.rootOnly().multipleRoots();
+        this
+    }
+
+    def rootOnly(): QualBuilder = {
+        jqual.rootOnly();
+        this
+    }
+
+    def multiple(): QualBuilder = {
+        jqual.multipleRoots();
         this
     }
 
@@ -104,9 +114,11 @@ class QualBuilder(private val view: View,
             return qualBuilder
         }
 
+        /*
         def exists: QualBuilder = {
            return qualBuilder
         }
+         */
 
         def selectDynamic( attributeName: String): EntityQualBuilder = {
             jviewAttribute = jviewEntity.getAttribute( attributeName )
