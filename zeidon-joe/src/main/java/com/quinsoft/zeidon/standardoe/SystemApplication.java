@@ -101,4 +101,10 @@ public class SystemApplication extends ApplicationImpl
     {
         return false;
     }
+
+    @Override
+    public boolean isSystemApp()
+    {
+        return true;
+    }
 }

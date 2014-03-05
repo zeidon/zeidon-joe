@@ -83,7 +83,13 @@ public class ViewOd implements PortableFileAttributeHandler
         this.name = name;
 
         // Make sure the XOD exists.
-        filename = app.getObjectDir() + File.separator + name + ".XOD";
+        String xod = name + ".XOD";
+
+        // We know that system apps XODs are stored as all lower-case.
+        if ( app.isSystemApp() )
+            xod = xod.toLowerCase();
+
+        filename = app.getObjectDir() + File.separator + xod;
         InputStream inputStream = JoeUtils.getInputStream( task, filename, getClass().getClassLoader() );
         if ( inputStream == null )
             throw new UnknownViewOdException(name, filename, app );

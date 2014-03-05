@@ -30,16 +30,16 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
 public interface Application
 {
     String getName();
-    
+
     /**
      * Return the view OD; load it from the .xod if necessary.
-     * 
+     *
      * @param taskQual - Used for logging only.
      * @param name - Name of the ViewOD.
      * @return
      */
     ViewOd getViewOd( TaskQualification taskQual, String name );
-    
+
     String getObjectDir();
     String getBinDir();
     String getLocalDir();
@@ -47,7 +47,7 @@ public interface Application
     String getSourceDir();
     String getQlplrDir();
     String getPackage();
-    
+
     Domain getDomain( String name );
     View getViewByName( String name );
     void dropNameForView( String name, View view );
@@ -56,13 +56,14 @@ public interface Application
     Collection<? extends View> getAllNamedViews();
     void setNameForView( String name, View view );
     Lockable getNamedLock( String name );
-    
+    boolean isSystemApp();
+
     /**
      * If true, then this application views null strings equal to empty strings.
      * I.e. null == "".
-     * 
+     *
      * Default is true.
-     * 
+     *
      * @return
      */
     boolean nullStringEqualsEmptyString();

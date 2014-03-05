@@ -237,4 +237,10 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     {
         getViewNameList().dropView( view );
     }
+
+    @Override
+    public boolean isSystemApp()
+    {
+        return false;
+    }
 }
