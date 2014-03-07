@@ -35,6 +35,7 @@ import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.standardoe.ActivateOisFromJsonStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.standardoe.WriteOiToJsonStream;
+import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.Timer;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
@@ -131,6 +132,12 @@ public class TestZencas
 		VmlTester tester = new VmlTester( testview );
 		tester.testRecursiveEntities( testview );
         System.out.println("===== Finished testRecursiveEntities ========");
+	}
+
+	@Test
+	public void testXpg()
+	{
+	    JspWebUtils.createWebSession( this, zencas, "123" );
 	}
 
 	@Test
