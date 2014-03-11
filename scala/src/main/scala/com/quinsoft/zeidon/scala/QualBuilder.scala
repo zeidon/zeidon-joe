@@ -78,6 +78,16 @@ class QualBuilder(private val view: View,
         this
     }
 
+    def cachedAs( cacheName: String ): QualBuilder = {
+        jqual.cachedAs( cacheName );
+        this
+    }
+
+    def cachedAs( cacheName: String, jtask: com.quinsoft.zeidon.Task ): QualBuilder = {
+        jqual.cachedAs( cacheName, jtask );
+        this
+    }
+
     def activate(): Integer = {
         jqual.getView().logObjectInstance()
         view.jview = jqual.activate();

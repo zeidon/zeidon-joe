@@ -19,9 +19,14 @@ class View( val task: Task ) extends Task(task) {
       jview = jv
     }
 
+    def this( jtask: com.quinsoft.zeidon.Task ) = {
+      this( new Task( jtask ) )
+    }
+
     var jviewOd: ViewOd = null
     var jview:   com.quinsoft.zeidon.View = null
 
+    def BASEDONLOD( lodName: String ): View = basedOnLod( lodName )
 	def basedOnLod( lodName: String ): View = {
 		jviewOd = task.jtask.getApplication().getViewOd( task.jtask, lodName )
 		if ( jview != null && jview.getViewOd() != jviewOd )

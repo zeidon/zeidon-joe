@@ -23,7 +23,7 @@ class ScalaHelperImpl extends ScalaHelper {
                                  loader: ClassLoader ): Integer = {
       val jviewOd = jview.getViewOd()
       val application = jviewOd.getApplication()
-      val className = application.getPackage() + "." + jviewOd.getName() + "_Object"
+      val className = application.getPackage() + "." + jviewOd.getName()
       val operationsClass = loader.loadClass( className );
       val constructors = operationsClass.getConstructors()
       val constructor = constructors(0)

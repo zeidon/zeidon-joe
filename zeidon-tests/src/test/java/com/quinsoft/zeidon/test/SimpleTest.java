@@ -16,6 +16,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -157,6 +158,8 @@ class SimpleTest
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
+
+        JspWebUtils.createWebSession( null, zencas, "my-id" );
 
         View stud = new QualificationBuilder( zencas )
                             .setViewOd( "lStudDpt" )

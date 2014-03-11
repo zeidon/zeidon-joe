@@ -35,20 +35,36 @@ class EntityCursor( private[this] val view: View,
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
 
-    def where( predicate: (EntityInstance) => Boolean ) = iterator.filter( predicate )
-
+    def count = jentityCursor.getEntityCount()
     def setFirst: CursorResult = jentityCursor.setFirst()
+    def setNext: CursorResult = jentityCursor.setNext()
 
-    def setFirst( predicate: (View) => Boolean, scopingEntity: String = null ): Boolean = {
+    def setFirst( predicate:  => Boolean, scopingEntity: String = null ): Boolean = {
         val iter = jentityCursor.eachEntity( scopingEntity )
         while ( iter.hasNext() )
         {
             iter.next()
-            if ( predicate == null || predicate(view) )
+            if ( predicate )
                 return true
         }
 
         return false
+    }
+
+    def setFirst( predicate: (EntityInstance) => Boolean ): Boolean = {
+        val iter = jentityCursor.eachEntity()
+        while ( iter.hasNext() )
+        {
+            val ei = iter.next()
+            if ( predicate( new EntityInstance( ei ) ) )
+                return true
+        }
+
+        return false
+    }
+
+    def setFirst( attributeName: String, value: Any): Boolean = {
+      jentityCursor.setFirst( attributeName, value ) == CursorResult.SET
     }
 
     def iterator = {
