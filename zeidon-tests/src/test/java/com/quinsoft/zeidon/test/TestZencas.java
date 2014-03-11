@@ -784,6 +784,16 @@ public class TestZencas
 		tester.testCompareEmptyWithNullForStaticTableDomain( testview );
         System.out.println("===== Finished testCompareEmptyWithNullForStaticTableDomain ========");
 	}
+	
+	@Test
+	public void testDerivedDerived()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDerivedDerived( testview );
+        System.out.println("===== Finished testDerivedDerived ========");
+	}
 
 //	@Test
 	public void testTimeFormatting()
@@ -1924,6 +1934,24 @@ public class TestZencas
 			return 0;
 		}
 
+		public int
+		testDerivedDerived( View     ViewToWindow )
+		{
+			zVIEW    lTrnscpt = new zVIEW( );
+			zVIEW    lTermLST = new zVIEW( );
+			zVIEW    wXferO = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    //:CREATE ENTITY wXferO.Root
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    //:NAME VIEW wXferO "wXferO"
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    String dateStr = wXferO.cursor("Root").getStringFromAttribute("dCurrentDate");
+			DropView( wXferO );
+			return 0;
+		}
 
 		public int
 		testActivateMissingPerson( View     ViewToWindow )
@@ -3401,13 +3429,19 @@ public class TestZencas
 		public void testDomainCompareIssue( View ViewToWindow )
 		{
 			   zVIEW    mCRStdPLST = new zVIEW( );
+			   zVIEW    mFaculty = new zVIEW( );
 			   int      RESULT = 0;
 			   int      lTempInteger_0 = 0;
 			   int      lTempInteger_1 = 0;
 			   int      lTempInteger_2 = 0;
+			   
+			   RESULT = ActivateObjectInstance( mFaculty, "mFaculty", ViewToWindow, 0, zMULTIPLE );			   
+			   SetNameForView( mFaculty, "mFaculty", null, zLEVEL_TASK );
+
+		       OrderEntityForView( mFaculty, "Faculty", "Status  A" );
 
 			   // Getting an error on the OrderEntityForView in AltStaticTableDomain.java because we
-			   // end of comparing an integer to a string (which is an integer).
+			   // end up comparing an integer to a string (which is an integer).
 			   // I can also get this error in AbstractDomain.java line 347 if I'm not using AltStatic...
 			   // If I add "Object newValue = attributeValue.convertInternalValue( getTask(), viewAttribute, value );"
 			   // in AttributeInstanceImpl.java setInternalValue(), then I don't get an error because then I am
