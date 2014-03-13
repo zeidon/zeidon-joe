@@ -89,7 +89,7 @@ public class ViewOd implements PortableFileAttributeHandler
         if ( app.isSystemApp() )
             xod = xod.toLowerCase();
 
-        filename = app.getObjectDir() + File.separator + xod;
+        filename = app.getObjectDir() + "/" + xod;
         InputStream inputStream = JoeUtils.getInputStream( task, filename, getClass().getClassLoader() );
         if ( inputStream == null )
             throw new UnknownViewOdException(name, filename, app );

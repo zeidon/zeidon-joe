@@ -104,6 +104,16 @@ public class TestZencas
 		tester.testClsIncludeError( testview );
         System.out.println("===== Finished testInclude2 ========");
 	}
+	
+	@Test
+	public void testActivateControls()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testActivateControls( testview );
+        System.out.println("===== Finished testActivateControls ========");
+	}
 	@Test
 	public void testCheckExistenceWithRecursiveEnt()
 	{
@@ -2173,6 +2183,19 @@ public class TestZencas
 				DropView( mMinorTrack );
 
 	         return 0;
+		}
+		
+		public int
+		testActivateControls( View ViewToWindow )
+		{
+			zVIEW    sHost = new zVIEW( );
+			int      RESULT = 0;
+
+			//:// ACTIVATE sHost
+			//:ActivateObjectInstance( sHost, "sHost", zAnyView, 0,
+			//:                        zSINGLE + zLEVEL_APPLICATION )
+			ActivateObjectInstance( sHost, "sHost", ViewToWindow, null, zSINGLE + zLEVEL_APPLICATION );
+			return ( 0 );
 		}
 
 		public int

@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 07/09/13   12:04:06 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 02/04/14   13:40:37 1.0a2    
 eDomainGroup 1
 aName      Zeidon9B
 
@@ -2984,7 +2984,7 @@ aName      LanguageType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92484525
+aZKey      110001393
 
 eTableEntry 4
 aZKey      90026795
@@ -2995,6 +2995,16 @@ eTableEntry 4
 aZKey      90026796
 aExternalValue VML
 aInternalValue V
+
+eTableEntry 4
+aZKey      110001385
+aExternalValue Java
+aInternalValue J
+
+eTableEntry 4
+aZKey      110001392
+aExternalValue Scala
+aInternalValue S
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -3301,7 +3311,7 @@ aName      MetaName
 aDesc      Name of a meta object (ie., LOD, Dialog, Report)
 aDomainType E
 aDataType  S
-aMaxStringLth 8
+aMaxStringLth 32
 aContextRestriction N
 aDLL_Name  TZAPDMAA
 aOperName  zdmQSName
@@ -3417,9 +3427,6 @@ eContext   3
 aZKey      92726978
 aName      OperationGenerationType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92726981
 
 eTableEntry 4
 aZKey      92726979
@@ -6688,7 +6695,7 @@ aName      WD_WebGroupControlProperties
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92741380
+aZKey      130000002
 
 eTableEntry 4
 aZKey      68304367
@@ -6706,14 +6713,14 @@ aExternalValue Table
 aInternalValue Table
 
 eTableEntry 4
-aZKey      90754211
-aExternalValue Grid Grouping
-aInternalValue Grid Grouping
+aZKey      4634994
+aExternalValue Fieldset
+aInternalValue Container
 
 eTableEntry 4
-aZKey      68304369
-aExternalValue Scrollable
-aInternalValue Scrollable
+aZKey      4634995
+aExternalValue Fieldset Absolute Pos
+aInternalValue Container Absolute Size
 
 eTableEntry 4
 aZKey      89853394
@@ -6726,6 +6733,21 @@ aExternalValue No Width
 aInternalValue No Width
 
 eTableEntry 4
+aZKey      89990860
+aExternalValue Include File
+aInternalValue Include File
+
+eTableEntry 4
+aZKey      130000001
+aExternalValue Absolute Pos
+aInternalValue Absolute Pos
+
+eTableEntry 4
+aZKey      90754211
+aExternalValue Grid Grouping
+aInternalValue Grid Grouping
+
+eTableEntry 4
 aZKey      92656449
 aExternalValue Show/Hide Toggle
 aInternalValue Show/Hide Toggle
@@ -6736,21 +6758,6 @@ aExternalValue Repeating Group
 aInternalValue Repeating Group
 
 eTableEntry 4
-aZKey      68442849
-aExternalValue Relative Positioning
-aInternalValue Relative Positioning
-
-eTableEntry 4
-aZKey      4634994
-aExternalValue Container
-aInternalValue Container
-
-eTableEntry 4
-aZKey      4634995
-aExternalValue Container Absolute Size
-aInternalValue Container Absolute Size
-
-eTableEntry 4
 aZKey      68544987
 aExternalValue File Transfer to Server
 aInternalValue File Transfer to Server
@@ -6759,11 +6766,6 @@ eTableEntry 4
 aZKey      92741379
 aExternalValue Survey Group
 aInternalValue Survey Group
-
-eTableEntry 4
-aZKey      89990860
-aExternalValue Include File
-aInternalValue Include File
 
 eTableEntry 4
 aZKey      90127802
@@ -6779,6 +6781,11 @@ eTableEntry 4
 aZKey      90044246
 aExternalValue Dashboard Group
 aInternalValue Dashboard Group
+
+eTableEntry 4
+aZKey      68304369
+aExternalValue Scrollable
+aInternalValue Scrollable
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
