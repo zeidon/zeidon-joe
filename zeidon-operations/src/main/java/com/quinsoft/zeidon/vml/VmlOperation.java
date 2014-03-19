@@ -301,6 +301,7 @@ public abstract class VmlOperation
    public static final int zEXPANDALL = 0;
 
    public static final int zSINGLE                 = 0;          // 0x00000000L
+   public static final int zAPPLICATION            = 4;          // 0x00000004L
    public static final int zMULTIPLE               = 256;        // 0x00000100L
    public static final int zNOI_OKAY               = 512;        // 0x00000200L
    public static final int zNOENQUEUE              = 1024;       // 0x00000400L
@@ -338,6 +339,9 @@ public abstract class VmlOperation
        put( zSINGLE_FOR_UPDATE, ActivateFlags.SINGLE );
        put( zIGNORE_JOINS, ActivateFlags.IGNORE_JOINS );
        put( zASYNCHRONOUS, ActivateFlags.ASYNCHRONOUS );
+       
+       // Ignore zAPPLICATION whan paired with SINGLE
+       put( zSINGLE + zAPPLICATION, ActivateFlags.SINGLE );
    }} );
 
    /**
