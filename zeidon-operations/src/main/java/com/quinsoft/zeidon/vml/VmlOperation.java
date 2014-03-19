@@ -2314,13 +2314,13 @@ public abstract class VmlOperation
    {
       StringBuilder sb = new StringBuilder( tgtString );
       int position = sb.indexOf( searchString );
-      if ( position >= 0 )
+      while ( position >= 0 )
       {
-         sb.replace( position, position + searchString.length( ) - 1, replaceString );
-         if ( sb.length( ) > tgtLth )
-         {
-            sb.setLength( tgtLth );
-         }
+         //sbString.replace( position, position + searchString.length( ) - 1, replaceString );
+         sb.replace( position, position + searchString.length( ), replaceString );
+         
+         position = position + replaceString.length();
+         position = sb.indexOf( searchString, position ); 
       }
 
       return sb.toString( );
@@ -2329,13 +2329,13 @@ public abstract class VmlOperation
    protected static final int zSearchAndReplace( StringBuilder sbString, int tgtLth, String searchString, String replaceString )
    {
       int position = sbString.indexOf( searchString );
-      if ( position >= 0 )
+      while ( position >= 0 )
       {
-         sbString.replace( position, position + searchString.length( ) - 1, replaceString );
-         if ( sbString.length( ) > tgtLth )
-         {
-            sbString.setLength( tgtLth );
-         }
+         //sbString.replace( position, position + searchString.length( ) - 1, replaceString );
+         sbString.replace( position, position + searchString.length( ), replaceString );
+         
+         position = position + replaceString.length();
+         position = sbString.indexOf( searchString, position ); 
       }
 
       return sbString.length( );
@@ -4870,6 +4870,10 @@ public abstract class VmlOperation
 
   // if ( control == 0 )
   //     control = zASYNCHRONOUS;
+      // A couple of times in Windows vml we have an activate with zSINGLE + zLEVE_APPLICATION. That is not 
+      // applicable in the JOE so ignore and just use zSINGLE.
+      if ( control == 4 )
+    	  control = 0;
 
       View view = qual.activateObjectInstance( viewOdName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
       ViewOd viewOd = view.getViewOd();

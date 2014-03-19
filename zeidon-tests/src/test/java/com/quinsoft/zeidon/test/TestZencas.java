@@ -1551,7 +1551,54 @@ public class TestZencas
 		public void testZeidonStringCompare( View     ViewToWindow )
 		{
 			int nRC = 0;
+			
+			// Also going to test zSearchAndReplace
+			String szLocation = "NY:AMHERSTNY";
+            {StringBuilder sb_szLocation;
+            if ( szLocation == null )
+               sb_szLocation = new StringBuilder( 32 );
+            else
+               sb_szLocation = new StringBuilder( szLocation );
+            zSearchAndReplace( sb_szLocation, 256, "NY:", "NY: " );
+            szLocation = sb_szLocation.toString( );}
+            
+            if (!szLocation.equals("NY: AMHERSTNY"))
+            	Assert.assertEquals("zSearchAndReplace not working!", 1, 0);
+            
+            szLocation = "111-11-1111";
+            {StringBuilder sb_szLocation;
+            if ( szLocation == null )
+               sb_szLocation = new StringBuilder( 32 );
+            else
+               sb_szLocation = new StringBuilder( szLocation );
+            zSearchAndReplace( sb_szLocation,25, "-", "" );
+            szLocation = sb_szLocation.toString( );}
+            if (!szLocation.equals("111111111"))
+            	Assert.assertEquals("zSearchAndReplace not working!", 1, 0);
 
+            szLocation = "NY:AMHERSTNYNY:AMHERSTNY";
+            {StringBuilder sb_szLocation;
+            if ( szLocation == null )
+               sb_szLocation = new StringBuilder( 32 );
+            else
+               sb_szLocation = new StringBuilder( szLocation );
+            zSearchAndReplace( sb_szLocation,25, "NY:", "NY: " );
+            szLocation = sb_szLocation.toString( );}
+            if (!szLocation.equals("NY: AMHERSTNYNY: AMHERSTNY"))
+            	Assert.assertEquals("zSearchAndReplace not working!", 1, 0);
+
+            szLocation = "NY:NY:NY:XXX";
+            {StringBuilder sb_szLocation;
+            if ( szLocation == null )
+               sb_szLocation = new StringBuilder( 32 );
+            else
+               sb_szLocation = new StringBuilder( szLocation );
+            zSearchAndReplace( sb_szLocation,25, "NY:", "NY: " );
+            szLocation = sb_szLocation.toString( );}
+            if (!szLocation.equals("NY: NY: NY: XXX"))
+            	Assert.assertEquals("zSearchAndReplace not working!", 1, 0);
+
+            
 	        byte[] buffer2=new byte[]{97, 0, 0, 0, 0, 0, 0, 0, 0};
 	        //String str1 = new String(buffer2);
 	        int size = 0;
