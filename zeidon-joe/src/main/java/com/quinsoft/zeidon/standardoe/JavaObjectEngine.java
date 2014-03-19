@@ -166,26 +166,12 @@ public class JavaObjectEngine implements ObjectEngine
         uuidGenerator = options.getUuidGenerator();
         oeListener = options.getObjectEngineListener();
 
-        // Read the manifest to get the compile date/time and log it.
-        try
-        {
-            InputStream stream = getClass().getResourceAsStream("/META-INF/MANIFEST.MF");
-            Manifest manifest = new Manifest(stream);
+        Package _package = this.getClass().getPackage();
+        String version = _package.getImplementationVersion();
+        String builtDate = _package.getImplementationTitle();
+        logger.info( "Zeidon JOE Version: %s  Build Date: %s", version, builtDate );
 
-            Attributes attributes = manifest.getMainAttributes();
-
-            String implementationVersion = attributes.getValue("Implementation-Version");
-            String builtDate = attributes.getValue("Built-Date");
-            String builtBy = attributes.getValue("Built-By");
-            logger.info( "Zeidon JOE Version: %s  Build Date: %s   Built By: %s",
-                         implementationVersion, builtDate, builtBy );
-
-            logger.info( "classpath = %s", getClassPath( logger ) );
-        }
-        catch ( IOException e )
-        {
-            logger.error( "Couldn't read manifest." );
-        }
+        logger.info( "classpath = %s", getClassPath( logger ) );
 
         // Generate a UUID as a task ID.
         id = uuidGenerator.generate().toString();
