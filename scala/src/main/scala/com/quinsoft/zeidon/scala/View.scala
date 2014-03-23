@@ -13,6 +13,9 @@ import com.quinsoft.zeidon.scala.EntityCursor
  */
 class View( val task: Task ) extends Task(task) {
 
+    var jviewOd: ViewOd = null
+    var jview:   com.quinsoft.zeidon.View = null
+
     def this( jv: com.quinsoft.zeidon.View ) = {
       this( new Task( jv.getTask() ) )
       jviewOd = jv.getViewOd()
@@ -22,9 +25,6 @@ class View( val task: Task ) extends Task(task) {
     def this( jtask: com.quinsoft.zeidon.Task ) = {
       this( new Task( jtask ) )
     }
-
-    var jviewOd: ViewOd = null
-    var jview:   com.quinsoft.zeidon.View = null
 
     def BASEDONLOD( lodName: String ): View = basedOnLod( lodName )
 	def basedOnLod( lodName: String ): View = {
@@ -71,6 +71,10 @@ class View( val task: Task ) extends Task(task) {
 
     def logObjectInstance = jview.logObjectInstance()
 
+    /**
+     * This is called when the compiler doesn't recognize a method name.  This
+     * is used to find the entity cursor for a view.
+     */
     def selectDynamic(entityName: String): EntityCursor = {
         validateViewOd
         val jviewEntity = jviewOd.getViewEntity(entityName)

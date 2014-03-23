@@ -22,6 +22,8 @@ class ZeidonOperations ( ) {
 
     def VIEW: View = new View( task )
 
+    def GETVIEW( viewName: String ) = task.jtask.getViewByName( viewName )
+
     def FOREACH( cursor: EntityCursor ) = {
       val iterator = new EntityIterator( cursor )
       iterator
@@ -67,16 +69,14 @@ class ZeidonOperations ( ) {
             cursor.iterator.foreach( ei => { if ( predicate() ) func } )
       }
 
+      /*
       def apply( func: => Unit ) = {
         if ( scopingEntity != null )
             cursor.iterator( scopingEntity ).foreach( ei => { if ( predicate() ) func } )
         else
             cursor.iterator.foreach( ei => { if ( predicate() ) func } )
       }
-
-//      def DO( func: ( EntityInstance ) => Unit ) = {
-//        cursor.iterator.foreach( ei => func )
-//      }
+*/
 
     }
 

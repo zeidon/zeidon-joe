@@ -26,15 +26,6 @@ aAPP_SOURCE ./SWAU
 aAPP_PACKAGE com.quinsoft.zencas
 
 eAPPLICATION 2
-aAPP_NAME  ZeidonTools
-aAPP_DLL   ./ZeidonTools
-aAPP_ADOBIN ./ZeidonTools
-aAPP_LOCAL ./ZeidonTools
-aAPP_SHARED ./ZeidonTools
-aAPP_QLPLR ./ZeidonTools
-aAPP_SOURCE ./ZeidonTools
-
-eAPPLICATION 2
 aAPP_NAME  NOA
 aAPP_DLL   ./NOA
 aAPP_ADOBIN ./NOA

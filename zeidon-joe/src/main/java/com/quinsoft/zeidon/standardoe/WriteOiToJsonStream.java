@@ -43,7 +43,10 @@ public class WriteOiToJsonStream
         this.viewList = viewList;
         this.writer = writer;
         this.options = options;
-        this.flags = this.options.getFlags();
+        if ( options.getFlags() == null )
+            flags = EnumSet.noneOf( WriteOiFlags.class );
+        else
+            flags = this.options.getFlags();
         incremental = this.flags.contains( WriteOiFlags.fINCREMENTAL );
     }
 

@@ -64,7 +64,12 @@ class EntityCursor( private[this] val view: View,
     }
 
     def setFirst( attributeName: String, value: Any): Boolean = {
-      jentityCursor.setFirst( attributeName, value ) == CursorResult.SET
+        if ( value.isInstanceOf[ AttributeInstance ] )
+            // If the value is of type AttributeInstance then convert it to an internal value.
+            jentityCursor.setFirst( attributeName, value.asInstanceOf[ AttributeInstance ].
+                                                   jattributeInstance.getValue ) == CursorResult.SET
+        else
+            jentityCursor.setFirst( attributeName, value ) == CursorResult.SET
     }
 
     def iterator = {

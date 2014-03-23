@@ -63,8 +63,6 @@ public class ActivateOiFromFileDb implements Activator
         viewOd = options.getViewOd();
         fileDbUtils = new FileDbUtils( options );
 
-        validateQual();
-
         return view;
     }
 
@@ -116,12 +114,17 @@ public class ActivateOiFromFileDb implements Activator
     @Override
     public View activate()
     {
+        // If the oiServerUrl specifies a file name then use that.
+        if ( fileDbUtils.urlIsFile() )
+            return activateFile( fileDbUtils.getDirectoryName() );
+
         if ( ! StringUtils.isBlank( options.getQualificationName() ) )
             return activateByQualificationName();
 
         if ( qual == null )
             return activateFile( fileDbUtils.genFilename( viewOd, "ALL_DATA" ) );
 
+        validateQual();
         if ( qualViewAttrib.isKey() )
         {
             String filename = fileDbUtils.genFilename( viewOd, fileDbUtils.genKeyQualifier( qualViewAttrib, qualValue ) );
@@ -187,8 +190,7 @@ public class ActivateOiFromFileDb implements Activator
         }
         finally
         {
-            if ( inputStream != null )
-                IOUtils.closeQuietly( inputStream );
+            IOUtils.closeQuietly( inputStream );
         }
     }
 

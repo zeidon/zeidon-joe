@@ -3,7 +3,6 @@
  */
 package com.quinsoft.zeidon.config;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -11,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
  * Reads Zeidon preferences from a .properties file.  Since properties aren't broken out
@@ -53,7 +53,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
         {
             LOG.info( "Opening properties from: " + filename );
             properties = new Properties();
-            stream = new FileInputStream( filename );
+            stream = JoeUtils.getInputStream( filename );
             properties.load( stream );
         }
         catch ( Exception e )

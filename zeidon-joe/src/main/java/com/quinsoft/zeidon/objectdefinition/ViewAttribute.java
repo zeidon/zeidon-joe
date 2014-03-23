@@ -159,6 +159,9 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
             case 'H':
                 if ( reader.getAttributeName().equals( "HASHKEY" ))
                 {
+                    if ( hashKeyParent == null )
+                        hashKeyParent = getViewEntity().getParent();
+
                     hashKeyType = AttributeHashKeyType.valueOf( reader.getAttributeValue() );
                     if ( hashKeyType != AttributeHashKeyType.NONE )
                         viewEntity.addHashKeyAttribute( this );

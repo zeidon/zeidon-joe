@@ -30,7 +30,8 @@ public class DefaultOiServerSelector implements OiServerSelector
     public Activator getActivator( Task task, Application application, ActivateOptions options )
     {
         String url = options.getOiServerUrl();
-        options.setOiServerUrl( url );
+        if ( StringUtils.isBlank( url ) )
+            throw new ZeidonException( "oiServerUrl has not been specified in config" );
 
         if ( url.startsWith( "jdbc:" ) )
             return new ActivateOiFromDB();
@@ -51,7 +52,8 @@ public class DefaultOiServerSelector implements OiServerSelector
     public Committer getCommitter( Task task, List<? extends View> viewList, CommitOptions options )
     {
         String url = options.getOiServerUrl();
-        options.setOiServerUrl( url );
+        if ( StringUtils.isBlank( url ) )
+            throw new ZeidonException( "oiServerUrl has not been specified in config" );
 
         if ( url.startsWith( "jdbc:" ) )
         {

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -84,21 +85,25 @@ class ApplicationList
             throw ZeidonException.wrapException( e ).appendMessage( "Error while attempting to load zeidon.app" );
         }
 
-        String filename = FilenameUtils.concat( home.getHomeDirectory(), "zeidon.app" );
-        try
+        if ( ! StringUtils.isBlank( home.getHomeDirectory() ) )
         {
-            InputStream inputStream = JoeUtils.getInputStream( null, filename, logger.getClass().getClassLoader() );
-            if ( inputStream == null )
-                logger.info( "No zeidon.app found via ZEIDON_HOME." );
-            else
+            String filename = FilenameUtils.concat( home.getHomeDirectory(), "zeidon.app" );
+            try
             {
-                ApplicationHandler appHandler = new ApplicationHandler( apps );
-                PortableFileReader.ReadPortableFile( inputStream, logger, appHandler );
+                InputStream inputStream = JoeUtils.getInputStream( null, filename, logger.getClass().getClassLoader() );
+                if ( inputStream == null )
+                    logger.info( "No zeidon.app found via ZEIDON_HOME." );
+                else
+                {
+                    logger.info( "Loading apps using ZEIDON_HOME (%s)/zeidon.app", home.getHomeDirectory() );
+                    ApplicationHandler appHandler = new ApplicationHandler( apps );
+                    PortableFileReader.ReadPortableFile( inputStream, logger, appHandler );
+                }
             }
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
+            catch ( Exception e )
+            {
+                throw ZeidonException.wrapException( e ).prependFilename( filename );
+            }
         }
 
         if ( apps.size() == 0 )

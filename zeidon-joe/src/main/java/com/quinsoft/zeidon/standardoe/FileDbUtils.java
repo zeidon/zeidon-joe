@@ -20,9 +20,9 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author dgc
  *
  */
-public class FileDbUtils
+class FileDbUtils
 {
-    public enum FileType
+    enum FileType
     {
         POR( ".por" ), XML( ".xml" ), JSON( ".json" );
 
@@ -43,7 +43,13 @@ public class FileDbUtils
     private final String                       directoryName;
     private final FileType                     fileType;
 
-    public FileDbUtils( AbstractOptionsConfiguration options )
+    /**
+     * If true, the the ioServerUrl specifies a filename instead of a directory
+     * name.  In that case all activates take place from the same file.
+     */
+    private final boolean isFile;
+
+    FileDbUtils( AbstractOptionsConfiguration options )
     {
         this.options = options;
         String url = this.options.getOiServerUrl();
@@ -67,12 +73,18 @@ public class FileDbUtils
             directoryName = url.substring( 5 );
         }
 
-        if ( ! new File( directoryName ).exists() )
+        File f = new File( directoryName );
+        if ( ! f.exists() )
             throw new ZeidonException( "File DB directory does not exist: %s", directoryName );
+
+                             isFile = f.isFile();
     }
 
-    public String genFilename( ViewOd viewOd, String qualifier )
+    String genFilename( ViewOd viewOd, String qualifier )
     {
+        if ( isFile )
+            return directoryName;
+
         return directoryName + File.separator + viewOd.getName() + "_" + qualifier + fileType.getExtension();
     }
 
@@ -82,7 +94,7 @@ public class FileDbUtils
      * @param view
      * @return
      */
-    public String genKeyFilename( View view )
+    String genKeyFilename( View view )
     {
         ViewOd viewOd = view.getViewOd();
         ViewEntity root = viewOd.getRoot();
@@ -96,7 +108,7 @@ public class FileDbUtils
         return genFilename( viewOd, qualifier );
     }
 
-    public String genKeyQualifier( ViewAttribute key, String value )
+    String genKeyQualifier( ViewAttribute key, String value )
     {
         if ( StringUtils.isBlank( value ) )
             throw new ZeidonException( "Key value may not be null.  Key = %s.%s",
@@ -105,13 +117,23 @@ public class FileDbUtils
         return key.getName() + "_" + value;
     }
 
-    public FileType getFileType()
+    FileType getFileType()
     {
         return fileType;
     }
 
-    public String getDirectoryName()
+    String getDirectoryName()
     {
         return directoryName;
+    }
+
+    /**
+     * Returns true if the oiServerUrl specifies a filename instead of a directory.
+     *
+     * @return
+     */
+    boolean urlIsFile()
+    {
+        return isFile;
     }
 }

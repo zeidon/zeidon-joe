@@ -487,10 +487,23 @@ class IteratorBuilder
                 break;
 
             case UNDER_PARENT:
-                if ( ! scopingInstance.getViewEntity().equals( viewAttribute.getHashKeyParent() ) )
+                EntityInstanceImpl scoping = scopingInstance;
+
+                // If scoping and the initialInstance are null then we should be
+                // dealing with a NULL cursor so no match can be found.
+                if ( scoping == null && initialInstance == null )
+                {
+                    noMatchForHashMapAttribute = true;
+                    return;
+                }
+
+                if ( scoping == null )
+                    scoping = initialInstance.getParent();
+
+                if ( ! scoping.getViewEntity().equals( viewAttribute.getHashKeyParent() ) )
                     return;  // We can only match if scoping entity matches hashkey parent.
 
-                map = scopingInstance.getAttributeHashkeyMap();
+                map = scoping.getAttributeHashkeyMap();
                 break;
 
             default:
