@@ -29,6 +29,8 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  */
 public class WriteOiToJsonStream
 {
+    private final static String VERSION = "1.0";
+
     private final Collection<View> viewList;
     private final Writer writer;
     private final WriteOiOptions options;
@@ -74,7 +76,14 @@ public class WriteOiToJsonStream
             jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
 
             jg.writeStartObject();
+
+            // Write meta info for entire JSON object.
+            jg.writeObjectFieldStart( ".meta" );
+            jg.writeStringField( "version", VERSION );
+            jg.writeEndObject();
+
             jg.writeArrayFieldStart( "OIs" );
+
             for ( View view : viewList )
             {
                 jg.writeStartObject();

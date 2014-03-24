@@ -58,6 +58,7 @@ public class ActivateOisFromJsonStream
     private ViewOd                        viewOd;
     private View                          view;
     private List<View>                    returnList;
+    private String version;
 
     public ActivateOisFromJsonStream( Task task, InputStream stream, EnumSet<ActivateFlags> control )
     {
@@ -85,6 +86,10 @@ public class ActivateOisFromJsonStream
             if ( token != JsonToken.FIELD_NAME )
                 throw new ZeidonException( "OI JSON missing OI field name." );
 
+            String fieldName = jp.getCurrentName();
+            if ( fieldName.equals( ".meta"  ) )
+                readFileMeta();
+
             token = jp.nextToken();
             if ( token != JsonToken.START_ARRAY )
                 throw new ZeidonException( "OI JSON missing beginning of OI array." );
@@ -104,6 +109,25 @@ public class ActivateOisFromJsonStream
         }
 
         return returnList;
+    }
+
+    private void readFileMeta() throws Exception
+    {
+        jp.nextToken();
+        while ( jp.nextToken() != JsonToken.END_OBJECT )
+        {
+            String fieldName = jp.getCurrentName();
+            jp.nextToken(); // Move to value.
+            if ( StringUtils.equals( fieldName, "version" ) )
+                version = jp.getValueAsString();
+            else
+                task.log().warn( "Unknown .oimeta fieldname %s", fieldName );
+        }
+
+        task.log().debug( "JSON version: %s", version );
+
+        jp.nextToken();
+
     }
 
     private boolean readOi() throws Exception
@@ -250,7 +274,7 @@ public class ActivateOisFromJsonStream
             if ( fieldName.equals( "updated" ) )
                 attrib.setUpdated( true );
             else
-                throw new ZeidonException( "Unknown entity meta value %s", fieldName );
+                task.log().warn( "Unknown entity meta value %s", fieldName );
         }
     }
 
@@ -273,7 +297,7 @@ public class ActivateOisFromJsonStream
             if ( fieldName.equals( "linkedSource" ) )
                 meta.linkedSource = jp.getText();
             else
-                throw new ZeidonException( "Unknown entity meta value %s", fieldName );
+                task.log().warn( "Unknown entity meta value %s", fieldName );
         }
 
         return meta;
@@ -305,7 +329,7 @@ public class ActivateOisFromJsonStream
             else if ( StringUtils.equals( fieldName, "incremental" ) )
                 incremental = jp.getValueAsBoolean();
             else
-                throw new ZeidonException( "Unknown .oimeta fieldname %s", fieldName );
+                task.log().warn( "Unknown .oimeta fieldname %s", fieldName );
         }
 
         if ( odName == null )
