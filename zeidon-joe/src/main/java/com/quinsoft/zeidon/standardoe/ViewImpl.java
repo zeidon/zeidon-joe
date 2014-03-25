@@ -468,9 +468,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public ViewImpl newView( TaskQualification task )
+    public ViewImpl newView( TaskQualification owningTask )
     {
-        return new ViewImpl( (TaskImpl) task.getTask(), this );
+        return new ViewImpl( (TaskImpl) owningTask.getTask(), this );
     }
 
     @Override

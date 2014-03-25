@@ -174,7 +174,14 @@ public interface View extends TaskQualification, CacheMap
      * @return new view.
      */
     View newView();
-    View newView( TaskQualification task );
+    
+    /**
+     * Create a new view but set its owning task to a different task.
+     * 
+     * @param owningTask
+     * @return
+     */
+    View newView( TaskQualification owningTask );
     View activateOiFromOi( Set<ActivateFlags> flags );
     View activateOiFromOi( ActivateFlags flag );
 

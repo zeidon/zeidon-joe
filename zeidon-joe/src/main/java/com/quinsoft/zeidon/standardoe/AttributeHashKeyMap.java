@@ -245,7 +245,7 @@ class AttributeHashKeyMap
         Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( viewAttribute );
         EntityInstanceImpl ei = map.get( internalValue );
 
-        assert ! ei.isDropped() : "HashKey entity is flagged as dropped.";
+        assert ei == null || ! ei.isDropped() : "HashKey entity is flagged as dropped.";
 
         return ei;
     }

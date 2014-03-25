@@ -31,7 +31,7 @@ public class DefaultOiServerSelector implements OiServerSelector
     {
         String url = options.getOiServerUrl();
         if ( StringUtils.isBlank( url ) )
-            throw new ZeidonException( "oiServerUrl has not been specified in config" );
+            throw new ZeidonException( "oiServerUrl has not been specified in config for application %s", application.getName() );
 
         if ( url.startsWith( "jdbc:" ) )
             return new ActivateOiFromDB();

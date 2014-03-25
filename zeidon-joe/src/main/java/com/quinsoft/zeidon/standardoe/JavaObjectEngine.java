@@ -187,7 +187,7 @@ public class JavaObjectEngine implements ObjectEngine
         // Check to see if we should start the browser.
         String startBrowser = JoeUtils.getEnvProperty( "zeidon.start.browser" );
         if ( StringUtils.isBlank( startBrowser ) )
-            startBrowser = systemTask.readZeidonConfig( "Browser", "Start" );
+            startBrowser = systemTask.readZeidonConfig( "Browser", "Start", "" );
 
         if ( ! StringUtils.isBlank( startBrowser ) && startBrowser.toUpperCase().startsWith( "Y" ) )
             startBrowser();

@@ -54,6 +54,9 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
             LOG.info( "Opening properties from: " + filename );
             properties = new Properties();
             stream = JoeUtils.getInputStream( filename );
+            if ( stream == null )
+                throw new ZeidonException( "Couldn't find property file" );
+            
             properties.load( stream );
         }
         catch ( Exception e )
