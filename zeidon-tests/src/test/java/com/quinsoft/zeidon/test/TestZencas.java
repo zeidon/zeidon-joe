@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,7 @@ import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.standardoe.ActivateOisFromJsonStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.standardoe.WriteOiToJsonStream;
+import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.Timer;
@@ -73,6 +75,30 @@ public class TestZencas
 	}
 
 	@Test
+	public void testWritingXodAsJson() throws IOException
+	{
+        String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
+        View stud = new QualificationBuilder( zencas )
+                        .setViewOd( "lStudDpt" )
+                        .setOiServerUrl( fileDbUrl )
+                        .addAttribQual( "Status", "A" )
+                        .addAttribQual( "AND" )
+                        .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+                        .activate();
+
+        Writer writer = null;
+        try
+        {
+            writer = new FileWriter( getTempDir() + "/xod.json" );
+            JsonUtils.writeXodToJsonStream( stud, writer );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( writer );
+        }
+    }
+
+	@Test
 	public void testAttributeUpdated()
 	{
 	    View         testview;
@@ -104,7 +130,7 @@ public class TestZencas
 		tester.testClsIncludeError( testview );
         System.out.println("===== Finished testInclude2 ========");
 	}
-	
+
 	@Test
 	public void testActivateControls()
 	{
@@ -794,7 +820,7 @@ public class TestZencas
 		tester.testCompareEmptyWithNullForStaticTableDomain( testview );
         System.out.println("===== Finished testCompareEmptyWithNullForStaticTableDomain ========");
 	}
-	
+
 	@Test
 	public void testDerivedDerived()
 	{
@@ -1551,7 +1577,7 @@ public class TestZencas
 		public void testZeidonStringCompare( View     ViewToWindow )
 		{
 			int nRC = 0;
-			
+
 			// Also going to test zSearchAndReplace
 			String szLocation = "NY:AMHERSTNY";
             {StringBuilder sb_szLocation;
@@ -1561,10 +1587,10 @@ public class TestZencas
                sb_szLocation = new StringBuilder( szLocation );
             zSearchAndReplace( sb_szLocation, 256, "NY:", "NY: " );
             szLocation = sb_szLocation.toString( );}
-            
+
             if (!szLocation.equals("NY: AMHERSTNY"))
             	Assert.assertEquals("zSearchAndReplace not working!", 1, 0);
-            
+
             szLocation = "111-11-1111";
             {StringBuilder sb_szLocation;
             if ( szLocation == null )
@@ -1598,7 +1624,7 @@ public class TestZencas
             if (!szLocation.equals("NY: NY: NY: XXX"))
             	Assert.assertEquals("zSearchAndReplace not working!", 1, 0);
 
-            
+
 	        byte[] buffer2=new byte[]{97, 0, 0, 0, 0, 0, 0, 0, 0};
 	        //String str1 = new String(buffer2);
 	        int size = 0;
@@ -2231,7 +2257,7 @@ public class TestZencas
 
 	         return 0;
 		}
-		
+
 		public int
 		testActivateControls( View ViewToWindow )
 		{
@@ -3504,8 +3530,8 @@ public class TestZencas
 			   int      lTempInteger_0 = 0;
 			   int      lTempInteger_1 = 0;
 			   int      lTempInteger_2 = 0;
-			   
-			   RESULT = ActivateObjectInstance( mFaculty, "mFaculty", ViewToWindow, 0, zMULTIPLE );			   
+
+			   RESULT = ActivateObjectInstance( mFaculty, "mFaculty", ViewToWindow, 0, zMULTIPLE );
 			   SetNameForView( mFaculty, "mFaculty", null, zLEVEL_TASK );
 
 		       OrderEntityForView( mFaculty, "Faculty", "Status  A" );

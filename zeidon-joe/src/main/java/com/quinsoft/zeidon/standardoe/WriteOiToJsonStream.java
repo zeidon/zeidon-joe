@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalTime;
+import org.joda.time.LocalDateTime;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -75,13 +75,12 @@ public class WriteOiToJsonStream
         {
             jg = jsonF.createJsonGenerator( writer );
             jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
-
             jg.writeStartObject();
 
             // Write meta info for entire JSON object.
             jg.writeObjectFieldStart( ".meta" );
             jg.writeStringField( "version", VERSION );
-            jg.writeStringField( "date", new LocalTime().toString() );
+            jg.writeStringField( "date", new LocalDateTime().toString() );
             jg.writeEndObject();
 
             jg.writeArrayFieldStart( "OIs" );
