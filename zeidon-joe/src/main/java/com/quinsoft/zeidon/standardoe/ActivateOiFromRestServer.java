@@ -8,6 +8,7 @@ import java.io.StringWriter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -86,9 +87,12 @@ public class ActivateOiFromRestServer implements Activator
 
             HttpResponse response = client.execute( post );
             InputStream stream = response.getEntity().getContent();
+            StatusLine status = response.getStatusLine();
+            task.log().info( "Status from http activate = %s", status );
+            int statusCode = status.getStatusCode();
 
             // If we're in debug mode, print out the results.
-            if ( task.log().isDebugEnabled() )
+            if ( task.log().isDebugEnabled() || statusCode != 200 )
             {
                 StringWriter writer = new StringWriter();
                 IOUtils.copy(stream, writer, "UTF-8");
@@ -97,9 +101,12 @@ public class ActivateOiFromRestServer implements Activator
                 stream = IOUtils.toInputStream(stringResponse, "UTF-8");
             }
 
-            // Since we expect multiple OIs in a single stream, create a stream reader to share
-            // between activates.
-
+            if ( statusCode != 200 )
+            {
+                throw new ZeidonException( "http activate failed with status %s", status )
+                            .appendMessage( "web URL = %s", url );
+            }
+            
             ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
             View restRc = activator.read().get( 0 );
             restRc.logObjectInstance();

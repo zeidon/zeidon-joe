@@ -116,7 +116,14 @@ public class WriteOiToJsonStream
                 lastViewEntity = writeEntity( ei, lastViewEntity );
         }
 
-        if ( lastViewEntity != null )
+        // If lastViewEntity is null then the OI is empty so write a start array
+        // to indicate it's empty.
+        if ( lastViewEntity == null )
+        {
+//            jg.writeStartObject();
+//            jg.writeEndObject();
+        }
+        else
             jg.writeEndArray();
     }
 
