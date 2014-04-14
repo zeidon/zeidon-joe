@@ -14,7 +14,6 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
 
     var predicate: () => Boolean = {() => true}
 
-
     def isSet = jcursorResult == CursorResult.SET ||
                  jcursorResult == CursorResult.SET_NEWPARENT ||
                  jcursorResult == CursorResult.SET_RECURSIVE_CHILD
@@ -24,6 +23,14 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
         jcursorResult = cursor.jentityCursor.setNextContinue
 
       predicate = () => { func }
+      this
+    }
+
+    def WHERE( func: (EntityInstance) => Boolean ): SetCursorResult = {
+      while ( isSet && ! func( new EntityInstance( cursor.getEntityInstance ) ) )
+        jcursorResult = cursor.jentityCursor.setNextContinue
+
+      predicate = () => { func( new EntityInstance( cursor.getEntityInstance ) ) }
       this
     }
 

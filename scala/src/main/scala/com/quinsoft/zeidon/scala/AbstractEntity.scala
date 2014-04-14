@@ -9,13 +9,21 @@ import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition._
 
 /**
+ * This class implements methods that are common to both EntityCursor and EntityInstance.
+ * 
  * @author dgc
  *
  */
 abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefinition.ViewEntity )
                         extends Dynamic {
 
+    /**
+     * The subclasses implement this method to get the Java EntityInstance.
+     */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance
+
+    def logEntity = getEntityInstance.logEntity()
+    def logEntity( displayChildren: Boolean ) = getEntityInstance.logEntity( displayChildren ) 
 
     /**
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.log4j.Logger;
 
 import com.quinsoft.zeidon.ZeidonException;
@@ -42,7 +43,9 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
     public String get( String groupName, String key, String defaultValue )
     {
         String fullKey = groupName + "." + key;
-        return properties.getProperty( fullKey, defaultValue );
+        String str = properties.getProperty( fullKey, defaultValue );
+        str = StrSubstitutor.replaceSystemProperties( str );
+        return str;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
         {
             LOG.info( "Opening properties from: " + filename );
             properties = new Properties();
-            stream = JoeUtils.getInputStream( filename );
+            stream = JoeUtils.getInputStream( null, filename, this.getClass().getClassLoader() );
             if ( stream == null )
                 throw new ZeidonException( "Couldn't find property file" );
             

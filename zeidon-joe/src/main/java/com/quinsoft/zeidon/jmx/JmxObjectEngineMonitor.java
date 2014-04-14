@@ -57,11 +57,11 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         JoeUtils.RegisterJmxBean( this, "com.quinsoft.zeidon:type=ObjectEngineMonitor", config.getJmxAppName() );
     }
 
-    public JmxObjectEngineMonitor( )
+    public JmxObjectEngineMonitor( String jmxName )
     {
-        this( null );
+        JoeUtils.RegisterJmxBean( this, jmxName, null );
     }
-
+    
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.jmx.ObjectEngineMonitorMBean#getViewList()
      */

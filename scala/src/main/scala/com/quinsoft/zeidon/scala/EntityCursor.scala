@@ -29,6 +29,9 @@ class EntityCursor( private[this] val view: View,
         this
     }
 
+    def drop: CursorResult = jentityCursor.dropEntity()
+    def drop( reposition: CursorPosition ): CursorResult = jentityCursor.dropEntity( reposition )
+    def delete(): CursorResult = jentityCursor.deleteEntity()
     def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
 
     def include( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = {

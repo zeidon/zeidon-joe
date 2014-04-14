@@ -21,8 +21,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -32,8 +30,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import org.apache.commons.lang3.StringUtils;
 

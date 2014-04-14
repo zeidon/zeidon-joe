@@ -34,6 +34,7 @@ class TestOperations ( task: Task ) extends ZeidonOperations( task ) {
 		          .and( _.MajorDepartment.ID = 3 ).activate
 
 		view.jview.logObjectInstance()
+        val b = view.Student.eMailAddress.isNull
 
 		FOREACH ( view.Student ) WHERE ( view.AdministrativeDivision.ID == 1 ) DO {
 		    println( view.AdministrativeDivision.Name )
@@ -45,6 +46,12 @@ class TestOperations ( task: Task ) extends ZeidonOperations( task ) {
             println( view.Person.MiddleName )
         }
 
+        
+        if ( SETFIRST( view.Student ) WHERE ( _.eMailAddress == null  ) ) {
+            println( view.Person.FirstName )
+            println( view.Person.LastName )
+            println( view.Person.MiddleName )
+        }
 
         println("----------------------------")
         FOREACH ( view.Student ) WHERE ( view.Person.MiddleName == "M" || view.Person.MiddleName == "S" ) DO {
