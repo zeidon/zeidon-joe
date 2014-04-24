@@ -84,6 +84,7 @@ public class JdbcHandler extends AbstractSqlHandler
         super( task, options );
         this.options = options;
         configGroupName = options.getConfigValue( "_JDBC", "JdbcConfigGroupName" );
+        task.log().debug( "JDBC config group = %s", configGroupName );
 
         if ( isBindAllValues() )
             cachedStatements = new HashMap<String, PreparedStatementCacheValue>();
@@ -840,7 +841,9 @@ public class JdbcHandler extends AbstractSqlHandler
             }
             catch ( SQLException e )
             {
-                throw ZeidonException.wrapException( e ).appendMessage( "Connection String = %s", url );
+                throw ZeidonException.wrapException( e )
+                                     .appendMessage( "Connection String = %s", url )
+                                     .appendMessage( "Username: %s", handler.getUserName() );
             }
 
             return connection;

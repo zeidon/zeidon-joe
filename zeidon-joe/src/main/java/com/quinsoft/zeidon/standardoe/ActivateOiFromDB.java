@@ -130,7 +130,7 @@ class ActivateOiFromDB implements Activator
         {
             ZeidonException ze = ZeidonException.wrapException( e ).prependViewOd( view.getViewOd() );
             if ( task.log().isDebugEnabled() )
-                ze.appendMessage( "XOD + %s", this.viewOd.getFileName() );
+                ze.appendMessage( "XOD: %s", this.viewOd.getFileName() );
             task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), ze );
             throw ze;
         }
