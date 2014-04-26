@@ -5,6 +5,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -20,6 +21,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.ZeidonRestException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
@@ -106,19 +108,20 @@ public class ActivateOiFromRestServer implements Activator
                 throw new ZeidonException( "http activate failed with status %s", status )
                             .appendMessage( "web URL = %s", url );
             }
-            
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
-            View restRc = activator.read().get( 0 );
-            restRc.logObjectInstance();
-            return restRc;
 
-//            activator = new ActivateOiFromStream(getTask(), application, stream, null );
-//            activator.setStreamReader( reader );
-//            activator.setEmptyView( view );
-//            ViewImpl newView = activator.read();
-//
-//            newView.logObjectInstance();
-//            return newView;
+            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
+            List<View> views = activator.read();
+            View restRc = views.get( 0 );
+            restRc.logObjectInstance();
+            Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();
+            if ( rc != 0 )
+            {
+                String errorMsg = restRc.cursor( "RestResponse" ).getAttribute( "ErrorMessage" ).getString();
+                throw new ZeidonRestException( "Error activating OI from REST server %d", rc )
+                                                .appendMessage( "%s", errorMsg );
+            }
+
+            return views.get( 1 );
         }
         catch ( Exception e )
         {
