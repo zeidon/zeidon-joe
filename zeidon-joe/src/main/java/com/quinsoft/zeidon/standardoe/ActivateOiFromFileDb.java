@@ -114,7 +114,7 @@ public class ActivateOiFromFileDb implements Activator
     @Override
     public View activate()
     {
-        // If the oiServerUrl specifies a file name then use that.
+        // If the oiSourceUrl specifies a file name then use that.
         if ( fileDbUtils.urlIsFile() )
             return activateFile( fileDbUtils.getDirectoryName() );
 

@@ -193,9 +193,9 @@ public class QualificationBuilder
         return this;
     }
 
-    public QualificationBuilder setOiServerUrl( String url )
+    public QualificationBuilder setOiSourceUrl( String url )
     {
-        activateOptions.setOiServerUrl( url );
+        activateOptions.setOiSourceUrl( url );
         return this;
     }
 

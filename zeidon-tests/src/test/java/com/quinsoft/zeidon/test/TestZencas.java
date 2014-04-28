@@ -80,7 +80,7 @@ public class TestZencas
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         View stud = new QualificationBuilder( zencas )
                         .setViewOd( "lStudDpt" )
-                        .setOiServerUrl( fileDbUrl )
+                        .setOiSourceUrl( fileDbUrl )
                         .addAttribQual( "Status", "A" )
                         .addAttribQual( "AND" )
                         .addAttribQual( "MajorDepartment", "ID", "=", 3 )

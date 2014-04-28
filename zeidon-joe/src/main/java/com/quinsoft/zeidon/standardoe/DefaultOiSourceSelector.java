@@ -12,7 +12,7 @@ import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
-import com.quinsoft.zeidon.OiServerSelector;
+import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -21,7 +21,7 @@ import com.quinsoft.zeidon.ZeidonException;
  * @author dgc
  *
  */
-public class DefaultOiServerSelector implements OiServerSelector
+public class DefaultOiSourceSelector implements OiSourceSelector
 {
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.OiServerSelector#getActivator(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.View)
@@ -29,9 +29,9 @@ public class DefaultOiServerSelector implements OiServerSelector
     @Override
     public Activator getActivator( Task task, Application application, ActivateOptions options )
     {
-        String url = options.getOiServerUrl();
+        String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
-            throw new ZeidonException( "oiServerUrl has not been specified in config for application %s", application.getName() );
+            throw new ZeidonException( "oiSourceUrl has not been specified in config for application %s", application.getName() );
 
         if ( url.startsWith( "jdbc:" ) )
             return new ActivateOiFromDB();
@@ -42,7 +42,7 @@ public class DefaultOiServerSelector implements OiServerSelector
         if ( url.startsWith( "file:" ) )
             return new ActivateOiFromFileDb();
 
-        throw new ZeidonException( "oiServerUrl specifies unknown protocol: %s", url );
+        throw new ZeidonException( "oiSourceUrl specifies unknown protocol: %s", url );
     }
 
     /* (non-Javadoc)
@@ -51,9 +51,9 @@ public class DefaultOiServerSelector implements OiServerSelector
     @Override
     public Committer getCommitter( Task task, List<? extends View> viewList, CommitOptions options )
     {
-        String url = options.getOiServerUrl();
+        String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
-            throw new ZeidonException( "oiServerUrl has not been specified in config" );
+            throw new ZeidonException( "oiSourceUrl has not been specified in config" );
 
         if ( url.startsWith( "jdbc:" ) )
         {
@@ -75,6 +75,6 @@ public class DefaultOiServerSelector implements OiServerSelector
         if ( url.startsWith( "file:" ) )
             return new CommitOiToFileDb();
 
-        throw new ZeidonException( "oiServerUrl specifies unknown protocol: %s", url );
+        throw new ZeidonException( "oiSourceUrl specifies unknown protocol: %s", url );
     }
 }

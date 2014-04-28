@@ -35,13 +35,13 @@ public class JdbcHandlerUtils
         if ( ! StringUtils.isBlank( configGroupName ) )
             return configGroupName;
 
-        String dbUrl = options.getOiServerUrl();
+        String dbUrl = options.getOiSourceUrl();
         if ( ! dbUrl.startsWith( "jdbc:" ) )
-            throw new ZeidonException( "Expecting jdbc url for oiServerUrl: %s", dbUrl );
+            throw new ZeidonException( "Expecting jdbc url for oiSourceUrl: %s", dbUrl );
 
         String[] parts = dbUrl.split( ":" );
         if ( parts.length < 3 )
-            throw new ZeidonException( "oiServerUrl is not a valid JDBC URL.  Expecting 3 parts separated by ':' - %s", dbUrl );
+            throw new ZeidonException( "oiSourceUrl is not a valid JDBC URL.  Expecting 3 parts separated by ':' - %s", dbUrl );
 
         String dbType = parts[1];
         configGroupName = options.getApplication().getName() + "." + dbName + ".jdbc." + dbType;
@@ -60,7 +60,7 @@ public class JdbcHandlerUtils
         // handler using the connection string.
         if ( StringUtils.isBlank( handlerName ) )
         {
-            String conn = options.getOiServerUrl();
+            String conn = options.getOiSourceUrl();
             if ( conn.startsWith( "jdbc:mysql:" ) )
                 handlerName = MysqlJdbcHandler.class.getCanonicalName();
             else
