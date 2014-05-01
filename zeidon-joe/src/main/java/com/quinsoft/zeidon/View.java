@@ -152,7 +152,7 @@ public interface View extends TaskQualification, CacheMap
     Iterable<EntityInstance> getHierEntityList( boolean includeRoot );
 
     /**
-     * Loops through all the entities in the OI in hierarchical order.
+     * Loops through all the entities in the OI that match entityName in hierarchical order.
      * Sets the cursors.
      *
      * @param includeRoot If false, then skip the root.
@@ -174,14 +174,39 @@ public interface View extends TaskQualification, CacheMap
      * @return new view.
      */
     View newView();
-    
+
     /**
      * Create a new view but set its owning task to a different task.
-     * 
+     *
      * @param owningTask
      * @return
      */
     View newView( TaskQualification owningTask );
+
+    /**
+     * Creates a new Object Instance by copying or including the entity instances from this view.
+     * Whether an entity instance is created or included form the source OI is dependent on the
+     * permissions as specified in the LOD.
+     *
+     * @return
+     */
+    View copyOi();
+
+    /**
+     * Creates a new Object Instance by copying or including the entity instances from this view.
+     * Whether an entity instance is created or included form the source OI is dependent on the
+     * permissions as specified in the LOD.
+     *
+     * @param options
+     * @return
+     */
+    View copyOi( CopyOiOptions options );
+
+    /**
+     * Creates an exact duplicate of the OI.
+     * @param flags
+     * @return
+     */
     View activateOiFromOi( Set<ActivateFlags> flags );
     View activateOiFromOi( ActivateFlags flag );
 
