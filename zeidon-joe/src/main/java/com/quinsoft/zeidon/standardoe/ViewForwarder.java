@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.CopyOiOptions;
+import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Level;
@@ -637,14 +637,14 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     @Override
-    public View copyOi( )
+    public View duplicateOi( )
     {
-        return getView().copyOi();
+        return getView().duplicateOi();
     }
 
     @Override
-    public View copyOi( CopyOiOptions options )
+    public View duplicateOi( DuplicateOiOptions options )
     {
-        return getView().copyOi( options );
+        return getView().duplicateOi( options );
     }
 }

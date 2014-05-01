@@ -177,7 +177,7 @@ public class JavaObjectEngine implements ObjectEngine
         persistentTaskList = options.getPersistentTaskCacheMap();
 
         applicationList = new ApplicationList( zeidonHomeDir, logger );
-        systemTask = createTask( ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
+        systemTask = createTask( ObjectEngine.ZEIDON_SYSTEM_APP_NAME, true, ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
         oeListener.setObjectEngine( this );
 
         // Check to see if we should start the browser.

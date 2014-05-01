@@ -31,6 +31,7 @@ import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Level;
@@ -740,5 +741,17 @@ public class zVIEW extends VmlOperation implements View
     public String readZeidonConfig( Application application, String group, String key, String defaultValue )
     {
         return getView().readZeidonConfig( application, group, key, defaultValue );
+    }
+
+    @Override
+    public View duplicateOi( )
+    {
+        return getView().duplicateOi();
+    }
+
+    @Override
+    public View duplicateOi( DuplicateOiOptions options )
+    {
+        return getView().duplicateOi( options );
     }
 }

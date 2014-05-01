@@ -62,6 +62,15 @@ public interface JmxObjectEngineMonitorMBean
     String dropViewByName( String taskId, String viewName );
 
     /**
+     * Drops the view specified by viewName from the system task.  This
+     * effectively drops a cached OI.
+     *
+     * @param viewName
+     * @return
+     */
+    String dropCachedViewByName( String viewName );
+
+    /**
      * @return runtime Properties.
      */
     Properties getRuntimeProperties();

@@ -190,7 +190,7 @@ public interface View extends TaskQualification, CacheMap
      *
      * @return
      */
-    View copyOi();
+    View duplicateOi();
 
     /**
      * Creates a new Object Instance by copying or including the entity instances from this view.
@@ -200,7 +200,7 @@ public interface View extends TaskQualification, CacheMap
      * @param options
      * @return
      */
-    View copyOi( CopyOiOptions options );
+    View duplicateOi( DuplicateOiOptions options );
 
     /**
      * Creates an exact duplicate of the OI.

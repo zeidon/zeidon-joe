@@ -318,4 +318,23 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
 
         return "Browser started";
     }
+
+    @Override
+    public String dropCachedViewByName( String viewName )
+    {
+        if ( oe == null )
+            return "ObjectEngine not specified";
+
+        Task task = oe.getSystemTask();
+        if ( task == null )
+            return "No System Task!";
+
+        View v = task.getViewByName( viewName );
+        if ( v == null )
+            return "Unknown viewname for System task";
+
+        v.dropNameForView( viewName );
+
+        return "Cached view name dropped";
+    }
 }
