@@ -98,7 +98,7 @@ class AttributeHashKeyMap
                     throw new ZeidonException( "Attribute hashkey value is missing from table." )
                                     .prependEntityInstance( ei )
                                     .prependViewAttribute( viewAttribute )
-                                    .appendMessage( "HashKey value = %s", value.toString() );
+                                    .appendMessage( "HashKey value = %s", value );
 
                 if ( ei != hashEi )
                     throw new ZeidonException( "Attribute hashkey returns wrong EI." )

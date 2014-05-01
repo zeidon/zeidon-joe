@@ -52,9 +52,9 @@ class FileDbUtils
     FileDbUtils( AbstractOptionsConfiguration options )
     {
         this.options = options;
-        String url = this.options.getOiServerUrl();
+        String url = this.options.getOiSourceUrl();
         if ( ! url.startsWith( "file:" ) )
-            throw new ZeidonException("File DB Error: oiServerUrl doesn't start with 'file:'.  URL = %s", url );
+            throw new ZeidonException("File DB Error: oiSourceUrl doesn't start with 'file:'.  URL = %s", url );
 
         if ( url.startsWith( "file:xml:" ) )
         {
@@ -128,7 +128,7 @@ class FileDbUtils
     }
 
     /**
-     * Returns true if the oiServerUrl specifies a filename instead of a directory.
+     * Returns true if the oiSourceUrl specifies a filename instead of a directory.
      *
      * @return
      */

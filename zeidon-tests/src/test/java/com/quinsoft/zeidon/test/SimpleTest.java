@@ -16,7 +16,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.utils.JspWebUtils;
+import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -155,30 +155,31 @@ class SimpleTest
 
 //        String fileDbUrl = "file:json:/tmp/filedb";
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
-        String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
+        String fileDbUrl = "jdbc:sqlite:/home/dg/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
 
-        JspWebUtils.createWebSession( null, zencas, "my-id" );
-
         View stud = new QualificationBuilder( zencas )
                             .setViewOd( "lStudDpt" )
-                            .setOiServerUrl( fileDbUrl )
+                            .setOiSourceUrl( fileDbUrl )
                             .addAttribQual( "Status", "A" )
                             .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
 
+        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
+        View stud2 = JoeUtils.actviateOiFromJsonFile( zencas, "/tmp/stud.json" );
+        stud2.logObjectInstance();
 //        stud.logObjectInstance();
 /*
         CommitOptions options = new CommitOptions( zencas );
-        options.setOiServerUrl( fileDbUrl );
+        options.setOiSourceUrl( fileDbUrl );
         stud.commit( options );
 
         stud = new QualificationBuilder( zencas )
                             .setViewOd( "lStudDpt" )
                             .addAttribQual( "eMailAddress", "kellysautter@comcast.net" )
-                            .setOiServerUrl( fileDbUrl )
+                            .setOiSourceUrl( fileDbUrl )
                             .activate();
 */
         stud.logObjectInstance();

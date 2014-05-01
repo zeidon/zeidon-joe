@@ -9,7 +9,7 @@ require 'pathname'
 
 load "zeidon.rb"
 include_class 'com.quinsoft.zeidon.CursorPosition'
-include_class 'java.util.zip.ZipInputStream'
+include_class 'java.util.jar.JarFile'
 
 enable :sessions
 set :port, ENV['SINATRA_PORT'].to_i || 4567
@@ -252,16 +252,21 @@ def get_viewod_list app_name
   return @@app_viewod_list[ app_name ] if @@app_viewod_list[ app_name ]
 
   @@app_viewod_list[ app_name ] = []
-  oe = Zeidon.get_object_engine
-  bindir = oe.get_app( app_name ).getBinDir.downcase
-  puts "bindir = #{bindir}"
-  regex = /#{bindir}.*\.xod$/
 
-  src = Zeidon.get_object_engine.getClass().getProtectionDomain().getCodeSource().getLocation()
-  zip = ZipInputStream.new( src.openStream() )
-  while ( entry = zip.getNextEntry ) do
-    fullname = entry.getName()
-    @@app_viewod_list[ app_name ] << File.basename( fullname, '.*' ) if regex.match( fullname.downcase )
+  puts "classpath="
+  $CLASSPATH.each{|cp| puts "-> #{cp}"}
+  oe = Zeidon.get_object_engine
+  bindir = oe.get_app( app_name ).getBinDir
+  puts "bindir = #{bindir}"
+  regex = /^#{bindir}.*\.(XOD|xod)$/
+
+  loader = oe.getClassLoader( "" )
+  urls = loader.getURLs
+  urls.each do |url|
+    jar = JarFile.new( url.getPath )
+    jar.entries.each do |entry|
+      @@app_viewod_list[ app_name ] << File.basename( entry.toString, "." + $1) if entry.toString =~ regex
+   end
   end
 
   @@app_viewod_list[ app_name ]

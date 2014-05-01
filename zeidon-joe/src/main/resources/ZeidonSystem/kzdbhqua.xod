@@ -1,13 +1,13 @@
-z1000-Zeidon    KZDBHQUA TZZOXODO 06/26/12   12:15:40 1.0a2    
+z1000-Zeidon    KZDBHQUA TZZOXODO 03/30/14   16:35:23 1.0a2    
 eOBJECT    1
 aNAME      KZDBHQUA
 aZKey      1331051
 aOPER_LIBNM KZDBHQUA
-aER_DATE   20120626121520029
+aER_DATE   20140322175321721
 
 eENTITY    2
 aNAME      EntitySpec
-aMAX_LTH   20536
+aMAX_LTH   20795
 aERENT_TOK 1321534
 aFULLPERSIST Y
 aCREATE    Y
@@ -28,6 +28,28 @@ aUPDATE    Y
 aXVAATT_TOK 1
 
 eATTRIB    3
+aNAME      RootOnly
+aERATT_TOK 110001925
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 2
+
+eATTRIB    3
+aNAME      MultipleRoots
+aERATT_TOK 110001927
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 3
+
+eATTRIB    3
 aNAME      OpenSQL
 aERATT_TOK 90029869
 aAPDM_TOK  90000032
@@ -36,7 +58,7 @@ aTYPE      S
 aLTH       10000
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 2
+aXVAATT_TOK 4
 
 eATTRIB    3
 aNAME      OpenSQL_AttributeList
@@ -47,7 +69,7 @@ aTYPE      S
 aLTH       10000
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 3
+aXVAATT_TOK 5
 
 eATTRIB    3
 aNAME      Options
@@ -58,7 +80,18 @@ aTYPE      S
 aLTH       500
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 4
+aXVAATT_TOK 6
+
+eATTRIB    3
+aNAME      CacheName
+aERATT_TOK 110001923
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 7
 
 eCHILDENTITY 3
 aNAME      QualAttrib
@@ -84,7 +117,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 5
+aXVAATT_TOK 8
 
 eATTRIB    4
 aNAME      AttributeName
@@ -96,7 +129,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 6
+aXVAATT_TOK 9
 
 eATTRIB    4
 aNAME      Value
@@ -107,7 +140,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       500
 aUPDATE    Y
-aXVAATT_TOK 7
+aXVAATT_TOK 10
 
 eATTRIB    4
 aNAME      Oper
@@ -118,7 +151,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       20
 aUPDATE    Y
-aXVAATT_TOK 8
+aXVAATT_TOK 11
 
 eATTRIB    4
 aNAME      SourceEntityName
@@ -129,7 +162,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 9
+aXVAATT_TOK 12
 
 eATTRIB    4
 aNAME      SourceAttributeName
@@ -140,7 +173,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 10
+aXVAATT_TOK 13
 
 eATTRIB    4
 aNAME      SourceViewID
@@ -151,7 +184,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 11
+aXVAATT_TOK 14
 
 eATTRIB    4
 aNAME      SourceViewName
@@ -162,7 +195,7 @@ aTYPE      S
 aLTH       50
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 12
+aXVAATT_TOK 15
 
 eCHILDENTITY 4
 aNAME      SubQualAttrib
@@ -189,7 +222,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 13
+aXVAATT_TOK 16
 
 eATTRIB    5
 aNAME      AttributeName
@@ -201,7 +234,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 14
+aXVAATT_TOK 17
 
 eATTRIB    5
 aNAME      Value
@@ -212,7 +245,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       500
 aUPDATE    Y
-aXVAATT_TOK 15
+aXVAATT_TOK 18
 
 eATTRIB    5
 aNAME      Oper
@@ -223,7 +256,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       20
 aUPDATE    Y
-aXVAATT_TOK 16
+aXVAATT_TOK 19
 
 eATTRIB    5
 aNAME      SourceEntityName
@@ -234,7 +267,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 17
+aXVAATT_TOK 20
 
 eATTRIB    5
 aNAME      SourceAttributeName
@@ -245,7 +278,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 18
+aXVAATT_TOK 21
 
 eATTRIB    5
 aNAME      SourceViewID
@@ -256,7 +289,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 19
+aXVAATT_TOK 22
 
 eATTRIB    5
 aNAME      SourceViewName
@@ -267,7 +300,7 @@ aTYPE      S
 aLTH       50
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 12
+aXVAATT_TOK 15
 
 eCHILDENTITY 4
 aNAME      KeyList
@@ -293,7 +326,7 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 21
+aXVAATT_TOK 24
 
 eATTRIB    5
 aNAME      StringValue
@@ -304,7 +337,7 @@ aTYPE      S
 aLTH       250
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 22
+aXVAATT_TOK 25
 
 eATTRIB    5
 aNAME      IntegerList
@@ -315,5 +348,43 @@ aTYPE      B
 aLTH       7
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 23
+aXVAATT_TOK 26
+
+eCHILDENTITY 3
+aNAME      ActivateOption
+aERENT_TOK 110001917
+aERREL_TOK 110001917
+aFULLPERSIST Y
+aCARDMIN   0
+aCARDMAX   999999
+aCREATE    Y
+aDELETE    Y
+aPDELETE   D
+aUPDATE    Y
+aDERIVED   Y
+aINCLSRC   Y
+aMAX_LTH   510
+
+eATTRIB    4
+aNAME      Name
+aERATT_TOK 110001919
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 27
+aHASHKEY   UNDER_PARENT
+
+eATTRIB    4
+aNAME      Value
+aERATT_TOK 110001921
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 28
 

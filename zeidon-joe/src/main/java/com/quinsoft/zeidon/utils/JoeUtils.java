@@ -21,8 +21,10 @@ package com.quinsoft.zeidon.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.Enumeration;
@@ -499,6 +501,42 @@ public class JoeUtils
         StringWriter writer = new StringWriter();
         view.writeOiAsJson( writer );
         return writer.toString();
+    }
+    
+    public static void writeOiToJsonFile( View view, String filename )
+    {
+        Writer writer = null;
+        try
+        {
+            writer = new FileWriter( filename );
+            view.writeOiAsJson( writer );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e ).prependFilename( filename );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( writer );
+        }
+    }
+
+    public static View actviateOiFromJsonFile( TaskQualification taskQual, String filename )
+    {
+        InputStream stream = null;
+        try
+        {
+            stream = new FileInputStream( filename );
+            return taskQual.activateOiFromJsonStream( stream, null );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e ).prependFilename( filename );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( stream );
+        }
     }
 
     public static void RegisterJmxBean( Object bean, String beanName, String jmxAppName )

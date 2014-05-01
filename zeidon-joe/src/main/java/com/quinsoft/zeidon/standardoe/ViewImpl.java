@@ -44,6 +44,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.CopyOiOptions;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.EntityCursor;
@@ -68,6 +69,8 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  */
 class ViewImpl extends AbstractTaskQualification implements InternalView, Comparable<ViewImpl>
 {
+    private static final CopyOiOptions DEFAULT_COPY_OI_OPTIONS = new CopyOiOptions();
+
     private static final EnumSet<CreateEntityFlags> CREATE_OI_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                       CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
                                                                       CreateEntityFlags.fIGNORE_PERMISSIONS);
@@ -248,13 +251,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public Iterable<EntityInstance> getHierEntityList()
     {
-        return getHierEntityList( true );
+        return getHierEntityList( true, null );
     }
 
     @Override
     public Iterable<EntityInstance> getHierEntityList( boolean includeRoot )
     {
-        return getHierEntityList( true, null );
+        return getHierEntityList( includeRoot, null );
     }
 
     @Override
@@ -1002,5 +1005,34 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     public void writeOiAsJson( Writer writer )
     {
         writeOiAsJson( writer, (EnumSet<WriteOiFlags>) null );
+    }
+
+    @Override
+    public View copyOi( )
+    {
+        return copyOi( DEFAULT_COPY_OI_OPTIONS );
+    }
+
+    @Override
+    public View copyOi( CopyOiOptions options )
+    {
+        Task owningTask = options.owningTask;
+        if ( owningTask == null )
+            owningTask = getTask();
+
+        ViewEntity rootViewEntity = getViewOd().getRoot();
+        View copy = owningTask.activateEmptyObjectInstance( getViewOd() );
+        EntityCursor rootCursor = copy.cursor( rootViewEntity );
+        for ( EntityInstance srcInstance = getObjectInstance().getRootEntityInstance();
+                             srcInstance != null;
+                             srcInstance = srcInstance.getNextTwin() )
+        {
+            if ( srcInstance.isHidden() )
+                continue;
+
+            rootCursor.copySubobject( srcInstance, CursorPosition.NEXT );
+        }
+
+        return null;
     }
 }

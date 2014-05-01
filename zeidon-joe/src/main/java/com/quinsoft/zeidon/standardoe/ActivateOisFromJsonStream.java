@@ -145,18 +145,22 @@ public class ActivateOisFromJsonStream
 
         String fieldName = jp.getCurrentName();
         if ( StringUtils.equals( fieldName, ".oimeta" ) )
-            readOiMeta();
+            token = readOiMeta();
         else
             throw new ZeidonException( ".oimeta object not specified in JSON stream" );
 
-        fieldName = jp.getCurrentName();
-        if ( !StringUtils.equals( fieldName, viewOd.getRoot().getName() ) )
-            throw new ZeidonException( "First entity specified in OI (%s) is not the root (%s)", fieldName,
-                                       viewOd.getRoot().getName() );
-
-        readEntity( fieldName );
-
-        token = jp.nextToken();
+        // If the token after reading the .oimeta is END_OBJECT then the OI is empty.
+        if ( token != JsonToken.END_OBJECT )
+        {
+            fieldName = jp.getCurrentName();
+            if ( !StringUtils.equals( fieldName, viewOd.getRoot().getName() ) )
+                throw new ZeidonException( "First entity specified in OI (%s) is not the root (%s)", fieldName,
+                                           viewOd.getRoot().getName() );
+    
+            readEntity( fieldName );
+            token = jp.nextToken();
+        }
+        
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "OI JSON stream doesn't end with object." );
 
@@ -314,7 +318,7 @@ public class ActivateOisFromJsonStream
         meta.excluded = increStr.contains( "x" );
     }
 
-    private void readOiMeta() throws Exception
+    private JsonToken readOiMeta() throws Exception
     {
         String odName = null;
         jp.nextToken();
@@ -341,8 +345,16 @@ public class ActivateOisFromJsonStream
         viewOd = application.getViewOd( task, odName );
         view = task.activateEmptyObjectInstance( viewOd );
         returnList.add( view );
-        jp.nextToken();
-        jp.nextToken();
+        JsonToken token = jp.nextToken();
+        
+        // If the next token is FIELD_NAME then OI data is next so get the next token.
+        // If it's not the the OI is EMPTY and token should be END_OBJECT.
+        if ( token == JsonToken.FIELD_NAME )
+            token = jp.nextToken();
+        else
+            assert token == JsonToken.END_OBJECT;
+        
+        return token;
     }
 
     private static class EntityMeta

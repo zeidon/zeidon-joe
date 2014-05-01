@@ -2596,7 +2596,7 @@ public abstract class VmlOperation
       }
       else
       {
-         string1 = (strOne == null) ? "" : strOne.substring( strOneIdx, strOneMaxCompare );
+         string1 = (strOne == null) ? "" : strOne.substring( strOneIdx, strOneIdx + strOneMaxCompare );
       }
 
       if ( strTwoMaxCompare <= 0 )

@@ -16,6 +16,8 @@ object AttributeInstance {
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
     var contextName: String = null
 
+    def isNull = jattributeInstance.isNull()
+    
     override def equals(other: Any) = other match {
         // If 'other' is an AttributeInstance, get its value before calling compare.
         case attr: AttributeInstance => jattributeInstance.compare(attr.jattributeInstance.getInternalAttributeValue()) == 0

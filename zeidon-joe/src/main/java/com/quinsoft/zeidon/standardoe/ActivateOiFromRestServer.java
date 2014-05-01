@@ -5,9 +5,11 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -19,6 +21,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.ZeidonRestException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
@@ -86,9 +89,12 @@ public class ActivateOiFromRestServer implements Activator
 
             HttpResponse response = client.execute( post );
             InputStream stream = response.getEntity().getContent();
+            StatusLine status = response.getStatusLine();
+            task.log().info( "Status from http activate = %s", status );
+            int statusCode = status.getStatusCode();
 
             // If we're in debug mode, print out the results.
-            if ( task.log().isDebugEnabled() )
+            if ( task.log().isDebugEnabled() || statusCode != 200 )
             {
                 StringWriter writer = new StringWriter();
                 IOUtils.copy(stream, writer, "UTF-8");
@@ -97,21 +103,25 @@ public class ActivateOiFromRestServer implements Activator
                 stream = IOUtils.toInputStream(stringResponse, "UTF-8");
             }
 
-            // Since we expect multiple OIs in a single stream, create a stream reader to share
-            // between activates.
+            if ( statusCode != 200 )
+            {
+                throw new ZeidonException( "http activate failed with status %s", status )
+                            .appendMessage( "web URL = %s", url );
+            }
 
             ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
-            View restRc = activator.read().get( 0 );
+            List<View> views = activator.read();
+            View restRc = views.get( 0 );
             restRc.logObjectInstance();
-            return restRc;
+            Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();
+            if ( rc != 0 )
+            {
+                String errorMsg = restRc.cursor( "RestResponse" ).getAttribute( "ErrorMessage" ).getString();
+                throw new ZeidonRestException( "Error activating OI from REST server %d", rc )
+                                                .appendMessage( "%s", errorMsg );
+            }
 
-//            activator = new ActivateOiFromStream(getTask(), application, stream, null );
-//            activator.setStreamReader( reader );
-//            activator.setEmptyView( view );
-//            ViewImpl newView = activator.read();
-//
-//            newView.logObjectInstance();
-//            return newView;
+            return views.get( 1 );
         }
         catch ( Exception e )
         {

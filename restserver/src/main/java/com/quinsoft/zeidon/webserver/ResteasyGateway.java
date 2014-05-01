@@ -3,9 +3,6 @@
  */
 package com.quinsoft.zeidon.webserver;
 
-import java.io.InputStream;
-import java.io.StringWriter;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -18,16 +15,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 
-import org.apache.commons.io.IOUtils;
-
-import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.ObjectEngine;
-import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.DefaultJavaOeConfiguration;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.standardoe.JavaOeConfiguration;
+import com.quinsoft.zeidon.utils.RestServerImplementation;
+import com.quinsoft.zeidon.utils.RestServerImplementation.DataFormat;
 
 /**
  * A simple RESTEasy service gateway for activating and committing OIs.
@@ -40,7 +33,7 @@ public class ResteasyGateway extends Application
 {
     @Resource private JavaOeConfiguration oeConfig;
     @Resource private ObjectEngine objectEngine; // = JavaObjectEngine.getInstance();
-
+    private final RestServerImplementation restImpl;
 
     public ResteasyGateway( @Context ServletContext servletContext )
     {
@@ -54,6 +47,8 @@ public class ResteasyGateway extends Application
 
             objectEngine = new JavaObjectEngine( oeConfig );
         }
+        
+        restImpl = new RestServerImplementation( objectEngine );
     }
 
     @GET
@@ -73,27 +68,7 @@ public class ResteasyGateway extends Application
                                 @QueryParam("viewOdName")  String viewOdName,
                                 String content )
     {
-        Task task = objectEngine.createTask( applicationName, false );
-
-        try
-        {
-            InputStream stream = IOUtils.toInputStream(content, "UTF-8");
-            View qual = task.activateOiFromJsonStream( stream, null );
-            qual.logObjectInstance();
-            View view = task.activateObjectInstance( viewOdName, qual, new ActivateOptions( task ) );
-
-            StringWriter writer = new StringWriter();
-            view.writeOiAsJson( writer );
-            return writer.toString();
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-        finally
-        {
-            task.dropTask();
-        }
+        return restImpl.activate( applicationName, viewOdName, content, DataFormat.JSON );
     }
 
     @GET

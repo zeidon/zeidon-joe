@@ -16,4 +16,5 @@ class EntityInstance( private[this] val jentityInstance: com.quinsoft.zeidon.Ent
 {    
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityInstance
     def delete: CursorResult = jentityInstance.deleteEntity()
+    def drop: CursorResult = jentityInstance.dropEntity()
 }

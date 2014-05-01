@@ -18,6 +18,12 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  */
 public class JsonUtils
 {
+    /**
+     * Write the XOD for view as JSON to a writer.
+     *
+     * @param view
+     * @param writer
+     */
     public static void writeXodToJsonStream( View view, Writer writer )
     {
         // Determine the name of the XOD for view.
@@ -32,6 +38,8 @@ public class JsonUtils
         {
             stream = JoeUtils.getInputStream( filename );
             View xod = view.activateOiFromStream( "TZZOXODO", zeidonTools, stream, null );
+
+            // Write it.
             xod.writeOiAsJson( writer );
         }
         finally

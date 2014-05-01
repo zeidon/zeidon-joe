@@ -80,7 +80,7 @@ public class TestZencas
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         View stud = new QualificationBuilder( zencas )
                         .setViewOd( "lStudDpt" )
-                        .setOiServerUrl( fileDbUrl )
+                        .setOiSourceUrl( fileDbUrl )
                         .addAttribQual( "Status", "A" )
                         .addAttribQual( "AND" )
                         .addAttribQual( "MajorDepartment", "ID", "=", 3 )
@@ -223,6 +223,40 @@ public class TestZencas
             IOUtils.closeQuietly( inputStream );
         }
 
+        stud = new QualificationBuilder( zencas )
+                            .setViewOd( "mCollege" )
+                            .singleRoot()
+                            .addAttribQual( "ID", 5 )
+                            .activate();
+        stud.cursor( "College" ).deleteEntity();
+        stream = null;
+        try
+        {
+            stream = new BufferedWriter( new FileWriter( getTempDir() + "/mcollege.json" ) );
+            WriteOiToJsonStream writer = new WriteOiToJsonStream( stud, stream, options );
+            writer.writeToStream();
+        }
+        finally
+        {
+            IOUtils.closeQuietly( stream );
+        }
+
+        inputStream = new FileInputStream( getTempDir() + "/mcollege.json" );
+        try
+        {
+            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( zencas, inputStream, null );
+            List<View> viewList = activator.read();
+            for ( View v : viewList )
+            {
+                v.logObjectInstance();
+                v.log().info( "Entity count = %d", v.cursor( "College" ).getEntityCount() );
+            }
+
+        }
+        finally
+        {
+            IOUtils.closeQuietly( inputStream );
+        }
 	}
 
 	@Test

@@ -30,6 +30,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.CopyOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Level;
@@ -633,5 +634,17 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public ViewImpl activateOiFromStream( InputStream stream, EnumSet<ActivateFlags> control )
     {
         return getView().activateOiFromStream( stream, control );
+    }
+
+    @Override
+    public View copyOi( )
+    {
+        return getView().copyOi();
+    }
+
+    @Override
+    public View copyOi( CopyOiOptions options )
+    {
+        return getView().copyOi( options );
     }
 }

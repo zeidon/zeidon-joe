@@ -84,6 +84,7 @@ public class JdbcHandler extends AbstractSqlHandler
         super( task, options );
         this.options = options;
         configGroupName = options.getConfigValue( "_JDBC", "JdbcConfigGroupName" );
+        task.log().debug( "JDBC config group = %s", configGroupName );
 
         if ( isBindAllValues() )
             cachedStatements = new HashMap<String, PreparedStatementCacheValue>();
@@ -102,7 +103,7 @@ public class JdbcHandler extends AbstractSqlHandler
         if ( connection != null )
             return connection;
 
-        String url = options.getOiServerUrl();
+        String url = options.getOiSourceUrl();
         connection = getConnectionPool().getConnection( url, task, this, application );
         if ( connection != null )
             return connection;
@@ -151,7 +152,7 @@ public class JdbcHandler extends AbstractSqlHandler
     public void beginTransaction()
     {
         connection = getConnection( application );
-        task.dblog().debug( "JDBC: got a connection to %s", options.getOiServerUrl() );
+        task.dblog().debug( "JDBC: got a connection to %s", options.getOiSourceUrl() );
     }
 
     /* (non-Javadoc)
@@ -183,7 +184,7 @@ public class JdbcHandler extends AbstractSqlHandler
         }
         catch ( Throwable e )
         {
-            throw ZeidonException.prependMessage( e, "JDBC = %s", options.getOiServerUrl() );
+            throw ZeidonException.prependMessage( e, "JDBC = %s", options.getOiSourceUrl() );
         }
     }
 
@@ -340,7 +341,7 @@ public class JdbcHandler extends AbstractSqlHandler
         }
         catch ( Exception e )
         {
-            throw ZeidonException.prependMessage( e, "SQL => %s\nDB: %s", sql, options.getOiServerUrl() )
+            throw ZeidonException.prependMessage( e, "SQL => %s\nDB: %s", sql, options.getOiSourceUrl() )
                                  .prependViewEntity( viewEntity )
                                  .prependDataRecord( viewEntity.getDataRecord() );
         }
@@ -840,7 +841,9 @@ public class JdbcHandler extends AbstractSqlHandler
             }
             catch ( SQLException e )
             {
-                throw ZeidonException.wrapException( e ).appendMessage( "Connection String = %s", url );
+                throw ZeidonException.wrapException( e )
+                                     .appendMessage( "Connection String = %s", url )
+                                     .appendMessage( "Username: %s", handler.getUserName() );
             }
 
             return connection;
@@ -926,7 +929,7 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 // Translator isn't specified.  Let's try to be smart and determine the
                 // correct translator from the connection string.
-                String connStr = options.getOiServerUrl();
+                String connStr = options.getOiSourceUrl();
                 if ( ! StringUtils.isBlank( connStr ) )
                 {
                     if ( connStr.contains( "sqlite" ) )
@@ -948,7 +951,7 @@ public class JdbcHandler extends AbstractSqlHandler
             catch ( Throwable t )
             {
                 throw ZeidonException.prependMessage( t, "Error trying to load translator class = '%s', DB=%s",
-                                                      transName, options.getOiServerUrl() );
+                                                      transName, options.getOiSourceUrl() );
             }
         }
 

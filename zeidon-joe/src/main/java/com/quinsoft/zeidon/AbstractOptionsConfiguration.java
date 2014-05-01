@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public abstract class AbstractOptionsConfiguration
 {
-    public static final String OI_SERVER_URL = "oiServerUrl";
+    public static final String OI_SOURCE_URL = "oiSourceUrl";
 
     private final Task                  task;
     private final Map<String,String>    overrideMap;
@@ -27,14 +27,14 @@ public abstract class AbstractOptionsConfiguration
 
     public abstract Application getApplication();
 
-    public String getOiServerUrl()
+    public String getOiSourceUrl()
     {
-        return getConfigValue( getApplication().getName(), OI_SERVER_URL );
+        return getConfigValue( getApplication().getName(), OI_SOURCE_URL );
     }
 
-    public void setOiServerUrl( String url )
+    public void setOiSourceUrl( String url )
     {
-        overrideConfigValue( OI_SERVER_URL, url );
+        overrideConfigValue( OI_SOURCE_URL, url );
     }
 
     public AbstractOptionsConfiguration overrideConfigValue( String key, String value )
