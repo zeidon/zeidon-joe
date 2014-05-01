@@ -1,0 +1,7306 @@
+z1000-Zeidon    ZEIDON   TZDMXGPO 01/18/14   21:33:12 1.0a2    
+eDomainGroup 1
+aName      Zeidon9B
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319720
+aName      AccessAuthority
+aDesc      Configuration Management Authority levels to CPLRs
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1319721
+aName      AccessAuthority
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484487
+
+eTableEntry 4
+aZKey      1319722
+aExternalValue Read Only
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1319723
+aExternalValue Update
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1319724
+aExternalValue Administrator
+aInternalValue 2
+
+eContext   3
+aZKey      127082698
+aName      CPLR_AccessAuthority
+
+eTableEntry 4
+aZKey      92484488
+
+eTableEntry 4
+aZKey      127082699
+aExternalValue Read Only
+aInternalValue 0
+
+eTableEntry 4
+aZKey      127082700
+aExternalValue Update
+aInternalValue 1
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000028
+aName      AlphaNumeric
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmAlphaNumeric
+aDecimalFormat 1234
+
+eContext   3
+aZKey      90000029
+aName      ALPHANUMERIC
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90059367
+aName      AutodesignCaseType
+aDesc      Autodesign Case 1A, 1B, 1C, 2, 3, 4, etc.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      90059368
+aName      AutodesignCaseType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656408
+
+eTableEntry 4
+aZKey      90059369
+aExternalValue Case 1A - Root of LOD
+aInternalValue 1A
+
+eTableEntry 4
+aZKey      90059370
+aExternalValue Case 1B - Attrib. under Root
+aInternalValue 1B
+
+eTableEntry 4
+aZKey      90059371
+aExternalValue Case 1C - Attrib. under Attrib.
+aInternalValue 1C
+
+eTableEntry 4
+aZKey      90080894
+aExternalValue Case 1D - Attrib. under Assoc.
+aInternalValue 1D
+
+eTableEntry 4
+aZKey      90197173
+aExternalValue Case 1F - Root/Attrib as Tab, Style 1
+aInternalValue 1F
+
+eTableEntry 4
+aZKey      90197174
+aExternalValue Case 1G - Root/Attrib as Tab, Style 2
+aInternalValue 1G
+
+eTableEntry 4
+aZKey      90059372
+aExternalValue Case 2    - Include single
+aInternalValue 2
+
+eTableEntry 4
+aZKey      90059373
+aExternalValue Case 3    - Include mult, many-to-many
+aInternalValue 3
+
+eTableEntry 4
+aZKey      90059374
+aExternalValue Case 4    - Primary Fund. under Assoc.
+aInternalValue 4
+
+eTableEntry 4
+aZKey      90157295
+aExternalValue Case 5    - Secondary Fund. under Assoc.
+aInternalValue 5
+
+eTableEntry 4
+aZKey      90237245
+aExternalValue Case 6    - Fund. as Combobox
+aInternalValue 6
+
+eTableEntry 4
+aZKey      90141787
+aExternalValue Case R   - Report Group
+aInternalValue R
+
+eTableEntry 4
+aZKey      90084880
+aExternalValue None      - No window / report group
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90067466
+aName      AutodesignDefaultText
+aDesc      Default text for Autodesign
+aDomainType E
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      90067467
+aName      AutodesignDefaultText
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.BlobDomain
+aZKey      90000007
+aName      Blob
+aDesc      A do nothing domain for blobs
+aDomainType E
+aDataType  B
+aContextRestriction N
+
+eContext   3
+aZKey      90000008
+aName      BLOB
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319735
+aName      CM_DataBaseMode
+aDesc      Indicator for how CPLRs are to be maintained
+aDomainType T
+aDataType  L
+aMaxStringLth 11
+aContextRestriction N
+
+eContext   3
+aZKey      1319736
+aName      CM_DataBaseMode
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484490
+
+eTableEntry 4
+aZKey      1319738
+aExternalValue File Only
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1319739
+aExternalValue Test
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1319740
+aExternalValue Performance
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1319741
+aExternalValue Repository Only
+aInternalValue 3
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319742
+aName      CM_MetaDefStatus
+aDesc      Status for W_MetaDef in LPLR
+aDomainType T
+aDataType  L
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      96000567
+aName      CM_MetaCheckOutState
+
+eTableEntry 4
+aZKey      96000568
+aExternalValue No
+aInternalValue 0
+
+eTableEntry 4
+aZKey      96000569
+aExternalValue No
+
+eTableEntry 4
+aZKey      96000570
+aExternalValue .
+aInternalValue 1
+
+eContext   3
+aZKey      1319743
+aName      CM_MetaDefStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1319744
+aExternalValue Inactive
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1319745
+aExternalValue Inactive
+
+eTableEntry 4
+aZKey      1319746
+aExternalValue Active
+aInternalValue 1
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319747
+aName      CM_MetaDefUpdated
+aDesc      Update Indicator on W_MetaDef in LPLR
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1319748
+aName      CM_MetaDefUpdated
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1319749
+aExternalValue No
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1319750
+aExternalValue Yes (Implicit)
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1319751
+aExternalValue Yes (Explicit)
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1319752
+aExternalValue Yes (Deleted)
+aInternalValue 3
+
+eTableEntry 4
+aZKey      127083404
+aExternalValue Yes (Implicit, SourceFile)
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1319753
+aExternalValue Yes (Implicit)
+aInternalValue 99
+
+eTableEntry 4
+aZKey      1319754
+aExternalValue No
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319755
+aName      CM_Type
+aDesc      Meta types for Configuration Management
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1319756
+aName      CM_Type
+aIsDefault Y
+
+eTableEntry 4
+aZKey      4896563
+
+eTableEntry 4
+aZKey      1319758
+aExternalValue Header
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1319759
+aExternalValue Source
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1319760
+aExternalValue Global Operation
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1319761
+aExternalValue Domain
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1319762
+aExternalValue Data Model
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1319763
+aExternalValue Subject Area
+aInternalValue 5
+
+eTableEntry 4
+aZKey      1319764
+aExternalValue Technical Environment
+aInternalValue 6
+
+eTableEntry 4
+aZKey      1319765
+aExternalValue Logical Object Definition
+aInternalValue 7
+
+eTableEntry 4
+aZKey      1319766
+aExternalValue Physical Object Definition
+aInternalValue 8
+
+eTableEntry 4
+aZKey      1319767
+aExternalValue Registered View
+aInternalValue 9
+
+eTableEntry 4
+aZKey      1319768
+aExternalValue Presentation Environment
+aInternalValue 10
+
+eTableEntry 4
+aZKey      1319769
+aExternalValue Dialog
+aInternalValue 11
+
+eTableEntry 4
+aZKey      1319770
+aExternalValue User Interface Specification
+aInternalValue 12
+
+eTableEntry 4
+aZKey      1319771
+aExternalValue Domain Group
+aInternalValue 13
+
+eTableEntry 4
+aZKey      1319772
+aExternalValue Global Operation Group
+aInternalValue 14
+
+eTableEntry 4
+aZKey      90152343
+aExternalValue Report
+aInternalValue 15
+
+eTableEntry 4
+aZKey      4896557
+aExternalValue XSLT
+aInternalValue 16
+
+eTableEntry 4
+aZKey      1319773
+aExternalValue Header
+aInternalValue 2000
+
+eTableEntry 4
+aZKey      1319774
+aExternalValue Source
+aInternalValue 2001
+
+eTableEntry 4
+aZKey      1319775
+aExternalValue Global Operation
+aInternalValue 2002
+
+eTableEntry 4
+aZKey      1319776
+aExternalValue Domain
+aInternalValue 2003
+
+eTableEntry 4
+aZKey      1319777
+aExternalValue Data Model
+aInternalValue 2004
+
+eTableEntry 4
+aZKey      1319778
+aExternalValue Subject Area
+aInternalValue 2005
+
+eTableEntry 4
+aZKey      1319779
+aExternalValue Technical Environment
+aInternalValue 2006
+
+eTableEntry 4
+aZKey      1319780
+aExternalValue Logical Object Definition
+aInternalValue 2007
+
+eTableEntry 4
+aZKey      1319781
+aExternalValue Physical Object Definition
+aInternalValue 2008
+
+eTableEntry 4
+aZKey      1319782
+aExternalValue Registered View
+aInternalValue 2009
+
+eTableEntry 4
+aZKey      1319783
+aExternalValue Presentation Environment
+aInternalValue 2010
+
+eTableEntry 4
+aZKey      1319784
+aExternalValue Dialog
+aInternalValue 2011
+
+eTableEntry 4
+aZKey      1319785
+aExternalValue User Interface Specification
+aInternalValue 2012
+
+eTableEntry 4
+aZKey      1319786
+aExternalValue Domain Group
+aInternalValue 2013
+
+eTableEntry 4
+aZKey      1319787
+aExternalValue Global Operation Group
+aInternalValue 2014
+
+eTableEntry 4
+aZKey      90152344
+aExternalValue Report
+aInternalValue 2015
+
+eTableEntry 4
+aZKey      4896558
+aExternalValue XSLT
+aInternalValue 2016
+
+eContext   3
+aZKey      1319788
+aName      CM_Type_Short
+
+eTableEntry 4
+aZKey      4896564
+
+eTableEntry 4
+aZKey      1319790
+aExternalValue Header
+aInternalValue 0
+
+eTableEntry 4
+aZKey      11014000
+aExternalValue Source
+aInternalValue 1
+
+eTableEntry 4
+aZKey      11014001
+aExternalValue G Oper
+aInternalValue 2
+
+eTableEntry 4
+aZKey      11014002
+aExternalValue Domain
+aInternalValue 3
+
+eTableEntry 4
+aZKey      11014003
+aExternalValue ERD
+aInternalValue 4
+
+eTableEntry 4
+aZKey      11014004
+aExternalValue SA
+aInternalValue 5
+
+eTableEntry 4
+aZKey      11014005
+aExternalValue TE
+aInternalValue 6
+
+eTableEntry 4
+aZKey      11014006
+aExternalValue LOD
+aInternalValue 7
+
+eTableEntry 4
+aZKey      11014007
+aExternalValue POD
+aInternalValue 8
+
+eTableEntry 4
+aZKey      11014008
+aExternalValue R View
+aInternalValue 9
+
+eTableEntry 4
+aZKey      11014009
+aExternalValue PPE
+aInternalValue 10
+
+eTableEntry 4
+aZKey      11014010
+aExternalValue Dialog
+aInternalValue 11
+
+eTableEntry 4
+aZKey      11014011
+aExternalValue UIS
+aInternalValue 12
+
+eTableEntry 4
+aZKey      11014012
+aExternalValue DomGrp
+aInternalValue 13
+
+eTableEntry 4
+aZKey      11014013
+aExternalValue OperGrp
+aInternalValue 14
+
+eTableEntry 4
+aZKey      11014014
+aExternalValue Report
+aInternalValue 15
+
+eTableEntry 4
+aZKey      4896561
+aExternalValue XSLT
+aInternalValue 16
+
+eTableEntry 4
+aZKey      1319791
+aExternalValue Source
+aInternalValue 2001
+
+eTableEntry 4
+aZKey      1319792
+aExternalValue G Oper
+aInternalValue 2002
+
+eTableEntry 4
+aZKey      1319793
+aExternalValue Domain
+aInternalValue 2003
+
+eTableEntry 4
+aZKey      1319794
+aExternalValue ERD
+aInternalValue 2004
+
+eTableEntry 4
+aZKey      1319795
+aExternalValue SA
+aInternalValue 2005
+
+eTableEntry 4
+aZKey      1319796
+aExternalValue TE
+aInternalValue 2006
+
+eTableEntry 4
+aZKey      1319797
+aExternalValue LOD
+aInternalValue 2007
+
+eTableEntry 4
+aZKey      1319798
+aExternalValue POD
+aInternalValue 2008
+
+eTableEntry 4
+aZKey      1319799
+aExternalValue R View
+aInternalValue 2009
+
+eTableEntry 4
+aZKey      1319800
+aExternalValue PPE
+aInternalValue 2010
+
+eTableEntry 4
+aZKey      1319801
+aExternalValue Dialog
+aInternalValue 2011
+
+eTableEntry 4
+aZKey      1319802
+aExternalValue UIS
+aInternalValue 2012
+
+eTableEntry 4
+aZKey      1319803
+aExternalValue DomGrp
+aInternalValue 2013
+
+eTableEntry 4
+aZKey      1319804
+aExternalValue OperGrp
+aInternalValue 2014
+
+eTableEntry 4
+aZKey      90152346
+aExternalValue Report
+aInternalValue 2015
+
+eTableEntry 4
+aZKey      4896562
+aExternalValue XSLT
+aInternalValue 2016
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      4531067
+aName      Color
+aDomainType E
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      4531068
+aName      Color
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319806
+aName      DataType
+aDesc      Zeidon defined datatypes ( logical & physical )
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1319828
+aName      C-3GL
+
+eTableEntry 4
+aZKey      92484493
+
+eTableEntry 4
+aZKey      1319829
+aExternalValue zPCHAR / char * - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319830
+aExternalValue zCHAR / char  - Single Char
+aInternalValue Y
+
+eTableEntry 4
+aZKey      1319831
+aExternalValue zLONG / long (-2,147,483,648 to +2,147,483,647)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319832
+aExternalValue zDECIMAL / Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      1319833
+aExternalValue zSHORT / short int (-32,768 to +32,767)
+aInternalValue N
+
+eContext   3
+aZKey      1319807
+aName      DataType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484494
+
+eTableEntry 4
+aZKey      1319808
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319809
+aExternalValue Byte - Single Char
+aInternalValue Y
+
+eTableEntry 4
+aZKey      1319810
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319811
+aExternalValue Decimal ( 15 digits )
+aInternalValue M
+
+eTableEntry 4
+aZKey      1319812
+aExternalValue Short Number (-32,768 to +32,767)
+aInternalValue N
+
+eTableEntry 4
+aZKey      1319813
+aExternalValue Short Scientific (3.4x10^±38) (7 digit prec.)
+aInternalValue F
+
+eTableEntry 4
+aZKey      1319814
+aExternalValue Std. Scientific (1.7x10^±308) (15 digit prec.)
+aInternalValue R
+
+eTableEntry 4
+aZKey      1319815
+aExternalValue Timestamp
+aInternalValue T
+
+eTableEntry 4
+aZKey      1319816
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      1319817
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      1319818
+aExternalValue BLOb - Binary Large Object
+aInternalValue B
+
+eTableEntry 4
+aZKey      1319819
+aExternalValue View
+aInternalValue V
+
+eTableEntry 4
+aZKey      1319820
+aExternalValue Entity Name
+aInternalValue E
+
+eTableEntry 4
+aZKey      1319821
+aExternalValue Attribute Name
+aInternalValue A
+
+eContext   3
+aZKey      1319822
+aName      Domain
+
+eTableEntry 4
+aZKey      92484495
+
+eTableEntry 4
+aZKey      1319823
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319824
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319825
+aExternalValue Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      1319826
+aExternalValue Date & Time
+aInternalValue T
+
+eTableEntry 4
+aZKey      90024739
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      90025042
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      1319827
+aExternalValue BLOb - Binary Large Object
+aInternalValue B
+
+eContext   3
+aZKey      1319834
+aName      VML
+
+eTableEntry 4
+aZKey      92484496
+
+eTableEntry 4
+aZKey      1319836
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319837
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319838
+aExternalValue Short Number (±32,000)
+aInternalValue N
+
+eTableEntry 4
+aZKey      1319839
+aExternalValue Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      1319840
+aExternalValue View
+aInternalValue V
+
+eTableEntry 4
+aZKey      1319841
+aExternalValue Entity Name
+aInternalValue E
+
+eTableEntry 4
+aZKey      1319842
+aExternalValue Attribute Name
+aInternalValue A
+
+eTableEntry 4
+aZKey      1319843
+aExternalValue Byte - Single Char
+aInternalValue Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319844
+aName      DataType3GL
+aDesc      VML Supported Types...
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1319845
+aName      DataType3GL
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484497
+
+eTableEntry 4
+aZKey      1319846
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319848
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319849
+aExternalValue Decimal (18 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      1319850
+aExternalValue Short Number (±32,000)
+aInternalValue N
+
+eTableEntry 4
+aZKey      1319851
+aExternalValue View
+aInternalValue V
+
+eTableEntry 4
+aZKey      1319852
+aExternalValue Entity Name
+aInternalValue E
+
+eTableEntry 4
+aZKey      1319853
+aExternalValue Attribute Name
+aInternalValue A
+
+eTableEntry 4
+aZKey      1319854
+aExternalValue Void
+aInternalValue O
+
+eTableEntry 4
+aZKey      90019974
+aExternalValue Domain Info Struct
+aInternalValue I
+
+eContext   3
+aZKey      1319855
+aName      Display
+
+eTableEntry 4
+aZKey      92484498
+
+eTableEntry 4
+aZKey      1319857
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319858
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319859
+aExternalValue Short Number (±32,000)
+aInternalValue N
+
+eTableEntry 4
+aZKey      1319860
+aExternalValue Decimal (18 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      1319861
+aExternalValue View
+aInternalValue V
+
+eTableEntry 4
+aZKey      1319862
+aExternalValue Entity Name
+aInternalValue E
+
+eTableEntry 4
+aZKey      1319863
+aExternalValue Attribute Name
+aInternalValue A
+
+eTableEntry 4
+aZKey      1319865
+aExternalValue Void
+aInternalValue O
+
+eContext   3
+aZKey      89095614
+aName      NonGlobalParameter
+
+eTableEntry 4
+aZKey      92484499
+
+eTableEntry 4
+aZKey      89095615
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      89095616
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      89101021
+aExternalValue Short Number (±32,000)
+aInternalValue N
+
+eTableEntry 4
+aZKey      89095617
+aExternalValue Decimal (18 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      89095618
+aExternalValue View
+aInternalValue V
+
+eContext   3
+aZKey      1319866
+aName      OtherLangFuture
+
+eContext   3
+aZKey      89095607
+aName      ReturnCode
+
+eTableEntry 4
+aZKey      92484500
+
+eTableEntry 4
+aZKey      89095608
+aExternalValue Short Number (±32,000)
+aInternalValue N
+
+eTableEntry 4
+aZKey      89095609
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      89095610
+aExternalValue Decimal (18 digits)
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319867
+aName      DataTypeDomain
+aDesc      Zeidon domain datatypes (logical) supported by Core
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1319868
+aName      DataTypeDomain
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484501
+
+eTableEntry 4
+aZKey      1319870
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319871
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319872
+aExternalValue Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      90024741
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      1319873
+aExternalValue Date & Time
+aInternalValue T
+
+eTableEntry 4
+aZKey      90025043
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      1319874
+aExternalValue BLOb - Binary Large Object
+aInternalValue B
+
+eContext   3
+aZKey      1319875
+aName      Display
+
+eTableEntry 4
+aZKey      92484502
+
+eTableEntry 4
+aZKey      1319876
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319877
+aExternalValue Number (±2,147,483,647)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319878
+aExternalValue Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      90024742
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      1319879
+aExternalValue Date & Time
+aInternalValue T
+
+eTableEntry 4
+aZKey      90025044
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      1319880
+aExternalValue BLOb - Binary Large Object
+aInternalValue B
+
+eContext   3
+aZKey      90182731
+aName      DisplayShort
+
+eTableEntry 4
+aZKey      92484503
+
+eTableEntry 4
+aZKey      90182732
+aExternalValue String
+aInternalValue S
+
+eTableEntry 4
+aZKey      90182734
+aExternalValue Number
+aInternalValue L
+
+eTableEntry 4
+aZKey      90182737
+aExternalValue Decimal
+aInternalValue M
+
+eTableEntry 4
+aZKey      90024743
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      90182738
+aExternalValue Date/Time
+aInternalValue T
+
+eTableEntry 4
+aZKey      90025045
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      90182739
+aExternalValue Blob
+aInternalValue B
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      90000052
+aName      Date
+aDesc      This domain manipulates the date portion of DateTime
+aDomainType A
+aDataType  T
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDate
+
+eContext   3
+aZKey      90000053
+aName      Date
+aEditString YYYYmmdd
+aJavaEditString yyyyMMdd
+
+eContext   3
+aZKey      90000068
+aName      Day
+
+eContext   3
+aZKey      90000074
+aName      DayOfMonth
+aEditString D
+aJavaEditString d
+
+eContext   3
+aZKey      90000073
+aName      DayOfWeek
+aEditString Dddd
+aJavaEditString dddd
+
+eContext   3
+aZKey      90000075
+aName      DayOfYear
+aEditString jjj
+aJavaEditString D
+
+eContext   3
+aZKey      90000058
+aName      DD.MM.YYYY
+aEditString dd.mm.YYYY
+aJavaEditString dd.MM.yyyy
+
+eContext   3
+aZKey      90000063
+aName      DDMonthYYYY
+aEditString dd Mmmm YYYY
+aJavaEditString dd MMMM yyyy
+
+eContext   3
+aZKey      90000065
+aName      DDMonYYYY
+aEditString dd Mmm YYYY
+aJavaEditString dd MMM yyyy
+
+eContext   3
+aZKey      123033213
+aName      FreeForm
+aEditString *
+aJavaEditString *
+
+eContext   3
+aZKey      90000056
+aName      MM-DD-YYYY
+aEditString mm-dd-YYYY
+aJavaEditString MM-dd-yyyy
+
+eContext   3
+aZKey      90000054
+aName      MM/DD/YYYY
+aEditString mm/dd/YYYY
+aJavaEditString MM/dd/yyyy
+
+eContext   3
+aZKey      90000064
+aName      MonDDYYYY
+aEditString Mmm dd, YYYY
+aJavaEditString MMM dd, yyyy
+
+eContext   3
+aZKey      90000069
+aName      Month
+
+eContext   3
+aZKey      90000062
+aName      MonthDDYYYY
+aEditString Mmmm dd, YYYY
+aJavaEditString MMMM dd, yyyy
+
+eContext   3
+aZKey      90000077
+aName      MonthOfYear
+aEditString Mmmm
+aJavaEditString MMMM
+
+eContext   3
+aZKey      90000066
+aName      MSWindowsLongSetting
+
+eContext   3
+aZKey      90000067
+aName      MSWindowsShortSetting
+aIsDefault Y
+
+eContext   3
+aZKey      90000076
+aName      WeekOfYear
+
+eContext   3
+aZKey      90000070
+aName      Year
+
+eContext   3
+aZKey      90000071
+aName      YYYY
+aEditString YYYY
+aJavaEditString yyyy
+
+eContext   3
+aZKey      1077348
+aName      YYYY.MM.DD
+aEditString YYYY.mm.dd
+aJavaEditString yyyy.MM.dd
+
+eContext   3
+aZKey      90000061
+aName      YYYYJJJ
+aEditString YYYYjjj
+aJavaEditString yyyyD
+
+eContext   3
+aZKey      4662461
+aName      yyyyMMdd
+aEditString yyyyMMdd
+aJavaEditString yyyyMMdd
+
+eContext   3
+aZKey      1077347
+aName      YYYYMonDD
+aEditString YYYY Mon dd
+aJavaEditString yyyy MMM dd
+
+eContext   3
+aZKey      1077346
+aName      YYYYMonthDD
+aEditString YYYY Mmmm dd
+aJavaEditString yyyy MMMM dd
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      90000089
+aName      DateTime
+aDesc      Basic Timestamp Domain
+aDomainType A
+aDataType  T
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDateTime
+
+eContext   3
+aZKey      90000091
+aName      Date
+aEditString YYYYmmdd
+aJavaEditString yyyyMMdd
+
+eContext   3
+aZKey      90000090
+aName      DateTime
+aEditString YYYYmmddHHMISS999
+aJavaEditString yyyyMMddHHmmssSSS
+
+eContext   3
+aZKey      90000109
+aName      Day
+
+eContext   3
+aZKey      90000115
+aName      DayOfMonth
+aEditString D
+aJavaEditString d
+
+eContext   3
+aZKey      90000114
+aName      DayOfWeek
+aEditString Dddd
+aJavaEditString dddd
+
+eContext   3
+aZKey      90000116
+aName      DayOfYear
+aEditString jjj
+aJavaEditString D
+
+eContext   3
+aZKey      90000098
+aName      DD.MM.YYYY
+aEditString dd.mm.YYYY
+aJavaEditString dd.MM.yyyy
+
+eContext   3
+aZKey      127021331
+aName      DD.MM.YYYY HH:MM
+aEditString dd.mm.YYYY HH:MI
+aJavaEditString dd.MM.yyyy HH:mm
+
+eContext   3
+aZKey      90000126
+aName      DD.MM.YYYY HH:MM:SS
+aEditString dd.mm.YYYY HH:MI:SS
+aJavaEditString dd.MM.yyyy HH:mm:ss
+
+eContext   3
+aZKey      90000103
+aName      DDMonthYYYY
+aEditString dd Mmmm, YYYY
+aJavaEditString dd MMMM, yyyy
+
+eContext   3
+aZKey      90000105
+aName      DDMonYYYY
+aEditString dd Mmm YYYY
+aJavaEditString dd MMM yyyy
+
+eContext   3
+aZKey      127021332
+aName      HH:MM
+aEditString HH:MI
+aJavaEditString HH:mm
+
+eContext   3
+aZKey      127021333
+aName      HH:MM:SS
+aEditString HH:MI:SS
+aJavaEditString HH:mm:ss
+
+eContext   3
+aZKey      90000120
+aName      HH:MM:SS.S
+aEditString HH:MI:SS.9
+aJavaEditString HH:mm:ss.S
+
+eContext   3
+aZKey      90000119
+aName      HH:MM:SS.S AM
+aEditString HH:MI:SS.9 AM
+aJavaEditString HH:mm:ss.S a
+
+eContext   3
+aZKey      90000121
+aName      Hour
+aEditString HH
+aJavaEditString HH
+
+eContext   3
+aZKey      90000093
+aName      ListDisplayNumeric
+aEditString YYYY/MM/DD - HH:MI
+aJavaEditString yyyy/MM/dd - HH:mm
+
+eContext   3
+aZKey      90000122
+aName      Minute
+aEditString MI
+aJavaEditString mm
+
+eContext   3
+aZKey      90000096
+aName      MM-DD-YYYY
+aEditString mm-dd-YYYY
+aJavaEditString MM-dd-yyyy
+
+eContext   3
+aZKey      90000094
+aName      MM/DD/YYYY
+aEditString mm/dd/YYYY
+aJavaEditString  MM/dd/yyyy
+
+eContext   3
+aZKey      90000125
+aName      MM/DD/YYYY HH:MM:SS.S
+aEditString mm/dd/YYYY HH:MI:SS.9
+aJavaEditString MM/dd/yyyy HH:mm:ss.S
+
+eContext   3
+aZKey      90000124
+aName      MM/DD/YYYY HH:MM:SS.S AM
+aEditString mm/dd/YYYY HH:MI:SS.9 AM
+aJavaEditString MM/dd/yyyy HH:mm:ss.S a
+
+eContext   3
+aZKey      90000104
+aName      MonDDYYYY
+aEditString Mmm dd, YYYY
+aJavaEditString MMM dd, yyyy
+
+eContext   3
+aZKey      90000110
+aName      Month
+
+eContext   3
+aZKey      90000102
+aName      MonthDDYYYY
+aEditString Mmmm dd, YYYY
+aJavaEditString MMMM dd, yyyy
+
+eContext   3
+aZKey      90000118
+aName      MonthOfYear
+aEditString Mmmm
+aJavaEditString MMMM
+
+eContext   3
+aZKey      90000106
+aName      MSWindowsLongSetting
+
+eContext   3
+aZKey      90000108
+aName      MSWindowsSetting
+
+eContext   3
+aZKey      90000107
+aName      MSWindowsShortSetting
+aIsDefault Y
+
+eContext   3
+aZKey      90000123
+aName      Second
+aEditString SS
+aJavaEditString SS
+
+eContext   3
+aZKey      90000092
+aName      Time
+aEditString HHMISS999
+aJavaEditString HHmmssSSS
+
+eContext   3
+aZKey      123030441
+aName      UserFriendlyGerman
+
+eContext   3
+aZKey      90000117
+aName      WeekOfYear
+
+eContext   3
+aZKey      90000111
+aName      Year
+
+eContext   3
+aZKey      90000112
+aName      YYYY
+aEditString YYYY
+aJavaEditString yyyy
+
+eContext   3
+aZKey      90000101
+aName      YYYYJJJ
+aEditString YYYYjjj
+aJavaEditString yyyyD
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90000129
+aName      Decimal
+aDesc      Characters '0-9' precision ( 0.00 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 2
+
+eContext   3
+aZKey      1165568
+aName      CurrencyText
+
+eContext   3
+aZKey      90000130
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000131
+aName      DECIMAL0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000132
+aName      DECIMAL1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000133
+aName      DECIMAL2
+aDecimalFormat 2
+aIsDefault Y
+
+eContext   3
+aZKey      90000134
+aName      DECIMAL3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000135
+aName      DECIMAL4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000142
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000143
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000144
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000145
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000146
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000147
+aName      DecimalComma4
+
+eContext   3
+aZKey      90000151
+aName      DecimalFraction
+
+eContext   3
+aZKey      90000149
+aName      DecimalInteger
+
+eContext   3
+aZKey      90000150
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90430511
+aName      DecimalKey2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000136
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000137
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000138
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000139
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000140
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000141
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000148
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90000244
+aName      Decimal0
+aDesc      Characters '0-9' precision ( 0 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000245
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000246
+aName      DECIMAL0
+aDecimalFormat 0
+aIsDefault Y
+
+eContext   3
+aZKey      90000247
+aName      DECIMAL1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000248
+aName      DECIMAL2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000249
+aName      DECIMAL3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000250
+aName      DECIMAL4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000257
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000258
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000259
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000260
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000261
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000262
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000266
+aName      DecimalFraction
+
+eContext   3
+aZKey      90000264
+aName      DecimalInteger
+
+eContext   3
+aZKey      90000265
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90430512
+aName      DecimalKey0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000251
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000252
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000253
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000254
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000255
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000256
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000263
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90000221
+aName      Decimal1
+aDesc      Characters '0-9' precision ( 0.0 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000222
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000223
+aName      DECIMAL0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000224
+aName      DECIMAL1
+aDecimalFormat 1
+aIsDefault Y
+
+eContext   3
+aZKey      90000225
+aName      DECIMAL2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000226
+aName      DECIMAL3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000227
+aName      DECIMAL4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000234
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000235
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000236
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000237
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000238
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000239
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000243
+aName      DecimalFraction
+
+eContext   3
+aZKey      90000241
+aName      DecimalInteger
+
+eContext   3
+aZKey      90000242
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90430513
+aName      DecimalKey1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000228
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000229
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000230
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000231
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000232
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000233
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000240
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90000198
+aName      Decimal2
+aDesc      Characters '0-9' precision ( 0.00 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 2
+
+eContext   3
+aZKey      1165569
+aName      CurrencyText
+
+eContext   3
+aZKey      90000199
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000200
+aName      DECIMAL0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000201
+aName      DECIMAL1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000202
+aName      DECIMAL2
+aDecimalFormat 2
+aIsDefault Y
+
+eContext   3
+aZKey      90000203
+aName      DECIMAL3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000220
+aName      DECIMAL4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000210
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000211
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000212
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000213
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000214
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000215
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000219
+aName      DecimalFraction
+
+eContext   3
+aZKey      90000217
+aName      DecimalInteger
+
+eContext   3
+aZKey      90000218
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90430514
+aName      DecimalKey2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000204
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000205
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000206
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000207
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000208
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000209
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000216
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90000175
+aName      Decimal3
+aDesc      Characters '0-9' precision ( 0.000 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000176
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000177
+aName      DECIMAL0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000178
+aName      DECIMAL1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000179
+aName      DECIMAL2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000180
+aName      DECIMAL3
+aDecimalFormat 3
+aIsDefault Y
+
+eContext   3
+aZKey      90000181
+aName      DECIMAL4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000188
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000189
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000190
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000191
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000192
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000193
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000197
+aName      DecimalFraction
+
+eContext   3
+aZKey      90000195
+aName      DecimalInteger
+
+eContext   3
+aZKey      90000196
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90430515
+aName      DecimalKey3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000182
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000183
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000184
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000185
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000186
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000187
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000194
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90000152
+aName      Decimal4
+aDesc      Characters '0-9' precision ( 0.0000 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000153
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000154
+aName      DECIMAL0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000155
+aName      DECIMAL1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000156
+aName      DECIMAL2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000157
+aName      DECIMAL3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000158
+aName      DECIMAL4
+aDecimalFormat 4
+aIsDefault Y
+
+eContext   3
+aZKey      90000165
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000166
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000167
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000168
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000169
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000170
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000174
+aName      DecimalFraction
+
+eContext   3
+aZKey      90000172
+aName      DecimalInteger
+
+eContext   3
+aZKey      90000173
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90430516
+aName      DecimalKey4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000159
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90000160
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000161
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90000162
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90000163
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90000164
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90000171
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90359329
+aName      Decimal5
+aDesc      Characters '0-9' precision ( 0.00000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 5
+
+eContext   3
+aZKey      90359330
+aName      Decimal5
+aDecimalFormat 5
+aIsDefault Y
+
+eContext   3
+aZKey      90430517
+aName      DecimalKey5
+aDecimalFormat 5
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90359331
+aName      Decimal6
+aDesc      Characters '0-9' precision ( 0.000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 6
+
+eContext   3
+aZKey      90359332
+aName      Decimal6
+aDecimalFormat 6
+aIsDefault Y
+
+eContext   3
+aZKey      90430518
+aName      DecimalKey6
+aDecimalFormat 6
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90359333
+aName      Decimal7
+aDesc      Characters '0-9' precision ( 0.0000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 7
+
+eContext   3
+aZKey      90359334
+aName      Decimal7
+aDecimalFormat 7
+aIsDefault Y
+
+eContext   3
+aZKey      90430519
+aName      DecimalKey7
+aDecimalFormat 7
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90359335
+aName      Decimal8
+aDesc      Characters '0-9' precision ( 0.00000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 8
+
+eContext   3
+aZKey      90359336
+aName      Decimal8
+aDecimalFormat 8
+aIsDefault Y
+
+eContext   3
+aZKey      90430520
+aName      DecimalKey8
+aDecimalFormat 8
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90359337
+aName      Decimal9
+aDesc      Characters '0-9' precision ( 0.000000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 9
+
+eContext   3
+aZKey      90359338
+aName      Decimal9
+aDecimalFormat 9
+aIsDefault Y
+
+eContext   3
+aZKey      90430521
+aName      DecimalKey9
+aDecimalFormat 9
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      91004756
+aName      DecimalKey0
+aDesc      Decimal used as integer
+aDomainType A
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 0
+
+eContext   3
+aZKey      91004757
+aName      DecimalKey0
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000030
+aName      Description
+aDesc      Standard Zeidon Description
+aDomainType E
+aDataType  S
+aMaxStringLth 32000
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      90000031
+aName      Description
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320095
+aName      DM_DomainType
+aDesc      Type of Zeidon Domain
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320102
+aName      Display
+
+eTableEntry 4
+aZKey      92484512
+
+eTableEntry 4
+aZKey      1320104
+aExternalValue Table
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320105
+aExternalValue Expression
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320106
+aExternalValue Algorithm
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320107
+aExternalValue Format
+aInternalValue F
+
+eContext   3
+aZKey      1320096
+aName      DM_DomainType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484513
+
+eTableEntry 4
+aZKey      1320098
+aExternalValue A
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320099
+aExternalValue T
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320100
+aExternalValue E
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320101
+aExternalValue F
+aInternalValue F
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90026801
+aName      DragDropType
+aDesc      Defines the Drag/Drop type (source/target?)  of a control
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90026802
+aName      DragDropType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656409
+
+eTableEntry 4
+aZKey      90026803
+aExternalValue Drag & Drop Source
+aInternalValue S
+
+eTableEntry 4
+aZKey      90026807
+aExternalValue Drag & Drop Target AND Source
+aInternalValue B
+
+eTableEntry 4
+aZKey      90026804
+aExternalValue Drag & Drop Target
+aInternalValue T
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320129
+aName      ER_EntityPurpose
+aDesc      Purpose of Entity in ER
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320136
+aName      Display
+
+eTableEntry 4
+aZKey      92484515
+
+eTableEntry 4
+aZKey      1320138
+aExternalValue Fundamental
+aInternalValue F
+
+eTableEntry 4
+aZKey      1320139
+aExternalValue Attributive
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320140
+aExternalValue Associative
+aInternalValue S
+
+eTableEntry 4
+aZKey      1320141
+aExternalValue Work
+aInternalValue W
+
+eContext   3
+aZKey      89369437
+aName      DisplayQBN
+
+eTableEntry 4
+aZKey      92484516
+
+eTableEntry 4
+aZKey      89369446
+aExternalValue Fundamental
+aInternalValue F
+
+eTableEntry 4
+aZKey      89369447
+aExternalValue Attributive
+aInternalValue A
+
+eTableEntry 4
+aZKey      89369448
+aExternalValue Associative
+aInternalValue S
+
+eTableEntry 4
+aZKey      89369449
+aExternalValue Work
+aInternalValue W
+
+eTableEntry 4
+aZKey      89369450
+aExternalValue Fact (DWH)
+aInternalValue 1
+
+eTableEntry 4
+aZKey      89369451
+aExternalValue Dimension (DWH)
+aInternalValue 2
+
+eContext   3
+aZKey      1320130
+aName      ER_EntityPurpose
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484517
+
+eTableEntry 4
+aZKey      1320131
+aExternalValue F
+aInternalValue F
+
+eTableEntry 4
+aZKey      1320132
+aExternalValue A
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320133
+aExternalValue S
+aInternalValue S
+
+eTableEntry 4
+aZKey      1320134
+aExternalValue D
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320135
+aExternalValue W
+aInternalValue W
+
+eTableEntry 4
+aZKey      89357204
+aExternalValue 1
+aInternalValue 1
+
+eTableEntry 4
+aZKey      89357205
+aExternalValue 2
+aInternalValue 2
+
+eContext   3
+aZKey      90126598
+aName      ShortPurpose
+
+eTableEntry 4
+aZKey      92484518
+
+eTableEntry 4
+aZKey      90126599
+aExternalValue Fund
+aInternalValue F
+
+eTableEntry 4
+aZKey      90126600
+aExternalValue Attrib
+aInternalValue A
+
+eTableEntry 4
+aZKey      90126601
+aExternalValue Assoc
+aInternalValue S
+
+eTableEntry 4
+aZKey      90126602
+aExternalValue Work
+aInternalValue W
+
+eContext   3
+aZKey      89369439
+aName      ShortPurposeQBN
+
+eTableEntry 4
+aZKey      92484519
+
+eTableEntry 4
+aZKey      89369440
+aExternalValue Fund
+aInternalValue F
+
+eTableEntry 4
+aZKey      89369442
+aExternalValue Attrib
+aInternalValue A
+
+eTableEntry 4
+aZKey      89369441
+aExternalValue Assoc
+aInternalValue S
+
+eTableEntry 4
+aZKey      89369443
+aExternalValue Work
+aInternalValue W
+
+eTableEntry 4
+aZKey      89369444
+aExternalValue Fact
+aInternalValue 1
+
+eTableEntry 4
+aZKey      89369445
+aExternalValue Dim
+aInternalValue 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90055891
+aName      ERD_MaxCardinality
+aDesc      Maximum Cardinality for a relationship - m, M or integer
+aDomainType A
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+aDLL_Name  TZLODOPR
+aOperName  zdmCardinalityMaximum
+
+eContext   3
+aZKey      90055892
+aName      ERD_MaxCardinality
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90121803
+aName      ERD_MinCardinality
+aDesc      Minimum Cardinality for a relationship - Integer
+aDomainType A
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+aDLL_Name  TZLODOPR
+aOperName  zdmCardinalityMinimum
+
+eContext   3
+aZKey      90121804
+aName      ERD_MinCardinality
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320109
+aName      ERD_PrintAlgorithm
+aDesc      ER Diagram Print Algorithm
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320110
+aName      ERD_PrintAlgorithm
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484520
+
+eTableEntry 4
+aZKey      1320111
+aExternalValue Fit to page
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320112
+aExternalValue Fill page
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1320113
+aExternalValue Percent
+aInternalValue 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320114
+aName      ERD_PrintOrientation
+aDesc      ER Diagram Print Orientation
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320115
+aName      ERD_PrintOrientation
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484521
+
+eTableEntry 4
+aZKey      1320116
+aExternalValue Best fit
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320117
+aExternalValue Landscape
+aInternalValue 1024
+
+eTableEntry 4
+aZKey      1320118
+aExternalValue Portrait
+aInternalValue 2048
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320119
+aName      ERD_ShowRelOption
+aDesc      ER Diagram drawing mode for Rels
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320120
+aName      ERD_ShowRelOption
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484522
+
+eTableEntry 4
+aZKey      1320121
+aExternalValue Line and Text
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1320122
+aExternalValue Line Only
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320123
+aExternalValue No Line or Text
+aInternalValue 0
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320124
+aName      ERD_ZoomAlgorithm
+aDesc      ER Diagram Zoom Algorithm
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320125
+aName      ERD_ZoomAlgorithm
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484523
+
+eTableEntry 4
+aZKey      1320126
+aExternalValue Absolute
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320127
+aExternalValue Relative
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320128
+aExternalValue Fit
+aInternalValue 4
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      70000605
+aName      HorizontalControlSize
+aDesc      Autodesign - Horizontal size of autopainted control - range
+aDomainType E
+aDataType  L
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+
+eContext   3
+aZKey      70000606
+aName      HorizontalControlSize
+aEditString >= 2; < 10
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      90000044
+aName      Integer
+aDesc      Integer numbers from -lots to +lots.
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+aDecimalFormat 0
+
+eContext   3
+aZKey      90000046
+aName      Hex
+
+eContext   3
+aZKey      92010217
+aName      hexAddress
+
+eContext   3
+aZKey      90000045
+aName      INTEGER
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90000009
+aName      J/N
+aDesc      Ja / Nein
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90000010
+aName      J/N
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484524
+
+eTableEntry 4
+aZKey      90000012
+aExternalValue Ja
+aInternalValue J
+
+eTableEntry 4
+aZKey      90000013
+aExternalValue Nein
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90026793
+aName      LanguageType
+aDesc      Source language type  - VML or C
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90026794
+aName      LanguageType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484525
+
+eTableEntry 4
+aZKey      90026795
+aExternalValue C
+aInternalValue C
+
+eTableEntry 4
+aZKey      90026796
+aExternalValue VML
+aInternalValue V
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90441895
+aName      LockingOptions
+aDesc      LOD and Entity Locks
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      90441896
+aName      LockingOptions
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484526
+
+eTableEntry 4
+aZKey      90441897
+aExternalValue Optimistic Partial Compare
+aInternalValue 1
+
+eTableEntry 4
+aZKey      90441898
+aExternalValue Optimistic Full Compare
+aInternalValue 2
+
+eTableEntry 4
+aZKey      90441899
+aExternalValue Pessimistic Non-Exclusive
+aInternalValue 4
+
+eTableEntry 4
+aZKey      90441900
+aExternalValue Pessimistic Exclusive
+aInternalValue 5
+
+eContext   3
+aZKey      90441902
+aName      LockingOptionsOnEntity
+
+eTableEntry 4
+aZKey      92484527
+
+eTableEntry 4
+aZKey      90441941
+aExternalValue Pessimistic Read-Only
+aInternalValue 3
+
+eTableEntry 4
+aZKey      90441903
+aExternalValue Pessimistic Non-Exclusive
+aInternalValue 4
+
+eTableEntry 4
+aZKey      90441904
+aExternalValue Pessimistic Exclusive
+aInternalValue 5
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      4330375
+aName      LOD_AttributeHashkeyType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      4330376
+aName      LOD_AttributeHashkeyType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92716707
+
+eTableEntry 4
+aZKey      4330377
+aExternalValue Global
+aInternalValue G
+
+eTableEntry 4
+aZKey      4330378
+aExternalValue Under Parent
+aInternalValue P
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90201051
+aName      LOD_DB_DerivedValue
+aDesc      X - MAX, N - MIN, A - AVG, S - SUM, C - COUNT
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90201052
+aName      LOD_DB_DerivedValue
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484528
+
+eTableEntry 4
+aZKey      90201053
+aExternalValue MAX
+aInternalValue X
+
+eTableEntry 4
+aZKey      90201054
+aExternalValue MIN
+aInternalValue N
+
+eTableEntry 4
+aZKey      90201055
+aExternalValue AVG
+aInternalValue A
+
+eTableEntry 4
+aZKey      90201056
+aExternalValue SUM
+aInternalValue S
+
+eTableEntry 4
+aZKey      90206081
+aExternalValue COUNT
+aInternalValue C
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320147
+aName      LOD_EntitySequence
+aDesc      Attribute or Relative Position
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320148
+aName      LOD_EntitySequence
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484529
+
+eTableEntry 4
+aZKey      1320149
+aExternalValue Attribute
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320150
+aExternalValue Relative Pos.
+aInternalValue R
+
+eTableEntry 4
+aZKey      1320151
+aExternalValue - none -
+aInternalValue -
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320152
+aName      LOD_ParentDeleteBehavior
+aDesc      Delete, Restrict, Exclude
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320153
+aName      LOD_ParentDeleteBehavior
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92716004
+
+eTableEntry 4
+aZKey      1320154
+aExternalValue Delete
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320155
+aExternalValue Exclude
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320156
+aExternalValue Restrict
+aInternalValue R
+
+eTableEntry 4
+aZKey      1320157
+aExternalValue - none -
+aInternalValue -
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1158762
+aName      MapTypeGeneral
+aDesc      Specify the type of mapping
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68567192
+aName      MapTypeGeneral
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68567201
+aName      MapTypeGridColumnControl
+aDesc      Holds any of the MapType values
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68567202
+aName      MapTypeGridColumnControl
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656410
+
+eTableEntry 4
+aZKey      68567247
+aExternalValue Variable Header
+aInternalValue Variable Header
+
+eTableEntry 4
+aZKey      68567248
+aExternalValue Hyperlink URL
+aInternalValue Hyperlink URL
+
+eTableEntry 4
+aZKey      68579465
+aExternalValue Displayed Text
+aInternalValue Displayed Text
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68567203
+aName      MapTypeTextControl
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68567204
+aName      MapTypeTextControl
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92657016
+
+eTableEntry 4
+aZKey      68567205
+aExternalValue Displayed Text
+aInternalValue Displayed Text
+
+eTableEntry 4
+aZKey      68567206
+aExternalValue Hyperlink URL
+aInternalValue Hyperlink URL
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92002297
+aName      Marks
+aDesc      this is for ADW Export 
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92002298
+aName      Marks
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484533
+
+eTableEntry 4
+aZKey      92002299
+aExternalValue "
+aInternalValue 1
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90145848
+aName      MetaName
+aDesc      Name of a meta object (ie., LOD, Dialog, Report)
+aDomainType E
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmQSName
+
+eContext   3
+aZKey      90203297
+aName      MetaName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1051178
+aName      Month
+aDesc      Number of month in year (e.g.  November is 11)
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1051179
+aName      Month
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484534
+
+eTableEntry 4
+aZKey      1051180
+aExternalValue January
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1051181
+aExternalValue February
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1051182
+aExternalValue March
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1051184
+aExternalValue April
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1051185
+aExternalValue May
+aInternalValue 5
+
+eTableEntry 4
+aZKey      1051186
+aExternalValue June
+aInternalValue 6
+
+eTableEntry 4
+aZKey      1051187
+aExternalValue July
+aInternalValue 7
+
+eTableEntry 4
+aZKey      1051188
+aExternalValue August
+aInternalValue 8
+
+eTableEntry 4
+aZKey      1051189
+aExternalValue September
+aInternalValue 9
+
+eTableEntry 4
+aZKey      1051190
+aExternalValue October
+aInternalValue 10
+
+eTableEntry 4
+aZKey      1051191
+aExternalValue November
+aInternalValue 11
+
+eTableEntry 4
+aZKey      1051192
+aExternalValue December
+aInternalValue 12
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1158059
+aName      Note
+aDesc      10000 byte string
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      1158060
+aName      Note
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92726977
+aName      OperationGenerationType
+aDesc      If the operation is to be generated in C only or Java only.
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92726978
+aName      OperationGenerationType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92726981
+
+eTableEntry 4
+aZKey      92726979
+aExternalValue C Generation Only
+aInternalValue C
+
+eTableEntry 4
+aZKey      92726980
+aExternalValue Java Generation Only
+aInternalValue J
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320158
+aName      Operators
+aDesc      List of operators (<, >, =, <=, >=)
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      1320159
+aName      Operators
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320160
+aExternalValue <
+aInternalValue <
+
+eTableEntry 4
+aZKey      1320161
+aExternalValue >
+aInternalValue >
+
+eTableEntry 4
+aZKey      1320162
+aExternalValue =
+aInternalValue =
+
+eTableEntry 4
+aZKey      1320163
+aExternalValue <=
+aInternalValue <=
+
+eTableEntry 4
+aZKey      1320164
+aExternalValue >=
+aInternalValue >=
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000042
+aName      Password
+aDesc      Encrypted password
+aDomainType A
+aDataType  S
+aMaxStringLth 9
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmPassword
+
+eContext   3
+aZKey      90000043
+aName      Password
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1084699
+aName      PasswordUL
+aDesc      Password in Upper and Lower case
+aDomainType A
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmPasswordUL
+
+eContext   3
+aZKey      1084734
+aName      PasswordUL
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      4531065
+aName      PositionSize
+aDomainType F
+aDataType  S
+aMaxStringLth 100
+aContextRestriction N
+
+eContext   3
+aZKey      4531066
+aName      PositionSize
+aEditString [0-9 a-z A-Z]
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000040
+aName      QSFileName
+aDesc      QuinSoft File Name - 32 chars
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      90000041
+aName      QSFILENAME
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1165598
+aName      QSFullPathName
+aDesc      Construct full path expanding embedded environment variables to their value.
+aDomainType E
+aDataType  S
+aMaxStringLth 260
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmExpandEnvVar
+
+eContext   3
+aZKey      1165599
+aName      QSFullPathName
+aIsDefault Y
+
+eContext   3
+aZKey      1165601
+aName      TEXT
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000038
+aName      QSName
+aDesc      QuinSoft Name
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmQSName
+
+eContext   3
+aZKey      90000039
+aName      QSName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000036
+aName      QSNameLJNS
+aDesc      QuinSoft Name - left justified, no spaces
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmQSName
+
+eContext   3
+aZKey      90000037
+aName      QSNameLJNS
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000034
+aName      QSNameUpper
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+aDecimalFormat 1234
+
+eContext   3
+aZKey      90000035
+aName      QSNAMEUPPER
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90258642
+aName      ReportGroupSetType
+aDesc      Type of GroupSet for Report
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      90258643
+aName      ReportGroupSetType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656412
+
+eTableEntry 4
+aZKey      90258644
+aExternalValue Page Header
+aInternalValue PH
+
+eTableEntry 4
+aZKey      90258645
+aExternalValue Page Footer
+aInternalValue PF
+
+eTableEntry 4
+aZKey      90258647
+aExternalValue Entity
+aInternalValue E
+
+eTableEntry 4
+aZKey      4592674
+aExternalValue Page Start
+aInternalValue PS
+
+eTableEntry 4
+aZKey      4592675
+aExternalValue Page End
+aInternalValue PE
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90258866
+aName      ReportGroupSubType
+aDesc      Subtype of Group for Report
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      89354581
+aName      ReportGroupSubType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656413
+
+eTableEntry 4
+aZKey      89354582
+aExternalValue All Pages
+aInternalValue 0
+
+eTableEntry 4
+aZKey      89354583
+aExternalValue First Page Only
+aInternalValue 1
+
+eTableEntry 4
+aZKey      89354584
+aExternalValue Starting on Page 2
+aInternalValue 2
+
+eTableEntry 4
+aZKey      89354585
+aExternalValue Last Page Only
+aInternalValue 3
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90145806
+aName      ReportGroupType
+aDesc      Type of Control group for report, Page Header, Group Header, Attribute, etc.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      90145807
+aName      ReportGroupType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656414
+
+eTableEntry 4
+aZKey      90145808
+aExternalValue Group Detail
+aInternalValue ga
+
+eTableEntry 4
+aZKey      90145809
+aExternalValue Group Header
+aInternalValue gh
+
+eTableEntry 4
+aZKey      90145810
+aExternalValue Group Footer
+aInternalValue gf
+
+eTableEntry 4
+aZKey      90258863
+aExternalValue Page Header
+aInternalValue ph
+
+eTableEntry 4
+aZKey      90258864
+aExternalValue Page Footer
+aInternalValue pf
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      70061913
+aName      ReportPositioningType
+aDesc      Type of positioning (vertical or horizontal) for an entity on a report
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      70061914
+aName      ReportPositioningType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      70061915
+aExternalValue Horizontal
+aInternalValue H
+
+eTableEntry 4
+aZKey      70061916
+aExternalValue Vertical
+aInternalValue V
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      91143965
+aName      SironDB_SubType
+aDesc      Datenbank-Subtypen
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      91143966
+aName      SironDB_SubType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484540
+
+eTableEntry 4
+aZKey      91143967
+aExternalValue AIX: DB2 deutsch
+aInternalValue 0
+
+eTableEntry 4
+aZKey      91143968
+aExternalValue AIX: DB2 englisch
+aInternalValue 1
+
+eTableEntry 4
+aZKey      91143970
+aExternalValue OS/2: DB2/2 deutsch
+aInternalValue 2
+
+eTableEntry 4
+aZKey      91143971
+aExternalValue OS/2: DB2/2 englisch
+aInternalValue 3
+
+eTableEntry 4
+aZKey      91143972
+aExternalValue Host: DB2 deutsch
+aInternalValue 4
+
+eTableEntry 4
+aZKey      91143973
+aExternalValue Host: DB2 englisch
+aInternalValue 5
+
+eTableEntry 4
+aZKey      91143974
+aExternalValue Native ODBC: Access
+aInternalValue 6
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90000208
+aName      SironDB_Type
+aDesc      For Siron DB Handler, the physical database type
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90000209
+aName      SironDB_Type
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484541
+
+eTableEntry 4
+aZKey      90000210
+aExternalValue Oracle
+aInternalValue O
+
+eTableEntry 4
+aZKey      90000211
+aExternalValue Informix
+aInternalValue I
+
+eTableEntry 4
+aZKey      90000212
+aExternalValue DB2
+aInternalValue 2
+
+eTableEntry 4
+aZKey      90000213
+aExternalValue Ingres
+aInternalValue G
+
+eTableEntry 4
+aZKey      90000214
+aExternalValue RDB
+aInternalValue R
+
+eTableEntry 4
+aZKey      90000215
+aExternalValue ODBC
+aInternalValue D
+
+eTableEntry 4
+aZKey      90000216
+aExternalValue Flat File
+aInternalValue F
+
+eTableEntry 4
+aZKey      98197965
+aExternalValue SAP R3
+aInternalValue S
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1320176
+aName      SSN
+aDesc      Social Security Format
+aDomainType F
+aDataType  S
+aMaxStringLth 11
+aContextRestriction N
+
+eContext   3
+aZKey      1320177
+aName      SSN
+aEditString 999999999
+aIsDefault Y
+
+eContext   3
+aZKey      1320178
+aName      SSN Format
+aEditString 999-99-9999
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320180
+aName      State
+aDesc      USA State abbreviations
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDecimalFormat 1234
+
+eContext   3
+aZKey      1320181
+aName      STATE
+aDecimalFormat 1234
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484542
+
+eTableEntry 4
+aZKey      1320183
+aExternalValue AK
+aInternalValue AK
+
+eTableEntry 4
+aZKey      1320184
+aExternalValue AL
+aInternalValue AL
+
+eTableEntry 4
+aZKey      1320185
+aExternalValue AR
+aInternalValue AR
+
+eTableEntry 4
+aZKey      1320186
+aExternalValue AZ
+aInternalValue AZ
+
+eTableEntry 4
+aZKey      1320187
+aExternalValue CA
+aInternalValue CA
+
+eTableEntry 4
+aZKey      1320188
+aExternalValue CO
+aInternalValue CO
+
+eTableEntry 4
+aZKey      1320189
+aExternalValue CT
+aInternalValue CT
+
+eTableEntry 4
+aZKey      1320190
+aExternalValue DC
+aInternalValue DC
+
+eTableEntry 4
+aZKey      1320191
+aExternalValue DE
+aInternalValue DE
+
+eTableEntry 4
+aZKey      1320192
+aExternalValue FL
+aInternalValue FL
+
+eTableEntry 4
+aZKey      1320193
+aExternalValue GA
+aInternalValue GA
+
+eTableEntry 4
+aZKey      1320194
+aExternalValue HI
+aInternalValue HI
+
+eTableEntry 4
+aZKey      1320195
+aExternalValue IA
+aInternalValue IA
+
+eTableEntry 4
+aZKey      1320196
+aExternalValue ID
+aInternalValue ID
+
+eTableEntry 4
+aZKey      1320197
+aExternalValue IL
+aInternalValue IL
+
+eTableEntry 4
+aZKey      1320198
+aExternalValue IN
+aInternalValue IN
+
+eTableEntry 4
+aZKey      1320199
+aExternalValue KS
+aInternalValue KS
+
+eTableEntry 4
+aZKey      1320200
+aExternalValue KY
+aInternalValue KY
+
+eTableEntry 4
+aZKey      1320201
+aExternalValue LA
+aInternalValue LA
+
+eTableEntry 4
+aZKey      1320202
+aExternalValue MA
+aInternalValue MA
+
+eTableEntry 4
+aZKey      1320203
+aExternalValue MD
+aInternalValue MD
+
+eTableEntry 4
+aZKey      1320204
+aExternalValue ME
+aInternalValue ME
+
+eTableEntry 4
+aZKey      1320205
+aExternalValue MI
+aInternalValue MI
+
+eTableEntry 4
+aZKey      1320206
+aExternalValue MN
+aInternalValue MN
+
+eTableEntry 4
+aZKey      1320207
+aExternalValue MO
+aInternalValue MO
+
+eTableEntry 4
+aZKey      1320208
+aExternalValue MS
+aInternalValue MS
+
+eTableEntry 4
+aZKey      1320209
+aExternalValue MT
+aInternalValue MT
+
+eTableEntry 4
+aZKey      1320210
+aExternalValue NC
+aInternalValue NC
+
+eTableEntry 4
+aZKey      1320211
+aExternalValue ND
+aInternalValue ND
+
+eTableEntry 4
+aZKey      1320212
+aExternalValue NE
+aInternalValue NE
+
+eTableEntry 4
+aZKey      1320213
+aExternalValue NH
+aInternalValue NH
+
+eTableEntry 4
+aZKey      1320214
+aExternalValue NJ
+aInternalValue NJ
+
+eTableEntry 4
+aZKey      1320215
+aExternalValue NM
+aInternalValue NM
+
+eTableEntry 4
+aZKey      1320216
+aExternalValue NV
+aInternalValue NV
+
+eTableEntry 4
+aZKey      1320217
+aExternalValue NY
+aInternalValue NY
+
+eTableEntry 4
+aZKey      1320218
+aExternalValue OH
+aInternalValue OH
+
+eTableEntry 4
+aZKey      1320219
+aExternalValue OK
+aInternalValue OK
+
+eTableEntry 4
+aZKey      1320220
+aExternalValue OR
+aInternalValue OR
+
+eTableEntry 4
+aZKey      1320221
+aExternalValue PA
+aInternalValue PA
+
+eTableEntry 4
+aZKey      1320222
+aExternalValue PR
+aInternalValue PR
+
+eTableEntry 4
+aZKey      1320223
+aExternalValue RI
+aInternalValue RI
+
+eTableEntry 4
+aZKey      1320224
+aExternalValue SC
+aInternalValue SC
+
+eTableEntry 4
+aZKey      1320225
+aExternalValue SD
+aInternalValue SD
+
+eTableEntry 4
+aZKey      1320226
+aExternalValue TN
+aInternalValue TN
+
+eTableEntry 4
+aZKey      1320227
+aExternalValue TX
+aInternalValue TX
+
+eTableEntry 4
+aZKey      1320228
+aExternalValue UT
+aInternalValue UT
+
+eTableEntry 4
+aZKey      1320229
+aExternalValue VA
+aInternalValue VA
+
+eTableEntry 4
+aZKey      1320230
+aExternalValue VI
+aInternalValue VI
+
+eTableEntry 4
+aZKey      1320231
+aExternalValue VT
+aInternalValue VT
+
+eTableEntry 4
+aZKey      1320232
+aExternalValue WA
+aInternalValue WA
+
+eTableEntry 4
+aZKey      1320233
+aExternalValue WI
+aInternalValue WI
+
+eTableEntry 4
+aZKey      1320234
+aExternalValue WV
+aInternalValue WV
+
+eTableEntry 4
+aZKey      1320235
+aExternalValue WY
+aInternalValue WY
+
+eContext   3
+aZKey      1320236
+aName      STATEFULLNAME
+aDecimalFormat 1234
+
+eTableEntry 4
+aZKey      92484543
+
+eTableEntry 4
+aZKey      1320238
+aExternalValue Alaska
+aInternalValue AK
+
+eTableEntry 4
+aZKey      1320239
+aExternalValue Alabama
+aInternalValue AL
+
+eTableEntry 4
+aZKey      1320240
+aExternalValue Arkansas
+aInternalValue AR
+
+eTableEntry 4
+aZKey      1320241
+aExternalValue Arizona
+aInternalValue AZ
+
+eTableEntry 4
+aZKey      1320242
+aExternalValue California
+aInternalValue CA
+
+eTableEntry 4
+aZKey      1320243
+aExternalValue Colorado
+aInternalValue CO
+
+eTableEntry 4
+aZKey      1320244
+aExternalValue Connecticut
+aInternalValue CT
+
+eTableEntry 4
+aZKey      1320245
+aExternalValue District of Columbia
+aInternalValue DC
+
+eTableEntry 4
+aZKey      1320246
+aExternalValue Delaware
+aInternalValue DE
+
+eTableEntry 4
+aZKey      1320247
+aExternalValue Florida
+aInternalValue FL
+
+eTableEntry 4
+aZKey      1320248
+aExternalValue Georgia
+aInternalValue GA
+
+eTableEntry 4
+aZKey      1320249
+aExternalValue Hawaii
+aInternalValue HI
+
+eTableEntry 4
+aZKey      1320250
+aExternalValue Iowa
+aInternalValue IA
+
+eTableEntry 4
+aZKey      1320251
+aExternalValue Idaho
+aInternalValue ID
+
+eTableEntry 4
+aZKey      1320252
+aExternalValue Illinois
+aInternalValue IL
+
+eTableEntry 4
+aZKey      1320253
+aExternalValue Indiana
+aInternalValue IN
+
+eTableEntry 4
+aZKey      1320254
+aExternalValue Kansas
+aInternalValue KS
+
+eTableEntry 4
+aZKey      1320255
+aExternalValue Kentucky
+aInternalValue KY
+
+eTableEntry 4
+aZKey      1320256
+aExternalValue Louisiana
+aInternalValue LA
+
+eTableEntry 4
+aZKey      1320257
+aExternalValue Massachusetts
+aInternalValue MA
+
+eTableEntry 4
+aZKey      1320258
+aExternalValue Maryland
+aInternalValue MD
+
+eTableEntry 4
+aZKey      1320259
+aExternalValue Maine
+aInternalValue ME
+
+eTableEntry 4
+aZKey      1320260
+aExternalValue Michigan
+aInternalValue MI
+
+eTableEntry 4
+aZKey      1320261
+aExternalValue Minnesota
+aInternalValue MN
+
+eTableEntry 4
+aZKey      1320262
+aExternalValue Missouri
+aInternalValue MO
+
+eTableEntry 4
+aZKey      1320263
+aExternalValue Mississippi
+aInternalValue MS
+
+eTableEntry 4
+aZKey      1320264
+aExternalValue Montana
+aInternalValue MT
+
+eTableEntry 4
+aZKey      1320265
+aExternalValue North Carolina
+aInternalValue NC
+
+eTableEntry 4
+aZKey      1320266
+aExternalValue North Dakota
+aInternalValue ND
+
+eTableEntry 4
+aZKey      1320267
+aExternalValue Nebraska
+aInternalValue NE
+
+eTableEntry 4
+aZKey      1320268
+aExternalValue New Hampshire
+aInternalValue NH
+
+eTableEntry 4
+aZKey      1320269
+aExternalValue New Jersey
+aInternalValue NJ
+
+eTableEntry 4
+aZKey      1320270
+aExternalValue New Mexico
+aInternalValue NM
+
+eTableEntry 4
+aZKey      1320271
+aExternalValue Nevada
+aInternalValue NV
+
+eTableEntry 4
+aZKey      1320272
+aExternalValue New York
+aInternalValue NY
+
+eTableEntry 4
+aZKey      1320273
+aExternalValue Ohio
+aInternalValue OH
+
+eTableEntry 4
+aZKey      1320274
+aExternalValue Oklahoma
+aInternalValue OK
+
+eTableEntry 4
+aZKey      1320275
+aExternalValue Oregon
+aInternalValue OR
+
+eTableEntry 4
+aZKey      1320276
+aExternalValue Pennsylvania
+aInternalValue PA
+
+eTableEntry 4
+aZKey      1320277
+aExternalValue Puerto Rico
+aInternalValue PR
+
+eTableEntry 4
+aZKey      1320278
+aExternalValue Rhode Island
+aInternalValue RI
+
+eTableEntry 4
+aZKey      1320279
+aExternalValue South Carolina
+aInternalValue SC
+
+eTableEntry 4
+aZKey      1320280
+aExternalValue South Dakota
+aInternalValue SD
+
+eTableEntry 4
+aZKey      1320281
+aExternalValue Tennessee
+aInternalValue TN
+
+eTableEntry 4
+aZKey      1320282
+aExternalValue Texas
+aInternalValue TX
+
+eTableEntry 4
+aZKey      1320283
+aExternalValue Utah
+aInternalValue UT
+
+eTableEntry 4
+aZKey      1320284
+aExternalValue Virginia
+aInternalValue VA
+
+eTableEntry 4
+aZKey      1320285
+aExternalValue Virgin Islands
+aInternalValue VI
+
+eTableEntry 4
+aZKey      1320286
+aExternalValue Vermont
+aInternalValue VT
+
+eTableEntry 4
+aZKey      1320287
+aExternalValue Washington
+aInternalValue WA
+
+eTableEntry 4
+aZKey      1320288
+aExternalValue Wisconsin
+aInternalValue WI
+
+eTableEntry 4
+aZKey      1320289
+aExternalValue West Virginia
+aInternalValue WV
+
+eTableEntry 4
+aZKey      1320290
+aExternalValue Wyoming
+aInternalValue WY
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320294
+aName      TE_DataOrRel
+aDesc      Table is Data or Relationship
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+aDecimalFormat 0
+
+eContext   3
+aZKey      1320298
+aName      Display
+
+eTableEntry 4
+aZKey      92484544
+
+eTableEntry 4
+aZKey      1320300
+aExternalValue Data
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320301
+aExternalValue Relationship
+aInternalValue R
+
+eContext   3
+aZKey      1320295
+aName      TE_DataOrRel
+aDecimalFormat 0
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484545
+
+eTableEntry 4
+aZKey      1320296
+aExternalValue D
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320297
+aExternalValue R
+aInternalValue R
+
+eContext   3
+aZKey      1320302
+aName      XAM_List
+
+eTableEntry 4
+aZKey      92484546
+
+eTableEntry 4
+aZKey      1320304
+aExternalValue Entity
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320305
+aExternalValue Rel...
+aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320306
+aName      TE_DataOrRelfieldOrSet
+aDesc      Column is Data or Rel -- Field is Data or Set
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320311
+aName      Display
+
+eTableEntry 4
+aZKey      92484547
+
+eTableEntry 4
+aZKey      1320312
+aExternalValue Data
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320313
+aExternalValue Set
+aInternalValue S
+
+eTableEntry 4
+aZKey      1320314
+aExternalValue Foreign Key
+aInternalValue R
+
+eContext   3
+aZKey      1320307
+aName      TE_DataOrRelfieldOrSet
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484548
+
+eTableEntry 4
+aZKey      1320308
+aExternalValue D
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320309
+aExternalValue S
+aInternalValue S
+
+eTableEntry 4
+aZKey      1320310
+aExternalValue R
+aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320330
+aName      TE_DB_ConnectType
+aDesc      Connection type to use for data source
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320331
+aName      TE_DB_ConnectType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484549
+
+eTableEntry 4
+aZKey      1320333
+aExternalValue ODBC
+aInternalValue N
+
+eTableEntry 4
+aZKey      1320334
+aExternalValue Native
+aInternalValue O
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320315
+aName      TE_DBMS
+aDesc      DBMSs supported by Zeidon
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320316
+aName      TE_DBMS
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484550
+
+eTableEntry 4
+aZKey      1320318
+aExternalValue SqlBase
+aInternalValue B
+
+eTableEntry 4
+aZKey      1320319
+aExternalValue SqlServer
+aInternalValue M
+
+eTableEntry 4
+aZKey      1320320
+aExternalValue DB Raima
+aInternalValue V
+
+eTableEntry 4
+aZKey      90008948
+aExternalValue Siron
+aInternalValue S
+
+eTableEntry 4
+aZKey      90054850
+aExternalValue Network Server
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320321
+aName      TE_DBMS_Paradigm
+aDesc      Relational or Network DB Model
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320327
+aName      Display
+
+eTableEntry 4
+aZKey      92484551
+
+eTableEntry 4
+aZKey      1320328
+aExternalValue Relational
+aInternalValue R
+
+eTableEntry 4
+aZKey      1320329
+aExternalValue Network
+aInternalValue N
+
+eContext   3
+aZKey      1320322
+aName      TE_DBMS_Paradigm
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484552
+
+eTableEntry 4
+aZKey      1320324
+aExternalValue Relational
+aInternalValue R
+
+eTableEntry 4
+aZKey      1320325
+aExternalValue Network
+aInternalValue N
+
+eTableEntry 4
+aZKey      1320326
+aExternalValue Hierarchical
+aInternalValue H
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320335
+aName      TE_KeyCategory
+aDesc      System Maintained, Attributes only, etc.
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320336
+aName      TE_KeyCategory
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484553
+
+eTableEntry 4
+aZKey      1320338
+aExternalValue System Maintained
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320339
+aExternalValue Attributes Only
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320340
+aExternalValue Relationship / Attributes
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1320341
+aExternalValue M-M Rel. Table
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1320342
+aExternalValue Undefined
+aInternalValue 9
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000032
+aName      Text
+aDesc      Any Character String
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      90000033
+aName      TEXT
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      90000078
+aName      Time
+aDomainType A
+aDataType  T
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmTime
+
+eContext   3
+aZKey      123033214
+aName      FreeForm
+aEditString *
+aJavaEditString *
+
+eContext   3
+aZKey      127021328
+aName      HH:MM
+aEditString HH:MI
+aJavaEditString HH:mm
+
+eContext   3
+aZKey      127021329
+aName      HH:MM:SS
+aEditString HH:MI:SS
+aJavaEditString HH:mm:ss
+
+eContext   3
+aZKey      90000081
+aName      HH:MM:SS.S
+aEditString HH:MI:SS.9
+aJavaEditString HH:mm:ss.S
+
+eContext   3
+aZKey      90000080
+aName      HH:MM:SS.S AM
+aEditString HH:MI:SS.9 AM
+aJavaEditString HH:mm:ss.S a
+aIsDefault Y
+
+eContext   3
+aZKey      90000084
+aName      Hour
+aEditString HH
+aJavaEditString HH
+
+eContext   3
+aZKey      90000085
+aName      Minute
+aEditString MI
+aJavaEditString MM
+
+eContext   3
+aZKey      90000082
+aName      MSWindowsSetting
+
+eContext   3
+aZKey      90000087
+aName      Second
+aEditString SS
+aJavaEditString ss
+
+eContext   3
+aZKey      90000079
+aName      Time
+aEditString HHMISS999
+aJavaEditString HHmmssSSS
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90165355
+aName      TimeStampEx
+aDomainType A
+aDataType  S
+aMaxStringLth 22
+aContextRestriction N
+
+eContext   3
+aZKey      90165356
+aName      TimeStampEx
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320356
+aName      TZ_StartupLPLR_Option
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320357
+aName      TZ_StartupLPLR_Option
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484554
+
+eTableEntry 4
+aZKey      1320358
+aExternalValue Current Default
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320359
+aExternalValue Last Used by Tool
+aInternalValue L
+
+eTableEntry 4
+aZKey      1320360
+aExternalValue Specific Name
+aInternalValue S
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1137350
+aName      UserSpecType
+aDesc      Type of user spec - report dialog
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1137351
+aName      UserSpecType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656415
+
+eTableEntry 4
+aZKey      1137352
+aExternalValue Dialog
+aInternalValue D
+
+eTableEntry 4
+aZKey      1137353
+aExternalValue Report
+aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      70000603
+aName      VerticalControlSize
+aDesc      Autodesign - Vertical size of autopainted control, range
+aDomainType E
+aDataType  L
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+
+eContext   3
+aZKey      70000604
+aName      VerticalControlSize
+aEditString >= 4; <= 30
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      70000607
+aName      VerticalSpacingIncrement
+aDesc      Autodesign - Vertical spacing between autopainted controls, range
+aDomainType E
+aDataType  L
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+
+eContext   3
+aZKey      70000608
+aName      VerticalSpacingIncrement
+aEditString >= 0; < 10
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320361
+aName      VirtualKeys
+aDesc      Virtual key table for hotkeys
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320362
+aName      VirtualKeys
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484486
+
+eTableEntry 4
+aZKey      1320363
+aExternalValue <F1>
+aInternalValue 112
+
+eTableEntry 4
+aZKey      1320364
+aExternalValue <F2>
+aInternalValue 113
+
+eTableEntry 4
+aZKey      1320365
+aExternalValue <F3>
+aInternalValue 114
+
+eTableEntry 4
+aZKey      1320366
+aExternalValue <F4>
+aInternalValue 115
+
+eTableEntry 4
+aZKey      1320367
+aExternalValue <F5>
+aInternalValue 116
+
+eTableEntry 4
+aZKey      1320368
+aExternalValue <F6>
+aInternalValue 117
+
+eTableEntry 4
+aZKey      1320369
+aExternalValue <F7>
+aInternalValue 118
+
+eTableEntry 4
+aZKey      1320370
+aExternalValue <F8>
+aInternalValue 119
+
+eTableEntry 4
+aZKey      1320371
+aExternalValue <F9>
+aInternalValue 120
+
+eTableEntry 4
+aZKey      1320372
+aExternalValue <F10>
+aInternalValue 121
+
+eTableEntry 4
+aZKey      1320373
+aExternalValue <F11>
+aInternalValue 122
+
+eTableEntry 4
+aZKey      1320374
+aExternalValue <F12>
+aInternalValue 123
+
+eTableEntry 4
+aZKey      1320375
+aExternalValue <F13>
+aInternalValue 124
+
+eTableEntry 4
+aZKey      1320376
+aExternalValue <F14>
+aInternalValue 125
+
+eTableEntry 4
+aZKey      1320377
+aExternalValue <F15>
+aInternalValue 126
+
+eTableEntry 4
+aZKey      1320378
+aExternalValue <F16>
+aInternalValue 127
+
+eTableEntry 4
+aZKey      1320379
+aExternalValue <F17>
+aInternalValue 128
+
+eTableEntry 4
+aZKey      1320380
+aExternalValue <F18>
+aInternalValue 129
+
+eTableEntry 4
+aZKey      1320381
+aExternalValue <F19>
+aInternalValue 130
+
+eTableEntry 4
+aZKey      1320382
+aExternalValue <F20>
+aInternalValue 131
+
+eTableEntry 4
+aZKey      1320383
+aExternalValue <F21>
+aInternalValue 132
+
+eTableEntry 4
+aZKey      1320384
+aExternalValue <F22>
+aInternalValue 133
+
+eTableEntry 4
+aZKey      1320385
+aExternalValue <F23>
+aInternalValue 134
+
+eTableEntry 4
+aZKey      1320386
+aExternalValue <F24>
+aInternalValue 135
+
+eTableEntry 4
+aZKey      1320387
+aExternalValue <Back>
+aInternalValue 8
+
+eTableEntry 4
+aZKey      1320388
+aExternalValue <Tab>
+aInternalValue 9
+
+eTableEntry 4
+aZKey      1320389
+aExternalValue <Clear>
+aInternalValue 12
+
+eTableEntry 4
+aZKey      1320390
+aExternalValue <Return>
+aInternalValue 13
+
+eTableEntry 4
+aZKey      1320391
+aExternalValue <Shift>
+aInternalValue 16
+
+eTableEntry 4
+aZKey      1320392
+aExternalValue <Control>
+aInternalValue 17
+
+eTableEntry 4
+aZKey      1320393
+aExternalValue <Menu>
+aInternalValue 18
+
+eTableEntry 4
+aZKey      1320394
+aExternalValue <Pause>
+aInternalValue 19
+
+eTableEntry 4
+aZKey      1320395
+aExternalValue <Capital>
+aInternalValue 20
+
+eTableEntry 4
+aZKey      1320396
+aExternalValue <Escape>
+aInternalValue 27
+
+eTableEntry 4
+aZKey      1320397
+aExternalValue <Space>
+aInternalValue 32
+
+eTableEntry 4
+aZKey      1320398
+aExternalValue <PageUp>
+aInternalValue 33
+
+eTableEntry 4
+aZKey      1320399
+aExternalValue <PageDown>
+aInternalValue 34
+
+eTableEntry 4
+aZKey      1320400
+aExternalValue <End>
+aInternalValue 35
+
+eTableEntry 4
+aZKey      1320401
+aExternalValue <Home>
+aInternalValue 36
+
+eTableEntry 4
+aZKey      1320402
+aExternalValue <Left>
+aInternalValue 37
+
+eTableEntry 4
+aZKey      1320403
+aExternalValue <Up>
+aInternalValue 38
+
+eTableEntry 4
+aZKey      1320404
+aExternalValue <Right>
+aInternalValue 39
+
+eTableEntry 4
+aZKey      1320405
+aExternalValue <Down>
+aInternalValue 40
+
+eTableEntry 4
+aZKey      1320406
+aExternalValue <Select>
+aInternalValue 41
+
+eTableEntry 4
+aZKey      1320407
+aExternalValue <Print>
+aInternalValue 42
+
+eTableEntry 4
+aZKey      1320408
+aExternalValue <Execute>
+aInternalValue 43
+
+eTableEntry 4
+aZKey      1320409
+aExternalValue <Snapshot>
+aInternalValue 44
+
+eTableEntry 4
+aZKey      1320410
+aExternalValue <Insert>
+aInternalValue 45
+
+eTableEntry 4
+aZKey      1320411
+aExternalValue <Delete>
+aInternalValue 46
+
+eTableEntry 4
+aZKey      1320412
+aExternalValue <Help>
+aInternalValue 47
+
+eTableEntry 4
+aZKey      1320413
+aExternalValue <Numpad0>
+aInternalValue 96
+
+eTableEntry 4
+aZKey      1320414
+aExternalValue <Numpad1>
+aInternalValue 97
+
+eTableEntry 4
+aZKey      1320415
+aExternalValue <Numpad2>
+aInternalValue 98
+
+eTableEntry 4
+aZKey      1320416
+aExternalValue <Numpad3>
+aInternalValue 99
+
+eTableEntry 4
+aZKey      1320417
+aExternalValue <Numpad4>
+aInternalValue 100
+
+eTableEntry 4
+aZKey      1320418
+aExternalValue <Numpad5>
+aInternalValue 101
+
+eTableEntry 4
+aZKey      1320419
+aExternalValue <Numpad6>
+aInternalValue 102
+
+eTableEntry 4
+aZKey      1320420
+aExternalValue <Numpad7>
+aInternalValue 103
+
+eTableEntry 4
+aZKey      1320421
+aExternalValue <Numpad8>
+aInternalValue 104
+
+eTableEntry 4
+aZKey      1320422
+aExternalValue <Numpad9>
+aInternalValue 105
+
+eTableEntry 4
+aZKey      1320423
+aExternalValue <Multiply>
+aInternalValue 106
+
+eTableEntry 4
+aZKey      1320424
+aExternalValue <Add>
+aInternalValue 107
+
+eTableEntry 4
+aZKey      1320425
+aExternalValue <Separator>
+aInternalValue 108
+
+eTableEntry 4
+aZKey      1320426
+aExternalValue <Subtract>
+aInternalValue 109
+
+eTableEntry 4
+aZKey      1320427
+aExternalValue <Decimal>
+aInternalValue 110
+
+eTableEntry 4
+aZKey      1320428
+aExternalValue <Divide>
+aInternalValue 111
+
+eTableEntry 4
+aZKey      1320429
+aExternalValue <Numlock>
+aInternalValue 144
+
+eTableEntry 4
+aZKey      1320430
+aExternalValue <Scroll>
+aInternalValue 145
+
+eTableEntry 4
+aZKey      1320431
+aExternalValue 1
+aInternalValue 49
+
+eTableEntry 4
+aZKey      1320432
+aExternalValue 2
+aInternalValue 50
+
+eTableEntry 4
+aZKey      1320433
+aExternalValue 3
+aInternalValue 51
+
+eTableEntry 4
+aZKey      1320434
+aExternalValue 4
+aInternalValue 52
+
+eTableEntry 4
+aZKey      1320435
+aExternalValue 5
+aInternalValue 53
+
+eTableEntry 4
+aZKey      1320436
+aExternalValue 6
+aInternalValue 54
+
+eTableEntry 4
+aZKey      1320437
+aExternalValue 7
+aInternalValue 55
+
+eTableEntry 4
+aZKey      1320438
+aExternalValue 8
+aInternalValue 56
+
+eTableEntry 4
+aZKey      1320439
+aExternalValue 9
+aInternalValue 57
+
+eTableEntry 4
+aZKey      1320440
+aExternalValue 0
+aInternalValue 48
+
+eTableEntry 4
+aZKey      1320441
+aExternalValue A
+aInternalValue 65
+
+eTableEntry 4
+aZKey      1320442
+aExternalValue B
+aInternalValue 66
+
+eTableEntry 4
+aZKey      1320443
+aExternalValue C
+aInternalValue 67
+
+eTableEntry 4
+aZKey      1320444
+aExternalValue D
+aInternalValue 68
+
+eTableEntry 4
+aZKey      1320445
+aExternalValue E
+aInternalValue 69
+
+eTableEntry 4
+aZKey      1320446
+aExternalValue F
+aInternalValue 70
+
+eTableEntry 4
+aZKey      1320447
+aExternalValue G
+aInternalValue 71
+
+eTableEntry 4
+aZKey      1320448
+aExternalValue H
+aInternalValue 72
+
+eTableEntry 4
+aZKey      1320449
+aExternalValue I
+aInternalValue 73
+
+eTableEntry 4
+aZKey      1320450
+aExternalValue J
+aInternalValue 74
+
+eTableEntry 4
+aZKey      1320451
+aExternalValue K
+aInternalValue 75
+
+eTableEntry 4
+aZKey      1320452
+aExternalValue L
+aInternalValue 76
+
+eTableEntry 4
+aZKey      1320453
+aExternalValue M
+aInternalValue 77
+
+eTableEntry 4
+aZKey      1320454
+aExternalValue N
+aInternalValue 78
+
+eTableEntry 4
+aZKey      1320455
+aExternalValue O
+aInternalValue 79
+
+eTableEntry 4
+aZKey      1320456
+aExternalValue P
+aInternalValue 80
+
+eTableEntry 4
+aZKey      1320457
+aExternalValue Q
+aInternalValue 81
+
+eTableEntry 4
+aZKey      1320458
+aExternalValue R
+aInternalValue 82
+
+eTableEntry 4
+aZKey      1320459
+aExternalValue S
+aInternalValue 83
+
+eTableEntry 4
+aZKey      1320460
+aExternalValue T
+aInternalValue 84
+
+eTableEntry 4
+aZKey      1320461
+aExternalValue U
+aInternalValue 85
+
+eTableEntry 4
+aZKey      1320462
+aExternalValue V
+aInternalValue 86
+
+eTableEntry 4
+aZKey      1320463
+aExternalValue W
+aInternalValue 87
+
+eTableEntry 4
+aZKey      1320464
+aExternalValue X
+aInternalValue 88
+
+eTableEntry 4
+aZKey      1320465
+aExternalValue Y
+aInternalValue 89
+
+eTableEntry 4
+aZKey      1320466
+aExternalValue Z
+aInternalValue 90
+
+eTableEntry 4
+aZKey      1131248
+aExternalValue :
+aInternalValue 186
+
+eTableEntry 4
+aZKey      70057942
+aExternalValue +
+aInternalValue 187
+
+eTableEntry 4
+aZKey      1131239
+aExternalValue <
+aInternalValue 188
+
+eTableEntry 4
+aZKey      1131240
+aExternalValue -
+aInternalValue 189
+
+eTableEntry 4
+aZKey      1131241
+aExternalValue >
+aInternalValue 190
+
+eTableEntry 4
+aZKey      1131242
+aExternalValue ?
+aInternalValue 191
+
+eTableEntry 4
+aZKey      1131243
+aExternalValue ~
+aInternalValue 192
+
+eTableEntry 4
+aZKey      1131244
+aExternalValue {
+aInternalValue 219
+
+eTableEntry 4
+aZKey      1131247
+aExternalValue |
+aInternalValue 220
+
+eTableEntry 4
+aZKey      1131245
+aExternalValue }
+aInternalValue 221
+
+eTableEntry 4
+aZKey      1131246
+aExternalValue "
+aInternalValue 222
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320595
+aName      WD__OutlinerFormatType
+aDesc      Table for format values for an outliner
+aDomainType T
+aDataType  L
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320596
+aName      WD__OutlinerFormatType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656416
+
+eTableEntry 4
+aZKey      1320597
+aExternalValue Display Text
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320598
+aExternalValue Single Root
+aInternalValue 1
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320468
+aName      WD_ActionNoMap
+aDesc      No Map (prevent mapping) options for an Action
+aDomainType T
+aDataType  T
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320469
+aName      WD_ActionNoMap
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320470
+aExternalValue No
+
+eTableEntry 4
+aZKey      1320471
+aExternalValue Yes
+aInternalValue Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320472
+aName      WD_ActionType
+aDesc      Behavior Type for a Window Action
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320488
+aName      Control/Option Action Type
+
+eTableEntry 4
+aZKey      4847914
+
+eTableEntry 4
+aZKey      1320489
+aExternalValue Same Window / No Refresh
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320490
+aExternalValue Same Window / Refresh
+aInternalValue 2
+
+eTableEntry 4
+aZKey      4274541
+aExternalValue Same Window / Web Refresh
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1320491
+aExternalValue Subwindow / Modal
+aInternalValue 34
+
+eTableEntry 4
+aZKey      1320492
+aExternalValue Subwindow / Modeless
+aInternalValue 33
+
+eTableEntry 4
+aZKey      1320493
+aExternalValue Replace Window / Modal
+aInternalValue 53
+
+eTableEntry 4
+aZKey      1320494
+aExternalValue Replace Window / Modeless
+aInternalValue 52
+
+eTableEntry 4
+aZKey      1320495
+aExternalValue Return / No Refresh
+aInternalValue 71
+
+eTableEntry 4
+aZKey      1320496
+aExternalValue Return / Refresh
+aInternalValue 72
+
+eTableEntry 4
+aZKey      1320497
+aExternalValue Return Top / No Refresh
+aInternalValue 73
+
+eTableEntry 4
+aZKey      1320498
+aExternalValue Return Top / Refresh
+aInternalValue 74
+
+eTableEntry 4
+aZKey      1320499
+aExternalValue Exit Dialog Task
+aInternalValue 99
+
+eContext   3
+aZKey      1320473
+aName      WD_ActionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      4847915
+
+eTableEntry 4
+aZKey      1320475
+aExternalValue Default or Same Window / No Refresh
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320476
+aExternalValue Same Window / Refresh
+aInternalValue 2
+
+eTableEntry 4
+aZKey      4274542
+aExternalValue Same Window / Web Refresh
+aInternalValue 3
+
+eTableEntry 4
+aZKey      4847899
+aExternalValue Start or Focus Modeless Dialog
+aInternalValue 30
+
+eTableEntry 4
+aZKey      4847900
+aExternalValue Start Dialog Task
+aInternalValue 31
+
+eTableEntry 4
+aZKey      4847901
+aExternalValue Start Modeless Subwindow
+aInternalValue 32
+
+eTableEntry 4
+aZKey      1320478
+aExternalValue Subwindow / Modeless
+aInternalValue 33
+
+eTableEntry 4
+aZKey      1320477
+aExternalValue Subwindow / Modal
+aInternalValue 34
+
+eTableEntry 4
+aZKey      90790802
+aExternalValue ReCAPTCHA Subwindow
+aInternalValue 35
+
+eTableEntry 4
+aZKey      4847903
+aExternalValue Start Modal Window
+aInternalValue 36
+
+eTableEntry 4
+aZKey      4847904
+aExternalValue Start or Focus Modeless Application
+aInternalValue 37
+
+eTableEntry 4
+aZKey      1320479
+aExternalValue Set Focus or Start Modeless Window
+aInternalValue 38
+
+eTableEntry 4
+aZKey      1320480
+aExternalValue Set Focus or Start Modeless Subwindow
+aInternalValue 39
+
+eTableEntry 4
+aZKey      89152166
+aExternalValue Start Popup Menu
+aInternalValue 40
+
+eTableEntry 4
+aZKey      1089781
+aExternalValue Start Browser HTML Page
+aInternalValue 41
+
+eTableEntry 4
+aZKey      1094790
+aExternalValue Start Email Client
+aInternalValue 42
+
+eTableEntry 4
+aZKey      93059782
+aExternalValue Start Email Client BCC
+aInternalValue 43
+
+eTableEntry 4
+aZKey      93059783
+aExternalValue Start Email Client CC
+aInternalValue 44
+
+eTableEntry 4
+aZKey      93165224
+aExternalValue Link to HTML Address
+aInternalValue 45
+
+eTableEntry 4
+aZKey      68561279
+aExternalValue Process File Download
+aInternalValue 46
+
+eTableEntry 4
+aZKey      90131333
+aExternalValue Start Browser PDF Page
+aInternalValue 47
+
+eTableEntry 4
+aZKey      4847905
+aExternalValue Replace Dialog with Dialog
+aInternalValue 51
+
+eTableEntry 4
+aZKey      1320482
+aExternalValue Replace Window / Modeless
+aInternalValue 52
+
+eTableEntry 4
+aZKey      1320481
+aExternalValue ReplaceWindow / Modal
+aInternalValue 53
+
+eTableEntry 4
+aZKey      4847907
+aExternalValue ReplaceCurrentAppWithApp
+aInternalValue 54
+
+eTableEntry 4
+aZKey      90790801
+aExternalValue ReCAPTCHA Replace Window
+aInternalValue 55
+
+eTableEntry 4
+aZKey      89982621
+aExternalValue Print Window
+aInternalValue 60
+
+eTableEntry 4
+aZKey      4847908
+aExternalValue Start Split Window
+aInternalValue 61
+
+eTableEntry 4
+aZKey      4847909
+aExternalValue Replace Split Window
+aInternalValue 62
+
+eTableEntry 4
+aZKey      4847910
+aExternalValue Delete Split Window
+aInternalValue 63
+
+eTableEntry 4
+aZKey      1320483
+aExternalValue Return / No Refresh
+aInternalValue 71
+
+eTableEntry 4
+aZKey      1320484
+aExternalValue Return / Refresh
+aInternalValue 72
+
+eTableEntry 4
+aZKey      1320485
+aExternalValue Return Top / No Refresh
+aInternalValue 73
+
+eTableEntry 4
+aZKey      1320486
+aExternalValue Return Top / Refresh
+aInternalValue 74
+
+eTableEntry 4
+aZKey      4847911
+aExternalValue Start Top Window
+aInternalValue 75
+
+eTableEntry 4
+aZKey      4847912
+aExternalValue Replace Top Window
+aInternalValue 76
+
+eTableEntry 4
+aZKey      68545594
+aExternalValue Start Modal Web Popup
+aInternalValue 78
+
+eTableEntry 4
+aZKey      68545595
+aExternalValue Start Modeless Web Popup
+aInternalValue 79
+
+eTableEntry 4
+aZKey      68545589
+aExternalValue Return from Web Popup / No Refresh
+aInternalValue 84
+
+eTableEntry 4
+aZKey      68545590
+aExternalValue Return from Web Popup / Refresh
+aInternalValue 85
+
+eTableEntry 4
+aZKey      1320487
+aExternalValue Exit Dialog Task
+aInternalValue 99
+
+eContext   3
+aZKey      1320500
+aName      Window Event Action Type
+
+eTableEntry 4
+aZKey      4847916
+
+eTableEntry 4
+aZKey      1320501
+aExternalValue Default
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320502
+aExternalValue Subwindow / Modal
+aInternalValue 34
+
+eTableEntry 4
+aZKey      1320503
+aExternalValue Subwindow / Modeless
+aInternalValue 33
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320504
+aName      WD_ComboBoxFormatType
+aDesc      Table for format values for a Combo Box Control
+aDomainType T
+aDataType  L
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320505
+aName      WD_ComboBoxFormatType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656420
+
+eTableEntry 4
+aZKey      1320506
+aExternalValue Drop Down List
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320507
+aExternalValue Drop Down
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320508
+aExternalValue Simple
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1145051
+aExternalValue Extended List
+aInternalValue 4
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320509
+aName      WD_ControlSubtype
+aDesc      Table of valid subtypes for Window Controls
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320526
+aName      ControlComboSubtype
+
+eTableEntry 4
+aZKey      1320528
+aExternalValue Domain
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320529
+aExternalValue Automatic Include
+aInternalValue 20480
+
+eTableEntry 4
+aZKey      1320530
+aExternalValue Set Foreign Key
+aInternalValue 36864
+
+eTableEntry 4
+aZKey      1320531
+aExternalValue Select Source Entity Only
+aInternalValue 12288
+
+eTableEntry 4
+aZKey      1320532
+aExternalValue Set Foreign Key and Select Source Entity
+aInternalValue 45056
+
+eContext   3
+aZKey      1320552
+aName      ControlDIL_ItemStyle
+
+eTableEntry 4
+aZKey      1320553
+aExternalValue Text Left
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320554
+aExternalValue Text Center
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320555
+aExternalValue Text Right
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1320556
+aExternalValue Auto Size
+aInternalValue 2048
+
+eContext   3
+aZKey      1320543
+aName      ControlEditSubtype
+
+eTableEntry 4
+aZKey      1320544
+aExternalValue Upper/Lower Case
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320545
+aExternalValue Lower Case
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320546
+aExternalValue Upper Case
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320547
+aExternalValue Password
+aInternalValue 4
+
+eContext   3
+aZKey      1320533
+aName      ControlGraphSubtype
+
+eTableEntry 4
+aZKey      1320535
+aExternalValue Pie Chart
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320536
+aExternalValue Bar Graph
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320537
+aExternalValue Line Graph
+aInternalValue 3
+
+eContext   3
+aZKey      1320538
+aName      ControlListSubtype
+
+eTableEntry 4
+aZKey      1320539
+aExternalValue Single
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320540
+aExternalValue Multiple
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320541
+aExternalValue Extended
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1320542
+aExternalValue Single / Hilite Cursor Pos
+aInternalValue 8192
+
+eContext   3
+aZKey      1320557
+aName      ControlSpreadSheetSubtype
+
+eTableEntry 4
+aZKey      1320558
+aExternalValue Nonsizable Border
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320559
+aExternalValue Sizable Border
+aInternalValue 16
+
+eContext   3
+aZKey      1320510
+aName      WD_ControlSubtype
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320512
+aExternalValue 0
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1320513
+aExternalValue 1
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320514
+aExternalValue 2
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320515
+aExternalValue 3
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1320516
+aExternalValue 4
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1320517
+aExternalValue 9
+aInternalValue 9
+
+eTableEntry 4
+aZKey      1320518
+aExternalValue 10
+aInternalValue 10
+
+eTableEntry 4
+aZKey      1320519
+aExternalValue 12
+aInternalValue 12
+
+eTableEntry 4
+aZKey      1320520
+aExternalValue 16
+aInternalValue 16
+
+eTableEntry 4
+aZKey      1320521
+aExternalValue 2048
+aInternalValue 2048
+
+eTableEntry 4
+aZKey      1320522
+aExternalValue 8192
+aInternalValue 8192
+
+eTableEntry 4
+aZKey      1320523
+aExternalValue 12288
+aInternalValue 12288
+
+eTableEntry 4
+aZKey      1320524
+aExternalValue 20480
+aInternalValue 20480
+
+eTableEntry 4
+aZKey      1320525
+aExternalValue 36864
+aInternalValue 36864
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1137330
+aName      WD_CtrlDefVisible
+aDesc      Determines the visibility of  a CtrlDef to the painter or report builder or XSLT builder
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1137331
+aName      WD_CtrlDefVisible
+aIsDefault Y
+
+eTableEntry 4
+aZKey      4904272
+
+eTableEntry 4
+aZKey      4904271
+aExternalValue XSLT & Report
+aInternalValue -6
+
+eTableEntry 4
+aZKey      4904270
+aExternalValue XSLT & Dialog
+aInternalValue -5
+
+eTableEntry 4
+aZKey      4894015
+aExternalValue XSLT
+aInternalValue -4
+
+eTableEntry 4
+aZKey      4904266
+aExternalValue Dialog & Report
+aInternalValue -3
+
+eTableEntry 4
+aZKey      1137333
+aExternalValue Report
+aInternalValue -2
+
+eTableEntry 4
+aZKey      1137332
+aExternalValue Dialog
+aInternalValue -1
+
+eTableEntry 4
+aZKey      1137334
+aExternalValue Dialog & Report & XSLT
+aInternalValue 0
+
+eTableEntry 4
+aZKey      1137335
+aExternalValue Deleted
+aInternalValue 1
+
+eContext   3
+aZKey      1137337
+aName      WD_PPE_Visibility
+
+eTableEntry 4
+aZKey      4904273
+
+eTableEntry 4
+aZKey      4904269
+aExternalValue XSLT & Report
+aInternalValue -6
+
+eTableEntry 4
+aZKey      4904268
+aExternalValue XSLT & Dialog
+aInternalValue -5
+
+eTableEntry 4
+aZKey      4894018
+aExternalValue XSLT
+aInternalValue -4
+
+eTableEntry 4
+aZKey      4904267
+aExternalValue Dialog & Report
+aInternalValue -3
+
+eTableEntry 4
+aZKey      1137339
+aExternalValue Report
+aInternalValue -2
+
+eTableEntry 4
+aZKey      1137338
+aExternalValue Dialog
+aInternalValue -1
+
+eTableEntry 4
+aZKey      1137340
+aExternalValue Dialog & Report & XSLT
+aInternalValue 0
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1160237
+aName      WD_MapDefType
+aDesc      Mapping definition type for PE defined MapDef
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      1160238
+aName      WD_MapDefType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1160239
+aExternalValue Entity
+aInternalValue E
+
+eTableEntry 4
+aZKey      1160242
+aExternalValue Scoping Entity
+aInternalValue S
+
+eTableEntry 4
+aZKey      1160240
+aExternalValue Attribute
+aInternalValue A
+
+eTableEntry 4
+aZKey      1160241
+aExternalValue Multiple Attributes
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320560
+aName      WD_SB_ActionDisabling
+aDesc      Subobject Behavior: Auto Action disabling
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320561
+aName      WD_SB_ActionDisabling
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320563
+aExternalValue Cursor On First Entity
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320564
+aExternalValue Cursor On Last Entity
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320565
+aExternalValue Entity Not Selected
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1320566
+aExternalValue Entity Null
+aInternalValue 8
+
+eTableEntry 4
+aZKey      1320567
+aExternalValue Browse Only View
+aInternalValue 16
+
+eTableEntry 4
+aZKey      1007320
+aExternalValue Entity Not Null
+aInternalValue 32
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320568
+aName      WD_SB_DeleteNull
+aDesc      Subobject Behavior: Return/Stay behavior for Delete SubAct
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320569
+aName      WD_SB_DeleteNull
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320571
+aExternalValue Stay When Null
+aInternalValue 512
+
+eTableEntry 4
+aZKey      1320572
+aExternalValue Return When Null
+aInternalValue 1024
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320573
+aName      WD_SB_NextPrev
+aDesc      Subobject Behavior: Next Prev behavior within a SubAction
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320574
+aName      WD_SB_NextPrev
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320576
+aExternalValue Next
+aInternalValue 128
+
+eTableEntry 4
+aZKey      1320577
+aExternalValue Previous
+aInternalValue 256
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320578
+aName      WD_SB_SubAction
+aDesc      Subobject Behavior: SubAction
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1320579
+aName      WD_SB_SubAction
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1320581
+aExternalValue Accept
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1320582
+aExternalValue Cancel
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1320583
+aExternalValue Delete
+aInternalValue 4
+
+eTableEntry 4
+aZKey      1320584
+aExternalValue Delete after Confirmation
+aInternalValue 268435460
+
+eTableEntry 4
+aZKey      1320585
+aExternalValue Exclude
+aInternalValue 8
+
+eTableEntry 4
+aZKey      1320586
+aExternalValue Exclude after Confirmation
+aInternalValue 268435464
+
+eTableEntry 4
+aZKey      1320587
+aExternalValue Create Entity
+aInternalValue 16
+
+eTableEntry 4
+aZKey      1320588
+aExternalValue Create Entity after Accept
+aInternalValue 17
+
+eTableEntry 4
+aZKey      1320589
+aExternalValue Create Temporal Entity
+aInternalValue 32
+
+eTableEntry 4
+aZKey      1320590
+aExternalValue Create Temporal Entity after Accept
+aInternalValue 33
+
+eTableEntry 4
+aZKey      1320591
+aExternalValue Create Temporal Subobject Version
+aInternalValue 64
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92715091
+aName      WD_TextAlignHorizontal
+aDomainType T
+aDataType  S
+aMaxStringLth 25
+aContextRestriction N
+
+eContext   3
+aZKey      92715092
+aName      WD_TextAlignHorizontal
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92715989
+
+eTableEntry 4
+aZKey      92715093
+aExternalValue Left
+aInternalValue left
+
+eTableEntry 4
+aZKey      92715094
+aExternalValue Center
+aInternalValue center
+
+eTableEntry 4
+aZKey      92715095
+aExternalValue Right
+aInternalValue right
+
+eTableEntry 4
+aZKey      92715096
+aExternalValue Left Offset
+aInternalValue Left Offset
+
+eTableEntry 4
+aZKey      92715097
+aExternalValue Right Offset
+aInternalValue Right Offset
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1141800
+aName      WD_WebCtrlType
+aDesc      Used for JSP Generation
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      1141801
+aName      WD_WebCtrlType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1141805
+aExternalValue Button (rather than Submit)
+aInternalValue Button
+
+eTableEntry 4
+aZKey      1141803
+aExternalValue Clear - Force to appear after floated columns
+aInternalValue Clear
+
+eTableEntry 4
+aZKey      1141806
+aExternalValue Edit - updatable table column
+aInternalValue Edit
+
+eTableEntry 4
+aZKey      1141812
+aExternalValue Email Address - table column
+aInternalValue EmailAddress
+
+eTableEntry 4
+aZKey      1141808
+aExternalValue Email Message (Body)
+aInternalValue EmailMessage
+
+eTableEntry 4
+aZKey      1141810
+aExternalValue Email Recipient
+aInternalValue EmailRecipient
+
+eTableEntry 4
+aZKey      1141809
+aExternalValue Email Subject Line
+aInternalValue EmailSubject
+
+eTableEntry 4
+aZKey      1141816
+aExternalValue Hidden - not displayed
+aInternalValue Hidden
+
+eTableEntry 4
+aZKey      1141807
+aExternalValue Multiline - preformatted (line, paragraph, etc.)
+aInternalValue Multiline
+
+eTableEntry 4
+aZKey      1141802
+aExternalValue Repeating Group
+aInternalValue RepeatingGroup
+
+eTableEntry 4
+aZKey      1141804
+aExternalValue Div - Group sub-controls
+aInternalValue Div
+
+eTableEntry 4
+aZKey      1158821
+aExternalValue Div with AutoScroll
+aInternalValue DivScroll
+
+eTableEntry 4
+aZKey      1156571
+aExternalValue Span (deprecated)
+aInternalValue Span
+
+eTableEntry 4
+aZKey      1168494
+aExternalValue wysiwygEditor
+aInternalValue wysiwygEditor
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68304446
+aName      WD_WebEditControlProperties
+aDesc      Web control type for Edit controls
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68304447
+aName      WD_WebEditControlProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92741378
+
+eTableEntry 4
+aZKey      68304448
+aExternalValue No Current Values
+aInternalValue No Current Values
+
+eTableEntry 4
+aZKey      92656445
+aExternalValue Create Session Variable
+aInternalValue Create Session Variable
+
+eTableEntry 4
+aZKey      92656446
+aExternalValue XSS Encode
+aInternalValue XSS
+
+eTableEntry 4
+aZKey      92656447
+aExternalValue No Output Mapping
+aInternalValue No Output Mapping
+
+eTableEntry 4
+aZKey      92741377
+aExternalValue wysiwyg TinyMCE
+aInternalValue wysiwyg TinyMCE
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68442297
+aName      WD_WebGridControlProperties
+aDesc      Web control type for Grid subcontrols
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68442298
+aName      WD_WebGridControlProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      68442299
+aExternalValue Absolute Width
+aInternalValue Absolute Width
+
+eTableEntry 4
+aZKey      92656442
+aExternalValue Table Export Option
+aInternalValue Table Export Option
+
+eTableEntry 4
+aZKey      1454567
+aExternalValue Scrolling Table
+aInternalValue Scrolling Table
+
+eTableEntry 4
+aZKey      89581085
+aExternalValue Filter Rows (wHideTableRow='Y')
+aInternalValue Filter Rows
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68304279
+aName      WD_WebGridSubControlProperties
+aDesc      Web subcontrol type for Grid subcontrols
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68304280
+aName      WD_WebGridSubControlProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      68304281
+aExternalValue Hidden
+aInternalValue Hidden
+
+eTableEntry 4
+aZKey      68304442
+aExternalValue Edit
+aInternalValue Edit
+
+eTableEntry 4
+aZKey      68304443
+aExternalValue Multiline
+aInternalValue Multiline
+
+eTableEntry 4
+aZKey      68304444
+aExternalValue EmailAddress
+aInternalValue EmailAddress
+
+eTableEntry 4
+aZKey      68442680
+aExternalValue Absolute Width
+aInternalValue Absolute Width
+
+eTableEntry 4
+aZKey      90249868
+aExternalValue Wrap
+aInternalValue WRAP
+
+eTableEntry 4
+aZKey      90768599
+aExternalValue First Occurrence Only
+aInternalValue First Occurrence Only
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68304365
+aName      WD_WebGroupControlProperties
+aDesc      Web control type for Group controls
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68304366
+aName      WD_WebGroupControlProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92741380
+
+eTableEntry 4
+aZKey      68304367
+aExternalValue Div
+aInternalValue Div
+
+eTableEntry 4
+aZKey      68304368
+aExternalValue Span
+aInternalValue Span
+
+eTableEntry 4
+aZKey      89582614
+aExternalValue Table
+aInternalValue Table
+
+eTableEntry 4
+aZKey      90754211
+aExternalValue Grid Grouping
+aInternalValue Grid Grouping
+
+eTableEntry 4
+aZKey      68304369
+aExternalValue Scrollable
+aInternalValue Scrollable
+
+eTableEntry 4
+aZKey      89853394
+aExternalValue No Height
+aInternalValue No Height
+
+eTableEntry 4
+aZKey      89853395
+aExternalValue No Width
+aInternalValue No Width
+
+eTableEntry 4
+aZKey      92656449
+aExternalValue Show/Hide Toggle
+aInternalValue Show/Hide Toggle
+
+eTableEntry 4
+aZKey      68304372
+aExternalValue Repeating Group
+aInternalValue Repeating Group
+
+eTableEntry 4
+aZKey      68442849
+aExternalValue Relative Positioning
+aInternalValue Relative Positioning
+
+eTableEntry 4
+aZKey      4634994
+aExternalValue Container
+aInternalValue Container
+
+eTableEntry 4
+aZKey      4634995
+aExternalValue Container Absolute Size
+aInternalValue Container Absolute Size
+
+eTableEntry 4
+aZKey      68544987
+aExternalValue File Transfer to Server
+aInternalValue File Transfer to Server
+
+eTableEntry 4
+aZKey      92741379
+aExternalValue Survey Group
+aInternalValue Survey Group
+
+eTableEntry 4
+aZKey      89990860
+aExternalValue Include File
+aInternalValue Include File
+
+eTableEntry 4
+aZKey      90127802
+aExternalValue iFrame
+aInternalValue iFrame
+
+eTableEntry 4
+aZKey      90790799
+aExternalValue reCAPTCHA
+aInternalValue reCAPTCHA
+
+eTableEntry 4
+aZKey      90044246
+aExternalValue Dashboard Group
+aInternalValue Dashboard Group
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68544962
+aName      WD_WebPushControlProperties
+aDesc      Web control type for Push Button controls
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      68544963
+aName      WD_WebPushControlProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      68544964
+aExternalValue Button (Not Submit)
+aInternalValue Button (Not Submit)
+
+eTableEntry 4
+aZKey      89581087
+aExternalValue Hidden
+aInternalValue Hidden
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      4899546
+aName      WD_WebScriptLocation
+aDomainType T
+aDataType  S
+aMaxStringLth 16
+aContextRestriction N
+
+eContext   3
+aZKey      4899547
+aName      WD_WebScriptLocation
+aIsDefault Y
+
+eTableEntry 4
+aZKey      4903923
+aExternalValue Pre-Mapping
+aInternalValue Pre-Mapping
+
+eTableEntry 4
+aZKey      4899548
+aExternalValue Pre-Operation
+aInternalValue Pre-Operation
+
+eTableEntry 4
+aZKey      4899549
+aExternalValue Post Operation
+aInternalValue Post Operation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92709478
+aName      WD_WebTextControlProperties
+aDesc      Web control types for Text control
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      92709479
+aName      WD_WebTextControlProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92709609
+
+eTableEntry 4
+aZKey      92709482
+aExternalValue Label
+aInternalValue Label
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320593
+aName      WD_WindowStyle
+aDesc      Window Style
+aDomainType T
+aDataType  T
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      1320594
+aName      WD_WindowStyle
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1178138
+aName      XRA_Tag
+aDesc      Double ^ to ^^and modify & to ^
+aDomainType A
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      1178139
+aName      XRA_Tag
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1178141
+aName      XRA_Text
+aDesc      Double ^ to ^^ and modify & to ^
+aDomainType A
+aDataType  S
+aMaxStringLth 65534
+aContextRestriction N
+
+eContext   3
+aZKey      1178142
+aName      XRA_Text
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1005026
+aName      XRA_YNA
+aDesc      Yes/No/All
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1005028
+aName      XRA_YNA
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484581
+
+eTableEntry 4
+aZKey      1005053
+aExternalValue A
+aInternalValue A
+
+eTableEntry 4
+aZKey      1005054
+aExternalValue N
+aInternalValue N
+
+eTableEntry 4
+aZKey      1005055
+aExternalValue Y
+aInternalValue Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      4591424
+aName      XSL_PageProperties
+aDesc      Table of XSL Page Properties
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      4591425
+aName      XSL_PageProperties
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92656441
+
+eTableEntry 4
+aZKey      4591426
+aExternalValue page-width
+aInternalValue page-width
+
+eTableEntry 4
+aZKey      4591427
+aExternalValue page-height
+aInternalValue page-height
+
+eTableEntry 4
+aZKey      4591431
+aExternalValue margin
+aInternalValue margin
+
+eTableEntry 4
+aZKey      4591428
+aExternalValue margin-top
+aInternalValue margin-top
+
+eTableEntry 4
+aZKey      4591429
+aExternalValue margin-bottom
+aInternalValue margin-bottom
+
+eTableEntry 4
+aZKey      4591430
+aExternalValue margin-left
+aInternalValue margin-left
+
+eTableEntry 4
+aZKey      4591432
+aExternalValue margin-right
+aInternalValue margin-right
+
+eTableEntry 4
+aZKey      4591433
+aExternalValue region-body
+aInternalValue region-body
+
+eTableEntry 4
+aZKey      4591434
+aExternalValue region-before
+aInternalValue region-before
+
+eTableEntry 4
+aZKey      4591435
+aExternalValue region-after
+aInternalValue region-after
+
+eTableEntry 4
+aZKey      4591436
+aExternalValue region-start
+aInternalValue region-start
+
+eTableEntry 4
+aZKey      4591437
+aExternalValue region-end
+aInternalValue region-end
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90000014
+aName      Y/N
+aDesc      Yes or No
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90000019
+aName      Default
+
+eTableEntry 4
+aZKey      92484582
+
+eTableEntry 4
+aZKey      90000021
+aExternalValue Default
+aInternalValue Y
+
+eTableEntry 4
+aZKey      90000022
+aInternalValue N
+
+eContext   3
+aZKey      90000015
+aName      Y/N
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484583
+
+eTableEntry 4
+aZKey      90000017
+aExternalValue Y
+aInternalValue Y
+
+eTableEntry 4
+aZKey      90000018
+aExternalValue N
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320608
+aName      ZeidonOperationTypes
+aDesc      types of operations that can be defined for Zeidon (VML)
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320632
+aName      Dialog Operation Types
+
+eTableEntry 4
+aZKey      92484584
+
+eTableEntry 4
+aZKey      1320633
+aExternalValue Dialog Operation
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320634
+aExternalValue Local Operation
+aInternalValue L
+
+eTableEntry 4
+aZKey      1320635
+aExternalValue ShortcutKey Operation
+aInternalValue K
+
+eContext   3
+aZKey      1320648
+aName      Domain Operation Types
+
+eTableEntry 4
+aZKey      92484585
+
+eTableEntry 4
+aZKey      1320649
+aExternalValue Domain Operation
+aInternalValue M
+
+eTableEntry 4
+aZKey      1320650
+aExternalValue Local Operation
+aInternalValue L
+
+eContext   3
+aZKey      1320643
+aName      Global Operation Types
+
+eTableEntry 4
+aZKey      92484586
+
+eTableEntry 4
+aZKey      1320645
+aExternalValue Global Operation
+aInternalValue G
+
+eTableEntry 4
+aZKey      1320646
+aExternalValue ShortcutKey Operation
+aInternalValue K
+
+eTableEntry 4
+aZKey      1320647
+aExternalValue Local Operation
+aInternalValue L
+
+eContext   3
+aZKey      1320636
+aName      Object Operation Types
+
+eTableEntry 4
+aZKey      92484587
+
+eTableEntry 4
+aZKey      1320638
+aExternalValue Object Constraint Operation
+aInternalValue C
+
+eTableEntry 4
+aZKey      1320639
+aExternalValue Entity Constraint Operation
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320640
+aExternalValue Transformation Operation
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320641
+aExternalValue Derived Attribute Operation
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320642
+aExternalValue Local Operation
+aInternalValue L
+
+eContext   3
+aZKey      1320621
+aName      OperationTypesShort
+
+eTableEntry 4
+aZKey      92484588
+
+eTableEntry 4
+aZKey      1320623
+aExternalValue Dialog
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320624
+aExternalValue Trans
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320625
+aExternalValue Global
+aInternalValue G
+
+eTableEntry 4
+aZKey      1320626
+aExternalValue Local
+aInternalValue L
+
+eTableEntry 4
+aZKey      1320627
+aExternalValue Object
+aInternalValue O
+
+eTableEntry 4
+aZKey      1320628
+aExternalValue ObjConstr
+aInternalValue C
+
+eTableEntry 4
+aZKey      1320629
+aExternalValue EntConstr
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320630
+aExternalValue Derived
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320631
+aExternalValue Domain
+aInternalValue M
+
+eContext   3
+aZKey      1320609
+aName      ZeidonOperationTypes
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484589
+
+eTableEntry 4
+aZKey      1320610
+aExternalValue Global Operation
+aInternalValue G
+
+eTableEntry 4
+aZKey      1320611
+aExternalValue Zeidon Operation
+aInternalValue Z
+
+eTableEntry 4
+aZKey      1320612
+aExternalValue Dialog Operation
+aInternalValue D
+
+eTableEntry 4
+aZKey      1320613
+aExternalValue Local Operation
+aInternalValue L
+
+eTableEntry 4
+aZKey      1320614
+aExternalValue Object Operation
+aInternalValue O
+
+eTableEntry 4
+aZKey      1320615
+aExternalValue Transformation Operation
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320616
+aExternalValue Object Constraint Operation
+aInternalValue C
+
+eTableEntry 4
+aZKey      1320617
+aExternalValue Entity Constraint Operation
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320618
+aExternalValue Derived Attribute Operation
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320619
+aExternalValue Domain Operation
+aInternalValue M
+
+eTableEntry 4
+aZKey      1320620
+aExternalValue ShortcutKey Operation
+aInternalValue K
+
