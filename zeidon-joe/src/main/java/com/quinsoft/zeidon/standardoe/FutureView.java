@@ -39,7 +39,7 @@ import com.quinsoft.zeidon.ZeidonException;
  */
 class FutureView extends InternalViewForwarder implements Future<View>
 {
-    private final Future<View> future;
+    private Future<View> future;
 
     /**
      * @param view
@@ -58,6 +58,7 @@ class FutureView extends InternalViewForwarder implements Future<View>
         try
         {
             future.get();
+            future = null; // Let GC clean up the future.
         }
         catch ( ExecutionException e )
         {
@@ -70,9 +71,11 @@ class FutureView extends InternalViewForwarder implements Future<View>
     }
 
     @Override
-    protected ViewImpl getView()
+    synchronized protected ViewImpl getView()
     {
-        waitForFuture();
+        if ( future != null )
+            waitForFuture();
+        
         return super.getView();
     }
     
@@ -80,9 +83,11 @@ class FutureView extends InternalViewForwarder implements Future<View>
      * @see java.util.concurrent.Future#cancel(boolean)
      */
     @Override
-    public boolean cancel( boolean mayInterruptIfRunning )
+    synchronized public boolean cancel( boolean mayInterruptIfRunning )
     {
-        waitForFuture();
+        if ( future == null )
+            return false;
+        
         return future.cancel( mayInterruptIfRunning );
     }
 
@@ -90,8 +95,11 @@ class FutureView extends InternalViewForwarder implements Future<View>
      * @see java.util.concurrent.Future#isCancelled()
      */
     @Override
-    public boolean isCancelled()
+    synchronized public boolean isCancelled()
     {
+        if ( future == null )
+            return false;
+        
         return future.isCancelled();
     }
 
@@ -99,8 +107,11 @@ class FutureView extends InternalViewForwarder implements Future<View>
      * @see java.util.concurrent.Future#isDone()
      */
     @Override
-    public boolean isDone()
+    synchronized public boolean isDone()
     {
+        if ( future == null )
+            return true;
+        
         return future.isDone();
     }
 
@@ -110,7 +121,7 @@ class FutureView extends InternalViewForwarder implements Future<View>
     @Override
     public View get() throws InterruptedException, ExecutionException
     {
-        return future.get();
+        return getView();
     }
 
     /* (non-Javadoc)
@@ -119,7 +130,7 @@ class FutureView extends InternalViewForwarder implements Future<View>
     @Override
     public View get( long timeout, TimeUnit unit ) throws InterruptedException, ExecutionException, TimeoutException
     {
-        return future.get( timeout, unit );
+        return getView();
     }
 
     @Override

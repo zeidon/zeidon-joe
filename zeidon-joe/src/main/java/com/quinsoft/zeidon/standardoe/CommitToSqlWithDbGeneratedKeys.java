@@ -6,6 +6,7 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,10 +42,12 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
     private CommitOptions        options;
 
     /**
-     * Keeps track of the number of keys that need to be copied to an EI
-     * before it can be inserted into the DB.
+     * Keeps track of the FK source instances for every EI.
+     * 
+     *      key = EI that is to be committed to DB
+     *      value = set of EIs that are the source of the key's FKs.
      */
-    private Map<EntityInstanceImpl, Set<EntityInstanceImpl>> fkCount;
+    private Map<EntityInstanceImpl, Set<EntityInstanceImpl>> fkSourcesForEi;
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.Committer#init(com.quinsoft.zeidon.standardoe.TaskImpl, java.util.List)
@@ -76,7 +79,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
             dbHandler.setDbGenerateKeys( true );
 
-            fkCount = new HashMap<EntityInstanceImpl, Set<EntityInstanceImpl>>();
+            fkSourcesForEi = new HashMap<EntityInstanceImpl, Set<EntityInstanceImpl>>();
 
             // Reset flags needed for commit processing.
             for ( ViewImpl view : viewList )
@@ -87,6 +90,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 view.getObjectInstance().dbhNeedsForeignKeys = false;
                 view.getObjectInstance().dbhNeedsGenKeys = false;
 
+                final RelFieldParser p = new RelFieldParser();
                 for ( EntityInstanceImpl ei : view.getObjectInstance().getEntities() )
                 {
                     ei.dbhCreated = false;
@@ -100,8 +104,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     ei.dbhNoGenKey = false;
                     ei.dbhForeignKey = false;
 
-                    // We're keeping a count of all the FKs that need to be set for
-                    // an EI.  Find the RelInstance for ei and bump up its count.
+                    // Keep track of the FK sources for this EI.
                     final ViewEntity viewEntity = ei.getViewEntity();
                     final DataRecord dataRecord = viewEntity.getDataRecord();
                     if ( dataRecord != null )
@@ -109,18 +112,18 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                         final RelRecord relRecord = dataRecord.getRelRecord();
                         if ( relRecord != null )
                         {
-                            RelFieldParser p = new RelFieldParser();
                             for ( final RelField relField : relRecord.getRelFields() )
                             {
-                                // If there is not rel data field then there's nothing to set.
+                                // If there is no rel data field then there's nothing to set.
                                 if ( relField.getRelDataField() == null )
                                     continue;
 
                                 p.parse( relField, ei );
-                                if ( ! fkCount.containsKey( p.relInstance ) )
-                                    fkCount.put( p.relInstance, new HashSet<EntityInstanceImpl>() );
+                                if ( ! fkSourcesForEi.containsKey( p.relInstance ) )
+                                    fkSourcesForEi.put( p.relInstance, new HashSet<EntityInstanceImpl>() );
 
-                                fkCount.get( p.relInstance ).add( p.srcInstance );
+                                // Add the srcInstance to the set of FK sources for relInstance.
+                                fkSourcesForEi.get( p.relInstance ).add( p.srcInstance );
                             }
                         }
                     }
@@ -357,20 +360,20 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         if ( ei.isDeleted() )
             return false;
 
-        // Skip it if the entity was already created via a linked instance.
+        // Check to see if this EI has already been inserted into the DB.
         if ( ei.dbhCreated )
             return false;
 
         ViewEntity viewEntity = ei.getViewEntity();
-        DataRecord dataRecord = viewEntity.getDataRecord();
-        if ( dataRecord == null )
-            return false;
-
         if ( viewEntity.isDerivedPath() )
             return false;
 
         // Skip the entity if we don't allow creates.
         if ( ! viewEntity.isCreate() )
+            return false;
+
+        DataRecord dataRecord = viewEntity.getDataRecord();
+        if ( dataRecord == null )
             return false;
 
         return true;
@@ -616,10 +619,9 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         // want to copy a FK until we know that the source for a FK has been
         // properly set.  We also want to make sure we set the FK's for the EIs that
         // have been excluded/deleted before we copy FKs for the included/created.
-
-        // First get a count for each created entity the number of FKs that need to be set.
-
         int     debugCnt   = 0;     // We'll keep a counter in case we get an infinite loop.
+        
+        // creatingEntities will be true for as long as we think we need to create more entities.
         boolean creatingEntities = true;
         while ( creatingEntities )
         {
@@ -642,97 +644,120 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     assert ! ei.getViewEntity().isDerivedPath();
 
                     if ( ! createInstance( view, ei ) )
-                        creatingEntities = true;
+                        creatingEntities = true;  // We weren't able to create ei.  Try again later.
                 }
             }
         } // while creatingEntities...
     }
 
     /**
-     * This will set the FKs associated with ei.
+     * This will attempt to set all the FKs for ei.  We've created the map fkSourcesForEi
+     * which keeps track of all the EIs that are the source for ei's foreign keys.
+     * We'll loops through all the source instances for ei and attempt to copy the 
+     * FK from srcInstance to ei.
+     * 
+     * However, if the srcInstance hasn't been created in the DB it won't have its 
+     * key set yet.  We'll have to come back after srcInstance is created to set
+     * the FKs for ei.
      *
      * @param ei
-     * @return
+     * @return true of all FKs were set, false if there are still some FKs that need to be set.
      */
     private boolean setForeignKeys( EntityInstanceImpl ei )
     {
         final ViewEntity viewEntity = ei.getViewEntity();
-        final DataRecord dataRecord = viewEntity.getDataRecord();
-        final RelRecord relRecord = dataRecord.getRelRecord();
-        if ( relRecord == null )
-            return true;
-
-        RelFieldParser p = new RelFieldParser();
-
-        for ( final RelField relField : relRecord.getRelFields() )
+        final Set<EntityInstanceImpl> srcInstances = fkSourcesForEi.get( ei );
+        if ( srcInstances == null || srcInstances.size() == 0 )
+            return true;  // No FKs to set.
+        
+        // Loop through all the source instances for ei's FKs.
+        // Use an iterator because we may need to remove the srcInstance.
+        for ( Iterator<EntityInstanceImpl> iter = srcInstances.iterator(); iter.hasNext(); )
         {
-            // If there is not rel data field then there's nothing to set.
-            if ( relField.getRelDataField() == null )
+            EntityInstanceImpl srcInstance = iter.next();
+            
+            // If the source instance hasn't had been created yet then we need to wait
+            // and try again later.
+            if ( requiresCreate( srcInstance ) )
                 continue;
 
-            p.parse( relField, ei );
-
-            // If the instance we are about to update with FKs is being deleted then
-            // don't worry about setting the key because it's unnecessary.
-            if ( p.relInstance.isDeleted() )
-                continue;
-
-            if ( ei.isCreated() || ei.isIncluded() )
+            // The RelRecord that defines the relationship between ei and srcInstance
+            // will be in the entity that is a child (or descendant) of the parent.  Find which
+            // entity is below the other.
+            DataRecord dataRecord;
+            EntityInstanceImpl childInstance;
+            if ( srcInstance.getLevel() < ei.getLevel() )
             {
-                // If the source of the relationship is ei then we can copy the FK's
-                // after it's created.
-                if ( p.srcInstance == ei )
-                    continue;
-                
-                // If the source instance hasn't had been created yet then we need to wait.
-                // one and try again later.
-                if ( requiresCreate( p.srcInstance ) )
-                    continue;
-
-                Set<EntityInstanceImpl> set = fkCount.get( p.relInstance );
-                if ( set.contains( p.srcInstance ) )
-                {
-                    Object value = p.srcInstance.getAttribute( p.srcViewAttrib ).getValue();
-                    p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
-                    set.remove( p.srcInstance );
-                }
+                // ei is under srcInstance
+                dataRecord = viewEntity.getDataRecord();  
+                childInstance = ei;
             }
             else
             {
-                assert false : "We got to this code";
-            
-                // If the foreign key is a key to the target entity, then
-                // we cannot null the key because we would lose the
-                // capability of updating the entity (in this case it
-                // better be deleted!!!)
-                assert ! p.relViewAttrib.isKey();
-                assert ei.isExcluded(); // EI is hidden and we've ignored deleted EIs above.
-
-                // If the EI is excluded and the min cardinality is 1, we'll get an error
-                // if we set the FK to null.  We will assume that a different entity is being
-                // included which will set the FK to a non-null value.  We can assume this because
-                // the OI has passed cardinality validation and if no EI was being included it
-                // would have thrown a validation exception.
-                if ( viewEntity.getMinCardinality() == 0)
-                    p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( null, true );
+                // srcInstance is under ei.
+                dataRecord = srcInstance.getViewEntity().getDataRecord();
+                childInstance = srcInstance;
             }
+            
+            final RelRecord relRecord = dataRecord.getRelRecord();
+            final RelFieldParser p = new RelFieldParser();
+    
+            // Loop through the relationships for childInstance and find the one(s)
+            // for srcInstance-ei
+            for ( final RelField relField : relRecord.getRelFields() )
+            {
+                p.parse( relField, childInstance );
+                
+                // We only want the relField that copies a FK from srcInstance to ei.
+                if ( p.srcInstance != srcInstance )
+                    continue;
+                
+                assert p.relInstance == ei;
+                
+                if ( ei.isCreated() || ei.isIncluded() )
+                {
+                    Object value = srcInstance.getAttribute( p.srcViewAttrib ).getValue();
+                    ei.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
+                    
+                    // We've copied the FK to ei.  Remove srcInstance from the list of required sources.
+                    iter.remove();
+                }
+                else
+                {
+                    // If the foreign key is a key to the target entity, then
+                    // we cannot null the key because we would lose the
+                    // capability of updating the entity (in this case it
+                    // better be deleted!!!)
+                    assert ! p.relViewAttrib.isKey();
+                    assert ei.isExcluded(); // EI is hidden and we've ignored deleted EIs above.
+    
+                    // If the EI is excluded and the min cardinality is 1, we'll get an error
+                    // if we set the FK to null.  We will assume that a different entity is being
+                    // included which will set the FK to a non-null value.  We can assume this because
+                    // the OI has passed cardinality validation and if no EI was being included it
+                    // would have thrown a validation exception.
+                    if ( viewEntity.getMinCardinality() == 0)
+                        p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( null, true );
+                }
+    
+                // Turn off the dbh flag to make sure that the DBHandler updates
+                // the instance.
+                ei.dbhUpdated = false;
+    
+            } // for each rel field...
+        }
 
-            // Turn off the dbh flag to make sure that the DBHandler updates
-            // the instance.
-            p.relInstance.dbhUpdated = false;
-
-        } // for each rel field...
-
-        // If fkCount contains an entry for ei then we are done setting FKs only
-        // if all the FKs have been set.
-        if ( fkCount.containsKey( ei ) )
-            return fkCount.get( ei ).size() == 0;
+        // If fkSourcesForEi contains an entry for ei then we are done setting FKs only
+        // if there are no more source instances for ei.
+        if ( fkSourcesForEi.containsKey( ei ) )
+            return fkSourcesForEi.get( ei ).size() == 0;
         
         return true;
     }
 
     /**
-    // Copies all foreign keys to/from lpEntityInstance and creates it if possible.
+    // Attempts to insert ei into the DB.  It will fail (and return false) if ei relies
+     * on a FK from an EI that hasn't been created yet. 
     //
     // Returns true  if the EI was created in the DB
     //         false if the EI couldn't be created because it relies on uncreated FKs.
@@ -765,63 +790,24 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
                 ViewAttribute keyAttrib = viewEntity.getKeys().get( 0 );
                 ei.getAttribute( keyAttrib ).setValue( keys.get( 0 ) );
-                
-                // Set the dbhCreated flag for ei and all its linked instances.
-                for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
-                {
-                    linked.dbhCreated = true;
+            }
+            
+            // Set the dbhCreated flag for ei and all its linked instances.  This
+            // will prevent us from trying to insert it again.
+            for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
+            {
+                linked.dbhCreated = true;
 
-                    // If the linked instance is flagged as created then we need
-                    // to set its included flag on so that the *relationship*
-                    // is still created.
-                    if ( linked.isCreated() )
-                        linked.dbhNeedsInclude = true;
-                }
-
-                //
-                // Now copy the new key to other entities if necessary.
-                //
-                final DataRecord dataRecord = viewEntity.getDataRecord();
-                final RelRecord relRecord = dataRecord.getRelRecord();
-                if ( relRecord == null )
-                    return true;
-
-                RelFieldParser p = new RelFieldParser();
-
-                for ( final RelField relField : relRecord.getRelFields() )
-                {
-                    // If there is not rel data field then there's nothing to set.
-                    if ( relField.getRelDataField() == null )
-                        continue;
-
-                    p.parse( relField, ei );
-                    if ( p.srcInstance == ei )
-                    {
-                        Set<EntityInstanceImpl> set = fkCount.get( p.relInstance );
-                        assert set.contains( p.srcInstance );
-                        Object value = p.srcInstance.getAttribute( p.srcViewAttrib ).getValue();
-                        p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
-                        set.remove( p.srcInstance );
-                    }
-                }
+                // If the linked instance is flagged as created then we need
+                // to set its included flag on so that the *relationship*
+                // is still created.
+                if ( linked.isCreated() )
+                    linked.dbhNeedsInclude = true;
             }
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e )
-                                 .prependEntityInstance( ei );
-        }
-
-        // Flag all linked entities (including 'ei') as having been created.
-        for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
-        {
-            linked.dbhCreated = true;
-
-            // If the linked instance is flagged as created then we need
-            // to set its included flag on so that the *relationship*
-            // is still created.
-            if ( linked.isCreated() )
-                linked.dbhNeedsInclude = true;
+            throw ZeidonException.wrapException( e ).prependEntityInstance( ei );
         }
 
         return true;
