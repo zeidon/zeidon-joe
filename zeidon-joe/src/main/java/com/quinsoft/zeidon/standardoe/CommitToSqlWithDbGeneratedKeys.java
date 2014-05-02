@@ -5,6 +5,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
      * Keeps track of the number of keys that need to be copied to an EI
      * before it can be inserted into the DB.
      */
-    private Map<EntityInstanceImpl, MutableInt> fkCount;
+    private Map<EntityInstanceImpl, Set<EntityInstanceImpl>> fkCount;
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.Committer#init(com.quinsoft.zeidon.standardoe.TaskImpl, java.util.List)
@@ -75,7 +76,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
             dbHandler.setDbGenerateKeys( true );
 
-            fkCount = new HashMap<EntityInstanceImpl, MutableInt>();
+            fkCount = new HashMap<EntityInstanceImpl, Set<EntityInstanceImpl>>();
 
             // Reset flags needed for commit processing.
             for ( ViewImpl view : viewList )
@@ -116,13 +117,10 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                                     continue;
 
                                 p.parse( relField, ei );
-                                if ( p.relInstance != ei )
-                                {
-                                    if ( fkCount.containsKey( ei ) )
-                                        fkCount.get( p.relInstance ).increment();
-                                    else
-                                        fkCount.put( ei, new MutableInt( 1 ) );
-                                }
+                                if ( ! fkCount.containsKey( p.relInstance ) )
+                                    fkCount.put( p.relInstance, new HashSet<EntityInstanceImpl>() );
+
+                                fkCount.get( p.relInstance ).add( p.srcInstance );
                             }
                         }
                     }
@@ -641,8 +639,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     if ( ! requiresCreate( ei ) )
                         continue;
 
-                    final ViewEntity viewEntity = ei.getViewEntity();
-                    assert ! viewEntity.isDerivedPath();
+                    assert ! ei.getViewEntity().isDerivedPath();
 
                     if ( ! createInstance( view, ei ) )
                         creatingEntities = true;
@@ -682,16 +679,28 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
             if ( ei.isCreated() || ei.isIncluded() )
             {
+                // If the source of the relationship is ei then we can copy the FK's
+                // after it's created.
+                if ( p.srcInstance == ei )
+                    continue;
+                
                 // If the source instance hasn't had been created yet then we need to wait.
                 // one and try again later.
                 if ( requiresCreate( p.srcInstance ) )
-                    return false;
+                    continue;
 
-                Object value = p.srcInstance.getAttribute( p.srcViewAttrib ).getValue();
-                p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
+                Set<EntityInstanceImpl> set = fkCount.get( p.relInstance );
+                if ( set.contains( p.srcInstance ) )
+                {
+                    Object value = p.srcInstance.getAttribute( p.srcViewAttrib ).getValue();
+                    p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
+                    set.remove( p.srcInstance );
+                }
             }
             else
             {
+                assert false : "We got to this code";
+            
                 // If the foreign key is a key to the target entity, then
                 // we cannot null the key because we would lose the
                 // capability of updating the entity (in this case it
@@ -714,6 +723,11 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
         } // for each rel field...
 
+        // If fkCount contains an entry for ei then we are done setting FKs only
+        // if all the FKs have been set.
+        if ( fkCount.containsKey( ei ) )
+            return fkCount.get( ei ).size() == 0;
+        
         return true;
     }
 
@@ -751,6 +765,45 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
                 ViewAttribute keyAttrib = viewEntity.getKeys().get( 0 );
                 ei.getAttribute( keyAttrib ).setValue( keys.get( 0 ) );
+                
+                // Set the dbhCreated flag for ei and all its linked instances.
+                for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
+                {
+                    linked.dbhCreated = true;
+
+                    // If the linked instance is flagged as created then we need
+                    // to set its included flag on so that the *relationship*
+                    // is still created.
+                    if ( linked.isCreated() )
+                        linked.dbhNeedsInclude = true;
+                }
+
+                //
+                // Now copy the new key to other entities if necessary.
+                //
+                final DataRecord dataRecord = viewEntity.getDataRecord();
+                final RelRecord relRecord = dataRecord.getRelRecord();
+                if ( relRecord == null )
+                    return true;
+
+                RelFieldParser p = new RelFieldParser();
+
+                for ( final RelField relField : relRecord.getRelFields() )
+                {
+                    // If there is not rel data field then there's nothing to set.
+                    if ( relField.getRelDataField() == null )
+                        continue;
+
+                    p.parse( relField, ei );
+                    if ( p.srcInstance == ei )
+                    {
+                        Set<EntityInstanceImpl> set = fkCount.get( p.relInstance );
+                        assert set.contains( p.srcInstance );
+                        Object value = p.srcInstance.getAttribute( p.srcViewAttrib ).getValue();
+                        p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
+                        set.remove( p.srcInstance );
+                    }
+                }
             }
         }
         catch ( Exception e )
