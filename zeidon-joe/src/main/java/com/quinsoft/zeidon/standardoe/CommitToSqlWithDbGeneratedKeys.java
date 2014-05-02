@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections4.Factory;
-import org.apache.commons.collections4.map.LazyMap;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.quinsoft.zeidon.CommitOptions;
@@ -43,8 +41,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
     /**
      * Keeps track of the number of keys that need to be copied to an EI
-     * before it can be inserted into the DB.  This map is decorated with
-     * LazyMap to create MutableInts on the fly.
+     * before it can be inserted into the DB.
      */
     private Map<EntityInstanceImpl, MutableInt> fkCount;
 
@@ -78,15 +75,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
             dbHandler.setDbGenerateKeys( true );
 
-            // Create a map to keep track of how many FKs an EI needs.  It will automatically
-            // create a MutableInt with value 0 on the first get().
-            fkCount = LazyMap.lazyMap( new HashMap<EntityInstanceImpl, MutableInt>(),
-                                       new Factory<MutableInt>() {
-                                                @Override
-                                                public MutableInt create()
-                                                {
-                                                    return new MutableInt( 0 );
-                                                }} );
+            fkCount = new HashMap<EntityInstanceImpl, MutableInt>();
 
             // Reset flags needed for commit processing.
             for ( ViewImpl view : viewList )
@@ -128,7 +117,12 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
                                 p.parse( relField, ei );
                                 if ( p.relInstance != ei )
-                                    fkCount.get( p.relInstance ).increment();
+                                {
+                                    if ( fkCount.containsKey( ei ) )
+                                        fkCount.get( p.relInstance ).increment();
+                                    else
+                                        fkCount.put( ei, new MutableInt( 1 ) );
+                                }
                             }
                         }
                     }
