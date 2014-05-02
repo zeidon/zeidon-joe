@@ -1033,6 +1033,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             rootCursor.copySubobject( srcInstance, CursorPosition.NEXT );
         }
 
-        return null;
+        return copy;
     }
 }
