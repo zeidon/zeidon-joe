@@ -4,8 +4,14 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
@@ -34,6 +40,13 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
     private List<ViewImpl>       viewList;
     private DbHandler            dbHandler;
     private CommitOptions        options;
+
+    /**
+     * Keeps track of the number of keys that need to be copied to an EI
+     * before it can be inserted into the DB.  This map is decorated with
+     * LazyMap to create MutableInts on the fly.
+     */
+    private Map<EntityInstanceImpl, MutableInt> fkCount;
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.Committer#init(com.quinsoft.zeidon.standardoe.TaskImpl, java.util.List)
@@ -65,6 +78,16 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
             dbHandler.setDbGenerateKeys( true );
 
+            // Create a map to keep track of how many FKs an EI needs.  It will automatically
+            // create a MutableInt with value 0 on the first get().
+            fkCount = LazyMap.lazyMap( new HashMap<EntityInstanceImpl, MutableInt>(),
+                                       new Factory<MutableInt>() {
+                                                @Override
+                                                public MutableInt create()
+                                                {
+                                                    return new MutableInt( 0 );
+                                                }} );
+
             // Reset flags needed for commit processing.
             for ( ViewImpl view : viewList )
             {
@@ -86,6 +109,29 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     ei.dbhGenKeyNeeded = false;
                     ei.dbhNoGenKey = false;
                     ei.dbhForeignKey = false;
+
+                    // We're keeping a count of all the FKs that need to be set for
+                    // an EI.  Find the RelInstance for ei and bump up its count.
+                    final ViewEntity viewEntity = ei.getViewEntity();
+                    final DataRecord dataRecord = viewEntity.getDataRecord();
+                    if ( dataRecord != null )
+                    {
+                        final RelRecord relRecord = dataRecord.getRelRecord();
+                        if ( relRecord != null )
+                        {
+                            RelFieldParser p = new RelFieldParser();
+                            for ( final RelField relField : relRecord.getRelFields() )
+                            {
+                                // If there is not rel data field then there's nothing to set.
+                                if ( relField.getRelDataField() == null )
+                                    continue;
+
+                                p.parse( relField, ei );
+                                if ( p.relInstance != ei )
+                                    fkCount.get( p.relInstance ).increment();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -102,6 +148,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
              * Determines if we should commit or rollback the current transaction.
              */
             boolean commit = false;
+
             dbHandler.beginTransaction();
             try
             {
@@ -310,6 +357,18 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
      */
     private boolean requiresCreate( EntityInstanceImpl ei )
     {
+        // Can't create an entity that wasn't created...
+        if ( !ei.isCreated() )
+            return false;
+
+        // Skip deleted entities; they've been created then deleted so no need to save them.
+        if ( ei.isDeleted() )
+            return false;
+
+        // Skip it if the entity was already created via a linked instance.
+        if ( ei.dbhCreated )
+            return false;
+
         ViewEntity viewEntity = ei.getViewEntity();
         DataRecord dataRecord = viewEntity.getDataRecord();
         if ( dataRecord == null )
@@ -318,20 +377,8 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         if ( viewEntity.isDerivedPath() )
             return false;
 
-        // Skip deleted entities; they've been created then deleted so no need to save them.
-        if ( ei.isDeleted() )
-            return false;
-
         // Skip the entity if we don't allow creates.
         if ( ! viewEntity.isCreate() )
-            return false;
-
-        // Can't create an entity that wasn't created...
-        if ( !ei.isCreated() )
-            return false;
-
-        // Skip it if the entity was already created via a linked instance.
-        if ( ei.dbhCreated )
             return false;
 
         return true;
@@ -577,6 +624,9 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         // want to copy a FK until we know that the source for a FK has been
         // properly set.  We also want to make sure we set the FK's for the EIs that
         // have been excluded/deleted before we copy FKs for the included/created.
+
+        // First get a count for each created entity the number of FKs that need to be set.
+
         int     debugCnt   = 0;     // We'll keep a counter in case we get an infinite loop.
         boolean creatingEntities = true;
         while ( creatingEntities )
@@ -621,49 +671,30 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         if ( relRecord == null )
             return true;
 
+        RelFieldParser p = new RelFieldParser();
+
         for ( final RelField relField : relRecord.getRelFields() )
         {
             // If there is not rel data field then there's nothing to set.
             if ( relField.getRelDataField() == null )
                 continue;
 
-            final ViewAttribute srcViewAttrib = relField.getSrcDataField().getViewAttribute();
-            final ViewEntity    srcViewEntity = srcViewAttrib.getViewEntity();
-            final ViewAttribute relViewAttrib = relField.getRelDataField().getViewAttribute();
-            final ViewEntity    relViewEntity = relViewAttrib.getViewEntity();
-
-            // We now have the attributes--the source and relationship (i.e. target)
-            // attributes.  One is part of the current entity (lpViewEntity) and
-            // the other is a parent of the current entity.  Find the entity
-            // instance of the parent entity.
-
-            final EntityInstanceImpl relInstance;
-            final EntityInstanceImpl srcInstance;
-            if ( relViewEntity == viewEntity )
-            {
-                relInstance = ei;
-                srcInstance = ei.findMatchingParent( srcViewEntity );
-            }
-            else
-            {
-                srcInstance = ei;
-                relInstance = ei.findMatchingParent( relViewEntity );
-            }
+            p.parse( relField, ei );
 
             // If the instance we are about to update with FKs is being deleted then
             // don't worry about setting the key because it's unnecessary.
-            if ( relInstance.isDeleted() )
+            if ( p.relInstance.isDeleted() )
                 continue;
 
             if ( ei.isCreated() || ei.isIncluded() )
             {
                 // If the source instance hasn't had been created yet then we need to wait.
                 // one and try again later.
-                if ( requiresCreate( srcInstance ) )
+                if ( requiresCreate( p.srcInstance ) )
                     return false;
 
-                Object value = srcInstance.getAttribute( srcViewAttrib ).getValue();
-                relInstance.getAttribute( relViewAttrib ).setInternalValue( value, true );
+                Object value = p.srcInstance.getAttribute( p.srcViewAttrib ).getValue();
+                p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
             }
             else
             {
@@ -671,7 +702,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 // we cannot null the key because we would lose the
                 // capability of updating the entity (in this case it
                 // better be deleted!!!)
-                assert ! relViewAttrib.isKey();
+                assert ! p.relViewAttrib.isKey();
                 assert ei.isExcluded(); // EI is hidden and we've ignored deleted EIs above.
 
                 // If the EI is excluded and the min cardinality is 1, we'll get an error
@@ -680,12 +711,12 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 // the OI has passed cardinality validation and if no EI was being included it
                 // would have thrown a validation exception.
                 if ( viewEntity.getMinCardinality() == 0)
-                    relInstance.getAttribute( relViewAttrib ).setInternalValue( null, true );
+                    p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( null, true );
             }
 
             // Turn off the dbh flag to make sure that the DBHandler updates
             // the instance.
-            relInstance.dbhUpdated = false;
+            p.relInstance.dbhUpdated = false;
 
         } // for each rel field...
 
