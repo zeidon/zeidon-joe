@@ -263,10 +263,14 @@ def get_viewod_list app_name
   loader = oe.getClassLoader( "" )
   urls = loader.getURLs
   urls.each do |url|
-    jar = JarFile.new( url.getPath )
-    jar.entries.each do |entry|
-      @@app_viewod_list[ app_name ] << File.basename( entry.toString, "." + $1) if entry.toString =~ regex
-   end
+    begin
+      jar = JarFile.new( url.getPath )
+      jar.entries.each do |entry|
+        @@app_viewod_list[ app_name ] << File.basename( entry.toString, "." + $1) if entry.toString =~ regex
+      end
+    rescue
+      puts "Error trying to load jar file #{url.getPath} protocol #{url.getProtocol}"
+    end
   end
 
   @@app_viewod_list[ app_name ]

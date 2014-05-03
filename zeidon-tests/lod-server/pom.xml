@@ -7,7 +7,7 @@
 	<groupId>com.quinsoft.zeidon</groupId>
 	<artifactId>test-lod-server</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2</version>
+	<version>1.0.7-SNAPSHOT</version>
 
 	<description>LOD server for Zeidon Test applications.</description>
 
@@ -15,18 +15,24 @@
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zeidon-sinatra-server</artifactId>
-	    <version>1.0.2</version>
+	    <version>1.0.7-SNAPSHOT</version>
 	  </dependency>
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zruby</artifactId>
-	    <version>1.0.2</version>
-	  </dependency>
+	    <version>1.0.7-SNAPSHOT</version>
+ 	  </dependency>
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zeidon-tests</artifactId>
 	    <type>test-jar</type>
-	    <version>1.0.2</version>
+	    <version>1.0.7-SNAPSHOT</version>
+	    <exclusions>
+	      <exclusion>
+		<artifactId>fop</artifactId>
+		<groupId>org.apache.xmlgraphics</groupId>
+	      </exclusion>
+	    </exclusions>
 	  </dependency>
 	  <dependency>
 	    <groupId>log4j</groupId>
@@ -35,36 +41,6 @@
 	    <scope>compile</scope>
 	  </dependency>
 	</dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <id>assemble</id>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <archive>
-                <manifest>
-                  <mainClass>org.jruby.JarBootstrapMain</mainClass>
-                </manifest>
-              </archive>
-              <appendAssemblyId>false</appendAssemblyId>
-              <descriptors>
-                <descriptor>assembly.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
 
 </project>

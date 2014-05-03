@@ -64,10 +64,18 @@
 -->
 		<module>android</module>
 		<module>zruby</module>
-<!-- Sinatra server only needs to be built once.
-		<module>sinatra-server</module>
--->
 	</modules>
+
+	<profiles>
+          <!-- This profile builds the sinatra server .jar.  It only needs to be
+               built once and doesn't include Zeidon code -->
+	  <profile>
+	    <id>sinatra-server</id>
+	    <modules>
+	      <module>sinatra-server</module>
+	    </modules> 
+	  </profile>
+	</profiles>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
