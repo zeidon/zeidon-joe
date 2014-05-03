@@ -67,8 +67,12 @@
 	</modules>
 
 	<profiles>
-          <!-- This profile builds the sinatra server .jar.  It only needs to be
-               built once and doesn't include Zeidon code -->
+	  <!-- The sinatra server only needs to be built once per release because
+               it doesn't include any Zeidon code.  It is a convenience .jar for
+               LOD servers.
+
+               Build this with: mvn -P sinatra-server install
+          -->
 	  <profile>
 	    <id>sinatra-server</id>
 	    <modules>
