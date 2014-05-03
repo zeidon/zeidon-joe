@@ -58,12 +58,13 @@
 		<module>zeidon-operations</module>
 		<module>zeidon-tests</module>
 		<module>restserver</module>
+		<module>zruby</module>
 		<module>zeidon-tests/rest-server</module>
+		<module>zeidon-tests/lod-server</module>
 <!--
 		<module>scala</module>
 -->
 		<module>android</module>
-		<module>zruby</module>
 	</modules>
 
 	<profiles>

@@ -2,7 +2,8 @@ require 'rubygems'
 require 'bundler/setup'
 require 'sinatra'
 
-#Dir.chdir("/home/dgc/zeidon/java/zeidon-dev/zruby/src/main/resources/")
+puts "Using default jar-bootstrap.jar"
+
 load 'sinatra_framework.rb'
 
 include_class 'com.quinsoft.zeidon.utils.JoeUtils'
