@@ -1,0 +1,3 @@
+This project builds the sinatra-server .jar.  It is a convenience .jar to make it
+easy build simple LOD servers from any Zeidon project.  See client-files directory
+for the files necessary to build and start a lod-server.

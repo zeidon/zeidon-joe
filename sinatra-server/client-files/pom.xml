@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<name>test-lod-server</name>
+	<name>lod-server</name>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.quinsoft.zeidon</groupId>
-	<artifactId>test-lod-server</artifactId>
+	<groupId>*groupId*</groupId>
+	<artifactId>lod-server</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>*version*</version>
 
-	<description>LOD server for Zeidon Test applications.</description>
+	<description>LOD server for Zeidon applications.</description>
 
 	<dependencies>
 	  <dependency>
@@ -24,17 +24,15 @@
  	  </dependency>
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
-	    <artifactId>zeidon-tests</artifactId>
-	    <type>test-jar</type>
+	    <artifactId>zeidon-joe</artifactId>
 	    <version>1.0.7-SNAPSHOT</version>
-	    <exclusions>
-	      <exclusion>
-		<artifactId>fop</artifactId>
-		<groupId>org.apache.xmlgraphics</groupId>
-	      </exclusion>
-	    </exclusions>
+ 	  </dependency>
+
+	  <!-- Add dependencies for client applications here.  Below is an exmaple. -->
+	  <dependency>
+	    <groupId>com.quinsoft.zeidon</groupId>
+	    <artifactId>zeidon-tests</artifactId>
+	    <version>1.0.7-SNAPSHOT</version>
 	  </dependency>
 	</dependencies>
-
-
 </project>
