@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-#require 'sinatra/reloader'
 require 'haml'
 require 'pp'
 require 'fastercsv'
@@ -11,6 +10,7 @@ load "zeidon.rb"
 include_class 'com.quinsoft.zeidon.CursorPosition'
 include_class 'java.util.jar.JarFile'
 
+puts "Loaded sinatra_framework.rb from #{__FILE__}"
 enable :sessions
 set :port, ENV['SINATRA_PORT'].to_i || 4567
 
@@ -233,19 +233,6 @@ def activate_for_edit( args = {} )
   return @view_name
 end
 
-def zurl args = {}
-  #args[:entity] = @entity if args[:entity].nil? && @entity
-  #args[:viewname] = @view_name if args[:viewname].nil? && @view_name
-  #args[:viewod] = @viewod if args[:viewod].nil? && @viewod
-  #args[:command] = @command if args[:command].nil? && @command
-
-  tparams = []
-  args.each_pair{|k,v| tparams << "#{k}=#{v}" }
-  tparams = tparams.join("&")
-  tparams = "?" + tparams if tparams != ''
-  return url("/#{@application}/#{@command}/#{viewod}#{tparams}")
-end
-
 def get_viewod_list app_name
   puts "Getting viewod_list from #{@@app_viewod_list}"
 
@@ -273,7 +260,7 @@ def get_viewod_list app_name
     end
   end
 
-  @@app_viewod_list[ app_name ]
+  @@app_viewod_list[ app_name ].sort!
 end
 
 # ===== Helper methods =====
@@ -316,7 +303,13 @@ helpers do
   end
 
   def bottom_links
-    html = "<br/><br/><table><tr><td><a href='#{url("startbrowser")}'>Start Browser</a></td></tr></table>"
+    puts "bottom_links"
+    html = <<-code
+          <br/><br/>
+            <table><tr>
+               <td><a href='#{url("startbrowser")}'>Start Browser</a></td>
+            </tr></table>
+code
     return html
   end
 
@@ -403,6 +396,7 @@ end
 
 get '/:application/list/:viewod' do
   @view = @task.activate @viewod, :options => {:root_only_multiple => true}
+  @view.setName @viewod + "_list"
   return haml <<-code
 %title #{@viewod} List
 %h2 #{@viewod} List
@@ -448,7 +442,8 @@ get '/:application/edit/:viewod' do
     %input{:type => "hidden", :name => "viewname", :value => "#{@view_name}"}
     %input{:type => "hidden", :name => "entity", :value => "#{@entity}"}
     = input_fields_for_entity( @view.cursor( @entity ) )
-  %input{:type => "submit", :value => "#{@save_button_text}", :class => "button"}
+  %input{:type => "submit", :name => "save", :value => "#{@save_button_text}", :class => "button"}
+  %input{:type => "submit", :name => "duplicate", :value => "Duplicate", :class => "button"}
 - @view.cursor( @entity ).each_child do |child_cursor|
   - cname = child_cursor.get_name
   %p
@@ -514,6 +509,17 @@ end
 
 post '/:application/save/:viewod' do
   raise ":viewname not specified" if @view_name.nil?
+
+  # If 'duplicate' param is specified then we really want to duplicate the current
+  # OI and send the user off to edit it.
+  if ! params[ 'duplicate' ].nil?
+    puts "Duplicating OI"
+    session[:messages] << "OI Duplicated.  Edit below."
+    new_view = @view.duplicateOi
+    new_view.setName @view_name
+    return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}")
+  end
+
   input = params[:input]
   input.each_pair do |entity_name, values|
     cursor = @view.cursor( entity_name )
@@ -569,18 +575,22 @@ get '/:application/select/:viewod' do
 end
 
 get '/' do
+  puts "Listing applications"
+
   haml <<-code
 %title Applications List
 %h2 List of Available Applications
 %table
   - Zeidon.get_object_engine.applications.each do |application|
-    %tr
-      %td
-        %a{:href => url("/" + application + "/list" )}
-          = "View"
-          = application
+    - if application != "ZeidonSystem"
+      %tr
+        %td
+          %a{:href => url("/" + application + "/list" )}
+            = "View"
+            = application
+= bottom_links
 code
-  
+
 end
 
 #==============================================================

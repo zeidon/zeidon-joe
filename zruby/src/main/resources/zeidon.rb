@@ -25,7 +25,7 @@ module Zeidon
     end
 
     def applications
-      @applications.keys
+      @applications.keys.sort_by{ |a| a.downcase  }
     end
 
     def respond_to?( id )
