@@ -1,6 +1,152 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 10/02/12   12:26:53 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 04/03/14   12:14:09 1.0a2    
 eDomainGroup 1
 aName      Cheetah
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92862676
+aName      AdmissionCategory
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92862677
+aName      AdmissionCategory
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92862678
+aExternalValue Admitted
+aInternalValue A
+
+eTableEntry 4
+aZKey      92862679
+aExternalValue Discharged
+aInternalValue D
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92952227
+aName      AdmissionMedRecNeed
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92952228
+aName      AdmissionMedRecNeed
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92952230
+aExternalValue Medical records needed
+aInternalValue MEDRECNEEDED
+
+eTableEntry 4
+aZKey      92952231
+aExternalValue Medical records submitted
+aInternalValue MEDRECSUBMIT
+
+eTableEntry 4
+aZKey      92952232
+aExternalValue Pending with MCCT
+aInternalValue PENDMCCT
+
+eTableEntry 4
+aZKey      92952236
+aExternalValue Approved
+aInternalValue APPROVED
+
+eTableEntry 4
+aZKey      92952237
+aExternalValue Denied
+aInternalValue DENIED
+
+eTableEntry 4
+aZKey      92952238
+aExternalValue Records not needed
+aInternalValue NOTNEEDED
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92952218
+aName      AdmissionVisitType
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92952219
+aName      AdmissionVisitType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92952220
+aExternalValue Clinic
+aInternalValue CLINIC
+
+eTableEntry 4
+aZKey      92952221
+aExternalValue Emergency
+aInternalValue EMERGENCY
+
+eTableEntry 4
+aZKey      92952222
+aExternalValue Inpatient
+aInternalValue INPATIENT
+
+eTableEntry 4
+aZKey      92952223
+aExternalValue Observation
+aInternalValue OBSERVATION
+
+eTableEntry 4
+aZKey      92952224
+aExternalValue Recurring
+aInternalValue RECURRING
+
+eTableEntry 4
+aZKey      92952225
+aExternalValue SDC
+aInternalValue SDC
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      92909599
+aName      AlmostApprove
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92909600
+aName      AlmostApprove
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92909601
+aExternalValue Patient Reports Approval - unconfirmed
+aInternalValue PTRPT
+
+eTableEntry 4
+aZKey      92909602
+aExternalValue SSA Reports Approval - unconfirmed
+aInternalValue SSARPT
+
+eTableEntry 4
+aZKey      92909603
+aExternalValue Medically Approved, not yet in pay
+aInternalValue MEDAPPROVE
+
+eTableEntry 4
+aZKey      92909604
+aExternalValue SSA Reports Approval - Seeking NOA
+aInternalValue SEEKNOA
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -38,6 +184,53 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93436699
+aName      ApprovalType
+aDomainType T
+aDataType  S
+aMaxStringLth 30
+aContextRestriction N
+
+eContext   3
+aZKey      93436700
+aName      ApprovalType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93455641
+
+eTableEntry 4
+aZKey      93455639
+aExternalValue HSN
+aInternalValue HSN
+
+eTableEntry 4
+aZKey      93436701
+aExternalValue Ongoing Approved
+aInternalValue ONGOINGAPPROVED
+
+eTableEntry 4
+aZKey      93455640
+aExternalValue Temporary
+aInternalValue TEMPORARY
+
+eTableEntry 4
+aZKey      93436703
+aExternalValue Time Limited Approval Expired
+aInternalValue TIMELIMITEDAPPROVALEXPIRED
+
+eTableEntry 4
+aZKey      93436704
+aExternalValue Time Limited Approval Ongoing
+aInternalValue TIMELIMITEDAPPROVALONGOING
+
+eTableEntry 4
+aZKey      93436702
+aExternalValue Time Limited Approved
+aInternalValue TIMELIMITEDAPPROVED
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92732860
 aName      AppTakenBy
 aDomainType T
@@ -49,9 +242,6 @@ eContext   3
 aZKey      92732861
 aName      AppTakenBy
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92732866
 
 eTableEntry 4
 aZKey      92732862
@@ -70,6 +260,48 @@ aInternalValue U
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93057893
+aName      AppTakenLocation
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      93057894
+aName      AppTakenLocation
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93131163
+
+eTableEntry 4
+aZKey      93057896
+aExternalValue Discharge
+aInternalValue D
+
+eTableEntry 4
+aZKey      93057897
+aExternalValue ED/Outpatient
+aInternalValue E
+
+eTableEntry 4
+aZKey      93057898
+aExternalValue Inpatient
+aInternalValue I
+
+eTableEntry 4
+aZKey      93057899
+aExternalValue Walk-ins
+aInternalValue W
+
+eTableEntry 4
+aZKey      93131124
+aExternalValue In House
+aInternalValue H
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
 aZKey      92732913
 aName      AppUrgency
 aDomainType T
@@ -81,9 +313,6 @@ eContext   3
 aZKey      92732914
 aName      AppUrgency
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92732921
 
 eTableEntry 4
 aZKey      92732915
@@ -167,16 +396,11 @@ aDomainType T
 aDataType  S
 aMaxStringLth 1
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmDynamicTable
 
 eContext   3
 aZKey      92691986
 aName      BillBasis
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92691989
 
 eTableEntry 4
 aZKey      92691987
@@ -187,6 +411,209 @@ eTableEntry 4
 aZKey      92691988
 aExternalValue R
 aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92950094
+aName      BillingPaymentStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92950095
+aName      BillingPaymentStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93214937
+
+eTableEntry 4
+aZKey      92950096
+aExternalValue Awaiting authorization number
+aInternalValue AAN
+
+eTableEntry 4
+aZKey      92950099
+aExternalValue Partial bill used to meet spend down
+aInternalValue BILLTOSD
+
+eTableEntry 4
+aZKey      92950100
+aExternalValue Payment complete
+aInternalValue COMPLETE
+
+eTableEntry 4
+aZKey      92950097
+aExternalValue Denied by primary insurance
+aInternalValue DENIED
+
+eTableEntry 4
+aZKey      92950098
+aExternalValue Not medically necessary
+aInternalValue NMN
+
+eTableEntry 4
+aZKey      93214936
+aExternalValue Not Expecting Payment
+aInternalValue NOPAYMENT
+
+eTableEntry 4
+aZKey      92950101
+aExternalValue Pending Adjustment
+aInternalValue PENDADJ
+
+eTableEntry 4
+aZKey      92950102
+aExternalValue Pending Appeal
+aInternalValue PENDAPPEAL
+
+eTableEntry 4
+aZKey      92950103
+aExternalValue Pending Medical Info
+aInternalValue PENDMED
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93084133
+aName      BillingRate
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93084134
+aName      BillingRate 
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93208483
+
+eTableEntry 4
+aZKey      93084154
+aExternalValue HFI took app
+aInternalValue HFITOOKAPP
+
+eTableEntry 4
+aZKey      93208482
+aExternalValue Day 1
+aInternalValue DAY1
+
+eTableEntry 4
+aZKey      93084155
+aExternalValue Day 21
+aInternalValue DAY21
+
+eTableEntry 4
+aZKey      93084156
+aExternalValue Pre 21 
+aInternalValue PRE21
+
+eTableEntry 4
+aZKey      93084157
+aExternalValue Post 21 
+aInternalValue POST21
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92950128
+aName      BillingVisitType
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92950129
+aName      BillingVisitType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93343845
+
+eTableEntry 4
+aZKey      92950130
+aExternalValue In-Patient
+aInternalValue INP
+
+eTableEntry 4
+aZKey      93192196
+aExternalValue Out-Patient
+aInternalValue OUTP
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92950106
+aName      BillToMedicaidStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92950107
+aName      BillToMedicaidStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93339957
+
+eTableEntry 4
+aZKey      92950108
+aExternalValue Approved for LTC Only
+aInternalValue LTCONLY
+
+eTableEntry 4
+aZKey      92950109
+aExternalValue Awaiting primary insurance payment
+aInternalValue WAITINS
+
+eTableEntry 4
+aZKey      92950110
+aExternalValue Duplicate
+aInternalValue DUP
+
+eTableEntry 4
+aZKey      92950111
+aExternalValue Entire bill used to meet spend down
+aInternalValue ENTIRESD
+
+eTableEntry 4
+aZKey      92950112
+aExternalValue Paid in full by primary insurance
+aInternalValue INPAIDFULL
+
+eTableEntry 4
+aZKey      92950113
+aExternalValue Partial bill used to meet spend down
+aInternalValue PARTSD
+
+eTableEntry 4
+aZKey      92950114
+aExternalValue Pending payment
+aInternalValue PENDING
+
+eTableEntry 4
+aZKey      93339956
+aExternalValue See other referral
+aInternalValue OTHERREF
+
+eTableEntry 4
+aZKey      92950115
+aExternalValue Start date does not cover DOS
+aInternalValue DOSNOTCOVERED
+
+eTableEntry 4
+aZKey      92950116
+aExternalValue Still admitted collateral 
+aInternalValue STILLADMIT
+
+eTableEntry 4
+aZKey      92950117
+aExternalValue Zero balance
+aInternalValue ZEROBAL
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.BlobDomain
@@ -204,6 +631,418 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92748379
+aName      CapturableVisits
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      92748380
+aName      CapturableVisits
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93512032
+
+eTableEntry 4
+aZKey      92748384
+aExternalValue Clinic Only
+aInternalValue CLINIC
+
+eTableEntry 4
+aZKey      92748385
+aExternalValue ED/Clinic/Inpatient
+aInternalValue ECI
+
+eTableEntry 4
+aZKey      92748382
+aExternalValue ED Only
+aInternalValue ED
+
+eTableEntry 4
+aZKey      92748383
+aExternalValue ED to Inpatient
+aInternalValue EDIN
+
+eTableEntry 4
+aZKey      92748381
+aExternalValue Inpatient Only
+aInternalValue IN
+
+eTableEntry 4
+aZKey      93512031
+aExternalValue No Visit
+aInternalValue NOVIS
+
+eTableEntry 4
+aZKey      93108100
+aExternalValue Outpatient
+aInternalValue OUT
+
+eTableEntry 4
+aZKey      93110034
+aExternalValue Out In
+aInternalValue OUTIN
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93492854
+aName      CEExamLevel
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      93492855
+aName      CEExamLevel
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93492859
+
+eTableEntry 4
+aZKey      93492856
+aExternalValue INITIAL
+aInternalValue INITIAL
+
+eTableEntry 4
+aZKey      93492857
+aExternalValue RECON
+aInternalValue RECON
+
+eTableEntry 4
+aZKey      93492858
+aExternalValue ALJ
+aInternalValue ALJ
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      93084144
+aName      ClientReferralType
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93084145
+aName      ClientReferralType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93110046
+
+eTableEntry 4
+aZKey      93084146
+aExternalValue App complete/pending decision
+aInternalValue APPPEND
+
+eTableEntry 4
+aZKey      93084150
+aExternalValue App complete/out of state
+aInternalValue APPOOS
+
+eTableEntry 4
+aZKey      93084147
+aExternalValue App complete/VCs needed
+aInternalValue APPVC
+
+eTableEntry 4
+aZKey      93084148
+aExternalValue Appeal
+aInternalValue APPEAL
+
+eTableEntry 4
+aZKey      93084149
+aExternalValue Difficult to follow up
+aInternalValue DIFFICULTFU
+
+eTableEntry 4
+aZKey      93084151
+aExternalValue Telephonic app not returned
+aInternalValue TELENOTRET
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      93046468
+aName      ContactActivity
+aDomainType T
+aDataType  S
+aMaxStringLth 60
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      93046469
+aName      ContactActivity
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93046470
+aExternalValue Answer billing questions
+aInternalValue Answer billing questions
+
+eTableEntry 4
+aZKey      93046471
+aExternalValue Answer eligibilty questions
+aInternalValue Answer eligibilty questions
+
+eTableEntry 4
+aZKey      93046472
+aExternalValue Assess viability for appeal
+aInternalValue Assess viability for appeal
+
+eTableEntry 4
+aZKey      93046473
+aExternalValue Clarify referral parameters
+aInternalValue Clarify referral parameters
+
+eTableEntry 4
+aZKey      93046474
+aExternalValue Complete ADL report
+aInternalValue Complete ADL report
+
+eTableEntry 4
+aZKey      93046475
+aExternalValue Complete application
+aInternalValue Complete application
+
+eTableEntry 4
+aZKey      93046476
+aExternalValue Conduct MCO enrollment
+aInternalValue Conduct MCO enrollment
+
+eTableEntry 4
+aZKey      93046477
+aExternalValue Conduct QC
+aInternalValue Conduct QC
+
+eTableEntry 4
+aZKey      93106151
+aExternalValue Create Initial Record
+aInternalValue Create Initial Record
+
+eTableEntry 4
+aZKey      93046478
+aExternalValue Conduct screening
+aInternalValue Conduct screening
+
+eTableEntry 4
+aZKey      93046479
+aExternalValue Confirm application is on file
+aInternalValue Confirm application is on file
+
+eTableEntry 4
+aZKey      93046480
+aExternalValue Confirm disability packet is on file
+aInternalValue Confirm disability packet is on file
+
+eTableEntry 4
+aZKey      93046481
+aExternalValue Escalate case to upper management
+aInternalValue Escalate case to upper management
+
+eTableEntry 4
+aZKey      93046482
+aExternalValue File Appeal
+aInternalValue File Appeal
+
+eTableEntry 4
+aZKey      93046483
+aExternalValue Follow up on Appt
+aInternalValue Follow up on Appt
+
+eTableEntry 4
+aZKey      93046484
+aExternalValue Follow up on CE exam
+aInternalValue Follow up on CE exam
+
+eTableEntry 4
+aZKey      93046485
+aExternalValue Left message
+aInternalValue Left message
+
+eTableEntry 4
+aZKey      93046486
+aExternalValue Obtain appeal status
+aInternalValue Obtain appeal status
+
+eTableEntry 4
+aZKey      93046487
+aExternalValue Obtain bills to submit for spend down
+aInternalValue Obtain bills to submit for spend down
+
+eTableEntry 4
+aZKey      93046488
+aExternalValue Obtain missing information
+aInternalValue Obtain missing information
+
+eTableEntry 4
+aZKey      93046489
+aExternalValue Obtain status update
+aInternalValue Obtain status update
+
+eTableEntry 4
+aZKey      93046490
+aExternalValue Obtain update on disability determination
+aInternalValue Obtain update on disability determination
+
+eTableEntry 4
+aZKey      93046491
+aExternalValue Prepare for appeal
+aInternalValue Prepare for appeal
+
+eTableEntry 4
+aZKey      93046492
+aExternalValue Prepare for hearing
+aInternalValue Prepare for hearing
+
+eTableEntry 4
+aZKey      93046493
+aExternalValue Process medical records received
+aInternalValue Process medical records received
+
+eTableEntry 4
+aZKey      93046494
+aExternalValue Process spend down bills received
+aInternalValue Process spend down bills received
+
+eTableEntry 4
+aZKey      93046495
+aExternalValue Process verifications received
+aInternalValue Process verifications received
+
+eTableEntry 4
+aZKey      93046496
+aExternalValue Provide missing information
+aInternalValue Provide missing information
+
+eTableEntry 4
+aZKey      93046497
+aExternalValue Provide status update
+aInternalValue Provide status update
+
+eTableEntry 4
+aZKey      93046498
+aExternalValue Provide verifications
+aInternalValue Provide verifications
+
+eTableEntry 4
+aZKey      93046499
+aExternalValue Report new information
+aInternalValue Report new information
+
+eTableEntry 4
+aZKey      93046500
+aExternalValue Request correct start date
+aInternalValue Request correct start date
+
+eTableEntry 4
+aZKey      93046501
+aExternalValue Request medical records
+aInternalValue Request medical records
+
+eTableEntry 4
+aZKey      93046502
+aExternalValue Request spend down documentation
+aInternalValue Request spend down documentation
+
+eTableEntry 4
+aZKey      93046503
+aExternalValue Request verifications
+aInternalValue Request verifications
+
+eTableEntry 4
+aZKey      93046504
+aExternalValue Retrieve approval information
+aInternalValue Retrieve approval information
+
+eTableEntry 4
+aZKey      93046505
+aExternalValue Retrieve denial information
+aInternalValue Retrieve denial information
+
+eTableEntry 4
+aZKey      93046506
+aExternalValue Review medical records
+aInternalValue Review medical records
+
+eTableEntry 4
+aZKey      93046507
+aExternalValue Review next step options with colleagues
+aInternalValue Review next step options with colleagues
+
+eTableEntry 4
+aZKey      93046508
+aExternalValue Review rush/placement issues
+aInternalValue Review rush/placement issues
+
+eTableEntry 4
+aZKey      93046509
+aExternalValue Schedule Appt
+aInternalValue Schedule Appt
+
+eTableEntry 4
+aZKey      93046510
+aExternalValue Schedule CE exam
+aInternalValue Schedule CE exam
+
+eTableEntry 4
+aZKey      93046511
+aExternalValue Schedule hearing
+aInternalValue Schedule hearing
+
+eTableEntry 4
+aZKey      93046512
+aExternalValue Submit ADL report
+aInternalValue Submit ADL report
+
+eTableEntry 4
+aZKey      93046513
+aExternalValue Submit application
+aInternalValue Submit application
+
+eTableEntry 4
+aZKey      93046514
+aExternalValue Submit medical records
+aInternalValue Submit medical records
+
+eTableEntry 4
+aZKey      93046515
+aExternalValue Submit verifications
+aInternalValue Submit verifications
+
+eTableEntry 4
+aZKey      93046516
+aExternalValue Unable to be seen for screening
+aInternalValue Unable to be seen for screening
+
+eTableEntry 4
+aZKey      93046517
+aExternalValue Unable to leave message
+aInternalValue Unable to leave message
+
+eTableEntry 4
+aZKey      93046518
+aExternalValue Uncooperative
+aInternalValue Uncooperative
+
+eTableEntry 4
+aZKey      93046519
+aExternalValue Verify coverage level
+aInternalValue Verify coverage level
+
+eTableEntry 4
+aZKey      93046520
+aExternalValue Wrong number
+aInternalValue Wrong number
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92749353
 aName      ContactMethod
 aDomainType T
@@ -217,7 +1056,7 @@ aName      ContactMethod
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92749362
+aZKey      93337935
 
 eTableEntry 4
 aZKey      92749355
@@ -236,7 +1075,7 @@ aInternalValue INPERSON
 
 eTableEntry 4
 aZKey      92749358
-aExternalValue Intenet
+aExternalValue Internet
 aInternalValue INTERNET
 
 eTableEntry 4
@@ -252,7 +1091,7 @@ aInternalValue PHONE
 eTableEntry 4
 aZKey      92749361
 aExternalValue Other
-aInternalValue Other
+aInternalValue OTHER
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -297,16 +1136,13 @@ aZKey      92749376
 aName      ContactPurpose
 aDomainType T
 aDataType  S
-aMaxStringLth 10
+aMaxStringLth 25
 aContextRestriction N
 
 eContext   3
 aZKey      92749377
 aName      ContactPurpose
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92749403
 
 eTableEntry 4
 aZKey      92749378
@@ -448,12 +1284,14 @@ aName      ContactResult
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92749411
-
-eTableEntry 4
 aZKey      92749406
 aExternalValue Application taken
 aInternalValue APPTAKEN
+
+eTableEntry 4
+aZKey      92887862
+aExternalValue Converted DO NOT USE
+aInternalValue CONVERTED
 
 eTableEntry 4
 aZKey      92749407
@@ -475,13 +1313,153 @@ aZKey      92749410
 aExternalValue Decision rendered; requires review
 aInternalValue DECISIONREVIEW
 
+eTableEntry 4
+aZKey      92886906
+aExternalValue Enrollment completed
+aInternalValue ENROLCOMPLETE
+
+eTableEntry 4
+aZKey      92886907
+aExternalValue Enrollment not completed
+aInternalValue ENROLNOTCOMPLETE
+
+eTableEntry 4
+aZKey      92886908
+aExternalValue Incorrect contact info
+aInternalValue BADINFO
+
+eTableEntry 4
+aZKey      92886909
+aExternalValue Incorrect phone number
+aInternalValue BADPHONE
+
+eTableEntry 4
+aZKey      92886910
+aExternalValue Info received
+aInternalValue INFORECEIVED
+
+eTableEntry 4
+aZKey      92886911
+aExternalValue Info submitted
+aInternalValue INFOSUBMITTED
+
+eTableEntry 4
+aZKey      92886912
+aExternalValue Language barrier
+aInternalValue LANGBARRIER
+
+eTableEntry 4
+aZKey      92886913
+aExternalValue Left message
+aInternalValue LEFTMESSAGE
+
+eTableEntry 4
+aZKey      92886914
+aExternalValue MAILINGCOMPLETE
+aInternalValue Mailing Complete
+
+eTableEntry 4
+aZKey      92886915
+aExternalValue No answer
+aInternalValue NOANSWER
+
+eTableEntry 4
+aZKey      92886916
+aExternalValue No contact info
+aInternalValue NOINFO
+
+eTableEntry 4
+aZKey      92886917
+aExternalValue NOK uncooperative
+aInternalValue NOKUNCOOP
+
+eTableEntry 4
+aZKey      92886918
+aExternalValue Patient no longer eligible
+aInternalValue NOTELIGIBLE
+
+eTableEntry 4
+aZKey      92886919
+aExternalValue Patient no longer needs/wants coverage
+aInternalValue NOTWANTED
+
+eTableEntry 4
+aZKey      92886920
+aExternalValue Patient not compliant at this time
+aInternalValue NONCOMPLIANT
+
+eTableEntry 4
+aZKey      92886921
+aExternalValue Patient not seen, at treatment
+aInternalValue NOTSEENTREATMENT
+
+eTableEntry 4
+aZKey      92886922
+aExternalValue Patient not seen, discharged
+aInternalValue NOTSEENDISCHARGE
+
+eTableEntry 4
+aZKey      92886923
+aExternalValue Patient not seen, having tests
+aInternalValue NOTSEENTESTS
+
+eTableEntry 4
+aZKey      92886924
+aExternalValue Patient not seen, sedated
+aInternalValue NOTSEENSEDATED
+
+eTableEntry 4
+aZKey      92886925
+aExternalValue Patient not seen, too ill
+aInternalValue NOTSEENTOOILL
+
+eTableEntry 4
+aZKey      92886926
+aExternalValue Patient unable to obtain verifications
+aInternalValue NOVERIFICATIONS
+
+eTableEntry 4
+aZKey      92886927
+aExternalValue Patient was seen
+aInternalValue SEEN
+
+eTableEntry 4
+aZKey      92886928
+aExternalValue Patient will be seen shortly
+aInternalValue SEENSOON
+
+eTableEntry 4
+aZKey      92886929
+aExternalValue Patient will submit verifications
+aInternalValue WILLSUBMITVERIF
+
+eTableEntry 4
+aZKey      92886930
+aExternalValue Phone line was busy
+aInternalValue PHONEBUSY
+
+eTableEntry 4
+aZKey      92886931
+aExternalValue Phone line was disconnected
+aInternalValue PHONEDISCONNECT
+
+eTableEntry 4
+aZKey      92886932
+aExternalValue Requested no calls
+aInternalValue REQESTEDNOCALL
+
+eTableEntry 4
+aZKey      92886933
+aExternalValue Uncooperative
+aInternalValue UNCOOP
+
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92749363
 aName      ContactWhom
 aDomainType T
 aDataType  S
-aMaxStringLth 10
+aMaxStringLth 15
 aContextRestriction N
 
 eContext   3
@@ -490,12 +1468,7 @@ aName      ContactWhom
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92749375
-
-eTableEntry 4
-aZKey      92749365
-aExternalValue Agency
-aInternalValue AGENCY
+aZKey      93212421
 
 eTableEntry 4
 aZKey      92749368
@@ -504,28 +1477,23 @@ aInternalValue APPLICANT
 
 eTableEntry 4
 aZKey      92749366
-aExternalValue DDS
-aInternalValue DDS
-
-eTableEntry 4
-aZKey      92749367
-aExternalValue DES
-aInternalValue DES
-
-eTableEntry 4
-aZKey      92749369
-aExternalValue Employer
-aInternalValue EMPLOYER
-
-eTableEntry 4
-aZKey      92749371
-aExternalValue HFI
-aInternalValue HFI
+aExternalValue DDS/DES 
+aInternalValue DDSDES
 
 eTableEntry 4
 aZKey      92749372
-aExternalValue HFICLIENT
+aExternalValue HFI Client
 aInternalValue HFICLIENT
+
+eTableEntry 4
+aZKey      92749371
+aExternalValue Internal HFI
+aInternalValue INTERNALHFI
+
+eTableEntry 4
+aZKey      93046465
+aExternalValue MH/DSS
+aInternalValue MHDSS
 
 eTableEntry 4
 aZKey      92749370
@@ -533,14 +1501,28 @@ aExternalValue Next of Kin
 aInternalValue NOK
 
 eTableEntry 4
-aZKey      92749374
+aZKey      92749373
 aExternalValue SSA
 aInternalValue SSA
 
 eTableEntry 4
-aZKey      92749373
-aExternalValue VA
-aInternalValue VA
+aZKey      92749374
+aExternalValue Third Party
+aInternalValue THIRDPARTY
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92834252
+aName      DataTypeDomain
+aDomainType E
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92834253
+aName      DM_DomainType
+aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DateDomain
@@ -659,6 +1641,7 @@ eContext   3
 aZKey      92659088
 aName      MonthDDYYYY
 aEditString Mmmm d, YYYY
+aJavaEditString MMMM dd, yyyy
 
 eContext   3
 aZKey      92659089
@@ -705,7 +1688,7 @@ eContext   3
 aZKey      92659098
 aName      YYYY/MM/DD
 aEditString YYYY/MM/DD
-aJavaEditString yyyy/mm/dd
+aJavaEditString yyyy/MM/dd
 
 eContext   3
 aZKey      92659099
@@ -728,13 +1711,12 @@ aName      YYYYMonthDD
 aEditString YYYY Mmmm dd
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aJavaClass com.quinsoft.zeidon.domains.DateTimeDomain
 aZKey      92659113
 aName      DateTime
 aDesc      Basic Timestamp Domain
 aDomainType A
 aDataType  T
-aMaxStringLth 20
 aContextRestriction N
 aDLL_Name  TZAPDMAA
 aOperName  zdmDateTime
@@ -869,7 +1851,7 @@ eContext   3
 aZKey      92659139
 aName      MM/DD/YYYY HH:MM:SS.S AM
 aEditString m/d/yy h:m:s a
-aJavaEditString mm/dd/yy hh:mm:ss a
+aJavaEditString MM/dd/yyyy hh:mm:ss a
 aIsDefault Y
 
 eContext   3
@@ -1866,18 +2848,253 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
-aZKey      92659024
-aName      DonationCategory
+aZKey      92934263
+aName      DenialReason
 aDomainType T
 aDataType  S
-aMaxStringLth 5
+aMaxStringLth 15
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmDynamicTable
 
 eContext   3
-aZKey      92659025
-aName      DonationCategory
+aZKey      92934264
+aName      DenialReason
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93270935
+
+eTableEntry 4
+aZKey      92934275
+aExternalValue Over assets
+aInternalValue ASSETS
+
+eTableEntry 4
+aZKey      92934267
+aExternalValue Categorically ineligible
+aInternalValue CATEGORYINELIG
+
+eTableEntry 4
+aZKey      93250296
+aExternalValue Clinical
+aInternalValue CLINICAL
+
+eTableEntry 4
+aZKey      92934265
+aExternalValue Applicant deceased
+aInternalValue DECEASED
+
+eTableEntry 4
+aZKey      92934268
+aExternalValue Department of Revenue match not returned
+aInternalValue DEPTREVENUE
+
+eTableEntry 4
+aZKey      92934270
+aExternalValue Eligibility Review Form not returned
+aInternalValue FORMNOTRETURNED
+
+eTableEntry 4
+aZKey      92934269
+aExternalValue Does not meet immigration requirements
+aInternalValue IMMIGRATION
+
+eTableEntry 4
+aZKey      92934272
+aExternalValue Incarcerated
+aInternalValue INCARCERATED
+
+eTableEntry 4
+aZKey      92934276
+aExternalValue Over income
+aInternalValue INCOME
+
+eTableEntry 4
+aZKey      92934273
+aExternalValue Mail undeliverable
+aInternalValue MAILUNDEL
+
+eTableEntry 4
+aZKey      92934271
+aExternalValue Found not disabled
+aInternalValue NOTDISABLED
+
+eTableEntry 4
+aZKey      92934274
+aExternalValue Not long term unemployed
+aInternalValue NOTLTUNEMPL
+
+eTableEntry 4
+aZKey      92934266
+aExternalValue Access to other health insurance
+aInternalValue OTHERINS
+
+eTableEntry 4
+aZKey      92934277
+aExternalValue Premium issue
+aInternalValue PREMIUM
+
+eTableEntry 4
+aZKey      92934278
+aExternalValue Verifications overdue, 30 days
+aInternalValue VERIF30
+
+eTableEntry 4
+aZKey      92934279
+aExternalValue Verifications overdue, 60 days
+aInternalValue VERIF60
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92834248
+aName      Description
+aDomainType E
+aDataType  S
+aMaxStringLth 2000
+aContextRestriction N
+
+eContext   3
+aZKey      92834249
+aName      Description
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92934281
+aName      DESDenialCode
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92934282
+aName      DESDenialCode
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92934289
+aExternalValue Capacity for other work
+aInternalValue 231
+
+eTableEntry 4
+aZKey      92934288
+aExternalValue Capacity for past work
+aInternalValue 230
+
+eTableEntry 4
+aZKey      92934285
+aExternalValue Impairment will not last 12 months
+aInternalValue 220
+
+eTableEntry 4
+aZKey      92934287
+aExternalValue Impairment will not last 30 days
+aInternalValue 222
+
+eTableEntry 4
+aZKey      92934286
+aExternalValue Impairment will not last 60 days
+aInternalValue 221
+
+eTableEntry 4
+aZKey      92934284
+aExternalValue Not severe enough
+aInternalValue 210
+
+eTableEntry 4
+aZKey      92934292
+aExternalValue Patient failed to attend CE
+aInternalValue 252
+
+eTableEntry 4
+aZKey      92934293
+aExternalValue Patient failed to cooperate
+aInternalValue 253
+
+eTableEntry 4
+aZKey      92934294
+aExternalValue Patient whereabouts unknown
+aInternalValue 254
+
+eTableEntry 4
+aZKey      92934291
+aExternalValue Substance Abuse was determined as material for decision
+aInternalValue 240
+
+eTableEntry 4
+aZKey      92934290
+aExternalValue Vocational Grid Ruling
+aInternalValue 232
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93410836
+aName      DESProcess
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      93410837
+aName      DESProcess
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93425189
+
+eTableEntry 4
+aZKey      93410838
+aExternalValue 1- Application submitted
+aInternalValue 1
+
+eTableEntry 4
+aZKey      93410839
+aExternalValue 2- Medical records pending
+aInternalValue 2
+
+eTableEntry 4
+aZKey      93410840
+aExternalValue 3- CE needed
+aInternalValue 3
+
+eTableEntry 4
+aZKey      93410841
+aExternalValue 4- CE complete
+aInternalValue 4
+
+eTableEntry 4
+aZKey      93410842
+aExternalValue 5- In review
+aInternalValue 5
+
+eTableEntry 4
+aZKey      93410843
+aExternalValue 6- Final review
+aInternalValue 6
+
+eTableEntry 4
+aZKey      93410845
+aExternalValue 7- Final review
+aInternalValue 7
+
+eTableEntry 4
+aZKey      93410844
+aExternalValue 8- Decision sent back
+aInternalValue 8
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92834250
+aName      DM_DomainType
+aDomainType E
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92834251
+aName      DM_DomainType
 aIsDefault Y
 
 eDomain    2
@@ -1911,7 +3128,69 @@ aName      EscalationReason
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92691984
+aZKey      92691974
+aExternalValue Denied
+aInternalValue 13
+
+eTableEntry 4
+aZKey      92691976
+aExternalValue Language Barrier
+aInternalValue 15
+
+eTableEntry 4
+aZKey      92691971
+aExternalValue Not Eligible - new info calls application into question
+aInternalValue 10
+
+eTableEntry 4
+aZKey      92691973
+aExternalValue Not Eligible - not in REVS, can't enroll in RightChoice Plan
+aInternalValue 12
+
+eTableEntry 4
+aZKey      92691972
+aExternalValue Not Eligible - patient already has coverage
+aInternalValue 11
+
+eTableEntry 4
+aZKey      92691970
+aExternalValue Not Eligible-verifications different from reported values
+aInternalValue 9
+
+eTableEntry 4
+aZKey      92691982
+aExternalValue Patient / NOK Uncooperative - no follow through on verifications
+aInternalValue 21
+
+eTableEntry 4
+aZKey      92691981
+aExternalValue Patient / NOK Uncooperative - no response to outreach
+aInternalValue 20
+
+eTableEntry 4
+aZKey      92691983
+aExternalValue Patient / NOK Uncooperative - refuses to assist w/ process
+aInternalValue 22
+
+eTableEntry 4
+aZKey      92691967
+aExternalValue Problem w/Employer/Agency;HFI lacks process to deal with agency
+aInternalValue 6
+
+eTableEntry 4
+aZKey      92691969
+aExternalValue Problem w/ Employer / Agency - no record of applicant
+aInternalValue 8
+
+eTableEntry 4
+aZKey      92691968
+aExternalValue Problem w/ Employer / Agency - not accepting HFI authorization
+aInternalValue 7
+
+eTableEntry 4
+aZKey      92691975
+aExternalValue Problem w/ Employer / Agency - not responding
+aInternalValue 14
 
 eTableEntry 4
 aZKey      92691962
@@ -1924,6 +3203,11 @@ aExternalValue Problem w/ MassHealth - not accepting valid verfication
 aInternalValue 2
 
 eTableEntry 4
+aZKey      92691966
+aExternalValue Problem w/ MassHealth - not recognizing  PSI or ERD
+aInternalValue 5
+
+eTableEntry 4
 aZKey      92691964
 aExternalValue Problem w/ MassHealth - requesting verif not needed
 aInternalValue 3
@@ -1934,74 +3218,9 @@ aExternalValue Request update from DSS
 aInternalValue 4
 
 eTableEntry 4
-aZKey      92691966
-aExternalValue Problem w/ MassHealth - not recognizing  PSI or ERD
-aInternalValue 5
-
-eTableEntry 4
-aZKey      92691967
-aExternalValue Problem w/ Employer / Agency - HFI lacks process to deal with agency
-aInternalValue 6
-
-eTableEntry 4
-aZKey      92691968
-aExternalValue Problem w/ Employer / Agency - not accepting HFI authorization
-aInternalValue 7
-
-eTableEntry 4
-aZKey      92691969
-aExternalValue Problem w/ Employer / Agency - no record of applicant
-aInternalValue 8
-
-eTableEntry 4
-aZKey      92691970
-aExternalValue Not Eligible - verifications different from what was reported on application
-aInternalValue 9
-
-eTableEntry 4
-aZKey      92691971
-aExternalValue Not Eligible - new info calls application into question
-aInternalValue 10
-
-eTableEntry 4
-aZKey      92691972
-aExternalValue Not Eligible - patient already has coverage
-aInternalValue 11
-
-eTableEntry 4
-aZKey      92691973
-aExternalValue Not Eligible - not in REVS, can't enroll in RightChoice Plan
-aInternalValue 12
-
-eTableEntry 4
-aZKey      92691974
-aExternalValue Denied
-aInternalValue 13
-
-eTableEntry 4
-aZKey      92691975
-aExternalValue Problem w/ Employer / Agency - not responding
-aInternalValue 14
-
-eTableEntry 4
-aZKey      92691976
-aExternalValue Language Barrier
-aInternalValue 15
-
-eTableEntry 4
 aZKey      92691977
 aExternalValue Unable to Contact Pt / NOK - disconnected or wrong #
 aInternalValue 16
-
-eTableEntry 4
-aZKey      92691978
-aExternalValue Unable to Contact Pt / NOK - no phone #
-aInternalValue 17
-
-eTableEntry 4
-aZKey      92691979
-aExternalValue Unable to Contact Pt / NOK - invalid address
-aInternalValue 18
 
 eTableEntry 4
 aZKey      92691980
@@ -2009,19 +3228,14 @@ aExternalValue Unable to Contact Pt / NOK - homeless / no contact info
 aInternalValue 19
 
 eTableEntry 4
-aZKey      92691981
-aExternalValue Patient / NOK Uncooperative - no response to outreach
-aInternalValue 20
+aZKey      92691979
+aExternalValue Unable to Contact Pt / NOK - invalid address
+aInternalValue 18
 
 eTableEntry 4
-aZKey      92691982
-aExternalValue Patient / NOK Uncooperative - no follow through on verifications
-aInternalValue 21
-
-eTableEntry 4
-aZKey      92691983
-aExternalValue Patient / NOK Uncooperative - refuses to assist w/ process
-aInternalValue 22
+aZKey      92691978
+aExternalValue Unable to Contact Pt / NOK - no phone #
+aInternalValue 17
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DateDomain
@@ -2053,9 +3267,6 @@ eContext   3
 aZKey      92732938
 aName      FeeWindow
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92740338
 
 eTableEntry 4
 aZKey      92732940
@@ -2092,6 +3303,40 @@ aName      FileNameType
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92934299
+aName      FinalDisposition
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92934300
+aName      FinalDisposition
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92934302
+aExternalValue DES Favorable
+aInternalValue DESF
+
+eTableEntry 4
+aZKey      92934303
+aExternalValue DES Unfavorable
+aInternalValue DESU
+
+eTableEntry 4
+aZKey      92934304
+aExternalValue MH Favorable
+aInternalValue MHF
+
+eTableEntry 4
+aZKey      92934305
+aExternalValue MH Unfavorable
+aInternalValue MHU
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      92658980
 aName      FirstName
@@ -2105,6 +3350,138 @@ eContext   3
 aZKey      92658981
 aName      FirstName
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92844750
+aName      FreeCareStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92844751
+aName      FreeCareStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92947138
+
+eTableEntry 4
+aZKey      92844752
+aExternalValue AFCC
+aInternalValue AFCC
+
+eTableEntry 4
+aZKey      92844753
+aExternalValue AFCmed
+aInternalValue AFCmed
+
+eTableEntry 4
+aZKey      92844754
+aExternalValue AFCP
+aInternalValue AFCP
+
+eTableEntry 4
+aZKey      92844755
+aExternalValue BFC
+aInternalValue BFC
+
+eTableEntry 4
+aZKey      92844756
+aExternalValue BMH
+aInternalValue BMH
+
+eTableEntry 4
+aZKey      92844757
+aExternalValue BVFC
+aInternalValue BVFC
+
+eTableEntry 4
+aZKey      92844758
+aExternalValue BVMH
+aInternalValue BVMH
+
+eTableEntry 4
+aZKey      92844759
+aExternalValue CFC
+aInternalValue CFC
+
+eTableEntry 4
+aZKey      92844760
+aExternalValue DFC
+aInternalValue DFC
+
+eTableEntry 4
+aZKey      92844761
+aExternalValue DIFC
+aInternalValue DIFC
+
+eTableEntry 4
+aZKey      92844762
+aExternalValue EFC
+aInternalValue EFC
+
+eTableEntry 4
+aZKey      92844763
+aExternalValue F
+aInternalValue F
+
+eTableEntry 4
+aZKey      92844764
+aExternalValue FCE
+aInternalValue FCE
+
+eTableEntry 4
+aZKey      92844765
+aExternalValue H
+aInternalValue H
+
+eTableEntry 4
+aZKey      92844766
+aExternalValue IFC
+aInternalValue IFC
+
+eTableEntry 4
+aZKey      92844767
+aExternalValue IMH
+aInternalValue IMH
+
+eTableEntry 4
+aZKey      92844768
+aExternalValue KEFC
+aInternalValue KEFC
+
+eTableEntry 4
+aZKey      92844769
+aExternalValue KFC
+aInternalValue KFC
+
+eTableEntry 4
+aZKey      92844770
+aExternalValue NRN
+aInternalValue NRN
+
+eTableEntry 4
+aZKey      92844771
+aExternalValue RFC
+aInternalValue RFC
+
+eTableEntry 4
+aZKey      92844772
+aExternalValue WFC
+aInternalValue WFC
+
+eTableEntry 4
+aZKey      92844773
+aExternalValue WMH
+aInternalValue WMH
+
+eTableEntry 4
+aZKey      92844774
+aExternalValue X
+aInternalValue X
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2122,7 +3499,7 @@ aName      Gender
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92658994
+aZKey      92886031
 
 eTableEntry 4
 aZKey      92658995
@@ -2133,6 +3510,11 @@ eTableEntry 4
 aZKey      92658996
 aExternalValue Male
 aInternalValue M
+
+eTableEntry 4
+aZKey      92886030
+aExternalValue Unknown
+aInternalValue U
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -2164,9 +3546,6 @@ aName      InOrOutContact
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92763527
-
-eTableEntry 4
 aZKey      92763525
 aExternalValue In
 aInternalValue I
@@ -2189,9 +3568,6 @@ eContext   3
 aZKey      92729712
 aName      InOutPatient
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92729717
 
 eTableEntry 4
 aZKey      92729713
@@ -2247,9 +3623,6 @@ aName      JobClass
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92747006
-
-eTableEntry 4
 aZKey      92671976
 aExternalValue Exempt
 aInternalValue Ex
@@ -2260,7 +3633,7 @@ aExternalValue Non-Exempt
 aInternalValue Non-E
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
 aZKey      92658683
 aName      Language
 aDomainType T
@@ -2274,17 +3647,22 @@ aName      Language
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92691956
+aZKey      93110047
 
 eTableEntry 4
 aZKey      92658685
-aExternalValue Albanian
-aInternalValue ALB
+aExternalValue American Sign Language
+aInternalValue ASL
+
+eTableEntry 4
+aZKey      92843484
+aExternalValue Arabic
+aInternalValue ARA
 
 eTableEntry 4
 aZKey      92658686
 aExternalValue Cantonese
-aInternalValue CTO
+aInternalValue CAN
 
 eTableEntry 4
 aZKey      92658687
@@ -2299,27 +3677,17 @@ aInternalValue ENG
 eTableEntry 4
 aZKey      92691942
 aExternalValue French
-aInternalValue FRA
-
-eTableEntry 4
-aZKey      92691944
-aExternalValue Fugianese
-aInternalValue FUG
+aInternalValue FRE
 
 eTableEntry 4
 aZKey      92691945
 aExternalValue Greek
-aInternalValue ELL
+aInternalValue GRE
 
 eTableEntry 4
 aZKey      92691946
 aExternalValue Haitian Creole
-aInternalValue HAT
-
-eTableEntry 4
-aZKey      92691947
-aExternalValue Italian
-aInternalValue ITA
+aInternalValue HAI
 
 eTableEntry 4
 aZKey      92691948
@@ -2335,11 +3703,6 @@ eTableEntry 4
 aZKey      92691950
 aExternalValue Mandarin
 aInternalValue CHI
-
-eTableEntry 4
-aZKey      92691951
-aExternalValue Polish
-aInternalValue POL
 
 eTableEntry 4
 aZKey      92691952
@@ -2360,6 +3723,16 @@ eTableEntry 4
 aZKey      92691955
 aExternalValue Vietnamese
 aInternalValue VIE
+
+eTableEntry 4
+aZKey      92843489
+aExternalValue Undetermined
+aInternalValue UND
+
+eTableEntry 4
+aZKey      92897870
+aExternalValue Other - Enter ALERT
+aInternalValue OTH
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -2389,9 +3762,6 @@ eContext   3
 aZKey      92712489
 aName      LetterClass
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92712511
 
 eTableEntry 4
 aZKey      92712490
@@ -2495,48 +3865,6 @@ aInternalValue CTWP_Letters
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      92748379
-aName      LocationInFacility
-aDomainType T
-aDataType  S
-aMaxStringLth 5
-aContextRestriction N
-
-eContext   3
-aZKey      92748380
-aName      LocationInFacility
-aIsDefault Y
-
-eTableEntry 4
-aZKey      92748386
-
-eTableEntry 4
-aZKey      92748381
-aExternalValue Inpatient
-aInternalValue IN
-
-eTableEntry 4
-aZKey      92748382
-aExternalValue Emergency Department
-aInternalValue ED
-
-eTableEntry 4
-aZKey      92748383
-aExternalValue Ed to Inpatient
-aInternalValue EDIN
-
-eTableEntry 4
-aZKey      92748384
-aExternalValue Outpatient
-aInternalValue OUT
-
-eTableEntry 4
-aZKey      92748385
-aExternalValue Outpatient/Inpatient
-aInternalValue OUTIN
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92658885
 aName      MaritalStatus
 aDomainType T
@@ -2550,7 +3878,7 @@ aName      MaritalStatus
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92658887
+aZKey      92906402
 
 eTableEntry 4
 aZKey      92658888
@@ -2561,6 +3889,11 @@ eTableEntry 4
 aZKey      92658889
 aExternalValue Married
 aInternalValue M
+
+eTableEntry 4
+aZKey      92888317
+aExternalValue Separated
+aInternalValue P
 
 eTableEntry 4
 aZKey      92658890
@@ -2578,6 +3911,155 @@ aExternalValue Widowed
 aInternalValue W
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93337924
+aName      MedRecContactMethod
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      93337925
+aName      MedRecContactMethod
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93410579
+
+eTableEntry 4
+aZKey      93337933
+aExternalValue Electronic Records Express
+aInternalValue ERE
+
+eTableEntry 4
+aZKey      93337926
+aExternalValue Email
+aInternalValue EMAIL
+
+eTableEntry 4
+aZKey      93337927
+aExternalValue Fax
+aInternalValue FAX
+
+eTableEntry 4
+aZKey      93337928
+aExternalValue In Person
+aInternalValue INPERSON
+
+eTableEntry 4
+aZKey      93337929
+aExternalValue Internet
+aInternalValue INTERNET
+
+eTableEntry 4
+aZKey      93337930
+aExternalValue Mail
+aInternalValue MAIL
+
+eTableEntry 4
+aZKey      93337932
+aExternalValue Other
+aInternalValue OTHER
+
+eTableEntry 4
+aZKey      93337931
+aExternalValue Phone
+aInternalValue PHONE
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92963997
+aName      MedRecRequestType
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92963998
+aName      MedRecRequestType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93433930
+
+eTableEntry 4
+aZKey      92964002
+aExternalValue Approved
+aInternalValue APPROVED
+
+eTableEntry 4
+aZKey      92964003
+aExternalValue Denied
+aInternalValue DENIED
+
+eTableEntry 4
+aZKey      92963999
+aExternalValue Medical records needed
+aInternalValue MEDRECNEEDED
+
+eTableEntry 4
+aZKey      92981984
+aExternalValue Medical records not available yet
+aInternalValue MEDRECNOTAVAIL
+
+eTableEntry 4
+aZKey      93431611
+aExternalValue Medical records received from hospital
+aInternalValue MEDRECRECHOSP
+
+eTableEntry 4
+aZKey      93431610
+aExternalValue Medical records requested 
+aInternalValue MEDRECREQ
+
+eTableEntry 4
+aZKey      93431614
+aExternalValue Medical records resubmitted 
+aInternalValue MEDRECRESUBMIT
+
+eTableEntry 4
+aZKey      92964000
+aExternalValue Medical records submitted to DSS onsite
+aInternalValue MEDRECSUB
+
+eTableEntry 4
+aZKey      92981983
+aExternalValue Medical records submitted to DSS
+aInternalValue MEDRECSUBDSS
+
+eTableEntry 4
+aZKey      93431612
+aExternalValue Medical records submitted to Regional Office
+aInternalValue MEDRECSUBRPU
+
+eTableEntry 4
+aZKey      92964001
+aExternalValue Pending with MCCT
+aInternalValue PENDMCCT
+
+eTableEntry 4
+aZKey      92964004
+aExternalValue Records not needed
+aInternalValue NOTNEEDED
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92836977
+aName      Memo
+aDesc      Large text object, build to support letters.
+aDomainType E
+aDataType  S
+aMaxStringLth 20000
+aContextRestriction N
+
+eContext   3
+aZKey      92836979
+aName      Memo
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      92658976
 aName      MiddleName
@@ -2591,6 +4073,144 @@ eContext   3
 aZKey      92658977
 aName      MiddleName
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93410808
+aName      MilTimeList
+aDesc      Pseudo Military Time by hours
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      93410809
+aName      MilTimeList
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93421493
+
+eTableEntry 4
+aZKey      93410810
+aExternalValue 0000 hours (midnight)
+aInternalValue 0000
+
+eTableEntry 4
+aZKey      93410811
+aExternalValue 0100 hours (1am)
+aInternalValue 0100
+
+eTableEntry 4
+aZKey      93410812
+aExternalValue 0200 hours (2am)
+aInternalValue 0200
+
+eTableEntry 4
+aZKey      93410813
+aExternalValue 0300 hours (3am)
+aInternalValue 0300
+
+eTableEntry 4
+aZKey      93410814
+aExternalValue 0400 hours (4am)
+aInternalValue 0400
+
+eTableEntry 4
+aZKey      93410815
+aExternalValue 0500 hours (5am)
+aInternalValue 0500
+
+eTableEntry 4
+aZKey      93410816
+aExternalValue 0600 hours (6am)
+aInternalValue 0600
+
+eTableEntry 4
+aZKey      93410817
+aExternalValue 0700 hours (7am)
+aInternalValue 0700
+
+eTableEntry 4
+aZKey      93410818
+aExternalValue 0800 hours (8am)
+aInternalValue 0800
+
+eTableEntry 4
+aZKey      93410819
+aExternalValue 0900 hours (9am)
+aInternalValue 0900
+
+eTableEntry 4
+aZKey      93410820
+aExternalValue 1000 hours (10am)
+aInternalValue 1000
+
+eTableEntry 4
+aZKey      93410821
+aExternalValue 1100 hours (11am)
+aInternalValue 1100
+
+eTableEntry 4
+aZKey      93410822
+aExternalValue 1200 hours (noon)
+aInternalValue 1200
+
+eTableEntry 4
+aZKey      93410823
+aExternalValue 1300 hours (1pm)
+aInternalValue 1300
+
+eTableEntry 4
+aZKey      93410824
+aExternalValue 1400 hours (2pm)
+aInternalValue 1400
+
+eTableEntry 4
+aZKey      93410825
+aExternalValue 1500 hours (3pm)
+aInternalValue 1500
+
+eTableEntry 4
+aZKey      93410826
+aExternalValue 1600 hours (4pm)
+aInternalValue 1600
+
+eTableEntry 4
+aZKey      93410827
+aExternalValue 1700 hours (5pm)
+aInternalValue 1700
+
+eTableEntry 4
+aZKey      93410828
+aExternalValue 1800 hours (6pm)
+aInternalValue 1800
+
+eTableEntry 4
+aZKey      93410829
+aExternalValue 1900 hours (7pm)
+aInternalValue 1900
+
+eTableEntry 4
+aZKey      93410830
+aExternalValue 2000 hours (8pm)
+aInternalValue 2000
+
+eTableEntry 4
+aZKey      93410831
+aExternalValue 2100 hours (9pm)
+aInternalValue 2100
+
+eTableEntry 4
+aZKey      93410832
+aExternalValue 2200 hours (10pm)
+aInternalValue 2200
+
+eTableEntry 4
+aZKey      93410833
+aExternalValue 2300 hours (11pm)
+aInternalValue 2300
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -2623,6 +4243,40 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92894117
+aName      Operator
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92894118
+aName      Operator
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92894122
+aExternalValue +
+aInternalValue +
+
+eTableEntry 4
+aZKey      92894123
+aExternalValue -
+aInternalValue -
+
+eTableEntry 4
+aZKey      92894124
+aExternalValue *
+aInternalValue *
+
+eTableEntry 4
+aZKey      92894121
+aExternalValue /
+aInternalValue /
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92732923
 aName      OutreachType
 aDomainType T
@@ -2636,17 +4290,12 @@ aName      OutreachType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92732928
+aZKey      93339805
 
 eTableEntry 4
 aZKey      92732925
 aExternalValue Auto
 aInternalValue A
-
-eTableEntry 4
-aZKey      92732926
-aExternalValue AutoK
-aInternalValue AK
 
 eTableEntry 4
 aZKey      92732927
@@ -2706,7 +4355,7 @@ aEditString <= 1; >= 0
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aJavaClass com.quinsoft.zeidon.domains.PhoneDomain
 aZKey      92658997
 aName      PhoneNumber
 aDesc      Any phone number.  Requires flexible format for foreign numbers.
@@ -2718,7 +4367,8 @@ aContextRestriction N
 eContext   3
 aZKey      92658998
 aName      PhoneNumber
-aEditString 999-999-9999
+aEditString (999) 999-9999
+aJavaEditString (999) 999-9999
 aIsDefault Y
 
 eDomain    2
@@ -2736,7 +4386,14 @@ aName      PhoneType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92747875
+aZKey      92732989
+aExternalValue Cell
+aInternalValue C
+
+eTableEntry 4
+aZKey      93206049
+aExternalValue Fax
+aInternalValue F
 
 eTableEntry 4
 aZKey      92732987
@@ -2744,19 +4401,282 @@ aExternalValue Home
 aInternalValue H
 
 eTableEntry 4
-aZKey      92732988
-aExternalValue Work
-aInternalValue W
-
-eTableEntry 4
-aZKey      92732989
-aExternalValue Cell
-aInternalValue C
+aZKey      93211881
+aExternalValue Invalid
+aInternalValue I
 
 eTableEntry 4
 aZKey      92732990
 aExternalValue Other
 aInternalValue O
+
+eTableEntry 4
+aZKey      92732988
+aExternalValue Work
+aInternalValue W
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92958629
+aName      PlanChoice
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92958630
+aName      PlanChoice
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93455548
+
+eTableEntry 4
+aZKey      93455545
+aExternalValue Anthem BCBS
+aInternalValue ANTHEM
+
+eTableEntry 4
+aZKey      93431604
+aExternalValue BCBS
+aInternalValue BCBS
+
+eTableEntry 4
+aZKey      93013075
+aExternalValue BMC Healthnet Plan
+aInternalValue BMCHP
+
+eTableEntry 4
+aZKey      92958633
+aExternalValue CeltiCare
+aInternalValue CELTICARE
+
+eTableEntry 4
+aZKey      93455546
+aExternalValue ConnectiCare
+aInternalValue CONNCARE
+
+eTableEntry 4
+aZKey      92958632
+aExternalValue Fallon
+aInternalValue FALLON
+
+eTableEntry 4
+aZKey      93431606
+aExternalValue Harvard Pilgrim Health Plan
+aInternalValue HPHP
+
+eTableEntry 4
+aZKey      93013076
+aExternalValue Health New England
+aInternalValue HNE
+
+eTableEntry 4
+aZKey      93455547
+aExternalValue HealthyCT
+aInternalValue HEALTHY
+
+eTableEntry 4
+aZKey      93431603
+aExternalValue Minuteman Health
+aInternalValue MINMAN
+
+eTableEntry 4
+aZKey      92958631
+aExternalValue Neighborhood Health Plan 
+aInternalValue NHP
+
+eTableEntry 4
+aZKey      93013077
+aExternalValue Network Health Plan
+aInternalValue NETWORKHEALTH
+
+eTableEntry 4
+aZKey      93013078
+aExternalValue PCC
+aInternalValue PCC
+
+eTableEntry 4
+aZKey      93431605
+aExternalValue Tufts Health Plan
+aInternalValue TUFTS
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      93007969
+aName      Presumptive
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93007970
+aName      Presumptive
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93110048
+
+eTableEntry 4
+aZKey      93007971
+aExternalValue ALS (Lou Gehrig's disease)
+aInternalValue ALS
+
+eTableEntry 4
+aZKey      93007972
+aExternalValue Amputation of leg at hip
+aInternalValue AMP
+
+eTableEntry 4
+aZKey      93007973
+aExternalValue Bed confinement, immobility - longstanding
+aInternalValue BED
+
+eTableEntry 4
+aZKey      93007974
+aExternalValue Birth weight < 2# 10 oz
+aInternalValue BIRTHWEIGHT
+
+eTableEntry 4
+aZKey      93007975
+aExternalValue Cerebral palsy, musc dystrophy, musc atrophy
+aInternalValue PALSY
+
+eTableEntry 4
+aZKey      93007976
+aExternalValue Down syndrome
+aInternalValue DOWN
+
+eTableEntry 4
+aZKey      93007977
+aExternalValue End stage renal disease
+aInternalValue ENDSTAGE
+
+eTableEntry 4
+aZKey      93007978
+aExternalValue GA 33 < 2# 15 oz
+aInternalValue GA33
+
+eTableEntry 4
+aZKey      93007979
+aExternalValue GA 34 < 3# 5 oz
+aInternalValue GA34
+
+eTableEntry 4
+aZKey      93007980
+aExternalValue GA 35 < 3# 12 oz
+aInternalValue GA35
+
+eTableEntry 4
+aZKey      93007981
+aExternalValue GA 36 < 4# 2 oz
+aInternalValue GA36
+
+eTableEntry 4
+aZKey      93007982
+aExternalValue GA 37-40 < 4# 6 oz
+aInternalValue GA37
+
+eTableEntry 4
+aZKey      93007983
+aExternalValue HIV or AIDS
+aInternalValue HIV
+
+eTableEntry 4
+aZKey      93007984
+aExternalValue Severe mental deficiency
+aInternalValue SEVEREMENTAL
+
+eTableEntry 4
+aZKey      93007985
+aExternalValue Spinal cord injury - assistive devices
+aInternalValue SPINE
+
+eTableEntry 4
+aZKey      93007986
+aExternalValue Stroke - 3 months in past
+aInternalValue STROKE
+
+eTableEntry 4
+aZKey      93007987
+aExternalValue Terminal illness < 6 mo life expectancy
+aInternalValue TERMINAL
+
+eTableEntry 4
+aZKey      93007988
+aExternalValue Total blindness
+aInternalValue BLIND
+
+eTableEntry 4
+aZKey      93007989
+aExternalValue Total deafness
+aInternalValue DEAF
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92856749
+aName      PriorityCode
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      92856792
+aName      PriorityCode
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93211883
+
+eTableEntry 4
+aZKey      92856793
+aExternalValue Expedite - in ED, move ASAP
+aInternalValue EXPED
+
+eTableEntry 4
+aZKey      92856794
+aExternalValue Expedite - see contact log
+aInternalValue EXPLOG
+
+eTableEntry 4
+aZKey      92856795
+aExternalValue Expedite - LOS beyond 10 days
+aInternalValue EXPLOS
+
+eTableEntry 4
+aZKey      92856797
+aExternalValue Rush - Dialysis
+aInternalValue RUSHDIALYSIS
+
+eTableEntry 4
+aZKey      92856798
+aExternalValue Rush - Home Services
+aInternalValue RUSHHOME
+
+eTableEntry 4
+aZKey      92856799
+aExternalValue Rush - Hospice
+aInternalValue RUSHHOSPICE
+
+eTableEntry 4
+aZKey      92856800
+aExternalValue Rush - Rehab/SNF
+aInternalValue RUSHREHAB
+
+eTableEntry 4
+aZKey      93206047
+aExternalValue Rush - Discharged Contract
+aInternalValue RUSHDISCHARGE
+
+eTableEntry 4
+aZKey      92958420
+aExternalValue Slam Dunk
+aInternalValue SLAMDUNK
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2771,9 +4691,6 @@ eContext   3
 aZKey      92726937
 aName      ProviderType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92727391
 
 eTableEntry 4
 aZKey      92726938
@@ -2809,6 +4726,34 @@ eTableEntry 4
 aZKey      92726944
 aExternalValue SSI
 aInternalValue SSI
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92834254
+aName      QSFileName
+aDomainType E
+aDataType  S
+aMaxStringLth 256
+aContextRestriction N
+
+eContext   3
+aZKey      92834255
+aName      DM_DomainType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92834256
+aName      QSName
+aDomainType E
+aDataType  S
+aMaxStringLth 256
+aContextRestriction N
+
+eContext   3
+aZKey      92834257
+aName      DM_DomainType
+aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -3133,7 +5078,7 @@ aExternalValue ALL
 aInternalValue ALL
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
 aZKey      92748327
 aName      ReferralLOB
 aDesc      Line of Business
@@ -3141,14 +5086,13 @@ aDomainType T
 aDataType  S
 aMaxStringLth 10
 aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
 
 eContext   3
 aZKey      92748328
 aName      ReferralLOB
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92748340
 
 eTableEntry 4
 aZKey      92748329
@@ -3206,7 +5150,7 @@ aExternalValue Redeterm
 aInternalValue RE
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
 aZKey      92748301
 aName      ReferralSource
 aDomainType T
@@ -3220,12 +5164,14 @@ aName      ReferralSource
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92748310
-
-eTableEntry 4
 aZKey      92748303
 aExternalValue Case Manager
 aInternalValue CM
+
+eTableEntry 4
+aZKey      92832745
+aExternalValue Community Outreach
+aInternalValue CO
 
 eTableEntry 4
 aZKey      92748304
@@ -3272,52 +5218,49 @@ aName      ReferralSubSource
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92748326
-
-eTableEntry 4
 aZKey      92748314
 aExternalValue MMP 1
-aInternalValue M-1
+aInternalValue MMP1
 
 eTableEntry 4
 aZKey      92748321
 aExternalValue MMP 2
-aInternalValue M-2
+aInternalValue MMP2
 
 eTableEntry 4
 aZKey      92748322
 aExternalValue MMP 3
-aInternalValue M-3
+aInternalValue MMP3
 
 eTableEntry 4
 aZKey      92748323
 aExternalValue MMP 4
-aInternalValue M-4
+aInternalValue MMP4
 
 eTableEntry 4
 aZKey      92748324
 aExternalValue Discharge report
-aInternalValue W-DR
+aInternalValue WDR
 
 eTableEntry 4
 aZKey      92748325
 aExternalValue FirstNet
-aInternalValue W-FN
+aInternalValue WFN
 
 eTableEntry 4
 aZKey      92748315
 aExternalValue SCM
-aInternalValue W-SCM
+aInternalValue WSCM
 
 eTableEntry 4
 aZKey      92748316
 aExternalValue SDK
-aInternalValue W-SDK
+aInternalValue WSDK
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
-aZKey      92732691
-aName      ReferralType
+aZKey      92748341
+aName      ReferredAs
 aDomainType T
 aDataType  S
 aMaxStringLth 15
@@ -3326,64 +5269,39 @@ aDLL_Name  TZAPDMAA
 aOperName  zdmDynamicTable
 
 eContext   3
-aZKey      92732692
-aName      ReferralType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      92732695
-
-eTableEntry 4
-aZKey      92732693
-aExternalValue Census
-aInternalValue Census
-
-eTableEntry 4
-aZKey      92732694
-aExternalValue Case Manager
-aInternalValue Case Manager
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      92748341
-aName      ReferredAs
-aDomainType T
-aDataType  S
-aMaxStringLth 15
-aContextRestriction N
-
-eContext   3
 aZKey      92748342
 aName      ReferredAs
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92748378
-
-eTableEntry 4
 aZKey      92748351
 aExternalValue Basic
-aInternalValue Basic
+aInternalValue BASIC
 
 eTableEntry 4
 aZKey      92748352
 aExternalValue Buy In
-aInternalValue BuyIn
+aInternalValue BUYIN
 
 eTableEntry 4
 aZKey      92748353
 aExternalValue Commercial Insurance
-aInternalValue Commercial
+aInternalValue COMMERCIAL
 
 eTableEntry 4
-aZKey      92748354
-aExternalValue Commonwealth Care
-aInternalValue CommCare
+aZKey      93013084
+aExternalValue CMSP
+aInternalValue CMSP
 
 eTableEntry 4
 aZKey      92748355
 aExternalValue CommonHealth
-aInternalValue CommonHealth
+aInternalValue COMMHEALTH
+
+eTableEntry 4
+aZKey      92748354
+aExternalValue Commonwealth Care
+aInternalValue COMMCARE
 
 eTableEntry 4
 aZKey      92748356
@@ -3393,72 +5311,67 @@ aInternalValue EAEDC
 eTableEntry 4
 aZKey      92748357
 aExternalValue Essential
-aInternalValue Essential
+aInternalValue ESSENTIAL
 
 eTableEntry 4
 aZKey      92748358
 aExternalValue Family Assistance
-aInternalValue FamilyAssist
-
-eTableEntry 4
-aZKey      92748359
-aExternalValue Free Care
-aInternalValue FreeCare
-
-eTableEntry 4
-aZKey      92748360
-aExternalValue Free Care Pending
-aInternalValue FreeCarePend
+aInternalValue FAMASSIST
 
 eTableEntry 4
 aZKey      92748361
 aExternalValue Healthy Start
-aInternalValue HealthyStart
+aInternalValue HEALTHYSTART
+
+eTableEntry 4
+aZKey      92832749
+aExternalValue HSN
+aInternalValue HSN
+
+eTableEntry 4
+aZKey      92832750
+aExternalValue HSN Pending
+aInternalValue HSNP
+
+eTableEntry 4
+aZKey      92832751
+aExternalValue Husky A
+aInternalValue HUSKYA
+
+eTableEntry 4
+aZKey      92832752
+aExternalValue Husky C
+aInternalValue HUSKYC
 
 eTableEntry 4
 aZKey      92748362
-aExternalValue LIA
-aInternalValue LIA
+aExternalValue Husky D
+aInternalValue HUSKYD
 
 eTableEntry 4
 aZKey      92748363
 aExternalValue Limited
-aInternalValue Limited
-
-eTableEntry 4
-aZKey      92748364
-aExternalValue MA Over 65
-aInternalValue MAOver65
-
-eTableEntry 4
-aZKey      92748365
-aExternalValue BMCR
-aInternalValue BMCR
-
-eTableEntry 4
-aZKey      92748366
-aExternalValue MCR Secondary
-aInternalValue MCR
-
-eTableEntry 4
-aZKey      92748367
-aExternalValue Medicaid
-aInternalValue Medicaid
+aInternalValue LIMITED
 
 eTableEntry 4
 aZKey      92748368
 aExternalValue Medicaid Pending
-aInternalValue MedicaidPend
+aInternalValue MEDICAIDPEND
 
 eTableEntry 4
 aZKey      92748369
 aExternalValue Medicare
-aInternalValue Medicare
+aInternalValue MEDICARE
 
 eTableEntry 4
 aZKey      92748370
 aExternalValue MVA
 aInternalValue MVA
+
+eTableEntry 4
+aZKey      92832753
+aExternalValue Out Of State Medicaid 
+aInternalValue OOSMEDICAID
 
 eTableEntry 4
 aZKey      92748371
@@ -3481,19 +5394,24 @@ aExternalValue RC7
 aInternalValue RC7
 
 eTableEntry 4
-aZKey      92748375
-aExternalValue SAGA
-aInternalValue SAGA
-
-eTableEntry 4
 aZKey      92748376
 aExternalValue Self-Pay
-aInternalValue SelfPay
+aInternalValue SELFPAY
 
 eTableEntry 4
 aZKey      92748377
 aExternalValue Standard
-aInternalValue Standard
+aInternalValue STANDARD
+
+eTableEntry 4
+aZKey      92832754
+aExternalValue WCOMP
+aInternalValue Workers Comp
+
+eTableEntry 4
+aZKey      93013086
+aExternalValue UNKNOWN
+aInternalValue UNKNOWN
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
@@ -3542,6 +5460,53 @@ aExternalValue Invoice
 aInternalValue I
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92813295
+aName      ResidentStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      92813296
+aName      ResidentStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93410404
+
+eTableEntry 4
+aZKey      92813297
+aExternalValue Citizen
+aInternalValue C
+
+eTableEntry 4
+aZKey      92813298
+aExternalValue LPR
+aInternalValue L
+
+eTableEntry 4
+aZKey      92900293
+aExternalValue LPR<5
+aInternalValue LL5
+
+eTableEntry 4
+aZKey      92900294
+aExternalValue LPR>5
+aInternalValue LG5
+
+eTableEntry 4
+aZKey      92900295
+aExternalValue LPR>8/22/1996
+aInternalValue L1996
+
+eTableEntry 4
+aZKey      92813301
+aExternalValue Other
+aInternalValue O
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
 aZKey      92658706
 aName      Revenue
@@ -3575,6 +5540,102 @@ aName      RevenueWithDollarSignCR
 aDecimalFormat 2
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93376194
+aName      ScreenDetermination
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93376195
+aName      ScreenDetermination
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93387284
+
+eTableEntry 4
+aZKey      93383696
+aExternalValue Apply for Commonhealth
+aInternalValue APPLYCOMM
+
+eTableEntry 4
+aZKey      93376199
+aExternalValue Apply for MH Disability
+aInternalValue APPLYMHDIS
+
+eTableEntry 4
+aZKey      93376200
+aExternalValue Apply for SS/MH Dis
+aInternalValue APPLYMHSSDIS
+
+eTableEntry 4
+aZKey      93376197
+aExternalValue Apply for SSDI
+aInternalValue APPLYFORSSDI
+
+eTableEntry 4
+aZKey      93376196
+aExternalValue Apply for SSI
+aInternalValue APPLYFORSSI
+
+eTableEntry 4
+aZKey      93383697
+aExternalValue Apply for SSI/Commonhealth
+aInternalValue APPLYCOMMSSI
+
+eTableEntry 4
+aZKey      93376198
+aExternalValue Apply for SSI/SSDI
+aInternalValue APPLYSSISSDI
+
+eTableEntry 4
+aZKey      93376201
+aExternalValue Will follow up later
+aInternalValue LATER
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92932282
+aName      ScreenedIneligibleMED
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92932283
+aName      ScreenedIneligibleMED
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92932285
+aExternalValue Patient has other insurance
+aInternalValue OTHERINS
+
+eTableEntry 4
+aZKey      92932286
+aExternalValue Patient is not a MA resident
+aInternalValue NONRES
+
+eTableEntry 4
+aZKey      92932284
+aExternalValue Patient is not eligible for ANY programs
+aInternalValue NOTELIG
+
+eTableEntry 4
+aZKey      92932287
+aExternalValue Patient refused HFI help
+aInternalValue REFUSED
+
+eTableEntry 4
+aZKey      92932288
+aExternalValue Other
+aInternalValue OTHER
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      92658984
 aName      ShortDescription
@@ -3589,18 +5650,20 @@ aName      ShortDescription
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aJavaClass com.quinsoft.zeidon.domains.SSNDomain
 aZKey      92658714
 aName      SocialSecurityNumber
+aDesc      com.quinsoft.zeidon.domains.SSNDomain 
 aDomainType F
 aDataType  S
-aMaxStringLth 9
+aMaxStringLth 11
 aContextRestriction N
 
 eContext   3
 aZKey      92658715
 aName      SocialSecurityNumber
 aEditString 999-99-9999
+aJavaEditString 999-99-9999
 aIsDefault Y
 
 eDomain    2
@@ -3632,6 +5695,668 @@ aExternalValue Desc
 aInternalValue D
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      92942314
+aName      SpendDownType
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92942315
+aName      SpendDownType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93340038
+
+eTableEntry 4
+aZKey      92942316
+aExternalValue Additional bills needed
+aInternalValue ADDBILLS
+
+eTableEntry 4
+aZKey      92942317
+aExternalValue Awaiting primary insurance payment
+aInternalValue AWAITINGPRIINS
+
+eTableEntry 4
+aZKey      92942318
+aExternalValue Bills applied incorrectly; needs adjustment 
+aInternalValue BILLSNEEDADJ
+
+eTableEntry 4
+aZKey      92942319
+aExternalValue Bills forwarded to CM Rep
+aInternalValue BILLSFORWARD
+
+eTableEntry 4
+aZKey      92942320
+aExternalValue Bills needed
+aInternalValue BILLSNEED
+
+eTableEntry 4
+aZKey      92942321
+aExternalValue Bills submitted to DSS
+aInternalValue BILLSTODSS
+
+eTableEntry 4
+aZKey      92942322
+aExternalValue Not enough charges to meet spenddown
+aInternalValue NOTENOUGH
+
+eTableEntry 4
+aZKey      92942323
+aExternalValue On hold; pending better begin date
+aInternalValue ONHOLD
+
+eTableEntry 4
+aZKey      93064728
+aExternalValue Over Asset
+aInternalValue OVERASSETS
+
+eTableEntry 4
+aZKey      93064729
+aExternalValue Over Income
+aInternalValue OVERINCOME
+
+eTableEntry 4
+aZKey      92942324
+aExternalValue SDME and MAFI needed
+aInternalValue SDMENEEDED
+
+eTableEntry 4
+aZKey      92942325
+aExternalValue Segment amount and/or timeframe needed
+aInternalValue SEGMENTNEED
+
+eTableEntry 4
+aZKey      92942326
+aExternalValue Segment complete
+aInternalValue SEGMENTCOMPLETE
+
+eTableEntry 4
+aZKey      93340037
+aExternalValue Spend Down Segment
+aInternalValue SEGMENT
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93066755
+aName      SSAOfficeType
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93066756
+aName      SSAOfficeType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93066757
+aExternalValue SSA Field Office
+aInternalValue FIELDOFFICE
+
+eTableEntry 4
+aZKey      93066758
+aExternalValue DDS Office
+aInternalValue DDSOFFICE
+
+eTableEntry 4
+aZKey      93066759
+aExternalValue ODAR Location
+aInternalValue ODARLOCATION
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93066761
+aName      SSATitles
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93066762
+aName      SSATitles
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93066764
+aExternalValue CR
+aInternalValue CR
+
+eTableEntry 4
+aZKey      93066765
+aExternalValue SR
+aInternalValue SR
+
+eTableEntry 4
+aZKey      93066766
+aExternalValue DDS Examiner
+aInternalValue DDS
+
+eTableEntry 4
+aZKey      93066767
+aExternalValue DDS Recon Examiner
+aInternalValue DDSRECON
+
+eTableEntry 4
+aZKey      93066768
+aExternalValue Judge
+aInternalValue JUDGE
+
+eTableEntry 4
+aZKey      93066769
+aExternalValue Clerk
+aInternalValue CLERK
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92968508
+aName      SSIApptStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      92968509
+aName      SSIApptStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92968510
+aExternalValue Completed appt process, Filing confirmed
+aInternalValue C
+
+eTableEntry 4
+aZKey      92968512
+aExternalValue Scheduled, filing not yet confirmed
+aInternalValue S
+
+eTableEntry 4
+aZKey      92968513
+aExternalValue Unable to schedule - patient issue
+aInternalValue UP
+
+eTableEntry 4
+aZKey      92968514
+aExternalValue Unable to schedule - SSA issue
+aInternalValue US
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888399
+aName      SSIApptTimePref
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92888400
+aName      SSIApptTimePref
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92888401
+aExternalValue A.M.
+aInternalValue A
+
+eTableEntry 4
+aZKey      92888402
+aExternalValue P.M.
+aInternalValue P
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888394
+aName      SSIApptTypePref
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92888395
+aName      SSIApptTypePref
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92888396
+aExternalValue Phone
+aInternalValue P
+
+eTableEntry 4
+aZKey      92888397
+aExternalValue In Person
+aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888388
+aName      SSICaseLevel
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92888389
+aName      SSICaseLevel
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92888390
+aExternalValue Initial
+aInternalValue INITIAL
+
+eTableEntry 4
+aZKey      92888391
+aExternalValue Recon
+aInternalValue RECON
+
+eTableEntry 4
+aZKey      92888392
+aExternalValue ALJ
+aInternalValue ALJ
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888382
+aName      SSICaseStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92888383
+aName      SSICaseStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92888384
+aExternalValue Filed
+aInternalValue FILED
+
+eTableEntry 4
+aZKey      92888385
+aExternalValue Not yet Filed
+aInternalValue NOTFILED
+
+eTableEntry 4
+aZKey      92888386
+aExternalValue Online Application
+aInternalValue ONLINE
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888375
+aName      SSICaseType
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92888376
+aName      SSICaseType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93243996
+
+eTableEntry 4
+aZKey      92888377
+aExternalValue New
+aInternalValue NEW
+
+eTableEntry 4
+aZKey      92888378
+aExternalValue Mid-stream Attorney
+aInternalValue MIDA
+
+eTableEntry 4
+aZKey      93046527
+aExternalValue Mid-stream HFI
+aInternalValue MIDHFI
+
+eTableEntry 4
+aZKey      92888379
+aExternalValue Approval Only
+aInternalValue APP
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93410795
+aName      SSICaseTypeLevel
+aDesc      combined
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      93410796
+aName      SSICaseTypeLevel
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93410805
+
+eTableEntry 4
+aZKey      93410798
+aExternalValue New Initial
+aInternalValue NEWINITIAL
+
+eTableEntry 4
+aZKey      93410799
+aExternalValue New Recon
+aInternalValue NEWRECON
+
+eTableEntry 4
+aZKey      93410800
+aExternalValue New ALJ
+aInternalValue NEWALJ
+
+eTableEntry 4
+aZKey      93410801
+aExternalValue Midstream Initial
+aInternalValue MIDSTREAMINITIAL
+
+eTableEntry 4
+aZKey      93410802
+aExternalValue Midstream Recon
+aInternalValue MIDSTREAMRECON
+
+eTableEntry 4
+aZKey      93410803
+aExternalValue Midstream Attorney
+aInternalValue MIDSTREAMATTORNEY
+
+eTableEntry 4
+aZKey      93410804
+aExternalValue Approval Only
+aInternalValue APPROVALONLY
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92968530
+aName      SSIHearingWithdrawlReason
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      92968531
+aName      SSIHearingWithdrawlReason
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93340029
+
+eTableEntry 4
+aZKey      92968532
+aExternalValue Attorney
+aInternalValue ATTY
+
+eTableEntry 4
+aZKey      93331598
+aExternalValue Attorney, Fee waived
+aInternalValue ATTYWAIVED
+
+eTableEntry 4
+aZKey      93331601
+aExternalValue Medical Record, Fee Waived
+aInternalValue NOMEDRECWAIVED
+
+eTableEntry 4
+aZKey      92968534
+aExternalValue No Contact
+aInternalValue NOCONTACT
+
+eTableEntry 4
+aZKey      93331602
+aExternalValue No Contact, Fee Waived
+aInternalValue NOCONTACTWAIVED
+
+eTableEntry 4
+aZKey      93331599
+aExternalValue Self
+aInternalValue SELF
+
+eTableEntry 4
+aZKey      93331600
+aExternalValue Self, Fee Waived
+aInternalValue SELFWAIVED
+
+eTableEntry 4
+aZKey      93331603
+aExternalValue Uncooperative
+aInternalValue UNCOOPERATIVE
+
+eTableEntry 4
+aZKey      93331604
+aExternalValue Uncooperative, Fee Waived
+aInternalValue UNCOOPERATIVEWAIVED
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888404
+aName      SSIIncomeType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92888405
+aName      SSIIncomeType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92888406
+aExternalValue Earned
+aInternalValue E
+
+eTableEntry 4
+aZKey      92888407
+aExternalValue Unearned
+aInternalValue U
+
+eTableEntry 4
+aZKey      92888408
+aExternalValue Both earned and unearned
+aInternalValue B
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888410
+aName      SSIIneligibleReason
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      92888411
+aName      SSIIneligibleReason
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93410578
+
+eTableEntry 4
+aZKey      92888423
+aExternalValue Already approved for more than 1 year
+aInternalValue ALREADYAPPROVED
+
+eTableEntry 4
+aZKey      92888421
+aExternalValue Immigration issue - Long Term
+aInternalValue IMMIGRATIONLONG
+
+eTableEntry 4
+aZKey      92888420
+aExternalValue Immigration issue - Temporary (<6 months)
+aInternalValue IMMIGRATIONTEMP
+
+eTableEntry 4
+aZKey      92888419
+aExternalValue Incarcerated
+aInternalValue PRISON
+
+eTableEntry 4
+aZKey      92888418
+aExternalValue Income/asset issue - Long Term
+aInternalValue INCOMELONG
+
+eTableEntry 4
+aZKey      92888417
+aExternalValue Income/asset issue - Temporary (< 6 months)
+aInternalValue INCOMETEMP
+
+eTableEntry 4
+aZKey      92888416
+aExternalValue Med issues but able to function
+aInternalValue FUNCTIONAL
+
+eTableEntry 4
+aZKey      92888415
+aExternalValue Med issues but insufficient history/treatment
+aInternalValue INSUFFHIST
+
+eTableEntry 4
+aZKey      92888414
+aExternalValue Med issues but substance abuse to recent
+aInternalValue SUBSTANCE
+
+eTableEntry 4
+aZKey      92888413
+aExternalValue Member passed away
+aInternalValue DECEASED
+
+eTableEntry 4
+aZKey      92888412
+aExternalValue No medical issues reported
+aInternalValue NOMEDICAL
+
+eTableEntry 4
+aZKey      92888422
+aExternalValue Not accepting cases at this level
+aInternalValue NOTACCEPTING
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92888425
+aName      SSIScreenedIneligible
+aDomainType T
+aDataType  S
+aMaxStringLth 15
+aContextRestriction N
+
+eContext   3
+aZKey      93282355
+aName      MAReasons
+
+eTableEntry 4
+aZKey      93410407
+
+eTableEntry 4
+aZKey      93282359
+aExternalValue Patient has other insurance
+aInternalValue OTHERINS
+
+eTableEntry 4
+aZKey      93282360
+aExternalValue Patient is not a MA resident
+aInternalValue NONRES
+
+eTableEntry 4
+aZKey      93282356
+aExternalValue Patient is not eligible for ANY programs
+aInternalValue NONELIG
+
+eTableEntry 4
+aZKey      93282361
+aExternalValue Patient refused HFI help
+aInternalValue REFUSED
+
+eTableEntry 4
+aZKey      93282362
+aExternalValue Other
+aInternalValue OTHER
+
+eContext   3
+aZKey      92888426
+aName      SSIScreenedIneligible
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93410408
+
+eTableEntry 4
+aZKey      92888428
+aExternalValue Diagnosis
+aInternalValue DIAGNOSIS
+
+eTableEntry 4
+aZKey      92888430
+aExternalValue Immigration 
+aInternalValue IMMIGRATION
+
+eTableEntry 4
+aZKey      92888427
+aExternalValue Income/Asset
+aInternalValue INCOME
+
+eTableEntry 4
+aZKey      92888431
+aExternalValue Other
+aInternalValue OTHER
+
+eTableEntry 4
+aZKey      92888429
+aExternalValue Refused
+aInternalValue REFUSED
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92994160
+aName      SSISSAReqType
+aDesc      item requested from SSA
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      92994161
+aName      SSISSAReqType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92994162
+aExternalValue CD
+aInternalValue CD
+
+eTableEntry 4
+aZKey      92994163
+aExternalValue Barcode
+aInternalValue BARCODE
+
+eTableEntry 4
+aZKey      92994165
+aExternalValue Exhibit
+aInternalValue EXHIBIT
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92675986
 aName      State
@@ -3646,12 +6371,286 @@ aName      State
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92675989
+aZKey      92995394
+
+eTableEntry 4
+aZKey      92882875
+aExternalValue AK
+aInternalValue AK
+
+eTableEntry 4
+aZKey      92882876
+aExternalValue AL
+aInternalValue AL
+
+eTableEntry 4
+aZKey      92882877
+aExternalValue AR
+aInternalValue AR
+
+eTableEntry 4
+aZKey      92882878
+aExternalValue AZ
+aInternalValue AZ
+
+eTableEntry 4
+aZKey      92882879
+aExternalValue CA
+aInternalValue CA
+
+eTableEntry 4
+aZKey      92882880
+aExternalValue CO
+aInternalValue CO
+
+eTableEntry 4
+aZKey      92856403
+aExternalValue CT
+aInternalValue CT
+
+eTableEntry 4
+aZKey      92882881
+aExternalValue DC
+aInternalValue DC
+
+eTableEntry 4
+aZKey      92882882
+aExternalValue DE
+aInternalValue DE
+
+eTableEntry 4
+aZKey      92856409
+aExternalValue FL
+aInternalValue FL
+
+eTableEntry 4
+aZKey      92882883
+aExternalValue GA
+aInternalValue GA
+
+eTableEntry 4
+aZKey      92882884
+aExternalValue HI
+aInternalValue HI
+
+eTableEntry 4
+aZKey      92882885
+aExternalValue IA
+aInternalValue IA
+
+eTableEntry 4
+aZKey      92882886
+aExternalValue ID
+aInternalValue ID
+
+eTableEntry 4
+aZKey      92856404
+aExternalValue IL
+aInternalValue IL
+
+eTableEntry 4
+aZKey      92882887
+aExternalValue IN
+aInternalValue IN
+
+eTableEntry 4
+aZKey      92882888
+aExternalValue KS
+aInternalValue KS
+
+eTableEntry 4
+aZKey      92882889
+aExternalValue KY
+aInternalValue KY
+
+eTableEntry 4
+aZKey      92882890
+aExternalValue LA
+aInternalValue LA
 
 eTableEntry 4
 aZKey      92675988
 aExternalValue MA
 aInternalValue MA
+
+eTableEntry 4
+aZKey      93110015
+aExternalValue MO
+aInternalValue MO
+
+eTableEntry 4
+aZKey      92882891
+aExternalValue MD
+aInternalValue MD
+
+eTableEntry 4
+aZKey      92882892
+aExternalValue ME
+aInternalValue ME
+
+eTableEntry 4
+aZKey      92882893
+aExternalValue MI
+aInternalValue MI
+
+eTableEntry 4
+aZKey      92882894
+aExternalValue MN
+aInternalValue MN
+
+eTableEntry 4
+aZKey      92995391
+aExternalValue MS
+aInternalValue MS
+
+eTableEntry 4
+aZKey      92882895
+aExternalValue MT
+aInternalValue MT
+
+eTableEntry 4
+aZKey      92995395
+aExternalValue NE
+aInternalValue NE
+
+eTableEntry 4
+aZKey      92882896
+aExternalValue NC
+aInternalValue NC
+
+eTableEntry 4
+aZKey      92995393
+aExternalValue ND
+aInternalValue ND
+
+eTableEntry 4
+aZKey      92856408
+aExternalValue NH
+aInternalValue NH
+
+eTableEntry 4
+aZKey      92856406
+aExternalValue NJ
+aInternalValue NJ
+
+eTableEntry 4
+aZKey      92882897
+aExternalValue NM
+aInternalValue NM
+
+eTableEntry 4
+aZKey      92882898
+aExternalValue NV
+aInternalValue NV
+
+eTableEntry 4
+aZKey      92856405
+aExternalValue NY
+aInternalValue NY
+
+eTableEntry 4
+aZKey      92882899
+aExternalValue OH
+aInternalValue OH
+
+eTableEntry 4
+aZKey      92882900
+aExternalValue OK
+aInternalValue OK
+
+eTableEntry 4
+aZKey      92882901
+aExternalValue OR
+aInternalValue OR
+
+eTableEntry 4
+aZKey      92882902
+aExternalValue PA
+aInternalValue PA
+
+eTableEntry 4
+aZKey      92856407
+aExternalValue RI
+aInternalValue RI
+
+eTableEntry 4
+aZKey      92882903
+aExternalValue SC
+aInternalValue SC
+
+eTableEntry 4
+aZKey      92882904
+aExternalValue SD
+aInternalValue SD
+
+eTableEntry 4
+aZKey      92882905
+aExternalValue TN
+aInternalValue TN
+
+eTableEntry 4
+aZKey      92882906
+aExternalValue TX
+aInternalValue TX
+
+eTableEntry 4
+aZKey      92882907
+aExternalValue UT
+aInternalValue UT
+
+eTableEntry 4
+aZKey      92882908
+aExternalValue VA
+aInternalValue VA
+
+eTableEntry 4
+aZKey      92882909
+aExternalValue VT
+aInternalValue VT
+
+eTableEntry 4
+aZKey      92882867
+aExternalValue WA
+aInternalValue WA
+
+eTableEntry 4
+aZKey      92882910
+aExternalValue WI
+aInternalValue WI
+
+eTableEntry 4
+aZKey      92882911
+aExternalValue WV
+aInternalValue WV
+
+eTableEntry 4
+aZKey      92995396
+aExternalValue WY
+aInternalValue WY
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92816668
+aName      StatusCodeType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92816669
+aName      StatusCodeType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92816670
+aExternalValue Application
+aInternalValue A
+
+eTableEntry 4
+aZKey      92816671
+aExternalValue Referral
+aInternalValue R
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -3724,120 +6723,8 @@ aJavaEditString HHmmssS
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      92693013
-aName      TS_DistributionCode
-aDomainType T
-aDataType  S
-aMaxStringLth 5
-aContextRestriction N
-
-eContext   3
-aZKey      92693014
-aName      TS_DistributionCode
-aIsDefault Y
-
-eTableEntry 4
-aZKey      92693034
-
-eTableEntry 4
-aZKey      92693015
-aExternalValue A
-aInternalValue A
-
-eTableEntry 4
-aZKey      92693016
-aExternalValue D
-aInternalValue D
-
-eTableEntry 4
-aZKey      92693017
-aExternalValue H
-aInternalValue H
-
-eTableEntry 4
-aZKey      92693018
-aExternalValue I
-aInternalValue I
-
-eTableEntry 4
-aZKey      92693019
-aExternalValue J
-aInternalValue J
-
-eTableEntry 4
-aZKey      92693020
-aExternalValue LT
-aInternalValue LT
-
-eTableEntry 4
-aZKey      92693021
-aExternalValue M
-aInternalValue M
-
-eTableEntry 4
-aZKey      92693022
-aExternalValue MB
-aInternalValue MB
-
-eTableEntry 4
-aZKey      92693023
-aExternalValue NA
-aInternalValue NA
-
-eTableEntry 4
-aZKey      92693024
-aExternalValue O6
-aInternalValue O6
-
-eTableEntry 4
-aZKey      92693025
-aExternalValue OF
-aInternalValue OF
-
-eTableEntry 4
-aZKey      92693026
-aExternalValue OH
-aInternalValue OH
-
-eTableEntry 4
-aZKey      92693027
-aExternalValue P
-aInternalValue P
-
-eTableEntry 4
-aZKey      92693028
-aExternalValue PO
-aInternalValue PO
-
-eTableEntry 4
-aZKey      92693029
-aExternalValue PU
-aInternalValue PU
-
-eTableEntry 4
-aZKey      92693030
-aExternalValue S
-aInternalValue S
-
-eTableEntry 4
-aZKey      92693031
-aExternalValue SS
-aInternalValue SS
-
-eTableEntry 4
-aZKey      92693032
-aExternalValue T
-aInternalValue T
-
-eTableEntry 4
-aZKey      92693033
-aExternalValue UF
-aInternalValue UF
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92693008
-aName      TS_Type
+aName      TSLaborType
 aDesc      Time Sheet Type
 aDomainType T
 aDataType  S
@@ -3846,78 +6733,495 @@ aContextRestriction N
 
 eContext   3
 aZKey      92693009
-aName      TS_Type
+aName      TSLaborType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92694195
+aZKey      93057826
 
 eTableEntry 4
 aZKey      92693010
-aExternalValue Client
-aInternalValue CL
+aExternalValue Direct Labor
+aInternalValue D
 
 eTableEntry 4
 aZKey      92693011
-aExternalValue Overhead
-aInternalValue OH
-
-eTableEntry 4
-aZKey      92694194
-aExternalValue Case
-aInternalValue CA
+aExternalValue Indirect Labor
+aInternalValue I
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      92693046
-aName      TSEarnCode
+aZKey      93057827
+aName      TSProgramTypeSF
+aDesc      Screening Follow up
 aDomainType T
 aDataType  S
-aMaxStringLth 1
+aMaxStringLth 10
 aContextRestriction N
 
 eContext   3
-aZKey      92693047
-aName      TSEarnCode
+aZKey      93057828
+aName      TSProgramTypeSF
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92693055
+aZKey      93057829
 
 eTableEntry 4
-aZKey      92693048
-aExternalValue 1
-aInternalValue 1
-
-eTableEntry 4
-aZKey      92693049
-aExternalValue H
-aInternalValue H
-
-eTableEntry 4
-aZKey      92693050
-aExternalValue I
-aInternalValue I
-
-eTableEntry 4
-aZKey      92693051
-aExternalValue J
-aInternalValue J
-
-eTableEntry 4
-aZKey      92693052
-aExternalValue M
-aInternalValue M
-
-eTableEntry 4
-aZKey      92693053
-aExternalValue P
-aInternalValue P
-
-eTableEntry 4
-aZKey      92693054
-aExternalValue S
+aZKey      93057830
+aExternalValue Screening
 aInternalValue S
+
+eTableEntry 4
+aZKey      93057831
+aExternalValue FollowUp
+aInternalValue F
+
+eTableEntry 4
+aZKey      93057832
+aExternalValue Both
+aInternalValue SF
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92844777
+aName      wSortDynamic
+aDomainType T
+aDataType  S
+aMaxStringLth 150
+aContextRestriction N
+
+eContext   3
+aZKey      92844778
+aName      wSortDy
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92844788
+
+eTableEntry 4
+aZKey      92844779
+aExternalValue First Name
+aInternalValue PatientFirstName
+
+eTableEntry 4
+aZKey      92844780
+aExternalValue Last Name
+aInternalValue PatientLastName
+
+eTableEntry 4
+aZKey      92844781
+aExternalValue Social Security
+aInternalValue SSN
+
+eTableEntry 4
+aZKey      92844782
+aExternalValue Primary Insurance
+aInternalValue PatientPrimaryInsurance
+
+eTableEntry 4
+aZKey      92844783
+aExternalValue Secondary Insurance
+aInternalValue PatientSecondaryInsurance
+
+eTableEntry 4
+aZKey      92844784
+aExternalValue Referred As
+aInternalValue PatientInsuranceReferredAs
+
+eTableEntry 4
+aZKey      92844785
+aExternalValue Aid Type
+aInternalValue AidType
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92844789
+aName      wSortLikeAidType
+aDomainType T
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+
+eContext   3
+aZKey      92844790
+aName      wSortLikeAidType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92856770
+
+eTableEntry 4
+aZKey      92844791
+aExternalValue CHILDRENS MEDICAL SECURITY PLAN
+aInternalValue CHILDRENS MEDICAL SECURITY PLAN
+
+eTableEntry 4
+aZKey      92844792
+aExternalValue CHILDRENS MEDICAL SERVICE PLAN
+aInternalValue CHILDRENS MEDICAL SERVICE PLAN
+
+eTableEntry 4
+aZKey      92844793
+aExternalValue COMMONWEALTH CARE
+aInternalValue COMMONWEALTH CARE
+
+eTableEntry 4
+aZKey      92844794
+aExternalValue COMMONWEALTH CARE WITH LIMITED
+aInternalValue COMMONWEALTH CARE WITH LIMITED
+
+eTableEntry 4
+aZKey      92844795
+aExternalValue DMH ONLY
+aInternalValue DMH ONLY
+
+eTableEntry 4
+aZKey      92844796
+aExternalValue EMERG AID TO ELDERLY DISABLED AND CHILDR
+aInternalValue EMERG AID TO ELDERLY DISABLED AND CHILDR
+
+eTableEntry 4
+aZKey      92844797
+aExternalValue HEALTH SAFETY NET
+aInternalValue HEALTH SAFETY NET
+
+eTableEntry 4
+aZKey      92844798
+aExternalValue LIMITED PLUS CMSP
+aInternalValue LIMITED PLUS CMSP
+
+eTableEntry 4
+aZKey      92844799
+aExternalValue LIMITED PLUS HEALTHY START
+aInternalValue LIMITED PLUS HEALTHY START
+
+eTableEntry 4
+aZKey      92844800
+aExternalValue MASSHEALTH BASIC FEE FOR SERVICE
+aInternalValue MASSHEALTH BASIC FEE FOR SERVICE
+
+eTableEntry 4
+aZKey      92844801
+aExternalValue MASSHEALTH BASIC MANAGED CARE
+aInternalValue MASSHEALTH BASIC MANAGED CARE
+
+eTableEntry 4
+aZKey      92844802
+aExternalValue MASSHEALTH COMMONHEALTH
+aInternalValue MASSHEALTH COMMONHEALTH
+
+eTableEntry 4
+aZKey      92844803
+aExternalValue MASSHEALTH ESSENTIAL MANAGED CARE
+aInternalValue MASSHEALTH ESSENTIAL MANAGED CARE
+
+eTableEntry 4
+aZKey      92844804
+aExternalValue MASSHEALTH FAMILY ASSISTANCE
+aInternalValue MASSHEALTH FAMILY ASSISTANCE
+
+eTableEntry 4
+aZKey      92844805
+aExternalValue MASSHEALTH LIMITED
+aInternalValue MASSHEALTH LIMITED
+
+eTableEntry 4
+aZKey      92844806
+aExternalValue MASSHEALTH PRENATAL
+aInternalValue MASSHEALTH PRENATAL
+
+eTableEntry 4
+aZKey      92844807
+aExternalValue MASSHEALTH STANDARD
+aInternalValue MASSHEALTH STANDARD
+
+eTableEntry 4
+aZKey      92844808
+aExternalValue Member is not eligible
+aInternalValue Member is not eligible
+
+eTableEntry 4
+aZKey      92844809
+aExternalValue Not Found In MassHealth
+aInternalValue Not Found In MassHealth
+
+eTableEntry 4
+aZKey      92844810
+aExternalValue PARTIAL HEALTH SAFETY NET
+aInternalValue PARTIAL HEALTH SAFETY NET
+
+eTableEntry 4
+aZKey      92844811
+aExternalValue PREMIUM ASSISTANCE (NO DIRECT COVERAGE)
+aInternalValue PREMIUM ASSISTANCE (NO DIRECT COVERAGE)
+
+eTableEntry 4
+aZKey      92844812
+aExternalValue SENIOR BUYIN
+aInternalValue SENIOR BUYIN
+
+eTableEntry 4
+aZKey      92844813
+aExternalValue STANDARD PLUS AUTISM WAIVER
+aInternalValue STANDARD PLUS AUTISM WAIVER
+
+eTableEntry 4
+aZKey      92844814
+aExternalValue STANDARD PLUS DDS ADULT RESIDENTIAL WAIVER
+aInternalValue STANDARD PLUS DDS ADULT RESIDENTIAL WAIVER
+
+eTableEntry 4
+aZKey      92844815
+aExternalValue STANDARD PLUS FRAIL ELDERS HCBS WAIVER
+aInternalValue STANDARD PLUS FRAIL ELDERS HCBS WAIVER
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92844817
+aName      wSortLikePrimary
+aDomainType T
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+
+eContext   3
+aZKey      92844818
+aName      wSortLikePrimary
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92856771
+
+eTableEntry 4
+aZKey      92844819
+aExternalValue BCBS HMO
+aInternalValue BCBS HMO
+
+eTableEntry 4
+aZKey      92844820
+aExternalValue BCBS INDEMNITY
+aInternalValue BCBS INDEMNITY
+
+eTableEntry 4
+aZKey      92844821
+aExternalValue BCBS MEDEX
+aInternalValue BCBS MEDEX
+
+eTableEntry 4
+aZKey      92844822
+aExternalValue BCBS PPO
+aInternalValue BCBS PPO
+
+eTableEntry 4
+aZKey      92844823
+aExternalValue BMC HealthNet CommCare
+aInternalValue BMC HLTHNET COMMCARE
+
+eTableEntry 4
+aZKey      92844824
+aExternalValue CIGNA
+aInternalValue CIGNA
+
+eTableEntry 4
+aZKey      92844825
+aExternalValue Doral Dental
+aInternalValue DORAL DENTAL
+
+eTableEntry 4
+aZKey      92844826
+aExternalValue Healthy Start
+aInternalValue HEALTHY START
+
+eTableEntry 4
+aZKey      92844827
+aExternalValue HP Passport Connect
+aInternalValue HP PASSPORT CONNECT
+
+eTableEntry 4
+aZKey      92844828
+aExternalValue HSN
+aInternalValue HSN
+
+eTableEntry 4
+aZKey      92844829
+aExternalValue HSN Partial
+aInternalValue HSN PARTIAL
+
+eTableEntry 4
+aZKey      92844830
+aExternalValue HSN Pending
+aInternalValue HSN PENDING
+
+eTableEntry 4
+aZKey      92844831
+aExternalValue MEDICAID
+aInternalValue MEDICAID
+
+eTableEntry 4
+aZKey      92844832
+aExternalValue MEDICAID MNGCARE
+aInternalValue MEDICAID MNGCARE
+
+eTableEntry 4
+aZKey      92844833
+aExternalValue Medicare A and B
+aInternalValue MEDICARE A AND B
+
+eTableEntry 4
+aZKey      92844834
+aExternalValue Medicare Part A Only
+aInternalValue MEDICARE PART A ONLY
+
+eTableEntry 4
+aZKey      92844835
+aExternalValue TUFTS MCARE POS
+aInternalValue TUFTS MCARE POS
+
+eTableEntry 4
+aZKey      92844836
+aExternalValue STD CLINIC
+aInternalValue STD CLINIC
+
+eTableEntry 4
+aZKey      92844837
+aExternalValue COMMERCIAL INSURANCE
+aInternalValue COMMERCIAL INSURANCE
+
+eTableEntry 4
+aZKey      92844838
+aExternalValue VETERANS ADMIN
+aInternalValue VETERANS ADMIN
+
+eTableEntry 4
+aZKey      92844839
+aExternalValue EVERCARE
+aInternalValue EVERCARE
+
+eTableEntry 4
+aZKey      92844840
+aExternalValue BMC PREFERRED
+aInternalValue BMC PREFERRED
+
+eTableEntry 4
+aZKey      92844841
+aExternalValue BCBS POS
+aInternalValue BCBS POS
+
+eTableEntry 4
+aZKey      92844842
+aExternalValue TUFTS POS
+aInternalValue TUFTS POS
+
+eTableEntry 4
+aZKey      92844843
+aExternalValue BCBS NOT MA PPO
+aInternalValue BCBS NOT MA PPO
+
+eTableEntry 4
+aZKey      92844844
+aExternalValue TUFTS MCARE HMO
+aInternalValue TUFTS MCARE HMO
+
+eTableEntry 4
+aZKey      92844845
+aExternalValue HPHC HMO
+aInternalValue HPHC HMO
+
+eTableEntry 4
+aZKey      92844846
+aExternalValue CMPS
+aInternalValue CMPS
+
+eTableEntry 4
+aZKey      92844847
+aExternalValue HPHC POS
+aInternalValue HPHC POS
+
+eTableEntry 4
+aZKey      92844848
+aExternalValue AETNA NO PCP
+aInternalValue AETNA NO PCP
+
+eTableEntry 4
+aZKey      92844849
+aExternalValue NHP OTHER MEDICARE
+aInternalValue NHP OTHER MEDICARE
+
+eTableEntry 4
+aZKey      92844850
+aExternalValue AETNA STUDENT HEALTH
+aInternalValue AETNA STUDENT HEALTH
+
+eTableEntry 4
+aZKey      92844851
+aExternalValue BCBS NOT MA HMO
+aInternalValue BCBS NOT MA HMO
+
+eTableEntry 4
+aZKey      92844852
+aExternalValue MEDICAID MNGCARE OTH
+aInternalValue MEDICAID MNGCARE OTH
+
+eTableEntry 4
+aZKey      92844853
+aExternalValue AARP MCARE COMPLETE
+aInternalValue AARP MCARE COMPLETE
+
+eTableEntry 4
+aZKey      92844854
+aExternalValue MEDICAID NOT MA
+aInternalValue MEDICAID NOT MA
+
+eTableEntry 4
+aZKey      92844855
+aExternalValue CARENET
+aInternalValue CARENET
+
+eTableEntry 4
+aZKey      92844856
+aExternalValue MVA
+aInternalValue MVA
+
+eTableEntry 4
+aZKey      92844857
+aExternalValue NHP COMMERCIAL
+aInternalValue NHP COMMERCIAL
+
+eTableEntry 4
+aZKey      92844858
+aExternalValue Network Health Medicaid
+aInternalValue NETWK HLTH MEDICAID
+
+eTableEntry 4
+aZKey      92844859
+aExternalValue Network Health CommCare
+aInternalValue NETWK HLTH COMMCARE
+
+eTableEntry 4
+aZKey      92844860
+aExternalValue NHP MEDICAID
+aInternalValue NHP MEDICAID
+
+eTableEntry 4
+aZKey      92844861
+aExternalValue SELF PAY
+aInternalValue SELF PAY
+
+eTableEntry 4
+aZKey      92844862
+aExternalValue TUFTS HMO
+aInternalValue TUFTS HMO
+
+eTableEntry 4
+aZKey      92844863
+aExternalValue United Healthcare
+aInternalValue UNITED HEALTHCARE
+
+eTableEntry 4
+aZKey      92844864
+aExternalValue ZP MBHP
+aInternalValue ZP MBHP
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain

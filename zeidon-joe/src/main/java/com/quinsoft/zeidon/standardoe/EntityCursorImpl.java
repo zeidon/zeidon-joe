@@ -1370,12 +1370,27 @@ class EntityCursorImpl implements EntityCursor
                     }
                 }
 
-                int cmp = cei1.compareAttribute( key.viewAttrib, cei2, key.viewAttrib );
+                int cmp = 0;
+                if (key.context != null)
+                {
+                	// Use context for sort order.
+                	String value1 = cei1.getStringFromAttribute(key.viewAttrib,  key.context);
+                	String value2 = cei2.getStringFromAttribute(key.viewAttrib,  key.context);
+                	
+                	cmp = value1.compareTo(value2);
+                }
+                else
+                {
+                	cmp = cei1.compareAttribute( key.viewAttrib, cei2, key.viewAttrib );
+                }
                 if ( ! key.ascending )
                     cmp = -cmp;
 
                 if ( cmp != 0 )
                     return cmp;
+                
+                if ( 1 == 1 )
+                	Tmp = 1;
             }
 
             return 0;
@@ -1434,9 +1449,13 @@ class EntityCursorImpl implements EntityCursor
             String context = null;
             if ( i + 1 < strings.length )
             {
-                // TODO: Add support for contexts.
+            	// KJS 05/07/14 - Add context.
                 if ( strings[ i + 1 ].startsWith( "[" ) )
-                    throw new ZeidonException("Context names in sort order not supported yet.");
+                {
+                	context = strings[ i + 1 ].substring(1, strings[ i + 1 ].lastIndexOf("]"));
+                	i++;
+                }
+                
             }
 
             sortAttribs.add( new SortKey( sortAttrib, ascending, context ) );

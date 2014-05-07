@@ -168,13 +168,16 @@ public class DateDomain extends AbstractDomain
         private DateTimeFormatter formatter;
         
         @Override
-        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue) throws ZeidonException
         {
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
         	
         	if ( internalValue.toString().isEmpty())
         		return internalValue.toString();
+        	
+        	if ( formatter == null )
+        	    throw new ZeidonException( "JaveEditString is not set for context %s", this.toString() );
 
             return formatter.print( (DateTime) internalValue );
         }
