@@ -1389,8 +1389,6 @@ class EntityCursorImpl implements EntityCursor
                 if ( cmp != 0 )
                     return cmp;
                 
-                if ( 1 == 1 )
-                	Tmp = 1;
             }
 
             return 0;
