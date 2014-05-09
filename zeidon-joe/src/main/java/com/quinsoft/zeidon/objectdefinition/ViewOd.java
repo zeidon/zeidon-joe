@@ -21,9 +21,9 @@
  */
 package com.quinsoft.zeidon.objectdefinition;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -419,7 +419,10 @@ public class ViewOd implements PortableFileAttributeHandler
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e );
+            if ( e instanceof InvocationTargetException )
+                throw ZeidonException.wrapException( ((InvocationTargetException) e).getTargetException() );
+            else
+                throw ZeidonException.wrapException( e );
         }
     }
 
@@ -440,7 +443,10 @@ public class ViewOd implements PortableFileAttributeHandler
         }
         catch ( Exception e )
         {
-            throw ZeidonException.prependMessage( e, "Error calling Activate constraint for %s", this );
+            if ( e instanceof InvocationTargetException )
+                throw ZeidonException.wrapException( ((InvocationTargetException) e).getTargetException() );
+            else
+                throw ZeidonException.wrapException( e );
         }
     }
 
