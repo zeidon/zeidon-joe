@@ -52,6 +52,5 @@ fi
 cp=`cat .tmpclasspath`
 #echo "cp=$cp"
 
-#export CLASSPATH=$(cat .tmpclasspath)
 java -cp "$cp" $DEBUG_FLAGS org.jruby.JarBootstrapMain  | tee /tmp/lod-server.log
 
