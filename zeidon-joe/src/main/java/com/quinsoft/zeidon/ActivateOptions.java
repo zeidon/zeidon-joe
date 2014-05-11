@@ -22,6 +22,11 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     private View                   qualificationObject;
     private EnumSet<ActivateFlags> activateFlags;
     private LockingLevel           lockingLevel = LockingLevel.NONE;
+
+    /**
+     * The name of this qualification.  Some day this could be used for calling
+     * stored procedures or something with the FileDB.
+     */
     private String                 qualificationName;
 
     public ActivateOptions( TaskQualification task )

@@ -25,6 +25,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -33,7 +34,7 @@ import com.quinsoft.zeidon.ZeidonException;
  * A view used for asynchronous views.  An activate that is performed asynchronously returns
  * a future view.  Any operations that require the OI are blocked until the activate
  * finishes.
- * 
+ *
  * @author DG
  *
  */
@@ -75,10 +76,10 @@ class FutureView extends InternalViewForwarder implements Future<View>
     {
         if ( future != null )
             waitForFuture();
-        
+
         return super.getView();
     }
-    
+
     /* (non-Javadoc)
      * @see java.util.concurrent.Future#cancel(boolean)
      */
@@ -87,7 +88,7 @@ class FutureView extends InternalViewForwarder implements Future<View>
     {
         if ( future == null )
             return false;
-        
+
         return future.cancel( mayInterruptIfRunning );
     }
 
@@ -99,7 +100,7 @@ class FutureView extends InternalViewForwarder implements Future<View>
     {
         if ( future == null )
             return false;
-        
+
         return future.isCancelled();
     }
 
@@ -111,7 +112,7 @@ class FutureView extends InternalViewForwarder implements Future<View>
     {
         if ( future == null )
             return true;
-        
+
         return future.isDone();
     }
 
@@ -161,5 +162,13 @@ class FutureView extends InternalViewForwarder implements Future<View>
     public Collection<ZeidonException> validateOi()
     {
         return super.getView().validateOi();
+    }
+
+    @Override
+    public ActivateOptions getActivateOptions()
+    {
+        // We don't need to wait for the activate to finish to get the options.
+        // Call super to get the view without waiting for the future to return.
+        return super.getView().getActivateOptions();
     }
 }

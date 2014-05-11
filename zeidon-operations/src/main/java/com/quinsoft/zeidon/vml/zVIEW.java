@@ -754,4 +754,10 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().duplicateOi( options );
     }
+
+    @Override
+    public ActivateOptions getActivateOptions()
+    {
+        return getView().getActivateOptions();
+    }
 }

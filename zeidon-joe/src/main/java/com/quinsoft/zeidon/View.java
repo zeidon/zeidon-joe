@@ -211,6 +211,12 @@ public interface View extends TaskQualification, CacheMap
     View activateOiFromOi( ActivateFlags flag );
 
     /**
+     * @return The ActivateOptions used to activate the OI.  May return null if
+     * there was no qualification.
+     */
+    ActivateOptions getActivateOptions();
+
+    /**
      * Drops all view names for this view.  The view will not be cleaned up by the GC
      * until all application references are removed.
      *

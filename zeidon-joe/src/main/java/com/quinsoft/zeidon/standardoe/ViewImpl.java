@@ -41,12 +41,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
@@ -1034,5 +1035,11 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         }
 
         return copy;
+    }
+
+    @Override
+    public ActivateOptions getActivateOptions()
+    {
+        return getObjectInstance().getActivateOptions();
     }
 }

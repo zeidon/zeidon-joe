@@ -43,7 +43,7 @@ class ActivateObjectInstance
     ActivateObjectInstance( ViewImpl view )
     {
         this.task = view.getViewImpl().getTask();
-        this.options = view.getObjectInstance().getActivateOptions();
+        this.options = view.getActivateOptions();
     }
 
     View activate()

@@ -63,10 +63,16 @@ public class QualificationBuilder
     private final ActivateOptions activateOptions;
 
     /**
+     * EntityInstance of the EntitySpec that qualifies the
+     * root of the target ViewOD.
+     */
+    private EntityInstance rootInstance;
+
+    /**
      * When doing the activate we will synchronize using this object.  May be changed
      * by cachedAs().  Defaults to the QualificationBuilder.
      */
-    private       Object      synch;
+    private Object synch;
 
     /**
      * If non-null, then attempt to relink this instance with the root after the activate.
@@ -145,8 +151,16 @@ public class QualificationBuilder
         return setFlag( ActivateFlags.fSINGLE );
     }
 
+    public QualificationBuilder rootOnlyMultiple()
+    {
+        rootOnly();
+        multipleRoots();
+        return this;
+    }
+
     public QualificationBuilder rootOnly()
     {
+        getRootInstance().getAttribute( "RootOnly" ).setValue( "Y" );
         return setFlag( ActivateFlags.fROOT_ONLY );
     }
 
@@ -157,6 +171,7 @@ public class QualificationBuilder
 
     public QualificationBuilder multipleRoots()
     {
+        getRootInstance().getAttribute( "MultipleRoots" ).setValue( "Y" );
         return setFlag( ActivateFlags.fMULTIPLE );
     }
 
@@ -167,9 +182,11 @@ public class QualificationBuilder
 
     public QualificationBuilder asynchronous()
     {
+        /*  Why can't we do async?  Removing this for now.
         if ( sourceEntityInstance != null )
             throw new ZeidonException( "The qualification source entity is configured to be relinked after " +
             		                   "the activate is finished.  This is incompatible with asynchronous config." );
+        */
 
         return setFlag( ActivateFlags.fASYNCHRONOUS );
     }
@@ -251,6 +268,28 @@ public class QualificationBuilder
         return forEntity( entityName );
     }
 
+    /**
+     * @return The EntityInstance for the root EntitySpec.  Creates it if necessary.
+     */
+    private EntityInstance getRootInstance()
+    {
+        if ( rootInstance == null )
+        {
+            String rootName = getViewOd().getRoot().getName();
+            View temp = qualView.newView();
+
+            if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", rootName ) != CursorResult.SET )
+            {
+                entitySpecCount++;
+                qualView.cursor( ENTITYSPEC ).createEntity().setAttribute( "EntityName", rootName );
+            }
+
+            rootInstance = temp.cursor( ENTITYSPEC ).getEntityInstance();
+        }
+
+        return rootInstance;
+    }
+
     public QualificationBuilder forEntity( String entityName )
     {
         if ( getViewOd() == null )
@@ -260,6 +299,10 @@ public class QualificationBuilder
         {
             entitySpecCount++;
             qualView.cursor( ENTITYSPEC ).createEntity().setAttribute( "EntityName", entityName );
+
+            // If this is the root then get the cursor.
+            if ( rootInstance == null && getViewOd().getRoot().getName().equals( entityName ) )
+                rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
         }
 
         return this;
@@ -355,7 +398,8 @@ public class QualificationBuilder
      *
      * @param source
      * @param linkEntities if true and the target entity is the root then the entities will
-     * be relinked after the activity.
+     * be relinked after the activate.  This is used to activate a list with rootonly-multiple
+     * and then activating one of the roots.  The root will be be current if the OI is updated.
      *
      * @return
      */
@@ -424,7 +468,7 @@ public class QualificationBuilder
         View view = null;
 
         // In case we're loading a cached object, synchronize using 'synch'.  If we're not
-        // loading a cached object then sync = this so it's basically a no-op.  If we're loading
+        // loading a cached object then sync = 'this' so it's basically a no-op.  If we're loading
         // a cached object then synch is required to be an object that will prevent multiple
         // threads from loading the same cached object at the same time.  Usually the viewName
         // is good enough.
@@ -454,6 +498,10 @@ public class QualificationBuilder
                 ViewEntity root = getViewOd().getRoot();
                 if ( root == sourceEntityInstance.getViewEntity() && view.cursor( root ).getEntityCount() == 1 )
                     view.cursor( root ).linkInstances( sourceEntityInstance );
+
+                // Null out the value so that it can be dropped by the GC if it's not
+                // longer needed.
+                sourceEntityInstance = null;
             }
 
             return view;
