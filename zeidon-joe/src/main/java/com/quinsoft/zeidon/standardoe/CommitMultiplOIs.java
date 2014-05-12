@@ -276,6 +276,9 @@ class CommitMultiplOIs
     int commit()
     {
         validateCommit();
+        // If there aren't any valid views then we have nothing to commit.
+        if ( viewList.size() ==0 )
+        	return 0;
         executeCommitConstraints();
 
         Committer committer = selector.getCommitter( getTask(), viewList, options );
