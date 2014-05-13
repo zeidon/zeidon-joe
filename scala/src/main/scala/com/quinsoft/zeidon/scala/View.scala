@@ -8,6 +8,9 @@ import com.quinsoft.zeidon.objectdefinition._
 import com.quinsoft.zeidon.scala.EntityCursor
 
 /**
+ * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
+ * users to write code using VML-like view.entity.attribute syntax.
+ *
  * @author dgc
  *
  */
@@ -70,6 +73,7 @@ class View( val task: Task ) extends Task(task) {
     }
 
     def logObjectInstance = jview.logObjectInstance()
+    def activateOptions = jview.getActivateOptions()
 
     /**
      * This is called when the compiler doesn't recognize a method name.  This
@@ -77,11 +81,16 @@ class View( val task: Task ) extends Task(task) {
      */
     def selectDynamic(entityName: String): EntityCursor = {
         validateViewOd
+
+        // Following will throw an exception if the entityName is not valid.
         val jviewEntity = jviewOd.getViewEntity(entityName)
         val jcur = jview.cursor(jviewEntity)
         new EntityCursor( this, jcur )
     }
 
+    /**
+     * Validates that the View OD is specified.
+     */
     private def validateViewOd: Unit = {
         if ( jviewOd == null )
             throw new ZeidonException( "LOD name not established for this View" )

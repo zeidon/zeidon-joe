@@ -8,6 +8,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedGenerator;
@@ -16,13 +19,16 @@ import com.google.common.cache.CacheBuilder;
 import com.quinsoft.zeidon.ObjectEngineEventListener;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskLogger;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.config.DefaultPreferencesFactory;
 import com.quinsoft.zeidon.config.HomeDirectory;
 import com.quinsoft.zeidon.config.HomeDirectoryFromEnvVar;
 import com.quinsoft.zeidon.config.UuidGenerator;
 import com.quinsoft.zeidon.config.ZeidonIniPreferences;
+import com.quinsoft.zeidon.config.ZeidonPreferences;
 import com.quinsoft.zeidon.config.ZeidonPreferencesFactory;
+import com.quinsoft.zeidon.config.ZeidonPropertyPreferences;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.jmx.JmxObjectEngineMonitor;
 
@@ -45,6 +51,7 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     protected UuidGenerator uuidGenerator;
     protected ConcurrentMap<String, Task> taskCacheMap;
     protected String jmxAppName;
+    protected String preferencesFilename;
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.JavaOeOptions#getHomeDirectory()
@@ -82,16 +89,35 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
         return zeidonLogger;
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.standardoe.JavaOeOptions#getPreferencesFactory()
+    /**
+     * Return a ZeidonPreferencesFactory, create one if necessary.  If preferencesFilename is specified
+     * then use the extension of the filename to determine what kind of factory to create.  If none is
+     * specified then "zeidon.ini" is assumed.
      */
     @Override
     public ZeidonPreferencesFactory getPreferencesFactory()
     {
         if ( zeidonPreferencesFactory == null )
         {
-            ZeidonIniPreferences iniPref = new ZeidonIniPreferences( getHomeDirectory(), getJmxAppName() );
-            zeidonPreferencesFactory = new DefaultPreferencesFactory( iniPref, getJmxAppName() );
+            if ( StringUtils.isBlank( preferencesFilename ) )
+            {
+                ZeidonIniPreferences iniPref = new ZeidonIniPreferences( getHomeDirectory(), getJmxAppName() );
+                zeidonPreferencesFactory = new DefaultPreferencesFactory( iniPref, getJmxAppName() );
+            }
+            else
+            {
+                ZeidonPreferences prefs;
+                String extension = FilenameUtils.getExtension( preferencesFilename );
+                if ( StringUtils.equalsIgnoreCase( extension, "ini" ) )
+                    prefs = new ZeidonIniPreferences( preferencesFilename, getJmxAppName() );
+                else
+                if ( StringUtils.equalsIgnoreCase( extension, "properties" ) )
+                    prefs = new ZeidonPropertyPreferences( preferencesFilename, getJmxAppName() );
+                else
+                    throw new ZeidonException( "Unknown ZeidonPreferences extension for %s", preferencesFilename );
+
+                zeidonPreferencesFactory = new DefaultPreferencesFactory( prefs, getJmxAppName() );
+            }
         }
 
         return zeidonPreferencesFactory;
@@ -218,5 +244,15 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     {
         this.jmxAppName = jmxAppName;
         return this;
+    }
+
+    public String getPreferencesFilename()
+    {
+        return preferencesFilename;
+    }
+
+    public void setPreferencesFilename( String preferencesFilename )
+    {
+        this.preferencesFilename = preferencesFilename;
     }
 }

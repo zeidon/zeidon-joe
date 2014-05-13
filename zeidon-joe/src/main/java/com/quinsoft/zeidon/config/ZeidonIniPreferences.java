@@ -30,8 +30,19 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 
     public ZeidonIniPreferences( HomeDirectory homeDirectory, String jmxAppName )
     {
-        super();
         iniFileName = FilenameUtils.concat( homeDirectory.getHomeDirectory(), "zeidon.ini" );
+        loadZeidonIni();
+        new JmxZeidonPreferences( this, "com.quinsoft.zeidon:type=ZeidonIniPreferences", jmxAppName, iniFileName );
+    }
+
+    /**
+     * Explicitly set the file name to be loaded.
+     * @param fileName
+     * @param jmxAppName
+     */
+    public ZeidonIniPreferences( String fileName, String jmxAppName )
+    {
+        iniFileName = fileName;
         loadZeidonIni();
         new JmxZeidonPreferences( this, "com.quinsoft.zeidon:type=ZeidonIniPreferences", jmxAppName, iniFileName );
     }
