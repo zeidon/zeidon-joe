@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -117,8 +118,6 @@ class CommitMultiplOIs
 
     private void validateCommit()
     {
-        Set<ObjectInstance> oiSet = new HashSet<ObjectInstance>();
-
         // Build a list of the non-empty views.
         viewList = new ArrayList<ViewImpl>();
         for ( View v : originalViewList )
@@ -132,15 +131,29 @@ class CommitMultiplOIs
                 throw new ZeidonException("Attempting to commit a view with outstanding versioned instances.  " +
                                           "View = %s", v );
 
-            // If this OI has no instances, skip it.
-            if ( oi.getRootEntityInstance() == null )
-                continue;
-
-            oiSet.add( oi );
             viewList.add( view );
         }
 
+        // Run the commit constraints before we do any validation because the constraints might
+        // change the OIs.
         executeCommitConstraints();
+
+        // Remove any empty OIs.
+        Set<ObjectInstance> oiSet = new HashSet<ObjectInstance>();
+        for ( Iterator<ViewImpl> iter = viewList.iterator(); iter.hasNext(); )
+        {
+            ViewImpl view = iter.next();
+            ObjectInstance oi = view.getObjectInstance();
+
+            // If this OI has no instances, remove it.
+            if ( oi.getRootEntityInstance() == null )
+            {
+                iter.remove();
+                continue;
+            }
+
+            oiSet.add( oi );
+        }
 
         // Call validateOi on all the views.
         List<ZeidonException> validationExceptions = new ArrayList<ZeidonException>();
