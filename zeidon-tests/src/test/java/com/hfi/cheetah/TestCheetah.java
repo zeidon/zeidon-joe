@@ -58,12 +58,38 @@ public class TestCheetah
         System.out.println("===== Finished TEST_Zeidon ========");
 	}
 
+//	@Test
+	public void testOrderEntity()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		TestVml tester = new TestVml( testview );
+		tester.testOrderEntity( testview );
+        System.out.println("===== Finished testOrderEntity ========");
+	}
+
 	private class TestVml extends VmlObjectOperations
 	{
 		public TestVml( View view )
 		{
 			super( view );
 		}
+		
+
+		public int
+		testOrderEntity( View     ViewToWindow )
+		{
+		    zVIEW    lRastaRed45 = new zVIEW( );
+		    String szSort = "";
+		    
+			ActivateOI_FromFile( lRastaRed45, "mRasta", ViewToWindow, "./src/test/resources/testdata/Cheetah/ois/lRastaRed45.por", zSINGLE );
+			SetNameForView( lRastaRed45, "lRastaRed45", null, zLEVEL_TASK );
+			
+			szSort = "Application.dTotalCharges D, Referral.StatusDate D, Referral.ReferralDate D";
+			OrderEntityForView( lRastaRed45, "Referral", szSort );
+			
+			return 0;
+		}		
 
 		public int
 		TEST_Zeidon( View     ViewToWindow )

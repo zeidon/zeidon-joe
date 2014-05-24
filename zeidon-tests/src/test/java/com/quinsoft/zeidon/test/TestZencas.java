@@ -736,6 +736,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testDateSort()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mStudent" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDateSort( testview );
+        System.out.println("===== Finished testDateSort ========");
+	}
+
+	@Test
 	public void testSpawning1()
 	{
 	    View         testview;
@@ -2359,6 +2369,21 @@ public class TestZencas
 	         return 0;
 		}
 
+		public int
+		testDateSort( View     ViewToWindow )
+		{
+		    zVIEW    wDateSrt = new zVIEW( );
+		    String szSort = "";
+
+		    ActivateOI_FromFile( wDateSrt, "wDateSrt", ViewToWindow, "./src/test/resources/testdata/ZENCAs/wDateSrt1.por", zMULTIPLE );
+			SetNameForView( wDateSrt, "wDateSrt", null, zLEVEL_TASK );
+
+			szSort = "wDateSrt.Date2 D, wDateSrt.Date1 D";
+			OrderEntityForView( wDateSrt, "wDateSrt", szSort );
+
+		    return ( 0 );
+		}
+		
 		public int
 		testDatesTimes( View     ViewToWindow )
 		{

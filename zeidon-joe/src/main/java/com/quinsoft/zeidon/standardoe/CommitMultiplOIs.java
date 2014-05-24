@@ -150,6 +150,7 @@ class CommitMultiplOIs
         if ( validationExceptions.size() > 0 )
             throw new SubobjectValidationException( validationExceptions );
 
+        executeCommitConstraints();
         validatePermissions( oiSet );
     }
 
@@ -276,7 +277,11 @@ class CommitMultiplOIs
     int commit()
     {
         validateCommit();
-        executeCommitConstraints();
+        // If there aren't any valid views then we have nothing to commit.
+        if ( viewList.size() ==0 )
+        	return 0;
+        // KJS 05/14/14 - Moved this to validateCommit so that it happens before validatePermissions.
+        //executeCommitConstraints();
 
         Committer committer = selector.getCommitter( getTask(), viewList, options );
         committer.init( task, viewList, options );
