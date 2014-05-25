@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.prefs.Preferences;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.ini4j.zeidon.Config;
 import org.ini4j.zeidon.Ini;
@@ -47,6 +48,12 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         new JmxZeidonPreferences( this, "com.quinsoft.zeidon:type=ZeidonIniPreferences", jmxAppName, iniFileName );
     }
 
+    public ZeidonIniPreferences( InputStream iniFile )
+    {
+        iniFileName = "input stream";
+        loadZeidonIni( iniFile );
+    }
+
     @Override
     public String get( String groupName, String key, String defaultValue )
     {
@@ -58,6 +65,18 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     {
         LOG.info( "Opening Preferences: " + iniFileName );
         InputStream iniFile = JoeUtils.getInputStream( null, iniFileName, getClass().getClassLoader() );
+        try
+        {
+            loadZeidonIni( iniFile );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( iniFile );
+        }
+    }
+
+    private void loadZeidonIni( InputStream iniFile )
+    {
         try
         {
             if ( iniFile == null )
