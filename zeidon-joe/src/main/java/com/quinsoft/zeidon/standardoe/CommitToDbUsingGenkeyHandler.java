@@ -705,6 +705,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 }
 
                 relInstance.setInternalAttributeValue( relViewAttrib, srcInstance.getInternalAttribute( srcViewAttrib ).getInternalValue(), true );
+                relInstance.dbhNeedsCommit = true;
             }
             else
             {
@@ -721,7 +722,10 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // the OI has passed cardinality validation and if no EI was being included it
                 // would have thrown a validation exception.
                 if ( viewEntity.getMinCardinality() == 0)
+                {
                     relInstance.setInternalAttributeValue( relViewAttrib, null, true );
+                    relInstance.dbhNeedsCommit = true;
+                }
             }
 
             // Turn off the dbh flag to make sure that the DBHandler updates

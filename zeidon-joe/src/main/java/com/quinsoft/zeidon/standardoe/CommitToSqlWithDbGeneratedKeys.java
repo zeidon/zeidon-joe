@@ -664,6 +664,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
                 Object value = srcInstance.getAttribute( srcViewAttrib ).getValue();
                 relInstance.getAttribute( relViewAttrib ).setInternalValue( value, true );
+                relInstance.dbhNeedsCommit = true;
             }
             else
             {
@@ -680,7 +681,10 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 // the OI has passed cardinality validation and if no EI was being included it
                 // would have thrown a validation exception.
                 if ( viewEntity.getMinCardinality() == 0)
-                    relInstance.getAttribute( relViewAttrib ).setInternalValue( null, true );
+                {
+                	relInstance.getAttribute( relViewAttrib ).setInternalValue( null, true );
+                    relInstance.dbhNeedsCommit = true;
+                }
             }
 
             // Turn off the dbh flag to make sure that the DBHandler updates
