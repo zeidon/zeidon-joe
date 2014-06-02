@@ -146,7 +146,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // If the DB is generating the keys then don't add generated keys to
             // the list of columns.
             ViewAttribute viewAttrib = dataField.getViewAttribute();
-            if ( isDbGenerateKeys && viewAttrib.isGenKey() && entityInstance.getAttribute( viewAttrib ).isNull() )
+            if ( useDbGenerateKeys() && viewAttrib.isGenKey() && entityInstance.getAttribute( viewAttrib ).isNull() )
                 continue;
 
             if ( firstColumn )
@@ -176,7 +176,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         isDbGenerateKeys  = set;
     }
 
-
+    protected boolean useDbGenerateKeys()
+    {
+        return isDbGenerateKeys;
+    }
+    
     /**
      * Add the attribute value to the buffer.
      * @param stmt TODO
@@ -280,7 +284,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     continue;
             }
 
-            if ( stmt.commandType == SqlCommand.INSERT && isDbGenerateKeys )
+            if ( stmt.commandType == SqlCommand.INSERT && useDbGenerateKeys() )
             {
                 // If the DB is generating the keys then don't add generated keys to
                 // the list of columns UNLESS the key is not null.  If the key is not

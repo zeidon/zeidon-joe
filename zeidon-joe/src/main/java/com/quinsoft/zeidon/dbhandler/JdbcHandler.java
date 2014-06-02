@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.MapMaker;
@@ -167,7 +168,7 @@ public class JdbcHandler extends AbstractSqlHandler
             if ( cachedStatements != null )
             {
                 for ( PreparedStatementCacheValue v : cachedStatements.values() )
-                    close( v.ps );
+                    DbUtils.closeQuietly( v.ps );
                 task.dblog().trace( "Loaded %d statements from cache\nTotal cache size = %d",
                                     cachedStatementCount, cachedStatements.size() );
                 cachedStatements.clear();
@@ -511,11 +512,16 @@ public class JdbcHandler extends AbstractSqlHandler
 
     private void close( ResultSet rs, PreparedStatement ps )
     {
-        close( rs );
-
-        if ( cachedStatements == null ) // Are we caching PreparedStatements?
+        try
         {
-            close( ps );                // No, so close it.
+            close( rs );
+    
+            if ( cachedStatements == null ) // Are we caching PreparedStatements?
+                DbUtils.closeQuietly( ps );
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
         }
     }
 
@@ -526,21 +532,6 @@ public class JdbcHandler extends AbstractSqlHandler
             if (rs != null)
             {
                 rs.close();
-            }
-        }
-        catch (SQLException e)
-        {
-            task.dblog().error( e );
-        }
-    }
-
-    private void close(Statement stmt)
-    {
-        try
-        {
-            if (stmt != null)
-            {
-                stmt.close();
             }
         }
         catch (SQLException e)
@@ -611,7 +602,8 @@ public class JdbcHandler extends AbstractSqlHandler
             PreparedStatementCacheValue value = cachedStatements.get( key.getKey() );
             if ( value == null )
             {
-                ps = connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS );
+                ps = useDbGenerateKeys() ? connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS ) :
+                                           connection.prepareStatement( sql );
                 value = new PreparedStatementCacheValue( ps, sql );
                 cachedStatements.put( key.getKey(), value );
             }
@@ -622,7 +614,15 @@ public class JdbcHandler extends AbstractSqlHandler
             }
         }
         else
-            ps = connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS );
+        {
+            // Some JDBC implementations don't support Statement.NO_GENERATED_KEYS (SQLDroid I'm looking
+            // at you) so we have to use the single-argument prepareStatement if we aren't keeping the
+            // generated keys.
+            if ( useDbGenerateKeys() )
+                ps = connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS );
+            else
+                ps = connection.prepareStatement( sql );
+        }
 
 
         if ( stmt != null ) // When executing simple statements this will be null.
@@ -686,20 +686,26 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 ps.executeUpdate();
 
-                generatedKeys = new ArrayList<Object>();
-                ResultSet rs2 = ps.getGeneratedKeys();
-                try
+                if ( useDbGenerateKeys() )
                 {
-                    while ( rs2.next() )
+                    generatedKeys = new ArrayList<Object>();
+                    ResultSet rs2 = ps.getGeneratedKeys();
+                    try
                     {
-                        Integer i = rs2.getInt( 1 );
-                        generatedKeys.add( i );
+                        while ( rs2.next() )
+                        {
+                            Integer i = rs2.getInt( 1 );
+                            generatedKeys.add( i );
+                        }
+                    }
+                    finally
+                    {
+                        DbUtils.closeQuietly( rs2 );
                     }
                 }
-                finally
-                {
-                    close( rs2 );
-                }
+                else
+                    generatedKeys = null;
+
             }
             else
             {

@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -54,14 +56,15 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
      */
     public JmxObjectEngineMonitor( JavaOeConfiguration config )
     {
-        JoeUtils.RegisterJmxBean( this, "com.quinsoft.zeidon:type=ObjectEngineMonitor", config.getJmxAppName() );
+        if ( ! StringUtils.isBlank( config.getJmxAppName() ) )
+            JoeUtils.RegisterJmxBean( this, "com.quinsoft.zeidon:type=ObjectEngineMonitor", config.getJmxAppName() );
     }
 
     public JmxObjectEngineMonitor( String jmxName )
     {
         JoeUtils.RegisterJmxBean( this, jmxName, null );
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.jmx.ObjectEngineMonitorMBean#getViewList()
      */
