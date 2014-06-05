@@ -604,6 +604,14 @@ class EntityCursorImpl implements EntityCursor
                 case NEXT:
                     return setNext();
 
+                case NEXT_OR_LAST:
+                    CursorResult rc = setNext();
+                    if ( rc == CursorResult.SET )
+                        return rc;
+                    else
+                        return setLast();
+                        
+
                 case LAST:
                     return setLast();
 
