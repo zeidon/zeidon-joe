@@ -466,7 +466,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             ViewEntity linkedViewEntity = linked.getViewEntity();
 
             // Linked EI must have the same relationship and it can't be derived.
-            if ( linkedViewEntity.getErRelToken() == viewEntity.getErRelToken() ||
+            if ( linkedViewEntity.getErRelToken() != viewEntity.getErRelToken() ||
                  linkedViewEntity.isDerivedPath() )
             {
                 continue;
