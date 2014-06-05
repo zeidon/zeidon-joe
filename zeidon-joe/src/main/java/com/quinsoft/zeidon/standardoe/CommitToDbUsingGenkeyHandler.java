@@ -359,6 +359,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 for ( EntityInstanceImpl linked : twin.getAllLinkedInstances() )
                 {
                     linked.dbhCreated = true;
+                    linked.dbhUpdated = true;
 
                     // If the linked instance is flagged as created then we need
                     // to set its included flag on so that the *relationship*
