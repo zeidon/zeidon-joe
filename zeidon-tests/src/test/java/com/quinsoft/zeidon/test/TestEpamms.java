@@ -3,6 +3,8 @@
  */
 package com.quinsoft.zeidon.test;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -121,17 +123,11 @@ public class TestEpamms
 		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
 
 		   //:IF mSPLDef.LLD_Block EXISTS
+           Assert.assertEquals( "SetViewToSubobject LLD_SubBlock didn't work.", -3, CheckExistenceOfEntity( mSPLDef, "LLD_Block" ) );
+           /*
 		   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "LLD_Block" );
 		   if ( lTempInteger_0 == 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 1",
-		      //:             "SetViewToSubobject didn't work.",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 1", "SetViewToSubobject didn't work.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
-
+           */
 		   //:END
 
 		   //:CREATE ENTITY mSPLDef.LLD_Block 
@@ -146,58 +142,18 @@ public class TestEpamms
 		   //:ResetViewFromSubobject( mSPLDef )
 		   ResetViewFromSubobject( mSPLDef );
 
-		   //:// See if we can now read what we created.
-		   //:IF mSPLDef.LLD_Block.Name != "Block Level 1"
-		   if ( CompareAttributeToString( mSPLDef, "LLD_Block", "Name", "Block Level 1" ) != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 1",
-		      //:             "No match on Block Level 1",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 1", "No match on Block Level 1", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
-
-		   //:END
+           Assert.assertEquals( "No match on Block Level 1", 0, CompareAttributeToString( mSPLDef, "LLD_Block", "Name", "Block Level 1" ) );
 		   //:IF mSPLDef.LLD_SpecialSectionAttribute.Name != "Spec Attribute 1"
-		   if ( CompareAttributeToString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 1" ) != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 1",
-		      //:             "No match on Spec Attribute 1",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 1", "No match on Spec Attribute 1", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
+           Assert.assertEquals( "No match on Spec Attribute 1", 0, CompareAttributeToString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 1" ) );
 
-		   //:END
-		   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
+           //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
 		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
 		   //:IF mSPLDef.LLD_Block.Name != "Block Level 2"
-		   if ( CompareAttributeToString( mSPLDef, "LLD_Block", "Name", "Block Level 2" ) != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 2",
-		      //:             "No match on Block Level 1",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 2", "No match on Block Level 1", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
-
-		   //:END
+           Assert.assertEquals( "No match on Block Level 2", 0, CompareAttributeToString( mSPLDef, "LLD_Block", "Name", "Block Level 2" ) );
 		   //:IF mSPLDef.LLD_SpecialSectionAttribute.Name != "Spec Attribute 2"
-		   if ( CompareAttributeToString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 2" ) != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 1",
-		      //:             "No match on Spec Attribute 2",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 1", "No match on Spec Attribute 2", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
+           Assert.assertEquals( "No match on Spec Attribute 2", 0, CompareAttributeToString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 2" ) );
 
-		   //:END
-		   //:ResetViewFromSubobject( mSPLDef )
+           //:ResetViewFromSubobject( mSPLDef )
 		   ResetViewFromSubobject( mSPLDef );
 
 		   //:// Now try the subobject from a different view.
@@ -206,30 +162,10 @@ public class TestEpamms
 
 		   //:SetViewToSubobject( mSPLDef2, "LLD_SubBlock" )
 		   SetViewToSubobject( mSPLDef2, "LLD_SubBlock" );
-		   //:IF mSPLDef2.LLD_Block.Name != "Block Level 2"
-		   if ( CompareAttributeToString( mSPLDef2, "LLD_Block", "Name", "Block Level 2" ) != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 2",
-		      //:             "No match on Block Level 1",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 2", "No match on Block Level 1", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
-
-		   //:END
+           Assert.assertEquals( "No match on Block Level 2", 0, CompareAttributeToString( mSPLDef2, "LLD_Block", "Name", "Block Level 2" ) );
 		   //:IF mSPLDef2.LLD_SpecialSectionAttribute.Name != "Spec Attribute 2"
-		   if ( CompareAttributeToString( mSPLDef2, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 2" ) != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 1",
-		      //:             "No match on Spec Attribute 2",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 1", "No match on Spec Attribute 2", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
+           Assert.assertEquals( "No match on Spec Attribute 2", 0, CompareAttributeToString( mSPLDef2, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 2" ) );
 
-		   //:END
 		   //:ResetViewFromSubobject( mSPLDef2 )
 		   ResetViewFromSubobject( mSPLDef2 );
 
@@ -301,17 +237,7 @@ public class TestEpamms
 
 		   //:IF mSPLDef2.ContinuationStatement DOES NOT EXIST
 		   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef2, "ContinuationStatement" );
-		   if ( lTempInteger_0 != 0 )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 2",
-		      //:             "ContinuationStatement doesn't exist 1",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 2", "ContinuationStatement doesn't exist 1", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
-
-		   //:END 
+           Assert.assertEquals( "ContinuationStatement doesn't exist 1", 0, CheckExistenceOfEntity( mSPLDef2, "ContinuationStatement" ) );
 
 		   //:// Next, do the same test except that the entity is first deleted from the primary view.
 
@@ -325,20 +251,11 @@ public class TestEpamms
 		   //:mSPLDef.ContinuationStatement.Text  = "Text 1"
 		   SetAttributeFromString( mSPLDef, "ContinuationStatement", "Text", "Text 1" );
 
-		   //:SET CURSOR FIRST mSPLDef2.ContinuationStatement
 		   RESULT = SetCursorFirstEntity( mSPLDef2, "ContinuationStatement", "" );
-		   //:IF RESULT < zCURSOR_SET
+           Assert.assertEquals( "ContinuationStatement doesn't exist 2", 0, RESULT );
+           /*
 		   if ( RESULT < zCURSOR_SET )
-		   { 
-		      //:MessageSend( ViewToWindow, "", "JOE Test 2",
-		      //:             "ContinuationStatement doesn't exist 2",
-		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
-		      MessageSend( ViewToWindow, "", "JOE Test 2", "ContinuationStatement doesn't exist 2", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
-		      //:RETURN 2
-		      if(8==8)return( 2 );
-		   } 
-
-		   //:END 
+           */
 
 		   //:TraceLineS( "*** JOE Test 2 successfully completed", "" )
 		   TraceLineS( "*** JOE Test 2 successfully completed", "" );
