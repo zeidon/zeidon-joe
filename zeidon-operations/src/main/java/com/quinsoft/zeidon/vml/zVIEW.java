@@ -760,4 +760,10 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().getActivateOptions();
     }
+    
+    @Override
+    public boolean isEmpty()
+    {
+        return getView().isEmpty();
+    }
 }
