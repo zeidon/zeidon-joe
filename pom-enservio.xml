@@ -31,8 +31,6 @@
                 <module>zeidon-tests</module>
                 <module>restserver</module>
                 <module>zruby</module>
-                <module>zeidon-tests/rest-server</module>
-                <module>zeidon-tests/lod-server</module>
                 <module>scala</module>
                 <module>android</module>
 		<module>sinatra-server</module>
