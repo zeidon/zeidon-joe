@@ -61,9 +61,7 @@
 		<module>zruby</module>
 		<module>zeidon-tests/rest-server</module>
 		<module>zeidon-tests/lod-server</module>
-<!--
 		<module>scala</module>
--->
 		<module>android</module>
 	</modules>
 
