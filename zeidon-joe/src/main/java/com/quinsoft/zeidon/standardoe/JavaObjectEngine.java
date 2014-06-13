@@ -392,7 +392,8 @@ public class JavaObjectEngine implements ObjectEngine
         return threadPool;
     }
 
-    ZeidonPreferences getZeidonPreferences( Application app )
+    @Override
+    public ZeidonPreferences getZeidonPreferences( Application app )
     {
         return zeidonPreferencesFactory.getPreferences( app );
     }

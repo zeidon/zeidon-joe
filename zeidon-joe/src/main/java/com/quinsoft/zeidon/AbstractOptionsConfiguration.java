@@ -37,6 +37,17 @@ public abstract class AbstractOptionsConfiguration
         overrideConfigValue( OI_SOURCE_URL, url );
     }
 
+    /**
+     * Returns a description of the source of the configuration.
+     * E.g "/tmp/zeidon.ini"
+     * 
+     * @return
+     */
+    public String getConfigSource()
+    {
+       return task.getObjectEngine().getZeidonPreferences( getApplication() ).getSourceDescription(); 
+    }
+    
     public AbstractOptionsConfiguration overrideConfigValue( String key, String value )
     {
         overrideMap.put( key, value );

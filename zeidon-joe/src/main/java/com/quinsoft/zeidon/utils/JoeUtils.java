@@ -70,7 +70,7 @@ public class JoeUtils
      *
      * @return the InputStream or null if it wasn't found.
      */
-    public static InputStream getInputStream( Task task, String resourceName, ClassLoader classLoader )
+    public static ZeidonInputStream getInputStream( Task task, String resourceName, ClassLoader classLoader )
     {
         try
         {
@@ -79,7 +79,7 @@ public class JoeUtils
             //
             File file = getFile( resourceName );
             if ( file.exists() )
-                return new FileInputStream( file );
+                return ZeidonInputStream.create( file );
 
             if ( classLoader == null )
             {
@@ -92,14 +92,14 @@ public class JoeUtils
             // Try loading as a resource (e.g. from a .jar).
             //
             int count = 0;
-            InputStream stream = null;
+            ZeidonInputStream stream = null;
             for ( Enumeration<URL> url = classLoader.getResources( resourceName ); url.hasMoreElements(); )
             {
                 count++;
                 if ( count > 1 )
                     throw new ZeidonException( "Found multiple resources that match resourceName %s", resourceName );
 
-                stream = url.nextElement().openStream();
+                stream = ZeidonInputStream.create( url.nextElement() );
             }
 
             if ( stream != null )
@@ -119,7 +119,7 @@ public class JoeUtils
             else
                 newName = path + name.toLowerCase();
 
-            stream = classLoader.getResourceAsStream( newName );
+            stream = ZeidonInputStream.create( classLoader, newName );
             if ( stream != null )
                 return stream;
 
@@ -133,7 +133,7 @@ public class JoeUtils
             newName = task.getObjectEngine().getHomeDirectory() + "/" + resourceName;
             file = getFile( newName );
             if ( file.exists() )
-                return new FileInputStream( file );
+                return ZeidonInputStream.create( file );
 
             return null;
         }
