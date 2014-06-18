@@ -3,6 +3,8 @@
  */
 package com.quinsoft.zeidon.test;
 
+import junit.framework.Assert;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,6 +58,17 @@ public class TestCheetah2
 	}
 
 	@Test
+	public void testEntityDeleteParentBehavior()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		VmlTester tester = new VmlTester( testview );
+		//tester.testEntityDeleteParentBehavior2( testview );
+		tester.testEntityDeleteParentBehavior( testview );
+        System.out.println("===== Finished testEntityDeleteParentBehavior ========");
+	}
+
+	@Test
 	public void testOrderEntity2()
 	{
 	    View         testview;
@@ -71,6 +84,50 @@ public class TestCheetah2
 		{
 			super( view );
 		}
+
+        public int
+        testEntityDeleteParentBehavior( View     ViewToWindow)
+        {
+		    zVIEW    mApp = new zVIEW( );
+		    int RESULT = 0;
+		    String szSort = "";
+
+  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/Cheetah/mAppDenial.por", zSINGLE );
+	 	    SetNameForView( mApp, "mApp", null, zLEVEL_TASK );
+	 	    
+	 	    RESULT = DeleteEntity( mApp, "Denial", zREPOS_NONE ); //zPOS_NEXT
+            Assert.assertFalse( "Denial was excluded not deleted", mApp.cursor("Denial").isExcluded() );
+	 	    DropView(mApp);
+			return 0;
+       }
+
+        public int
+        testEntityDeleteParentBehavior2( View     ViewToWindow)
+        {
+		    zVIEW    mApp = new zVIEW( );
+		    int RESULT = 0;
+		    String szSort = "";
+
+  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/Cheetah/mAppDenial.por", zSINGLE );
+	 	    SetNameForView( mApp, "mApp", null, zLEVEL_TASK );
+
+	 	    RESULT = ExcludeEntity( mApp, "ApplicationType", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "SupplementApp", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "CMEmployee", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "HFIClient", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "Person", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "Referral", zPOS_NEXT );
+	 	    RESULT = DeleteEntity( mApp, "AppTracking", zPOS_NEXT );
+	 	    RESULT = DeleteEntity( mApp, "SpendDown", zPOS_NEXT );
+	 	    RESULT = DeleteEntity( mApp, "Approval", zPOS_NEXT );
+	 	    
+	 	    // Now Delete Application, see what happens to Denial.
+	 	    RESULT = DeleteEntity( mApp, "Application", zPOS_NEXT );
+		 	  		 	  	 	    
+            Assert.assertFalse( "Denial was excluded not deleted", mApp.cursor("Denial").isExcluded() );
+	 	    DropView(mApp);
+			return 0;
+       }
 
         public int
         testOrderEntity2( View     ViewToWindow)
