@@ -826,6 +826,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testDeleteDropEntityCursorPosError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDeleteDropEntityCursorPosError( testview );
+        System.out.println("===== Finished testDeleteDropEntityCursorPosError ========");
+	}
+
+	@Test
 	public void testActivatemFAProfNoData()
 	{
 	    View         testview;
@@ -1462,6 +1472,38 @@ public class TestZencas
       		    //RESULT = SetCursorFirstEntity( wWebXfer, "PersonRole", "" );
      			//Assert.assertEquals("SetCursorFirstEntity doesn't set correctly. ", 0, RESULT);
 			return 0;
+		}
+
+		public int
+		testDeleteDropEntityCursorPosError( View     ViewToWindow )
+		{
+			   int 		RESULT=0;
+			   int iCount1 = 0;
+			   int iCount2 = 0;
+
+
+	 			zVIEW    wWebXfer = new zVIEW( );
+
+			    RESULT = ActivateEmptyObjectInstance( wWebXfer, "wWebXfer", ViewToWindow, zSINGLE );
+			    RESULT = CreateEntity( wWebXfer, "Work", zPOS_AFTER );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Faculty" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Faculty" );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Student" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Student" );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Faculty" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Faculty" );
+			    SetNameForView( wWebXfer, "wWebXfer", null, zLEVEL_TASK );
+
+   		        //DropEntity( wWebXfer, "PersonRole", zREPOS_NONE);
+   		        RESULT = DeleteEntity( wWebXfer, "PersonRole", zPOS_NEXT );
+    		    Assert.assertEquals("deleteEntity with pos NEXT should position on an existing entity if one exists. ", 0, CheckExistenceOfEntity( wWebXfer, "PersonRole" ));
+   		        RESULT = DropEntity( wWebXfer, "PersonRole", zPOS_NEXT );
+    		    Assert.assertEquals("dropEntity with pos NEXT should position on an existing entity if one exists. ", 0, CheckExistenceOfEntity( wWebXfer, "PersonRole" ));
+
+ 			return 0;
 		}
 
 //		@Test
