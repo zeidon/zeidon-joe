@@ -602,13 +602,21 @@ class EntityCursorImpl implements EntityCursor
                     return setFirst();
 
                 case NEXT:
-                    return setNext();
+                    CursorResult rc = setNext();
+                    if ( rc == CursorResult.SET )
+                        return rc;
+                    else
+                        return setLast();
 
                 case LAST:
                     return setLast();
 
                 case PREV:
-                    return setPrev();
+                    CursorResult rc2 = setPrev();
+                    if ( rc2 == CursorResult.SET )
+                        return rc2;
+                    else
+                        return setFirst();
 
                 default:
                     throw new RuntimeException( "Uknown CursorPosition " + cursorPosition );
