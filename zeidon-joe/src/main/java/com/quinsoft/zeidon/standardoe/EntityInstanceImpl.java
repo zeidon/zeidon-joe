@@ -81,8 +81,8 @@ class EntityInstanceImpl implements EntityInstance
     private final ViewEntity      viewEntity;
     private final int             level;
     private final long            entityKey;
-    private final UUID            uuid;
 
+    private UUID                  uuid;
     private EntityInstanceImpl    parentInstance;
     private EntityInstanceImpl    prevHierInstance;
     private EntityInstanceImpl    nextHierInstance;
@@ -205,7 +205,6 @@ class EntityInstanceImpl implements EntityInstance
         this.viewEntity = viewEntity;
         objectInstance = null;
         entityKey = NumberUtils.LONG_ZERO;
-        uuid = null;
         level = -1;
         this.attributeHashkeyMap = null;
     }
@@ -248,7 +247,6 @@ class EntityInstanceImpl implements EntityInstance
         // Set a unique identifier for this entity.  We use a number that's unique across
         // all tasks in case the entity is included into another task.
         this.entityKey = getTask().getObjectEngine().getNextObjectKey();
-        uuid = getTask().getObjectEngine().generateUuid();
 
         // Copy some values from parentInstance if it isn't null.
         if ( parentInstance != null )
@@ -490,7 +488,7 @@ class EntityInstanceImpl implements EntityInstance
         assert nextTwin == null || nextTwin.getViewEntity() == getViewEntity();
     }
 
-    private void setNextVersion( EntityInstanceImpl nextVersion )
+    void setNextVersion( EntityInstanceImpl nextVersion )
     {
         this.nextVersion = nextVersion;
         assert nextVersion == null || nextVersion.getViewEntity() == getViewEntity();
@@ -1248,7 +1246,7 @@ class EntityInstanceImpl implements EntityInstance
      * for is that the source entity doesn't define all the attributes that the target has.  If
      * that happens the attributes in target will be lost when it is linked to source.
      *
-     * If the entities have the same ER date then we'll assume all is good because they wer
+     * If the entities have the same ER date then we'll assume all is good because they were
      * built with the same ER and both entities should have all the required attributes.
      *
      * Some day we may handle checking the reverse (linking source to target).
@@ -1259,6 +1257,9 @@ class EntityInstanceImpl implements EntityInstance
      */
     static LinkValidation validateLinking( ViewEntity target, ViewEntity source )
     {
+        if ( target == source )
+            return LinkValidation.SOURCE_OK;
+
         ViewAttribute missingViewAttribute = null;
 
         // If they have the same ER date we'll assume all is good.
@@ -1970,6 +1971,26 @@ class EntityInstanceImpl implements EntityInstance
         return lastChild;
     }
 
+    /**
+     * Sets all the prev/next pointers to null so that this entity doesn't refer to
+     * any other EIs.  This is intended to be used in commit processing when an EI is
+     * being superseded.  This also sets the 'dropped' flag to indicate that it should
+     * not be considered in linked processing.
+     *
+     * NOTE: This does NOT reset the pointers of twin instances.  Use removeEntityFromChains()
+     * for that.
+     */
+    void setEiPointersToNull()
+    {
+        parentInstance = null;
+        prevHierInstance = null;
+        prevTwinInstance = null;
+        nextHierInstance = null;
+        nextTwinInstance = null;
+        dropped          = true;
+        // Don't set nextVersion!
+    }
+
     String getTag()
     {
         return tag;
@@ -1987,8 +2008,11 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public UUID getEntityUuid()
+    public synchronized UUID getEntityUuid()
     {
+        if ( uuid == null )
+            uuid = getTask().getObjectEngine().generateUuid();
+
         return uuid;
     }
 

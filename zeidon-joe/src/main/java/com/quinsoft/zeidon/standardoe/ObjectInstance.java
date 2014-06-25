@@ -22,10 +22,13 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
@@ -83,6 +86,14 @@ class ObjectInstance implements Lockable
      */
     private final AttributeHashKeyMap attributeHashkeyMap;
 
+    /**
+     * This is a weak map of the ViewCursors that refer to this ObjectInstance.
+     * Note: This is currently only used if the ViewOD has physical mappings; it
+     * is intended to be used by merge processing for commits that are made on
+     * remote servers.
+     */
+    private final ConcurrentMap<ViewCursor, Boolean> referringViewCursors;
+
     ObjectInstance(TaskImpl task, ViewOd viewOd)
     {
         this.task = task;
@@ -92,6 +103,11 @@ class ObjectInstance implements Lockable
         lock = new LazyLoadLock();
         versionedInstances = new AtomicInteger( 0 );
         attributeHashkeyMap = new AttributeHashKeyMap( this );
+
+        if ( viewOd.hasPhysicalMappings() )
+            referringViewCursors = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
+        else
+            referringViewCursors = null;
     }
 
     ViewOd getViewOd()
@@ -319,7 +335,7 @@ class ObjectInstance implements Lockable
     /**
      * @return the pessimisticLockingHandler
      */
-    public PessimisticLockingHandler getPessimisticLockingHandler()
+    PessimisticLockingHandler getPessimisticLockingHandler()
     {
         return pessimisticLockingHandler;
     }
@@ -353,8 +369,19 @@ class ObjectInstance implements Lockable
         this.activateOptions = activateOptions;
     }
 
-    public UUID getUuid()
+    UUID getUuid()
     {
         return uuid;
+    }
+
+    void addReferringViewCursor( ViewCursor viewCursor )
+    {
+        if ( referringViewCursors != null )
+            referringViewCursors.put( viewCursor, Boolean.TRUE );
+    }
+
+    Set<ViewCursor> getReferringViewCursors()
+    {
+        return referringViewCursors.keySet();
     }
 }

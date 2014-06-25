@@ -606,6 +606,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
 
     void setDataRecord(DataRecord dataRecord)
     {
+        getViewOd().setHasPhysicalMappings( true );
         this.dataRecord = dataRecord;
     }
 

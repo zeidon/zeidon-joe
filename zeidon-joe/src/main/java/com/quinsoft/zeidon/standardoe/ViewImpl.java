@@ -986,7 +986,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOiAsJson( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        WriteOiToJsonStream w = new WriteOiToJsonStream( this, writer, new WriteOiOptions().setFlags( flags ) );
+        WriteOisToJsonStream w = new WriteOisToJsonStream( this, writer, new WriteOiOptions().setFlags( flags ) );
         w.writeToStream();
     }
 

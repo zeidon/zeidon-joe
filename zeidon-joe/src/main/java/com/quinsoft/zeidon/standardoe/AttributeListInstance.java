@@ -97,6 +97,12 @@ class AttributeListInstance
 
         source.addLinkedInstance( sourceInstance, targetInstance );
         targetAttributeList.persistentAttributes = source.persistentAttributes;
+
+        // Check to see if targetInstance is already linked and if it is remove it.  This
+        // can happen when merging an OI committed on a web server.
+        if ( targetAttributeList.linkedInstances != null )
+            targetAttributeList.linkedInstances.remove( targetInstance );
+
         targetAttributeList.linkedInstances = source.linkedInstances;
         return targetAttributeList;
     }

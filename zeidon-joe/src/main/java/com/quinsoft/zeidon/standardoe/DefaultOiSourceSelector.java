@@ -68,9 +68,7 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         }
 
         if ( url.startsWith( "http:" ) || url.startsWith( "https:" ) )
-        {
-            // We can't commit with http. Yet.
-        }
+            return new CommitToRestServer();
 
         if ( url.startsWith( "file:" ) )
             return new CommitOiToFileDb();

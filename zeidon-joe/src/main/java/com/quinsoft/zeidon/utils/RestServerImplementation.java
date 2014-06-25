@@ -17,7 +17,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
-import com.quinsoft.zeidon.standardoe.WriteOiToJsonStream;
+import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 
 /**
  * Implements the activate and commit logic for REST servers.  This is used by the
@@ -83,7 +83,7 @@ public class RestServerImplementation
             StringWriter strWriter = new StringWriter();
 
             List<View> list = Arrays.asList( rc, view );
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( list, strWriter, options );
+            WriteOisToJsonStream writer = new WriteOisToJsonStream( list, strWriter, options );
             writer.writeToStream();
 
             return strWriter.toString();
@@ -96,7 +96,7 @@ public class RestServerImplementation
 
             // Write the rc OI to a string.
             StringWriter strWriter = new StringWriter();
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( rc, strWriter, options );
+            WriteOisToJsonStream writer = new WriteOisToJsonStream( rc, strWriter, options );
             writer.writeToStream();
 
             return strWriter.toString();

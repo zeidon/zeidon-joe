@@ -33,13 +33,13 @@ class ViewCursor
     private final ViewOd           viewOd;
     private final EntityCursorImpl cursorList[];
     private final ObjectInstance   objectInstance;
-    
+
     /**
      * If this view was set to a recursive suboject this points to the root instance
      * of the subobject.
      */
     private EntityInstanceImpl recursiveRoot;
-    
+
     /**
      * When there is a subobject cursor defined, this represents the difference in levels
      * between recursiveRoot and its view entity level.  When there's no subobject this is 0.
@@ -47,7 +47,7 @@ class ViewCursor
     private int recursiveDiff;
     private int firstValidCursorIndex;
     private int lastValidCursorIndex;
-    
+
     ViewCursor( TaskImpl task, ViewImpl view, ViewOd viewOd )
     {
         this( task, view, viewOd, null, null );
@@ -65,7 +65,7 @@ class ViewCursor
 
     /**
      * Create and initialize the entity cursors from a source cursor.
-     * 
+     *
      * @param task
      * @param viewOd
      * @param sourceCursor - If not null, then initialize the cursors in the new ViewCursor to point to the same entities.
@@ -93,17 +93,17 @@ class ViewCursor
             else
                 cursorList[ idx ] = new EntityCursorImpl( this, viewEntity, parentCsr );
         }
-        
+
         // Set the next/prev pointers.
         for ( int i = 0; i < cursorList.length; i++ )
         {
             if ( i > 0 )
                 cursorList[i].setPrevHier( cursorList[i - 1] );
-            
+
             if ( i < cursorList.length - 1 )
                 cursorList[i].setNextHierCursor( cursorList[i + 1] );
         }
-        
+
         if ( oi != null )
         {
             objectInstance = oi;
@@ -123,13 +123,15 @@ class ViewCursor
             objectInstance = new ObjectInstance(task, viewOd);
             setRecursiveParent( null );
         }
+
+        objectInstance.addReferringViewCursor( this );
     }
-    
+
     TaskImpl getTask()
     {
         return objectInstance.getTask();
     }
-    
+
     protected EntityCursorImpl getEntityCursor( String entityName )
     {
         return getEntityCursor( viewOd.getViewEntity( entityName ) );
@@ -149,7 +151,7 @@ class ViewCursor
     {
         return viewOd;
     }
-    
+
     void copyEntityCursors( ViewCursor source )
     {
         for ( int i = 0; i < cursorList.length; i++ )
@@ -164,7 +166,7 @@ class ViewCursor
             recursiveDiff = 0;
             return;
         }
-        
+
         // Calculate the recursiveDiff.
         ViewEntity viewEntity = recursiveParent.getViewEntity();
         if ( viewEntity.getRecursiveParentViewEntity() != null )
@@ -176,19 +178,19 @@ class ViewCursor
             recursiveRoot = null;
             return;
         }
-        
+
         // Calculate which cursors are now valid with the new scope.
         firstValidCursorIndex = viewEntity.getHierIndex();
         lastValidCursorIndex = viewEntity.getLastChildHier().getHierIndex();
     }
-    
+
     void resetSubobjectToParent()
     {
-        EntityInstanceImpl currentRoot = getRecursiveRoot(); 
+        EntityInstanceImpl currentRoot = getRecursiveRoot();
         if ( currentRoot == null )
             return;
 //            throw new ZeidonException("View %s has no subobject cursors", getViewOd() );
- 
+
         // We need to find the ancestor of currentRoot that has the same ER entity token
         // as current root.
         ViewEntity viewEntity = currentRoot.getViewEntity();
@@ -196,7 +198,7 @@ class ViewCursor
         EntityInstanceImpl ancestor = currentRoot.findMatchingParent( recursiveParent );
         if ( ancestor == null )
             throw new ZeidonException( "Current subobject root has no valid ancestor" );
-        
+
         setRecursiveParent( ancestor );
         view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
         view.cursor( viewEntity ).setCursor( currentRoot );    // Set the cursor for the recursive child.
@@ -219,7 +221,7 @@ class ViewCursor
 
     /**
      * Verifies that the supplied entity cursor is in scope.
-     * 
+     *
      * @param cursor
      * @return
      */
@@ -227,14 +229,14 @@ class ViewCursor
     {
         if ( recursiveRoot == null )
             return true;  // All cursors are in scope if there is no recursive subobject defined.
-        
+
         ViewEntity viewEntity = cursor.getViewEntity();
         if ( viewEntity.getHierIndex() < firstValidCursorIndex )
             return false;
-        
+
         if ( viewEntity.getHierIndex() > lastValidCursorIndex )
             return false;
-        
+
         return true;
     }
 
@@ -247,7 +249,7 @@ class ViewCursor
     {
         return viewOd;
     }
-    
+
     /**
      * Sets the root cursor to point to the first entity and all child cursors to NOT-SET.
      */
@@ -255,7 +257,7 @@ class ViewCursor
     {
         if ( objectInstance.getRootEntityInstance() == null )
             return;
-        
+
         cursorList[0].setCursor( objectInstance.getRootEntityInstance() );
         setRecursiveParent( null );
 //        cursorList[0].resetChildCursors( objectInstance.getRootEntityInstance() );
