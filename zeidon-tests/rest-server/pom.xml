@@ -6,7 +6,12 @@
     <artifactId>test-restserver</artifactId>
     <packaging>war</packaging>
     <name>test-restserver</name>
-    <version>1.0.7-SNAPSHOT</version>
+
+    <parent>
+            <artifactId>zeidon</artifactId>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <version>1.0.7-SNAPSHOT</version>
+    </parent>
 
     <dependencies>
       <dependency>

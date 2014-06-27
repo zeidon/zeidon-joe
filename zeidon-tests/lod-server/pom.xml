@@ -7,7 +7,12 @@
 	<groupId>com.quinsoft.zeidon</groupId>
 	<artifactId>test-lod-server</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.7-SNAPSHOT</version>
+
+    <parent>
+            <artifactId>zeidon</artifactId>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <version>1.0.7-SNAPSHOT</version>
+    </parent>
 
 	<description>LOD server for Zeidon Test applications.</description>
 
