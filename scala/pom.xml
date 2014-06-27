@@ -7,13 +7,14 @@
     <version>1.0.7-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.quinsoft.zeidon</groupId>
   <artifactId>zeidon-scala</artifactId>
 
   <properties>
+  <!-- 
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <encoding>UTF-8</encoding>
+   -->
     <scala.version>2.11.1</scala.version>
   </properties>
 
@@ -46,6 +47,8 @@
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
+    
+    <!-- This pulls in the .jar file with the Zeidon Apps -->
     <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-tests</artifactId>

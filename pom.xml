@@ -81,26 +81,49 @@
         <module>zeidon-joe</module>
         <module>object-browser</module>
         <module>zeidon-operations</module>
-        <module>zeidon-tests</module>
         <module>restserver</module>
         <module>zruby</module>
-        <module>zeidon-tests/rest-server</module>
-        <module>zeidon-tests/lod-server</module>
         <module>scala</module>
         <module>android</module>
     </modules>
 
     <profiles>
+        <!-- Put the test projects under a profile that is normally included.  This lets
+             us exclude the test projects when we are deploying to remote repos.
+        -->
+         <profile>
+            <id>test-projects</id>
+            <!-- This means the profile will always used unless it is explicitly excluded -->
+            <activation>
+                <file>
+                    <exists>pom.xml</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>zeidon-tests</module>
+                <module>zeidon-tests/rest-server</module>
+                <module>zeidon-tests/lod-server</module>
+            </modules>
+        </profile>
+ 
         <!-- The sinatra server only needs to be built once per release because 
-            it doesn't include any Zeidon code. It is a convenience .jar for LOD servers. 
-            Build this with: mvn -P sinatra-server install -->
+             it doesn't include any Zeidon code. It is a convenience .jar for LOD servers.
+         -->
         <profile>
             <id>sinatra-server</id>
+            <activation>
+                <file>
+                    <missing>sinatra-server/target</missing>
+                </file>
+            </activation>
             <modules>
                 <module>sinatra-server</module>
             </modules>
         </profile>
-            
+ 
+        <!-- 
+            Builds required objects for deploying to 
+         -->
         <profile>
             <id>release</id>
             <build>
@@ -147,6 +170,11 @@
                     </plugin>
                 </plugins>
             </build>
+
+            <!-- Make sure sinatra-server is included. -->
+            <modules>
+                <module>sinatra-server</module>
+            </modules>
         </profile>
     </profiles>
 

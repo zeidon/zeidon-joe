@@ -1,83 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-        <parent>
-                <artifactId>zeidon</artifactId>
-                <groupId>com.quinsoft.zeidon</groupId>
-                <version>1.0.7-SNAPSHOT</version>
-        </parent>
-
-        <packaging>jar</packaging>
-        <name>zeidon-android</name>
+    <parent>
+        <artifactId>zeidon</artifactId>
         <groupId>com.quinsoft.zeidon</groupId>
-        <artifactId>zeidon-android</artifactId>
+        <version>1.0.7-SNAPSHOT</version>
+    </parent>
 
-	<properties>
-		<platform.version> 4.1
-		</platform.version>
-	</properties>
+    <packaging>jar</packaging>
+    <name>zeidon-android</name>
+    <artifactId>zeidon-android</artifactId>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.quinsoft.zeidon</groupId>
-			<artifactId>zeidon-joe</artifactId>
-			<version>${project.parent.version}</version>
-			<!-- Following are needed to keep down the number of methods in the .dex file -->
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-beanutils</artifactId>
-					<groupId>commons-beanutils</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>2.3.3</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
-			<version>r7</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.mindpipe.android</groupId>
-			<artifactId>android-logging-log4j</artifactId>
-			<version>1.0.3</version>
-		</dependency>
-		
-		<!-- For image rendering in ZeidonImageView -->
-		<dependency>
-			<groupId>com.squareup.picasso</groupId>
-			<artifactId>picasso</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-		 -->
-  	</dependencies>
+    <properties>
+        <platform.version>4.1</platform.version>
+    </properties>
 
-	<build>
-	  <plugins>
-	    <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-compiler-plugin</artifactId>
-	      <version>2.5.1</version>
-	      <configuration>
-		<source>1.6</source>
-		<target>1.6</target>
-	      </configuration>
-	    </plugin>
-	  </plugins>
-	</build>
+    <dependencies>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>zeidon-joe</artifactId>
+            <version>${project.parent.version}</version>
+            <!-- Following are needed to keep down the number of methods 
+                in the .dex file -->
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-beanutils</artifactId>
+                    <groupId>commons-beanutils</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>2.3.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>r7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.mindpipe.android</groupId>
+            <artifactId>android-logging-log4j</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <!-- For image rendering in ZeidonImageView -->
+        <dependency>
+            <groupId>com.squareup.picasso</groupId>
+            <artifactId>picasso</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+    </dependencies>
+
+<!--  Do we need to target 1.6 for Android?
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+ -->
 
 </project>
