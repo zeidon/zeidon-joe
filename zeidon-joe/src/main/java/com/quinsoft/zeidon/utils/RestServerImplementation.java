@@ -50,6 +50,53 @@ public class RestServerImplementation
         restResponse = systemTask.getApplication().getViewOd( systemTask, "kzrestresponse" );
     }
 
+    public String activate( Task   task,
+                            String viewOdName,
+                            String postContent,
+                            DataFormat format )  // Currently we don't do anything with this because only JSON is supported.
+    {
+        View rc = task.activateEmptyObjectInstance( restResponse );
+        EntityInstance rcEI = rc.cursor( "RestResponse" ).createEntity();
+        WriteOiOptions options = new WriteOiOptions();
+        options.setIncremental();
+
+        try
+        {
+            rcEI.getAttribute( "ReturnCode" ).setValue( 0 ); // Assume everything is OK.
+
+            InputStream stream = IOUtils.toInputStream(postContent, "UTF-8");
+            View qual = task.activateOiFromJsonStream( stream, null );
+            qual.logObjectInstance();
+            
+            ActivateOptions activateOptions = new ActivateOptions( task );
+            
+            View view = task.activateObjectInstance( viewOdName, qual, activateOptions );
+
+            StringWriter strWriter = new StringWriter();
+
+            List<View> list = Arrays.asList( rc, view );
+            WriteOiToJsonStream writer = new WriteOiToJsonStream( list, strWriter, options );
+            writer.writeToStream();
+
+            return strWriter.toString();
+        }
+        catch ( Exception e )
+        {
+            task.log().error( "Error in Activate", e, (Object[]) null );
+            
+            // Set the error codes.
+            rcEI.getAttribute( "ReturnCode" ).setValue( 500 );
+            rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
+
+            // Write the rc OI to a string.
+            StringWriter strWriter = new StringWriter();
+            WriteOiToJsonStream writer = new WriteOiToJsonStream( rc, strWriter, options );
+            writer.writeToStream();
+
+            return strWriter.toString();
+        }
+    }
+    
     /**
      * Activate an OI.
      *
@@ -66,40 +113,10 @@ public class RestServerImplementation
                             DataFormat format )  // Currently we don't do anything with this because only JSON is supported.
     {
         Task task = objectEngine.createTask( applicationName, false );
-        View rc = task.activateEmptyObjectInstance( restResponse );
-        EntityInstance rcEI = rc.cursor( "RestResponse" ).createEntity();
-        WriteOiOptions options = new WriteOiOptions();
-        options.setIncremental();
 
         try
         {
-            rcEI.getAttribute( "ReturnCode" ).setValue( 0 ); // Assume everything is OK.
-
-            InputStream stream = IOUtils.toInputStream(postContent, "UTF-8");
-            View qual = task.activateOiFromJsonStream( stream, null );
-            qual.logObjectInstance();
-            View view = task.activateObjectInstance( viewOdName, qual, new ActivateOptions( task ) );
-
-            StringWriter strWriter = new StringWriter();
-
-            List<View> list = Arrays.asList( rc, view );
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( list, strWriter, options );
-            writer.writeToStream();
-
-            return strWriter.toString();
-        }
-        catch ( Exception e )
-        {
-            // Set the error codes.
-            rcEI.getAttribute( "ReturnCode" ).setValue( 500 );
-            rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
-
-            // Write the rc OI to a string.
-            StringWriter strWriter = new StringWriter();
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( rc, strWriter, options );
-            writer.writeToStream();
-
-            return strWriter.toString();
+            return activate( task, viewOdName, postContent, format );
         }
         finally
         {
