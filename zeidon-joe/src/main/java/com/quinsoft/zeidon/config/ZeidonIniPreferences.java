@@ -15,6 +15,7 @@ import org.ini4j.zeidon.IniPreferences;
 
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * Reads preferences from zeidon.ini.
@@ -28,6 +29,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 
     private       Preferences   preferences;
     private final String        iniFileName;
+    private       String        iniFileDesc;
 
     public ZeidonIniPreferences( HomeDirectory homeDirectory, String jmxAppName )
     {
@@ -64,10 +66,11 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     private void loadZeidonIni()
     {
         LOG.info( "Opening Preferences: " + iniFileName );
-        InputStream iniFile = JoeUtils.getInputStream( null, iniFileName, getClass().getClassLoader() );
+        ZeidonInputStream iniFile = JoeUtils.getInputStream( null, iniFileName, getClass().getClassLoader() );
         try
         {
             loadZeidonIni( iniFile );
+            iniFileDesc = iniFile.getDescription();
         }
         finally
         {
@@ -124,5 +127,11 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         {
             throw ZeidonException.wrapException( e ).prependFilename( iniFileName );
         }
+    }
+
+    @Override
+    public String getSourceDescription()
+    {
+        return iniFileDesc;
     }
 }

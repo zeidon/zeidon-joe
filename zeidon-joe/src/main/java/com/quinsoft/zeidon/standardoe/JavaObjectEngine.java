@@ -184,6 +184,9 @@ public class JavaObjectEngine implements ObjectEngine
         String startBrowser = JoeUtils.getEnvProperty( "zeidon.start.browser" );
         if ( StringUtils.isBlank( startBrowser ) )
             startBrowser = systemTask.readZeidonConfig( "Browser", "Start", "" );
+        else
+            // Log a message in case the ENVVAR overrides the value from zeidon.ini
+            logger.info( "startBrowser indicator is from zeidon.start.browser: %s", startBrowser );
 
         if ( ! StringUtils.isBlank( startBrowser ) && startBrowser.toUpperCase().startsWith( "Y" ) )
             startBrowser();
@@ -392,7 +395,8 @@ public class JavaObjectEngine implements ObjectEngine
         return threadPool;
     }
 
-    ZeidonPreferences getZeidonPreferences( Application app )
+    @Override
+    public ZeidonPreferences getZeidonPreferences( Application app )
     {
         return zeidonPreferencesFactory.getPreferences( app );
     }

@@ -73,7 +73,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Boolean isBindAllValues;
     private Boolean ignoreJoins;
 
-    AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
+    protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
         this.application = options.getApplication();
@@ -166,9 +166,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * @param buffer
      * @param value
      */
-    abstract void getSqlValue(SqlStatement stmt, Domain domain, ViewAttribute viewAttribute, StringBuilder buffer, Object value );
+    protected abstract void getSqlValue( SqlStatement stmt,
+                                         Domain domain,
+                                         ViewAttribute viewAttribute,
+                                         StringBuilder buffer,
+                                         Object value );
 
-    abstract String getConfigValue( String key );
+    protected abstract String getConfigValue( String key );
 
     @Override
     public void setDbGenerateKeys( boolean set )
@@ -180,7 +184,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         return isDbGenerateKeys;
     }
-    
+
     /**
      * Add the attribute value to the buffer.
      * @param stmt TODO
@@ -785,11 +789,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         stmt.conjunctionNeeded = true;
     }
 
-    abstract int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt);
-    abstract int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt);
-    abstract void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt );
+    protected abstract int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt);
+    protected abstract int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt);
+    protected abstract void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt );
 
-    private int executeStatement(View view, ViewEntity viewEntity, EntityInstance entityInstance, SqlStatement stmt)
+    protected int executeStatement(View view, ViewEntity viewEntity, EntityInstance entityInstance, SqlStatement stmt)
     {
         try
         {
@@ -808,7 +812,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * @param sql
      * @return
      */
-    abstract int executeSql(String sql);
+    protected abstract int executeSql(String sql);
 
     /**
      * Write a row with a specific key to the genkey table.  A successful write means we
@@ -1632,7 +1636,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 ordering.append( " DESC " );
         }
 
-        void appendSuffix( Object value )
+        public void appendSuffix( Object value )
         {
             if ( suffix == null )
                 suffix = new StringBuilder();

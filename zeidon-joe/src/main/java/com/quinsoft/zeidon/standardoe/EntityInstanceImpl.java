@@ -1049,7 +1049,7 @@ class EntityInstanceImpl implements EntityInstance
                 continue;
             }
 
-            if ( ! scan.getViewEntity().isParentDelete() )
+            if ( ! scan.getViewEntity().isParentDelete()  && scan != this )
             {
                 scan.excludeEntity( true ); // This will also exclude linked instances.
                 scan = scan.getNextNonDescendant();  // exclude() handled child entities so skip them.

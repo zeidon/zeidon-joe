@@ -25,29 +25,20 @@
         </parent>
 
 	<modules>
-		<module>zeidon-joe</module>
-		<module>object-browser</module>
-		<module>zeidon-operations</module>
-		<module>zeidon-tests</module>
-		<module>zruby</module>
+                <module>zeidon-joe</module>
+                <module>object-browser</module>
+                <module>zeidon-operations</module>
+                <module>zeidon-tests</module>
+                <module>restserver</module>
+                <module>zruby</module>
+                <module>scala</module>
+                <module>android</module>
+		<module>sinatra-server</module>
 	</modules>
-
-	<profiles>
-	  <!-- The sinatra server only needs to be built once per release because
-               it doesn't include any Zeidon code.  It is a convenience .jar for
-               LOD servers.
-
-               Build this with: mvn -P sinatra-server install
-          -->
-	  <profile>
-	    <id>sinatra-server</id>
-	    <modules>
-	      <module>sinatra-server</module>
-	    </modules> 
-	  </profile>
-	</profiles>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<dgc>this is a test</dgc>
+		<parent-pom>pom-enservio.xml</parent-pom>
 	</properties>
 </project>

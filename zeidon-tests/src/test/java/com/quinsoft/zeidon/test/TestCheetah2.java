@@ -3,12 +3,12 @@
  */
 package com.quinsoft.zeidon.test;
 
+import junit.framework.Assert;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -50,9 +50,20 @@ public class TestCheetah2
 	{
 	    View         testview;
 		testview = cheetah.activateEmptyObjectInstance( "mUser" );
-		VmlTester tester = new VmlTester( testview );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntity( testview );
         System.out.println("===== Finished testOrderEntity ========");
+	}
+
+	@Test
+	public void testEntityDeleteParentBehavior()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		//tester.testEntityDeleteParentBehavior2( testview );
+		tester.testEntityDeleteParentBehavior( testview );
+        System.out.println("===== Finished testEntityDeleteParentBehavior ========");
 	}
 
 	@Test
@@ -60,17 +71,61 @@ public class TestCheetah2
 	{
 	    View         testview;
 		testview = cheetah.activateEmptyObjectInstance( "mUser" );
-		VmlTester tester = new VmlTester( testview );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntity2( testview );
         System.out.println("===== Finished testOrderEntity2 ========");
 	}
 
-	private class VmlTester extends VmlObjectOperations
+	private class CheetahVmlTester extends VmlObjectOperations
 	{
-		public VmlTester( View view )
+		public CheetahVmlTester( View view )
 		{
 			super( view );
 		}
+
+        public int
+        testEntityDeleteParentBehavior( View     ViewToWindow)
+        {
+		    zVIEW    mApp = new zVIEW( );
+		    int RESULT = 0;
+		    String szSort = "";
+
+  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/Cheetah/mAppDenial.por", zSINGLE );
+	 	    SetNameForView( mApp, "mApp", null, zLEVEL_TASK );
+
+	 	    RESULT = DeleteEntity( mApp, "Denial", zREPOS_NONE ); //zPOS_NEXT
+            Assert.assertFalse( "Denial was excluded not deleted", mApp.cursor("Denial").isExcluded() );
+	 	    DropView(mApp);
+			return 0;
+       }
+
+        public int
+        testEntityDeleteParentBehavior2( View     ViewToWindow)
+        {
+		    zVIEW    mApp = new zVIEW( );
+		    int RESULT = 0;
+		    String szSort = "";
+
+  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/Cheetah/mAppDenial.por", zSINGLE );
+	 	    SetNameForView( mApp, "mApp", null, zLEVEL_TASK );
+
+	 	    RESULT = ExcludeEntity( mApp, "ApplicationType", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "SupplementApp", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "CMEmployee", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "HFIClient", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "Person", zPOS_NEXT );
+	 	    RESULT = ExcludeEntity( mApp, "Referral", zPOS_NEXT );
+	 	    RESULT = DeleteEntity( mApp, "AppTracking", zPOS_NEXT );
+	 	    RESULT = DeleteEntity( mApp, "SpendDown", zPOS_NEXT );
+	 	    RESULT = DeleteEntity( mApp, "Approval", zPOS_NEXT );
+
+	 	    // Now Delete Application, see what happens to Denial.
+	 	    RESULT = DeleteEntity( mApp, "Application", zPOS_NEXT );
+
+            Assert.assertFalse( "Denial was excluded not deleted", mApp.cursor("Denial").isExcluded() );
+	 	    DropView(mApp);
+			return 0;
+       }
 
         public int
         testOrderEntity2( View     ViewToWindow)
@@ -89,19 +144,19 @@ public class TestCheetah2
 		    SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "EmployeeID" );
 		    SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", 1202 );
 		    SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-		    
+
         	RESULT = ActivateObjectInstance( mRasta, "mRasta", ViewToWindow, vQualObject, zACTIVATE_ROOTONLY_MULTIPLE );
         	DropView( vQualObject );
 			SetNameForView( mRasta, "mRasta", null, zLEVEL_TASK );
 
 			ActivateOI_FromFile( mRastaFromFile, "mRasta", ViewToWindow, "./src/test/resources/testdata/Cheetah/ois/lRastaRootOnly.por", zMULTIPLE );
 			SetNameForView( mRastaFromFile, "mRastaFromFile", null, zLEVEL_TASK );
-       	
-        	
+
+
 			szSort = "Referral.StatusDate D, Referral.ReferralDate D";
 			OrderEntityForView( mRasta, "Referral", szSort );
 			OrderEntityForView( mRastaFromFile, "Referral", szSort );
-        	
+
         	DropView( mRasta );
         	DropView( mRastaFromFile );
 
@@ -117,59 +172,59 @@ public class TestCheetah2
 		    int RESULT = 0;
 		    int nPersonID = 0;
 		    int count = 0;
-		    
+
 		    RESULT = ActivateEmptyObjectInstance( wDateSrt, "wDateSrt", ViewToWindow, zMULTIPLE );
 			SetNameForView( wDateSrt, "wDateSrt", null, zLEVEL_TASK );
 		    RESULT = ActivateEmptyObjectInstance( mRasta, "mRasta", ViewToWindow, zMULTIPLE );
 			SetNameForView( mRasta, "mRasta", null, zLEVEL_TASK );
 			ActivateOI_FromFile( lRastaRed45, "mRasta", ViewToWindow, "./src/test/resources/testdata/Cheetah/ois/lRastaRed45_2.por", zMULTIPLE );
 			SetNameForView( lRastaRed45, "lRastaRed45", null, zLEVEL_TASK );
-			   //:FOR EACH lRastaRed45.Referral 
+			   //:FOR EACH lRastaRed45.Referral
 			   RESULT = SetCursorFirstEntity( lRastaRed45, "Referral", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
-			   { 
+			   {
 			      //:nPersonID = lRastaRed45.Person.PersonID
 			      {MutableInt mi_nPersonID = new MutableInt( nPersonID );
 			             GetIntegerFromAttribute( mi_nPersonID, lRastaRed45, "Person", "PersonID" );
 			      nPersonID = mi_nPersonID.intValue( );}
 
-			      if ( nPersonID == 468419 || nPersonID == 467889 || nPersonID == 467960 || 
+			      if ( nPersonID == 468419 || nPersonID == 467889 || nPersonID == 467960 ||
 			    	   nPersonID == 463967 || nPersonID == 466619 || nPersonID == 271939 )
-			      { 
+			      {
 					 RESULT = IncludeSubobjectFromSubobject( mRasta, "Referral", lRastaRed45, "Referral", zPOS_AFTER );
-                     
+
 			         RESULT = CreateEntity( wDateSrt, "wDateSrt", zPOS_AFTER );
 		             SetAttributeFromAttribute( wDateSrt, "wDateSrt", "Date1", lRastaRed45, "Referral", "ReferralDate" );
 		             SetAttributeFromAttribute( wDateSrt, "wDateSrt", "Date2", lRastaRed45, "Referral", "StatusDate" );
    		  		     SetAttributeFromInteger( wDateSrt, "wDateSrt", "OrderNbr", 1 );
-			      } 
+			      }
 
-			      //:IF nPersonID != 468419 AND 
+			      //:IF nPersonID != 468419 AND
 			      //:   nPersonID != 467889 AND
 			      //:   nPersonID != 467960 AND
 			      //:   nPersonID != 463967 AND
 			      //:   nPersonID != 466619 AND
-			      //:   nPersonID != 271939 
+			      //:   nPersonID != 271939
 			      /*
 			      if ( nPersonID != 468419 && nPersonID != 467889 && nPersonID != 467960 && nPersonID != 463967 && nPersonID != 466619 && nPersonID != 271939 )
-			      { 
+			      {
 
-			         //:DELETE ENTITY lRastaRed45.Referral   
+			         //:DELETE ENTITY lRastaRed45.Referral
 			         RESULT = DeleteEntity( lRastaRed45, "Referral", zPOS_NONE );
-			      } 
+			      }
 */
 			      RESULT = SetCursorNextEntity( lRastaRed45, "Referral", "" );
-			      //:END 
-			   } 
-			   
+			      //:END
+			   }
+
 			//	szSort = "Referral.StatusDate D, Person.LastName";
 			szSort = "Referral.StatusDate D, Referral.ReferralDate D";
 			OrderEntityForView( lRastaRed45, "Referral", szSort );
 			OrderEntityForView( mRasta, "Referral", szSort );
 			szSort = "wDateSrt.Date2 D, wDateSrt.Date1 D";
 			OrderEntityForView( wDateSrt, "wDateSrt", szSort );
-			
+
 			return 0;
-		}		
+		}
    }
 }

@@ -602,21 +602,21 @@ class EntityCursorImpl implements EntityCursor
                     return setFirst();
 
                 case NEXT:
-                    return setNext();
-
-                case NEXT_OR_LAST:
                     CursorResult rc = setNext();
                     if ( rc == CursorResult.SET )
                         return rc;
                     else
                         return setLast();
-                        
 
                 case LAST:
                     return setLast();
 
                 case PREV:
-                    return setPrev();
+                    CursorResult rc2 = setPrev();
+                    if ( rc2 == CursorResult.SET )
+                        return rc2;
+                    else
+                        return setFirst();
 
                 default:
                     throw new RuntimeException( "Uknown CursorPosition " + cursorPosition );
@@ -1384,7 +1384,7 @@ class EntityCursorImpl implements EntityCursor
                 	// Use context for sort order.
                 	String value1 = cei1.getStringFromAttribute(key.viewAttrib,  key.context);
                 	String value2 = cei2.getStringFromAttribute(key.viewAttrib,  key.context);
-                	
+
                 	cmp = value1.compareTo(value2);
                 }
                 else
@@ -1396,7 +1396,7 @@ class EntityCursorImpl implements EntityCursor
 
                 if ( cmp != 0 )
                     return cmp;
-                
+
             }
 
             return 0;
@@ -1461,7 +1461,7 @@ class EntityCursorImpl implements EntityCursor
                 	context = strings[ i + 1 ].substring(1, strings[ i + 1 ].lastIndexOf("]"));
                 	i++;
                 }
-                
+
             }
 
             sortAttribs.add( new SortKey( sortAttrib, ascending, context ) );
@@ -2774,20 +2774,36 @@ class EntityCursorImpl implements EntityCursor
 
             // Do we allow lazy loading for this entity?  If not, must be null.
             LazyLoadConfig config = getViewEntity().getLazyLoadConfig();
-            if ( ! config.isLazyLoad() && ! config.hasLazyLoadParent() )
-                return CursorStatus.NULL;
+            if ( config.isLazyLoad() )
+            {
+                assert parentCursor != null : "Root cannot be lazy load candidate";
 
-            assert parentCursor != null : "Root cannot be lazy load candidate";
+                EntityInstanceImpl parent = parentCursor.getEntityInstance( false );
+                if ( parent == null )
+                    // TODO: What if there are multiple levels of LazyLoad?  It's possible that
+                    // the parent entity wasn't loaded because it is lazyload.
+                    return CursorStatus.NULL;
 
-            // Get the status of the parent.  If the status isn't normal (i.e. set to an EI)
-            // then the child must have the same status.
-            EntityCursorImpl pcursor = getViewCursor().getEntityCursor( config.getLazyLoadParent() );
-            CursorStatus parentStatus = pcursor.getStatus();
-            if ( parentStatus != CursorStatus.SET )
-                return parentStatus;
+                if ( parent.hasChildBeenLazyLoaded( getViewEntity() ) )
+                    return CursorStatus.NULL;
+
+                return CursorStatus.NOT_LOADED;
+            }
+            else
+            if ( config.hasLazyLoadParent() )
+            {
+                assert parentCursor != null : "Root cannot be lazy load candidate";
+
+                // Get the status of the parent.  If the status isn't normal (i.e. set to an EI)
+                // then the child must have the same status.
+                EntityCursorImpl pcursor = getViewCursor().getEntityCursor( config.getLazyLoadParent() );
+                CursorStatus parentStatus = pcursor.getStatus();
+                if ( parentStatus != CursorStatus.SET )
+                    return parentStatus;
+            }
 
             // The lazy-load parent has been loaded.  That means we must be null.
-            return CursorStatus.NULL; // We attempted to lazy load EI so must be null.
+            return CursorStatus.NULL;
         }
 
         if ( ei.isHidden() )

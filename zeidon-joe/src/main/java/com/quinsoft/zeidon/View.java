@@ -319,4 +319,11 @@ public interface View extends TaskQualification, CacheMap
      * was never activated from a file then it is a synonym for isUpdated().
      */
     boolean isUpdatedFile();
+    
+    /**
+     * Returns true if the OI does not have any entities.
+     * 
+     * @return
+     */
+    boolean isEmpty();
 }

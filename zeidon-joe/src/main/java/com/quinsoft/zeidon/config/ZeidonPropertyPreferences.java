@@ -3,7 +3,6 @@
  */
 package com.quinsoft.zeidon.config;
 
-import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
@@ -12,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * Reads Zeidon preferences from a .properties file.  Since properties aren't broken out
@@ -31,6 +31,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
 
     private final String     filename;
     private       Properties properties;
+    private       String sourceDescription;
 
     public ZeidonPropertyPreferences( String filename, String jmxAppName )
     {
@@ -51,7 +52,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
     @Override
     public void reload()
     {
-        InputStream stream = null;
+        ZeidonInputStream stream = null;
         try
         {
             LOG.info( "Opening properties from: " + filename );
@@ -61,6 +62,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
                 throw new ZeidonException( "Couldn't find property file" );
             
             properties.load( stream );
+            sourceDescription = stream.getDescription();
         }
         catch ( Exception e )
         {
@@ -80,5 +82,11 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
             builder.append( key ).append( "=" ).append( properties.getProperty( key.toString() ) ).append( "\n" );
 
         return builder.toString();
+    }
+
+    @Override
+    public String getSourceDescription()
+    {
+        return sourceDescription;
     }
 }

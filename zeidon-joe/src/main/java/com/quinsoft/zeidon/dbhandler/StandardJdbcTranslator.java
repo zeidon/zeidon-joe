@@ -72,8 +72,21 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         bindAllValues = handler.isBindAllValues();
         String dateFormat = handler.getDateAsStringFormat();
         dateFormatter     = DateTimeFormat.forPattern( dateFormat );
-        dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + " HH:mm:ss.SSS" );
-        dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat + " HH:mm:ss" );
+        if ( dateFormat.indexOf("HH:mm:ss.SSS") >= 0 )
+        {
+            dateTimeFormatter = DateTimeFormat.forPattern( dateFormat );
+            dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat.substring(0,  dateFormat.length() - 4) );
+        }
+        else if (dateFormat.indexOf("HH:mm:ss.SSS") < 0 && dateFormat.indexOf("HH:mm:ss") >= 0)	
+        {
+        	dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + ".SSS" );       	
+            dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat );
+        }
+        else
+        {
+        	dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + " HH:mm:ss.SSS" );
+            dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat + " HH:mm:ss" );
+        }
     }
 
     protected Task getTask()

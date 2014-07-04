@@ -107,7 +107,17 @@ public class EntitySquare extends JPanel implements MouseListener
         List<ViewAttribute> keys = viewEntity.getKeys();
         for ( ViewAttribute key : keys )
         {
-            builder.append( key.getName() ).append( ": " ).append( ei.getStringFromAttribute( key ) );
+        	if ( ! ei.isHidden())
+                builder.append( key.getName() ).append( ": " ).append( ei.getStringFromAttribute( key ) );
+        	else
+        	{
+        		if (ei.isDeleted())
+        		   builder.append( key.getName() ).append( ": DELETED" );
+        		else if (ei.isExcluded())
+         		   builder.append( key.getName() ).append( ": EXCLUDED" );
+        		else
+         		   builder.append( key.getName() ).append( ": HIDDEN" );
+        	}
         }
         
         return builder.toString();

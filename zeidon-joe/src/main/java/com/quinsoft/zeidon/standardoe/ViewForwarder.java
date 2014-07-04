@@ -647,4 +647,10 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         return getView().duplicateOi( options );
     }
+    
+    @Override
+    public boolean isEmpty()
+    {
+        return getView().isEmpty();
+    }
 }

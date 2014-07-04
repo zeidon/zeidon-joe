@@ -21,4 +21,11 @@ public interface ZeidonPreferences
      * @return
      */
     public String getAllProperties();
+    
+    /**
+     * Returns a description of where the ZeidonPreferences are stored.
+     * 
+     * @return
+     */
+    public String getSourceDescription();
 }

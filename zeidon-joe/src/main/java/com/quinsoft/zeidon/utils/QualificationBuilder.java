@@ -217,31 +217,31 @@ public class QualificationBuilder
     }
 
     /**
-     * Cache this object in the System task using viewName to name the view.
+     * Cache this object in the System task using cacheName to name the view.
      *
-     * @param viewName
+     * @param cacheName
      * @return
      */
-    public QualificationBuilder cachedAs( String viewName )
+    public QualificationBuilder cachedAs( String cacheName )
     {
-        return cachedAs( viewName, task.getSystemTask(), viewName );
+        return cachedAs( cacheName, task.getSystemTask(), cacheName );
     }
 
     /**
-     * Cache this object in the specified task using viewName to name the view.
+     * Cache this object in the specified task using cacheName to name the view.
      *
-     * @param viewName
+     * @param cacheName
      * @param taskQual
      * @return
      */
-    public QualificationBuilder cachedAs( String viewName, TaskQualification taskQual )
+    public QualificationBuilder cachedAs( String cacheName, TaskQualification taskQual )
     {
-        return cachedAs( viewName, taskQual.getTask(), viewName ); // We'll default sync object to view name.
+        return cachedAs( cacheName, taskQual.getTask(), cacheName ); // We'll default sync object to view name.
     }
 
-    public QualificationBuilder cachedAs( String viewName, TaskQualification taskQual, Object syncObject )
+    public QualificationBuilder cachedAs( String cacheName, TaskQualification taskQual, Object syncObject )
     {
-        this.cacheViewName = viewName;
+        this.cacheViewName = cacheName;
         this.synch = syncObject;
         cacheTask = taskQual.getTask();
         return this;

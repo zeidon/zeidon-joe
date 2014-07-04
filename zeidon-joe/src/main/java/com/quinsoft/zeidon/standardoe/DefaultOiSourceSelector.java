@@ -29,9 +29,14 @@ public class DefaultOiSourceSelector implements OiSourceSelector
     @Override
     public Activator getActivator( Task task, Application application, ActivateOptions options )
     {
+        Activator activator = options.getActivator();
+        if ( activator != null )
+            return activator;
+
         String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
-            throw new ZeidonException( "oiSourceUrl has not been specified in config for application %s", application.getName() );
+            throw new ZeidonException( "oiSourceUrl has not been specified in config for application %s", application.getName() )
+                            .appendMessage( "Configuration source: %s", options.getConfigSource() );
 
         if ( url.startsWith( "jdbc:" ) )
             return new ActivateOiFromDB();
@@ -53,7 +58,8 @@ public class DefaultOiSourceSelector implements OiSourceSelector
     {
         String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
-            throw new ZeidonException( "oiSourceUrl has not been specified in config" );
+            throw new ZeidonException( "oiSourceUrl has not been specified in config" )
+                            .appendMessage( "Configuration source: %s", options.getConfigSource() );
 
         if ( url.startsWith( "jdbc:" ) )
         {

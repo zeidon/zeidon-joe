@@ -6,6 +6,8 @@ package com.quinsoft.zeidon;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.quinsoft.zeidon.dbhandler.DbHandler;
+
 /**
  * Common code for getting activate/commit configuration values from task config.
  *
@@ -18,6 +20,11 @@ public abstract class AbstractOptionsConfiguration
 
     private final Task                  task;
     private final Map<String,String>    overrideMap;
+
+    /**
+     * If not null then the activator/committer will use this DbHandler for processing.
+     */
+    private DbHandler dbHandler;
 
     public AbstractOptionsConfiguration( Task task )
     {
@@ -35,6 +42,17 @@ public abstract class AbstractOptionsConfiguration
     public void setOiSourceUrl( String url )
     {
         overrideConfigValue( OI_SOURCE_URL, url );
+    }
+
+    /**
+     * Returns a description of the source of the configuration.
+     * E.g "/tmp/zeidon.ini"
+     *
+     * @return
+     */
+    public String getConfigSource()
+    {
+       return task.getObjectEngine().getZeidonPreferences( getApplication() ).getSourceDescription();
     }
 
     public AbstractOptionsConfiguration overrideConfigValue( String key, String value )
@@ -62,5 +80,15 @@ public abstract class AbstractOptionsConfiguration
     public Task getTask()
     {
         return task;
+    }
+
+    public DbHandler getDbHandler()
+    {
+        return dbHandler;
+    }
+
+    public void setDbHandler( DbHandler dbHandler )
+    {
+        this.dbHandler = dbHandler;
     }
 }

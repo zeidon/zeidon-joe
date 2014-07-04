@@ -1042,4 +1042,17 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         return getObjectInstance().getActivateOptions();
     }
+
+    @Override
+    public boolean isEmpty()
+    {
+        ObjectInstance oi = getObjectInstance();
+        for ( EntityInstanceImpl ei = oi.getRootEntityInstance(); ei != null; ei = ei.getNextTwin() )
+        {
+            if ( ! ei.isHidden() )
+                return true;  // OI has a valid EI so return true.
+        }
+        
+        return false;  // If we get here then there are no non-hidden EIs.
+    }
 }

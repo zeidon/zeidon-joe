@@ -20,6 +20,7 @@ package com.quinsoft.zeidon;
 
 import java.util.List;
 
+import com.quinsoft.zeidon.config.ZeidonPreferences;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 
 
@@ -129,5 +130,13 @@ public interface ObjectEngine
      * @return true if started, false if there was an exception.
      */
     boolean startBrowser();
+
+    /**
+     * Get the ZeidonPreferences for an application.
+     * 
+     * @param app
+     * @return
+     */
+    ZeidonPreferences getZeidonPreferences( Application app );
 
 }
