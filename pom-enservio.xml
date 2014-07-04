@@ -38,5 +38,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<dgc>this is a test</dgc>
+		<parent-pom>pom-enservio.xml</parent-pom>
 	</properties>
 </project>
