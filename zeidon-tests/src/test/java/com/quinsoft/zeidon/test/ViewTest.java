@@ -184,14 +184,6 @@ public class ViewTest
     }
 
     @Test
-    public void testDerivedOperation()
-    {
-        createTestOI();
-        String value = mFASrc.cursor( "FinAidSource" ).getStringFromAttribute( "dTotalNotAcceptedByYear" );
-        System.out.println(value);
-    }
-
-    @Test
     public void testSubobject() throws IOException
     {
         String oldfile = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD";
@@ -441,41 +433,6 @@ public class ViewTest
         assertEquals( rc, CursorResult.SET );
         rc = schol.deleteEntity( CursorPosition.LAST );
         assertEquals( rc, CursorResult.UNCHANGED );
-    }
-
-    @Test
-    public void testExclude()
-    {
-        createTestOI();
-        mFASrc.cursor( "Scholarship" ).setFirst();
-        mFASrc.cursor( "Scholarship" ).excludeEntity();
-
-        View mStudenC = zencas.activateOiFromFile( "mStudenC", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudencsqlOI.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
-        EntityCursor regClass = mStudenC.cursor( "RegistrationClass" );
-        EntityCursor year = mStudenC.cursor( "RegistrationClassCollegeYear" );
-        CursorResult rc = year.setFirst( "Student" );
-        View yearList = zencas.activateOiFromFile( "mYear", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mYearLST.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
-        EntityCursor yearSrc = yearList.cursor( "CollegeYear" );
-        rc = yearSrc.setFirst();
-        EntityCursor classTerm = mStudenC.cursor( "RegistrationClassCollegeTerm" );
-        year.excludeEntity();
-        year.includeSubobject( yearSrc, CursorPosition.NEXT );
-        regClass.setFirst();
-        year.setFirst();
-        classTerm.logEntity( true );
-
-        year.excludeEntity();
-        year.includeSubobject( yearSrc, CursorPosition.NEXT );
-        classTerm.logEntity( true );
-
-        year.excludeEntity();
-        year.includeSubobject( yearSrc, CursorPosition.NEXT );
-        rc = year.setFirst();
-        classTerm.logEntity( true );
-        assertEquals( "Couldn't find first CollegeYear", CursorResult.SET, rc );
-
-        int id = year.getIntegerFromAttribute( "ID" );
-        assertEquals( "Invalid ID value", 44, id );
     }
 
     /**
@@ -740,16 +697,9 @@ public class ViewTest
 
         finAid.setAttribute( "wTotalNotAcceptedActiveStudents", "1231234.56789" );
         String str = finAid.getStringFromAttribute( "wTotalNotAcceptedActiveStudents", null );
-        assertEquals( "Default decimal context failed", str, "1231234.57" ); // Gets rounded up.
+        assertEquals( "Default decimal context failed", str, "1,231,234.57" ); // Gets rounded up.
         str = finAid.getStringFromAttribute( "wTotalNotAcceptedActiveStudents" );
         assertEquals( "Default decimal context failed", str, "1231234.56789" );
-
-        finAid.setAttribute( "wTotalNotAcceptedActiveStudents", "1,231,234.56789" );
-        str = finAid.getStringFromAttribute( "wTotalNotAcceptedActiveStudents", "Decimal4" );
-        assertEquals( "Decimal4 context failed", str, "1231234.5679" );
-
-        str = finAid.getStringFromAttribute( "wTotalNotAcceptedActiveStudents", "DecimalComma" );
-        assertEquals( "DecimalComma context failed", "1,231,234.56789", str );
 
         try
         {
@@ -783,20 +733,6 @@ public class ViewTest
         sch.setNext();
         String s5 = sch.getStringFromAttribute( "ID" );
         assertEquals( "Move entity didn't move source", s6, s5 );
-    }
-
-    @Test
-    public void testHierCursor()
-    {
-        Task epamms = oe.createTask( "ePamms" );
-        View view = epamms.activateOiFromFile( "mTempl", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePamms/mTempl.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
-        int count = 0;
-        for ( EntityInstance ei : view.cursor( "TemplatePanel" ).getChildrenHier( true ) )
-        {
-            count++;
-        }
-
-        assertEquals("Wrong count for hier cursor", count, 7);
     }
 
     @Test

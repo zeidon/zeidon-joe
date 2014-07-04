@@ -24,6 +24,12 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     private LockingLevel           lockingLevel = LockingLevel.NONE;
 
     /**
+     * If not null then Activate processing will use this Activator instead
+     * of using oiSourceUrl.
+     */
+    private Activator activator;
+
+    /**
      * The name of this qualification.  Some day this could be used for calling
      * stored procedures or something with the FileDB.
      */
@@ -219,5 +225,15 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     public Application getApplication()
     {
         return viewOd.getApplication();
+    }
+
+    public Activator getActivator()
+    {
+        return activator;
+    }
+
+    public void setActivator( Activator activator )
+    {
+        this.activator = activator;
     }
 }

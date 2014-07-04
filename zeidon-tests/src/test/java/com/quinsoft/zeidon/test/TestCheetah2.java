@@ -50,7 +50,7 @@ public class TestCheetah2
 	{
 	    View         testview;
 		testview = cheetah.activateEmptyObjectInstance( "mUser" );
-		VmlTester tester = new VmlTester( testview );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntity( testview );
         System.out.println("===== Finished testOrderEntity ========");
 	}
@@ -60,14 +60,14 @@ public class TestCheetah2
 	{
 	    View         testview;
 		testview = cheetah.activateEmptyObjectInstance( "mUser" );
-		VmlTester tester = new VmlTester( testview );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntity2( testview );
         System.out.println("===== Finished testOrderEntity2 ========");
 	}
 
-	private class VmlTester extends VmlObjectOperations
+	private class CheetahVmlTester extends VmlObjectOperations
 	{
-		public VmlTester( View view )
+		public CheetahVmlTester( View view )
 		{
 			super( view );
 		}

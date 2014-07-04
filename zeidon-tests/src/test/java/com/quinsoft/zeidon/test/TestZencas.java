@@ -31,6 +31,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.standardoe.ActivateOisFromJsonStream;
@@ -40,7 +41,7 @@ import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.Timer;
-import com.quinsoft.zeidon.vml.VmlObjectOperations;
+import com.quinsoft.zeidon.vml.VmlOperation;
 import com.quinsoft.zeidon.vml.zVIEW;
 import com.quinsoft.zeidon.zeidonoperations.KZOEP1AA;
 import com.quinsoft.zencas.ZGLOBAL1_Operation;
@@ -62,6 +63,7 @@ public class TestZencas
 	Task         zencas;
 	Task         zeidonSystem;
 	View         mFASrc;
+	View         subtaskView;
 	ObjectEngine oe;
 	/**
 	 * @throws java.lang.Exception
@@ -756,12 +758,14 @@ public class TestZencas
 		// Test for a memory leak by creating lots of views and make sure they
 		// get cleaned up by the GC.
 		testview = zencas.getViewByName( "mFAProf1" );
+
+		/*
 		for ( int i = 0; i < 100000; i++ )
 		{
 		    testview = testview.newView();
 		    testview.setName( "mFAProf2" );
 		}
-
+        */
         System.out.println("===== Finished testSpawning1 ========");
 	}
 
@@ -960,16 +964,23 @@ public class TestZencas
 	    view.logObjectInstance();
     }
 
+    public void
+    testOutOfMemory()
+    {
+        VmlTester tester = new VmlTester( zencas );
+        tester.testOutOfMemory();
+    }
+
     private String getTempDir()
     {
         return System.getProperty("java.io.tmpdir");
     }
 
-	private class VmlTester extends VmlObjectOperations
+	private class VmlTester extends VmlOperation
 	{
-		public VmlTester( View view )
+		public VmlTester( TaskQualification qual )
 		{
-			super( view );
+			super( qual );
 		}
 
 		public int
@@ -1472,7 +1483,6 @@ public class TestZencas
 			return 0;
 		}
 
-		@Test
 		public int
 		testmUserActivateTime( View ViewToWindow )
 		{
@@ -1490,7 +1500,6 @@ public class TestZencas
 
 		}
 
-		@Test
 		public int
 		testmUserActivateTimeAdmin( View ViewToWindow )
 		{
@@ -1520,7 +1529,6 @@ public class TestZencas
 
 		}
 
-		@Test
 		public int
 		testClsIncludeError( View ViewToWindow )
 		{
@@ -2383,7 +2391,7 @@ public class TestZencas
 
 		    return ( 0 );
 		}
-		
+
 		public int
 		testDatesTimes( View     ViewToWindow )
 		{
@@ -3711,7 +3719,6 @@ public class TestZencas
 
 		}
 
-		@Test
 		public void testOutOfMemory()
 		{
 

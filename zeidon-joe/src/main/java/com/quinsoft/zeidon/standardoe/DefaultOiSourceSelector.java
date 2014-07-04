@@ -29,6 +29,10 @@ public class DefaultOiSourceSelector implements OiSourceSelector
     @Override
     public Activator getActivator( Task task, Application application, ActivateOptions options )
     {
+        Activator activator = options.getActivator();
+        if ( activator != null )
+            return activator;
+
         String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
             throw new ZeidonException( "oiSourceUrl has not been specified in config for application %s", application.getName() )
