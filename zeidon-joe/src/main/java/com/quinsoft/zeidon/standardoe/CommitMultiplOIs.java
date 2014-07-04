@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -117,11 +118,7 @@ class CommitMultiplOIs
 
     private void validateCommit()
     {
-        Set<ObjectInstance> oiSet = new HashSet<ObjectInstance>();
-
-        // Do some verification on the views, cast them to ViewImpl and copy them
-        // to the viewList.
-        List<ZeidonException> validationExceptions = new ArrayList<ZeidonException>();
+        // Build a list of the non-empty views.
         viewList = new ArrayList<ViewImpl>();
         for ( View v : originalViewList )
         {
@@ -134,23 +131,42 @@ class CommitMultiplOIs
                 throw new ZeidonException("Attempting to commit a view with outstanding versioned instances.  " +
                                           "View = %s", v );
 
-            // If this OI has no instances, skip it.
+            viewList.add( view );
+        }
+
+        // Run the commit constraints before we do any validation because the constraints might
+        // change the OIs.
+        executeCommitConstraints();
+
+        // Remove any empty OIs.
+        Set<ObjectInstance> oiSet = new HashSet<ObjectInstance>();
+        for ( Iterator<ViewImpl> iter = viewList.iterator(); iter.hasNext(); )
+        {
+            ViewImpl view = iter.next();
+            ObjectInstance oi = view.getObjectInstance();
+
+            // If this OI has no instances, remove it.
             if ( oi.getRootEntityInstance() == null )
+            {
+                iter.remove();
                 continue;
+            }
 
             oiSet.add( oi );
+        }
 
+        // Call validateOi on all the views.
+        List<ZeidonException> validationExceptions = new ArrayList<ZeidonException>();
+        for ( ViewImpl view : viewList )
+        {
             Collection<ZeidonException> list = view.validateOi();
             if ( list != null )
                 validationExceptions.addAll( list );
-
-            viewList.add( view );
         }
 
         if ( validationExceptions.size() > 0 )
             throw new SubobjectValidationException( validationExceptions );
 
-        executeCommitConstraints();
         validatePermissions( oiSet );
     }
 
@@ -268,20 +284,16 @@ class CommitMultiplOIs
     {
         // Call commit constraints.
         for ( ViewImpl view : viewList )
-        {
             view.getViewOd().executeCommitConstraint( view );
-        }
-
     }
 
     int commit()
     {
         validateCommit();
+
         // If there aren't any valid views then we have nothing to commit.
         if ( viewList.size() ==0 )
         	return 0;
-        // KJS 05/14/14 - Moved this to validateCommit so that it happens before validatePermissions.
-        //executeCommitConstraints();
 
         Committer committer = selector.getCommitter( getTask(), viewList, options );
         committer.init( task, viewList, options );

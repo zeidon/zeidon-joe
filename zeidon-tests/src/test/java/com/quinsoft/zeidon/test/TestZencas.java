@@ -389,6 +389,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testInclude0to1WithCommit2()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testInclude0to1WithCommit2( testview );
+        System.out.println("===== Finished testInclude0to1WithCommit2 ========");
+	}
+
+	@Test
 	public void testIncludeMtoMWithCommit()
 	{
 	    View         testview;
@@ -817,6 +827,16 @@ public class TestZencas
 		VmlTester tester = new VmlTester( testview );
 		tester.testDropEntityCursorError( testview );
         System.out.println("===== Finished testDropEntityError2 ========");
+	}
+
+	@Test
+	public void testDeleteDropEntityCursorPosError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDeleteDropEntityCursorPosError( testview );
+        System.out.println("===== Finished testDeleteDropEntityCursorPosError ========");
 	}
 
 	@Test
@@ -1463,6 +1483,44 @@ public class TestZencas
       		    //RESULT = SetCursorFirstEntity( wWebXfer, "PersonRole", "" );
      			//Assert.assertEquals("SetCursorFirstEntity doesn't set correctly. ", 0, RESULT);
 			return 0;
+		}
+
+		public int
+		testDeleteDropEntityCursorPosError( View     ViewToWindow )
+		{
+			   int 		RESULT=0;
+			   int iCount1 = 0;
+			   int iCount2 = 0;
+
+
+	 			zVIEW    wWebXfer = new zVIEW( );
+
+			    RESULT = ActivateEmptyObjectInstance( wWebXfer, "wWebXfer", ViewToWindow, zSINGLE );
+			    RESULT = CreateEntity( wWebXfer, "Work", zPOS_AFTER );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Faculty" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Faculty1" );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Student" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Student" );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Faculty" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Faculty2" );
+			    RESULT = CreateEntity( wWebXfer, "PersonRole", zPOS_AFTER );
+			    SetAttributeFromString( wWebXfer, "PersonRole", "Type", "Faculty" );
+    	        SetAttributeFromString( wWebXfer, "PersonRole", "WindowName", "Faculty3" );
+			    SetNameForView( wWebXfer, "wWebXfer", null, zLEVEL_TASK );
+
+   		        //DropEntity( wWebXfer, "PersonRole", zREPOS_NONE); kkk
+   		        RESULT = DeleteEntity( wWebXfer, "PersonRole", zPOS_NEXT );
+    		    Assert.assertEquals("deleteEntity with pos NEXT should position on an existing entity if one exists. ", 0, CheckExistenceOfEntity( wWebXfer, "PersonRole" ));
+   		        RESULT = DropEntity( wWebXfer, "PersonRole", zPOS_NEXT );
+    		    Assert.assertEquals("dropEntity with pos NEXT should position on an existing entity if one exists. ", 0, CheckExistenceOfEntity( wWebXfer, "PersonRole" ));
+    		    SetCursorFirstEntity( wWebXfer, "PersonRole", "");
+   		        RESULT = DeleteEntity( wWebXfer, "PersonRole", zPOS_PREV );
+    		    Assert.assertEquals("dropEntity with pos PREV should position on an existing entity if one exists. ", 0, CheckExistenceOfEntity( wWebXfer, "PersonRole" ));
+
+ 			return 0;
 		}
 
 //		@Test
@@ -3130,12 +3188,14 @@ public class TestZencas
 			RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
 
 			//:ACTIVATE mStudent WHERE mStudent.Student.ID = 14136 //johnsonl
-		    o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 16406 );
+		    //o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 16406 );
+		    o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 14229 );
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
 	   		DropView( vTempViewVar_0 );
 		    SetNameForView( mStudent, "mStudent", null, zLEVEL_TASK );
 
 			   RESULT = ActivateObjectInstance( lCohort, "lCohort", ViewToWindow, 0, zMULTIPLE );
+			    SetNameForView( lCohort, "lCohort", null, zLEVEL_TASK );
 
 			   //:   // Request is to create Cohort.
 			   //:   IF mStudent.Cohort EXISTS
@@ -3151,11 +3211,100 @@ public class TestZencas
 			   RESULT = SetCursorFirstEntityByInteger( lCohort, "Cohort", "ID", 809, "" );
 			   //:   INCLUDE mStudent.Cohort FROM lCohort.Cohort
 			   RESULT = IncludeSubobjectFromSubobject( mStudent, "Cohort", lCohort, "Cohort", zPOS_AFTER );
+			   RESULT = CommitObjectInstance( mStudent );
+
      	       RESULT = ExcludeEntity( mStudent, "Cohort", zREPOS_AFTER );
 			   RESULT = IncludeSubobjectFromSubobject( mStudent, "Cohort", lCohort, "Cohort", zPOS_AFTER );
 			   //:
 			   //:   COMMIT mStudent
 			   RESULT = CommitObjectInstance( mStudent );
+			   RESULT = CommitObjectInstance( mStudent );
+	   	   DropView( vTempViewVar_0 );
+	   	   DropView( lCohort );
+	   	   DropView( mStudent );
+	   	   DropView( lTermLST );
+	   	   DropView( wXferO );
+   		   return( 0 );
+   		}
+
+   		public int
+   		testInclude0to1WithCommit2( View     ViewToWindow )
+   		{
+   		   zVIEW    mStudent = new zVIEW( );
+   		   zVIEW    lCohort = new zVIEW( );
+  		   int      RESULT = 0;
+   		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+
+		   // I exclude mStudent.Cohort (which is id 26) and include Cohort id=809. 
+		   // When I look at the object browser, you see 2 entities for mStudent.Cohort although
+		   // I can not position on the excluded Cohort. But when we save to the database,
+		   // the original cohort (id=26) gets saved not the new included cohort (id=809).
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    //:CREATE ENTITY wXferO.Root
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    //:NAME VIEW wXferO "wXferO"
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			//:NAME VIEW lTermLST "lTermLST"
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			//:OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" )
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+			//:SET CURSOR FIRST lTermLST.CollegeTerm WHERE lTermLST.CollegeTerm.CurrentTermFlag = "Y"
+			RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
+
+			//:ACTIVATE mStudent WHERE mStudent.Student.ID = 14136 //johnsonl
+		    //o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 16406 );
+		    o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 14229 );
+		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
+	   		DropView( vTempViewVar_0 );
+		    SetNameForView( mStudent, "mStudent", null, zLEVEL_TASK );
+
+			RESULT = ActivateObjectInstance( lCohort, "lCohort", ViewToWindow, 0, zMULTIPLE );
+			SetNameForView( lCohort, "lCohort", null, zLEVEL_TASK );
+
+			   //:   // Request is to create Cohort.
+			   //:   IF mStudent.Cohort EXISTS
+			   RESULT = CheckExistenceOfEntity( mStudent, "Cohort" );
+			   if ( RESULT == 0 )
+			   {
+			      //:   EXCLUDE mStudent.Cohort
+			      RESULT = ExcludeEntity( mStudent, "Cohort", zREPOS_AFTER );
+			   }
+
+			   //:   END
+			   //:   SET CURSOR FIRST lCohort.Cohort WHERE lCohort.Cohort.ID = 809
+			   RESULT = SetCursorFirstEntityByInteger( lCohort, "Cohort", "ID", 809, "" );
+			   //:   INCLUDE mStudent.Cohort FROM lCohort.Cohort
+			   RESULT = IncludeSubobjectFromSubobject( mStudent, "Cohort", lCohort, "Cohort", zPOS_AFTER );
+			   RESULT = CommitObjectInstance( mStudent );
+		   	   DropView( mStudent );
+			   
+			   o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 14229 );
+			   RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   	   DropView( vTempViewVar_0 );
+			   SetNameForView( mStudent, "mStudent", null, zLEVEL_TASK );
+		   	   //kkk
+		   	   int lTempInteger_0 = 0;
+		   	   MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+	   	       GetIntegerFromAttribute( mi_lTempInteger_0, mStudent, "Cohort", "ID" );
+	   	       lTempInteger_0 = mi_lTempInteger_0.intValue( );
+	   	       
+	   	       if (lTempInteger_0 == 26 )
+					//:IssueError( ViewToWindow,0,0, "Person was not correctly included." )
+					Assert.assertEquals("Cohort include/save was not correct!", lTempInteger_0, 809);
+	   	    	 //TraceLineS(" ***ERROR ", "");	   	    	   
+		   	   
+			   
+
+     	       RESULT = ExcludeEntity( mStudent, "Cohort", zREPOS_AFTER );
+			   RESULT = IncludeSubobjectFromSubobject( mStudent, "Cohort", lCohort, "Cohort", zPOS_AFTER );
+			   //:
+			   //:   COMMIT mStudent
 			   RESULT = CommitObjectInstance( mStudent );
 	   	   DropView( vTempViewVar_0 );
 	   	   DropView( lCohort );

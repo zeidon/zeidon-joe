@@ -52,3 +52,13 @@ aAPP_SHARED ./ePamms
 aAPP_QLPLR ./ePamms
 aAPP_SOURCE ./ePamms
 aAPP_PACKAGE com.arksoft.epamms
+
+eAPPLICATION 2
+aAPP_NAME  ePammsDon
+aAPP_DLL   ./ePammsDon
+aAPP_ADOBIN ./ePammsDon
+aAPP_LOCAL ./ePammsDon
+aAPP_SHARED ./ePammsDon
+aAPP_QLPLR ./ePammsDon
+aAPP_SOURCE ./ePammsDon
+aAPP_PACKAGE com.quinsoft.epamms

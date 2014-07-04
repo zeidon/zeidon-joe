@@ -359,6 +359,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 for ( EntityInstanceImpl linked : twin.getAllLinkedInstances() )
                 {
                     linked.dbhCreated = true;
+                    linked.dbhUpdated = true;
 
                     // If the linked instance is flagged as created then we need
                     // to set its included flag on so that the *relationship*
@@ -465,7 +466,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             ViewEntity linkedViewEntity = linked.getViewEntity();
 
             // Linked EI must have the same relationship and it can't be derived.
-            if ( linkedViewEntity.getErRelToken() == viewEntity.getErRelToken() ||
+            if ( linkedViewEntity.getErRelToken() != viewEntity.getErRelToken() ||
                  linkedViewEntity.isDerivedPath() )
             {
                 continue;
@@ -705,6 +706,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 }
 
                 relInstance.setInternalAttributeValue( relViewAttrib, srcInstance.getInternalAttribute( srcViewAttrib ).getInternalValue(), true );
+                relInstance.dbhNeedsCommit = true;
             }
             else
             {
@@ -721,7 +723,10 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // the OI has passed cardinality validation and if no EI was being included it
                 // would have thrown a validation exception.
                 if ( viewEntity.getMinCardinality() == 0)
+                {
                     relInstance.setInternalAttributeValue( relViewAttrib, null, true );
+                    relInstance.dbhNeedsCommit = true;
+                }
             }
 
             // Turn off the dbh flag to make sure that the DBHandler updates
