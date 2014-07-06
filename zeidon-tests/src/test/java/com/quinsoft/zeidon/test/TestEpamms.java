@@ -8,8 +8,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -74,7 +72,7 @@ public class TestEpamms
 		}
 
 
-		public int 
+		public int
 		ExecuteJOE_Test1( View     ViewToWindow )
 		{
 		   zVIEW    mSPLDef = new zVIEW( );
@@ -91,35 +89,35 @@ public class TestEpamms
 		   //:// The current error is that the basic SetViewToSubobject function did not change the view to the subobject.
 
 		   //:// Create subobject with one level of recursive subobject.
-		   //:ACTIVATE mSPLDef EMPTY 
+		   //:ACTIVATE mSPLDef EMPTY
 		   RESULT = ActivateEmptyObjectInstance( mSPLDef, "mSPLDef", ViewToWindow, zSINGLE );
-		   //:NAME VIEW mSPLDef "mSPLDef" 
+		   //:NAME VIEW mSPLDef "mSPLDef"
 		   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
-		   //:CREATE ENTITY mSPLDef.SubregPhysicalLabelDef 
+		   //:CREATE ENTITY mSPLDef.SubregPhysicalLabelDef
 		   RESULT = CreateEntity( mSPLDef, "SubregPhysicalLabelDef", zPOS_AFTER );
-		   //:CREATE ENTITY mSPLDef.SPLD_LLD 
+		   //:CREATE ENTITY mSPLDef.SPLD_LLD
 		   RESULT = CreateEntity( mSPLDef, "SPLD_LLD", zPOS_AFTER );
 		   //:mSPLDef.SPLD_LLD.Name = "Test"
 		   SetAttributeFromString( mSPLDef, "SPLD_LLD", "Name", "Test" );
-		   //:CREATE ENTITY mSPLDef.LLD_Page 
+		   //:CREATE ENTITY mSPLDef.LLD_Page
 		   RESULT = CreateEntity( mSPLDef, "LLD_Page", zPOS_AFTER );
 		   //:mSPLDef.LLD_Page.Width = 10
 		   SetAttributeFromInteger( mSPLDef, "LLD_Page", "Width", 10 );
-		   //:CREATE ENTITY mSPLDef.LLD_Panel 
+		   //:CREATE ENTITY mSPLDef.LLD_Panel
 		   RESULT = CreateEntity( mSPLDef, "LLD_Panel", zPOS_AFTER );
 		   //:mSPLDef.LLD_Panel.Width = 11
 		   SetAttributeFromInteger( mSPLDef, "LLD_Panel", "Width", 11 );
 
-		   //:CREATE ENTITY mSPLDef.LLD_Block 
+		   //:CREATE ENTITY mSPLDef.LLD_Block
 		   RESULT = CreateEntity( mSPLDef, "LLD_Block", zPOS_AFTER );
 		   //:mSPLDef.LLD_Block.Name = "Block Level 1"
 		   SetAttributeFromString( mSPLDef, "LLD_Block", "Name", "Block Level 1" );
-		   //:CREATE ENTITY mSPLDef.LLD_SpecialSectionAttribute 
+		   //:CREATE ENTITY mSPLDef.LLD_SpecialSectionAttribute
 		   RESULT = CreateEntity( mSPLDef, "LLD_SpecialSectionAttribute", zPOS_AFTER );
 		   //:mSPLDef.LLD_SpecialSectionAttribute.Name = "Spec Attribute 1"
 		   SetAttributeFromString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 1" );
 
-		   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" ) 
+		   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
 		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
 
 		   //:IF mSPLDef.LLD_Block EXISTS
@@ -130,13 +128,13 @@ public class TestEpamms
            */
 		   //:END
 
-		   //:CREATE ENTITY mSPLDef.LLD_Block 
+		   //:CREATE ENTITY mSPLDef.LLD_Block
 		   RESULT = CreateEntity( mSPLDef, "LLD_Block", zPOS_AFTER );
 		   //:mSPLDef.LLD_Block.Name = "Block Level 2"
 		   SetAttributeFromString( mSPLDef, "LLD_Block", "Name", "Block Level 2" );
-		   //:CREATE ENTITY mSPLDef.LLD_SpecialSectionAttribute 
+		   //:CREATE ENTITY mSPLDef.LLD_SpecialSectionAttribute
 		   RESULT = CreateEntity( mSPLDef, "LLD_SpecialSectionAttribute", zPOS_AFTER );
-		   //:mSPLDef.LLD_SpecialSectionAttribute.Name = "Spec Attribute 2" 
+		   //:mSPLDef.LLD_SpecialSectionAttribute.Name = "Spec Attribute 2"
 		   SetAttributeFromString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 2" );
 
 		   //:ResetViewFromSubobject( mSPLDef )
@@ -175,15 +173,15 @@ public class TestEpamms
 		   //:TraceLineS( "*** JOE Test 1 successfully completed", "" )
 		   TraceLineS( "*** JOE Test 1 successfully completed", "" );
 		   return( 0 );
-		//    
+		//
 //		    // Recursive code that didn't quite work.
-//		    /*FOR EACH mSPLDef.BlockSubBlockComponent 
+//		    /*FOR EACH mSPLDef.BlockSubBlockComponent
 //		       IF mSPLDef.BlockSubBlockComponent.Type = "Block"
-//		          CREATE ENTITY mSPLDef.LLD_Block 
+//		          CREATE ENTITY mSPLDef.LLD_Block
 //		          SetMatchingAttributesByName( mSPLDef, "LLD_Block", mSPLDef, "BlockSubBlockComponent", zSET_NULL )
 //		       ELSE
 //		          IF mSPLDef.BlockSubBlockComponent.Type = "SubBlock"
-//		             CREATE ENTITY mSPLDef.LLD_SubBlock 
+//		             CREATE ENTITY mSPLDef.LLD_SubBlock
 //		             CreateViewFromView( mSPLDef2, mSPLDef )
 //		             SetViewToSubobject( mSPLDef2, "LLD_SubBlock" )
 //		             SetMatchingAttributesByName( mSPLDef2, "LLD_Block", mSPLDef, "BlockSubBlockComponent", zSET_NULL )
@@ -195,9 +193,9 @@ public class TestEpamms
 //		       END
 //		    END*/
 		// END
-		} 
+		}
 		//:   VIEW mSPLDef  BASED ON LOD mSPLDef
-		public int 
+		public int
 		ExecuteJOE_Test2( View     ViewToWindow )
 		{
 		   zVIEW    mSPLDef = new zVIEW( );
@@ -221,14 +219,14 @@ public class TestEpamms
 
 		   //:// First, do a simple create and see if entity is seen in other view.
 
-		   //:SET CURSOR LAST mSPLDef.LLD_Panel  
+		   //:SET CURSOR LAST mSPLDef.LLD_Panel
 		   RESULT = SetCursorLastEntity( mSPLDef, "LLD_Panel", "" );
 		   //:CreateViewFromView( mSPLDef2, mSPLDef )
 		   CreateViewFromView( mSPLDef2, mSPLDef );
 		   //:NAME VIEW mSPLDef2 "mSPLDef2"
 		   SetNameForView( mSPLDef2, "mSPLDef2", null, zLEVEL_TASK );
 
-		   //:CREATE ENTITY mSPLDef.ContinuationStatement 
+		   //:CREATE ENTITY mSPLDef.ContinuationStatement
 		   RESULT = CreateEntity( mSPLDef, "ContinuationStatement", zPOS_AFTER );
 		   //:mSPLDef.ContinuationStatement.Title = "Title 1"
 		   SetAttributeFromString( mSPLDef, "ContinuationStatement", "Title", "Title 1" );
@@ -241,10 +239,10 @@ public class TestEpamms
 
 		   //:// Next, do the same test except that the entity is first deleted from the primary view.
 
-		   //:DELETE ENTITY mSPLDef.ContinuationStatement NONE 
+		   //:DELETE ENTITY mSPLDef.ContinuationStatement NONE
 		   RESULT = DeleteEntity( mSPLDef, "ContinuationStatement", zREPOS_NONE );
 
-		   //:CREATE ENTITY mSPLDef.ContinuationStatement 
+		   //:CREATE ENTITY mSPLDef.ContinuationStatement
 		   RESULT = CreateEntity( mSPLDef, "ContinuationStatement", zPOS_AFTER );
 		   //:mSPLDef.ContinuationStatement.Title = "Title 1"
 		   SetAttributeFromString( mSPLDef, "ContinuationStatement", "Title", "Title 1" );
@@ -261,9 +259,6 @@ public class TestEpamms
 		   TraceLineS( "*** JOE Test 2 successfully completed", "" );
 		   return( 0 );
 		// END
-		} 
-
-
-
+		}
    }
 }
