@@ -112,7 +112,7 @@ public class CommitToRestServer implements Committer
             String json = WriteOisToJsonStream.writeOisToJsonString( viewList, JSON_WRITE_OPTIONS );
             List<View> views = makePostCall( json );
             View restRc = views.get( 0 );
-            views.remove( 0 );
+            views.remove( 0 ); // Remove the RC from the list of views.
 
             supersedeEis( views );
             return originalList;
