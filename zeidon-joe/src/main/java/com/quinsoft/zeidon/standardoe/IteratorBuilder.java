@@ -185,6 +185,60 @@ class IteratorBuilder
     }
 
     /**
+     * Attempt to find a non-dropped instance that is a twin of droppedInstance.
+     *
+     * @param droppedInstance
+     * @return Either a valid (i.e. non-dropped) EI or droppInstance if one isn't found.
+     */
+    private EntityInstanceImpl findNonDroppedInstance( EntityInstanceImpl droppedInstance )
+    {
+        assert droppedInstance.isDropped() : "Expecing dropped instance";
+
+        EntityInstanceImpl search = droppedInstance.getNextTwin();
+        while ( search != null && search.isDropped() )
+            search = search.getNextTwin();
+
+        if ( search != null )
+            return search;
+
+        // We didn't find one after droppedInstance.  Try the previous ones.
+        search = droppedInstance.getPrevTwin();
+        while ( search != null && search.isDropped() )
+            search = search.getPrevTwin();
+
+        if ( search != null )
+            return search;
+
+        // If search is null then there are no non-dropped twins of droppedInstance.  Try
+        // searching starting from the parent.
+        EntityInstanceImpl parent = droppedInstance.getParent();
+        if ( parent == null )
+        {
+            // If we get here then droppedInstance is a root.  Since we are
+            // looking for a valid non-dropped EI then get the first EI.
+            return objectInstance.getRootEntityInstance();
+        }
+
+        if ( parent.isDropped() )  // If parent is also dropped then forget it.
+            return droppedInstance;
+
+        // Loop through the children of the ei to find a matching EI.
+        for ( EntityInstanceImpl ei : parent.getDirectChildren( true ) )
+        {
+            if ( ei.getViewEntity() == droppedInstance.getViewEntity() )
+            {
+                // We found a match!  This is a valid EI that is the same entity
+                // type as droppedInstance and shouldn't be flagged as dropped.
+                assert ! ei.isDropped();
+                return ei;
+            }
+        }
+
+        // If we get here we didn't find a valid twin so return the original EI.
+        return droppedInstance;
+    }
+
+    /**
      * Builds an entity iterator using the options previously set.
      *
      * @return
@@ -229,8 +283,17 @@ class IteratorBuilder
         {
             traverser = s_nextTwinTraverser;
 
+            // If currentInstance is then we should be setting cursor to First/Last.
             if ( currentInstance == null )
             {
+                if ( initialInstance != null && initialInstance.isDropped() )
+                {
+                    // If we get here then the initial instance has been dropped and thus
+                    // removed from the chains.  Scan through the twins to see if we can
+                    // find a non-dropped instance.
+                    initialInstance = findNonDroppedInstance( initialInstance );
+                }
+
                 if ( initialInstance != null && targetViewEntity != initialInstance.getViewEntity()
                                              && targetViewEntity != initialInstance.getBaseViewEntity() )
                 {
