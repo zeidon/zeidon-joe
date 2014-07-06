@@ -110,7 +110,6 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     private boolean    derived = false;
     private boolean    derivedPath = false;
     private boolean    recursive = false;
-    private boolean    recursiveParent = false;
     private boolean    duplicateEntity = false;
     private int        persistentAttributeCount;
     private int        workAttributeCount;
@@ -119,6 +118,11 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     private int        minCardinality;
     private int        maxcardinality;
     private boolean    hasInitializedAttributes = false;
+
+    /**
+     * If this entity is a recursive parent then recursiveChild references the child.
+     */
+    private ViewEntity recursiveChild;
 
     // Flags to help debug OI.
     private boolean    debugIncrementalFlag; // If true, then pop up a message when we change an incremental flag.
@@ -275,7 +279,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
                     {
                         if ( search.getErEntityToken() == erEntityToken )
                         {
-                            search.recursiveParent = true;
+                            search.recursiveChild = this;
                             this.recursive = true;
                             this.recursiveParentViewEntity = search;
                             break;
@@ -606,6 +610,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
 
     void setDataRecord(DataRecord dataRecord)
     {
+        getViewOd().setHasPhysicalMappings( true );
         this.dataRecord = dataRecord;
     }
 
@@ -656,7 +661,17 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
 
     public boolean isRecursiveParent()
     {
-        return recursiveParent;
+        return recursiveChild != null;
+    }
+
+    /**
+     * If this ViewEntity is a recursive parent then this returns the recursive child.
+     *
+     * @return
+     */
+    public ViewEntity getRecursiveChild()
+    {
+        return recursiveChild;
     }
 
     public boolean isDebugIncremental()

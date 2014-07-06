@@ -36,7 +36,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiOptions;
 import com.quinsoft.zeidon.standardoe.ActivateOisFromJsonStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.standardoe.WriteOiToJsonStream;
+import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -204,7 +204,7 @@ public class TestZencas
         {
             stream = new BufferedWriter( new FileWriter( getTempDir() + "/stud.json" ) );
             List<View> list = Arrays.asList( stud, person );
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( list, stream, options );
+            WriteOisToJsonStream writer = new WriteOisToJsonStream( list, stream, options );
             writer.writeToStream();
         }
         finally
@@ -235,7 +235,7 @@ public class TestZencas
         try
         {
             stream = new BufferedWriter( new FileWriter( getTempDir() + "/mcollege.json" ) );
-            WriteOiToJsonStream writer = new WriteOiToJsonStream( stud, stream, options );
+            WriteOisToJsonStream writer = new WriteOisToJsonStream( stud, stream, options );
             writer.writeToStream();
         }
         finally

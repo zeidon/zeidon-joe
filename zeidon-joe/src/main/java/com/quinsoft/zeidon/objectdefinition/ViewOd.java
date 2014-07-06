@@ -73,6 +73,11 @@ public class ViewOd implements PortableFileAttributeHandler
     private LockingLevel lockingLevel = LockingLevel.NONE;
     private SourceFileType sourceFileType = SourceFileType.VML;
 
+    /**
+     * True if any entities in this LOD have DataRecords.
+     */
+    private boolean      hasPhysicalMappings = false;
+
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
     static private final Class<?>[] constructorArgTypes2 = new Class<?>[] { Task.class };
 
@@ -643,5 +648,20 @@ public class ViewOd implements PortableFileAttributeHandler
     public SourceFileType getSourceFileType()
     {
         return sourceFileType;
+    }
+
+    /**
+     * True if the LOD has DataRecords.
+     *
+     * @return
+     */
+    public boolean hasPhysicalMappings()
+    {
+        return hasPhysicalMappings;
+    }
+
+    void setHasPhysicalMappings( boolean hasPhysicalMappings )
+    {
+        this.hasPhysicalMappings = hasPhysicalMappings;
     }
 }

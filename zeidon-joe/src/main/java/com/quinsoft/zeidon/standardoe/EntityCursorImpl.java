@@ -256,7 +256,25 @@ class EntityCursorImpl implements EntityCursor
         if ( parentCursor == null )
             return null;
 
-        return parentCursor.getExistingInstance();
+        // If this entity is a recursive parent and the current view is in a subobject
+        // then the parent is not necessarily determined by the parent cursor.
+        if ( getViewEntity().isRecursiveParent() && viewCursor.getRecursiveDiff() > 0 )
+        {
+            // The current ViewEntity is the parent of a recursive relationship and recursiveDiff
+            // indicates we have a recursive subobject.  Check to see if there is a recursive root.
+            if ( getViewCursor().getRecursiveRoot() == null )
+            {
+                // The recursive root is null.  This means that when setSubobject was called
+                // the subobject child was null and is now the parent.  Return the EI that
+                // is the parent of the null EI.
+                return getViewCursor().getRecursiveRootParent();
+            }
+            else
+                assert getViewCursor().getRecursiveRoot().getParent() == parentCursor.getExistingInstance();
+        }
+
+        EntityInstanceImpl parent = parentCursor.getExistingInstance();
+        return parent;
     }
 
     @Override
@@ -341,13 +359,35 @@ class EntityCursorImpl implements EntityCursor
 
         EntityInstanceImpl ei = getEntityInstance();
 
+        ViewEntity newInstanceViewEntity = getViewEntity();
+
+        // Check for an edge case.  See if the ViewEntity of the parent is the same as the
+        // one we're about to create.  If it is then we are creating the child of a recursive
+        // relationship.  If the ViewEntity is the recursive parent then the View Entity of
+        // the new instance should be the recursive child.
+        if ( parent != null &&
+            newInstanceViewEntity == parent.getViewEntity() && // Recursive relationship?
+            newInstanceViewEntity.isRecursiveParent() )        // ViewEntity is recursive parent?
+        {
+            // Change the ViewEntity of the instance we're about to create to be the child
+            // of the recursive relationship.
+            newInstanceViewEntity = newInstanceViewEntity.getRecursiveChild();
+        }
+
         // Create a new instance and initialize the attributes.
         EntityInstanceImpl newInstance =
                 EntityInstanceImpl.createEntity( getObjectInstance(),
                                                  parent,
                                                  ei,
-                                                 getViewEntity(),
+                                                 newInstanceViewEntity,
                                                  position );
+
+        // If recursiveDiff is > 0 then we are in a recursive subobject.  If recursiveRoot is
+        // null then we just created the root of the recursive subobject so set it.
+        if ( getViewCursor().getRecursiveDiff() > 0 && getViewCursor().getRecursiveRoot() == null )
+        {
+            getViewCursor().setRecursiveParent( newInstance, newInstanceViewEntity, null );
+        }
 
         if ( ! flags.contains( CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES ) )
             newInstance.initializeDefaultAttributes();
@@ -1617,12 +1657,12 @@ class EntityCursorImpl implements EntityCursor
 
         // TODO: Check to see if subobject entity is already the parent?
 
-        // Throws NullCursor if current cursor isn't set to a valid instance.
-        EntityInstanceImpl ei = getExistingInstance();
+        EntityInstanceImpl ei = getEntityInstance();
+        EntityInstanceImpl parentOfSubobject = getParentCursor().getExistingInstance();
 
-        ViewEntity recursiveParent = getViewEntity().getRecursiveParentViewEntity();
-        viewCursor.setRecursiveParent( ei );
-        viewCursor.getEntityCursor( recursiveParent ).resetChildCursors( ei );
+        ViewEntity recursiveParentViewEntity = getViewEntity().getRecursiveParentViewEntity();
+        viewCursor.setRecursiveParent( ei, getViewEntity(), parentOfSubobject );
+        viewCursor.getEntityCursor( recursiveParentViewEntity ).resetChildCursors( ei );
         return true;
     }
 
