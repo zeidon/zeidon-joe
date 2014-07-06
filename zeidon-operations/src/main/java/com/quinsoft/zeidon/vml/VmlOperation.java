@@ -339,7 +339,7 @@ public abstract class VmlOperation
        put( zSINGLE_FOR_UPDATE, ActivateFlags.SINGLE );
        put( zIGNORE_JOINS, ActivateFlags.IGNORE_JOINS );
        put( zASYNCHRONOUS, ActivateFlags.ASYNCHRONOUS );
-       
+
        // Ignore zAPPLICATION whan paired with SINGLE
        put( zSINGLE + zAPPLICATION, ActivateFlags.SINGLE );
    }} );
@@ -1912,20 +1912,13 @@ public abstract class VmlOperation
           return 0;
 
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.isNull() == false )
+      if ( cursor.setToSubobject() )
       {
-         if ( cursor.setToSubobject() )
-         {
-            nRC = 0;
-         }
-         else
-         {
-            nRC = -1;
-         }
+         nRC = 0;
       }
       else
       {
-         nRC = zCALL_ERROR;
+         nRC = -1;
       }
 
       return nRC;
@@ -2322,9 +2315,9 @@ public abstract class VmlOperation
       {
          //sbString.replace( position, position + searchString.length( ) - 1, replaceString );
          sb.replace( position, position + searchString.length( ), replaceString );
-         
+
          position = position + replaceString.length();
-         position = sb.indexOf( searchString, position ); 
+         position = sb.indexOf( searchString, position );
       }
 
       return sb.toString( );
@@ -2337,9 +2330,9 @@ public abstract class VmlOperation
       {
          //sbString.replace( position, position + searchString.length( ) - 1, replaceString );
          sbString.replace( position, position + searchString.length( ), replaceString );
-         
+
          position = position + replaceString.length();
-         position = sbString.indexOf( searchString, position ); 
+         position = sbString.indexOf( searchString, position );
       }
 
       return sbString.length( );
@@ -3074,21 +3067,7 @@ public abstract class VmlOperation
    {
       int nRC;
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.hasAny( scopingEntity ) == false )
-      {
-         nRC = zCURSOR_NULL;
-      }
-      else
-      {
-         if ( StringUtils.isBlank( scopingEntity ) )
-         {
-            nRC = cursor.setFirst( ).toInt();
-         }
-         else
-         {
-            nRC = cursor.setFirst( scopingEntity ).toInt();
-         }
-      }
+      nRC = cursor.setFirst( scopingEntity ).toInt();
 
       return nRC;
    }
@@ -4874,7 +4853,7 @@ public abstract class VmlOperation
 
   // if ( control == 0 )
   //     control = zASYNCHRONOUS;
-      // A couple of times in Windows vml we have an activate with zSINGLE + zLEVE_APPLICATION. That is not 
+      // A couple of times in Windows vml we have an activate with zSINGLE + zLEVE_APPLICATION. That is not
       // applicable in the JOE so ignore and just use zSINGLE.
       if ( control == 4 )
     	  control = 0;
@@ -5715,7 +5694,7 @@ public abstract class VmlOperation
 
       view = view.newView(); // Create a copy so we can muck the cursors.
       EntityCursor cursor = view.cursor( entityName );
-      
+
       for ( CursorResult rc = cursor.setFirst( scopingEntity );
             rc.isSet(); // isSet ==> set, setNewParent, setRecursiveChild
             rc = cursor.setNextContinue() )

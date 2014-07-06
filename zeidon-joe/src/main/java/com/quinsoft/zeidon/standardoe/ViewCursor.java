@@ -41,6 +41,13 @@ class ViewCursor
     private EntityInstanceImpl recursiveRoot;
 
     /**
+     * This is the parent of recursiveRoot.  This is only guaranteed to be correctly
+     * set if recursiveRoot is null.  This is used to find the parent if we execute
+     * recursiveRoot.create.
+     */
+    private EntityInstanceImpl recursiveRootParent;
+
+    /**
      * When there is a subobject cursor defined, this represents the difference in levels
      * between recursiveRoot and its view entity level.  When there's no subobject this is 0.
      */
@@ -107,7 +114,7 @@ class ViewCursor
         if ( oi != null )
         {
             objectInstance = oi;
-            setRecursiveParent( null );
+            resetRecursiveParent();
         }
         else
         if ( sourceCursor != null )
@@ -121,7 +128,7 @@ class ViewCursor
         else
         {
             objectInstance = new ObjectInstance(task, viewOd);
-            setRecursiveParent( null );
+            resetRecursiveParent();
         }
 
         objectInstance.addReferringViewCursor( this );
@@ -158,20 +165,50 @@ class ViewCursor
             cursorList[ i ] = source.cursorList[ i ];
     }
 
-    void setRecursiveParent(EntityInstanceImpl recursiveParent)
+    /**
+     * Reset the subobject fields to indicate that we are no longer inside
+     * a subobject.
+     */
+    private void resetRecursiveParent()
     {
+        recursiveRoot = null;
+        recursiveDiff = 0;
+    }
+
+    /**
+     * Set the root of the recursive subobject to 'recursiveParent', which may be null.
+     * If it is null, then recursiveGrandParent is the parent that will be used if
+     * any recursiveParents are created after setting subobject.
+     *
+     * @param recursiveParent - The EI that will become the root of the new subobject.
+     *                          May be null; if null then recursiveGrandParent MUST be
+     *                          non-null.
+     * @param recursiveParentViewEntity - The view entity of recursiveParent.
+     * @param recursiveGrandParent - The parent of recursiveParent.  Must be non-null if
+     *                          recursiveParent is null.  Some subobject processing needs
+     *                          to know that parent for creates/inserts.  This is undefined
+     *                          if recursiveParent is not null.
+     */
+    void setRecursiveParent( EntityInstanceImpl recursiveParent,
+                             ViewEntity recursiveParentViewEntity,
+                             EntityInstanceImpl recursiveGrandParent )
+    {
+        // One of the two EIs had better be non-null.
+        assert recursiveParent != null || recursiveGrandParent != null : "Internal error: An EI must be non-null";
+        assert recursiveParent == null || recursiveParent.getViewEntity() == recursiveParentViewEntity;
+
         this.recursiveRoot = recursiveParent;
-        if ( recursiveRoot == null )
-        {
-            recursiveDiff = 0;
-            return;
-        }
+        this.recursiveRootParent = recursiveGrandParent;
+        int recursiveLevel;
+        if ( recursiveParent == null )
+            recursiveLevel = recursiveGrandParent.getLevel() + 1;
+        else
+            recursiveLevel = recursiveParent.getLevel();
 
         // Calculate the recursiveDiff.
-        ViewEntity viewEntity = recursiveParent.getViewEntity();
-        if ( viewEntity.getRecursiveParentViewEntity() != null )
-            viewEntity = viewEntity.getRecursiveParentViewEntity();
-        recursiveDiff = recursiveParent.getLevel() - viewEntity.getLevel();
+        if ( recursiveParentViewEntity.getRecursiveParentViewEntity() != null )
+            recursiveParentViewEntity = recursiveParentViewEntity.getRecursiveParentViewEntity();
+        recursiveDiff = recursiveLevel - recursiveParentViewEntity.getLevel();
         if ( recursiveDiff == 0 )
         {
             // We've reset the cursor back to its "normal" state so there is no recursiveRoot.
@@ -180,8 +217,8 @@ class ViewCursor
         }
 
         // Calculate which cursors are now valid with the new scope.
-        firstValidCursorIndex = viewEntity.getHierIndex();
-        lastValidCursorIndex = viewEntity.getLastChildHier().getHierIndex();
+        firstValidCursorIndex = recursiveParentViewEntity.getHierIndex();
+        lastValidCursorIndex = recursiveParentViewEntity.getLastChildHier().getHierIndex();
     }
 
     void resetSubobjectToParent()
@@ -199,7 +236,7 @@ class ViewCursor
         if ( ancestor == null )
             throw new ZeidonException( "Current subobject root has no valid ancestor" );
 
-        setRecursiveParent( ancestor );
+        setRecursiveParent( ancestor, ancestor.getViewEntity(), null );
         view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
         view.cursor( viewEntity ).setCursor( currentRoot );    // Set the cursor for the recursive child.
     }
@@ -259,7 +296,18 @@ class ViewCursor
             return;
 
         cursorList[0].setCursor( objectInstance.getRootEntityInstance() );
-        setRecursiveParent( null );
-//        cursorList[0].resetChildCursors( objectInstance.getRootEntityInstance() );
+        resetRecursiveParent();
+    }
+
+    /**
+     * Returns the parent of the subobject root.  This is specified when we
+     * set subobject to a cursor that is null.  This is undefined if recursiveRoot
+     * is not null.
+     *
+     * @return
+     */
+    EntityInstanceImpl getRecursiveRootParent()
+    {
+        return recursiveRootParent;
     }
 }
