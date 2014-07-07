@@ -25,7 +25,7 @@ public class ZeidonAndroidViewDelegate
     /**
      * This is the namespace for zeidon in the Android layout XML.
      */
-    final static String ZEIDON_NS = "zeidon";
+    final static String ZEIDON_NS = "http://zeidon.quinsoft.com";
     
     private android.view.View androidView;
     private android.view.View parentView;

@@ -22,7 +22,7 @@ public class SqliteJdbcHandler extends JdbcHandler
     }
 
     @Override
-    void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt )
+    protected void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt )
     {
         stmt.appendSuffix( "LIMIT " );
         stmt.appendSuffix( viewEntity.getActivateLimit() );

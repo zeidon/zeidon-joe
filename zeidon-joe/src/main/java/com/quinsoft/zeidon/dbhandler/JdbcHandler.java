@@ -94,7 +94,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    String getConfigValue( String key )
+    protected String getConfigValue( String key )
     {
         return options.getConfigValue( configGroupName, key );
     }
@@ -134,7 +134,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    void getSqlValue(SqlStatement stmt, Domain domain, ViewAttribute viewAttribute, StringBuilder buffer, Object value)
+    protected void getSqlValue(SqlStatement stmt, Domain domain, ViewAttribute viewAttribute, StringBuilder buffer, Object value)
     {
         try
         {
@@ -281,7 +281,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt )
+    protected void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt )
     {
         // Default is to do nothing.  Why?  Limits are DB-specific and anything we put here
         // could cause a generate problem.  We'll spit out a warning.
@@ -290,7 +290,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt)
+    protected int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt)
     {
         int rc = 0;
         String sql = stmt.getAssembledCommand();
@@ -515,7 +515,7 @@ public class JdbcHandler extends AbstractSqlHandler
         try
         {
             close( rs );
-    
+
             if ( cachedStatements == null ) // Are we caching PreparedStatements?
                 DbUtils.closeQuietly( ps );
         }
@@ -670,7 +670,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt)
+    protected int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt)
     {
         String sql = stmt.getAssembledCommand();
         logSql( stmt );

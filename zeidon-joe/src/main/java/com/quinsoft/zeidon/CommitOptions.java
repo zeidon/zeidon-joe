@@ -3,6 +3,7 @@
  */
 package com.quinsoft.zeidon;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -52,8 +53,18 @@ public class CommitOptions extends AbstractOptionsConfiguration
         return viewList;
     }
 
-    public void setViewList( List<View> viewList )
+    public CommitOptions setViewList( List<View> viewList )
     {
         this.viewList = viewList;
+        return this;
+    }
+
+    public CommitOptions addView( View view )
+    {
+        if ( viewList == null )
+            viewList = new ArrayList<View>();
+
+        viewList.add( view );
+        return this;
     }
 }

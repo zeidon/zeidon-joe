@@ -4,6 +4,7 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,11 +29,11 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author dgc
  *
  */
-public class WriteOiToJsonStream
+public class WriteOisToJsonStream
 {
     private final static String VERSION = "1.0";
 
-    private final Collection<View> viewList;
+    private final Collection<? extends View> viewList;
     private final Writer writer;
     private final WriteOiOptions options;
     private final EnumSet<WriteOiFlags> flags;
@@ -41,7 +42,7 @@ public class WriteOiToJsonStream
 
     private JsonGenerator jg;
 
-    public WriteOiToJsonStream( Collection<View> viewList, Writer writer, WriteOiOptions options )
+    public WriteOisToJsonStream( Collection<? extends View> viewList, Writer writer, WriteOiOptions options )
     {
         this.viewList = viewList;
         this.writer = writer;
@@ -53,9 +54,24 @@ public class WriteOiToJsonStream
         incremental = this.flags.contains( WriteOiFlags.fINCREMENTAL );
     }
 
-    public WriteOiToJsonStream(View view, Writer writer, WriteOiOptions options )
+    public WriteOisToJsonStream(View view, Writer writer, WriteOiOptions options )
     {
         this( viewToCollection( view ), writer, options );
+    }
+
+    /**
+     * Returns a JSON string that serializes the collection of views.
+     *
+     * @param viewList
+     * @param options
+     * @return
+     */
+    public static String writeOisToJsonString( Collection<? extends View> viewList, WriteOiOptions options )
+    {
+        StringWriter writer = new StringWriter();
+        WriteOisToJsonStream jsonBuilder = new WriteOisToJsonStream( viewList, writer, options );
+        jsonBuilder.writeToStream();
+        return writer.toString();
     }
 
     public void writeToStream()

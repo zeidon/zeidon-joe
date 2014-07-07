@@ -48,15 +48,15 @@ public class TestSWAU
 	{
 	    View         testview;
 		testview = zencas.activateEmptyObjectInstance( "mSAProf" );
-		VmlTester tester = new VmlTester( testview );
+		SwauVmlTester tester = new SwauVmlTester( testview );
 		tester.testSAProfIncludeMealPlan( testview );
         System.out.println("===== Finished testSAProfIncludeMealPlan ========");
 	}
 
 
-	private class VmlTester extends VmlObjectOperations
+	private class SwauVmlTester extends VmlObjectOperations
 	{
-		public VmlTester( View view )
+		public SwauVmlTester( View view )
 		{
 			super( view );
 		}

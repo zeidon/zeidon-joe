@@ -27,7 +27,6 @@ public enum CursorPosition
     FIRST,
     LAST,
     NEXT,
-    NEXT_OR_LAST,
     PREV,
     NONE
 }

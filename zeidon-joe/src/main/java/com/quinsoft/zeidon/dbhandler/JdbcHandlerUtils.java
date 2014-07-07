@@ -54,6 +54,10 @@ public class JdbcHandlerUtils
     @SuppressWarnings("unchecked")
     public DbHandler getDbHandler()
     {
+        DbHandler handler = options.getDbHandler();
+        if ( handler != null )
+            return handler;
+
         String handlerName = options.getConfigValue( getGroupName(), "DbHandler" );
 
         // If the handler name isn't specified we'll try to be smart and determine the default

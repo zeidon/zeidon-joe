@@ -256,7 +256,25 @@ class EntityCursorImpl implements EntityCursor
         if ( parentCursor == null )
             return null;
 
-        return parentCursor.getExistingInstance();
+        // If this entity is a recursive parent and the current view is in a subobject
+        // then the parent is not necessarily determined by the parent cursor.
+        if ( getViewEntity().isRecursiveParent() && viewCursor.getRecursiveDiff() > 0 )
+        {
+            // The current ViewEntity is the parent of a recursive relationship and recursiveDiff
+            // indicates we have a recursive subobject.  Check to see if there is a recursive root.
+            if ( getViewCursor().getRecursiveRoot() == null )
+            {
+                // The recursive root is null.  This means that when setSubobject was called
+                // the subobject child was null and is now the parent.  Return the EI that
+                // is the parent of the null EI.
+                return getViewCursor().getRecursiveRootParent();
+            }
+            else
+                assert getViewCursor().getRecursiveRoot().getParent() == parentCursor.getExistingInstance();
+        }
+
+        EntityInstanceImpl parent = parentCursor.getExistingInstance();
+        return parent;
     }
 
     @Override
@@ -341,13 +359,35 @@ class EntityCursorImpl implements EntityCursor
 
         EntityInstanceImpl ei = getEntityInstance();
 
+        ViewEntity newInstanceViewEntity = getViewEntity();
+
+        // Check for an edge case.  See if the ViewEntity of the parent is the same as the
+        // one we're about to create.  If it is then we are creating the child of a recursive
+        // relationship.  If the ViewEntity is the recursive parent then the View Entity of
+        // the new instance should be the recursive child.
+        if ( parent != null &&
+            newInstanceViewEntity == parent.getViewEntity() && // Recursive relationship?
+            newInstanceViewEntity.isRecursiveParent() )        // ViewEntity is recursive parent?
+        {
+            // Change the ViewEntity of the instance we're about to create to be the child
+            // of the recursive relationship.
+            newInstanceViewEntity = newInstanceViewEntity.getRecursiveChild();
+        }
+
         // Create a new instance and initialize the attributes.
         EntityInstanceImpl newInstance =
                 EntityInstanceImpl.createEntity( getObjectInstance(),
                                                  parent,
                                                  ei,
-                                                 getViewEntity(),
+                                                 newInstanceViewEntity,
                                                  position );
+
+        // If recursiveDiff is > 0 then we are in a recursive subobject.  If recursiveRoot is
+        // null then we just created the root of the recursive subobject so set it.
+        if ( getViewCursor().getRecursiveDiff() > 0 && getViewCursor().getRecursiveRoot() == null )
+        {
+            getViewCursor().setRecursiveParent( newInstance, newInstanceViewEntity, null );
+        }
 
         if ( ! flags.contains( CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES ) )
             newInstance.initializeDefaultAttributes();
@@ -602,21 +642,21 @@ class EntityCursorImpl implements EntityCursor
                     return setFirst();
 
                 case NEXT:
-                    return setNext();
-
-                case NEXT_OR_LAST:
                     CursorResult rc = setNext();
                     if ( rc == CursorResult.SET )
                         return rc;
                     else
                         return setLast();
-                        
 
                 case LAST:
                     return setLast();
 
                 case PREV:
-                    return setPrev();
+                    CursorResult rc2 = setPrev();
+                    if ( rc2 == CursorResult.SET )
+                        return rc2;
+                    else
+                        return setFirst();
 
                 default:
                     throw new RuntimeException( "Uknown CursorPosition " + cursorPosition );
@@ -1384,7 +1424,7 @@ class EntityCursorImpl implements EntityCursor
                 	// Use context for sort order.
                 	String value1 = cei1.getStringFromAttribute(key.viewAttrib,  key.context);
                 	String value2 = cei2.getStringFromAttribute(key.viewAttrib,  key.context);
-                	
+
                 	cmp = value1.compareTo(value2);
                 }
                 else
@@ -1396,7 +1436,7 @@ class EntityCursorImpl implements EntityCursor
 
                 if ( cmp != 0 )
                     return cmp;
-                
+
             }
 
             return 0;
@@ -1461,7 +1501,7 @@ class EntityCursorImpl implements EntityCursor
                 	context = strings[ i + 1 ].substring(1, strings[ i + 1 ].lastIndexOf("]"));
                 	i++;
                 }
-                
+
             }
 
             sortAttribs.add( new SortKey( sortAttrib, ascending, context ) );
@@ -1617,12 +1657,12 @@ class EntityCursorImpl implements EntityCursor
 
         // TODO: Check to see if subobject entity is already the parent?
 
-        // Throws NullCursor if current cursor isn't set to a valid instance.
-        EntityInstanceImpl ei = getExistingInstance();
+        EntityInstanceImpl ei = getEntityInstance();
+        EntityInstanceImpl parentOfSubobject = getParentCursor().getExistingInstance();
 
-        ViewEntity recursiveParent = getViewEntity().getRecursiveParentViewEntity();
-        viewCursor.setRecursiveParent( ei );
-        viewCursor.getEntityCursor( recursiveParent ).resetChildCursors( ei );
+        ViewEntity recursiveParentViewEntity = getViewEntity().getRecursiveParentViewEntity();
+        viewCursor.setRecursiveParent( ei, getViewEntity(), parentOfSubobject );
+        viewCursor.getEntityCursor( recursiveParentViewEntity ).resetChildCursors( ei );
         return true;
     }
 
@@ -2774,20 +2814,36 @@ class EntityCursorImpl implements EntityCursor
 
             // Do we allow lazy loading for this entity?  If not, must be null.
             LazyLoadConfig config = getViewEntity().getLazyLoadConfig();
-            if ( ! config.isLazyLoad() && ! config.hasLazyLoadParent() )
-                return CursorStatus.NULL;
+            if ( config.isLazyLoad() )
+            {
+                assert parentCursor != null : "Root cannot be lazy load candidate";
 
-            assert parentCursor != null : "Root cannot be lazy load candidate";
+                EntityInstanceImpl parent = parentCursor.getEntityInstance( false );
+                if ( parent == null )
+                    // TODO: What if there are multiple levels of LazyLoad?  It's possible that
+                    // the parent entity wasn't loaded because it is lazyload.
+                    return CursorStatus.NULL;
 
-            // Get the status of the parent.  If the status isn't normal (i.e. set to an EI)
-            // then the child must have the same status.
-            EntityCursorImpl pcursor = getViewCursor().getEntityCursor( config.getLazyLoadParent() );
-            CursorStatus parentStatus = pcursor.getStatus();
-            if ( parentStatus != CursorStatus.SET )
-                return parentStatus;
+                if ( parent.hasChildBeenLazyLoaded( getViewEntity() ) )
+                    return CursorStatus.NULL;
+
+                return CursorStatus.NOT_LOADED;
+            }
+            else
+            if ( config.hasLazyLoadParent() )
+            {
+                assert parentCursor != null : "Root cannot be lazy load candidate";
+
+                // Get the status of the parent.  If the status isn't normal (i.e. set to an EI)
+                // then the child must have the same status.
+                EntityCursorImpl pcursor = getViewCursor().getEntityCursor( config.getLazyLoadParent() );
+                CursorStatus parentStatus = pcursor.getStatus();
+                if ( parentStatus != CursorStatus.SET )
+                    return parentStatus;
+            }
 
             // The lazy-load parent has been loaded.  That means we must be null.
-            return CursorStatus.NULL; // We attempted to lazy load EI so must be null.
+            return CursorStatus.NULL;
         }
 
         if ( ei.isHidden() )
