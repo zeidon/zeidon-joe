@@ -63,6 +63,16 @@ public class TestEpamms
         System.out.println("===== Finished ExecuteJOE_Test2 ========");
 	}
 
+	@Test
+	public void ExecuteJOE_TestSubobjectCreateView()
+	{
+	    View         testview;
+		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( testview );
+		tester.ExecuteJOE_TestSubobjectCreateView( testview );
+        System.out.println("===== Finished ExecuteJOE_TestSubobjectCreateView ========");
+	}
+
 
 	private class VmlTester extends VmlObjectOperations
 	{
@@ -194,6 +204,85 @@ public class TestEpamms
 //		    END*/
 		// END
 		}
+
+		public int
+		ExecuteJOE_TestSubobjectCreateView( View     ViewToWindow )
+		{
+		   zVIEW    mSPLDef = new zVIEW( );
+		   //:VIEW mSPLDef2 BASED ON LOD mSPLDef
+		   zVIEW    mSPLDef2 = new zVIEW( );
+		   int      RESULT = 0;
+		   int      lTempInteger_0 = 0;
+
+
+		   //:// Execute Tests to Check for JOE Bugs.
+
+		   // Recursive Subobject Test.
+		   // After creating the subobject entity, we get an error when calling the a newView() from the subobject view.
+		   // The error occurs in EntityCursorImpl line 159 and I have to say I am confused as to why in EntityCursorImpl the
+		   // retrieved parentInstance isn't the same in both the cases of newView() in this code.
+
+		   //:// Create subobject with one level of recursive subobject.
+		   //:ACTIVATE mSPLDef EMPTY
+		   RESULT = ActivateEmptyObjectInstance( mSPLDef, "mSPLDef", ViewToWindow, zSINGLE );
+		   //:NAME VIEW mSPLDef "mSPLDef"
+		   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
+		   //:CREATE ENTITY mSPLDef.SubregPhysicalLabelDef
+		   RESULT = CreateEntity( mSPLDef, "SubregPhysicalLabelDef", zPOS_AFTER );
+		   //:CREATE ENTITY mSPLDef.SPLD_LLD
+		   RESULT = CreateEntity( mSPLDef, "SPLD_LLD", zPOS_AFTER );
+		   //:mSPLDef.SPLD_LLD.Name = "Test"
+		   SetAttributeFromString( mSPLDef, "SPLD_LLD", "Name", "Test" );
+		   //:CREATE ENTITY mSPLDef.LLD_Page
+		   RESULT = CreateEntity( mSPLDef, "LLD_Page", zPOS_AFTER );
+		   //:mSPLDef.LLD_Page.Width = 10
+		   SetAttributeFromInteger( mSPLDef, "LLD_Page", "Width", 10 );
+		   //:CREATE ENTITY mSPLDef.LLD_Panel
+		   RESULT = CreateEntity( mSPLDef, "LLD_Panel", zPOS_AFTER );
+		   //:mSPLDef.LLD_Panel.Width = 11
+		   SetAttributeFromInteger( mSPLDef, "LLD_Panel", "Width", 11 );
+
+		   //:CREATE ENTITY mSPLDef.LLD_Block
+		   RESULT = CreateEntity( mSPLDef, "LLD_Block", zPOS_AFTER );
+		   //:mSPLDef.LLD_Block.Name = "Block Level 1"
+		   SetAttributeFromString( mSPLDef, "LLD_Block", "Name", "Block Level 1" );
+		   //:CREATE ENTITY mSPLDef.LLD_SpecialSectionAttribute
+		   RESULT = CreateEntity( mSPLDef, "LLD_SpecialSectionAttribute", zPOS_AFTER );
+		   //:mSPLDef.LLD_SpecialSectionAttribute.Name = "Spec Attribute 1"
+		   SetAttributeFromString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 1" );
+
+		   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
+		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
+		   
+		   //zVIEW vGrid2 = new zVIEW( );
+		   //CreateViewFromView( vGrid2, mSPLDef );
+		   View vGrid2;
+		   vGrid2 = mSPLDef.newView( );		   
+		   
+		   DropView( vGrid2 );
+
+		   RESULT = CreateEntity( mSPLDef, "LLD_Block", zPOS_AFTER );
+		   //:mSPLDef.LLD_Block.Name = "Block Level 2"
+		   SetAttributeFromString( mSPLDef, "LLD_Block", "Name", "Block Level 2" );
+		   //:CREATE ENTITY mSPLDef.LLD_SpecialSectionAttribute
+		   RESULT = CreateEntity( mSPLDef, "LLD_SpecialSectionAttribute", zPOS_AFTER );
+		   //:mSPLDef.LLD_SpecialSectionAttribute.Name = "Spec Attribute 2"
+		   SetAttributeFromString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", "Spec Attribute 2" );
+
+		   /*
+		   ResetViewFromSubobject( mSPLDef );
+		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
+		   ResetViewFromSubobject( mSPLDef );	   
+		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
+		   */
+		   vGrid2 = mSPLDef.newView( );		   
+		   //CreateViewFromView( mSPLDef2, mSPLDef );
+		   
+		   DropView( vGrid2 );
+
+		   return( 0 );
+		}
+		
 		//:   VIEW mSPLDef  BASED ON LOD mSPLDef
 		public int
 		ExecuteJOE_Test2( View     ViewToWindow )
