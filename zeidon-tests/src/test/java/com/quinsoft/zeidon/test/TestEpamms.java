@@ -5,6 +5,7 @@ package com.quinsoft.zeidon.test;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,6 +72,16 @@ public class TestEpamms
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_TestSubobjectCreateView( testview );
         System.out.println("===== Finished ExecuteJOE_TestSubobjectCreateView ========");
+	}
+
+	@Test
+	public void ExecuteJOE_TestTemporalError()
+	{
+	    View         testview;
+		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( testview );
+		tester.ExecuteJOE_TemporalDeleteError( testview );
+        System.out.println("===== Finished ExecuteJOE_TemporalDeleteError ========");
 	}
 
 
@@ -277,7 +288,7 @@ public class TestEpamms
 		   */
 		   vGrid2 = mSPLDef.newView( );		   
 		   //CreateViewFromView( mSPLDef2, mSPLDef );
-		   
+		   String str = GetStringFromAttribute( vGrid2, "LLD_SpecialSectionAttribute", "Name" );
 		   DropView( vGrid2 );
 
 		   return( 0 );
@@ -349,5 +360,54 @@ public class TestEpamms
 		   return( 0 );
 		// END
 		}
+		
+		//:   VIEW mSPLDef  BASED ON LOD mSPLDef
+		public int
+		ExecuteJOE_TemporalDeleteError( View     ViewToWindow )
+		{
+		   zVIEW    mSPLDef = new zVIEW( );
+		   //:VIEW mSPLDef2 BASED ON LOD mSPLDef
+		   zVIEW    mSPLDef2 = new zVIEW( );
+		   int      RESULT = 0;
+		   int      lTempInteger_0 = 0;
+           int      SaveID = 0;
+
+           // A temporal subobject is created for LLD_Page. Then a subentity LLD_Panel is deleted.
+           // After the CancelSubobject LLD_Page, the LLD_Panel should exist again, but it does not.
+
+		   //:// Activate the basic object.
+		   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\JOE_Test2.por", zSINGLE )
+		   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test2.por", zSINGLE );
+		   //:NAME VIEW mSPLDef "mSPLDef"
+		   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
+	   
+           // Dad's new test. After deleting the entity from a Temporal view, if the 
+           // parent TemporalSubobject gets cancelled, then the deleted entity should be back.
+           //:// First CancelSubobject test after delete of a subentity.
+
+           CreateTemporalSubobjectVersion( mSPLDef, "LLD_Page" );
+
+           RESULT = SetCursorFirstEntity( mSPLDef, "LLD_Panel", "" );
+
+           //:SaveID = mSPLDef.LLD_Panel.ID
+           {MutableInt mi_SaveID = new MutableInt( SaveID );
+               GetIntegerFromAttribute( mi_SaveID, mSPLDef, "LLD_Panel", "ID" );
+           SaveID = mi_SaveID.intValue( );}
+
+           //:DELETE ENTITY mSPLDef.LLD_Panel
+           RESULT = DeleteEntity( mSPLDef, "LLD_Panel", zPOS_NEXT );
+
+           //:CancelSubobject( mSPLDef, "LLD_Page" )
+           CancelSubobject( mSPLDef, "LLD_Page" );
+
+           //:SET CURSOR FIRST mSPLDef.LLD_Panel WHERE mSPLDef.LLD_Panel.ID = SaveID
+           RESULT = SetCursorFirstEntityByInteger( mSPLDef, "LLD_Panel", "ID", SaveID, "" );
+           Assert.assertEquals( "Can't find LLD_Panel but it should exist after CancelSubobject.", 0, RESULT );
+
+           //:TraceLineS( "$$$$ Cancel of deleted Panel worked", "" )
+           TraceLineS( "$$$$ Cancel of deleted Panel worked", "" );
+
+           return( 0 );
+ 		}
    }
 }
