@@ -93,7 +93,7 @@ class EntityCursorImpl implements EntityCursor
     EntityCursorImpl( ViewCursor viewCursor, EntityCursorImpl source, EntityCursorImpl parentCsr )
     {
         this( viewCursor, source.getViewEntity(), parentCsr );
-        setEntityInstance( source.getEntityInstance( false ) );
+        setEntityInstance( source.entityInstance );
         if ( source.currentIterator != null)
             currentIterator = IteratorBuilder.build( source.currentIterator, this );
     }
