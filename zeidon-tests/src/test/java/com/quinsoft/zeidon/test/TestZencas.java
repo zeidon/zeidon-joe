@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -18,6 +19,7 @@ import junit.framework.Assert;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,7 +81,8 @@ public class TestZencas
 	@Test
 	public void testWritingXodAsJson() throws IOException
 	{
-        String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
+	    Map<String, String> envs = System.getenv();
+        String fileDbUrl = StrSubstitutor.replace( "jdbc:sqlite:${ZENCAS_SQLITE_DIR}/zencasa.sqlite", envs );
         View stud = new QualificationBuilder( zencas )
                         .setViewOd( "lStudDpt" )
                         .setOiSourceUrl( fileDbUrl )
@@ -3237,7 +3240,7 @@ public class TestZencas
 		   zVIEW    lTermLST = new zVIEW( );
 		   zVIEW    wXferO = new zVIEW( );
 
-		   // I exclude mStudent.Cohort (which is id 26) and include Cohort id=809. 
+		   // I exclude mStudent.Cohort (which is id 26) and include Cohort id=809.
 		   // When I look at the object browser, you see 2 entities for mStudent.Cohort although
 		   // I can not position on the excluded Cohort. But when we save to the database,
 		   // the original cohort (id=26) gets saved not the new included cohort (id=809).
@@ -3283,7 +3286,7 @@ public class TestZencas
 			   RESULT = IncludeSubobjectFromSubobject( mStudent, "Cohort", lCohort, "Cohort", zPOS_AFTER );
 			   RESULT = CommitObjectInstance( mStudent );
 		   	   DropView( mStudent );
-			   
+
 			   o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 14229 );
 			   RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
 		   	   DropView( vTempViewVar_0 );
@@ -3293,13 +3296,13 @@ public class TestZencas
 		   	   MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
 	   	       GetIntegerFromAttribute( mi_lTempInteger_0, mStudent, "Cohort", "ID" );
 	   	       lTempInteger_0 = mi_lTempInteger_0.intValue( );
-	   	       
+
 	   	       if (lTempInteger_0 == 26 )
 					//:IssueError( ViewToWindow,0,0, "Person was not correctly included." )
 					Assert.assertEquals("Cohort include/save was not correct!", lTempInteger_0, 809);
-	   	    	 //TraceLineS(" ***ERROR ", "");	   	    	   
-		   	   
-			   
+	   	    	 //TraceLineS(" ***ERROR ", "");
+
+
 
      	       RESULT = ExcludeEntity( mStudent, "Cohort", zREPOS_AFTER );
 			   RESULT = IncludeSubobjectFromSubobject( mStudent, "Cohort", lCohort, "Cohort", zPOS_AFTER );
