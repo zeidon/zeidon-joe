@@ -3079,15 +3079,7 @@ public abstract class VmlOperation
    {
       int nRC;
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.hasAny( scopingEntity ) == false )
-      {
-         nRC = zCURSOR_NULL;
-      }
-      else
-      {
-          //nRC = cursor.setNextContinue( ).toInt();
-          nRC = cursor.setNext( scopingEntity ).toInt();
-      }
+      nRC = cursor.setNext( scopingEntity ).toInt();
 
       return nRC;
    }
@@ -3099,14 +3091,7 @@ public abstract class VmlOperation
    {
       int nRC;
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.hasAny( scopingEntity ) == false )
-      {
-         nRC = zCURSOR_NULL;
-      }
-      else
-      {
-         nRC = cursor.setPrev( scopingEntity ).toInt();
-      }
+      nRC = cursor.setPrev( scopingEntity ).toInt();
 
       return nRC;
    }
@@ -3118,14 +3103,7 @@ public abstract class VmlOperation
    {
       int nRC;
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.hasAny( scopingEntity ) == false )
-      {
-         nRC = zCURSOR_NULL;
-      }
-      else
-      {
-         nRC = cursor.setLast( scopingEntity ).toInt();
-      }
+      nRC = cursor.setLast( scopingEntity ).toInt();
 
       return nRC;
    }
