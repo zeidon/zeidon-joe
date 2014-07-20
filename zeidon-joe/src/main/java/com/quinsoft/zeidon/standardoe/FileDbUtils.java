@@ -77,7 +77,7 @@ class FileDbUtils
         if ( ! f.exists() )
             throw new ZeidonException( "File DB directory does not exist: %s", directoryName );
 
-                             isFile = f.isFile();
+        isFile = f.isFile();
     }
 
     String genFilename( ViewOd viewOd, String qualifier )

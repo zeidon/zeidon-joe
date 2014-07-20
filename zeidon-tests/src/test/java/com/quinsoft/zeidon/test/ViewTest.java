@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.EnumSet;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,6 +34,8 @@ import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * @author DG
@@ -821,4 +824,17 @@ public class ViewTest
         System.out.println( "Done.\n"  );
     }
 
+    /**
+     * Tests loading an inputstream from a resourceName that is a list of resources separated by "|".
+     */
+    @Test
+    public void testLoadingResourceList()
+    {
+        String filename = zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/ThisFileDoesntExist|" +
+                          zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/mStudenCWithin.por";
+        filename = StrSubstitutor.replaceSystemProperties( filename );
+        ZeidonInputStream stream = JoeUtils.getInputStream( filename );
+        String desc = stream.getDescription();
+        assertTrue( "Somehow didn't find the correct stream", desc.endsWith( ".por" ));
+    }
 }

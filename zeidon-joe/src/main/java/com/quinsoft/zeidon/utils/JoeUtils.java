@@ -28,6 +28,7 @@ import java.io.Writer;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.regex.Pattern;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
@@ -55,6 +56,8 @@ import com.quinsoft.zeidon.ZeidonException;
  */
 public class JoeUtils
 {
+    private final static Pattern PIPE_DELIMITER = Pattern.compile( "\\|" );
+
     /**
      * Returns an input stream for a resource/filename.  Logic will first attempt to find
      * a filename that matches the resourceName (search is case-insensitive).  If a file
@@ -72,6 +75,22 @@ public class JoeUtils
      */
     public static ZeidonInputStream getInputStream( Task task, String resourceName, ClassLoader classLoader )
     {
+        // If the resourceName contains a '|' then it is a list of resources.  We'll return the first
+        // one that is valid.
+        String[] resourceList = PIPE_DELIMITER.split( resourceName );
+        if ( resourceList.length > 1 )
+        {
+            for ( String resource: resourceList )
+            {
+                ZeidonInputStream stream = getInputStream( task, resource, classLoader );
+                if ( stream != null )
+                    return stream;
+            }
+
+            // If we get here then none of the resources in the list were found so return null.
+            return null;
+        }
+
         try
         {
             //
@@ -143,12 +162,12 @@ public class JoeUtils
         }
     }
 
-    public static InputStream getInputStream( String resourceName, ClassLoader classLoader )
+    public static ZeidonInputStream getInputStream( String resourceName, ClassLoader classLoader )
     {
         return getInputStream( null, resourceName, classLoader );
     }
 
-    public static InputStream getInputStream( String resourceName )
+    public static ZeidonInputStream getInputStream( String resourceName )
     {
         return getInputStream( null, resourceName, null );
     }
@@ -502,7 +521,7 @@ public class JoeUtils
         view.writeOiAsJson( writer );
         return writer.toString();
     }
-    
+
     public static void writeOiToJsonFile( View view, String filename )
     {
         Writer writer = null;
