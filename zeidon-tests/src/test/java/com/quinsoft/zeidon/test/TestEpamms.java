@@ -9,6 +9,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -264,12 +265,12 @@ public class TestEpamms
 
 		   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
 		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
-		   
+
 		   //zVIEW vGrid2 = new zVIEW( );
 		   //CreateViewFromView( vGrid2, mSPLDef );
 		   View vGrid2;
-		   vGrid2 = mSPLDef.newView( );		   
-		   
+		   vGrid2 = mSPLDef.newView( );
+
 		   DropView( vGrid2 );
 
 		   RESULT = CreateEntity( mSPLDef, "LLD_Block", zPOS_AFTER );
@@ -283,17 +284,17 @@ public class TestEpamms
 		   /*
 		   ResetViewFromSubobject( mSPLDef );
 		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
-		   ResetViewFromSubobject( mSPLDef );	   
+		   ResetViewFromSubobject( mSPLDef );
 		   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
 		   */
-		   vGrid2 = mSPLDef.newView( );		   
+		   vGrid2 = mSPLDef.newView( );
 		   //CreateViewFromView( mSPLDef2, mSPLDef );
 		   String str = GetStringFromAttribute( vGrid2, "LLD_SpecialSectionAttribute", "Name" );
 		   DropView( vGrid2 );
 
 		   return( 0 );
 		}
-		
+
 		//:   VIEW mSPLDef  BASED ON LOD mSPLDef
 		public int
 		ExecuteJOE_Test2( View     ViewToWindow )
@@ -360,7 +361,7 @@ public class TestEpamms
 		   return( 0 );
 		// END
 		}
-		
+
 		//:   VIEW mSPLDef  BASED ON LOD mSPLDef
 		public int
 		ExecuteJOE_TemporalDeleteError( View     ViewToWindow )
@@ -380,8 +381,8 @@ public class TestEpamms
 		   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test2.por", zSINGLE );
 		   //:NAME VIEW mSPLDef "mSPLDef"
 		   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
-	   
-           // Dad's new test. After deleting the entity from a Temporal view, if the 
+
+           // Dad's new test. After deleting the entity from a Temporal view, if the
            // parent TemporalSubobject gets cancelled, then the deleted entity should be back.
            //:// First CancelSubobject test after delete of a subentity.
 
@@ -395,6 +396,8 @@ public class TestEpamms
            SaveID = mi_SaveID.intValue( );}
 
            //:DELETE ENTITY mSPLDef.LLD_Panel
+           EntityInstance ei = mSPLDef.cursor( "LLD_Panel" ).getEntityInstance();
+           EntityInstance page = mSPLDef.cursor( "LLD_Page" ).getEntityInstance();
            RESULT = DeleteEntity( mSPLDef, "LLD_Panel", zPOS_NEXT );
 
            //:CancelSubobject( mSPLDef, "LLD_Page" )

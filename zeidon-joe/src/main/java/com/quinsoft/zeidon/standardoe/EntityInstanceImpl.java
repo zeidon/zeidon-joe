@@ -1857,8 +1857,7 @@ class EntityInstanceImpl implements EntityInstance
         // The getChildrenHier uses an iterator that needs the nextHier pointers so we'll
         // create a temporary list before nulling them out.
         List<EntityInstanceImpl> list = new ArrayList<EntityInstanceImpl>();
-        list.add( this );
-        for ( EntityInstanceImpl ei : this.getChildrenHier( false, true ) )
+        for ( EntityInstanceImpl ei : this.getChildrenHier( true, false ) )
             list.add( ei );
 
         // Now we can set the pointers to null without a problem.
