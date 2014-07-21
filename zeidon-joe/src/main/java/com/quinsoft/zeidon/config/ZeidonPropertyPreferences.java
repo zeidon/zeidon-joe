@@ -6,6 +6,7 @@ package com.quinsoft.zeidon.config;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.text.StrLookup;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.log4j.Logger;
 
@@ -32,10 +33,15 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
     private final String     filename;
     private       Properties properties;
     private       String sourceDescription;
+    
+    /**
+     * Used to translate environment variables in property values.
+     */
+    private final StrSubstitutor substitutor = new StrSubstitutor( StrLookup.systemPropertiesLookup());
 
     public ZeidonPropertyPreferences( String filename, String jmxAppName )
     {
-        this.filename = filename;
+        this.filename = substitutor.replace( filename );
         reload();
         new JmxZeidonPreferences( this, "com.quinsoft.zeidon:type=ZeidonPropertyPreferences", jmxAppName, filename );
     }
@@ -45,7 +51,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
     {
         String fullKey = groupName + "." + key;
         String str = properties.getProperty( fullKey, defaultValue );
-        str = StrSubstitutor.replaceSystemProperties( str );
+        str = substitutor.replace( str );
         return str;
     }
 
@@ -55,12 +61,12 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
         ZeidonInputStream stream = null;
         try
         {
-            LOG.info( "Opening properties from: " + filename );
             properties = new Properties();
             stream = JoeUtils.getInputStream( null, filename, this.getClass().getClassLoader() );
             if ( stream == null )
                 throw new ZeidonException( "Couldn't find property file" );
             
+            LOG.info( "Opening properties from: " + stream.getDescription() );
             properties.load( stream );
             sourceDescription = stream.getDescription();
         }
