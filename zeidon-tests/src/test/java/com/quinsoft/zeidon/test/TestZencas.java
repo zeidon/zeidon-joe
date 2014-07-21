@@ -5,8 +5,10 @@ package com.quinsoft.zeidon.test;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Arrays;
@@ -205,7 +207,7 @@ public class TestZencas
         BufferedWriter stream = null;
         try
         {
-            stream = new BufferedWriter( new FileWriter( getTempDir() + "/stud.json" ) );
+        	stream = new BufferedWriter( new OutputStreamWriter(new FileOutputStream( getTempDir() + "/stud.json" ), "UTF-8") );
             List<View> list = Arrays.asList( stud, person );
             WriteOisToJsonStream writer = new WriteOisToJsonStream( list, stream, options );
             writer.writeToStream();
