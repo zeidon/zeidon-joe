@@ -45,7 +45,7 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         if ( url.startsWith( "http:" ) || url.startsWith( "https:" ) )
             return new ActivateOiFromRestServer( url );
 
-        if ( url.startsWith( "file:" ) )
+        if ( url.startsWith( "file:" ) || url.startsWith( "resource:" ) )
             return new ActivateOiFromFileDb();
 
         throw new ZeidonException( "oiSourceUrl specifies unknown protocol: %s", url );
@@ -78,7 +78,7 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         if ( url.startsWith( "http:" ) || url.startsWith( "https:" ) )
             return new CommitToRestServer();
 
-        if ( url.startsWith( "file:" ) )
+        if ( url.startsWith( "file:" ) || url.startsWith( "resource:" ) )
             return new CommitOiToFileDb();
 
         throw new ZeidonException( "oiSourceUrl specifies unknown protocol: %s", url );

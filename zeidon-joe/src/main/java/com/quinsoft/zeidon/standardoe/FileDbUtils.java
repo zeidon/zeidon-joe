@@ -53,31 +53,57 @@ class FileDbUtils
     {
         this.options = options;
         String url = this.options.getOiSourceUrl();
-        if ( ! url.startsWith( "file:" ) )
-            throw new ZeidonException("File DB Error: oiSourceUrl doesn't start with 'file:'.  URL = %s", url );
+        String workstring;
+        
+        if ( url.startsWith( "file:" ) )
+            workstring = url.substring( 5 );
+        else
+        if ( url.startsWith( "resource:" ) )
+            workstring = url.substring( 9 );
+        else
+            throw new ZeidonException("File DB Error: oiSourceUrl doesn't start with 'file:' or 'resource:'.  URL = %s", url );
 
-        if ( url.startsWith( "file:xml:" ) )
+        if ( workstring.startsWith( "xml:" ) )
         {
             fileType = FileType.XML;
-            directoryName = url.substring( 9 );
+            directoryName = workstring.substring( 4 );
         }
         else
-        if ( url.startsWith( "file:json:" ) )
+        if ( workstring.startsWith( "json:" ) )
         {
             fileType = FileType.JSON;
-            directoryName = url.substring( 10 );
+            directoryName = workstring.substring( 5 );
+        }
+        else
+        if ( workstring.toLowerCase().endsWith( ".xml" ) )
+        {
+            fileType = FileType.XML;
+            directoryName = workstring;
+        }
+        else
+        if ( workstring.toLowerCase().endsWith( ".json" ) )
+        {
+            fileType = FileType.JSON;
+            directoryName = workstring;
         }
         else
         {
             fileType = FileType.POR;
-            directoryName = url.substring( 5 );
+            directoryName = workstring;
         }
 
-        File f = new File( directoryName );
-        if ( ! f.exists() )
-            throw new ZeidonException( "File DB directory does not exist: %s", directoryName );
-
-        isFile = f.isFile();
+        if ( url.startsWith( "resource:" ) )
+        {
+            isFile = true;
+        }
+        else
+        {
+            File f = new File( directoryName );
+            if ( ! f.exists() )
+                throw new ZeidonException( "File DB directory does not exist: %s", directoryName );
+    
+            isFile = f.isFile();
+        }
     }
 
     String genFilename( ViewOd viewOd, String qualifier )

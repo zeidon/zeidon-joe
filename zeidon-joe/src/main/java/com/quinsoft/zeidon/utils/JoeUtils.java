@@ -82,7 +82,7 @@ public class JoeUtils
         {
             for ( String resource: resourceList )
             {
-                ZeidonInputStream stream = getInputStream( task, resource, classLoader );
+                ZeidonInputStream stream = getInputStream( task, resource.trim(), classLoader );
                 if ( stream != null )
                     return stream;
             }
@@ -102,7 +102,12 @@ public class JoeUtils
 
             if ( classLoader == null )
             {
-                classLoader = resourceName.getClass().getClassLoader();
+                if ( task != null )
+                    classLoader = task.getClass().getClassLoader();
+                if ( classLoader == null )
+                    classLoader = new JoeUtils().getClass().getClassLoader();
+                if ( classLoader == null )
+                    classLoader = resourceName.getClass().getClassLoader();
                 if ( classLoader == null )
                     classLoader = ClassLoader.getSystemClassLoader();
             }
@@ -165,6 +170,11 @@ public class JoeUtils
     public static ZeidonInputStream getInputStream( String resourceName, ClassLoader classLoader )
     {
         return getInputStream( null, resourceName, classLoader );
+    }
+
+    public static ZeidonInputStream getInputStream( Task task, String resourceName )
+    {
+        return getInputStream( task, resourceName, null );
     }
 
     public static ZeidonInputStream getInputStream( String resourceName )

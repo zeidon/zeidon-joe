@@ -5,7 +5,6 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.util.EnumSet;
 
 import org.apache.commons.io.IOUtils;
@@ -23,6 +22,8 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * Activates an OI from a Zeidon file DB, which is OIs stored in a directory.
@@ -165,19 +166,25 @@ public class ActivateOiFromFileDb implements Activator
 
     private View activateFile( final String filename )
     {
-        FileInputStream inputStream = null;
+        ZeidonInputStream inputStream = null;
         task.dblog().info( "Reading OI from %s", filename );
         try
         {
             switch ( fileDbUtils.getFileType() )
             {
                 case XML:
-                    inputStream = new FileInputStream( filename );
+                    inputStream = JoeUtils.getInputStream( task, filename );
+                    if ( inputStream == null )
+                        throw new ZeidonException( "Unknown FileDB resource: %s", filename );
+                    
                     ActivateOiFromXmlStream loader = new ActivateOiFromXmlStream( task, inputStream, control );
                     return loader.read();
 
                 case JSON:
-                    inputStream = new FileInputStream( filename );
+                    inputStream = JoeUtils.getInputStream( task, filename );
+                    if ( inputStream == null )
+                        throw new ZeidonException( "Unknown FileDB resource: %s", filename );
+                    
                     return task.activateOiFromJsonStream( inputStream, control );
 
                 default:
