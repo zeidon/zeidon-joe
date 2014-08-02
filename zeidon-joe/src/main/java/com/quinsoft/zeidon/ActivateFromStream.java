@@ -34,7 +34,7 @@ public class ActivateFromStream
     private InputStream inputStream;
     private String      resourceName;
     private EnumSet<ActivateFlags> flags = ActivateFlags.MULTIPLE;
-    private StreamFormat format = StreamFormat.POR;
+    private StreamFormat format;
     private Application application;
 
     /**

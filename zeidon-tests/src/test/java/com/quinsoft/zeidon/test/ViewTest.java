@@ -807,8 +807,6 @@ public class ViewTest
         // The second por file doesn't work either.  This time the value is 19000101113000000.
         //mStudenC = zencas.activateOiFromFile( "mStudenC", "./testdata/ZENCAs/mStudenCOI.por", null );
         mStudenC = zencas.activateOiFromFile( "mStudenC", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mStudenCWithin.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
-        FileWriter writer = new FileWriter( "/tmp/mStudenC.json" );
-        mStudenC.writeOiAsJson( writer );
         mStudenC.log( ).info("*** Show mStudenC data ***");
         CursorResult RESULT = mStudenC.cursor( "RegistrationClass" ).setFirst( "Student" );
         //RESULT = mStudenC.cursor( "Registration" ).setFirst().toInt();
@@ -865,9 +863,22 @@ public class ViewTest
         String filename = mFASrc.getTempDirectory() + "dynamictest.por";
         mFASrc.writeOiToFile( filename, 0 );
 
+        try
+        {
+            View v = new ActivateFromStream( mFASrc )
+                                .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
+                                .asJson()
+                                .activateFirst();
+
+            assertTrue( "Didn't get expected Exception", false );
+        }
+        catch ( ZeidonException e )
+        {
+            mFASrc.log().debug( "Got expected Exception" );
+        }
+
         View v = new ActivateFromStream( mFASrc )
-                            .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/mStudenC-dynamictest.json" )
-                            .asJson()
+                            .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
                             .allowDynamicAttributesFor( "Student" )
                             .activateFirst();
 

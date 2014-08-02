@@ -1,0 +1,998 @@
+{
+  ".meta" : {
+    "version" : "1.0",
+    "date" : "2014-08-02T15:57:02.862"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "ZENCAs",
+      "odName" : "lStudDpt",
+      "incremental" : false
+    },
+    "Student" : [ {
+      "ID" : "1184",
+      "DynamicAttr": "This is a test",
+      "Status" : "A",
+      "CurrentLevel" : "4",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "4510",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "1627",
+      "Person" : [ {
+        "ID" : "1627",
+        "LastName" : "Smith",
+        "FirstName" : "Joe",
+        "MiddleName" : "B",
+        "FK_ID_FINAIDPROFIL" : "25519",
+        "FK_ID_ADDRESS" : "258009",
+        "FK_ID_CHURCH" : "171"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "1354",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FK_ID_FACULTY" : "29",
+        "FK_ID_DEGREETRACK" : "57",
+        "FK_ID_STUDENT" : "1184",
+        "MajorDegreeTrack" : [ {
+          "ID" : "57",
+          "Name" : "General",
+          "Description" : "Verified against the MS Excel spreadsheets.",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "2",
+          "FK_ID_COLLEGEYEAR" : "2",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "15541",
+      "CreationDate" : "20060311",
+      "Status" : "A",
+      "CurrentLevel" : "4",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "5281",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "77244",
+      "Person" : [ {
+        "ID" : "77244",
+        "LastName" : "Biggs",
+        "FirstName" : "Kurtis",
+        "MiddleName" : "M",
+        "FK_ID_DONOR" : "35130",
+        "FK_ID_ADDRESS" : "127037",
+        "FK_ID_CHURCH" : "2141"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "12732",
+        "LastAuditSatisfiedDescription" : "Courses on Track",
+        "FK_ID_FACULTY" : "74",
+        "FK_ID_DEGREETRACK" : "1103",
+        "FK_ID_STUDENT" : "15541",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1103",
+          "Name" : "Social Relations",
+          "Description" : "Validated.\r\nJL Added the Gen Ed. Communication Skills, and the Bib Lit/Christian Tradition  Groups. 7/28/06\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "62",
+          "FK_ID_COLLEGEDEGRE" : "2",
+          "FK_ID_COLLEGEYEAR" : "25",
+          "DegreeMajor" : [ {
+            "ID" : "62",
+            "Name" : "Psychology",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "17",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "17",
+              "Name" : "Psychology",
+              "FKIDACADEMICDIVISI" : "3",
+              "FK_ID_FACULTY" : "15",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "15906",
+        "ComprehensiveTestScore" : "H",
+        "LastAuditSatisfiedDescription" : "Courses SATISFIED",
+        "GraduationDate" : "20100515",
+        "FKIDDEGREECANDIDAC" : "2989",
+        "FK_ID_FACULTY" : "29",
+        "FK_ID_DEGREETRACK" : "1068",
+        "FK_ID_STUDENT" : "15541",
+        "FKHISTID_STUDENT" : "15541",
+        "FKIDSTUDENTMAJORDE" : "15906",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1068",
+          "Name" : "General (BA)",
+          "Description" : "Configured against the Spring 2006 new curriculum submissions by Matt W.  Reviewed/Setup - MB and MJB on 6/6/06 - oooooohhhhhhh.  Very scary.\r\nJL Added the Gen Ed. Communication Skills, and the Bib Lit/Christian Tradition  Groups. 7/28/06\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "2",
+          "FK_ID_COLLEGEYEAR" : "25",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ],
+      "StudentMinorDegreeTrack" : [ {
+        "ID" : "850",
+        "FK_ID_DEGREETRACK" : "1479",
+        "FK_ID_STUDENT" : "15541",
+        "MinorDegreeTrack" : [ {
+          "ID" : "1479",
+          "Name" : "Theology/Philosophy",
+          "Description" : "Verified 10/14/08 JM",
+          "FK_ID_DEGREEMINOR" : "13",
+          "FK_ID_COLLEGEYEAR" : "26",
+          "DegreeMinor" : [ {
+            "ID" : "13",
+            "Name" : "Philosophy",
+            "Description" : "Changed from PHIL, adult studies to undergrad.",
+            "FK_ID_COLLEGE" : "1",
+            "FKIDADMINISTRATIVE" : "1"
+          } ]
+        } ]
+      }, {
+        "ID" : "724",
+        "FK_ID_DEGREETRACK" : "1366",
+        "FK_ID_STUDENT" : "15541",
+        "MinorDegreeTrack" : [ {
+          "ID" : "1366",
+          "Name" : "Math",
+          "Description" : "Verified 10/15/08 JM",
+          "Status" : "A",
+          "FK_ID_DEGREEMINOR" : "11",
+          "FK_ID_COLLEGEYEAR" : "26",
+          "DegreeMinor" : [ {
+            "ID" : "11",
+            "Name" : "Mathematics",
+            "Description" : "Changed from MATH. Undergrad.",
+            "FK_ID_COLLEGE" : "1",
+            "FKIDADMINISTRATIVE" : "1"
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "16711",
+      "CreationDate" : "20070827",
+      "Status" : "A",
+      "CurrentLevel" : "4",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "7750",
+      "FK_ID_COLLEGEYEAR" : "38",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "117169",
+      "Person" : [ {
+        "ID" : "117169",
+        "LastName" : "Peryea",
+        "FirstName" : "Tyler",
+        "MiddleName" : "A",
+        "FK_ID_ADDRESS" : "205455",
+        "FK_ID_CHURCH" : "3140"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "11253",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1209",
+        "FK_ID_STUDENT" : "16711",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1209",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "26",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "16841",
+      "CreationDate" : "20071204",
+      "Status" : "A",
+      "CurrentLevel" : "2",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "9078",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "83307",
+      "Person" : [ {
+        "ID" : "83307",
+        "LastName" : "Hollett",
+        "FirstName" : "Joshua",
+        "MiddleName" : "S",
+        "FK_ID_ADDRESS" : "133837",
+        "FK_ID_CHURCH" : "974"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "14218",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1381",
+        "FK_ID_STUDENT" : "16841",
+        "FKHISTID_STUDENT" : "16841",
+        "FKIDSTUDENTMAJORDE" : "14218",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1381",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ],
+      "StudentMinorDegreeTrack" : [ {
+        "ID" : "801",
+        "FK_ID_DEGREETRACK" : "1214",
+        "FK_ID_STUDENT" : "16841",
+        "MinorDegreeTrack" : [ {
+          "ID" : "1214",
+          "Name" : "Music ",
+          "Description" : "verified 10/2/08 JM",
+          "Status" : "A",
+          "FK_ID_DEGREEMINOR" : "17",
+          "FK_ID_COLLEGEYEAR" : "26",
+          "DegreeMinor" : [ {
+            "ID" : "17",
+            "Name" : "Music",
+            "Description" : "Changed to undergrad, from MUSIC.",
+            "FK_ID_COLLEGE" : "1",
+            "FKIDADMINISTRATIVE" : "1"
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "16879",
+      "CreationDate" : "20071219",
+      "Status" : "A",
+      "CurrentLevel" : "2",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "9036",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "64937",
+      "Person" : [ {
+        "ID" : "64937",
+        "LastName" : "Barnard",
+        "FirstName" : "David",
+        "MiddleName" : "T",
+        "FK_ID_ADDRESS" : "114413",
+        "FK_ID_CHURCH" : "323"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "12949",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6675",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1381",
+        "FK_ID_STUDENT" : "16879",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1381",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "17001",
+      "CreationDate" : "20080130",
+      "Status" : "A",
+      "CurrentLevel" : "2",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "9072",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "122929",
+      "Person" : [ {
+        "ID" : "122929",
+        "LastName" : "Weaver",
+        "FirstName" : "Holly",
+        "MiddleName" : "M",
+        "FK_ID_ADDRESS" : "212096",
+        "FK_ID_CHURCH" : "161"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "13002",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6711",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1381",
+        "FK_ID_STUDENT" : "17001",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1381",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ],
+      "StudentMinorDegreeTrack" : [ {
+        "ID" : "764",
+        "FK_ID_DEGREETRACK" : "1320",
+        "FK_ID_STUDENT" : "17001",
+        "MinorDegreeTrack" : [ {
+          "ID" : "1320",
+          "Name" : "General",
+          "Description" : "1999-2005 verified 10/14/08  JM",
+          "Status" : "A",
+          "FK_ID_DEGREEMINOR" : "1",
+          "FK_ID_COLLEGEYEAR" : "26",
+          "DegreeMinor" : [ {
+            "ID" : "1",
+            "Name" : "Biology",
+            "Description" : "Biology Minor 2004-05",
+            "FK_ID_COLLEGE" : "1",
+            "FKIDADMINISTRATIVE" : "1",
+            "FK_ID_DEPARTMENT" : "2",
+            "MinorDepartment" : [ {
+              "ID" : "2",
+              "Name" : "Biology",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "17035",
+      "CreationDate" : "20080206",
+      "Status" : "A",
+      "CurrentLevel" : "2",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "9116",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "123599",
+      "Person" : [ {
+        "ID" : "123599",
+        "LastName" : "Saintine",
+        "FirstName" : "Vladimir",
+        "FK_ID_ADDRESS" : "213092",
+        "FK_ID_CHURCH" : "3481"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "13064",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6756",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1381",
+        "FK_ID_STUDENT" : "17035",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1381",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "13065",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6756",
+        "FK_ID_FACULTY" : "11",
+        "FK_ID_DEGREETRACK" : "1360",
+        "FK_ID_STUDENT" : "17035",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1360",
+          "Name" : "Pre Med Preparatory Program",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "179",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "179",
+            "Name" : "Preparatory Program",
+            "Description" : "Preparatory Program tracking for Pre Med, Pre Vet, Pre Dental.",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "2",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "2",
+              "Name" : "Biology",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "17190",
+      "CreationDate" : "20080313",
+      "Status" : "A",
+      "CurrentLevel" : "2",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "8693",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "122337",
+      "Person" : [ {
+        "ID" : "122337",
+        "LastName" : "Cruz",
+        "FirstName" : "Soria",
+        "MiddleName" : "T",
+        "FK_ID_ADDRESS" : "211580"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "13511",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6332",
+        "FK_ID_FACULTY" : "11",
+        "FK_ID_DEGREETRACK" : "1360",
+        "FK_ID_STUDENT" : "17190",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1360",
+          "Name" : "Pre Med Preparatory Program",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "179",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "179",
+            "Name" : "Preparatory Program",
+            "Description" : "Preparatory Program tracking for Pre Med, Pre Vet, Pre Dental.",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "2",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "2",
+              "Name" : "Biology",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "13868",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6332",
+        "FK_ID_FACULTY" : "516",
+        "FK_ID_DEGREETRACK" : "1438",
+        "FK_ID_STUDENT" : "17190",
+        "FKHISTID_STUDENT" : "17190",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1438",
+          "Name" : "For Advising Purposes",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "180",
+          "FK_ID_COLLEGEDEGRE" : "19",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "180",
+            "Name" : "CAS Advising Major",
+            "Description" : "For students who will be in developmental program with CAS Director advising, plus their chosen major.",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "31",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "31",
+              "Name" : "Registrar's Office",
+              "FKIDACADEMICDIVISI" : "6",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "15467",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1381",
+        "FK_ID_STUDENT" : "17190",
+        "FKHISTID_STUDENT" : "17190",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1381",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ],
+      "StudentMinorDegreeTrack" : [ {
+        "ID" : "950",
+        "FK_ID_DEGREETRACK" : "1659",
+        "FK_ID_STUDENT" : "17190",
+        "MinorDegreeTrack" : [ {
+          "ID" : "1659",
+          "Name" : "General",
+          "Description" : "Passed at Oct 2006 Faculty Meeting.  Passed in spring 2005 Curriculum meeting.\r\nVerified 10/16/08 JM\r\nRevised 6-13-09",
+          "Status" : "A",
+          "FK_ID_DEGREEMINOR" : "39",
+          "FK_ID_COLLEGEYEAR" : "38",
+          "DegreeMinor" : [ {
+            "ID" : "39",
+            "Name" : "Visual Arts",
+            "FK_ID_COLLEGE" : "1",
+            "FKIDADMINISTRATIVE" : "1"
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "17323",
+      "CreationDate" : "20080507",
+      "Status" : "A",
+      "CurrentLevel" : "2",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "9340",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "125122",
+      "Person" : [ {
+        "ID" : "125122",
+        "LastName" : "Yu",
+        "FirstName" : "Peter",
+        "FK_ID_FINAIDPROFIL" : "17524",
+        "FK_ID_ADDRESS" : "215230"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "13420",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6984",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1381",
+        "FK_ID_STUDENT" : "17323",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1381",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP and Bib Lilt/ Christian Tradition Reusable Groups. 4.24.09 JL",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "13421",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "6984",
+        "FK_ID_FACULTY" : "11",
+        "FK_ID_DEGREETRACK" : "1360",
+        "FK_ID_STUDENT" : "17323",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1360",
+          "Name" : "Pre Med Preparatory Program",
+          "Status" : "H",
+          "FK_ID_DEGREEMAJOR" : "179",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "DegreeMajor" : [ {
+            "ID" : "179",
+            "Name" : "Preparatory Program",
+            "Description" : "Preparatory Program tracking for Pre Med, Pre Vet, Pre Dental.",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "2",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "2",
+              "Name" : "Biology",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "18202",
+      "CreationDate" : "20090531",
+      "Status" : "A",
+      "CurrentLevel" : "1",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "10388",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "125060",
+      "Person" : [ {
+        "ID" : "125060",
+        "LastName" : "McLean",
+        "FirstName" : "Euro",
+        "MiddleName" : "X",
+        "FK_ID_FINAIDPROFIL" : "16817",
+        "FK_ID_ADDRESS" : "215143",
+        "FK_ID_CHURCH" : "2506"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "15081",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "8058",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1578",
+        "FK_ID_STUDENT" : "18202",
+        "FKHISTID_STUDENT" : "18202",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1578",
+          "Name" : "Pre-Pharmacy",
+          "Description" : "Pre Pharmacy requirements - revised 11-5-08 mhb\r\nAdded New CP Courses and First Year Experience. JL 4.18.09",
+          "Status" : "A",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "38",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "18041",
+      "CreationDate" : "20090326",
+      "Status" : "A",
+      "CurrentLevel" : "1",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "10199",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "141189",
+      "Person" : [ {
+        "ID" : "141189",
+        "LastName" : "Charles",
+        "FirstName" : "Stacey",
+        "MiddleName" : "G",
+        "FK_ID_FINAIDPROFIL" : "17182",
+        "FK_ID_ADDRESS" : "234194",
+        "FK_ID_CHURCH" : "4008"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "14638",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "7852",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1578",
+        "FK_ID_STUDENT" : "18041",
+        "FKHISTID_STUDENT" : "18041",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1578",
+          "Name" : "Pre-Pharmacy",
+          "Description" : "Pre Pharmacy requirements - revised 11-5-08 mhb\r\nAdded New CP Courses and First Year Experience. JL 4.18.09",
+          "Status" : "A",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "38",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "ID" : "18353",
+      "CreationDate" : "20090709",
+      "Status" : "A",
+      "CurrentLevel" : "1",
+      "eMailAddress" : "kellysautter@comcast.net",
+      "FK_ID_STUDENTHEALT" : "10500",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_PERSON" : "144062",
+      "Person" : [ {
+        "ID" : "144062",
+        "LastName" : "Dauo",
+        "FirstName" : "Brandon",
+        "MiddleName" : "L",
+        "FK_ID_FINAIDPROFIL" : "18025",
+        "FK_ID_ADDRESS" : "237678",
+        "FK_ID_CHURCH" : "3724"
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : "1",
+        "Name" : "Main Campus",
+        "Description" : "Main Campus",
+        "AutoAssignCounselorFlag" : "Y",
+        "FacultyProspectScript" : "Note to Faculty \r\n\r\nFirst and foremost, it is important that you realize how meaningful it is to a prospective student, and sometimes more important to parents, that a faculty member actually took the time to call them.  Do not underestimate this aspect of your involvement in building a class.  \r\nRemember, one of the things we market is our size and what that size means to the development of relationships, community, and employment networking.  Additionally, remember that at larger schools faculty members rarely, if ever, take the time to meet with prospective students, let alone attempt to make phone contact.  Phone contact really does mean something.\r\n\r\nSecond, you are trying to get a feel for whether or not the prospect is looking for program INFORMATION and graduate outcomes - or for CONNECTION.  \r\n\r\nYou know better than anyone else about what your program has to offer.  That will cover the INFORMATION piece.  It would be good to have an example or two of what some of your recent graduates are doing.  \r\n\r\nAs for CONNECTION, below you will find a list of open-ended questions that can aid you in establishing a relationship.  Of course, these are just suggestions.  Mainly, millennials just want to know you are genuine and willing to make contact at a personal level. \r\n\r\nThird, in Admissions we try to meet the goals listed below on every call.  If you can only meet one of these goals, please try to push the CAMPUS VISIT.  Statistics show that about 70% of all campus visitors enroll.  They can find out more about CAMPUS VISITS at http://www.enc.edu/undergrad/campus_visit.htm.\r\n\r\nIf you have any questions do not hesitate to call Admissions at ext. 3711.\r\n\r\nEvery Call Goals\r\n·\tFor Seniors - push application\r\n·\tPush Campus Visit\r\n·\tDrive to Web:   www.enc.edu\r\n·\tVerify Contact Information\r\no\t        Phone Numbers\r\no\t        E-mail Addresses\r\n\r\nOpen-Ended Questions for Building Relationships/Making Personal Connections:\r\n\r\nWhat are you looking for in a college?\r\n\r\nWhat interests you about (fill in your academic discipline)?\r\n\r\nWhat do you think you might like to do after college?\r\n\r\nHow important is it for you to go to a Christian college?\r\n\r\nTell me about your favorite activity or memory from your HS years.\r\n\r\nWhat do you like to do for fun?\r\n\r\nWhere do your interests lie?\r\n\r\nHow did you hear about ENC?\r\n\r\nWhat excites you about attending college?\r\n\r\nWhere do you see yourself in 5 years?\r\n\r\nHow important are your parents' opinions in your college decision?\r\n\r\nCould you help me understand more about your Christian faith?\r\n\r\nWhat is your favorite class in high school and why?\r\n\r\nWhy do you want to attend college?",
+        "NamePrefix" : "MC",
+        "FK_ID_DOCUMENT" : "267"
+      } ],
+      "StudentMajorDegreeTrack" : [ {
+        "ID" : "15083",
+        "LastAuditSatisfiedDescription" : "Courses NOT satisfied",
+        "FKIDDEGREECANDIDAC" : "8167",
+        "FK_ID_FACULTY" : "461",
+        "FK_ID_DEGREETRACK" : "1576",
+        "FK_ID_STUDENT" : "18353",
+        "FKHISTID_STUDENT" : "18353",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1576",
+          "Name" : "General (BS)",
+          "Description" : "Validated 7/20/07 MJB\r\nAdded New CP Courses and First Year Experience. JL 4.18.09",
+          "Status" : "A",
+          "FK_ID_DEGREEMAJOR" : "16",
+          "FK_ID_COLLEGEDEGRE" : "1",
+          "FK_ID_COLLEGEYEAR" : "38",
+          "DegreeMajor" : [ {
+            "ID" : "16",
+            "Name" : "Chemistry",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "3",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "3",
+              "Name" : "Chemistry",
+              "FacultySharedAdvisorFlag" : "Y",
+              "FKIDACADEMICDIVISI" : "7",
+              "FK_ID_FACULTY" : "11",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "15486",
+        "LastAuditSatisfiedDescription" : "Courses on Track",
+        "FK_ID_FACULTY" : "516",
+        "FK_ID_DEGREETRACK" : "1580",
+        "FK_ID_STUDENT" : "18353",
+        "FKHISTID_STUDENT" : "18353",
+        "MajorDegreeTrack" : [ {
+          "ID" : "1580",
+          "Name" : "For Advising Purposes",
+          "Status" : "A",
+          "FK_ID_DEGREEMAJOR" : "180",
+          "FK_ID_COLLEGEDEGRE" : "19",
+          "FK_ID_COLLEGEYEAR" : "38",
+          "DegreeMajor" : [ {
+            "ID" : "180",
+            "Name" : "CAS Advising Major",
+            "Description" : "For students who will be in developmental program with CAS Director advising, plus their chosen major.",
+            "FK_ID_COLLEGE" : "1",
+            "FK_ID_DEPARTMENT" : "31",
+            "FKIDADMINISTRATIVE" : "1",
+            "MajorDepartment" : [ {
+              "ID" : "31",
+              "Name" : "Registrar's Office",
+              "FKIDACADEMICDIVISI" : "6",
+              "FKIDADMINISTRATIVE" : "1"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}

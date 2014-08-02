@@ -156,7 +156,7 @@ class SimpleTest
 
 //        String fileDbUrl = "file:json:/tmp/filedb";
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
-        String fileDbUrl = "jdbc:sqlite:/home/dg/zeidon/sqlite/zencasa.sqlite";
+        String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
 
