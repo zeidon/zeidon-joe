@@ -38,7 +38,6 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
-import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
 
 /**
@@ -280,42 +279,6 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
         {
             if ( options.closeStream() )
                 IOUtils.closeQuietly( options.getInputStream() );
-        }
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( String viewOdName, BufferedBinaryStreamReader stream ) throws UnknownViewOdException
-    {
-        try
-        {
-            ActivateOiFromStream activator = new ActivateOiFromStream(this, getTask().getApplication(), null, null );
-            activator.setStreamReader( stream );
-            activator.setViewOd( getTask().getApplication().getViewOd( getTask(), viewOdName ) );
-            ViewImpl v = activator.read();
-            return v;
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( String viewOdName,
-                                          String applicationName,
-                                          BufferedBinaryStreamReader stream ) throws UnknownViewOdException
-    {
-        try
-        {
-            ActivateOiFromStream activator = new ActivateOiFromStream(this, getTask().getApplication(), null, null );
-            activator.setStreamReader( stream );
-            activator.setViewOd( getTask().getApplication( applicationName ).getViewOd( getTask(), viewOdName ) );
-            ViewImpl v = activator.read();
-            return v;
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e );
         }
     }
 

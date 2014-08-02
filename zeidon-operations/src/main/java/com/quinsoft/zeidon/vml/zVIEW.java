@@ -47,7 +47,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
-import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 
 /**
  * A wrapper around a View to allow VML generation to closely resemble generated .c.
@@ -323,20 +322,6 @@ public class zVIEW extends VmlOperation implements View
     public View activateObjectInstance(ViewOd viewOd, View qual, EnumSet<ActivateFlags> control)
     {
         return view.activateObjectInstance( viewOd, qual, control );
-    }
-
-    @Override
-    public View activateOiFromStream( String viewOdName, BufferedBinaryStreamReader stream ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, stream );
-    }
-
-    @Override
-    public View activateOiFromStream( String viewOdName,
-                                      String applicationName,
-                                      BufferedBinaryStreamReader stream ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, applicationName, stream );
     }
 
     @Override

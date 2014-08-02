@@ -22,7 +22,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
-import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 
 /**
  * @author DG
@@ -54,18 +53,6 @@ public interface TaskQualification extends Lockable
     View activateOiFromFile( String viewOdName, Application app, String filename, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
     View activateOiFromFile( String viewOdName, TaskQualification task, String filename, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
     View activateOiFromFile( ViewOd viewOd, String filename, EnumSet<ActivateFlags> control );
-
-    /**
-     * Activate an OI from the buffered stream reader.  Note: this doesn't close the stream so it can be used
-     * to activate multiple OIs from a single stream.
-     *
-     * @param viewOdName
-     * @param stream
-     * @return
-     * @throws UnknownViewOdException
-     */
-    View activateOiFromStream( String viewOdName, BufferedBinaryStreamReader stream ) throws UnknownViewOdException;
-    View activateOiFromStream( String viewOdName, String applicationName, BufferedBinaryStreamReader stream ) throws UnknownViewOdException;
 
     List<View> activateOisFromStream( ActivateFromStream options ) throws UnknownViewOdException;
 
