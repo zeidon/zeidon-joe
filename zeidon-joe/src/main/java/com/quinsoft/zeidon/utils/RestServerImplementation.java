@@ -3,14 +3,12 @@
  */
 package com.quinsoft.zeidon.utils;
 
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
@@ -63,17 +61,16 @@ public class RestServerImplementation
         try
         {
             rcEI.getAttribute( "ReturnCode" ).setValue( 0 ); // Assume everything is OK.
+            View qual = new ActivateFromStream( task )
+                                    .asJson()
+                                    .fromInputString( postContent )
+                                    .activateFirst();
 
-            InputStream stream = IOUtils.toInputStream(postContent, "UTF-8");
-            View qual = task.activateOiFromJsonStream( stream, null );
             qual.logObjectInstance();
-            
+
             ActivateOptions activateOptions = new ActivateOptions( task );
-            
             View view = task.activateObjectInstance( viewOdName, qual, activateOptions );
-
             StringWriter strWriter = new StringWriter();
-
             List<View> list = Arrays.asList( rc, view );
             WriteOisToJsonStream writer = new WriteOisToJsonStream( list, strWriter, options );
             writer.writeToStream();
@@ -83,7 +80,7 @@ public class RestServerImplementation
         catch ( Exception e )
         {
             task.log().error( "Error in Activate", e, (Object[]) null );
-            
+
             // Set the error codes.
             rcEI.getAttribute( "ReturnCode" ).setValue( 500 );
             rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
@@ -96,7 +93,7 @@ public class RestServerImplementation
             return strWriter.toString();
         }
     }
-    
+
     /**
      * Activate an OI.
      *

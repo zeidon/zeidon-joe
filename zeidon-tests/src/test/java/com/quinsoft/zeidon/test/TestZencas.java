@@ -4,7 +4,6 @@
 package com.quinsoft.zeidon.test;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,6 +26,7 @@ import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
@@ -38,7 +38,6 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiOptions;
-import com.quinsoft.zeidon.standardoe.ActivateOisFromJsonStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 import com.quinsoft.zeidon.utils.JsonUtils;
@@ -217,18 +216,12 @@ public class TestZencas
             IOUtils.closeQuietly( stream );
         }
 
-        FileInputStream inputStream = new FileInputStream( getTempDir() + "/stud.json" );
-        try
-        {
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( zencas, inputStream, null );
-            List<View> viewList = activator.read();
-            for ( View v : viewList )
-                v.logObjectInstance();
-        }
-        finally
-        {
-            IOUtils.closeQuietly( inputStream );
-        }
+        List<View> viewList = new ActivateFromStream( zencas )
+                                        .asJson()
+                                        .fromResource( getTempDir() + "/stud.json" )
+                                        .activate();
+        for ( View v : viewList )
+            v.logObjectInstance();
 
         stud = new QualificationBuilder( zencas )
                             .setViewOd( "mCollege" )
@@ -248,21 +241,14 @@ public class TestZencas
             IOUtils.closeQuietly( stream );
         }
 
-        inputStream = new FileInputStream( getTempDir() + "/mcollege.json" );
-        try
+        viewList = new ActivateFromStream( zencas )
+                                    .asJson()
+                                    .fromResource( getTempDir() + "/mcollege.json" )
+                                    .activate();
+        for ( View v : viewList )
         {
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( zencas, inputStream, null );
-            List<View> viewList = activator.read();
-            for ( View v : viewList )
-            {
-                v.logObjectInstance();
-                v.log().info( "Entity count = %d", v.cursor( "College" ).getEntityCount() );
-            }
-
-        }
-        finally
-        {
-            IOUtils.closeQuietly( inputStream );
+            v.logObjectInstance();
+            v.log().info( "Entity count = %d", v.cursor( "College" ).getEntityCount() );
         }
 	}
 

@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -168,7 +169,10 @@ class SimpleTest
                             .activate();
 
         JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
-        View stud2 = JoeUtils.actviateOiFromJsonFile( zencas, "/tmp/stud.json" );
+        View stud2 = new ActivateFromStream( zencas )
+                            .fromResource( "/tmp/stud.json" )
+                            .asJson()
+                            .activateFirst();
         stud2.logObjectInstance();
 //        stud.logObjectInstance();
 /*

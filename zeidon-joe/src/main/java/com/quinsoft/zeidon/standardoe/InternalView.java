@@ -22,7 +22,9 @@ package com.quinsoft.zeidon.standardoe;
 import com.quinsoft.zeidon.View;
 
 /**
- * A simple interface that defines methods needed by the standardoe package.
+ * A simple interface that defines methods needed by the standardoe package.  This is intended to
+ * be used to convert an external View to an internal ViewImpl.
+ *
  * @author DG
  *
  */

@@ -61,7 +61,7 @@ public class CommitOiToFileDb implements Committer
         Writer writer = null;
         try
         {
-            switch ( fileDbUtils.getFileType() )
+            switch ( fileDbUtils.getStreamFormat() )
             {
                 case XML:
                     view.writeOiToXml( filename, 0 );

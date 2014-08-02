@@ -19,7 +19,6 @@
 
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.InputStream;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -37,7 +36,6 @@ import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -597,46 +595,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     @Override
-    public ViewImpl activateOiFromStream( String viewOdName, InputStream stream ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, stream );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( String viewOdName,
-                                          InputStream stream,
-                                          EnumSet<ActivateFlags> control ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( String viewOdName, Application app, InputStream stream,
-                                          EnumSet<ActivateFlags> control ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, app, stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( String viewOdName, TaskQualification task, InputStream stream,
-                                          EnumSet<ActivateFlags> control ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, task, stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( ViewOd viewOd, InputStream stream, EnumSet<ActivateFlags> control )
-    {
-        return activateOiFromStream( viewOd, stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( InputStream stream, EnumSet<ActivateFlags> control )
-    {
-        return getView().activateOiFromStream( stream, control );
-    }
-
-    @Override
     public View duplicateOi( )
     {
         return getView().duplicateOi();
@@ -647,7 +605,7 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         return getView().duplicateOi( options );
     }
-    
+
     @Override
     public boolean isEmpty()
     {

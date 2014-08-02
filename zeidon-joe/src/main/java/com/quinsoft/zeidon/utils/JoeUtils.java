@@ -20,9 +20,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.management.ManagementFactory;
@@ -43,10 +41,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.ImmutableMap;
-import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
@@ -501,24 +497,6 @@ public class JoeUtils
         return writer.toString();
     }
 
-    public static View deserializeView( TaskQualification taskQual, String string )
-    {
-        InputStream stream = null;
-        try
-        {
-            stream = IOUtils.toInputStream(string, "UTF-8");
-            return taskQual.activateOiFromStream( stream, ActivateFlags.MULTIPLE );
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
-    }
-
     /**
      * Write an OI to a string as JSON.
      *
@@ -547,24 +525,6 @@ public class JoeUtils
         finally
         {
             IOUtils.closeQuietly( writer );
-        }
-    }
-
-    public static View actviateOiFromJsonFile( TaskQualification taskQual, String filename )
-    {
-        InputStream stream = null;
-        try
-        {
-            stream = new FileInputStream( filename );
-            return taskQual.activateOiFromJsonStream( stream, null );
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
         }
     }
 

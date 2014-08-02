@@ -68,12 +68,13 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     /**
      * List of the attributes in the order they are defined in the XOD file.
      */
-    private final List<ViewAttribute> attributes = new ArrayList<ViewAttribute>();
+    private final List<ViewAttribute> attributes = Collections.synchronizedList( new ArrayList<ViewAttribute>() );
 
     /**
-     * Map of attributes by attribute name.
+     * Map of attributes by attribute name.  This is a concurrent map because this can be increased
+     * with dynamic attributes.
      */
-    private final Map<String, ViewAttribute> attributeMap = new HashMap<String, ViewAttribute>();
+    private final ConcurrentMap<String, ViewAttribute> attributeMap = new MapMaker().concurrencyLevel( 2 ).makeMap();
 
     /**
      * Map of attributes by ER attribute token.
@@ -399,12 +400,34 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     {
         attributes.add( viewAttribute );
         attributeMap.put( viewAttribute.getName(), viewAttribute );
-        erAttributeMap.put( viewAttribute.getErAttributeToken(), viewAttribute );
+
+        if ( viewAttribute.isDynamicAttribute() )
+            assert viewAttribute.getErAttributeToken() < 0;
+        else
+        {
+            assert viewAttribute.getErAttributeToken() != null;
+            erAttributeMap.put( viewAttribute.getErAttributeToken(), viewAttribute );
+        }
+    }
+
+    public ViewAttribute createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
+    {
+        if ( attributeMap.containsKey( config.getAttributeName() ) )
+        {
+            if ( config.canExist() )
+                return attributeMap.get( config.getAttributeName() );
+
+            throw new ZeidonException( "Attribute already exists with name: %s", config.getAttributeName() );
+        }
+
+        ViewAttribute dynamicAttrib = new ViewAttribute( this, config );
+        addViewAttribute( dynamicAttrib );
+        return dynamicAttrib;
     }
 
     public int getAttributeCount()
     {
-        return attributes.size();
+        return attributeMap.size();
     }
 
     public ViewAttribute getAttribute( String attribName )

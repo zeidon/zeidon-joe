@@ -19,14 +19,15 @@
 
 package com.quinsoft.zeidon.vml;
 
-import java.io.InputStream;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
@@ -674,52 +675,6 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public View activateOiFromStream( String viewOdName, InputStream stream ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, stream );
-    }
-
-    @Override
-    public View activateOiFromStream( String viewOdName,
-                                      InputStream stream,
-                                      EnumSet<ActivateFlags> control ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, stream, control );
-    }
-
-    @Override
-    public View activateOiFromStream( String viewOdName, Application app, InputStream stream,
-                                      EnumSet<ActivateFlags> control ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, app, stream, control );
-    }
-
-    @Override
-    public View activateOiFromStream( String viewOdName, TaskQualification task, InputStream stream,
-                                      EnumSet<ActivateFlags> control ) throws UnknownViewOdException
-    {
-        return getView().activateOiFromStream( viewOdName, task, stream, control );
-    }
-
-    @Override
-    public View activateOiFromStream( ViewOd viewOd, InputStream stream, EnumSet<ActivateFlags> control )
-    {
-        return activateOiFromStream( viewOd, stream, control );
-    }
-
-    @Override
-    public View activateOiFromStream( InputStream stream, EnumSet<ActivateFlags> control )
-    {
-        return getView().activateOiFromStream( stream, control );
-    }
-
-    @Override
-    public View activateOiFromJsonStream( InputStream stream, EnumSet<ActivateFlags> control )
-    {
-        return getView().activateOiFromJsonStream( stream, control );
-    }
-
-    @Override
     public <T> T putCacheMap( Class<T> key, T value )
     {
         return getView().putCacheMap( key, value );
@@ -760,10 +715,16 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().getActivateOptions();
     }
-    
+
     @Override
     public boolean isEmpty()
     {
         return getView().isEmpty();
+    }
+
+    @Override
+    public List<View> activateOisFromStream( ActivateFromStream options ) throws UnknownViewOdException
+    {
+        return getView().activateOisFromStream( options );
     }
 }

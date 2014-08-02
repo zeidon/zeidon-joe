@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
@@ -63,6 +64,16 @@ class ActivateOiFromXmlStream
             control = ActivateFlags.MULTIPLE;
         this.control = control;
         this.inputStream = inputStream;
+        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
+        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
+    }
+
+    public ActivateOiFromXmlStream( ActivateFromStream options )
+    {
+        super();
+        this.task = (TaskImpl) options.getTask();
+        control = options.getFlags();
+        this.inputStream = options.getInputStream();;
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
     }

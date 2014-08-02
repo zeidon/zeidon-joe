@@ -56,6 +56,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
+import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -3463,6 +3464,13 @@ class EntityInstanceImpl implements EntityInstance
             attrInstance.setView( view );
 
         return attrInstance;
+    }
+
+    @Override
+    public AttributeInstance createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
+    {
+        ViewAttribute viewAttribute = getViewEntity().createDynamicViewAttribute( config );
+        return getAttribute( viewAttribute );
     }
 
     static private synchronized ViewEntityLinkInfo getViewEntityLinkInfo( ViewEntity viewEntity )

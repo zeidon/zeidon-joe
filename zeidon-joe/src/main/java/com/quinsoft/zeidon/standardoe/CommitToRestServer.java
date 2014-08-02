@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
@@ -251,12 +252,12 @@ public class CommitToRestServer implements Committer
             }
 
             if ( statusCode != 200 )
-            {
                 throw new ZeidonException( "http activate failed with status %s", status );
-            }
 
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
-            List<View> views = activator.read();
+            List<View> views = new ActivateFromStream( getTask() )
+                                        .asJson()
+                                        .fromInputStream( stream )
+                                        .activate();
             View restRc = views.get( 0 );
             restRc.logObjectInstance();
             Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();

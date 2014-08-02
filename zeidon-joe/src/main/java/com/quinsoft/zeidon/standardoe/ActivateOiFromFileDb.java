@@ -7,12 +7,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.EnumSet;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
@@ -22,8 +22,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
-import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * Activates an OI from a Zeidon file DB, which is OIs stored in a directory.
@@ -147,7 +145,7 @@ public class ActivateOiFromFileDb implements Activator
     {
         task.dblog().debug( "FileDB: performing scan of %s", fileDbUtils.getDirectoryName() );
         File dir = new File( fileDbUtils.getDirectoryName() );
-        FileFilter fileFilter = new WildcardFileFilter( viewOd.getName() + "*" + fileDbUtils.getFileType().getExtension() );
+        FileFilter fileFilter = new WildcardFileFilter( viewOd.getName() + "*" + fileDbUtils.getStreamFormat().getExtension() );
         File[] files = dir.listFiles( fileFilter );
         for ( File file : files )
         {
@@ -166,39 +164,11 @@ public class ActivateOiFromFileDb implements Activator
 
     private View activateFile( final String filename )
     {
-        ZeidonInputStream inputStream = null;
         task.dblog().info( "Reading OI from %s", filename );
-        try
-        {
-            switch ( fileDbUtils.getFileType() )
-            {
-                case XML:
-                    inputStream = JoeUtils.getInputStream( task, filename );
-                    if ( inputStream == null )
-                        throw new ZeidonException( "Unknown FileDB resource: %s", filename );
-                    
-                    ActivateOiFromXmlStream loader = new ActivateOiFromXmlStream( task, inputStream, control );
-                    return loader.read();
-
-                case JSON:
-                    inputStream = JoeUtils.getInputStream( task, filename );
-                    if ( inputStream == null )
-                        throw new ZeidonException( "Unknown FileDB resource: %s", filename );
-                    
-                    return task.activateOiFromJsonStream( inputStream, control );
-
-                default:
-                    return task.activateOiFromFile( viewOd, filename, control );
-            }
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( inputStream );
-        }
+        return new ActivateFromStream( task )
+                        .fromResource( filename )
+                        .setFormat( fileDbUtils.getStreamFormat() )
+                        .activateFirst();
     }
 
     private View activateByQualificationName()

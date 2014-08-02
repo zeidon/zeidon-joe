@@ -49,6 +49,7 @@ import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -2903,5 +2904,11 @@ class EntityCursorImpl implements EntityCursor
         AttributeInstanceImpl attributeInstance = getExistingInstance().getAttribute( viewAttribute );
         attributeInstance.setView( getView() );
         return attributeInstance;
+    }
+
+    @Override
+    public AttributeInstance createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
+    {
+        return getExistingInstance().createDynamicViewAttribute( config );
     }
 }

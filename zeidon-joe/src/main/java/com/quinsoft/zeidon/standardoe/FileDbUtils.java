@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
+import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -22,26 +23,9 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  */
 class FileDbUtils
 {
-    enum FileType
-    {
-        POR( ".por" ), XML( ".xml" ), JSON( ".json" );
-
-        private final String extension;
-
-        private FileType( String extension )
-        {
-            this.extension = extension;
-        }
-
-        public String getExtension()
-        {
-            return extension;
-        }
-    }
-
     private final AbstractOptionsConfiguration options;
     private final String                       directoryName;
-    private final FileType                     fileType;
+    private final StreamFormat                 streamFormat;
 
     /**
      * If true, the the ioServerUrl specifies a filename instead of a directory
@@ -54,7 +38,7 @@ class FileDbUtils
         this.options = options;
         String url = this.options.getOiSourceUrl();
         String workstring;
-        
+
         if ( url.startsWith( "file:" ) )
             workstring = url.substring( 5 );
         else
@@ -65,30 +49,30 @@ class FileDbUtils
 
         if ( workstring.startsWith( "xml:" ) )
         {
-            fileType = FileType.XML;
+            streamFormat = StreamFormat.XML;
             directoryName = workstring.substring( 4 );
         }
         else
         if ( workstring.startsWith( "json:" ) )
         {
-            fileType = FileType.JSON;
+            streamFormat = StreamFormat.JSON;
             directoryName = workstring.substring( 5 );
         }
         else
         if ( workstring.toLowerCase().endsWith( ".xml" ) )
         {
-            fileType = FileType.XML;
+            streamFormat = StreamFormat.XML;
             directoryName = workstring;
         }
         else
         if ( workstring.toLowerCase().endsWith( ".json" ) )
         {
-            fileType = FileType.JSON;
+            streamFormat = StreamFormat.JSON;
             directoryName = workstring;
         }
         else
         {
-            fileType = FileType.POR;
+            streamFormat = StreamFormat.POR;
             directoryName = workstring;
         }
 
@@ -101,7 +85,7 @@ class FileDbUtils
             File f = new File( directoryName );
             if ( ! f.exists() )
                 throw new ZeidonException( "File DB directory does not exist: %s", directoryName );
-    
+
             isFile = f.isFile();
         }
     }
@@ -111,7 +95,7 @@ class FileDbUtils
         if ( isFile )
             return directoryName;
 
-        return directoryName + File.separator + viewOd.getName() + "_" + qualifier + fileType.getExtension();
+        return directoryName + File.separator + viewOd.getName() + "_" + qualifier + streamFormat.getExtension();
     }
 
     /**
@@ -143,9 +127,9 @@ class FileDbUtils
         return key.getName() + "_" + value;
     }
 
-    FileType getFileType()
+    StreamFormat getStreamFormat()
     {
-        return fileType;
+        return streamFormat;
     }
 
     String getDirectoryName()

@@ -19,15 +19,15 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
@@ -40,7 +40,6 @@ import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
-import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
  * @author DG
@@ -179,23 +178,23 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public ViewImpl activateOiFromFile(String viewOdName,
-                                       String filename )
+    public View activateOiFromFile( String viewOdName,
+                                    String filename )
     {
         return activateOiFromFile( viewOdName, filename, null );
     }
 
     @Override
-    public ViewImpl activateOiFromFile(String viewOdName,
-                                       String filename,
-                                       EnumSet<ActivateFlags> control) throws UnknownViewOdException
+    public View activateOiFromFile( String viewOdName,
+                                    String filename,
+                                    EnumSet<ActivateFlags> control) throws UnknownViewOdException
     {
         ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
         return activateOiFromFile( viewOd, filename, control );
     }
 
     @Override
-    public ViewImpl activateOiFromFile(String viewOdName,
+    public View activateOiFromFile(String viewOdName,
                                        Application app,
                                        String filename,
                                        EnumSet<ActivateFlags> control) throws UnknownViewOdException
@@ -205,37 +204,23 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public ViewImpl activateOiFromFile(String viewOdName,
-                                       TaskQualification appQualView,
-                                       String filename,
-                                       EnumSet<ActivateFlags> control)
+    public View activateOiFromFile( String viewOdName,
+                                    TaskQualification appQualView,
+                                    String filename,
+                                    EnumSet<ActivateFlags> control)
     {
         return activateOiFromFile( viewOdName, appQualView.getApplication(), filename, control );
     }
 
     @Override
-    public ViewImpl activateOiFromFile(ViewOd viewOd,
-                                       String filename,
-                                       EnumSet<ActivateFlags> control)
+    public View activateOiFromFile( ViewOd viewOd,
+                                    String filename,
+                                    EnumSet<ActivateFlags> control )
     {
-        File file = JoeUtils.getFile( filename );
-        if ( !file.exists() )
-            throw new ZeidonException("File %s does not exist", filename );
-
-        FileInputStream inputStream = null;
-        try
-        {
-            inputStream = new FileInputStream( file );
-            return activateOiFromStream( viewOd, inputStream, control );
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( inputStream );
-        }
+        return new ActivateFromStream( this )
+                        .fromFile( filename )
+                        .setViewOd( viewOd )
+                        .activateFirst();
     }
 
     @Override
@@ -260,73 +245,41 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
         }
     }
 
-
     @Override
-    public ViewImpl activateOiFromStream(String viewOdName, InputStream stream )
-    {
-        return activateOiFromStream( viewOdName, stream, null );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream(String viewOdName,
-                                       InputStream stream,
-                                       EnumSet<ActivateFlags> control) throws UnknownViewOdException
-    {
-        ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
-        return activateOiFromStream( viewOd, stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream(String viewOdName,
-                                       Application app,
-                                       InputStream stream,
-                                       EnumSet<ActivateFlags> control) throws UnknownViewOdException
-    {
-        ViewOd viewOd = app.getViewOd( getTask(), viewOdName );
-        return activateOiFromStream( viewOd, stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream(String viewOdName,
-                                       TaskQualification appQualView,
-                                       InputStream stream,
-                                       EnumSet<ActivateFlags> control)
-    {
-        return activateOiFromStream( viewOdName, appQualView.getApplication(), stream, control );
-    }
-
-    @Override
-    public ViewImpl activateOiFromStream( ViewOd viewOd,
-                                          InputStream stream,
-                                          EnumSet<ActivateFlags> control )
+    public List<View> activateOisFromStream( ActivateFromStream options ) throws UnknownViewOdException
     {
         try
         {
-            ActivateOiFromStream activator = new ActivateOiFromStream(this, viewOd.getApplication(), stream, control );
-            activator.setViewOd( viewOd ); // This will allow us to ignore the ViewOD name listed in the stream.
-            ViewImpl v = activator.read();
-            assert v.getViewOd() == viewOd;
-            return v;
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-    }
+            switch ( options.getFormat() )
+            {
+                case POR:
+                {
+                    ActivateOiFromStream activator = new ActivateOiFromStream( options );
+                    View v = activator.read();
+                    return Arrays.asList( v );
+                }
 
-    @Override
-    public ViewImpl activateOiFromStream( InputStream stream,
-                                          EnumSet<ActivateFlags> control )
-    {
-        try
-        {
-            ActivateOiFromStream activator = new ActivateOiFromStream(this, getTask().getApplication(), stream, control );
-            ViewImpl v = activator.read();
-            return v;
+                case JSON:
+                {
+                    ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( options );
+                    return activator.read();
+                }
+
+                case XML:
+                {
+                    ActivateOiFromXmlStream loader = new ActivateOiFromXmlStream( options );
+                    View v = loader.read();
+                    return Arrays.asList( v );
+                }
+
+                default:
+                    throw new ZeidonException( "Unknown stream type %s", options.getFormat() );
+            }
         }
-        catch ( Throwable e )
+        finally
         {
-            throw ZeidonException.wrapException( e );
+            if ( options.closeStream() )
+                IOUtils.closeQuietly( options.getInputStream() );
         }
     }
 
@@ -410,21 +363,6 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     public String getTempDirectory()
     {
         return getTask().getTempDirectory();
-    }
-
-    @Override
-    public View activateOiFromJsonStream( InputStream stream, EnumSet<ActivateFlags> control )
-    {
-        try
-        {
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( getTask(), stream, control );
-            List<View> v = activator.read();
-            return v.get( 0 );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
     }
 
     /* (non-Javadoc)

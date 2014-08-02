@@ -17,7 +17,7 @@
     Copyright 2009-2012 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.standardoe;
 
@@ -29,10 +29,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -44,20 +46,20 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler;
 
 /**
- * Activates an OI from a stream.
- * 
+ * Activates an OI from a POR stream.
+ *
  * @author DG
  *
  */
 class ActivateOiFromStream implements PortableFileEntityHandler
 {
-    private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING, 
+    private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
                                                                                CreateEntityFlags.fDONT_UPDATE_OI,
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
-    
-    private final TaskImpl    task;
+
+    private final Task    task;
     private final Application application;
     private ViewOd            viewOd;
     private ViewImpl          view;
@@ -68,7 +70,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
     private final InputStream        inputStream;
     private final boolean            ignoreInvalidEntityNames;
     private final boolean            ignoreInvalidAttributeNames;
-    
+
     ActivateOiFromStream( AbstractTaskQualification qual,
                           Application               application,
                           InputStream               inputStream,
@@ -87,15 +89,28 @@ class ActivateOiFromStream implements PortableFileEntityHandler
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
     }
-    
+
+    ActivateOiFromStream( ActivateFromStream options )
+    {
+        super();
+        task = options.getTask();
+        application = options.getApplication();
+        control = options.getFlags();
+        entities = new ArrayList<EntityInstanceImpl>();
+        inputStream = options.getInputStream();
+        viewOd = options.getViewOd();
+        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
+        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
+    }
+
     ViewImpl read()
     {
         PortableFileReader reader = new PortableFileReader( task.log(), inputStream, this );
         if ( streamReader != null )
             reader.setStreamReader( streamReader );
-        
+
         reader.readEntities();
-        
+
         // If user wanted just one root remove others if we have more than one.
         // We don't want to abort the loading of entities in the middle of the stream
         // because that could throw off the link cards.
@@ -107,7 +122,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
                 rootCursor.dropEntity();
             rootCursor.setFirst();
         }
-        
+
         view.reset();
         return view;
     }
@@ -116,15 +131,15 @@ class ActivateOiFromStream implements PortableFileEntityHandler
     {
         this.viewOd = viewOd;
     }
-    
+
     @Override
     public PortableFileAttributeHandler createEntity(PortableFileReader reader,
-                                                     int level, 
+                                                     int level,
                                                      long flags)
     {
         String entityName = reader.getAttributeName();
         ViewEntity viewEntity = viewOd.getViewEntity( entityName, ! ignoreInvalidEntityNames );
-        
+
         // If the viewEntity is null then the entity name doesn't exist in the View OD and
         // the user wants us to ignore unknown entities.
         if ( viewEntity == null )
@@ -132,7 +147,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
             entities.add( null );  // Needed so that link indexes in stream still point to valid entities.
             return new PortableFileAttributeHandler.NullAttributeHandler();
         }
-        
+
         int viewEntityLevel = viewEntity.getLevel() + view.getViewCursor().getRecursiveDiff();
         if ( viewEntityLevel < level )
         {
@@ -149,12 +164,12 @@ class ActivateOiFromStream implements PortableFileEntityHandler
                 viewEntityLevel = viewEntity.getLevel() + view.getViewCursor().getRecursiveDiff();
             }
         }
-        
+
         // Create the new instance and add it to the list of entities.
         EntityCursorImpl cursor = view.cursor( viewEntity );
         lastInstance = cursor.createEntity( CursorPosition.LAST, CREATE_FLAGS );
         entities.add( lastInstance );
-        
+
         return new AttributeSetter( lastInstance );
     }
 
@@ -163,10 +178,10 @@ class ActivateOiFromStream implements PortableFileEntityHandler
         // Flags used when reading from a stream.
         final static long FLAGS_ACTIVATED = 0x00000001;
         final static long FLAGS_UPDATED   = 0x00000002;
-        
+
         private final EntityInstanceImpl entityInstance;
         private final ViewEntity         viewEntity;
-        
+
         public AttributeSetter(EntityInstanceImpl entityInstance)
         {
             this.entityInstance = entityInstance;
@@ -197,7 +212,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
                 }
                 else
                     entityInstance.setInternalAttributeValue( viewAttribute, reader.getAttributeValue(), true );
-                
+
                 if ( reader.isIncremental() )
                 {
                     AttributeValue attrib = entityInstance.getInternalAttribute( viewAttribute );
@@ -206,7 +221,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
             }
         }
     }
-    
+
     @Override
     public void endEntity(PortableFileReader reader,
                           PortableFileAttributeHandler handler,
@@ -217,7 +232,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
     @Override
     public void endFile()
     {
-        
+
     }
 
     @Override
@@ -247,26 +262,26 @@ class ActivateOiFromStream implements PortableFileEntityHandler
         // ViewOd may have already been given to us.
         if ( viewOd == null )
             viewOd = application.getViewOd( task, viewOdName );
-        
+
         if ( view == null )
-            view = task.activateEmptyObjectInstance( viewOd );
+            view = ((InternalView) task.activateEmptyObjectInstance( viewOd )).getViewImpl();
         else
         if ( view.getViewOd() != viewOd )
             throw new ZeidonException( "ViewOD of empty view (%s) does not match ViewOD from OI stream (%s)",
                                        view.getViewOd().getName(), viewOd.getName() );
     }
-    
+
     /**
      * This sets the initial empty view.  If not set then it will be created automatically.
      * Setting this allows a caller to create and access the view before processing starts.
-     * 
+     *
      * @param view
      */
     void setEmptyView( ViewImpl view )
     {
         this.view = view;
     }
-    
+
     ViewOd getViewOd()
     {
         return viewOd;
@@ -275,7 +290,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
     /**
      * Explicitly set the stream reader.  This allows a client to read multiple OIs
      * from a single stream because this won't be automatically closed.
-     * 
+     *
      * @param reader
      */
     public void setStreamReader( BufferedBinaryStreamReader reader )

@@ -18,13 +18,14 @@ import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
@@ -35,7 +36,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author dgc
  *
  */
-public class ActivateOisFromJsonStream
+class ActivateOisFromJsonStream
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
@@ -44,7 +45,11 @@ public class ActivateOisFromJsonStream
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
     private final Task                    task;
     private final InputStream             stream;
-    private final EnumSet<ActivateFlags>  control;
+
+    /**
+     * Keep track of the options for this activate.
+     */
+    private final ActivateFromStream  options;
 
     /**
      * This keeps track of all the entities that are the sources for linked instances.
@@ -60,13 +65,13 @@ public class ActivateOisFromJsonStream
     private List<View>                    returnList;
     private String version;
 
-    public ActivateOisFromJsonStream( Task task, InputStream stream, EnumSet<ActivateFlags> control )
+    ActivateOisFromJsonStream( ActivateFromStream options )
     {
-        this.task = task;
-        this.stream = stream;
-        this.control = control;
+        this.task = options.getTask();
+        this.stream = options.getInputStream();
         returnList = new ArrayList<View>();
         linkSources = new HashMap<Object, EntityInstanceImpl>();
+        this.options = options;
     }
 
     public List<View> read()
@@ -74,7 +79,7 @@ public class ActivateOisFromJsonStream
         try
         {
             JsonFactory jsonFactory = new JsonFactory();
-            jp = jsonFactory.createJsonParser( stream );
+            jp = jsonFactory.createParser( stream );
             jp.configure( JsonParser.Feature.AUTO_CLOSE_SOURCE, false );
 
             // Read the START_OBJECT
@@ -103,8 +108,9 @@ public class ActivateOisFromJsonStream
         {
             ZeidonException ze = ZeidonException.wrapException( e );
             JsonLocation loc = jp.getCurrentLocation();
-            ze.appendMessage( "Position line=%d col=%d, token=%s", loc.getLineNr(), loc.getColumnNr(), jp
-                    .getCurrentToken().name() );
+            JsonToken token = jp.getCurrentToken();
+            ze.appendMessage( "Position line=%d col=%d, token=%s", loc.getLineNr(), loc.getColumnNr(),
+                              token == null ? "No Token" : token.name() );
             throw ze;
         }
 
@@ -156,11 +162,11 @@ public class ActivateOisFromJsonStream
             if ( !StringUtils.equals( fieldName, viewOd.getRoot().getName() ) )
                 throw new ZeidonException( "First entity specified in OI (%s) is not the root (%s)", fieldName,
                                            viewOd.getRoot().getName() );
-    
+
             readEntity( fieldName );
             token = jp.nextToken();
         }
-        
+
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "OI JSON stream doesn't end with object." );
 
@@ -241,7 +247,22 @@ public class ActivateOisFromJsonStream
                     readAttributeMeta( ei, fieldName );
                 else
                 {
-                    ViewAttribute viewAttribute = viewEntity.getAttribute( fieldName );
+                    // Try getting the attribute.  We won't throw an exception (yet) if there
+                    // is no attribute with a matching name.
+                    ViewAttribute viewAttribute = viewEntity.getAttribute( fieldName, false );
+                    if ( viewAttribute == null )
+                    {
+                        // We didn't find an attribute with a name matching fieldName.  Do we allow
+                        // dynamic attributes for this entity?
+                        if ( ! options.getAllowableDynamicEntities().contains( viewEntity.getName() ) )
+                            viewEntity.getAttribute( fieldName ); // This will throw the exception.
+
+                        // We are allowing dynamic attributes.  Create one.
+                        DynamicViewAttributeConfiguration config = new DynamicViewAttributeConfiguration();
+                        config.setAttributeName( fieldName );
+                        viewAttribute = viewEntity.createDynamicViewAttribute( config );
+                    }
+
                     ei.setInternalAttributeValue( viewAttribute, jp.getText(), false );
                     if ( incremental )
                     {
@@ -346,14 +367,14 @@ public class ActivateOisFromJsonStream
         view = task.activateEmptyObjectInstance( viewOd );
         returnList.add( view );
         JsonToken token = jp.nextToken();
-        
+
         // If the next token is FIELD_NAME then OI data is next so get the next token.
         // If it's not the the OI is EMPTY and token should be END_OBJECT.
         if ( token == JsonToken.FIELD_NAME )
             token = jp.nextToken();
         else
             assert token == JsonToken.END_OBJECT;
-        
+
         return token;
     }
 
