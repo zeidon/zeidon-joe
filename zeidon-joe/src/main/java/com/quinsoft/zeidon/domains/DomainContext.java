@@ -35,17 +35,17 @@ public interface DomainContext extends PortableFileAttributeHandler
 {
     String getName();
     boolean isDefault();
-    
+
     /**
      * Takes an external value and converts it into an internal value using domain processing.
      * @param task
-     * @param viewAttribute 
+     * @param viewAttribute
      * @param value - External value
      * @return internal value.
      */
     Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value) throws InvalidAttributeValueException;
     int compare( Task task, Object o1, Object o2 );
-    
+
     void validateInternalValue( Task task, ViewAttribute viewAttribute, Object value ) throws InvalidAttributeValueException;
 
     /**
@@ -57,4 +57,5 @@ public interface DomainContext extends PortableFileAttributeHandler
     Double   convertToDouble( Task task, ViewAttribute viewAttribute, Object internalValue );
     DateTime convertToDate( Task task, ViewAttribute viewAttribute, Object internalValue );
     Blob     convertToBlob( Task task, ViewAttribute viewAttribute, Object internalValue );
+    Boolean  convertToBoolean( Task task, ViewAttribute viewAttribute, Object internalValue );
 }

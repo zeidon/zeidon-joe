@@ -17,7 +17,7 @@
     Copyright 2009-2012 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.standardoe;
 
@@ -34,7 +34,7 @@ import com.quinsoft.zeidon.utils.JoeUtils;
 /**
  * This class instantiates the value of an attribute.  It can be shared by multiple
  * entitiy instances if they are linked.
- * 
+ *
  * @author DG
  *
  */
@@ -66,48 +66,58 @@ class AttributeValue
     {
         return attributeValue;
     }
-    
-    String getString( Task task, ViewAttribute viewAttribute, String contextName ) 
+
+    String getString( Task task, ViewAttribute viewAttribute, String contextName )
     {
         return domain.convertToString( task, viewAttribute, getInternalValue(), contextName );
     }
 
-    String getString( Task task, ViewAttribute viewAttribute ) 
+    String getString( Task task, ViewAttribute viewAttribute )
     {
         return domain.convertToString( task, viewAttribute, getInternalValue() );
     }
 
-    Integer getInteger( Task task, ViewAttribute viewAttribute, String contextName ) 
+    Integer getInteger( Task task, ViewAttribute viewAttribute, String contextName )
     {
         return domain.convertToInteger( task, viewAttribute, getInternalValue(), contextName );
     }
 
-    Integer getInteger( Task task, ViewAttribute viewAttribute ) 
+    Integer getInteger( Task task, ViewAttribute viewAttribute )
     {
         return domain.convertToInteger( task, viewAttribute, getInternalValue() );
     }
 
-    Double getDouble( Task task, ViewAttribute viewAttribute, String contextName ) 
+    Double getDouble( Task task, ViewAttribute viewAttribute, String contextName )
     {
         return domain.convertToDouble( task, viewAttribute, getInternalValue(), contextName );
     }
 
-    Double getDouble( Task task, ViewAttribute viewAttribute ) 
+    Double getDouble( Task task, ViewAttribute viewAttribute )
     {
         return domain.convertToDouble( task, viewAttribute, getInternalValue() );
     }
 
-    DateTime getDateTime( Task task, ViewAttribute viewAttribute, String contextName ) 
+    Boolean getBoolean( Task task, ViewAttribute viewAttribute, String contextName )
+    {
+        return domain.convertToBoolean( task, viewAttribute, getInternalValue(), contextName );
+    }
+
+    Boolean getBoolean( Task task, ViewAttribute viewAttribute )
+    {
+        return domain.convertToBoolean( task, viewAttribute, getInternalValue() );
+    }
+
+    DateTime getDateTime( Task task, ViewAttribute viewAttribute, String contextName )
     {
         return domain.convertToDate( task, viewAttribute, getInternalValue(), contextName );
     }
 
-    DateTime getDateTime( Task task, ViewAttribute viewAttribute ) 
+    DateTime getDateTime( Task task, ViewAttribute viewAttribute )
     {
         return domain.convertToDate( task, viewAttribute, getInternalValue() );
     }
 
-    Blob getBlob( Task task, ViewAttribute viewAttribute ) 
+    Blob getBlob( Task task, ViewAttribute viewAttribute )
     {
         return domain.convertToBlob( task, viewAttribute, getInternalValue() );
     }
@@ -121,21 +131,21 @@ class AttributeValue
     {
         if ( isNull( task, viewAttribute ) )
             return domain.isNull( task, viewAttribute, value );
-        
+
         return getInternalValue().equals( value );
     }
-    
+
     /**
      * Sets the internal value of the attribute to newValue.  Assumes that newValue has been converted
      * to the correct object type.
      * @param setIncremental If true, then set the update incremental flag.
-     * 
+     *
      * @return True if the value was changed, false otherwise.
      */
     boolean setInternalValue( TaskImpl task, ViewAttribute viewAttribute, Object newValue, boolean setIncremental )
     {
         assert createAttribute.getErAttributeToken().equals( viewAttribute.getErAttributeToken() );
-        
+
         if ( areEqual( task, viewAttribute, newValue ) )
             return false;
 
@@ -159,16 +169,16 @@ class AttributeValue
             String msg = String.format( "Changing attribute %s to %s", viewAttribute, newValue );
             JoeUtils.sysMessageBox( "Changing an attribute", msg );
         }
-        
+
         attributeValue = newValue;
         if ( setIncremental )
             setUpdated( true );
-        
+
         return true;
     }
-    
+
     /**
-     * 
+     *
      * @param task
      * @param viewAttribute - Needed for error processing.
      * @param newValue
@@ -190,10 +200,10 @@ class AttributeValue
                                  .prependMessage( "New value = %s\nDomain = %s\nContext = %s", newValue, domain, contextName )
                                  .prependViewAttribute( viewAttribute );
         }
-        
+
         return setInternalValue( task, viewAttribute, o, true );
     }
-    
+
     Object convertInternalValue( Task task, ViewAttribute viewAttribute, Object value )
     {
         try
@@ -206,7 +216,7 @@ class AttributeValue
             }
             else
                 domain.validateInternalValue( task, viewAttribute, newValue );
-            
+
             return newValue;
         }
         catch ( Throwable t )
@@ -220,11 +230,11 @@ class AttributeValue
     {
         return updated;
     }
-    
+
     long getAttributeFlags()
     {
         long flags = 0;
-        
+
 //        if ( activated )
 //            flags |= 0x00000001;
 
@@ -262,21 +272,21 @@ class AttributeValue
     {
         return attributeValue == null ? "NULL" : attributeValue.toString();
     }
-    
+
     Object addToAttribute( TaskImpl task, ViewAttribute viewAttribute, Object value )
     {
         Object newValue = domain.addToAttribute( task, viewAttribute, getInternalValue(), value );
         setInternalValue( task, viewAttribute, newValue, true );
         return newValue;
     }
-    
+
     Object multiplyAttribute( TaskImpl task, ViewAttribute viewAttribute, Object value )
     {
         Object newValue = domain.multiplyAttribute( task, viewAttribute, getInternalValue(), value );
         setInternalValue( task, viewAttribute, newValue, true );
         return newValue;
     }
-    
+
     void copyUpdateFlags( AttributeValue source )
     {
         setUpdated( source.isUpdated() );

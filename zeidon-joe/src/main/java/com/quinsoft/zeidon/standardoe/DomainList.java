@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.AbstractDomain;
@@ -31,13 +32,14 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.domains.DomainContext;
 import com.quinsoft.zeidon.domains.TableDomainContext;
 import com.quinsoft.zeidon.domains.TableEntry;
+import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.NullEntityHandler;
 
 /**
  * List of domains for an application.  This handles loading the domains.
- * 
+ *
  * @author DG
  *
  */
@@ -47,7 +49,7 @@ public class DomainList
 
     private final Map<String, Domain> domainMap = new HashMap<String,Domain>();
     private final Application application;
-    
+
     public DomainList(Application application)
     {
         super();
@@ -61,15 +63,15 @@ public class DomainList
             throw new ZeidonException( "Domain '%s' does not have the JavaClass defined in the .xdm", domain );
 
     	if ( domain == null )
-    		throw new ZeidonException( "Domain '%s' does not exist for application %s", 
+    		throw new ZeidonException( "Domain '%s' does not exist for application %s",
     								   name, application.toString() );
-    	
+
     	return domain;
     }
-    
+
     /**
      * Load the domains for this application.
-     * 
+     *
      * @param task Used mostly for logging.
      */
     void loadDomains( Task task )
@@ -88,12 +90,12 @@ public class DomainList
         private DomainContext currentContext;
         private TableEntryReader currentTableEntry;
         private Map<String,Object> domainProperties;
-        
+
         private DomainReader( Task task )
         {
             this.task = task;
         }
-        
+
         @Override
         public PortableFileAttributeHandler createEntity(PortableFileReader reader, int level, long flags)
         {
@@ -121,7 +123,7 @@ public class DomainList
                 // Ignore domain group.
                 return new NullAttributeHandler();
             }
-            
+
             throw new ZeidonException( "Unknown entity name '%' in zeidon.xdm ", entityName );
         }
 
@@ -170,13 +172,13 @@ public class DomainList
         		throw ZeidonException.wrapException( e ).prependMessage("Domain = %s", currentDomain );
         	}
         }
-        
-        private Domain loadNewDomain( Task task ) 
+
+        private Domain loadNewDomain( Task task )
         {
             DomainClassLoader loader = task.getObjectEngine().getDomainClassLoader();
             return loader.loadDomain( application, domainProperties, task );
         }
-        
+
         @Override
         public void setAttribute(PortableFileReader reader )
         {
@@ -224,7 +226,7 @@ public class DomainList
      * This is a dummy domain to stand in the place for domains that haven't (yet)
      * had their java class defined in the .xdm.  This will be used as a marker so
      * we can tell the user they need to add java class to the .xdm.
-     * 
+     *
      * @author DG
      *
      */
@@ -234,6 +236,13 @@ public class DomainList
         public DummyDomain(Application application, Map<String, Object> domainProperties, Task task )
         {
             super( application, domainProperties, task );
+        }
+
+        @Override
+        public Object convertExternalValue( Task task, ViewAttribute viewAttribute, String contextName,
+                                            Object externalValue ) throws InvalidAttributeValueException
+        {
+            throw new ZeidonException( "This should never get called" );
         }
     }
 }

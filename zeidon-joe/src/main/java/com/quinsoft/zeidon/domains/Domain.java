@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 
 /**
  * Interface for all domains.
- * 
+ *
  * @author DG
  *
  */
@@ -46,52 +46,52 @@ public interface Domain
 
     /**
      * Takes an external value and converts it into a value used internally value using domain processing.
-     * 
+     *
      * @param task TODO
      * @param viewAttribute TODO
      * @param contextName - Context name.
      * @param externalValue - External value
      * @return internal value.
      */
-    Object convertExternalValue( Task          task, 
-                                 ViewAttribute viewAttribute, 
-                                 String        contextName, 
+    Object convertExternalValue( Task          task,
+                                 ViewAttribute viewAttribute,
+                                 String        contextName,
                                  Object        externalValue ) throws InvalidAttributeValueException;
-    
+
     /**
      * Takes a value that is an internal value but may may be of a different type and converts it
      * into an internal value data type.  This is used when setting the attribute value from the DB.
-     * 
-     * Normally this method is the same as convertExternalValue but some domains require different 
+     *
+     * Normally this method is the same as convertExternalValue but some domains require different
      * conversion algorithms.  For example, the PasswordDomain normally encrypts an external string
      * but when loaded from the DB the encrypting is not necessary.
-     *  
+     *
      * @param task
      * @param viewAttribute
      * @param value
      * @return
      * @throws InvalidAttributeValueException
      */
-    Object convertInternalValue( Task          task, 
-                                 ViewAttribute viewAttribute, 
+    Object convertInternalValue( Task          task,
+                                 ViewAttribute viewAttribute,
                                  Object        value ) throws InvalidAttributeValueException;
-    
+
     /**
      * Compares an external value to an internal attribute value.
-     * 
+     *
      * @param task
      * @param viewAttribute TODO
      * @param internalValue - Internal attribute value.
-     * @param externalValue 
+     * @param externalValue
      * @return -1 if o1 < o2
      *          0 if o1 = o2
      *          1 if o1 > o2
      */
     int compare( Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue );
-    
+
     /**
      * Validates that the object 'value' is a valid class and value for this domain.
-     * 
+     *
      * @param task
      * @param viewAttribute
      * @param internalValue
@@ -100,10 +100,10 @@ public interface Domain
     void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException;
 
     boolean isNull( Task task, ViewAttribute viewAttribute, Object value );
-    
+
     /**
      * Converts the internal value of the domain to a string.
-     * 
+     *
      * @param task
      * @param viewAttribute
      * @param internalValue
@@ -115,24 +115,26 @@ public interface Domain
     Double   convertToDouble( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
     DateTime convertToDate( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
     Blob     convertToBlob( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
+    Boolean  convertToBoolean( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
 
     String   convertToString( Task task, ViewAttribute viewAttribute, Object internalValue );
     Integer  convertToInteger( Task task, ViewAttribute viewAttribute, Object internalValue );
     Double   convertToDouble( Task task, ViewAttribute viewAttribute, Object internalValue );
     DateTime convertToDate( Task task, ViewAttribute viewAttribute, Object internalValue );
     Blob     convertToBlob( Task task, ViewAttribute viewAttribute, Object internalValue );
+    Boolean  convertToBoolean( Task task, ViewAttribute viewAttribute, Object internalValue );
 
     Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand );
     Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand );
-    
+
     /**
      * Creates an empty context which will then be initialized from values in zeidon.xdm.  Used when
      * loading domains from zeidon.xdm.
      * @param task TODO
-     * 
+     *
      * @return
      */
     DomainContext newContext(Task task);
-    
+
     void addContext( Task task, DomainContext context );
 }
