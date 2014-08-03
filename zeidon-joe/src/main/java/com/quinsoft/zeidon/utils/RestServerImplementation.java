@@ -13,7 +13,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteOiOptions;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 
@@ -55,7 +55,7 @@ public class RestServerImplementation
     {
         View rc = task.activateEmptyObjectInstance( restResponse );
         EntityInstance rcEI = rc.cursor( "RestResponse" ).createEntity();
-        WriteOiOptions options = new WriteOiOptions();
+        WriteToStream options = new WriteToStream();
         options.setIncremental();
 
         try

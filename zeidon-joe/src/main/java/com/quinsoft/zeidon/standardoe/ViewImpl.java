@@ -57,7 +57,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteOiOptions;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -986,7 +986,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOiAsJson( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        WriteOisToJsonStream w = new WriteOisToJsonStream( this, writer, new WriteOiOptions().setFlags( flags ) );
+        WriteOisToJsonStream w = new WriteOisToJsonStream( this, writer, new WriteToStream().setFlags( flags ) );
         w.writeToStream();
     }
 

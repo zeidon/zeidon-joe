@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteOiOptions;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 import com.quinsoft.zeidon.utils.JsonUtils;
@@ -201,7 +201,7 @@ public class TestZencas
 
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
 
-        WriteOiOptions options = new WriteOiOptions();
+        WriteToStream options = new WriteToStream();
         options.setIncremental();
         BufferedWriter stream = null;
         try

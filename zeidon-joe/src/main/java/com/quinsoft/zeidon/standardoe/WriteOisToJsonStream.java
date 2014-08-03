@@ -6,7 +6,7 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteOiOptions;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -35,14 +35,14 @@ public class WriteOisToJsonStream
 
     private final Collection<? extends View> viewList;
     private final Writer writer;
-    private final WriteOiOptions options;
+    private final WriteToStream options;
     private final EnumSet<WriteOiFlags> flags;
     private final boolean incremental;
     private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
 
     private JsonGenerator jg;
 
-    public WriteOisToJsonStream( Collection<? extends View> viewList, Writer writer, WriteOiOptions options )
+    public WriteOisToJsonStream( Collection<? extends View> viewList, Writer writer, WriteToStream options )
     {
         this.viewList = viewList;
         this.writer = writer;
@@ -54,9 +54,9 @@ public class WriteOisToJsonStream
         incremental = this.flags.contains( WriteOiFlags.fINCREMENTAL );
     }
 
-    public WriteOisToJsonStream(View view, Writer writer, WriteOiOptions options )
+    public WriteOisToJsonStream(View view, Writer writer, WriteToStream options )
     {
-        this( viewToCollection( view ), writer, options );
+        this( Arrays.asList( view ), writer, options );
     }
 
     /**
@@ -66,7 +66,7 @@ public class WriteOisToJsonStream
      * @param options
      * @return
      */
-    public static String writeOisToJsonString( Collection<? extends View> viewList, WriteOiOptions options )
+    public static String writeOisToJsonString( Collection<? extends View> viewList, WriteToStream options )
     {
         StringWriter writer = new StringWriter();
         WriteOisToJsonStream jsonBuilder = new WriteOisToJsonStream( viewList, writer, options );
@@ -89,7 +89,7 @@ public class WriteOisToJsonStream
         JsonFactory jsonF = new JsonFactory();
         try
         {
-            jg = jsonF.createJsonGenerator( writer );
+            jg = jsonF.createGenerator( writer );
             jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
             jg.writeStartObject();
 
@@ -313,18 +313,5 @@ public class WriteOisToJsonStream
 
         jg.writeEndObject();
         return writeAttributes;
-    }
-
-    /**
-     * Convenience method to turn a single view into a collection.
-     *
-     * @param view
-     * @return
-     */
-    private static Collection<View> viewToCollection( View view )
-    {
-        ArrayList<View> list = new ArrayList<View>();
-        list.add( view );
-        return list;
     }
 }

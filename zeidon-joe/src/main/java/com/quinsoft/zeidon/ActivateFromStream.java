@@ -107,7 +107,7 @@ public class ActivateFromStream
      */
     public ActivateFromStream fromFile( String filename )
     {
-        this.inputStream = JoeUtils.getInputStream( task, filename );
+        inputStream = JoeUtils.getInputStream( task, filename );
         if ( inputStream == null )
             throw new ZeidonException( "Filename %s not found", filename );
 
