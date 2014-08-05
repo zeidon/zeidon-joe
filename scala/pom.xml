@@ -10,11 +10,6 @@
   <artifactId>zeidon-scala</artifactId>
 
   <properties>
-  <!-- 
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <encoding>UTF-8</encoding>
-   -->
     <scala.version>2.11.1</scala.version>
   </properties>
 
