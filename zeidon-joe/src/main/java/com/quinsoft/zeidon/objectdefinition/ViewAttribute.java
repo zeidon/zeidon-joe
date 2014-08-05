@@ -48,9 +48,13 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     private final ViewEntity   viewEntity;
     private String       name;
     private Long         erAttributeToken;
-    private InternalType type;
+    private InternalType type = InternalType.STRING;
     private Integer      length;
-    private int          token;
+
+    /**
+     * Used to match up DATARECORDS with CHILDENTITY lines in the XOD.
+     */
+    private int          xvaAttrToken;
     private String       initialValue;
 
     // Derived operation fields.
@@ -70,7 +74,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
      * The unique number for the entity which is the index of the attribute for all
      * attributes.
      */
-    private int          attributeNumber;
+    private final int    attributeNumber;
     private boolean      hidden;
     private boolean      persistent;
     private boolean      key;
@@ -84,11 +88,28 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     private String       domainName;
     private ViewEntity   hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
+    /**
+     * If true then this attribute was created at runtime via ViewEntity.createDynamicViewAttribute.
+     */
+    private boolean isDynamicAttribute = false;
 
     public ViewAttribute(ViewEntity viewEntity)
     {
         super();
         this.viewEntity = viewEntity;
+        attributeNumber = viewEntity.getAttributeCount();
+    }
+
+    public ViewAttribute(ViewEntity viewEntity, DynamicViewAttributeConfiguration config )
+    {
+        this( viewEntity );
+        setName( config.getAttributeName() );
+        setDomain( config.getDomainName() );
+        setDynamicAttribute( true );
+
+        // We'll set the ER attribute token to be a negative number to indicate
+        // that it's not a normal token.
+        erAttributeToken = (long) -attributeNumber;
     }
 
     @Override
@@ -121,9 +142,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
                 else
                 if ( reader.getAttributeName().equals( "DOMAIN" ))
                 {
-                    Application app = viewEntity.getViewOd().getApplication();
-                    domainName = reader.getAttributeValue().intern();
-                    domain = app.getDomain( domainName );
+                    setDomain( reader.getAttributeValue().intern() );
                 }
                 else
                 if ( reader.getAttributeName().equals( "DEBUGCHG" ))
@@ -213,8 +232,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
             case 'N':
                 if ( reader.getAttributeName().equals( "NAME" ))
                 {
-                    attributeNumber = viewEntity.getAttributeCount();
-                    name = reader.getAttributeValue().intern();
+                    setName( reader.getAttributeValue().intern() );
                 }
                 break;
 
@@ -269,15 +287,29 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
             case 'X':
                 if ( reader.getAttributeName().equals( "XVAATT_TOK" ))
                 {
-                    token = Integer.parseInt( reader.getAttributeValue() );
+                    xvaAttrToken = Integer.parseInt( reader.getAttributeValue() );
                 }
                 break;
         }
     }
 
+    ViewAttribute setDomain( String domainName )
+    {
+        Application app = viewEntity.getViewOd().getApplication();
+        this.domainName = domainName;
+        domain = app.getDomain( domainName );
+        return this;
+    }
+
     public ViewEntity getViewEntity()
     {
         return viewEntity;
+    }
+
+    ViewAttribute setName( String name )
+    {
+        this.name = name;
+        return this;
     }
 
     public String getName()
@@ -304,15 +336,21 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
         return length;
     }
 
+    ViewAttribute setLength( int length )
+    {
+        this.length = length;
+        return this;
+    }
+
     @Override
     public String toString()
     {
         return viewEntity.toString() + "." + name;
     }
 
-    public int getToken()
+    int getXvaAttrToken()
     {
-        return token;
+        return xvaAttrToken;
     }
 
     public boolean isHidden()
@@ -618,5 +656,15 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     public Boolean isSequencingAscending()
     {
         return isSequencingAscending;
+    }
+
+    public boolean isDynamicAttribute()
+    {
+        return isDynamicAttribute;
+    }
+
+    void setDynamicAttribute( boolean isDynamicAttribute )
+    {
+        this.isDynamicAttribute = isDynamicAttribute;
     }
 }

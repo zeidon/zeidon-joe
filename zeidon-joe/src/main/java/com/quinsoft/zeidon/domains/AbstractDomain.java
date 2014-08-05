@@ -47,14 +47,14 @@ public abstract class AbstractDomain implements Domain
     private final String name;
     private final Map<String, DomainContext> contextList = new HashMap<String, DomainContext>();
     private DomainContext defaultContext = null;
-    
+
     /**
      * Internal domain type read from the XDM.
      */
     private final DomainType    domainType;
     private final InternalType  dataType;
     private final String        description;
-    
+
     public AbstractDomain( Application app, Map<String, Object> domainProperties, Task task )
     {
         application = app;
@@ -62,13 +62,6 @@ public abstract class AbstractDomain implements Domain
         domainType = DomainType.mapCode( ((String) domainProperties.get( "DomainType" )).charAt( 0 ) );
         dataType = InternalType.mapCode( (String) domainProperties.get( "DataType" ) );
         description = (String) domainProperties.get( "Desc" );
-    }
-    
-    @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
-    {
-        validateInternalValue( task, viewAttribute, externalValue );
-        return externalValue;
     }
 
     /* (non-Javadoc)
@@ -80,13 +73,13 @@ public abstract class AbstractDomain implements Domain
         // For most domains converting an internal value is the same as converting an external value.
         return convertExternalValue( task, viewAttribute, null, value );
     }
-    
+
     @Override
     public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof String )
             return;
-        
+
         throw new InvalidAttributeValueException( viewAttribute, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
     }
 
@@ -98,8 +91,43 @@ public abstract class AbstractDomain implements Domain
 
         if ( internalValue instanceof Blob )
             return (Blob) internalValue;
-        
+
         throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert internal value of %s to Blob", viewAttribute.toString() );
+    }
+
+    @Override
+    public Boolean convertToBoolean(Task task, ViewAttribute viewAttribute, Object internalValue )
+    {
+        if ( internalValue == null )
+            return null;
+
+        if ( internalValue instanceof Boolean )
+            return (Boolean) internalValue;
+
+        if ( internalValue instanceof CharSequence )
+        {
+            String lower = internalValue.toString().toLowerCase();
+            switch ( lower )
+            {
+                case "true":
+                case "t":
+                case "1":
+                case "y":
+                case "yes":
+                case "on":
+                    return Boolean.TRUE;
+
+                case "false":
+                case "f":
+                case "0":
+                case "n":
+                case "no":
+                case "off":
+                    return Boolean.FALSE;
+            }
+        }
+
+        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Boolean", viewAttribute.toString() );
     }
 
     @Override
@@ -113,7 +141,7 @@ public abstract class AbstractDomain implements Domain
 
         if ( internalValue instanceof Date )
             return new DateTime( internalValue );
-        
+
         throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert internal value of %s to Date", viewAttribute.toString() );
     }
 
@@ -172,8 +200,20 @@ public abstract class AbstractDomain implements Domain
 
         if ( internalValue instanceof Blob )
             return (Blob) internalValue;
-        
+
         throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Blob", viewAttribute.toString() );
+    }
+
+    @Override
+    public Boolean convertToBoolean(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    {
+        if ( internalValue == null )
+            return null;
+
+        if ( internalValue instanceof Boolean )
+            return (Boolean) internalValue;
+
+        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Boolean", viewAttribute.toString() );
     }
 
     @Override
@@ -184,10 +224,10 @@ public abstract class AbstractDomain implements Domain
 
         if ( internalValue instanceof DateTime )
             return (DateTime) internalValue;
-        
+
         if ( internalValue instanceof Date )
             return new DateTime( internalValue );
-        
+
         throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Date", viewAttribute.toString() );
     }
 
@@ -199,7 +239,7 @@ public abstract class AbstractDomain implements Domain
 
         if ( internalValue instanceof Double )
             return (Double) internalValue;
-        
+
         throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Double", viewAttribute.toString() );
     }
 
@@ -212,7 +252,7 @@ public abstract class AbstractDomain implements Domain
 
         if ( internalValue instanceof Integer )
             return (Integer) internalValue;
-        
+
         throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Integer", viewAttribute.toString() );
     }
 
@@ -234,7 +274,7 @@ public abstract class AbstractDomain implements Domain
     {
         throw new ZeidonException( "multiplyAttribute not supported for this domain" );
     }
-    
+
     @Override
     public String getName()
     {
@@ -249,7 +289,7 @@ public abstract class AbstractDomain implements Domain
     protected DomainContext getContext( String contextName )
     {
         // Convert contextName to lower case so we can find the context irrespective of case.
-        String lowerName; 
+        String lowerName;
         if ( StringUtils.isBlank( contextName ) )
             lowerName = null;
         else
@@ -276,7 +316,7 @@ public abstract class AbstractDomain implements Domain
         DomainContext context = contextList.get( lowerName );
         return context;
     }
-    
+
     @Override
     public DomainContext getContext(Task task, String contextName)
     {
@@ -285,7 +325,7 @@ public abstract class AbstractDomain implements Domain
         {
             if ( StringUtils.isBlank( contextName ) )
                 throw new ZeidonException("Domain '%s' does not have a default context defined.", getName() );
-            
+
             throw new ZeidonException("Couldn't find context '%s' for domain '%s'", contextName, getName() );
         }
 
@@ -321,13 +361,13 @@ public abstract class AbstractDomain implements Domain
 
             return -1;
         }
-        
+
         if ( isNull( task, viewAttribute, externalValue ) )
             return 1;
-        
+
         return null;
     }
-    
+
     @Override
     public int compare(Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue)
     {
@@ -337,16 +377,16 @@ public abstract class AbstractDomain implements Domain
             Integer rc = compareNull( task, viewAttribute, internalValue, value);
             if ( rc != null )
                 return rc;
-            
+
             if ( internalValue instanceof Comparable )
             {
                 assert internalValue.getClass() == value.getClass();
-                
+
                 @SuppressWarnings("unchecked")
                 Comparable<Object> c = (Comparable<Object>) internalValue;
                 return c.compareTo( value );
             }
-            
+
             DomainContext context = getContext( task, null ); // Get the default context.
             return context.compare( task, internalValue, value );
         }
@@ -378,28 +418,28 @@ public abstract class AbstractDomain implements Domain
     {
         return description;
     }
-    
+
     protected String getDefaultedProperty( Map<String, Object> domainProperties, String propName, String defaultValue )
     {
         if ( domainProperties.containsKey( propName ) )
             return (String) domainProperties.get( propName );
-        
+
         return defaultValue;
     }
-    
+
     @Override
     public boolean isNull( Task task, ViewAttribute viewAttribute, Object value )
     {
         if ( value == null )  // Null values are always null (duh).
             return true;
-        
+
         if ( value instanceof String &&
              viewAttribute.getViewEntity().getViewOd().getApplication().nullStringEqualsEmptyString() &&
              StringUtils.isBlank( (String) value ) )
         {
             return true;
         }
-        
+
         return false;
         // old isNull code...
         //return value == null;

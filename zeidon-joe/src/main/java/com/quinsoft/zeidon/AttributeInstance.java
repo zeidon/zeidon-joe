@@ -20,11 +20,13 @@ public interface AttributeInstance
     Integer getInteger();
     DateTime getDateTime();
     Double getDouble();
+    Boolean getBoolean();
 
     String getString( String contextName );
     Integer getInteger( String contextName );
     DateTime getDateTime( String contextName );
     Double getDouble( String contextName );
+    Boolean getBoolean( String contextName );
 
     /**
      * @deprecated Use getValue() instead.

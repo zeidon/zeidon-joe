@@ -28,11 +28,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Writer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
@@ -63,7 +60,6 @@ import net.htmlparser.jericho.StartTag;
 import net.htmlparser.jericho.StartTagType;
 import net.htmlparser.jericho.Tag;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -75,6 +71,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
@@ -4924,13 +4921,13 @@ public abstract class VmlOperation
 
    protected int CommitOI_ToFile( View view, String fileName, int control )
    {
-      view.writeOiToFile( fileName, control );
+      view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 
    protected int CommitOI_ToXML_File( View view, String fileName, int control )
    {
-      view.writeOiToXml( fileName, control );
+      view.writeOiToXml( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 
@@ -8697,22 +8694,10 @@ public abstract class VmlOperation
    public View
    ActivateOiFromJson( View view, String filename ) throws Exception
    {
-      View v = null;
-      InputStream inputStream = null;
-      try
-      {
-         inputStream = new FileInputStream( filename );
-         v = view.activateOiFromJsonStream( inputStream, null );
-         v.logObjectInstance();
-      } catch (FileNotFoundException ex) {
-         Logger.getLogger( VmlOperation.class.getName() ).log( Level.SEVERE, null, ex );
-      }
-      finally
-      {
-         IOUtils.closeQuietly( inputStream );
-      }
-
-      return v;
+       return new ActivateFromStream( view )
+                       .asJson()
+                       .fromResource( filename )
+                       .activateFirst();
    }
 
    private final class TextTransfer implements ClipboardOwner

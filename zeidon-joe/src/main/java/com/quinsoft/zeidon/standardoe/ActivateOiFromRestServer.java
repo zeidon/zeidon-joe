@@ -16,6 +16,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
@@ -109,8 +110,11 @@ public class ActivateOiFromRestServer implements Activator
                             .appendMessage( "web URL = %s", url );
             }
 
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
-            List<View> views = activator.read();
+
+            List<View> views = new ActivateFromStream( getTask() )
+                                        .asJson()
+                                        .fromInputStream( stream )
+                                        .activate();
             View restRc = views.get( 0 );
             restRc.logObjectInstance();
             Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();

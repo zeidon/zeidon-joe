@@ -3,11 +3,9 @@
  */
 package com.quinsoft.zeidon.utils;
 
-import java.io.InputStream;
 import java.io.Writer;
 
-import org.apache.commons.io.IOUtils;
-
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
@@ -33,18 +31,12 @@ public class JsonUtils
 
         // Load the XOD as a view.
         Application zeidonTools = view.getApplication( "ZeidonTools" );
-        InputStream stream = null;
-        try
-        {
-            stream = JoeUtils.getInputStream( filename );
-            View xod = view.activateOiFromStream( "TZZOXODO", zeidonTools, stream, null );
+        View xod = new ActivateFromStream( view )
+                            .fromFile( filename )
+                            .setApplication( zeidonTools )
+                            .activateFirst();
 
-            // Write it.
-            xod.writeOiAsJson( writer );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
+        // Write it.
+        xod.writeOiAsJson( writer );
     }
 }

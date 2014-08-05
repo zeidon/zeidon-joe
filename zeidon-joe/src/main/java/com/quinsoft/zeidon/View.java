@@ -105,12 +105,7 @@ public interface View extends TaskQualification, CacheMap
      */
     Object setCurrentSelectSet( Object key );
 
-    static final long CONTROL_INCREMENTAL = 0x00000001;
-    static final long CONTROL_ENTITY_TAGS = 0x00000002;
-    static final long CONTROL_ENTITY_KEYS = 0x00000004;
-    static final long CONTROL_KEYS_ONLY   = 0x00000008;
-
-    void writeOiToFile( String filename, long control );
+    void writeOiToFile( String filename, EnumSet<WriteOiFlags> control );
 
     /**
      * Writes the OI to a Java Writer.
@@ -127,9 +122,7 @@ public interface View extends TaskQualification, CacheMap
     void writeOiAsJson( Writer writer, WriteOiFlags flag );
     void writeOiAsJson( Writer writer, WriteOiFlags... flags );
 
-    void writeOiToXml( String filename, long control );
-    void writeOiToXmlWriter( Writer writer, long control );
-
+    void writeOiToXml( String filename, EnumSet<WriteOiFlags> control );
 
     Blob writeOiToBlob( long control );
 
@@ -319,10 +312,10 @@ public interface View extends TaskQualification, CacheMap
      * was never activated from a file then it is a synonym for isUpdated().
      */
     boolean isUpdatedFile();
-    
+
     /**
      * Returns true if the OI does not have any entities.
-     * 
+     *
      * @return
      */
     boolean isEmpty();

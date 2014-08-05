@@ -146,6 +146,20 @@ class AttributeInstanceImpl implements AttributeInstance
         return attributeValue.getDouble( getTask(), viewAttribute, contextName );
     }
 
+    @Override
+    public Boolean getBoolean()
+    {
+        executeDerivedOper();
+        return attributeValue.getBoolean( getTask(), viewAttribute );
+    }
+
+    @Override
+    public Boolean getBoolean( String contextName )
+    {
+        executeDerivedOper();
+        return attributeValue.getBoolean( getTask(), viewAttribute, contextName );
+    }
+
     /**
      * @deprecated Use getValue() instead.
      */

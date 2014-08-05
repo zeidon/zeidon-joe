@@ -20,12 +20,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteOiOptions;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
 
@@ -38,7 +39,7 @@ public class CommitToRestServer implements Committer
     /**
      * The WriteOptions for creating the JSON stream.
      */
-    private final static WriteOiOptions JSON_WRITE_OPTIONS = new WriteOiOptions().setIncremental();
+    private final static WriteToStream JSON_WRITE_OPTIONS = new WriteToStream().withIncremental();
 
     private Set<ViewImpl>  viewList;
     private Task           task;
@@ -251,12 +252,12 @@ public class CommitToRestServer implements Committer
             }
 
             if ( statusCode != 200 )
-            {
                 throw new ZeidonException( "http activate failed with status %s", status );
-            }
 
-            ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream(getTask(), stream, null );
-            List<View> views = activator.read();
+            List<View> views = new ActivateFromStream( getTask() )
+                                        .asJson()
+                                        .fromInputStream( stream )
+                                        .activate();
             View restRc = views.get( 0 );
             restRc.logObjectInstance();
             Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();

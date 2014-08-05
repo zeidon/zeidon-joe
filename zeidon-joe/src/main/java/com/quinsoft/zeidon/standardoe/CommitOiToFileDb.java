@@ -3,18 +3,14 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.FileWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.WriteToStream;
 
 /**
  * @author dgc
@@ -58,33 +54,9 @@ public class CommitOiToFileDb implements Committer
     {
         String filename = fileDbUtils.genKeyFilename( view );
         task.dblog().info( "Writing OI to %s", filename );
-        Writer writer = null;
-        try
-        {
-            switch ( fileDbUtils.getFileType() )
-            {
-                case XML:
-                    view.writeOiToXml( filename, 0 );
-                    return;
-
-                case JSON:
-                    writer = new FileWriter( filename );
-                    view.writeOiAsJson( writer );
-                    return;
-
-                default:
-                    view.writeOiToFile( filename, 0 );
-                    return;
-            }
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            if ( writer != null )
-                IOUtils.closeQuietly( writer );
-        }
+        new WriteToStream().setFormat( fileDbUtils.getStreamFormat() )
+                           .toFile( filename )
+                           .withIncremental()
+                           .write( view );
     }
 }

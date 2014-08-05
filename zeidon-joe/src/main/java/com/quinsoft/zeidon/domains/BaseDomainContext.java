@@ -39,7 +39,7 @@ public class BaseDomainContext implements DomainContext
     private String name;
     private boolean isDefault;
     private Domain domain;
-    
+
     public BaseDomainContext(Domain domain)
     {
         super();
@@ -50,23 +50,23 @@ public class BaseDomainContext implements DomainContext
     {
         this.name = name;
     }
-    
+
     @Override
     public String getName()
     {
         return name;
     }
- 
+
     public Domain getDomain()
     {
         return domain;
     }
-    
+
     public Application getApplication()
     {
         return domain.getApplication();
     }
-    
+
     @Override
     public boolean isDefault()
     {
@@ -105,6 +105,12 @@ public class BaseDomainContext implements DomainContext
     }
 
     @Override
+    public Boolean convertToBoolean(Task task, ViewAttribute viewAttribute, Object internalValue)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public DateTime convertToDate(Task task, ViewAttribute viewAttribute, Object internalValue)
     {
         throw new UnsupportedOperationException();
@@ -124,7 +130,7 @@ public class BaseDomainContext implements DomainContext
 
     @Override
     public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
-    { 
+    {
     	return internalValue.toString();
         //throw new UnsupportedOperationException();
     }

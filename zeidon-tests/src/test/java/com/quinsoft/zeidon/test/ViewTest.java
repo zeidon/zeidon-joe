@@ -7,10 +7,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Writer;
 import java.util.EnumSet;
 
@@ -20,7 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
@@ -29,9 +29,11 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.UnknownViewAttributeException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -140,24 +142,20 @@ public class ViewTest
             IOUtils.closeQuietly( writer );
         }
 
-        InputStream inputStream = null;
-        try
-        {
-            inputStream = new FileInputStream( filename );
-            View v2 = v.activateOiFromJsonStream( inputStream, null );
-            filename = v.getTempDirectory() + "mstudent_ac.por";
-            v2.writeOiToFile( filename, 0 );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( inputStream );
-        }
+        View v2 = new ActivateFromStream( zencas )
+                            .asJson()
+                            .fromResource( filename )
+                            .activateFirst();
+        filename = v.getTempDirectory() + "mstudent_ac.por";
+        v2.writeOiToFile( filename, null );
 
         filename = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mlld.json";
         try {
             Task epamms = oe.createTask( "ePamms" );
-            inputStream = new FileInputStream( filename );
-            View v3 = epamms.activateOiFromJsonStream( inputStream, null );
+            View v3 = new ActivateFromStream( epamms )
+                                    .asJson()
+                                    .fromResource( filename )
+                                    .activateFirst();
             v3.logObjectInstance();
             EntityCursor block = v3.cursor( "Block" );
             CursorResult r = block.setFirst();
@@ -180,7 +178,7 @@ public class ViewTest
         String filename = mFASrc.getTempDirectory() + "mfasrc.por";
         String attrvalue = "This is line 1\r\nThis is line2";
         mFASrc.cursor( "FinAidSource" ).setAttribute( "SourceFootnote", attrvalue );
-        mFASrc.writeOiToFile( filename, View.CONTROL_INCREMENTAL );
+        mFASrc.writeOiToFile( filename, EnumSet.of( WriteOiFlags.fINCREMENTAL ) );
         View v2 = zencas.activateOiFromFile( "mFASrc", filename );
         String str = v2.cursor( "FinAidSource" ).getStringFromAttribute( "SourceFootnote" );
         assertEquals( "Multi-line attribute value fails comparison", attrvalue, str );
@@ -217,7 +215,7 @@ public class ViewTest
 
         xwd = zencas.activateOiFromFile( xwdOD, oldfile, null );
         xwd.logObjectInstance();
-        xwd.writeOiToFile( newfile, 0 );
+        xwd.writeOiToFile( newfile, null );
 
 //        String f1 = FileUtils.readFileToString( new File( oldfile ) );
 //        String f2 = FileUtils.readFileToString( new File( newfile ) );
@@ -797,7 +795,7 @@ public class ViewTest
     }
 
     @Test
-    public void testReportedBugs3()
+    public void testReportedBugs3() throws IOException
     {
         // Reported by Kelly.
     	// Looping through entities using WITHIN doesn't seem to be working, at least in the case
@@ -836,5 +834,55 @@ public class ViewTest
         ZeidonInputStream stream = JoeUtils.getInputStream( filename );
         String desc = stream.getDescription();
         assertTrue( "Somehow didn't find the correct stream", desc.endsWith( ".por" ));
+    }
+
+    @Test
+    public void testDynamicAttributes()
+    {
+        createTestOI();
+        try
+        {
+            AttributeInstance attr = mFASrc.cursor( "FinAidSource" ).getAttribute( "TestDyn" );
+            assertTrue( false );
+        }
+        catch ( UnknownViewAttributeException e )
+        {
+            // If we get here everything is as expected.
+        }
+
+        DynamicViewAttributeConfiguration config = new DynamicViewAttributeConfiguration();
+        config.setAttributeName( "TestDyn" );
+        mFASrc.cursor( "FinAidSource" ).createDynamicViewAttribute( config  );
+        AttributeInstance attr = mFASrc.cursor( "FinAidSource" ).getAttribute( "TestDyn" );
+        attr.setValue( "This is a test" );
+
+        attr = mFASrc.cursor( "FinAidSource" ).getAttribute( "TestDyn" );
+        String value = attr.getString();
+        assertTrue( "Unexpected dynamic attribute value",  "This is a test".equals( value ) );
+
+        String filename = mFASrc.getTempDirectory() + "dynamictest.por";
+        mFASrc.writeOiToFile( filename, null );
+
+        try
+        {
+            View v = new ActivateFromStream( mFASrc )
+                                .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
+                                .asJson()
+                                .activateFirst();
+
+            assertTrue( "Didn't get expected Exception", false );
+        }
+        catch ( ZeidonException e )
+        {
+            mFASrc.log().debug( "Got expected Exception" );
+        }
+
+        View v = new ActivateFromStream( mFASrc )
+                            .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
+                            .allowDynamicAttributesFor( "Student" )
+                            .activateFirst();
+
+        value = v.cursor( "Student" ).getAttribute( "DynamicAttr" ).getString();
+        assertTrue( "Unexpected dynamic attribute value",  "This is a test".equals( value ) );
     }
 }

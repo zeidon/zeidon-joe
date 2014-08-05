@@ -1,10 +1,9 @@
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.android;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import android.content.ContextWrapper;
 import android.util.Log;
 
-import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -28,7 +27,7 @@ public class AndroidUtils
     /**
      * Checks to see if the targetDbName exists.  If not it will be copied from emptyDbName,
      * which must be in the assets directory.
-     * 
+     *
      * @param context
      * @param emptyDbName
      * @param targetDbName
@@ -61,7 +60,7 @@ public class AndroidUtils
             IOUtils.closeQuietly( ins );
             throw ZeidonException.wrapException( e ).prependFilename( targetDbName );
         }
-        
+
         try
         {
             byte[] buffer = new byte[1024];
@@ -80,40 +79,29 @@ public class AndroidUtils
             IOUtils.closeQuietly( fos );
         }
     }
-    
+
     static ZeidonException appendViewInfo( Exception e, android.view.View androidView )
     {
         ZeidonException ze = ZeidonException.wrapException( e );
         ze.appendMessage( "Android View ID: %d", androidView.getId() );
         if ( androidView.getTag() != null )
             ze.appendMessage( "Tag: %s", androidView.getTag() );
-        
+
         return ze;
     }
-    
+
     /**
      * Activates an OI from an Android external file.
-     * 
+     *
      * @param task
      * @param filename
      * @return
      */
     public static View activateOiFromFile( TaskQualification task, String viewOdName, String filename )
     {
-        FileInputStream stream = null;
-        try
-        {
-            File file = new File( filename );
-            stream = new FileInputStream( file );
-            return task.activateOiFromStream( viewOdName, stream, ActivateFlags.MULTIPLE );
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
+        return new ActivateFromStream( task )
+                        .fromFile( filename )
+                        .setViewOd( viewOdName )
+                        .activateFirst();
     }
 }

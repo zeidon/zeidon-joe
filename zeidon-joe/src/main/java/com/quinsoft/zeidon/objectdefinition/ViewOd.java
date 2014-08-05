@@ -609,7 +609,7 @@ public class ViewOd implements PortableFileAttributeHandler
             {
                 for ( ViewAttribute viewAttrib : ve.getAttributes() )
                 {
-                    attribMap.put( viewAttrib.getToken(), viewAttrib );
+                    attribMap.put( viewAttrib.getXvaAttrToken(), viewAttrib );
                 }
 
                 DataRecord dataRecord = ve.getDataRecord();

@@ -24,11 +24,11 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Enum of Activate flags.
- * 
+ *
  * @author DG
  *
  */
-public enum ActivateFlags 
+public enum ActivateFlags
 {
     fSINGLE,
     fMULTIPLE,
@@ -38,7 +38,13 @@ public enum ActivateFlags
     fIGNORE_ATTRIB_ERRORS,
     fIGNORE_JOINS,
     fIGNORE_ACTIVATE_CONSTRAINTS,
-    fASYNCHRONOUS;
+    fASYNCHRONOUS,
+
+    /**
+     * Used when reading/writing from a stream, this indicates that there is no header (i.e. meta)
+     * information in the stream.
+     */
+    fNO_HEADER;
 
     public static final EnumSet<ActivateFlags> ROOT_ONLY = EnumSet.of( fROOT_ONLY );
     public static final EnumSet<ActivateFlags> ROOT_ONLY_MULTIPLE = EnumSet.of( fROOT_ONLY, fMULTIPLE );
@@ -51,10 +57,10 @@ public enum ActivateFlags
     public static final EnumSet<ActivateFlags> ASYNCHRONOUS = EnumSet.of( fASYNCHRONOUS );
     public static final EnumSet<ActivateFlags> MULTIPLE_IGNORE_ERRORS = EnumSet.of( fMULTIPLE, fIGNORE_ENTITY_ERRORS, fIGNORE_ATTRIB_ERRORS );
     public static final EnumSet<ActivateFlags> SINGLE_IGNORE_ERRORS = EnumSet.of( fSINGLE, fIGNORE_ENTITY_ERRORS, fIGNORE_ATTRIB_ERRORS );
-    
+
     /**
      * Deserialize a string into an EnumSet<ActivateFlags>
-     * 
+     *
      * @param str
      * @return
      */
@@ -66,7 +72,7 @@ public enum ActivateFlags
         {
             if ( StringUtils.isBlank( token ) )
                 continue;
-            
+
             try
             {
                 returnSet.add( ActivateFlags.valueOf( token ) );
@@ -76,7 +82,7 @@ public enum ActivateFlags
                 throw ZeidonException.wrapException( e ).appendMessage( "String = '%s'", token );
             }
         }
-        
+
         return returnSet;
     }
 }
