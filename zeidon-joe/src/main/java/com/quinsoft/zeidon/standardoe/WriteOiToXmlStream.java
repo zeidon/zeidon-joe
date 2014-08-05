@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -35,18 +36,18 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author DG
  *
  */
-class WriteOiToXmlStream
+public class WriteOiToXmlStream
 {
     private final ViewImpl view;
     private final Writer writer;
     private final EnumSet<WriteOiFlags> control;
     private final boolean incremental;
-    
+
     private int currentIndent;
 
-    WriteOiToXmlStream(ViewImpl view, Writer writer, EnumSet<WriteOiFlags> control )
+    public WriteOiToXmlStream(View view, Writer writer, EnumSet<WriteOiFlags> control )
     {
-        this.view = view;
+        this.view = ((InternalView) view).getViewImpl();
         this.writer = writer;
         this.control = control == null ? EnumSet.noneOf( WriteOiFlags.class ) : control;
         incremental = this.control.contains( WriteOiFlags.fINCREMENTAL );
@@ -64,7 +65,7 @@ class WriteOiToXmlStream
                                  .appendMessage( "Attempting to write: %s", StringUtils.substring( string, 0, 100 ) );
         }
     }
-    
+
     private void write( String format, Object...strings )
     {
         if ( strings == null || strings.length == 0 )
@@ -73,7 +74,7 @@ class WriteOiToXmlStream
         }
         else
         {
-            write( String.format( format, strings ) ); 
+            write( String.format( format, strings ) );
         }
     }
 
@@ -82,19 +83,19 @@ class WriteOiToXmlStream
         for ( int i = 0; i < currentIndent; i++ )
             write( "  " );
     }
-    
+
     private void startElement( final String elementName, final String...attributes )
     {
         startElement( elementName, null, false, attributes );
     }
-    
+
     private void startElement( final String elementName, final String value, final boolean close, final String...attributes )
     {
         assert attributes.length % 2 == 0 : "Illegal number of attributes; should be an even number.";
         writeIndent();
         write( "<" );
         write( elementName );
-        
+
         if ( attributes != null && attributes.length > 0 )
         {
             for ( int i = 0; i < attributes.length; i += 2 )
@@ -103,7 +104,7 @@ class WriteOiToXmlStream
                 write( " %s=\"%s\"", attributes[ i ], esc );
             }
         }
-        
+
         if ( value != null )
         {
             String esc = StringEscapeUtils.escapeXml( value );
@@ -117,19 +118,19 @@ class WriteOiToXmlStream
                 write( ">\n" );
         }
     }
-    
+
     private void endElement( final String elementName )
     {
         writeIndent();
         write( "</%s>\n", elementName );
     }
-    
+
     private void writeEntity( final EntityInstanceImpl ei )
     {
         final ViewEntity viewEntity = ei.getViewEntity();
 
         currentIndent = viewEntity.getLevel();
-        
+
         if ( incremental )
             startElement( viewEntity.getName(),
                           "Created",  yesNo( ei.isCreated() ),
@@ -139,7 +140,7 @@ class WriteOiToXmlStream
                           "Excluded", yesNo( ei.isExcluded() ) );
         else
             startElement( viewEntity.getName() );
-        
+
         currentIndent++;
         String[] attrIncr = new String[] { "Updated", null };
         for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
@@ -154,7 +155,7 @@ class WriteOiToXmlStream
             else
                 startElement( viewAttribute.getName(), value, true, (String[]) null );
         }
-        
+
         // Loop through the children and add them.  If 'incremental' is true then
         // we want hidden entities.
         boolean first = true;
@@ -165,23 +166,23 @@ class WriteOiToXmlStream
                 write("\n");
                 first = false;
             }
-            
+
             writeEntity( child );
         }
-        
+
         currentIndent--;
         endElement( viewEntity.getName() );
     }
-    
-    void writeToStream()
+
+    public void writeToStream()
     {
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
-        startElement( "zOI", "zObjectName", view.getViewOd().getName(), 
+        startElement( "zOI", "zObjectName", view.getViewOd().getName(),
                              "zAppName", view.getApplication().getName(),
                              "zIncreFlags", yesNo( incremental ) );
-        
+
         currentIndent = 0;
-        
+
         for ( EntityInstanceImpl ei = view.getObjectInstance().getRootEntityInstance();
               ei != null;
               ei = ei.getNextTwin() )
@@ -189,10 +190,10 @@ class WriteOiToXmlStream
             if ( incremental || ! ei.isHidden() )
                 writeEntity( ei );
         }
-        
+
         endElement( "zOI" );
     }
-    
+
     private String yesNo( boolean b )
     {
         return b ? "Y" : "N";

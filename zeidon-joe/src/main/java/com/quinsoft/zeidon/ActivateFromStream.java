@@ -289,14 +289,29 @@ public class ActivateFromStream
         return e;
     }
 
+    /**
+     * Indicates that the stream has no header (i.e. meta) information.  Using
+     * this requires that the View OD be set.
+     *
+     * @return
+     */
+    public ActivateFromStream hasNoHeader()
+    {
+        flags.add( ActivateFlags.fNO_HEADER );
+        return this;
+    }
+
     public EnumSet<ActivateFlags> getFlags()
     {
         return flags;
     }
 
-    public void setFlags( EnumSet<ActivateFlags> flags )
+    public ActivateFromStream setFlags( EnumSet<ActivateFlags> flags )
     {
-        this.flags = flags;
+        if ( flags != null )
+            this.flags = flags;
+
+        return this;
     }
 
     public ActivateFromStream asJson()

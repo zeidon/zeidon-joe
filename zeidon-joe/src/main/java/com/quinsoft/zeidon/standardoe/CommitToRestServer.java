@@ -39,7 +39,7 @@ public class CommitToRestServer implements Committer
     /**
      * The WriteOptions for creating the JSON stream.
      */
-    private final static WriteToStream JSON_WRITE_OPTIONS = new WriteToStream().setIncremental();
+    private final static WriteToStream JSON_WRITE_OPTIONS = new WriteToStream().withIncremental();
 
     private Set<ViewImpl>  viewList;
     private Task           task;

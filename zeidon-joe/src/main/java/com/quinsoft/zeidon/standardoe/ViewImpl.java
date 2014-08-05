@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
@@ -317,13 +318,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * @see com.quinsoft.zeidon.View#writeOiToXml(java.lang.String, long)
      */
     @Override
-    public void writeOiToXml(String filename, long control)
+    public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control )
     {
         BufferedWriter stream = null;
         try
         {
             stream = new BufferedWriter( new FileWriter( filename ) );
-            WriteOiToXmlStream writer = new WriteOiToXmlStream(this, stream, null );
+            WriteOiToXmlStream writer = new WriteOiToXmlStream(this, stream, control );
             writer.writeToStream();
         }
         catch ( Throwable e )
@@ -347,25 +348,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#writeOiToXmlWriter(java.io.Writer, long)
-     */
     @Override
-    public void writeOiToXmlWriter( Writer writer, long control )
-    {
-        try
-        {
-            WriteOiToXmlStream xmlwriter = new WriteOiToXmlStream(this, writer, null );
-            xmlwriter.writeToStream();
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-    }
-
-    @Override
-    public void writeOiToFile(String filename, long control)
+    public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
         FileWriter stream = null;
         try
@@ -380,17 +364,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         }
         finally
         {
-            if ( stream != null )
-            {
-                try
-                {
-                    stream.close();
-                }
-                catch ( Exception e )
-                {
-                    throw ZeidonException.wrapException( e ).prependFilename( filename );
-                }
-            }
+            IOUtils.closeQuietly( stream );
         }
     }
 
@@ -402,7 +376,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         {
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             stream = new OutputStreamWriter( byteArray );
-            WriteOiToStream writer = new WriteOiToStream(this, stream, getViewOd().getName(), 0 );
+            WriteOiToStream writer = new WriteOiToStream(this, stream, getViewOd().getName(), null );
             writer.writeToStream();
             return new Blob( byteArray.toByteArray() );
         }
@@ -1052,7 +1026,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             if ( ! ei.isHidden() )
                 return true;  // OI has a valid EI so return true.
         }
-        
+
         return false;  // If we get here then there are no non-hidden EIs.
     }
 }

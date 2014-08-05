@@ -202,7 +202,7 @@ public class TestZencas
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
 
         WriteToStream options = new WriteToStream();
-        options.setIncremental();
+        options.withIncremental();
         BufferedWriter stream = null;
         try
         {

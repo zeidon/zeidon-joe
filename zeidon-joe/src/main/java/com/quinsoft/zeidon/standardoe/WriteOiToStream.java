@@ -17,7 +17,7 @@
     Copyright 2009-2012 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.standardoe;
 
@@ -32,7 +32,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Blob;
-import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
@@ -43,7 +42,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
  * Writes an object instance to a stream.
- *  
+ *
  * @author DG
  *
  */
@@ -59,48 +58,20 @@ class WriteOiToStream
     private EnumSet<WriteOiFlags> flags;
     private final String          name;
 
-    /**
-     * Class to write an OI to a stream.
-     * @param view View to OI
-     * @param writer Stream to write to
-     * @param name Description of object (usually file name)
-     * @param control Write options.
-     */
-    WriteOiToStream(ViewImpl view, Writer writer, String name, long control )
-    {
-        super();
-        this.view = view;
-        this.writer = writer;
-        this.name = name;
-        
-        flags = EnumSet.noneOf( WriteOiFlags.class );
-        if ( ( control & View.CONTROL_INCREMENTAL ) != 0 )
-            flags.add( WriteOiFlags.fINCREMENTAL );
-
-        if ( ( control & View.CONTROL_ENTITY_KEYS ) != 0 )
-            flags.add( WriteOiFlags.fENTITY_KEYS );
-
-        if ( ( control & View.CONTROL_ENTITY_TAGS) != 0 )
-            flags.add( WriteOiFlags.fENTITY_TAGS );
-
-        if ( ( control & View.CONTROL_KEYS_ONLY ) != 0 )
-            flags.add( WriteOiFlags.fKEYS_ONLY);
-    }
-    
     WriteOiToStream(ViewImpl view, Writer writer, String name, EnumSet<WriteOiFlags> flags )
     {
         super();
         this.view = view;
-        this.flags = flags;
+        this.flags = flags == null ? WriteOiFlags.empty() : flags;
         this.writer = writer;
         this.name = name;
     }
-    
+
     private void write( String buffer ) throws IOException
     {
         writer.write( buffer );
     }
-    
+
     private void write(String control, Object...objects ) throws IOException
     {
         writer.write( JoeUtils.format( control, objects ) );
@@ -110,7 +81,7 @@ class WriteOiToStream
     {
         writer.write( "\n" );
     }
-    
+
     private void writeln(String control, Object...objects ) throws IOException
     {
         write( JoeUtils.format( control, objects ) );
@@ -121,13 +92,13 @@ class WriteOiToStream
     {
         // Compile a regex that will search for special printable chars later on.
         Pattern specialChars = Pattern.compile( ".*[\\n\\r" + PortableFileReader.STRING_STORED_AS_BLOB_REGEX + "]+.*", Pattern.DOTALL );
-        
+
         // Since we use it a lot, create a local value.
-        boolean writeIncremental = flags.contains( WriteOiFlags.fINCREMENTAL ); 
-        
+        boolean writeIncremental = flags.contains( WriteOiFlags.fINCREMENTAL );
+
         // Used to create the link statements at the end.
         int     hierIndex = 0;
-        
+
         // Initialize instance flags that we'll use during the write.
         for ( EntityInstanceImpl ei : view.getObjectInstance().getEntities() )
         {
@@ -135,7 +106,7 @@ class WriteOiToStream
             ei.setRecordOwner( false );
             ei.setHierIndex( -1 );
         }
-        
+
         long lastLinked = -1;
 
         String erDate = "0";
@@ -151,19 +122,19 @@ class WriteOiToStream
         try
         {
             writeln( header );
-            
+
             if ( writeIncremental )
             {
                 long flags = 0;
                 if ( view.getObjectInstance().isLocked() )
                     flags |= META_OI_LOCKED;
-                
+
                 if ( view.getObjectInstance().isReadOnly() )
                     flags |= META_OI_READONLY;
-                
+
                 writeln("mOIFLAGS    %x", flags);
             }
-            
+
             // Loop through the entities.  We can't use the iterator because the inner loop
             // object may skip some.
             for ( EntityInstanceImpl ei = view.getObjectInstance().getRootEntityInstance();
@@ -178,9 +149,9 @@ class WriteOiToStream
                     ei = ei.getLastChildHier();
                     continue;
                 }
-        
+
                 ei.setHierIndex( hierIndex++ );
-                
+
                 // Write out entity name and instance flags.
                 write( "e%-9s %d", viewEntity.getName(), ei.getLevel() );
                 if ( writeIncremental )
@@ -189,7 +160,7 @@ class WriteOiToStream
                     write( ",%d", ei.getInstanceFlags() );
                 }
                 writeln();
-                
+
                 if ( flags.contains( WriteOiFlags.fENTITY_TAGS ) || ei.getTag() != null )
                 {
                     String tag = ei.getTag();
@@ -197,7 +168,7 @@ class WriteOiToStream
                         tag = Integer.toHexString( ei.hashCode() );
                     writeln( "mETAG      %s", tag );
                 }
-                
+
                 if ( flags.contains( WriteOiFlags.fENTITY_KEYS ) )
                 {
                     writeln( "mEKEY      %d", ei.getEntityKey() );
@@ -216,7 +187,7 @@ class WriteOiToStream
                     // The ei is linked and it hasn't been written so it must be the record
                     // owner.
                     ei.setRecordOwner( true );
-                    
+
                     // Set the written flag for all the linked instances that belong
                     // to this OI.
                     for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
@@ -225,17 +196,17 @@ class WriteOiToStream
                             linked.setWritten( true );
                     }
                 }
-                
+
                 // Loops through all non-null attributes.
                 for ( ViewAttribute viewAttrib : ei.getNonNullAttributeList() )
                 {
                     // Don't bother if the attribute is derived.
                     if ( viewAttrib.isDerived() )
                         continue;
-                    
+
                     if ( flags.contains( WriteOiFlags.fKEYS_ONLY ) && ! viewAttrib.isKey() )
                         continue;
-                    
+
                     // If this entity is the one that was most recently flagged as linked, don't
                     // write persistent attributes -- they were already written for a linked
                     // instance.
@@ -248,7 +219,7 @@ class WriteOiToStream
                         flags = String.format(",%x", ei.getInternalAttribute( viewAttrib ).getAttributeFlags() );
 
                     write("a%-9s ", viewAttrib.getName() + flags);
-                    
+
                     if ( viewAttrib.getType() == InternalType.BLOB )
                     {
                         Blob blob = (Blob) ei.getInternalAttributeValue( viewAttrib );
@@ -267,12 +238,12 @@ class WriteOiToStream
                         {
                             writeln("%c%d", PortableFileReader.STRING_STORED_AS_BLOB, value.length() );
                         }
-                        
+
                         writeln("%s", value );
                     }
-                    
+
                 } // for each attribute...
-                
+
                 // Write a blank line just to look pretty.
                 writeln();
 
@@ -287,30 +258,30 @@ class WriteOiToStream
                     // If we've gone past the last linked EI we're done.
                     if ( ei.getHierIndex() > lastLinked )
                         break;
-                    
+
                     // If index is -1 it wasn't written.
                     if ( ei.getHierIndex() == -1 )
                         continue;
-                    
+
                     // If the entity is the record owner then we don't write link cards.
                     // Link records are written for the non-record owner.
                     if ( ei.isRecordOwner() )
                         continue;
-                    
+
                     synchronized ( ei.getAllLinkedInstances() )
                     {
                         for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
                         {
                             if ( linked == ei )
                                 continue;  // Don't write a link record for ourself.
-                            
+
                             if ( linked.getObjectInstance() == view.getObjectInstance() &&
                                  linked.isRecordOwner() )
                             {
                                 assert ei.getHierIndex() != linked.getHierIndex() : "Mismatched record owners.";
                                 assert ei.getViewEntity().getErEntityToken() == linked.getViewEntity().getErEntityToken() :
                                        "Mismatched entity tokens";
-                                
+
                                 writeln("i%-9d %d", ei.getHierIndex(), linked.getHierIndex() );
                                 break;
                             }
@@ -318,7 +289,7 @@ class WriteOiToStream
                     }
                 } // for each entity instance...
             } // if ( lastLinked > -1 )...
-            
+
             // Indicate that the OI is done.
             writeln( "ZEND" );
         }

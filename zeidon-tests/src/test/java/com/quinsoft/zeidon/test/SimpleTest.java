@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 
 import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.CursorResult;
@@ -17,8 +18,6 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
  * @author DG
@@ -160,21 +159,30 @@ class SimpleTest
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
 
-        View stud = new QualificationBuilder( zencas )
-                            .setViewOd( "lStudDpt" )
-                            .setOiSourceUrl( fileDbUrl )
-                            .addAttribQual( "Status", "A" )
-                            .addAttribQual( "AND" )
-                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
-                            .activate();
-
-        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
+//        View stud = new QualificationBuilder( zencas )
+//                            .setViewOd( "lStudDpt" )
+//                            .setOiSourceUrl( fileDbUrl )
+//                            .addAttribQual( "Status", "A" )
+//                            .addAttribQual( "AND" )
+//                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+//                            .activate();
+//
+//        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
         View stud2 = new ActivateFromStream( zencas )
-                            .fromResource( "/tmp/stud.json" )
+                            .fromResource( "/tmp/stud2.json" )
+                            .setViewOd( "lStudDpt" )
                             .asJson()
                             .activateFirst();
         stud2.logObjectInstance();
-//        stud.logObjectInstance();
+
+        List<View> stud3 = new ActivateFromStream( zencas )
+                            .fromResource( "/tmp/stud.json" )
+                            .setViewOd( "lStudDpt" )
+                            .asJson()
+                            .activate();
+        stud3.get( 0 ).logObjectInstance();
+
+        //        stud.logObjectInstance();
 /*
         CommitOptions options = new CommitOptions( zencas );
         options.setOiSourceUrl( fileDbUrl );
@@ -186,6 +194,5 @@ class SimpleTest
                             .setOiSourceUrl( fileDbUrl )
                             .activate();
 */
-        stud.logObjectInstance();
     }
 }

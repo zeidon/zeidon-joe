@@ -4921,13 +4921,13 @@ public abstract class VmlOperation
 
    protected int CommitOI_ToFile( View view, String fileName, int control )
    {
-      view.writeOiToFile( fileName, control );
+      view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 
    protected int CommitOI_ToXML_File( View view, String fileName, int control )
    {
-      view.writeOiToXml( fileName, control );
+      view.writeOiToXml( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 

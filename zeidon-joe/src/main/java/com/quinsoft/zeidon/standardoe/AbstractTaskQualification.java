@@ -219,6 +219,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
         return new ActivateFromStream( this )
                         .fromFile( filename )
                         .setViewOd( viewOd )
+                        .setFlags( control )
                         .activateFirst();
     }
 

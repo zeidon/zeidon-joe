@@ -14,11 +14,15 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
+import com.quinsoft.zeidon.standardoe.WriteOiToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
+ * Encapsulates options for writing an OI to a file/writer and includes some
+ * convenience methods for performing the write.
+ *
  * @author dg
  *
  */
@@ -170,8 +174,23 @@ public class WriteToStream
                     jsonWriter.writeToStream();
                     return;
 
+                case XML:
+                    if ( viewList.size() > 1 )
+                        throw new ZeidonException( "Only one View may be written to a .XML file" );
+
+                    WriteOiToXmlStream xmlWriter = new WriteOiToXmlStream( viewList.get( 0 ), writer, flags );
+                    xmlWriter.writeToStream();
+                    return;
+
+                case POR:
+                    if ( viewList.size() > 1 )
+                        throw new ZeidonException( "Only one View may be written to a .POR file" );
+
+                    viewList.get( 0 ).writeOi( writer, flags );
+                    return;
+
                 default:
-                    throw new ZeidonException( "Format %s not supported (yet)", getFormat() );
+                    throw new ZeidonException( "Unknown format", getFormat() );
             }
         }
         finally
@@ -192,7 +211,7 @@ public class WriteToStream
         return this;
     }
 
-    public WriteToStream setIncremental()
+    public WriteToStream withIncremental()
     {
         flags.add( WriteOiFlags.fINCREMENTAL );
         return this;

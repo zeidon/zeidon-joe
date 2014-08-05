@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.EnumSet;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.WriteOiFlags;
 
 /**
  * @author DG
@@ -124,7 +126,7 @@ class ViewChooser extends JPanel implements ActionListener
         if ( returnVal == JFileChooser.APPROVE_OPTION )
         {
             String filename = chooser.getSelectedFile().getAbsolutePath();
-            view.writeOiToFile( filename, View.CONTROL_INCREMENTAL );
+            view.writeOiToFile( filename, EnumSet.of( WriteOiFlags.fINCREMENTAL ) );
             env.getOe().getSystemTask().log().info( "OI written to %s", filename );
         }
     }

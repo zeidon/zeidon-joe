@@ -147,7 +147,7 @@ public class ViewTest
                             .fromResource( filename )
                             .activateFirst();
         filename = v.getTempDirectory() + "mstudent_ac.por";
-        v2.writeOiToFile( filename, 0 );
+        v2.writeOiToFile( filename, null );
 
         filename = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mlld.json";
         try {
@@ -178,7 +178,7 @@ public class ViewTest
         String filename = mFASrc.getTempDirectory() + "mfasrc.por";
         String attrvalue = "This is line 1\r\nThis is line2";
         mFASrc.cursor( "FinAidSource" ).setAttribute( "SourceFootnote", attrvalue );
-        mFASrc.writeOiToFile( filename, View.CONTROL_INCREMENTAL );
+        mFASrc.writeOiToFile( filename, EnumSet.of( WriteOiFlags.fINCREMENTAL ) );
         View v2 = zencas.activateOiFromFile( "mFASrc", filename );
         String str = v2.cursor( "FinAidSource" ).getStringFromAttribute( "SourceFootnote" );
         assertEquals( "Multi-line attribute value fails comparison", attrvalue, str );
@@ -215,7 +215,7 @@ public class ViewTest
 
         xwd = zencas.activateOiFromFile( xwdOD, oldfile, null );
         xwd.logObjectInstance();
-        xwd.writeOiToFile( newfile, 0 );
+        xwd.writeOiToFile( newfile, null );
 
 //        String f1 = FileUtils.readFileToString( new File( oldfile ) );
 //        String f2 = FileUtils.readFileToString( new File( newfile ) );
@@ -861,7 +861,7 @@ public class ViewTest
         assertTrue( "Unexpected dynamic attribute value",  "This is a test".equals( value ) );
 
         String filename = mFASrc.getTempDirectory() + "dynamictest.por";
-        mFASrc.writeOiToFile( filename, 0 );
+        mFASrc.writeOiToFile( filename, null );
 
         try
         {

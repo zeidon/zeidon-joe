@@ -274,7 +274,7 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public void writeOiToFile(String filename, long control)
+    public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
         view.writeOiToFile( filename, control );
     }
@@ -283,7 +283,7 @@ public class zVIEW extends VmlOperation implements View
      * @see com.quinsoft.zeidon.View#writeOiToXml(java.lang.String, long)
      */
     @Override
-    public void writeOiToXml(String filename, long control)
+    public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control)
     {
         view.writeOiToXml( filename, control );
     }
@@ -552,15 +552,6 @@ public class zVIEW extends VmlOperation implements View
     public int relinkOis( View... otherViews )
     {
         return this.view.relinkOis( otherViews );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#writeOiToXmlWriter(java.io.BufferedWriter, long)
-     */
-    @Override
-    public void writeOiToXmlWriter( Writer writer, long control )
-    {
-        view.writeOiToXmlWriter( writer, control );
     }
 
     @Override

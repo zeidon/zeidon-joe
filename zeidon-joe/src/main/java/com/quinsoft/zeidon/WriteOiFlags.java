@@ -19,6 +19,8 @@
 
 package com.quinsoft.zeidon;
 
+import java.util.EnumSet;
+
 /**
  * @author DG
  *
@@ -28,6 +30,33 @@ public enum WriteOiFlags
     fINCREMENTAL,
     fENTITY_TAGS,
     fENTITY_KEYS,
-    fKEYS_ONLY
+    fKEYS_ONLY;
 
+    static final long CONTROL_INCREMENTAL = 0x00000001;
+    static final long CONTROL_ENTITY_TAGS = 0x00000002;
+    static final long CONTROL_ENTITY_KEYS = 0x00000004;
+    static final long CONTROL_KEYS_ONLY   = 0x00000008;
+
+    public static EnumSet<WriteOiFlags> empty()
+    {
+        return EnumSet.noneOf( WriteOiFlags.class );
+    }
+
+    public static EnumSet<WriteOiFlags> convertLongFlags( long control )
+    {
+        EnumSet<WriteOiFlags> flags = empty();
+        if ( ( control & CONTROL_INCREMENTAL ) != 0 )
+            flags.add( WriteOiFlags.fINCREMENTAL );
+
+        if ( ( control & CONTROL_ENTITY_KEYS ) != 0 )
+            flags.add( WriteOiFlags.fENTITY_KEYS );
+
+        if ( ( control & CONTROL_ENTITY_TAGS) != 0 )
+            flags.add( WriteOiFlags.fENTITY_TAGS );
+
+        if ( ( control & CONTROL_KEYS_ONLY ) != 0 )
+            flags.add( WriteOiFlags.fKEYS_ONLY);
+
+        return flags;
+    }
 }

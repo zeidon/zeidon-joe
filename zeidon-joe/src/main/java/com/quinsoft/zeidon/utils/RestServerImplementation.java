@@ -56,7 +56,7 @@ public class RestServerImplementation
         View rc = task.activateEmptyObjectInstance( restResponse );
         EntityInstance rcEI = rc.cursor( "RestResponse" ).createEntity();
         WriteToStream options = new WriteToStream();
-        options.setIncremental();
+        options.withIncremental();
 
         try
         {

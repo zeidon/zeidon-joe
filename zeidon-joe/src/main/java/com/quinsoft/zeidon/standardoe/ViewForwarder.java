@@ -208,7 +208,7 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
      * @see com.quinsoft.zeidon.View#writeOiToFile(java.lang.String, long)
      */
     @Override
-    public void writeOiToFile( String filename, long control )
+    public void writeOiToFile( String filename, EnumSet<WriteOiFlags> control )
     {
         getView().writeOiToFile( filename, control );
     }
@@ -217,18 +217,9 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
      * @see com.quinsoft.zeidon.View#writeOiToXml(java.lang.String, long)
      */
     @Override
-    public void writeOiToXml(String filename, long control)
+    public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control)
     {
         getView().writeOiToXml( filename, control );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#writeOiToXmlWriter(java.io.BufferedWriter, long)
-     */
-    @Override
-    public void writeOiToXmlWriter( Writer writer, long control )
-    {
-        getView().writeOiToXmlWriter( writer, control );
     }
 
     /* (non-Javadoc)
