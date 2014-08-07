@@ -3,6 +3,7 @@
  */
 package com.quinsoft.zeidon;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -16,8 +17,6 @@ import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.standardoe.WriteOiToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
-import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * Encapsulates options for writing an OI to a file/writer and includes some
@@ -43,13 +42,10 @@ public class WriteToStream
 
     public WriteToStream toFile( String filename )
     {
-        ZeidonInputStream inputStream = JoeUtils.getInputStream( filename );
-        if ( inputStream == null )
-            throw new ZeidonException( "Filename %s not found", filename );
-
         try
         {
-            writer = new FileWriter( filename );
+            File file = new File( filename );
+            writer = new FileWriter( file );
         }
         catch ( IOException e )
         {
@@ -145,8 +141,11 @@ public class WriteToStream
     public void write( View view, View... views )
     {
         viewList.add( view );
-        if ( views != null )
-            viewList.addAll( viewList );
+        if ( views != null && views.length > 0 )
+        {
+            for ( View v : views )
+                viewList.add( v );
+        }
 
         write();
     }
@@ -213,7 +212,19 @@ public class WriteToStream
 
     public WriteToStream withIncremental()
     {
-        flags.add( WriteOiFlags.fINCREMENTAL );
+        flags.add( WriteOiFlags.INCREMENTAL );
+        return this;
+    }
+
+    /**
+     * This turns off headers (e.g. .oimeta) when writing the OI.  This results in a simpler
+     * JSON but it won't have incremental information.
+     *
+     * @return
+     */
+    public WriteToStream withoutHeaders()
+    {
+        flags.add( WriteOiFlags.NO_HEADER );
         return this;
     }
 

@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  */
 public class WriteOisToJsonStream
 {
-    private final static String VERSION = "1.0";
+    private final static String VERSION = "1";
 
     private final Collection<? extends View> viewList;
     private final Writer writer;
@@ -51,7 +51,7 @@ public class WriteOisToJsonStream
             flags = EnumSet.noneOf( WriteOiFlags.class );
         else
             flags = this.options.getFlags();
-        incremental = this.flags.contains( WriteOiFlags.fINCREMENTAL );
+        incremental = this.flags.contains( WriteOiFlags.INCREMENTAL );
     }
 
     public WriteOisToJsonStream(View view, Writer writer, WriteToStream options )

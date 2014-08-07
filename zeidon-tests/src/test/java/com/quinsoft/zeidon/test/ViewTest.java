@@ -134,7 +134,7 @@ public class ViewTest
         try
         {
             writer = new FileWriter( filename );
-            v.writeOiAsJson( writer, WriteOiFlags.fINCREMENTAL );
+            v.writeOiAsJson( writer, WriteOiFlags.INCREMENTAL );
             writer.close();
         }
         finally
@@ -178,7 +178,7 @@ public class ViewTest
         String filename = mFASrc.getTempDirectory() + "mfasrc.por";
         String attrvalue = "This is line 1\r\nThis is line2";
         mFASrc.cursor( "FinAidSource" ).setAttribute( "SourceFootnote", attrvalue );
-        mFASrc.writeOiToFile( filename, EnumSet.of( WriteOiFlags.fINCREMENTAL ) );
+        mFASrc.writeOiToFile( filename, EnumSet.of( WriteOiFlags.INCREMENTAL ) );
         View v2 = zencas.activateOiFromFile( "mFASrc", filename );
         String str = v2.cursor( "FinAidSource" ).getStringFromAttribute( "SourceFootnote" );
         assertEquals( "Multi-line attribute value fails comparison", attrvalue, str );

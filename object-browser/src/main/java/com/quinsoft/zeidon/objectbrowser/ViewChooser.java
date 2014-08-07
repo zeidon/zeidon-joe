@@ -126,7 +126,7 @@ class ViewChooser extends JPanel implements ActionListener
         if ( returnVal == JFileChooser.APPROVE_OPTION )
         {
             String filename = chooser.getSelectedFile().getAbsolutePath();
-            view.writeOiToFile( filename, EnumSet.of( WriteOiFlags.fINCREMENTAL ) );
+            view.writeOiToFile( filename, EnumSet.of( WriteOiFlags.INCREMENTAL ) );
             env.getOe().getSystemTask().log().info( "OI written to %s", filename );
         }
     }

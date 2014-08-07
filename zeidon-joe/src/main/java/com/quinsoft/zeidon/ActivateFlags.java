@@ -38,13 +38,7 @@ public enum ActivateFlags
     fIGNORE_ATTRIB_ERRORS,
     fIGNORE_JOINS,
     fIGNORE_ACTIVATE_CONSTRAINTS,
-    fASYNCHRONOUS,
-
-    /**
-     * Used when reading/writing from a stream, this indicates that there is no header (i.e. meta)
-     * information in the stream.
-     */
-    fNO_HEADER;
+    fASYNCHRONOUS;
 
     public static final EnumSet<ActivateFlags> ROOT_ONLY = EnumSet.of( fROOT_ONLY );
     public static final EnumSet<ActivateFlags> ROOT_ONLY_MULTIPLE = EnumSet.of( fROOT_ONLY, fMULTIPLE );

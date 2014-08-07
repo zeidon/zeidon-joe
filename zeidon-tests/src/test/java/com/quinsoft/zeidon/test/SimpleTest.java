@@ -15,9 +15,11 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
  * @author DG
@@ -159,15 +161,17 @@ class SimpleTest
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
 
-//        View stud = new QualificationBuilder( zencas )
-//                            .setViewOd( "lStudDpt" )
-//                            .setOiSourceUrl( fileDbUrl )
-//                            .addAttribQual( "Status", "A" )
-//                            .addAttribQual( "AND" )
-//                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
-//                            .activate();
-//
+        View stud = new QualificationBuilder( zencas )
+                            .setViewOd( "lStudDpt" )
+                            .setOiSourceUrl( fileDbUrl )
+                            .addAttribQual( "Status", "A" )
+                            .addAttribQual( "AND" )
+                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+                            .activate();
+
 //        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
+        new WriteToStream().toFile( "/tmp/stud2.json" ).asJson().withoutHeaders().write( stud );
+
         View stud2 = new ActivateFromStream( zencas )
                             .fromResource( "/tmp/stud2.json" )
                             .setViewOd( "lStudDpt" )

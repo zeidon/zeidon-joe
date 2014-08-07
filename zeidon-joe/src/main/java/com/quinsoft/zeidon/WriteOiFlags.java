@@ -27,10 +27,16 @@ import java.util.EnumSet;
  */
 public enum WriteOiFlags
 {
-    fINCREMENTAL,
-    fENTITY_TAGS,
-    fENTITY_KEYS,
-    fKEYS_ONLY;
+    INCREMENTAL,
+    ENTITY_TAGS,
+    ENTITY_KEYS,
+    KEYS_ONLY,
+
+    /**
+     * Used when reading/writing from a stream, this indicates that there is no header (i.e. meta)
+     * information in the stream.
+     */
+    NO_HEADER;
 
     static final long CONTROL_INCREMENTAL = 0x00000001;
     static final long CONTROL_ENTITY_TAGS = 0x00000002;
@@ -46,16 +52,16 @@ public enum WriteOiFlags
     {
         EnumSet<WriteOiFlags> flags = empty();
         if ( ( control & CONTROL_INCREMENTAL ) != 0 )
-            flags.add( WriteOiFlags.fINCREMENTAL );
+            flags.add( WriteOiFlags.INCREMENTAL );
 
         if ( ( control & CONTROL_ENTITY_KEYS ) != 0 )
-            flags.add( WriteOiFlags.fENTITY_KEYS );
+            flags.add( WriteOiFlags.ENTITY_KEYS );
 
         if ( ( control & CONTROL_ENTITY_TAGS) != 0 )
-            flags.add( WriteOiFlags.fENTITY_TAGS );
+            flags.add( WriteOiFlags.ENTITY_TAGS );
 
         if ( ( control & CONTROL_KEYS_ONLY ) != 0 )
-            flags.add( WriteOiFlags.fKEYS_ONLY);
+            flags.add( WriteOiFlags.KEYS_ONLY);
 
         return flags;
     }

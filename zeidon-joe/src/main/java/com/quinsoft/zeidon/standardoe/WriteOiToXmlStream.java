@@ -50,7 +50,7 @@ public class WriteOiToXmlStream
         this.view = ((InternalView) view).getViewImpl();
         this.writer = writer;
         this.control = control == null ? EnumSet.noneOf( WriteOiFlags.class ) : control;
-        incremental = this.control.contains( WriteOiFlags.fINCREMENTAL );
+        incremental = this.control.contains( WriteOiFlags.INCREMENTAL );
     }
 
     private void write( String string )

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.utils;
 
@@ -13,7 +13,7 @@ import java.net.URL;
 /**
  * A forwarding wrapper of InputStream that includes a string describing
  * the source of the input stream.
- * 
+ *
  * @author dgc
  *
  */
@@ -24,7 +24,7 @@ public class ZeidonInputStream extends InputStream
     private final String description;
 
     /**
-     * 
+     *
      */
     public ZeidonInputStream( InputStream sourceInputStream, String desc )
     {
@@ -116,23 +116,29 @@ public class ZeidonInputStream extends InputStream
     {
         return description;
     }
-    
+
+    @Override
+    public String toString()
+    {
+        return "ZeidonInputStream: " + description;
+    }
+
     static public ZeidonInputStream create( File file ) throws FileNotFoundException
     {
         return new ZeidonInputStream ( new FileInputStream( file ), file.getAbsolutePath() );
     }
-    
+
     static public ZeidonInputStream create( URL url ) throws IOException
     {
         return new ZeidonInputStream ( url.openStream(), url.toString() );
     }
-    
+
     static public ZeidonInputStream create( ClassLoader classLoader, String resource )
     {
         InputStream is = classLoader.getResourceAsStream( resource );
         if ( is == null )
             return null;
-        
+
         String desc = String.format( "Resource '%s' from classLoader %s", resource, classLoader.toString() );
         return new ZeidonInputStream ( is, desc );
     }

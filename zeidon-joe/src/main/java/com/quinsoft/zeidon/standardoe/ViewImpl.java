@@ -954,7 +954,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOi( Writer writer )
     {
-        writeOi( writer, WriteOiFlags.fINCREMENTAL );
+        writeOi( writer, WriteOiFlags.INCREMENTAL );
     }
 
     @Override

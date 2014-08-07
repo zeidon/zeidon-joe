@@ -94,7 +94,7 @@ class WriteOiToStream
         Pattern specialChars = Pattern.compile( ".*[\\n\\r" + PortableFileReader.STRING_STORED_AS_BLOB_REGEX + "]+.*", Pattern.DOTALL );
 
         // Since we use it a lot, create a local value.
-        boolean writeIncremental = flags.contains( WriteOiFlags.fINCREMENTAL );
+        boolean writeIncremental = flags.contains( WriteOiFlags.INCREMENTAL );
 
         // Used to create the link statements at the end.
         int     hierIndex = 0;
@@ -161,7 +161,7 @@ class WriteOiToStream
                 }
                 writeln();
 
-                if ( flags.contains( WriteOiFlags.fENTITY_TAGS ) || ei.getTag() != null )
+                if ( flags.contains( WriteOiFlags.ENTITY_TAGS ) || ei.getTag() != null )
                 {
                     String tag = ei.getTag();
                     if ( StringUtils.isBlank( tag ) )
@@ -169,7 +169,7 @@ class WriteOiToStream
                     writeln( "mETAG      %s", tag );
                 }
 
-                if ( flags.contains( WriteOiFlags.fENTITY_KEYS ) )
+                if ( flags.contains( WriteOiFlags.ENTITY_KEYS ) )
                 {
                     writeln( "mEKEY      %d", ei.getEntityKey() );
                 }
@@ -204,7 +204,7 @@ class WriteOiToStream
                     if ( viewAttrib.isDerived() )
                         continue;
 
-                    if ( flags.contains( WriteOiFlags.fKEYS_ONLY ) && ! viewAttrib.isKey() )
+                    if ( flags.contains( WriteOiFlags.KEYS_ONLY ) && ! viewAttrib.isKey() )
                         continue;
 
                     // If this entity is the one that was most recently flagged as linked, don't

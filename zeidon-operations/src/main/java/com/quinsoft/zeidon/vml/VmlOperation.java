@@ -8678,7 +8678,7 @@ public abstract class VmlOperation
       Writer writer = null;
       try {
          writer = new FileWriter( filename );
-         view.writeOiAsJson( writer, WriteOiFlags.fINCREMENTAL );
+         view.writeOiAsJson( writer, WriteOiFlags.INCREMENTAL );
          writer.close();
       } catch (IOException ex) {
          Logger.getLogger( VmlOperation.class.getName() ).log( Level.SEVERE, null, ex );

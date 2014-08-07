@@ -66,7 +66,6 @@ class ActivateOisFromJsonStream
     private List<View>                    returnList;
     private String version;
     private EnumSet<ActivateFlags> flags;
-    private boolean simpleFormat;
 
     ActivateOisFromJsonStream( ActivateFromStream options )
     {
@@ -77,12 +76,6 @@ class ActivateOisFromJsonStream
         this.options = options;
         viewOd = options.getViewOd();
         flags = options.getFlags();
-
-        if ( flags.contains( ActivateFlags.fNO_HEADER ) )
-        {
-            if ( viewOd == null )
-                throw new ZeidonException( "NO_HEADER flag requires that ViewOD be specified" );
-        }
     }
 
     public List<View> read()
@@ -107,10 +100,6 @@ class ActivateOisFromJsonStream
             {
                 readFileMeta();
 
-                // If the stream contains .meta in the JSON record we must be reading a stream
-                // fully formatted with Zeidon information.
-                simpleFormat = false;
-
                 token = jp.nextToken();
                 if ( token != JsonToken.START_ARRAY )
                     throw new ZeidonException( "OI JSON missing beginning of OI array." );
@@ -128,10 +117,6 @@ class ActivateOisFromJsonStream
                     throw new ZeidonException( "The first field in the JSON stream must be the root entity name" +
                                                " (%) or '.meta' but was %s.", rootName, fieldName );
 
-                // If we get here then the first field in the JSON is the root entity name.
-                // This means we must be reading a simple format JSON.  Simple format doesn't
-                // have any Zeidon-specific information.
-                simpleFormat = true;
                 view = task.activateEmptyObjectInstance( viewOd );
                 returnList.add( view );
 
