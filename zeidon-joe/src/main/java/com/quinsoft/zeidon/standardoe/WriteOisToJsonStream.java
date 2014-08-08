@@ -4,7 +4,6 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,6 +17,7 @@ import org.joda.time.LocalDateTime;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.WriteToStream;
@@ -29,16 +29,16 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author dgc
  *
  */
-public class WriteOisToJsonStream
+public class WriteOisToJsonStream implements StreamWriter
 {
     private final static String VERSION = "1";
 
-    private final Collection<? extends View> viewList;
-    private final Writer writer;
-    private final WriteToStream options;
-    private final EnumSet<WriteOiFlags> flags;
-    private final boolean incremental;
-    private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
+    private Collection<? extends View> viewList;
+    private Writer writer;
+    private WriteToStream options;
+    private EnumSet<WriteOiFlags> flags;
+    private boolean incremental;
+    private Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
 
     private JsonGenerator jg;
 
@@ -59,23 +59,18 @@ public class WriteOisToJsonStream
         this( Arrays.asList( view ), writer, options );
     }
 
-    /**
-     * Returns a JSON string that serializes the collection of views.
-     *
-     * @param viewList
-     * @param options
-     * @return
-     */
-    public static String writeOisToJsonString( Collection<? extends View> viewList, WriteToStream options )
+    @Override
+    public void writeToStream( WriteToStream options )
     {
-        StringWriter writer = new StringWriter();
-        WriteOisToJsonStream jsonBuilder = new WriteOisToJsonStream( viewList, writer, options );
-        jsonBuilder.writeToStream();
-        return writer.toString();
-    }
+        this.viewList = options.getViewList();
+        this.writer = options.getWriter();
+        this.options = options;
+        if ( options.getFlags() == null )
+            flags = EnumSet.noneOf( WriteOiFlags.class );
+        else
+            flags = options.getFlags();
+        incremental = flags.contains( WriteOiFlags.INCREMENTAL );
 
-    public void writeToStream()
-    {
         // Create a set of all the OIs and turn off the record owner flag.  The record owner
         // flag will be used to determine if a linked EI has been written to the stream.
         for ( View view : viewList )

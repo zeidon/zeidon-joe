@@ -156,6 +156,16 @@ public class WriteToStream
         write();
     }
 
+    public List<View> getViewList()
+    {
+        return viewList;
+    }
+
+    public Writer getWriter()
+    {
+        return writer;
+    }
+
     public void write()
     {
         try
