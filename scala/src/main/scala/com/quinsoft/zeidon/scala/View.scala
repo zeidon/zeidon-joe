@@ -96,3 +96,16 @@ class View( val task: Task ) extends Task(task) {
             throw new ZeidonException( "LOD name not established for this View" )
     }
 }
+
+object View {
+    /**
+     * Convert a Java View to a Scala View
+     */
+    implicit def jview2view( jview: com.quinsoft.zeidon.View ) = new com.quinsoft.zeidon.scala.View( jview )
+    
+    /**
+     * Convert Scala View to Java View.
+     */
+    implicit def view2jview( view: com.quinsoft.zeidon.scala.View ) = view.jview
+
+}

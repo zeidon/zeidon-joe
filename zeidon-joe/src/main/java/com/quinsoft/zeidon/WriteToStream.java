@@ -41,6 +41,18 @@ public class WriteToStream
         viewList = new ArrayList<>();
     }
 
+    public WriteToStream( View view, View... views )
+    {
+        this();
+        addView( view, views );
+    }
+
+    public WriteToStream( List<View> views )
+    {
+        this();
+        addViews( views );
+    }
+
     public WriteToStream toFile( String filename )
     {
         ZeidonInputStream inputStream = JoeUtils.getInputStream( filename );
@@ -142,22 +154,22 @@ public class WriteToStream
         return this;
     }
 
-    public void write( View view, View... views )
+    public WriteToStream write( View view, View... views )
     {
         viewList.add( view );
         if ( views != null )
             viewList.addAll( viewList );
 
-        write();
+        return write();
     }
 
-    public void write( Collection<View> views )
+    public WriteToStream write( Collection<View> views )
     {
         viewList.addAll( views );
-        write();
+        return write();
     }
 
-    public void write()
+    public WriteToStream write()
     {
         try
         {
@@ -172,7 +184,7 @@ public class WriteToStream
                 case JSON:
                     WriteOisToJsonStream jsonWriter = new WriteOisToJsonStream( viewList, writer, this );
                     jsonWriter.writeToStream();
-                    return;
+                    return this;
 
                 case XML:
                     if ( viewList.size() > 1 )
@@ -180,14 +192,14 @@ public class WriteToStream
 
                     WriteOiToXmlStream xmlWriter = new WriteOiToXmlStream( viewList.get( 0 ), writer, flags );
                     xmlWriter.writeToStream();
-                    return;
+                    return this;
 
                 case POR:
                     if ( viewList.size() > 1 )
                         throw new ZeidonException( "Only one View may be written to a .POR file" );
 
                     viewList.get( 0 ).writeOi( writer, flags );
-                    return;
+                    return this;
 
                 default:
                     throw new ZeidonException( "Unknown format", getFormat() );
