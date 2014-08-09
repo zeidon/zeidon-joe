@@ -20,9 +20,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.Enumeration;
@@ -35,7 +33,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -495,37 +492,6 @@ public class JoeUtils
         StringWriter writer = new StringWriter();
         view.writeOi( writer );
         return writer.toString();
-    }
-
-    /**
-     * Write an OI to a string as JSON.
-     *
-     * @param view
-     * @return
-     */
-    public static String serializeViewAsJson( View view )
-    {
-        StringWriter writer = new StringWriter();
-        view.writeOiAsJson( writer );
-        return writer.toString();
-    }
-
-    public static void writeOiToJsonFile( View view, String filename )
-    {
-        Writer writer = null;
-        try
-        {
-            writer = new FileWriter( filename );
-            view.writeOiAsJson( writer );
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( writer );
-        }
     }
 
     public static void RegisterJmxBean( Object bean, String beanName, String jmxAppName )

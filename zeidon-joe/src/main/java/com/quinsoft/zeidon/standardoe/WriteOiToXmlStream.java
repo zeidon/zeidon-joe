@@ -22,12 +22,15 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -36,20 +39,25 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author DG
  *
  */
-public class WriteOiToXmlStream
+public class WriteOiToXmlStream implements StreamWriter
 {
-    private final ViewImpl view;
-    private final Writer writer;
-    private final EnumSet<WriteOiFlags> control;
-    private final boolean incremental;
+    private ViewImpl view;
+    private Writer writer;
+    private EnumSet<WriteOiFlags> control;
+    private boolean incremental;
 
     private int currentIndent;
 
-    public WriteOiToXmlStream(View view, Writer writer, EnumSet<WriteOiFlags> control )
+    @Override
+    public void writeToStream( WriteToStream options )
     {
-        this.view = ((InternalView) view).getViewImpl();
-        this.writer = writer;
-        this.control = control == null ? EnumSet.noneOf( WriteOiFlags.class ) : control;
+        List<View> viewList = options.getViewList();
+        if ( viewList.size() > 1 )
+            throw new ZeidonException( "XML stream processing can only handle a single OI" );
+
+        view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
+        writer = options.getWriter();
+        control = options.getFlags();
         incremental = this.control.contains( WriteOiFlags.INCREMENTAL );
     }
 

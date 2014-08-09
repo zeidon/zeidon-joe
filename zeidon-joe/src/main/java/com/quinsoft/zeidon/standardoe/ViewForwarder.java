@@ -562,30 +562,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     @Override
-    public void writeOiAsJson( Writer writer, EnumSet<WriteOiFlags> flags )
-    {
-        getView().writeOiAsJson( writer, flags );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, WriteOiFlags flag )
-    {
-        getView().writeOiAsJson( writer, flag );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, WriteOiFlags... flags )
-    {
-        getView().writeOiAsJson( writer, flags );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer )
-    {
-        getView().writeOiAsJson( writer );
-    }
-
-    @Override
     public View duplicateOi( )
     {
         return getView().duplicateOi();

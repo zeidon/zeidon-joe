@@ -21,10 +21,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -320,52 +317,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control )
     {
-        BufferedWriter stream = null;
-        try
-        {
-            stream = new BufferedWriter( new FileWriter( filename ) );
-            WriteOiToXmlStream writer = new WriteOiToXmlStream(this, stream, control );
-            writer.writeToStream();
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            if ( stream != null )
-            {
-                try
-                {
-                    stream.close();
-                }
-                catch ( Exception e )
-                {
-                    // Just log the error.  This way we don't hide an exception from above.
-                    getTask().log().error( "Error closing stream: %s\n%s", e.getMessage(), e.getStackTrace() );
-                }
-            }
-        }
+        new WriteToStream().asXml().setFlags( control ).toFile( filename ).write( this );
     }
 
     @Override
     public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
-        FileWriter stream = null;
-        try
-        {
-            stream = new FileWriter( filename );
-            WriteOiToStream writer = new WriteOiToStream(this, stream, (new File(filename)).getName(), control );
-            writer.writeToStream();
-        }
-        catch ( Throwable e )
-        {
-            throw ZeidonException.wrapException( e ).prependFilename( filename );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
+        new WriteToStream().setFlags( control ).toFile( filename ).write( this );
     }
 
     @Override
@@ -376,20 +334,14 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         {
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             stream = new OutputStreamWriter( byteArray );
-            WriteOiToStream writer = new WriteOiToStream(this, stream, getViewOd().getName(), null );
-            writer.writeToStream();
+            new WriteToStream().setFlags( WriteOiFlags.convertLongFlags( control ) )
+                               .toWriter( stream )
+                               .write( this );
             return new Blob( byteArray.toByteArray() );
         }
         finally
         {
-            if ( stream != null ) try
-            {
-                stream.close();
-            }
-            catch ( Exception e )
-            {
-                throw ZeidonException.wrapException( e );
-            }
+            IOUtils.closeQuietly( stream );
         }
     }
 
@@ -935,8 +887,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOi( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        WriteOiToStream w = new WriteOiToStream(this, writer, getViewOd().getName(), flags );
-        w.writeToStream();
+        new WriteToStream().setFlags( flags ).toWriter( writer ).write( this );
     }
 
     @Override
@@ -955,31 +906,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     public void writeOi( Writer writer )
     {
         writeOi( writer, WriteOiFlags.INCREMENTAL );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, EnumSet<WriteOiFlags> flags )
-    {
-        WriteOisToJsonStream w = new WriteOisToJsonStream( this, writer, new WriteToStream().setFlags( flags ) );
-        w.writeToStream();
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, WriteOiFlags flag )
-    {
-        writeOiAsJson( writer, convertFlags( flag ) );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, WriteOiFlags... flags )
-    {
-        writeOiAsJson( writer, convertFlags( flags ) );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer )
-    {
-        writeOiAsJson( writer, (EnumSet<WriteOiFlags>) null );
     }
 
     @Override

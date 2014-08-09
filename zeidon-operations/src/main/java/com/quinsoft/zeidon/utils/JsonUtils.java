@@ -8,6 +8,7 @@ import java.io.Writer;
 import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -37,6 +38,6 @@ public class JsonUtils
                             .activateFirst();
 
         // Write it.
-        xod.writeOiAsJson( writer );
+        new WriteToStream().toWriter( writer ).write( xod );
     }
 }

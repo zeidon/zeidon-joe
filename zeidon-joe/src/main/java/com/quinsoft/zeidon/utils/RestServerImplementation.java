@@ -3,19 +3,14 @@
  */
 package com.quinsoft.zeidon.utils;
 
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.List;
-
-import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
-import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 
 /**
  * Implements the activate and commit logic for REST servers.  This is used by the
@@ -70,12 +65,8 @@ public class RestServerImplementation
 
             ActivateOptions activateOptions = new ActivateOptions( task );
             View view = task.activateObjectInstance( viewOdName, qual, activateOptions );
-            StringWriter strWriter = new StringWriter();
-            List<View> list = Arrays.asList( rc, view );
-            WriteOisToJsonStream writer = new WriteOisToJsonStream( list, strWriter, options );
-            writer.writeToStream();
-
-            return strWriter.toString();
+            WriteToStream writer = new WriteToStream().addView( rc, view ).withIncremental().toStringWriter().write();
+            return writer.getJsonString();
         }
         catch ( Exception e )
         {
@@ -86,11 +77,8 @@ public class RestServerImplementation
             rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
 
             // Write the rc OI to a string.
-            StringWriter strWriter = new StringWriter();
-            WriteOisToJsonStream writer = new WriteOisToJsonStream( rc, strWriter, options );
-            writer.writeToStream();
-
-            return strWriter.toString();
+            WriteToStream writer = new WriteToStream().addView( rc ).withIncremental().toStringWriter().write();
+            return writer.getJsonString();
         }
     }
 

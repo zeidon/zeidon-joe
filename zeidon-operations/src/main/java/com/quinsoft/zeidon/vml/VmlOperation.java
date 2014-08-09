@@ -28,9 +28,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,8 +40,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
@@ -90,6 +86,7 @@ import com.quinsoft.zeidon.UnknownViewEntityException;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
@@ -8675,20 +8672,10 @@ public abstract class VmlOperation
    public void
    WriteOiToJson( View view, String filename, int control )
    {
-      Writer writer = null;
-      try {
-         writer = new FileWriter( filename );
-         view.writeOiAsJson( writer, WriteOiFlags.INCREMENTAL );
-         writer.close();
-      } catch (IOException ex) {
-         Logger.getLogger( VmlOperation.class.getName() ).log( Level.SEVERE, null, ex );
-      } finally {
-         try {
-            writer.close();
-         } catch (IOException ex) {
-            Logger.getLogger( VmlOperation.class.getName() ).log( Level.SEVERE, null, ex );
-         }
-      }
+       new WriteToStream().asJson()
+                          .setFlags( WriteOiFlags.convertLongFlags( control ) )
+                          .toFile( filename )
+                          .write( view );
    }
 
    public View

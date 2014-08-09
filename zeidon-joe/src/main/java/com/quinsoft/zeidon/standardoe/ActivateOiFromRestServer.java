@@ -15,18 +15,18 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
-import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
  * Activate an OI from a REST server.
@@ -75,15 +75,16 @@ public class ActivateOiFromRestServer implements Activator
         Application application = viewOd.getApplication();
         String stringResponse = null;
         BufferedBinaryStreamReader reader = null;
+        HttpClient client = null;
 
         try
         {
             String url = String.format( "%s/activate?application=%s&viewOdName=%s",
                                         serverUrl, application.getName(), view.getViewOd().getName() );
-            HttpClient client = new DefaultHttpClient();
+            client = new DefaultHttpClient();
             HttpPost post = new HttpPost( url );
             View qual = activateOptions.getQualificationObject();
-            String qualStr = JoeUtils.serializeViewAsJson( qual );
+            String qualStr = new WriteToStream().asJson().toStringWriter().write( qual ).getJsonString();
             StringEntity entity = new StringEntity( qualStr );
             post.setEntity( entity );
             post.setHeader( "Content-Type", "application/json" );

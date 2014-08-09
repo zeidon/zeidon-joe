@@ -7,12 +7,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.EnumSet;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +29,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownViewAttributeException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
@@ -130,17 +128,7 @@ public class ViewTest
     {
         View v = zencas.activateOiFromFile( "mStudent", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudent_ac.por" );
         String filename = v.getTempDirectory() + "mstudent_ac.json";
-        Writer writer = null;
-        try
-        {
-            writer = new FileWriter( filename );
-            v.writeOiAsJson( writer, WriteOiFlags.INCREMENTAL );
-            writer.close();
-        }
-        finally
-        {
-            IOUtils.closeQuietly( writer );
-        }
+        new WriteToStream().asJson().withIncremental().toFile( filename ).write( v );
 
         View v2 = new ActivateFromStream( zencas )
                             .asJson()

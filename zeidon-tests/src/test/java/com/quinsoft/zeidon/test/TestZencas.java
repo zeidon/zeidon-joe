@@ -3,14 +3,10 @@
  */
 package com.quinsoft.zeidon.test;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,8 +21,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
@@ -39,7 +35,6 @@ import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -203,18 +198,7 @@ public class TestZencas
 
         WriteToStream options = new WriteToStream();
         options.withIncremental();
-        BufferedWriter stream = null;
-        try
-        {
-        	stream = new BufferedWriter( new OutputStreamWriter(new FileOutputStream( getTempDir() + "/stud.json" ), "UTF-8") );
-            List<View> list = Arrays.asList( stud, person );
-            WriteOisToJsonStream writer = new WriteOisToJsonStream( list, stream, options );
-            writer.writeToStream();
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
+        new WriteToStream().toFile( getTempDir() + "/stud.json" ).write( stud, person );
 
         List<View> viewList = new ActivateFromStream( zencas )
                                         .asJson()
@@ -229,17 +213,7 @@ public class TestZencas
                             .addAttribQual( "ID", 5 )
                             .activate();
         stud.cursor( "College" ).deleteEntity();
-        stream = null;
-        try
-        {
-            stream = new BufferedWriter( new FileWriter( getTempDir() + "/mcollege.json" ) );
-            WriteOisToJsonStream writer = new WriteOisToJsonStream( stud, stream, options );
-            writer.writeToStream();
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-        }
+        new WriteToStream().toFile( getTempDir() + "/mcollege.json" ).write( stud );
 
         viewList = new ActivateFromStream( zencas )
                                     .asJson()

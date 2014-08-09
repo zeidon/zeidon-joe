@@ -110,8 +110,8 @@ public class CommitToRestServer implements Committer
         {
             copyEntityKeysToTags();
 
-            writer = new WriteToStream()
-            String json = WriteOisToJsonStream.writeOisToJsonString( viewList, JSON_WRITE_OPTIONS );
+            WriteToStream writer = new WriteToStream().asJson().toStringWriter().withIncremental().write( viewList );
+            String json = writer.getJsonString();
             List<View> views = makePostCall( json );
             View restRc = views.get( 0 );
             views.remove( 0 ); // Remove the RC from the list of views.

@@ -5,7 +5,6 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -41,23 +40,6 @@ public class WriteOisToJsonStream implements StreamWriter
     private Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
 
     private JsonGenerator jg;
-
-    public WriteOisToJsonStream( Collection<? extends View> viewList, Writer writer, WriteToStream options )
-    {
-        this.viewList = viewList;
-        this.writer = writer;
-        this.options = options;
-        if ( options.getFlags() == null )
-            flags = EnumSet.noneOf( WriteOiFlags.class );
-        else
-            flags = this.options.getFlags();
-        incremental = this.flags.contains( WriteOiFlags.INCREMENTAL );
-    }
-
-    public WriteOisToJsonStream(View view, Writer writer, WriteToStream options )
-    {
-        this( Arrays.asList( view ), writer, options );
-    }
 
     @Override
     public void writeToStream( WriteToStream options )

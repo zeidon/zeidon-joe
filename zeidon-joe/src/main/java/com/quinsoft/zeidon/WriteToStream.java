@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
+import com.quinsoft.zeidon.standardoe.WriteOiToPorStream;
 import com.quinsoft.zeidon.standardoe.WriteOiToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 
@@ -34,10 +35,23 @@ public class WriteToStream
     private StreamFormat format;
     private String resourceName;
     private EnumSet<WriteOiFlags> flags = EnumSet.noneOf( WriteOiFlags.class );
+    private StreamWriter streamWriter;
 
     public WriteToStream()
     {
         viewList = new ArrayList<>();
+    }
+
+    public WriteToStream( View view, View... views )
+    {
+        this();
+        addView( view, views );
+    }
+
+    public WriteToStream( List<View> views )
+    {
+        this();
+        addViews( views );
     }
 
     public WriteToStream toFile( String filename )
@@ -53,8 +67,21 @@ public class WriteToStream
         }
 
         resourceName = filename;
-        setFormatFromFilename( resourceName, true );
+        setFormatFromFilename( resourceName );
         return this;
+    }
+
+    public WriteToStream toWriter( Writer writer )
+    {
+        this.writer = writer;
+        closeWriter = false;  // We'll assume the caller will close it.
+        resourceName = "*External writer*";
+        return this;
+    }
+
+    public String getSourceName()
+    {
+        return resourceName;
     }
 
     /**
@@ -69,28 +96,44 @@ public class WriteToStream
         return this;
     }
 
+    private void close()
+    {
+        if ( closeWriter )
+        {
+            IOUtils.closeQuietly( writer );
+            closeWriter = false;
+        }
+    }
+
     public String getJsonString()
     {
-        if ( writer == null )
-            throw new ZeidonException( "No output destination specified." );
+        try
+        {
+            if ( writer == null )
+                throw new ZeidonException( "No output destination specified." );
 
-        if ( writer instanceof StringWriter )
-            return writer.toString();
+            if ( writer instanceof StringWriter )
+                return writer.toString();
 
-        throw new ZeidonException( "Writer is not an instance of StringWriter.  Class = %s",
-                                   writer.getClass().getCanonicalName() );
+            throw new ZeidonException( "Writer is not an instance of StringWriter.  Class = %s",
+                                       writer.getClass().getCanonicalName() );
+        }
+        catch ( Exception e )
+        {
+            close();
+            throw e;
+        }
     }
 
     /**
      * Set the format depending on the extension of filename.
      *
      * @param filename
-     * @param ifNull if true only set format if it is null.
      * @return
      */
-    private WriteToStream setFormatFromFilename( String filename, boolean ifNull )
+    private WriteToStream setFormatFromFilename( String filename )
     {
-        if ( ifNull && format != null )
+        if ( format != null )
             return this;
 
         for ( StreamFormat f : StreamFormat.values() )
@@ -132,13 +175,13 @@ public class WriteToStream
         return this;
     }
 
-    public WriteToStream addViews( Collection<View> views )
+    public WriteToStream addViews( Collection<? extends View> views )
     {
         viewList.addAll( views );
         return this;
     }
 
-    public void write( View view, View... views )
+    public WriteToStream write( View view, View... views )
     {
         viewList.add( view );
         if ( views != null && views.length > 0 )
@@ -147,13 +190,13 @@ public class WriteToStream
                 viewList.add( v );
         }
 
-        write();
+        return write();
     }
 
-    public void write( Collection<View> views )
+    public WriteToStream write( Collection<? extends View> views )
     {
         viewList.addAll( views );
-        write();
+        return write();
     }
 
     public List<View> getViewList()
@@ -166,7 +209,7 @@ public class WriteToStream
         return writer;
     }
 
-    public void write()
+    public WriteToStream write()
     {
         try
         {
@@ -176,36 +219,33 @@ public class WriteToStream
             if ( writer == null )
                 throw new ZeidonException( "No output destination specified." );
 
-            switch ( getFormat() )
+            if ( streamWriter == null )
             {
-                case JSON:
-                    WriteOisToJsonStream jsonWriter = new WriteOisToJsonStream( viewList, writer, this );
-                    jsonWriter.writeToStream();
-                    return;
+                switch ( getFormat() )
+                {
+                    case JSON:
+                        streamWriter = new WriteOisToJsonStream();
+                        break;
 
-                case XML:
-                    if ( viewList.size() > 1 )
-                        throw new ZeidonException( "Only one View may be written to a .XML file" );
+                    case XML:
+                        streamWriter = new WriteOiToXmlStream();
+                        break;
 
-                    WriteOiToXmlStream xmlWriter = new WriteOiToXmlStream( viewList.get( 0 ), writer, flags );
-                    xmlWriter.writeToStream();
-                    return;
+                    case POR:
+                        streamWriter = new WriteOiToPorStream();
+                        break;
 
-                case POR:
-                    if ( viewList.size() > 1 )
-                        throw new ZeidonException( "Only one View may be written to a .POR file" );
-
-                    viewList.get( 0 ).writeOi( writer, flags );
-                    return;
-
-                default:
-                    throw new ZeidonException( "Unknown format", getFormat() );
+                    default:
+                        throw new ZeidonException( "Unknown format", getFormat() );
+                }
             }
+
+            streamWriter.writeToStream( this );
+            return this;
         }
         finally
         {
-            if ( closeWriter )
-                IOUtils.closeQuietly( writer );
+            close();
         }
     }
 
@@ -216,6 +256,9 @@ public class WriteToStream
 
     public WriteToStream setFlags( EnumSet<WriteOiFlags> flags )
     {
+        if ( flags == null )
+            flags = EnumSet.noneOf( WriteOiFlags.class );
+
         this.flags = flags;
         return this;
     }
@@ -226,6 +269,11 @@ public class WriteToStream
         return this;
     }
 
+    public WriteToStream using( StreamWriter streamWriter )
+    {
+        this.streamWriter = streamWriter;
+        return this;
+    }
     /**
      * This turns off headers (e.g. .oimeta) when writing the OI.  This results in a simpler
      * JSON but it won't have incremental information.

@@ -116,12 +116,6 @@ public interface View extends TaskQualification, CacheMap
     void writeOi( Writer writer );
     void writeOi( Writer writer, WriteOiFlags flag );
     void writeOi( Writer writer, WriteOiFlags... flags );
-
-    void writeOiAsJson( Writer writer, EnumSet<WriteOiFlags> flags );
-    void writeOiAsJson( Writer writer );
-    void writeOiAsJson( Writer writer, WriteOiFlags flag );
-    void writeOiAsJson( Writer writer, WriteOiFlags... flags );
-
     void writeOiToXml( String filename, EnumSet<WriteOiFlags> control );
 
     Blob writeOiToBlob( long control );

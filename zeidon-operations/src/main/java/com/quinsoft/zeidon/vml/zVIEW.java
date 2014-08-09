@@ -627,30 +627,6 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public void writeOiAsJson( Writer writer, EnumSet<WriteOiFlags> flags )
-    {
-        getView().writeOiAsJson( writer, flags );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, WriteOiFlags flag )
-    {
-        getView().writeOiAsJson( writer, flag );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer, WriteOiFlags... flags )
-    {
-        getView().writeOiAsJson( writer, flags );
-    }
-
-    @Override
-    public void writeOiAsJson( Writer writer )
-    {
-        getView().writeOiAsJson( writer );
-    }
-
-    @Override
     public <T> T putCacheMap( Class<T> key, T value )
     {
         return getView().putCacheMap( key, value );

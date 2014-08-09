@@ -21,9 +21,11 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +34,10 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.StreamWriter;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -41,12 +46,12 @@ import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
- * Writes an object instance to a stream.
+ * Writes an object instance to a stream using Zeidon's portable file format.
  *
  * @author DG
  *
  */
-class WriteOiToStream
+public class WriteOiToPorStream implements StreamWriter
 {
     private static final long META_OI_LOCKED =   0x00000001;
     private static final long META_OI_READONLY = 0x00000002;
@@ -56,15 +61,20 @@ class WriteOiToStream
     private ViewImpl              view;
     private Writer                writer;
     private EnumSet<WriteOiFlags> flags;
-    private final String          name;
+    private WriteToStream options;
 
-    WriteOiToStream(ViewImpl view, Writer writer, String name, EnumSet<WriteOiFlags> flags )
+    @Override
+    public void writeToStream( WriteToStream options )
     {
-        super();
-        this.view = view;
-        this.flags = flags == null ? WriteOiFlags.empty() : flags;
-        this.writer = writer;
-        this.name = name;
+        List<View> viewList = options.getViewList();
+        if ( viewList.size() > 1 )
+            throw new ZeidonException( "POR stream processing can only handle a single OI" );
+
+        view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
+        writer = options.getWriter();
+        flags = options.getFlags();
+        this.options = options;
+        writeToStream();
     }
 
     private void write( String buffer ) throws IOException
@@ -114,6 +124,10 @@ class WriteOiToStream
         String compressed = "0";
         String optimisticOIs = "0";
         String attribFlags = writeIncremental ? "1" : "0";
+
+        String name = view.getViewOd().getName();
+        if ( writer instanceof FileWriter )
+            name = options.getSourceName();
 
         String header = String.format( "z%s%s%s%s%sZeidon    %8s %s %s",
                                         erDate, incremental, compressed, optimisticOIs, attribFlags,
