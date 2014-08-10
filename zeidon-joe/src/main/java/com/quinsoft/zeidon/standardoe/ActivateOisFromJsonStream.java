@@ -68,6 +68,17 @@ class ActivateOisFromJsonStream implements StreamReader
     private String version;
     private EnumSet<ActivateFlags> flags;
 
+    /**
+     * A JSON stream will have a version.  Once the version is read from the stream a
+     * subclass of JsonReader will be used to read a particular version.
+     * @author dgc
+     *
+     */
+    private interface JsonReader
+    {
+        void process() throws Exception;
+    }
+
     ActivateOisFromJsonStream( )
     {
         returnList = new ArrayList<View>();
@@ -96,14 +107,23 @@ class ActivateOisFromJsonStream implements StreamReader
             {
                 readFileMeta();
 
-                token = jp.nextToken();
-                if ( token != JsonToken.START_ARRAY )
-                    throw new ZeidonException( "OI JSON missing beginning of OI array." );
-
-                while ( readOi() );
+                JsonReader reader = getReaderForVersion();
+                reader.process();
             }
             else
             {
+                if ( StringUtils.equalsIgnoreCase( fieldName, "version" ) )
+                {
+                    token = jp.nextToken(); // Move to value.
+                    version = jp.getValueAsString();
+                    token = jp.nextToken(); // Move to next field name.
+                }
+                else
+                if ( StringUtils.isBlank( options.getVersion() ) )
+                {
+                    throw new ZeidonException( "First field must be version" );
+                }
+
                 if ( viewOd == null )
                     throw new ZeidonException( "JSON stream appears to start with the root entity name (%s)" +
                                                " but the ViewOD has not been specified." );
@@ -116,7 +136,8 @@ class ActivateOisFromJsonStream implements StreamReader
                 view = task.activateEmptyObjectInstance( viewOd );
                 returnList.add( view );
 
-                while ( readSimpleOi() );
+                JsonReader reader = getSimpleReaderForVersion();
+                reader.process();
             }
 
             jp.close();
@@ -133,6 +154,33 @@ class ActivateOisFromJsonStream implements StreamReader
         }
 
         return returnList;
+    }
+
+    private JsonReader getReaderForVersion()
+    {
+        String v = getVersion();
+        switch ( v )
+        {
+            case "1":
+            case "1.0":
+                return new JsonReaderVersion1();
+
+            default:
+                throw new ZeidonException("Unknown version %s", v );
+        }
+    }
+
+    private JsonReader getSimpleReaderForVersion()
+    {
+        String v = getVersion();
+        switch ( v )
+        {
+            case "1":
+                return new SimpleJsonReaderVersion1();
+
+            default:
+                throw new ZeidonException("Unknown version %s", v );
+        }
     }
 
     private void readFileMeta() throws Exception
@@ -159,6 +207,17 @@ class ActivateOisFromJsonStream implements StreamReader
 
         jp.nextToken();
 
+    }
+
+    private String getVersion()
+    {
+        if ( ! StringUtils.isBlank( options.getVersion() ) )
+            return options.getVersion();
+
+        if ( StringUtils.isBlank( version ) )
+            throw new ZeidonException( "Version is not specified in stream or Deserialization options" );
+
+        return version;
     }
 
     private boolean readOi() throws Exception
@@ -484,4 +543,28 @@ class ActivateOisFromJsonStream implements StreamReader
         flags = options.getFlags();
         return read();
     }
+
+    private class JsonReaderVersion1 implements JsonReader
+    {
+        @Override
+        public void process() throws Exception
+        {
+            JsonToken token = jp.nextToken();
+            if ( token != JsonToken.START_ARRAY )
+                throw new ZeidonException( "OI JSON missing beginning of OI array." );
+
+            while ( readOi() );
+        }
+    }
+
+
+    private class SimpleJsonReaderVersion1 implements JsonReader
+    {
+        @Override
+        public void process() throws Exception
+        {
+            while ( readSimpleOi() );
+        }
+    }
+
 }

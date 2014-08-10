@@ -37,6 +37,7 @@ public class Deserialize
     private StreamFormat format;
     private Application application;
     private StreamReader streamReader;
+    private String       version;
 
     /**
      * This is a set of ViewEntities that we will allow to create dynamic
@@ -357,5 +358,15 @@ public class Deserialize
     public void using( StreamReader streamReader )
     {
         this.streamReader = streamReader;
+    }
+
+    public String getVersion()
+    {
+        return version;
+    }
+
+    public void setVersion( String version )
+    {
+        this.version = version;
     }
 }
