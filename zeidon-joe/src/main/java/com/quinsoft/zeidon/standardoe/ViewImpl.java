@@ -317,13 +317,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control )
     {
-        new Serialize().asXml().setFlags( control ).toFile( filename ).write( this );
+        serialize().asXml().setFlags( control ).toFile( filename ).write();
     }
 
     @Override
     public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
-        new Serialize().setFlags( control ).toFile( filename ).write( this );
+        serialize().setFlags( control ).toFile( filename ).write();
     }
 
     @Override
@@ -334,9 +334,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         {
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             stream = new OutputStreamWriter( byteArray );
-            new Serialize().setFlags( WriteOiFlags.convertLongFlags( control ) )
-                               .toWriter( stream )
-                               .write( this );
+            serialize().setFlags( control ).toWriter( stream ).write();
             return new Blob( byteArray.toByteArray() );
         }
         finally
@@ -887,7 +885,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOi( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        new Serialize().setFlags( flags ).toWriter( writer ).write( this );
+        serialize().setFlags( flags ).toWriter( writer ).write();
     }
 
     @Override

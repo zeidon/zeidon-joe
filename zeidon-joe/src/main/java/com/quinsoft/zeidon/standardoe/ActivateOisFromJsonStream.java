@@ -19,10 +19,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -37,20 +38,20 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author dgc
  *
  */
-class ActivateOisFromJsonStream
+class ActivateOisFromJsonStream implements StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
                                                                                CreateEntityFlags.fDONT_UPDATE_OI,
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
-    private final Task                    task;
-    private final InputStream             stream;
+    private Task                    task;
+    private InputStream             stream;
 
     /**
      * Keep track of the options for this activate.
      */
-    private final Deserialize  options;
+    private Deserialize  options;
 
     /**
      * This keeps track of all the entities that are the sources for linked instances.
@@ -63,19 +64,14 @@ class ActivateOisFromJsonStream
     private boolean                       incremental;
     private ViewOd                        viewOd;
     private View                          view;
-    private List<View>                    returnList;
+    private final List<View>              returnList;
     private String version;
     private EnumSet<ActivateFlags> flags;
 
-    ActivateOisFromJsonStream( Deserialize options )
+    ActivateOisFromJsonStream( )
     {
-        this.task = options.getTask();
-        this.stream = options.getInputStream();
         returnList = new ArrayList<View>();
         linkSources = new HashMap<Object, EntityInstanceImpl>();
-        this.options = options;
-        viewOd = options.getViewOd();
-        flags = options.getFlags();
     }
 
     public List<View> read()
@@ -476,5 +472,16 @@ class ActivateOisFromJsonStream
         boolean deleted  = false;
         boolean included = false;
         boolean excluded = false;
+    }
+
+    @Override
+    public List<View> readFromStream( Deserialize options )
+    {
+        this.task = options.getTask();
+        this.stream = options.getInputStream();
+        this.options = options;
+        viewOd = options.getViewOd();
+        flags = options.getFlags();
+        return read();
     }
 }

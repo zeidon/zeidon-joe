@@ -4,8 +4,9 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.Set;
+import java.util.List;
 import java.util.Stack;
 
 import javax.xml.parsers.SAXParser;
@@ -17,10 +18,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.StreamReader;
+import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -30,7 +34,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author dgc
  *
  */
-class ActivateOiFromXmlStream
+class ActivateOiFromXmlStream implements StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
@@ -38,45 +42,21 @@ class ActivateOiFromXmlStream
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
 
-    private final TaskImpl    task;
-    private final InputStream inputStream;
-    private final boolean     ignoreInvalidEntityNames;
-    private final boolean     ignoreInvalidAttributeNames;
+    private Task        task;
+    private InputStream inputStream;
+    private boolean     ignoreInvalidEntityNames;
+    private boolean     ignoreInvalidAttributeNames;
 
     private Application              application;
     private ViewOd                   viewOd;
     private ViewImpl                 view;
-    private Set<ActivateFlags>       control;
+    private EnumSet<ActivateFlags>   control;
     private boolean                  incremental = false;
     private Stack<Attributes>        entityAttributes = new Stack<Attributes>();
     private Stack<Attributes>        attributeAttributes = new Stack<Attributes>();
     private Stack<ViewEntity>        currentEntityStack = new Stack<ViewEntity>();
     private ViewEntity               currentViewEntity;
     private StringBuilder            characterBuffer;
-
-    ActivateOiFromXmlStream( AbstractTaskQualification qual,
-                             InputStream inputStream,
-                             Set<ActivateFlags> control )
-    {
-        super();
-        this.task = qual.getTask();
-        if ( control == null )
-            control = ActivateFlags.MULTIPLE;
-        this.control = control;
-        this.inputStream = inputStream;
-        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
-        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
-    }
-
-    public ActivateOiFromXmlStream( Deserialize options )
-    {
-        super();
-        this.task = (TaskImpl) options.getTask();
-        control = options.getFlags();
-        this.inputStream = options.getInputStream();;
-        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
-        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
-    }
 
     ViewImpl read()
     {
@@ -137,7 +117,7 @@ class ActivateOiFromXmlStream
             throw new ZeidonException("zOI element does not specify zObjectName" );
 
         viewOd = application.getViewOd( task, odName );
-        view = task.activateEmptyObjectInstance( viewOd );
+        view = (ViewImpl) task.activateEmptyObjectInstance( viewOd );
 
         String increFlags = attributes.getValue( "zIncreFlags" );
         if ( ! StringUtils.isBlank( increFlags ) )
@@ -266,4 +246,16 @@ class ActivateOiFromXmlStream
             characterBuffer.append( ch, start, length );
         }
     } // class SaxParserHandler
+
+    @Override
+    public List<View> readFromStream( Deserialize options )
+    {
+        this.task = options.getTask();
+        control = options.getFlags();
+        this.inputStream = options.getInputStream();;
+        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
+        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
+        read();
+        return Arrays.asList( (View) view );
+    }
 }

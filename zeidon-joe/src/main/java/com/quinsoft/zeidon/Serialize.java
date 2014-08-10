@@ -179,7 +179,10 @@ public class Serialize
     {
         viewList.add( view );
         if ( views != null )
-            viewList.addAll( viewList );
+        {
+            for ( View v : views )
+                viewList.add( v );
+        }
 
         return this;
     }
@@ -274,6 +277,14 @@ public class Serialize
 
         this.flags = flags;
         return this;
+    }
+
+    public Serialize setFlags( Long control )
+    {
+        if ( control == null )
+            return setFlags( (EnumSet<WriteOiFlags>) null );
+
+        return setFlags( WriteOiFlags.convertLongFlags( control ) );
     }
 
     public Serialize withIncremental()

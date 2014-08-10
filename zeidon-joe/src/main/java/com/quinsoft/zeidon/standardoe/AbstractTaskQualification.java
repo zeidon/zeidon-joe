@@ -18,7 +18,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -29,6 +28,7 @@ import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
@@ -90,13 +90,6 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public View activateEmptyObjectInstance( String viewOdName, TaskQualification taskQual ) throws UnknownViewOdException
-    {
-        ViewOd viewOd = taskQual.getApplication().getViewOd( getTask(), viewOdName );
-        return activateEmptyObjectInstance( viewOd );
-    }
-
-    @Override
     public ViewImpl activateEmptyObjectInstance(ViewOd viewOd)
     {
         ViewImpl view = new ViewImpl( getTask(), viewOd );
@@ -128,14 +121,6 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public View activateObjectInstance(ViewOd viewOd, View qual, ActivateOptions options )
-    {
-        options.setViewOd( viewOd );
-        options.setQualificationObject( qual );
-        return activateObjectInstance( options );
-    }
-
-    @Override
     public  View activateObjectInstance( ActivateOptions options ) throws UnknownViewOdException
     {
         ActivateObjectInstance activator = new ActivateObjectInstance( getTask(), options );
@@ -146,7 +131,9 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     public View activateObjectInstance( String viewOdName, View qual, ActivateOptions options )
     {
         ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
-        return activateObjectInstance( viewOd, qual, options );
+        options.setViewOd( viewOd );
+        options.setQualificationObject( qual );
+        return activateObjectInstance( options );
     }
 
     @Override
@@ -206,31 +193,29 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     {
         try
         {
-            switch ( options.getFormat() )
+            StreamReader activator = options.getStreamReader();
+            if ( activator == null )
             {
-                case POR:
+                switch ( options.getFormat() )
                 {
-                    ActivateOiFromStream activator = new ActivateOiFromStream( options );
-                    View v = activator.read();
-                    return Arrays.asList( v );
-                }
+                    case POR:
+                        activator = new ActivateOiFromPorStream( );
+                        break;
 
-                case JSON:
-                {
-                    ActivateOisFromJsonStream activator = new ActivateOisFromJsonStream( options );
-                    return activator.read();
-                }
+                    case JSON:
+                        activator = new ActivateOisFromJsonStream( );
+                        break;
 
-                case XML:
-                {
-                    ActivateOiFromXmlStream loader = new ActivateOiFromXmlStream( options );
-                    View v = loader.read();
-                    return Arrays.asList( v );
-                }
+                    case XML:
+                        activator= new ActivateOiFromXmlStream();
+                        break;
 
-                default:
-                    throw new ZeidonException( "Unknown stream type %s", options.getFormat() );
+                    default:
+                        throw new ZeidonException( "Unknown stream type %s", options.getFormat() );
+                }
             }
+
+            return activator.readFromStream( options );
         }
         finally
         {

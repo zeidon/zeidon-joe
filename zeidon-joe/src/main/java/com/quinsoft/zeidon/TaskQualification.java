@@ -39,14 +39,12 @@ public interface TaskQualification extends Lockable
     View activateEmptyObjectInstance( String viewOdName ) throws UnknownViewOdException;
     View activateEmptyObjectInstance( String viewOdName, String appName ) throws UnknownViewOdException;
     View activateEmptyObjectInstance( String viewOdName, Application app ) throws UnknownViewOdException;
-    View activateEmptyObjectInstance( String viewOdName, TaskQualification taskQual ) throws UnknownViewOdException;
     View activateEmptyObjectInstance( ViewOd viewOd );
 
     View activateObjectInstance( ActivateOptions options ) throws UnknownViewOdException;
     View activateObjectInstance( String viewOdName, View qual, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
     View activateObjectInstance( ViewOd viewOd, View qual, EnumSet<ActivateFlags> control );
     View activateObjectInstance( String viewOdName, View qual, ActivateOptions options );
-    View activateObjectInstance( ViewOd viewOd, View qual, ActivateOptions options );
 
     View activateOiFromFile( String viewOdName, String filename ) throws UnknownViewOdException;
     View activateOiFromFile( String viewOdName, String filename, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
@@ -54,6 +52,7 @@ public interface TaskQualification extends Lockable
 
     List<View> activateOisFromStream( Deserialize options ) throws UnknownViewOdException;
     Deserialize deserialize();
+    Serialize serialize();
 
     View getViewByName( String name );
     View getViewByKey( long key );

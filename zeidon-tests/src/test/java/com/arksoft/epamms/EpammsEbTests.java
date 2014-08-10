@@ -48,7 +48,6 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.vml.VmlDialog;
-import com.quinsoft.zeidon.vml.zVIEW;
 
 /**
  * @author DG
@@ -61,7 +60,7 @@ public class EpammsEbTests
    private ObjectEngine oe;
 
    /**
-    * Called at the beginning of the test to reset the DB. 
+    * Called at the beginning of the test to reset the DB.
     */
    @BeforeClass
    public static void resetDB( ) throws IOException
@@ -84,7 +83,7 @@ public class EpammsEbTests
    @Test
    public void testPessimisticLocking()
    {
-       
+
        View mMasProd = new QualificationBuilder( task )
                                .setViewOd( "mMasProd" )
                                .multipleRoots()
@@ -121,8 +120,8 @@ public class EpammsEbTests
 
        task.dropTask();
    }
-   
-   @Test 
+
+   @Test
    public void testBasicStartup() throws IOException
    {
    // zVIEW    wWebXfer = new zVIEW( );
@@ -130,13 +129,13 @@ public class EpammsEbTests
    // int zSINGLE            = 0;
    // int zLEVEL_TASK        = 2;
    // int zPOS_AFTER         = 3;
-      
+
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "" );
       wStartUp_Dialog wStartUp = new wStartUp_Dialog( vKZXMLPGO );
 
       //:ACTIVATE wWebXfer EMPTY
    // RESULT = ActivateEmptyObjectInstance( wWebXfer, "wWebXfer", wStartUp, zSINGLE );
-      View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", vKZXMLPGO );
+      View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", vKZXMLPGO.getApplication() );
       //:NAME VIEW wWebXfer "wWebXfer"
    // SetNameForView( wWebXfer, "wWebXfer", null, zLEVEL_TASK );
       wWebXfer.setName( "wWebXfer" );
@@ -176,7 +175,7 @@ public class EpammsEbTests
             {
                InputStream cbis = (InputStream) clipboardContents.getTransferData(flavor);
 
-               // Create the byte array to hold the data 
+               // Create the byte array to hold the data
                byte[] bytes = new byte[32000];
 
                // ... read the bytes from the stream...
@@ -227,7 +226,7 @@ public class EpammsEbTests
       }
    }
 
-   @Test 
+   @Test
    public void testSanitizeClipboard() throws IOException
    {
       String grabbed = TextGrabber.getClipboard( );
@@ -264,7 +263,7 @@ public class EpammsEbTests
    }
 
    @Test
-   public void testMarketingLoop() throws IOException  
+   public void testMarketingLoop() throws IOException
    {
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
@@ -275,7 +274,7 @@ public class EpammsEbTests
       qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
       qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
       qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );       
+      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
 
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
@@ -330,10 +329,10 @@ public class EpammsEbTests
 
       wMLC.AcceptMarketingStmt( vKZXMLPGO );
       srcCursor.logEntity( false );
-       
+
       // ZeidonOperation: wMLC.InitMarketingSect called from wMLCMarketingSection
       // ZeidonAction: wMLCMarketingSection.smAcceptMarketingSection
-      // ZeidonOperation: wMLC.AcceptMarketingSect called from wMLCMarketingSection       
+      // ZeidonOperation: wMLC.AcceptMarketingSect called from wMLCMarketingSection
       wMLC.InitMarketingSect( vKZXMLPGO );
       wMLC.AcceptMarketingSect( vKZXMLPGO );
       assertEquals( "testMarketingLoop failed", nRC, 0 );
@@ -341,7 +340,7 @@ public class EpammsEbTests
 
 
    @Test
-   public void testAddDirectionsForUse() throws IOException  
+   public void testAddDirectionsForUse() throws IOException
    {
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
@@ -354,7 +353,7 @@ public class EpammsEbTests
       qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
       qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
       qualView.cursor( "QualAttrib" ).setAttribute( "Value", 4 );  // assuming ID = 4
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );       
+      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
 
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
       wWebXfer.cursor( "Root" ).createEntity( );
@@ -392,8 +391,8 @@ public class EpammsEbTests
    }
 
 /*
-   @Test 
-   public void testCancelSubobject() throws IOException  
+   @Test
+   public void testCancelSubobject() throws IOException
    {
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
@@ -404,19 +403,19 @@ public class EpammsEbTests
       qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
       qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
       qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );       
-       
+      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
       wWebXfer.cursor( "Root" ).createEntity( );
       wWebXfer.setName( "wWebXfer" );
-      
+
       View mMasProd = vKZXMLPGO.activateObjectInstance( "mMasProd", qualView, ActivateFlags.SINGLE );
       //:NAME VIEW mMasProd "mMasProd"
    // mMasLC.displayObjectInstance();
       mMasProd.setName( "mMasProd" );
       qualView.drop( );
-       
+
       wMLC.InitMasterLabelContentForUpdate( vKZXMLPGO );
       wMLC.EditMarketingSect( vKZXMLPGO );
       wMLC.AddNewMarketingSect( vKZXMLPGO );
@@ -424,8 +423,8 @@ public class EpammsEbTests
       wMLC.CancelMarketingSect( vKZXMLPGO );
    }
 
-   @Test 
-   public void testAcceptSubobject() throws IOException  
+   @Test
+   public void testAcceptSubobject() throws IOException
    {
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
@@ -436,19 +435,19 @@ public class EpammsEbTests
       qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
       qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
       qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );       
-       
+      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
       wWebXfer.cursor( "Root" ).createEntity( );
       wWebXfer.setName( "wWebXfer" );
-       
+
       View mMasProd = vKZXMLPGO.activateObjectInstance( "mMasProd", qualView, ActivateFlags.SINGLE );
       //:NAME VIEW mMasProd "mMasProd"
    // mMasLC.displayObjectInstance();
       mMasProd.setName( "mMasProd" );
       qualView.drop( );
-       
+
       wMLC.InitMasterLabelContentForUpdate( vKZXMLPGO );
       wMLC.EditMarketingSect( vKZXMLPGO );
       wMLC.InitMarketingContent( vKZXMLPGO );
@@ -461,8 +460,8 @@ public class EpammsEbTests
       wMLC.AcceptMarketingSect( vKZXMLPGO );
    }
 
-   @Test 
-   public void testAutoSeq() throws IOException  
+   @Test
+   public void testAutoSeq() throws IOException
    {
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
@@ -473,7 +472,7 @@ public class EpammsEbTests
       qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
       qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
       qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );       
+      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
 
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
@@ -509,7 +508,7 @@ public class EpammsEbTests
       nRC = srcCursor.setLast().toInt();;
       int nID1 = srcCursor.getIntegerFromAttribute( "ID" );
       srcCursor.displayEntity( false );
-       
+
       wMLC.AcceptMarketingSect( vKZXMLPGO );
       mMasLC.commit( );
 
@@ -517,7 +516,7 @@ public class EpammsEbTests
       wMLC.EditFirstAidSect( vKZXMLPGO );
       wMLC.InitFirstAidSect( vKZXMLPGO );
       mMasLC = vKZXMLPGO.getViewByName( "mMasLC" );
-       
+
       srcCursor = mMasLC.cursor( "M_GeneralStatement" );
       nRC = srcCursor.setLast().toInt();;
       int nID2 = srcCursor.getIntegerFromAttribute( "ID" );
@@ -525,11 +524,11 @@ public class EpammsEbTests
       assertEquals( "testAutoSeq failed", nID1, nID2 );
    }
 
-   @Test 
+   @Test
    public void testBug1() throws IOException
    {
       View view = task.activateOiFromFile( "mMasLC", "./testdata/ePamms/OIs/TestInsertBug1.por", null );
-        
+
       view.displayObjectInstance();
       EntityCursor cursor = view.cursor( "M_StorageDisposalStatement" );
       cursor.createTemporalSubobjectVersion();
@@ -542,25 +541,25 @@ public class EpammsEbTests
    private ViewEntity findViewEntity( ViewEntity parentViewEntity, String entityName )
    {
       ViewEntity ve;
-       
+
       if ( parentViewEntity.getName().equals( entityName ) )
          return parentViewEntity;
-       
+
       for ( ViewEntity childViewEntity : parentViewEntity.getChildren() )
       {
          if ( childViewEntity.getName( ).equals( entityName ) )
             return childViewEntity;
-          
+
          ve = findViewEntity( childViewEntity, entityName );
          if ( ve != null )
             return ve;
       }
-       
+
       return null;
    }
 
 // @Test // this is a destructive test, so only run it when necessary to see if deletes are working properly
-   public void testXOD() throws IOException  
+   public void testXOD() throws IOException
    {
       View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
@@ -589,7 +588,7 @@ public class EpammsEbTests
             }
          }
       }
-       
+
       //:ACTIVATE mMasLC WHERE mMasLC.MasterLabelContent.ID = mMasProd.MasterLabelContent.ID
       // ActivateObjectInstance( mMasLC, "mMasLC", ViewToWindow, vTempViewVar_0, zSINGLE );
       mMasLC = vKZXMLPGO.activateObjectInstance( "mMasLC", qualView, ActivateFlags.SINGLE );

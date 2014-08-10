@@ -36,6 +36,7 @@ public class Deserialize
     private EnumSet<ActivateFlags> flags = ActivateFlags.MULTIPLE;
     private StreamFormat format;
     private Application application;
+    private StreamReader streamReader;
 
     /**
      * This is a set of ViewEntities that we will allow to create dynamic
@@ -165,9 +166,6 @@ public class Deserialize
 
     public List<View> activate()
     {
-        if ( task == null )
-            throw new ZeidonException( "Task is required to execute activate from ActivateStreamOptions" );
-
         return task.activateOisFromStream( this );
     }
 
@@ -178,10 +176,6 @@ public class Deserialize
      */
     public View activateFirst()
     {
-        if ( task == null )
-            throw new ZeidonException( "Task is required to execute activate from ActivateStreamOptions" );
-
-        // TODO: Activate the stream without using a List intermediary.
         List<View> v = task.activateOisFromStream( this );
         return v.get( 0 );
     }
@@ -353,5 +347,15 @@ public class Deserialize
     public Set<String> getAllowableDynamicEntities()
     {
         return allowDynamicAttributes;
+    }
+
+    public StreamReader getStreamReader()
+    {
+        return streamReader;
+    }
+
+    public void using( StreamReader streamReader )
+    {
+        this.streamReader = streamReader;
     }
 }

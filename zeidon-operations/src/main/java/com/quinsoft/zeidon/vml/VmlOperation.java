@@ -4822,7 +4822,7 @@ public abstract class VmlOperation
     */
    protected int ActivateEmptyObjectInstance( zVIEW returnView, String viewOdName, TaskQualification qual, int control )
    {
-      View view = qual.activateEmptyObjectInstance( viewOdName, qual );
+      View view = qual.activateEmptyObjectInstance( viewOdName, qual.getApplication() );
       returnView.setView( view );
       return 0;
    }

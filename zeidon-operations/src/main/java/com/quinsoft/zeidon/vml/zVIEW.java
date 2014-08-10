@@ -326,13 +326,6 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public View activateObjectInstance( ViewOd viewOd, View qual, ActivateOptions options )
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public View activateOiFromFile(String viewOdName, String filename)
     {
         return view.activateOiFromFile( viewOdName, filename, null );
@@ -408,12 +401,6 @@ public class zVIEW extends VmlOperation implements View
     public String getTempDirectory()
     {
         return view.getTempDirectory();
-    }
-
-    @Override
-    public View activateEmptyObjectInstance( String viewOdName, TaskQualification taskQual ) throws UnknownViewOdException
-    {
-        return view.activateEmptyObjectInstance( viewOdName, taskQual );
     }
 
     @Override

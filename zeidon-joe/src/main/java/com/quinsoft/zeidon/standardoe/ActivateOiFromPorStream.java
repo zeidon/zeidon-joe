@@ -24,6 +24,7 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -53,7 +54,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler;
  * @author DG
  *
  */
-class ActivateOiFromStream implements PortableFileEntityHandler, StreamReader
+class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
@@ -61,29 +62,21 @@ class ActivateOiFromStream implements PortableFileEntityHandler, StreamReader
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
 
-    private final Task    task;
-    private final Application application;
+    private Task    task;
+    private Application application;
     private ViewOd            viewOd;
     private ViewImpl          view;
     private Set<ActivateFlags>       control;
     private List<EntityInstanceImpl> entities;
     private EntityInstanceImpl       lastInstance;
     private BufferedBinaryStreamReader streamReader;
-    private final InputStream        inputStream;
-    private final boolean            ignoreInvalidEntityNames;
-    private final boolean            ignoreInvalidAttributeNames;
+    private InputStream        inputStream;
+    private boolean            ignoreInvalidEntityNames;
+    private boolean            ignoreInvalidAttributeNames;
 
-    ActivateOiFromStream( Deserialize options )
+    ActivateOiFromPorStream()
     {
         super();
-        task = options.getTask();
-        application = options.getApplication();
-        control = options.getFlags();
-        entities = new ArrayList<EntityInstanceImpl>();
-        inputStream = options.getInputStream();
-        viewOd = options.getViewOd();
-        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
-        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
     }
 
     ViewImpl read()
@@ -284,7 +277,16 @@ class ActivateOiFromStream implements PortableFileEntityHandler, StreamReader
     @Override
     public List<View> readFromStream( Deserialize options )
     {
-        // TODO Auto-generated method stub
-        return null;
+        task = options.getTask();
+        application = options.getApplication();
+        control = options.getFlags();
+        entities = new ArrayList<EntityInstanceImpl>();
+        inputStream = options.getInputStream();
+        viewOd = options.getViewOd();
+        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
+        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
+
+        read();
+        return Arrays.asList( (View) view );
     }
 }

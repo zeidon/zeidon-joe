@@ -36,6 +36,7 @@ import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Lockable;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskLogger;
 import com.quinsoft.zeidon.View;
@@ -522,5 +523,11 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     public String getDescription()
     {
         return description;
+    }
+
+    @Override
+    public Serialize serialize()
+    {
+        return new Serialize();
     }
 }
