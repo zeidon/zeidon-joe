@@ -28,6 +28,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
@@ -67,17 +68,18 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -86,7 +88,6 @@ import com.quinsoft.zeidon.UnknownViewEntityException;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
@@ -4765,14 +4766,22 @@ public abstract class VmlOperation
         try
         {
             // Try with ZeidonSystem
-            view = qualView.activateOiFromFile( viewOdName, task.getSystemTask().getApplication(),
-                                                fileName, ACTIVATE_CONTROL.get( control ) );
+            view = qualView.deserialize()
+                           .fromFile( fileName )
+                           .setFlags( control )
+                           .setApplication( task.getSystemTask().getApplication() )
+                           .setViewOd( viewOdName )
+                           .activateFirst();
         }
         catch ( UnknownViewOdException e )
         {
             // Try with ZeidonTools
-            view = qualView.activateOiFromFile( viewOdName, task.getApplication( "ZeidonTools" ),
-                                                fileName, ACTIVATE_CONTROL.get( control ) );
+            view = qualView.deserialize()
+                            .fromFile( fileName )
+                            .setFlags( control )
+                            .setApplication( task.getApplication( "ZeidonTools" ) )
+                            .setViewOd( viewOdName )
+                            .activateFirst();
         }
 
         returnView.setView( view );
@@ -4871,15 +4880,12 @@ public abstract class VmlOperation
 
    public int ActivateOI_FromFile( zVIEW view, String viewOdName, View qualView, String fileName, int control )
    {
-      if ( qualView != null )
-      {
-         view.setView( task.activateOiFromFile( viewOdName, qualView.getApplication(), fileName, ACTIVATE_CONTROL.get( control ) ) );
-      }
-      else
-      {
-         view.setView( task.activateOiFromFile( viewOdName, fileName, ACTIVATE_CONTROL.get( control ) ) );
-      }
-
+       view.setView( task.deserialize()
+                         .fromFile( fileName )
+                         .setViewOd( viewOdName )
+                         .setFlags( control )
+                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+                         .activateFirst() );
       return 0;
    }
 
@@ -4949,7 +4955,12 @@ public abstract class VmlOperation
          return -1;
       }
 
-      View v = qualView.activateOiFromBlob( application, blob, ACTIVATE_CONTROL.get(control) );
+      View v = qualView.deserialize()
+                       .fromInputStream( new ByteArrayInputStream( blob.getBytes() ) )
+                       .setFlags( ACTIVATE_CONTROL.get(control) )
+                       .setApplication( application )
+                       .activateFirst();
+
       returnView.setView( v );
       sbViewOdName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbViewOdName.append( v.getViewOd().getName() );
@@ -8672,7 +8683,7 @@ public abstract class VmlOperation
    public void
    WriteOiToJson( View view, String filename, int control )
    {
-       new WriteToStream().asJson()
+       new Serialize().asJson()
                           .setFlags( WriteOiFlags.convertLongFlags( control ) )
                           .toFile( filename )
                           .write( view );
@@ -8681,7 +8692,7 @@ public abstract class VmlOperation
    public View
    ActivateOiFromJson( View view, String filename ) throws Exception
    {
-       return new ActivateFromStream( view )
+       return new Deserialize( view )
                        .asJson()
                        .fromResource( filename )
                        .activateFirst();

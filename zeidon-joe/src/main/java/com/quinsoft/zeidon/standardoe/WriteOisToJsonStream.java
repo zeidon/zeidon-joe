@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteToStream;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -34,7 +34,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
     private Collection<? extends View> viewList;
     private Writer writer;
-    private WriteToStream options;
+    private Serialize options;
     private EnumSet<WriteOiFlags> flags;
     private boolean incremental;
     private Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
@@ -42,7 +42,7 @@ public class WriteOisToJsonStream implements StreamWriter
     private JsonGenerator jg;
 
     @Override
-    public void writeToStream( WriteToStream options )
+    public void writeToStream( Serialize options )
     {
         this.viewList = options.getViewList();
         this.writer = options.getWriter();

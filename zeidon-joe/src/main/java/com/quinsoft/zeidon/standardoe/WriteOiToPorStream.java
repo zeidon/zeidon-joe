@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteToStream;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -61,10 +61,10 @@ public class WriteOiToPorStream implements StreamWriter
     private ViewImpl              view;
     private Writer                writer;
     private EnumSet<WriteOiFlags> flags;
-    private WriteToStream options;
+    private Serialize options;
 
     @Override
-    public void writeToStream( WriteToStream options )
+    public void writeToStream( Serialize options )
     {
         List<View> viewList = options.getViewList();
         if ( viewList.size() > 1 )

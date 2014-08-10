@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
@@ -50,7 +50,7 @@ class ActivateOisFromJsonStream
     /**
      * Keep track of the options for this activate.
      */
-    private final ActivateFromStream  options;
+    private final Deserialize  options;
 
     /**
      * This keeps track of all the entities that are the sources for linked instances.
@@ -67,7 +67,7 @@ class ActivateOisFromJsonStream
     private String version;
     private EnumSet<ActivateFlags> flags;
 
-    ActivateOisFromJsonStream( ActivateFromStream options )
+    ActivateOisFromJsonStream( Deserialize options )
     {
         this.task = options.getTask();
         this.stream = options.getInputStream();

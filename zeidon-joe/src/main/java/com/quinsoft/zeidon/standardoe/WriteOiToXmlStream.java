@@ -30,7 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteToStream;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -49,7 +49,7 @@ public class WriteOiToXmlStream implements StreamWriter
     private int currentIndent;
 
     @Override
-    public void writeToStream( WriteToStream options )
+    public void writeToStream( Serialize options )
     {
         List<View> viewList = options.getViewList();
         if ( viewList.size() > 1 )

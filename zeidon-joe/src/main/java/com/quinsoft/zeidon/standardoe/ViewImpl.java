@@ -51,11 +51,11 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -317,13 +317,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control )
     {
-        new WriteToStream().asXml().setFlags( control ).toFile( filename ).write( this );
+        new Serialize().asXml().setFlags( control ).toFile( filename ).write( this );
     }
 
     @Override
     public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
-        new WriteToStream().setFlags( control ).toFile( filename ).write( this );
+        new Serialize().setFlags( control ).toFile( filename ).write( this );
     }
 
     @Override
@@ -334,7 +334,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         {
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             stream = new OutputStreamWriter( byteArray );
-            new WriteToStream().setFlags( WriteOiFlags.convertLongFlags( control ) )
+            new Serialize().setFlags( WriteOiFlags.convertLongFlags( control ) )
                                .toWriter( stream )
                                .write( this );
             return new Blob( byteArray.toByteArray() );
@@ -887,7 +887,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOi( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        new WriteToStream().setFlags( flags ).toWriter( writer ).write( this );
+        new Serialize().setFlags( flags ).toWriter( writer ).write( this );
     }
 
     @Override
@@ -954,5 +954,11 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         }
 
         return false;  // If we get here then there are no non-hidden EIs.
+    }
+
+    @Override
+    public Serialize serialize()
+    {
+        return new Serialize( this );
     }
 }

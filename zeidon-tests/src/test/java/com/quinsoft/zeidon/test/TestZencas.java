@@ -21,19 +21,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
@@ -196,11 +196,11 @@ public class TestZencas
 
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
 
-        WriteToStream options = new WriteToStream();
+        Serialize options = new Serialize();
         options.withIncremental();
-        new WriteToStream().toFile( getTempDir() + "/stud.json" ).write( stud, person );
+        new Serialize().toFile( getTempDir() + "/stud.json" ).write( stud, person );
 
-        List<View> viewList = new ActivateFromStream( zencas )
+        List<View> viewList = new Deserialize( zencas )
                                         .asJson()
                                         .fromResource( getTempDir() + "/stud.json" )
                                         .activate();
@@ -213,9 +213,9 @@ public class TestZencas
                             .addAttribQual( "ID", 5 )
                             .activate();
         stud.cursor( "College" ).deleteEntity();
-        new WriteToStream().toFile( getTempDir() + "/mcollege.json" ).write( stud );
+        new Serialize().toFile( getTempDir() + "/mcollege.json" ).write( stud );
 
-        viewList = new ActivateFromStream( zencas )
+        viewList = new Deserialize( zencas )
                                     .asJson()
                                     .fromResource( getTempDir() + "/mcollege.json" )
                                     .activate();
@@ -309,14 +309,21 @@ public class TestZencas
     public void testInclude3()
     {
         View         testview;
-        testview = zencas.activateOiFromFile( "mFAProf", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/TestInclude3-mFAProfO.por" );
+        testview = zencas.deserialize()
+                         .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/TestInclude3-mFAProfO.por" )
+                         .setViewOd( "mFAProf" )
+                         .activateFirst();
+
         int rc = testview.cursor( "FinAidAward" ).setFirst( "ID", 50224 ).toInt();
         View profn = zencas.activateEmptyObjectInstance( "mFAProf" );
         profn.cursor( "FinAidProfile" ).createEntity();
         profn.cursor( "FinAidProfile" ).setMatchingAttributesByName( testview, "FinAidProfile", SetMatchingFlags.SET_NULL );
         profn.cursor( "Person" ).includeSubobject( testview.cursor( "Person" ), CursorPosition.LAST );
 
-        View view = zencas.activateOiFromFile( "mFAProf", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/AfterPersonInclude.por" );
+        View view = zencas.deserialize()
+                .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/AfterPersonInclude.por" )
+                .setViewOd( "mFAProf" )
+                .activateFirst();
         Assert.assertTrue( "Views don't match after include", view.equalsOi( profn ) );
 
         System.out.println("done");

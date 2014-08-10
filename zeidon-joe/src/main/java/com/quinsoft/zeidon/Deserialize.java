@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.utils.ZeidonInputStream;
  * @author dgc
  *
  */
-public class ActivateFromStream
+public class Deserialize
 {
     private final Task task;
 
@@ -50,7 +50,7 @@ public class ActivateFromStream
      */
     private boolean closeStream = true;
 
-    public ActivateFromStream( TaskQualification task )
+    public Deserialize( TaskQualification task )
     {
         this.task = task.getTask();
     }
@@ -72,7 +72,7 @@ public class ActivateFromStream
      * @param inputStream the inputStream to set
      * @return
      */
-    public ActivateFromStream fromInputStream( InputStream inputStream )
+    public Deserialize fromInputStream( InputStream inputStream )
     {
         this.inputStream = inputStream;
         if ( inputStream instanceof ZeidonInputStream )
@@ -88,7 +88,7 @@ public class ActivateFromStream
      * @param resourceName
      * @return
      */
-    public ActivateFromStream fromResource( String resourceName )
+    public Deserialize fromResource( String resourceName )
     {
         this.inputStream = JoeUtils.getInputStream( task, resourceName );
         if ( inputStream == null )
@@ -99,13 +99,18 @@ public class ActivateFromStream
         return this;
     }
 
+    public Deserialize fromAttribute( AttributeInstance attribute )
+    {
+        return fromString( attribute.getString() );
+    }
+
     /**
      * Set the input stream by opening the file.
      *
      * @param resourceName
      * @return
      */
-    public ActivateFromStream fromFile( String filename )
+    public Deserialize fromFile( String filename )
     {
         inputStream = JoeUtils.getInputStream( task, filename );
         if ( inputStream == null )
@@ -122,7 +127,7 @@ public class ActivateFromStream
      * @param resourceName
      * @return
      */
-    public ActivateFromStream fromFile( File file )
+    public Deserialize fromFile( File file )
     {
         try
         {
@@ -145,7 +150,7 @@ public class ActivateFromStream
      * @param resourceName
      * @return
      */
-    public ActivateFromStream fromInputString( String inputString )
+    public Deserialize fromString( String inputString )
     {
         try
         {
@@ -193,13 +198,13 @@ public class ActivateFromStream
      * @param viewOd the viewOd to set
      * @return
      */
-    public ActivateFromStream setViewOd( ViewOd viewOd )
+    public Deserialize setViewOd( ViewOd viewOd )
     {
         this.viewOd = viewOd;
         return this;
     }
 
-    public ActivateFromStream setViewOd( String viewOdName )
+    public Deserialize setViewOd( String viewOdName )
     {
         viewOd = getApplication().getViewOd( getTask(), viewOdName );
         return this;
@@ -212,7 +217,7 @@ public class ActivateFromStream
      * @param ifNull if true only set format if it is null.
      * @return
      */
-    private ActivateFromStream setFormatFromFilename( String filename, boolean ifNull )
+    private Deserialize setFormatFromFilename( String filename, boolean ifNull )
     {
         if ( ifNull && format != null )
             return this;
@@ -229,7 +234,7 @@ public class ActivateFromStream
         return this;
     }
 
-    public ActivateFromStream setFormat( StreamFormat format )
+    public Deserialize setFormat( StreamFormat format )
     {
         this.format = format;
         return this;
@@ -263,7 +268,7 @@ public class ActivateFromStream
         return task.getApplication();
     }
 
-    public ActivateFromStream setApplication( Application application )
+    public Deserialize setApplication( Application application )
     {
         this.application = application;
         return this;
@@ -294,7 +299,7 @@ public class ActivateFromStream
         return flags;
     }
 
-    public ActivateFromStream setFlags( EnumSet<ActivateFlags> flags )
+    public Deserialize setFlags( EnumSet<ActivateFlags> flags )
     {
         if ( flags != null )
             this.flags = flags;
@@ -302,13 +307,21 @@ public class ActivateFromStream
         return this;
     }
 
-    public ActivateFromStream asJson()
+    public Deserialize setFlags( Integer control )
+    {
+        if ( control == null )
+            return this;
+
+        return setFlags( ActivateFlags.convertLongFlags( control ) );
+    }
+
+    public Deserialize asJson()
     {
         format = StreamFormat.JSON;
         return this;
     }
 
-    public ActivateFromStream asXml()
+    public Deserialize asXml()
     {
         format = StreamFormat.XML;
         return this;
@@ -317,18 +330,18 @@ public class ActivateFromStream
     /**
      * If true, then automatically close the stream after activating.
      */
-    public boolean closeStream()
+    public boolean isCloseStream()
     {
         return closeStream;
     }
 
-    public ActivateFromStream setCloseStream( boolean closeStream )
+    public Deserialize closeStream( boolean closeStream )
     {
         this.closeStream = closeStream;
         return this;
     }
 
-    public ActivateFromStream allowDynamicAttributesFor( String entityName )
+    public Deserialize allowDynamicAttributesFor( String entityName )
     {
         if ( allowDynamicAttributes == null )
             allowDynamicAttributes = new HashSet<String>();

@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
  * @author dg
  *
  */
-public class WriteToStream
+public class Serialize
 {
     private final List<View> viewList;
 
@@ -37,24 +37,26 @@ public class WriteToStream
     private EnumSet<WriteOiFlags> flags = EnumSet.noneOf( WriteOiFlags.class );
     private StreamWriter streamWriter;
 
-    public WriteToStream()
+    private AttributeInstance targetAttribute;
+
+    public Serialize()
     {
         viewList = new ArrayList<>();
     }
 
-    public WriteToStream( View view, View... views )
+    public Serialize( View view, View... views )
     {
         this();
         addView( view, views );
     }
 
-    public WriteToStream( List<View> views )
+    public Serialize( List<View> views )
     {
         this();
         addViews( views );
     }
 
-    public WriteToStream toFile( String filename )
+    public Serialize toFile( String filename )
     {
         try
         {
@@ -71,11 +73,18 @@ public class WriteToStream
         return this;
     }
 
-    public WriteToStream toWriter( Writer writer )
+    public Serialize toWriter( Writer writer )
     {
         this.writer = writer;
         closeWriter = false;  // We'll assume the caller will close it.
         resourceName = "*External writer*";
+        return this;
+    }
+
+    public Serialize toAttribute( AttributeInstance attribute )
+    {
+        targetAttribute = attribute;
+        toStringWriter();
         return this;
     }
 
@@ -89,7 +98,7 @@ public class WriteToStream
      * using getJsonString();
      * @return
      */
-    public WriteToStream toStringWriter()
+    public Serialize toStringWriter()
     {
         writer = new StringWriter();
         resourceName = "*String*";
@@ -131,7 +140,7 @@ public class WriteToStream
      * @param filename
      * @return
      */
-    private WriteToStream setFormatFromFilename( String filename )
+    private Serialize setFormatFromFilename( String filename )
     {
         if ( format != null )
             return this;
@@ -148,25 +157,25 @@ public class WriteToStream
         return this;
     }
 
-    public WriteToStream setFormat( StreamFormat format )
+    public Serialize setFormat( StreamFormat format )
     {
         this.format = format;
         return this;
     }
 
-    public WriteToStream asJson()
+    public Serialize asJson()
     {
         format = StreamFormat.JSON;
         return this;
     }
 
-    public WriteToStream asXml()
+    public Serialize asXml()
     {
         format = StreamFormat.XML;
         return this;
     }
 
-    public WriteToStream addView( View view, View... views )
+    public Serialize addView( View view, View... views )
     {
         viewList.add( view );
         if ( views != null )
@@ -175,13 +184,13 @@ public class WriteToStream
         return this;
     }
 
-    public WriteToStream addViews( Collection<? extends View> views )
+    public Serialize addViews( Collection<? extends View> views )
     {
         viewList.addAll( views );
         return this;
     }
 
-    public WriteToStream write( View view, View... views )
+    public Serialize write( View view, View... views )
     {
         viewList.add( view );
         if ( views != null && views.length > 0 )
@@ -193,7 +202,7 @@ public class WriteToStream
         return write();
     }
 
-    public WriteToStream write( Collection<? extends View> views )
+    public Serialize write( Collection<? extends View> views )
     {
         viewList.addAll( views );
         return write();
@@ -209,7 +218,7 @@ public class WriteToStream
         return writer;
     }
 
-    public WriteToStream write()
+    public Serialize write()
     {
         try
         {
@@ -241,6 +250,10 @@ public class WriteToStream
             }
 
             streamWriter.writeToStream( this );
+
+            if ( targetAttribute != null )
+                targetAttribute.setValue( getJsonString() );
+
             return this;
         }
         finally
@@ -254,7 +267,7 @@ public class WriteToStream
         return flags;
     }
 
-    public WriteToStream setFlags( EnumSet<WriteOiFlags> flags )
+    public Serialize setFlags( EnumSet<WriteOiFlags> flags )
     {
         if ( flags == null )
             flags = EnumSet.noneOf( WriteOiFlags.class );
@@ -263,13 +276,13 @@ public class WriteToStream
         return this;
     }
 
-    public WriteToStream withIncremental()
+    public Serialize withIncremental()
     {
         flags.add( WriteOiFlags.INCREMENTAL );
         return this;
     }
 
-    public WriteToStream using( StreamWriter streamWriter )
+    public Serialize using( StreamWriter streamWriter )
     {
         this.streamWriter = streamWriter;
         return this;
@@ -280,7 +293,7 @@ public class WriteToStream
      *
      * @return
      */
-    public WriteToStream withoutHeaders()
+    public Serialize withoutHeaders()
     {
         flags.add( WriteOiFlags.NO_HEADER );
         return this;

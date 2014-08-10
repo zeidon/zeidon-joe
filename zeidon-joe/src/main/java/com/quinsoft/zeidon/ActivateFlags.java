@@ -18,7 +18,10 @@
  */
 package com.quinsoft.zeidon;
 
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -78,5 +81,48 @@ public enum ActivateFlags
         }
 
         return returnSet;
+    }
+
+    private static final int zSINGLE                 = 0;          // 0x00000000L
+    private static final int zAPPLICATION            = 4;          // 0x00000004L
+    private static final int zMULTIPLE               = 256;        // 0x00000100L
+    private static final int zIGNORE_ENTITY_ERRORS   = 4096;       // 0x00001000L
+    private static final int zIGNORE_ATTRIB_ERRORS   = 8192;       // 0x00002000L
+    private static final int zIGNORE_ERRORS          = 12288;      // 0x00003000L
+    private static final int zSINGLE_FOR_UPDATE      = 67108864;   // 0x04000000L
+    private static final int zACTIVATE_ROOTONLY      = 268435456;  // 0x10000000L
+    private static final int zACTIVATE_ROOTONLY_MULTIPLE = 268435712;  // 0x10000000L + 0x00000100L
+    private static final int zIGNORE_JOINS           = 1048576;    // 0x00100000L
+    private static final int zASYNCHRONOUS           = 2097152;    // 0x00200000L
+
+    /**
+     * A map to convert C-style activate flags (int) to JOE-style (enum).
+     */
+    private static final Map<Integer, EnumSet<ActivateFlags>> ACTIVATE_CONTROL =
+        Collections.unmodifiableMap( new HashMap<Integer, EnumSet<ActivateFlags>>() {
+        private static final long serialVersionUID = 2L;
+    {
+        put( zSINGLE, ActivateFlags.SINGLE );
+        put( zMULTIPLE, ActivateFlags.MULTIPLE );
+        put( zACTIVATE_ROOTONLY_MULTIPLE, ActivateFlags.ROOT_ONLY_MULTIPLE );
+        put( zACTIVATE_ROOTONLY, ActivateFlags.ROOT_ONLY );
+        put( zIGNORE_ENTITY_ERRORS, ActivateFlags.IGNORE_ENTITY_ERRORS );
+        put( zIGNORE_ATTRIB_ERRORS, ActivateFlags.IGNORE_ATTRIB_ERRORS );
+        put( zIGNORE_ERRORS, ActivateFlags.IGNORE_ERRORS );
+        put( zSINGLE_FOR_UPDATE, ActivateFlags.SINGLE );
+        put( zIGNORE_JOINS, ActivateFlags.IGNORE_JOINS );
+        put( zASYNCHRONOUS, ActivateFlags.ASYNCHRONOUS );
+
+        // Ignore zAPPLICATION whan paired with SINGLE
+        put( zSINGLE + zAPPLICATION, ActivateFlags.SINGLE );
+    }} );
+
+    // Convert C-style write flags to JOE style.
+    public static EnumSet<ActivateFlags> convertLongFlags( Integer control )
+    {
+        if ( ACTIVATE_CONTROL.containsKey( control ) )
+            return ACTIVATE_CONTROL.get( control );
+
+        throw new ZeidonException( "Unknown control for converting to flags: %d", control );
     }
 }

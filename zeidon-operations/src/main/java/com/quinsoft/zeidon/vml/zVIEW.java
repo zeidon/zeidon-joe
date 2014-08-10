@@ -27,17 +27,18 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownViewOdException;
@@ -344,19 +345,6 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public View activateOiFromFile(String viewOdName, Application app, String filename, EnumSet<ActivateFlags> control)
-    {
-        return view.activateOiFromFile( viewOdName, app, filename, control );
-    }
-
-    @Override
-    public View activateOiFromFile(String viewOdName, TaskQualification task,
-                                   String filename, EnumSet<ActivateFlags> control)
-    {
-        return view.activateOiFromFile( viewOdName, task, filename, control );
-    }
-
-    @Override
     public View activateOiFromFile(ViewOd viewOd, String filename, EnumSet<ActivateFlags> control)
     {
         return view.activateOiFromFile( viewOd, filename, control );
@@ -408,12 +396,6 @@ public class zVIEW extends VmlOperation implements View
     public ReentrantReadWriteLock getLock()
     {
         return view.getLock();
-    }
-
-    @Override
-    public View activateOiFromBlob(Application application, Blob blob, EnumSet<ActivateFlags> control)
-    {
-        return view.activateOiFromBlob( application, blob, control );
     }
 
     @Override
@@ -675,8 +657,20 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public List<View> activateOisFromStream( ActivateFromStream options ) throws UnknownViewOdException
+    public List<View> activateOisFromStream( Deserialize options ) throws UnknownViewOdException
     {
         return getView().activateOisFromStream( options );
+    }
+
+    @Override
+    public Serialize serialize()
+    {
+        return getView().serialize();
+    }
+
+    @Override
+    public Deserialize deserialize()
+    {
+        return getView().deserialize();
     }
 }

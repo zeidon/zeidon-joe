@@ -9,13 +9,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteToStream;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
@@ -170,16 +170,16 @@ class SimpleTest
                             .activate();
 
 //        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
-        new WriteToStream().toFile( "/tmp/stud2.json" ).asJson().withoutHeaders().write( stud );
+        new Serialize().toFile( "/tmp/stud2.json" ).asJson().withoutHeaders().write( stud );
 
-        View stud2 = new ActivateFromStream( zencas )
+        View stud2 = new Deserialize( zencas )
                             .fromResource( "/tmp/stud2.json" )
                             .setViewOd( "lStudDpt" )
                             .asJson()
                             .activateFirst();
         stud2.logObjectInstance();
 
-        List<View> stud3 = new ActivateFromStream( zencas )
+        List<View> stud3 = new Deserialize( zencas )
                             .fromResource( "/tmp/stud.json" )
                             .setViewOd( "lStudDpt" )
                             .asJson()

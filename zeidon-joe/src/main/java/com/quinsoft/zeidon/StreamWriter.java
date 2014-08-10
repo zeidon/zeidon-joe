@@ -11,5 +11,5 @@ package com.quinsoft.zeidon;
  */
 public interface StreamWriter
 {
-    public void writeToStream( WriteToStream options );
+    public void writeToStream( Serialize options );
 }

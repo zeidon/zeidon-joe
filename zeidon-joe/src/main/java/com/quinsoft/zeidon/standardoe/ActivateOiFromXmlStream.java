@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
@@ -68,7 +68,7 @@ class ActivateOiFromXmlStream
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
     }
 
-    public ActivateOiFromXmlStream( ActivateFromStream options )
+    public ActivateOiFromXmlStream( Deserialize options )
     {
         super();
         this.task = (TaskImpl) options.getTask();

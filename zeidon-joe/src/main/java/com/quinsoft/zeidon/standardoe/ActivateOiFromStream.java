@@ -29,12 +29,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -51,7 +53,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler;
  * @author DG
  *
  */
-class ActivateOiFromStream implements PortableFileEntityHandler
+class ActivateOiFromStream implements PortableFileEntityHandler, StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
@@ -71,26 +73,7 @@ class ActivateOiFromStream implements PortableFileEntityHandler
     private final boolean            ignoreInvalidEntityNames;
     private final boolean            ignoreInvalidAttributeNames;
 
-    ActivateOiFromStream( AbstractTaskQualification qual,
-                          Application               application,
-                          InputStream               inputStream,
-                          Set<ActivateFlags>        control )
-    {
-        super();
-        this.task = qual.getTask();
-        if ( application == null )
-            application = task.getApplication();
-        this.application = application;
-        if ( control == null )
-            control = ActivateFlags.MULTIPLE;
-        this.control = control;
-        entities = new ArrayList<EntityInstanceImpl>();
-        this.inputStream = inputStream;
-        ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
-        ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
-    }
-
-    ActivateOiFromStream( ActivateFromStream options )
+    ActivateOiFromStream( Deserialize options )
     {
         super();
         task = options.getTask();
@@ -296,5 +279,12 @@ class ActivateOiFromStream implements PortableFileEntityHandler
     public void setStreamReader( BufferedBinaryStreamReader reader )
     {
         this.streamReader = reader;
+    }
+
+    @Override
+    public List<View> readFromStream( Deserialize options )
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

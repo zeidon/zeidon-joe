@@ -18,8 +18,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -27,11 +25,10 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CacheMap;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
@@ -193,30 +190,11 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public View activateOiFromFile(String viewOdName,
-                                       Application app,
-                                       String filename,
-                                       EnumSet<ActivateFlags> control) throws UnknownViewOdException
-    {
-        ViewOd viewOd = app.getViewOd( getTask(), viewOdName );
-        return activateOiFromFile( viewOd, filename, control );
-    }
-
-    @Override
-    public View activateOiFromFile( String viewOdName,
-                                    TaskQualification appQualView,
-                                    String filename,
-                                    EnumSet<ActivateFlags> control)
-    {
-        return activateOiFromFile( viewOdName, appQualView.getApplication(), filename, control );
-    }
-
-    @Override
     public View activateOiFromFile( ViewOd viewOd,
                                     String filename,
                                     EnumSet<ActivateFlags> control )
     {
-        return new ActivateFromStream( this )
+        return new Deserialize( this )
                         .fromFile( filename )
                         .setViewOd( viewOd )
                         .setFlags( control )
@@ -224,29 +202,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public View activateOiFromBlob(Application application, Blob blob, EnumSet<ActivateFlags> control)
-    {
-        InputStream inputStream = null;
-        try
-        {
-            inputStream = new ByteArrayInputStream( blob.getBytes() );
-            ActivateOiFromStream activator = new ActivateOiFromStream(this, application, inputStream, control );
-            ViewImpl v = activator.read();
-            assert v.getViewOd().getApplication() == application;
-            return v;
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( inputStream );
-        }
-    }
-
-    @Override
-    public List<View> activateOisFromStream( ActivateFromStream options ) throws UnknownViewOdException
+    public List<View> activateOisFromStream( Deserialize options ) throws UnknownViewOdException
     {
         try
         {
@@ -278,7 +234,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
         }
         finally
         {
-            if ( options.closeStream() )
+            if ( options.isCloseStream() )
                 IOUtils.closeQuietly( options.getInputStream() );
         }
     }
@@ -345,5 +301,11 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     public <T> T putCacheMap(Class<T> key, T value)
     {
         return cacheMap.putCacheMap( key, value );
+    }
+
+    @Override
+    public Deserialize deserialize()
+    {
+        return new Deserialize( this );
     }
 }

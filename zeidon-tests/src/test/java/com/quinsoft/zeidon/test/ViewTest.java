@@ -15,21 +15,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateFromStream;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownViewAttributeException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.WriteToStream;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
@@ -128,9 +128,9 @@ public class ViewTest
     {
         View v = zencas.activateOiFromFile( "mStudent", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudent_ac.por" );
         String filename = v.getTempDirectory() + "mstudent_ac.json";
-        new WriteToStream().asJson().withIncremental().toFile( filename ).write( v );
+        new Serialize().asJson().withIncremental().toFile( filename ).write( v );
 
-        View v2 = new ActivateFromStream( zencas )
+        View v2 = new Deserialize( zencas )
                             .asJson()
                             .fromResource( filename )
                             .activateFirst();
@@ -140,7 +140,7 @@ public class ViewTest
         filename = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mlld.json";
         try {
             Task epamms = oe.createTask( "ePamms" );
-            View v3 = new ActivateFromStream( epamms )
+            View v3 = new Deserialize( epamms )
                                     .asJson()
                                     .fromResource( filename )
                                     .activateFirst();
@@ -639,8 +639,10 @@ public class ViewTest
         View view = zeidonTools.activateEmptyObjectInstance( "kzwdlgxo" );
         view.logObjectInstance();
 
-        view = zeidonTools.activateOiFromFile( "kzwdlgxo", zeidonTools,
-                zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD", null );
+        view = zeidonTools.deserialize()
+                          .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD" )
+                          .setApplication( zeidonTools.getApplication() )
+                          .activateFirst();
         view.logObjectInstance();
 
         // Activate a multiple-root object with SINGLE and make sure there's only one root.
@@ -853,7 +855,7 @@ public class ViewTest
 
         try
         {
-            View v = new ActivateFromStream( mFASrc )
+            View v = new Deserialize( mFASrc )
                                 .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
                                 .asJson()
                                 .activateFirst();
@@ -865,7 +867,7 @@ public class ViewTest
             mFASrc.log().debug( "Got expected Exception" );
         }
 
-        View v = new ActivateFromStream( mFASrc )
+        View v = new Deserialize( mFASrc )
                             .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
                             .allowDynamicAttributesFor( "Student" )
                             .activateFirst();

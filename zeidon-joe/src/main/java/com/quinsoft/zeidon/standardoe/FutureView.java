@@ -27,6 +27,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Level;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
@@ -170,5 +171,11 @@ class FutureView extends InternalViewForwarder implements Future<View>
         // We don't need to wait for the activate to finish to get the options.
         // Call super to get the view without waiting for the future to return.
         return super.getView().getActivateOptions();
+    }
+
+    @Override
+    public Serialize serialize()
+    {
+        return super.getView().serialize();
     }
 }

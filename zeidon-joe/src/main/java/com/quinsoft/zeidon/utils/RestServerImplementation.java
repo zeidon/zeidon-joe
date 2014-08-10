@@ -3,13 +3,13 @@
  */
 package com.quinsoft.zeidon.utils;
 
-import com.quinsoft.zeidon.ActivateFromStream;
+import com.quinsoft.zeidon.Deserialize;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteToStream;
+import com.quinsoft.zeidon.Serialize;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -50,22 +50,22 @@ public class RestServerImplementation
     {
         View rc = task.activateEmptyObjectInstance( restResponse );
         EntityInstance rcEI = rc.cursor( "RestResponse" ).createEntity();
-        WriteToStream options = new WriteToStream();
+        Serialize options = new Serialize();
         options.withIncremental();
 
         try
         {
             rcEI.getAttribute( "ReturnCode" ).setValue( 0 ); // Assume everything is OK.
-            View qual = new ActivateFromStream( task )
+            View qual = new Deserialize( task )
                                     .asJson()
-                                    .fromInputString( postContent )
+                                    .fromString( postContent )
                                     .activateFirst();
 
             qual.logObjectInstance();
 
             ActivateOptions activateOptions = new ActivateOptions( task );
             View view = task.activateObjectInstance( viewOdName, qual, activateOptions );
-            WriteToStream writer = new WriteToStream().addView( rc, view ).withIncremental().toStringWriter().write();
+            Serialize writer = new Serialize().addView( rc, view ).withIncremental().toStringWriter().write();
             return writer.getJsonString();
         }
         catch ( Exception e )
@@ -77,7 +77,7 @@ public class RestServerImplementation
             rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
 
             // Write the rc OI to a string.
-            WriteToStream writer = new WriteToStream().addView( rc ).withIncremental().toStringWriter().write();
+            Serialize writer = new Serialize().addView( rc ).withIncremental().toStringWriter().write();
             return writer.getJsonString();
         }
     }
