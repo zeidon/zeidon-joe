@@ -20,6 +20,9 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
 
     new View( jview )
   }
+  
+  def deserializeOi = jtask.deserializeOi()
+  def newView = new View( this )
 }
 
 object Task {

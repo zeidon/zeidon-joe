@@ -50,15 +50,18 @@ class View( val task: Task ) extends Task(task) {
         jview.copyCursors(view.jview)
     }
 
-    def activateEmpty(): Unit = {
+    def activateEmpty() = {
         validateViewOd
         jview = jtask.activateEmptyObjectInstance( jviewOd )
+        this
     }
 
-    def activateWhere( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
+    def activateWhere( addQual: (QualBuilder) => QualBuilder ): View = {
         validateViewOd
         val builder = new QualBuilder( this, jviewOd )
         addQual( builder )
+        builder.activate
+        this
     }
 
     def buildQual( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
@@ -72,8 +75,11 @@ class View( val task: Task ) extends Task(task) {
         return builder
     }
 
+    def isEmpty = jview.isEmpty()
     def logObjectInstance = jview.logObjectInstance()
     def activateOptions = jview.getActivateOptions()
+    def serializeOi = jview.serializeOi()
+    override def deserializeOi = jview.deserializeOi()
 
     /**
      * This is called when the compiler doesn't recognize a method name.  This

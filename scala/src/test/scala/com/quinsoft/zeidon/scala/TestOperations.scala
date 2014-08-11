@@ -10,16 +10,15 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine
  * @author dgc
  *
  */
-class TestOperations ( task: Task ) extends ZeidonOperations( task ) {
-
-  /**
-   * Following constructor allows this to be called from Zeidon JOE.
-   */
-  def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
+class TestOperations ( val task: Task ) extends ZeidonOperations{
+   /**
+    * Following constructor allows this to be called from Zeidon JOE.
+    */
+    def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
 
     def CompileOper() {
-        var view = VIEW basedOnLod "mPerson"
-        view.activateWhere( _.Person.PersonID = 1 )
+        val view = VIEW basedOnLod "mPerson"
+        view.buildQual( _.Person.PersonID = 1 )
                        .orAll( _.Person.PersonID > 2,
                                _.Person.PersonID < 5 )
                        .and( q => q.Person.PersonID = q.Person.LastName )

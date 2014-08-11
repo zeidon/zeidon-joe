@@ -9,12 +9,9 @@ import com.quinsoft.zeidon._
  * @author dgc
  *
  */
-class ZeidonOperations ( ) {
+trait ZeidonOperations {
+    val task: Task
 
-    def this( task: Task ) = { this(); this.task = task }
-    def this( jtask: com.quinsoft.zeidon.Task ) = { this(); task = new Task( jtask ) }
-
-    var task: Task = null
     val NEXT  = CursorPosition.NEXT
     val PREV  = CursorPosition.PREV
     val FIRST = CursorPosition.FIRST

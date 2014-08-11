@@ -19,7 +19,7 @@ class EntityCursor( private[this] val view: View,
 {
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
 
-    def create(): EntityCursor = {
+    def create: EntityCursor = {
         jentityCursor.createEntity()
         this
     }
