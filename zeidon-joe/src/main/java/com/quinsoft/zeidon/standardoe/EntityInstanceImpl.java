@@ -281,7 +281,7 @@ class EntityInstanceImpl implements EntityInstance
                 if ( StringUtils.isBlank( viewAttribute.getInitialValue() ) )
                     continue;
 
-                setAttribute( viewAttribute, viewAttribute.getInitialValue() );
+                setAttribute( viewAttribute, viewAttribute.getInitialValue(), null, true );
             }
         }
     }
@@ -2576,6 +2576,7 @@ class EntityInstanceImpl implements EntityInstance
      * Makes sure the attribute can be updated.
      *
      * @param viewAttribute
+     * @param beingInitialized 
      */
     private void validateUpdateAttribute( ViewAttribute viewAttribute )
     {
@@ -2641,12 +2642,23 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityInstance setAttribute(ViewAttribute viewAttribute, Object value, String contextName) throws InvalidAttributeValueException
     {
+        return setAttribute( viewAttribute, value, contextName, false );
+    }
+
+    EntityInstance setAttribute( ViewAttribute viewAttribute, 
+                                 Object value, 
+                                 String contextName,
+                                 boolean beingInitialized ) throws InvalidAttributeValueException
+    {
         if ( viewAttribute.isHidden() )
             throw new UnknownViewAttributeException( getViewEntity(), viewAttribute.getName() );
 
         contextName = checkContextName( viewAttribute, contextName );
 
-        validateUpdateAttribute( viewAttribute );
+        // Validate that this attribute can be updated.  If we're in the process of initializing
+        // the attribute we'll allow it.
+        if ( !beingInitialized )
+            validateUpdateAttribute( viewAttribute );
 
         try
         {
