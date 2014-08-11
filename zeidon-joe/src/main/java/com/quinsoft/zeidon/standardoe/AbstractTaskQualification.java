@@ -27,7 +27,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CacheMap;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownViewOdException;
@@ -181,7 +181,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
                                     String filename,
                                     EnumSet<ActivateFlags> control )
     {
-        return new Deserialize( this )
+        return new DeserializeOi( this )
                         .fromFile( filename )
                         .setViewOd( viewOd )
                         .setFlags( control )
@@ -189,7 +189,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public List<View> activateOisFromStream( Deserialize options ) throws UnknownViewOdException
+    public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownViewOdException
     {
         try
         {
@@ -289,8 +289,8 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public Deserialize deserialize()
+    public DeserializeOi deserializeOi()
     {
-        return new Deserialize( this );
+        return new DeserializeOi( this );
     }
 }

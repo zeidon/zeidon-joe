@@ -10,7 +10,7 @@ import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 
 /**
  * @author dgc
@@ -54,7 +54,7 @@ public class CommitOiToFileDb implements Committer
     {
         String filename = fileDbUtils.genKeyFilename( view );
         task.dblog().info( "Writing OI to %s", filename );
-        new Serialize().setFormat( fileDbUtils.getStreamFormat() )
+        new SerializeOi().setFormat( fileDbUtils.getStreamFormat() )
                            .toFile( filename )
                            .withIncremental()
                            .write( view );

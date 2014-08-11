@@ -36,7 +36,7 @@ import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Lockable;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskLogger;
 import com.quinsoft.zeidon.View;
@@ -526,8 +526,8 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     }
 
     @Override
-    public Serialize serialize()
+    public SerializeOi serializeOi()
     {
-        return new Serialize();
+        return new SerializeOi();
     }
 }

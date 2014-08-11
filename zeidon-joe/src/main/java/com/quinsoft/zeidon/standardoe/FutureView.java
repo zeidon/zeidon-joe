@@ -27,7 +27,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Level;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
@@ -174,8 +174,8 @@ class FutureView extends InternalViewForwarder implements Future<View>
     }
 
     @Override
-    public Serialize serialize()
+    public SerializeOi serializeOi()
     {
-        return super.getView().serialize();
+        return super.getView().serializeOi();
     }
 }

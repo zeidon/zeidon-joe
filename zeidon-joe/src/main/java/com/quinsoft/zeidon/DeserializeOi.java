@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.utils.ZeidonInputStream;
  * @author dgc
  *
  */
-public class Deserialize
+public class DeserializeOi
 {
     private final Task task;
 
@@ -52,7 +52,7 @@ public class Deserialize
      */
     private boolean closeStream = true;
 
-    public Deserialize( TaskQualification task )
+    public DeserializeOi( TaskQualification task )
     {
         this.task = task.getTask();
     }
@@ -74,7 +74,7 @@ public class Deserialize
      * @param inputStream the inputStream to set
      * @return
      */
-    public Deserialize fromInputStream( InputStream inputStream )
+    public DeserializeOi fromInputStream( InputStream inputStream )
     {
         this.inputStream = inputStream;
         if ( inputStream instanceof ZeidonInputStream )
@@ -90,7 +90,7 @@ public class Deserialize
      * @param resourceName
      * @return
      */
-    public Deserialize fromResource( String resourceName )
+    public DeserializeOi fromResource( String resourceName )
     {
         this.inputStream = JoeUtils.getInputStream( task, resourceName );
         if ( inputStream == null )
@@ -101,7 +101,7 @@ public class Deserialize
         return this;
     }
 
-    public Deserialize fromAttribute( AttributeInstance attribute )
+    public DeserializeOi fromAttribute( AttributeInstance attribute )
     {
         return fromString( attribute.getString() );
     }
@@ -112,7 +112,7 @@ public class Deserialize
      * @param resourceName
      * @return
      */
-    public Deserialize fromFile( String filename )
+    public DeserializeOi fromFile( String filename )
     {
         inputStream = JoeUtils.getInputStream( task, filename );
         if ( inputStream == null )
@@ -129,7 +129,7 @@ public class Deserialize
      * @param resourceName
      * @return
      */
-    public Deserialize fromFile( File file )
+    public DeserializeOi fromFile( File file )
     {
         try
         {
@@ -152,7 +152,7 @@ public class Deserialize
      * @param resourceName
      * @return
      */
-    public Deserialize fromString( String inputString )
+    public DeserializeOi fromString( String inputString )
     {
         try
         {
@@ -193,13 +193,13 @@ public class Deserialize
      * @param viewOd the viewOd to set
      * @return
      */
-    public Deserialize setViewOd( ViewOd viewOd )
+    public DeserializeOi setViewOd( ViewOd viewOd )
     {
         this.viewOd = viewOd;
         return this;
     }
 
-    public Deserialize setViewOd( String viewOdName )
+    public DeserializeOi setViewOd( String viewOdName )
     {
         viewOd = getApplication().getViewOd( getTask(), viewOdName );
         return this;
@@ -212,7 +212,7 @@ public class Deserialize
      * @param ifNull if true only set format if it is null.
      * @return
      */
-    private Deserialize setFormatFromFilename( String filename, boolean ifNull )
+    private DeserializeOi setFormatFromFilename( String filename, boolean ifNull )
     {
         if ( ifNull && format != null )
             return this;
@@ -229,7 +229,7 @@ public class Deserialize
         return this;
     }
 
-    public Deserialize setFormat( StreamFormat format )
+    public DeserializeOi setFormat( StreamFormat format )
     {
         this.format = format;
         return this;
@@ -263,7 +263,7 @@ public class Deserialize
         return task.getApplication();
     }
 
-    public Deserialize setApplication( Application application )
+    public DeserializeOi setApplication( Application application )
     {
         this.application = application;
         return this;
@@ -294,7 +294,7 @@ public class Deserialize
         return flags;
     }
 
-    public Deserialize setFlags( EnumSet<ActivateFlags> flags )
+    public DeserializeOi setFlags( EnumSet<ActivateFlags> flags )
     {
         if ( flags != null )
             this.flags = flags;
@@ -302,7 +302,7 @@ public class Deserialize
         return this;
     }
 
-    public Deserialize setFlags( Integer control )
+    public DeserializeOi setFlags( Integer control )
     {
         if ( control == null )
             return this;
@@ -310,13 +310,13 @@ public class Deserialize
         return setFlags( ActivateFlags.convertLongFlags( control ) );
     }
 
-    public Deserialize asJson()
+    public DeserializeOi asJson()
     {
         format = StreamFormat.JSON;
         return this;
     }
 
-    public Deserialize asXml()
+    public DeserializeOi asXml()
     {
         format = StreamFormat.XML;
         return this;
@@ -330,13 +330,13 @@ public class Deserialize
         return closeStream;
     }
 
-    public Deserialize closeStream( boolean closeStream )
+    public DeserializeOi closeStream( boolean closeStream )
     {
         this.closeStream = closeStream;
         return this;
     }
 
-    public Deserialize allowDynamicAttributesFor( String entityName )
+    public DeserializeOi allowDynamicAttributesFor( String entityName )
     {
         if ( allowDynamicAttributes == null )
             allowDynamicAttributes = new HashSet<String>();

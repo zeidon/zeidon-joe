@@ -9,13 +9,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
@@ -170,16 +170,16 @@ class SimpleTest
                             .activate();
 
 //        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
-        new Serialize().toFile( "/tmp/stud2.json" ).asJson().withoutHeaders().write( stud );
+        new SerializeOi().toFile( "/tmp/stud2.json" ).asJson().withoutHeaders().write( stud );
 
-        View stud2 = new Deserialize( zencas )
+        View stud2 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud2.json" )
                             .setViewOd( "lStudDpt" )
                             .asJson()
                             .activateFirst();
         stud2.logObjectInstance();
 
-        List<View> stud3 = new Deserialize( zencas )
+        List<View> stud3 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud.json" )
                             .setViewOd( "lStudDpt" )
                             .asJson()

@@ -22,7 +22,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -51,7 +51,7 @@ class ActivateOisFromJsonStream implements StreamReader
     /**
      * Keep track of the options for this activate.
      */
-    private Deserialize  options;
+    private DeserializeOi  options;
 
     /**
      * This keeps track of all the entities that are the sources for linked instances.
@@ -534,7 +534,7 @@ class ActivateOisFromJsonStream implements StreamReader
     }
 
     @Override
-    public List<View> readFromStream( Deserialize options )
+    public List<View> readFromStream( DeserializeOi options )
     {
         this.task = options.getTask();
         this.stream = options.getInputStream();

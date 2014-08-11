@@ -51,7 +51,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.SelectSet;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
@@ -317,13 +317,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control )
     {
-        serialize().asXml().setFlags( control ).toFile( filename ).write();
+        serializeOi().asXml().setFlags( control ).toFile( filename ).write();
     }
 
     @Override
     public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
-        serialize().setFlags( control ).toFile( filename ).write();
+        serializeOi().setFlags( control ).toFile( filename ).write();
     }
 
     @Override
@@ -334,7 +334,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         {
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             stream = new OutputStreamWriter( byteArray );
-            serialize().setFlags( control ).toWriter( stream ).write();
+            serializeOi().setFlags( control ).toWriter( stream ).write();
             return new Blob( byteArray.toByteArray() );
         }
         finally
@@ -885,7 +885,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void writeOi( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        serialize().setFlags( flags ).toWriter( writer ).write();
+        serializeOi().setFlags( flags ).toWriter( writer ).write();
     }
 
     @Override
@@ -955,8 +955,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public Serialize serialize()
+    public SerializeOi serializeOi()
     {
-        return new Serialize( this );
+        return new SerializeOi( this );
     }
 }

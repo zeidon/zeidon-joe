@@ -20,13 +20,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
 
@@ -39,7 +39,7 @@ public class CommitToRestServer implements Committer
     /**
      * The WriteOptions for creating the JSON stream.
      */
-    private final static Serialize JSON_WRITE_OPTIONS = new Serialize().withIncremental();
+    private final static SerializeOi JSON_WRITE_OPTIONS = new SerializeOi().withIncremental();
 
     private Set<ViewImpl>  viewList;
     private Task           task;
@@ -110,7 +110,7 @@ public class CommitToRestServer implements Committer
         {
             copyEntityKeysToTags();
 
-            Serialize writer = new Serialize().asJson().toStringWriter().withIncremental().write( viewList );
+            SerializeOi writer = new SerializeOi().asJson().toStringWriter().withIncremental().write( viewList );
             String json = writer.getJsonString();
             List<View> views = makePostCall( json );
             View restRc = views.get( 0 );
@@ -255,7 +255,7 @@ public class CommitToRestServer implements Committer
             if ( statusCode != 200 )
                 throw new ZeidonException( "http activate failed with status %s", status );
 
-            List<View> views = new Deserialize( getTask() )
+            List<View> views = new DeserializeOi( getTask() )
                                         .asJson()
                                         .fromInputStream( stream )
                                         .activate();

@@ -24,12 +24,12 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SelectSet;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -196,11 +196,11 @@ public class TestZencas
 
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
 
-        Serialize options = new Serialize();
+        SerializeOi options = new SerializeOi();
         options.withIncremental();
-        new Serialize().toFile( getTempDir() + "/stud.json" ).write( stud, person );
+        new SerializeOi().toFile( getTempDir() + "/stud.json" ).write( stud, person );
 
-        List<View> viewList = new Deserialize( zencas )
+        List<View> viewList = new DeserializeOi( zencas )
                                         .asJson()
                                         .fromResource( getTempDir() + "/stud.json" )
                                         .activate();
@@ -213,9 +213,9 @@ public class TestZencas
                             .addAttribQual( "ID", 5 )
                             .activate();
         stud.cursor( "College" ).deleteEntity();
-        new Serialize().toFile( getTempDir() + "/mcollege.json" ).write( stud );
+        new SerializeOi().toFile( getTempDir() + "/mcollege.json" ).write( stud );
 
-        viewList = new Deserialize( zencas )
+        viewList = new DeserializeOi( zencas )
                                     .asJson()
                                     .fromResource( getTempDir() + "/mcollege.json" )
                                     .activate();
@@ -309,7 +309,7 @@ public class TestZencas
     public void testInclude3()
     {
         View         testview;
-        testview = zencas.deserialize()
+        testview = zencas.deserializeOi()
                          .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/TestInclude3-mFAProfO.por" )
                          .setViewOd( "mFAProf" )
                          .activateFirst();
@@ -320,7 +320,7 @@ public class TestZencas
         profn.cursor( "FinAidProfile" ).setMatchingAttributesByName( testview, "FinAidProfile", SetMatchingFlags.SET_NULL );
         profn.cursor( "Person" ).includeSubobject( testview.cursor( "Person" ), CursorPosition.LAST );
 
-        View view = zencas.deserialize()
+        View view = zencas.deserializeOi()
                 .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/AfterPersonInclude.por" )
                 .setViewOd( "mFAProf" )
                 .activateFirst();

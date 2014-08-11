@@ -50,9 +50,9 @@ public interface TaskQualification extends Lockable
     View activateOiFromFile( String viewOdName, String filename, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
     View activateOiFromFile( ViewOd viewOd, String filename, EnumSet<ActivateFlags> control );
 
-    List<View> activateOisFromStream( Deserialize options ) throws UnknownViewOdException;
-    Deserialize deserialize();
-    Serialize serialize();
+    List<View> activateOisFromStream( DeserializeOi options ) throws UnknownViewOdException;
+    SerializeOi serializeOi();
+    DeserializeOi deserializeOi();
 
     View getViewByName( String name );
     View getViewByKey( long key );

@@ -31,14 +31,14 @@ import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SelectSet;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownViewOdException;
@@ -644,20 +644,20 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public List<View> activateOisFromStream( Deserialize options ) throws UnknownViewOdException
+    public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownViewOdException
     {
         return getView().activateOisFromStream( options );
     }
 
     @Override
-    public Serialize serialize()
+    public SerializeOi serializeOi()
     {
-        return getView().serialize();
+        return getView().serializeOi();
     }
 
     @Override
-    public Deserialize deserialize()
+    public DeserializeOi deserializeOi()
     {
-        return getView().deserialize();
+        return getView().deserializeOi();
     }
 }

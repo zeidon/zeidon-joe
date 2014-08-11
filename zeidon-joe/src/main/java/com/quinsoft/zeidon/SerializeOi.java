@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
  * @author dg
  *
  */
-public class Serialize
+public class SerializeOi
 {
     private final List<View> viewList;
 
@@ -39,24 +39,24 @@ public class Serialize
 
     private AttributeInstance targetAttribute;
 
-    public Serialize()
+    public SerializeOi()
     {
         viewList = new ArrayList<>();
     }
 
-    public Serialize( View view, View... views )
+    public SerializeOi( View view, View... views )
     {
         this();
         addView( view, views );
     }
 
-    public Serialize( List<View> views )
+    public SerializeOi( List<View> views )
     {
         this();
         addViews( views );
     }
 
-    public Serialize toFile( String filename )
+    public SerializeOi toFile( String filename )
     {
         try
         {
@@ -73,7 +73,7 @@ public class Serialize
         return this;
     }
 
-    public Serialize toWriter( Writer writer )
+    public SerializeOi toWriter( Writer writer )
     {
         this.writer = writer;
         closeWriter = false;  // We'll assume the caller will close it.
@@ -81,7 +81,7 @@ public class Serialize
         return this;
     }
 
-    public Serialize toAttribute( AttributeInstance attribute )
+    public SerializeOi toAttribute( AttributeInstance attribute )
     {
         targetAttribute = attribute;
         toStringWriter();
@@ -98,7 +98,7 @@ public class Serialize
      * using getJsonString();
      * @return
      */
-    public Serialize toStringWriter()
+    public SerializeOi toStringWriter()
     {
         writer = new StringWriter();
         resourceName = "*String*";
@@ -140,7 +140,7 @@ public class Serialize
      * @param filename
      * @return
      */
-    private Serialize setFormatFromFilename( String filename )
+    private SerializeOi setFormatFromFilename( String filename )
     {
         if ( format != null )
             return this;
@@ -157,25 +157,25 @@ public class Serialize
         return this;
     }
 
-    public Serialize setFormat( StreamFormat format )
+    public SerializeOi setFormat( StreamFormat format )
     {
         this.format = format;
         return this;
     }
 
-    public Serialize asJson()
+    public SerializeOi asJson()
     {
         format = StreamFormat.JSON;
         return this;
     }
 
-    public Serialize asXml()
+    public SerializeOi asXml()
     {
         format = StreamFormat.XML;
         return this;
     }
 
-    public Serialize addView( View view, View... views )
+    public SerializeOi addView( View view, View... views )
     {
         viewList.add( view );
         if ( views != null )
@@ -187,13 +187,13 @@ public class Serialize
         return this;
     }
 
-    public Serialize addViews( Collection<? extends View> views )
+    public SerializeOi addViews( Collection<? extends View> views )
     {
         viewList.addAll( views );
         return this;
     }
 
-    public Serialize write( View view, View... views )
+    public SerializeOi write( View view, View... views )
     {
         viewList.add( view );
         if ( views != null && views.length > 0 )
@@ -205,7 +205,7 @@ public class Serialize
         return write();
     }
 
-    public Serialize write( Collection<? extends View> views )
+    public SerializeOi write( Collection<? extends View> views )
     {
         viewList.addAll( views );
         return write();
@@ -221,7 +221,7 @@ public class Serialize
         return writer;
     }
 
-    public Serialize write()
+    public SerializeOi write()
     {
         try
         {
@@ -270,7 +270,7 @@ public class Serialize
         return flags;
     }
 
-    public Serialize setFlags( EnumSet<WriteOiFlags> flags )
+    public SerializeOi setFlags( EnumSet<WriteOiFlags> flags )
     {
         if ( flags == null )
             flags = EnumSet.noneOf( WriteOiFlags.class );
@@ -279,7 +279,7 @@ public class Serialize
         return this;
     }
 
-    public Serialize setFlags( Long control )
+    public SerializeOi setFlags( Long control )
     {
         if ( control == null )
             return setFlags( (EnumSet<WriteOiFlags>) null );
@@ -287,13 +287,13 @@ public class Serialize
         return setFlags( WriteOiFlags.convertLongFlags( control ) );
     }
 
-    public Serialize withIncremental()
+    public SerializeOi withIncremental()
     {
         flags.add( WriteOiFlags.INCREMENTAL );
         return this;
     }
 
-    public Serialize using( StreamWriter streamWriter )
+    public SerializeOi using( StreamWriter streamWriter )
     {
         this.streamWriter = streamWriter;
         return this;
@@ -304,7 +304,7 @@ public class Serialize
      *
      * @return
      */
-    public Serialize withoutHeaders()
+    public SerializeOi withoutHeaders()
     {
         flags.add( WriteOiFlags.NO_HEADER );
         return this;

@@ -5,10 +5,10 @@ package com.quinsoft.zeidon.utils;
 
 import java.io.Writer;
 
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -32,12 +32,12 @@ public class JsonUtils
 
         // Load the XOD as a view.
         Application zeidonTools = view.getApplication( "ZeidonTools" );
-        View xod = new Deserialize( view )
+        View xod = new DeserializeOi( view )
                             .fromFile( filename )
                             .setApplication( zeidonTools )
                             .activateFirst();
 
         // Write it.
-        new Serialize().toWriter( writer ).write( xod );
+        new SerializeOi().toWriter( writer ).write( xod );
     }
 }

@@ -73,13 +73,13 @@ import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.SelectSet;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -4766,7 +4766,7 @@ public abstract class VmlOperation
         try
         {
             // Try with ZeidonSystem
-            view = qualView.deserialize()
+            view = qualView.deserializeOi()
                            .fromFile( fileName )
                            .setFlags( control )
                            .setApplication( task.getSystemTask().getApplication() )
@@ -4776,7 +4776,7 @@ public abstract class VmlOperation
         catch ( UnknownViewOdException e )
         {
             // Try with ZeidonTools
-            view = qualView.deserialize()
+            view = qualView.deserializeOi()
                             .fromFile( fileName )
                             .setFlags( control )
                             .setApplication( task.getApplication( "ZeidonTools" ) )
@@ -4880,7 +4880,7 @@ public abstract class VmlOperation
 
    public int ActivateOI_FromFile( zVIEW view, String viewOdName, View qualView, String fileName, int control )
    {
-       view.setView( task.deserialize()
+       view.setView( task.deserializeOi()
                          .fromFile( fileName )
                          .setViewOd( viewOdName )
                          .setFlags( control )
@@ -4955,7 +4955,7 @@ public abstract class VmlOperation
          return -1;
       }
 
-      View v = qualView.deserialize()
+      View v = qualView.deserializeOi()
                        .fromInputStream( new ByteArrayInputStream( blob.getBytes() ) )
                        .setFlags( ACTIVATE_CONTROL.get(control) )
                        .setApplication( application )
@@ -8683,7 +8683,7 @@ public abstract class VmlOperation
    public void
    WriteOiToJson( View view, String filename, int control )
    {
-       new Serialize().asJson()
+       new SerializeOi().asJson()
                           .setFlags( WriteOiFlags.convertLongFlags( control ) )
                           .toFile( filename )
                           .write( view );
@@ -8692,7 +8692,7 @@ public abstract class VmlOperation
    public View
    ActivateOiFromJson( View view, String filename ) throws Exception
    {
-       return new Deserialize( view )
+       return new DeserializeOi( view )
                        .asJson()
                        .fromResource( filename )
                        .activateFirst();

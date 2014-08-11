@@ -34,7 +34,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -275,7 +275,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
     }
 
     @Override
-    public List<View> readFromStream( Deserialize options )
+    public List<View> readFromStream( DeserializeOi options )
     {
         task = options.getTask();
         application = options.getApplication();

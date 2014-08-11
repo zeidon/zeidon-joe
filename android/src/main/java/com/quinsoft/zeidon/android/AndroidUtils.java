@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import android.content.ContextWrapper;
 import android.util.Log;
 
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -99,7 +99,7 @@ public class AndroidUtils
      */
     public static View activateOiFromFile( TaskQualification task, String viewOdName, String filename )
     {
-        return new Deserialize( task )
+        return new DeserializeOi( task )
                         .fromFile( filename )
                         .setViewOd( viewOdName )
                         .activateFirst();

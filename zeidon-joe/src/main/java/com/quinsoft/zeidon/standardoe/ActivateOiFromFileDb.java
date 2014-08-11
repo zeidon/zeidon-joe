@@ -11,7 +11,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.Deserialize;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.CursorResult;
@@ -165,7 +165,7 @@ public class ActivateOiFromFileDb implements Activator
     private View activateFile( final String filename )
     {
         task.dblog().info( "Reading OI from %s", filename );
-        return new Deserialize( task )
+        return new DeserializeOi( task )
                         .fromResource( filename )
                         .setFormat( fileDbUtils.getStreamFormat() )
                         .activateFirst();

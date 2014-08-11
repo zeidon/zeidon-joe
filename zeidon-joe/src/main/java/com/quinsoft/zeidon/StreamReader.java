@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface StreamReader
 {
-    public List<View> readFromStream( Deserialize options );
+    public List<View> readFromStream( DeserializeOi options );
 }

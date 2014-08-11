@@ -16,7 +16,7 @@ import org.joda.time.LocalDateTime;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.quinsoft.zeidon.Serialize;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
@@ -34,7 +34,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
     private Collection<? extends View> viewList;
     private Writer writer;
-    private Serialize options;
+    private SerializeOi options;
     private EnumSet<WriteOiFlags> flags;
     private boolean incremental;
     private Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
@@ -42,7 +42,7 @@ public class WriteOisToJsonStream implements StreamWriter
     private JsonGenerator jg;
 
     @Override
-    public void writeToStream( Serialize options )
+    public void writeToStream( SerializeOi options )
     {
         this.viewList = options.getViewList();
         this.writer = options.getWriter();
