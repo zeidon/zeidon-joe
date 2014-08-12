@@ -160,8 +160,11 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         {
             return appendNumeric( stmt, buffer, value );
         }
-
-        return appendString( stmt, buffer, value );
+        
+        
+        Object v = domain.convertExternalValue( task, viewAttribute, null, value );
+        String str = domain.convertToString( task, viewAttribute, v );
+        return appendString( stmt, buffer, str );
     }
 
     /**
