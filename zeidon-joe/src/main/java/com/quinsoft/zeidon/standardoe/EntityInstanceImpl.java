@@ -2266,7 +2266,8 @@ class EntityInstanceImpl implements EntityInstance
      * @param allowHidden
      * @return
      */
-    EntityIterator<EntityInstanceImpl> getDirectChildren()
+    @Override
+    public EntityIterator<EntityInstanceImpl> getDirectChildren()
     {
         return getDirectChildren( false );
     }
@@ -2280,7 +2281,8 @@ class EntityInstanceImpl implements EntityInstance
      * @param allowHidden
      * @return
      */
-    EntityIterator<EntityInstanceImpl> getDirectChildren( boolean allowHidden )
+    @Override
+    public EntityIterator<EntityInstanceImpl> getDirectChildren( boolean allowHidden )
     {
         return new IteratorBuilder(getObjectInstance())
                         .forDirectChildren( this )
@@ -2576,7 +2578,7 @@ class EntityInstanceImpl implements EntityInstance
      * Makes sure the attribute can be updated.
      *
      * @param viewAttribute
-     * @param beingInitialized 
+     * @param beingInitialized
      */
     private void validateUpdateAttribute( ViewAttribute viewAttribute )
     {
@@ -2645,8 +2647,8 @@ class EntityInstanceImpl implements EntityInstance
         return setAttribute( viewAttribute, value, contextName, false );
     }
 
-    EntityInstance setAttribute( ViewAttribute viewAttribute, 
-                                 Object value, 
+    EntityInstance setAttribute( ViewAttribute viewAttribute,
+                                 Object value,
                                  String contextName,
                                  boolean beingInitialized ) throws InvalidAttributeValueException
     {
@@ -3455,6 +3457,25 @@ class EntityInstanceImpl implements EntityInstance
     public AttributeInstanceImpl getAttribute( ViewAttribute viewAttribute )
     {
         return getAttribute( viewAttribute, null );
+    }
+
+
+    @Override
+    public List<AttributeInstance> attributeList( boolean includeNullValues )
+    {
+        List<AttributeInstance> list = new ArrayList<>();
+        if ( includeNullValues )
+        {
+            for ( ViewAttribute viewAttribute : getViewEntity().getAttributes() )
+                list.add( getAttribute( viewAttribute ) );
+        }
+        else
+        {
+            for ( ViewAttribute viewAttribute : getNonNullAttributeList() )
+                list.add( getAttribute( viewAttribute ) );
+        }
+
+        return list;
     }
 
     private synchronized AttributeInstanceImpl getAttribute( ViewAttribute viewAttribute, View view )

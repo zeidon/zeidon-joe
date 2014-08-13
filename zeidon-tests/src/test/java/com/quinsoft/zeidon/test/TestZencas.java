@@ -198,7 +198,7 @@ public class TestZencas
 
         SerializeOi options = new SerializeOi();
         options.withIncremental();
-        new SerializeOi().toFile( getTempDir() + "/stud.json" ).write( stud, person );
+        new SerializeOi().toFile( getTempDir() + "/stud.json" ).withIncremental().write( stud, person );
 
         List<View> viewList = new DeserializeOi( zencas )
                                         .asJson()
@@ -213,7 +213,7 @@ public class TestZencas
                             .addAttribQual( "ID", 5 )
                             .activate();
         stud.cursor( "College" ).deleteEntity();
-        new SerializeOi().toFile( getTempDir() + "/mcollege.json" ).write( stud );
+        new SerializeOi().toFile( getTempDir() + "/mcollege.json" ).withIncremental().write( stud );
 
         viewList = new DeserializeOi( zencas )
                                     .asJson()

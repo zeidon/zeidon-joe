@@ -2907,8 +2907,26 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
+    public List<AttributeInstance> attributeList( boolean includeNullValues )
+    {
+        return getExistingInstance( true ).attributeList( includeNullValues );
+    }
+
+    @Override
     public AttributeInstance createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
     {
         return getExistingInstance().createDynamicViewAttribute( config );
+    }
+
+    @Override
+    public EntityIterator<? extends EntityInstance> getDirectChildren()
+    {
+        return getExistingInstance().getDirectChildren();
+    }
+
+    @Override
+    public EntityIterator<? extends EntityInstance> getDirectChildren( boolean allowHidden )
+    {
+        return getExistingInstance().getDirectChildren( allowHidden );
     }
 }

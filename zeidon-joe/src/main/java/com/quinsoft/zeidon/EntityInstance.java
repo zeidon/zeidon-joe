@@ -20,6 +20,7 @@ package com.quinsoft.zeidon;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
@@ -81,6 +82,8 @@ public interface EntityInstance
     //
     AttributeInstance getAttribute( String attributeName );
     AttributeInstance getAttribute( ViewAttribute viewAttribute );
+    List<AttributeInstance> attributeList( boolean includeNullValues );
+
     /**
      * Creates a work attribute for this entity type.
      *
@@ -193,6 +196,28 @@ public interface EntityInstance
      * @return
      */
     EntityIterator<? extends EntityInstance> getChildrenHier( boolean includeParent );
+
+    /**
+     * Loops through all the direct EI children of 'this'.
+     *
+     * NOTE: this will *NOT* load lazy-load entities if they haven't already
+     * been loaded.
+     *
+     * @param allowHidden
+     * @return
+     */
+    EntityIterator<? extends EntityInstance> getDirectChildren();
+
+    /**
+     * Loops through all the direct EI children of 'this'.
+     *
+     * NOTE: this will *NOT* load lazy-load entities if they haven't already
+     * been loaded.
+     *
+     * @param allowHidden
+     * @return
+     */
+    EntityIterator<? extends EntityInstance> getDirectChildren( boolean allowHidden );
 
     /**
      * Returns an iterable list of entities linked with 'this'.  If there

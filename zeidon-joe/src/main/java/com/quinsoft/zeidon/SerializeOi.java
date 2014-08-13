@@ -18,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import com.quinsoft.zeidon.standardoe.WriteOiToPorStream;
 import com.quinsoft.zeidon.standardoe.WriteOiToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
+import com.quinsoft.zeidon.utils.WriteOisToJsonStreamNoIncrementals;
 
 /**
  * Encapsulates options for writing an OI to a file/writer and includes some
@@ -236,7 +237,10 @@ public class SerializeOi
                 switch ( getFormat() )
                 {
                     case JSON:
-                        streamWriter = new WriteOisToJsonStream();
+                        if ( flags.contains( WriteOiFlags.INCREMENTAL ) )
+                            streamWriter = new WriteOisToJsonStream();
+                        else
+                            streamWriter = new WriteOisToJsonStreamNoIncrementals();
                         break;
 
                     case XML:
@@ -298,18 +302,6 @@ public class SerializeOi
         this.streamWriter = streamWriter;
         return this;
     }
-    /**
-     * This turns off headers (e.g. .oimeta) when writing the OI.  This results in a simpler
-     * JSON but it won't have incremental information.
-     *
-     * @return
-     */
-    public SerializeOi withoutHeaders()
-    {
-        flags.add( WriteOiFlags.NO_HEADER );
-        return this;
-    }
-
     /**
      * @return the format
      */

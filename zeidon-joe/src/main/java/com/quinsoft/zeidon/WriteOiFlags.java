@@ -30,13 +30,7 @@ public enum WriteOiFlags
     INCREMENTAL,
     ENTITY_TAGS,
     ENTITY_KEYS,
-    KEYS_ONLY,
-
-    /**
-     * Used when reading/writing from a stream, this indicates that there is no header (i.e. meta)
-     * information in the stream.
-     */
-    NO_HEADER;
+    KEYS_ONLY;
 
     static final long CONTROL_INCREMENTAL = 0x00000001;
     static final long CONTROL_ENTITY_TAGS = 0x00000002;

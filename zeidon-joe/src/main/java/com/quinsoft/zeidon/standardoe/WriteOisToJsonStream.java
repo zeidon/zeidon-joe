@@ -52,6 +52,8 @@ public class WriteOisToJsonStream implements StreamWriter
         else
             flags = options.getFlags();
         incremental = flags.contains( WriteOiFlags.INCREMENTAL );
+        if ( ! incremental )
+            throw new ZeidonException( "This JSON stream writer intended for writing incremental." );
 
         // Create a set of all the OIs and turn off the record owner flag.  The record owner
         // flag will be used to determine if a linked EI has been written to the stream.

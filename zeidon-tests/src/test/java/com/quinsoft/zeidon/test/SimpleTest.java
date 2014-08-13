@@ -9,13 +9,12 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
@@ -169,8 +168,8 @@ class SimpleTest
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
 
-//        JoeUtils.writeOiToJsonFile( stud, "/tmp/stud.json" );
-        new SerializeOi().toFile( "/tmp/stud2.json" ).asJson().withoutHeaders().write( stud );
+        stud.serializeOi().toFile( "/tmp/stud.json" ).asJson().withIncremental().write();
+        stud.serializeOi().toFile( "/tmp/stud2.json" ).asJson().write();
 
         View stud2 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud2.json" )

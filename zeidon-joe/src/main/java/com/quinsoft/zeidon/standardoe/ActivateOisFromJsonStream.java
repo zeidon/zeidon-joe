@@ -117,6 +117,8 @@ class ActivateOisFromJsonStream implements StreamReader
                     token = jp.nextToken(); // Move to value.
                     version = jp.getValueAsString();
                     token = jp.nextToken(); // Move to next field name.
+                    assert token == JsonToken.FIELD_NAME;
+                    fieldName = jp.getCurrentName();
                 }
                 else
                 if ( StringUtils.isBlank( options.getVersion() ) )
@@ -126,7 +128,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
                 if ( viewOd == null )
                     throw new ZeidonException( "JSON stream appears to start with the root entity name (%s)" +
-                                               " but the ViewOD has not been specified." );
+                                               " but the ViewOD has not been specified.", fieldName );
 
                 String rootName = viewOd.getRoot().getName();
                 if ( ! fieldName.equals( rootName ) )
