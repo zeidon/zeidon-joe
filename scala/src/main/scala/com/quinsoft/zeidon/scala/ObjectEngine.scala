@@ -9,6 +9,8 @@ package com.quinsoft.zeidon.scala
  */
 class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
 
+    private [scala] val objectOperationMap = new ObjectOperationMap
+    
     def getTask( taskId: String ): Task = {
         val jtask = joe.getTaskById( taskId )
         if ( jtask == null )
@@ -17,7 +19,7 @@ class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
         new Task( jtask )
     }
 
-    def createTask( appName: String, taskId: String = null ) = new Task( joe.createTask( appName, taskId ) )
+    def createTask( appName: String, taskId: String = null ) = new Task( joe.createTask( appName, taskId ), this )
     def taskList = joe.getTaskList()
     def startBrowser = joe.startBrowser()
 }

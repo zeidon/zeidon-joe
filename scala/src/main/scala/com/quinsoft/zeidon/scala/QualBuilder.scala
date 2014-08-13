@@ -31,6 +31,7 @@ class QualBuilder(private val view: View,
     }
 
     def andAny( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+        jqual.addAttribQual( "AND" )
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -50,6 +51,7 @@ class QualBuilder(private val view: View,
     }
 
     def orAll( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+        jqual.addAttribQual( "OR" )
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -78,13 +80,13 @@ class QualBuilder(private val view: View,
         this
     }
 
-    def cachedAs( cacheName: String ): QualBuilder = {
-        jqual.cachedAs( cacheName );
+    def cachedAs( cacheName: String, qualtask: com.quinsoft.zeidon.Task = jtask ): QualBuilder = {
+        jqual.cachedAs( cacheName, qualtask );
         this
     }
 
-    def cachedAs( cacheName: String, jtask: com.quinsoft.zeidon.Task ): QualBuilder = {
-        jqual.cachedAs( cacheName, jtask );
+    def systemCachedAs( cacheName: String ): QualBuilder = {
+        jqual.cachedAs( cacheName, jtask.getSystemTask() );
         this
     }
 

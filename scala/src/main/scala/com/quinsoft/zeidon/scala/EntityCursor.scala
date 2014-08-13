@@ -39,6 +39,7 @@ class EntityCursor( private[this] val view: View,
     }
 
     def count = jentityCursor.getEntityCount()
+    
     def setFirst: CursorResult = jentityCursor.setFirst()
     def setNext: CursorResult = jentityCursor.setNext()
 
@@ -75,6 +76,16 @@ class EntityCursor( private[this] val view: View,
             jentityCursor.setFirst( attributeName, value ) == CursorResult.SET
     }
 
+    /**
+     * Allows user to set a cursor to the first value using '=', e.g.
+     * view.cursor( _.attr = 10 )
+    def apply( func: (AbstractEntity) => Unit ): Boolean = {
+        val setter = new CursorSetter
+        func( setter )
+        setter.rc
+    }
+   */
+    
     def iterator = {
         val iter = jentityCursor.eachEntity
         new Iterator[EntityInstance] {
@@ -89,5 +100,14 @@ class EntityCursor( private[this] val view: View,
             def hasNext = iter.hasNext()
             def next = new EntityInstance( iter.next() )
         }
+    }
+    
+    class CursorSetter extends AbstractEntity( jviewEntity ) {
+       var rc: Boolean = false
+       
+       def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
+       override def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
+           rc = setFirst( jviewAttribute.getName(), value )
+       }
     }
 }

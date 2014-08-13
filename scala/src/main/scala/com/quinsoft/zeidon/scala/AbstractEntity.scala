@@ -42,10 +42,22 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
             newValue = value.asInstanceOf[ AttributeInstance ].jattributeInstance.getValue
 
         val jviewAttribute = jviewEntity.getAttribute( attributeName )
-        getEntityInstance.getAttribute( jviewAttribute ).setValue( newValue )
-        return value
+        return setValue( jviewAttribute, newValue )
     }
 
+    def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
+        getEntityInstance.getAttribute( jviewAttribute ).setValue( value )
+        return value
+    }
+    
+    /**
+     * Copies attributes by name.  Normal invocation is:
+     *      tgtView.Entity copyAttributes from srcView.Entity 
+     */
+    def copyAttributes() : SetMatchingFlagsBuilder = {
+        return getEntityInstance.setMatchingAttributesByName()
+    }
+    
     /**
      * Called dynamically to convert an attribute name with context value into a
      * Scala AttributeInstance.
@@ -59,4 +71,9 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
     }
 
     override def toString: String = getEntityInstance.toString
+}
+
+object AbstractEntity {
+    implicit def ei2jei( ei: AbstractEntity ) = ei.getEntityInstance
+    
 }

@@ -230,18 +230,15 @@ public interface EntityInstance
     /**
      * Copies attributes from source to 'this' matching by name.
      *
-     *   zSET_NULL    - Set, if the current value of the target attribute is null  (except KEYs)
      *   zSET_KEYS    - Set target attributes that represent KEY's.
      *   zSET_NOTNULL - Set, even if current value of the target attribute is not null.  (except KEYs)
      *   zSET_ALL     - Set all target attributes.
      *   zSET_SRCNOTNULL - Only set attribute if the src value is not null.
      *
      */
-
-    int setMatchingAttributesByName( View source, String sourceViewEntity, EnumSet<SetMatchingFlags> control );
-    int setMatchingAttributesByName( View source, ViewEntity viewEntity, EnumSet<SetMatchingFlags> control );
     int setMatchingAttributesByName( EntityInstance sourceInstance, EnumSet<SetMatchingFlags> control );
     int setMatchingAttributesByName( EntityInstance sourceInstance );
+    SetMatchingFlagsBuilder setMatchingAttributesByName();
 
     void logEntity();
     void logEntity( boolean displayChildren );

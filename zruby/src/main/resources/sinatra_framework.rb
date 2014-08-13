@@ -162,7 +162,7 @@ def list_entities( top_entity, args = {} )
 
     links = [] # We'll create a list of edit links and then concat them at the end.
     if args[:include_only] # If true, then we're displaying a list of entities to include
-      links << "<a href='/#{@application}/select/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Select</a>"
+      links << "<a href='/#{@application}/select/#{@viewod}?id=#{top_entity.get_key.to_str}&entity=#{@entity}&viewname=#{@view_name}'>Select</a>"
     else
       links << "<a href='/#{@application}/edit/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Edit</a>" if jtop_view_entity.isUpdate
       links << "<a href='/#{@application}/exclude/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Exclude</a>" if jtop_view_entity.isExclude
@@ -552,19 +552,21 @@ def activate_include_source
 
   @include_source = @task.activate lod_name, :options => { :root_only_multiple => true }
   @include_source.set_name( list_view_name )
+  @select_entity = @include_source.getViewOd.getRoot.name
 end
 
 get '/:application/include/:viewod' do
   activate_include_source
-  list_entities @include_source.cursor( @entity ), :include_only => true, :viewname => @view_name
+  list_entities @include_source.cursor( @select_entity ), :include_only => true, :viewname => @view_name
 end
 
 # User selected an entity to be included.
 get '/:application/select/:viewod' do
+  @select_entity = settings.lod_for_entity_list[ @entity ] || @entity
   list_view_name = "#{@entity}_List"
   @include_source = @task.get_view( list_view_name )
 
-  cursor = @include_source.cursor( @entity )
+  cursor = @include_source.cursor( @select_entity )
 
   key = cursor.get_key.getName
   cursor.setFirst(key, params[:id] )

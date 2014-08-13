@@ -3,9 +3,8 @@
  */
 package com.quinsoft.zeidon.scala
 
-import com.quinsoft.zeidon._
-import com.quinsoft.zeidon.objectdefinition._
-import com.quinsoft.zeidon.scala.EntityCursor
+import com.quinsoft.zeidon.ZeidonException
+import com.quinsoft.zeidon.objectdefinition.ViewOd
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -75,6 +74,7 @@ class View( val task: Task ) extends Task(task) {
         return builder
     }
 
+    def odName = if ( jviewOd  == null ) "*not specified*" else jviewOd.getName 
     def isEmpty = jview.isEmpty()
     def logObjectInstance = jview.logObjectInstance()
     def activateOptions = jview.getActivateOptions()
@@ -88,10 +88,21 @@ class View( val task: Task ) extends Task(task) {
     def selectDynamic(entityName: String): EntityCursor = {
         validateViewOd
 
-        // Following will throw an exception if the entityName is not valid.
         val jviewEntity = jviewOd.getViewEntity(entityName)
         val jcur = jview.cursor(jviewEntity)
         new EntityCursor( this, jcur )
+    }
+
+    /**
+     * Called dynamically to process a Object Operation.
+     */
+    def applyDynamic( operationName: String)(args: AnyRef*): AnyRef = {
+        println( s"method '$operationName' called with arguments ${args.mkString("'", "', '", "'")}" )
+        validateViewOd
+        
+        val oe = task.objectEngine
+        val oper = oe.objectOperationMap.getObjectOperation(operationName, jviewOd, args: _*)
+        return oper.invokeOperation(this, args:_*)
     }
 
     /**

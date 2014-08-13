@@ -11,18 +11,25 @@ import scala.language.dynamics
  */
 case class Task ( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
 
-  def this( task: Task ) = this( task.jtask )
+    private[scala] var objectEngine: ObjectEngine = null
 
-  def getView( viewName: String ): View = {
-    val jview = jtask.getViewByName( viewName )
-    if ( jview == null )
-      return null
+    def this( jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine ) = {
+        this(jtask)
+        objectEngine = oe
+    }
+    
+    def this( task: Task ) = this( task.jtask )
 
-    new View( jview )
-  }
-  
-  def deserializeOi = jtask.deserializeOi()
-  def newView = new View( this )
+    def getView( viewName: String ): View = {
+        val jview = jtask.getViewByName( viewName )
+        if ( jview == null )
+            return null
+
+        new View( jview )
+    }
+
+    def deserializeOi = jtask.deserializeOi()
+    def newView = new View( this )
 }
 
 object Task {

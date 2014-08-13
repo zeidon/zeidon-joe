@@ -49,6 +49,7 @@ import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
+import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.TemporalEntityException;
 import com.quinsoft.zeidon.UnknownViewAttributeException;
@@ -2432,15 +2433,9 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public int setMatchingAttributesByName(View source, String sourceViewEntity, EnumSet<SetMatchingFlags> control)
+    public SetMatchingFlagsBuilder setMatchingAttributesByName()
     {
-        return setMatchingAttributesByName( source, source.getViewOd().getViewEntity( sourceViewEntity ), control );
-    }
-
-    @Override
-    public int setMatchingAttributesByName(View source, ViewEntity sourceViewEntity, EnumSet<SetMatchingFlags> control)
-    {
-        return setMatchingAttributesByName( source.cursor( sourceViewEntity ), control );
+        return new SetMatchingFlagsBuilder().to( this );
     }
 
     @Override
@@ -2466,7 +2461,7 @@ class EntityInstanceImpl implements EntityInstance
             if ( ! targetAttr.isUpdate() )
                 continue;
 
-            // If target entity was not just created (this means that the entity
+            // If target entity was not created (this means that the entity
             // has been committed to the database) then the attribute cannot
             // be updated if it is a key.
             if ( ! this.isCreated() && targetAttr.isKey() )

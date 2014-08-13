@@ -77,6 +77,7 @@ public class ViewOd implements PortableFileAttributeHandler
      * True if any entities in this LOD have DataRecords.
      */
     private boolean      hasPhysicalMappings = false;
+    private String       libraryName;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
     static private final Class<?>[] constructorArgTypes2 = new Class<?>[] { Task.class };
@@ -235,6 +236,11 @@ public class ViewOd implements PortableFileAttributeHandler
         if ( reader.getAttributeName().equals( "OCSRCTYPE" ))
         {
             sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
+        }
+        else
+        if ( reader.getAttributeName().equals( "OPER_LIBNM" ))
+        {
+                  libraryName = reader.getAttributeValue().intern();
         }
     }
 
@@ -663,5 +669,10 @@ public class ViewOd implements PortableFileAttributeHandler
     void setHasPhysicalMappings( boolean hasPhysicalMappings )
     {
         this.hasPhysicalMappings = hasPhysicalMappings;
+    }
+
+    public String getLibraryName()
+    {
+        return libraryName;
     }
 }

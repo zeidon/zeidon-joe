@@ -47,6 +47,7 @@ import com.quinsoft.zeidon.HiddenCursorException;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.SetMatchingFlags;
+import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
@@ -1735,19 +1736,10 @@ class EntityCursorImpl implements EntityCursor
         return iter;
     }
 
-
     @Override
-    public int setMatchingAttributesByName(View source, String sourceViewEntity, EnumSet<SetMatchingFlags> control)
+    public SetMatchingFlagsBuilder setMatchingAttributesByName()
     {
-        validateOiUpdate();
-        return getExistingInstance().setMatchingAttributesByName( source, sourceViewEntity, control );
-    }
-
-    @Override
-    public int setMatchingAttributesByName(View source, ViewEntity viewEntity, EnumSet<SetMatchingFlags> control)
-    {
-        validateOiUpdate();
-        return getExistingInstance().setMatchingAttributesByName( source, viewEntity, control );
+        return getExistingInstance().setMatchingAttributesByName();
     }
 
     @Override
