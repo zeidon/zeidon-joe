@@ -506,7 +506,7 @@ class EntityInstanceImpl implements EntityInstance
             if ( ! ei.isHidden() )
                 return true;
         }
-        
+
         return false;
     }
 
@@ -520,7 +520,7 @@ class EntityInstanceImpl implements EntityInstance
               if ( ! ei.isHidden() )
                   return true;
           }
-          
+
           return false;
     }
 
@@ -1727,8 +1727,18 @@ class EntityInstanceImpl implements EntityInstance
                 continue;  // Child entities aren't required so ignore this one.
 
             // Make sure there is at least one child instance that matches this.
-            if ( ! getChildren( childEntity, false ).hasNext() )
-                list.add( new RequiredEntityMissingException( childEntity ) );
+            if ( getChildren( childEntity, false ).hasNext() )
+                continue;
+
+            // If the child is being lazy-loaded and 'this' EI hasn't been created
+            // then we'll assume the child just hasn't been loaded and we're good.
+            if ( childEntity.getLazyLoadConfig().isLazyLoad() )
+            {
+                if ( ! isCreated() && ! isIncluded() )
+                    continue;
+            }
+
+            list.add( new RequiredEntityMissingException( childEntity ) );
         }
 
         // Now run this on all direct children.
