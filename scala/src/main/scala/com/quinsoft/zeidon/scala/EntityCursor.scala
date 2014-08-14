@@ -18,7 +18,12 @@ class EntityCursor( private[this] val view: View,
             extends AbstractEntity( jentityCursor.getViewEntity() )
             with Iterable[EntityInstance]
 {
-    def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
+    def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
+        val instance = jentityCursor.getEntityInstance()
+        if ( instance == null )
+            throw new ZeidonException( "Cursor for '%s' is null.  Did you forget to create the entity?", jviewEntity.getName() )
+        instance
+    }
 
     def create: EntityCursor = {
         jentityCursor.createEntity()
@@ -87,6 +92,15 @@ class EntityCursor( private[this] val view: View,
     }
    */
 
+    def each( looper: => Any ) = {
+        val iter = jentityCursor.eachEntity()
+        while ( iter.hasNext() )
+        {
+            val ei = iter.next()
+            looper
+        }
+    }
+    
     def iterator = {
         val iter = jentityCursor.eachEntity
         new Iterator[EntityInstance] {

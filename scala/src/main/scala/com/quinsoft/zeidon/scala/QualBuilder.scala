@@ -80,6 +80,16 @@ class QualBuilder(private val view: View,
         this
     }
 
+    def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.ViewEntity ): QualBuilder = {
+        val entity = restrictTo( new EntitySelector )
+        jqual.restricting( entity.getName() )
+        this
+    }
+    
+    def to( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
+        addQual( this )
+    }
+
     def cachedAs( cacheName: String, qualtask: com.quinsoft.zeidon.Task = jtask ): QualBuilder = {
         jqual.cachedAs( cacheName, qualtask );
         this
@@ -99,8 +109,8 @@ class QualBuilder(private val view: View,
     /**
      * Builder for setting entity values.
      */
-    class EntityQualBuilder(private val qualBuilder: QualBuilder,
-                             private val jviewEntity: com.quinsoft.zeidon.objectdefinition.ViewEntity )
+    class EntityQualBuilder( val qualBuilder: QualBuilder,
+                             val jviewEntity: com.quinsoft.zeidon.objectdefinition.ViewEntity )
             extends Dynamic {
 
         var jviewAttribute: com.quinsoft.zeidon.objectdefinition.ViewAttribute = null
@@ -148,6 +158,12 @@ class QualBuilder(private val view: View,
             jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "=", value )
             println( "Adding " + jviewAttribute + " = " + value)
             return qualBuilder
+        }
+    }
+
+    class EntitySelector() extends Dynamic {
+        def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.ViewEntity = {
+            jviewOd.getViewEntity( entityName )
         }
     }
 }

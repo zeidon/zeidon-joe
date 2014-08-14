@@ -74,6 +74,8 @@ class View( val task: Task ) extends Task(task) {
         return builder
     }
 
+    def name( viewName: String ) = jview.setName( viewName )
+    def assert = new AssertView( this )
     def odName = if ( jviewOd  == null ) "*not specified*" else jviewOd.getName 
     def isEmpty = jview.isEmpty()
     def logObjectInstance = jview.logObjectInstance()
@@ -105,6 +107,8 @@ class View( val task: Task ) extends Task(task) {
         return oper.invokeOperation(this, args:_*)
     }
 
+    override def toString = if ( jview != null ) jview.toString() else "*undefined*"
+        
     /**
      * Validates that the View OD is specified.
      */
