@@ -324,4 +324,10 @@ class AttributeInstanceImpl implements AttributeInstance
     {
         return attributeValue.compare( getTask(), viewAttribute, value );
     }
+    
+    @Override
+    public String toString()
+    {
+        return viewAttribute.toString() + ": " + getValue(); 
+    }
 }
