@@ -3,7 +3,6 @@
  */
 package com.quinsoft.zeidon.utils;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -36,7 +35,6 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     private EnumSet<WriteOiFlags> flags;
 
     private JsonGenerator jg;
-    private int rootCount;
 
     @Override
     public void writeToStream( SerializeOi options )
@@ -76,14 +74,8 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         view = view.newView();  // To preserve cursor positions in the original view.
 
         ViewEntity rootViewEntity = view.getViewOd().getRoot();
-        rootCount = view.cursor( rootViewEntity ).getEntityCount();
-        if ( rootCount > 1 )
-        {
-            jg.writeArrayFieldStart( rootViewEntity.getName() );
-            jg.writeStartObject();
-        }
-        else
-            jg.writeObjectFieldStart( rootViewEntity.getName() );
+        jg.writeArrayFieldStart( rootViewEntity.getName() );
+        jg.writeStartObject();
         
         for ( EntityInstance ei:  view.cursor( rootViewEntity ).eachEntity() )
         {
@@ -97,8 +89,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         }
 
         jg.writeEndObject();
-        if ( rootCount > 1 )
-            jg.writeEndArray();
+        jg.writeEndArray();
     }
     
     private ViewEntity writeEntity( EntityInstance ei ) throws Exception
