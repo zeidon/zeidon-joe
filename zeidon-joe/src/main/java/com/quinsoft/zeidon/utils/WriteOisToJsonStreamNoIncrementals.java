@@ -74,7 +74,6 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     private void writeOi( View view ) throws Exception
     {
         view = view.newView();  // To preserve cursor positions in the original view.
-        ViewEntity lastViewEntity = null;
 
         ViewEntity rootViewEntity = view.getViewOd().getRoot();
         rootCount = view.cursor( rootViewEntity ).getEntityCount();
@@ -91,7 +90,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             if ( ei.hasPrevTwin() )
                 jg.writeStartObject();
             
-            lastViewEntity = writeEntity( ei, lastViewEntity );
+            writeEntity( ei );
             
             if ( ei.hasNextTwin() )
                 jg.writeEndObject();
@@ -102,7 +101,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             jg.writeEndArray();
     }
     
-    private ViewEntity writeEntity( EntityInstance ei, ViewEntity lastViewEntity ) throws Exception
+    private ViewEntity writeEntity( EntityInstance ei ) throws Exception
     {
         try
         {
@@ -114,12 +113,11 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 if ( attrib.getViewAttribute().isHidden() )
                     continue;
                 
-                String value = attrib.getString();
+                String value = attrib.getString( null );
                 jg.writeStringField( attrib.getViewAttribute().getName(), value );
             }
 
             // Loop through the children and add them.
-            ViewEntity lastChildViewEntity = null;
             for ( EntityInstance child : ei.getDirectChildren() )
             {
                 ViewEntity childViewEntity = child.getViewEntity();
@@ -131,12 +129,12 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                         jg.writeStartObject();
                     }
                     else
-                        jg.writeObjectFieldStart( viewEntity.getName() );
+                        jg.writeObjectFieldStart( childViewEntity.getName() );
                 }
                 else
                     jg.writeStartObject();
                 
-                lastChildViewEntity = writeEntity( child, lastChildViewEntity );
+                writeEntity( child );
                 
                 jg.writeEndObject();
                 if ( ! child.hasNextTwin() )
