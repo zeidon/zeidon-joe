@@ -27,6 +27,15 @@ public class BooleanDomain extends AbstractDomain
         super( app, domainProperties, task );
     }
 
+    @Override
+    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    {
+        if ( internalValue instanceof Boolean )
+            return;
+
+        throw new InvalidAttributeValueException( viewAttribute, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.domains.Domain#convertExternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.String, java.lang.Object)
      */
