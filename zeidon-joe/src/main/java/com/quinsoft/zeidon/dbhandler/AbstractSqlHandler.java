@@ -358,6 +358,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     throw new ZeidonException( "QualAttrib for " + entityName + " is missing Oper" );
 
                 QualAttrib qualAttrib = new QualAttrib( qualAttribInstance.getStringFromAttribute( "Oper" ) );
+                if ( qualAttrib.oper.equals( "EXCLUDE" ) )
+                {
+                    qualEntity.exclude = true;
+                    continue;
+                }
+
+                if ( qualEntity.exclude )
+                    throw new ZeidonException( "Entity '%s' has EXCLUDE but has additional qualifcation",
+                                               qualEntity.viewEntity.getName() );
+
                 parenCount += CharSetUtils.count( qualAttrib.oper, "(" );
                 parenCount -= CharSetUtils.count( qualAttrib.oper, ")" );
 
@@ -551,6 +561,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( ! activatingWithJoins() )
             return false;
 
+        QualEntity qualEntity = qualMap.get( viewEntity );
+        if ( qualEntity != null && qualEntity.exclude )
+            return false;
+
         //TODO: Add check to see if child is qualified.  If it is then it's not joinable.
 
         return getViewEntityData( viewEntity ).isJoinable( viewEntity );
@@ -641,6 +655,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     @Override
     public int loadEntity( View view, ViewEntity viewEntity )
     {
+        QualEntity qualEntity = qualMap.get( viewEntity );
+        if ( qualEntity != null && qualEntity.exclude )
+        {
+            view.dblog().debug( "Excluding '%s' because qualification says so", viewEntity.getName() );
+            return DbHandler.LOAD_NO_ENTITIES;
+        }
+
         SqlStatement stmt = null;
 
         DataRecord dataRecord = viewEntity.getDataRecord();
@@ -1867,6 +1888,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private static class QualEntity
     {
         private boolean                usesChildQualification;
+        private boolean                exclude;
         private boolean                childQualIsManyToMany;
         private final EntityInstance   qualEntityInstance;
         private final ViewEntity       viewEntity;

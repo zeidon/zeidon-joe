@@ -317,7 +317,7 @@ public class TestZencas
         int rc = testview.cursor( "FinAidAward" ).setFirst( "ID", 50224 ).toInt();
         View profn = zencas.activateEmptyObjectInstance( "mFAProf" );
         profn.cursor( "FinAidProfile" ).createEntity();
-        profn.cursor( "FinAidProfile" ).setMatchingAttributesByName( testview, "FinAidProfile", SetMatchingFlags.SET_NULL );
+        profn.cursor( "FinAidProfile" ).setMatchingAttributesByName( testview.cursor( "FinAidProfile" ), SetMatchingFlags.DEFAULT);
         profn.cursor( "Person" ).includeSubobject( testview.cursor( "Person" ), CursorPosition.LAST );
 
         View view = zencas.deserializeOi()

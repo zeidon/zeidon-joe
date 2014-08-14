@@ -19,6 +19,10 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 
 /**
+ * Serializes an OI by writing it as a JSON stream.  This does not write any Zeidon
+ * information (e.g. incremental flags).  Zeidon can retrieve an OI written with this
+ * object but it won't have any linking or incremental flags.
+ *
  * @author dgc
  *
  */

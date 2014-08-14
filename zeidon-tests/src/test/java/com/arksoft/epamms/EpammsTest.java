@@ -287,7 +287,7 @@ public class EpammsTest
         while ( nRC > CursorResult.UNCHANGED.toInt() )
         {
            mMasLC.cursor( "M_Usage" ).createEntity( CursorPosition.NEXT );
-           mMasLC.cursor( "M_Usage" ).setMatchingAttributesByName( wWebXfer, "Usage", SetMatchingFlags.SET_NULL );
+           mMasLC.cursor( "M_Usage" ).setMatchingAttributesByName( wWebXfer.cursor( "Usage" ), SetMatchingFlags.DEFAULT );
            mMasLC.cursor( "M_Usage" ).setAttribute( "UsageType", "U" );
            nRC = wWebXfer.cursor( "Usage" ).setNextContinue().toInt();;
         }

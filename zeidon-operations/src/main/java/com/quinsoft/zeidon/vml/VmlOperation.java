@@ -4296,11 +4296,6 @@ public abstract class VmlOperation
       }
 
       EnumSet<SetMatchingFlags> flags = EnumSet.noneOf( SetMatchingFlags.class );
-      if ( (control & zSET_NULL) != 0 )
-      {
-          flags.add( SetMatchingFlags.fSET_NULL );
-      }
-
       if ( (control & zSET_KEYS) != 0 )
       {
           flags.add( SetMatchingFlags.fSET_KEYS );
@@ -4316,7 +4311,7 @@ public abstract class VmlOperation
           flags.add( SetMatchingFlags.fSET_SRCNOTNULL );
       }
 
-      nRC = tgtCursor.setMatchingAttributesByName( srcView, srcEntity, flags );
+      nRC = tgtCursor.setMatchingAttributesByName( srcView.getCursor( srcEntity ), flags );
 
       return nRC;
    }

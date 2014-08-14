@@ -6,6 +6,9 @@ package com.quinsoft.zeidon.scala
 import com.quinsoft.zeidon._
 
 /**
+ * A trait that is added to a Scala object to give the object VML-like syntax.
+ * Requires a task.
+ *
  * @author dgc
  *
  */

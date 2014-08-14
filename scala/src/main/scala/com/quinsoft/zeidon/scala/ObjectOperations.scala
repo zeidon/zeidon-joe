@@ -10,6 +10,12 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd
 import scala.collection.concurrent.TrieMap
 import scala.collection.mutable.WrappedArray
 
+/**
+ * A trait to give Scala objects access to VML-like syntax.  This is similar to
+ * ZeidonOperations except it requires a View be supplied instead of a task.  It is
+ * intended to be use by classes that define Object Operations that will be executed
+ * dynamically.
+ */
 trait ObjectOperations extends ZeidonOperations {
     val view: View
     val task: Task = view.task
@@ -17,11 +23,11 @@ trait ObjectOperations extends ZeidonOperations {
 
 /**
  * Keeps track of information needed for an object operation.
- * 
+ *
  * @author dgc
  *
  */
-private[scala] class ObjectOperationCaller( private[scala] val operationName: String, 
+private[scala] class ObjectOperationCaller( private[scala] val operationName: String,
                                             private[scala] val className: String,
                                             args: AnyRef* ) {
 
@@ -33,12 +39,12 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
         val constructors = clazz.getConstructors()
         if ( constructors.length != 1 )
             throw new ZeidonException( "Unexpected number of constructors for %s", className )
-        
+
         constructors(0)
     }
 
     val argLength = args.length
-    
+
     val method = {
         val matchedMethods = for ( m <- clazz.getMethods if m.getName().equals(operationName) ) yield m
         if ( matchedMethods.length == 0 )
@@ -49,16 +55,16 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
 
         matchedMethods(0)
     }
-    
+
     if ( method.getParameterTypes().length != args.length )
         throw new ZeidonException( "Unexpected number of arguments for method.  Expected %d, got %d",
                                    Int.box( argLength ), Int.box( method.getParameterTypes().length ) )
-    
+
     def invokeOperation( view: View, args: AnyRef*): AnyRef = {
         if ( args.length != argLength )
             throw new ZeidonException( "Unexpected number of arguments.  Expected %d, got %d",
                                        Int.box( argLength ), Int.box( args.length ) )
-        
+
         val instance = constructor.newInstance( view )
         view.task.log.debug( "Invoking %s.%s", className, operationName )
         method.invoke(instance, args:_*)
@@ -67,13 +73,13 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
 
 private [scala] class ObjectOperationMap() {
     val map = new TrieMap[String, ObjectOperationCaller]()
-    
+
     def getObjectOperation( operName: String, jviewOd: ViewOd, args: AnyRef* ) = {
         val className = jviewOd.getApplication().getPackage() + "." + jviewOd.getLibraryName()
         val key = className + "." + operName
         if ( ! map.contains( key ) )
             map += (key -> new ObjectOperationCaller( operName, className, args:_* ) )
-            
+
         map(key)
     }
 }

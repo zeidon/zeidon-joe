@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
@@ -66,7 +65,6 @@ class ActivateOisFromJsonStream implements StreamReader
     private View                          view;
     private final List<View>              returnList;
     private String version;
-    private EnumSet<ActivateFlags> flags;
 
     /**
      * A JSON stream will have a version.  Once the version is read from the stream a
@@ -542,7 +540,6 @@ class ActivateOisFromJsonStream implements StreamReader
         this.stream = options.getInputStream();
         this.options = options;
         viewOd = options.getViewOd();
-        flags = options.getFlags();
         return read();
     }
 

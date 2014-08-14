@@ -9,11 +9,12 @@ import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition._
 
 /**
+ * Scala wrapper around a Ze
  * @author dgc
  *
  */
 class EntityCursor( private[this] val view: View,
-                     val jentityCursor: com.quinsoft.zeidon.EntityCursor )
+                    val jentityCursor: com.quinsoft.zeidon.EntityCursor )
             extends AbstractEntity( jentityCursor.getViewEntity() )
             with Iterable[EntityInstance]
 {
@@ -39,7 +40,7 @@ class EntityCursor( private[this] val view: View,
     }
 
     def count = jentityCursor.getEntityCount()
-    
+
     def setFirst: CursorResult = jentityCursor.setFirst()
     def setNext: CursorResult = jentityCursor.setNext()
 
@@ -85,7 +86,7 @@ class EntityCursor( private[this] val view: View,
         setter.rc
     }
    */
-    
+
     def iterator = {
         val iter = jentityCursor.eachEntity
         new Iterator[EntityInstance] {
@@ -101,10 +102,10 @@ class EntityCursor( private[this] val view: View,
             def next = new EntityInstance( iter.next() )
         }
     }
-    
+
     class CursorSetter extends AbstractEntity( jviewEntity ) {
        var rc: Boolean = false
-       
+
        def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
        override def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
            rc = setFirst( jviewAttribute.getName(), value )

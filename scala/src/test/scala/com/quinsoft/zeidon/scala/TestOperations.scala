@@ -45,7 +45,7 @@ class TestOperations ( val task: Task ) extends ZeidonOperations{
             println( view.Person.MiddleName )
         }
 
-        
+
         if ( SETFIRST( view.Student ) WHERE ( _.eMailAddress == null  ) ) {
             println( view.Person.FirstName )
             println( view.Person.LastName )
@@ -75,9 +75,11 @@ class TestOperations ( val task: Task ) extends ZeidonOperations{
 		view.Person.ID = 1
 
 		view.Person.create.ID = 2
+		val person = view.Person
+		person.ID = 2
 
 		view.Person include view.Person
-		view.Person.setFirst
+		view.Person setFirst
 		var personId: String = view.Person.ID
 
 		val v = VIEW from view
@@ -116,7 +118,7 @@ class TestOperations ( val task: Task ) extends ZeidonOperations{
 		  view.Person.Id = 0
 		}
 
-        FOREACH ( view.Person ) UNDER view.Person WHERE { view.Person.Idxxx > 5 } DO {
+        FOREACH ( view.Person ) UNDER view.Person WHERE { view.Person.Id > 5 } DO {
           view.Person.Id = 0
         }
 

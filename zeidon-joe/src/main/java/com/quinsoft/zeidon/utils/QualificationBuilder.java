@@ -318,6 +318,17 @@ public class QualificationBuilder
     }
 
     /**
+     * Excludes an entity type and its children from the activation.
+     *
+     * @param oper
+     * @return
+     */
+    public QualificationBuilder excludeEntity( String entityName )
+    {
+        return restricting( entityName ).addAttribQual( "EXCLUDE" );
+    }
+
+    /**
      * @deprecated  Use addAttribQual() instead.
      */
     @Deprecated
