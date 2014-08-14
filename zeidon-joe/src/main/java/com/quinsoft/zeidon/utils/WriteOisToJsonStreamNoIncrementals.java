@@ -3,6 +3,7 @@
  */
 package com.quinsoft.zeidon.utils;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -35,6 +36,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     private EnumSet<WriteOiFlags> flags;
 
     private JsonGenerator jg;
+    private int rootCount;
 
     @Override
     public void writeToStream( SerializeOi options )
@@ -75,48 +77,43 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         ViewEntity lastViewEntity = null;
 
         ViewEntity rootViewEntity = view.getViewOd().getRoot();
+        rootCount = view.cursor( rootViewEntity ).getEntityCount();
+        if ( rootCount > 1 )
+        {
+            jg.writeArrayFieldStart( rootViewEntity.getName() );
+            jg.writeStartObject();
+        }
+        else
+            jg.writeObjectFieldStart( rootViewEntity.getName() );
+        
         for ( EntityInstance ei:  view.cursor( rootViewEntity ).eachEntity() )
         {
+            if ( ei.hasPrevTwin() )
+                jg.writeStartObject();
+            
             lastViewEntity = writeEntity( ei, lastViewEntity );
+            
+            if ( ei.hasNextTwin() )
+                jg.writeEndObject();
         }
 
-        if ( lastViewEntity != null )
-        {
-            jg.writeEndObject();
-            if ( lastViewEntity.getMaxCardinality() > 1 )
-                jg.writeEndArray();
-        }
+        jg.writeEndObject();
+        if ( rootCount > 1 )
+            jg.writeEndArray();
     }
-
+    
     private ViewEntity writeEntity( EntityInstance ei, ViewEntity lastViewEntity ) throws Exception
     {
         try
         {
             // See if we need to open or close an array field.
             final ViewEntity viewEntity = ei.getViewEntity();
-            if ( lastViewEntity != viewEntity )
-            {
-                if ( lastViewEntity != null )
-                {
-                    jg.writeEndObject();
-
-                    if ( lastViewEntity.getMaxCardinality() > 1 )
-                        jg.writeEndArray();
-                }
-
-                lastViewEntity = viewEntity;
-
-                if ( viewEntity.getMaxCardinality() > 1 )
-                {
-                    jg.writeArrayFieldStart( viewEntity.getName() );
-                    jg.writeStartObject();
-                }
-                else
-                    jg.writeObjectFieldStart( viewEntity.getName() );
-            }
 
             for ( AttributeInstance attrib : ei.attributeList( false ) )
             {
+                if ( attrib.getViewAttribute().isHidden() )
+                    continue;
+                
                 String value = attrib.getString();
                 jg.writeStringField( attrib.getViewAttribute().getName(), value );
             }
@@ -124,13 +121,29 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             // Loop through the children and add them.
             ViewEntity lastChildViewEntity = null;
             for ( EntityInstance child : ei.getDirectChildren() )
-                lastChildViewEntity = writeEntity( child, lastChildViewEntity );
-
-            if ( lastChildViewEntity != null )
             {
+                ViewEntity childViewEntity = child.getViewEntity();
+                if ( ! child.hasPrevTwin() )
+                {
+                    if ( childViewEntity.getMaxCardinality() > 1 )
+                    {
+                        jg.writeArrayFieldStart( childViewEntity.getName() );
+                        jg.writeStartObject();
+                    }
+                    else
+                        jg.writeObjectFieldStart( viewEntity.getName() );
+                }
+                else
+                    jg.writeStartObject();
+                
+                lastChildViewEntity = writeEntity( child, lastChildViewEntity );
+                
                 jg.writeEndObject();
-                if ( lastChildViewEntity.getMaxCardinality() > 1 )
-                    jg.writeEndArray();
+                if ( ! child.hasNextTwin() )
+                {
+                    if ( childViewEntity.getMaxCardinality() > 1 )
+                        jg.writeEndArray();
+                }
             }
 
             return viewEntity;

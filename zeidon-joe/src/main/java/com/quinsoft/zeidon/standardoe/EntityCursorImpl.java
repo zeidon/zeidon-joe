@@ -2921,4 +2921,16 @@ class EntityCursorImpl implements EntityCursor
     {
         return getExistingInstance().getDirectChildren( allowHidden );
     }
+
+    @Override
+    public boolean hasNextTwin()
+    {
+        return getExistingInstance().hasNextTwin();
+    }
+
+    @Override
+    public boolean hasPrevTwin()
+    {
+        return getExistingInstance().hasPrevTwin();
+    }
 }

@@ -50,6 +50,16 @@ public interface EntityInstance
     EntityInstance getParent();
     EntityInstance getPrevTwin();
     EntityInstance getNextTwin();
+    
+    /**
+     * @return true if this EntityInstance has a next, non-hidden, twin.
+     */
+    boolean hasNextTwin();
+    
+    /**
+     * @return true if this EntityInstance has a previous, non-hidden, twin.
+     */
+    boolean hasPrevTwin();
 
     UUID getEntityUuid();
     UUID getObjectInstanceUuid();

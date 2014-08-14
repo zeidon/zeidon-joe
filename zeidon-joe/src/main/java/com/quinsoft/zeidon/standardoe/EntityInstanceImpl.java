@@ -496,6 +496,34 @@ class EntityInstanceImpl implements EntityInstance
         assert nextVersion == null || nextVersion.getViewEntity() == getViewEntity();
     }
 
+    @Override
+    public boolean hasNextTwin()
+    {
+        for ( EntityInstanceImpl ei = getNextTwin();
+              ei != null;
+              ei = ei.getNextTwin() )
+        {
+            if ( ! ei.isHidden() )
+                return true;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public boolean hasPrevTwin()
+    {
+        for ( EntityInstanceImpl ei = getPrevTwin();
+                ei != null;
+                ei = ei.getPrevTwin() )
+          {
+              if ( ! ei.isHidden() )
+                  return true;
+          }
+          
+          return false;
+    }
+
     /**
      * Copy all the next/prev pointers.
      *
