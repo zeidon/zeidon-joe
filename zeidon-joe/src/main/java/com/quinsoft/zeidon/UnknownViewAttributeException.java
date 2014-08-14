@@ -31,7 +31,7 @@ public class UnknownViewAttributeException extends ZeidonException
 
     public UnknownViewAttributeException( ViewEntity viewEntity, String attributeName )
     {
-        super( "Attribute name %s does not exist for View Entity", attributeName );
+        super( "Attribute name '%s' does not exist for View Entity", attributeName );
         prependViewEntity( viewEntity );
     }
 }
