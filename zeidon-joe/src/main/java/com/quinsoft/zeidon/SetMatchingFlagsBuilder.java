@@ -18,10 +18,10 @@ public class SetMatchingFlagsBuilder
     
     private EnumSet<SetMatchingFlags> flags = EnumSet.noneOf( SetMatchingFlags.class );
     
-    public SetMatchingFlagsBuilder from( EntityInstance sourceEi )
+    public int from( EntityInstance sourceEi )
     {
         srcEntityInstance = sourceEi;
-        return this;
+        return copy();
     }
     
     public SetMatchingFlagsBuilder to( EntityInstance targetEi )
