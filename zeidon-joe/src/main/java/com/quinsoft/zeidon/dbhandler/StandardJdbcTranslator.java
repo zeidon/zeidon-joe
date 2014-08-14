@@ -78,9 +78,9 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             dateTimeFormatter = DateTimeFormat.forPattern( dateFormat );
             dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat.substring(0,  dateFormat.length() - 4) );
         }
-        else if (dateFormat.indexOf("HH:mm:ss.SSS") < 0 && dateFormat.indexOf("HH:mm:ss") >= 0)	
+        else if (dateFormat.indexOf("HH:mm:ss.SSS") < 0 && dateFormat.indexOf("HH:mm:ss") >= 0)
         {
-        	dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + ".SSS" );       	
+        	dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + ".SSS" );
             dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat );
         }
         else
@@ -161,14 +161,14 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         {
             return appendNumeric( stmt, buffer, value );
         }
-        
+
         if ( domain instanceof BooleanDomain )
         {
-            Boolean b = (Boolean) value;
-            buffer.append( b ? "true" : "false" );
+            Object b = domain.convertExternalValue( task, viewAttribute, null, value );
+            buffer.append( (Boolean) b ? "true" : "false" );
             return true;
         }
-        
+
         Object v = domain.convertExternalValue( task, viewAttribute, null, value );
         String str = domain.convertToString( task, viewAttribute, v );
         return appendString( stmt, buffer, str );
