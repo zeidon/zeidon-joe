@@ -34,6 +34,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.AbstractNumericDomain;
+import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
@@ -161,6 +162,12 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             return appendNumeric( stmt, buffer, value );
         }
         
+        if ( domain instanceof BooleanDomain )
+        {
+            Boolean b = (Boolean) value;
+            buffer.append( b ? "true" : "false" );
+            return true;
+        }
         
         Object v = domain.convertExternalValue( task, viewAttribute, null, value );
         String str = domain.convertToString( task, viewAttribute, v );
