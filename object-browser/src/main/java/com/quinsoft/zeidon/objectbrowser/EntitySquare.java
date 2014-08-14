@@ -225,6 +225,7 @@ public class EntitySquare extends JPanel implements MouseListener
         switch ( cursor.getStatus() )
         {
             case NULL:
+            case NOT_LOADED:
                 // Do nothing.
                 break;
                 
