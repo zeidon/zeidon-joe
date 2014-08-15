@@ -695,6 +695,24 @@ class EntityInstanceImpl implements EntityInstance
         return null;
     }
 
+    /**
+     * Adds all child entities to 'this' EI to indicate they don't need to be lazy
+     * loaded.  Intended to be used by commit processing to indicate that an entity
+     * that has been created doesn't need to have its children loaded.
+     */
+    void flagAllChildrenAsLazyLoaded()
+    {
+        if ( ! getViewEntity().getLazyLoadConfig().hasLazyLoadChild() )
+            return;  // EI doesn't have any children who are lazy loaded.
+
+        Set<ViewEntity> set = getEntitiesLoadedLazily();
+        for ( ViewEntity child: getViewEntity().getChildren() )
+        {
+            // We'll just add all children regardless of whether they belong.
+            set.add( child );
+        }
+    }
+
     boolean hasChildBeenLazyLoaded( ViewEntity childViewEntity )
     {
         return getEntitiesLoadedLazily().contains( childViewEntity );
@@ -712,14 +730,14 @@ class EntityInstanceImpl implements EntityInstance
         if ( ! view.isLazyLoad() )
             return;
 
+        // Is the child entity instance loaded lazily?
+        if ( ! childViewEntity.getLazyLoadConfig().isLazyLoad() )
+            return; // Nope.
+
         // Has this entity been created?  If so then nothing has been written to
         // the DB that can be lazy loaded.
         if ( isCreated() )
             return;
-
-        // Is the child entity instance loaded lazily?
-        if ( ! childViewEntity.getLazyLoadConfig().isLazyLoad() )
-            return; // Nope.
 
         // Have we already loaded this child?
         if ( hasChildBeenLazyLoaded( childViewEntity ) )

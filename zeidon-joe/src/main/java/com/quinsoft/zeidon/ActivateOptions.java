@@ -41,6 +41,13 @@ public class ActivateOptions extends AbstractOptionsConfiguration
         activateFlags = EnumSet.of( ActivateFlags.fMULTIPLE );
     }
 
+    public ActivateOptions( View view )
+    {
+        super( view.getTask() );
+        activateFlags = EnumSet.of( ActivateFlags.fMULTIPLE );
+        viewOd = view.getViewOd();
+    }
+
     /**
      * @return the activateFlags
      */

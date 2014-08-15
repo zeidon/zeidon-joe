@@ -43,7 +43,18 @@ class ActivateObjectInstance
     ActivateObjectInstance( ViewImpl view )
     {
         this.task = view.getViewImpl().getTask();
-        this.options = view.getActivateOptions();
+        if ( view.getActivateOptions() == null )
+        {
+            // If we get here then we're in an edge case.  The current OI was created
+            // manually and has no ActivateOptions.  However, we're attempting to
+            // lazy load the children of an entity that was included from a different
+            // OI that was loaded from the db.  In this case we'll assume there is
+            // no qualification on the child being lazy-loaded and we'll create an
+            // empty ActivateOptions.
+            options = new ActivateOptions( view );
+        }
+        else
+            options = view.getActivateOptions();
     }
 
     View activate()

@@ -35,6 +35,7 @@ class EntityCursor( private[this] val view: View,
         this
     }
 
+    def exists = jentityCursor.checkExistenceOfEntity().isSet()
     def drop: CursorResult = jentityCursor.dropEntity()
     def drop( reposition: CursorPosition ): CursorResult = jentityCursor.dropEntity( reposition )
     def delete(): CursorResult = jentityCursor.deleteEntity()
@@ -83,14 +84,13 @@ class EntityCursor( private[this] val view: View,
     }
 
     /**
-     * Allows user to set a cursor to the first value using '=', e.g.
-     * view.cursor( _.attr = 10 )
-    def apply( func: (AbstractEntity) => Unit ): Boolean = {
-        val setter = new CursorSetter
-        func( setter )
-        setter.rc
+     * Set the cursor using a hashkey attribute value.
+     */
+    def set( setter: (HashSetter) => Any ): Boolean = {
+        val hashSetter = new HashSetter()
+        setter( hashSetter )
+        hashSetter.rc
     }
-   */
 
     def each( looper: => Any ) = {
         val iter = jentityCursor.eachEntity()
@@ -100,7 +100,7 @@ class EntityCursor( private[this] val view: View,
             looper
         }
     }
-    
+
     def iterator = {
         val iter = jentityCursor.eachEntity
         new Iterator[EntityInstance] {
@@ -117,12 +117,25 @@ class EntityCursor( private[this] val view: View,
         }
     }
 
-    class CursorSetter extends AbstractEntity( jviewEntity ) {
-       var rc: Boolean = false
+    class HashSetter extends AbstractEntity( jviewEntity ) {
+        var rc: Boolean = false
 
-       def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
-       override def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
-           rc = setFirst( jviewAttribute.getName(), value )
-       }
+        def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
+
+        override def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
+            if ( jviewAttribute.getHashKeyType() == AttributeHashKeyType.NONE )
+                throw new ZeidonException( "Cursor.set() can only be used on attributes defined with a hashkey" )
+                                  .prependViewAttribute( jviewAttribute )
+
+            val attributeName = jviewAttribute.getName()
+            rc = {
+                if ( value.isInstanceOf[ AttributeInstance ] )
+                    // If the value is of type AttributeInstance then convert it to an internal value.
+                    jentityCursor.setFirst( attributeName, value.asInstanceOf[ AttributeInstance ].
+                                            jattributeInstance.getValue ) == CursorResult.SET
+                else
+                    jentityCursor.setFirst( attributeName, value ) == CursorResult.SET
+            }
+        }
     }
 }

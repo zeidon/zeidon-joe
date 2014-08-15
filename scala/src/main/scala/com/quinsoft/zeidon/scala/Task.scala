@@ -17,7 +17,7 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
         this(jtask)
         objectEngine = oe
     }
-    
+
     def this( task: Task ) = this( task.jtask )
 
     def getView( viewName: String ): View = {
@@ -30,6 +30,7 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
 
     def deserializeOi = jtask.deserializeOi()
     def newView = new View( this )
+    def newView( source: View ) = new View( this ).from( source )
 }
 
 object Task {

@@ -37,16 +37,18 @@ class View( val task: Task ) extends Task(task) {
 		return this
 	}
 
-    def from( view: View ) {
+    def from( view: View ) = {
         jview = view.jview.newView()
         jviewOd = jview.getViewOd()
+        this
     }
 
-    def copyCursors( view: View ) {
+    def copyCursors( view: View ) = {
         if ( jview == null )
             throw new ZeidonException( "View has no OI" )
 
         jview.copyCursors(view.jview)
+        this
     }
 
     def activateEmpty() = {
@@ -76,7 +78,7 @@ class View( val task: Task ) extends Task(task) {
 
     def name( viewName: String ) = jview.setName( viewName )
     def assert = new AssertView( this )
-    def odName = if ( jviewOd  == null ) "*not specified*" else jviewOd.getName 
+    def odName = if ( jviewOd  == null ) "*not specified*" else jviewOd.getName
     def isEmpty = jview.isEmpty()
     def logObjectInstance = jview.logObjectInstance()
     def activateOptions = jview.getActivateOptions()
@@ -101,14 +103,14 @@ class View( val task: Task ) extends Task(task) {
     def applyDynamic( operationName: String)(args: AnyRef*): AnyRef = {
         println( s"method '$operationName' called with arguments ${args.mkString("'", "', '", "'")}" )
         validateViewOd
-        
+
         val oe = task.objectEngine
         val oper = oe.objectOperationMap.getObjectOperation(operationName, jviewOd, args: _*)
         return oper.invokeOperation(this, args:_*)
     }
 
     override def toString = if ( jview != null ) jview.toString() else "*undefined*"
-        
+
     /**
      * Validates that the View OD is specified.
      */
@@ -123,7 +125,7 @@ object View {
      * Convert a Java View to a Scala View
      */
     implicit def jview2view( jview: com.quinsoft.zeidon.View ) = new com.quinsoft.zeidon.scala.View( jview )
-    
+
     /**
      * Convert Scala View to Java View.
      */

@@ -66,4 +66,10 @@ public class LazyLoadConfig
     {
         this.lazyLoadParent = lazyLoadParent;
     }
+
+    @Override
+    public String toString()
+    {
+        return flags.toString();
+    }
 }

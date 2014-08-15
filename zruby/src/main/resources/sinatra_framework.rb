@@ -183,11 +183,15 @@ def list_entities( top_entity, args = {} )
       html << "<td></td>" if entity != top_entity
       entity.attributes.each do |attrib|
         next if attrib.is_hidden
-        value = attrib.getStringFromAttribute(attrib.name, nil)
-        if value && value.length > 100
-          value = /^([^\n]*)/.match(value)[1][0..100] + "..."
+        if entity.isNull
+          html << "<td></td>\n"
+        else
+          value = attrib.getStringFromAttribute(attrib.name, nil)
+          if value && value.length > 100
+            value = /^([^\n]*)/.match(value)[1][0..100] + "..."
+          end
+          html << "<td>#{value}</td>\n"
         end
-        html << "<td>#{value}</td>\n"
       end
     end
 

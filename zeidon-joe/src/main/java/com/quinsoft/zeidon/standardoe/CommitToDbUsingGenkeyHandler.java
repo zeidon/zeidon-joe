@@ -6,7 +6,6 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
@@ -18,7 +17,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
-import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
@@ -152,51 +150,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
      */
     private void cleanupOI(ObjectInstance oi)
     {
-        // We can't use an iterator because we are potentially removing entities.
-        for ( EntityInstanceImpl ei = oi.getRootEntityInstance();
-              ei != null;
-              ei = ei.getNextHier() )
-        {
-            for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
-            {
-                if ( linked.dbhDeleted || linked.dbhExcluded )
-                {
-                    linked.dropEntity();  // Remove the ei from the chain.
-                    continue;
-                }
-
-                if ( linked.dbhCreated )
-                    linked.setCreated( false );
-                if ( linked.dbhIncluded )
-                    linked.setIncluded( false );
-                if ( linked.dbhUpdated )
-                    linked.setUpdated( false );
-
-                ViewEntity viewEntity = linked.getViewEntity();
-
-                // For created/included entities we need to indicate that they don't have
-                // any children that need to be lazy-loaded.
-                if ( linked.dbhCreated || linked.dbhIncluded )
-                {
-                    LazyLoadConfig config = viewEntity.getLazyLoadConfig();
-                    if ( config.hasLazyLoadChild() )
-                    {
-                        Set<ViewEntity> lazySet = linked.getEntitiesLoadedLazily();
-                        for ( ViewEntity child : viewEntity.getChildren() )
-                        {
-                            if ( child.getLazyLoadConfig().isLazyLoad() )
-                                lazySet.add( child );
-                        }
-                    }
-                }
-
-                for ( ViewAttribute viewAttrib : viewEntity.getAttributes() )
-                {
-                    if ( viewAttrib.isPersistent() )
-                        linked.getInternalAttribute( viewAttrib ).setUpdated( false );
-                }
-            }
-        }
+        CommitHelper.cleanupOI( oi );
     }
 
     private void commitView(ViewImpl view)
