@@ -44,11 +44,6 @@ import com.quinsoft.zeidon.WriteOiFlags;
  */
 class ViewChooser extends JPanel implements ActionListener
 {
-    interface ViewSelected
-    {
-        void viewSelected( View view );
-    }
-
     private static final long serialVersionUID = 1L;
     private static final String REFRESH  = "Refresh";
     private static final String WRITEOI  = "WriteOI";
@@ -62,27 +57,25 @@ class ViewChooser extends JPanel implements ActionListener
      * @param objectEngine
      * @throws HeadlessException
      */
-    ViewChooser(BrowserEnvironment environment, ViewSelected viewSelected )
+    ViewChooser(BrowserEnvironment environment )
     {
         super();
         this.env = environment;
         this.setName( "ViewChooser" );
+        setLayout( new BorderLayout() );
 
-        viewList = new ViewList( this.env, viewSelected );
-        taskList = new TaskList( this.env, viewList );
+        viewList = new ViewList( this.env );
+        taskList = new TaskList( this.env );
 
         JScrollPane scrollableTasks = new JScrollPane( taskList );
         JScrollPane scrollableViews = new JScrollPane( viewList );
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                                              scrollableTasks, scrollableViews);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollableTasks, scrollableViews );
         splitPane.setName( "ViewChooserSplitPane" );
-
-        setLayout( new BorderLayout() );
 
         JPanel buttonPane = new JPanel();
         addButton( buttonPane, "Refresh", REFRESH );
-        final JCheckBox showUnnamed = new JCheckBox( "Show Unnamed Views", env.isShowUnnamedViews() );
+        final JCheckBox showUnnamed = new JCheckBox( "Unnamed", env.isShowUnnamedViews() );
         showUnnamed.addItemListener( new ItemListener(){
             @Override
             public void itemStateChanged( ItemEvent e )
@@ -92,7 +85,7 @@ class ViewChooser extends JPanel implements ActionListener
             }} );
         buttonPane.add( showUnnamed );
         addButton( buttonPane, "Write OI", WRITEOI );
-        addButton( buttonPane, "Save Window Settings", SAVE_ENV );
+        addButton( buttonPane, "Save Settings", SAVE_ENV );
 
         add( splitPane, BorderLayout.CENTER );
         add( buttonPane, BorderLayout.SOUTH );

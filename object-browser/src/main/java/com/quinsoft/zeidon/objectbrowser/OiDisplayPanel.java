@@ -24,17 +24,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
@@ -44,41 +37,33 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 
 /**
  * This is the frame around the OI display.
- * 
+ *
  * @author DG
  *
  */
-class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionListener
+class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionListener
 {
     private static final long serialVersionUID = 1L;
     private static final String FIRST_CURSOR = "FirstCursor";
     private static final String PREV_CURSOR  = "PreviousCursor";
     private static final String NEXT_CURSOR  = "NextCursor";
     private static final String LAST_CURSOR  = "LastCursor";
-    
+
     private final BrowserEnvironment env;
-    private final JFrame  parentFrame;
-    private final boolean isMainOiDisplay;
-    private final AttributeDialog attributeDialog;
     private       ViewEntity selectedViewEntity;
-    private final Set<JDialog> childFrames; 
     private final BorderLayout borderLayout;
     private       OiDisplay oiDisplay;
     private       View view;
-    private final TwinDialog twinDialog;
+    private       TwinDialog twinDialog;
 
-    OiDisplayDialog( BrowserEnvironment env, JFrame parentFrame, boolean isMainOiDisplay )
+    OiDisplayPanel( BrowserEnvironment env )
     {
         super( );
         this.env = env;
-        this.parentFrame = parentFrame;
-        this.isMainOiDisplay = isMainOiDisplay;
-        childFrames = new HashSet<JDialog>();
-        setTitle( "No OI selected" );
         setSize( new Dimension( 1000, 200 ) );
         borderLayout = new BorderLayout();
         setLayout( borderLayout );
-        
+
         //
         // Set up buttons.
         //
@@ -89,28 +74,24 @@ class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionL
         addButton( buttonPane, "Next", NEXT_CURSOR );
         addButton( buttonPane, "Last", LAST_CURSOR );
         add( buttonPane, BorderLayout.NORTH );
-        
-        attributeDialog = new AttributeDialog( env, this.parentFrame );
+/*
+        attributeDialog = new AttributeDialog( env, this.parentContainer );
         attributeDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         childFrames.add( attributeDialog );
         env.restore( attributeDialog );
-        
-        twinDialog = new TwinDialog( env, this.parentFrame );
+
+        twinDialog = new TwinDialog( env, this.parentContainer );
         twinDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         childFrames.add( twinDialog );
         env.restore( twinDialog );
-        
-        if ( isMainOiDisplay )
-            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
-        
-        addComponentListener( new DisplayVisibleHandler() );
+*/
         setVisible( true );
     }
-    
+
     void saveEnvironment()
     {
         env.save( this );
-        env.save( attributeDialog );
+//        env.save( attributeDialog );
         env.save( twinDialog );
     }
 
@@ -118,7 +99,7 @@ class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionL
     {
         saveEnvironment();
     }
-    
+
     private void addButton( JPanel buttonPane, String title, String command )
     {
         JButton button = new JButton( title );
@@ -126,31 +107,13 @@ class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionL
         button.addActionListener( this );
         buttonPane.add( button );
     }
-    
-    @Override
-    public void setTitle( String title )
-    {
-        if ( isMainOiDisplay )
-            super.setTitle( "** Main Display ** " + title );
-        else
-            super.setTitle( title );
-    }
-    
-    @Override
-    public void dispose()
-    {
-        for ( JDialog dialog : childFrames )
-            dialog.dispose();
-        super.dispose();
-    }
-    
+
     void displayView( View view )
     {
         this.view = view;
-        setTitle( view.getViewOd().getName() );
         if ( oiDisplay != null )
             remove( oiDisplay );
-        
+
         oiDisplay = new OiDisplay( env, view, this, this );
 
         add( oiDisplay, BorderLayout.CENTER );
@@ -161,8 +124,8 @@ class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionL
     public void entitySelected( ViewEntity viewEntity, EntityInstance ei )
     {
         selectedViewEntity = viewEntity;
-        attributeDialog.setEntity( viewEntity, ei );
-        twinDialog.setEntityInstance( ei );
+        env.entitySelected( viewEntity, ei );
+//        twinDialog.setEntityInstance( ei );
     }
 
     @Override
@@ -174,33 +137,12 @@ class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionL
         oiDisplay.repositionScroll( p );
     }
 
-    private class DisplayVisibleHandler extends ComponentAdapter
-    {
-        @Override
-        public void componentHidden(ComponentEvent evt)
-        {
-            for ( JDialog child : childFrames )
-            {
-                child.setVisible( false );
-            }
-        }
-
-        @Override
-        public void componentShown(ComponentEvent evt)
-        {
-            for ( JDialog child : childFrames )
-            {
-                child.setVisible( true );
-            }
-        }
-    }
-
     @Override
     public void actionPerformed(ActionEvent action)
     {
         if ( selectedViewEntity == null ) // Possible when dialog is first displayed.
             return;
-        
+
         if ( action.getActionCommand().equals( FIRST_CURSOR ) )
             view.cursor( selectedViewEntity ).setFirst();
         else
@@ -214,7 +156,7 @@ class OiDisplayDialog extends JDialog implements EntitySelectedListener, ActionL
             view.cursor( selectedViewEntity ).setLast();
         else
             throw new ZeidonException( "Internal action error" );
-        
+
         entitySelected( selectedViewEntity, view.cursor( selectedViewEntity ).getEntityInstance() );
         oiDisplay.repaint();
     }

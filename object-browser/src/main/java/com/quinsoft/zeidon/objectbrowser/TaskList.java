@@ -38,26 +38,25 @@ class TaskList extends JTable
     private static String[] TASKLISTCOLS = { "Task ID", "Application Name" };
 
     private final BrowserEnvironment env;
-    private final ViewList           viewList;
-    
+
     private List<String> currentTaskList;
     private DefaultTableModel model;
 
     /**
      * @param env
      */
-    TaskList(BrowserEnvironment env, ViewList vList )
+    TaskList(BrowserEnvironment env )
     {
         super();
         this.setName( "TaskList" );
         this.env = env;
-        viewList = vList;
 
         model = new DefaultTableModel();
         model.setColumnIdentifiers( TASKLISTCOLS );
         setModel( model );
 
         addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 taskListMouseClicked(evt);
             }
@@ -65,12 +64,12 @@ class TaskList extends JTable
 
         refresh();
     }
-    
+
     void taskListMouseClicked( MouseEvent evt )
     {
         int idx = getSelectedRow();
         Task task = getTaskByIdx( idx );
-        viewList.refresh( task );
+        env.getViewList().refresh( task );
     }
 
     void refresh()
@@ -79,10 +78,10 @@ class TaskList extends JTable
         int idx = getSelectedRow();
         if ( idx >= 0 )
             selectedTask = getTaskByIdx( idx );
-        
+
         while ( model.getRowCount() > 0 )
             model.removeRow( 0 );
-        
+
         Object[] row = new Object[ TASKLISTCOLS.length ];
 
         List<String> taskList = new ArrayList<String>();
@@ -91,22 +90,22 @@ class TaskList extends JTable
         {
             if ( ! task.isValid() )
                 continue;  // This task was dropped.
-            
+
             if ( task == selectedTask )
                 idx = taskList.size();
-            
+
             taskList.add( task.getTaskId() );
             row[0] = task.getTaskId();
             row[1] = task.getApplication().getName();
             model.addRow( row );
         }
-        
+
         currentTaskList = taskList;
-        
+
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );
     }
-    
+
     Task getTaskByIdx( int idx )
     {
         String id = currentTaskList.get( idx );
@@ -117,7 +116,7 @@ class TaskList extends JTable
     {
         return getTaskByIdx( 1 );
     }
-    
+
     @Override
     public String toString()
     {

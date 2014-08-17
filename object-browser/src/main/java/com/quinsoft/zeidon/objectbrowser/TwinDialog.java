@@ -19,9 +19,10 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
+import java.awt.Container;
+
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -44,7 +45,7 @@ class TwinDialog extends JDialog
     private final JTable table;
     private final DefaultTableModel model;
 
-    TwinDialog( BrowserEnvironment environment, JFrame parentFrame )
+    TwinDialog( BrowserEnvironment environment, Container parentFrame )
     {
         super( );
         env = environment;
@@ -54,7 +55,7 @@ class TwinDialog extends JDialog
 
         DefaultListSelectionModel selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
-        
+
         table = new JTable();
         table.setSelectionModel( selectionModel );
         table.setName( "TwinTableDialog" );
@@ -63,11 +64,11 @@ class TwinDialog extends JDialog
         table.setModel( model );
         table.setCellSelectionEnabled( false );
         table.setRowSelectionAllowed( true );
-        
+
         JScrollPane scroll = new JScrollPane( table );
         add( scroll );
     }
-    
+
     private String getAttributeString( EntityInstance ei )
     {
         StringBuilder sb = new StringBuilder();
@@ -77,21 +78,21 @@ class TwinDialog extends JDialog
         {
             if ( viewAttribute.isKey() )
                 continue;
-            
+
             if ( viewAttribute.isHidden() )
                 continue;
-            
+
             sb.append( viewAttribute.getName() )
               .append( ": " )
               .append( ei.getStringFromAttribute( viewAttribute ) )
               .append( "; " );
-            
+
             if ( ++count > 5 )
                 break;
         }
         return sb.toString();
     }
-    
+
     void setEntityInstance( EntityInstance entityInstance )
     {
         while ( model.getRowCount() > 0 )
@@ -108,7 +109,7 @@ class TwinDialog extends JDialog
         EntityInstance first = entityInstance;
         while ( first.getPrevTwin() != null )
             first = first.getPrevTwin();
-        
+
         Object[] row = new Object[COLS.length];
 
         int idx = -1;
@@ -116,7 +117,7 @@ class TwinDialog extends JDialog
         {
             if ( ei == entityInstance )
                 idx = model.getRowCount();
-            
+
             int col = 0;
             row[col++] = model.getRowCount() + 1;
             row[col++] = EntitySquare.getKeyString( ei, ei.getViewEntity() );

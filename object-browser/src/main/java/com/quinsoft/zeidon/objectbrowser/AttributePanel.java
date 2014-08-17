@@ -23,10 +23,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -38,13 +36,15 @@ import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 
 /**
+ * Displays attribute values for a selected entity instance.
+ *
  * @author DG
  *
  */
-class AttributeDialog extends JDialog
+class AttributePanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
-    
+
     private static String[] COLS = { "Attr Name", "Value", "UP?" };
     private static String[] LINKED_COLS = { "Entity Name", "Entity Key", "OI ID" };
 
@@ -56,15 +56,13 @@ class AttributeDialog extends JDialog
     private final JTable linkedTable;
     private final JSplitPane splitPane;
 
-    AttributeDialog( BrowserEnvironment environment, JFrame parentFrame )
+    AttributePanel( BrowserEnvironment environment )
     {
-        super( );
+        super(  new BorderLayout() );
         this.env = environment;
         setName("AttributeDialog");
-        setTitle( "Attribute List -- No entity selected" );
 
         JPanel optionPane = new JPanel();
-        new BoxLayout( optionPane, BoxLayout.X_AXIS );
         showHidden = new JCheckBox("Show Hidden", this.env.isShowHiddenAttributes() );
         optionPane.add( showHidden );
         showHidden.addItemListener( new ItemListener(){
@@ -74,7 +72,7 @@ class AttributeDialog extends JDialog
                 env.setShowHiddenAttributes( showHidden.isSelected() );
                 refresh();
             }} );
-        
+
         showNull = new JCheckBox("Show Null", this.env.isShowNullAttributes() );
         showNull.addItemListener( new ItemListener(){
             @Override
@@ -85,9 +83,9 @@ class AttributeDialog extends JDialog
             }} );
 
         optionPane.add( showNull );
-        
+
         add( optionPane, BorderLayout.NORTH );
-        
+
         attributeTable = new JTable();
         attributeTable.setName( "AttributeTableDialog" );
         DefaultTableModel model = new DefaultTableModel();
@@ -102,13 +100,16 @@ class AttributeDialog extends JDialog
 
         JScrollPane scrollAttr = new JScrollPane( attributeTable );
         JScrollPane scrollLinked = new JScrollPane( linkedTable );
-        
-        splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollAttr, scrollLinked  );
+        JPanel linkedPanel = new JPanel( new BorderLayout() );
+        linkedPanel.add( new JLabel( "Linked Entity Instances" ), BorderLayout.NORTH );
+        linkedPanel.add( scrollLinked, BorderLayout.CENTER );
+
+        splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollAttr, linkedPanel  );
         splitPane.setName( "AttributeSplitPane" );
 
         add( splitPane, BorderLayout.CENTER );
-        
-        setSize( 200, 400 );
+
+//        setSize( 200, 400 );
         setVisible( true );
     }
 
@@ -116,15 +117,14 @@ class AttributeDialog extends JDialog
     {
         if ( currentEntityInstance == null )
             return;
-        
+
         setEntity( currentEntityInstance.getViewEntity(), currentEntityInstance );
     }
-    
+
     void setEntity( ViewEntity viewEntity, EntityInstance ei )
     {
         splitPane.setDividerLocation( 0.900 );
         currentEntityInstance = ei;
-        setTitle( viewEntity.getName() );
 
         DefaultTableModel attrModel = (DefaultTableModel) attributeTable.getModel();
         while ( attrModel.getRowCount() > 0 )
@@ -133,7 +133,7 @@ class AttributeDialog extends JDialog
         DefaultTableModel linkedModel = (DefaultTableModel) linkedTable.getModel();
         while ( linkedModel.getRowCount() > 0 )
             linkedModel.removeRow( 0 );
-        
+
         if ( ei != null )
         {
             Object[] row = new Object[COLS.length];
@@ -149,18 +149,18 @@ class AttributeDialog extends JDialog
                 {
                     if ( viewAttribute.isHidden() && ! env.isShowHiddenAttributes() )
                         continue;
-                    
+
                     if ( ei.isAttributeNull( viewAttribute ) && ! env.isShowNullAttributes() )
                         continue;
                 }
-                
+
                 int col = 0;
                 row[col++] = viewAttribute.getName();
                 row[col++] = ei.getStringFromAttribute( viewAttribute );
                 row[col++] = ei.isAttributeUpdated( viewAttribute ) ? "Y" : "";
                 attrModel.addRow( row );
             }
-            
+
             row = new Object[LINKED_COLS.length];
             for ( EntityInstance linked : ei.getLinkedInstances() )
             {

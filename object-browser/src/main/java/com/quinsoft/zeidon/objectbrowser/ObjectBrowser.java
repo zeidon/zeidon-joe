@@ -22,36 +22,29 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import com.quinsoft.zeidon.BrowserStarter;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectbrowser.ViewChooser.ViewSelected;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 
 /**
  * @author DG
  *
  */
-public class ObjectBrowser implements ViewSelected
+public class ObjectBrowser
 {
     private final BrowserEnvironment env;
-    
+
     private JFrame          mainFrame;
-    private OiDisplayDialog oiDisplay;
-    private Set<JDialog>    childFrames; 
 
     public ObjectBrowser( ObjectEngine oe )
     {
         super();
         env = new BrowserEnvironment( oe, this );
-        childFrames = new HashSet<JDialog>();
     }
 
     protected void startup()
@@ -60,23 +53,19 @@ public class ObjectBrowser implements ViewSelected
         mainFrame = new JFrame();
         mainFrame.setTitle( "Zeidon Object Browser" );
         mainFrame.setName( "Object Browser" );
-        ViewChooser viewChooser = new ViewChooser( env, this );
-        mainFrame.getContentPane().add( viewChooser );
-        oiDisplay = new OiDisplayDialog( env, mainFrame, true );
-        oiDisplay.setName( "MainOiDisplay" );
-        childFrames.add( oiDisplay );
-        
+        mainFrame.getContentPane().add( new MainPanel( env ) );
+
         BrowserEventHandler listener = new BrowserEventHandler();
         mainFrame.addWindowStateListener( listener );
         mainFrame.addWindowListener( listener );
         mainFrame.pack();
 
         env.restore( this );
-        env.restore( oiDisplay );
-        
+//        env.restore( oiDisplay );
+
         // Display the window.
         mainFrame.setVisible( true );
-        
+
         // Use invokeLater otherwise toFront() won't always work.
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -100,41 +89,21 @@ public class ObjectBrowser implements ViewSelected
         System.out.println( "Done" );
     }
 
-    @Override
-    public void viewSelected( final View view )
-    {
-        // Use invokeLater otherwise toFront() won't always work.
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                oiDisplay.toFront();
-                View v = view.newView();  // Copy the view so that we don't mess up the original cursors.
-                v.setLazyLoad( false );   // Turn off lazy loading so browser doesn't change data.
-                oiDisplay.displayView( v );
-            }
-        });
-    }
-    
     void saveEnvironment()
     {
         env.save( ObjectBrowser.this );
-        oiDisplay.saveEnvironment();
         env.getOe().getSystemTask().log().info( "Browser environment saved" );
     }
-    
+
     private class BrowserEventHandler extends WindowAdapter
     {
+        @Override
         public void windowClosing(WindowEvent e)
         {
             env.save( ObjectBrowser.this );
-            oiDisplay.shutdown();
             mainFrame.setVisible(false);
-            for ( JDialog dialog : childFrames )
-                dialog.dispose();
             mainFrame.dispose();
             mainFrame = null;
-            childFrames = null;
-            oiDisplay = null;
         }
 
         @Override
@@ -146,11 +115,6 @@ public class ObjectBrowser implements ViewSelected
                 case Frame.ICONIFIED:
                     visible = false;
                     break;
-            }
-            
-            for ( JDialog child : childFrames )
-            {
-                child.setVisible( visible );
             }
         }
     }

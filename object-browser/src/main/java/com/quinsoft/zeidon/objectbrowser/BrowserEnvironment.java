@@ -20,6 +20,7 @@
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +28,16 @@ import java.util.Map;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.SingleFrameApplication;
 
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
  * This object contains info about the browser environment that can be passed around
  * to the different components.
- * 
+ *
  * @author DG
  *
  */
@@ -44,20 +47,23 @@ class BrowserEnvironment
     private static final String OIDISPLAY_SESSION_FILE = "OiDisplayState.xml";
     private static final String ATTRIBUTEDIALOG_SESSION_FILE = "AttributeDialog.xml";
     private static final String TWINDIALOG_SESSION_FILE = "TwinDialog.xml";
-    
+
     private final ObjectEngine oe;
     private final ObjectBrowser objectBrowser;
     private final Map<ViewOd, ViewOdLayout> odLayouts;
     private final BrowserContext context;
-    
+
     private int     painterScaleFactor = 8;
     private boolean showHiddenAttributes = false;
     private boolean showNullAttributes   = true;
     private boolean showUnnamedViews     = true;
+    private OiDisplayPanel oiDisplay;
+    private ViewList viewList;
+    private AttributePanel attributePanel;
 
     /**
      * @param oe
-     * @param objectBrowser 
+     * @param objectBrowser
      */
     BrowserEnvironment( ObjectEngine oe, ObjectBrowser objectBrowser )
     {
@@ -77,7 +83,7 @@ class BrowserEnvironment
     {
         return getOdLayout( view.getViewOd() );
     }
-    
+
     synchronized ViewOdLayout getOdLayout( ViewOd viewOd )
     {
         ViewOdLayout layout = odLayouts.get( viewOd );
@@ -86,7 +92,7 @@ class BrowserEnvironment
             layout = new ViewOdLayout( this, viewOd );
             odLayouts.put( viewOd, layout );
         }
-        
+
         return layout;
     }
 
@@ -97,7 +103,7 @@ class BrowserEnvironment
     {
         return painterScaleFactor;
     }
-    
+
     int getDefaultPainterScale()
     {
         return 8;
@@ -122,7 +128,7 @@ class BrowserEnvironment
         return restore( browser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
-    BrowserEnvironment restore( OiDisplayDialog display )
+    BrowserEnvironment restore( OiDisplayPanel display )
     {
         return restore( display, OIDISPLAY_SESSION_FILE );
     }
@@ -136,7 +142,7 @@ class BrowserEnvironment
     {
         objectBrowser.saveEnvironment();
     }
-    
+
     BrowserEnvironment save( Component component, String filename )
     {
         try
@@ -156,7 +162,7 @@ class BrowserEnvironment
         return save( browser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
-    BrowserEnvironment save( OiDisplayDialog display )
+    BrowserEnvironment save( OiDisplayPanel display )
     {
         return save( display, OIDISPLAY_SESSION_FILE );
     }
@@ -175,27 +181,27 @@ class BrowserEnvironment
         int n = Math.min( 15, Math.max( 1, painterScaleFactor ) );
         if ( n == this.painterScaleFactor )
             return false;
-        
+
         this.painterScaleFactor = n;
         return true;
     }
-    
+
     void warn( String format, Object...args )
     {
         oe.getSystemTask().log().warn( format, args );
     }
-    
+
     void error( String format, Object...args )
     {
         oe.getSystemTask().log().error( format, args );
     }
 
-    void restore( AttributeDialog attributeDialog )
+    void restore( AttributePanel attributeDialog )
     {
         restore( attributeDialog, ATTRIBUTEDIALOG_SESSION_FILE );
     }
-    
-    void save( AttributeDialog attributeDialog )
+
+    void save( AttributePanel attributeDialog )
     {
         save( attributeDialog, ATTRIBUTEDIALOG_SESSION_FILE );
     }
@@ -241,7 +247,7 @@ class BrowserEnvironment
     {
         return showUnnamedViews;
     }
-    
+
     private class BrowserContext extends ApplicationContext
     {
         public BrowserContext()
@@ -250,7 +256,23 @@ class BrowserEnvironment
             setApplicationClass( ObjectBrowserState.class );
         }
     }
-    
+
+    public OiDisplayPanel createOiDisplay( Container container )
+    {
+        oiDisplay = new OiDisplayPanel( this );
+        return oiDisplay;
+    }
+
+    public ViewList getViewList()
+    {
+        return viewList;
+    }
+
+    public void setViewList( ViewList viewList )
+    {
+        this.viewList = viewList;
+    }
+
     /**
      * This is a dummy class so that we can use the Application context to save window state.
      */
@@ -260,5 +282,34 @@ class BrowserEnvironment
         protected void startup()
         {
         }
+    }
+
+    public void viewSelected( final View view )
+    {
+        // Use invokeLater otherwise toFront() won't always work.
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                View v = view.newView();  // Copy the view so that we don't mess up the original cursors.
+                v.setLazyLoad( false );   // Turn off lazy loading so browser doesn't change data.
+                oiDisplay.displayView( v );
+            }
+        });
+    }
+
+    public AttributePanel createAttributePanel()
+    {
+        attributePanel = new AttributePanel( this );
+        return attributePanel;
+    }
+
+    public AttributePanel getAttributePanel()
+    {
+        return attributePanel;
+    }
+
+    public void entitySelected( ViewEntity viewEntity, EntityInstance ei )
+    {
+        attributePanel.setEntity( viewEntity, ei );
     }
 }

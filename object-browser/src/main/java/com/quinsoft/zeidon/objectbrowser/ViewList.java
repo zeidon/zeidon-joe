@@ -28,7 +28,6 @@ import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectbrowser.ViewChooser.ViewSelected;
 
 /**
  * @author DG
@@ -39,22 +38,20 @@ public class ViewList extends JTable
     private static final long serialVersionUID = 1L;
     private static String[] VIEWLISTCOLS = { "View ID", "OI ID", "Name", "OD Name" };
     private static String   UNNAMED_VIEW = "*** unnamed ***";
-    
+
     private final BrowserEnvironment env;
     private final DefaultTableModel  model;
-    private final ViewSelected       viewSelected;
 
     private List<View> currentViewList;
-    
+
     /**
-     * @param viewSelected 
+     * @param viewSelected
      * @param objectEngine
      */
-    ViewList(BrowserEnvironment env, ViewSelected selector )
+    ViewList( final BrowserEnvironment env )
     {
         super();
         this.env = env;
-        this.viewSelected = selector;
 
         this.setName( "TaskList" );
         model = new DefaultTableModel();
@@ -62,13 +59,15 @@ public class ViewList extends JTable
         setModel( model );
 
         addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int idx = getSelectedRow();
-                View v = currentViewList.get( idx );
-                viewSelected.viewSelected( v );
+                final View v = currentViewList.get( idx );
+                env.viewSelected( v );
             }
         });
 
+        env.setViewList( this );
         refresh( null );
     }
 
@@ -76,14 +75,14 @@ public class ViewList extends JTable
     {
         if ( currentViewList.size() == 0 )
             return null;
-        
+
         int idx = getSelectedRow();
         if ( idx < 0 )
             return null;
-        
+
         return currentViewList.get( idx );
     }
-    
+
     void refresh( Task task )
     {
         View selectedView = null;
@@ -107,7 +106,7 @@ public class ViewList extends JTable
                     if ( ! env.isShowUnnamedViews() )
                         continue;
 
-                    // We're going to add a name so create a temporary list. 
+                    // We're going to add a name so create a temporary list.
                     nameList = new ArrayList<String>();
                     nameList.add( UNNAMED_VIEW );
                 }
@@ -128,7 +127,7 @@ public class ViewList extends JTable
                 }
             }
         }
-        
+
         currentViewList = viewList;
 
         if ( idx >= 0 )
