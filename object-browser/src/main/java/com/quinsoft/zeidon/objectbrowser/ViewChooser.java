@@ -50,7 +50,7 @@ class ViewChooser extends JPanel implements ActionListener
     private static final String SAVE_ENV = "SaveEnv";
 
     private final BrowserEnvironment env;
-    private final ViewList viewList;
+    private final ViewListTable viewList;
     private final TaskList taskList;
 
     /**
@@ -64,7 +64,7 @@ class ViewChooser extends JPanel implements ActionListener
         this.setName( "ViewChooser" );
         setLayout( new BorderLayout() );
 
-        viewList = new ViewList( this.env );
+        viewList = new ViewListTable( this.env );
         taskList = new TaskList( this.env );
 
         JScrollPane scrollableTasks = new JScrollPane( taskList );

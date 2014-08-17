@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.View;
  * @author DG
  *
  */
-public class ViewList extends JTable
+public class ViewListTable extends JTable
 {
     private static final long serialVersionUID = 1L;
     private static String[] VIEWLISTCOLS = { "View ID", "OI ID", "Name", "OD Name" };
@@ -42,13 +42,11 @@ public class ViewList extends JTable
     private final BrowserEnvironment env;
     private final DefaultTableModel  model;
 
-    private List<View> currentViewList;
-
     /**
      * @param viewSelected
      * @param objectEngine
      */
-    ViewList( final BrowserEnvironment env )
+    ViewListTable( final BrowserEnvironment env )
     {
         super();
         this.env = env;
@@ -62,7 +60,7 @@ public class ViewList extends JTable
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int idx = getSelectedRow();
-                final View v = currentViewList.get( idx );
+                final View v = env.getCurrentViewList().get( idx );
                 env.viewSelected( v );
             }
         });
@@ -73,14 +71,14 @@ public class ViewList extends JTable
 
     View getSelectedView()
     {
-        if ( currentViewList.size() == 0 )
+        if ( env.getCurrentViewList().size() == 0 )
             return null;
 
         int idx = getSelectedRow();
         if ( idx < 0 )
             return null;
 
-        return currentViewList.get( idx );
+        return env.getCurrentViewList().get( idx );
     }
 
     void refresh( Task task )
@@ -88,7 +86,7 @@ public class ViewList extends JTable
         View selectedView = null;
         int idx = getSelectedRow();
         if ( idx >= 0 )
-            selectedView = currentViewList.get( idx );
+            selectedView = env.getCurrentViewList().get( idx );
 
         while ( model.getRowCount() > 0 )
             model.removeRow( 0 );
@@ -128,7 +126,7 @@ public class ViewList extends JTable
             }
         }
 
-        currentViewList = viewList;
+//        currentViewList = viewList;
 
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );

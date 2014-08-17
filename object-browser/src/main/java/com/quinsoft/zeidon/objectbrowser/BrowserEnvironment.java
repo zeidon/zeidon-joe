@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jdesktop.application.ApplicationContext;
@@ -41,7 +42,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author DG
  *
  */
-class BrowserEnvironment
+abstract class BrowserEnvironment
 {
     private static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
     private static final String OIDISPLAY_SESSION_FILE = "OiDisplayState.xml";
@@ -49,7 +50,6 @@ class BrowserEnvironment
     private static final String TWINDIALOG_SESSION_FILE = "TwinDialog.xml";
 
     private final ObjectEngine oe;
-    private final ObjectBrowser objectBrowser;
     private final Map<ViewOd, ViewOdLayout> odLayouts;
     private final BrowserContext context;
 
@@ -58,18 +58,18 @@ class BrowserEnvironment
     private boolean showNullAttributes   = true;
     private boolean showUnnamedViews     = true;
     private OiDisplayPanel oiDisplay;
-    private ViewList viewList;
+    private ViewListTable viewList;
     private AttributePanel attributePanel;
+    private List<View> currentViewList;
 
     /**
      * @param oe
      * @param objectBrowser
      */
-    BrowserEnvironment( ObjectEngine oe, ObjectBrowser objectBrowser )
+    BrowserEnvironment( ObjectEngine oe )
     {
         super();
         this.oe = oe;
-        this.objectBrowser = objectBrowser;
         odLayouts = new HashMap<ViewOd, ViewOdLayout>();
         context = new BrowserContext();
     }
@@ -136,11 +136,6 @@ class BrowserEnvironment
     BrowserEnvironment restore( TwinDialog dialog )
     {
         return restore( dialog, TWINDIALOG_SESSION_FILE );
-    }
-
-    void saveEnvironment()
-    {
-        objectBrowser.saveEnvironment();
     }
 
     BrowserEnvironment save( Component component, String filename )
@@ -263,12 +258,12 @@ class BrowserEnvironment
         return oiDisplay;
     }
 
-    public ViewList getViewList()
+    public ViewListTable getViewList()
     {
         return viewList;
     }
 
-    public void setViewList( ViewList viewList )
+    public void setViewList( ViewListTable viewList )
     {
         this.viewList = viewList;
     }
@@ -311,5 +306,19 @@ class BrowserEnvironment
     public void entitySelected( ViewEntity viewEntity, EntityInstance ei )
     {
         attributePanel.setEntity( viewEntity, ei );
+    }
+
+    void saveEnvironment()
+    {
+    }
+
+    public List<View> getCurrentViewList()
+    {
+        return currentViewList;
+    }
+
+    public void setCurrentViewList( List<View> currentViewList )
+    {
+        this.currentViewList = currentViewList;
     }
 }

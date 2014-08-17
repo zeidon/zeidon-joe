@@ -25,26 +25,23 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import com.quinsoft.zeidon.BrowserStarter;
 import com.quinsoft.zeidon.ObjectEngine;
-import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 
 /**
+ * The main Frame for the stand-alone OB.
+ *
  * @author DG
  *
  */
 public class ObjectBrowser
 {
-    private final BrowserEnvironment env;
-
-    private JFrame          mainFrame;
+    private final FrameBrowserEnvironment env;
+    private JFrame mainFrame;
 
     public ObjectBrowser( ObjectEngine oe )
     {
         super();
-        env = new BrowserEnvironment( oe, this );
+        env = new FrameBrowserEnvironment( oe, this );
     }
 
     protected void startup()
@@ -61,7 +58,6 @@ public class ObjectBrowser
         mainFrame.pack();
 
         env.restore( this );
-//        env.restore( oiDisplay );
 
         // Display the window.
         mainFrame.setVisible( true );
@@ -74,19 +70,6 @@ public class ObjectBrowser
             }
         });
 
-    }
-
-    public static void main( String[] args ) throws InterruptedException
-    {
-        ObjectEngine oe = JavaObjectEngine.getInstance();
-        Task zencas = oe.createTask( "ZENCAs" );
-        View v = zencas.activateOiFromFile( "mStudenC", "../JOE/testdata/ZENCAs/mStudenCOI.por", null );
-        v.setName( "TestView" );
-        v = zencas.activateOiFromFile( "mFAProf", "../JOE/testdata/ZENCAs/mFAProfO.por", null );
-        v.setName( "mFAProf" );
-        BrowserStarter starter = new Starter();
-        starter.startBrowser( oe );
-        System.out.println( "Done" );
     }
 
     void saveEnvironment()
