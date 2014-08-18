@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author DG
  *
  */
-class AttributePanel extends JPanel
+public class AttributePanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
 

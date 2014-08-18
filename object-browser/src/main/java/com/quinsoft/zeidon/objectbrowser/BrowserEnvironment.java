@@ -129,7 +129,7 @@ public abstract class BrowserEnvironment
         return restore( browser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
-    BrowserEnvironment save( Component component, String filename )
+    public BrowserEnvironment save( Component component, String filename )
     {
         try
         {
