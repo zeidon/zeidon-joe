@@ -52,5 +52,10 @@ fi
 cp=`cat .tmpclasspath`
 #echo "cp=$cp"
 
-java -cp "$cp" $DEBUG_FLAGS org.jruby.JarBootstrapMain  | tee /tmp/lod-server.log
+JMXOPTS="-Dcom.sun.management.jmxremote
+         -Dcom.sun.management.jmxremote.port=9010
+         -Dcom.sun.management.jmxremote.local.only=true
+         -Dcom.sun.management.jmxremote.authenticate=false
+         -Dcom.sun.management.jmxremote.ssl=false"
 
+java -cp "$cp" $DEBUG_FLAGS $JMXOPTS org.jruby.JarBootstrapMain  | tee /tmp/lod-server.log

@@ -74,7 +74,7 @@ public class ObjectBrowser
 
     void saveEnvironment()
     {
-        env.save( ObjectBrowser.this );
+        env.save( this );
         env.getOe().getSystemTask().log().info( "Browser environment saved" );
     }
 

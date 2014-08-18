@@ -184,6 +184,8 @@ class SimpleTest
                             .asJson()
                             .activate();
         stud3.get( 0 ).logObjectInstance();
+        oe.startBrowser();
+        oe.toString();
 
         //        stud.logObjectInstance();
 /*

@@ -24,6 +24,7 @@ import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.config.DefaultPreferencesFactory;
 import com.quinsoft.zeidon.config.HomeDirectory;
 import com.quinsoft.zeidon.config.HomeDirectoryFromEnvVar;
+import com.quinsoft.zeidon.config.HomeDirectoryFromString;
 import com.quinsoft.zeidon.config.UuidGenerator;
 import com.quinsoft.zeidon.config.ZeidonIniPreferences;
 import com.quinsoft.zeidon.config.ZeidonPreferences;
@@ -31,6 +32,7 @@ import com.quinsoft.zeidon.config.ZeidonPreferencesFactory;
 import com.quinsoft.zeidon.config.ZeidonPropertyPreferences;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.jmx.JmxObjectEngineMonitor;
+import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
  * Returns the default configuration options for the Java Object Engine.  This is designed to be
@@ -50,7 +52,7 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     protected ExecutorService activatePoolThread;
     protected UuidGenerator uuidGenerator;
     protected ConcurrentMap<String, Task> taskCacheMap;
-    protected String jmxAppName;
+    protected String jmxAppName = "DefaultOE";
     protected String preferencesFilename;
 
     /* (non-Javadoc)
@@ -60,7 +62,12 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     public HomeDirectory getHomeDirectory()
     {
         if ( homeDirectory == null )
-            homeDirectory = new HomeDirectoryFromEnvVar();
+        {
+            if ( JoeUtils.getEnvProperty( "ZEIDON_HOME" ) != null )
+                homeDirectory = new HomeDirectoryFromEnvVar();
+            else
+                homeDirectory = new HomeDirectoryFromString( "" );
+        }
 
         return homeDirectory;
     }

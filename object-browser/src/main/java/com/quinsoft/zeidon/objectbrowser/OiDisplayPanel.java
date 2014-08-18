@@ -54,7 +54,6 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     private final BorderLayout borderLayout;
     private       OiDisplay oiDisplay;
     private       View view;
-    private       TwinDialog twinDialog;
 
     OiDisplayPanel( BrowserEnvironment env )
     {
@@ -86,18 +85,6 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         env.restore( twinDialog );
 */
         setVisible( true );
-    }
-
-    void saveEnvironment()
-    {
-        env.save( this );
-//        env.save( attributeDialog );
-        env.save( twinDialog );
-    }
-
-    void shutdown()
-    {
-        saveEnvironment();
     }
 
     private void addButton( JPanel buttonPane, String title, String command )

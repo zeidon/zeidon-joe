@@ -4,6 +4,7 @@
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -33,6 +34,11 @@ public class MainPanel extends JPanel
         JTabbedPane leftTabbedPane = new JTabbedPane();
         leftTabbedPane.addTab( "Tasks/Views", new ViewChooser( env ) );
         leftTabbedPane.addTab( "Attributes", env.getAttributePanel() );
+        leftTabbedPane.addTab( "Twins", new TwinInstancesPanel( this.env ) );
+
+        leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
+        leftTabbedPane.setMnemonicAt(1, KeyEvent.VK_A);
+        leftTabbedPane.setMnemonicAt(2, KeyEvent.VK_W);
 
         OiDisplayPanel oiDisplay = env.createOiDisplay( this );
         JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, oiDisplay );

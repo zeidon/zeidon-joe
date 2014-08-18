@@ -57,7 +57,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
     public JmxObjectEngineMonitor( JavaOeConfiguration config )
     {
         if ( ! StringUtils.isBlank( config.getJmxAppName() ) )
-            JoeUtils.RegisterJmxBean( this, "com.quinsoft.zeidon:type=ObjectEngineMonitor", config.getJmxAppName() );
+            JoeUtils.RegisterJmxBean( this, "com.quinsoft.zeidon:type=ObjectEngine", config.getJmxAppName() );
     }
 
     public JmxObjectEngineMonitor( String jmxName )

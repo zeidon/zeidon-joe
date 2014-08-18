@@ -19,10 +19,8 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
-import java.awt.Container;
-
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.JDialog;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -36,7 +34,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  * @author DGC
  *
  */
-class TwinDialog extends JDialog
+class TwinInstancesPanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
     private static String[] COLS = { "#", "Key", "Attributes" };
@@ -45,13 +43,11 @@ class TwinDialog extends JDialog
     private final JTable table;
     private final DefaultTableModel model;
 
-    TwinDialog( BrowserEnvironment environment, Container parentFrame )
+    TwinInstancesPanel( BrowserEnvironment environment )
     {
         super( );
         env = environment;
         setName("TwinDialog");
-        setTitle( "Twin Dialog -- no entity selected" );
-        setSize( 200, 400 );
 
         DefaultListSelectionModel selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
@@ -67,6 +63,7 @@ class TwinDialog extends JDialog
 
         JScrollPane scroll = new JScrollPane( table );
         add( scroll );
+        env.setTwinInstancesPanel( this );
     }
 
     private String getAttributeString( EntityInstance ei )
@@ -97,14 +94,6 @@ class TwinDialog extends JDialog
     {
         while ( model.getRowCount() > 0 )
             model.removeRow( 0 );
-
-        if ( entityInstance == null )
-        {
-            setTitle( "No entity selected" );
-            return;
-        }
-
-        setTitle( "Twins of " + entityInstance.getViewEntity().getName() );
 
         EntityInstance first = entityInstance;
         while ( first.getPrevTwin() != null )

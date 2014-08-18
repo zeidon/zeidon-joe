@@ -45,9 +45,6 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
 abstract class BrowserEnvironment
 {
     private   static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
-    private   static final String OIDISPLAY_SESSION_FILE = "OiDisplayState.xml";
-    private   static final String ATTRIBUTEDIALOG_SESSION_FILE = "AttributeDialog.xml";
-    private   static final String TWINDIALOG_SESSION_FILE = "TwinDialog.xml";
     protected static final String UNNAMED_VIEW = "*** unnamed ***";
 
     private final ObjectEngine oe;
@@ -63,6 +60,7 @@ abstract class BrowserEnvironment
     private AttributePanel attributePanel;
     private List<BrowserView> currentViewList;
     private Map<String, BrowserTask> currentTaskList;
+    private TwinInstancesPanel twinInstancesPanel;
 
     /**
      * @param oe
@@ -130,16 +128,6 @@ abstract class BrowserEnvironment
         return restore( browser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
-    BrowserEnvironment restore( OiDisplayPanel display )
-    {
-        return restore( display, OIDISPLAY_SESSION_FILE );
-    }
-
-    BrowserEnvironment restore( TwinDialog dialog )
-    {
-        return restore( dialog, TWINDIALOG_SESSION_FILE );
-    }
-
     BrowserEnvironment save( Component component, String filename )
     {
         try
@@ -157,16 +145,6 @@ abstract class BrowserEnvironment
     BrowserEnvironment save( ObjectBrowser browser )
     {
         return save( browser.getMainFrame(), BROWSER_SESSION_FILE );
-    }
-
-    BrowserEnvironment save( OiDisplayPanel display )
-    {
-        return save( display, OIDISPLAY_SESSION_FILE );
-    }
-
-    BrowserEnvironment save( TwinDialog dialog )
-    {
-        return save( dialog, TWINDIALOG_SESSION_FILE );
     }
 
     /**
@@ -191,16 +169,6 @@ abstract class BrowserEnvironment
     void error( String format, Object...args )
     {
         oe.getSystemTask().log().error( format, args );
-    }
-
-    void restore( AttributePanel attributeDialog )
-    {
-        restore( attributeDialog, ATTRIBUTEDIALOG_SESSION_FILE );
-    }
-
-    void save( AttributePanel attributeDialog )
-    {
-        save( attributeDialog, ATTRIBUTEDIALOG_SESSION_FILE );
     }
 
     /**
@@ -306,11 +274,10 @@ abstract class BrowserEnvironment
     public void entitySelected( ViewEntity viewEntity, EntityInstance ei )
     {
         attributePanel.setEntity( viewEntity, ei );
+        twinInstancesPanel.setEntityInstance( ei );
     }
 
-    void saveEnvironment()
-    {
-    }
+    abstract void saveEnvironment();
 
     public List<BrowserView> getCurrentViewList()
     {
@@ -346,5 +313,15 @@ abstract class BrowserEnvironment
     public void setCurrentTaskList( Map<String, BrowserTask> browserTaskList )
     {
         this.currentTaskList = browserTaskList;
+    }
+
+    public TwinInstancesPanel getTwinInstancesPanel()
+    {
+        return twinInstancesPanel;
+    }
+
+    public void setTwinInstancesPanel( TwinInstancesPanel twinInstancesPanel )
+    {
+        this.twinInstancesPanel = twinInstancesPanel;
     }
 }
