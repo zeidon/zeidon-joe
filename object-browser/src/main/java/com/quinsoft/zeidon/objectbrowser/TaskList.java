@@ -26,8 +26,6 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.quinsoft.zeidon.Task;
-
 /**
  * @author DG
  *
@@ -68,35 +66,33 @@ class TaskList extends JTable
     void taskListMouseClicked( MouseEvent evt )
     {
         int idx = getSelectedRow();
-        Task task = getTaskByIdx( idx );
+        BrowserTask task = getTaskByIdx( idx );
         env.getViewList().refresh( task );
     }
 
     void refresh()
     {
-        Task selectedTask = null;
+        String selectedTask = "";
         int idx = getSelectedRow();
         if ( idx >= 0 )
-            selectedTask = getTaskByIdx( idx );
+            selectedTask = getTaskByIdx( idx ).taskId;
 
         while ( model.getRowCount() > 0 )
             model.removeRow( 0 );
 
         Object[] row = new Object[ TASKLISTCOLS.length ];
+        env.refreshBrowserTaskList();
 
         List<String> taskList = new ArrayList<String>();
         idx = -1;
-        for ( Task task : env.getOe().getTaskList() )
+        for ( BrowserTask task : env.getCurrentTaskList().values() )
         {
-            if ( ! task.isValid() )
-                continue;  // This task was dropped.
-
-            if ( task == selectedTask )
+            if ( task.taskId.equals( selectedTask ) )
                 idx = taskList.size();
 
-            taskList.add( task.getTaskId() );
-            row[0] = task.getTaskId();
-            row[1] = task.getApplication().getName();
+            taskList.add( task.taskId );
+            row[0] = task.taskId;
+            row[1] = task.applicationName;
             model.addRow( row );
         }
 
@@ -106,13 +102,13 @@ class TaskList extends JTable
             setRowSelectionInterval( idx, idx );
     }
 
-    Task getTaskByIdx( int idx )
+    BrowserTask getTaskByIdx( int idx )
     {
         String id = currentTaskList.get( idx );
-        return env.getOe().getTaskById( id );
+        return env.getTaskById( id );
     }
 
-    Task getCurrentTask()
+    BrowserTask getCurrentTask()
     {
         return getTaskByIdx( 1 );
     }

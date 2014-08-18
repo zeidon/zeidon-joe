@@ -19,15 +19,10 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
-import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.View;
 
 /**
  * @author DG
@@ -37,7 +32,6 @@ public class ViewListTable extends JTable
 {
     private static final long serialVersionUID = 1L;
     private static String[] VIEWLISTCOLS = { "View ID", "OI ID", "Name", "OD Name" };
-    private static String   UNNAMED_VIEW = "*** unnamed ***";
 
     private final BrowserEnvironment env;
     private final DefaultTableModel  model;
@@ -60,7 +54,7 @@ public class ViewListTable extends JTable
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int idx = getSelectedRow();
-                final View v = env.getCurrentViewList().get( idx );
+                final BrowserView v = env.getCurrentViewList().get( idx );
                 env.viewSelected( v );
             }
         });
@@ -69,7 +63,7 @@ public class ViewListTable extends JTable
         refresh( null );
     }
 
-    View getSelectedView()
+    BrowserView getSelectedView()
     {
         if ( env.getCurrentViewList().size() == 0 )
             return null;
@@ -81,52 +75,34 @@ public class ViewListTable extends JTable
         return env.getCurrentViewList().get( idx );
     }
 
-    void refresh( Task task )
+    void refresh( BrowserTask task )
     {
-        View selectedView = null;
+        Long selectedView = -1L;
         int idx = getSelectedRow();
         if ( idx >= 0 )
-            selectedView = env.getCurrentViewList().get( idx );
+            selectedView = env.getCurrentViewList().get( idx ).viewId;
 
         while ( model.getRowCount() > 0 )
             model.removeRow( 0 );
 
         Object[] row = new Object[ VIEWLISTCOLS.length ];
-        List<View> viewList = new ArrayList<View>();
+        List<BrowserView> viewList = env.refreshBrowserViewList( task );
         idx = -1;
-        if ( task != null )
+        int count = 0;
+        for ( BrowserView view : viewList )
         {
-            for ( View view : task.getViewList() )
-            {
-                Collection<String> nameList = view.getNameList();
-                if ( nameList.size() == 0 )
-                {
-                    if ( ! env.isShowUnnamedViews() )
-                        continue;
+            int col = 0;
+            row[col++] = view.viewId;
+            row[col++] = view.oiId;
+            row[col++] = view.viewName;
+            row[col++] = view.lodName;
+            model.addRow( row );
 
-                    // We're going to add a name so create a temporary list.
-                    nameList = new ArrayList<String>();
-                    nameList.add( UNNAMED_VIEW );
-                }
+            if ( view.viewId == selectedView )
+                idx = count;
 
-                if ( view == selectedView )
-                    idx = viewList.size();
-
-                viewList.add( view );
-
-                for ( String name : nameList )
-                {
-                    int col = 0;
-                    row[col++] = view.getId();
-                    row[col++] = view.getOiId();
-                    row[col++] = name;
-                    row[col++] = view.getViewOd().getName();
-                    model.addRow( row );
-                }
-            }
+            count++;
         }
-
-//        currentViewList = viewList;
 
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );

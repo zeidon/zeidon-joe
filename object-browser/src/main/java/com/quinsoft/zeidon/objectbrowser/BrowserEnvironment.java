@@ -44,10 +44,11 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  */
 abstract class BrowserEnvironment
 {
-    private static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
-    private static final String OIDISPLAY_SESSION_FILE = "OiDisplayState.xml";
-    private static final String ATTRIBUTEDIALOG_SESSION_FILE = "AttributeDialog.xml";
-    private static final String TWINDIALOG_SESSION_FILE = "TwinDialog.xml";
+    private   static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
+    private   static final String OIDISPLAY_SESSION_FILE = "OiDisplayState.xml";
+    private   static final String ATTRIBUTEDIALOG_SESSION_FILE = "AttributeDialog.xml";
+    private   static final String TWINDIALOG_SESSION_FILE = "TwinDialog.xml";
+    protected static final String UNNAMED_VIEW = "*** unnamed ***";
 
     private final ObjectEngine oe;
     private final Map<ViewOd, ViewOdLayout> odLayouts;
@@ -60,7 +61,8 @@ abstract class BrowserEnvironment
     private OiDisplayPanel oiDisplay;
     private ViewListTable viewList;
     private AttributePanel attributePanel;
-    private List<View> currentViewList;
+    private List<BrowserView> currentViewList;
+    private Map<String, BrowserTask> currentTaskList;
 
     /**
      * @param oe
@@ -279,15 +281,13 @@ abstract class BrowserEnvironment
         }
     }
 
-    public void viewSelected( final View view )
+    public void viewSelected( final BrowserView view )
     {
         // Use invokeLater otherwise toFront() won't always work.
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                View v = view.newView();  // Copy the view so that we don't mess up the original cursors.
-                v.setLazyLoad( false );   // Turn off lazy loading so browser doesn't change data.
-                oiDisplay.displayView( v );
+                oiDisplay.displayView( getView( view ) );
             }
         });
     }
@@ -312,13 +312,39 @@ abstract class BrowserEnvironment
     {
     }
 
-    public List<View> getCurrentViewList()
+    public List<BrowserView> getCurrentViewList()
     {
         return currentViewList;
     }
 
-    public void setCurrentViewList( List<View> currentViewList )
+    public void setCurrentViewList( List<BrowserView> currentViewList )
     {
         this.currentViewList = currentViewList;
+    }
+
+    public abstract Map<String, BrowserTask> refreshBrowserTaskList();
+    public abstract List<BrowserView> refreshBrowserViewList( BrowserTask task );
+
+    /**
+     * Retrieve a view from a BrowserView.
+     *
+     * @param v
+     * @return
+     */
+    public abstract View getView( BrowserView v );
+
+    public BrowserTask getTaskById( String id )
+    {
+        return currentTaskList.get( id );
+    }
+
+    public Map<String, BrowserTask> getCurrentTaskList()
+    {
+        return currentTaskList;
+    }
+
+    public void setCurrentTaskList( Map<String, BrowserTask> browserTaskList )
+    {
+        this.currentTaskList = browserTaskList;
     }
 }

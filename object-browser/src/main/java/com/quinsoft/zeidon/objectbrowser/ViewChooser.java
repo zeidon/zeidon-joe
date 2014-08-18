@@ -98,6 +98,7 @@ class ViewChooser extends JPanel implements ActionListener
         button.addActionListener( this );
         buttonPane.add( button );
     }
+
     void refresh()
     {
         taskList.refresh();
@@ -106,7 +107,7 @@ class ViewChooser extends JPanel implements ActionListener
 
     private void writeOi()
     {
-        View view = viewList.getSelectedView();
+        BrowserView view = viewList.getSelectedView();
         if ( view == null )
         {
             JOptionPane.showMessageDialog( null, "No view selected", "alert",
@@ -119,7 +120,8 @@ class ViewChooser extends JPanel implements ActionListener
         if ( returnVal == JFileChooser.APPROVE_OPTION )
         {
             String filename = chooser.getSelectedFile().getAbsolutePath();
-            view.writeOiToFile( filename, EnumSet.of( WriteOiFlags.INCREMENTAL ) );
+            View v = env.getView( view );
+            v.writeOiToFile( filename, EnumSet.of( WriteOiFlags.INCREMENTAL ) );
             env.getOe().getSystemTask().log().info( "OI written to %s", filename );
         }
     }
