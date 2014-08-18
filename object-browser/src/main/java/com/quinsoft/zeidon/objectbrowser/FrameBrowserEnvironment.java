@@ -33,7 +33,7 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     }
 
     @Override
-    void saveEnvironment()
+    public void saveEnvironment()
     {
         objectBrowser.saveEnvironment();
     }

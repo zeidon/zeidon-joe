@@ -30,7 +30,7 @@ import javax.swing.table.DefaultTableModel;
  * @author DG
  *
  */
-class TaskList extends JTable
+public class TaskList extends JTable
 {
     private static final long serialVersionUID = 1L;
     private static String[] TASKLISTCOLS = { "Task ID", "Application Name" };
@@ -52,6 +52,7 @@ class TaskList extends JTable
         model = new DefaultTableModel();
         model.setColumnIdentifiers( TASKLISTCOLS );
         setModel( model );
+        setSize( 200, 400 );
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -60,6 +61,7 @@ class TaskList extends JTable
             }
         });
 
+        env.setTaskList( this );
         refresh();
     }
 
@@ -70,7 +72,7 @@ class TaskList extends JTable
         env.getViewList().refresh( task );
     }
 
-    void refresh()
+    public void refresh()
     {
         String selectedTask = "";
         int idx = getSelectedRow();

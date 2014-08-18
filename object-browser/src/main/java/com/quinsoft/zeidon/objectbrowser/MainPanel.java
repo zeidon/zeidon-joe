@@ -22,6 +22,8 @@ public class MainPanel extends JPanel
 
     private final BrowserEnvironment env;
 
+    private JTabbedPane leftTabbedPane;
+
     /**
      *
      */
@@ -31,7 +33,7 @@ public class MainPanel extends JPanel
         this.env = env;
 
         env.createAttributePanel();
-        JTabbedPane leftTabbedPane = new JTabbedPane();
+        leftTabbedPane = new JTabbedPane();
         leftTabbedPane.addTab( "Tasks/Views", new ViewChooser( env ) );
         leftTabbedPane.addTab( "Attributes", env.getAttributePanel() );
         leftTabbedPane.addTab( "Twins", new TwinInstancesPanel( this.env ) );
@@ -44,6 +46,10 @@ public class MainPanel extends JPanel
         JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, oiDisplay );
 
         add( splitPane, BorderLayout.CENTER );
+    }
 
+    public JTabbedPane getLeftTabbedPane()
+    {
+        return leftTabbedPane;
     }
 }

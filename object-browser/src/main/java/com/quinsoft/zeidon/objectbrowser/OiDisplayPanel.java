@@ -73,17 +73,6 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         addButton( buttonPane, "Next", NEXT_CURSOR );
         addButton( buttonPane, "Last", LAST_CURSOR );
         add( buttonPane, BorderLayout.NORTH );
-/*
-        attributeDialog = new AttributeDialog( env, this.parentContainer );
-        attributeDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        childFrames.add( attributeDialog );
-        env.restore( attributeDialog );
-
-        twinDialog = new TwinDialog( env, this.parentContainer );
-        twinDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        childFrames.add( twinDialog );
-        env.restore( twinDialog );
-*/
         setVisible( true );
     }
 

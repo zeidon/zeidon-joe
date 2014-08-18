@@ -42,7 +42,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author DG
  *
  */
-abstract class BrowserEnvironment
+public abstract class BrowserEnvironment
 {
     private   static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
     protected static final String UNNAMED_VIEW = "*** unnamed ***";
@@ -56,6 +56,7 @@ abstract class BrowserEnvironment
     private boolean showNullAttributes   = true;
     private boolean showUnnamedViews     = true;
     private OiDisplayPanel oiDisplay;
+    private TaskList taskList;
     private ViewListTable viewList;
     private AttributePanel attributePanel;
     private List<BrowserView> currentViewList;
@@ -66,7 +67,7 @@ abstract class BrowserEnvironment
      * @param oe
      * @param objectBrowser
      */
-    BrowserEnvironment( ObjectEngine oe )
+    public BrowserEnvironment( ObjectEngine oe )
     {
         super();
         this.oe = oe;
@@ -277,7 +278,7 @@ abstract class BrowserEnvironment
         twinInstancesPanel.setEntityInstance( ei );
     }
 
-    abstract void saveEnvironment();
+    public abstract void saveEnvironment();
 
     public List<BrowserView> getCurrentViewList()
     {
@@ -323,5 +324,15 @@ abstract class BrowserEnvironment
     public void setTwinInstancesPanel( TwinInstancesPanel twinInstancesPanel )
     {
         this.twinInstancesPanel = twinInstancesPanel;
+    }
+
+    public TaskList getTaskList()
+    {
+        return taskList;
+    }
+
+    public void setTaskList( TaskList taskList )
+    {
+        this.taskList = taskList;
     }
 }
