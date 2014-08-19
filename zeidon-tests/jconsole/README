@@ -1,0 +1,8 @@
+This is a sample project is used to start jconsole with the Zeidon plugin.  Maven is used
+to build the classpath for calling jconsole.  The zeidon-test project needs
+to be included in the classpath so the Zeidon plugin knows where to find
+the ZENCAs meta files (e.g. the XODs).  Requires JAVA_HOME be set to find the
+jconsole runtime files.
+
+Update log4j.xml if you want to see debug messages.  This will open the jconsole
+"console" window.
