@@ -23,14 +23,15 @@ class ScalaHelperImpl extends ScalaHelper {
                                  loader: ClassLoader ): Integer = {
       val jviewOd = jview.getViewOd()
       val application = jviewOd.getApplication()
-      val className = application.getPackage() + "." + jviewOd.getName()
+      val objName = if ( jviewOd.getLibraryName() != null ) jviewOd.getLibraryName() else jviewOd.getName()
+      val className = application.getPackage() + "." + objName
       val operationsClass = loader.loadClass( className );
       val constructors = operationsClass.getConstructors()
       val constructor = constructors(0)
       val view = new View( jview ).basedOnLod( jviewOd.getName() )
-      val instance = constructor.newInstance( view.task )
-      val method = instance.getClass.getMethod(jviewOd.getConstraintOper(), view.getClass(), constraintType.getClass() )
-      val rc = method.invoke(instance, view, constraintType)
+      val instance = constructor.newInstance( view )
+      val method = instance.getClass.getMethod(jviewOd.getConstraintOper(), constraintType.getClass() )
+      val rc = method.invoke(instance, constraintType)
       return 0
     }
 }

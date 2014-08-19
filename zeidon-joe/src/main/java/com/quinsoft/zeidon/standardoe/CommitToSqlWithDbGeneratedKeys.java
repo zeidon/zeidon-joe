@@ -242,10 +242,6 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 continue;
 
             setForeignKeys( ei );
-
-            // setForeignKeys only copies keys for created instances.  Do another copy
-            // to set keys for instances that were excluded only.
-            excludeFksFromParents( ei, dataRecord );
             view.cursor( viewEntity ).setCursor( ei );
             dbHandler.deleteRelationship( view, ei );
             markDuplicateRelationships( ei );

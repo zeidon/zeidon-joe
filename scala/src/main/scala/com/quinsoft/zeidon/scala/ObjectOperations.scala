@@ -58,7 +58,7 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
 
     if ( method.getParameterTypes().length != args.length )
         throw new ZeidonException( "Unexpected number of arguments for method.  Expected %d, got %d",
-                                   Int.box( argLength ), Int.box( method.getParameterTypes().length ) )
+                                   Int.box( method.getParameterTypes().length ), Int.box( argLength ) )
 
     def invokeOperation( view: View, args: AnyRef*): AnyRef = {
         if ( args.length != argLength )
