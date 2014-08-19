@@ -11,13 +11,14 @@ import com.quinsoft.zeidon.View;
  */
 public class BrowserView
 {
-    final BrowserTask task;
-    final long viewId;
-    final long oiId;
-    final String viewName;
-    final String lodName;
+    public final BrowserTask task;
+    public final long viewId;
+    public final long oiId;
+    public final String viewName;
+    public final String lodName;
+    public final String appName;
 
-    public BrowserView( BrowserTask task, long viewId, long oiId, String viewName, String lodName )
+    public BrowserView( BrowserTask task, long viewId, long oiId, String viewName, String lodName, String appName )
     {
         super();
         this.viewId = viewId;
@@ -25,10 +26,11 @@ public class BrowserView
         this.viewName = viewName;
         this.lodName = lodName;
         this.task = task;
+        this.appName = appName;
     }
 
     public BrowserView( BrowserTask task, View view, String viewName )
     {
-        this( task, view.getId(), view.getOiId(), viewName, view.getViewOd().getName() );
+        this( task, view.getId(), view.getOiId(), viewName, view.getViewOd().getName(), view.getViewOd().getApplication().getName() );
     }
 }

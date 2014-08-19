@@ -279,7 +279,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
     {
         ArrayList<String> taskList = new ArrayList<String>();
         for ( Task task : oe.getTaskList() )
-            taskList.add( task.getTaskId() );
+            taskList.add( task.getTaskId() + "," + task.getApplication().getName() );
 
         return taskList;
     }
@@ -339,5 +339,52 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         v.dropNameForView( viewName );
 
         return "Cached view name dropped";
+    }
+
+    @Override
+    public Collection<String> getViewList( String taskId )
+    {
+        ArrayList<String> list = new ArrayList<>();
+        if ( oe == null )
+            return list;
+
+        Task task = oe.getTaskById( taskId );
+        if ( task == null  || ! task.isValid() )
+            return list;
+
+        for ( View v : task.getViewList() )
+        {
+            String viewOd = v.getViewOd().getName();
+            String app = v.getViewOd().getApplication().getName();
+            Collection<String> nameList = v.getNameList();
+            if ( nameList.size() == 0 )
+            {
+                list.add( String.format( "%d,%d,%s,%s", v.getId(), v.getOiId(), viewOd, app ) );
+            }
+            else
+            {
+                for ( String name : nameList )
+                    list.add( String.format( "%d,%d,%s,%s,%s", v.getId(), v.getOiId(), viewOd, app, name ) );
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public String getSerializedView( String taskId, Long viewId )
+    {
+        if ( oe == null )
+            return "NO OE";
+
+        Task task = oe.getTaskById( taskId );
+        if ( task == null  || ! task.isValid() )
+            return "NO TASK";
+
+        View view = task.getViewByKey( viewId );
+        if ( view == null )
+            return "NO VIEW";
+
+        return view.serializeOi().asJson().toStringWriter().withIncremental().write().getJsonString();
     }
 }

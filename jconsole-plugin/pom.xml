@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>zeidon</artifactId>
+        <groupId>com.quinsoft.zeidon</groupId>
+        <version>1.0.7-SNAPSHOT</version>
+    </parent>
+
+    <packaging>jar</packaging>
+    <name>zeidon-jconsole-plugin</name>
+    <artifactId>zeidon-jconsole-plugin</artifactId>
+
+    <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>
+                                true
+                            </addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Implementation-Title>${maven.build.timestamp}</Implementation-Title>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>object-browser</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>zeidon-tests</artifactId>
+            <type>test-jar</type>
+            <version>${project.parent.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>fop</artifactId>
+                    <groupId>org.apache.xmlgraphics</groupId>
+                </exclusion>
+	    </exclusions>
+	</dependency>
+         <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>jconsole</artifactId>
+            <version>1.7</version>
+            <scope>system</scope>
+            <systemPath>${env.JAVA_HOME}/lib/jconsole.jar</systemPath>
+        </dependency>
+    </dependencies>
+</project>

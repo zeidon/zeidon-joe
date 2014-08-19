@@ -9,8 +9,8 @@ package com.quinsoft.zeidon.objectbrowser;
  */
 public class BrowserTask
 {
-    final String taskId;
-    final String applicationName;
+    public final String taskId;
+    public final String applicationName;
 
     public BrowserTask( String taskId, String applicationName )
     {

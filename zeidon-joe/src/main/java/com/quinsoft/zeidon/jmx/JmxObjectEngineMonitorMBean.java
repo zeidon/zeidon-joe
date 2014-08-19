@@ -40,6 +40,23 @@ public interface JmxObjectEngineMonitorMBean
     Collection<Map<String, String>> getViewList();
 
     /**
+     * Returns a list of all views and their names.
+     *
+     * @param taskId
+     * @return
+     */
+    Collection<String> getViewList( String taskId );
+
+    /**
+     * Downloads the view serialized as JSON.
+     *
+     * @param taskId
+     * @param viewId
+     * @return
+     */
+    String getSerializedView( String taskId, Long viewId );
+
+    /**
      * @return A list of task IDs for all active tasks.
      */
     Collection<String> getTaskList();

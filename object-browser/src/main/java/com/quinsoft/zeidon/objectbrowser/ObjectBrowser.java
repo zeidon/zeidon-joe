@@ -57,7 +57,7 @@ public class ObjectBrowser
         mainFrame.addWindowListener( listener );
         mainFrame.pack();
 
-        env.restore( this );
+        env.restoreEnvironment();
 
         // Display the window.
         mainFrame.setVisible( true );
@@ -74,8 +74,13 @@ public class ObjectBrowser
 
     void saveEnvironment()
     {
-        env.save( this );
+        env.saveEnvironment();
         env.getOe().getSystemTask().log().info( "Browser environment saved" );
+    }
+
+    public JFrame getFrame()
+    {
+        return mainFrame;
     }
 
     private class BrowserEventHandler extends WindowAdapter
@@ -83,7 +88,7 @@ public class ObjectBrowser
         @Override
         public void windowClosing(WindowEvent e)
         {
-            env.save( ObjectBrowser.this );
+            env.saveEnvironment();
             mainFrame.setVisible(false);
             mainFrame.dispose();
             mainFrame = null;

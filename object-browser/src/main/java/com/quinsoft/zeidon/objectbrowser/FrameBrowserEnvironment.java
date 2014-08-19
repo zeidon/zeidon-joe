@@ -20,6 +20,8 @@ import com.quinsoft.zeidon.View;
  */
 public class FrameBrowserEnvironment extends BrowserEnvironment
 {
+    private   static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
+
     private final ObjectBrowser objectBrowser;
 
     /**
@@ -35,7 +37,13 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     @Override
     public void saveEnvironment()
     {
-        objectBrowser.saveEnvironment();
+        restore( objectBrowser.getMainFrame(), BROWSER_SESSION_FILE );
+    }
+
+    @Override
+    public void restoreEnvironment()
+    {
+        restore( objectBrowser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
     @Override

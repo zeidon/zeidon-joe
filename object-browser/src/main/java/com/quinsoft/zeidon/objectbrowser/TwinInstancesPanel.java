@@ -95,6 +95,9 @@ class TwinInstancesPanel extends JPanel
         while ( model.getRowCount() > 0 )
             model.removeRow( 0 );
 
+        if ( entityInstance == null )
+            return;
+
         EntityInstance first = entityInstance;
         while ( first.getPrevTwin() != null )
             first = first.getPrevTwin();

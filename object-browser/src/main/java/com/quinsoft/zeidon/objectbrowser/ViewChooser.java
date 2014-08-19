@@ -72,6 +72,7 @@ class ViewChooser extends JPanel implements ActionListener
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollableTasks, scrollableViews );
         splitPane.setName( "ViewChooserSplitPane" );
+        splitPane.setResizeWeight( 0.4 );
 
         JPanel buttonPane = new JPanel();
         addButton( buttonPane, "Refresh", REFRESH );

@@ -44,7 +44,6 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  */
 public abstract class BrowserEnvironment
 {
-    private   static final String BROWSER_SESSION_FILE   = "BrowserState.xml";
     protected static final String UNNAMED_VIEW = "*** unnamed ***";
 
     private final ObjectEngine oe;
@@ -75,7 +74,7 @@ public abstract class BrowserEnvironment
         context = new BrowserContext();
     }
 
-    ObjectEngine getOe()
+    protected ObjectEngine getOe()
     {
         return oe;
     }
@@ -110,11 +109,11 @@ public abstract class BrowserEnvironment
         return 8;
     }
 
-    BrowserEnvironment restore( Component component, String filename )
+    public BrowserEnvironment restore( Component topLevelComponent, String filename )
     {
         try
         {
-            context.getSessionStorage().restore( component, filename );
+            context.getSessionStorage().restore( topLevelComponent, filename );
         }
         catch ( IOException e )
         {
@@ -124,16 +123,11 @@ public abstract class BrowserEnvironment
         return this;
     }
 
-    BrowserEnvironment restore( ObjectBrowser browser )
-    {
-        return restore( browser.getMainFrame(), BROWSER_SESSION_FILE );
-    }
-
-    public BrowserEnvironment save( Component component, String filename )
+    public BrowserEnvironment save( Component topLevelComponent, String filename )
     {
         try
         {
-            context.getSessionStorage().save( component, filename );
+            context.getSessionStorage().save( topLevelComponent, filename );
         }
         catch ( IOException e )
         {
@@ -141,11 +135,6 @@ public abstract class BrowserEnvironment
         }
 
         return this;
-    }
-
-    BrowserEnvironment save( ObjectBrowser browser )
-    {
-        return save( browser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
     /**
@@ -278,6 +267,7 @@ public abstract class BrowserEnvironment
         twinInstancesPanel.setEntityInstance( ei );
     }
 
+    public abstract void restoreEnvironment();
     public abstract void saveEnvironment();
 
     public List<BrowserView> getCurrentViewList()

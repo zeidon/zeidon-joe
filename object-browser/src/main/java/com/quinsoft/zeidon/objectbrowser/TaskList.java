@@ -51,8 +51,8 @@ public class TaskList extends JTable
 
         model = new DefaultTableModel();
         model.setColumnIdentifiers( TASKLISTCOLS );
+        model.setRowCount( 5 );
         setModel( model );
-        setSize( 200, 400 );
 
         addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
