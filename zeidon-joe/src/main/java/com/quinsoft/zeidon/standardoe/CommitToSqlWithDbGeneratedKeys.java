@@ -242,6 +242,10 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 continue;
 
             setForeignKeys( ei );
+
+            // setForeignKeys only copies keys for created instances.  Do another copy
+            // to set keys for instances that were excluded only.
+            excludeFksFromParents( ei, dataRecord );
             view.cursor( viewEntity ).setCursor( ei );
             dbHandler.deleteRelationship( view, ei );
             markDuplicateRelationships( ei );
@@ -367,9 +371,46 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             if ( ! setForeignKeys( ei ) )
                 throw new ZeidonException( "Internal error: FKs for include were not set.  This should never happen" );
 
+            // setForeignKeys only copies keys for created instances.  Do another copy
+            // to set keys for instances that were included only.
+            copyFksToParents( ei, dataRecord );
             view.cursor( viewEntity ).setCursor( ei );
             dbHandler.insertRelationship( view, ei );
             markDuplicateRelationships( ei );
+        }
+    }
+
+    /**
+     * EI has been included.  Copy any FKs that involve ei.
+     * Note: This may re-copy some FKs that have already been copied.
+     *
+     * @param ei
+     */
+    private void copyFksToParents( EntityInstanceImpl ei, DataRecord dataRecord )
+    {
+        RelRecord relRecord = dataRecord.getRelRecord();
+        for ( RelField relField : relRecord.getRelFields() )
+        {
+            final RelFieldParser p = new RelFieldParser();
+            p.parse( relField, ei );
+            p.copySrcToRel();
+        }
+    }
+
+    /**
+     * EI has been included.  Set any FKs that involve ei to null
+     * Note: This may reset some FKs that have already been set.
+     *
+     * @param ei
+     */
+    private void excludeFksFromParents( EntityInstanceImpl ei, DataRecord dataRecord )
+    {
+        RelRecord relRecord = dataRecord.getRelRecord();
+        for ( RelField relField : relRecord.getRelFields() )
+        {
+            final RelFieldParser p = new RelFieldParser();
+            p.parse( relField, ei );
+            p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( null, true );
         }
     }
 
@@ -669,8 +710,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
                 if ( ei.isCreated() || ei.isIncluded() )
                 {
-                    Object value = srcInstance.getAttribute( p.srcViewAttrib ).getValue();
-                    ei.getAttribute( p.relViewAttrib ).setInternalValue( value, true );
+                    p.copySrcToRel();
 
                     // We've copied the FK to ei.  Remove srcInstance from the list of required sources.
                     iter.remove();
@@ -709,13 +749,13 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
     }
 
     /**
-    // Attempts to insert ei into the DB.  It will fail (and return false) if ei relies
+     * Attempts to insert ei into the DB.  It will fail (and return false) if ei relies
      * on a FK from an EI that hasn't been created yet.
-    //
-    // Returns true  if the EI was created in the DB
-    //         false if the EI couldn't be created because it relies on uncreated FKs.
-    //
-    **/
+     *
+     * Returns true  if the EI was created in the DB
+     *         false if the EI couldn't be created because it relies on uncreated FKs.
+     *
+     **/
     private boolean createInstance( View view, final EntityInstanceImpl ei )
     {
         final ViewEntity viewEntity = ei.getViewEntity();

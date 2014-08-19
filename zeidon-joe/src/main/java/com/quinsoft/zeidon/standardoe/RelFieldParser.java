@@ -62,4 +62,13 @@ class RelFieldParser
             relInstance = ei.findMatchingParent( relViewEntity );
         }
     }
+
+    /**
+     * Copies the value of the source rel attribute to the target (ie. rel) attribute.
+     */
+    void copySrcToRel()
+    {
+        Object value = srcInstance.getAttribute( srcViewAttrib ).getValue();
+        relInstance.getAttribute( relViewAttrib ).setInternalValue( value, true );
+    }
 }
