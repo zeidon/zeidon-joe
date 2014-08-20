@@ -76,6 +76,7 @@ class View( val task: Task ) extends Task(task) {
         return builder
     }
 
+    def duplicate = new View( jview.newView )
     def name( viewName: String ) = jview.setName( viewName )
     def assert = new AssertView( this )
     def odName = if ( jviewOd  == null ) "*not specified*" else jviewOd.getName

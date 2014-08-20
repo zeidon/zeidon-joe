@@ -69,6 +69,9 @@ public class BooleanDomain extends AbstractDomain
                 case "no":
                 case "off":
                     return Boolean.FALSE;
+
+                case "":
+                    return null;
             }
         }
 

@@ -115,7 +115,7 @@ public class SerializeOi
         }
     }
 
-    public String getJsonString()
+    public String getString()
     {
         try
         {
@@ -259,7 +259,7 @@ public class SerializeOi
             streamWriter.writeToStream( this );
 
             if ( targetAttribute != null )
-                targetAttribute.setValue( getJsonString() );
+                targetAttribute.setValue( getString() );
 
             return this;
         }

@@ -111,7 +111,7 @@ public class CommitToRestServer implements Committer
             copyEntityKeysToTags();
 
             SerializeOi writer = new SerializeOi().asJson().toStringWriter().withIncremental().write( viewList );
-            String json = writer.getJsonString();
+            String json = writer.getString();
             List<View> views = makePostCall( json );
             View restRc = views.get( 0 );
             views.remove( 0 ); // Remove the RC from the list of views.

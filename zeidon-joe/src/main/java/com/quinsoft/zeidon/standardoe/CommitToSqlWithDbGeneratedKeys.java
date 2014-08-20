@@ -340,18 +340,6 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             if ( ! ei.isIncluded() && ! ei.dbhNeedsInclude )
                 continue;
 
-            ViewEntity viewEntity = ei.getViewEntity();
-            DataRecord dataRecord = viewEntity.getDataRecord();
-            if ( dataRecord == null )
-                continue;
-
-            if ( viewEntity.isDerivedPath() )
-                continue;
-
-            // Skip the entity if we don't allow includes
-            if ( ! viewEntity.isInclude() )
-                continue;
-
             // Skip it if the entity was already included via a linked instance.
             if ( ei.dbhIncluded )
                 continue;
@@ -362,6 +350,21 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             if ( ei.getParent() == null )
                 continue;
 
+            ViewEntity viewEntity = ei.getViewEntity();
+            DataRecord dataRecord = viewEntity.getDataRecord();
+            if ( dataRecord == null )
+                continue;
+
+            if ( viewEntity.isDerivedPath() )
+                continue;
+
+            RelRecord relRecord = viewEntity.getDataRecord().getRelRecord();
+
+            // Skip the entity if we don't allow includes unless this is a many-to-many
+            // relationship.  Those need to have their correspondance table updated.
+            if ( ! viewEntity.isInclude() && relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY)
+                continue;
+
             // Since all new entities have been created by now there should be no problems
             // setting FKs.
             if ( ! setForeignKeys( ei ) )
@@ -369,9 +372,13 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
             // setForeignKeys only copies keys for created instances.  Do another copy
             // to set keys for instances that were included only.
-            copyFksToParents( ei, dataRecord );
-            view.cursor( viewEntity ).setCursor( ei );
-            dbHandler.insertRelationship( view, ei );
+            if ( relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY )
+                copyFksToParents( ei, dataRecord );
+            else
+            {
+                view.cursor( viewEntity ).setCursor( ei );
+                dbHandler.insertRelationship( view, ei );
+            }
             markDuplicateRelationships( ei );
         }
     }

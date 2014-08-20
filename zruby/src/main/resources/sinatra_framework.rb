@@ -183,7 +183,7 @@ def list_entities( top_entity, args = {} )
       html << "<td></td>" if entity != top_entity
       entity.attributes.each do |attrib|
         next if attrib.is_hidden
-        if entity.isNull
+        if entity.isNull or attrib.is_null?
           html << "<td></td>\n"
         else
           value = attrib.getStringFromAttribute(attrib.name, nil)

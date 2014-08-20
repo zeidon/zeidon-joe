@@ -1640,17 +1640,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         void appendOrdering( ViewAttribute viewAttribute )
         {
-            appendOrdering( viewAttribute.getViewEntity().getDataRecord().getDataField( viewAttribute ) );
+            appendOrdering( viewAttribute.getViewEntity().getDataRecord().getDataField( viewAttribute ), viewAttribute.isAutoSeq() );
         }
 
-        void appendOrdering( DataField dataField )
+        void appendOrdering( DataField dataField, boolean isAutoSeq )
         {
             if ( ordering.length() > 0 )
                 ordering.append( ", " );
 
             DataRecord dataRecord = dataField.getViewAttribute().getViewEntity().getDataRecord();
-            ordering.append( getTableName( dataRecord ) )
-                    .append( "." )
+            if ( isAutoSeq )
+            {
+                RelRecord relRecord = dataRecord.getRelRecord();
+                if ( relRecord.getRecordName() != null )
+                    ordering.append( getTableName( relRecord ) );
+                else
+                    ordering.append( getTableName( dataRecord ) );
+            }
+            else
+                ordering.append( getTableName( dataRecord ) );
+
+            ordering.append( "." )
                     .append( dataField.getName() );
 
             if ( ! dataField.getViewAttribute().isSequencingAscending() )

@@ -66,7 +66,7 @@ public class RestServerImplementation
             ActivateOptions activateOptions = new ActivateOptions( task );
             View view = task.activateObjectInstance( viewOdName, qual, activateOptions );
             SerializeOi writer = new SerializeOi().addView( rc, view ).withIncremental().toStringWriter().write();
-            return writer.getJsonString();
+            return writer.getString();
         }
         catch ( Exception e )
         {
@@ -78,7 +78,7 @@ public class RestServerImplementation
 
             // Write the rc OI to a string.
             SerializeOi writer = new SerializeOi().addView( rc ).withIncremental().toStringWriter().write();
-            return writer.getJsonString();
+            return writer.getString();
         }
     }
 
