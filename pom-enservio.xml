@@ -27,12 +27,12 @@
 	<modules>
                 <module>zeidon-joe</module>
                 <module>object-browser</module>
+		<module>jconsole-plugin</module>
                 <module>zeidon-operations</module>
                 <module>zeidon-tests</module>
                 <module>restserver</module>
                 <module>zruby</module>
                 <module>scala</module>
-                <module>android</module>
 		<module>sinatra-server</module>
 	</modules>
 
