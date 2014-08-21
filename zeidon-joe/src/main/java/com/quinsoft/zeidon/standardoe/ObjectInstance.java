@@ -81,6 +81,13 @@ class ObjectInstance implements Lockable
     private final LazyLoadLock lock;
 
     /**
+     * If true, then tell cursor processing to not attempt to lazy load entities.
+     * This is intended to be used during activation so we don't go through
+     * unnecessary processing.
+     */
+    private boolean ignoreLazyLoadEntities = false;
+
+    /**
      * This keeps track of attribute hash keys that are global to the OI.  Intended for use
      * by cursor.setFirst() processing.
      */
@@ -383,5 +390,15 @@ class ObjectInstance implements Lockable
     Set<ViewCursor> getReferringViewCursors()
     {
         return referringViewCursors.keySet();
+    }
+
+    boolean isIgnoreLazyLoadEntities()
+    {
+        return ignoreLazyLoadEntities;
+    }
+
+    void setIgnoreLazyLoadEntities( boolean ignoreLazyLoadEntities )
+    {
+        this.ignoreLazyLoadEntities = ignoreLazyLoadEntities;
     }
 }

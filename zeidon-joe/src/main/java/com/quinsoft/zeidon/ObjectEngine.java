@@ -84,6 +84,17 @@ public interface ObjectEngine
     Task createTask( String applicationName, boolean persistent ) throws UnknownApplicationException;
 
     /**
+     * Create a Zeidon task and assigning it the specified taskId.
+     *
+     * @param applicationName
+     * @param taskId
+     * @param persistent
+     * @return
+     * @throws UnknownApplicationException
+     */
+    Task createTask( String applicationName, boolean persistent, String taskId  ) throws UnknownApplicationException;
+
+    /**
      * @return the Zeidon System task that is registered when the Object Engine is instantiated.
      */
     Task getSystemTask();
@@ -133,7 +144,7 @@ public interface ObjectEngine
 
     /**
      * Get the ZeidonPreferences for an application.
-     * 
+     *
      * @param app
      * @return
      */

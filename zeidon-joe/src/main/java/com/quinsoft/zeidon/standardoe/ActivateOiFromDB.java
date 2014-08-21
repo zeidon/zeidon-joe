@@ -79,10 +79,16 @@ class ActivateOiFromDB implements Activator
     public ViewImpl activate()
     {
         Timer timer = new Timer();
+        ObjectInstance oi = view.getObjectInstance();
+
+        // Set flag to tell cursor processing to not bother with checking for lazy-loaded
+        // entities.  Since we're activating we know we don't want to load lazy entities
+        // via cursor access.
+        oi.setIgnoreLazyLoadEntities( true );
+
         ViewEntity rootEntity = viewOd.getRoot();
         activate( rootEntity );
 
-        ObjectInstance oi = view.getObjectInstance();
         if ( oi.getRootEntityInstance() != null ) // Did we load anything?
 		{
             // Check the pessimistic locks.  We need to do this after we load the OI because
@@ -94,6 +100,7 @@ class ActivateOiFromDB implements Activator
             view.reset();
             view.getViewOd().executeActivateConstraint( view );
 		}
+        oi.setIgnoreLazyLoadEntities( false );
         task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
 
         return view;
@@ -197,7 +204,7 @@ class ActivateOiFromDB implements Activator
                 if ( childViewEntity.getDataRecord() == null )
                     continue;
 
-                if ( childViewEntity.getLazyLoadConfig().isLazyLoad() )
+                if ( isLazyLoad( childViewEntity ) )
                 {
                     view.dblog().debug( "Entity %s is flagged as LazyLoad. Skipping activate", childViewEntity.getName() );
 
@@ -215,6 +222,17 @@ class ActivateOiFromDB implements Activator
             if ( recursive )
                 parentCursor.resetSubobjectToParent();
         }
+    }
+
+    /**
+     * returns true if viewEntity should be loaded lazily.
+     *
+     * @param viewEntity
+     * @return
+     */
+    private boolean isLazyLoad( ViewEntity viewEntity )
+    {
+        return viewEntity.getLazyLoadConfig().isLazyLoad() && ! control.contains(  ActivateFlags.fINCLUDE_LAZYLOAD );
     }
 
     /**

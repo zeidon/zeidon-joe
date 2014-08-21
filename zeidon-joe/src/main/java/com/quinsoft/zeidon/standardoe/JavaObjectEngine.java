@@ -258,7 +258,8 @@ public class JavaObjectEngine implements ObjectEngine
         return applicationList.getList();
     }
 
-    private TaskImpl createTask( String applicationName, boolean persistent, String taskId )
+    @Override
+    public TaskImpl createTask( String applicationName, boolean persistent, String taskId )
     {
         TaskImpl systemTask = getSystemTask() == null ? new TaskImpl( this ) : getSystemTask();
         ApplicationImpl app = applicationList.getApplication( systemTask, applicationName );

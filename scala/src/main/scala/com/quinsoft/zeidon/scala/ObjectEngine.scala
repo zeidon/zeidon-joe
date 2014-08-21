@@ -20,7 +20,8 @@ class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
         new Task( jtask )
     }
 
-    def createTask( appName: String, taskId: String = null ) = new Task( joe.createTask( appName, taskId ), this )
+    def createTask( appName: String, persistent: Boolean = true, taskId: String = null ) =
+                    new Task( joe.createTask( appName, persistent, taskId ), this )
     def taskList = joe.getTaskList()
     def startBrowser = joe.startBrowser()
 }

@@ -41,6 +41,7 @@ public enum ActivateFlags
     fIGNORE_ATTRIB_ERRORS,
     fIGNORE_JOINS,
     fIGNORE_ACTIVATE_CONSTRAINTS,
+    fINCLUDE_LAZYLOAD,
     fASYNCHRONOUS;
 
     public static final EnumSet<ActivateFlags> ROOT_ONLY = EnumSet.of( fROOT_ONLY );

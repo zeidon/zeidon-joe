@@ -66,17 +66,22 @@ class QualBuilder(private val view: View,
     }
 
     def rootOnlyMultiple(): QualBuilder = {
-        jqual.rootOnly().multipleRoots();
+        jqual.rootOnly().multipleRoots()
         this
     }
 
     def rootOnly(): QualBuilder = {
-        jqual.rootOnly();
+        jqual.rootOnly()
         this
     }
 
     def multiple(): QualBuilder = {
-        jqual.multipleRoots();
+        jqual.multipleRoots()
+        this
+    }
+
+    def includeLazy(): QualBuilder = {
+        jqual.setFlag( ActivateFlags.fINCLUDE_LAZYLOAD )
         this
     }
 
@@ -85,25 +90,25 @@ class QualBuilder(private val view: View,
         jqual.restricting( entity.getName() )
         this
     }
-    
+
     def to( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
         addQual( this )
     }
 
     def cachedAs( cacheName: String, qualtask: com.quinsoft.zeidon.Task = jtask ): QualBuilder = {
-        jqual.cachedAs( cacheName, qualtask );
+        jqual.cachedAs( cacheName, qualtask )
         this
     }
 
     def systemCachedAs( cacheName: String ): QualBuilder = {
-        jqual.cachedAs( cacheName, jtask.getSystemTask() );
+        jqual.cachedAs( cacheName, jtask.getSystemTask() )
         this
     }
 
     def activate(): Integer = {
         jqual.getView().logObjectInstance()
-        view.jview = jqual.activate();
-        return 0;
+        view.jview = jqual.activate()
+        return 0
     }
 
     /**
