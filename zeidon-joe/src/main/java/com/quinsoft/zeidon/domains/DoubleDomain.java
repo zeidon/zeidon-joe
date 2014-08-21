@@ -166,7 +166,7 @@ public class DoubleDomain extends AbstractNumericDomain
 
     private class DoubleContext extends BaseDomainContext
     {
-        private DecimalFormat format = null;
+        private DecimalFormat format = parser;
         private String        formatPattern = null;
         private Integer       decimalPlaces;
 
