@@ -21,8 +21,22 @@
         <parent>
           <groupId>com.enservio.maven</groupId>
           <artifactId>company-pom</artifactId>
-          <version>1.0.63-SNAPSHOT</version>
+          <version>1.0.85-SNAPSHOT</version>
         </parent>
+
+	<build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>2.5.1</version>
+              <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+              </configuration>
+            </plugin>
+	  </plugins>
+	</build>
 
 	<modules>
                 <module>zeidon-joe</module>

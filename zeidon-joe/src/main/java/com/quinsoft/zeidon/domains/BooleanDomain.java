@@ -75,6 +75,12 @@ public class BooleanDomain extends AbstractDomain
             }
         }
 
+        if ( externalValue instanceof Number )
+        {
+            int b = ((Number) externalValue).intValue();
+            return ! ( b == 0 );
+        }
+
         throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Boolean",
                                                   externalValue.getClass().getName() );
     }
