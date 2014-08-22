@@ -40,7 +40,7 @@ class EntityCursor( private[this] val view: View,
     def drop( reposition: CursorPosition ): CursorResult = jentityCursor.dropEntity( reposition )
     def delete(): CursorResult = jentityCursor.deleteEntity()
     def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
-
+    def exclude( position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.excludeEntity( position )
     def include( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = {
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
