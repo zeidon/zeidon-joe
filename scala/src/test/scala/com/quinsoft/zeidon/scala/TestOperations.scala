@@ -28,7 +28,8 @@ class TestOperations ( val task: Task ) extends ZeidonOperations{
     }
 
 	def TestOper() {
-		var view = VIEW BASEDONLOD "lStudDpt"
+		var view = VIEW BASED ON LOD "lStudDpt"
+		val s = VIEW.basedOn.lSudDpt
 		view.buildQual( _.Student.Status = "A" )
 		          .and( _.MajorDepartment.ID = 3 ).activate
 

@@ -3,6 +3,7 @@
  */
 package com.quinsoft.zeidon.scala
 
+import scala.language.dynamics
 import com.quinsoft.zeidon._
 
 /**
@@ -14,6 +15,8 @@ import com.quinsoft.zeidon._
  */
 trait ZeidonOperations {
     val task: Task
+
+    val ON = View.ON // Used to build "BASED ON LOD" syntax.
 
     val NEXT  = CursorPosition.NEXT
     val PREV  = CursorPosition.PREV
@@ -79,5 +82,4 @@ trait ZeidonOperations {
 */
 
     }
-
 }
