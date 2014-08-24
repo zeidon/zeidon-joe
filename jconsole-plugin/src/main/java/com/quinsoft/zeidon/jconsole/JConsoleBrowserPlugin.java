@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.jconsole;
 
 import java.beans.PropertyChangeEvent;

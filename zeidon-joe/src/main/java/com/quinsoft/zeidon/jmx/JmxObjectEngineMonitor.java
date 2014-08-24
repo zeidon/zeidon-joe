@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009-2012 QuinSoft
+    Copyright 2009-2014 QuinSoft
  */
 
 package com.quinsoft.zeidon.jmx;
@@ -385,6 +385,6 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         if ( view == null )
             return "NO VIEW";
 
-        return view.serializeOi().asJson().toStringWriter().withIncremental().write().getString();
+        return view.serializeOi().asJson().toStringWriter().withIncremental().compressed().write().getString();
     }
 }

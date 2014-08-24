@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.objectdefinition;
 
 import org.apache.commons.lang3.StringUtils;

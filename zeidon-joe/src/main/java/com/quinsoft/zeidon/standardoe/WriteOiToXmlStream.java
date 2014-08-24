@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009-2012 QuinSoft
+    Copyright 2009-2014 QuinSoft
  */
 
 package com.quinsoft.zeidon.standardoe;
@@ -27,10 +27,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -47,6 +47,7 @@ public class WriteOiToXmlStream implements StreamWriter
     private boolean incremental;
 
     private int currentIndent;
+    private SerializeOi options;
 
     @Override
     public void writeToStream( SerializeOi options )
@@ -56,6 +57,7 @@ public class WriteOiToXmlStream implements StreamWriter
             throw new ZeidonException( "XML stream processing can only handle a single OI" );
 
         view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
+        this.options = options;
         writer = options.getWriter();
         control = options.getFlags();
         incremental = this.control.contains( WriteOiFlags.INCREMENTAL );
@@ -88,6 +90,9 @@ public class WriteOiToXmlStream implements StreamWriter
 
     private void writeIndent()
     {
+        if ( options.isCompressed() )
+            return;
+
         for ( int i = 0; i < currentIndent; i++ )
             write( "  " );
     }

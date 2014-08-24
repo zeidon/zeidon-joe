@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.dbhandler;
 
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;

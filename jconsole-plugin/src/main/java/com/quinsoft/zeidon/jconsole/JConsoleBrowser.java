@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.jconsole;
 
 import java.awt.BorderLayout;
@@ -63,7 +60,7 @@ public class JConsoleBrowser extends JPanel
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-//                env.restoreEnvironment();
+                env.restoreEnvironment();
             }
         });
 

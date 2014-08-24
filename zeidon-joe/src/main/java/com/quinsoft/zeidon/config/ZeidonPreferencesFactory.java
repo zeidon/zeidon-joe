@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.config;
 
 import com.quinsoft.zeidon.Application;

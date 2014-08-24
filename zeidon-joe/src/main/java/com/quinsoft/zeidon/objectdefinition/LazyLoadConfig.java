@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.objectdefinition;
 
 import java.util.EnumSet;

@@ -168,7 +168,7 @@ class SimpleTest
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
 
-        stud.serializeOi().toFile( "/tmp/stud.json" ).asJson().withIncremental().write();
+        stud.serializeOi().toFile( "/tmp/stud.json" ).asJson().withIncremental().compressed().write();
         stud.serializeOi().toFile( "/tmp/stud2.json" ).asJson().write();
 
         View stud2 = new DeserializeOi( zencas )

@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009-2012 QuinSoft
+    Copyright 2009-2014 QuinSoft
  */
 package com.quinsoft.zeidon;
 

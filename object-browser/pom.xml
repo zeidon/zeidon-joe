@@ -17,10 +17,5 @@
             <artifactId>zeidon-joe</artifactId>
             <version>${project.parent.version}</version>  
         </dependency>
-        <dependency>
-            <groupId>org.jdesktop</groupId>
-            <artifactId>appframework</artifactId>
-            <version>1.0.3</version>
-        </dependency>
     </dependencies>
 </project>

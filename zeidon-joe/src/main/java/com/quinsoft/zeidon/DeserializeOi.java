@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon;
 
 import java.io.File;

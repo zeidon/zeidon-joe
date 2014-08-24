@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.util.ArrayList;
@@ -37,7 +34,7 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     @Override
     public void saveEnvironment()
     {
-        restore( objectBrowser.getMainFrame(), BROWSER_SESSION_FILE );
+        save( objectBrowser.getMainFrame(), BROWSER_SESSION_FILE );
     }
 
     @Override

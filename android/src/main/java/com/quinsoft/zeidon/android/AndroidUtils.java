@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.android;
 
 import java.io.File;

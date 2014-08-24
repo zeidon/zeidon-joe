@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon;
 
 import java.io.File;
@@ -312,5 +309,25 @@ public class SerializeOi
             return StreamFormat.POR;
 
         return format;
+    }
+
+    public boolean isCompressed()
+    {
+        return flags.contains( WriteOiFlags.COMPRESSED );
+    }
+
+    public SerializeOi setCompressed( boolean compressed )
+    {
+        if ( compressed )
+            flags.add( WriteOiFlags.COMPRESSED );
+        else
+            flags.remove( WriteOiFlags.COMPRESSED );
+
+        return this;
+    }
+
+    public SerializeOi compressed()
+    {
+        return setCompressed( true );
     }
 }

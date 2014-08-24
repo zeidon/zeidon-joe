@@ -14,20 +14,16 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009-2012 QuinSoft
+    Copyright 2009-2014 QuinSoft
  */
 
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jdesktop.application.ApplicationContext;
-import org.jdesktop.application.SingleFrameApplication;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -48,7 +44,6 @@ public abstract class BrowserEnvironment
 
     private final ObjectEngine oe;
     private final Map<ViewOd, ViewOdLayout> odLayouts;
-    private final BrowserContext context;
 
     private int     painterScaleFactor = 8;
     private boolean showHiddenAttributes = false;
@@ -71,7 +66,6 @@ public abstract class BrowserEnvironment
         super();
         this.oe = oe;
         odLayouts = new HashMap<ViewOd, ViewOdLayout>();
-        context = new BrowserContext();
     }
 
     protected ObjectEngine getOe()
@@ -109,31 +103,19 @@ public abstract class BrowserEnvironment
         return 8;
     }
 
-    public BrowserEnvironment restore( Component topLevelComponent, String filename )
+    public BrowserEnvironment restore( Component component, String filename )
     {
-        try
-        {
-            context.getSessionStorage().restore( topLevelComponent, filename );
-        }
-        catch ( IOException e )
-        {
-            error( "Error loading Browser session state from file %s: %s", filename, e.getMessage() );
-        }
-
+        String f = System.getProperty("user.home") + "/.ZeidonBrowser/" + filename;
+        WindowBoundsRestorer restorer = new WindowBoundsRestorer( f );
+        restorer.restore( component );
         return this;
     }
 
-    public BrowserEnvironment save( Component topLevelComponent, String filename )
+    public BrowserEnvironment save( Component component, String filename )
     {
-        try
-        {
-            context.getSessionStorage().save( topLevelComponent, filename );
-        }
-        catch ( IOException e )
-        {
-            error( "Error loading Browser session state from file %s: %s", filename, e.getMessage() );
-        }
-
+        String f = System.getProperty("user.home") + "/.ZeidonBrowser/" + filename;
+        WindowBoundsRestorer restorer = new WindowBoundsRestorer( f );
+        restorer.save( component );
         return this;
     }
 
@@ -203,15 +185,6 @@ public abstract class BrowserEnvironment
         return showUnnamedViews;
     }
 
-    private class BrowserContext extends ApplicationContext
-    {
-        public BrowserContext()
-        {
-            super();
-            setApplicationClass( ObjectBrowserState.class );
-        }
-    }
-
     public OiDisplayPanel createOiDisplay( Container container )
     {
         oiDisplay = new OiDisplayPanel( this );
@@ -226,17 +199,6 @@ public abstract class BrowserEnvironment
     public void setViewList( ViewListTable viewList )
     {
         this.viewList = viewList;
-    }
-
-    /**
-     * This is a dummy class so that we can use the Application context to save window state.
-     */
-    private static class ObjectBrowserState extends SingleFrameApplication
-    {
-        @Override
-        protected void startup()
-        {
-        }
     }
 
     public void viewSelected( final BrowserView view )

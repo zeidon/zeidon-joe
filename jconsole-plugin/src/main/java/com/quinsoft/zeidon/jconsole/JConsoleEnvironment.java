@@ -37,10 +37,7 @@ public class JConsoleEnvironment extends BrowserEnvironment
     private OeProxy currentlySelectedOe;
     private JFrame containingJFrame;
 
-//    private Component topLevelComponent;
-
-    public JConsoleEnvironment( ObjectEngine oe,
-                                MBeanServerConnection server )
+    public JConsoleEnvironment( ObjectEngine oe, MBeanServerConnection server )
     {
         super( oe );
         this.server = server;
@@ -93,7 +90,7 @@ public class JConsoleEnvironment extends BrowserEnvironment
     public void saveEnvironment()
     {
         JFrame jframe = getContainingJFrame();
-        save( jframe, "jconsole.xml" );
+        save( jframe, BROWSER_SESSION_FILE );
     }
 
     @Override

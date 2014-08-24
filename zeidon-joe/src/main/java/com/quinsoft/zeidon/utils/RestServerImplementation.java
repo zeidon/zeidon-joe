@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.utils;
 
 import com.quinsoft.zeidon.DeserializeOi;

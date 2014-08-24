@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.standardoe;
 
 import org.joda.time.DateTime;

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.dbhandler;
 
 import java.lang.reflect.Constructor;

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.config;
 
 import java.util.Arrays;

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.IOException;
@@ -69,7 +66,9 @@ public class WriteOisToJsonStream implements StreamWriter
         try
         {
             jg = jsonF.createGenerator( writer );
-            jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
+            if ( ! options.isCompressed() )
+                jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
+
             jg.writeStartObject();
 
             // Write meta info for entire JSON object.

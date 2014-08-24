@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.ObjectEngine;
