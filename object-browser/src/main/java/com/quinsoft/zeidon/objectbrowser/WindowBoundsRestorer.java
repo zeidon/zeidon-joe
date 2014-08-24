@@ -41,9 +41,6 @@ public class WindowBoundsRestorer
     private final String filename;
     private Properties properties;
 
-    /**
-     *
-     */
     public WindowBoundsRestorer( String filename )
     {
         this.filename = filename;
@@ -70,6 +67,13 @@ public class WindowBoundsRestorer
         }
     }
 
+    /**
+     * Loads the properties from the .xml file and sets all named windows with a matching
+     * name.
+     *
+     * @param component Any component in the Swing app.  The top-most container will be
+     * determined from this component.
+     */
     public void restore( Component component )
     {
         properties = new Properties();
