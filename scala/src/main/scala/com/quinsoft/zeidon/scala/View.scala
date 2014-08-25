@@ -29,7 +29,7 @@ class View( val task: Task ) extends Task( task ) {
         this( new Task( jtask ) )
     }
 
-    def basedOn = new LodChooser
+    def BasedOn( lodName: String ) = basedOnLod( lodName )
     def BASED( f: VmlSyntaxFiller ) = this
     def LOD( lodName: String ): View = basedOnLod( lodName )
     def basedOnLod( lodName: String ): View = {
