@@ -34,6 +34,7 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -349,22 +350,22 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( qual == null )
             return;
 
-        for ( EntityInstance ei : qual.cursor( "EntitySpec" ).eachEntity() )
+        for ( EntityInstance entitySpec : qual.cursor( "EntitySpec" ).eachEntity() )
         {
-            if ( ei.isAttributeNull( "EntityName" ) )
+            if ( entitySpec.isAttributeNull( "EntityName" ) )
                 throw new ZeidonException("Qualification view is missing entity name in EntitySpec" );
 
-            String entityName = ei.getStringFromAttribute( "EntityName" );
+            String entityName = entitySpec.getStringFromAttribute( "EntityName" );
             if ( StringUtils.isBlank( entityName ) )
                 throw new ZeidonException("Qualification view is missing entity name in EntitySpec" );
 
             ViewEntity viewEntity = view.getViewOd().getViewEntity( entityName );
-            QualEntity qualEntity = new QualEntity( ei, viewEntity );
+            QualEntity qualEntity = new QualEntity( entitySpec, viewEntity );
             qualMap.put( viewEntity, qualEntity );
 
             int parenCount = 0;
 
-            for ( EntityInstance qualAttribInstance : ei.getChildren( "QualAttrib" ) )
+            for ( EntityInstance qualAttribInstance : entitySpec.getChildren( "QualAttrib" ) )
             {
                 //
                 // Verify Oper
@@ -658,8 +659,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( ViewEntity child : joinedChildren )
             stmt.appendOrdering( child );
 
+        if ( qualEntity != null && qualEntity.activateLimit != null )
+            addActivateLimit( qualEntity.activateLimit, stmt );
+        else
         if ( viewEntity.getActivateLimit() != null )
-            addActivateLimit( viewEntity, stmt );
+            addActivateLimit( viewEntity.getActivateLimit(), stmt );
 
         return null;
     }
@@ -827,7 +831,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected abstract int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt);
     protected abstract int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt);
-    protected abstract void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt );
+    protected abstract void addActivateLimit( int limit, SqlStatement stmt );
 
     protected int executeStatement(View view, ViewEntity viewEntity, EntityInstance entityInstance, SqlStatement stmt)
     {
@@ -1915,6 +1919,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private boolean                usesChildQualification;
         private boolean                exclude;
         private boolean                childQualIsManyToMany;
+        private final Integer          activateLimit;
         private final EntityInstance   qualEntityInstance;
         private final ViewEntity       viewEntity;
         private final List<QualAttrib> qualAttribs;
@@ -1925,6 +1930,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             this.qualEntityInstance = qualEntityInstance;
             this.viewEntity = viewEntity;
             qualAttribs = new ArrayList<QualAttrib>();
+            AttributeInstance limitAttr = qualEntityInstance.getAttribute( "ActivateLimit" );
+            if ( limitAttr.isNull() )
+                activateLimit = null;
+            else
+                activateLimit = limitAttr.getInteger();
         }
 
         void addQualAttrib( QualAttrib qualAttrib )

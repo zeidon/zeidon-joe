@@ -50,13 +50,12 @@ aUPDATE    Y
 aXVAATT_TOK 3
 
 eATTRIB    3
-aNAME      OpenSQL
+aNAME      ActivateLimit
 aERATT_TOK 90029869
-aAPDM_TOK  90000032
-aDOMAIN    Text
-aTYPE      S
-aLTH       10000
-aSEQ_AD    A
+aAPDM_TOK  90000044
+aDOMAIN    Integer
+aTYPE      L
+aLTH       4
 aUPDATE    Y
 aXVAATT_TOK 4
 

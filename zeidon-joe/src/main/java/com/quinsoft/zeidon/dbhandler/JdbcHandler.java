@@ -296,7 +296,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    protected void addActivateLimit( ViewEntity viewEntity, SqlStatement stmt )
+    protected void addActivateLimit( int limit, SqlStatement stmt )
     {
         // Default is to do nothing.  Why?  Limits are DB-specific and anything we put here
         // could cause a generate problem.  We'll spit out a warning.

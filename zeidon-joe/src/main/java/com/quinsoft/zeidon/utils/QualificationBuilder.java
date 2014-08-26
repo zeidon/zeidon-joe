@@ -175,6 +175,12 @@ public class QualificationBuilder
         return setFlag( ActivateFlags.fMULTIPLE );
     }
 
+    public QualificationBuilder limitCountTo( int limit )
+    {
+        qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).setValue( limit );
+        return setFlag( ActivateFlags.fMULTIPLE );
+    }
+
     public QualificationBuilder setAsynchronous()
     {
         return asynchronous();
