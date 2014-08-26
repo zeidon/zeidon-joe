@@ -29,16 +29,27 @@ class View( val task: Task ) extends Task( task ) {
         this( new Task( jtask ) )
     }
 
-    def BasedOn( lodName: String ) = basedOnLod( lodName )
+    def basedOn( viewDef: ViewDef ) = setLod( viewDef.lodName , viewDef.applicationName  )
+    def basedOn( lodName: String ) = setLod( lodName )
     def BASED( f: VmlSyntaxFiller ) = this
-    def LOD( lodName: String ): View = basedOnLod( lodName )
-    def basedOnLod( lodName: String ): View = {
-        jviewOd = task.jtask.getApplication().getViewOd( task.jtask, lodName )
+    def LOD( lodName: String ): View = setLod( lodName )
+    def LOD( viewDef: ViewDef ): View = setLod( viewDef.lodName , viewDef.applicationName  )
+
+    @deprecated("Use basedOn instead")
+    def basedOnLod( lodName: String ) = setLod( lodName )
+
+    private def setLod( lodName: String, appName: String = null ): View = {
+        if ( appName == null )
+            jviewOd = task.jtask.getApplication().getViewOd( task.jtask, lodName )
+        else
+            jviewOd = task.jtask.getApplication( appName ).getViewOd( task.jtask, lodName )
+
         if ( jview != null && jview.getViewOd() != jviewOd )
             throw new ZeidonException( "ViewOD set by basedOnLod doesn't match view." )
 
         return this
     }
+
 
     def from( view: View ) = {
         jview = view.jview.newView()

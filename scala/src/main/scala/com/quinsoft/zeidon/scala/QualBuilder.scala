@@ -80,6 +80,11 @@ class QualBuilder(private val view: View,
         this
     }
 
+    def limitCountTo( limit: Integer ): QualBuilder = {
+        jqual.limitCountTo(limit)
+        this
+    }
+
     def includeLazy(): QualBuilder = {
         jqual.setFlag( ActivateFlags.fINCLUDE_LAZYLOAD )
         this

@@ -28,13 +28,15 @@ import scala.annotation.StaticAnnotation
  * @author dgc
  *
  */
-case class BasedOn( lodName: String, notEmpty: Boolean = true ) extends scala.annotation.StaticAnnotation {
-    println( "The BasedOn annotation was created" )
+case class basedOn( lodName: String,
+                    appName: String = "",
+                    notEmpty: Boolean = true ) extends scala.annotation.StaticAnnotation {
 
-    def macroTransform(annottees: Any*) = macro BasedOnMacro.impl
+    def this( viewDef: ViewDef ) = this( viewDef.lodName , viewDef.applicationName )
+    def macroTransform(annottees: Any*) = macro basedOnMacro.impl
 }
 
-object BasedOnMacro {
+object basedOnMacro {
     def impl( c: Context )( annottees: c.Expr[ Any ]* ): c.Expr[ Any ] = {
         import c.universe._
         val inputs = annottees.map( _.tree ).toList
