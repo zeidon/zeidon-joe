@@ -69,8 +69,8 @@ class ObjectInstance implements Lockable
     private boolean         updatedFile = false;
 
     /**
-     * Stores the option used when activating the OI.  This is intended to be used by lazy load
-     * processing.
+     * Stores the options used when activating the OI.  This is intended to be used by lazy load
+     * and pagination processing.
      */
     private ActivateOptions activateOptions;
 
