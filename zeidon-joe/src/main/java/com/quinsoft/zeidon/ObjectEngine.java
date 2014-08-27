@@ -50,7 +50,7 @@ public interface ObjectEngine
     Application getApplication(String appName ) throws UnknownApplicationException;
 
     /**
-     * Create a persistent Zeidon task.  See
+     * Create a NON-persistent Zeidon task.  See
      * createTask( String applicationName, boolean persistent )
      * for more information about persistent tasks.
      *

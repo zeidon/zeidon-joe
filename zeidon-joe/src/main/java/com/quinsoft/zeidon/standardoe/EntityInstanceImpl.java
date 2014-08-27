@@ -2625,7 +2625,6 @@ class EntityInstanceImpl implements EntityInstance
      * Makes sure the attribute can be updated.
      *
      * @param viewAttribute
-     * @param beingInitialized
      */
     private void validateUpdateAttribute( ViewAttribute viewAttribute )
     {

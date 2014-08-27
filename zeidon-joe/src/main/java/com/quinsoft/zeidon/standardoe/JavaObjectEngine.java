@@ -286,7 +286,7 @@ public class JavaObjectEngine implements ObjectEngine
     @Override
     public TaskImpl createTask( String applicationName )
     {
-        return createTask( applicationName, true, null );
+        return createTask( applicationName, false, null );
     }
 
     @Override
