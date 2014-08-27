@@ -321,7 +321,6 @@ public class JdbcHandler extends AbstractSqlHandler
 
             while ( rs.next() )
             {
-                // TODO: implement Activate Limit constraint.
                 loadAttributes( stmt, rs, view, loadedEntities, entityCounts );
 
                 // Check to see if we've loaded 2 root entities.  If so, then see if we're only
@@ -398,7 +397,9 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     /**
-     * This will load all the entities/attributes from the select statement.
+     * This will load all the attributes for a row in the ResultSet.  This will
+     * potentially create entities.
+     *
      * @param loadedEntities
      * @param entityCount
      * @throws SQLException
@@ -436,7 +437,16 @@ public class JdbcHandler extends AbstractSqlHandler
                     }
 
                     if ( value == null )
-                        continue;
+                    {
+                        ViewAttribute viewAttribute = dataField.getViewAttribute();
+                        if ( viewAttribute.getInitialValue() != null )
+                        {
+                            view.dblog().warn( "Attribute %s is null in DB but has Initial Value '%s' which will be ignored",
+                                               viewAttribute.toString(), viewAttribute.getInitialValue() );
+                        }
+
+                        continue; // Value is null so don't bother setting it.
+                    }
 
                     // Create the new entity if we haven't already loaded this instance, otherwise set the cursor to it.
                     if ( entityInstance == null )
@@ -453,10 +463,14 @@ public class JdbcHandler extends AbstractSqlHandler
                         if ( entityInstance != null )
                         {
                             // We've already loaded this entity instance.  Set the cursor and stop
-                            // loading the attributes for this instance.
+                            // loading the attributes for this instance.  We need to set the cursor because
+                            // we might be loading instances that are children of viewEntity.
                             view.cursor(  viewEntity ).setCursor( entityInstance );
                             break;
                         }
+
+                        //TODO: If we're loading all instances of ViewEntity then we need to set the parent cursor
+                        // to point to the correct entity.
 
                         // Create the entity but tell the OE not to spawn because this will cause the OE
                         // to attempt to spawn entities that we've already loaded.

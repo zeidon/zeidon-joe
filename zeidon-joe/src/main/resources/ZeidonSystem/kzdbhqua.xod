@@ -1,13 +1,13 @@
-z1000-Zeidon    KZDBHQUA TZZOXODO 03/30/14   16:35:23 1.0a2    
+z1000-Zeidon    KZDBHQUA TZZOXODO 08/26/14   21:05:23 1.0a2    
 eOBJECT    1
 aNAME      KZDBHQUA
 aZKey      1331051
 aOPER_LIBNM KZDBHQUA
-aER_DATE   20140322175321721
+aER_DATE   20140819124300328
 
 eENTITY    2
 aNAME      EntitySpec
-aMAX_LTH   20795
+aMAX_LTH   20806
 aERENT_TOK 1321534
 aFULLPERSIST Y
 aCREATE    Y
@@ -50,12 +50,13 @@ aUPDATE    Y
 aXVAATT_TOK 3
 
 eATTRIB    3
-aNAME      ActivateLimit
+aNAME      OpenSQL
 aERATT_TOK 90029869
-aAPDM_TOK  90000044
-aDOMAIN    Integer
-aTYPE      L
-aLTH       4
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       10000
+aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 4
 
@@ -92,6 +93,17 @@ aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 7
 
+eATTRIB    3
+aNAME      ActivateLimit
+aERATT_TOK 130000406
+aAPDM_TOK  90000044
+aDOMAIN    Integer
+aTYPE      L
+aLTH       4
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 8
+
 eCHILDENTITY 3
 aNAME      QualAttrib
 aERENT_TOK 1321536
@@ -116,7 +128,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 8
+aXVAATT_TOK 9
 
 eATTRIB    4
 aNAME      AttributeName
@@ -128,7 +140,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 9
+aXVAATT_TOK 10
 
 eATTRIB    4
 aNAME      Value
@@ -139,7 +151,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       500
 aUPDATE    Y
-aXVAATT_TOK 10
+aXVAATT_TOK 11
 
 eATTRIB    4
 aNAME      Oper
@@ -150,7 +162,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       20
 aUPDATE    Y
-aXVAATT_TOK 11
+aXVAATT_TOK 12
 
 eATTRIB    4
 aNAME      SourceEntityName
@@ -161,7 +173,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 12
+aXVAATT_TOK 13
 
 eATTRIB    4
 aNAME      SourceAttributeName
@@ -172,7 +184,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 13
+aXVAATT_TOK 14
 
 eATTRIB    4
 aNAME      SourceViewID
@@ -183,7 +195,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 14
+aXVAATT_TOK 15
 
 eATTRIB    4
 aNAME      SourceViewName
@@ -194,7 +206,7 @@ aTYPE      S
 aLTH       50
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 15
+aXVAATT_TOK 16
 
 eCHILDENTITY 4
 aNAME      SubQualAttrib
@@ -221,7 +233,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 16
+aXVAATT_TOK 17
 
 eATTRIB    5
 aNAME      AttributeName
@@ -233,7 +245,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 17
+aXVAATT_TOK 18
 
 eATTRIB    5
 aNAME      Value
@@ -244,7 +256,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       500
 aUPDATE    Y
-aXVAATT_TOK 18
+aXVAATT_TOK 19
 
 eATTRIB    5
 aNAME      Oper
@@ -255,7 +267,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       20
 aUPDATE    Y
-aXVAATT_TOK 19
+aXVAATT_TOK 20
 
 eATTRIB    5
 aNAME      SourceEntityName
@@ -266,7 +278,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 20
+aXVAATT_TOK 21
 
 eATTRIB    5
 aNAME      SourceAttributeName
@@ -277,7 +289,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 21
+aXVAATT_TOK 22
 
 eATTRIB    5
 aNAME      SourceViewID
@@ -288,7 +300,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 22
+aXVAATT_TOK 23
 
 eATTRIB    5
 aNAME      SourceViewName
@@ -299,7 +311,7 @@ aTYPE      S
 aLTH       50
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 15
+aXVAATT_TOK 16
 
 eCHILDENTITY 4
 aNAME      KeyList
@@ -325,7 +337,7 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 24
+aXVAATT_TOK 25
 
 eATTRIB    5
 aNAME      StringValue
@@ -336,7 +348,7 @@ aTYPE      S
 aLTH       250
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 25
+aXVAATT_TOK 26
 
 eATTRIB    5
 aNAME      IntegerList
@@ -347,7 +359,7 @@ aTYPE      B
 aLTH       7
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 26
+aXVAATT_TOK 27
 
 eCHILDENTITY 3
 aNAME      ActivateOption
@@ -373,7 +385,7 @@ aTYPE      S
 aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 27
+aXVAATT_TOK 28
 aHASHKEY   UNDER_PARENT
 
 eATTRIB    4
@@ -385,5 +397,5 @@ aTYPE      S
 aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 28
+aXVAATT_TOK 29
 
