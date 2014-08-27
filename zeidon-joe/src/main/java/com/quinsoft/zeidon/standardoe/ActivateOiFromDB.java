@@ -257,7 +257,7 @@ class ActivateOiFromDB implements Activator
     }
 
     /**
-     * Activate a single object instance or subobject, starting with rootEntity.
+     * Activate a single object instance or subobject, starting with rootViewEntity.
      * @return
      */
     private int singleActivate( ViewEntity rootViewEntity )

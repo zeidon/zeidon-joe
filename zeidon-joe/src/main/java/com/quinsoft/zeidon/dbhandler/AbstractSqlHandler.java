@@ -89,6 +89,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Boolean isBindAllValues;
     private Boolean ignoreJoins;
 
+    /**
+     * This is the list of instances that were loaded on the previous SELECT.
+     */
+    private Map<ViewEntity, Map<Object, EntityInstance>> recentlyLoadedInstances;
+
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
@@ -668,6 +673,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return null;
     }
 
+    protected boolean childCanBeLoadedAtOnce( ViewEntity childEntity )
+    {
+        DataRecord childRecord = childEntity.getDataRecord();
+        if ( childRecord == null )
+            return false;
+
+        RelRecord relRecord = childRecord.getRelRecord();
+        if ( relRecord == null )
+            return false;
+
+        if ( relRecord.getRelationshipType() != RelRecord.ONE_TO_MANY )
+            return false;
+
+        // We can only handle it if there is a single key between child
+        // and parent.
+        if ( relRecord.getRelFields().size() > 1 )
+            return false;
+
+        return true;
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.dbhandler.DbHandler#loadEntity(com.quinsoft.zeidon.View, com.quinsoft.zeidon.objectdefinition.ViewEntity, com.quinsoft.zeidon.View, java.lang.Object, long)
      */
@@ -709,6 +735,20 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         else
         {
             stmt = initializeCommand( SqlCommand.SELECT, view, viewEntity );
+
+            // Check to see if any child view entities have a one-to-many relationship.  If there
+            // are, we can load all the children in a single SELECT statement.  To do this we
+            // need to save a map of the entities we are about to load with their keys.
+            for ( ViewEntity childEntity : viewEntity.getChildren() )
+            {
+                if ( childCanBeLoadedAtOnce( childEntity ) )
+                {
+                    view.dblog().trace( "Entity %s has children that can be loaded all at once", viewEntity.getName() );
+                    stmt.loadedInstances = new HashMap<ViewEntity, Map<Object,EntityInstance>>();
+                    break;
+                }
+            }
+
             Integer rc = generateLoadStatement( stmt, view, viewEntity );
             if ( rc != null )
                 return rc;
@@ -718,6 +758,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         executeLoad( view, viewEntity, stmt );
         assert assertNotNullKey( view, viewEntity ) : "Activated entity has null key";
+
+        recentlyLoadedInstances = stmt.loadedInstances;
 
         return DbHandler.LOAD_DONE;
     }
@@ -1517,6 +1559,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private       StringBuilder suffix;   // DB-specific db-handlers put stuff here.
         private final LinkedHashMap<DataField, Integer> columns; // List of datafields in the column list.
         private final Map<Object,String> tables; // List of tables in the statement.  Key = table name, value = alias
+
+        /**
+         * This keeps track of instances created for this SELECT statement.  If this
+         * is non-null then we should be saving them.
+         */
+        Map<ViewEntity, Map<Object, EntityInstance>> loadedInstances;
 
         private final List<Object> boundValues;
 

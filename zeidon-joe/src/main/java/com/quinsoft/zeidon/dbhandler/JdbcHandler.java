@@ -494,6 +494,18 @@ public class JdbcHandler extends AbstractSqlHandler
 
                     ViewAttribute viewAttrib = dataField.getViewAttribute();
                     setAttribute( entityInstance, viewAttrib, value );
+
+                    // Check to see if we should save this instance in the map of all loaded
+                    // instances.
+                    if ( viewAttrib.isKey() && stmt.loadedInstances != null )
+                    {
+                        if ( ! stmt.loadedInstances.containsKey( viewEntity ) )
+                            stmt.loadedInstances.put( viewEntity, new HashMap<Object, EntityInstance>() );
+
+                        assert ! stmt.loadedInstances.get(  viewEntity ).containsKey( value ) : "Duplicate keys?";
+
+                        stmt.loadedInstances.get(  viewEntity ).put( value, entityInstance );
+                    }
                 }
                 catch ( Exception e )
                 {
