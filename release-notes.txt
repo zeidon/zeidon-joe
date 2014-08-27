@@ -1,3 +1,19 @@
 1.0.7
+    - Renamed oiServerUrl to oiSourceUrl in zeidon.ini.
+    - ObjectEngine.createTask( appName ) now creates a NON-persistent task.
+      ObjectEngine.createTask( appName, taskId ) still creates persistent tasks.
     - Update to Object Browser to run in a single window.
     - Added jconsole plugin to run Object Browser.
+    - Added SerializeOi and DeserializeOi builders.
+    - Numerous changes Scala DSL for VML.
+    - Refactored Sinatra infrastructure to not require full build of Sinatra projects.
+    - Following added to Activation qualification:
+        - Exclude processing--entities can be excluded from being loaded.
+	- Activate Limit.
+	- Lazy load can be ignored--all entities will be automatically loaded.
+    - Added Boolean as one of the supported Zeidon types.
+    - Added functionality for Dynamic View Attributes.
+    - Created options builder for SetMatchingAttributesByName.
+    - JoeUtils.getInputStream can take a list of pipe-delimited resources.  It
+      will attempt to load each one in turn until it finds one.
+
