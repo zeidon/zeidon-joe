@@ -48,7 +48,9 @@ public class ActivateOptions extends AbstractOptionsConfiguration
      * The name of this qualification.  Some day this could be used for calling
      * stored procedures or something with the FileDB.
      */
-    private String                 qualificationName;
+    private String qualificationName;
+
+    private boolean performingLazyLoad = false;
 
     public ActivateOptions( TaskQualification task )
     {
@@ -257,5 +259,15 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     public void setActivator( Activator activator )
     {
         this.activator = activator;
+    }
+
+    public boolean isPerformingLazyLoad()
+    {
+        return performingLazyLoad;
+    }
+
+    public void setPerformingLazyLoad( boolean performingLazyLoad )
+    {
+        this.performingLazyLoad = performingLazyLoad;
     }
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.primitives.Ints;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
@@ -44,16 +45,19 @@ public class IntegerDomain extends AbstractNumericDomain
     {
     	if ( externalValue == null )
     		return null;
-    	
+
+        if ( externalValue instanceof Long )
+            return Ints.checkedCast( (Long) externalValue );
+
         if ( externalValue instanceof Number )
             return ((Number) externalValue).intValue();
-        
+
         if ( externalValue instanceof CharSequence )
         {
             // VML uses "" as a synonym for null.
         	if ( externalValue instanceof String && StringUtils.isBlank( (String) externalValue) )
         		return null;
-        	
+
         	Integer num;
         	try
         	{
@@ -61,23 +65,23 @@ public class IntegerDomain extends AbstractNumericDomain
         	}
         	catch( Exception e )
         	{
-                throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Integer", 
-                        externalValue.getClass().getName() );        	
+                throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Integer",
+                        externalValue.getClass().getName() );
         	}
             return num;
         }
-        
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Integer", 
+
+        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Integer",
                                                   externalValue.getClass().getName() );
     }
-    
+
     @Override
     public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof Integer )
             return;
-        
-        throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for IntegerDomain", 
+
+        throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for IntegerDomain",
                                                   internalValue.getClass().getName() );
     }
 
@@ -97,13 +101,13 @@ public class IntegerDomain extends AbstractNumericDomain
         return value * num;
     }
 
-   
+
     @Override
     public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
     {
      	if ( internalValue == null )
     		return null;
-     	
-     	return internalValue.toString();	
+
+     	return internalValue.toString();
     }
 }

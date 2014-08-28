@@ -17,13 +17,14 @@
     Copyright 2009-2014 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.objectdefinition;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 
@@ -33,17 +34,55 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
  */
 public class RelRecord implements PortableFileAttributeHandler
 {
-    public final static char MANY_TO_MANY     = '2';
-    public final static char MANY_TO_ONE      = 'M';
-    public final static char ONE_TO_MANY      = 'O';
-    public final static char PARENT_IS_SOURCE = 'O';  // 'O' originally meant 'owner'.
-    public final static char CHILD_IS_SOURCE  = 'M';  // 'M' originally meant 'member'.
-    
-    private char   relationshipType;
+    public enum RelationshipType
+    {
+        // 'O' originally meant 'owner', 'M' originally meant member.
+        MANY_TO_MANY( '2' ), MANY_TO_ONE( 'M' ), ONE_TO_MANY( 'O' );
+
+        private final char code;
+
+        private RelationshipType( char code )
+        {
+            this.code = code;
+        }
+
+        public boolean isManyToMany()
+        {
+            return code == '2';
+        }
+
+        public boolean isManyToOne()
+        {
+            return code == 'M';
+        }
+
+        public boolean isOneToMany()
+        {
+            return code == 'O';
+        }
+
+        public boolean parentIsSource()
+        {
+            return isOneToMany();
+        }
+
+        public boolean childIsSource()
+        {
+            return isManyToOne();
+        }
+    }
+
+    public final static RelationshipType MANY_TO_MANY     = RelationshipType.MANY_TO_MANY;
+    public final static RelationshipType MANY_TO_ONE      = RelationshipType.MANY_TO_ONE;
+    public final static RelationshipType ONE_TO_MANY      = RelationshipType.ONE_TO_MANY;
+    public final static RelationshipType PARENT_IS_SOURCE = RelationshipType.ONE_TO_MANY;
+    public final static RelationshipType CHILD_IS_SOURCE  = RelationshipType.MANY_TO_ONE;
+
+    private RelationshipType   relationshipType;
     private String recordName;
-    private List<RelField> relFields = new ArrayList<RelField>();
-    private DataRecord dataRecord;
-    
+    private final List<RelField> relFields = new ArrayList<RelField>();
+    private final DataRecord dataRecord;
+
     RelRecord(DataRecord dataRecord)
     {
         this.dataRecord = dataRecord;
@@ -54,13 +93,21 @@ public class RelRecord implements PortableFileAttributeHandler
     {
         String attributeName = reader.getAttributeName();
         if ( attributeName.equals( "OWNER_MEMB" ) )
-            relationshipType = reader.getAttributeValue().charAt( 0 );
+        {
+            switch ( reader.getAttributeValue().charAt( 0 ) )
+            {
+                case 'O': relationshipType = RelationshipType.ONE_TO_MANY; break;
+                case '2': relationshipType = RelationshipType.MANY_TO_MANY; break;
+                case 'M': relationshipType = RelationshipType.MANY_TO_ONE; break;
+                default: throw new ZeidonException( "Unknown relationship type %s", reader.getAttributeValue() );
+            }
+        }
         else
         if ( attributeName.equals( "RECNAME" ) )
             recordName = reader.getAttributeValue();
     }
 
-    public char getRelationshipType()
+    public RelationshipType getRelationshipType()
     {
         return relationshipType;
     }
@@ -74,12 +121,12 @@ public class RelRecord implements PortableFileAttributeHandler
     {
         relFields.add( relField );
     }
-    
+
     public List<RelField> getRelFields()
     {
         return relFields;
     }
-    
+
     @Override
     public String toString()
     {

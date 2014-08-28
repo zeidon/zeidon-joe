@@ -50,7 +50,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
-import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
@@ -85,7 +84,6 @@ public class JdbcHandler extends AbstractSqlHandler
     private ArrayList<Object> generatedKeys;
 
     private final String configGroupName;
-    private final AbstractOptionsConfiguration options;
     private JdbcDomainTranslator translator;
     private String dateFormat;
     private String drivers;
@@ -462,7 +460,7 @@ public class JdbcHandler extends AbstractSqlHandler
                             // This is a one-to-many relationship with only one key.  We verified this
                             // with childCanBeLoadedAtOnce().
                             assert dataRecord.getRelRecord().getRelFields().size() == 1;
-                            assert dataRecord.getRelRecord().getRelationshipType() == RelRecord.ONE_TO_MANY;
+                            assert dataRecord.getRelRecord().getRelationshipType().isOneToMany();
                             assert loadedInstances.containsKey( parent );
 
                             DataField keyField = dataRecord.getRelRecord().getRelFields().get( 0 ).getRelDataField();

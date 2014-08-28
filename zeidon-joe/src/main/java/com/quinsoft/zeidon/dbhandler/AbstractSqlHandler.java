@@ -33,6 +33,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorResult;
@@ -677,6 +678,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected boolean childCanBeLoadedAtOnce( ViewEntity childEntity )
     {
+        // We should only be calling this as part of an activate so this cast
+        // is safe.
+        ActivateOptions aOptions = (ActivateOptions) options;
+
+        // If we're performing a lazy load then we shouldn't be loading all
+        // instances because lazy load indicates we want partial loading.
+        if ( aOptions.isPerformingLazyLoad() )
+            return false;
+
         if ( childEntity.isRecursive() )
             return false;
 
@@ -693,7 +703,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( relRecord == null )
             return false;
 
-        if ( relRecord.getRelationshipType() != RelRecord.ONE_TO_MANY )
+        if ( ! relRecord.getRelationshipType().isOneToMany() )
             return false;
 
         // We can only handle it if there is a single key between child

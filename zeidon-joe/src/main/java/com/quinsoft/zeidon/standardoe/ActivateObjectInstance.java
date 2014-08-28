@@ -127,9 +127,11 @@ class ActivateObjectInstance
      */
     void activate( ViewImpl view, ViewEntity childViewEntity )
     {
+        options.setPerformingLazyLoad( true );
         final Activator activator = selector.getActivator( getTask(), getApplication(), options );
         activator.init( getTask(), view, options );
         activator.activate( childViewEntity );
+        options.setPerformingLazyLoad( false );
     }
 
     private TaskImpl getTask()
