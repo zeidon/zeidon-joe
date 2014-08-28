@@ -50,6 +50,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
+import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
@@ -242,16 +243,9 @@ public class JdbcHandler extends AbstractSqlHandler
                 DataField dataField = dataRecord.getDataField( key );
                 Integer columnIdx = stmt.getColumns().get( dataField );
                 assert columnIdx != null;
-                try
-                {
-                    Object value = getSqlObject( rs, columnIdx, loadedObjects );
-                    String str = value.toString();
-                    values.add( str );
-                }
-                catch ( SQLException e )
-                {
-                    throw ZeidonException.wrapException( e ).appendMessage( "DataField: %s, column idx: %d", dataField, columnIdx );
-                }
+                Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
+                String str = value.toString();
+                values.add( str );
             }
         }
 
@@ -280,16 +274,9 @@ public class JdbcHandler extends AbstractSqlHandler
             DataField dataField = dataRecord.getDataField( key );
             Integer columnIdx = stmt.getColumns().get( dataField );
             assert columnIdx != null;
-            try
-            {
-                Object value = getSqlObject( rs, columnIdx, loadedObjects );
-                String str = value.toString();
-                builder.append( str ).append( "|" );
-            }
-            catch ( SQLException e )
-            {
-                throw ZeidonException.wrapException( e ).appendMessage( "DataField: %s, column idx: %d", dataField, columnIdx );
-            }
+            Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
+            String str = value.toString();
+            builder.append( str ).append( "|" );
         }
 
         return builder.toString();
@@ -368,16 +355,23 @@ public class JdbcHandler extends AbstractSqlHandler
         return rc;
     }
 
-    private Object getSqlObject( ResultSet rs, Integer idx, Map<Integer,Object> loadedObjects ) throws SQLException
+    private Object getSqlObject( ResultSet rs, Integer idx, DataField dataField, Map<Integer,Object> loadedObjects )
     {
-        Object o = loadedObjects.get( idx );
-        if ( o == null )
+        try
         {
-            o = rs.getObject( idx );
-            loadedObjects.put( idx, o );
-        }
+            Object o = loadedObjects.get( idx );
+            if ( o == null )
+            {
+                o = rs.getObject( idx );
+                loadedObjects.put( idx, o );
+            }
 
-        return o;
+            return o;
+        }
+        catch ( SQLException e )
+        {
+            throw ZeidonException.wrapException( e ).appendMessage( "DataField: %s, column idx: %d", dataField, idx );
+        }
     }
 
     /**
@@ -426,16 +420,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 try
                 {
                     Integer columnIdx = stmt.getColumns().get( dataField );
-                    Object value;
-                    try
-                    {
-                        value = getSqlObject( rs, columnIdx, loadedObjects );
-                    }
-                    catch ( SQLException e )
-                    {
-                        throw ZeidonException.wrapException( e ).appendMessage( "DataField: %s, column idx: %d", dataField, columnIdx );
-                    }
-
+                    Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
                     if ( value == null )
                     {
                         ViewAttribute viewAttribute = dataField.getViewAttribute();
@@ -469,8 +454,26 @@ public class JdbcHandler extends AbstractSqlHandler
                             break;
                         }
 
-                        //TODO: If we're loading all instances of ViewEntity then we need to set the parent cursor
+                        // If we're loading all instances of ViewEntity then we need to set the parent cursor
                         // to point to the correct entity.
+                        if ( childCanBeLoadedAtOnce( viewEntity ) )
+                        {
+                            ViewEntity parent = viewEntity.getParent();
+                            // This is a one-to-many relationship with only one key.  We verified this
+                            // with childCanBeLoadedAtOnce().
+                            assert dataRecord.getRelRecord().getRelFields().size() == 1;
+                            assert dataRecord.getRelRecord().getRelationshipType() == RelRecord.ONE_TO_MANY;
+                            assert loadedInstances.containsKey( parent );
+
+                            DataField keyField = dataRecord.getRelRecord().getRelFields().get( 0 ).getRelDataField();
+                            columnIdx = stmt.getColumns().get( keyField );;
+                            Object key = getSqlObject( rs, columnIdx, keyField, loadedObjects );
+                            EntityInstance parentEi = loadedInstances.get( parent ).get( key );
+                            if ( parentEi == null )
+                                throw new ZeidonException( "Didn't find parent EI by key: %s", key );
+
+                            view.cursor(  parent ).setCursor( parentEi );
+                        }
 
                         // Create the entity but tell the OE not to spawn because this will cause the OE
                         // to attempt to spawn entities that we've already loaded.
@@ -497,14 +500,10 @@ public class JdbcHandler extends AbstractSqlHandler
 
                     // Check to see if we should save this instance in the map of all loaded
                     // instances.
-                    if ( viewAttrib.isKey() && stmt.loadedInstances != null )
+                    if ( viewAttrib.isKey() && loadedInstances.containsKey( viewEntity ) )
                     {
-                        if ( ! stmt.loadedInstances.containsKey( viewEntity ) )
-                            stmt.loadedInstances.put( viewEntity, new HashMap<Object, EntityInstance>() );
-
-                        assert ! stmt.loadedInstances.get(  viewEntity ).containsKey( value ) : "Duplicate keys?";
-
-                        stmt.loadedInstances.get(  viewEntity ).put( value, entityInstance );
+                        assert ! loadedInstances.get(  viewEntity ).containsKey( value ) : "Duplicate keys?";
+                        loadedInstances.get(  viewEntity ).put( value, entityInstance );
                     }
                 }
                 catch ( Exception e )

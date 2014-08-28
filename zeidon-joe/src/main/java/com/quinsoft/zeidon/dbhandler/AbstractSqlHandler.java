@@ -90,9 +90,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Boolean ignoreJoins;
 
     /**
-     * This is the list of instances that were loaded on the previous SELECT.
+     * This is the list of instances that have been loaded.  It is limited to instances
+     * that have children that can be loaded in one SELECT.
+     *
+     * The sub-map is keyed by the key value of the entity instance.
      */
-    private Map<ViewEntity, Map<Object, EntityInstance>> recentlyLoadedInstances;
+    final Map<ViewEntity, Map<Object, EntityInstance>> loadedInstances = new HashMap<>();
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
@@ -572,8 +575,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 jc.add( child );
         }
 
-        joinableChildren.put( viewEntity, jc );
-
+        joinableChildren.put( viewEntity, Collections.unmodifiableList( jc ) );
         return jc;
     }
 
@@ -675,6 +677,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected boolean childCanBeLoadedAtOnce( ViewEntity childEntity )
     {
+        if ( childEntity.isRecursive() )
+            return false;
+
+        // If this is being joined with its parent then we don't need to load the
+        // child in a separate SELECT.
+        if ( isJoinable( childEntity ) )
+            return false;
+
         DataRecord childRecord = childEntity.getDataRecord();
         if ( childRecord == null )
             return false;
@@ -739,13 +749,21 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // Check to see if any child view entities have a one-to-many relationship.  If there
             // are, we can load all the children in a single SELECT statement.  To do this we
             // need to save a map of the entities we are about to load with their keys.
-            for ( ViewEntity childEntity : viewEntity.getChildren() )
+            // Do the same for all entities being joined with viewEntity.
+            ArrayList<ViewEntity> list = new ArrayList<>( getJoinableChildren( viewEntity ) );
+            list.add( viewEntity );
+            for ( ViewEntity ve : list )
             {
-                if ( childCanBeLoadedAtOnce( childEntity ) )
+                for ( ViewEntity childEntity : ve.getChildren() )
                 {
-                    view.dblog().trace( "Entity %s has children that can be loaded all at once", viewEntity.getName() );
-                    stmt.loadedInstances = new HashMap<ViewEntity, Map<Object,EntityInstance>>();
-                    break;
+                    if ( childCanBeLoadedAtOnce( childEntity ) )
+                    {
+                        view.dblog().trace( "Entity %s has children that can be loaded all at once", ve.getName() );
+                        if ( ! loadedInstances.containsKey( ve ) )
+                            loadedInstances.put( ve, new HashMap<Object, EntityInstance>() );
+
+                        break;
+                    }
                 }
             }
 
@@ -758,8 +776,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         executeLoad( view, viewEntity, stmt );
         assert assertNotNullKey( view, viewEntity ) : "Activated entity has null key";
-
-        recentlyLoadedInstances = stmt.loadedInstances;
 
         return DbHandler.LOAD_DONE;
     }
@@ -1559,12 +1575,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private       StringBuilder suffix;   // DB-specific db-handlers put stuff here.
         private final LinkedHashMap<DataField, Integer> columns; // List of datafields in the column list.
         private final Map<Object,String> tables; // List of tables in the statement.  Key = table name, value = alias
-
-        /**
-         * This keeps track of instances created for this SELECT statement.  If this
-         * is non-null then we should be saving them.
-         */
-        Map<ViewEntity, Map<Object, EntityInstance>> loadedInstances;
 
         private final List<Object> boundValues;
 
