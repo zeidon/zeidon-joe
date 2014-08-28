@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.CharSetUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +50,7 @@ import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
+import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
@@ -97,6 +100,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * The sub-map is keyed by the key value of the entity instance.
      */
     final Map<ViewEntity, Map<Object, EntityInstance>> loadedInstances = new HashMap<>();
+
+    /**
+     * This hash set keeps track of view entities that have been loaded.  It's used to
+     * determine if we've already loaded the instances of a ViewEntity.
+     */
+    final Set<ViewEntity> loadedViewEntities = new HashSet<>();
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
@@ -350,6 +359,25 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             stmt.appendCmd( colName );
             stmt.addColumn( dataRecord, dataField );
+        }
+
+        // If viewEntity can be loaded all at once and this is a many-to-many relationship
+        // we need to add the key of the parent table in the column list so we can use it
+        // later to set the cursor when we're loading attributes.
+        ViewEntity viewEntity = dataRecord.getViewEntity();
+        if ( stmt.commandType == SqlCommand.SELECT &&
+             childCanBeLoadedAtOnce( viewEntity ) && relRecord.getRelationshipType().isManyToMany() )
+        {
+            RelField relField = relRecord.getParentRelField();
+            StringBuilder colName = new StringBuilder();
+            String tableName = stmt.getTableName( relRecord );
+            colName.append( tableName ).append( "." );
+            colName.append( relField.getFieldName() );
+            if ( stmt.columns.size() > 0 )
+                stmt.appendCmd( ", " );
+
+            stmt.appendCmd( colName );
+            stmt.addColumn( dataRecord, relField.getSrcDataField() );
         }
     }
 
@@ -687,6 +715,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( aOptions.isPerformingLazyLoad() )
             return false;
 
+        if ( aOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_LOAD_OPTIMIZATION ) )
+            return false;
+
         if ( childEntity.isRecursive() )
             return false;
 
@@ -703,12 +734,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( relRecord == null )
             return false;
 
-        if ( ! relRecord.getRelationshipType().isOneToMany() )
+        RelationshipType relType = relRecord.getRelationshipType();
+        if ( relType.isManyToOne() )
             return false;
 
         // We can only handle it if there is a single key between child
         // and parent.
-        if ( relRecord.getRelFields().size() > 1 )
+        if ( relType.isOneToMany() && relRecord.getRelFields().size() > 1 )
+            return false;
+
+        if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
             return false;
 
         return true;
@@ -739,6 +774,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             task.dblog().trace( "Loaded via parent join" );
             return DbHandler.LOAD_DONE;
         }
+
+        // If we've already loaded this entity and the entity can be loaded all at once then
+        // we've loaded all the instances and we're done.
+        if ( loadedViewEntities.contains( viewEntity ) && childCanBeLoadedAtOnce( viewEntity ) )
+            return DbHandler.LOAD_DONE;
+
+        loadedViewEntities.add( viewEntity );
 
         // TODO: Implement autoload from parent.
         // TODO: We can't handle cached recursive statements because the cached statement is
@@ -1212,7 +1254,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         // If we are dealing with a m-to-m relationship lets first add the correspondence
         // table to the query.
-        if ( relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
+        if ( relRecord != null && relRecord.getRelationshipType().isManyToMany() )
         {
             boolean added = stmt.addTableToFrom( relRecord.getRecordName(), relRecord, true );
             if ( ! added )
@@ -1238,12 +1280,25 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                         stmt.where.append(" AND ");
 
                     stmt.appendWhere( stmt.getTableName( relRecord ), ".", relField.getFieldName() );
+
                     // If we get here then we are building the foreign keys for the
                     // entity that we are loading.  In this case the key values from
                     // the parent entities have already been loaded so we only need
                     // to copy the attribute values from the parent entities.
-                    if ( ! getAttributeValueEquality( stmt, stmt.where, srcDataField, view.cursor( srcViewEntity ) ) )
-                        return false; // Attribute is null--don't bother loading it.
+
+                    // If all entity instances of the ViewEntity we are loading are to
+                    // be loaded at once, then instead of qualifying on a single key we
+                    // want to create an IN clause with all the parent keys.
+                    if ( childCanBeLoadedAtOnce( viewEntity ) )
+                    {
+                        if ( ! addAllParentFks( stmt, viewEntity, srcDataField ) )
+                            return false; // No non-null attrs found so don't bother loading.
+                    }
+                    else
+                    {
+                        if ( ! getAttributeValueEquality( stmt, stmt.where, srcDataField, view.cursor( srcViewEntity ) ) )
+                            return false; // Attribute is null--don't bother loading it.
+                    }
 
                     stmt.conjunctionNeeded = true;
                 }
@@ -1315,8 +1370,25 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // entity that we are loading.  In this case the key values from
                     // the parent entities have already been loaded so we only need
                     // to copy the attribute values from the parent entities.
-                    if ( ! getAttributeValueEquality( stmt, stmt.where, srcDataField, view.cursor( srcViewEntity ) ) )
-                        return false; // Attribute is null--don't bother loading it.
+
+                    // If all entity instances of the ViewEntity we are loading are to
+                    // be loaded at once, then instead of qualifying on a single key we
+                    // want to create an IN clause with all the parent keys.
+                    if ( childCanBeLoadedAtOnce( viewEntity ) )
+                    {
+                        assert dataRecord.getRelRecord().getRelFields().size() == 1;
+                        assert dataRecord.getRelRecord().getRelationshipType().isOneToMany();
+
+                        if ( ! addAllParentFks( stmt, viewEntity, srcDataField ) )
+                            return false; // No non-null attrs found so don't bother loading.
+                    }
+                    else
+                    {
+                        // Add a single FK value.
+                        if ( ! getAttributeValueEquality( stmt, stmt.where, srcDataField, view.cursor( srcViewEntity ) ) )
+                            return false; // Attribute is null--don't bother loading it.
+                    }
+
                     stmt.conjunctionNeeded = true;
                 }
                 else
@@ -1378,6 +1450,30 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         } // for each relField...
 
         return true;
+    }
+
+    private boolean addAllParentFks( SqlStatement stmt, ViewEntity viewEntity, DataField srcDataField )
+    {
+        boolean foundNonNullValues = false;
+        ViewEntity parent = viewEntity.getParent();
+        assert loadedInstances.containsKey( parent );
+
+        stmt.appendWhere( " IN ( " );
+        for ( EntityInstance ei : loadedInstances.get( parent ).values() )
+        {
+            if ( ei.getAttribute( srcDataField.getViewAttribute() ).isNull() )
+                continue;
+
+            if ( foundNonNullValues )
+                stmt.appendWhere( ", " );
+
+            foundNonNullValues = true;
+            getAttributeValue( stmt, stmt.where, srcDataField, ei );
+        }
+
+        stmt.appendWhere( " ) " );
+
+        return foundNonNullValues;
     }
 
     /* (non-Javadoc)

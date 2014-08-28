@@ -540,7 +540,6 @@ public class ViewOd implements PortableFileAttributeHandler
             if ( reader.getAttributeName().equals( "RELFIELD" ))
             {
                 RelField relField = new RelField();
-                currentViewEntity.getDataRecord().getRelRecord().addRelField( relField );
                 return relField;
             }
             else
@@ -592,6 +591,12 @@ public class ViewOd implements PortableFileAttributeHandler
             {
                 ViewAttribute attrib = (ViewAttribute) handler;
                 currentViewEntity.addViewAttribute( attrib );
+            }
+            else
+            if ( handler instanceof RelField )
+            {
+                RelField relField = (RelField) handler;
+                currentViewEntity.getDataRecord().getRelRecord().addRelField( relField );
             }
         }
 

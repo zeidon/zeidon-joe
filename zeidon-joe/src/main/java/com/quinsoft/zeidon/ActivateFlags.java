@@ -42,7 +42,12 @@ public enum ActivateFlags
     fIGNORE_JOINS,
     fIGNORE_ACTIVATE_CONSTRAINTS,
     fINCLUDE_LAZYLOAD,
-    fASYNCHRONOUS;
+    fASYNCHRONOUS,
+
+    /**
+     * If set, then we won't load all ViewEntity instances in one SELECT statement.
+     */
+    fIGNORE_LOAD_OPTIMIZATION;
 
     public static final EnumSet<ActivateFlags> ROOT_ONLY = EnumSet.of( fROOT_ONLY );
     public static final EnumSet<ActivateFlags> ROOT_ONLY_MULTIPLE = EnumSet.of( fROOT_ONLY, fMULTIPLE );

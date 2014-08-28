@@ -83,6 +83,12 @@ public class RelRecord implements PortableFileAttributeHandler
     private final List<RelField> relFields = new ArrayList<RelField>();
     private final DataRecord dataRecord;
 
+    /**
+     * If the relationship is many-to-many, this is the relfield that references the parent
+     * entity of the relationship.
+     */
+    private RelField parentRelField;
+
     RelRecord(DataRecord dataRecord)
     {
         this.dataRecord = dataRecord;
@@ -131,5 +137,16 @@ public class RelRecord implements PortableFileAttributeHandler
     public String toString()
     {
         return dataRecord.toString() + ":" + recordName;
+    }
+
+    public RelField getParentRelField()
+    {
+        assert relationshipType.isManyToMany() : "Illegal attempt to get parent rel field";
+        return parentRelField;
+    }
+
+    public void setParentRelField( RelField parent )
+    {
+        parentRelField = parent;
     }
 }

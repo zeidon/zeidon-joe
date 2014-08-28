@@ -17,7 +17,7 @@
     Copyright 2009-2014 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.objectdefinition;
 
@@ -38,17 +38,17 @@ public class DataRecord implements PortableFileAttributeHandler
 {
     private String recordName;
     private String type;
-    private List<DataField> dataFields = new ArrayList<DataField>();
+    private final List<DataField> dataFields = new ArrayList<DataField>();
     private RelRecord relRecord;
     private final ViewEntity viewEntity;
     private final Map<ViewAttribute, DataField> attributeMap = new HashMap<ViewAttribute, DataField>();
     private boolean joinable;
-    
+
     DataRecord( ViewEntity viewEntity )
     {
         this.viewEntity = viewEntity;
     }
-    
+
     @Override
     public void setAttribute(PortableFileReader reader)
     {
@@ -67,7 +67,7 @@ public class DataRecord implements PortableFileAttributeHandler
     {
         return viewEntity;
     }
-    
+
     public String getRecordName()
     {
         return recordName;
@@ -82,20 +82,20 @@ public class DataRecord implements PortableFileAttributeHandler
     {
         dataFields.add( dataField );
     }
-    
+
     public DataField getDataField( ViewAttribute viewAttribute )
     {
         // We allow viewAttribute to be null.  Just return null.
         if ( viewAttribute == null )
             return null;
-        
+
         DataField dataField = attributeMap.get( viewAttribute );
         if ( dataField == null )
             throw new ZeidonException( "ViewAttrib %s does not belong to record %s", viewAttribute, this );
-        
+
         return dataField;
     }
-    
+
     public List<DataField> dataFields()
     {
         return dataFields;
@@ -110,16 +110,16 @@ public class DataRecord implements PortableFileAttributeHandler
     {
         this.relRecord = relRecord;
     }
-    
+
     // Loops through all the rel fields and sets the src and tgt datafields.
     void setFields(ViewEntity currentViewEntity)
     {
         for ( DataField dataField : dataFields )
             attributeMap.put( dataField.getViewAttribute(), dataField );
-        
+
         if ( relRecord == null )
             return;
-        
+
         Map<Integer, DataField> map = new HashMap<Integer, DataField>();
         for ( ViewEntity ve = currentViewEntity; ve != null; ve = ve.getParent() )
         {
@@ -132,21 +132,33 @@ public class DataRecord implements PortableFileAttributeHandler
                 }
             }
         }
-        
+
         for ( RelField relField : relRecord.getRelFields() )
         {
             if ( relField.getRelToken() != 0 )
                 relField.setRelDataField( map.get( relField.getRelToken() ) );
             if ( relField.getSrcToken() != 0 )
                 relField.setSrcDataField( map.get( relField.getSrcToken() ) );
+
+            if ( relRecord.getRelationshipType().isManyToMany() )
+            {
+                if ( relField.getSrcDataField() != null )
+                {
+                    {
+                        if ( relField.getSrcDataField().getViewAttribute().getViewEntity() != getViewEntity() )
+                            relRecord.setParentRelField( relField );
+                    }
+                }
+            }
+
         }
     }
-    
+
     public boolean isJoinable()
     {
         return joinable;
     }
-    
+
     @Override
     public String toString()
     {

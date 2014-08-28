@@ -50,6 +50,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
+import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
@@ -454,18 +455,21 @@ public class JdbcHandler extends AbstractSqlHandler
 
                         // If we're loading all instances of ViewEntity then we need to set the parent cursor
                         // to point to the correct entity.
-                        if ( childCanBeLoadedAtOnce( viewEntity ) )
+                        ViewEntity parent = viewEntity.getParent();
+                        RelRecord relRecord = dataRecord.getRelRecord();
+                        if ( loadedInstances.containsKey( parent ) && ! relRecord.getRelationshipType().isManyToOne() )
                         {
-                            ViewEntity parent = viewEntity.getParent();
-                            // This is a one-to-many relationship with only one key.  We verified this
-                            // with childCanBeLoadedAtOnce().
-                            assert dataRecord.getRelRecord().getRelFields().size() == 1;
-                            assert dataRecord.getRelRecord().getRelationshipType().isOneToMany();
-                            assert loadedInstances.containsKey( parent );
+                            DataField keyField;
+                            switch ( relRecord.getRelationshipType() )
+                            {
+                                case MANY_TO_MANY: keyField = relRecord.getParentRelField().getSrcDataField(); break;
+                                case ONE_TO_MANY:  keyField = relRecord.getRelFields().get( 0 ).getRelDataField(); break;
+                                default: throw new ZeidonException( "Unknown reltype" );
+                            }
 
-                            DataField keyField = dataRecord.getRelRecord().getRelFields().get( 0 ).getRelDataField();
-                            columnIdx = stmt.getColumns().get( keyField );;
+                            columnIdx = stmt.getColumns().get( keyField );
                             Object key = getSqlObject( rs, columnIdx, keyField, loadedObjects );
+
                             EntityInstance parentEi = loadedInstances.get( parent ).get( key );
                             if ( parentEi == null )
                                 throw new ZeidonException( "Didn't find parent EI by key: %s", key );
@@ -494,6 +498,12 @@ public class JdbcHandler extends AbstractSqlHandler
                     }
 
                     ViewAttribute viewAttrib = dataField.getViewAttribute();
+
+                    // If the viewAttrib does not belong to viewEntity then it's a field from a many-to-many
+                    // relationship that was used to set the cursor and shouldn't be copied.
+                    if ( viewAttrib.getViewEntity() != viewEntity )
+                        continue;
+
                     setAttribute( entityInstance, viewAttrib, value );
 
                     // Check to see if we should save this instance in the map of all loaded

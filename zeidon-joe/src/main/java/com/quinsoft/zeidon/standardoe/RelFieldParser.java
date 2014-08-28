@@ -53,8 +53,9 @@ class RelFieldParser
      *
      * @param relField
      * @param ei
+     * @return
      */
-    void parse( RelField relField, EntityInstanceImpl ei )
+    RelFieldParser parse( RelField relField, EntityInstanceImpl ei )
     {
         srcViewAttrib = relField.getSrcDataField().getViewAttribute();
         srcViewEntity = srcViewAttrib.getViewEntity();
@@ -76,6 +77,8 @@ class RelFieldParser
             srcInstance = ei;
             relInstance = ei.findMatchingParent( relViewEntity );
         }
+
+        return this;
     }
 
     /**
