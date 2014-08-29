@@ -189,10 +189,6 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue == null )
             return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
 
-        DomainContext context = getDefaultContext();
-        if ( context != null )
-            return context.convertToString( task, viewAttribute, internalValue );
-
         return internalValue.toString();
     }
 

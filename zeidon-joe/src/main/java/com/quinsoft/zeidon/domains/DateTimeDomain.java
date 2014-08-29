@@ -51,10 +51,6 @@ public class DateTimeDomain extends DateDomain
         if ( internalValue == null )
             return super.convertToString( task, viewAttribute, internalValue );
         
-        DomainContext context = getDefaultContext();
-        if ( context != null )
-            return context.convertToString( task, viewAttribute, internalValue );
-
         return defaultDateTimeFormatter.print( (DateTime) internalValue );
     }
 }

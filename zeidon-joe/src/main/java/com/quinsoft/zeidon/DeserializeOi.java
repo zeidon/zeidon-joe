@@ -182,7 +182,16 @@ public class DeserializeOi
 
     public List<View> activate()
     {
-        return task.activateOisFromStream( this );
+        try
+        {
+            return task.activateOisFromStream( this );
+        }
+        catch ( Exception e )
+        {
+            ZeidonException ze = ZeidonException.wrapException( e );
+            ze.prependFilename( resourceName );
+            throw ze;
+        }
     }
 
     /**
@@ -192,7 +201,7 @@ public class DeserializeOi
      */
     public View activateFirst()
     {
-        List<View> v = task.activateOisFromStream( this );
+        List<View> v = activate();
         return v.get( 0 );
     }
 

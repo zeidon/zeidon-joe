@@ -156,7 +156,7 @@ public class AttributePanel extends JPanel
 
                 int col = 0;
                 row[col++] = viewAttribute.getName();
-                row[col++] = ei.getStringFromAttribute( viewAttribute );
+                row[col++] = ei.getStringFromAttribute( viewAttribute, null );
                 row[col++] = ei.isAttributeUpdated( viewAttribute ) ? "Y" : "";
                 attrModel.addRow( row );
             }

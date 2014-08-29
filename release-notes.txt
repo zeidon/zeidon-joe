@@ -2,8 +2,6 @@
     - Renamed oiServerUrl to oiSourceUrl in zeidon.ini.
     - ObjectEngine.createTask( appName ) now creates a NON-persistent task.
       ObjectEngine.createTask( appName, taskId ) still creates persistent tasks.
-    - GetStringFromAttribute will attempt to use the default context if none is
-      supplied.
     - Following options added to Activation qualification:
         - Exclude processing--entities can be excluded from being loaded.
 	- Activate Limit.
