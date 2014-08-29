@@ -49,7 +49,11 @@ public class DateTimeDomain extends DateDomain
     public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
     {
         if ( internalValue == null )
-            return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
+            return super.convertToString( task, viewAttribute, internalValue );
+        
+        DomainContext context = getDefaultContext();
+        if ( context != null )
+            return context.convertToString( task, viewAttribute, internalValue );
 
         return defaultDateTimeFormatter.print( (DateTime) internalValue );
     }
