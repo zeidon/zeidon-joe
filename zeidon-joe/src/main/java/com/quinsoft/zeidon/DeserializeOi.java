@@ -250,6 +250,12 @@ public class DeserializeOi
         return this;
     }
 
+    public DeserializeOi setFormat( String format )
+    {
+        this.format = StreamFormat.valueOf( format );
+        return this;
+    }
+
     /**
      * @return the format
      */

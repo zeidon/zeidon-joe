@@ -179,6 +179,12 @@ public class SerializeOi
         return this;
     }
 
+    public SerializeOi setFormat( String format )
+    {
+        this.format = StreamFormat.valueOf( format );
+        return this;
+    }
+
     public SerializeOi asJson()
     {
         format = StreamFormat.JSON;
