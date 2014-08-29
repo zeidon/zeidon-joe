@@ -21,6 +21,8 @@ package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -34,10 +36,11 @@ public class TaskList extends JTable
 {
     private static final long serialVersionUID = 1L;
     private static String[] TASKLISTCOLS = { "Task ID", "Application Name" };
+    private static TaskListComparitor TASK_COMPARATOR = new TaskListComparitor();
 
     private final BrowserEnvironment env;
 
-    private List<String> currentTaskList;
+    private List<BrowserTask> currentTaskList;
     private DefaultTableModel model;
 
     /**
@@ -85,39 +88,68 @@ public class TaskList extends JTable
         Object[] row = new Object[ TASKLISTCOLS.length ];
         env.refreshBrowserTaskList();
 
-        List<String> taskList = new ArrayList<String>();
+        List<BrowserTask> taskList = new ArrayList<>( env.getCurrentTaskList().values() );
+        Collections.sort( taskList, TASK_COMPARATOR );
         idx = -1;
-        for ( BrowserTask task : env.getCurrentTaskList().values() )
+        for ( BrowserTask task : taskList )
         {
             if ( task.taskId.equals( selectedTask ) )
-                idx = taskList.size();
+                idx = model.getRowCount();
 
-            taskList.add( task.taskId );
             row[0] = task.taskId;
             row[1] = task.applicationName;
             model.addRow( row );
         }
 
         currentTaskList = taskList;
-
+        
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );
     }
 
     BrowserTask getTaskByIdx( int idx )
     {
-        String id = currentTaskList.get( idx );
+        String id = currentTaskList.get( idx ).taskId;
         return env.getTaskById( id );
     }
 
     BrowserTask getCurrentTask()
     {
-        return getTaskByIdx( 1 );
+        if ( model.getRowCount() == 0 )
+            return null;
+        
+        int idx = getSelectedRow();
+        if ( idx == -1 ) // This means no tasks are selected
+            idx = 0;     // Select task 0.  There should always be a system task.
+        
+        return getTaskByIdx( idx );
     }
 
     @Override
     public String toString()
     {
         return currentTaskList.toString();
+    }
+    
+    private static class TaskListComparitor implements Comparator<BrowserTask>
+    {
+        @Override
+        public int compare( BrowserTask a, BrowserTask b )
+        {
+            // We'll try comparing the task IDs as integers.  If that fails we'll
+            // compare them as strings.
+            try
+            {
+                long id1 = Long.parseLong( a.taskId );
+                long id2 = Long.parseLong( b.taskId );
+                return Long.compare( id1, id2 );
+            }
+            catch( NumberFormatException e )
+            {
+                // One of the IDs is not a number so just compare them as strings.
+                return a.taskId.compareTo( b.taskId );
+            }
+        }
+        
     }
 }

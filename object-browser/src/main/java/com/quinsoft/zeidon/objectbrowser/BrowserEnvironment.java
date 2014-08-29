@@ -21,6 +21,7 @@ package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import java.util.Map;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -103,9 +105,34 @@ public abstract class BrowserEnvironment
         return 8;
     }
 
+    private String getBrowserDir()
+    {
+        String filename = System.getProperty("user.home") + "/.ZeidonBrowser/";
+        createBrowserDir( filename );
+        return filename;
+    }
+    
+    private void createBrowserDir( String dir )
+    {
+        File theDir = new File( dir );
+
+        // if the directory does not exist, create it
+        if ( theDir.exists() )
+            return;
+        
+        try
+        {
+            theDir.mkdir();
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e ).prependFilename( dir );
+        }
+    }
+    
     public BrowserEnvironment restore( Component component, String filename )
     {
-        String f = System.getProperty("user.home") + "/.ZeidonBrowser/" + filename;
+        String f =  getBrowserDir() + filename;
         WindowBoundsRestorer restorer = new WindowBoundsRestorer( f );
         restorer.restore( component );
         return this;
@@ -113,7 +140,7 @@ public abstract class BrowserEnvironment
 
     public BrowserEnvironment save( Component component, String filename )
     {
-        String f = System.getProperty("user.home") + "/.ZeidonBrowser/" + filename;
+        String f =  getBrowserDir() + filename;
         WindowBoundsRestorer restorer = new WindowBoundsRestorer( f );
         restorer.save( component );
         return this;

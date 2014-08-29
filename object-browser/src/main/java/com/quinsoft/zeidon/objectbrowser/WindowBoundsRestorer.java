@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,6 +79,11 @@ public class WindowBoundsRestorer
     {
         properties = new Properties();
         InputStream is = null;
+        
+        File file = new File( filename );
+        if ( ! file.exists() )
+            return;
+        
         try
         {
             is = new FileInputStream( filename );

@@ -151,8 +151,13 @@ public class JConsoleEnvironment extends BrowserEnvironment
         {
             String[] strings = vstr.split( ",", 5 );
             String viewName = "*** unnamed *** ";
+            
+            // Was a view named passed?
             if ( strings.length == 5 && ! StringUtils.isBlank( strings[4] ) )
-                viewName = strings[4];
+                viewName = strings[4]; // Yes.
+            else
+            if ( ! isShowUnnamedViews() ) // No.  Check to see if we should show it.
+                continue; // Nope.
 
             BrowserView bv = new BrowserView( task,
                                               Long.parseLong( strings[0] ),
