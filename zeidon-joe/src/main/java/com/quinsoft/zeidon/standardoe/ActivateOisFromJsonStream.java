@@ -37,6 +37,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -80,6 +81,7 @@ class ActivateOisFromJsonStream implements StreamReader
     private View                          view;
     private final List<View>              returnList;
     private String version;
+    private List<EntityInstance>    selectedInstances;
 
     /**
      * A JSON stream will have a version.  Once the version is read from the stream a
@@ -156,7 +158,6 @@ class ActivateOisFromJsonStream implements StreamReader
             }
 
             jp.close();
-            view.reset();
         }
         catch ( Exception e )
         {
@@ -266,10 +267,28 @@ class ActivateOisFromJsonStream implements StreamReader
             token = jp.nextToken();
         }
 
+        if ( selectedInstances.size() > 0 )
+            setCursors();
+        else
+            view.reset();
+        
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "OI JSON stream doesn't end with object." );
 
         return true;  // Keep looking for OIs in the stream.
+    }
+
+    /**
+     * The view has been loaded from the stream and it was indicated that there are 
+     * cursor selections.  Reset them.
+     */
+    private void setCursors()
+    {
+        for ( EntityInstance ei : selectedInstances )
+        {
+            ViewEntity viewEntity = ei.getViewEntity();
+            view.cursor( viewEntity ).setCursor( ei );
+        }
     }
 
     private boolean readSimpleOi() throws Exception
@@ -328,6 +347,15 @@ class ActivateOisFromJsonStream implements StreamReader
             if ( token == JsonToken.END_ARRAY )
                 break;
 
+            if ( token == JsonToken.END_OBJECT )
+            {
+                // If we get here then this should indicate an empty OI.  Get the next
+                // token, verify that it's an END_ARRAY, and return.
+                token = jp.nextToken();
+                assert token == JsonToken.END_ARRAY;
+                break;
+            }
+
             // If there are multiple twins then the token is START_OBJECT to
             // indicate a new EI.
             if ( token == JsonToken.START_OBJECT )
@@ -349,7 +377,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
                 if ( StringUtils.equals( fieldName, ".meta" ) )
                 {
-                    entityMeta = readEntityMeta();
+                    entityMeta = readEntityMeta( ei );
 
                     // Now that we have everything we can perform some processing.
                     if ( entityMeta.isLinkedSource )
@@ -407,8 +435,11 @@ class ActivateOisFromJsonStream implements StreamReader
                 {
                     // We didn't find an attribute with a name matching fieldName.  Do we allow
                     // dynamic attributes for this entity?
-                    if ( ! options.getAllowableDynamicEntities().contains( viewEntity.getName() ) )
+                    if ( options.getAllowableDynamicEntities() == null ||
+                       ! options.getAllowableDynamicEntities().contains( viewEntity.getName() ) )
+                    {
                         viewEntity.getAttribute( fieldName ); // This will throw the exception.
+                    }
 
                     // We are allowing dynamic attributes.  Create one.
                     DynamicViewAttributeConfiguration config = new DynamicViewAttributeConfiguration();
@@ -461,26 +492,23 @@ class ActivateOisFromJsonStream implements StreamReader
         }
     }
 
-    private EntityMeta readEntityMeta() throws Exception
+    private EntityMeta readEntityMeta(EntityInstanceImpl ei) throws Exception
     {
         EntityMeta meta = new EntityMeta();
         while ( jp.nextToken() != JsonToken.END_OBJECT )
         {
             String fieldName = jp.getCurrentName();
 
-            if ( fieldName.equals( "incrementals" ) )
-                readIncrementals( meta );
-            else
-            if ( fieldName.equals( "isLinkedSource" ) )
-                meta.isLinkedSource = true;
-            else
-            if ( fieldName.equals( "entityKey" ) )
-                meta.entityKey = jp.getText();
-            else
-            if ( fieldName.equals( "linkedSource" ) )
-                meta.linkedSource = jp.getText();
-            else
-                task.log().warn( "Unknown entity meta value %s", fieldName );
+            switch ( fieldName )
+            {
+                case  "incrementals" :   readIncrementals( meta ); break;
+                case  "isLinkedSource" : meta.isLinkedSource = true; break;
+                case  "entityKey" :      meta.entityKey = jp.getText(); break;
+                case  "linkedSource" :   meta.linkedSource = jp.getText(); break;
+                case  "selected" :       selectedInstances.add( ei ); break;
+                
+                default: task.log().warn( "Unknown entity meta value %s", fieldName );
+            }
         }
 
         return meta;
@@ -519,12 +547,14 @@ class ActivateOisFromJsonStream implements StreamReader
             throw new ZeidonException( "ViewOD not specified in JSON .oimeta" );
 
         // We don't load the ViewOD until now because it's valid JSON to reorder
-        // the values
-        // in the .oimeta object.
+        // the values in the .oimeta object.
         viewOd = application.getViewOd( task, odName );
         view = task.activateEmptyObjectInstance( viewOd );
         returnList.add( view );
         JsonToken token = jp.nextToken();
+        
+        // Create a list to keep track of selected instances.
+        selectedInstances = new ArrayList<>();
 
         // If the next token is FIELD_NAME then OI data is next so get the next token.
         // If it's not the the OI is EMPTY and token should be END_OBJECT.
@@ -538,14 +568,14 @@ class ActivateOisFromJsonStream implements StreamReader
 
     private static class EntityMeta
     {
-        public String linkedSource;
-        public String entityKey;
-        public boolean isLinkedSource;
-        boolean updated  = false;
-        boolean created  = false;
-        boolean deleted  = false;
-        boolean included = false;
-        boolean excluded = false;
+        private String linkedSource;
+        private String entityKey;
+        private boolean isLinkedSource;
+        private boolean updated  = false;
+        private boolean created  = false;
+        private boolean deleted  = false;
+        private boolean included = false;
+        private boolean excluded = false;
     }
 
     @Override

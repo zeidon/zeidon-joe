@@ -291,30 +291,31 @@ public abstract class AbstractDomain implements Domain
         // Convert contextName to lower case so we can find the context irrespective of case.
         String lowerName;
         if ( StringUtils.isBlank( contextName ) )
-            lowerName = null;
-        else
-            lowerName = contextName.toLowerCase();
+            return getDefaultContext();
 
-        if ( lowerName == null )
+        lowerName = contextName.toLowerCase();
+        DomainContext context = contextList.get( lowerName );
+        return context;
+    }
+    
+    protected DomainContext getDefaultContext()
+    {
+        if ( defaultContext != null )
+            return defaultContext;
+
+        // We'll support domains that don't specify the default context if
+        // there is only one context.
+        if ( contextList.size() == 1 )
         {
-            if ( defaultContext != null )
-                return defaultContext;
-
-            // We'll support domains that don't specify the default context if
-            // there is only one context.
-            if ( contextList.size() == 1 )
+            for ( DomainContext dc : contextList.values() )
             {
-                for ( DomainContext dc : contextList.values() )
-                {
-                    // Get the first context and return it.
-                    defaultContext = dc;
-                    return defaultContext;
-                }
+                // Get the first context and return it.
+                defaultContext = dc;
+                return defaultContext;
             }
         }
 
-        DomainContext context = contextList.get( lowerName );
-        return context;
+        return null;
     }
 
     @Override

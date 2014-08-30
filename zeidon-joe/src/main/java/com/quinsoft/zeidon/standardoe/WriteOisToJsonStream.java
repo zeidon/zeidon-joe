@@ -51,10 +51,9 @@ public class WriteOisToJsonStream implements StreamWriter
     private Writer writer;
     private SerializeOi options;
     private EnumSet<WriteOiFlags> flags;
-    private boolean incremental;
     private Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
-
     private JsonGenerator jg;
+    private View currentView;
 
     @Override
     public void writeToStream( SerializeOi options )
@@ -66,8 +65,7 @@ public class WriteOisToJsonStream implements StreamWriter
             flags = EnumSet.noneOf( WriteOiFlags.class );
         else
             flags = options.getFlags();
-        incremental = flags.contains( WriteOiFlags.INCREMENTAL );
-        if ( ! incremental )
+        if ( ! flags.contains( WriteOiFlags.INCREMENTAL ) )
             throw new ZeidonException( "This JSON stream writer intended for writing incremental." );
 
         // Create a set of all the OIs and turn off the record owner flag.  The record owner
@@ -99,6 +97,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
             for ( View view : viewList )
             {
+                currentView = view;
                 jg.writeStartObject();
                 writeOi( view );
                 jg.writeEndObject();
@@ -124,8 +123,7 @@ public class WriteOisToJsonStream implements StreamWriter
               ei != null;
               ei = ei.getNextTwin() )
         {
-            if ( incremental || !ei.isHidden() )
-                lastViewEntity = writeEntity( ei, lastViewEntity );
+            lastViewEntity = writeEntity( ei, lastViewEntity );
         }
 
         // If lastViewEntity is null then the OI is empty so write a start array
@@ -144,7 +142,7 @@ public class WriteOisToJsonStream implements StreamWriter
         jg.writeObjectFieldStart( ".oimeta" );
         jg.writeStringField( "application", view.getViewOd().getApplication().getName() );
         jg.writeStringField( "odName", view.getViewOd().getName() );
-        jg.writeBooleanField( "incremental", incremental );
+        jg.writeBooleanField( "incremental", true );
         jg.writeEndObject();
     }
 
@@ -172,15 +170,14 @@ public class WriteOisToJsonStream implements StreamWriter
                 {
                     String value = attrib.getString( ei.getTask(), viewAttribute );
                     jg.writeStringField( viewAttribute.getName(), value );
-                    if ( incremental && viewAttribute.isPersistent() )
+                    if ( viewAttribute.isPersistent() )
                         writeAttributeMeta( attrib, viewAttribute );
                 }
             }
 
-            // Loop through the children and add them.  If 'incremental' is true then
-            // we want hidden entities.
+            // Loop through the children and add them. 
             ViewEntity lastChildViewEntity = null;
-            for ( EntityInstanceImpl child : ei.getDirectChildren( incremental ) )
+            for ( EntityInstanceImpl child : ei.getDirectChildren( true ) )
             {
                 lastChildViewEntity = writeEntity( child, lastChildViewEntity );
             }
@@ -277,11 +274,11 @@ public class WriteOisToJsonStream implements StreamWriter
         boolean writeAttributes = true;
         EntityInstanceImpl recordOwner = findLinkedRecordOwner( ei );
 
-        if ( ! incremental && recordOwner == null )
-            return writeAttributes;  // Nothing to do if we're not writing incrementals.
-
+        ViewEntity viewEntity = ei.getViewEntity();
+        boolean selectedCursor = currentView.cursor( viewEntity ).getEntityInstance() == ei;
+        
         String str = createIncrementalStr( ei );
-        if ( StringUtils.isBlank( str ) && recordOwner == null )
+        if ( StringUtils.isBlank( str ) && recordOwner == null && ! selectedCursor )
             return writeAttributes;
 
         jg.writeObjectFieldStart( ".meta" );
@@ -289,6 +286,9 @@ public class WriteOisToJsonStream implements StreamWriter
         if ( ! StringUtils.isBlank( str )  )
             jg.writeStringField( "incrementals", str );
 
+        if ( selectedCursor )
+            jg.writeBooleanField( "selected", true );
+        
         if ( recordOwner != null )
         {
             if ( recordOwner == ei )

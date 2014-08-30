@@ -15,6 +15,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
@@ -168,6 +169,8 @@ class SimpleTest
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
 
+        stud.cursor( "Student" ).setPosition( 6 );
+        String id = stud.cursor( "Student" ).getAttribute( "ID" ).getString();
         stud.serializeOi().toFile( "/tmp/stud.json" ).asJson().withIncremental().compressed().write();
         stud.serializeOi().toFile( "/tmp/stud2.json" ).asJson().write();
 
@@ -184,8 +187,10 @@ class SimpleTest
                             .asJson()
                             .activate();
         stud3.get( 0 ).logObjectInstance();
-        oe.startBrowser();
-        oe.toString();
+
+        String id2 = stud3.get( 0 ).cursor( "Student" ).getAttribute( "ID" ).getString();
+        if ( ! id.equals( id2 ) )
+            throw new ZeidonException( "Mismatching IDs" );
 
         //        stud.logObjectInstance();
 /*
