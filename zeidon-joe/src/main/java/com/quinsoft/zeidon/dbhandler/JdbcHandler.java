@@ -319,7 +319,7 @@ public class JdbcHandler extends AbstractSqlHandler
 
                     // If we're loading the root and we're only supposed to load a single root
                     // then stop loading.
-                    if ( viewEntity.getParent() == null && control.contains( ActivateFlags.fSINGLE ) )
+                    if ( viewEntity.getParent() == null && activateFlags.contains( ActivateFlags.fSINGLE ) )
                     {
                         // We've loaded 2 root entities.  Delete the second (current) one.
                         view.cursor( viewEntity ).dropEntity();
@@ -328,16 +328,19 @@ public class JdbcHandler extends AbstractSqlHandler
                 }
             }
 
-            for ( ViewEntity ve : entityCounts.keySet() )
+            if ( task.dblog().isDebugEnabled() )
             {
-                ViewEntity parentEntity = ve.getParent();
-                if ( parentEntity != null )
+                for ( ViewEntity ve : entityCounts.keySet() )
                 {
-                    EntityCursor parentCursor = view.cursor( parentEntity );
-                    task.dblog().debug( "Activated %d %s entities for %s", entityCounts.get( ve ), ve, parentCursor );
+                    ViewEntity parentEntity = ve.getParent();
+                    if ( parentEntity != null )
+                    {
+                        EntityCursor parentCursor = view.cursor( parentEntity );
+                        task.dblog().debug( "Activated %d %s entities for %s", entityCounts.get( ve ), ve, parentCursor );
+                    }
+                    else
+                        task.dblog().debug( "Activated %d %s entities", entityCounts.get( ve ), ve );
                 }
-                else
-                    task.dblog().debug( "Activated %d %s entities", entityCounts.get( ve ), ve );
             }
         }
         catch ( Exception e )
@@ -457,7 +460,7 @@ public class JdbcHandler extends AbstractSqlHandler
                         // to point to the correct entity.
                         ViewEntity parent = viewEntity.getParent();
                         RelRecord relRecord = dataRecord.getRelRecord();
-                        if ( loadedInstances.containsKey( parent ) && ! relRecord.getRelationshipType().isManyToOne() )
+                        if ( selectAllInstances( viewEntity ) )
                         {
                             DataField keyField;
                             switch ( relRecord.getRelationshipType() )
@@ -510,8 +513,16 @@ public class JdbcHandler extends AbstractSqlHandler
                     // instances.
                     if ( viewAttrib.isKey() && loadedInstances.containsKey( viewEntity ) )
                     {
-                        assert ! loadedInstances.get(  viewEntity ).containsKey( value ) : "Duplicate keys?";
-                        loadedInstances.get(  viewEntity ).put( value, entityInstance );
+                        // If we have a situation where the key is already in the map then
+                        // there are multiple instances of viewEntity.  This can happen if
+                        // one of the parent relationships is many-to-one.  Duplicate keys
+                        // nullifies the ability to load the children in a single select
+                        // so remove the viewEntity from loadedInstances to indicate we
+                        // can't load the children in one select.
+                        if ( loadedInstances.get(  viewEntity ).containsKey( value ) )
+                            loadedInstances.remove( viewEntity );
+                        else
+                            loadedInstances.get(  viewEntity ).put( value, entityInstance );
                     }
                 }
                 catch ( Exception e )
@@ -640,6 +651,9 @@ public class JdbcHandler extends AbstractSqlHandler
                 case SELECT:
                 case DELETE:
                     cacheThisCommand = true;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -972,6 +986,8 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     static private final Class<?>[] translatorConstructorArgs = new Class<?>[] { Task.class, JdbcHandler.class };
+
+    @SuppressWarnings("unchecked")
     public JdbcDomainTranslator getTranslator()
     {
         if ( translator == null )

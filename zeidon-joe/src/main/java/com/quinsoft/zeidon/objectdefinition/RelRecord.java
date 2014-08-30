@@ -88,6 +88,7 @@ public class RelRecord implements PortableFileAttributeHandler
      * entity of the relationship.
      */
     private RelField parentRelField;
+    private RelField childRelField;
 
     RelRecord(DataRecord dataRecord)
     {
@@ -145,8 +146,19 @@ public class RelRecord implements PortableFileAttributeHandler
         return parentRelField;
     }
 
+    public RelField getChildRelField()
+    {
+        assert relationshipType.isManyToMany() : "Illegal attempt to get child rel field";
+        return childRelField;
+    }
+
     public void setParentRelField( RelField parent )
     {
         parentRelField = parent;
+    }
+
+    public void setChildRelField( RelField childRelField )
+    {
+        this.childRelField = childRelField;
     }
 }

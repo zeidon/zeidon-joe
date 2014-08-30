@@ -149,6 +149,14 @@ public class DataRecord implements PortableFileAttributeHandler
                             relRecord.setParentRelField( relField );
                     }
                 }
+                else
+                if ( relField.getRelDataField() != null )
+                {
+                    {
+                        if ( relField.getRelDataField().getViewAttribute().getViewEntity() == getViewEntity() )
+                            relRecord.setChildRelField( relField );
+                    }
+                }
             }
 
         }

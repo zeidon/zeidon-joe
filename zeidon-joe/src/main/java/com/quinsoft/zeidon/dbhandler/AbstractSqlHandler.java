@@ -75,7 +75,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     protected final OiRelinker entityLinker;
     protected View qual;
     protected Map<ViewEntity, QualEntity> qualMap;
-    protected EnumSet<ActivateFlags> control;
+    protected EnumSet<ActivateFlags> activateFlags;
     protected AbstractOptionsConfiguration options;
 
     /**
@@ -99,13 +99,18 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      *
      * The sub-map is keyed by the key value of the entity instance.
      */
-    final Map<ViewEntity, Map<Object, EntityInstance>> loadedInstances = new HashMap<>();
+    protected Map<ViewEntity, Map<Object, EntityInstance>> loadedInstances;
 
     /**
      * This hash set keeps track of view entities that have been loaded.  It's used to
      * determine if we've already loaded the instances of a ViewEntity.
      */
-    final Set<ViewEntity> loadedViewEntities = new HashSet<>();
+    protected Set<ViewEntity> loadedViewEntities;
+
+    /**
+     * If a viewEntity is in this set it can be loaded in a single select.
+     */
+    private Set<ViewEntity> loadInOneSelect;
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
@@ -366,7 +371,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // later to set the cursor when we're loading attributes.
         ViewEntity viewEntity = dataRecord.getViewEntity();
         if ( stmt.commandType == SqlCommand.SELECT &&
-             childCanBeLoadedAtOnce( viewEntity ) && relRecord.getRelationshipType().isManyToMany() )
+             selectAllInstances( viewEntity ) && relRecord.getRelationshipType().isManyToMany() )
         {
             RelField relField = relRecord.getParentRelField();
             StringBuilder colName = new StringBuilder();
@@ -559,17 +564,64 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     public int beginActivate( View view, View qual, EnumSet<ActivateFlags> control )
     {
         this.qual = qual;
-        this.control = control;
+        this.activateFlags = control;
         verifyQualificationObject( view );
+
+        loadedViewEntities = new HashSet<>();
+
+        determineEntitiesThatCanBeLoadedInOneSelect( view );
+
         return 0;
+    }
+
+    /**
+     * This determines what ViewEntities can be loaded in a single SELECT statement.
+     * @param view
+     */
+    private void determineEntitiesThatCanBeLoadedInOneSelect(View view)
+    {
+        // If an entity can be loaded in one SELECT we need to keep a map of its parent
+        // EIs so we can set cursors appropriately.
+        loadedInstances = new HashMap<ViewEntity, Map<Object,EntityInstance>>();
+        loadInOneSelect = new HashSet<>();
+
+        for ( ViewEntity viewEntity : view.getViewOd().getViewEntitiesHier() )
+        {
+            ViewEntity parent = viewEntity.getParent();
+            if ( parent == null )
+                continue;
+
+            if ( entityCanBeLoadedAtOnce( viewEntity ) )
+            {
+                loadedInstances.put( parent, new HashMap<Object, EntityInstance>() );
+                loadInOneSelect.add( viewEntity );
+            }
+        }
+    }
+
+    /**
+     * Returns true if all the instances of ViewEntity can be loaded in a single select.
+     *
+     * @param viewEntity
+     */
+    protected boolean selectAllInstances( ViewEntity viewEntity )
+    {
+        if ( loadInOneSelect.contains( viewEntity ) )
+        {
+            ViewEntity parent = viewEntity.getParent();
+            if ( loadedInstances.containsKey( parent ) )
+                return true;
+        }
+
+        return false;
     }
 
     protected boolean activatingWithJoins()
     {
-        if ( control.contains( ActivateFlags.fIGNORE_JOINS ) )
+        if ( activateFlags.contains( ActivateFlags.fIGNORE_JOINS ) )
             return false;
 
-        if ( control.contains( ActivateFlags.fROOT_ONLY ) )
+        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
             return false;
 
         if ( ignoreJoins() )
@@ -704,13 +756,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return null;
     }
 
-    protected boolean childCanBeLoadedAtOnce( ViewEntity childEntity )
+    private boolean entityCanBeLoadedAtOnce( ViewEntity viewEntity )
     {
         // We should only be calling this as part of an activate so this cast
         // is safe.
         ActivateOptions aOptions = (ActivateOptions) options;
 
-        // If we're performing a lazy load then we shouldn't be loading all
+        // If we're activating as part of a lazy load then we shouldn't be loading all
         // instances because lazy load indicates we want partial loading.
         if ( aOptions.isPerformingLazyLoad() )
             return false;
@@ -718,15 +770,19 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( aOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_LOAD_OPTIMIZATION ) )
             return false;
 
-        if ( childEntity.isRecursive() )
-            return false;
+        // Can't load children of recursive entities.
+        for ( ViewEntity ve = viewEntity; ve != null; ve = ve.getParent() )
+        {
+            if ( ve.isRecursive() )
+                return false;
+        }
 
         // If this is being joined with its parent then we don't need to load the
         // child in a separate SELECT.
-        if ( isJoinable( childEntity ) )
+        if ( isJoinable( viewEntity ) )
             return false;
 
-        DataRecord childRecord = childEntity.getDataRecord();
+        DataRecord childRecord = viewEntity.getDataRecord();
         if ( childRecord == null )
             return false;
 
@@ -735,6 +791,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
 
         RelationshipType relType = relRecord.getRelationshipType();
+        if ( relType == null )
+            return false;
+
         if ( relType.isManyToOne() )
             return false;
 
@@ -744,6 +803,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
 
         if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
+            return false;
+
+        // It's part of a parent join.
+        if ( isJoinable( viewEntity ) )
             return false;
 
         return true;
@@ -777,7 +840,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         // If we've already loaded this entity and the entity can be loaded all at once then
         // we've loaded all the instances and we're done.
-        if ( loadedViewEntities.contains( viewEntity ) && childCanBeLoadedAtOnce( viewEntity ) )
+        if ( loadedViewEntities.contains( viewEntity ) && selectAllInstances( viewEntity ) )
             return DbHandler.LOAD_DONE;
 
         loadedViewEntities.add( viewEntity );
@@ -797,28 +860,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         else
         {
             stmt = initializeCommand( SqlCommand.SELECT, view, viewEntity );
-
-            // Check to see if any child view entities have a one-to-many relationship.  If there
-            // are, we can load all the children in a single SELECT statement.  To do this we
-            // need to save a map of the entities we are about to load with their keys.
-            // Do the same for all entities being joined with viewEntity.
-            ArrayList<ViewEntity> list = new ArrayList<>( getJoinableChildren( viewEntity ) );
-            list.add( viewEntity );
-            for ( ViewEntity ve : list )
-            {
-                for ( ViewEntity childEntity : ve.getChildren() )
-                {
-                    if ( childCanBeLoadedAtOnce( childEntity ) )
-                    {
-                        view.dblog().trace( "Entity %s has children that can be loaded all at once", ve.getName() );
-                        if ( ! loadedInstances.containsKey( ve ) )
-                            loadedInstances.put( ve, new HashMap<Object, EntityInstance>() );
-
-                        break;
-                    }
-                }
-            }
-
             Integer rc = generateLoadStatement( stmt, view, viewEntity );
             if ( rc != null )
                 return rc;
@@ -826,7 +867,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             cachedStmts.put( viewEntity, stmt );
         }
 
+        ViewEntity parent = viewEntity.getParent();
+        EntityInstance parentEi = null;
+        if ( parent != null )
+            parentEi = view.cursor( parent ).getEntityInstance();
+
         executeLoad( view, viewEntity, stmt );
+
+        if ( parentEi != null )
+            view.cursor( parent ).setCursor( parentEi );
+
         assert assertNotNullKey( view, viewEntity ) : "Activated entity has null key";
 
         return DbHandler.LOAD_DONE;
@@ -1289,7 +1339,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // If all entity instances of the ViewEntity we are loading are to
                     // be loaded at once, then instead of qualifying on a single key we
                     // want to create an IN clause with all the parent keys.
-                    if ( childCanBeLoadedAtOnce( viewEntity ) )
+                    if ( selectAllInstances( viewEntity ) )
                     {
                         if ( ! addAllParentFks( stmt, viewEntity, srcDataField ) )
                             return false; // No non-null attrs found so don't bother loading.
@@ -1374,7 +1424,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // If all entity instances of the ViewEntity we are loading are to
                     // be loaded at once, then instead of qualifying on a single key we
                     // want to create an IN clause with all the parent keys.
-                    if ( childCanBeLoadedAtOnce( viewEntity ) )
+                    if ( selectAllInstances( viewEntity ) )
                     {
                         assert dataRecord.getRelRecord().getRelFields().size() == 1;
                         assert dataRecord.getRelRecord().getRelationshipType().isOneToMany();
@@ -1461,6 +1511,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         stmt.appendWhere( " IN ( " );
         for ( EntityInstance ei : loadedInstances.get( parent ).values() )
         {
+            // Edge case: when loading entities with a limit we may end up dropping
+            // some EI's.  Skip any entities that are flagged as hidden.
+            if ( ei.isHidden() )
+                continue;
+
             if ( ei.getAttribute( srcDataField.getViewAttribute() ).isNull() )
                 continue;
 

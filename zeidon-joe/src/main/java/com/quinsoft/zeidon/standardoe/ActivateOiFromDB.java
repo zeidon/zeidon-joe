@@ -81,11 +81,6 @@ class ActivateOiFromDB implements Activator
         Timer timer = new Timer();
         ObjectInstance oi = view.getObjectInstance();
 
-        // Set flag to tell cursor processing to not bother with checking for lazy-loaded
-        // entities.  Since we're activating we know we don't want to load lazy entities
-        // via cursor access.
-        oi.setIgnoreLazyLoadEntities( true );
-
         ViewEntity rootEntity = viewOd.getRoot();
         activate( rootEntity );
 
@@ -100,7 +95,6 @@ class ActivateOiFromDB implements Activator
             view.reset();
             view.getViewOd().executeActivateConstraint( view );
 		}
-        oi.setIgnoreLazyLoadEntities( false );
         task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
 
         return view;
@@ -121,8 +115,15 @@ class ActivateOiFromDB implements Activator
         boolean transactionStarted = false;
         boolean commit = false;
         String viewName = "__Load in progress " + viewOd.getName();
+        ObjectInstance oi = view.getObjectInstance();
         try
         {
+
+            // Set flag to tell cursor processing to not bother with checking for lazy-loaded
+            // entities.  Since we're activating we know we don't want to load lazy entities
+            // via cursor access.
+            oi.setIgnoreLazyLoadEntities( true );
+
             task.log().debug( "Activating %s from DB", viewOd.getName() );
             view.setName( viewName );
 
@@ -143,6 +144,7 @@ class ActivateOiFromDB implements Activator
         }
         finally
         {
+            oi.setIgnoreLazyLoadEntities( false );
             view.dropNameForView( viewName );
             if ( transactionStarted )
                 dbHandler.endTransaction( commit );
