@@ -79,6 +79,13 @@ class View( val task: Task ) extends Task( task ) {
         this
     }
 
+    def activateAll(): View = {
+        validateViewOd
+        val builder = new QualBuilder( this, jviewOd )
+        builder.activate
+        this
+    }
+
     def buildQual( addQual: ( QualBuilder ) => QualBuilder ): QualBuilder = {
         val builder = buildQual()
         addQual( builder )

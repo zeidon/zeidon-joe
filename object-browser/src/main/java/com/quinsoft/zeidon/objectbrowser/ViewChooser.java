@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.util.EnumSet;
 
 import javax.swing.JButton;
@@ -75,7 +76,8 @@ class ViewChooser extends JPanel implements ActionListener
         splitPane.setResizeWeight( 0.4 );
 
         JPanel buttonPane = new JPanel();
-        addButton( buttonPane, "Refresh", REFRESH );
+        JButton refresh = addButton( buttonPane, "Refresh", REFRESH );
+        refresh.setMnemonic( KeyEvent.VK_R );
         final JCheckBox showUnnamed = new JCheckBox( "Unnamed", env.isShowUnnamedViews() );
         showUnnamed.addItemListener( new ItemListener(){
             @Override
@@ -92,12 +94,13 @@ class ViewChooser extends JPanel implements ActionListener
         add( buttonPane, BorderLayout.SOUTH );
     }
 
-    private void addButton( JPanel buttonPane, String title, String command )
+    private JButton addButton( JPanel buttonPane, String title, String command )
     {
         JButton button = new JButton( title );
         button.setActionCommand( command );
         button.addActionListener( this );
         buttonPane.add( button );
+        return button;
     }
 
     void refresh()

@@ -55,25 +55,25 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 public class EntitySquare extends JPanel implements MouseListener
 {
     private static final long serialVersionUID = 1L;
-    
+
     private static final int SMALLEST_WIDTH  = 10;
     private static final int SMALLEST_HEIGHT = 7;
     private static final int VERTICAL_PAD    = 3;
     private static final int HORIZONTAL_PAD  = 2;
-    
+
     private static Color SELECTED_COLOR = Color.RED;
     private static Color ENTITY_EXISTS  = Color.GREEN;
     private static Color NULL_ENTITY    = Color.GRAY;
     private static Color OUT_OF_SCOPE   = Color.BLACK;
     private static Color NOT_LOADED     = Color.LIGHT_GRAY;
-    
+
     private final OiDisplay          oiDisplay;
     private final ViewEntityLayout   viewEntityLayout;
     private final BrowserEnvironment env;
     private final Dimension          size;
     private final Dimension          paddedSize;
     private final Font font;
-    
+
     EntitySquare( OiDisplay display, BrowserEnvironment environment, ViewEntityLayout layout )
     {
         super();
@@ -81,7 +81,7 @@ public class EntitySquare extends JPanel implements MouseListener
         oiDisplay = display;
         viewEntityLayout = layout;
         size = new Dimension( SMALLEST_WIDTH * env.getPainterScaleFactor(), SMALLEST_HEIGHT * env.getPainterScaleFactor() );
-        paddedSize = new Dimension( ( SMALLEST_WIDTH + HORIZONTAL_PAD * 2 ) * env.getPainterScaleFactor(), 
+        paddedSize = new Dimension( ( SMALLEST_WIDTH + HORIZONTAL_PAD * 2 ) * env.getPainterScaleFactor(),
                                     ( SMALLEST_HEIGHT + VERTICAL_PAD * 2 ) * env.getPainterScaleFactor() );
         setSize( size );
         font = new Font( Font.SANS_SERIF, Font.PLAIN, env.getPainterScaleFactor() );
@@ -94,13 +94,13 @@ public class EntitySquare extends JPanel implements MouseListener
         Rectangle b = getBounds();
         return new Point( b.x + b.width / 2, b.y );
     }
-    
+
     Point getBottomAnchor()
     {
         Rectangle b = getBounds();
         return new Point( b.x + b.width / 2, b.y + b.height );
     }
-    
+
     static String getKeyString( EntityInstance ei, ViewEntity viewEntity )
     {
         StringBuilder builder = new StringBuilder();
@@ -119,20 +119,20 @@ public class EntitySquare extends JPanel implements MouseListener
          		   builder.append( key.getName() ).append( ": HIDDEN" );
         	}
         }
-        
+
         return builder.toString();
     }
-    
+
     private View getView()
     {
         return oiDisplay.getView();
     }
-    
+
     ViewEntity getViewEntity()
     {
         return viewEntityLayout.getViewEntity();
     }
-    
+
     private String getSiblingCount( EntityCursor cursor )
     {
         EntityInstance ei = cursor.getEntityInstance();
@@ -143,10 +143,10 @@ public class EntitySquare extends JPanel implements MouseListener
         int count = num;
         for ( EntityInstance t = ei; t != null && t.getNextTwin() != null; t = t.getNextTwin() )
             count++;
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append( num ).append( " of " ).append( count );
-        
+
         List<String> flags = new ArrayList<String>();
         if ( ei.isCreated() )
             flags.add( "CR" );
@@ -158,10 +158,10 @@ public class EntitySquare extends JPanel implements MouseListener
             flags.add( "IN" );
         if ( ei.isExcluded() )
             flags.add( "EX" );
-        
+
         if ( flags.size() > 0 )
             sb.append( "  (" ).append( StringUtils.join( flags, "," ) ).append( ")" );
-        
+
         return sb.toString();
     }
 
@@ -170,23 +170,23 @@ public class EntitySquare extends JPanel implements MouseListener
         Color prevColor = graphics2.getColor();
         if ( color != null )
             graphics2.setColor( color );
-        
+
         FontMetrics fm = graphics2.getFontMetrics();
         int lth = fm.stringWidth( text );
         int mid = size.width / 2;
         graphics2.drawString( text, mid - lth/2, y );
-        
+
         if ( color != null )
             graphics2.setColor( prevColor );
     }
-    
+
     @Override
     public void paint(Graphics g)
     {
         Graphics2D graphics2 = (Graphics2D) g;
         ViewEntity viewEntity = getViewEntity();
         EntityCursor cursor = getView().cursor( viewEntity );
-        
+
         if ( oiDisplay.getSelectedEntity() == this )
             g.setColor( SELECTED_COLOR );
         else
@@ -196,15 +196,15 @@ public class EntitySquare extends JPanel implements MouseListener
                 case NULL:
                     g.setColor( NULL_ENTITY );
                     break;
-                    
+
                 case OUT_OF_SCOPE:
                     g.setColor( OUT_OF_SCOPE );
                     break;
-                    
+
                 case NOT_LOADED:
                     g.setColor( NOT_LOADED );
                     break;
-                    
+
                 default:
                     g.setColor( ENTITY_EXISTS );
             }
@@ -221,18 +221,21 @@ public class EntitySquare extends JPanel implements MouseListener
         // Write the entity name
         graphics2.setFont( font );
         paintCenteredText( graphics2, env.getPainterScaleFactor(),viewEntity.getName(), null );
-        
+
         switch ( cursor.getStatus() )
         {
             case NULL:
-            case NOT_LOADED:
                 // Do nothing.
                 break;
-                
+
+            case NOT_LOADED:
+                paintCenteredText( graphics2, size.height / 2, "(Not yet loaded)", Color.WHITE );
+                break;
+
             case OUT_OF_SCOPE:
                 paintCenteredText( graphics2, size.height / 2, "Out of Scope", Color.WHITE );
                 break;
-                
+
             default:
                 String s = getKeyString( cursor, viewEntity );
                 paintCenteredText( graphics2, size.height / 2, s, null );
@@ -248,9 +251,9 @@ public class EntitySquare extends JPanel implements MouseListener
         EntitySquare prevSelected = oiDisplay.getSelectedEntity();
         if ( prevSelected == this )
             return;
-        
+
         oiDisplay.setSelectedEntity( this );
-        
+
         prevSelected.repaint();
         this.repaint();
     }
@@ -293,15 +296,16 @@ public class EntitySquare extends JPanel implements MouseListener
         return paddedSize;
     }
 
+    @Override
     public Dimension getSize()
     {
         return size;
     }
-    
+
     private class EntityPopupMenu extends JPopupMenu
     {
         private static final long serialVersionUID = 1L;
-        
+
         public EntityPopupMenu()
         {
             JMenuItem item = new JMenuItem( "Set to subobject" );
@@ -313,7 +317,7 @@ public class EntitySquare extends JPanel implements MouseListener
             add( item );
         }
     }
-    
+
     private class SubobjectMenuListener extends AbstractAction
     {
         private static final long serialVersionUID = 1L;
