@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -162,11 +163,26 @@ class OiDisplay extends JPanel
 
     void setSelectedEntityFromViewEntity( ViewEntity viewEntity )
     {
+        EntitySquare prevSelected = getSelectedEntity();
+
         EntitySquare square = entities.get( viewEntity );
         setSelectedEntity( square );
-        Point p = square.getLocation();
+        prevSelected.repaint();
+        square.repaint();
+
+        // Check to see if the square is outside the viewable area on the scroll.
+        Rectangle sqrec = square.getBounds();
+        Rectangle scrollrec = scroller.getViewport().getViewRect();
+        if ( ! scrollrec.contains( sqrec ) )
+        {
+            // Create a point that puts the middle of the square into the middle
+            // of the scroll.
+            Point p = new Point( (int) ( sqrec.getCenterX() - scrollrec.getWidth() / 2 ),
+                                 (int) ( sqrec.getCenterY() + scrollrec.getHeight() / 2 ) );
+            repositionScroll( p );
+        }
+
         revalidate();
-        repositionScroll( p );
     }
 
     /**

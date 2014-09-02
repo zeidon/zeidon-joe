@@ -87,17 +87,25 @@ public class EntityListPanel extends JPanel
         renderer.setClosedIcon( null );
         renderer.setOpenIcon( null );
 
-        MouseListener ml = new MouseAdapter() {
+        MouseListener ml = new MouseAdapter()
+        {
             @Override
-            public void mousePressed(MouseEvent e) {
-                int selRow = jtree.getRowForLocation(e.getX(), e.getY());
-                TreePath selPath = jtree.getPathForLocation(e.getX(), e.getY());
+            public void mousePressed( MouseEvent e )
+            {
+                int selRow = jtree.getRowForLocation( e.getX(), e.getY() );
+                TreePath selPath = jtree.getPathForLocation( e.getX(), e.getY() );
+                if ( selPath == null )
+                    return;
+
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
-                if(selRow != -1) {
-                    if(e.getClickCount() == 1) {
+                if ( selRow != -1 )
+                {
+                    if ( e.getClickCount() == 1 )
+                    {
                         valueChanged( selectedNode );
                     }
-                    else if(e.getClickCount() == 2) {
+                    else if ( e.getClickCount() == 2 )
+                    {
                         valueChanged( selectedNode );
                     }
                 }

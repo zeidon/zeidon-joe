@@ -54,7 +54,7 @@ public class MainPanel extends JPanel
         leftTabbedPane.addTab( "Twins", new TwinInstancesPanel( this.env ) );
         leftTabbedPane.addTab( "Entity List", new EntityListPanel( this.env ) );
 
-        leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
+        leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_V);
         leftTabbedPane.setMnemonicAt(1, KeyEvent.VK_A);
         leftTabbedPane.setMnemonicAt(2, KeyEvent.VK_W);
         leftTabbedPane.setMnemonicAt(3, KeyEvent.VK_E);
