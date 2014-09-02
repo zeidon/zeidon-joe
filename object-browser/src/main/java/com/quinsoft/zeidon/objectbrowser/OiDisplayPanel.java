@@ -36,7 +36,7 @@ import com.quinsoft.zeidon.objectbrowser.OiDisplay.EntitySelectedListener;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 
 /**
- * This is the frame around the OI display.
+ * This is the main panel around the OI display.
  *
  * @author DG
  *
@@ -94,6 +94,11 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
 
         add( oiDisplay, BorderLayout.CENTER );
         oiDisplay.revalidate();
+    }
+
+    void setSelectedEntity( ViewEntity viewEntity )
+    {
+        oiDisplay.setSelectedEntityFromViewEntity( viewEntity );
     }
 
     @Override

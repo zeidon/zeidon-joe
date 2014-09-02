@@ -70,9 +70,10 @@ public class JConsoleBrowser extends JPanel
             }
         });
 
+        int tabIndex = main.getLeftTabbedPane().getTabCount();
         main.getLeftTabbedPane().addTab( "OE List", oePane );
-        main.getLeftTabbedPane().setMnemonicAt(3, KeyEvent.VK_O);
-        main.getLeftTabbedPane().setSelectedIndex( 3 );
+        main.getLeftTabbedPane().setMnemonicAt( tabIndex, KeyEvent.VK_O );
+        main.getLeftTabbedPane().setSelectedIndex( tabIndex );
         add( main, BorderLayout.CENTER );
 
         SwingUtilities.invokeLater(new Runnable() {

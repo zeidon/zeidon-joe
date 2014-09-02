@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.test;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -46,15 +47,15 @@ public class TestLazyLoad
 
         String lazyLoadEntity = "Registration";
         String lazyLoadChild  = "RegistrationCourse";
-        
+
         view.logObjectInstance(); // Should not cause lazy load.
         CursorStatus status = view.cursor( lazyLoadEntity ).getStatus();
-        Assert.assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
-        
+        assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
+
         String id = view.cursor( lazyLoadEntity ).getStringFromAttribute( "ID" );
         status = view.cursor( lazyLoadEntity ).getStatus();
-        Assert.assertEquals("'Category' status is not SET.", CursorStatus.SET, status );
-        Assert.assertTrue( "ID is null after lazy load", ! StringUtils.isBlank( id ) );
+        assertEquals("'Category' status is not SET.", CursorStatus.SET, status );
+        assertTrue( "ID is null after lazy load", ! StringUtils.isBlank( id ) );
 
         // Lets do it again and test cursor looping.
         view = new QualificationBuilder( zencas )
@@ -65,7 +66,7 @@ public class TestLazyLoad
         int count = 0;
         for ( EntityInstance ei : view.cursor( lazyLoadEntity ).eachEntity() )
             count++;
-        Assert.assertTrue( "# of lazy-loaded entities is wrong", count > 0 );
+        assertTrue( "# of lazy-loaded entities is wrong", count > 0 );
         view.logObjectInstance();
 
         // Lets do it again and test accessing a child of lazy-loaded object.
@@ -74,26 +75,26 @@ public class TestLazyLoad
                             .addAttribQual( "ID", 2 )
                             .multipleRoots()
                             .activate();
-        
+
         status = view.cursor( lazyLoadChild ).getStatus();
-        Assert.assertEquals( lazyLoadChild + " status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
+        assertEquals( lazyLoadChild + " status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
         id = view.cursor( lazyLoadChild ).getStringFromAttribute( "ID" );
-        Assert.assertTrue( "ID is null after lazy load", ! StringUtils.isBlank( id ) );
-        
+        assertTrue( "ID is null after lazy load", ! StringUtils.isBlank( id ) );
+
         // Try again.  This time we'll turn off lazy loading.
         view = new QualificationBuilder( zencas )
                             .setViewOd( "LazyLoad" )
                             .addAttribQual( "ID", 1 )
                             .singleRoot()
                             .activate();
-        
+
         view.setLazyLoad( false );
         status = view.cursor( lazyLoadEntity ).getStatus();
-        Assert.assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
+        assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
         try
         {
             id = view.cursor( lazyLoadEntity ).getStringFromAttribute( "ID" );
-            Assert.assertTrue( "Cursor was apparently set", false );
+            assertTrue( "Cursor was apparently set", false );
         }
         catch ( NullCursorException e )
         {
@@ -101,7 +102,7 @@ public class TestLazyLoad
         }
 //        view.logObjectInstance();
         status = view.cursor( lazyLoadEntity ).getStatus();
-        Assert.assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
-        
+        assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
+
     }
 }

@@ -58,6 +58,7 @@ public abstract class BrowserEnvironment
     private List<BrowserView> currentViewList;
     private Map<String, BrowserTask> currentTaskList;
     private TwinInstancesPanel twinInstancesPanel;
+    private EntityListPanel entityListPanel;
 
     /**
      * @param oe
@@ -111,7 +112,7 @@ public abstract class BrowserEnvironment
         createBrowserDir( filename );
         return filename;
     }
-    
+
     private void createBrowserDir( String dir )
     {
         File theDir = new File( dir );
@@ -119,7 +120,7 @@ public abstract class BrowserEnvironment
         // if the directory does not exist, create it
         if ( theDir.exists() )
             return;
-        
+
         try
         {
             theDir.mkdir();
@@ -129,7 +130,7 @@ public abstract class BrowserEnvironment
             throw ZeidonException.wrapException( e ).prependFilename( dir );
         }
     }
-    
+
     public BrowserEnvironment restore( Component component, String filename )
     {
         String f =  getBrowserDir() + filename;
@@ -234,7 +235,9 @@ public abstract class BrowserEnvironment
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                oiDisplay.displayView( getView( view ) );
+                View v = getView( view );
+                oiDisplay.displayView( v );
+                entityListPanel.setView( v );
             }
         });
     }
@@ -254,6 +257,7 @@ public abstract class BrowserEnvironment
     {
         attributePanel.setEntity( viewEntity, ei );
         twinInstancesPanel.setEntityInstance( ei );
+        entityListPanel.setViewEntity( viewEntity );
     }
 
     public abstract void restoreEnvironment();
@@ -313,5 +317,20 @@ public abstract class BrowserEnvironment
     public void setTaskList( TaskList taskList )
     {
         this.taskList = taskList;
+    }
+
+    public EntityListPanel getEntityListPanel()
+    {
+        return entityListPanel;
+    }
+
+    public void setEntityListPanel( EntityListPanel entityListPanel )
+    {
+        this.entityListPanel = entityListPanel;
+    }
+
+    protected OiDisplayPanel getOiDisplay()
+    {
+        return oiDisplay;
     }
 }

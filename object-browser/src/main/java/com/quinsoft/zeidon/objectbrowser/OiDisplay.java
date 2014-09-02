@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -48,7 +49,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
  * This is the graphical panel that paints the OI display.
- * 
+ *
  * @author DG
  *
  */
@@ -59,10 +60,10 @@ class OiDisplay extends JPanel
         void entitySelected( ViewEntity viewEntity, EntityInstance ei );
         void scaleChanged(View view, Point newCorner);
     }
-    
+
     private static final long serialVersionUID = 1L;
     private static final int  TOP_PADDING = 2;
-    
+
     private final BrowserEnvironment env;
     private final DrawingPane  drawingPane;
     private final ViewOd       viewOd;
@@ -73,7 +74,7 @@ class OiDisplay extends JPanel
     private final JScrollPane scroller;
     private final EntitySelectedListener entitySelectedListener;
     private       Point mousePoint;
-    
+
     /**
      * @param env
      */
@@ -84,7 +85,7 @@ class OiDisplay extends JPanel
         this.viewOd = view.getViewOd();
         this.view = view;
         this.entitySelectedListener = listener;
-        
+
         entities = new HashMap<ViewEntity, EntitySquare>();
         drawingPane = new DrawingPane();
         drawingPane.setCursor( new Cursor( Cursor.MOVE_CURSOR ) );
@@ -92,19 +93,19 @@ class OiDisplay extends JPanel
         drawingPane.addMouseMotionListener( handler );
         drawingPane.addMouseListener( handler );
         drawingPane.addMouseWheelListener( handler );
-        
+
         scroller = new JScrollPane(drawingPane);
         add(scroller, BorderLayout.CENTER);
         scroller.setVisible( true );
         setup( view, parent );
         setVisible( true );
     }
-    
+
     private void setup( View view, Component parent )
     {
         ViewEntity root = viewOd.getRoot();
         viewOdLayout = env.getOdLayout( viewOd );
-        
+
         EntitySquare e = new EntitySquare( this, env, null ); // Create a dummy just to get the size.
         Dimension size = new Dimension( viewOdLayout.getWidth() * e.getPaddedSize().width,
                                         viewOdLayout.getHeight() * e.getPaddedSize().height );
@@ -113,7 +114,7 @@ class OiDisplay extends JPanel
 
         e = addEntity( root, 0, size.width );
         setSelectedEntity( e );
-        
+
         if ( scroller.getWidth() < size.width )
         {
             int mid = size.width / 2 - parent.getWidth() / 2 + 10; // 10 is for width of scroll bar.
@@ -126,19 +127,19 @@ class OiDisplay extends JPanel
     {
         ViewEntityLayout layout = viewOdLayout.getViewEntityLayout( viewEntity );
         EntitySquare e = new EntitySquare( this, env, layout );
-        
+
         int totalWidth = right - left - e.getWidth();
         int middle = totalWidth / 2;
         int topPadding = TOP_PADDING * env.getPainterScaleFactor();
-        
-        e.setBounds( left + middle, ( viewEntity.getLevel() - 1 ) * e.getPaddedSize().height + topPadding, 
+
+        e.setBounds( left + middle, ( viewEntity.getLevel() - 1 ) * e.getPaddedSize().height + topPadding,
                      e.getWidth(), e.getHeight() );
         drawingPane.add(  e );
         entities.put( viewEntity, e );
-        
+
         if ( viewEntity.getChildCount() == 0 )
             return e;
-        
+
         List<ViewEntity> children = viewEntity.getChildren();
         int newLeft = left;
         for ( ViewEntity child : children )
@@ -148,7 +149,7 @@ class OiDisplay extends JPanel
             addEntity( child, newLeft, newLeft + w );
             newLeft += w;
         }
-        
+
         return e;
     }
 
@@ -162,10 +163,28 @@ class OiDisplay extends JPanel
 
     void setSelectedEntityFromViewEntity( ViewEntity viewEntity )
     {
-        setSelectedEntity( entities.get( viewEntity ) );
+        EntitySquare prevSelected = getSelectedEntity();
+
+        EntitySquare square = entities.get( viewEntity );
+        setSelectedEntity( square );
+        prevSelected.repaint();
+        square.repaint();
+
+        // Check to see if the square is outside the viewable area on the scroll.
+        Rectangle sqrec = square.getBounds();
+        Rectangle scrollrec = scroller.getViewport().getViewRect();
+        if ( ! scrollrec.contains( sqrec ) )
+        {
+            // Create a point that puts the middle of the square into the middle
+            // of the scroll.
+            Point p = new Point( (int) ( sqrec.getCenterX() - scrollrec.getWidth() / 2 ),
+                                 (int) ( sqrec.getCenterY() + scrollrec.getHeight() / 2 ) );
+            repositionScroll( p );
+        }
+
         revalidate();
     }
-    
+
     /**
      * @param selectedEntity the selectedEntity to set
      */
@@ -197,13 +216,14 @@ class OiDisplay extends JPanel
             super( null );
         }
 
+        @Override
         protected void paintComponent( Graphics g )
         {
             super.paintComponent( g );
-            
+
             // Now draw the lines.
             Graphics2D g2 = (Graphics2D) g;
-            
+
             // Set a nice thick black line.
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setPaint(Color.black);
@@ -213,10 +233,10 @@ class OiDisplay extends JPanel
                 ViewEntity parent = viewEntity.getParent();
                 if ( parent == null )  // If this entity is the root we don't need to draw a line.
                     continue;
-                
+
                 EntitySquare e = entities.get( viewEntity );
                 EntitySquare p = entities.get( parent );
-                
+
                 g2.draw(new Line2D.Double(p.getBottomAnchor(), e.getTopAnchor()));
             }
         }
@@ -236,7 +256,7 @@ class OiDisplay extends JPanel
         scroller.getViewport().setViewPosition( p );
         scroller.revalidate();
     }
-    
+
     private class MouseHandler extends MouseAdapter
     {
         @Override
@@ -250,6 +270,7 @@ class OiDisplay extends JPanel
             p.y += y;
             javax.swing.SwingUtilities.invokeLater( new Runnable()
             {
+                @Override
                 public void run()
                 {
                     repositionScroll( p );
@@ -269,8 +290,8 @@ class OiDisplay extends JPanel
             if ( env.setPainterScaleFactor( scale ) )
             {
                 // The scale factor has bounds so we need to get it again.
-                scale = env.getPainterScaleFactor(); 
-                
+                scale = env.getPainterScaleFactor();
+
                 // We want the center of the scroll pane to remain in the middle once we resize.
                 Point corner = scroller.getViewport().getViewPosition();
                 int width = e.getX() - corner.x;
@@ -278,12 +299,13 @@ class OiDisplay extends JPanel
                 int height = e.getY() - corner.y;
                 int y = ( corner.y + height ) * scale / oldScale - height;
                 Point newCorner = new Point( x, y );
-                
+
                 entitySelectedListener.scaleChanged( view, newCorner );
             }
-    
+
         }
 
+        @Override
         public void mouseWheelMoved( MouseWheelEvent e )
         {
             int scale = env.getPainterScaleFactor() + - e.getWheelRotation();

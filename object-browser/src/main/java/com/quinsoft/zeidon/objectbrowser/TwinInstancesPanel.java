@@ -90,6 +90,11 @@ class TwinInstancesPanel extends JPanel
         return sb.toString();
     }
 
+    /**
+     * This is called when a new entity instance is selected in the OI view.
+     *
+     * @param entityInstance
+     */
     void setEntityInstance( EntityInstance entityInstance )
     {
         while ( model.getRowCount() > 0 )
