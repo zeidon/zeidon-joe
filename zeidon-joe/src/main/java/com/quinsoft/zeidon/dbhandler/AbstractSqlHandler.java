@@ -452,16 +452,33 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 //                                                   qualEntityName + " is not a child of " + entityName );
                 }
 
+                if ( qualAttrib.oper.equals( "EXISTS" ) || qualAttrib.oper.equals( "NOT EXISTS" ) )
+                {
+                    if ( qualAttrib.viewEntity == null )
+                        throw new ZeidonException("Oper 'EXISTS'/'NOT EXISTS' requires an entity specification");
+
+                    // Change the oper to =/!=
+                    if ( qualAttrib.oper.equals( "EXISTS" ) )
+                        qualAttrib.oper = "!=";
+                    else
+                        qualAttrib.oper = "=";
+
+                    qualAttrib.viewAttrib = qualAttrib.viewEntity.getKeys().get( 0 );
+                }
+
                 //
                 // Verify AttribName
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "AttributeName"  ) )
+                if ( ! qualAttribInstance.isAttributeNull( "AttributeName"  ) || qualAttrib.viewAttrib != null )
                 {
-                    String attribName = qualAttribInstance.getStringFromAttribute( "AttributeName" );
-                    if ( qualAttrib.viewEntity == null )
-                        throw new ZeidonException( "QualAttrib has attribute defined but no valid entity" );
+                    if ( qualAttrib.viewAttrib == null )
+                    {
+                        String attribName = qualAttribInstance.getStringFromAttribute( "AttributeName" );
+                        if ( qualAttrib.viewEntity == null )
+                            throw new ZeidonException( "QualAttrib has attribute defined but no valid entity" );
 
-                    qualAttrib.viewAttrib = qualAttrib.viewEntity.getAttribute( attribName );
+                        qualAttrib.viewAttrib = qualAttrib.viewEntity.getAttribute( attribName );
+                    }
 
                     // In some cases, we might be qualifying an entity using an attribute
                     // from a child entity.  If the child attribute is a key AND that key
@@ -543,12 +560,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // ===  Validate Qualification attributes.
                 // ===
                 // =================================================================
-                if ( qualAttrib.oper.equals( "EXISTS" ) || qualAttrib.oper.equals( "NOT EXISTS" ) )
-                {
-                    if ( qualAttrib.viewEntity == null )
-                        throw new ZeidonException("Oper 'EXISTS'/'NOT EXISTS' requires an entity specification");
-
-                }
 
                 // TODO: Add the rest of the checks in fnSqlRetrieveQualAttrib.
 
@@ -704,8 +715,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // Pass true to indicate that viewEntity is the root of this SELECT.
             if ( ! addForeignKeys( stmt, view, viewEntity, viewEntity ) )
             {
-                task.dblog().debug( "FK was null--skipping load entity for SQL statement: " + stmt.toString() +
-                        (stmt.from == null ? "" : (" FROM " + stmt.from.toString())) + (stmt.where == null ? "" : (" WHERE " + stmt.where.toString())) );
+                task.dblog().trace( "FK was null--skipping load entity for SQL statement:\n%s", stmt.toString() );
                 return DbHandler.LOAD_NO_ENTITIES; // A FK was null so don't load it.
             }
         }

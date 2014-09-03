@@ -343,6 +343,15 @@ public class QualificationBuilder
         return addAttribQual( oper );
     }
 
+    public QualificationBuilder addAttribQualEntityExists( String entityName )
+    {
+        validateEntity();
+        qualView.cursor( QUALATTRIB ).createEntity()
+                                     .setAttribute( ENTITYNAME, entityName )
+                                     .setAttribute( OPER, "EXISTS" );
+        return this;
+    }
+
     public QualificationBuilder addAttribQual( String oper )
     {
         validateEntity();

@@ -90,6 +90,7 @@ class QualBuilder(private val view: View,
         this
     }
 
+    def restrict( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.ViewEntity ) = restricting( restrictTo )
     def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.ViewEntity ): QualBuilder = {
         val entity = restrictTo( new EntitySelector )
         jqual.restricting( entity.getName() )
@@ -110,10 +111,10 @@ class QualBuilder(private val view: View,
         this
     }
 
-    def activate(): Integer = {
+    def activate(): View = {
         jqual.getView().logObjectInstance()
         view.jview = jqual.activate()
-        return 0
+        return view
     }
 
     /**
@@ -127,7 +128,11 @@ class QualBuilder(private val view: View,
 
         def > ( value: Any ): QualBuilder = {
             jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), ">", value )
-            println( "> " + value.toString)
+            return qualBuilder
+        }
+
+        def <> ( value: Any ): QualBuilder = {
+            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "!=", value )
             return qualBuilder
         }
 
@@ -146,11 +151,10 @@ class QualBuilder(private val view: View,
             return qualBuilder
         }
 
-        /*
         def exists: QualBuilder = {
+            jqual.addAttribQualEntityExists( jviewEntity.getName() )
            return qualBuilder
         }
-         */
 
         def selectDynamic( attributeName: String): EntityQualBuilder = {
             jviewAttribute = jviewEntity.getAttribute( attributeName )
