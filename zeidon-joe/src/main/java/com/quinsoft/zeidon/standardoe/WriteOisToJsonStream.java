@@ -143,6 +143,12 @@ public class WriteOisToJsonStream implements StreamWriter
         jg.writeStringField( "application", view.getViewOd().getApplication().getName() );
         jg.writeStringField( "odName", view.getViewOd().getName() );
         jg.writeBooleanField( "incremental", true );
+        if ( ((InternalView) view).getViewImpl().getObjectInstance().isReadOnly() )
+            jg.writeBooleanField( "readOnlyOi", true );
+        else
+            if ( view.isReadOnly() )
+                jg.writeBooleanField( "readOnly", true );
+
         jg.writeEndObject();
     }
 
@@ -175,7 +181,7 @@ public class WriteOisToJsonStream implements StreamWriter
                 }
             }
 
-            // Loop through the children and add them. 
+            // Loop through the children and add them.
             ViewEntity lastChildViewEntity = null;
             for ( EntityInstanceImpl child : ei.getDirectChildren( true ) )
             {
@@ -276,7 +282,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
         ViewEntity viewEntity = ei.getViewEntity();
         boolean selectedCursor = currentView.cursor( viewEntity ).getEntityInstance() == ei;
-        
+
         String str = createIncrementalStr( ei );
         if ( StringUtils.isBlank( str ) && recordOwner == null && ! selectedCursor )
             return writeAttributes;
@@ -288,7 +294,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
         if ( selectedCursor )
             jg.writeBooleanField( "selected", true );
-        
+
         if ( recordOwner != null )
         {
             if ( recordOwner == ei )

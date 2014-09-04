@@ -474,6 +474,12 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
         return viewOd.toString() + "." + name;
     }
 
+    /**
+     * If true then this entity will be deleted if its parent is deleted, otherwise
+     * this entity will be excluded if it's parent is excluded.
+     *
+     * @return
+     */
     public boolean isParentDelete()
     {
         return parentDelete ;

@@ -38,8 +38,8 @@ import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 
 /**
  * Handles pessimistic View locking by writing records to the DB to lock OIs.
- * Assumes that ZPLOCKO LOD exists in the application. 
- * 
+ * Assumes that ZPLOCKO LOD exists in the application.
+ *
  * @author DG
  *
  */
@@ -49,13 +49,13 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
      * @see com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler#acquireLocks(releaseLock(com.quinsoft.zeidon.View)
      */
     @Override
-    public PessimisticLockingHandler acquireLocks( View view ) throws PessimisticLockingException
+    public void acquireLocks( View view ) throws PessimisticLockingException
     {
         Task task = view.getTask();
         ViewOd viewOd = view.getViewOd();
-        
+
         Application application = view.getApplication();
-        
+
         // See if the locking view exists.
         try
         {
@@ -67,17 +67,17 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             		                   "To create one use the Utilities menu in the ER diagram tool." )
                                        .setCause( e );
         }
-            
+
         View vlock = task.activateEmptyObjectInstance( "ZPLOCKO", application );
         ViewEntity root = viewOd.getRoot();
-        
+
         // For each root entity, create a locking record in ZPLOCKO
         for ( EntityInstance ei : view.cursor( root ).eachEntity() )
         {
             String user = task.getUserId();
             if ( StringUtils.isBlank( user ) )
                 user = "none";
-            
+
             vlock.cursor( "ZeidonLock" ).createEntity()
                                         .setAttribute( "LOD_Name", viewOd.getName() )
                                         .setAttribute( "KeyValue", ei.getKeyString() )
@@ -85,7 +85,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                                         .setAttribute( "Timestamp", new Date() )
                                         .setAttribute( "AllowRead", "Y" );
         }
-        
+
         try
         {
             vlock.commit();
@@ -96,8 +96,6 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             throw new PessimisticLockingException( view, "Error creating pessimistic locking semaphore" )
                             .setCause( e );
         }
-        
-        return this;
     }
 
     /* (non-Javadoc)
@@ -108,7 +106,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     {
         if ( views.size() == 0 )
             return; // Nothing to do.
-        
+
         Task task = null;
         Application application = null;
         View vlock = null;
@@ -127,17 +125,17 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                 // multiple tasks at once?
                 if ( task != view.getTask() )
                     throw new PessimisticLockingException( views, "Views are from different tasks" );
-                
+
                 // TODO: Someday we should handle multiple applications.
                 if ( application != view.getApplication() )
                     throw new PessimisticLockingException( views, "Views are from different applications" );
             }
-            
+
             ViewOd     viewOd = view.getViewOd();
             ViewEntity root   = viewOd.getRoot();
-            
+
             // For each root entity, create a locking record in ZPLOCKO.  Normally we'd activate the locking
-            // records, delete them from the OI, and then commit it.  Instead we will set the incremental 
+            // records, delete them from the OI, and then commit it.  Instead we will set the incremental
             // flags for each entity to DELETE.  This will save us the time of doing the activate.
             for ( EntityInstance ei : view.cursor( root ).eachEntity() )
             {
@@ -147,7 +145,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                                             .setIncrementalFlags( IncrementalEntityFlags.DELETED );
             }
         }
-        
+
         try
         {
             vlock.commit();

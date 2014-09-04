@@ -225,8 +225,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         {
             for ( ViewImpl view : lockedViews.keySet() )
             {
-                assert view.getObjectInstance().getPessimisticLockingHandler() != null
-                                                : "Attempting to drop locks on view without locks.";
                 log().warn( "View %s still has pessimistic locks.  Dropping them.", view.toString() );
                 view.dropDbLocks();
             }

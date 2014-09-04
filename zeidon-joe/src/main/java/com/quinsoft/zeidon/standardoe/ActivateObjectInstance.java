@@ -101,7 +101,11 @@ class ActivateObjectInstance
         final InternalView view = (InternalView) activator.init( getTask(), null, options );
         if ( ! control.contains( ActivateFlags.fASYNCHRONOUS ) )
         {
-            return activator.activate();
+            View v = activator.activate();
+            if ( control.contains( ActivateFlags.fREAD_ONLY ) )
+                ((InternalView) v).getViewImpl().getObjectInstance().setReadOnly( true );
+
+            return v;
         }
 
         //

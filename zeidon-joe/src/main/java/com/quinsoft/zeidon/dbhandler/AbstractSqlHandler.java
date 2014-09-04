@@ -892,6 +892,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return DbHandler.LOAD_DONE;
     }
 
+    @Override
+    public boolean isQualified( ViewEntity viewEntity )
+    {
+        return qualMap.containsKey( viewEntity );
+    }
+
     protected boolean assertNotNullKey( View view, ViewEntity viewEntity )
     {
         if ( view.cursor( viewEntity ).isNull() )

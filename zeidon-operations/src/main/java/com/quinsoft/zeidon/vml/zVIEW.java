@@ -660,4 +660,21 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().deserializeOi();
     }
+    @Override
+    public View newView( boolean readOnly )
+    {
+        return newView( readOnly );
+    }
+
+    @Override
+    public View newView( TaskQualification owningTask, boolean readOnly )
+    {
+        return getView().newView( owningTask, readOnly );
+    }
+
+    @Override
+    public boolean isLocked()
+    {
+        return getView().isLocked();
+    }
 }

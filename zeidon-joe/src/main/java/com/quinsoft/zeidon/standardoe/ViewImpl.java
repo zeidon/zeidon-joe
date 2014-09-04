@@ -53,6 +53,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
+import com.quinsoft.zeidon.dbhandler.PessimisticLockingViaDb;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -85,6 +86,11 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     private Map<Object, SelectSet>  selectSets;
     private boolean enableLazyLoad = true;
     private Object defaultSelectSet = 0;
+
+    /**
+     * True if this view is read only.
+     */
+    private boolean isReadOnly = false;
 
     ViewImpl( TaskImpl task, ViewOd viewOd )
     {
@@ -362,38 +368,62 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         ObjectInstance oi = getObjectInstance();
         synchronized ( oi )
         {
-            PessimisticLockingHandler releaser = oi.getPessimisticLockingHandler();
-            if ( releaser == null )
-                return;  // No locks to release.
-
-            releaser.releaseLocks( this );
-            oi.setPessimisticLockingHandler( null );
-            getTask().removePessimisticLock( this );
+            if ( oi.isLocked() )
+            {
+                PessimisticLockingHandler releaser = getPessimisticLockingHandler();
+                releaser.releaseLocks( this );
+                getTask().removePessimisticLock( this );
+                oi.setLocked( false );
+            }
         }
     }
 
     @Override
     public boolean isReadOnly()
     {
+        if ( isReadOnly )
+            return true;
+
         return getObjectInstance().isReadOnly();
     }
 
     @Override
     public void setReadOnly( boolean b )
     {
-        getObjectInstance().setReadOnly( b );
+        isReadOnly = b;
     }
 
     @Override
     public ViewImpl newView()
     {
-        return newView( getTask() );
+        return newView( getTask(), false );
     }
 
     @Override
     public ViewImpl newView( TaskQualification owningTask )
     {
-        return new ViewImpl( (TaskImpl) owningTask.getTask(), this );
+        return newView( owningTask, false );
+    }
+
+    @Override
+    public ViewImpl newView( boolean readOnly )
+    {
+        return newView( getTask(), readOnly );
+    }
+
+    @Override
+    public ViewImpl newView( TaskQualification owningTask, boolean readOnly )
+    {
+        // If the current view is locked then we can only create new views if they
+        // are readOnly.
+        if ( isLocked() && ! readOnly )
+            throw new ZeidonException( "Views created from a locked view must be readOnly." );
+
+        ViewImpl newView = new ViewImpl( (TaskImpl) owningTask.getTask(), this );
+        if ( readOnly )
+            newView.setReadOnly( true );
+
+        return newView;
     }
 
     @Override
@@ -953,5 +983,18 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     public SerializeOi serializeOi()
     {
         return new SerializeOi( this );
+    }
+
+    PessimisticLockingHandler getPessimisticLockingHandler()
+    {
+        //TODO: At some point we want to dynamically load the pessimistic locking handler.
+        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb();
+        return lockingHandler;
+    }
+
+    @Override
+    public boolean isLocked()
+    {
+        return getObjectInstance().isLocked();
     }
 }

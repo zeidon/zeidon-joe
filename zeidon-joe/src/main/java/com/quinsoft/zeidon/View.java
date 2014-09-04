@@ -171,6 +171,15 @@ public interface View extends TaskQualification, CacheMap
     View newView( TaskQualification owningTask );
 
     /**
+     * Create a new view that is readonly if readonly is true.
+     *
+     * @return
+     */
+    View newView( boolean readOnly );
+
+    View newView( TaskQualification owningTask, boolean readOnly );
+
+    /**
      * Creates a new Object Instance by copying or including the entity instances from this view.
      * Whether an entity instance is created or included form the source OI is dependent on the
      * permissions as specified in the LOD.
@@ -235,6 +244,11 @@ public interface View extends TaskQualification, CacheMap
      * @return list of exceptions or null if there are no errors.
      */
     Collection<ZeidonException> validateOi();
+
+    /**
+     * Returns true if the OI of this view was activated with locking.
+     */
+    boolean isLocked();
 
     /**
      * Drops any outstanding pessimistic locks in the DB.

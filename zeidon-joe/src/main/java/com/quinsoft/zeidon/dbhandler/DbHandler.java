@@ -57,6 +57,11 @@ public interface DbHandler
      */
     int loadEntity( View view, ViewEntity viewEntity );
 
+    /**
+     * Returns true if there was qualification on viewEntity.
+     */
+    boolean isQualified( ViewEntity viewEntity );
+
     int insertEntity( View view, List<? extends EntityInstance> entityInstances );
     int insertRelationship( View view, EntityInstance entityInstance );
     int deleteEntity( View view, EntityInstance entityInstance );

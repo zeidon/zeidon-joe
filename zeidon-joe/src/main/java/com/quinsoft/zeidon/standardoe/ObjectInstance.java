@@ -31,7 +31,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Lockable;
-import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.LazyLoadLock;
 
@@ -53,10 +52,9 @@ class ObjectInstance implements Lockable
     private final UUID          uuid;
 
     private EntityInstanceImpl  rootEntityInstance;
-    private boolean             isLocked;   // TODO: implement this
+    private boolean             isLocked;
     private boolean             isReadOnly;
     private final AtomicInteger versionedInstances;
-    private PessimisticLockingHandler pessimisticLockingHandler;
 
     /**
      * If true then this OI has been updated since it was last loaded from the DB.
@@ -337,22 +335,6 @@ class ObjectInstance implements Lockable
     void setTask( TaskImpl task )
     {
         this.task = task;
-    }
-
-    /**
-     * @return the pessimisticLockingHandler
-     */
-    PessimisticLockingHandler getPessimisticLockingHandler()
-    {
-        return pessimisticLockingHandler;
-    }
-
-    /**
-     * @param pessimisticLockingHandler the pessimisticLockingHandler to set
-     */
-    void setPessimisticLockingHandler( PessimisticLockingHandler pessimisticLockingHandler )
-    {
-        this.pessimisticLockingHandler = pessimisticLockingHandler;
     }
 
     AttributeHashKeyMap getAttributeHashkeyMap()

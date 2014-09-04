@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.quinsoft.zeidon.CommitFlags;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.EntityInstance;
@@ -188,8 +189,11 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 cleanupOI( view.getObjectInstance() );
 
             // Drop any pessimistic locks we might have.
-            for ( ViewImpl view : viewList )
-                view.dropDbLocks();
+            if ( ! options.getControl().contains( CommitFlags.fKEEP_LOCKS ) )
+            {
+                for ( ViewImpl view : viewList )
+                    view.dropDbLocks();
+            }
 
             return viewList;
         }

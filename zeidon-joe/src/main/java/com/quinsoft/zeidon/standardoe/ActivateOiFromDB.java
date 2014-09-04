@@ -29,7 +29,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
-import com.quinsoft.zeidon.dbhandler.PessimisticLockingViaDb;
 import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
@@ -118,6 +117,8 @@ class ActivateOiFromDB implements Activator
         ObjectInstance oi = view.getObjectInstance();
         try
         {
+            // Store the activate options for later use.
+            view.getObjectInstance().setActivateOptions( options );
 
             // Set flag to tell cursor processing to not bother with checking for lazy-loaded
             // entities.  Since we're activating we know we don't want to load lazy entities
@@ -208,12 +209,22 @@ class ActivateOiFromDB implements Activator
 
                 if ( isLazyLoad( childViewEntity ) )
                 {
-                    view.dblog().debug( "Entity %s is flagged as LazyLoad. Skipping activate", childViewEntity.getName() );
-
-                    // Store the activate options for later use.
-                    view.getObjectInstance().setActivateOptions( options );
-
+                    view.dblog().trace( "Entity %s is flagged as LazyLoad. Skipping activate", childViewEntity.getName() );
                     continue;
+                }
+
+                if ( dbHandler.isQualified( childViewEntity ) )
+                {
+                    parentEi.setIncomplete( true );
+
+                    // Now set the flag for any parents that will cause the child to be deleted
+                    // if the parent is deleted.
+                    for ( EntityInstanceImpl p = parentEi;
+                          p != null && p.getViewEntity().isParentDelete();
+                          p = p.getParent() )
+                    {
+                        p.setIncomplete( true );
+                    }
                 }
 
                 int load = dbHandler.loadEntity( view, childViewEntity );
@@ -334,10 +345,8 @@ class ActivateOiFromDB implements Activator
 
     private void acquirePessimisticLocks()
     {
-        //TODO: At some point we want to dynamically load the pessimistic locking handler.
-        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb();
-        PessimisticLockingHandler releaser = lockingHandler.acquireLocks( view );
-        view.getObjectInstance().setPessimisticLockingHandler( releaser );
+        PessimisticLockingHandler locker = view.getPessimisticLockingHandler();
+        locker.acquireLocks( view );
         view.getTask().addLockedView( view );
     }
 }

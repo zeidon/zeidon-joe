@@ -84,6 +84,16 @@ class ActivateOisFromJsonStream implements StreamReader
     private List<EntityInstance>    selectedInstances;
 
     /**
+     * If true then mark the OI that is being read as readonly.
+     */
+    private boolean readOnlyOi;
+
+    /**
+     * If trure then mark the view as readonly.
+     */
+    private boolean readOnly;
+
+    /**
      * A JSON stream will have a version.  Once the version is read from the stream a
      * subclass of JsonReader will be used to read a particular version.
      * @author dgc
@@ -271,15 +281,21 @@ class ActivateOisFromJsonStream implements StreamReader
             setCursors();
         else
             view.reset();
-        
+
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "OI JSON stream doesn't end with object." );
+
+        if ( readOnlyOi )
+            ((InternalView) view).getViewImpl().getObjectInstance().setReadOnly( true );
+
+        if ( readOnly )
+            view.setReadOnly( true );
 
         return true;  // Keep looking for OIs in the stream.
     }
 
     /**
-     * The view has been loaded from the stream and it was indicated that there are 
+     * The view has been loaded from the stream and it was indicated that there are
      * cursor selections.  Reset them.
      */
     private void setCursors()
@@ -506,7 +522,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 case  "entityKey" :      meta.entityKey = jp.getText(); break;
                 case  "linkedSource" :   meta.linkedSource = jp.getText(); break;
                 case  "selected" :       selectedInstances.add( ei ); break;
-                
+
                 default: task.log().warn( "Unknown entity meta value %s", fieldName );
             }
         }
@@ -528,19 +544,24 @@ class ActivateOisFromJsonStream implements StreamReader
     private JsonToken readOiMeta() throws Exception
     {
         String odName = null;
+        readOnlyOi = false;
+        readOnly   = false;
+
         jp.nextToken();
         while ( jp.nextToken() != JsonToken.END_OBJECT )
         {
             String fieldName = jp.getCurrentName();
             jp.nextToken(); // Move to value.
-            if ( StringUtils.equals( fieldName, "application" ) )
-                application = task.getApplication( jp.getValueAsString() );
-            else if ( StringUtils.equals( fieldName, "odName" ) )
-                odName = jp.getValueAsString(); // Save OD name for later.
-            else if ( StringUtils.equals( fieldName, "incremental" ) )
-                incremental = jp.getValueAsBoolean();
-            else
-                task.log().warn( "Unknown .oimeta fieldname %s", fieldName );
+            switch ( fieldName )
+            {
+                case "application": application = task.getApplication( jp.getValueAsString() ); break;
+                case "odName":      odName = jp.getValueAsString(); break; // Save OD name for later.
+                case "incremental": incremental = jp.getValueAsBoolean(); break;
+                case "readOnlyOi":  readOnlyOi = true; break;
+                case "readOnly":    readOnly = true; break;
+
+                default: task.log().warn( "Unknown .oimeta fieldname %s", fieldName ); break;
+            }
         }
 
         if ( odName == null )
@@ -552,7 +573,7 @@ class ActivateOisFromJsonStream implements StreamReader
         view = task.activateEmptyObjectInstance( viewOd );
         returnList.add( view );
         JsonToken token = jp.nextToken();
-        
+
         // Create a list to keep track of selected instances.
         selectedInstances = new ArrayList<>();
 

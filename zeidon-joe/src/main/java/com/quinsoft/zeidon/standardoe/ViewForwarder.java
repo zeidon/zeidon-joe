@@ -34,10 +34,12 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -577,5 +579,35 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public boolean isEmpty()
     {
         return getView().isEmpty();
+    }
+
+    @Override
+    public Collection<ZeidonException> validateOi()
+    {
+        return getView().validateOi();
+    }
+
+    @Override
+    public SerializeOi serializeOi()
+    {
+        return getView().serializeOi();
+    }
+
+    @Override
+    public View newView( boolean readOnly )
+    {
+        return newView( readOnly );
+    }
+
+    @Override
+    public View newView( TaskQualification owningTask, boolean readOnly )
+    {
+        return getView().newView( owningTask, readOnly );
+    }
+
+    @Override
+    public boolean isLocked()
+    {
+        return getView().isLocked();
     }
 }

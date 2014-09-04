@@ -19,7 +19,6 @@
 
 package com.quinsoft.zeidon.standardoe;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +26,6 @@ import java.util.concurrent.TimeoutException;
 
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Level;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
@@ -160,22 +158,10 @@ class FutureView extends InternalViewForwarder implements Future<View>
     }
 
     @Override
-    public Collection<ZeidonException> validateOi()
-    {
-        return super.getView().validateOi();
-    }
-
-    @Override
     public ActivateOptions getActivateOptions()
     {
         // We don't need to wait for the activate to finish to get the options.
         // Call super to get the view without waiting for the future to return.
         return super.getView().getActivateOptions();
-    }
-
-    @Override
-    public SerializeOi serializeOi()
-    {
-        return super.getView().serializeOi();
     }
 }

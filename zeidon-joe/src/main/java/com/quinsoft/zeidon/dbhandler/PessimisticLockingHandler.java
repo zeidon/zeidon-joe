@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.View;
 
 /**
  * Specifies the interface for locking OIs using pessimistic locking.
- * 
+ *
  * @author DG
  *
  */
@@ -34,19 +34,19 @@ public interface PessimisticLockingHandler
 {
     /**
      * Acquires the pessimistic locks for a view.
-     * 
+     *
      * @param view View to lock
      *
      * @throws PessimisticLockingException
      */
-    PessimisticLockingHandler acquireLocks( View view ) throws PessimisticLockingException;
-    
+    void acquireLocks( View view ) throws PessimisticLockingException;
+
     /**
      * Release the pessimistic locks for the views.
      * @param views List of views to release.
      */
     void releaseLocks( Collection<View> views );
-    
+
     /**
      * Release the pessimistic locks for this view.
      * @param view

@@ -151,7 +151,16 @@ class EntityInstanceImpl implements EntityInstance
     private boolean isWritten;
     private boolean isRecordOwner;
 
+    /**
+     * If true then children for this EI were activated with qualification.
+     * This means it's possible not all children were loaded and therefore
+     * a delete could possibly cause data integrity issues.
+     */
+    private boolean incomplete;
+
+    // ----------------------------------
     // Following flags used during commit to DB.
+    // ----------------------------------
     boolean dbhCreated;
     boolean dbhDeleted;
     boolean dbhExcluded;
@@ -162,10 +171,6 @@ class EntityInstanceImpl implements EntityInstance
     boolean dbhGenKeyNeeded;
     boolean dbhNoGenKey;
     boolean dbhForeignKey;
-
-    /**
-     * True if this entity has something that needs to be committed.
-     */
     boolean dbhNeedsCommit;
 
     /**
@@ -1057,13 +1062,10 @@ class EntityInstanceImpl implements EntityInstance
             throw new ZeidonException( "Entity is not flagged for delete." )
                             .prependViewEntity( getViewEntity() );
 
-        if ( getViewEntity().getEventListener() != null )
-        {
-            EventDataImpl data = new EventDataImpl( getTask() ).setEntityInstance( this ).setView( view );
-            getViewEntity().getEventListener().event( EventNotification.EntityDeleted, data );
-        }
-
-        int startLevel = getLevel();
+        if ( isIncomplete() )
+            throw new ZeidonException( "This entity instance may not be deleted because it is incomplete.  " +
+                                       "One of its children was activated with qualification that limited results." )
+                                    .prependEntityInstance( this );
 
         // If checkRestrictedDelete is set, then make sure none of the child entities
         // have their parent-restrict delete flag set.
@@ -1076,11 +1078,18 @@ class EntityInstanceImpl implements EntityInstance
             }
         }
 
+        if ( getViewEntity().getEventListener() != null )
+        {
+            EventDataImpl data = new EventDataImpl( getTask() ).setEntityInstance( this ).setView( view );
+            getViewEntity().getEventListener().event( EventNotification.EntityDeleted, data );
+        }
+
         EntitySpawner spawner = new EntitySpawner( this, view );
 
         // Run through the entity and all it's children and set the delete flag.
         // We start with 'this' because the logic below spawns the delete and
         // we want to spawn the deletes for all entities.
+        int startLevel = getLevel();
         EntityInstanceImpl scan = this;
         while ( scan != null && ( scan.getLevel() > startLevel || scan == this ) )
         {
@@ -3561,6 +3570,16 @@ class EntityInstanceImpl implements EntityInstance
         info = new ViewEntityLinkInfo();
         viewEntity.putCacheMap( ViewEntityLinkInfo.class, info );
         return info;
+    }
+
+    boolean isIncomplete()
+    {
+        return incomplete;
+    }
+
+    void setIncomplete( boolean incomplete )
+    {
+        this.incomplete = incomplete;
     }
 
     /**
