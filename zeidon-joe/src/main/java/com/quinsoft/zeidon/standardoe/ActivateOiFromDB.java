@@ -29,7 +29,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
-import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
 import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
@@ -88,7 +87,7 @@ class ActivateOiFromDB implements Activator
             // Check the pessimistic locks.  We need to do this after we load the OI because
             // databases (sqlite--grrrrr) can't handle two open connections updating the DB
             // at the same time.
-            if ( options.getLockingLevel() == LockingLevel.PESSIMISTIC )
+            if ( options.getLockingLevel().isPessimisticLock() )
                 acquirePessimisticLocks();
 
             view.reset();
@@ -348,5 +347,6 @@ class ActivateOiFromDB implements Activator
         PessimisticLockingHandler locker = view.getPessimisticLockingHandler();
         locker.acquireLocks( view );
         view.getTask().addLockedView( view );
+        view.getObjectInstance().setLocked( true );
     }
 }

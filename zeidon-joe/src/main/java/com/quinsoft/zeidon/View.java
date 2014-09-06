@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author DG
  *
  */
-public interface View extends TaskQualification, CacheMap
+public interface View extends TaskQualification, CacheMap, AutoCloseable
 {
     final static long DISPLAY_HIDDEN        = 0x00000001;
     final static long DISPLAY_EMPTY_ATTRIBS = 0x00000002;

@@ -19,6 +19,8 @@
 
 package com.quinsoft.zeidon.dbhandler;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -26,6 +28,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.Task;
@@ -76,7 +79,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         {
             String user = task.getUserId();
             if ( StringUtils.isBlank( user ) )
-                user = "none";
+                user = "unknown";
 
             vlock.cursor( "ZeidonLock" ).createEntity()
                                         .setAttribute( "LOD_Name", viewOd.getName() )
@@ -84,6 +87,13 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                                         .setAttribute( "UserName", user )
                                         .setAttribute( "Timestamp", new Date() )
                                         .setAttribute( "AllowRead", "Y" );
+
+            ViewEntity zeidonLock = vlock.cursor( "ZeidonLock" ).getViewEntity();
+            if ( zeidonLock.getAttribute( "CallStack", false ) != null )
+                addCallStack( vlock.cursor( "ZeidonLock" ) );
+
+            if ( zeidonLock.getAttribute( "Hostname", false ) != null )
+                addHostname( vlock.cursor( "ZeidonLock" ) );
         }
 
         try
@@ -96,6 +106,55 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             throw new PessimisticLockingException( view, "Error creating pessimistic locking semaphore" )
                             .setCause( e );
         }
+    }
+
+    private void addHostname( EntityCursor cursor )
+    {
+        String hostname;
+        try
+        {
+            hostname = InetAddress.getLocalHost().getHostName();
+        }
+        catch ( UnknownHostException e )
+        {
+            hostname = "unknown";
+        }
+
+        int lth = cursor.getAttribute( "Hostname" ).getViewAttribute().getLength();
+        if ( hostname.length() > lth )
+            hostname = hostname.substring( 0, lth - 1 );
+
+        cursor.getAttribute( "Hostname" ).setValue( hostname );
+
+    }
+
+    /**
+     * Adds a string to the locking table that is a partial call stack.
+     *
+     * @param cursor
+     */
+    private void addCallStack( EntityCursor cursor )
+    {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        StackTraceElement[] stack = new RuntimeException().getStackTrace();
+        for ( StackTraceElement element : stack )
+        {
+            String classname = element.getClassName();
+            if ( classname.startsWith( "com.quinsoft.zeidon" ) )
+                continue;
+
+            sb.append( element.toString() ).append( "\n" );
+            if ( ++count > 5 )
+                break;
+        }
+
+        // Make sure the string lenth isn't too long.
+        int lth = cursor.getAttribute( "CallStack" ).getViewAttribute().getLength();
+        if ( sb.length() > lth )
+            sb.setLength( lth );
+
+        cursor.getAttribute( "CallStack" ).setValue( sb.toString() );
     }
 
     /* (non-Javadoc)

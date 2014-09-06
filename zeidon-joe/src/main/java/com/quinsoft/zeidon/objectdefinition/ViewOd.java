@@ -209,7 +209,7 @@ public class ViewOd implements PortableFileAttributeHandler
         else
         if ( reader.getAttributeName().equals( "LOCK" ))
         {
-            Integer level = Integer.getInteger( reader.getAttributeValue() );
+            Integer level = Integer.valueOf( reader.getAttributeValue() );
             lockingLevel = LockingLevel.lookup( level );
         }
         else
