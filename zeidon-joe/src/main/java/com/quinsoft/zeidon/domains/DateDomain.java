@@ -26,6 +26,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.DateTimeParser;
+import org.joda.time.format.DateTimePrinter;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
@@ -43,7 +46,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader;
 public class DateDomain extends AbstractDomain
 {
     protected DateTimeFormatter defaultDateFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT );
-    
+
     public DateDomain(Application application, Map<String, Object> domainProperties, Task task)
     {
         super( application, domainProperties, task );
@@ -57,10 +60,10 @@ public class DateDomain extends AbstractDomain
     	// value = null so we are getting to the exception.  Will try returning null, see what happens.
     	if ( externalValue == null )
     		return null;
-    	
+
         if ( externalValue instanceof DateTime )
             return externalValue;
-    	
+
         if ( externalValue instanceof Date )
             return new DateTime( externalValue );
 
@@ -73,12 +76,12 @@ public class DateDomain extends AbstractDomain
             // If string is "NOW" then we'll use current datetime.
             if ( externalValue.toString().equals( "NOW" ) )
                 return new DateTime();
-                        
+
             DomainContext context = getContext( task, contextName );
             return context.convertExternalValue( task, viewAttribute, externalValue.toString() );
         }
 
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, 
+        throw new InvalidAttributeValueException( viewAttribute, externalValue,
                                                   "Invalid object: Domain %s cannot convert value for context %s.",
                                                   this.getClass().getName(), contextName );
     }
@@ -93,7 +96,7 @@ public class DateDomain extends AbstractDomain
         DomainContext context = getContext( contextName );
         if ( context != null )
             return context;  // We found one by name.
-        
+
         if ( StringUtils.isBlank( contextName ) )
             throw new ZeidonException("Domain '%s' does not have a default context defined.", getName() );
 
@@ -109,7 +112,7 @@ public class DateDomain extends AbstractDomain
     {
       if ( internalValue instanceof DateTime )
             return;
-        
+
         throw new InvalidAttributeValueException( viewAttribute, internalValue, "Internal value must be Joda DateTime, not %s",
                                                   internalValue.getClass().getName() );
     }
@@ -119,10 +122,10 @@ public class DateDomain extends AbstractDomain
     {
         if ( internalValue == null )
             return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
-  	
+
     	if ( internalValue.toString().isEmpty())
     		return internalValue.toString();
-        
+
         return defaultDateFormatter.print( (DateTime) internalValue );
     }
 
@@ -133,16 +136,16 @@ public class DateDomain extends AbstractDomain
     public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object addValue )
     {
         DateTime date1 = (DateTime) convertExternalValue( task, viewAttribute, null, currentValue );
-        
+
         if ( addValue == null )
             return date1;
-        
+
         if ( addValue instanceof Number )
         {
             int millis = ((Number) addValue).intValue();
             return date1.plusMillis( millis );
         }
-        
+
         throw new ZeidonException( "Value type of %s not supported for add to DateDomain", addValue.getClass().getName() );
     }
 
@@ -166,16 +169,16 @@ public class DateDomain extends AbstractDomain
 
         private String            editString;
         private DateTimeFormatter formatter;
-        
+
         @Override
         public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue) throws ZeidonException
         {
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
-        	
+
         	if ( internalValue.toString().isEmpty())
         		return internalValue.toString();
-        	
+
         	if ( formatter == null )
         	    throw new ZeidonException( "JaveEditString is not set for context %s", this.toString() );
 
@@ -190,21 +193,21 @@ public class DateDomain extends AbstractDomain
         {
         	if ( value == null )
         		return null;
-        	
+
             String s = (String) value;
 
             // VML operations use "" as synonymous with null.
         	if ( StringUtils.isBlank( s ) )
         		return null;
-       	
+
         	// A common internal date/time format is the DefaultTimeFormat.  Let's try
         	// a quick check to see if 's' is the same length and only digits.
         	if ( s.length() >= ObjectEngine.INTERNAL_DATE_STRING_FORMAT.length() && JoeUtils.onlyDigits( s ) )
                 return JoeUtils.parseStandardDateString( s );
-        	
+
         	if ( formatter == null )
         	    throw new ZeidonException( "JaveEditString is not set for context %s", this.toString() );
-        	
+
         	try
         	{
         	    return formatter.parseDateTime( s );
@@ -221,9 +224,30 @@ public class DateDomain extends AbstractDomain
         private void setEditString( String editString )
         {
             this.editString = editString;
-            formatter = DateTimeFormat.forPattern( editString );
+            String[] strings = editString.split( "\\|" );
+            DateTimeParser list[] = new DateTimeParser[ strings.length ];
+            DateTimePrinter printer = null;
+            for ( int i = 0; i < strings.length; i++ )
+            {
+                try
+                {
+                    DateTimeFormatter f = DateTimeFormat.forPattern( strings[i] );
+                    if ( printer == null )
+                        printer = f.getPrinter();
+
+                    list[ i ] = f.getParser();
+                }
+                catch ( Exception e )
+                {
+                    throw ZeidonException.wrapException( e ).appendMessage( "Format string = %s", strings[i] );
+                }
+            }
+
+            DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+            builder.append( printer, list );
+            formatter = builder.toFormatter();
         }
-        
+
         @Override
         public void setAttribute(PortableFileReader reader)
         {

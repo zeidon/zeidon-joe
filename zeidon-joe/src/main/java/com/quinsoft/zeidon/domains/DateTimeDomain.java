@@ -37,20 +37,19 @@ import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
  */
 public class DateTimeDomain extends DateDomain
 {
-    // orig protected DateTimeFormatter defaultDateTimeFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT + "HH:mm:ss");
     protected DateTimeFormatter defaultDateTimeFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT + "HHmmss");
-    
+
     public DateTimeDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
     }
-    
+
     @Override
     public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
     {
         if ( internalValue == null )
             return super.convertToString( task, viewAttribute, internalValue );
-        
+
         return defaultDateTimeFormatter.print( (DateTime) internalValue );
     }
 }
