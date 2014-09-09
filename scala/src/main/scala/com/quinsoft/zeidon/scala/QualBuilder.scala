@@ -112,7 +112,6 @@ class QualBuilder(private val view: View,
     }
 
     def activate(): View = {
-        jqual.getView().logObjectInstance()
         view.jview = jqual.activate()
         return view
     }
@@ -162,7 +161,7 @@ class QualBuilder(private val view: View,
         }
 
         def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
-            println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
+            //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
             jviewAttribute = jviewEntity.getAttribute( attributeName )
             return qualBuilder
         }
@@ -170,7 +169,6 @@ class QualBuilder(private val view: View,
         def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
             jviewAttribute = jviewEntity.getAttribute( attributeName )
             jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "=", value )
-            println( "Adding " + jviewAttribute + " = " + value)
             return qualBuilder
         }
     }

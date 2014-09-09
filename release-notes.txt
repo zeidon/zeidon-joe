@@ -9,6 +9,8 @@
     - Added Boolean as one of the supported Zeidon types.
     - Added functionality for Dynamic View Attributes.
     - Restricted delete if child entities were loaded with qualification.
+    - Added ability to specify multiple Java Edit Formats for parsing date strings.
+      To use, specify multiple formats seperated by a '|' in the domain context.
     - Fixes to pessimistic locking.
     - Update to Object Browser to run in a single window.
     - Added jconsole plugin to run Object Browser.

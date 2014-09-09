@@ -10,7 +10,7 @@ import com.quinsoft.zeidon.objectdefinition._
 
 /**
  * This class implements methods that are common to both EntityCursor and EntityInstance.
- * 
+ *
  * @author dgc
  *
  */
@@ -23,7 +23,7 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance
 
     def logEntity = getEntityInstance.logEntity()
-    def logEntity( displayChildren: Boolean ) = getEntityInstance.logEntity( displayChildren ) 
+    def logEntity( displayChildren: Boolean ) = getEntityInstance.logEntity( displayChildren )
 
     /**
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.
@@ -49,21 +49,21 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
         getEntityInstance.getAttribute( jviewAttribute ).setValue( value )
         return value
     }
-    
+
     /**
      * Copies attributes by name.  Normal invocation is:
-     *      tgtView.Entity copyAttributes from srcView.Entity 
+     *      tgtView.Entity copyAttributes from srcView.Entity
      */
     def copyAttributes() : SetMatchingFlagsBuilder = {
         return getEntityInstance.setMatchingAttributesByName()
     }
-    
+
     /**
      * Called dynamically to convert an attribute name with context value into a
      * Scala AttributeInstance.
      */
     def applyDynamic( attributeName: String)(args: Any*): AttributeInstance = {
-        println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
+//        println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
         val jviewAttribute = jviewEntity.getAttribute( attributeName )
         val attr = new AttributeInstance( getEntityInstance.getAttribute( jviewAttribute ) )
         attr.contextName = args(0).toString
@@ -75,5 +75,5 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
 
 object AbstractEntity {
     implicit def ei2jei( ei: AbstractEntity ) = ei.getEntityInstance
-    
+
 }

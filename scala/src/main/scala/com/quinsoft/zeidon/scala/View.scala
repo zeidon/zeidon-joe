@@ -123,7 +123,7 @@ class View( val task: Task ) extends Task( task ) {
      * Called dynamically to process a Object Operation.
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {
-        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
+//        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
         validateViewOd
 
         val oe = task.objectEngine
