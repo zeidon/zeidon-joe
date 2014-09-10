@@ -129,6 +129,9 @@ class TestOperations ( val task: Task ) extends ZeidonOperations{
         }
 
 		println( view )
+
+		// Iterate through attributes.
+		view.Person.attributes.foreach( a => {} )
 	}
 }
 

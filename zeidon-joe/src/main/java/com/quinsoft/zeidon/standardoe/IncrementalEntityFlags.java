@@ -23,7 +23,7 @@ import java.util.EnumSet;
 
 /**
  * Enum of IncrementalEntity flags.
- * 
+ *
  * @author DG
  *
  */
@@ -35,7 +35,8 @@ public enum IncrementalEntityFlags
     fEXCLUDED,
     fINCLUDED,
     fHIDDEN;
-    
+
+    public static final EnumSet<IncrementalEntityFlags> NONE = EnumSet.noneOf( IncrementalEntityFlags.class );
     public static final EnumSet<IncrementalEntityFlags> CREATED = EnumSet.of( fCREATED );
     public static final EnumSet<IncrementalEntityFlags> UPDATED = EnumSet.of( fUPDATED );
     public static final EnumSet<IncrementalEntityFlags> DELETED = EnumSet.of( fDELETED );

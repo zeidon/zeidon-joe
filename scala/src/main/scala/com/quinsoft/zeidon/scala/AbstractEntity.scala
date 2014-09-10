@@ -45,10 +45,21 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
         return setValue( jviewAttribute, newValue )
     }
 
-    def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
+    protected[scala] def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
         getEntityInstance.getAttribute( jviewAttribute ).setValue( value )
         return value
     }
+
+    def getAttribute( attribName: String ): AttributeInstance = {
+        val jviewAttribute = jviewEntity.getAttribute( attribName )
+        getAttribute(jviewAttribute)
+    }
+
+    protected[scala] def getAttribute( jviewAttribute: ViewAttribute ): AttributeInstance = {
+        new AttributeInstance( getEntityInstance.getAttribute( jviewAttribute ) )
+    }
+
+    def attributes = new AttributeIterator( getEntityInstance )
 
     /**
      * Copies attributes by name.  Normal invocation is:
@@ -64,8 +75,7 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
      */
     def applyDynamic( attributeName: String)(args: Any*): AttributeInstance = {
 //        println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
-        val jviewAttribute = jviewEntity.getAttribute( attributeName )
-        val attr = new AttributeInstance( getEntityInstance.getAttribute( jviewAttribute ) )
+        val attr = getAttribute(attributeName)
         attr.contextName = args(0).toString
         return attr
     }

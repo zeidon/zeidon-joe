@@ -108,6 +108,14 @@ class View( val task: Task ) extends Task( task ) {
     override def deserializeOi = jview.deserializeOi()
 
     /**
+     * Returns the cursor of the root entity..
+     */
+    def root = {
+        validateViewOd
+        new EntityCursor( this, jview.cursor( jviewOd.getRoot() ) )
+    }
+
+    /**
      * This is called when the compiler doesn't recognize a method name.  This
      * is used to find the entity cursor for a view.
      */
