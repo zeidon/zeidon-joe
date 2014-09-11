@@ -23,13 +23,20 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.MapMaker;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownViewOdException;
@@ -48,6 +55,98 @@ import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
  */
 public class PessimisticLockingViaDb implements PessimisticLockingHandler
 {
+    private static final Collection<View> EMPTY_VIEWS = Collections.emptyList();
+    private static final String GLOBAL_KEY = "*GLOBAL*";
+
+    private boolean locked = false;
+    private Task task;
+    private ViewOd viewOd;
+
+    @Override
+    public void initialize( ActivateOptions options ) throws PessimisticLockingException
+    {
+        task = options.getTask();
+        viewOd = options.getViewOd();
+        acquireGlobalLockViaReentrantLock();
+    }
+
+    private void acquireGlobalLockViaReentrantLock()
+    {
+        ReentrantLock lock = getLock( task, viewOd );
+        try
+        {
+            if ( ! lock.tryLock(15L, TimeUnit.SECONDS) )
+                throw new PessimisticLockingException( EMPTY_VIEWS,
+                        "Timeout while attempting to acquire global pessimistic lock" );
+
+            locked = true;
+        }
+        catch ( InterruptedException e )
+        {
+            throw new PessimisticLockingException( EMPTY_VIEWS,
+                                                   "Error attempting to acquire global pessimistic lock" )
+                                                  .setCause( e );
+        }
+    }
+
+    /**
+     * Acquire a global lock to prevent any other task from reading the same LOD
+     * as viewOd by writing a record to the DB.
+     *
+     * @param task
+     * @param viewOd
+     */
+    private void acquireGlobalLockViaDb()
+    {
+        View vlock = createLockOi( task, viewOd.getApplication() );
+
+        String user = task.getUserId();
+        if ( StringUtils.isBlank( user ) )
+            user = "unknown";
+
+        vlock.cursor( "ZeidonLock" ).createEntity()
+                                    .setAttribute( "LOD_Name", viewOd.getName() )
+                                    .setAttribute( "KeyValue", GLOBAL_KEY )
+                                    .setAttribute( "UserName", user )
+                                    .setAttribute( "Timestamp", new Date() )
+                                    .setAttribute( "AllowRead", "N" );
+
+        addCallStack( vlock.cursor( "ZeidonLock" ) );
+        addHostname( vlock.cursor( "ZeidonLock" ) );
+
+        // TODO: Finish this.
+        throw new ZeidonException( "Finish implementing" );
+    }
+
+    @Override
+    public void cleanup()
+    {
+        if ( locked )
+        {
+            ReentrantLock lock = getLock( task, viewOd );
+            lock.unlock();
+            locked = false;
+        }
+    }
+
+    private View createLockOi( Task task, Application application )
+    {
+        // See if the locking view exists.
+        try
+        {
+            application.getViewOd( task, "ZPLOCKO" );
+        }
+        catch ( UnknownViewOdException e )
+        {
+            throw new ZeidonException( "LOD for pessimistic locking (ZPLOCKO) does not exist in the application.  " +
+                                       "To create one use the Utilities menu in the ER diagram tool." )
+                                       .setCause( e );
+        }
+
+        View vlock = task.activateEmptyObjectInstance( "ZPLOCKO", application );
+        return vlock;
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler#acquireLocks(releaseLock(com.quinsoft.zeidon.View)
      */
@@ -56,22 +155,9 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     {
         Task task = view.getTask();
         ViewOd viewOd = view.getViewOd();
-
         Application application = view.getApplication();
 
-        // See if the locking view exists.
-        try
-        {
-            application.getViewOd( view, "ZPLOCKO" );
-        }
-        catch ( UnknownViewOdException e )
-        {
-            throw new ZeidonException( "LOD for pessimistic locking (ZPLOCKO) does not exist in the application.  " +
-            		                   "To create one use the Utilities menu in the ER diagram tool." )
-                                       .setCause( e );
-        }
-
-        View vlock = task.activateEmptyObjectInstance( "ZPLOCKO", application );
+        View vlock = createLockOi( task, application );
         ViewEntity root = viewOd.getRoot();
 
         // For each root entity, create a locking record in ZPLOCKO
@@ -88,12 +174,8 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                                         .setAttribute( "Timestamp", new Date() )
                                         .setAttribute( "AllowRead", "Y" );
 
-            ViewEntity zeidonLock = vlock.cursor( "ZeidonLock" ).getViewEntity();
-            if ( zeidonLock.getAttribute( "CallStack", false ) != null )
-                addCallStack( vlock.cursor( "ZeidonLock" ) );
-
-            if ( zeidonLock.getAttribute( "Hostname", false ) != null )
-                addHostname( vlock.cursor( "ZeidonLock" ) );
+            addCallStack( vlock.cursor( "ZeidonLock" ) );
+            addHostname( vlock.cursor( "ZeidonLock" ) );
         }
 
         try
@@ -106,10 +188,19 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             throw new PessimisticLockingException( view, "Error creating pessimistic locking semaphore" )
                             .setCause( e );
         }
+        finally
+        {
+            // We don't need the global lock so release it now.
+            cleanup();
+        }
     }
 
     private void addHostname( EntityCursor cursor )
     {
+        ViewEntity zeidonLock = cursor.getViewEntity();
+        if ( zeidonLock.getAttribute( "Hostname", false ) != null )
+            return;
+
         String hostname;
         try
         {
@@ -135,6 +226,10 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
      */
     private void addCallStack( EntityCursor cursor )
     {
+        ViewEntity zeidonLock = cursor.getViewEntity();
+        if ( zeidonLock.getAttribute( "CallStack", false ) != null )
+            return;
+
         StringBuilder sb = new StringBuilder();
         int count = 0;
         StackTraceElement[] stack = new RuntimeException().getStackTrace();
@@ -226,5 +321,28 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         ArrayList<View> list = new ArrayList<View>();
         list.add( view );
         releaseLocks( list );
+    }
+
+    private ReentrantLock getLock( Task task, ViewOd viewOd )
+    {
+        ObjectEngine oe = task.getObjectEngine();
+        GlobalLocks glocks = oe.getCacheMap( GlobalLocks.class );
+        if ( glocks == null )
+            glocks = oe.putCacheMap( GlobalLocks.class, new GlobalLocks() );
+
+        return glocks.getLock( viewOd );
+    }
+
+    private static class GlobalLocks
+    {
+        private final ConcurrentMap<ViewOd, ReentrantLock> locks = new MapMaker().concurrencyLevel( 2 ).makeMap();
+
+        private ReentrantLock getLock( ViewOd viewOd )
+        {
+            if ( ! locks.containsKey( viewOd ) )
+                locks.putIfAbsent( viewOd, new ReentrantLock() );
+
+            return locks.get( viewOd );
+        }
     }
 }

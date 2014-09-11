@@ -29,7 +29,7 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
  * @author DG
  *
  */
-public interface ObjectEngine
+public interface ObjectEngine extends CacheMap
 {
     /**
      * Name of the application for the Zeidon System.

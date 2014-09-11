@@ -306,7 +306,7 @@ public class EntitySquare extends JPanel implements MouseListener
     {
         private static final long serialVersionUID = 1L;
 
-        public EntityPopupMenu()
+        private EntityPopupMenu()
         {
             JMenuItem item = new JMenuItem( "Set to subobject" );
             item.addActionListener( new SubobjectMenuListener() );

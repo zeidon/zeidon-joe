@@ -1064,7 +1064,7 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( isIncomplete() )
             throw new ZeidonException( "This entity instance may not be deleted because it is incomplete.  " +
-                                       "One of its children was activated with qualification that limited results." )
+                                       "One or more of its children were activated with qualification that limited results." )
                                     .prependEntityInstance( this );
 
         // If checkRestrictedDelete is set, then make sure none of the child entities

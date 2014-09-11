@@ -49,7 +49,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     /**
      * This is a Concurrent hashmap that can be used by application as a task-level cache.
      */
-    private final CacheMap             cacheMap = new CacheMapImpl();
+    private CacheMap cacheMap;
 
     AbstractTaskQualification( Application app )
     {
@@ -274,8 +274,11 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
      * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
      */
     @Override
-    public <T> T getCacheMap(Class<T> key)
+    synchronized public <T> T getCacheMap(Class<T> key)
     {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
         return cacheMap.getCacheMap( key );
     }
 
@@ -283,8 +286,11 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
      * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
      */
     @Override
-    public <T> T putCacheMap(Class<T> key, T value)
+    synchronized public <T> T putCacheMap(Class<T> key, T value)
     {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
         return cacheMap.putCacheMap( key, value );
     }
 

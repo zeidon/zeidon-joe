@@ -26,18 +26,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.util.EnumSet;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-
-import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteOiFlags;
 
 /**
  * @author DG
@@ -47,7 +41,6 @@ class ViewChooser extends JPanel implements ActionListener
 {
     private static final long serialVersionUID = 1L;
     private static final String REFRESH  = "Refresh";
-    private static final String WRITEOI  = "WriteOI";
     private static final String SAVE_ENV = "SaveEnv";
 
     private final BrowserEnvironment env;
@@ -87,7 +80,6 @@ class ViewChooser extends JPanel implements ActionListener
                 refresh();
             }} );
         buttonPane.add( showUnnamed );
-        addButton( buttonPane, "Write OI", WRITEOI );
         addButton( buttonPane, "Save Settings", SAVE_ENV );
 
         add( splitPane, BorderLayout.CENTER );
@@ -109,35 +101,11 @@ class ViewChooser extends JPanel implements ActionListener
         viewList.refresh( taskList.getCurrentTask() );
     }
 
-    private void writeOi()
-    {
-        BrowserView view = viewList.getSelectedView();
-        if ( view == null )
-        {
-            JOptionPane.showMessageDialog( null, "No view selected", "alert",
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        JFileChooser chooser = new JFileChooser();
-        int returnVal = chooser.showOpenDialog( this );
-        if ( returnVal == JFileChooser.APPROVE_OPTION )
-        {
-            String filename = chooser.getSelectedFile().getAbsolutePath();
-            View v = env.getView( view );
-            v.writeOiToFile( filename, EnumSet.of( WriteOiFlags.INCREMENTAL ) );
-            env.getOe().getSystemTask().log().info( "OI written to %s", filename );
-        }
-    }
-
     @Override
     public void actionPerformed(ActionEvent action)
     {
         if ( action.getActionCommand().equals( REFRESH ) )
             refresh();
-        else
-        if ( action.getActionCommand().equals( WRITEOI ) )
-            writeOi();
         else
         if ( action.getActionCommand().equals( SAVE_ENV ) )
             env.saveEnvironment();

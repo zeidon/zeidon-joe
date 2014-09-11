@@ -275,6 +275,7 @@ public abstract class BrowserEnvironment
 
     public abstract Map<String, BrowserTask> refreshBrowserTaskList();
     public abstract List<BrowserView> refreshBrowserViewList( BrowserTask task );
+    public abstract void dropViewName( BrowserView view );
 
     /**
      * Retrieve a view from a BrowserView.

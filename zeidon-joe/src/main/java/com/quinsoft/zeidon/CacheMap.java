@@ -20,10 +20,8 @@
 package com.quinsoft.zeidon;
 
 /**
- * Cache maps are a way for Zeidon logic to store task-specific objects
- * in Zeidon objects.  Each CacheMap has a user cache that can store
- * any object.  The key is a class object to help reduce the number of
- * possible key collisions.
+ * Cache maps are a way to store objects in Zeidon objects in a thread-safe way.
+ * The key is a class object to help reduce the number of possible key collisions.
  *
  * @author DG
  *

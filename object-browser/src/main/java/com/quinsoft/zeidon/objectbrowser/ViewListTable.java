@@ -19,10 +19,19 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.quinsoft.zeidon.StreamFormat;
+import com.quinsoft.zeidon.View;
 
 /**
  * @author DG
@@ -56,6 +65,30 @@ public class ViewListTable extends JTable
                 int idx = getSelectedRow();
                 final BrowserView v = env.getCurrentViewList().get( idx );
                 env.viewSelected( v );
+            }
+
+            @Override
+            public void mousePressed( MouseEvent evt )
+            {
+                if ( evt.isPopupTrigger() )
+                {
+                    int idx = getSelectedRow();
+                    final BrowserView v = env.getCurrentViewList().get( idx );
+                    ViewPopupMenu menu = new ViewPopupMenu( v );
+                    menu.show( evt.getComponent(), evt.getX(), evt.getY() );
+                }
+            }
+
+            @Override
+            public void mouseReleased( MouseEvent evt )
+            {
+                if ( evt.isPopupTrigger() )
+                {
+                    int idx = getSelectedRow();
+                    final BrowserView v = env.getCurrentViewList().get( idx );
+                    ViewPopupMenu menu = new ViewPopupMenu( v );
+                    menu.show( evt.getComponent(), evt.getX(), evt.getY() );
+                }
             }
         });
 
@@ -106,5 +139,72 @@ public class ViewListTable extends JTable
 
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );
+    }
+
+    private class ViewPopupMenu extends JPopupMenu
+    {
+        private static final long serialVersionUID = 1L;
+
+        public ViewPopupMenu(BrowserView v)
+        {
+            JMenuItem item = new JMenuItem( "Write to POR file" );
+            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.POR ) );
+            add( item );
+
+            item = new JMenuItem( "Write to JSON file" );
+            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.JSON ) );
+            add( item );
+
+            item = new JMenuItem( "Drop View Name" );
+            item.addActionListener( new DropNameMenuListener( v ) );
+            add( item );
+            if ( v.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
+                item.setEnabled( false );
+        }
+    }
+
+    private class WriteViewMenuListener extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private StreamFormat format;
+        private BrowserView view;
+
+        public WriteViewMenuListener( BrowserView v, StreamFormat f )
+        {
+            format = f;
+            view = v;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            JFileChooser chooser = new JFileChooser();
+            int returnVal = chooser.showOpenDialog( ViewListTable.this );
+            if ( returnVal == JFileChooser.APPROVE_OPTION )
+            {
+                String filename = chooser.getSelectedFile().getAbsolutePath();
+                View v = env.getView( view );
+                v.serializeOi().setFormat( format ).toFile( filename ).withIncremental().write();
+                env.getOe().getSystemTask().log().info( "OI written to %s", filename );
+            }
+        }
+    }
+
+    private class DropNameMenuListener extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private BrowserView view;
+
+        public DropNameMenuListener( BrowserView v )
+        {
+            view = v;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent e )
+        {
+            env.dropViewName( view );
+            refresh( view.task );
+        }
     }
 }

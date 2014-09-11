@@ -79,23 +79,42 @@ class ActivateOiFromDB implements Activator
         Timer timer = new Timer();
         ObjectInstance oi = view.getObjectInstance();
 
-        ViewEntity rootEntity = viewOd.getRoot();
-        activate( rootEntity );
+        PessimisticLockingHandler pessimisticLlock = null;
+        if ( options.getLockingLevel().isPessimisticLock() )
+        {
+            pessimisticLlock = view.getPessimisticLockingHandler();
+            pessimisticLlock.initialize( options );
+        }
 
-        if ( oi.getRootEntityInstance() != null ) // Did we load anything?
-		{
-            // Check the pessimistic locks.  We need to do this after we load the OI because
-            // databases (sqlite--grrrrr) can't handle two open connections updating the DB
-            // at the same time.
-            if ( options.getLockingLevel().isPessimisticLock() )
-                acquirePessimisticLocks();
+        try
+        {
+            ViewEntity rootEntity = viewOd.getRoot();
+            activate( rootEntity );
 
-            view.reset();
-            view.getViewOd().executeActivateConstraint( view );
-		}
-        task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
+            if ( oi.getRootEntityInstance() != null ) // Did we load anything?
+    		{
+                // Check the pessimistic locks.  We need to do this after we load the OI because
+                // databases (sqlite--grrrrr) can't handle two open connections updating the DB
+                // at the same time.
+                if ( pessimisticLlock != null )
+                {
+                    pessimisticLlock.acquireLocks( view );
+                    view.getTask().addLockedView( view );
+                    view.getObjectInstance().setLocked( true );
+                }
 
-        return view;
+                view.reset();
+                view.getViewOd().executeActivateConstraint( view );
+    		}
+            task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
+
+            return view;
+        }
+        finally
+        {
+            if ( pessimisticLlock != null )
+                pessimisticLlock.cleanup();
+        }
     }
 
     /**

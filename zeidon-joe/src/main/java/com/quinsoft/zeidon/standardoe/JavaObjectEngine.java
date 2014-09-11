@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.BrowserStarter;
+import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.ObjectEngineEventListener;
 import com.quinsoft.zeidon.Task;
@@ -43,6 +44,7 @@ import com.quinsoft.zeidon.config.UuidGenerator;
 import com.quinsoft.zeidon.config.ZeidonPreferences;
 import com.quinsoft.zeidon.config.ZeidonPreferencesFactory;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
+import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
@@ -60,6 +62,11 @@ public class JavaObjectEngine implements ObjectEngine
     private final AtomicLong        taskCounter = new AtomicLong( 0 );
     private final String            id;
     private final ZeidonPreferencesFactory zeidonPreferencesFactory;
+
+    /**
+     * This is a Concurrent hashmap that can be used by application as an engine-level cache.
+     */
+    private final CacheMap cacheMap = new CacheMapImpl();
 
     /**
      * List of tasks.  This will be stored in a weak hash map so that if a task is dropped
@@ -400,5 +407,23 @@ public class JavaObjectEngine implements ObjectEngine
     ObjectEngineEventListener getOeEventListener()
     {
         return oeListener;
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
+     */
+    @Override
+    public <T> T getCacheMap(Class<T> key)
+    {
+        return cacheMap.getCacheMap( key );
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
+     */
+    @Override
+    public <T> T putCacheMap(Class<T> key, T value)
+    {
+        return cacheMap.putCacheMap( key, value );
     }
 }

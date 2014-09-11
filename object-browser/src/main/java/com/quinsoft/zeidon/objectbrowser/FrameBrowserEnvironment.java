@@ -115,4 +115,11 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
         view.setLazyLoad( false ); // Set lazy load so the browser doesn't change anything.
         return view;
     }
+
+    @Override
+    public void dropViewName( BrowserView view )
+    {
+        View v = getView( view );
+        v.dropNameForView( view.viewName );
+    }
 }

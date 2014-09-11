@@ -21,6 +21,7 @@ package com.quinsoft.zeidon.dbhandler;
 
 import java.util.Collection;
 
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.View;
 
@@ -33,7 +34,22 @@ import com.quinsoft.zeidon.View;
 public interface PessimisticLockingHandler
 {
     /**
-     * Acquires the pessimistic locks for a view.
+     * Performs any initialization necessary for acquiring pessimistic locks.
+     * Called at the beginning of activation.
+     *
+     * @param options
+     * @throws PessimisticLockingException
+     */
+    void initialize( ActivateOptions options ) throws PessimisticLockingException;
+
+    /**
+     * Called at the end of activation to release any resources.
+     */
+    void cleanup();
+
+    /**
+     * Acquires the pessimistic locks for a view.  This is called after the root
+     * entities are loaded.
      *
      * @param view View to lock
      *
@@ -42,13 +58,17 @@ public interface PessimisticLockingHandler
     void acquireLocks( View view ) throws PessimisticLockingException;
 
     /**
-     * Release the pessimistic locks for the views.
+     * Release the pessimistic locks for the views.  This is called when a view is
+     * dropped and is not part of activation.
+     *
      * @param views List of views to release.
      */
     void releaseLocks( Collection<View> views );
 
     /**
-     * Release the pessimistic locks for this view.
+     * Release the pessimistic locks for this view.  This is called when a view is
+     * dropped and is not part of activation.
+     *
      * @param view
      */
     void releaseLocks( View view );

@@ -187,6 +187,7 @@ class SimpleTest
                             .asJson()
                             .activate();
         stud3.get( 0 ).logObjectInstance();
+        oe.startBrowser();
 
         String id2 = stud3.get( 0 ).cursor( "Student" ).getAttribute( "ID" ).getString();
         if ( ! id.equals( id2 ) )

@@ -150,8 +150,8 @@ public class JConsoleEnvironment extends BrowserEnvironment
         for ( String vstr : list )
         {
             String[] strings = vstr.split( ",", 5 );
-            String viewName = "*** unnamed *** ";
-            
+            String viewName = BrowserEnvironment.UNNAMED_VIEW;
+
             // Was a view named passed?
             if ( strings.length == 5 && ! StringUtils.isBlank( strings[4] ) )
                 viewName = strings[4]; // Yes.
@@ -221,5 +221,12 @@ public class JConsoleEnvironment extends BrowserEnvironment
     public void restoreEnvironment()
     {
         restore( getContainingJFrame(), BROWSER_SESSION_FILE );
+    }
+
+    @Override
+    public void dropViewName( BrowserView view )
+    {
+        JmxObjectEngineMonitorMBean proxy = currentlySelectedOe.proxy;
+        proxy.dropViewByName( view.task.taskId, view.viewName );
     }
 }
