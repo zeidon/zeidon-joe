@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.domains.AbstractNumericDomain;
 import com.quinsoft.zeidon.domains.BaseDomainContext;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.DomainContext;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
@@ -57,7 +57,7 @@ public class RevenueDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	// KJS - Added 01/28/11 the following two returns.
     	if ( externalValue == null )
@@ -84,48 +84,48 @@ public class RevenueDomain extends AbstractNumericDomain
             int idx = Math.max( ps.getErrorIndex(), ps.getIndex() );
             if ( idx != str.length() )
             {
-                throw new InvalidAttributeValueException( viewAttribute, str,
+                throw new InvalidAttributeValueException( attributeDef, str,
                                                           "Error parsing '" + str + "' at position " + ( idx + 1 ) );
             }
 
             return d;
         }
         
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Double", 
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Double", 
                                                   externalValue.getClass().getName() );
     }
     
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) 
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) 
         throws InvalidAttributeValueException
     {
         if ( ! ( internalValue instanceof Double ) )
-            throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for RevenueDomain", 
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for RevenueDomain", 
                                                       internalValue.getClass().getName() );
 
-        super.validateInternalValue( task, viewAttribute, internalValue );
+        super.validateInternalValue( task, attributeDef, internalValue );
     }
 
     @Override
-    public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Double num = (Double) convertExternalValue( task, viewAttribute, null, operand );
+        Double num = (Double) convertExternalValue( task, attributeDef, null, operand );
         Double value = (Double) currentValue;
         return value + num;
     }
     
     @Override
-    public Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Double num = (Double) convertExternalValue( task, viewAttribute, null, operand );
+        Double num = (Double) convertExternalValue( task, attributeDef, null, operand );
         Double value = (Double) currentValue;
         return value * num;
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        return getContext( task, contextName ).convertToString( task, viewAttribute, internalValue );
+        return getContext( task, contextName ).convertToString( task, attributeDef, internalValue );
     }
 
     @Override
@@ -148,7 +148,7 @@ public class RevenueDomain extends AbstractNumericDomain
         }
 
         @Override
-        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
          	if ( internalValue == null )
         		return null;

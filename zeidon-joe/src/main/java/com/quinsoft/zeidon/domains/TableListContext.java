@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.TableDomain.ImmutableTableEntry;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Implementation of TableDomainContext that keeps the list of table entries in an internal list.
@@ -74,9 +74,9 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     }
     
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
-        String string = (String) stringConverter.convertExternalValue( task, viewAttribute, null, internalValue );
+        String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, internalValue );
         TableEntry v = internalMap.get( string );
         // KJS 02/16/11 - This used to be if ( v != null ) but then I had a case where v = "NULL/NULL" so I changed
         // this to v.getInternalValue which in that case returned NULL.  Now, there is no null value in the internalMap and so
@@ -86,7 +86,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
 
         // If attribute isn't required we can return 'string'.  It will be either null or "".
         // Change to permit return of empty string regardless of "required" flag ... dks/dgc 2011.04.27
-     // if ( ! viewAttribute.isRequired() && StringUtils.isBlank( string ) )
+     // if ( ! attributeDef.isRequired() && StringUtils.isBlank( string ) )
         if ( StringUtils.isBlank( string ) )
             return string;
         
@@ -94,9 +94,9 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object value ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException
     {
-        String string = (String) stringConverter.convertExternalValue( task, viewAttribute, null, value );
+        String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, value );
         if ( externalMap.containsKey( string ) )
             return;
         
@@ -104,17 +104,17 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
             return;
 
         // If attribute isn't required we can return if string is either null or "".
-        if ( ! viewAttribute.isRequired() && StringUtils.isBlank( string ) )
+        if ( ! attributeDef.isRequired() && StringUtils.isBlank( string ) )
             return;
 
-        throw new InvalidAttributeValueException( viewAttribute, value, "Invalid table domain value." );
+        throw new InvalidAttributeValueException( attributeDef, value, "Invalid table domain value." );
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value)
     {
-        String string = (String) stringConverter.convertExternalValue( task, viewAttribute, null, value );
-        validateInternalValue( task, viewAttribute, string );
+        String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, value );
+        validateInternalValue( task, attributeDef, string );
 
         if ( externalMap.containsKey( string ) )
             return externalMap.get( string ).getInternalValue();
@@ -123,7 +123,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
         
         // If tableEntry is null then we must be removing the value for a non-required attribute.
         if ( tableEntry == null )
-            return null; //stringConverter.convertExternalValue( task, viewAttribute, null, null );
+            return null; //stringConverter.convertExternalValue( task, attributeDef, null, null );
         
         // If we get here then the input value matched an internal value so just return it.
         return tableEntry.getInternalValue();

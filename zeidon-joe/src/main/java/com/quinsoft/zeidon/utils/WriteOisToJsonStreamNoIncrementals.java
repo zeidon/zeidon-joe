@@ -116,11 +116,11 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
 
             for ( AttributeInstance attrib : ei.attributeList( false ) )
             {
-                if ( attrib.getViewAttribute().isHidden() )
+                if ( attrib.getAttributeDef().isHidden() )
                     continue;
                 
                 String value = attrib.getString( null );
-                jg.writeStringField( attrib.getViewAttribute().getName(), value );
+                jg.writeStringField( attrib.getAttributeDef().getName(), value );
             }
 
             // Loop through the children and add them.

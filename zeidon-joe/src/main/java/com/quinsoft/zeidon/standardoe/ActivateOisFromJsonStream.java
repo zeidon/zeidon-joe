@@ -42,8 +42,8 @@ import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -446,8 +446,8 @@ class ActivateOisFromJsonStream implements StreamReader
                 // This better be an attribute
                 // Try getting the attribute.  We won't throw an exception (yet) if there
                 // is no attribute with a matching name.
-                ViewAttribute viewAttribute = entityDef.getAttribute( fieldName, false );
-                if ( viewAttribute == null )
+                AttributeDef attributeDef = entityDef.getAttribute( fieldName, false );
+                if ( attributeDef == null )
                 {
                     // We didn't find an attribute with a name matching fieldName.  Do we allow
                     // dynamic attributes for this entity?
@@ -458,17 +458,17 @@ class ActivateOisFromJsonStream implements StreamReader
                     }
 
                     // We are allowing dynamic attributes.  Create one.
-                    DynamicViewAttributeConfiguration config = new DynamicViewAttributeConfiguration();
+                    DynamicAttributeDefConfiguration config = new DynamicAttributeDefConfiguration();
                     config.setAttributeName( fieldName );
-                    viewAttribute = entityDef.createDynamicViewAttribute( config );
+                    attributeDef = entityDef.createDynamicAttributeDef( config );
                 }
 
-                ei.setInternalAttributeValue( viewAttribute, jp.getText(), false );
+                ei.setInternalAttributeValue( attributeDef, jp.getText(), false );
                 if ( incremental )
                 {
                     // Since incremental flags are set, assume the attribute hasn't been
                     // updated.  We'll be told later if it has.
-                    AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
+                    AttributeValue attrib = ei.getInternalAttribute( attributeDef );
                     attrib.setUpdated( false );
                 }
             } // while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )...
@@ -494,8 +494,8 @@ class ActivateOisFromJsonStream implements StreamReader
     private void readAttributeMeta( EntityInstanceImpl ei, String fieldName ) throws JsonParseException, IOException
     {
         String attribName = fieldName.substring( 1 ); // Remove the ".".
-        ViewAttribute viewAttribute = ei.getEntityDef().getAttribute( attribName );
-        AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
+        AttributeDef attributeDef = ei.getEntityDef().getAttribute( attribName );
+        AttributeValue attrib = ei.getInternalAttribute( attributeDef );
 
         while ( jp.nextToken() != JsonToken.END_OBJECT )
         {

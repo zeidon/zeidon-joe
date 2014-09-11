@@ -29,7 +29,7 @@ import org.jasypt.util.password.ConfigurablePasswordEncryptor;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * A domain for storing passwords using strong encryption.  The password itself is not stored
@@ -38,7 +38,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
  * 
  * By default this domain uses a random salt generator which means that two hashes cannot
  * be compared to each other to see if the passwords are the same.  The only way to compare
- * a password is to call compare(task, viewAttribute, encryptedHash, plaintextPassword)
+ * a password is to call compare(task, attributeDef, encryptedHash, plaintextPassword)
  * 
  * See http://www.jasypt.org/howtoencryptuserpasswords.html
  * @author DG
@@ -80,7 +80,7 @@ public class PasswordDomain extends StringDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue == null )
             return null;
@@ -94,19 +94,19 @@ public class PasswordDomain extends StringDomain
     }
 
     @Override
-    public Object convertInternalValue(Task task, ViewAttribute viewAttribute, Object internalValue) throws InvalidAttributeValueException
+    public Object convertInternalValue(Task task, AttributeDef attributeDef, Object internalValue) throws InvalidAttributeValueException
     {
-        validateInternalValue( task, viewAttribute, internalValue );
+        validateInternalValue( task, attributeDef, internalValue );
         return internalValue;
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof String )
             return;
             
-        throw new InvalidAttributeValueException( viewAttribute, internalValue,
+        throw new InvalidAttributeValueException( attributeDef, internalValue,
                                                   "Internal value of passwords must be strings.  Attempted %s",
                                                   internalValue.getClass().getName() );
     }
@@ -118,9 +118,9 @@ public class PasswordDomain extends StringDomain
      * (return 0) or not (return 1).
      */
     @Override
-    public int compare(Task task, ViewAttribute viewAttribute, Object encyrptedHash, Object plaintextPassword)
+    public int compare(Task task, AttributeDef attributeDef, Object encyrptedHash, Object plaintextPassword)
     {
-        Integer rc = compareNull( task, viewAttribute, encyrptedHash, plaintextPassword);
+        Integer rc = compareNull( task, attributeDef, encyrptedHash, plaintextPassword);
         if ( rc != null )
             return rc;
 

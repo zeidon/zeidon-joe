@@ -40,7 +40,7 @@ import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
@@ -212,42 +212,42 @@ public class WriteOiToPorStream implements StreamWriter
                 }
 
                 // Loops through all non-null attributes.
-                for ( ViewAttribute viewAttrib : ei.getNonNullAttributeList() )
+                for ( AttributeDef AttributeDef : ei.getNonNullAttributeList() )
                 {
                     // Don't bother if the attribute is derived.
-                    if ( viewAttrib.isDerived() )
+                    if ( AttributeDef.isDerived() )
                         continue;
 
-                    if ( flags.contains( WriteOiFlags.KEYS_ONLY ) && ! viewAttrib.isKey() )
+                    if ( flags.contains( WriteOiFlags.KEYS_ONLY ) && ! AttributeDef.isKey() )
                         continue;
 
                     // If this entity is the one that was most recently flagged as linked, don't
                     // write persistent attributes -- they were already written for a linked
                     // instance.
-                    if ( viewAttrib.isPersistent() && ei.getHierIndex() == lastLinked )
+                    if ( AttributeDef.isPersistent() && ei.getHierIndex() == lastLinked )
                         continue;
 
                     // Write the attribute flags if they aren't 0.
                     String flags = "";
-                    if ( writeIncremental && ei.getInternalAttribute( viewAttrib ).getAttributeFlags() != 0 )
-                        flags = String.format(",%x", ei.getInternalAttribute( viewAttrib ).getAttributeFlags() );
+                    if ( writeIncremental && ei.getInternalAttribute( AttributeDef ).getAttributeFlags() != 0 )
+                        flags = String.format(",%x", ei.getInternalAttribute( AttributeDef ).getAttributeFlags() );
 
-                    write("a%-9s ", viewAttrib.getName() + flags);
+                    write("a%-9s ", AttributeDef.getName() + flags);
 
-                    if ( viewAttrib.getType() == InternalType.BLOB )
+                    if ( AttributeDef.getType() == InternalType.BLOB )
                     {
-                        Blob blob = (Blob) ei.getInternalAttributeValue( viewAttrib );
+                        Blob blob = (Blob) ei.getInternalAttributeValue( AttributeDef );
                         byte[] bytes = blob.getBytes();
                         writeln("%d", bytes.length );
                         write( bytes.toString() );
                     }
                     else
                     {
-                        String value = ei.getStringFromAttribute( viewAttrib );
+                        String value = ei.getStringFromAttribute( AttributeDef );
 
                         // If the attribute type is a string then check to see if it contains "special"
                         // characters that interfere with normal attribute values, like "\n".
-                        if ( viewAttrib.getType() == InternalType.STRING &&
+                        if ( AttributeDef.getType() == InternalType.STRING &&
                              ( value.length() > 254 || specialChars.matcher( value ).matches() ) )
                         {
                             writeln("%c%d", PortableFileReader.STRING_STORED_AS_BLOB, value.length() );

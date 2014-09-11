@@ -41,7 +41,7 @@ public class DataRecord implements PortableFileAttributeHandler
     private final List<DataField> dataFields = new ArrayList<DataField>();
     private RelRecord relRecord;
     private final EntityDef entityDef;
-    private final Map<ViewAttribute, DataField> attributeMap = new HashMap<ViewAttribute, DataField>();
+    private final Map<AttributeDef, DataField> attributeMap = new HashMap<AttributeDef, DataField>();
     private boolean joinable;
 
     DataRecord( EntityDef entityDef )
@@ -83,15 +83,15 @@ public class DataRecord implements PortableFileAttributeHandler
         dataFields.add( dataField );
     }
 
-    public DataField getDataField( ViewAttribute viewAttribute )
+    public DataField getDataField( AttributeDef attributeDef )
     {
-        // We allow viewAttribute to be null.  Just return null.
-        if ( viewAttribute == null )
+        // We allow attributeDef to be null.  Just return null.
+        if ( attributeDef == null )
             return null;
 
-        DataField dataField = attributeMap.get( viewAttribute );
+        DataField dataField = attributeMap.get( attributeDef );
         if ( dataField == null )
-            throw new ZeidonException( "ViewAttrib %s does not belong to record %s", viewAttribute, this );
+            throw new ZeidonException( "AttributeDef %s does not belong to record %s", attributeDef, this );
 
         return dataField;
     }
@@ -115,7 +115,7 @@ public class DataRecord implements PortableFileAttributeHandler
     void setFields(EntityDef currentEntityDef)
     {
         for ( DataField dataField : dataFields )
-            attributeMap.put( dataField.getViewAttribute(), dataField );
+            attributeMap.put( dataField.getAttributeDef(), dataField );
 
         if ( relRecord == null )
             return;
@@ -145,7 +145,7 @@ public class DataRecord implements PortableFileAttributeHandler
                 if ( relField.getSrcDataField() != null )
                 {
                     {
-                        if ( relField.getSrcDataField().getViewAttribute().getEntityDef() != getEntityDef() )
+                        if ( relField.getSrcDataField().getAttributeDef().getEntityDef() != getEntityDef() )
                             relRecord.setParentRelField( relField );
                     }
                 }
@@ -153,7 +153,7 @@ public class DataRecord implements PortableFileAttributeHandler
                 if ( relField.getRelDataField() != null )
                 {
                     {
-                        if ( relField.getRelDataField().getViewAttribute().getEntityDef() == getEntityDef() )
+                        if ( relField.getRelDataField().getAttributeDef().getEntityDef() == getEntityDef() )
                             relRecord.setChildRelField( relField );
                     }
                 }

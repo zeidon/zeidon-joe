@@ -34,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.EventListener;
-import com.quinsoft.zeidon.UnknownViewAttributeException;
+import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig.LazyLoadFlags;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
@@ -63,23 +63,23 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private List<EntityDef> children;
     private List<EntityDef> childrenHier;
     private EventListener eventListener;
-    private ArrayList<ViewAttribute> activateOrdering;
+    private ArrayList<AttributeDef> activateOrdering;
     private Integer    activateLimit;
     /**
      * List of the attributes in the order they are defined in the XOD file.
      */
-    private final List<ViewAttribute> attributes = Collections.synchronizedList( new ArrayList<ViewAttribute>() );
+    private final List<AttributeDef> attributes = Collections.synchronizedList( new ArrayList<AttributeDef>() );
 
     /**
      * Map of attributes by attribute name.  This is a concurrent map because this can be increased
      * with dynamic attributes.
      */
-    private final ConcurrentMap<String, ViewAttribute> attributeMap = new MapMaker().concurrencyLevel( 2 ).makeMap();
+    private final ConcurrentMap<String, AttributeDef> attributeMap = new MapMaker().concurrencyLevel( 2 ).makeMap();
 
     /**
      * Map of attributes by ER attribute token.
      */
-    private final Map<Long, ViewAttribute> erAttributeMap = new HashMap<Long, ViewAttribute>();
+    private final Map<Long, AttributeDef> erAttributeMap = new HashMap<Long, AttributeDef>();
 
     /**
      * This map keeps track of entities that have been checked to see if 'this' entity
@@ -101,10 +101,10 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private boolean    update  = false;
     private boolean    includeSrc = false;
 
-    private final List<ViewAttribute> keys;
-    private ViewAttribute genKey;
-    private ViewAttribute autoSeq;
-    private Collection<ViewAttribute> hashKeyAttributes;
+    private final List<AttributeDef> keys;
+    private AttributeDef genKey;
+    private AttributeDef autoSeq;
+    private Collection<AttributeDef> hashKeyAttributes;
     private boolean    parentDelete = false;
     private boolean    restrictParentDelete = false;
     private boolean    checkRestrictedDelete = false;
@@ -135,7 +135,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         this.viewOd = viewOd;
         this.entityNumber = viewOd.getEntityCount();
         this.level = level;
-        keys = new ArrayList<ViewAttribute>();
+        keys = new ArrayList<AttributeDef>();
         lazyLoadConfig = new LazyLoadConfig();
     }
 
@@ -396,21 +396,21 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return level;
     }
 
-    void addViewAttribute( ViewAttribute viewAttribute )
+    void addAttributeDef( AttributeDef attributeDef )
     {
-        attributes.add( viewAttribute );
-        attributeMap.put( viewAttribute.getName(), viewAttribute );
+        attributes.add( attributeDef );
+        attributeMap.put( attributeDef.getName(), attributeDef );
 
-        if ( viewAttribute.isDynamicAttribute() )
-            assert viewAttribute.getErAttributeToken() < 0;
+        if ( attributeDef.isDynamicAttribute() )
+            assert attributeDef.getErAttributeToken() < 0;
         else
         {
-            assert viewAttribute.getErAttributeToken() != null;
-            erAttributeMap.put( viewAttribute.getErAttributeToken(), viewAttribute );
+            assert attributeDef.getErAttributeToken() != null;
+            erAttributeMap.put( attributeDef.getErAttributeToken(), attributeDef );
         }
     }
 
-    public ViewAttribute createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
+    public AttributeDef createDynamicAttributeDef( DynamicAttributeDefConfiguration config )
     {
         if ( attributeMap.containsKey( config.getAttributeName() ) )
         {
@@ -420,8 +420,8 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
             throw new ZeidonException( "Attribute already exists with name: %s", config.getAttributeName() );
         }
 
-        ViewAttribute dynamicAttrib = new ViewAttribute( this, config );
-        addViewAttribute( dynamicAttrib );
+        AttributeDef dynamicAttrib = new AttributeDef( this, config );
+        addAttributeDef( dynamicAttrib );
         return dynamicAttrib;
     }
 
@@ -430,21 +430,21 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return attributeMap.size();
     }
 
-    public ViewAttribute getAttribute( String attribName )
+    public AttributeDef getAttribute( String attribName )
     {
         return getAttribute( attribName, true );
     }
 
-    public ViewAttribute getAttribute( String attribName, boolean required )
+    public AttributeDef getAttribute( String attribName, boolean required )
     {
-        ViewAttribute attrib = attributeMap.get( attribName );
+        AttributeDef attrib = attributeMap.get( attribName );
         if ( attrib == null && required )
-            throw new UnknownViewAttributeException( this, attribName );
+            throw new UnknownAttributeDefException( this, attribName );
 
         return attrib;
     }
 
-    public ViewAttribute getAttribute( int attributeNumber )
+    public AttributeDef getAttribute( int attributeNumber )
     {
         if ( attributeNumber >= attributes.size() )
             throw new ZeidonException("Attribute index %d out of range for %s.",
@@ -453,12 +453,12 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return attributes.get( attributeNumber );
     }
 
-    public ViewAttribute getAttributeByErToken( long erToken )
+    public AttributeDef getAttributeByErToken( long erToken )
     {
         return erAttributeMap.get( erToken );
     }
 
-    public List<ViewAttribute> getAttributes()
+    public List<AttributeDef> getAttributes()
     {
         return Collections.unmodifiableList( attributes );
     }
@@ -643,7 +643,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         this.dataRecord = dataRecord;
     }
 
-    public ViewAttribute getGenKey()
+    public AttributeDef getGenKey()
     {
         return genKey;
     }
@@ -678,9 +678,9 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return update;
     }
 
-    void setGenKey(ViewAttribute viewAttribute)
+    void setGenKey(AttributeDef attributeDef)
     {
-        genKey = viewAttribute;
+        genKey = attributeDef;
     }
 
     public boolean isRecursive()
@@ -708,22 +708,22 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return debugIncrementalFlag;
     }
 
-    void setAutoSeq(ViewAttribute autoSeq)
+    void setAutoSeq(AttributeDef autoSeq)
     {
         this.autoSeq = autoSeq;
     }
 
-    public ViewAttribute getAutoSeq()
+    public AttributeDef getAutoSeq()
     {
         return autoSeq;
     }
 
-    public List<ViewAttribute> getKeys()
+    public List<AttributeDef> getKeys()
     {
         return keys;
     }
 
-    void addKey( ViewAttribute key )
+    void addKey( AttributeDef key )
     {
         keys.add( key );
     }
@@ -841,11 +841,11 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     	// Determine if 'this' entity is a superset.
     	Boolean isSuperset = Boolean.TRUE;
-    	for ( ViewAttribute viewAttribute : otherEntity.getAttributes() )
+    	for ( AttributeDef attributeDef : otherEntity.getAttributes() )
     	{
-    		if ( viewAttribute.isPersistent() )
+    		if ( attributeDef.isPersistent() )
     		{
-    			if ( getAttribute( viewAttribute.getName(), false ) == null )
+    			if ( getAttribute( attributeDef.getName(), false ) == null )
     			{
     				isSuperset = Boolean.FALSE;  // Use the constant value to preclude concurrency issues.
     				break;
@@ -863,7 +863,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * @return the hashKeyAttribute
      */
-    public Collection<ViewAttribute> getHashKeyAttributes()
+    public Collection<AttributeDef> getHashKeyAttributes()
     {
         return hashKeyAttributes;
     }
@@ -871,10 +871,10 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * @param hashKeyAttribute the hashKeyAttribute to set
      */
-    void addHashKeyAttribute( ViewAttribute hashKeyAttribute )
+    void addHashKeyAttribute( AttributeDef hashKeyAttribute )
     {
         if ( hashKeyAttributes == null )
-            hashKeyAttributes = new ArrayList<ViewAttribute>();
+            hashKeyAttributes = new ArrayList<AttributeDef>();
 
         hashKeyAttributes.add( hashKeyAttribute );
     }
@@ -887,7 +887,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return lazyLoadConfig;
     }
 
-    public List<ViewAttribute> getSequencingAttributes()
+    public List<AttributeDef> getSequencingAttributes()
     {
         return activateOrdering;
     }
@@ -896,18 +896,18 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
      * Add the view attribute to the list of ordering attributes in the position
      * 'position'.  Note, position is 1-based.
      *
-     * @param viewAttribute
+     * @param attributeDef
      * @param position
      */
-    void addSequencingAttribute( ViewAttribute viewAttribute, int position )
+    void addSequencingAttribute( AttributeDef attributeDef, int position )
     {
         if ( activateOrdering == null )
-            activateOrdering = new ArrayList<ViewAttribute>();
+            activateOrdering = new ArrayList<AttributeDef>();
 
         while ( activateOrdering.size() < position )
             activateOrdering.add( null );
 
-        activateOrdering.set( position - 1, viewAttribute );
+        activateOrdering.set( position - 1, attributeDef );
     }
 
     /**

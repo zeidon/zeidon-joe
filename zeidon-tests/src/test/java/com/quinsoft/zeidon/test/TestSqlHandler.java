@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.JdbcHandler;
 import com.quinsoft.zeidon.dbhandler.StandardJdbcTranslator;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -82,7 +82,7 @@ public class TestSqlHandler extends JdbcHandler
         for ( int i = 0; i < max; i++ )
         {
             csr.createEntity( CreateEntityFlags.fIGNORE_PERMISSIONS );
-            for ( ViewAttribute key : entityDef.getAttributes() )
+            for ( AttributeDef key : entityDef.getAttributes() )
             {
                 if ( key.isKey() || key.isForeignKey() )
                 {
@@ -121,9 +121,9 @@ public class TestSqlHandler extends JdbcHandler
      * @see com.quinsoft.zeidon.dbhandler.AbstractSqlHandler#getSqlValue(com.quinsoft.zeidon.domains.Domain, java.lang.StringBuilder, java.lang.Object)
      */
     @Override
-    protected void getSqlValue(SqlStatement stmt, Domain domain, ViewAttribute viewAttribute, StringBuilder buffer, Object value)
+    protected void getSqlValue(SqlStatement stmt, Domain domain, AttributeDef attributeDef, StringBuilder buffer, Object value)
     {
-        if ( translator.appendSqlValue( stmt, buffer, domain, viewAttribute, value ) )
+        if ( translator.appendSqlValue( stmt, buffer, domain, attributeDef, value ) )
             return;
 
         throw new ZeidonException("JdbcDomainTranslator did not correctly translate an attribute value" );

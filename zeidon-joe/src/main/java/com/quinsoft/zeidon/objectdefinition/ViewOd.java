@@ -281,7 +281,7 @@ public class ViewOd implements PortableFileAttributeHandler
         {
             task.log().info( "%s %d, count = %d", entityDef.getName(),
                               entityDef.getLevel(), entityDef.getChildCount() );
-            for ( ViewAttribute attrib : entityDef.getAttributes() )
+            for ( AttributeDef attrib : entityDef.getAttributes() )
             {
                 Domain domain = attrib.getDomain();
                 String type = domain == null ? attrib.getType().toString() : domain.getName();
@@ -500,7 +500,7 @@ public class ViewOd implements PortableFileAttributeHandler
         {
             if ( reader.getAttributeName().equals( "ATTRIB" ))
             {
-                ViewAttribute attrib = new ViewAttribute(currentEntityDef);
+                AttributeDef attrib = new AttributeDef(currentEntityDef);
                 return attrib;
             }
             else
@@ -575,9 +575,9 @@ public class ViewOd implements PortableFileAttributeHandler
                 // Count up the number of persistent and work attributes.
                 int persistentCount = 0;
                 int workCount = 0;
-                for ( ViewAttribute viewAttribute : entityDef.getAttributes() )
+                for ( AttributeDef attributeDef : entityDef.getAttributes() )
                 {
-                    if ( viewAttribute.isPersistent() )
+                    if ( attributeDef.isPersistent() )
                         persistentCount++;
                     else
                         workCount++;
@@ -587,10 +587,10 @@ public class ViewOd implements PortableFileAttributeHandler
                 entityDef.setWorkAttributeCount( workCount );
             }
             else
-            if ( handler instanceof ViewAttribute )
+            if ( handler instanceof AttributeDef )
             {
-                ViewAttribute attrib = (ViewAttribute) handler;
-                currentEntityDef.addViewAttribute( attrib );
+                AttributeDef attrib = (AttributeDef) handler;
+                currentEntityDef.addAttributeDef( attrib );
             }
             else
             if ( handler instanceof RelField )
@@ -608,14 +608,14 @@ public class ViewOd implements PortableFileAttributeHandler
             // Set the sibling pointers for all the view entities.
             entityList.get( 0 ).setSiblingsForChildren();
             entityList = Collections.unmodifiableList( entityList );
-            Map<Integer, ViewAttribute> attribMap = new HashMap<Integer, ViewAttribute>();
+            Map<Integer, AttributeDef> attribMap = new HashMap<Integer, AttributeDef>();
 
-            // Find the ViewAttrib for each of the DataFields.
+            // Find the AttributeDef for each of the DataFields.
             for ( EntityDef ve : entityList )
             {
-                for ( ViewAttribute viewAttrib : ve.getAttributes() )
+                for ( AttributeDef AttributeDef : ve.getAttributes() )
                 {
-                    attribMap.put( viewAttrib.getXvaAttrToken(), viewAttrib );
+                    attribMap.put( AttributeDef.getXvaAttrToken(), AttributeDef );
                 }
 
                 DataRecord dataRecord = ve.getDataRecord();
@@ -623,9 +623,9 @@ public class ViewOd implements PortableFileAttributeHandler
                 {
                     for ( DataField dataField : dataRecord.dataFields() )
                     {
-                        ViewAttribute viewAttrib = attribMap.get( dataField.getToken() );
-                        assert viewAttrib != null : "Can't find matching XVA Token for DataField";
-                        dataField.setViewAttribute( viewAttrib );
+                        AttributeDef AttributeDef = attribMap.get( dataField.getToken() );
+                        assert AttributeDef != null : "Can't find matching XVA Token for DataField";
+                        dataField.setAttributeDef( AttributeDef );
                     }
                     dataRecord.setFields( ve );
                 }

@@ -51,7 +51,7 @@ import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
@@ -184,8 +184,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             // If the DB is generating the keys then don't add generated keys to
             // the list of columns.
-            ViewAttribute viewAttrib = dataField.getViewAttribute();
-            if ( useDbGenerateKeys() && viewAttrib.isGenKey() && entityInstance.getAttribute( viewAttrib ).isNull() )
+            AttributeDef AttributeDef = dataField.getAttributeDef();
+            if ( useDbGenerateKeys() && AttributeDef.isGenKey() && entityInstance.getAttribute( AttributeDef ).isNull() )
                 continue;
 
             if ( firstColumn )
@@ -201,13 +201,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * Copies the value of the attribute into buffer.
      * @param stmt TODO
      * @param domain
-     * @param viewAttribute TODO
+     * @param attributeDef TODO
      * @param buffer
      * @param value
      */
     protected abstract void getSqlValue( SqlStatement stmt,
                                          Domain domain,
-                                         ViewAttribute viewAttribute,
+                                         AttributeDef attributeDef,
                                          StringBuilder buffer,
                                          Object value );
 
@@ -239,7 +239,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // value instead of the data field.
             if ( stmt.commandType == SqlCommand.INSERT )
             {
-                Object value = entityInstance.getInternalAttributeValue( dataField.getViewAttribute() );
+                Object value = entityInstance.getInternalAttributeValue( dataField.getAttributeDef() );
                 stmt.addBoundAttribute( buffer, value );
                 return;
             }
@@ -248,9 +248,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return;
         }
 
-        ViewAttribute viewAttribute = dataField.getViewAttribute();
-        Object value = entityInstance.getInternalAttributeValue( viewAttribute );
-        getSqlValue( stmt, viewAttribute.getDomain(), viewAttribute, buffer, value );
+        AttributeDef attributeDef = dataField.getAttributeDef();
+        Object value = entityInstance.getInternalAttributeValue( attributeDef );
+        getSqlValue( stmt, attributeDef.getDomain(), attributeDef, buffer, value );
     }
 
     protected Task getTask()
@@ -272,7 +272,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         if ( ! isBindAllValues() )
         {
-            if ( entityInstance.isAttributeNull( dataField.getViewAttribute() ) )
+            if ( entityInstance.isAttributeNull( dataField.getAttributeDef() ) )
             {
                 buffer.append( " IS null" );
                 return false;
@@ -293,8 +293,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         for ( DataField dataField : dataRecord.dataFields() )
         {
-            ViewAttribute viewAttrib = dataField.getViewAttribute();
-            if ( ( control & COL_KEYS_ONLY ) != 0 && viewAttrib.isKey() )
+            AttributeDef AttributeDef = dataField.getAttributeDef();
+            if ( ( control & COL_KEYS_ONLY ) != 0 && AttributeDef.isKey() )
                 continue;
 
             // If nControl indicates that we don't want hidden attributes, then
@@ -302,9 +302,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // they are hidden, should be included.  Same thing with auto sequencing
             // attributes.
             if ( ( control & COL_NO_HIDDEN ) == 0 &&
-                 ( viewAttrib.isHidden() && ! viewAttrib.isKey() &&
-                                            ! viewAttrib.isForeignKey() &&
-                                            ! viewAttrib.isAutoSeq() ))
+                 ( AttributeDef.isHidden() && ! AttributeDef.isKey() &&
+                                            ! AttributeDef.isForeignKey() &&
+                                            ! AttributeDef.isAutoSeq() ))
             {
                 continue;
             }
@@ -313,7 +313,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // is many-to-many then the attribute is stored in the corresponding
             // table.  If the command type is also INSERT then the attribute is
             // not to be included in this list.
-            if ( viewAttrib.isAutoSeq() &&
+            if ( AttributeDef.isAutoSeq() &&
                  relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY &&
                  stmt.commandType == SqlCommand.INSERT )
             {
@@ -323,7 +323,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // Skip the attribute if it wasn't updated.
             if ( entityInstance != null && stmt.commandType != SqlCommand.INSERT)
             {
-                if ( ! entityInstance.isAttributeUpdated( viewAttrib ) )
+                if ( ! entityInstance.isAttributeUpdated( AttributeDef ) )
                     continue;
             }
 
@@ -332,7 +332,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // If the DB is generating the keys then don't add generated keys to
                 // the list of columns UNLESS the key is not null.  If the key is not
                 // null then someone must have set it on purpose and we'll use that value.
-                if ( viewAttrib.isGenKey() && entityInstance.getAttribute( viewAttrib ).isNull() )
+                if ( AttributeDef.isGenKey() && entityInstance.getAttribute( AttributeDef ).isNull() )
                     continue;
             }
 
@@ -344,7 +344,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ( control & COL_FULL_QUAL ) != 0 )
             {
                 String tableName;
-                if ( viewAttrib.isAutoSeq() &&
+                if ( AttributeDef.isAutoSeq() &&
                      relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
                 {
                     // This is the autoseq attribute.  The autoseq is stored in the correspondance
@@ -463,21 +463,21 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     else
                         qualAttrib.oper = "=";
 
-                    qualAttrib.viewAttrib = qualAttrib.entityDef.getKeys().get( 0 );
+                    qualAttrib.AttributeDef = qualAttrib.entityDef.getKeys().get( 0 );
                 }
 
                 //
                 // Verify AttribName
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "AttributeName"  ) || qualAttrib.viewAttrib != null )
+                if ( ! qualAttribInstance.isAttributeNull( "AttributeName"  ) || qualAttrib.AttributeDef != null )
                 {
-                    if ( qualAttrib.viewAttrib == null )
+                    if ( qualAttrib.AttributeDef == null )
                     {
                         String attribName = qualAttribInstance.getStringFromAttribute( "AttributeName" );
                         if ( qualAttrib.entityDef == null )
                             throw new ZeidonException( "QualAttrib has attribute defined but no valid entity" );
 
-                        qualAttrib.viewAttrib = qualAttrib.entityDef.getAttribute( attribName );
+                        qualAttrib.AttributeDef = qualAttrib.entityDef.getAttribute( attribName );
                     }
 
                     // In some cases, we might be qualifying an entity using an attribute
@@ -489,7 +489,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // qualification to reference the foreign key.
                     DataRecord dataRecord = qualAttrib.entityDef.getDataRecord();
                     RelRecord relRecord = dataRecord.getRelRecord();
-                    while ( qualAttrib.viewAttrib.isKey() &&
+                    while ( qualAttrib.AttributeDef.isKey() &&
                             qualAttrib.entityDef != qualEntity.entityDef &&
                             relRecord != null &&
                             relRecord.getRelationshipType() == RelRecord.CHILD_IS_SOURCE )
@@ -499,8 +499,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                         {
                             // Change the column we are qualifying on.
                             DataField dataField = relField.getRelDataField();
-                            qualAttrib.viewAttrib = dataField.getViewAttribute();
-                            qualAttrib.entityDef = qualAttrib.viewAttrib.getEntityDef();
+                            qualAttrib.AttributeDef = dataField.getAttributeDef();
+                            qualAttrib.entityDef = qualAttrib.AttributeDef.getEntityDef();
 
                             dataRecord = qualAttrib.entityDef.getDataRecord();
                             relRecord = dataRecord.getRelRecord();
@@ -513,7 +513,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 if ( ! qualAttribInstance.isAttributeNull( "Value"  ) )
                 {
-                    if ( qualAttrib.viewAttrib == null )
+                    if ( qualAttrib.AttributeDef == null )
                         throw new ZeidonException("QualAttrib with value requires Entity.Attrib");
 
                     qualAttrib.value = qualAttribInstance.getStringFromAttribute( "Value" );
@@ -930,8 +930,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( QualAttrib qualAttrib : qualEntity.qualAttribs )
         {
             // Add the table to the SELECT statement only if the QualAttrib has
-            // a lpEntityDef and a lpViewAttrib.
-            if ( qualAttrib.entityDef == null || qualAttrib.viewAttrib == null )
+            // a lpEntityDef and a lpAttributeDef.
+            if ( qualAttrib.entityDef == null || qualAttrib.AttributeDef == null )
                 continue;
 
             addForeignKeys( stmt, view, qualAttrib.entityDef, entityDef );
@@ -967,7 +967,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // TODO : add code for subselect commands (like "EXISTS")
 
             DataRecord dataRecord = qualAttrib.entityDef.getDataRecord();
-            DataField  dataField = dataRecord.getDataField( qualAttrib.viewAttrib );
+            DataField  dataField = dataRecord.getDataField( qualAttrib.AttributeDef );
 
             String col = dataField.getName();
             stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " " );
@@ -992,9 +992,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
             else
             {
-                Domain domain = dataField.getViewAttribute().getDomain();
+                Domain domain = dataField.getAttributeDef().getDomain();
                 StringBuilder buffer = new StringBuilder();
-                getSqlValue( stmt, domain, qualAttrib.viewAttrib, buffer, qualAttrib.value );
+                getSqlValue( stmt, domain, qualAttrib.AttributeDef, buffer, qualAttrib.value );
                 stmt.appendWhere( qualAttrib.oper, " ", buffer.toString() );
             }
         }
@@ -1188,8 +1188,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( RelField relField : relRecord.getRelFields() )
         {
             DataField     srcDataField  = relField.getSrcDataField();
-            ViewAttribute srcViewAttrib = srcDataField.getViewAttribute();
-            EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
+            AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
+            EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
             if ( srcEntityDef == entityDef )
                 continue;
 
@@ -1222,8 +1222,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( RelField relField : relRecord.getRelFields() )
         {
             DataField     srcDataField  = relField.getSrcDataField();
-            ViewAttribute srcViewAttrib = srcDataField.getViewAttribute();
-            EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
+            AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
+            EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
             if ( srcEntityDef != entityDef )
                 continue;
 
@@ -1270,12 +1270,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 first = false;
 
             DataField     srcDataField  = relField.getSrcDataField();
-            ViewAttribute srcViewAttrib = srcDataField.getViewAttribute();
-            EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
+            AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
+            EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
             DataRecord    srcDataRecord = srcEntityDef.getDataRecord();
             DataField     relDataField  = relField.getRelDataField();
-            ViewAttribute relViewAttrib = relDataField.getViewAttribute();
-            EntityDef    relEntityDef = relViewAttrib.getEntityDef();
+            AttributeDef relAttributeDef = relDataField.getAttributeDef();
+            EntityDef    relEntityDef = relAttributeDef.getEntityDef();
             DataRecord    relDataRecord = relEntityDef.getDataRecord();
 
             stmt.from.append( stmt.getTableName( relDataRecord ) )
@@ -1333,8 +1333,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             for ( RelField relField : relRecord.getRelFields() )
             {
                 DataField     srcDataField  = relField.getSrcDataField();
-                ViewAttribute srcViewAttrib = srcDataField.getViewAttribute();
-                EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
+                AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
+                EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
                 if ( srcEntityDef == entityDef )
                     continue;  // Source is not a parent.
 
@@ -1395,8 +1395,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( RelField relField : relRecord.getRelFields() )
         {
             DataField     srcDataField  = relField.getSrcDataField();
-            ViewAttribute srcViewAttrib = srcDataField.getViewAttribute();
-            EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
+            AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
+            EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
             DataRecord    srcDataRecord = srcEntityDef.getDataRecord();
             DataField     relDataField  = relField.getRelDataField();
 
@@ -1420,8 +1420,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             else
             if ( relRecord.getRelationshipType() == RelRecord.ONE_TO_MANY )
             {
-                ViewAttribute relViewAttrib = relDataField.getViewAttribute();
-                EntityDef    relEntityDef = relViewAttrib.getEntityDef();
+                AttributeDef relAttributeDef = relDataField.getAttributeDef();
+                EntityDef    relEntityDef = relAttributeDef.getEntityDef();
                 DataRecord    relDataRecord = relEntityDef.getDataRecord();
 
                 if ( rootEntity )
@@ -1481,8 +1481,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             {
                 assert relRecord.getRelationshipType() == RelRecord.MANY_TO_ONE;
 
-                ViewAttribute relViewAttrib = relDataField.getViewAttribute();
-                EntityDef    relEntityDef = relViewAttrib.getEntityDef();
+                AttributeDef relAttributeDef = relDataField.getAttributeDef();
+                EntityDef    relEntityDef = relAttributeDef.getEntityDef();
                 DataRecord    relDataRecord = relEntityDef.getDataRecord();
 
 
@@ -1532,7 +1532,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ei.isHidden() )
                 continue;
 
-            if ( ei.getAttribute( srcDataField.getViewAttribute() ).isNull() )
+            if ( ei.getAttribute( srcDataField.getAttributeDef() ).isNull() )
                 continue;
 
             if ( foundNonNullValues )
@@ -1608,7 +1608,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // If the EntityDef of the relfield is NOT the EntityDef of the entityInstance
             // we need to find the source instance.
             DataField srcDataField = relField.getSrcDataField();
-            EntityDef srcEntityDef = srcDataField.getViewAttribute().getEntityDef();
+            EntityDef srcEntityDef = srcDataField.getAttributeDef().getEntityDef();
             if ( srcEntityDef == entityDef )
                 getAttributeValue( stmt, stmt.sqlCmd, srcDataField, entityInstance );
             else
@@ -1667,7 +1667,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // If the EntityDef of the relfield is NOT the EntityDef of the entityInstance
             // we need to find the source instance.
             DataField srcDataField = relField.getSrcDataField();
-            EntityDef srcEntityDef = srcDataField.getViewAttribute().getEntityDef();
+            EntityDef srcEntityDef = srcDataField.getAttributeDef().getEntityDef();
             if ( srcEntityDef == entityDef )
                 getAttributeValue( stmt, stmt.sqlCmd, srcDataField, entityInstance );
             else
@@ -1703,15 +1703,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         int updateCount = 0;
         for ( DataField dataField : dataRecord.dataFields() )
         {
-            ViewAttribute viewAttrib = dataField.getViewAttribute();
-            if ( ! viewAttrib.isPersistent() )
+            AttributeDef AttributeDef = dataField.getAttributeDef();
+            if ( ! AttributeDef.isPersistent() )
                 continue;
 
-            if ( ! entityInstance.isAttributeUpdated( viewAttrib ) )
+            if ( ! entityInstance.isAttributeUpdated( AttributeDef ) )
                 continue;
 
-            if ( viewAttrib.isKey() )
-               throw new ZeidonException( "Trying to update key %s", viewAttrib.toString() );
+            if ( AttributeDef.isKey() )
+               throw new ZeidonException( "Trying to update key %s", AttributeDef.toString() );
 
             if ( updateCount > 0 )
                 stmt.appendCmd( ",\n" );
@@ -1836,8 +1836,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             for ( DataField dataField : dataRecord.dataFields() )
             {
-                ViewAttribute viewAttrib = dataField.getViewAttribute();
-                if ( ! viewAttrib.isKey() )
+                AttributeDef AttributeDef = dataField.getAttributeDef();
+                if ( ! AttributeDef.isKey() )
                     continue;
 
                 if ( conjunctionNeeded )
@@ -1846,7 +1846,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 appendWhere( getTableName( dataRecord ),
                              ".", dataField.getName() );
 
-                if ( entityInstance.isAttributeNull( viewAttrib ) )
+                if ( entityInstance.isAttributeNull( AttributeDef ) )
                     appendWhere(" IS NULL " );
                 else
                 {
@@ -1880,21 +1880,21 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         void appendOrdering( EntityDef entityDef )
         {
-            final ViewAttribute autoSeq = entityDef.getAutoSeq();
+            final AttributeDef autoSeq = entityDef.getAutoSeq();
             if ( autoSeq != null )
                 appendOrdering( autoSeq );
 
             if ( entityDef.getSequencingAttributes() != null )
             {
-                for ( ViewAttribute viewAttribute : entityDef.getSequencingAttributes() )
-                    appendOrdering( viewAttribute );
+                for ( AttributeDef attributeDef : entityDef.getSequencingAttributes() )
+                    appendOrdering( attributeDef );
             }
 
         }
 
-        void appendOrdering( ViewAttribute viewAttribute )
+        void appendOrdering( AttributeDef attributeDef )
         {
-            appendOrdering( viewAttribute.getEntityDef().getDataRecord().getDataField( viewAttribute ), viewAttribute.isAutoSeq() );
+            appendOrdering( attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef ), attributeDef.isAutoSeq() );
         }
 
         void appendOrdering( DataField dataField, boolean isAutoSeq )
@@ -1902,7 +1902,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ordering.length() > 0 )
                 ordering.append( ", " );
 
-            DataRecord dataRecord = dataField.getViewAttribute().getEntityDef().getDataRecord();
+            DataRecord dataRecord = dataField.getAttributeDef().getEntityDef().getDataRecord();
             if ( isAutoSeq )
             {
                 RelRecord relRecord = dataRecord.getRelRecord();
@@ -1917,7 +1917,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             ordering.append( "." )
                     .append( dataField.getName() );
 
-            if ( ! dataField.getViewAttribute().isSequencingAscending() )
+            if ( ! dataField.getAttributeDef().isSequencingAscending() )
                 ordering.append( " DESC " );
         }
 
@@ -2219,7 +2219,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         String        oper;
         EntityDef    entityDef;
         String        keyList;
-        ViewAttribute viewAttrib;
+        AttributeDef AttributeDef;
 
         private QualAttrib(String oper)
         {
@@ -2236,7 +2236,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             StringBuilder sb = new StringBuilder();
             if ( entityDef != null )
-                sb.append( entityDef.getName() ).append( "." ).append( viewAttrib.getName() ).append( " "  );
+                sb.append( entityDef.getName() ).append( "." ).append( AttributeDef.getName() ).append( " "  );
             sb.append( oper ).append( " " );
             if ( value != null )
                 sb.append( value );

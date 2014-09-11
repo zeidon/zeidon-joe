@@ -179,7 +179,7 @@ module Zeidon
     end
 
     def get_name
-      return @jcursor.getViewEntity.getName
+      return @jcursor.getEntityDef.getName
     end
 
     def get_parent
@@ -255,7 +255,7 @@ module Zeidon
     end
 
     def each_child
-      @jcursor.getViewEntity.getChildren.each do |jve|
+      @jcursor.getEntityDef.getChildren.each do |jve|
         yield @view.cursor( jve.getName )
       end
     end
@@ -278,10 +278,10 @@ module Zeidon
   class Attribute
     attr_reader :name
 
-    def initialize jcursor, name, jviewAttribute
+    def initialize jcursor, name, jAttributeDefute
       @name = name
       @jcursor = jcursor
-      @jviewAttribute = jviewAttribute
+      @jAttributeDefute = jAttributeDefute
     end
 
     def coerce(other)
@@ -315,11 +315,11 @@ module Zeidon
     end
 
     def internal_value
-      return @jcursor.getInternalAttributeValue( @jviewAttribute )
+      return @jcursor.getInternalAttributeValue( @jAttributeDefute )
     end
 
     def entity_name
-      return @jviewAttribute.getViewEntity.getName
+      return @jAttributeDefute.getEntityDef.getName
     end
 
     def operators( op, value )
@@ -366,19 +366,19 @@ module Zeidon
     end
 
     def is_hidden?
-      return @jviewAttribute.isHidden
+      return @jAttributeDefute.isHidden
     end      
 
     def is_null?
-      return @jcursor.isAttributeNull( @jviewAttribute)
+      return @jcursor.isAttributeNull( @jAttributeDefute)
     end
 
     def respond_to?( id )
-     return @jviewAttribute.respond_to?( id ) || super
+     return @jAttributeDefute.respond_to?( id ) || super
     end
 
     def method_missing( id, *args, &block )
-      return @jviewAttribute.send( id, *args, &block ) if @jviewAttribute.respond_to?( id )
+      return @jAttributeDefute.send( id, *args, &block ) if @jAttributeDefute.respond_to?( id )
       return @jcursor.send( id, *args, &block ) if @jcursor.respond_to?( id )
       super
     end
@@ -447,9 +447,9 @@ module Zeidon
   end # class Qualification
 
   class QualEntity
-    def initialize( jqual, jviewEntity )
+    def initialize( jqual, jentityDef )
       @jqual = jqual
-      @jviewEntity = jviewEntity
+      @jentityDef = jentityDef
     end
   end # class QualEntity
 

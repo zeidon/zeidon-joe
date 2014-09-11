@@ -134,7 +134,7 @@ def list_entities( top_entity, args = {} )
   # Find children of 'entity' that have a max cardinality of 1.  We will
   # display them all in one row.
   entity_list = [ top_entity ]
-  jtop_view_entity = top_entity.getViewEntity
+  jtop_view_entity = top_entity.getEntityDef
   if @command != 'list'  # Only show children if we're aren't listing roots.
     jtop_view_entity.getChildren.each do | jchildentity |
       entity_list << @view.cursor( jchildentity.name ) if jchildentity.getMaxCardinality <= 1
@@ -201,7 +201,7 @@ def list_entities( top_entity, args = {} )
   html << "</table>\n"
 
   if ! args[:include_only]
-    if top_entity.getViewEntity.isCreate
+    if top_entity.getEntityDef.isCreate
       html += haml <<-code
 %p
 %form{ :action => url('/#{@application}/new/#{@viewod}'),
@@ -210,7 +210,7 @@ def list_entities( top_entity, args = {} )
   %input{:type => "hidden", :name => "entity", :value => "#{top_entity.get_name}"}
   %input{:type => "submit", :value => "New #{top_entity.get_name}", :class => "button" }
 code
-    elsif top_entity.getViewEntity.isInclude
+    elsif top_entity.getEntityDef.isInclude
       html += haml <<-code
 %p
 %form{ :action => url('/#{@application}/include/#{@viewod}'),
@@ -293,8 +293,8 @@ helpers do
         html << "<td><a href='" + url("/#{@application}/#{@command}/#{@viewod}?viewname=#{@view_name}") + "'>Top of #{@viewod}</a></td>"
       end
 
-      jviewentity = jviewod.getViewEntity( @entity )
-      jparent = jviewentity.getParent
+      jentityDef = jviewod.getEntityDef( @entity )
+      jparent = jentityDef.getParent
       if ! jparent.nil? and jparent.getName.to_s != viewod_root.to_s
         puts "jparent=#{jparent.getName}\nentity=#{@entity}"
         html << "<td>|</td>"
@@ -369,7 +369,7 @@ def setup_environment
       @parent_entity = @entity
       @root_entity = @entity
     else
-      jparent = jviewod.getViewEntity( @entity ).getParent
+      jparent = jviewod.getEntityDef( @entity ).getParent
       @parent_entity = jparent.nil? ? @entity : jparent.getName
       @root_entity = jviewod.getRoot.getName
     end

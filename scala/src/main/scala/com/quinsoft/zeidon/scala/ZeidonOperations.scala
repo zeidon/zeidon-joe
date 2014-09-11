@@ -51,7 +51,7 @@ trait ZeidonOperations {
        * Set the scoping entity.
        */
       def UNDER( ei: AbstractEntity ) = {
-        scopingEntity = ei.jviewEntity.getName()
+        scopingEntity = ei.jentityDef.getName()
         this
       }
 

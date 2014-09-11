@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.EntityComparator.AlwaysTrueComparator;
 import com.quinsoft.zeidon.standardoe.EntityComparator.InSetComparator;
@@ -542,11 +542,11 @@ class IteratorBuilder
         return this;
     }
 
-    private void setHashKeyAttribute( ViewAttribute viewAttribute, Object value )
+    private void setHashKeyAttribute( AttributeDef attributeDef, Object value )
     {
         AttributeHashKeyMap map;
 
-        switch ( viewAttribute.getHashKeyType() )
+        switch ( attributeDef.getHashKeyType() )
         {
             case GLOBAL:
                 map = objectInstance.getAttributeHashkeyMap();
@@ -566,17 +566,17 @@ class IteratorBuilder
                 if ( scoping == null )
                     scoping = initialInstance.getParent();
 
-                if ( ! scoping.getEntityDef().equals( viewAttribute.getHashKeyParent() ) )
+                if ( ! scoping.getEntityDef().equals( attributeDef.getHashKeyParent() ) )
                     return;  // We can only match if scoping entity matches hashkey parent.
 
                 map = scoping.getAttributeHashkeyMap();
                 break;
 
             default:
-                throw new ZeidonException( "Unknown HashKeyType %s", viewAttribute.getHashKeyType() );
+                throw new ZeidonException( "Unknown HashKeyType %s", attributeDef.getHashKeyType() );
         }
 
-        EntityInstanceImpl ei = map.getEntityInstanceUsingHashAttribute( viewAttribute, value );
+        EntityInstanceImpl ei = map.getEntityInstanceUsingHashAttribute( attributeDef, value );
         if ( ei == null )
             // There is no entity that matches the attribute value.
             noMatchForHashMapAttribute = true;
@@ -590,20 +590,20 @@ class IteratorBuilder
     /**
      * Returns only entities that match this attribute value.
      *
-     * @param viewAttribute
+     * @param attributeDef
      * @param value
      * @return
      */
-    IteratorBuilder withAttributeValue( ViewAttribute viewAttribute, Object value )
+    IteratorBuilder withAttributeValue( AttributeDef attributeDef, Object value )
     {
         if ( attributeValueList == null )
             attributeValueList = new ArrayList<IteratorBuilder.AttributeValue>();
 
-        attributeValueList.add( new AttributeValue( viewAttribute, value ) );
+        attributeValueList.add( new AttributeValue( attributeDef, value ) );
 
-        if ( viewAttribute.getHashKeyType() != AttributeHashKeyType.NONE )
+        if ( attributeDef.getHashKeyType() != AttributeHashKeyType.NONE )
         {
-            setHashKeyAttribute( viewAttribute, value );
+            setHashKeyAttribute( attributeDef, value );
             usingAttributeHashKey  = true;
         }
 
@@ -744,7 +744,7 @@ class IteratorBuilder
                     // We use entity tokens because this could be a recursive structure.
                     assert attrib.getEntityDef().getErEntityToken() == nextInstance.getEntityDef().getErEntityToken();
 
-                    if ( nextInstance.compareAttribute( attrib.getViewAttribute(), attrib.getValue() ) != 0 )
+                    if ( nextInstance.compareAttribute( attrib.getAttributeDef(), attrib.getValue() ) != 0 )
                         return false;
                 }
             }
@@ -977,22 +977,22 @@ class IteratorBuilder
 
     private static class AttributeValue
     {
-        private final ViewAttribute viewAttribute;
+        private final AttributeDef attributeDef;
         private final Object        value;
 
-        private AttributeValue(ViewAttribute viewAttribute, Object value)
+        private AttributeValue(AttributeDef attributeDef, Object value)
         {
             super();
-            this.viewAttribute = viewAttribute;
+            this.attributeDef = attributeDef;
             this.value = value;
         }
 
         /**
-         * @return the viewAttribute
+         * @return the attributeDef
          */
-        ViewAttribute getViewAttribute()
+        AttributeDef getAttributeDef()
         {
-            return viewAttribute;
+            return attributeDef;
         }
 
         /**
@@ -1005,7 +1005,7 @@ class IteratorBuilder
 
         EntityDef getEntityDef()
         {
-            return viewAttribute.getEntityDef();
+            return attributeDef.getEntityDef();
         }
     }
 }

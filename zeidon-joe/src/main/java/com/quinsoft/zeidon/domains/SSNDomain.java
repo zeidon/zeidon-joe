@@ -27,7 +27,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,7 +45,7 @@ public class SSNDomain extends StringDomain
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         String strSSN = checkNullString( internalValue );
         if ( strSSN != null && strSSN.isEmpty( ) == false )
@@ -68,19 +68,19 @@ public class SSNDomain extends StringDomain
            if ( matcher.matches( ) == false )
            {
                task.log().trace( "Invalid SSN: " + strSSN );
-               throw new InvalidAttributeValueException( viewAttribute, strSSN, "Value must be a valid SSN" );
+               throw new InvalidAttributeValueException( attributeDef, strSSN, "Value must be a valid SSN" );
            }
            strSSN = strSSN.replaceAll( "[^0-9]", "" );
        }
         
-        super.validateInternalValue( task, viewAttribute, strSSN );
+        super.validateInternalValue( task, attributeDef, strSSN );
     }
     
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue == null )
-            return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
+            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
         String SSN = externalValue.toString( );
         if ( SSN.isEmpty() )
@@ -90,13 +90,13 @@ public class SSNDomain extends StringDomain
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue )
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue )
     {
     		// no context given.
-            validateInternalValue( task, viewAttribute, internalValue );
+            validateInternalValue( task, attributeDef, internalValue );
             
             if ( internalValue == null )
-                return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
+                return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
         	//if ( StringUtils.isBlank((String) internalValue))
         	//	return "";
 
@@ -105,17 +105,17 @@ public class SSNDomain extends StringDomain
     
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
     	if ( internalValue == null )
     		return StringDomain.checkNullString(task.getApplication(), null);
     	
     	if ( !contextName.isEmpty() && !internalValue.toString().isEmpty())
     	{
-            //Object newValue = convertInternalValue( task, viewAttribute, internalValue );    	
+            //Object newValue = convertInternalValue( task, attributeDef, internalValue );    	
             //return newValue.toString();    	
             DomainContext context = getContext( task, contextName );
-            return context.convertToString( task, viewAttribute, internalValue );
+            return context.convertToString( task, attributeDef, internalValue );
     	}
     	else
     	{
@@ -142,7 +142,7 @@ public class SSNDomain extends StringDomain
         private String            editString;
         
         @Override
-        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
@@ -203,7 +203,7 @@ public class SSNDomain extends StringDomain
          * Assumes a string.
          */
         @Override
-        public Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value) throws InvalidAttributeValueException
+        public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value) throws InvalidAttributeValueException
         {
         	if ( value == null )
         		return null;

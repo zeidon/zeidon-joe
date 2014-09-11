@@ -32,7 +32,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.EntityInstance;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -143,21 +143,21 @@ public class AttributePanel extends JPanel
             row[2] = "";
             attrModel.addRow( row );
 
-            for ( ViewAttribute viewAttribute : entityDef.getAttributes() )
+            for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                if ( ! viewAttribute.isKey() )
+                if ( ! attributeDef.isKey() )
                 {
-                    if ( viewAttribute.isHidden() && ! env.isShowHiddenAttributes() )
+                    if ( attributeDef.isHidden() && ! env.isShowHiddenAttributes() )
                         continue;
 
-                    if ( ei.isAttributeNull( viewAttribute ) && ! env.isShowNullAttributes() )
+                    if ( ei.isAttributeNull( attributeDef ) && ! env.isShowNullAttributes() )
                         continue;
                 }
 
                 int col = 0;
-                row[col++] = viewAttribute.getName();
-                row[col++] = ei.getStringFromAttribute( viewAttribute, null );
-                row[col++] = ei.isAttributeUpdated( viewAttribute ) ? "Y" : "";
+                row[col++] = attributeDef.getName();
+                row[col++] = ei.getStringFromAttribute( attributeDef, null );
+                row[col++] = ei.isAttributeUpdated( attributeDef ) ? "Y" : "";
                 attrModel.addRow( row );
             }
 

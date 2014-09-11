@@ -27,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -41,7 +41,7 @@ public class BigDecimalDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue == null )
             return null;
@@ -56,31 +56,31 @@ public class BigDecimalDomain extends AbstractNumericDomain
         if ( externalValue instanceof Number )
             return new BigDecimal( externalValue.toString() );
         
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to BigDecimalDomain", 
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to BigDecimalDomain", 
                                                   externalValue.getClass().getName() );
     }
     
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) 
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) 
         throws InvalidAttributeValueException
     {
         if ( ! ( internalValue instanceof BigDecimal ) )
-            throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for BigDecimalDomain", 
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for BigDecimalDomain", 
                                                       internalValue.getClass().getName() );
     }
 
     @Override
-    public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        BigDecimal num = (BigDecimal) convertExternalValue( task, viewAttribute, null, operand );
+        BigDecimal num = (BigDecimal) convertExternalValue( task, attributeDef, null, operand );
         BigDecimal value = (BigDecimal) currentValue;
         return value.add( num );
     }
     
     @Override
-    public Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        BigDecimal num = (BigDecimal) convertExternalValue( task, viewAttribute, null, operand );
+        BigDecimal num = (BigDecimal) convertExternalValue( task, attributeDef, null, operand );
         BigDecimal value = (BigDecimal) currentValue;
         return value.multiply( num );
     }

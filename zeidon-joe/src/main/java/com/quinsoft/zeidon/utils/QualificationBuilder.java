@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.objectdefinition.LockingLevel;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -437,7 +437,7 @@ public class QualificationBuilder
             addAttribQual( "(" );
 
         boolean firstKey = true;
-        for ( ViewAttribute key : entityDef.getKeys() )
+        for ( AttributeDef key : entityDef.getKeys() )
         {
             if ( firstKey )
                 firstKey = false;
@@ -564,8 +564,8 @@ public class QualificationBuilder
         EntityDef entityDef = cursor.getEntityDef();
 
         // Find the key.
-        ViewAttribute key = null;
-        for ( ViewAttribute attrib : entityDef.getKeys() )
+        AttributeDef key = null;
+        for ( AttributeDef attrib : entityDef.getKeys() )
         {
             key = attrib;
         }

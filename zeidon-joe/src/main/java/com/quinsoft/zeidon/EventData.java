@@ -19,7 +19,7 @@
 
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -33,6 +33,6 @@ public interface EventData
     Task           getTask();
     View           getView();
     EntityDef     getEntityDef();
-    ViewAttribute  getViewAttribute();
+    AttributeDef  getAttributeDef();
     EntityInstance getEntityInstance();
 }

@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.domains.BaseDomainContext;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.DomainContext;
 import com.quinsoft.zeidon.domains.DoubleDomain;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * This domain 
@@ -53,7 +53,7 @@ public class AltDoubleDomain extends DoubleDomain
 
     
     @Override
-    public int compare(Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
     	Object value = null;
 
@@ -66,7 +66,7 @@ public class AltDoubleDomain extends DoubleDomain
     		// don't compare. In other words, in code we might be comparing a date to an invalid
     		// date value but since I'm not actually setting the value, then I don't want to 
     		// throw the exception.
-            value = convertExternalValue( task, viewAttribute, null, externalValue );   		
+            value = convertExternalValue( task, attributeDef, null, externalValue );   		
     	}
     	catch ( Throwable t )
     	{
@@ -80,14 +80,14 @@ public class AltDoubleDomain extends DoubleDomain
             }
             else
             {
-                throw ZeidonException.wrapException( t ).prependViewAttribute( viewAttribute );
+                throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
             }
     	}
         try
         {
-            //Object value = convertExternalValue( task, viewAttribute, null, externalValue );
+            //Object value = convertExternalValue( task, attributeDef, null, externalValue );
             //Object value =  externalValue;
-            Integer rc = compareNull( task, viewAttribute, internalValue, value);
+            Integer rc = compareNull( task, attributeDef, internalValue, value);
             if ( rc != null )
                 return rc;
             
@@ -105,7 +105,7 @@ public class AltDoubleDomain extends DoubleDomain
         }
         catch ( Throwable t )
         {
-            throw ZeidonException.wrapException( t ).prependViewAttribute( viewAttribute );
+            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
         }
     }
 }

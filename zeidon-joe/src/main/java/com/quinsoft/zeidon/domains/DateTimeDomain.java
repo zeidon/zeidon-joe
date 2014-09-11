@@ -28,7 +28,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * This domain handles any differences needed to deal with dates+time.
@@ -45,10 +45,10 @@ public class DateTimeDomain extends DateDomain
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
-            return super.convertToString( task, viewAttribute, internalValue );
+            return super.convertToString( task, attributeDef, internalValue );
 
         return defaultDateTimeFormatter.print( (DateTime) internalValue );
     }

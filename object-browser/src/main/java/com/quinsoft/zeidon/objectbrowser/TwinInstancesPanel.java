@@ -27,7 +27,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.EntityInstance;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -71,17 +71,17 @@ class TwinInstancesPanel extends JPanel
         StringBuilder sb = new StringBuilder();
         EntityDef entityDef = ei.getEntityDef();
         int count = 0;
-        for ( ViewAttribute viewAttribute : entityDef.getAttributes() )
+        for ( AttributeDef attributeDef : entityDef.getAttributes() )
         {
-            if ( viewAttribute.isKey() )
+            if ( attributeDef.isKey() )
                 continue;
 
-            if ( viewAttribute.isHidden() )
+            if ( attributeDef.isHidden() )
                 continue;
 
-            sb.append( viewAttribute.getName() )
+            sb.append( attributeDef.getName() )
               .append( ": " )
-              .append( ei.getStringFromAttribute( viewAttribute ) )
+              .append( ei.getStringFromAttribute( attributeDef ) )
               .append( "; " );
 
             if ( ++count > 5 )

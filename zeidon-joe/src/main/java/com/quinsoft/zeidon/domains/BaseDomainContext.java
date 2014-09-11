@@ -27,7 +27,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
@@ -92,51 +92,51 @@ public class BaseDomainContext implements DomainContext
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value)
             throws InvalidAttributeValueException
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Blob convertToBlob(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Boolean convertToBoolean(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Boolean convertToBoolean(Task task, AttributeDef attributeDef, Object internalValue)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public DateTime convertToDate(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Double convertToDouble(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
     	return internalValue.toString();
         //throw new UnsupportedOperationException();
     }
 
     @Override
-    public void validateInternalValue(Task task, ViewAttribute viewAttribute, Object value)
+    public void validateInternalValue(Task task, AttributeDef attributeDef, Object value)
             throws InvalidAttributeValueException
     {
         throw new UnsupportedOperationException();

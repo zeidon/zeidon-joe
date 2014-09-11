@@ -40,7 +40,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
@@ -167,10 +167,10 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         @Override
         public void setAttribute(PortableFileReader reader)
         {
-            ViewAttribute viewAttribute = entityDef.getAttribute( reader.getAttributeName(), ! ignoreInvalidAttributeNames );
-            if ( viewAttribute != null )
+            AttributeDef attributeDef = entityDef.getAttribute( reader.getAttributeName(), ! ignoreInvalidAttributeNames );
+            if ( attributeDef != null )
             {
-                if ( viewAttribute.getType() == InternalType.BLOB )
+                if ( attributeDef.getType() == InternalType.BLOB )
                 {
                     int length = Integer.parseInt( reader.getAttributeValue() );
                     byte[] buffer = new byte[ length ];
@@ -184,14 +184,14 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
                         throw ZeidonException.wrapException( e );
                     }
                     assert read == length;
-                    entityInstance.setInternalAttributeValue( viewAttribute, new Blob( buffer ), true );
+                    entityInstance.setInternalAttributeValue( attributeDef, new Blob( buffer ), true );
                 }
                 else
-                    entityInstance.setInternalAttributeValue( viewAttribute, reader.getAttributeValue(), true );
+                    entityInstance.setInternalAttributeValue( attributeDef, reader.getAttributeValue(), true );
 
                 if ( reader.isIncremental() )
                 {
-                    AttributeValue attrib = entityInstance.getInternalAttribute( viewAttribute );
+                    AttributeValue attrib = entityInstance.getInternalAttribute( attributeDef );
                     attrib.setUpdated( ( reader.getAttributeFlags() & FLAGS_UPDATED ) != 0 );
                 }
             }

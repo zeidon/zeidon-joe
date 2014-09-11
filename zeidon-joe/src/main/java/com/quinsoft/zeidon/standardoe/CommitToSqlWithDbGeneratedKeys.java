@@ -38,7 +38,7 @@ import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -432,7 +432,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         {
             final RelFieldParser p = new RelFieldParser();
             p.parse( relField, ei );
-            p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( null, true );
+            p.relInstance.getAttribute( p.relAttributeDef ).setInternalValue( null, true );
         }
     }
 
@@ -600,7 +600,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             if ( entityDef.isDerivedPath() )
                 continue;
 
-            final ViewAttribute autoSeq = entityDef.getAutoSeq();
+            final AttributeDef autoSeq = entityDef.getAutoSeq();
             if ( autoSeq != null && ei.getPrevTwin() == null && // Must be first twin
                                     ei.getNextTwin() != null )  // Don't bother if only one twin.
             {
@@ -743,7 +743,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     // we cannot null the key because we would lose the
                     // capability of updating the entity (in this case it
                     // better be deleted!!!)
-                    assert ! p.relViewAttrib.isKey();
+                    assert ! p.relAttributeDef.isKey();
                     assert ei.isExcluded(); // EI is hidden and we've ignored deleted EIs above.
 
                     // If the EI is excluded and the min cardinality is 1, we'll get an error
@@ -752,7 +752,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     // the OI has passed cardinality validation and if no EI was being included it
                     // would have thrown a validation exception.
                     if ( entityDef.getMinCardinality() == 0)
-                        p.relInstance.getAttribute( p.relViewAttrib ).setInternalValue( null, true );
+                        p.relInstance.getAttribute( p.relAttributeDef ).setInternalValue( null, true );
                 }
 
                 // Turn off the dbh flag to make sure that the DBHandler updates
@@ -796,14 +796,14 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             list.add( ei );
             dbHandler.insertEntity( view, list );
 
-            ViewAttribute genkey = entityDef.getGenKey();
+            AttributeDef genkey = entityDef.getGenKey();
             if ( genkey != null )
             {
                 List<Object> keys = dbHandler.getKeysGeneratedByDb();
                 if ( keys.size() != 1 )
                     throw new ZeidonException("Unexpected number of keys found: %s", keys );
 
-                ViewAttribute keyAttrib = entityDef.getKeys().get( 0 );
+                AttributeDef keyAttrib = entityDef.getKeys().get( 0 );
                 ei.getAttribute( keyAttrib ).setValue( keys.get( 0 ) );
             }
 

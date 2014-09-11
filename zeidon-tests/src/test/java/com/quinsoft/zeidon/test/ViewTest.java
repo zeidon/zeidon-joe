@@ -27,11 +27,11 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.UnknownViewAttributeException;
+import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -835,14 +835,14 @@ public class ViewTest
             AttributeInstance attr = mFASrc.cursor( "FinAidSource" ).getAttribute( "TestDyn" );
             assertTrue( false );
         }
-        catch ( UnknownViewAttributeException e )
+        catch ( UnknownAttributeDefException e )
         {
             // If we get here everything is as expected.
         }
 
-        DynamicViewAttributeConfiguration config = new DynamicViewAttributeConfiguration();
+        DynamicAttributeDefConfiguration config = new DynamicAttributeDefConfiguration();
         config.setAttributeName( "TestDyn" );
-        mFASrc.cursor( "FinAidSource" ).createDynamicViewAttribute( config  );
+        mFASrc.cursor( "FinAidSource" ).createDynamicAttributeDef( config  );
         AttributeInstance attr = mFASrc.cursor( "FinAidSource" ).getAttribute( "TestDyn" );
         attr.setValue( "This is a test" );
 

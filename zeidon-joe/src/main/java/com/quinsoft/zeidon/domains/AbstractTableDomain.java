@@ -25,7 +25,7 @@ import java.util.Map;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Common domain code for static and dynamic table domains.
@@ -41,24 +41,24 @@ public class AbstractTableDomain extends AbstractDomain implements TableDomain
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         DomainContext context = getContext( task, null );
-        context.validateInternalValue( task, viewAttribute, internalValue );
+        context.validateInternalValue( task, attributeDef, internalValue );
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         DomainContext context = getContext( task, contextName );
-        return context.convertExternalValue( task, viewAttribute, externalValue );
+        return context.convertExternalValue( task, attributeDef, externalValue );
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         DomainContext context = getContext( task, contextName );
-        return context.convertToString( task, viewAttribute, internalValue );
+        return context.convertToString( task, attributeDef, internalValue );
     }
     
     /* (non-Javadoc)

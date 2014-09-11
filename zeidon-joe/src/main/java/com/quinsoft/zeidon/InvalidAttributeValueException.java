@@ -19,7 +19,7 @@
 
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -29,11 +29,11 @@ public class InvalidAttributeValueException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
     
-    private final ViewAttribute viewAttribute;
+    private final AttributeDef attributeDef;
     private final Object        inputValue;
     private final String        reason;
     
-    public InvalidAttributeValueException( ViewAttribute viewAttribute, Object inputValue, String reason, Object...args )
+    public InvalidAttributeValueException( AttributeDef attributeDef, Object inputValue, String reason, Object...args )
     {
         super( "Invalid value for attribute" );
         if ( args.length > 0 )
@@ -46,16 +46,16 @@ public class InvalidAttributeValueException extends ZeidonException
 
         prependMessage( reason );
         prependMessage( "Value = %s", inputValue );
-        prependViewAttribute( viewAttribute );
+        prependAttributeDef( attributeDef );
         
-        this.viewAttribute = viewAttribute;
+        this.attributeDef = attributeDef;
         this.inputValue = inputValue;
         this.reason = reason;
     }
 
-    public ViewAttribute getViewAttribute()
+    public AttributeDef getAttributeDef()
     {
-        return viewAttribute;
+        return attributeDef;
     }
 
     public Object getInputValue()

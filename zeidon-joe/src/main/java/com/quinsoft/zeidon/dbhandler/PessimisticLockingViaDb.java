@@ -211,7 +211,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             hostname = "unknown";
         }
 
-        int lth = cursor.getAttribute( "Hostname" ).getViewAttribute().getLength();
+        int lth = cursor.getAttribute( "Hostname" ).getAttributeDef().getLength();
         if ( hostname.length() > lth )
             hostname = hostname.substring( 0, lth - 1 );
 
@@ -245,7 +245,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         }
 
         // Make sure the string lenth isn't too long.
-        int lth = cursor.getAttribute( "CallStack" ).getViewAttribute().getLength();
+        int lth = cursor.getAttribute( "CallStack" ).getAttributeDef().getLength();
         if ( sb.length() > lth )
             sb.setLength( lth );
 

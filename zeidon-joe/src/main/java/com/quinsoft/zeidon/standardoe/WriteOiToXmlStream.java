@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -156,17 +156,17 @@ public class WriteOiToXmlStream implements StreamWriter
 
         currentIndent++;
         String[] attrIncr = new String[] { "Updated", null };
-        for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
+        for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
         {
-            AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
-            String value = attrib.getString( view.getTask(), viewAttribute );
+            AttributeValue attrib = ei.getInternalAttribute( attributeDef );
+            String value = attrib.getString( view.getTask(), attributeDef );
             if ( incremental )
             {
                 attrIncr[ 1 ] = yesNo( attrib.isUpdated() );
-                startElement( viewAttribute.getName(), value, true, attrIncr );
+                startElement( attributeDef.getName(), value, true, attrIncr );
             }
             else
-                startElement( viewAttribute.getName(), value, true, (String[]) null );
+                startElement( attributeDef.getName(), value, true, (String[]) null );
         }
 
         // Loop through the children and add them.  If 'incremental' is true then

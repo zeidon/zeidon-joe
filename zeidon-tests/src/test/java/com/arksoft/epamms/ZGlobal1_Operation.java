@@ -2034,7 +2034,7 @@ public class ZGlobal1_Operation extends VmlOperation
       zVIEW  zqFrameOrig;
       zVIEW  zqFrame;
       LPVIEWENTITY lpEntityDef;
-      LPVIEWATTRIB lpViewAttrib;
+      LPVIEWATTRIB lpAttributeDef;
       LPDOMAIN     lpDomain;
       String  DataType;
       String  Msg;
@@ -2052,26 +2052,26 @@ public class ZGlobal1_Operation extends VmlOperation
 
       // Position on attribute.
 #ifdef VIEWENTITY_OD
-      lpViewAttrib = String zGETPTR( lpEntityDef->hFirstOD_Attrib );
+      lpAttributeDef = String zGETPTR( lpEntityDef->hFirstOD_Attrib );
       nRC = 1;
-      while ( lpViewAttrib > 0 && nRC > 0 )
+      while ( lpAttributeDef > 0 && nRC > 0 )
       {
-         if ( zstrcmp( lpViewAttrib->stringName, attributeName ) == 0 )
+         if ( zstrcmp( lpAttributeDef->stringName, attributeName ) == 0 )
             nRC = 0;
 
          if ( nRC > 0 )
-            lpViewAttrib = String zGETPTR( lpViewAttrib->hNextOD_Attrib );
+            lpAttributeDef = String zGETPTR( lpAttributeDef->hNextOD_Attrib );
       }
 #else
-      lpViewAttrib = String zGETPTR( lpEntityDef->hFirstViewAttrib );
+      lpAttributeDef = String zGETPTR( lpEntityDef->hFirstAttributeDef );
       nRC = 1;
-      while ( lpViewAttrib > 0 && nRC > 0 )
+      while ( lpAttributeDef > 0 && nRC > 0 )
       {
-         if ( zstrcmp( lpViewAttrib->stringName, attributeName ) == 0 )
+         if ( zstrcmp( lpAttributeDef->stringName, attributeName ) == 0 )
             nRC = 0;
 
          if ( nRC > 0 )
-            lpViewAttrib = String zGETPTR( lpViewAttrib->hNextViewAttrib );
+            lpAttributeDef = String zGETPTR( lpAttributeDef->hNextAttributeDef );
       }
 // #endif
       if ( nRC > 0 )
@@ -2089,7 +2089,7 @@ public class ZGlobal1_Operation extends VmlOperation
       nLth = zstrlen( srcString );
 
       // Process depending on whether or not the Domain is a Table.
-      lpDomain = (LPDOMAIN) zGETPTR( lpViewAttrib->hDomain );
+      lpDomain = (LPDOMAIN) zGETPTR( lpAttributeDef->hDomain );
       if ( lpDomain->cDomainType == 'T' )
       {
          if ( *(lpDomain->stringDomainOper) == 0 )
@@ -2331,7 +2331,7 @@ public class ZGlobal1_Operation extends VmlOperation
                             String attributeName )
    {
       LPVIEWENTITY lpEntityDef;
-      LPVIEWATTRIB lpViewAttrib;
+      LPVIEWATTRIB lpAttributeDef;
       int nRC;
 
       lpEntityDef = String zGETPTR( MiGetEntityDefForView( lpView, entityName ) );
@@ -2340,26 +2340,26 @@ public class ZGlobal1_Operation extends VmlOperation
 
       // Position on attribute.
    #ifdef VIEWENTITY_OD
-      lpViewAttrib = String zGETPTR( lpEntityDef->hFirstOD_Attrib );
+      lpAttributeDef = String zGETPTR( lpEntityDef->hFirstOD_Attrib );
       nRC = 1;
-      while ( lpViewAttrib > 0 && nRC > 0 )
+      while ( lpAttributeDef > 0 && nRC > 0 )
       {
-         if ( zstrcmp( lpViewAttrib->stringName, attributeName ) == 0 )
+         if ( zstrcmp( lpAttributeDef->stringName, attributeName ) == 0 )
             nRC = 0;
 
          if ( nRC > 0 )
-            lpViewAttrib = String zGETPTR( lpViewAttrib->hNextOD_Attrib );
+            lpAttributeDef = String zGETPTR( lpAttributeDef->hNextOD_Attrib );
       }
    #else
-      lpViewAttrib = String zGETPTR( lpEntityDef->hFirstViewAttrib );
+      lpAttributeDef = String zGETPTR( lpEntityDef->hFirstAttributeDef );
       nRC = 1;
-      while ( lpViewAttrib > 0 && nRC > 0 )
+      while ( lpAttributeDef > 0 && nRC > 0 )
       {
-         if ( zstrcmp( lpViewAttrib->stringName, attributeName ) == 0 )
+         if ( zstrcmp( lpAttributeDef->stringName, attributeName ) == 0 )
             nRC = 0;
 
          if ( nRC > 0 )
-            lpViewAttrib = String zGETPTR( lpViewAttrib->hNextViewAttrib );
+            lpAttributeDef = String zGETPTR( lpAttributeDef->hNextAttributeDef );
       }
    #endif
       if ( nRC > 0 )
@@ -2371,7 +2371,7 @@ public class ZGlobal1_Operation extends VmlOperation
       }
 
       // Set single character datatype followed by a string terminator.
-      *stringDataType = lpViewAttrib->hDomain->cType;
+      *stringDataType = lpAttributeDef->hDomain->cType;
       *(stringDataType + 1) = 0;
 
       return 0;

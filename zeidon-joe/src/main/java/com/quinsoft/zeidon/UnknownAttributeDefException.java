@@ -25,11 +25,11 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  * @author DG
  *
  */
-public class UnknownViewAttributeException extends ZeidonException
+public class UnknownAttributeDefException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
 
-    public UnknownViewAttributeException( EntityDef entityDef, String attributeName )
+    public UnknownAttributeDefException( EntityDef entityDef, String attributeName )
     {
         super( "Attribute name '%s' does not exist for View Entity", attributeName );
         prependEntityDef( entityDef );

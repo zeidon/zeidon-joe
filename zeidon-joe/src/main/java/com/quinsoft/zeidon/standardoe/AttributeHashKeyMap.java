@@ -24,7 +24,7 @@ import java.util.Map;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -40,7 +40,7 @@ class AttributeHashKeyMap
 {
     private final ObjectInstance objectInstance;
 
-    private Map<ViewAttribute,Map<Object,EntityInstanceImpl>> hashKeyAttributeMap;
+    private Map<AttributeDef,Map<Object,EntityInstanceImpl>> hashKeyAttributeMap;
 
     /**
      * This constructor is used in many places and should be as low-impact as possible.
@@ -57,22 +57,22 @@ class AttributeHashKeyMap
         return objectInstance.getTask();
     }
 
-    private Map<Object, EntityInstanceImpl> getHashMapForAttribute( ViewAttribute viewAttribute )
+    private Map<Object, EntityInstanceImpl> getHashMapForAttribute( AttributeDef attributeDef )
     {
         if ( hashKeyAttributeMap == null )
-            hashKeyAttributeMap = new HashMap<ViewAttribute, Map<Object,EntityInstanceImpl>>();
+            hashKeyAttributeMap = new HashMap<AttributeDef, Map<Object,EntityInstanceImpl>>();
 
         // Check to see if the attribute is part of a recursive child.  If it is then
         // we will use the recursive parent attribute to store values in the map.
-        EntityDef recursiveParent = viewAttribute.getEntityDef().getRecursiveParentEntityDef();
+        EntityDef recursiveParent = attributeDef.getEntityDef().getRecursiveParentEntityDef();
         if ( recursiveParent != null )
-            viewAttribute = recursiveParent.getAttributeByErToken( viewAttribute.getErAttributeToken() );
+            attributeDef = recursiveParent.getAttributeByErToken( attributeDef.getErAttributeToken() );
 
-        Map<Object, EntityInstanceImpl> map = hashKeyAttributeMap.get( viewAttribute );
+        Map<Object, EntityInstanceImpl> map = hashKeyAttributeMap.get( attributeDef );
         if ( map == null )
         {
             map = new HashMap<Object, EntityInstanceImpl>();
-            hashKeyAttributeMap.put( viewAttribute, map );
+            hashKeyAttributeMap.put( attributeDef, map );
         }
 
         return map;
@@ -96,14 +96,14 @@ class AttributeHashKeyMap
             if ( ei.getEntityDef().getHashKeyAttributes() == null )
                 continue;
 
-            for ( ViewAttribute viewAttribute : ei.getEntityDef().getHashKeyAttributes() )
+            for ( AttributeDef attributeDef : ei.getEntityDef().getHashKeyAttributes() )
             {
-                if ( viewAttribute.getHashKeyType() == AttributeHashKeyType.NONE )
+                if ( attributeDef.getHashKeyType() == AttributeHashKeyType.NONE )
                     continue;
 
-                Object value = ei.getAttribute( viewAttribute ).getValue();
-                AttributeHashKeyMap hashkeyMap = ei.getAttributeHashkeyMap( viewAttribute );
-                Map<Object, EntityInstanceImpl> map = hashkeyMap.getHashMapForAttribute( viewAttribute );
+                Object value = ei.getAttribute( attributeDef ).getValue();
+                AttributeHashKeyMap hashkeyMap = ei.getAttributeHashkeyMap( attributeDef );
+                Map<Object, EntityInstanceImpl> map = hashkeyMap.getHashMapForAttribute( attributeDef );
                 EntityInstanceImpl hashEi = map.get( value );
 
                 if ( hashkeyMap == this )
@@ -112,13 +112,13 @@ class AttributeHashKeyMap
                 if ( hashEi == null )
                     throw new ZeidonException( "Attribute hashkey value is missing from table." )
                                     .prependEntityInstance( ei )
-                                    .prependViewAttribute( viewAttribute )
+                                    .prependAttributeDef( attributeDef )
                                     .appendMessage( "HashKey value = %s", value );
 
                 if ( ei != hashEi )
                     throw new ZeidonException( "Attribute hashkey returns wrong EI." )
                                     .prependEntityInstance( ei )
-                                    .prependViewAttribute( viewAttribute )
+                                    .prependAttributeDef( attributeDef )
                                     .appendMessage( "HashKey value = %s", value.toString() )
                                     .appendMessage( "Wrong EI = %s", hashEi.toString() );
             }
@@ -134,40 +134,40 @@ class AttributeHashKeyMap
         return true;
     }
 
-    synchronized void addHashKey( ViewAttribute viewAttribute, EntityInstanceImpl entityInstance )
+    synchronized void addHashKey( AttributeDef attributeDef, EntityInstanceImpl entityInstance )
     {
-        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( viewAttribute );
-        Object internalValue = entityInstance.getAttribute( viewAttribute ).getValue();
+        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( attributeDef );
+        Object internalValue = entityInstance.getAttribute( attributeDef ).getValue();
         if ( internalValue == null )
         {
             throw new ZeidonException( "Attempting to add null attribute value to attribute hashmap" )
-                            .prependViewAttribute( viewAttribute );
+                            .prependAttributeDef( attributeDef );
         }
 
         if ( map.containsKey( internalValue ) )
         {
                 throw new ZeidonException( "Attempting to add duplicate attribute values to attribute hashmap" )
-                            .prependViewAttribute( viewAttribute )
+                            .prependAttributeDef( attributeDef )
                             .appendMessage( "Attribute value = %s", internalValue );
         }
 
         map.put( internalValue, entityInstance );
     }
 
-    synchronized void removeHashKey( ViewAttribute viewAttribute, EntityInstanceImpl entityInstance )
+    synchronized void removeHashKey( AttributeDef attributeDef, EntityInstanceImpl entityInstance )
     {
-        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( viewAttribute );
-        Object internalValue = entityInstance.getAttribute( viewAttribute ).getValue();
+        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( attributeDef );
+        Object internalValue = entityInstance.getAttribute( attributeDef ).getValue();
         if ( internalValue == null )
         {
             throw new ZeidonException( "Attempting to remove null attribute value from attribute hashmap" )
-                            .prependViewAttribute( viewAttribute );
+                            .prependAttributeDef( attributeDef );
         }
 
         if ( ! map.containsKey( internalValue ) )
         {
                 throw new ZeidonException( "Attempting to remove non-existent attribute value from attribute hashmap" )
-                            .prependViewAttribute( viewAttribute )
+                            .prependAttributeDef( attributeDef )
                             .appendMessage( "Attribute value = %s", internalValue );
         }
 
@@ -178,37 +178,37 @@ class AttributeHashKeyMap
      * This removes a key value from the map and reinserts an entity instance with a new value.
      * This can handle null.
      *
-     * @param viewAttribute
+     * @param attributeDef
      * @param entityInstance
      */
-    synchronized void updateHashKey( Object oldValue, ViewAttribute viewAttribute, EntityInstanceImpl entityInstance )
+    synchronized void updateHashKey( Object oldValue, AttributeDef attributeDef, EntityInstanceImpl entityInstance )
     {
-        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( viewAttribute );
+        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( attributeDef );
 
-        Domain domain = viewAttribute.getDomain();
-        if ( ! domain.isNull( getTask(), viewAttribute, oldValue ) )
+        Domain domain = attributeDef.getDomain();
+        if ( ! domain.isNull( getTask(), attributeDef, oldValue ) )
         {
             if ( ! map.containsKey( oldValue ) )
             {
                     throw new ZeidonException( "Attempting to update attribute value but old value doesn't exist." )
-                                .prependViewAttribute( viewAttribute )
+                                .prependAttributeDef( attributeDef )
                                 .appendMessage( "Old Attribute value = %s", oldValue );
             }
 
             map.remove( oldValue );
         }
 
-        Object internalValue = entityInstance.getAttribute( viewAttribute ).getValue();
-        if ( domain.isNull( getTask(), viewAttribute, internalValue ) )
+        Object internalValue = entityInstance.getAttribute( attributeDef ).getValue();
+        if ( domain.isNull( getTask(), attributeDef, internalValue ) )
         {
             throw new ZeidonException( "Attempting to update null attribute value from attribute hashmap" )
-                            .prependViewAttribute( viewAttribute );
+                            .prependAttributeDef( attributeDef );
         }
 
         if ( map.containsKey( internalValue ) )
         {
                 throw new ZeidonException( "Attempting to add duplicate attribute values to attribute hashmap" )
-                            .prependViewAttribute( viewAttribute )
+                            .prependAttributeDef( attributeDef )
                             .appendMessage( "Attribute value = %s", internalValue );
         }
 
@@ -218,23 +218,23 @@ class AttributeHashKeyMap
     /**
      * Replaces the entity currently associated with a key with a new one.
      *
-     * @param viewAttribute
+     * @param attributeDef
      * @param entityInstance
      */
-    synchronized void replaceHashKey( ViewAttribute viewAttribute, EntityInstanceImpl entityInstance )
+    synchronized void replaceHashKey( AttributeDef attributeDef, EntityInstanceImpl entityInstance )
     {
-        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( viewAttribute );
-        Object internalValue = entityInstance.getAttribute( viewAttribute ).getValue();
+        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( attributeDef );
+        Object internalValue = entityInstance.getAttribute( attributeDef ).getValue();
         if ( internalValue == null )
         {
             throw new ZeidonException( "Attempting to replace null attribute value from attribute hashmap" )
-                            .prependViewAttribute( viewAttribute );
+                            .prependAttributeDef( attributeDef );
         }
 
         if ( ! map.containsKey( internalValue ) )
         {
                 throw new ZeidonException( "Attempting to replace non-existent attribute value from attribute hashmap" )
-                            .prependViewAttribute( viewAttribute )
+                            .prependAttributeDef( attributeDef )
                             .appendMessage( "Attribute value = %s", internalValue );
         }
 
@@ -242,22 +242,22 @@ class AttributeHashKeyMap
     }
 
     /**
-     * @param viewAttribute
+     * @param attributeDef
      * @param externalValue
      * @return
      */
-    synchronized EntityInstanceImpl getEntityInstanceUsingHashAttribute( ViewAttribute viewAttribute, Object externalValue )
+    synchronized EntityInstanceImpl getEntityInstanceUsingHashAttribute( AttributeDef attributeDef, Object externalValue )
     {
         assert assertHashKeyCorrectness();
 
-        Domain domain = viewAttribute.getDomain();
-        if ( domain.isNull( getTask(), viewAttribute, externalValue ) )
+        Domain domain = attributeDef.getDomain();
+        if ( domain.isNull( getTask(), attributeDef, externalValue ) )
             throw new ZeidonException( "Attempting to find null attribute hash value" )
-                            .prependViewAttribute( viewAttribute );
+                            .prependAttributeDef( attributeDef );
 
-        Object internalValue = domain.convertExternalValue( getTask(), viewAttribute, null, externalValue );
+        Object internalValue = domain.convertExternalValue( getTask(), attributeDef, null, externalValue );
 
-        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( viewAttribute );
+        Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( attributeDef );
         EntityInstanceImpl ei = map.get( internalValue );
 
         assert ei == null || ! ei.isDropped() : "HashKey entity is flagged as dropped.";

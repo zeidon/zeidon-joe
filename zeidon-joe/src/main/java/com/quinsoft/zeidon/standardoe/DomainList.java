@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.domains.DomainContext;
 import com.quinsoft.zeidon.domains.TableDomainContext;
 import com.quinsoft.zeidon.domains.TableEntry;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.NullEntityHandler;
@@ -239,7 +239,7 @@ public class DomainList
         }
 
         @Override
-        public Object convertExternalValue( Task task, ViewAttribute viewAttribute, String contextName,
+        public Object convertExternalValue( Task task, AttributeDef attributeDef, String contextName,
                                             Object externalValue ) throws InvalidAttributeValueException
         {
             throw new ZeidonException( "This should never get called" );

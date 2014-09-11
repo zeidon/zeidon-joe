@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -213,9 +213,9 @@ public class ZeidonException extends RuntimeException
     // from adding the same message twice.
     //
 
-    public ZeidonException prependViewAttribute( ViewAttribute viewAttribute )
+    public ZeidonException prependAttributeDef( AttributeDef attributeDef )
     {
-        return prependMessage( "ViewAttribute = %s", viewAttribute.toString() );
+        return prependMessage( "AttributeDef = %s", attributeDef.toString() );
     }
 
     public ZeidonException prependEntityDef( EntityDef entityDef )

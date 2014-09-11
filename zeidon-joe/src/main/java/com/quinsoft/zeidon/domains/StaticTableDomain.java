@@ -24,7 +24,7 @@ import java.util.Map;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 
 
@@ -40,12 +40,12 @@ public class StaticTableDomain extends AbstractTableDomain
     }
     
     @Override
-    public int compare(Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
         try
         {
-            Object value = convertExternalValue( task, viewAttribute, null, externalValue );
-            Integer rc = compareNull( task, viewAttribute, internalValue, value);
+            Object value = convertExternalValue( task, attributeDef, null, externalValue );
+            Integer rc = compareNull( task, attributeDef, internalValue, value);
             if ( rc != null )
                 return rc;
 
@@ -65,7 +65,7 @@ public class StaticTableDomain extends AbstractTableDomain
         }
         catch ( Throwable t )
         {
-            throw ZeidonException.wrapException( t ).prependViewAttribute( viewAttribute );
+            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
         }
     }
 }

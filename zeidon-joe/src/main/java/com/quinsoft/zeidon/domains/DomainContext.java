@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 
 /**
@@ -39,23 +39,23 @@ public interface DomainContext extends PortableFileAttributeHandler
     /**
      * Takes an external value and converts it into an internal value using domain processing.
      * @param task
-     * @param viewAttribute
+     * @param attributeDef
      * @param value - External value
      * @return internal value.
      */
-    Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value) throws InvalidAttributeValueException;
+    Object convertExternalValue(Task task, AttributeDef attributeDef, Object value) throws InvalidAttributeValueException;
     int compare( Task task, Object o1, Object o2 );
 
-    void validateInternalValue( Task task, ViewAttribute viewAttribute, Object value ) throws InvalidAttributeValueException;
+    void validateInternalValue( Task task, AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException;
 
     /**
      * Converts the internal value of the attribute to a string.
      * @return String or null.
      */
-    String   convertToString( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Integer  convertToInteger( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Double   convertToDouble( Task task, ViewAttribute viewAttribute, Object internalValue );
-    DateTime convertToDate( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Blob     convertToBlob( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Boolean  convertToBoolean( Task task, ViewAttribute viewAttribute, Object internalValue );
+    String   convertToString( Task task, AttributeDef attributeDef, Object internalValue );
+    Integer  convertToInteger( Task task, AttributeDef attributeDef, Object internalValue );
+    Double   convertToDouble( Task task, AttributeDef attributeDef, Object internalValue );
+    DateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
+    Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue );
+    Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
 }

@@ -3727,7 +3727,7 @@ public class TestZencas
 			   // Getting an error on the OrderEntityForView in AltStaticTableDomain.java because we
 			   // end up comparing an integer to a string (which is an integer).
 			   // I can also get this error in AbstractDomain.java line 347 if I'm not using AltStatic...
-			   // If I add "Object newValue = attributeValue.convertInternalValue( getTask(), viewAttribute, value );"
+			   // If I add "Object newValue = attributeValue.convertInternalValue( getTask(), attributeDef, value );"
 			   // in AttributeInstanceImpl.java setInternalValue(), then I don't get an error because then I am
 			   // comparing integer and integer.
 			   RESULT = ActivateObjectInstance( mCRStdPLST, "mCRStdP", ViewToWindow, 0, zMULTIPLE );

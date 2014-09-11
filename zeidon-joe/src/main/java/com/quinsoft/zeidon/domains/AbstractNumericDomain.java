@@ -24,7 +24,7 @@ import java.util.Map;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * A Domain class so that all numeric domains can be grouped together.
@@ -50,14 +50,14 @@ public abstract class AbstractNumericDomain extends AbstractDomain
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) 
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) 
         throws InvalidAttributeValueException
     {
-        Double d = convertToDouble( task, viewAttribute, internalValue, null );
+        Double d = convertToDouble( task, attributeDef, internalValue, null );
         if ( min != null && d < min )
-            throw new InvalidAttributeValueException( viewAttribute, internalValue, "Value may not be below %d", min );
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "Value may not be below %d", min );
 
         if ( max != null && d > max )
-            throw new InvalidAttributeValueException( viewAttribute, internalValue, "Value may not be more than %d", max );
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "Value may not be more than %d", max );
     }
 }

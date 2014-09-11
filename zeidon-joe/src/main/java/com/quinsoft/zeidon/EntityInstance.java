@@ -25,8 +25,8 @@ import java.util.UUID;
 
 import org.joda.time.DateTime;
 
-import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 
@@ -91,7 +91,7 @@ public interface EntityInstance
     // Attribute methods.
     //
     AttributeInstance getAttribute( String attributeName );
-    AttributeInstance getAttribute( ViewAttribute viewAttribute );
+    AttributeInstance getAttribute( AttributeDef attributeDef );
     List<AttributeInstance> attributeList( boolean includeNullValues );
 
     /**
@@ -100,27 +100,27 @@ public interface EntityInstance
      * @param config
      * @return
      */
-    AttributeInstance createDynamicViewAttribute( DynamicViewAttributeConfiguration config );
+    AttributeInstance createDynamicAttributeDef( DynamicAttributeDefConfiguration config );
     boolean isAttributeNull( String attributeName );
-    boolean isAttributeNull( ViewAttribute viewAttribute );
-    boolean isAttributeUpdated( ViewAttribute viewAttribute );
+    boolean isAttributeNull( AttributeDef attributeDef );
+    boolean isAttributeUpdated( AttributeDef attributeDef );
     EntityInstance setAttribute( String attributeName, Object value ) throws InvalidAttributeValueException;
     EntityInstance setAttribute( String attributeName, Object value, String contextName ) throws InvalidAttributeValueException;
-    EntityInstance setAttribute( ViewAttribute viewAttribute, Object value ) throws InvalidAttributeValueException;
-    EntityInstance setAttribute( ViewAttribute viewAttribute, Object value, String contextName ) throws InvalidAttributeValueException;
+    EntityInstance setAttribute( AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException;
+    EntityInstance setAttribute( AttributeDef attributeDef, Object value, String contextName ) throws InvalidAttributeValueException;
     EntityInstance setAttributeFromAttribute( String tgtAttributeName, View srcView, String srcEntityName, String srcAttributeName ) throws InvalidAttributeValueException;
 
     /**
      * Sets the value of the attribute without attempting to convert it first.  This still validates that the
      * value is well-formed.  Does *NOT* set the update flag.
      *
-     * @param viewAttribute
+     * @param attributeDef
      * @param value
      * @param setIncremental TODO
      * @return
      * @throws InvalidAttributeValueException
      */
-    EntityInstance setInternalAttributeValue( ViewAttribute viewAttribute, Object value, boolean setIncremental ) throws InvalidAttributeValueException;
+    EntityInstance setInternalAttributeValue( AttributeDef attributeDef, Object value, boolean setIncremental ) throws InvalidAttributeValueException;
 
     /**
      * Sets the incremental update flags for this entity.  Does not set OI flags.
@@ -132,30 +132,30 @@ public interface EntityInstance
     EntityInstance setIncrementalFlags( IncrementalEntityFlags flag );
 
     Object getInternalAttributeValue( String attributeName );
-    Object getInternalAttributeValue( ViewAttribute viewAttribute );
+    Object getInternalAttributeValue( AttributeDef attributeDef );
 
-    String getStringFromAttribute( ViewAttribute viewAttribute );
+    String getStringFromAttribute( AttributeDef attributeDef );
     String getStringFromAttribute( String attributeName );
-    String getStringFromAttribute( ViewAttribute viewAttribute, String contextName );
+    String getStringFromAttribute( AttributeDef attributeDef, String contextName );
     String getStringFromAttribute( String attributeName, String contextName );
 
-    Integer getIntegerFromAttribute( ViewAttribute viewAttribute );
+    Integer getIntegerFromAttribute( AttributeDef attributeDef );
     Integer getIntegerFromAttribute( String attributeName );
-    Integer getIntegerFromAttribute( ViewAttribute viewAttribute, String contextName );
+    Integer getIntegerFromAttribute( AttributeDef attributeDef, String contextName );
     Integer getIntegerFromAttribute( String attributeName, String contextName );
 
-    Double getDoubleFromAttribute( ViewAttribute viewAttribute );
+    Double getDoubleFromAttribute( AttributeDef attributeDef );
     Double getDoubleFromAttribute( String attributeName );
-    Double getDoubleFromAttribute( ViewAttribute viewAttribute, String contextName );
+    Double getDoubleFromAttribute( AttributeDef attributeDef, String contextName );
     Double getDoubleFromAttribute( String attributeName, String contextName );
 
-    DateTime getDateTimeFromAttribute( ViewAttribute viewAttribute );
+    DateTime getDateTimeFromAttribute( AttributeDef attributeDef );
     DateTime getDateTimeFromAttribute( String attributeName );
-    DateTime getDateTimeFromAttribute( ViewAttribute viewAttribute, String contextName );
+    DateTime getDateTimeFromAttribute( AttributeDef attributeDef, String contextName );
     DateTime getDateTimeFromAttribute( String attributeName, String contextName );
 
     Blob getBlobFromAttribute( String attributeName );
-    Blob getBlobFromAttribute( ViewAttribute viewAttribute );
+    Blob getBlobFromAttribute( AttributeDef attributeDef );
 
     /**
      * Returns a string representation of the key values of this entity.  If all keys are
@@ -166,9 +166,9 @@ public interface EntityInstance
     String getKeyString();
 
     Object addToAttribute( String attributeName, Object value );
-    Object addToAttribute( ViewAttribute viewAttribute, Object value );
+    Object addToAttribute( AttributeDef attributeDef, Object value );
     Object multiplyAttribute( String attributeName, Object value );
-    Object multiplyAttribute( ViewAttribute viewAttribute, Object value );
+    Object multiplyAttribute( AttributeDef attributeDef, Object value );
 
     /**
      * Compares the value of the named attribute with 'value'.  This will convert the value of 'value'
@@ -182,9 +182,9 @@ public interface EntityInstance
      * @return -1, 0, or 1 depending on attribute <=> value.
      */
     int compareAttribute( String attributeName, Object value );
-    int compareAttribute( ViewAttribute viewAttribute, Object value );
+    int compareAttribute( AttributeDef attributeDef, Object value );
     int compareAttribute( String attributeName, EntityInstance entityInstance, String attributeName2 );
-    int compareAttribute( ViewAttribute viewAttribute, EntityInstance entityInstance, ViewAttribute viewAttribute2 );
+    int compareAttribute( AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 );
 
     /**
      * Iterates through all the child entities that match childEntityDef, including

@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import org.apache.commons.lang3.StringUtils;
@@ -97,11 +97,11 @@ public class JspWebUtils
     	Task task = view.getTask();
     	ViewOd viewOd = view.getViewOd();
     	EntityDef entityDef = viewOd.getEntityDef(entityName);
-    	ViewAttribute viewAttribute = entityDef.getAttribute(attribName);
-    	Domain domain = viewAttribute.getDomain();
+    	AttributeDef attributeDef = entityDef.getAttribute(attribName);
+    	Domain domain = attributeDef.getDomain();
     	if ( domain.getDomainType() != DomainType.TABLE )
     		throw new ZeidonException( "Domain %s is not a Table Domain for attribute %s ", 
-    									domain.getName(), viewAttribute.toString() );
+    									domain.getName(), attributeDef.toString() );
     	
 
     	TableDomain tableDomain = (TableDomain) domain;

@@ -45,7 +45,7 @@ import com.quinsoft.zeidon.domains.DynamicTableDomain;
 import com.quinsoft.zeidon.domains.TableDomainContext;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.domains.TableListContext;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
@@ -233,47 +233,47 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
         }
 
         @Override
-        public Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value)
+        public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value)
                 throws InvalidAttributeValueException
         {
-            return getTaskContext( task, this ).convertExternalValue( task, viewAttribute, value );
+            return getTaskContext( task, this ).convertExternalValue( task, attributeDef, value );
         }
 
         @Override
-        public Blob convertToBlob(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue)
         {
-            return getTaskContext( task, this ).convertToBlob( task, viewAttribute, internalValue );
+            return getTaskContext( task, this ).convertToBlob( task, attributeDef, internalValue );
         }
 
         @Override
-        public DateTime convertToDate(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
         {
-            return getTaskContext( task, this ).convertToDate( task, viewAttribute, internalValue );
+            return getTaskContext( task, this ).convertToDate( task, attributeDef, internalValue );
         }
 
         @Override
-        public Double convertToDouble(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue)
         {
-            return getTaskContext( task, this ).convertToDouble( task, viewAttribute, internalValue );
+            return getTaskContext( task, this ).convertToDouble( task, attributeDef, internalValue );
         }
 
         @Override
-        public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue)
         {
-            return getTaskContext( task, this ).convertToInteger( task, viewAttribute, internalValue );
+            return getTaskContext( task, this ).convertToInteger( task, attributeDef, internalValue );
         }
 
         @Override
-        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
-            return getTaskContext( task, this ).convertToString( task, viewAttribute, internalValue );
+            return getTaskContext( task, this ).convertToString( task, attributeDef, internalValue );
         }
 
         @Override
-        public void validateInternalValue(Task task, ViewAttribute viewAttribute, Object value)
+        public void validateInternalValue(Task task, AttributeDef attributeDef, Object value)
                 throws InvalidAttributeValueException
         {
-            getTaskContext( task, this ).validateInternalValue( task, viewAttribute, value );
+            getTaskContext( task, this ).validateInternalValue( task, attributeDef, value );
         }
 
         @Override

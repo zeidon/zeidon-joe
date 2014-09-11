@@ -20,7 +20,7 @@ package com.quinsoft.zeidon;
 
 import java.util.EnumSet;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -106,23 +106,23 @@ public interface EntityCursor extends EntityInstance
     CursorResult setFirst( EntityDef scopingEntity );
     CursorResult setFirst( String attributeName, Object value );
     CursorResult setFirst( String attributeName, Object value, String scopingEntityName );
-    CursorResult setFirst( ViewAttribute attribute, Object value );
-    CursorResult setFirst( ViewAttribute attribute, Object value, EntityDef scopingEntity );
+    CursorResult setFirst( AttributeDef attribute, Object value );
+    CursorResult setFirst( AttributeDef attribute, Object value, EntityDef scopingEntity );
     CursorResult setFirstWithinOi();
     CursorResult setFirstWithinOi( String attributeName, Object value );
-    CursorResult setFirstWithinOi( ViewAttribute viewAttribute, Object value );
+    CursorResult setFirstWithinOi( AttributeDef attributeDef, Object value );
 
     CursorResult setNext();
     CursorResult setNextContinue();
     CursorResult setNext( String scopingEntityName );
     CursorResult setNext( EntityDef scopingEntity );
     CursorResult setNext( String attributeName, Object value );
-    CursorResult setNext( ViewAttribute attribute, Object value );
+    CursorResult setNext( AttributeDef attribute, Object value );
     CursorResult setNext( String attributeName, Object value, String scopingEntityName );
-    CursorResult setNext( ViewAttribute attributeName, Object value, EntityDef scopingEntityName );
+    CursorResult setNext( AttributeDef attributeName, Object value, EntityDef scopingEntityName );
     CursorResult setNextWithinOi();
     CursorResult setNextWithinOi( String attributeName, Object value );
-    CursorResult setNextWithinOi( ViewAttribute attribute, Object value );
+    CursorResult setNextWithinOi( AttributeDef attribute, Object value );
 
     /**
      * TODO: Is this the same as getNextTwin() != null?
@@ -141,33 +141,33 @@ public interface EntityCursor extends EntityInstance
     boolean hasAny( EntityDef entityDef );
     boolean hasAny( String attributeName, Object value );
     boolean hasAny( String attributeName, Object value, String scopingEntityName );
-    boolean hasAny( ViewAttribute viewAttribute, Object value );
-    boolean hasAny( ViewAttribute viewAttribute, Object value, EntityDef scopingEntityDef );
+    boolean hasAny( AttributeDef attributeDef, Object value );
+    boolean hasAny( AttributeDef attributeDef, Object value, EntityDef scopingEntityDef );
     boolean hasAnyWithinOi();
     boolean hasAnyWithinOi( String attributeName, Object value );
-    boolean hasAnyWithinOi( ViewAttribute viewAttribute, Object value );
+    boolean hasAnyWithinOi( AttributeDef attributeDef, Object value );
 
     CursorResult setLast();
     CursorResult setLast( String scopingEntityName );
     CursorResult setLast( EntityDef scopingEntity );
     CursorResult setLast( String attributeName, Object value );
     CursorResult setLast( String attributeName, Object value, String scopingEntityName );
-    CursorResult setLast( ViewAttribute attribute, Object value );
-    CursorResult setLast( ViewAttribute attribute, Object value, EntityDef scopingEntity );
+    CursorResult setLast( AttributeDef attribute, Object value );
+    CursorResult setLast( AttributeDef attribute, Object value, EntityDef scopingEntity );
     CursorResult setLastWithinOi();
     CursorResult setLastWithinOi( String attributeName, Object value );
-    CursorResult setLastWithinOi( ViewAttribute viewAttribute, Object value );
+    CursorResult setLastWithinOi( AttributeDef attributeDef, Object value );
 
     CursorResult setPrev();
     CursorResult setPrevContinue();
     CursorResult setPrev( String scopingEntityName );
     CursorResult setPrev( EntityDef scopingEntity );
     CursorResult setPrev( String attributeName, Object value );
-    CursorResult setPrev( ViewAttribute attribute, Object value );
+    CursorResult setPrev( AttributeDef attribute, Object value );
     CursorResult setPrev( String attributeName, Object value, String scopingEntityName );
-    CursorResult setPrev( ViewAttribute attributeName, Object value, EntityDef scopingEntityName );
+    CursorResult setPrev( AttributeDef attributeName, Object value, EntityDef scopingEntityName );
     CursorResult setPrevWithinOi();
-    CursorResult setPrevWithinOi( ViewAttribute attribute, Object value );
+    CursorResult setPrevWithinOi( AttributeDef attribute, Object value );
 
     CursorResult setByEntityKey( long entityKey );
 

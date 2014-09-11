@@ -18,7 +18,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -65,10 +65,10 @@ class CommitHelper
                     linked.flagAllChildrenAsLazyLoaded();
                 }
 
-                for ( ViewAttribute viewAttrib : entityDef.getAttributes() )
+                for ( AttributeDef AttributeDef : entityDef.getAttributes() )
                 {
-                    if ( viewAttrib.isPersistent() )
-                        linked.getInternalAttribute( viewAttrib ).setUpdated( false );
+                    if ( AttributeDef.isPersistent() )
+                        linked.getInternalAttribute( AttributeDef ).setUpdated( false );
                 }
             }
         }

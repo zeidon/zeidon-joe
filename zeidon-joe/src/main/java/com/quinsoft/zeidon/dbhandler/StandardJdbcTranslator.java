@@ -39,7 +39,7 @@ import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.DataField;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * The standard JDBC domain translator.
@@ -127,7 +127,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
      * @see com.quinsoft.zeidon.dbhandler.JdbcDomainTranslator#getAttributeValue(java.lang.StringBuilder, com.quinsoft.zeidon.objectdefinition.DataField, com.quinsoft.zeidon.EntityInstance)
      */
     @Override
-    public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, ViewAttribute viewAttribute, Object value)
+    public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, AttributeDef attributeDef, Object value)
     {
         if ( bindAllValues )
         {
@@ -144,7 +144,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( domain instanceof DateTimeDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( task, viewAttribute, null, value );
+            Object v = domain.convertExternalValue( task, attributeDef, null, value );
             String str = dateTimeFormatter.print( (DateTime) v );
             return appendString( stmt, buffer, str );
         }
@@ -152,7 +152,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( domain instanceof DateDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( task, viewAttribute, null, value );
+            Object v = domain.convertExternalValue( task, attributeDef, null, value );
             String str = dateFormatter.print( (DateTime) v );
             return appendString( stmt, buffer, str );
         }
@@ -164,13 +164,13 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
 
         if ( domain instanceof BooleanDomain )
         {
-            Object b = domain.convertExternalValue( task, viewAttribute, null, value );
+            Object b = domain.convertExternalValue( task, attributeDef, null, value );
             buffer.append( (Boolean) b ? "true" : "false" );
             return true;
         }
 
-        Object v = domain.convertExternalValue( task, viewAttribute, null, value );
-        String str = domain.convertToString( task, viewAttribute, v );
+        Object v = domain.convertExternalValue( task, attributeDef, null, value );
+        String str = domain.convertToString( task, attributeDef, v );
         return appendString( stmt, buffer, str );
     }
 
@@ -237,8 +237,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     @Override
     public String bindAttributeValue( PreparedStatement ps, View view, DataField dataField, int idx )
     {
-        final ViewAttribute viewAttribute = dataField.getViewAttribute();
-        final Object value = view.cursor( viewAttribute.getEntityDef() ).getInternalAttributeValue( viewAttribute );
+        final AttributeDef attributeDef = dataField.getAttributeDef();
+        final Object value = view.cursor( attributeDef.getEntityDef() ).getInternalAttributeValue( attributeDef );
 
         try
         {
@@ -246,7 +246,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e ).prependViewAttribute( viewAttribute );
+            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
         }
     }
 

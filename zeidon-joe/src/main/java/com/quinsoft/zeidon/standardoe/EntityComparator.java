@@ -19,7 +19,7 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.Set;
 
 import com.quinsoft.zeidon.EntityInstance;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -30,14 +30,14 @@ class EntityComparator
 {
     private static final Object ANY_VALUE = new Object();
 
-    private final ViewAttribute viewAttribute;
+    private final AttributeDef attributeDef;
     private final boolean       allowHidden;
     private final Object        compareValue;
 
-    EntityComparator(ViewAttribute viewAttribute, boolean allowHidden, Object compareValue)
+    EntityComparator(AttributeDef attributeDef, boolean allowHidden, Object compareValue)
     {
         super();
-        this.viewAttribute = viewAttribute;
+        this.attributeDef = attributeDef;
         this.allowHidden = allowHidden;
         this.compareValue = compareValue;
     }
@@ -52,12 +52,12 @@ class EntityComparator
         if ( compareValue == ANY_VALUE )
             return true;
 
-        return entityInstance.compareAttribute( viewAttribute, compareValue ) == 0;
+        return entityInstance.compareAttribute( attributeDef, compareValue ) == 0;
     }
 
-    ViewAttribute getViewAttribute()
+    AttributeDef getAttributeDef()
     {
-        return viewAttribute;
+        return attributeDef;
     }
 
     /**

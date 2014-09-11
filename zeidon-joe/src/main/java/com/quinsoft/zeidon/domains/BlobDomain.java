@@ -25,7 +25,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -39,7 +39,7 @@ public class BlobDomain extends AbstractDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue instanceof byte[] )
             return new Blob( (byte[]) externalValue );
@@ -50,20 +50,20 @@ public class BlobDomain extends AbstractDomain
         if ( externalValue instanceof String )
             return new Blob( ((String) externalValue).getBytes() );
         
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Blob", externalValue.getClass().getName() );
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Blob", externalValue.getClass().getName() );
     }
     
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         @SuppressWarnings("unused")
         Blob blob = (Blob) internalValue;
         
         //TODO: Should blobs have a max value?  The length defined in the view attribute is the number of bytes
         // the old C OE needed to store a blob pointer.
-//        if ( blob.getBytes().length > viewAttribute.getLength() )
-//            throw new InvalidAttributeValueException( viewAttribute, value,
+//        if ( blob.getBytes().length > attributeDef.getLength() )
+//            throw new InvalidAttributeValueException( attributeDef, value,
 //                                                      "Max length of %d exceeded.  Length = %d",
-//                                                      viewAttribute.getLength(), blob.getBytes().length );
+//                                                      attributeDef.getLength(), blob.getBytes().length );
     }
 }

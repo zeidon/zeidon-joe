@@ -21,7 +21,7 @@
  */
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Thrown by validateSubobject(), this indicates a required attribute is null.
@@ -33,9 +33,9 @@ public class RequiredAttributeException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
     
-    public RequiredAttributeException( ViewAttribute viewAttrib )
+    public RequiredAttributeException( AttributeDef AttributeDef )
     {
-        super( "Required attribute %s is null.", viewAttrib.getName() );
-        prependViewAttribute( viewAttrib );
+        super( "Required attribute %s is null.", AttributeDef.getName() );
+        prependAttributeDef( AttributeDef );
     }
 }

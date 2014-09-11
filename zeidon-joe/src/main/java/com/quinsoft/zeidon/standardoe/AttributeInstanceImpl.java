@@ -23,11 +23,11 @@ import org.joda.time.DateTime;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.TemporalEntityException;
-import com.quinsoft.zeidon.UnknownViewAttributeException;
+import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -37,17 +37,17 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 class AttributeInstanceImpl implements AttributeInstance
 {
     private       View               view;
-    private final ViewAttribute      viewAttribute;
+    private final AttributeDef      attributeDef;
     private final AttributeValue     attributeValue;
     private final EntityInstanceImpl entityInstance;
 
 
-    AttributeInstanceImpl( ViewAttribute viewAttribute,
+    AttributeInstanceImpl( AttributeDef attributeDef,
                            AttributeValue attributeValue,
                            EntityInstanceImpl entityInstance )
     {
         super();
-        this.viewAttribute = viewAttribute;
+        this.attributeDef = attributeDef;
         this.attributeValue = attributeValue;
         this.entityInstance = entityInstance;
     }
@@ -59,12 +59,12 @@ class AttributeInstanceImpl implements AttributeInstance
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.AttributeInstance#getViewAttribute()
+     * @see com.quinsoft.zeidon.AttributeInstance#getAttributeDef()
      */
     @Override
-    public ViewAttribute getViewAttribute()
+    public AttributeDef getAttributeDef()
     {
-        return viewAttribute;
+        return attributeDef;
     }
 
     /* (non-Javadoc)
@@ -81,10 +81,10 @@ class AttributeInstanceImpl implements AttributeInstance
      */
     private void executeDerivedOper()
     {
-        if ( ! viewAttribute.isDerived() )
+        if ( ! attributeDef.isDerived() )
             return;
 
-        viewAttribute.executeDerivedAttributeForGet( getView() );
+        attributeDef.executeDerivedAttributeForGet( getView() );
     }
 
     /* (non-Javadoc)
@@ -94,7 +94,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public String getString()
     {
         executeDerivedOper();
-        return attributeValue.getString( getTask(), viewAttribute );
+        return attributeValue.getString( getTask(), attributeDef );
     }
 
     /* (non-Javadoc)
@@ -104,7 +104,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public Integer getInteger()
     {
         executeDerivedOper();
-        return attributeValue.getInteger( getTask(), viewAttribute );
+        return attributeValue.getInteger( getTask(), attributeDef );
     }
 
     /* (non-Javadoc)
@@ -114,7 +114,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public DateTime getDateTime()
     {
         executeDerivedOper();
-        return attributeValue.getDateTime( getTask(), viewAttribute );
+        return attributeValue.getDateTime( getTask(), attributeDef );
     }
 
     /* (non-Javadoc)
@@ -124,7 +124,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public String getString( String contextName )
     {
         executeDerivedOper();
-        return attributeValue.getString( getTask(), viewAttribute, contextName );
+        return attributeValue.getString( getTask(), attributeDef, contextName );
     }
 
     /* (non-Javadoc)
@@ -134,7 +134,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public Integer getInteger( String contextName )
     {
         executeDerivedOper();
-        return attributeValue.getInteger( getTask(), viewAttribute, contextName );
+        return attributeValue.getInteger( getTask(), attributeDef, contextName );
     }
 
     /* (non-Javadoc)
@@ -144,35 +144,35 @@ class AttributeInstanceImpl implements AttributeInstance
     public DateTime getDateTime( String contextName )
     {
         executeDerivedOper();
-        return attributeValue.getDateTime( getTask(), viewAttribute, contextName );
+        return attributeValue.getDateTime( getTask(), attributeDef, contextName );
     }
 
     @Override
     public Double getDouble()
     {
         executeDerivedOper();
-        return attributeValue.getDouble( getTask(), viewAttribute );
+        return attributeValue.getDouble( getTask(), attributeDef );
     }
 
     @Override
     public Double getDouble( String contextName )
     {
         executeDerivedOper();
-        return attributeValue.getDouble( getTask(), viewAttribute, contextName );
+        return attributeValue.getDouble( getTask(), attributeDef, contextName );
     }
 
     @Override
     public Boolean getBoolean()
     {
         executeDerivedOper();
-        return attributeValue.getBoolean( getTask(), viewAttribute );
+        return attributeValue.getBoolean( getTask(), attributeDef );
     }
 
     @Override
     public Boolean getBoolean( String contextName )
     {
         executeDerivedOper();
-        return attributeValue.getBoolean( getTask(), viewAttribute, contextName );
+        return attributeValue.getBoolean( getTask(), attributeDef, contextName );
     }
 
     /**
@@ -193,7 +193,7 @@ class AttributeInstanceImpl implements AttributeInstance
 
     private EntityDef getEntityDef()
     {
-        return viewAttribute.getEntityDef();
+        return attributeDef.getEntityDef();
     }
 
     private ObjectInstance getObjectInstance()
@@ -210,7 +210,7 @@ class AttributeInstanceImpl implements AttributeInstance
     /**
      * Makes sure the attribute can be updated.
      *
-     * @param viewAttribute
+     * @param attributeDef
      */
     private void validateUpdateAttribute()
     {
@@ -221,18 +221,18 @@ class AttributeInstanceImpl implements AttributeInstance
 
         // If the attribute is derived or work, then we do not need to check if the
         // attribute can be updated.
-        if ( viewAttribute.isDerived() )
+        if ( attributeDef.isDerived() )
             return;
 
         // If the attribute is Persistent, then it is an attribute from the ER.
         // Otherwise it's a work attribute and can be updated even if the
         // object is read only.
-        if ( ! viewAttribute.isPersistent() )
+        if ( ! attributeDef.isPersistent() )
             return;
 
-        if ( ! viewAttribute.isUpdate() )
+        if ( ! attributeDef.isUpdate() )
             throw new ZeidonException( "Attribute is defined as read-only" )
-                                .prependViewAttribute( viewAttribute );
+                                .prependAttributeDef( attributeDef );
 
         // If the entity is derived or work, then we do not need to check if the
         // attribute can be updated.
@@ -253,31 +253,31 @@ class AttributeInstanceImpl implements AttributeInstance
 
     /**
      * Validate the context name.  If the context name is null or "", returns the default context.
-     * @param viewAttribute
+     * @param attributeDef
      * @param contextName
      * @return
      */
     private String checkContextName( String contextName )
     {
-        Domain domain = viewAttribute.getDomain();
+        Domain domain = attributeDef.getDomain();
         return domain.getContext( getTask(), contextName ).getName();
     }
 
     @Override
     public EntityInstance setValue( Object value, String contextName )
     {
-        if ( viewAttribute.isHidden() )
-            throw new UnknownViewAttributeException( getEntityDef(), viewAttribute.getName() );
+        if ( attributeDef.isHidden() )
+            throw new UnknownAttributeDefException( getEntityDef(), attributeDef.getName() );
 
         validateUpdateAttribute();
         contextName = checkContextName( contextName );
         Object oldValue = attributeValue.getInternalValue();
-        if ( attributeValue.set( getTask(), viewAttribute, value, contextName ) )
+        if ( attributeValue.set( getTask(), attributeDef, value, contextName ) )
         {
-            if ( ! viewAttribute.isDerived() )
-                entityInstance.setUpdated( true, true, viewAttribute.isPersistent() );
+            if ( ! attributeDef.isDerived() )
+                entityInstance.setUpdated( true, true, attributeDef.isPersistent() );
 
-            entityInstance.updateHashKeyAttributeToMap( viewAttribute, oldValue );
+            entityInstance.updateHashKeyAttributeToMap( attributeDef, oldValue );
         }
         return entityInstance;
     }
@@ -291,20 +291,20 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public boolean isNull()
     {
-        return attributeValue.isNull( getTask(), viewAttribute );
+        return attributeValue.isNull( getTask(), attributeDef );
     }
 
     @Override
     public EntityInstanceImpl setInternalValue( Object value, boolean setIncremental )
     {
         Object oldValue = attributeValue.getInternalValue();
-        Object internalValue = viewAttribute.getDomain().convertInternalValue( getTask(), viewAttribute, value );
-        if ( attributeValue.setInternalValue( getTask(), viewAttribute, internalValue, setIncremental ) )
+        Object internalValue = attributeDef.getDomain().convertInternalValue( getTask(), attributeDef, value );
+        if ( attributeValue.setInternalValue( getTask(), attributeDef, internalValue, setIncremental ) )
         {
-            if ( ! viewAttribute.isDerived() )
-                entityInstance.setUpdated( true, true, viewAttribute.isPersistent() );
+            if ( ! attributeDef.isDerived() )
+                entityInstance.setUpdated( true, true, attributeDef.isPersistent() );
 
-            entityInstance.updateHashKeyAttributeToMap( viewAttribute, oldValue );
+            entityInstance.updateHashKeyAttributeToMap( attributeDef, oldValue );
         }
 
         return entityInstance;
@@ -322,7 +322,7 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( view == null )
         {
             view = new ViewImpl( getObjectInstance() );
-            view.cursor( viewAttribute.getEntityDef() ).setCursor( entityInstance );
+            view.cursor( attributeDef.getEntityDef() ).setCursor( entityInstance );
         }
 
         return view;
@@ -337,12 +337,12 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public int compare( Object value )
     {
-        return attributeValue.compare( getTask(), viewAttribute, value );
+        return attributeValue.compare( getTask(), attributeDef, value );
     }
     
     @Override
     public String toString()
     {
-        return viewAttribute.toString() + ": " + getValue(); 
+        return attributeDef.toString() + ": " + getValue(); 
     }
 }

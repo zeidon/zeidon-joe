@@ -34,7 +34,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 
 /**
@@ -65,26 +65,26 @@ public abstract class AbstractDomain implements Domain
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.domains.Domain#convertInternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.domains.Domain#convertInternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public Object convertInternalValue(Task task, ViewAttribute viewAttribute, Object value) throws InvalidAttributeValueException
+    public Object convertInternalValue(Task task, AttributeDef attributeDef, Object value) throws InvalidAttributeValueException
     {
         // For most domains converting an internal value is the same as converting an external value.
-        return convertExternalValue( task, viewAttribute, null, value );
+        return convertExternalValue( task, attributeDef, null, value );
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof String )
             return;
 
-        throw new InvalidAttributeValueException( viewAttribute, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
+        throw new InvalidAttributeValueException( attributeDef, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
     }
 
     @Override
-    public Blob convertToBlob(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
             return null;
@@ -92,11 +92,11 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Blob )
             return (Blob) internalValue;
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert internal value of %s to Blob", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s to Blob", attributeDef.toString() );
     }
 
     @Override
-    public Boolean convertToBoolean(Task task, ViewAttribute viewAttribute, Object internalValue )
+    public Boolean convertToBoolean(Task task, AttributeDef attributeDef, Object internalValue )
     {
         if ( internalValue == null )
             return null;
@@ -127,11 +127,11 @@ public abstract class AbstractDomain implements Domain
             }
         }
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Boolean", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Boolean", attributeDef.toString() );
     }
 
     @Override
-    public DateTime convertToDate(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
     {
     	if ( internalValue == null )
     		return null;
@@ -142,11 +142,11 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Date )
             return new DateTime( internalValue );
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert internal value of %s to Date", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s to Date", attributeDef.toString() );
     }
 
     @Override
-    public Double convertToDouble(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue)
     {
     	if ( internalValue == null )
     		return null;
@@ -160,12 +160,12 @@ public abstract class AbstractDomain implements Domain
         }
         catch ( NumberFormatException e )
         {
-            throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert internal value of %s (%s) to Double", internalValue.toString(), viewAttribute.toString() );
+            throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s (%s) to Double", internalValue.toString(), attributeDef.toString() );
         }
     }
 
     @Override
-    public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
             return null;
@@ -179,21 +179,21 @@ public abstract class AbstractDomain implements Domain
         }
         catch ( NumberFormatException e )
         {
-            throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert internal value of %s (%s) to Integer", internalValue.toString(), viewAttribute.toString() );
+            throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s (%s) to Integer", internalValue.toString(), attributeDef.toString() );
         }
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
-            return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
+            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
         return internalValue.toString();
     }
 
     @Override
-    public Blob convertToBlob(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         if ( internalValue == null )
             return null;
@@ -201,11 +201,11 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Blob )
             return (Blob) internalValue;
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Blob", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Blob", attributeDef.toString() );
     }
 
     @Override
-    public Boolean convertToBoolean(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Boolean convertToBoolean(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         if ( internalValue == null )
             return null;
@@ -213,11 +213,11 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Boolean )
             return (Boolean) internalValue;
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Boolean", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Boolean", attributeDef.toString() );
     }
 
     @Override
-    public DateTime convertToDate(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         if ( internalValue == null )
             return null;
@@ -228,11 +228,11 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Date )
             return new DateTime( internalValue );
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Date", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Date", attributeDef.toString() );
     }
 
     @Override
-    public Double convertToDouble(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         if ( internalValue == null )
             return null;
@@ -240,11 +240,11 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Double )
             return (Double) internalValue;
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Double", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Double", attributeDef.toString() );
     }
 
     @Override
-    public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         // TODO: Should we just use the context like in convertToString()?
         if ( internalValue == null )
@@ -253,24 +253,24 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof Integer )
             return (Integer) internalValue;
 
-        throw new InvalidAttributeConversionException( viewAttribute, "Cannot convert %s to Integer", viewAttribute.toString() );
+        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Integer", attributeDef.toString() );
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         DomainContext context = getContext( task, contextName );
-        return context.convertToString( task, viewAttribute, internalValue );
+        return context.convertToString( task, attributeDef, internalValue );
     }
 
     @Override
-    public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
         throw new ZeidonException( "addToAttribute not supported for this domain" );
     }
 
     @Override
-    public Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
         throw new ZeidonException( "multiplyAttribute not supported for this domain" );
     }
@@ -353,29 +353,29 @@ public abstract class AbstractDomain implements Domain
         return dataType;
     }
 
-    protected Integer compareNull(Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue)
+    protected Integer compareNull(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
-        if ( isNull( task, viewAttribute, internalValue ) )
+        if ( isNull( task, attributeDef, internalValue ) )
         {
-            if ( isNull( task, viewAttribute, externalValue ) )
+            if ( isNull( task, attributeDef, externalValue ) )
                 return 0;
 
             return -1;
         }
 
-        if ( isNull( task, viewAttribute, externalValue ) )
+        if ( isNull( task, attributeDef, externalValue ) )
             return 1;
 
         return null;
     }
 
     @Override
-    public int compare(Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
         try
         {
-            Object value = convertExternalValue( task, viewAttribute, null, externalValue );
-            Integer rc = compareNull( task, viewAttribute, internalValue, value);
+            Object value = convertExternalValue( task, attributeDef, null, externalValue );
+            Integer rc = compareNull( task, attributeDef, internalValue, value);
             if ( rc != null )
                 return rc;
 
@@ -393,7 +393,7 @@ public abstract class AbstractDomain implements Domain
         }
         catch ( Throwable t )
         {
-            throw ZeidonException.wrapException( t ).prependViewAttribute( viewAttribute );
+            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
         }
     }
 
@@ -429,13 +429,13 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
-    public boolean isNull( Task task, ViewAttribute viewAttribute, Object value )
+    public boolean isNull( Task task, AttributeDef attributeDef, Object value )
     {
         if ( value == null )  // Null values are always null (duh).
             return true;
 
         if ( value instanceof String &&
-             viewAttribute.getEntityDef().getViewOd().getApplication().nullStringEqualsEmptyString() &&
+             attributeDef.getEntityDef().getViewOd().getApplication().nullStringEqualsEmptyString() &&
              StringUtils.isBlank( (String) value ) )
         {
             return true;

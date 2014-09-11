@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
  * @author DG
  *
  */
-public class ViewAttribute implements PortableFileAttributeHandler, Serializable
+public class AttributeDef implements PortableFileAttributeHandler, Serializable
 {
     private static final long serialVersionUID = 1L;
     private final EntityDef   entityDef;
@@ -84,18 +84,18 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     private EntityDef   hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
     /**
-     * If true then this attribute was created at runtime via EntityDef.createDynamicViewAttribute.
+     * If true then this attribute was created at runtime via EntityDef.createDynamicAttributeDef.
      */
     private boolean isDynamicAttribute = false;
 
-    public ViewAttribute(EntityDef entityDef)
+    public AttributeDef(EntityDef entityDef)
     {
         super();
         this.entityDef = entityDef;
         attributeNumber = entityDef.getAttributeCount();
     }
 
-    public ViewAttribute(EntityDef entityDef, DynamicViewAttributeConfiguration config )
+    public AttributeDef(EntityDef entityDef, DynamicAttributeDefConfiguration config )
     {
         this( entityDef );
         setName( config.getAttributeName() );
@@ -288,7 +288,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
         }
     }
 
-    ViewAttribute setDomain( String domainName )
+    AttributeDef setDomain( String domainName )
     {
         Application app = entityDef.getViewOd().getApplication();
         this.domainName = domainName;
@@ -301,7 +301,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
         return entityDef;
     }
 
-    ViewAttribute setName( String name )
+    AttributeDef setName( String name )
     {
         this.name = name;
         return this;
@@ -331,7 +331,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
         return length;
     }
 
-    ViewAttribute setLength( int length )
+    AttributeDef setLength( int length )
     {
         this.length = length;
         return this;
@@ -548,7 +548,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
             catch ( Throwable e )
             {
                 throw ZeidonException.prependMessage( e, "Oper: %s", this )
-                                     .prependViewAttribute( ViewAttribute.this  );
+                                     .prependAttributeDef( AttributeDef.this  );
             }
         }
 
@@ -584,7 +584,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
         @Override
         void callDerivedOperation( View view )
         {
-            AttributeInstance ai = view.cursor( getEntityDef() ).getAttribute( ViewAttribute.this );
+            AttributeInstance ai = view.cursor( getEntityDef() ).getAttribute( AttributeDef.this );
             callDerivedOperation( ai );
         }
 
@@ -600,12 +600,12 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
             catch ( Throwable e )
             {
                 throw ZeidonException.prependMessage( e, "Oper: %s", this )
-                                     .prependViewAttribute( ViewAttribute.this  );
+                                     .prependAttributeDef( AttributeDef.this  );
             }
         }
     }
 
-    public ViewAttribute getNextViewAttribute()
+    public AttributeDef getNextAttributeDef()
     {
         int idx = getAttributeNumber() + 1;
         if ( idx == entityDef.getAttributeCount() )
@@ -642,7 +642,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     }
 
     /**
-     * Returns true if this ViewAttribute is a sequencing attribute in ascending order, false
+     * Returns true if this AttributeDef is a sequencing attribute in ascending order, false
      * if it's descending, and null if it's not a sequencing attribute.  See
      * EntityDef.getSequencingAttributes() for more.
      *

@@ -26,7 +26,7 @@ import org.apache.commons.validator.EmailValidator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -41,7 +41,7 @@ public class EmailAddressDomain extends StringDomain
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         String string = checkNullString( internalValue );
         
@@ -56,19 +56,19 @@ public class EmailAddressDomain extends StringDomain
         for(int i =0; i < temp.length ; i++)
         {
             if ( ! EmailValidator.getInstance().isValid( temp[i] ) ) 
-                throw new InvalidAttributeValueException( viewAttribute, string, "Value must be a valid email address" );
+                throw new InvalidAttributeValueException( attributeDef, string, "Value must be a valid email address" );
         }
            
-        super.validateInternalValue( task, viewAttribute, internalValue );
+        super.validateInternalValue( task, attributeDef, internalValue );
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue )
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue )
     {
-        return convertToString( task, viewAttribute, internalValue, "" );
+        return convertToString( task, attributeDef, internalValue, "" );
     }
     
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         String string = checkNullString( internalValue );
         // Eliminate any blank spaces in email.

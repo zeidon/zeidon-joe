@@ -83,7 +83,7 @@ import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.UnknownViewAttributeException;
+import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.UnknownEntityDefException;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
@@ -91,7 +91,7 @@ import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
@@ -235,8 +235,8 @@ public abstract class VmlOperation
    public static final char zTYPE_PIC = 'P';
    public static final char zTYPE_FIXEDCHAR = 'F';
 
-   public static final int zDERIVED_SET = ViewAttribute.DERIVED_SET;
-   public static final int zDERIVED_GET = ViewAttribute.DERIVED_GET;
+   public static final int zDERIVED_SET = AttributeDef.DERIVED_SET;
+   public static final int zDERIVED_GET = AttributeDef.DERIVED_GET;
 
    public static final int zCURSOR_SET = CursorResult.SET.toInt();
    public static final int zCURSOR_UNCHANGED = CursorResult.UNCHANGED.toInt();
@@ -5745,8 +5745,8 @@ public abstract class VmlOperation
                               String contextName,
                               MutableInt index )
    {
-      ViewAttribute viewAttribute = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
-      TableDomain domain = (TableDomain) viewAttribute.getDomain();
+      AttributeDef attributeDef = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
+      TableDomain domain = (TableDomain) attributeDef.getDomain();
       List<TableEntry> entries = domain.getTableEntries( view.getTask(), contextName );
 
       sbTableValue.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
@@ -5806,23 +5806,23 @@ public abstract class VmlOperation
    protected int zGetFirstAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
       EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
-      ViewAttribute viewAttrib = entityDef.getAttribute( 0 );
+      AttributeDef AttributeDef = entityDef.getAttribute( 0 );
       //if ( sbAttribName != null ) // Do we need this?
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-      sbAttribName.append( viewAttrib.getName() );
+      sbAttribName.append( AttributeDef.getName() );
       return 0;
    }
 
    protected int zGetNextAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
       EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
-      ViewAttribute viewAttrib = entityDef.getAttribute( sbAttribName.toString() );
-      viewAttrib = viewAttrib.getNextViewAttribute();
-      if ( viewAttrib == null )
+      AttributeDef AttributeDef = entityDef.getAttribute( sbAttribName.toString() );
+      AttributeDef = AttributeDef.getNextAttributeDef();
+      if ( AttributeDef == null )
          return -1;
 
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-      sbAttribName.append( viewAttrib.getName() );
+      sbAttribName.append( AttributeDef.getName() );
       return 0;
    }
 
@@ -6911,7 +6911,7 @@ public abstract class VmlOperation
 
    /**
     * The C version of this method converts internalEntityStructure to an LPVIEWATTRIB and
-    * compares attributeName to lpViewAttribute.szName.  In Java we don't pass the internal
+    * compares attributeName to lpAttributeDef.szName.  In Java we don't pass the internal
     * value, just the name of the attribute, so we just do a simple compare here.
     *
     * @param attributeName
@@ -6938,10 +6938,10 @@ public abstract class VmlOperation
           }
           try{
  	         AttributeInstance attr = cursor.getAttribute( attributeName );
- 	         if ( attr.getViewAttribute().isHidden() )
+ 	         if ( attr.getAttributeDef().isHidden() )
  	        	 return -1;
           }
-          catch  ( UnknownViewAttributeException e )
+          catch  ( UnknownAttributeDefException e )
           {
  	         return -1;
 
@@ -7203,7 +7203,7 @@ public abstract class VmlOperation
             lpEntityInstance = bSingleEntity ? null : lpEntityInstance.getNextHier() ) )
       {
          LPVIEWENTITY lpTempEntityDef;
-         LPVIEWATTRIB lpViewAttrib;
+         LPVIEWATTRIB lpAttributeDef;
          boolean      bWorkEntity; // indicate entity is work or derived
 
          lpTempEntityDef = zGETPTR( lpEntityInstance->hEntityDef );
@@ -7283,12 +7283,12 @@ public abstract class VmlOperation
             continue; // Nope--continue with the next EI.
 
          // Set attribute flags.
-         for ( lpViewAttrib = zGETPTR( lpTempEntityDef->hFirstOD_Attrib );
-               lpViewAttrib;
-               lpViewAttrib = zGETPTR( lpViewAttrib->hNextOD_Attrib ) )
+         for ( lpAttributeDef = zGETPTR( lpTempEntityDef->hFirstOD_Attrib );
+               lpAttributeDef;
+               lpAttributeDef = zGETPTR( lpAttributeDef->hNextOD_Attrib ) )
          {
             LPATTRIBFLAGS lpAttribFlags = fnGetAttribFlagsPtr( lpEntityInstance,
-                                                               lpViewAttrib );
+                                                               lpAttributeDef );
 
             // Set the update flag for the entity.  Since we KNOW that either
             // bAttrUpdated flag or bAttrNotUpdated flag is true, and since they
@@ -7410,9 +7410,9 @@ public abstract class VmlOperation
 
 	  EntityInstance entityInstance = view.cursor(entityName).getEntityInstance();
 
-	  ViewAttribute viewAttribute = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
+	  AttributeDef attributeDef = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
 
-	  if ( entityInstance.isAttributeUpdated(viewAttribute) )
+	  if ( entityInstance.isAttributeUpdated(attributeDef) )
 	     return 1;
 	  else
 		 return 0;

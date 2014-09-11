@@ -51,8 +51,8 @@ public class EventStackTrace implements EventListener
             logger.info( "    View = %s", data.getView() );
         if ( data.getEntityDef() != null )
             logger.info( "    EntityDef = %s", data.getEntityDef() );
-        if ( data.getViewAttribute() != null )
-            logger.info( "    ViewAttribute = %s", data.getViewAttribute() );
+        if ( data.getAttributeDef() != null )
+            logger.info( "    AttributeDef = %s", data.getAttributeDef() );
         if ( data.getEntityInstance() != null )
             logger.info( "    EntityInstance = %s", data.getEntityInstance() );
         

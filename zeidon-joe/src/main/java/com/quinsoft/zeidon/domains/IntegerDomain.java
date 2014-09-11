@@ -27,7 +27,7 @@ import com.google.common.primitives.Ints;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -41,7 +41,7 @@ public class IntegerDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	if ( externalValue == null )
     		return null;
@@ -65,45 +65,45 @@ public class IntegerDomain extends AbstractNumericDomain
         	}
         	catch( Exception e )
         	{
-                throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Integer",
+                throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
                         externalValue.getClass().getName() );
         	}
             return num;
         }
 
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Integer",
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
                                                   externalValue.getClass().getName() );
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof Integer )
             return;
 
-        throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for IntegerDomain",
+        throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for IntegerDomain",
                                                   internalValue.getClass().getName() );
     }
 
     @Override
-    public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Integer num = (Integer) convertExternalValue( task, viewAttribute, null, operand );
+        Integer num = (Integer) convertExternalValue( task, attributeDef, null, operand );
         Integer value = (Integer) currentValue;
         return value + num;
     }
 
     @Override
-    public Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Integer num = (Integer) convertExternalValue( task, viewAttribute, null, operand );
+        Integer num = (Integer) convertExternalValue( task, attributeDef, null, operand );
         Integer value = (Integer) currentValue;
         return value * num;
     }
 
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
      	if ( internalValue == null )
     		return null;

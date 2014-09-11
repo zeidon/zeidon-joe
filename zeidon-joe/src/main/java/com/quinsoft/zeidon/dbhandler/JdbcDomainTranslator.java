@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.DataField;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * This interface is used by the JdbcHandler to convert attribute values to values that
@@ -43,11 +43,11 @@ public interface JdbcDomainTranslator
      * @param stmt TODO
      * @param buffer
      * @param domain
-     * @param viewAttribute TODO
+     * @param attributeDef TODO
      * @param value
      * @return
      */
-    boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, ViewAttribute viewAttribute, Object value);
+    boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, AttributeDef attributeDef, Object value);
     
     /**
      * Converts a value from the DB to something the domain can handle.

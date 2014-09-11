@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Interface for all domains.
@@ -48,13 +48,13 @@ public interface Domain
      * Takes an external value and converts it into a value used internally value using domain processing.
      *
      * @param task TODO
-     * @param viewAttribute TODO
+     * @param attributeDef TODO
      * @param contextName - Context name.
      * @param externalValue - External value
      * @return internal value.
      */
     Object convertExternalValue( Task          task,
-                                 ViewAttribute viewAttribute,
+                                 AttributeDef attributeDef,
                                  String        contextName,
                                  Object        externalValue ) throws InvalidAttributeValueException;
 
@@ -67,65 +67,65 @@ public interface Domain
      * but when loaded from the DB the encrypting is not necessary.
      *
      * @param task
-     * @param viewAttribute
+     * @param attributeDef
      * @param value
      * @return
      * @throws InvalidAttributeValueException
      */
     Object convertInternalValue( Task          task,
-                                 ViewAttribute viewAttribute,
+                                 AttributeDef attributeDef,
                                  Object        value ) throws InvalidAttributeValueException;
 
     /**
      * Compares an external value to an internal attribute value.
      *
      * @param task
-     * @param viewAttribute TODO
+     * @param attributeDef TODO
      * @param internalValue - Internal attribute value.
      * @param externalValue
      * @return -1 if o1 < o2
      *          0 if o1 = o2
      *          1 if o1 > o2
      */
-    int compare( Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue );
+    int compare( Task task, AttributeDef attributeDef, Object internalValue, Object externalValue );
 
     /**
      * Validates that the object 'value' is a valid class and value for this domain.
      *
      * @param task
-     * @param viewAttribute
+     * @param attributeDef
      * @param internalValue
      * @throws InvalidAttributeValueException
      */
-    void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException;
+    void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException;
 
-    boolean isNull( Task task, ViewAttribute viewAttribute, Object value );
+    boolean isNull( Task task, AttributeDef attributeDef, Object value );
 
     /**
      * Converts the internal value of the domain to a string.
      *
      * @param task
-     * @param viewAttribute
+     * @param attributeDef
      * @param internalValue
      * @param contextName
      * @return
      */
-    String   convertToString( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
-    Integer  convertToInteger( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
-    Double   convertToDouble( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
-    DateTime convertToDate( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
-    Blob     convertToBlob( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
-    Boolean  convertToBoolean( Task task, ViewAttribute viewAttribute, Object internalValue, String contextName );
+    String   convertToString( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+    Integer  convertToInteger( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+    Double   convertToDouble( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+    DateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+    Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+    Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
 
-    String   convertToString( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Integer  convertToInteger( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Double   convertToDouble( Task task, ViewAttribute viewAttribute, Object internalValue );
-    DateTime convertToDate( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Blob     convertToBlob( Task task, ViewAttribute viewAttribute, Object internalValue );
-    Boolean  convertToBoolean( Task task, ViewAttribute viewAttribute, Object internalValue );
+    String   convertToString( Task task, AttributeDef attributeDef, Object internalValue );
+    Integer  convertToInteger( Task task, AttributeDef attributeDef, Object internalValue );
+    Double   convertToDouble( Task task, AttributeDef attributeDef, Object internalValue );
+    DateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
+    Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue );
+    Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
 
-    Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand );
-    Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand );
+    Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand );
+    Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand );
 
     /**
      * Creates an empty context which will then be initialized from values in zeidon.xdm.  Used when

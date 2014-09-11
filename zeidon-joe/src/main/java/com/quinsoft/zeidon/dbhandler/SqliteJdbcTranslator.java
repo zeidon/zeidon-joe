@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * JDBC translator for Sqlite.
@@ -68,7 +68,7 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
      * @see com.quinsoft.zeidon.dbhandler.JdbcDomainTranslator#getAttributeValue(java.lang.StringBuilder, com.quinsoft.zeidon.objectdefinition.DataField, com.quinsoft.zeidon.EntityInstance)
      */
     @Override
-    public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, ViewAttribute viewAttribute, Object value)
+    public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, AttributeDef attributeDef, Object value)
     {
         if ( bindAllValues )
         {
@@ -85,12 +85,12 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
         // Sqlite stores booleans as integers.
         if ( domain instanceof BooleanDomain )
         {
-            Object b = domain.convertExternalValue( getTask(), viewAttribute, null, value );
+            Object b = domain.convertExternalValue( getTask(), attributeDef, null, value );
             buffer.append( (Boolean) b ? "1" : "0" );
             return true;
         }
 
-        return super.appendSqlValue( stmt, buffer, domain, viewAttribute, value );
+        return super.appendSqlValue( stmt, buffer, domain, attributeDef, value );
     }
 
 }

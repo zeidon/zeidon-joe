@@ -27,7 +27,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
@@ -81,7 +81,7 @@ public class StringDomain extends AbstractDomain
     }
     
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue instanceof View )
         {
@@ -93,47 +93,47 @@ public class StringDomain extends AbstractDomain
     }
     
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         // It better be a string.
         if ( ! ( internalValue instanceof String ) )
-            throw new InvalidAttributeValueException( viewAttribute, internalValue, "Value must be a string" );
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "Value must be a string" );
         
         String string = checkNullString( internalValue );
             
         if ( string != null )
         {
             // If the max length is specified for the attribute, use it instead of the domain.
-            if ( viewAttribute.getLength() != null )
+            if ( attributeDef.getLength() != null )
             {
-                if ( string.length() > viewAttribute.getLength() )
-                     throw new InvalidAttributeValueException( viewAttribute, internalValue,
+                if ( string.length() > attributeDef.getLength() )
+                     throw new InvalidAttributeValueException( attributeDef, internalValue,
                                                                 "Max length of %d exceeded.  Length = %d",
-                                                                viewAttribute.getLength(), string.length() );
+                                                                attributeDef.getLength(), string.length() );
             }
             else
             // Use the default domain lth.
             if ( string.length() > maxLth )
-                throw new InvalidAttributeValueException( viewAttribute, internalValue,
+                throw new InvalidAttributeValueException( attributeDef, internalValue,
                                                            "Max length of %d exceeded.  Domain length = %d",
                                                            maxLth, string.length() );
         }
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         return checkNullString( internalValue );
     }
     
     @Override
-    public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         return Integer.parseInt( (String) internalValue );
     }
 
     @Override
-    public Double convertToDouble(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         return Double.parseDouble( (String) internalValue );
     }
@@ -143,13 +143,13 @@ public class StringDomain extends AbstractDomain
      * null before doing the comparison.
      */
     @Override
-    public int compare(Task task, ViewAttribute viewAttribute, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
-        Object value = convertExternalValue( task, viewAttribute, null, externalValue );
+        Object value = convertExternalValue( task, attributeDef, null, externalValue );
         String s1 = checkNullString( internalValue );
         String s2 = checkNullString( value );
         
-        Integer rc = compareNull( task, viewAttribute, s1, s2);
+        Integer rc = compareNull( task, attributeDef, s1, s2);
         if ( rc != null )
             return rc;
 
@@ -162,13 +162,13 @@ public class StringDomain extends AbstractDomain
     }
     
     @Override
-    public boolean isNull( Task task, ViewAttribute viewAttribute, Object value )
+    public boolean isNull( Task task, AttributeDef attributeDef, Object value )
     {
         if ( value == null )  // Null values are always null (duh).
             return true;
         
         if ( value instanceof String &&
-             viewAttribute.getEntityDef().getViewOd().getApplication().nullStringEqualsEmptyString() &&
+             attributeDef.getEntityDef().getViewOd().getApplication().nullStringEqualsEmptyString() &&
              StringUtils.isBlank( (String) value ) )
         {
             return true;

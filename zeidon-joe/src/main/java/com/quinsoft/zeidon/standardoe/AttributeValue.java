@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
@@ -41,21 +41,21 @@ import com.quinsoft.zeidon.utils.JoeUtils;
 class AttributeValue
 {
     /**
-     * The ViewAttribute that created this AttributeInstance.  This is used *only* for
+     * The AttributeDef that created this AttributeInstance.  This is used *only* for
      * debugging and to supply the ER attribute token.
      */
-    private final ViewAttribute createAttribute;
+    private final AttributeDef createAttribute;
     private final Domain        domain;
     private boolean             updated;     // Updated?
     private volatile Object     attributeValue;
 
-    AttributeValue( ViewAttribute viewAttribute )
+    AttributeValue( AttributeDef attributeDef )
     {
-        // We can't save viewAttribute as part of this attribute instance because it might
+        // We can't save attributeDef as part of this attribute instance because it might
         // be linked with a different entity.  Linked attribute instances can have
         // different view attributes.  They should have the same:
-        this.domain = viewAttribute.getDomain();
-        createAttribute = viewAttribute;
+        this.domain = attributeDef.getDomain();
+        createAttribute = attributeDef;
     }
 
     /**
@@ -67,59 +67,59 @@ class AttributeValue
         return attributeValue;
     }
 
-    String getString( Task task, ViewAttribute viewAttribute, String contextName )
+    String getString( Task task, AttributeDef attributeDef, String contextName )
     {
-        return domain.convertToString( task, viewAttribute, getInternalValue(), contextName );
+        return domain.convertToString( task, attributeDef, getInternalValue(), contextName );
     }
 
-    String getString( Task task, ViewAttribute viewAttribute )
+    String getString( Task task, AttributeDef attributeDef )
     {
-        return domain.convertToString( task, viewAttribute, getInternalValue() );
+        return domain.convertToString( task, attributeDef, getInternalValue() );
     }
 
-    Integer getInteger( Task task, ViewAttribute viewAttribute, String contextName )
+    Integer getInteger( Task task, AttributeDef attributeDef, String contextName )
     {
-        return domain.convertToInteger( task, viewAttribute, getInternalValue(), contextName );
+        return domain.convertToInteger( task, attributeDef, getInternalValue(), contextName );
     }
 
-    Integer getInteger( Task task, ViewAttribute viewAttribute )
+    Integer getInteger( Task task, AttributeDef attributeDef )
     {
-        return domain.convertToInteger( task, viewAttribute, getInternalValue() );
+        return domain.convertToInteger( task, attributeDef, getInternalValue() );
     }
 
-    Double getDouble( Task task, ViewAttribute viewAttribute, String contextName )
+    Double getDouble( Task task, AttributeDef attributeDef, String contextName )
     {
-        return domain.convertToDouble( task, viewAttribute, getInternalValue(), contextName );
+        return domain.convertToDouble( task, attributeDef, getInternalValue(), contextName );
     }
 
-    Double getDouble( Task task, ViewAttribute viewAttribute )
+    Double getDouble( Task task, AttributeDef attributeDef )
     {
-        return domain.convertToDouble( task, viewAttribute, getInternalValue() );
+        return domain.convertToDouble( task, attributeDef, getInternalValue() );
     }
 
-    Boolean getBoolean( Task task, ViewAttribute viewAttribute, String contextName )
+    Boolean getBoolean( Task task, AttributeDef attributeDef, String contextName )
     {
-        return domain.convertToBoolean( task, viewAttribute, getInternalValue(), contextName );
+        return domain.convertToBoolean( task, attributeDef, getInternalValue(), contextName );
     }
 
-    Boolean getBoolean( Task task, ViewAttribute viewAttribute )
+    Boolean getBoolean( Task task, AttributeDef attributeDef )
     {
-        return domain.convertToBoolean( task, viewAttribute, getInternalValue() );
+        return domain.convertToBoolean( task, attributeDef, getInternalValue() );
     }
 
-    DateTime getDateTime( Task task, ViewAttribute viewAttribute, String contextName )
+    DateTime getDateTime( Task task, AttributeDef attributeDef, String contextName )
     {
-        return domain.convertToDate( task, viewAttribute, getInternalValue(), contextName );
+        return domain.convertToDate( task, attributeDef, getInternalValue(), contextName );
     }
 
-    DateTime getDateTime( Task task, ViewAttribute viewAttribute )
+    DateTime getDateTime( Task task, AttributeDef attributeDef )
     {
-        return domain.convertToDate( task, viewAttribute, getInternalValue() );
+        return domain.convertToDate( task, attributeDef, getInternalValue() );
     }
 
-    Blob getBlob( Task task, ViewAttribute viewAttribute )
+    Blob getBlob( Task task, AttributeDef attributeDef )
     {
-        return domain.convertToBlob( task, viewAttribute, getInternalValue() );
+        return domain.convertToBlob( task, attributeDef, getInternalValue() );
     }
 
     void setUpdated( boolean value )
@@ -127,10 +127,10 @@ class AttributeValue
         updated = value;
     }
 
-    private boolean areEqual( Task task, ViewAttribute viewAttribute, Object value )
+    private boolean areEqual( Task task, AttributeDef attributeDef, Object value )
     {
-        if ( isNull( task, viewAttribute ) )
-            return domain.isNull( task, viewAttribute, value );
+        if ( isNull( task, attributeDef ) )
+            return domain.isNull( task, attributeDef, value );
 
         return getInternalValue().equals( value );
     }
@@ -142,31 +142,31 @@ class AttributeValue
      *
      * @return True if the value was changed, false otherwise.
      */
-    boolean setInternalValue( TaskImpl task, ViewAttribute viewAttribute, Object newValue, boolean setIncremental )
+    boolean setInternalValue( TaskImpl task, AttributeDef attributeDef, Object newValue, boolean setIncremental )
     {
-        assert createAttribute.getErAttributeToken().equals( viewAttribute.getErAttributeToken() );
+        assert createAttribute.getErAttributeToken().equals( attributeDef.getErAttributeToken() );
 
-        if ( areEqual( task, viewAttribute, newValue ) )
+        if ( areEqual( task, attributeDef, newValue ) )
             return false;
 
         try
         {
-            if ( domain.isNull( task, viewAttribute, newValue ) )
+            if ( domain.isNull( task, attributeDef, newValue ) )
             {
-                if ( viewAttribute.isRequired() )
-                    throw new InvalidAttributeValueException( viewAttribute, newValue, "Attribute is required" );
+                if ( attributeDef.isRequired() )
+                    throw new InvalidAttributeValueException( attributeDef, newValue, "Attribute is required" );
             }
             else
-                domain.validateInternalValue( task, viewAttribute, newValue );
+                domain.validateInternalValue( task, attributeDef, newValue );
         }
         catch ( Throwable e )
         {
-            throw ZeidonException.wrapException( e ).prependViewAttribute( viewAttribute );
+            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
         }
 
-        if ( viewAttribute.isDebugChange() )
+        if ( attributeDef.isDebugChange() )
         {
-            String msg = String.format( "Changing attribute %s to %s", viewAttribute, newValue );
+            String msg = String.format( "Changing attribute %s to %s", attributeDef, newValue );
             JoeUtils.sysMessageBox( "Changing an attribute", msg );
         }
 
@@ -180,11 +180,11 @@ class AttributeValue
     /**
      *
      * @param task
-     * @param viewAttribute - Needed for error processing.
+     * @param attributeDef - Needed for error processing.
      * @param newValue
      * @return
      */
-    boolean set( TaskImpl task, ViewAttribute viewAttribute, Object newValue, String contextName )
+    boolean set( TaskImpl task, AttributeDef attributeDef, Object newValue, String contextName )
     {
         Object o;
         try
@@ -192,37 +192,37 @@ class AttributeValue
             if ( newValue == null )
                 o = null;
             else
-                o = domain.convertExternalValue( task, viewAttribute, contextName, newValue );
+                o = domain.convertExternalValue( task, attributeDef, contextName, newValue );
         }
         catch ( Throwable t )
         {
             throw ZeidonException.wrapException( t )
                                  .prependMessage( "New value = %s\nDomain = %s\nContext = %s", newValue, domain, contextName )
-                                 .prependViewAttribute( viewAttribute );
+                                 .prependAttributeDef( attributeDef );
         }
 
-        return setInternalValue( task, viewAttribute, o, true );
+        return setInternalValue( task, attributeDef, o, true );
     }
 
-    Object convertInternalValue( Task task, ViewAttribute viewAttribute, Object value )
+    Object convertInternalValue( Task task, AttributeDef attributeDef, Object value )
     {
         try
         {
-            Object newValue = domain.convertInternalValue( task, viewAttribute, value );
-            if ( domain.isNull(task, viewAttribute, newValue) )
+            Object newValue = domain.convertInternalValue( task, attributeDef, value );
+            if ( domain.isNull(task, attributeDef, newValue) )
             {
-                if ( viewAttribute.isRequired() )
-                    throw new InvalidAttributeValueException( viewAttribute, newValue, "Attribute is required" );
+                if ( attributeDef.isRequired() )
+                    throw new InvalidAttributeValueException( attributeDef, newValue, "Attribute is required" );
             }
             else
-                domain.validateInternalValue( task, viewAttribute, newValue );
+                domain.validateInternalValue( task, attributeDef, newValue );
 
             return newValue;
         }
         catch ( Throwable t )
         {
             throw ZeidonException.prependMessage( t, "New value = %s\nDomain = %s", value, domain )
-                                 .prependViewAttribute( viewAttribute );
+                                 .prependAttributeDef( attributeDef );
         }
     }
 
@@ -244,21 +244,21 @@ class AttributeValue
         return flags;
     }
 
-    boolean isNull(Task task, ViewAttribute viewAttribute)
+    boolean isNull(Task task, AttributeDef attributeDef)
     {
         Object value = getInternalValue();
-        return domain.isNull( task, viewAttribute, value );
+        return domain.isNull( task, attributeDef, value );
     }
 
-    int compare(TaskImpl task, ViewAttribute viewAttribute, Object o)
+    int compare(TaskImpl task, AttributeDef attributeDef, Object o)
     {
         try
         {
-            return domain.compare( task, viewAttribute, this.getInternalValue(), o );
+            return domain.compare( task, attributeDef, this.getInternalValue(), o );
         }
         catch ( Throwable t )
         {
-            throw ZeidonException.wrapException( t ).prependViewAttribute( viewAttribute );
+            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
         }
     }
 
@@ -273,17 +273,17 @@ class AttributeValue
         return attributeValue == null ? "NULL" : attributeValue.toString();
     }
 
-    Object addToAttribute( TaskImpl task, ViewAttribute viewAttribute, Object value )
+    Object addToAttribute( TaskImpl task, AttributeDef attributeDef, Object value )
     {
-        Object newValue = domain.addToAttribute( task, viewAttribute, getInternalValue(), value );
-        setInternalValue( task, viewAttribute, newValue, true );
+        Object newValue = domain.addToAttribute( task, attributeDef, getInternalValue(), value );
+        setInternalValue( task, attributeDef, newValue, true );
         return newValue;
     }
 
-    Object multiplyAttribute( TaskImpl task, ViewAttribute viewAttribute, Object value )
+    Object multiplyAttribute( TaskImpl task, AttributeDef attributeDef, Object value )
     {
-        Object newValue = domain.multiplyAttribute( task, viewAttribute, getInternalValue(), value );
-        setInternalValue( task, viewAttribute, newValue, true );
+        Object newValue = domain.multiplyAttribute( task, attributeDef, getInternalValue(), value );
+        setInternalValue( task, attributeDef, newValue, true );
         return newValue;
     }
 

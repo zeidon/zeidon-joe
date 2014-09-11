@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -204,17 +204,17 @@ class ActivateOiFromXmlStream implements StreamReader
         public void endElement( String uri, String localName, String qName ) throws SAXException
         {
             // Is the element an attribute name?
-            ViewAttribute viewAttribute = currentEntityDef.getAttribute( qName, false );
-            if ( viewAttribute != null )
+            AttributeDef attributeDef = currentEntityDef.getAttribute( qName, false );
+            if ( attributeDef != null )
             {
-                EntityInstanceImpl ei = view.cursor( viewAttribute.getEntityDef() ).getEntityInstance();
-                ei.setInternalAttributeValue( viewAttribute, characterBuffer.toString(), false );
+                EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
+                ei.setInternalAttributeValue( attributeDef, characterBuffer.toString(), false );
                 characterBuffer = null;
 
                 if ( incremental )
                 {
                     Attributes attributes = attributeAttributes.pop();
-                    ei.setAttributeUpdated( viewAttribute, isYes( attributes.getValue( "Updated" ) ) );
+                    ei.setAttributeUpdated( attributeDef, isYes( attributes.getValue( "Updated" ) ) );
                 }
 
                 return;

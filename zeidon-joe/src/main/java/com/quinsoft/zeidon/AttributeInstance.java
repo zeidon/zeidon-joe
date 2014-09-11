@@ -20,7 +20,7 @@ package com.quinsoft.zeidon;
 
 import org.joda.time.DateTime;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author dgc
@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
  */
 public interface AttributeInstance
 {
-    ViewAttribute getViewAttribute();
+    AttributeDef getAttributeDef();
     EntityInstance getEntityInstance();
 
     String getString();

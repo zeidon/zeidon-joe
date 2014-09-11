@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -40,7 +40,7 @@ public class LongDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	if ( externalValue == null )
     		return null;
@@ -61,45 +61,45 @@ public class LongDomain extends AbstractNumericDomain
         	}
         	catch( Exception e )
         	{
-                throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Long", 
+                throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Long", 
                                                           externalValue.getClass().getName() );        	
         	}
             return num;
         }
         
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Long", 
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Long", 
                                                   externalValue.getClass().getName() );
     }
     
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof Long )
             return;
         
-        throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for LongDomain", 
+        throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for LongDomain", 
                                                   internalValue.getClass().getName() );
     }
 
     @Override
-    public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Long num = (Long) convertExternalValue( task, viewAttribute, null, operand );
+        Long num = (Long) convertExternalValue( task, attributeDef, null, operand );
         Long value = (Long) currentValue;
         return value + num;
     }
 
     @Override
-    public Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Long num = (Long) convertExternalValue( task, viewAttribute, null, operand );
+        Long num = (Long) convertExternalValue( task, attributeDef, null, operand );
         Long value = (Long) currentValue;
         return value * num;
     }
 
    
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
      	if ( internalValue == null )
     		return null;

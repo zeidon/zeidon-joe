@@ -34,7 +34,7 @@ public class DataField implements PortableFileAttributeHandler
     private String        name;
     private String        type;
     private int           token;
-    private ViewAttribute viewAttribute;
+    private AttributeDef attributeDef;
     
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler#setAttribute(com.quinsoft.zeidon.utils.PortableFileReader)
@@ -76,19 +76,19 @@ public class DataField implements PortableFileAttributeHandler
         return token;
     }
 
-    public ViewAttribute getViewAttribute()
+    public AttributeDef getAttributeDef()
     {
-        return viewAttribute;
+        return attributeDef;
     }
 
-    void setViewAttribute(ViewAttribute viewAttribute)
+    void setAttributeDef(AttributeDef attributeDef)
     {
-        this.viewAttribute = viewAttribute;
+        this.attributeDef = attributeDef;
     }
     
     @Override
     public String toString()
     {
-        return viewAttribute.toString() + "/" + name;
+        return attributeDef.toString() + "/" + name;
     }
 }

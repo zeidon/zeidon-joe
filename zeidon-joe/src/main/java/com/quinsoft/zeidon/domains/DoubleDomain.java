@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
@@ -61,38 +61,38 @@ public class DoubleDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	if ( externalValue == null )
     		return null;
 
         DomainContext context = getContext( task, contextName );
-        return context.convertExternalValue( task, viewAttribute, externalValue );
+        return context.convertExternalValue( task, attributeDef, externalValue );
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue )
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue )
         throws InvalidAttributeValueException
     {
         if ( ! ( internalValue instanceof Double ) )
-            throw new InvalidAttributeValueException( viewAttribute, internalValue, "'%s' is an invalid Object for DoubleDomain",
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for DoubleDomain",
                                                       internalValue.getClass().getName() );
 
-        super.validateInternalValue( task, viewAttribute, internalValue );
+        super.validateInternalValue( task, attributeDef, internalValue );
     }
 
     @Override
-    public Object addToAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Double num = (Double) convertExternalValue( task, viewAttribute, null, operand );
+        Double num = (Double) convertExternalValue( task, attributeDef, null, operand );
         Double value = (Double) currentValue;
         return value + num;
     }
 
     @Override
-    public Object multiplyAttribute( Task task, ViewAttribute viewAttribute, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Double num = (Double) convertExternalValue( task, viewAttribute, null, operand );
+        Double num = (Double) convertExternalValue( task, attributeDef, null, operand );
         Double value = (Double) currentValue;
         return value * num;
     }
@@ -142,14 +142,14 @@ public class DoubleDomain extends AbstractNumericDomain
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         DomainContext context = getContext( contextName );
-        return context.convertToString( task, viewAttribute, internalValue );
+        return context.convertToString( task, attributeDef, internalValue );
     }
 
     @Override
-    public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
             return null;
@@ -187,7 +187,7 @@ public class DoubleDomain extends AbstractNumericDomain
         }
 
         @Override
-        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
          	if ( internalValue == null )
         		return null;
@@ -200,7 +200,7 @@ public class DoubleDomain extends AbstractNumericDomain
         }
 
         @Override
-        public Object convertExternalValue( Task task, ViewAttribute viewAttribute, Object externalValue )
+        public Object convertExternalValue( Task task, AttributeDef attributeDef, Object externalValue )
                                 throws InvalidAttributeValueException
         {
             if ( externalValue instanceof Number )
@@ -250,13 +250,13 @@ public class DoubleDomain extends AbstractNumericDomain
                 }
                 catch ( Exception e )
                 {
-                    throw new InvalidAttributeValueException( viewAttribute, str, e.getMessage() )
+                    throw new InvalidAttributeValueException( attributeDef, str, e.getMessage() )
                             .setCause( e );
                 }
 
                 int idx = Math.max( ps.getErrorIndex(), ps.getIndex() );
                 if ( idx != str.length() ) { throw new InvalidAttributeValueException(
-                                                                                       viewAttribute,
+                                                                                       attributeDef,
                                                                                        str,
                                                                                        "Error parsing '"
                                                                                                + str
@@ -266,7 +266,7 @@ public class DoubleDomain extends AbstractNumericDomain
                 return d;
             }
 
-            throw new InvalidAttributeValueException( viewAttribute, externalValue,
+            throw new InvalidAttributeValueException( attributeDef, externalValue,
                                                       "Can't convert '%s' to Double", externalValue
                                                               .getClass().getName() );
         }

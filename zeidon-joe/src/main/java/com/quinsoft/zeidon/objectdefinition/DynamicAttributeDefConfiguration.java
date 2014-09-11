@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.ZeidonException;
  * @author dgc
  *
  */
-public class DynamicViewAttributeConfiguration
+public class DynamicAttributeDefConfiguration
 {
     private String attributeName;
     private String domainName = "Text";
@@ -42,7 +42,7 @@ public class DynamicViewAttributeConfiguration
      */
     private boolean canExist = false;
 
-    public DynamicViewAttributeConfiguration()
+    public DynamicAttributeDefConfiguration()
     {
     }
 
@@ -51,7 +51,7 @@ public class DynamicViewAttributeConfiguration
         return canExist;
     }
 
-    public DynamicViewAttributeConfiguration setCanExist( boolean canExist )
+    public DynamicAttributeDefConfiguration setCanExist( boolean canExist )
     {
         this.canExist = canExist;
         return this;
@@ -69,7 +69,7 @@ public class DynamicViewAttributeConfiguration
      * @param attributeName the attributeName to set
      * @return
      */
-    public DynamicViewAttributeConfiguration setAttributeName( String attributeName )
+    public DynamicAttributeDefConfiguration setAttributeName( String attributeName )
     {
         if ( StringUtils.isBlank( attributeName ) )
             throw new ZeidonException( "attributeName is required" );
@@ -90,7 +90,7 @@ public class DynamicViewAttributeConfiguration
      * @param domainName the domainName to set
      * @return
      */
-    public DynamicViewAttributeConfiguration setDomainName( String domainName )
+    public DynamicAttributeDefConfiguration setDomainName( String domainName )
     {
         this.domainName = domainName;
         return this;

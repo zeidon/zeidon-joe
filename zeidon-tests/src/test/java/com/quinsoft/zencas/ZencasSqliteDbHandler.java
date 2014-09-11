@@ -10,7 +10,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.dbhandler.SqliteJdbcHandler;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author dgc
@@ -26,11 +26,11 @@ public class ZencasSqliteDbHandler extends SqliteJdbcHandler
     }
 
     @Override
-    protected void setAttribute( EntityInstance entityInstance, ViewAttribute viewAttrib, Object value ) throws SQLException
+    protected void setAttribute( EntityInstance entityInstance, AttributeDef AttributeDef, Object value ) throws SQLException
     {
         try
         {
-            super.setAttribute( entityInstance, viewAttrib, value );
+            super.setAttribute( entityInstance, AttributeDef, value );
         }
         catch ( InvalidAttributeValueException e )
         {

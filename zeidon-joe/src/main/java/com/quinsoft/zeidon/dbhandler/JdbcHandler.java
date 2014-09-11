@@ -51,7 +51,7 @@ import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
 
@@ -149,18 +149,18 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    protected void getSqlValue(SqlStatement stmt, Domain domain, ViewAttribute viewAttribute, StringBuilder buffer, Object value)
+    protected void getSqlValue(SqlStatement stmt, Domain domain, AttributeDef attributeDef, StringBuilder buffer, Object value)
     {
         try
         {
-            if ( getTranslator().appendSqlValue( stmt, buffer, domain, viewAttribute, value ) )
+            if ( getTranslator().appendSqlValue( stmt, buffer, domain, attributeDef, value ) )
                 return;
 
             throw new ZeidonException("JdbcDomainTranslator did not correctly translate an attribute value" );
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e ).prependViewAttribute( viewAttribute ).appendMessage( "Value = %s", value );
+            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef ).appendMessage( "Value = %s", value );
         }
     }
 
@@ -236,8 +236,8 @@ public class JdbcHandler extends AbstractSqlHandler
                 break;
             }
 
-            List<ViewAttribute> keys = ve.getKeys();
-            for ( ViewAttribute key : keys )
+            List<AttributeDef> keys = ve.getKeys();
+            for ( AttributeDef key : keys )
             {
                 DataField dataField = dataRecord.getDataField( key );
                 Integer columnIdx = stmt.getColumns().get( dataField );
@@ -267,8 +267,8 @@ public class JdbcHandler extends AbstractSqlHandler
         DataRecord dataRecord = entityDef.getDataRecord();
         assert dataRecord != null;
 
-        List<ViewAttribute> keys = entityDef.getKeys();
-        for ( ViewAttribute key : keys )
+        List<AttributeDef> keys = entityDef.getKeys();
+        for ( AttributeDef key : keys )
         {
             DataField dataField = dataRecord.getDataField( key );
             Integer columnIdx = stmt.getColumns().get( dataField );
@@ -380,16 +380,16 @@ public class JdbcHandler extends AbstractSqlHandler
      * Sets the attribute using the value retrieved from the DB.
      *
      * @param entityInstance
-     * @param viewAttrib
+     * @param AttributeDef
      * @param value
      * @throws SQLException
      */
-    protected void setAttribute( EntityInstance entityInstance, ViewAttribute viewAttrib, Object value ) throws SQLException
+    protected void setAttribute( EntityInstance entityInstance, AttributeDef AttributeDef, Object value ) throws SQLException
     {
-        Object convertedValue = getTranslator().convertDbValue( viewAttrib.getDomain(), value );
-        entityInstance.getAttribute( viewAttrib).setInternalValue( convertedValue, false );
+        Object convertedValue = getTranslator().convertDbValue( AttributeDef.getDomain(), value );
+        entityInstance.getAttribute( AttributeDef).setInternalValue( convertedValue, false );
 
-        assert ! entityInstance.isAttributeUpdated( viewAttrib ) : "Attribute is updated " + viewAttrib.toString();
+        assert ! entityInstance.isAttributeUpdated( AttributeDef ) : "Attribute is updated " + AttributeDef.toString();
     }
 
     /**
@@ -425,11 +425,11 @@ public class JdbcHandler extends AbstractSqlHandler
                     Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
                     if ( value == null )
                     {
-                        ViewAttribute viewAttribute = dataField.getViewAttribute();
-                        if ( viewAttribute.getInitialValue() != null )
+                        AttributeDef attributeDef = dataField.getAttributeDef();
+                        if ( attributeDef.getInitialValue() != null )
                         {
                             view.dblog().warn( "Attribute %s is null in DB but has Initial Value '%s' which will be ignored",
-                                               viewAttribute.toString(), viewAttribute.getInitialValue() );
+                                               attributeDef.toString(), attributeDef.getInitialValue() );
                         }
 
                         continue; // Value is null so don't bother setting it.
@@ -500,18 +500,18 @@ public class JdbcHandler extends AbstractSqlHandler
 //                            break;  // This entity was relinked with another entity so we can stop loading it.
                     }
 
-                    ViewAttribute viewAttrib = dataField.getViewAttribute();
+                    AttributeDef AttributeDef = dataField.getAttributeDef();
 
-                    // If the viewAttrib does not belong to entityDef then it's a field from a many-to-many
+                    // If the AttributeDef does not belong to entityDef then it's a field from a many-to-many
                     // relationship that was used to set the cursor and shouldn't be copied.
-                    if ( viewAttrib.getEntityDef() != entityDef )
+                    if ( AttributeDef.getEntityDef() != entityDef )
                         continue;
 
-                    setAttribute( entityInstance, viewAttrib, value );
+                    setAttribute( entityInstance, AttributeDef, value );
 
                     // Check to see if we should save this instance in the map of all loaded
                     // instances.
-                    if ( viewAttrib.isKey() && loadedInstances.containsKey( entityDef ) )
+                    if ( AttributeDef.isKey() && loadedInstances.containsKey( entityDef ) )
                     {
                         // If we have a situation where the key is already in the map then
                         // there are multiple instances of entityDef.  This can happen if
@@ -528,7 +528,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 catch ( Exception e )
                 {
                     throw ZeidonException.wrapException( e )
-                                         .prependViewAttribute( dataField.getViewAttribute() )
+                                         .prependAttributeDef( dataField.getAttributeDef() )
                                          .prependMessage( "Column = %s.%s", dataRecord.getRecordName(), dataField.getName() );
                 }
             } // for each DataField...

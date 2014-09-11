@@ -14,7 +14,7 @@ import com.quinsoft.zeidon.objectdefinition._
  * @author dgc
  *
  */
-abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefinition.EntityDef )
+abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
                         extends Dynamic {
 
     /**
@@ -29,8 +29,8 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.
      */
     def selectDynamic( attributeName: String): AttributeInstance = {
-        val jviewAttribute = jviewEntity.getAttribute( attributeName )
-        new AttributeInstance( getEntityInstance.getAttribute( jviewAttribute ) )
+        val jattributeDef = jentityDef.getAttribute( attributeName )
+        new AttributeInstance( getEntityInstance.getAttribute( jattributeDef ) )
     }
 
     /**
@@ -41,22 +41,22 @@ abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefini
         if ( value.isInstanceOf[ AttributeInstance ] )
             newValue = value.asInstanceOf[ AttributeInstance ].jattributeInstance.getValue
 
-        val jviewAttribute = jviewEntity.getAttribute( attributeName )
-        return setValue( jviewAttribute, newValue )
+        val jattributeDef = jentityDef.getAttribute( attributeName )
+        return setValue( jattributeDef, newValue )
     }
 
-    protected[scala] def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
-        getEntityInstance.getAttribute( jviewAttribute ).setValue( value )
+    protected[scala] def setValue( jattributeDef: AttributeDef, value: Any ): Any = {
+        getEntityInstance.getAttribute( jattributeDef ).setValue( value )
         return value
     }
 
     def getAttribute( attribName: String ): AttributeInstance = {
-        val jviewAttribute = jviewEntity.getAttribute( attribName )
-        getAttribute(jviewAttribute)
+        val jattributeDef = jentityDef.getAttribute( attribName )
+        getAttribute(jattributeDef)
     }
 
-    protected[scala] def getAttribute( jviewAttribute: ViewAttribute ): AttributeInstance = {
-        new AttributeInstance( getEntityInstance.getAttribute( jviewAttribute ) )
+    protected[scala] def getAttribute( jattributeDef: AttributeDef ): AttributeInstance = {
+        new AttributeInstance( getEntityInstance.getAttribute( jattributeDef ) )
     }
 
     def attributes = new AttributeIterator( getEntityInstance )

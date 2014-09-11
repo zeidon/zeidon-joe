@@ -30,7 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 import difflib.Delta;
 import difflib.Delta.TYPE;
@@ -172,11 +172,11 @@ class ObjectInstanceComparer
         for ( EntityInstanceImpl ei : oi.getEntities( false ) )
         {
             list.add( ei.toString() + entityFlags( ei ) );
-            for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
+            for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
-                String s = String.format( "   %s: %s %s", viewAttribute.getName(), 
-                                                            ei.getStringFromAttribute( viewAttribute ),
-                                                            ei.isAttributeUpdated( viewAttribute ) ? "(Up)" : "(Up)" );
+                String s = String.format( "   %s: %s %s", attributeDef.getName(), 
+                                                            ei.getStringFromAttribute( attributeDef ),
+                                                            ei.isAttributeUpdated( attributeDef ) ? "(Up)" : "(Up)" );
                 list.add( s );
             }
         }

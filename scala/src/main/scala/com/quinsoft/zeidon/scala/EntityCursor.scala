@@ -21,7 +21,7 @@ class EntityCursor( private[this] val view: View,
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
         val instance = jentityCursor.getEntityInstance()
         if ( instance == null )
-            throw new ZeidonException( "Cursor for '%s' is null.  Did you forget to create the entity?", jviewEntity.getName() )
+            throw new ZeidonException( "Cursor for '%s' is null.  Did you forget to create the entity?", jentityDef.getName() )
         instance
     }
 
@@ -117,17 +117,17 @@ class EntityCursor( private[this] val view: View,
         }
     }
 
-    class HashSetter extends AbstractEntity( jviewEntity ) {
+    class HashSetter extends AbstractEntity( jentityDef ) {
         var rc: Boolean = false
 
         def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
 
-        override def setValue( jviewAttribute: ViewAttribute, value: Any ): Any = {
-            if ( jviewAttribute.getHashKeyType() == AttributeHashKeyType.NONE )
+        override def setValue( jattributeDef: AttributeDef, value: Any ): Any = {
+            if ( jattributeDef.getHashKeyType() == AttributeHashKeyType.NONE )
                 throw new ZeidonException( "Cursor.set() can only be used on attributes defined with a hashkey" )
-                                  .prependViewAttribute( jviewAttribute )
+                                  .prependAttributeDef( jattributeDef )
 
-            val attributeName = jviewAttribute.getName()
+            val attributeName = jattributeDef.getName()
             rc = {
                 if ( value.isInstanceOf[ AttributeInstance ] )
                     // If the value is of type AttributeInstance then convert it to an internal value.

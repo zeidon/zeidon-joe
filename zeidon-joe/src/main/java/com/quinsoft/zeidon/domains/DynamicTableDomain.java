@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
@@ -140,53 +140,53 @@ public class DynamicTableDomain extends AbstractTableDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
             throws InvalidAttributeValueException
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertExternalValue( task, viewAttribute, contextName, externalValue );
+        return super.convertExternalValue( task, attributeDef, contextName, externalValue );
     }
 
     @Override
-    public Blob convertToBlob(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertToBlob( task, viewAttribute, internalValue, contextName );
+        return super.convertToBlob( task, attributeDef, internalValue, contextName );
     }
 
     @Override
-    public DateTime convertToDate(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertToDate( task, viewAttribute, internalValue, contextName );
+        return super.convertToDate( task, attributeDef, internalValue, contextName );
     }
 
     @Override
-    public Double convertToDouble(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertToDouble( task, viewAttribute, internalValue, contextName );
+        return super.convertToDouble( task, attributeDef, internalValue, contextName );
     }
 
     @Override
-    public Integer convertToInteger(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertToInteger( task, viewAttribute, internalValue, contextName );
+        return super.convertToInteger( task, attributeDef, internalValue, contextName );
     }
 
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertToString( task, viewAttribute, internalValue, contextName );
+        return super.convertToString( task, attributeDef, internalValue, contextName );
     }
 
     @Override
-    public void validateInternalValue(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public void validateInternalValue(Task task, AttributeDef attributeDef, Object internalValue)
             throws InvalidAttributeValueException
     {
         loadDomainView( task, getContext( task, null ) );
-        super.validateInternalValue( task, viewAttribute, internalValue );
+        super.validateInternalValue( task, attributeDef, internalValue );
     }
 }

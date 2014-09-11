@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentMap;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -195,44 +195,44 @@ class AttributeListInstance
         linkedInstances = null;
     }
 
-    private Map<Long, AttributeValue> getInstanceMap( ViewAttribute viewAttribute )
+    private Map<Long, AttributeValue> getInstanceMap( AttributeDef attributeDef )
     {
-        if ( viewAttribute.isPersistent() )
+        if ( attributeDef.isPersistent() )
             return persistentAttributes;
 
         return workAttributes;
     }
 
     /**
-     * Validate that the entity instance for viewAttribute matches getEntityDef().  Check
+     * Validate that the entity instance for attributeDef matches getEntityDef().  Check
      * to see if this is a recursive entity and if so return the
-     * @param viewAttribute
+     * @param attributeDef
      * @return
      */
-    private ViewAttribute validateMatchingEntities( ViewAttribute viewAttribute )
+    private AttributeDef validateMatchingEntities( AttributeDef attributeDef )
     {
-        if ( viewAttribute.getEntityDef() == getEntityDef() )
-            return viewAttribute;
+        if ( attributeDef.getEntityDef() == getEntityDef() )
+            return attributeDef;
 
-        // If viewAttribute points to a recursive child, find the parent attribute.
+        // If attributeDef points to a recursive child, find the parent attribute.
         // TODO: Do we have to do this for the reciprocal situation as well?
-        if ( viewAttribute.getEntityDef() == getEntityDef().getRecursiveParentEntityDef() )
+        if ( attributeDef.getEntityDef() == getEntityDef().getRecursiveParentEntityDef() )
         {
-            // Find the attribute in getEntityDef() that matches viewAttribute.
-            for ( ViewAttribute va : getEntityDef().getAttributes() )
+            // Find the attribute in getEntityDef() that matches attributeDef.
+            for ( AttributeDef va : getEntityDef().getAttributes() )
             {
-                if ( va.getErAttributeToken().equals( viewAttribute.getErAttributeToken() ) )
+                if ( va.getErAttributeToken().equals( attributeDef.getErAttributeToken() ) )
                     return va;
             }
         }
 
-        throw new ZeidonException( "Mismatching entities.  ViewAttribEntity: %s, EntityDef: %s",
-                                    viewAttribute.getEntityDef(), getEntityDef() );
+        throw new ZeidonException( "Mismatching entities.  AttributeDefEntity: %s, EntityDef: %s",
+                                    attributeDef.getEntityDef(), getEntityDef() );
     }
 
-    AttributeValue getAttribute( ViewAttribute viewAttribute )
+    AttributeValue getAttribute( AttributeDef attributeDef )
     {
-        ViewAttribute va = validateMatchingEntities( viewAttribute );
+        AttributeDef va = validateMatchingEntities( attributeDef );
 
         Map<Long, AttributeValue> attributes = getInstanceMap( va );
         if ( ! attributes.containsKey( va.getErAttributeToken() ) )
@@ -253,15 +253,15 @@ class AttributeListInstance
     AttributeListInstance copyAttributes( TaskImpl task, AttributeListInstance sourceList,
                                           boolean copyPersist, boolean copyUpdateFlags )
     {
-        for ( ViewAttribute viewAttrib : sourceList.getNonNullAttributeList(task) )
+        for ( AttributeDef AttributeDef : sourceList.getNonNullAttributeList(task) )
         {
-            if ( viewAttrib.isPersistent() && !copyPersist )
+            if ( AttributeDef.isPersistent() && !copyPersist )
                 continue;
 
-            AttributeValue source = sourceList.getAttribute( viewAttrib );
-            AttributeValue target = getAttribute( viewAttrib );
-            Object internalValue = sourceList.getAttribute( viewAttrib ).getInternalValue();
-            target.setInternalValue( task, viewAttrib, internalValue, true );
+            AttributeValue source = sourceList.getAttribute( AttributeDef );
+            AttributeValue target = getAttribute( AttributeDef );
+            Object internalValue = sourceList.getAttribute( AttributeDef ).getInternalValue();
+            target.setInternalValue( task, AttributeDef, internalValue, true );
 
             if ( copyUpdateFlags )
                 target.copyUpdateFlags( source );
@@ -282,14 +282,14 @@ class AttributeListInstance
      *
      * @param task TODO
      */
-    Iterable<ViewAttribute> getNonNullAttributeList(final Task task)
+    Iterable<AttributeDef> getNonNullAttributeList(final Task task)
     {
-        return new Iterable<ViewAttribute>()
+        return new Iterable<AttributeDef>()
         {
             @Override
-            public Iterator<ViewAttribute> iterator()
+            public Iterator<AttributeDef> iterator()
             {
-                return new Iterator<ViewAttribute>()
+                return new Iterator<AttributeDef>()
                 {
                     private int attributeNumber     = -1;
                     private int nextAttributeNumber = -1;
@@ -302,9 +302,9 @@ class AttributeListInstance
                             nextAttributeNumber = attributeNumber + 1;
                             while ( nextAttributeNumber < getEntityDef().getAttributeCount() )
                             {
-                                ViewAttribute viewAttribute = getEntityDef().getAttribute( nextAttributeNumber );
-                                AttributeValue attrib = getAttribute( viewAttribute );
-                                if ( ! attrib.isNull(task, viewAttribute) || attrib.isUpdated() )
+                                AttributeDef attributeDef = getEntityDef().getAttribute( nextAttributeNumber );
+                                AttributeValue attrib = getAttribute( attributeDef );
+                                if ( ! attrib.isNull(task, attributeDef) || attrib.isUpdated() )
                                     break;
 
                                 nextAttributeNumber++;
@@ -315,7 +315,7 @@ class AttributeListInstance
                     }
 
                     @Override
-                    public ViewAttribute next()
+                    public AttributeDef next()
                     {
                         attributeNumber = nextAttributeNumber;
                         return getEntityDef().getAttribute( attributeNumber );

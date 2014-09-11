@@ -28,7 +28,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * This domain handles any differences needed to deal with time.
@@ -45,23 +45,23 @@ public class TimeDomain extends DateDomain
     }
    
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
-            return StringDomain.checkNullString( viewAttribute.getDomain().getApplication(), null );
+            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
         return defaultTimeFormatter.print( (DateTime) internalValue );
     }
 
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
             return;      
     }
 /*   
     @Override
-    public Object convertExternalValue(Task task, ViewAttribute viewAttribute, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	if ( externalValue == null )
     		return null;
@@ -83,10 +83,10 @@ public class TimeDomain extends DateDomain
         if ( externalValue instanceof DateTime )
         {
             DomainContext context = getContext( task, contextName );
-            return context.convertExternalValue( task, viewAttribute, externalValue );
+            return context.convertExternalValue( task, attributeDef, externalValue );
         }
 
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, 
+        throw new InvalidAttributeValueException( attributeDef, externalValue, 
                                                   "Invalid object: Domain %s cannot convert value for context %s.",
                                                   this.getClass().getName(), contextName );
     }
@@ -108,7 +108,7 @@ public class TimeDomain extends DateDomain
         private DateTimeFormatter formatter;
         
         @Override
-        public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue)
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
@@ -117,7 +117,7 @@ public class TimeDomain extends DateDomain
         }
 
         @Override
-        public Object convertExternalValue(Task task, ViewAttribute viewAttribute, Object value) throws InvalidAttributeValueException
+        public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value) throws InvalidAttributeValueException
         {
         	if ( value == null )
         		return null;

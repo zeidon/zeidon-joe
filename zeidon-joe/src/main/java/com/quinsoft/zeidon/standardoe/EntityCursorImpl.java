@@ -45,9 +45,9 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -827,7 +827,7 @@ class EntityCursorImpl implements EntityCursor
         return getExistingInstance().isVersioned();
     }
 
-    Iterable<ViewAttribute> getNonNullAttributeList() throws NullCursorException
+    Iterable<AttributeDef> getNonNullAttributeList() throws NullCursorException
     {
         return getExistingInstance().getNonNullAttributeList();
     }
@@ -916,7 +916,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public CursorResult setFirst(ViewAttribute attribute, Object value)
+    public CursorResult setFirst(AttributeDef attribute, Object value)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .forEntityDef( getEntityDef() )
@@ -948,7 +948,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public CursorResult setFirst(ViewAttribute attribute, Object value, EntityDef scopingEntity)
+    public CursorResult setFirst(AttributeDef attribute, Object value, EntityDef scopingEntity)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .withScoping( getScopingEntityInstance( scopingEntity ) )
@@ -1029,7 +1029,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public CursorResult setNext(ViewAttribute attribute, Object value)
+    public CursorResult setNext(AttributeDef attribute, Object value)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
         						.forEntityDef( getEntityDef() )
@@ -1055,7 +1055,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public CursorResult setNext( ViewAttribute attribute, Object value, EntityDef scopingEntity)
+    public CursorResult setNext( AttributeDef attribute, Object value, EntityDef scopingEntity)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
 					        .withScoping( getScopingEntityInstance( scopingEntity ) )
@@ -1340,14 +1340,14 @@ class EntityCursorImpl implements EntityCursor
 
     private static class SortKey
     {
-        ViewAttribute viewAttrib;
+        AttributeDef AttributeDef;
         boolean       ascending;
         @SuppressWarnings("unused")
         String        context;
 
-        SortKey(ViewAttribute viewAttrib, boolean ascending, String context)
+        SortKey(AttributeDef AttributeDef, boolean ascending, String context)
         {
-            this.viewAttrib = viewAttrib;
+            this.AttributeDef = AttributeDef;
             this.ascending = ascending;
             this.context = context;
         }
@@ -1395,7 +1395,7 @@ class EntityCursorImpl implements EntityCursor
                 EntityInstanceImpl cei1 = ei1;
                 EntityInstanceImpl cei2 = ei2;
 
-                EntityDef sortEntity = key.viewAttrib.getEntityDef();
+                EntityDef sortEntity = key.AttributeDef.getEntityDef();
                 if ( cei1.getEntityDef() != sortEntity )
                 {
                     cei1 = findMatchingChild( cei1, sortEntity );
@@ -1419,14 +1419,14 @@ class EntityCursorImpl implements EntityCursor
                 if (key.context != null)
                 {
                 	// Use context for sort order.
-                	String value1 = cei1.getStringFromAttribute(key.viewAttrib,  key.context);
-                	String value2 = cei2.getStringFromAttribute(key.viewAttrib,  key.context);
+                	String value1 = cei1.getStringFromAttribute(key.AttributeDef,  key.context);
+                	String value2 = cei2.getStringFromAttribute(key.AttributeDef,  key.context);
 
                 	cmp = value1.compareTo(value2);
                 }
                 else
                 {
-                	cmp = cei1.compareAttribute( key.viewAttrib, cei2, key.viewAttrib );
+                	cmp = cei1.compareAttribute( key.AttributeDef, cei2, key.AttributeDef );
                 }
                 if ( ! key.ascending )
                     cmp = -cmp;
@@ -1469,7 +1469,7 @@ class EntityCursorImpl implements EntityCursor
                 name = s[1];
             }
 
-            ViewAttribute sortAttrib = sortEntity.getAttribute( name );
+            AttributeDef sortAttrib = sortEntity.getAttribute( name );
 
             // Look for A or D.
             boolean ascending = true;
@@ -1828,9 +1828,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public EntityInstance setAttribute(ViewAttribute viewAttribute, Object value)
+    public EntityInstance setAttribute(AttributeDef attributeDef, Object value)
     {
-        return getExistingInstance().setAttribute( viewAttribute, value );
+        return getExistingInstance().setAttribute( attributeDef, value );
     }
 
     @Override
@@ -1858,18 +1858,18 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public EntityInstance setAttribute(ViewAttribute viewAttribute, Object value, String contextName) throws InvalidAttributeValueException
+    public EntityInstance setAttribute(AttributeDef attributeDef, Object value, String contextName) throws InvalidAttributeValueException
     {
-        return getExistingInstance().setAttribute( viewAttribute, value, contextName );
+        return getExistingInstance().setAttribute( attributeDef, value, contextName );
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityInstance#setInternalAttributeValue(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.EntityInstance#setInternalAttributeValue(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public EntityInstance setInternalAttributeValue(ViewAttribute viewAttribute, Object value, boolean setIncremental) throws InvalidAttributeValueException
+    public EntityInstance setInternalAttributeValue(AttributeDef attributeDef, Object value, boolean setIncremental) throws InvalidAttributeValueException
     {
-        return getExistingInstance().setInternalAttributeValue( viewAttribute, value, setIncremental );
+        return getExistingInstance().setInternalAttributeValue( attributeDef, value, setIncremental );
     }
 
     @Override
@@ -1885,21 +1885,21 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Object getInternalAttributeValue( ViewAttribute viewAttribute )
+    public Object getInternalAttributeValue( AttributeDef attributeDef )
     {
-        return getExistingInstance( true ).getInternalAttributeValue( getView(), viewAttribute );
+        return getExistingInstance( true ).getInternalAttributeValue( getView(), attributeDef );
     }
 
     @Override
-    public String getStringFromAttribute(ViewAttribute viewAttribute)
+    public String getStringFromAttribute(AttributeDef attributeDef)
     {
-        return getExistingInstance().getStringFromAttribute( getView(), viewAttribute );
+        return getExistingInstance().getStringFromAttribute( getView(), attributeDef );
     }
 
     @Override
-    public String getStringFromAttribute(ViewAttribute viewAttribute, String contextName )
+    public String getStringFromAttribute(AttributeDef attributeDef, String contextName )
     {
-        return getExistingInstance().getStringFromAttribute( getView(), viewAttribute, contextName );
+        return getExistingInstance().getStringFromAttribute( getView(), attributeDef, contextName );
     }
 
     @Override
@@ -1909,15 +1909,15 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public boolean isAttributeNull(ViewAttribute viewAttribute)
+    public boolean isAttributeNull(AttributeDef attributeDef)
     {
-        return getExistingInstance().isAttributeNull( getView(), viewAttribute );
+        return getExistingInstance().isAttributeNull( getView(), attributeDef );
     }
 
     @Override
-    public boolean isAttributeUpdated(ViewAttribute viewAttribute)
+    public boolean isAttributeUpdated(AttributeDef attributeDef)
     {
-        return getExistingInstance().isAttributeUpdated( viewAttribute );
+        return getExistingInstance().isAttributeUpdated( attributeDef );
     }
 
     @Override
@@ -1937,9 +1937,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public int compareAttribute(ViewAttribute viewAttribute, Object value)
+    public int compareAttribute(AttributeDef attributeDef, Object value)
     {
-        return getExistingInstance().compareAttribute( getView(), viewAttribute, value );
+        return getExistingInstance().compareAttribute( getView(), attributeDef, value );
     }
 
     @Override
@@ -1949,9 +1949,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Integer getIntegerFromAttribute( ViewAttribute viewAttribute )
+    public Integer getIntegerFromAttribute( AttributeDef attributeDef )
     {
-        return getExistingInstance().getIntegerFromAttribute( getView(), viewAttribute );
+        return getExistingInstance().getIntegerFromAttribute( getView(), attributeDef );
     }
 
     @Override
@@ -1961,9 +1961,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Integer getIntegerFromAttribute( ViewAttribute viewAttribute, String contextName )
+    public Integer getIntegerFromAttribute( AttributeDef attributeDef, String contextName )
     {
-        return getExistingInstance().getIntegerFromAttribute( getView(), viewAttribute, contextName );
+        return getExistingInstance().getIntegerFromAttribute( getView(), attributeDef, contextName );
     }
 
     @Override
@@ -1973,9 +1973,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Double getDoubleFromAttribute( ViewAttribute viewAttribute )
+    public Double getDoubleFromAttribute( AttributeDef attributeDef )
     {
-        return getExistingInstance().getDoubleFromAttribute( getView(), viewAttribute );
+        return getExistingInstance().getDoubleFromAttribute( getView(), attributeDef );
     }
 
     @Override
@@ -1985,9 +1985,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Double getDoubleFromAttribute( ViewAttribute viewAttribute, String contextName )
+    public Double getDoubleFromAttribute( AttributeDef attributeDef, String contextName )
     {
-        return getExistingInstance().getDoubleFromAttribute( getView(), viewAttribute, contextName );
+        return getExistingInstance().getDoubleFromAttribute( getView(), attributeDef, contextName );
     }
 
     @Override
@@ -1997,9 +1997,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public DateTime getDateTimeFromAttribute( ViewAttribute viewAttribute )
+    public DateTime getDateTimeFromAttribute( AttributeDef attributeDef )
     {
-        return getExistingInstance().getDateTimeFromAttribute( getView(), viewAttribute );
+        return getExistingInstance().getDateTimeFromAttribute( getView(), attributeDef );
     }
 
     @Override
@@ -2009,9 +2009,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public DateTime getDateTimeFromAttribute( ViewAttribute viewAttribute, String contextName )
+    public DateTime getDateTimeFromAttribute( AttributeDef attributeDef, String contextName )
     {
-        return getExistingInstance().getDateTimeFromAttribute( getView(), viewAttribute, contextName );
+        return getExistingInstance().getDateTimeFromAttribute( getView(), attributeDef, contextName );
     }
 
     @Override
@@ -2021,23 +2021,23 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Blob getBlobFromAttribute(ViewAttribute viewAttribute)
+    public Blob getBlobFromAttribute(AttributeDef attributeDef)
     {
-        return getExistingInstance().getBlobFromAttribute( getView(), viewAttribute );
+        return getExistingInstance().getBlobFromAttribute( getView(), attributeDef );
     }
 
     @Override
     public int compareAttribute(String attributeName, EntityInstance entityInstance, String attributeName2)
     {
-        ViewAttribute viewAttribute = getEntityDef().getAttribute( attributeName );
-        ViewAttribute viewAttribute2 = entityInstance.getEntityDef().getAttribute( attributeName2 );
-        return getExistingInstance().compareAttribute( getView(), viewAttribute, entityInstance, viewAttribute2 );
+        AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
+        AttributeDef attributeDef2 = entityInstance.getEntityDef().getAttribute( attributeName2 );
+        return getExistingInstance().compareAttribute( getView(), attributeDef, entityInstance, attributeDef2 );
     }
 
     @Override
-    public int compareAttribute(ViewAttribute viewAttribute, EntityInstance entityInstance, ViewAttribute viewAttribute2)
+    public int compareAttribute(AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2)
     {
-        return getExistingInstance().compareAttribute( getView(), viewAttribute, entityInstance, viewAttribute2 );
+        return getExistingInstance().compareAttribute( getView(), attributeDef, entityInstance, attributeDef2 );
     }
 
     @Override
@@ -2114,13 +2114,13 @@ class EntityCursorImpl implements EntityCursor
 	}
 
 	@Override
-	public CursorResult setLast(ViewAttribute viewAttribute, Object value)
+	public CursorResult setLast(AttributeDef attributeDef, Object value)
 	{
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .forTwinsOf( getEntityInstance() )
                                     .forEntityDef( getEntityDef() )
                                     .setCursor( this )
-                                    .withAttributeValue( viewAttribute, value )
+                                    .withAttributeValue( attributeDef, value )
                                     .setLast()
                                     .build();
         if ( ! currentIterator.hasPrev() ) // Is there a last entity?
@@ -2131,7 +2131,7 @@ class EntityCursorImpl implements EntityCursor
 	}
 
 	@Override
-    public CursorResult setLast( ViewAttribute attribute, Object value, EntityDef scopingEntity )
+    public CursorResult setLast( AttributeDef attribute, Object value, EntityDef scopingEntity )
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException( "Not written yet" );
@@ -2191,7 +2191,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public CursorResult setPrev( ViewAttribute attribute, Object value, EntityDef scopingEntity)
+    public CursorResult setPrev( AttributeDef attribute, Object value, EntityDef scopingEntity)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
 					        .withScoping( getScopingEntityInstance( scopingEntity ) )
@@ -2216,7 +2216,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public CursorResult setPrev( ViewAttribute attribute, Object value )
+    public CursorResult setPrev( AttributeDef attribute, Object value )
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                 .forEntityDef( getEntityDef() )
@@ -2240,9 +2240,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Object addToAttribute( ViewAttribute viewAttribute, Object value )
+    public Object addToAttribute( AttributeDef attributeDef, Object value )
     {
-        return getExistingInstance().addToAttribute( getView(), viewAttribute, value );
+        return getExistingInstance().addToAttribute( getView(), attributeDef, value );
     }
 
     @Override
@@ -2252,9 +2252,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public Object multiplyAttribute( ViewAttribute viewAttribute, Object value )
+    public Object multiplyAttribute( AttributeDef attributeDef, Object value )
     {
-        return getExistingInstance().multiplyAttribute( getView(), viewAttribute, value );
+        return getExistingInstance().multiplyAttribute( getView(), attributeDef, value );
     }
 
     /* (non-Javadoc)
@@ -2501,13 +2501,13 @@ class EntityCursorImpl implements EntityCursor
      * @see com.quinsoft.zeidon.EntityCursor#setFirstWithinOi(java.lang.String, java.lang.Object)
      */
     @Override
-    public CursorResult setFirstWithinOi( ViewAttribute viewAttribute, Object value)
+    public CursorResult setFirstWithinOi( AttributeDef attributeDef, Object value)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .setCursor( this )
                                     .withOiScoping( getObjectInstance() )
                                     .forEntityDef( getEntityDef() )
-                                    .withAttributeValue( viewAttribute, value )
+                                    .withAttributeValue( attributeDef, value )
                                     .build();
         if ( ! currentIterator.hasNext() )
             return CursorResult.NULL;
@@ -2517,17 +2517,17 @@ class EntityCursorImpl implements EntityCursor
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityCursor#setNextWithinOi(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.EntityCursor#setNextWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public CursorResult setNextWithinOi(ViewAttribute viewAttribute, Object value)
+    public CursorResult setNextWithinOi(AttributeDef attributeDef, Object value)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .setCursor( this )
                                     .withOiScoping( getObjectInstance() )
                                     .currentInstance( getEntityInstance() )
                                     .forEntityDef( getEntityDef() )
-                                    .withAttributeValue( viewAttribute, value )
+                                    .withAttributeValue( attributeDef, value )
                                     .build();
 
         if ( ! currentIterator.hasNext() )
@@ -2617,17 +2617,17 @@ class EntityCursorImpl implements EntityCursor
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityCursor#setPrevWithinOi(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.EntityCursor#setPrevWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public CursorResult setPrevWithinOi(ViewAttribute viewAttribute, Object value)
+    public CursorResult setPrevWithinOi(AttributeDef attributeDef, Object value)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .setCursor( this )
                                     .withOiScoping( getObjectInstance() )
                                     .currentInstance( getEntityInstance() )
                                     .forEntityDef( getEntityDef() )
-                                    .withAttributeValue( viewAttribute, value )
+                                    .withAttributeValue( attributeDef, value )
                                     .setLast()
                                     .build();
         if ( ! currentIterator.hasNext() )
@@ -2656,16 +2656,16 @@ class EntityCursorImpl implements EntityCursor
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityCursor#setLastWithinOi(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.EntityCursor#setLastWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public CursorResult setLastWithinOi(ViewAttribute viewAttribute, Object value)
+    public CursorResult setLastWithinOi(AttributeDef attributeDef, Object value)
     {
         currentIterator = new IteratorBuilder(getObjectInstance())
                                 .setCursor( this )
                                 .withOiScoping( getObjectInstance() )
                                 .forEntityDef( getEntityDef() )
-                                .withAttributeValue( viewAttribute, value )
+                                .withAttributeValue( attributeDef, value )
                                 .setLast()
                                 .build();
         if ( ! currentIterator.hasNext() )
@@ -2676,42 +2676,42 @@ class EntityCursorImpl implements EntityCursor
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityCursor#hasAny(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.EntityCursor#hasAny(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public boolean hasAny(ViewAttribute viewAttribute, Object value)
+    public boolean hasAny(AttributeDef attributeDef, Object value)
     {
         EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
                             .forEntityDef( getEntityDef() )
-                            .withAttributeValue( viewAttribute, value )
+                            .withAttributeValue( attributeDef, value )
                             .build();
         return iter.hasNext();
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityCursor#hasAny(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object, com.quinsoft.zeidon.objectdefinition.EntityDef)
+     * @see com.quinsoft.zeidon.EntityCursor#hasAny(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object, com.quinsoft.zeidon.objectdefinition.EntityDef)
      */
     @Override
-    public boolean hasAny(ViewAttribute viewAttribute, Object value, EntityDef scopingEntityDef)
+    public boolean hasAny(AttributeDef attributeDef, Object value, EntityDef scopingEntityDef)
     {
         EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
                             .forEntityDef( getEntityDef() )
                             .withScoping( getScopingEntityInstance( scopingEntityDef ) )
-                            .withAttributeValue( viewAttribute, value )
+                            .withAttributeValue( attributeDef, value )
                             .build();
         return iter.hasNext();
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityCursor#hasAnyWithinOi(com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.Object)
+     * @see com.quinsoft.zeidon.EntityCursor#hasAnyWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public boolean hasAnyWithinOi(ViewAttribute viewAttribute, Object value)
+    public boolean hasAnyWithinOi(AttributeDef attributeDef, Object value)
     {
         EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
                             .withOiScoping( getObjectInstance() )
                             .forEntityDef( getEntityDef() )
-                            .withAttributeValue( viewAttribute, value )
+                            .withAttributeValue( attributeDef, value )
                             .build();
         return iter.hasNext();
    }
@@ -2881,14 +2881,14 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public AttributeInstance getAttribute( String attributeName )
     {
-        ViewAttribute viewAttribute = getEntityDef().getAttribute( attributeName );
-        return getAttribute( viewAttribute );
+        AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
+        return getAttribute( attributeDef );
     }
 
     @Override
-    public AttributeInstance getAttribute( ViewAttribute viewAttribute )
+    public AttributeInstance getAttribute( AttributeDef attributeDef )
     {
-        AttributeInstanceImpl attributeInstance = getExistingInstance().getAttribute( viewAttribute );
+        AttributeInstanceImpl attributeInstance = getExistingInstance().getAttribute( attributeDef );
         attributeInstance.setView( getView() );
         return attributeInstance;
     }
@@ -2900,9 +2900,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public AttributeInstance createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
+    public AttributeInstance createDynamicAttributeDef( DynamicAttributeDefConfiguration config )
     {
-        return getExistingInstance().createDynamicViewAttribute( config );
+        return getExistingInstance().createDynamicAttributeDef( config );
     }
 
     @Override

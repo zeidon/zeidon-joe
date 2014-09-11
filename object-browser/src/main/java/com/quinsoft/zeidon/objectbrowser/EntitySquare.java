@@ -45,7 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -104,8 +104,8 @@ public class EntitySquare extends JPanel implements MouseListener
     static String getKeyString( EntityInstance ei, EntityDef entityDef )
     {
         StringBuilder builder = new StringBuilder();
-        List<ViewAttribute> keys = entityDef.getKeys();
-        for ( ViewAttribute key : keys )
+        List<AttributeDef> keys = entityDef.getKeys();
+        for ( AttributeDef key : keys )
         {
         	if ( ! ei.isHidden())
                 builder.append( key.getName() ).append( ": " ).append( ei.getStringFromAttribute( key ) );

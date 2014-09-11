@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
@@ -528,7 +528,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             if ( entityDef.isDerivedPath() )
                 continue;
 
-            final ViewAttribute autoSeq = entityDef.getAutoSeq();
+            final AttributeDef autoSeq = entityDef.getAutoSeq();
             if ( autoSeq != null && ei.getPrevTwin() == null && // Must be first twin
                                     ei.getNextTwin() != null )  // Don't bother if only one twin.
             {
@@ -639,10 +639,10 @@ class CommitToDbUsingGenkeyHandler implements Committer
             if ( relField.getRelDataField() == null )
                 continue;
 
-            final ViewAttribute srcViewAttrib = relField.getSrcDataField().getViewAttribute();
-            final EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
-            final ViewAttribute relViewAttrib = relField.getRelDataField().getViewAttribute();
-            final EntityDef    relEntityDef = relViewAttrib.getEntityDef();
+            final AttributeDef srcAttributeDef = relField.getSrcDataField().getAttributeDef();
+            final EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
+            final AttributeDef relAttributeDef = relField.getRelDataField().getAttributeDef();
+            final EntityDef    relEntityDef = relAttributeDef.getEntityDef();
 
             // We now have the attributes--the source and relationship (i.e. target)
             // attributes.  One is part of the current entity (lpEntityDef) and
@@ -678,7 +678,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     return true;
                 }
 
-                relInstance.setInternalAttributeValue( relViewAttrib, srcInstance.getInternalAttribute( srcViewAttrib ).getInternalValue(), true );
+                relInstance.setInternalAttributeValue( relAttributeDef, srcInstance.getInternalAttribute( srcAttributeDef ).getInternalValue(), true );
                 relInstance.dbhNeedsCommit = true;
             }
             else
@@ -687,7 +687,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // we cannot null the key because we would lose the
                 // capability of updating the entity (in this case it
                 // better be deleted!!!)
-                assert ! relViewAttrib.isKey();
+                assert ! relAttributeDef.isKey();
                 assert ei.isExcluded(); // EI is hidden and we've ignored deleted EIs above.
 
                 // If the EI is excluded and the min cardinality is 1, we'll get an error
@@ -697,7 +697,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // would have thrown a validation exception.
                 if ( entityDef.getMinCardinality() == 0)
                 {
-                    relInstance.setInternalAttributeValue( relViewAttrib, null, true );
+                    relInstance.setInternalAttributeValue( relAttributeDef, null, true );
                     relInstance.dbhNeedsCommit = true;
                 }
             }
@@ -766,7 +766,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
 
                 // We've determined if an entity needs FKs.  Now check for Genkeys.
 
-                final ViewAttribute genKey = entityDef.getGenKey();
+                final AttributeDef genKey = entityDef.getGenKey();
                 if ( genKey == null )
                     continue;
 
@@ -841,7 +841,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     continue;
 
                 final EntityDef entityDef = ei.getEntityDef();
-                final ViewAttribute genkeyAttr = entityDef.getGenKey();
+                final AttributeDef genkeyAttr = entityDef.getGenKey();
                 final Integer genkey = genkeys.get( entityDef.getErEntityToken() );
                 assert genkey != null;
 

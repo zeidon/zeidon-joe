@@ -19,7 +19,7 @@
 
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author DG
@@ -29,21 +29,21 @@ public class InvalidAttributeConversionException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
     
-    private final ViewAttribute viewAttribute;
+    private final AttributeDef attributeDef;
     private final String        reason;
 
-    public InvalidAttributeConversionException(ViewAttribute viewAttribute, String reason, Object... args)
+    public InvalidAttributeConversionException(AttributeDef attributeDef, String reason, Object... args)
     {
         super( args.length == 0 ? reason : String.format( reason, args ) );
-        prependViewAttribute( viewAttribute );
+        prependAttributeDef( attributeDef );
         
-        this.viewAttribute = viewAttribute;
+        this.attributeDef = attributeDef;
         this.reason = reason;
     }
 
-    public ViewAttribute getViewAttribute()
+    public AttributeDef getAttributeDef()
     {
-        return viewAttribute;
+        return attributeDef;
     }
 
     public String getReason()

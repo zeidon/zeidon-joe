@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * JDBC translator for MS Access DBs.  This extends the standard JDBC translator
@@ -52,14 +52,14 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
      * @see com.quinsoft.zeidon.dbhandler.JdbcDomainTranslator#getAttributeValue(java.lang.StringBuilder, com.quinsoft.zeidon.objectdefinition.DataField, com.quinsoft.zeidon.EntityInstance)
      */
     @Override
-    public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, ViewAttribute viewAttribute, Object value)
+    public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, AttributeDef attributeDef, Object value)
     {
         // If we're binding all the values we'll let the parent class handle it.
         if ( bindAllValues )
-            return super.appendSqlValue( stmt, buffer, domain, viewAttribute, value );
+            return super.appendSqlValue( stmt, buffer, domain, attributeDef, value );
 
         if ( value == null )
-            return super.appendSqlValue( stmt, buffer, domain, viewAttribute, null );
+            return super.appendSqlValue( stmt, buffer, domain, attributeDef, null );
 
         /*
          * Access dates are denoted in JDBC as date strings surrounded by '#'.
@@ -69,7 +69,7 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
         if ( domain instanceof DateTimeDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( getTask(), viewAttribute, null, value );
+            Object v = domain.convertExternalValue( getTask(), attributeDef, null, value );
             String str = dateTimeFormatter.print( (DateTime) v );
             buffer.append( "#" ).append( str ).append( "#" );
             return true;
@@ -78,12 +78,12 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
         if ( domain instanceof DateDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( getTask(), viewAttribute, null, value );
+            Object v = domain.convertExternalValue( getTask(), attributeDef, null, value );
             String str = dateFormatter.print( (DateTime) v );
             buffer.append( "#" ).append( str ).append( "#" );
             return true;
         }
 
-        return super.appendSqlValue( stmt, buffer, domain, viewAttribute, value );
+        return super.appendSqlValue( stmt, buffer, domain, attributeDef, value );
     }
 }

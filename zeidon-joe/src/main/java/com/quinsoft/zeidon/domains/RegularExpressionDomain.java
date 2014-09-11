@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
@@ -41,15 +41,15 @@ public class RegularExpressionDomain extends StringDomain
     }
     
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         String string = checkNullString( internalValue );
         
         // Validate string length
-        super.validateInternalValue( task, viewAttribute, string );
+        super.validateInternalValue( task, attributeDef, string );
         
         DomainContext context = getContext( task, null );
-        context.validateInternalValue( task, viewAttribute, string ); // Validate the regex.
+        context.validateInternalValue( task, attributeDef, string ); // Validate the regex.
     }
 
     @Override
@@ -59,10 +59,10 @@ public class RegularExpressionDomain extends StringDomain
     }
     
     @Override
-    public String convertToString(Task task, ViewAttribute viewAttribute, Object internalValue, String contextName)
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         DomainContext context = getContext( task, contextName );
-        return context.convertToString( task, viewAttribute, internalValue );
+        return context.convertToString( task, attributeDef, internalValue );
     }
 
     private class RegexContext extends BaseDomainContext
@@ -76,12 +76,12 @@ public class RegularExpressionDomain extends StringDomain
 		}
     	
 	    @Override
-	    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object value ) throws InvalidAttributeValueException
+	    public void validateInternalValue( Task task, AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException
 	    {
 	        String string = checkNullString( value );
 	        Matcher m = pattern.matcher( string );
 	        if ( ! m.matches() )
-	            throw new InvalidAttributeValueException( viewAttribute, value, "Input value does not match regular expression %s", regex );
+	            throw new InvalidAttributeValueException( attributeDef, value, "Input value does not match regular expression %s", regex );
 	    }
 
 	    @Override
@@ -98,9 +98,9 @@ public class RegularExpressionDomain extends StringDomain
 	    }
 
         @Override
-        public String convertToString( Task task, ViewAttribute viewAttribute, Object internalValue )
+        public String convertToString( Task task, AttributeDef attributeDef, Object internalValue )
         {
-            String string = super.convertToString( task, viewAttribute, internalValue );
+            String string = super.convertToString( task, attributeDef, internalValue );
             Matcher m = pattern.matcher( string );
             if ( ! m.matches() )
                 return string;  // TODO: Should this be an error?

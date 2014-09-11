@@ -23,7 +23,7 @@ import java.util.Map;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * @author dgc
@@ -43,19 +43,19 @@ public class BooleanDomain extends AbstractDomain
     }
 
     @Override
-    public void validateInternalValue( Task task, ViewAttribute viewAttribute, Object internalValue ) throws InvalidAttributeValueException
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         if ( internalValue instanceof Boolean )
             return;
 
-        throw new InvalidAttributeValueException( viewAttribute, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
+        throw new InvalidAttributeValueException( attributeDef, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.domains.Domain#convertExternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.ViewAttribute, java.lang.String, java.lang.Object)
+     * @see com.quinsoft.zeidon.domains.Domain#convertExternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.String, java.lang.Object)
      */
     @Override
-    public Object convertExternalValue( Task task, ViewAttribute viewAttribute, String contextName,
+    public Object convertExternalValue( Task task, AttributeDef attributeDef, String contextName,
                                         Object externalValue ) throws InvalidAttributeValueException
     {
         if ( externalValue == null )
@@ -96,7 +96,7 @@ public class BooleanDomain extends AbstractDomain
             return ! ( b == 0 );
         }
 
-        throw new InvalidAttributeValueException( viewAttribute, externalValue, "Can't convert '%s' to Boolean",
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Boolean",
                                                   externalValue.getClass().getName() );
     }
 }

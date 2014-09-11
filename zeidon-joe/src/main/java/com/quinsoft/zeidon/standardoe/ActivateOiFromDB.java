@@ -29,7 +29,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.Timer;
@@ -274,12 +274,12 @@ class ActivateOiFromDB implements Activator
      */
     private boolean assertFlagsAreOff( EntityInstanceImpl ei )
     {
-        for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
+        for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
         {
-            AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
+            AttributeValue attrib = ei.getInternalAttribute( attributeDef );
             if ( attrib.isUpdated() )
             {
-                task.log().error( "Assert: Attribute %s %s is flagged as updated", viewAttribute, attrib );
+                task.log().error( "Assert: Attribute %s %s is flagged as updated", attributeDef, attrib );
                 return false;
             }
         }

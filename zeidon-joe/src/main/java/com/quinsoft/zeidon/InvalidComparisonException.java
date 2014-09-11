@@ -18,7 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Thrown when an attempt is made to compare an attribute with an incompatible
@@ -31,21 +31,21 @@ public class InvalidComparisonException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
 
-    private final ViewAttribute viewAttribute;
+    private final AttributeDef attributeDef;
 
     /**
      * @param message
      */
-    public InvalidComparisonException(ViewAttribute viewAttribute, Object o)
+    public InvalidComparisonException(AttributeDef attributeDef, Object o)
     {
         super( "Unsupported comparison between attribute and type %s", o.getClass().getName() );
-        prependViewAttribute( viewAttribute );
+        prependAttributeDef( attributeDef );
 
-        this.viewAttribute = viewAttribute;
+        this.attributeDef = attributeDef;
     }
 
-    public ViewAttribute getViewAttribute()
+    public AttributeDef getAttributeDef()
     {
-        return viewAttribute;
+        return attributeDef;
     }
 }

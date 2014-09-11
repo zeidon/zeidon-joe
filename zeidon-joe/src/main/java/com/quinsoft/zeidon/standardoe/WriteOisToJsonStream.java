@@ -36,7 +36,7 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -169,15 +169,15 @@ public class WriteOisToJsonStream implements StreamWriter
 
             jg.writeStartObject();
             boolean writePersistent = writeEntityMeta( ei );
-            for ( ViewAttribute viewAttribute : ei.getNonNullAttributeList() )
+            for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
-                AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
-                if ( writePersistent || ! viewAttribute.isPersistent() )
+                AttributeValue attrib = ei.getInternalAttribute( attributeDef );
+                if ( writePersistent || ! attributeDef.isPersistent() )
                 {
-                    String value = attrib.getString( ei.getTask(), viewAttribute );
-                    jg.writeStringField( viewAttribute.getName(), value );
-                    if ( viewAttribute.isPersistent() )
-                        writeAttributeMeta( attrib, viewAttribute );
+                    String value = attrib.getString( ei.getTask(), attributeDef );
+                    jg.writeStringField( attributeDef.getName(), value );
+                    if ( attributeDef.isPersistent() )
+                        writeAttributeMeta( attrib, attributeDef );
                 }
             }
 
@@ -201,13 +201,13 @@ public class WriteOisToJsonStream implements StreamWriter
         }
     }
 
-    private void writeAttributeMeta( AttributeValue attrib, ViewAttribute viewAttribute )
+    private void writeAttributeMeta( AttributeValue attrib, AttributeDef attributeDef )
                         throws JsonGenerationException, IOException
     {
         if ( ! attrib.isUpdated() )
             return;
 
-        jg.writeObjectFieldStart( "." + viewAttribute.getName() );
+        jg.writeObjectFieldStart( "." + attributeDef.getName() );
         jg.writeStringField( "updated", "true" );
         jg.writeEndObject();
     }

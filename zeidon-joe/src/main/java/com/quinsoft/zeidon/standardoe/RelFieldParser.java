@@ -19,7 +19,7 @@
 package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.objectdefinition.RelField;
-import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -31,9 +31,9 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  */
 class RelFieldParser
 {
-    ViewAttribute srcViewAttrib;
+    AttributeDef srcAttributeDef;
     EntityDef srcEntityDef;
-    ViewAttribute relViewAttrib;
+    AttributeDef relAttributeDef;
     EntityDef relEntityDef;
     EntityInstanceImpl relInstance;
     EntityInstanceImpl srcInstance;
@@ -57,10 +57,10 @@ class RelFieldParser
      */
     RelFieldParser parse( RelField relField, EntityInstanceImpl ei )
     {
-        srcViewAttrib = relField.getSrcDataField().getViewAttribute();
-        srcEntityDef = srcViewAttrib.getEntityDef();
-        relViewAttrib = relField.getRelDataField().getViewAttribute();
-        relEntityDef = relViewAttrib.getEntityDef();
+        srcAttributeDef = relField.getSrcDataField().getAttributeDef();
+        srcEntityDef = srcAttributeDef.getEntityDef();
+        relAttributeDef = relField.getRelDataField().getAttributeDef();
+        relEntityDef = relAttributeDef.getEntityDef();
 
         // We now have the attributes--the source and relationship (i.e. target)
         // attributes.  One is part of the current entity (lpEntityDef) and
@@ -86,7 +86,7 @@ class RelFieldParser
      */
     void copySrcToRel()
     {
-        Object value = srcInstance.getAttribute( srcViewAttrib ).getValue();
-        relInstance.getAttribute( relViewAttrib ).setInternalValue( value, true );
+        Object value = srcInstance.getAttribute( srcAttributeDef ).getValue();
+        relInstance.getAttribute( relAttributeDef ).setInternalValue( value, true );
     }
 }
