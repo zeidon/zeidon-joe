@@ -42,7 +42,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 
@@ -158,7 +158,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         Application application = view.getApplication();
 
         View vlock = createLockOi( task, application );
-        ViewEntity root = viewOd.getRoot();
+        EntityDef root = viewOd.getRoot();
 
         // For each root entity, create a locking record in ZPLOCKO
         for ( EntityInstance ei : view.cursor( root ).eachEntity() )
@@ -197,7 +197,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
 
     private void addHostname( EntityCursor cursor )
     {
-        ViewEntity zeidonLock = cursor.getViewEntity();
+        EntityDef zeidonLock = cursor.getEntityDef();
         if ( zeidonLock.getAttribute( "Hostname", false ) != null )
             return;
 
@@ -226,7 +226,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
      */
     private void addCallStack( EntityCursor cursor )
     {
-        ViewEntity zeidonLock = cursor.getViewEntity();
+        EntityDef zeidonLock = cursor.getEntityDef();
         if ( zeidonLock.getAttribute( "CallStack", false ) != null )
             return;
 
@@ -286,7 +286,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             }
 
             ViewOd     viewOd = view.getViewOd();
-            ViewEntity root   = viewOd.getRoot();
+            EntityDef root   = viewOd.getRoot();
 
             // For each root entity, create a locking record in ZPLOCKO.  Normally we'd activate the locking
             // records, delete them from the OI, and then commit it.  Instead we will set the incremental

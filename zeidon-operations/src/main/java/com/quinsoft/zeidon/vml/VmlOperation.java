@@ -84,7 +84,7 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownViewAttributeException;
-import com.quinsoft.zeidon.UnknownViewEntityException;
+import com.quinsoft.zeidon.UnknownEntityDefException;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
@@ -92,7 +92,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -1897,13 +1897,13 @@ public abstract class VmlOperation
    {
       int nRC;
       ViewOd viewOd = view.getViewOd();
-      ViewEntity viewEntity = viewOd.getViewEntity( entityName );
+      EntityDef entityDef = viewOd.getEntityDef( entityName );
 
       // The C OE doesn't mind the user trying to set the subobject for non-recursive
       // entities but the JOE will throw an exception. To emulate the C OE we'll ignore
       // non recursive entities.
       // TODO: some day we need to restrict the OI to the subobject.
-      if ( ! viewEntity.isRecursive() )
+      if ( ! entityDef.isRecursive() )
           return 0;
 
       EntityCursor cursor = view.cursor( entityName );
@@ -2377,7 +2377,7 @@ public abstract class VmlOperation
 
    protected static final String zGetFirstEntityNameForView( View view, String entityName )
    {
-      return view.getViewOd( ).getViewEntity( 0 ).getName( );
+      return view.getViewOd( ).getEntityDef( 0 ).getName( );
    }
 
    protected static final String zGetNextEntityNameForView( View view, String entityName )
@@ -2387,21 +2387,21 @@ public abstract class VmlOperation
 
       for ( k = 0; k < nCnt; k++ )
       {
-         if ( view.getViewOd( ).getViewEntity( k ).getName( ).compareTo( entityName ) == 0 )
+         if ( view.getViewOd( ).getEntityDef( k ).getName( ).compareTo( entityName ) == 0 )
          {
             if ( k < nCnt - 1 )
             {
-               return view.getViewOd( ).getViewEntity( k + 1 ).getName( );
+               return view.getViewOd( ).getEntityDef( k + 1 ).getName( );
             }
          }
       }
 
-      return view.getViewOd( ).getViewEntity( 0 ).getName( );
+      return view.getViewOd( ).getEntityDef( 0 ).getName( );
    }
 
    protected static final String zGetFirstAttributeNameForEntity( View view, String entityName, String attributeName )
    {
-      ViewEntity ve = view.getViewOd( ).getViewEntity( entityName );
+      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
       if ( ve == null )
       {
          return null;
@@ -2412,7 +2412,7 @@ public abstract class VmlOperation
 
    protected static final String zGetNextAttributeNameForEntity( View view, String entityName, String attributeName )
    {
-      ViewEntity ve = view.getViewOd( ).getViewEntity( entityName );
+      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
       if ( ve == null )
          return null;
 
@@ -3757,7 +3757,7 @@ public abstract class VmlOperation
       }
       else
       {
-         nLth = cursor.getViewEntity( ).getAttribute( attributeName ).getLength( );
+         nLth = cursor.getEntityDef( ).getAttribute( attributeName ).getLength( );
          nRC = 0;
       }
 
@@ -3779,7 +3779,7 @@ public abstract class VmlOperation
       }
       else
       {
-         nLth = cursor.getViewEntity( ).getAttribute( attributeName ).getLength( );
+         nLth = cursor.getEntityDef( ).getAttribute( attributeName ).getLength( );
       }
 
       return nLth;
@@ -5388,7 +5388,7 @@ public abstract class VmlOperation
 
    protected String MiGetParentEntityNameForView( String stringParentEntity, View view, String entityName )
    {
-      return view.getViewOd( ).getViewEntity( entityName ).getParent( ).getName( );
+      return view.getViewOd( ).getEntityDef( entityName ).getParent( ).getName( );
    }
 
    protected int ResetView( View view )
@@ -5537,7 +5537,7 @@ public abstract class VmlOperation
       }
 
       EntityInstance ei = hierInstanceIterator.next();
-      hierInstanceEntityName = ei.getViewEntity().getName();
+      hierInstanceEntityName = ei.getEntityDef().getName();
       int nRC = view.cursor( hierInstanceEntityName ).setCursor( ei ).toInt();
       sbEntityName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbEntityName.append( hierInstanceEntityName );
@@ -5560,7 +5560,7 @@ public abstract class VmlOperation
       }
 
       EntityInstance ei = hierInstanceIterator.next();
-      hierInstanceEntityName = ei.getViewEntity().getName();
+      hierInstanceEntityName = ei.getEntityDef().getName();
       int nRC = view.cursor( hierInstanceEntityName ).setCursor( ei ).toInt();
       sbEntityName.append( hierInstanceEntityName );
       miLevel.setValue( view.cursor( hierInstanceEntityName ).getLevel( ) );
@@ -5734,7 +5734,7 @@ public abstract class VmlOperation
          return zCURSOR_UNCHANGED;
       }
 
-      sbReturnEntityName.append( ei.getViewEntity().getName() );
+      sbReturnEntityName.append( ei.getEntityDef().getName() );
       return view.cursor( sbReturnEntityName.toString() ).setCursor( ei ).toInt();
    }
 
@@ -5745,7 +5745,7 @@ public abstract class VmlOperation
                               String contextName,
                               MutableInt index )
    {
-      ViewAttribute viewAttribute = view.getViewOd().getViewEntity( entityName ).getAttribute( attributeName );
+      ViewAttribute viewAttribute = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
       TableDomain domain = (TableDomain) viewAttribute.getDomain();
       List<TableEntry> entries = domain.getTableEntries( view.getTask(), contextName );
 
@@ -5784,29 +5784,29 @@ public abstract class VmlOperation
    protected int zGetFirstEntityNameForView( View view, StringBuilder sbEntityName )
    {
       ViewOd viewOd = view.getViewOd();
-      ViewEntity viewEntity = viewOd.getRoot();
+      EntityDef entityDef = viewOd.getRoot();
       sbEntityName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-      sbEntityName.append( viewEntity.getName() );
+      sbEntityName.append( entityDef.getName() );
       return 0;
    }
 
    protected int zGetNextEntityNameForView( View view, StringBuilder sbEntityName )
    {
       ViewOd viewOd = view.getViewOd();
-      ViewEntity viewEntity = viewOd.getViewEntity( sbEntityName.toString() );
-      viewEntity = viewEntity.getNextHier();
-      if ( viewEntity == null )
+      EntityDef entityDef = viewOd.getEntityDef( sbEntityName.toString() );
+      entityDef = entityDef.getNextHier();
+      if ( entityDef == null )
          return -1;
 
       sbEntityName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-      sbEntityName.append( viewEntity.getName() );
+      sbEntityName.append( entityDef.getName() );
       return 0;
    }
 
    protected int zGetFirstAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
-      ViewEntity viewEntity = view.getViewOd().getViewEntity( entityName );
-      ViewAttribute viewAttrib = viewEntity.getAttribute( 0 );
+      EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
+      ViewAttribute viewAttrib = entityDef.getAttribute( 0 );
       //if ( sbAttribName != null ) // Do we need this?
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbAttribName.append( viewAttrib.getName() );
@@ -5815,8 +5815,8 @@ public abstract class VmlOperation
 
    protected int zGetNextAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
-      ViewEntity viewEntity = view.getViewOd().getViewEntity( entityName );
-      ViewAttribute viewAttrib = viewEntity.getAttribute( sbAttribName.toString() );
+      EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
+      ViewAttribute viewAttrib = entityDef.getAttribute( sbAttribName.toString() );
       viewAttrib = viewAttrib.getNextViewAttribute();
       if ( viewAttrib == null )
          return -1;
@@ -6932,7 +6932,7 @@ public abstract class VmlOperation
 	      try{
 	         cursor = view.cursor( entityName );
           }
-          catch ( UnknownViewEntityException e )
+          catch ( UnknownEntityDefException e )
           {
              return -1;
           }
@@ -7145,7 +7145,7 @@ public abstract class VmlOperation
       else
       {
          bSingleEntity = false;
-      // lpViewEntity = null;
+      // lpEntityDef = null;
       }
 
       // Get the root of the object instance
@@ -7202,20 +7202,20 @@ public abstract class VmlOperation
             lpEntityInstance != null;
             lpEntityInstance = bSingleEntity ? null : lpEntityInstance.getNextHier() ) )
       {
-         LPVIEWENTITY lpTempViewEntity;
+         LPVIEWENTITY lpTempEntityDef;
          LPVIEWATTRIB lpViewAttrib;
          boolean      bWorkEntity; // indicate entity is work or derived
 
-         lpTempViewEntity = zGETPTR( lpEntityInstance->hViewEntity );
+         lpTempEntityDef = zGETPTR( lpEntityInstance->hEntityDef );
 
-         // If lpViewEntity is not null, then we only want to change the flags
+         // If lpEntityDef is not null, then we only want to change the flags
          // for EI's that match that view entity.
-         if ( lpViewEntity && lpTempViewEntity != lpViewEntity )
+         if ( lpEntityDef && lpTempEntityDef != lpEntityDef )
             continue;  // They don't match so continue with next EI.
 
          bWorkEntity = false;
-         if ( lpTempViewEntity->bDerived || lpTempViewEntity->bDerivedPath ||
-              lpTempViewEntity->hFirstDataRecord == 0 )
+         if ( lpTempEntityDef->bDerived || lpTempEntityDef->bDerivedPath ||
+              lpTempEntityDef->hFirstDataRecord == 0 )
          {
             bWorkEntity = true;
          }
@@ -7283,7 +7283,7 @@ public abstract class VmlOperation
             continue; // Nope--continue with the next EI.
 
          // Set attribute flags.
-         for ( lpViewAttrib = zGETPTR( lpTempViewEntity->hFirstOD_Attrib );
+         for ( lpViewAttrib = zGETPTR( lpTempEntityDef->hFirstOD_Attrib );
                lpViewAttrib;
                lpViewAttrib = zGETPTR( lpViewAttrib->hNextOD_Attrib ) )
          {
@@ -7410,7 +7410,7 @@ public abstract class VmlOperation
 
 	  EntityInstance entityInstance = view.cursor(entityName).getEntityInstance();
 
-	  ViewAttribute viewAttribute = view.getViewOd().getViewEntity( entityName ).getAttribute( attributeName );
+	  ViewAttribute viewAttribute = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
 
 	  if ( entityInstance.isAttributeUpdated(viewAttribute) )
 	     return 1;
@@ -7420,7 +7420,7 @@ public abstract class VmlOperation
 
    protected int zLodContainsEntity( View view, String entityName )
    {
-      ViewEntity ve = view.getViewOd( ).getViewEntity( entityName );
+      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
       if ( ve != null )
       {
          return 1;
@@ -7433,7 +7433,7 @@ public abstract class VmlOperation
 
    protected int zLodContainsAttribute( View view, String entityName, String attribName )
    {
-      ViewEntity ve = view.getViewOd( ).getViewEntity( entityName );
+      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
       if ( ve.getAttribute( attribName ) != null )
       {
          return 1;

@@ -36,7 +36,7 @@ import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -195,12 +195,12 @@ class CommitToDbUsingGenkeyHandler implements Committer
               ei != null;
               ei = ei.getPrevHier() )
         {
-            ViewEntity viewEntity = ei.getViewEntity();
+            EntityDef entityDef = ei.getEntityDef();
 
             // EIs down a derived path don't get committed to the database.
             // Since all children of a derived EI are also derived we can skip
             // the twins of the current EI.
-            if ( viewEntity.isDerivedPath() )
+            if ( entityDef.isDerivedPath() )
             {
                 while ( ei.getPrevTwin() != null )
                     ei = ei.getPrevTwin();
@@ -219,7 +219,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             if ( ei.dbhExcluded )
                 continue;
 
-            view.cursor( viewEntity ).setCursor( ei );
+            view.cursor( entityDef ).setCursor( ei );
             dbHandler.deleteRelationship( view, ei );
             markDuplicateRelationships( ei );
         }
@@ -231,12 +231,12 @@ class CommitToDbUsingGenkeyHandler implements Committer
               ei != null;
               ei = ei.getPrevHier() )
         {
-            ViewEntity viewEntity = ei.getViewEntity();
+            EntityDef entityDef = ei.getEntityDef();
 
             // EIs down a derived path don't get committed to the database.
             // Since all children of a derived EI are also derived we can skip
             // the twins of the current EI.
-            if ( viewEntity.isDerivedPath() )
+            if ( entityDef.isDerivedPath() )
             {
                 while ( ei.getPrevTwin() != null )
                     ei = ei.getPrevTwin();
@@ -262,7 +262,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
 
             // TODO: add code to delete all children?
 
-            view.cursor( viewEntity ).setCursor( ei );
+            view.cursor( entityDef ).setCursor( ei );
             dbHandler.deleteEntity( view, ei );
 
             // Flag all linked entities (including 'ei') as having been deleted.
@@ -356,7 +356,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             if ( ! ei.isIncluded() && ! ei.dbhNeedsInclude )
                 continue;
 
-            ViewEntity viewEntity = ei.getViewEntity();
+            EntityDef entityDef = ei.getEntityDef();
 
             // Skip it if the entity was already included via a linked instance.
             if ( ei.dbhIncluded )
@@ -368,7 +368,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             if ( ei.getParent() == null )
                 continue;
 
-            view.cursor( viewEntity ).setCursor( ei );
+            view.cursor( entityDef ).setCursor( ei );
             dbHandler.insertRelationship( view, ei );
             markDuplicateRelationships( ei );
         }
@@ -378,7 +378,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
     {
         for ( EntityInstanceImpl ei : oi.getEntities() )
         {
-            ViewEntity viewEntity = ei.getViewEntity();
+            EntityDef entityDef = ei.getEntityDef();
 
             // If preprocessing didn't think this EI needed to be commmited, skip it.
             if ( ! ei.dbhNeedsCommit )
@@ -396,7 +396,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             if ( ei.dbhCreated || ei.dbhDeleted )
                 continue;
 
-            view.cursor( viewEntity ).setCursor( ei );
+            view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );
 
             // Flag all linked entities (including 'ei') as having been updated.
@@ -413,7 +413,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
     private void markDuplicateRelationships(EntityInstanceImpl ei)
     {
         EntityInstanceImpl parent = ei.getParent();
-        ViewEntity         viewEntity = ei.getViewEntity();
+        EntityDef         entityDef = ei.getEntityDef();
 
         // Duplicate relationship searching phase I, see if a linked instance to
         // the target instance in the same object instance represents the
@@ -436,11 +436,11 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     continue;
             }
 
-            ViewEntity linkedViewEntity = linked.getViewEntity();
+            EntityDef linkedEntityDef = linked.getEntityDef();
 
             // Linked EI must have the same relationship and it can't be derived.
-            if ( linkedViewEntity.getErRelToken() != viewEntity.getErRelToken() ||
-                 linkedViewEntity.isDerivedPath() )
+            if ( linkedEntityDef.getErRelToken() != entityDef.getErRelToken() ||
+                 linkedEntityDef.isDerivedPath() )
             {
                 continue;
             }
@@ -483,11 +483,11 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     continue;
             }
 
-            ViewEntity linkedViewEntity = linked.getViewEntity();
+            EntityDef linkedEntityDef = linked.getEntityDef();
 
             // Check to see if the relationship for the EI linked to the parent is
             // the same as the relationship of the original EI.
-            if ( linkedViewEntity.getErRelToken() != viewEntity.getErRelToken() )
+            if ( linkedEntityDef.getErRelToken() != entityDef.getErRelToken() )
                 continue; // Nope.
 
             // OK, we have an EI ('linked') that has the same relationship as
@@ -524,11 +524,11 @@ class CommitToDbUsingGenkeyHandler implements Committer
         {
             lastEntityInstance = ei;
 
-            final ViewEntity viewEntity = ei.getViewEntity();
-            if ( viewEntity.isDerivedPath() )
+            final EntityDef entityDef = ei.getEntityDef();
+            if ( entityDef.isDerivedPath() )
                 continue;
 
-            final ViewAttribute autoSeq = viewEntity.getAutoSeq();
+            final ViewAttribute autoSeq = entityDef.getAutoSeq();
             if ( autoSeq != null && ei.getPrevTwin() == null && // Must be first twin
                                     ei.getNextTwin() != null )  // Don't bother if only one twin.
             {
@@ -586,9 +586,9 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     if ( ! ei.dbhForeignKey )
                         continue;
 
-                    final ViewEntity viewEntity = ei.getViewEntity();
+                    final EntityDef entityDef = ei.getEntityDef();
 
-                    assert ! viewEntity.isDerivedPath();
+                    assert ! entityDef.isDerivedPath();
 
                     // If the EI is not hidden and we're setting FKs for hidden EIs
                     // only then set flags for another try.
@@ -624,11 +624,11 @@ class CommitToDbUsingGenkeyHandler implements Committer
     {
         ei.dbhForeignKey = false;
 
-        final ViewEntity viewEntity = ei.getViewEntity();
-        if ( viewEntity.getParent() == null )
+        final EntityDef entityDef = ei.getEntityDef();
+        if ( entityDef.getParent() == null )
             return false;
 
-        final DataRecord dataRecord = viewEntity.getDataRecord();
+        final DataRecord dataRecord = entityDef.getDataRecord();
         final RelRecord relRecord = dataRecord.getRelRecord();
         if ( relRecord == null )
             return false;
@@ -640,26 +640,26 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 continue;
 
             final ViewAttribute srcViewAttrib = relField.getSrcDataField().getViewAttribute();
-            final ViewEntity    srcViewEntity = srcViewAttrib.getViewEntity();
+            final EntityDef    srcEntityDef = srcViewAttrib.getEntityDef();
             final ViewAttribute relViewAttrib = relField.getRelDataField().getViewAttribute();
-            final ViewEntity    relViewEntity = relViewAttrib.getViewEntity();
+            final EntityDef    relEntityDef = relViewAttrib.getEntityDef();
 
             // We now have the attributes--the source and relationship (i.e. target)
-            // attributes.  One is part of the current entity (lpViewEntity) and
+            // attributes.  One is part of the current entity (lpEntityDef) and
             // the other is a parent of the current entity.  Find the entity
             // instance of the parent entity.
 
             final EntityInstanceImpl relInstance;
             final EntityInstanceImpl srcInstance;
-            if ( relViewEntity == viewEntity )
+            if ( relEntityDef == entityDef )
             {
                 relInstance = ei;
-                srcInstance = ei.findMatchingParent( srcViewEntity );
+                srcInstance = ei.findMatchingParent( srcEntityDef );
             }
             else
             {
                 srcInstance = ei;
-                relInstance = ei.findMatchingParent( relViewEntity );
+                relInstance = ei.findMatchingParent( relEntityDef );
             }
 
             // If the instance we are about to update with FKs is being deleted then
@@ -695,7 +695,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // included which will set the FK to a non-null value.  We can assume this because
                 // the OI has passed cardinality validation and if no EI was being included it
                 // would have thrown a validation exception.
-                if ( viewEntity.getMinCardinality() == 0)
+                if ( entityDef.getMinCardinality() == 0)
                 {
                     relInstance.setInternalAttributeValue( relViewAttrib, null, true );
                     relInstance.dbhNeedsCommit = true;
@@ -713,7 +713,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
 
     private void initializeGenKeys()
     {
-        ViewEntity currentGenKeyEntity = null;
+        EntityDef currentGenKeyEntity = null;
         final EntityCursor genKeyCursor = genKeyObj.cursor( "Genkey" );
 
         for ( final ViewImpl view : viewList )
@@ -732,31 +732,31 @@ class CommitToDbUsingGenkeyHandler implements Committer
             // Go through all the EIs and look for entities that need genkeys or FKs.
             for ( final EntityInstanceImpl ei : oi.getEntities() )
             {
-                final ViewEntity viewEntity = ei.getViewEntity();
-                if ( viewEntity.isDerivedPath() )
+                final EntityDef entityDef = ei.getEntityDef();
+                if ( entityDef.isDerivedPath() )
                     continue;
 
                 // Check to see if the EI needs foreign keys.
-                if ( ei.isCreated() && viewEntity.isCreate() )
+                if ( ei.isCreated() && entityDef.isCreate() )
                 {
                     ei.dbhForeignKey = true;
                     oi.dbhNeedsForeignKeys = true;
                 }
                 else
-                if ( ei.isIncluded() && viewEntity.isInclude() &&  ei.getParent() != null &&
-                     ( ! ei.isCreated() || ! viewEntity.isCreate() ) )
+                if ( ei.isIncluded() && entityDef.isInclude() &&  ei.getParent() != null &&
+                     ( ! ei.isCreated() || ! entityDef.isCreate() ) )
                 {
                     ei.dbhForeignKey = true;
                     oi.dbhNeedsForeignKeys = true;
                 }
                 else
-                if ( ei.isExcluded() && viewEntity.isExclude() )
+                if ( ei.isExcluded() && entityDef.isExclude() )
                 {
                     ei.dbhForeignKey = true;
                     oi.dbhNeedsForeignKeys = true;
                 }
                 else
-                if (ei.isDeleted() && viewEntity.isDelete() )
+                if (ei.isDeleted() && entityDef.isDelete() )
                 {
                     ei.dbhForeignKey = true;
                     oi.dbhNeedsForeignKeys = true;
@@ -766,7 +766,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
 
                 // We've determined if an entity needs FKs.  Now check for Genkeys.
 
-                final ViewAttribute genKey = viewEntity.getGenKey();
+                final ViewAttribute genKey = entityDef.getGenKey();
                 if ( genKey == null )
                     continue;
 
@@ -776,7 +776,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     continue;
 
                 // We only create genkeys for entities that have create authority.
-                if ( ! viewEntity.isCreate() )
+                if ( ! entityDef.isCreate() )
                     continue;
 
                 if ( ! ei.getInternalAttribute( genKey ).isNull(task, genKey) )
@@ -786,23 +786,23 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // entity instance in the OI being committed and the number of
                 // entity instances that need genkeys.
                 //
-                // If the viewEntity of the current entity instance is the same
+                // If the entityDef of the current entity instance is the same
                 // as the previous entity instance, then increment the count in
                 // genKeyObj by 1.  If they are different, then we need to find
                 // the entity instance in genKeyObj that corresponds with the
                 // current lpEntityInstance.  If one is not found, then it needs
                 // to be created.
-                if ( viewEntity != currentGenKeyEntity )
+                if ( entityDef != currentGenKeyEntity )
                 {
-                    if ( ! genKeyCursor.setFirst( "EntityID", viewEntity.getErEntityToken() ).isSet() )
+                    if ( ! genKeyCursor.setFirst( "EntityID", entityDef.getErEntityToken() ).isSet() )
                     {
-                        DataRecord dataRecord = viewEntity.getDataRecord();
-                        genKeyCursor.createEntity().setAttribute( "EntityID", viewEntity.getErEntityToken() )
+                        DataRecord dataRecord = entityDef.getDataRecord();
+                        genKeyCursor.createEntity().setAttribute( "EntityID", entityDef.getErEntityToken() )
                                                    .setAttribute( "EntityCount", 0 )
                                                    .setAttribute( "TableName", dataRecord.getRecordName() )
-                                                   .setAttribute( "EntityName", viewEntity.getName() );
+                                                   .setAttribute( "EntityName", entityDef.getName() );
                     }
-                    currentGenKeyEntity = viewEntity;
+                    currentGenKeyEntity = entityDef;
                 }
 
                 Integer count = genKeyCursor.getIntegerFromAttribute( "EntityCount" );
@@ -840,15 +840,15 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 if ( ! ei.dbhGenKeyNeeded )
                     continue;
 
-                final ViewEntity viewEntity = ei.getViewEntity();
-                final ViewAttribute genkeyAttr = viewEntity.getGenKey();
-                final Integer genkey = genkeys.get( viewEntity.getErEntityToken() );
+                final EntityDef entityDef = ei.getEntityDef();
+                final ViewAttribute genkeyAttr = entityDef.getGenKey();
+                final Integer genkey = genkeys.get( entityDef.getErEntityToken() );
                 assert genkey != null;
 
                 ei.setInternalAttributeValue( genkeyAttr, genkey, true );
 
                 // Increment the genkey value in the genkey map.
-                genkeys.put( viewEntity.getErEntityToken(), genkey + 1 );
+                genkeys.put( entityDef.getErEntityToken(), genkey + 1 );
             }
         }
     } // initializeGenKeys()

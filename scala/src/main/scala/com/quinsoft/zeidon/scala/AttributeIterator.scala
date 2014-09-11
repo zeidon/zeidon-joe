@@ -27,7 +27,7 @@ class AttributeIterator( val jentityInstance: com.quinsoft.zeidon.EntityInstance
     def iterator = {
         val entityInstance = new EntityInstance( jentityInstance )
         new Iterator[AttributeInstance] {
-            var jviewAttribute = entityInstance.getEntityInstance.getViewEntity().getAttributes().get(0)
+            var jviewAttribute = entityInstance.getEntityInstance.getEntityDef().getAttributes().get(0)
 
             def hasNext = jviewAttribute != null
             def next = {

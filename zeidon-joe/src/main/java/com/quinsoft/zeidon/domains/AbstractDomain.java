@@ -435,7 +435,7 @@ public abstract class AbstractDomain implements Domain
             return true;
 
         if ( value instanceof String &&
-             viewAttribute.getViewEntity().getViewOd().getApplication().nullStringEqualsEmptyString() &&
+             viewAttribute.getEntityDef().getViewOd().getApplication().nullStringEqualsEmptyString() &&
              StringUtils.isBlank( (String) value ) )
         {
             return true;

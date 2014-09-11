@@ -19,43 +19,43 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
  *
  */
-class ViewEntityLayout
+class EntityDefLayout
 {
     private final ViewOdLayout viewOdLayout;
-    private final ViewEntity   viewEntity;
+    private final EntityDef   entityDef;
     private final int width;
     
     /**
      * @param viewOdLayout
-     * @param viewEntity
+     * @param entityDef
      */
-    ViewEntityLayout(ViewOdLayout viewOdLayout, ViewEntity viewEntity)
+    EntityDefLayout(ViewOdLayout viewOdLayout, EntityDef entityDef)
     {
         this.viewOdLayout = viewOdLayout;
-        this.viewEntity = viewEntity;
+        this.entityDef = entityDef;
         
-        if ( viewEntity.getChildCount() == 0 )
+        if ( entityDef.getChildCount() == 0 )
         {
             width = 1;
         }
         else
         {
             int w = 0;
-            for ( ViewEntity child : viewEntity.getChildren() )
+            for ( EntityDef child : entityDef.getChildren() )
             {
-                ViewEntityLayout layout = new ViewEntityLayout( viewOdLayout, child );
+                EntityDefLayout layout = new EntityDefLayout( viewOdLayout, child );
                 w += layout.getWidth();
             }
             width = w;
         }
         
-        this.viewOdLayout.addViewEntityLayout( this.viewEntity, this );
+        this.viewOdLayout.addEntityDefLayout( this.entityDef, this );
     }
 
     public int getWidth()
@@ -68,8 +68,8 @@ class ViewEntityLayout
         return viewOdLayout;
     }
 
-    public ViewEntity getViewEntity()
+    public EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 }

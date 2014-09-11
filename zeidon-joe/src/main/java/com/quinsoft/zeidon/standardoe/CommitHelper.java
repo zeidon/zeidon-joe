@@ -19,7 +19,7 @@
 package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Methods that are common to multiple commit implementations.
@@ -56,7 +56,7 @@ class CommitHelper
                 if ( linked.dbhUpdated )
                     linked.setUpdated( false );
 
-                ViewEntity viewEntity = linked.getViewEntity();
+                EntityDef entityDef = linked.getEntityDef();
 
                 // For created/included entities we need to indicate that they don't have
                 // any children that need to be lazy-loaded.
@@ -65,7 +65,7 @@ class CommitHelper
                     linked.flagAllChildrenAsLazyLoaded();
                 }
 
-                for ( ViewAttribute viewAttrib : viewEntity.getAttributes() )
+                for ( ViewAttribute viewAttrib : entityDef.getAttributes() )
                 {
                     if ( viewAttrib.isPersistent() )
                         linked.getInternalAttribute( viewAttrib ).setUpdated( false );

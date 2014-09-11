@@ -42,7 +42,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -69,8 +69,8 @@ class ActivateOiFromXmlStream implements StreamReader
     private boolean                  incremental = false;
     private Stack<Attributes>        entityAttributes = new Stack<Attributes>();
     private Stack<Attributes>        attributeAttributes = new Stack<Attributes>();
-    private Stack<ViewEntity>        currentEntityStack = new Stack<ViewEntity>();
-    private ViewEntity               currentViewEntity;
+    private Stack<EntityDef>        currentEntityStack = new Stack<EntityDef>();
+    private EntityDef               currentEntityDef;
     private StringBuilder            characterBuffer;
 
     ViewImpl read()
@@ -142,9 +142,9 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private void createEntity( String entityName, Attributes attributes )
     {
-        currentViewEntity = viewOd.getViewEntity( entityName );
-        currentEntityStack.push( currentViewEntity );
-        EntityCursorImpl cursor = view.cursor( currentViewEntity );
+        currentEntityDef = viewOd.getEntityDef( entityName );
+        currentEntityStack.push( currentEntityDef );
+        EntityCursorImpl cursor = view.cursor( currentEntityDef );
         cursor.createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
         // If we're setting incremental flags, save them for later.
@@ -179,13 +179,13 @@ class ActivateOiFromXmlStream implements StreamReader
                 throw new ZeidonException( "XML stream does not specify zOI element" );
 
             // Is the element name an entity name?
-            if ( viewOd.getViewEntity( qName, false ) != null )
+            if ( viewOd.getEntityDef( qName, false ) != null )
             {
                 createEntity( qName, attributes );
                 return;
             }
 
-            if ( currentViewEntity.getAttribute( qName, false ) != null )
+            if ( currentEntityDef.getAttribute( qName, false ) != null )
             {
                 setAttribute( qName, attributes );
                 return;
@@ -204,10 +204,10 @@ class ActivateOiFromXmlStream implements StreamReader
         public void endElement( String uri, String localName, String qName ) throws SAXException
         {
             // Is the element an attribute name?
-            ViewAttribute viewAttribute = currentViewEntity.getAttribute( qName, false );
+            ViewAttribute viewAttribute = currentEntityDef.getAttribute( qName, false );
             if ( viewAttribute != null )
             {
-                EntityInstanceImpl ei = view.cursor( viewAttribute.getViewEntity() ).getEntityInstance();
+                EntityInstanceImpl ei = view.cursor( viewAttribute.getEntityDef() ).getEntityInstance();
                 ei.setInternalAttributeValue( viewAttribute, characterBuffer.toString(), false );
                 characterBuffer = null;
 
@@ -221,9 +221,9 @@ class ActivateOiFromXmlStream implements StreamReader
             }
 
             // Is the element name an entity name?
-            if ( viewOd.getViewEntity( qName, false ) != null )
+            if ( viewOd.getEntityDef( qName, false ) != null )
             {
-                assert qName.equals( currentViewEntity.getName() ) : "Mismatching entity names in XML";
+                assert qName.equals( currentEntityDef.getName() ) : "Mismatching entity names in XML";
 
                 if ( incremental )
                 {
@@ -237,11 +237,11 @@ class ActivateOiFromXmlStream implements StreamReader
                     ei.setDeleted( isYes( attributes.getValue( "Deleted" ) ) );
                 }
 
-                // The top of the stack equals currentViewEntity.  Pop it off the stack and
-                // set currentViewEntity to the next item in the stack.
+                // The top of the stack equals currentEntityDef.  Pop it off the stack and
+                // set currentEntityDef to the next item in the stack.
                 currentEntityStack.pop();
-                if ( currentViewEntity.getParent() != null ) // Is it root?
-                    currentViewEntity = currentEntityStack.peek();
+                if ( currentEntityDef.getParent() != null ) // Is it root?
+                    currentEntityDef = currentEntityStack.peek();
                 return;
             }
 

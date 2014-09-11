@@ -54,7 +54,7 @@ import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingViaDb;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -183,9 +183,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public EntityCursorImpl cursor(ViewEntity viewEntity)
+    public EntityCursorImpl cursor(EntityDef entityDef)
     {
-        return viewCursor.getEntityCursor( viewEntity );
+        return viewCursor.getEntityCursor( entityDef );
     }
 
     @Override
@@ -263,14 +263,14 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public Iterable<EntityInstance> getHierEntityList( boolean includeRoot, String entityName )
     {
-        ViewEntity viewEntity = null;
+        EntityDef entityDef = null;
         if ( ! StringUtils.isBlank( entityName ) )
-            viewEntity = getViewOd().getViewEntity( entityName );
+            entityDef = getViewOd().getEntityDef( entityName );
 
         ObjectInstance oi = viewCursor.getObjectInstance();
         final EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
                                                     .withOiScoping( oi )
-                                                    .forViewEntity( viewEntity )
+                                                    .forEntityDef( entityDef )
                                                     .setLazyLoad( true )
                                                     .build();
 
@@ -296,8 +296,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
                     public EntityInstance next()
                     {
                         EntityInstanceImpl ei = iter.next();
-                        ViewEntity viewEntity = ei.getViewEntity();
-                        EntityCursorImpl entityCursor = viewCursor.getEntityCursor( viewEntity );
+                        EntityDef entityDef = ei.getEntityDef();
+                        EntityCursorImpl entityCursor = viewCursor.getEntityCursor( entityDef );
                         entityCursor.setCursor( ei );
                         return entityCursor.getEntityInstance();
                     }
@@ -534,7 +534,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         if ( flags.contains( ActivateFlags.fSINGLE ) )
         {
             // We only want the root pointed to by the root cursor.
-            firstSrcEntityInstance = srcView.cursor( viewOd.getViewEntity( 0 ) ).getEntityInstance();
+            firstSrcEntityInstance = srcView.cursor( viewOd.getEntityDef( 0 ) ).getEntityInstance();
             lastSrcEntityInstance = firstSrcEntityInstance.getNextTwin();
         }
         else
@@ -559,9 +559,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
               srcEntityInstance != lastSrcEntityInstance;
               srcEntityInstance = srcEntityInstance.getNextHier() )
         {
-            ViewEntity viewEntity = srcEntityInstance.getViewEntity();
+            EntityDef entityDef = srcEntityInstance.getEntityDef();
 
-            EntityCursorImpl cursor = view.cursor( viewEntity );
+            EntityCursorImpl cursor = view.cursor( entityDef );
             EntityInstanceImpl newInstance = cursor.createEntity( CursorPosition.NEXT, CREATE_OI_FLAGS );
             newInstance.setHierIndex( srcEntityInstance.getHierIndex() );
 
@@ -640,9 +640,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public EntityCursor getCursor(ViewEntity viewEntity)
+    public EntityCursor getCursor(EntityDef entityDef)
     {
-        return cursor( viewEntity );
+        return cursor( entityDef );
     }
 
     @Override
@@ -706,7 +706,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
 
         for ( EntityInstanceImpl ei : allEntities )
         {
-            String name = ( ei == null ) ? "null" : ei.getViewEntity().getName();
+            String name = ( ei == null ) ? "null" : ei.getEntityDef().getName();
             Integer ec = entities.get( name );
             if ( ec == null )
                 ec = 1;
@@ -944,9 +944,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         if ( owningTask == null )
             owningTask = getTask();
 
-        ViewEntity rootViewEntity = getViewOd().getRoot();
+        EntityDef rootEntityDef = getViewOd().getRoot();
         View copy = owningTask.activateEmptyObjectInstance( getViewOd() );
-        EntityCursor rootCursor = copy.cursor( rootViewEntity );
+        EntityCursor rootCursor = copy.cursor( rootEntityDef );
         for ( EntityInstance srcInstance = getObjectInstance().getRootEntityInstance();
                              srcInstance != null;
                              srcInstance = srcInstance.getNextTwin() )

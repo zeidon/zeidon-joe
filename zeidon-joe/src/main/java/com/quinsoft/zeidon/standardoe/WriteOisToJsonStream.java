@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author dgc
@@ -116,19 +116,19 @@ public class WriteOisToJsonStream implements StreamWriter
     {
         writeOiMeta( view );
 
-        ViewEntity lastViewEntity = null;
+        EntityDef lastEntityDef = null;
 
         ViewImpl viewImpl = ((InternalView)view).getViewImpl();
         for ( EntityInstanceImpl ei = viewImpl.getObjectInstance().getRootEntityInstance();
               ei != null;
               ei = ei.getNextTwin() )
         {
-            lastViewEntity = writeEntity( ei, lastViewEntity );
+            lastEntityDef = writeEntity( ei, lastEntityDef );
         }
 
-        // If lastViewEntity is null then the OI is empty so write a start array
+        // If lastEntityDef is null then the OI is empty so write a start array
         // to indicate it's empty.
-        if ( lastViewEntity == null )
+        if ( lastEntityDef == null )
         {
 //            jg.writeStartObject();
 //            jg.writeEndObject();
@@ -152,19 +152,19 @@ public class WriteOisToJsonStream implements StreamWriter
         jg.writeEndObject();
     }
 
-    private ViewEntity writeEntity( EntityInstanceImpl ei, ViewEntity lastViewEntity ) throws Exception
+    private EntityDef writeEntity( EntityInstanceImpl ei, EntityDef lastEntityDef ) throws Exception
     {
         try
         {
             // See if we need to open or close an array field.
-            final ViewEntity viewEntity = ei.getViewEntity();
-            if ( lastViewEntity != viewEntity )
+            final EntityDef entityDef = ei.getEntityDef();
+            if ( lastEntityDef != entityDef )
             {
-                if ( lastViewEntity != null )
+                if ( lastEntityDef != null )
                     jg.writeEndArray();
 
-                lastViewEntity = viewEntity;
-                jg.writeArrayFieldStart( viewEntity.getName() );
+                lastEntityDef = entityDef;
+                jg.writeArrayFieldStart( entityDef.getName() );
             }
 
             jg.writeStartObject();
@@ -182,18 +182,18 @@ public class WriteOisToJsonStream implements StreamWriter
             }
 
             // Loop through the children and add them.
-            ViewEntity lastChildViewEntity = null;
+            EntityDef lastChildEntityDef = null;
             for ( EntityInstanceImpl child : ei.getDirectChildren( true ) )
             {
-                lastChildViewEntity = writeEntity( child, lastChildViewEntity );
+                lastChildEntityDef = writeEntity( child, lastChildEntityDef );
             }
 
-            if ( lastChildViewEntity != null )
+            if ( lastChildEntityDef != null )
                 jg.writeEndArray();
 
             jg.writeEndObject();
 
-            return viewEntity;
+            return entityDef;
         }
         catch ( Exception e )
         {
@@ -280,8 +280,8 @@ public class WriteOisToJsonStream implements StreamWriter
         boolean writeAttributes = true;
         EntityInstanceImpl recordOwner = findLinkedRecordOwner( ei );
 
-        ViewEntity viewEntity = ei.getViewEntity();
-        boolean selectedCursor = currentView.cursor( viewEntity ).getEntityInstance() == ei;
+        EntityDef entityDef = ei.getEntityDef();
+        boolean selectedCursor = currentView.cursor( entityDef ).getEntityInstance() == ei;
 
         String str = createIncrementalStr( ei );
         if ( StringUtils.isBlank( str ) && recordOwner == null && ! selectedCursor )
@@ -299,7 +299,7 @@ public class WriteOisToJsonStream implements StreamWriter
         {
             if ( recordOwner == ei )
             {
-                // TODO: validate that ei.viewEntity has all the attributes in the shared
+                // TODO: validate that ei.entityDef has all the attributes in the shared
                 // attribute hash.
                 ei.setRecordOwner( true );
                 jg.writeStringField( "isLinkedSource", "true" );

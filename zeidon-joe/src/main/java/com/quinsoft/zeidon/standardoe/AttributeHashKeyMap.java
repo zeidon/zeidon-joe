@@ -25,7 +25,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * This class keeps track of attribute hash keys.  AHKs are attributes that have values
@@ -64,7 +64,7 @@ class AttributeHashKeyMap
 
         // Check to see if the attribute is part of a recursive child.  If it is then
         // we will use the recursive parent attribute to store values in the map.
-        ViewEntity recursiveParent = viewAttribute.getViewEntity().getRecursiveParentViewEntity();
+        EntityDef recursiveParent = viewAttribute.getEntityDef().getRecursiveParentEntityDef();
         if ( recursiveParent != null )
             viewAttribute = recursiveParent.getAttributeByErToken( viewAttribute.getErAttributeToken() );
 
@@ -93,10 +93,10 @@ class AttributeHashKeyMap
         int hashKeyAttrCount = 0;
         for ( EntityInstanceImpl ei : objectInstance.getEntities( false ) )
         {
-            if ( ei.getViewEntity().getHashKeyAttributes() == null )
+            if ( ei.getEntityDef().getHashKeyAttributes() == null )
                 continue;
 
-            for ( ViewAttribute viewAttribute : ei.getViewEntity().getHashKeyAttributes() )
+            for ( ViewAttribute viewAttribute : ei.getEntityDef().getHashKeyAttributes() )
             {
                 if ( viewAttribute.getHashKeyType() == AttributeHashKeyType.NONE )
                     continue;

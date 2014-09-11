@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -52,7 +52,7 @@ public class ActivateOiFromFileDb implements Activator
     private EnumSet<ActivateFlags> control;
     private ViewOd          viewOd;
     private ActivateOptions options;
-    private ViewEntity      rootViewEntity;
+    private EntityDef      rootEntityDef;
     private ViewAttribute   qualViewAttrib;
     private String          qualValue;
     private FileDbUtils     fileDbUtils;
@@ -81,7 +81,7 @@ public class ActivateOiFromFileDb implements Activator
     }
 
     /**
-     * Validate that the qual object is well-formed for File DB and parse out the viewEntity,
+     * Validate that the qual object is well-formed for File DB and parse out the entityDef,
      * viewAttrib, and qual value.
      */
     private void validateQual()
@@ -95,8 +95,8 @@ public class ActivateOiFromFileDb implements Activator
 
         entitySpec.setFirst();
         String entityName = entitySpec.getAttribute( "EntityName" ).getString();
-        rootViewEntity = viewOd.getViewEntity( entityName );
-        if ( ! rootViewEntity.equals( viewOd.getRoot() ) )
+        rootEntityDef = viewOd.getEntityDef( entityName );
+        if ( ! rootEntityDef.equals( viewOd.getRoot() ) )
             throw new ZeidonException( "File DB supports qualification on the root only" );
 
         EntityCursor qualAttrib = qual.cursor( "QualAttrib" );
@@ -104,14 +104,14 @@ public class ActivateOiFromFileDb implements Activator
             throw new ZeidonException( "File DB supports qualification on one and only one attribute." );
 
         entityName = qualAttrib.getAttribute( "EntityName" ).getString();
-        if ( ! rootViewEntity.getName().equals( entityName ) )
+        if ( ! rootEntityDef.getName().equals( entityName ) )
             throw new ZeidonException( "File DB supports qualification on the root only" );
 
         String attribName = qualAttrib.getAttribute( "AttributeName" ).getString();
         if ( StringUtils.isBlank( attribName ) )
             throw new ZeidonException( "File DB requires qualification on an attribute." );
 
-        qualViewAttrib = rootViewEntity.getAttribute( attribName );
+        qualViewAttrib = rootEntityDef.getAttribute( attribName );
 
         String oper = qualAttrib.getAttribute( "Oper" ).getString();
         if ( ! StringUtils.equals( oper, "=" ) )
@@ -193,10 +193,10 @@ public class ActivateOiFromFileDb implements Activator
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Activator#activate(com.quinsoft.zeidon.objectdefinition.ViewEntity)
+     * @see com.quinsoft.zeidon.Activator#activate(com.quinsoft.zeidon.objectdefinition.EntityDef)
      */
     @Override
-    public int activate( ViewEntity subobjectRootEntity )
+    public int activate( EntityDef subobjectRootEntity )
     {
         throw new ZeidonException( "Lazy-load activates are not supported by File DB Handler" );
     }

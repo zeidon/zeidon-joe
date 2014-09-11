@@ -122,7 +122,7 @@ class View( val task: Task ) extends Task( task ) {
     def selectDynamic( entityName: String ): EntityCursor = {
         validateViewOd
 
-        val jviewEntity = jviewOd.getViewEntity( entityName )
+        val jviewEntity = jviewOd.getEntityDef( entityName )
         val jcur = jview.cursor( jviewEntity )
         new EntityCursor( this, jcur )
     }

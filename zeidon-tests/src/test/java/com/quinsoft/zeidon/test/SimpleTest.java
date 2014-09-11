@@ -16,7 +16,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -27,14 +27,14 @@ import com.quinsoft.zeidon.utils.QualificationBuilder;
  */
 class SimpleTest
 {
-    static int createChildEntities( int entityCount, View view, ViewEntity viewEntity )
+    static int createChildEntities( int entityCount, View view, EntityDef entityDef )
     {
-        if ( !viewEntity.isCreate() )
+        if ( !entityDef.isCreate() )
             return entityCount;
 
-        view.cursor( viewEntity.getName() ).createEntity();
+        view.cursor( entityDef.getName() ).createEntity();
         entityCount++;
-        for ( ViewEntity child : viewEntity.getChildren() )
+        for ( EntityDef child : entityDef.getChildren() )
         {
             for ( int i = 0; i < 2; i++ )
             {
@@ -59,7 +59,7 @@ class SimpleTest
         Task zeidonSystem = oe.getSystemTask();
         View view = zeidonSystem.activateEmptyObjectInstance( "kzwdlgxo" );
         ViewOd viewOd = view.getViewOd();
-        ViewEntity rootEntity = viewOd.getRoot();
+        EntityDef rootEntity = viewOd.getRoot();
         int entityCount = 0;
         for ( int i = 0; i < 2000; i++ )
         {

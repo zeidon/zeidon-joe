@@ -40,7 +40,7 @@ import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -156,12 +156,12 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#cursor(com.quinsoft.zeidon.objectdefinition.ViewEntity)
+     * @see com.quinsoft.zeidon.View#cursor(com.quinsoft.zeidon.objectdefinition.EntityDef)
      */
     @Override
-    public EntityCursor cursor( ViewEntity viewentity )
+    public EntityCursor cursor( EntityDef entityDef )
     {
-        return getView().cursor( viewentity );
+        return getView().cursor( entityDef );
     }
 
     /* (non-Javadoc)
@@ -174,12 +174,12 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#getCursor(com.quinsoft.zeidon.objectdefinition.ViewEntity)
+     * @see com.quinsoft.zeidon.View#getCursor(com.quinsoft.zeidon.objectdefinition.EntityDef)
      */
     @Override
-    public EntityCursor getCursor( ViewEntity viewEntity )
+    public EntityCursor getCursor( EntityDef entityDef )
     {
-        return getView().getCursor( viewEntity );
+        return getView().getCursor( entityDef );
     }
 
     /* (non-Javadoc)

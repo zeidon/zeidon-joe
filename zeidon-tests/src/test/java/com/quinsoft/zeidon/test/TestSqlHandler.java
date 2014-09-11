@@ -34,7 +34,7 @@ import com.quinsoft.zeidon.dbhandler.JdbcHandler;
 import com.quinsoft.zeidon.dbhandler.StandardJdbcTranslator;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Test dbhandler that just stores the generated SQL to a list so that the
@@ -65,24 +65,24 @@ public class TestSqlHandler extends JdbcHandler
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.dbhandler.AbstractSqlHandler#executeLoad(com.quinsoft.zeidon.objectdefinition.ViewEntity, com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement)
+     * @see com.quinsoft.zeidon.dbhandler.AbstractSqlHandler#executeLoad(com.quinsoft.zeidon.objectdefinition.EntityDef, com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement)
      */
     @Override
-    protected int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt)
+    protected int executeLoad(View view, EntityDef entityDef, SqlStatement stmt)
     {
         String sql = StringUtils.remove(  stmt.toString(), '\r' );
         task.dblog().debug( "<SQL>\n%s\n</SQL>", sql );
         sqlCommands.add( sql );
 
-//        DataRecord dataRecord = viewEntity.getDataRecord();
-        EntityCursor csr = view.cursor( viewEntity );
+//        DataRecord dataRecord = entityDef.getDataRecord();
+        EntityCursor csr = view.cursor( entityDef );
         int max = 3;
-        if ( viewEntity.getParent() != null )
-            max = Math.min(  max, viewEntity.getMaxCardinality() );
+        if ( entityDef.getParent() != null )
+            max = Math.min(  max, entityDef.getMaxCardinality() );
         for ( int i = 0; i < max; i++ )
         {
             csr.createEntity( CreateEntityFlags.fIGNORE_PERMISSIONS );
-            for ( ViewAttribute key : viewEntity.getAttributes() )
+            for ( ViewAttribute key : entityDef.getAttributes() )
             {
                 if ( key.isKey() || key.isForeignKey() )
                 {
@@ -106,10 +106,10 @@ public class TestSqlHandler extends JdbcHandler
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.dbhandler.AbstractSqlHandler#executeStatement(com.quinsoft.zeidon.objectdefinition.ViewEntity, com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement)
+     * @see com.quinsoft.zeidon.dbhandler.AbstractSqlHandler#executeStatement(com.quinsoft.zeidon.objectdefinition.EntityDef, com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement)
      */
     @Override
-    protected int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt)
+    protected int executeStatement(View view, EntityDef entityDef, SqlStatement stmt)
     {
         String sql = stmt.toString();
         task.dblog().debug( "<SQL>\n%s\n</SQL>", sql );

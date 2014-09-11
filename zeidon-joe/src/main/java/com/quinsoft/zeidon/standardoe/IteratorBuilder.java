@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.EntityComparator.AlwaysTrueComparator;
 import com.quinsoft.zeidon.standardoe.EntityComparator.InSetComparator;
 import com.quinsoft.zeidon.standardoe.EntityComparator.NonHiddenComparator;
@@ -45,7 +45,7 @@ import com.quinsoft.zeidon.standardoe.EntityTraverser.NextTwinTraverser;
  *      iterator = new IteratorBuilder()
  *                       .setCursor( cursor )
  *                       .forTwinsOf( getEntityInstance() )
- *                       .forViewEntity( getViewEntity() )
+ *                       .forEntityDef( getEntityDef() )
  *                       .build();
  * @author DG
  *
@@ -67,7 +67,7 @@ class IteratorBuilder
     private boolean              directChildren    = false;
     private boolean              includeHierParent = false;
     private EntityCursorImpl     cursor;
-    private ViewEntity           targetViewEntity;
+    private EntityDef           targetEntityDef;
     private EntityInstanceImpl   currentInstance;
     private EntityComparator     comparator;
     private EntityInstanceImpl   scopingInstance;
@@ -100,9 +100,9 @@ class IteratorBuilder
             return null;
 
         // Determine if we are going to lazy-load entities.
-        if ( targetViewEntity != null )
+        if ( targetEntityDef != null )
         {
-            LazyLoadConfig targetLazyLoadConfig = targetViewEntity.getLazyLoadConfig();
+            LazyLoadConfig targetLazyLoadConfig = targetEntityDef.getLazyLoadConfig();
 
             // We're looking for a particular view entity.  Are any of the entities between
             // the target and the scoping entity flagged as lazy load?
@@ -111,31 +111,31 @@ class IteratorBuilder
 
             // Determine the scoping view entity.  We'll initialize it to be the root
             // view entity.
-            ViewEntity scopingViewEntity = objectInstance.getRootEntityInstance().getViewEntity();
+            EntityDef scopingEntityDef = objectInstance.getRootEntityInstance().getEntityDef();
             if ( scopingInstance != null ) // Has a scoping entity been specified?
-                scopingViewEntity = scopingInstance.getViewEntity();
+                scopingEntityDef = scopingInstance.getEntityDef();
 
             LazyLoadInfo lazyLoadInfo = new LazyLoadInfo( objectInstance );
 
             // Find the view entity between target and scoping that is lazy-loaded.
-            ViewEntity lazyLoadViewEntity;
+            EntityDef lazyLoadEntityDef;
 
-            for ( lazyLoadViewEntity = targetViewEntity;
-                  lazyLoadViewEntity != scopingViewEntity;
-                  lazyLoadViewEntity = lazyLoadViewEntity.getParent() )
+            for ( lazyLoadEntityDef = targetEntityDef;
+                  lazyLoadEntityDef != scopingEntityDef;
+                  lazyLoadEntityDef = lazyLoadEntityDef.getParent() )
             {
-                if ( lazyLoadViewEntity.getLazyLoadConfig().isLazyLoad() )
+                if ( lazyLoadEntityDef.getLazyLoadConfig().isLazyLoad() )
                 {
-                    // lazyLoadViewEntity is flagged for lazy load.  This means that when we
-                    // access the parent we need to lazy load lazyLoadViewEntity.  Store this
+                    // lazyLoadEntityDef is flagged for lazy load.  This means that when we
+                    // access the parent we need to lazy load lazyLoadEntityDef.  Store this
                     // in the lazyLoadInfo.
-                    lazyLoadInfo.parentLazyLoad.put( lazyLoadViewEntity.getParent(), lazyLoadViewEntity );
+                    lazyLoadInfo.parentLazyLoad.put( lazyLoadEntityDef.getParent(), lazyLoadEntityDef );
                 }
                 else
                 {
                     // If the lazyLoadView entity is the scoping instance then this path has already
                     // been lazy-loaded so we don't need to attempt lazy loading.
-                    if ( lazyLoadViewEntity == scopingViewEntity )
+                    if ( lazyLoadEntityDef == scopingEntityDef )
                         return null;
                 }
             }
@@ -148,24 +148,24 @@ class IteratorBuilder
             // the scoping or initial instance.
             if ( scopingInstance != null )
             {
-                lazyLoadInfo.view.cursor( scopingInstance.getViewEntity() ).setCursor( scopingInstance );
+                lazyLoadInfo.view.cursor( scopingInstance.getEntityDef() ).setCursor( scopingInstance );
 
                 // Make sure we lazy-load any child instances of the scopingInstance.
-                for ( ViewEntity childLazyLoad : lazyLoadInfo.parentLazyLoad.get( scopingViewEntity ) )
+                for ( EntityDef childLazyLoad : lazyLoadInfo.parentLazyLoad.get( scopingEntityDef ) )
                     scopingInstance.lazyLoadChild( lazyLoadInfo.view, childLazyLoad );
             }
             else
             if ( initialInstance != null )
             {
-                // Find the parent of initialInstance that matches the LazyLoad parent of targetViewEntity.
+                // Find the parent of initialInstance that matches the LazyLoad parent of targetEntityDef.
                 // We can't just use initialInstance because when we're setting parent cursors they may
                 // be currently set to some other ancestor path, which will itself trigger a lazy load down
                 // the other path.
                 for ( EntityInstanceImpl ei = initialInstance; ei != null; ei = ei.getParent() )
                 {
-                    if ( ei.getViewEntity() == targetLazyLoadConfig.getLazyLoadParent() )
+                    if ( ei.getEntityDef() == targetLazyLoadConfig.getLazyLoadParent() )
                     {
-                        lazyLoadInfo.view.cursor( ei.getViewEntity() ).setCursor( ei );
+                        lazyLoadInfo.view.cursor( ei.getEntityDef() ).setCursor( ei );
                     }
                 }
             }
@@ -228,7 +228,7 @@ class IteratorBuilder
         // Loop through the children of the ei to find a matching EI.
         for ( EntityInstanceImpl ei : parent.getDirectChildren( true ) )
         {
-            if ( ei.getViewEntity() == droppedInstance.getViewEntity() )
+            if ( ei.getEntityDef() == droppedInstance.getEntityDef() )
             {
                 // We found a match!  This is a valid EI that is the same entity
                 // type as droppedInstance and shouldn't be flagged as dropped.
@@ -280,9 +280,9 @@ class IteratorBuilder
             }
         }
         else
-        if ( targetViewEntity != null &&     // If targetViewEntity == null then we must be looping hierarchically.
-             ( scopingInstance == null  || targetViewEntity.getParent() == null ||
-               scopingInstance.getViewEntity() == targetViewEntity.getParent() ) )
+        if ( targetEntityDef != null &&     // If targetEntityDef == null then we must be looping hierarchically.
+             ( scopingInstance == null  || targetEntityDef.getParent() == null ||
+               scopingInstance.getEntityDef() == targetEntityDef.getParent() ) )
         {
             traverser = s_nextTwinTraverser;
 
@@ -297,16 +297,16 @@ class IteratorBuilder
                     initialInstance = findNonDroppedInstance( initialInstance );
                 }
 
-                if ( initialInstance != null && targetViewEntity != initialInstance.getViewEntity()
-                                             && targetViewEntity != initialInstance.getBaseViewEntity() )
+                if ( initialInstance != null && targetEntityDef != initialInstance.getEntityDef()
+                                             && targetEntityDef != initialInstance.getBaseEntityDef() )
                 {
                     // If we get here then the caller indicated they want scoping but it is scoping using the parent EI,
                     // which really amounts to no scoping.  However, the initialInstance references the parent
-                    // scoping EI.  Find the first EI matching targetViewEntity under the current initialInstance.
-                    assert targetViewEntity.getParent() == initialInstance.getViewEntity();
+                    // scoping EI.  Find the first EI matching targetEntityDef under the current initialInstance.
+                    assert targetEntityDef.getParent() == initialInstance.getEntityDef();
                     int level = initialInstance.getLevel();
                     initialInstance = initialInstance.getNextHier();
-                    while ( initialInstance != null && initialInstance.getViewEntity() != targetViewEntity && initialInstance.getLevel() > level )
+                    while ( initialInstance != null && initialInstance.getEntityDef() != targetEntityDef && initialInstance.getLevel() > level )
                     {
                         initialInstance = initialInstance.getLastTwin().getLastChildHier().getNextHier();
                     }
@@ -314,7 +314,7 @@ class IteratorBuilder
                     if ( initialInstance != null && initialInstance.getLevel() <= level )
                         initialInstance = null;
 
-                    assert initialInstance == null || initialInstance.getViewEntity() == targetViewEntity;
+                    assert initialInstance == null || initialInstance.getEntityDef() == targetEntityDef;
                 }
 
                 currentInstance = initialInstance;
@@ -355,7 +355,7 @@ class IteratorBuilder
 
         InternalEntityIteratorImpl iterator =
                 new InternalEntityIteratorImpl( currentInstance,
-                                                targetViewEntity,
+                                                targetEntityDef,
                                                 traverser,
                                                 comparator,
                                                 attributeValueList,
@@ -429,17 +429,17 @@ class IteratorBuilder
     }
 
     /**
-     * Limit the entities found to those matching this ViewEntity.  This is normally set except for
+     * Limit the entities found to those matching this EntityDef.  This is normally set except for
      * hierarchical cursors.
      *
-     * The viewEntity may be null, which means we'll accept all entities.
+     * The entityDef may be null, which means we'll accept all entities.
      *
-     * @param viewEntity
+     * @param entityDef
      * @return
      */
-    IteratorBuilder forViewEntity( ViewEntity viewEntity )
+    IteratorBuilder forEntityDef( EntityDef entityDef )
     {
-        targetViewEntity = viewEntity;
+        targetEntityDef = entityDef;
         return this;
     }
 
@@ -566,7 +566,7 @@ class IteratorBuilder
                 if ( scoping == null )
                     scoping = initialInstance.getParent();
 
-                if ( ! scoping.getViewEntity().equals( viewAttribute.getHashKeyParent() ) )
+                if ( ! scoping.getEntityDef().equals( viewAttribute.getHashKeyParent() ) )
                     return;  // We can only match if scoping entity matches hashkey parent.
 
                 map = scoping.getAttributeHashkeyMap();
@@ -615,7 +615,7 @@ class IteratorBuilder
         /**
          * This keeps track of entities that have children that need to be lazy-loaded.
          */
-        private final Multimap<ViewEntity, ViewEntity> parentLazyLoad = HashMultimap.create();
+        private final Multimap<EntityDef, EntityDef> parentLazyLoad = HashMultimap.create();
 
         // If true, then all entities should be lazy loaded.
         private boolean allEntities = false;
@@ -638,7 +638,7 @@ class IteratorBuilder
          */
         private       EntityInstanceImpl   nextInstance;
         private       EntityInstanceImpl   currentInstance;
-        private final ViewEntity           targetViewEntity;
+        private final EntityDef           targetEntityDef;
         private final EntityTraverser      traverser;
         private final EntityComparator     comparator;
         private final boolean              usingAttributeHashKey;
@@ -666,7 +666,7 @@ class IteratorBuilder
         {
             nextInstance = source.nextInstance;
             currentInstance = source.currentInstance;
-            targetViewEntity = source.targetViewEntity;
+            targetEntityDef = source.targetEntityDef;
             traverser = source.traverser;
             comparator = source.comparator;
             direction = source.direction;
@@ -677,7 +677,7 @@ class IteratorBuilder
         }
 
         private InternalEntityIteratorImpl( EntityInstanceImpl   currentInstance,
-                                            ViewEntity           targetViewEntity,
+                                            EntityDef           targetEntityDef,
                                             EntityTraverser      traverser,
                                             EntityComparator     comparator,
                                             List<AttributeValue> attributeValueList,
@@ -687,7 +687,7 @@ class IteratorBuilder
         {
             super();
             this.nextInstance = currentInstance;
-            this.targetViewEntity = targetViewEntity;
+            this.targetEntityDef = targetEntityDef;
             this.traverser = traverser;
             this.comparator = comparator;
             this.attributeValueList = attributeValueList;
@@ -724,14 +724,14 @@ class IteratorBuilder
             if ( ! comparator.isEqual( nextInstance ) )
                 return false;
 
-            // If we're looking for a specific instance then targetViewEntity is not null.
-            if ( targetViewEntity != null )
+            // If we're looking for a specific instance then targetEntityDef is not null.
+            if ( targetEntityDef != null )
             {
                 // Same view entities?
-                if ( nextInstance.getViewEntity() != targetViewEntity )
+                if ( nextInstance.getEntityDef() != targetEntityDef )
                 {
                     // No?  Last chance--are they recursive parents?
-                    if ( nextInstance.getViewEntity().getRecursiveParentViewEntity() != targetViewEntity )
+                    if ( nextInstance.getEntityDef().getRecursiveParentEntityDef() != targetEntityDef )
                         return false;  // No match is found.
                 }
             }
@@ -742,7 +742,7 @@ class IteratorBuilder
                 {
                     //TODO: Some day we can support attribute values from parent instances.
                     // We use entity tokens because this could be a recursive structure.
-                    assert attrib.getViewEntity().getErEntityToken() == nextInstance.getViewEntity().getErEntityToken();
+                    assert attrib.getEntityDef().getErEntityToken() == nextInstance.getEntityDef().getErEntityToken();
 
                     if ( nextInstance.compareAttribute( attrib.getViewAttribute(), attrib.getValue() ) != 0 )
                         return false;
@@ -801,10 +801,10 @@ class IteratorBuilder
                 {
                     // nextInstance is determined to be the parent of a child instance that requires
                     // lazy loading.  Load all children that require it.
-                    lazyLoadInfo.view.cursor( nextInstance.getViewEntity() ).setCursor( nextInstance );
+                    lazyLoadInfo.view.cursor( nextInstance.getEntityDef() ).setCursor( nextInstance );
                     if ( lazyLoadInfo.allEntities )
                     {
-                        for ( ViewEntity child : nextInstance.getViewEntity().getChildren() )
+                        for ( EntityDef child : nextInstance.getEntityDef().getChildren() )
                         {
                             if ( child.getLazyLoadConfig().isLazyLoad() )
                                 nextInstance.lazyLoadChild( lazyLoadInfo.view, child );
@@ -812,7 +812,7 @@ class IteratorBuilder
                     }
                     else
                     {
-                        for ( ViewEntity child : lazyLoadInfo.parentLazyLoad.get( nextInstance.getViewEntity() ) )
+                        for ( EntityDef child : lazyLoadInfo.parentLazyLoad.get( nextInstance.getEntityDef() ) )
                             nextInstance.lazyLoadChild( lazyLoadInfo.view, child );
                     }
                 }
@@ -824,12 +824,12 @@ class IteratorBuilder
                 // skipping past child entities
                 // EXCEPT FOR
                 // when the target entities are part of a recursive chain.
-                // TODO: We really need to look to see if *any* parent of targetViewEntity
+                // TODO: We really need to look to see if *any* parent of targetEntityDef
                 // is recursive.
-                if ( targetViewEntity != null &&
-                     ( ! targetViewEntity.isRecursive() && ! targetViewEntity.isRecursiveParent() ) )
+                if ( targetEntityDef != null &&
+                     ( ! targetEntityDef.isRecursive() && ! targetEntityDef.isRecursiveParent() ) )
                 {
-                    if ( nextInstance.getLevel() > targetViewEntity.getLevel() )
+                    if ( nextInstance.getLevel() > targetEntityDef.getLevel() )
                         nextInstance = nextInstance.getLastTwin().getLastChildHier();
                 }
             }
@@ -1003,9 +1003,9 @@ class IteratorBuilder
             return value;
         }
 
-        ViewEntity getViewEntity()
+        EntityDef getEntityDef()
         {
-            return viewAttribute.getViewEntity();
+            return viewAttribute.getEntityDef();
         }
     }
 }

@@ -14,7 +14,7 @@ import com.quinsoft.zeidon.objectdefinition._
  * @author dgc
  *
  */
-abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefinition.ViewEntity )
+abstract class AbstractEntity( val jviewEntity: com.quinsoft.zeidon.objectdefinition.EntityDef )
                         extends Dynamic {
 
     /**

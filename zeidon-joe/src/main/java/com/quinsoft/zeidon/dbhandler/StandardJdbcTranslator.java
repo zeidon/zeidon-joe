@@ -238,7 +238,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     public String bindAttributeValue( PreparedStatement ps, View view, DataField dataField, int idx )
     {
         final ViewAttribute viewAttribute = dataField.getViewAttribute();
-        final Object value = view.cursor( viewAttribute.getViewEntity() ).getInternalAttributeValue( viewAttribute );
+        final Object value = view.cursor( viewAttribute.getEntityDef() ).getInternalAttributeValue( viewAttribute );
 
         try
         {

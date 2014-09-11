@@ -34,7 +34,7 @@ import com.quinsoft.zeidon.ObjectConstraintType;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.UnknownViewEntityException;
+import com.quinsoft.zeidon.UnknownEntityDefException;
 import com.quinsoft.zeidon.UnknownViewOdException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -55,8 +55,8 @@ public class ViewOd implements PortableFileAttributeHandler
     private final Application  app;
     private String       name;
     private final String filename;
-    private final Map<String, ViewEntity> nameMap = new HashMap<String, ViewEntity>();
-    private List<ViewEntity> entityList = new ArrayList<ViewEntity>();
+    private final Map<String, EntityDef> nameMap = new HashMap<String, EntityDef>();
+    private List<EntityDef> entityList = new ArrayList<EntityDef>();
     private String       erDate;
     private boolean      hasGenKey;
     private String       genkeyHandler;
@@ -117,29 +117,29 @@ public class ViewOd implements PortableFileAttributeHandler
         return filename;
     }
 
-    public ViewEntity getViewEntity( String entityName, boolean required )
+    public EntityDef getEntityDef( String entityName, boolean required )
     {
         // We allow the dbhandler to use a special string to indicate the
         // root.
         if ( StringUtils.equals( entityName, DbHandler.ROOT_ENTITY ) )
-            return getViewEntity( 0 );  // Return the root view entity.
+            return getEntityDef( 0 );  // Return the root view entity.
 
-        ViewEntity viewEntity = nameMap.get( entityName );
-        if ( viewEntity == null && required )
-            throw new UnknownViewEntityException( this, entityName );
+        EntityDef entityDef = nameMap.get( entityName );
+        if ( entityDef == null && required )
+            throw new UnknownEntityDefException( this, entityName );
 
-        return viewEntity;
+        return entityDef;
     }
 
-    public ViewEntity getViewEntity( String entityName )
+    public EntityDef getEntityDef( String entityName )
     {
-        return getViewEntity( entityName, true );
+        return getEntityDef( entityName, true );
     }
 
-    public ViewEntity getViewEntity( int index )
+    public EntityDef getEntityDef( int index )
     {
-        ViewEntity viewEntity = entityList.get( index );
-        return viewEntity;
+        EntityDef entityDef = entityList.get( index );
+        return entityDef;
     }
 
     private void loadViewOD( Task task, InputStream file )
@@ -155,11 +155,11 @@ public class ViewOd implements PortableFileAttributeHandler
         }
     }
 
-    private void addViewEntity( ViewEntity viewEntity )
+    private void addEntityDef( EntityDef entityDef )
     {
-        nameMap.put( viewEntity.getName(), viewEntity );
-        height = Math.max( height, viewEntity.getLevel() );
-        entityList.add( viewEntity );
+        nameMap.put( entityDef.getName(), entityDef );
+        height = Math.max( height, entityDef.getLevel() );
+        entityList.add( entityDef );
     }
 
     @Override
@@ -239,7 +239,7 @@ public class ViewOd implements PortableFileAttributeHandler
         }
     }
 
-    public List<ViewEntity> getViewEntitiesHier()
+    public List<EntityDef> getViewEntitiesHier()
     {
         return entityList;
     }
@@ -265,7 +265,7 @@ public class ViewOd implements PortableFileAttributeHandler
         return database;
     }
 
-    public ViewEntity getRoot()
+    public EntityDef getRoot()
     {
         return entityList.get( 0 );
     }
@@ -277,11 +277,11 @@ public class ViewOd implements PortableFileAttributeHandler
     public void displayViewOD( TaskQualification task )
     {
         task.log().info( "Displaying View OD for %s", getName() );
-        for ( ViewEntity viewEntity : getViewEntitiesHier() )
+        for ( EntityDef entityDef : getViewEntitiesHier() )
         {
-            task.log().info( "%s %d, count = %d", viewEntity.getName(),
-                              viewEntity.getLevel(), viewEntity.getChildCount() );
-            for ( ViewAttribute attrib : viewEntity.getAttributes() )
+            task.log().info( "%s %d, count = %d", entityDef.getName(),
+                              entityDef.getLevel(), entityDef.getChildCount() );
+            for ( ViewAttribute attrib : entityDef.getAttributes() )
             {
                 Domain domain = attrib.getDomain();
                 String type = domain == null ? attrib.getType().toString() : domain.getName();
@@ -289,7 +289,7 @@ public class ViewOd implements PortableFileAttributeHandler
                                  attrib.getName(), attrib.getAttributeNumber(), type );
             }
 
-            DataRecord dataRecord = viewEntity.getDataRecord();
+            DataRecord dataRecord = entityDef.getDataRecord();
             if ( dataRecord == null )
                 continue;
 
@@ -485,8 +485,8 @@ public class ViewOd implements PortableFileAttributeHandler
     private class ViewOdHandler extends NullEntityHandler
     {
         private final ViewOd viewOd;
-        private ViewEntity currentViewEntity = null;
-        private final ArrayList<ViewEntity> parentStack = new ArrayList<ViewEntity>();
+        private EntityDef currentEntityDef = null;
+        private final ArrayList<EntityDef> parentStack = new ArrayList<EntityDef>();
 
         ViewOdHandler(ViewOd viewOd)
         {
@@ -500,7 +500,7 @@ public class ViewOd implements PortableFileAttributeHandler
         {
             if ( reader.getAttributeName().equals( "ATTRIB" ))
             {
-                ViewAttribute attrib = new ViewAttribute(currentViewEntity);
+                ViewAttribute attrib = new ViewAttribute(currentEntityDef);
                 return attrib;
             }
             else
@@ -511,29 +511,29 @@ public class ViewOd implements PortableFileAttributeHandler
                 // is the object name.
                 level--;
 
-                if ( currentViewEntity != null )
-                    addViewEntity( currentViewEntity );
+                if ( currentEntityDef != null )
+                    addEntityDef( currentEntityDef );
 
-                ViewEntity viewEntity = new ViewEntity( viewOd, level );
+                EntityDef entityDef = new EntityDef( viewOd, level );
 
                 if ( level >= parentStack.size() )
-                    parentStack.add( viewEntity );
+                    parentStack.add( entityDef );
                 else
-                    parentStack.set( level, viewEntity );
+                    parentStack.set( level, entityDef );
                 if ( level > 1 )
-                    viewEntity.setParent( parentStack.get( level - 1 ) );
+                    entityDef.setParent( parentStack.get( level - 1 ) );
 
-                if ( currentViewEntity != null )
-                    currentViewEntity.setNextHier( viewEntity );
-                viewEntity.setPrevHier( currentViewEntity );
-                currentViewEntity = viewEntity;
-                return viewEntity;
+                if ( currentEntityDef != null )
+                    currentEntityDef.setNextHier( entityDef );
+                entityDef.setPrevHier( currentEntityDef );
+                currentEntityDef = entityDef;
+                return entityDef;
             }
             else
             if ( reader.getAttributeName().equals( "DATAFIELD" ))
             {
                 DataField dataField = new DataField();
-                currentViewEntity.getDataRecord().addDataField( dataField );
+                currentEntityDef.getDataRecord().addDataField( dataField );
                 return dataField;
             }
             else
@@ -545,15 +545,15 @@ public class ViewOd implements PortableFileAttributeHandler
             else
             if ( reader.getAttributeName().equals( "RELRECORD" ))
             {
-                RelRecord relRecord = new RelRecord( currentViewEntity.getDataRecord() );
-                currentViewEntity.getDataRecord().setRelRecord( relRecord );
+                RelRecord relRecord = new RelRecord( currentEntityDef.getDataRecord() );
+                currentEntityDef.getDataRecord().setRelRecord( relRecord );
                 return relRecord;
             }
             else
             if ( reader.getAttributeName().equals( "DATARECORD" ))
             {
-                DataRecord dataRecord = new DataRecord( currentViewEntity );
-                currentViewEntity.setDataRecord( dataRecord );
+                DataRecord dataRecord = new DataRecord( currentEntityDef );
+                currentEntityDef.setDataRecord( dataRecord );
                 return dataRecord;
             }
             else
@@ -568,14 +568,14 @@ public class ViewOd implements PortableFileAttributeHandler
         @Override
         public void endEntity(PortableFileReader reader, PortableFileAttributeHandler handler, int level)
         {
-            if ( handler instanceof ViewEntity )
+            if ( handler instanceof EntityDef )
             {
-                ViewEntity viewEntity = (ViewEntity) handler;
+                EntityDef entityDef = (EntityDef) handler;
 
                 // Count up the number of persistent and work attributes.
                 int persistentCount = 0;
                 int workCount = 0;
-                for ( ViewAttribute viewAttribute : viewEntity.getAttributes() )
+                for ( ViewAttribute viewAttribute : entityDef.getAttributes() )
                 {
                     if ( viewAttribute.isPersistent() )
                         persistentCount++;
@@ -583,27 +583,27 @@ public class ViewOd implements PortableFileAttributeHandler
                         workCount++;
                 }
 
-                viewEntity.setPersistentAttributeCount( persistentCount );
-                viewEntity.setWorkAttributeCount( workCount );
+                entityDef.setPersistentAttributeCount( persistentCount );
+                entityDef.setWorkAttributeCount( workCount );
             }
             else
             if ( handler instanceof ViewAttribute )
             {
                 ViewAttribute attrib = (ViewAttribute) handler;
-                currentViewEntity.addViewAttribute( attrib );
+                currentEntityDef.addViewAttribute( attrib );
             }
             else
             if ( handler instanceof RelField )
             {
                 RelField relField = (RelField) handler;
-                currentViewEntity.getDataRecord().getRelRecord().addRelField( relField );
+                currentEntityDef.getDataRecord().getRelRecord().addRelField( relField );
             }
         }
 
         @Override
         public void endFile()
         {
-            addViewEntity( currentViewEntity );  // Add the last view entity.
+            addEntityDef( currentEntityDef );  // Add the last view entity.
 
             // Set the sibling pointers for all the view entities.
             entityList.get( 0 ).setSiblingsForChildren();
@@ -611,7 +611,7 @@ public class ViewOd implements PortableFileAttributeHandler
             Map<Integer, ViewAttribute> attribMap = new HashMap<Integer, ViewAttribute>();
 
             // Find the ViewAttrib for each of the DataFields.
-            for ( ViewEntity ve : entityList )
+            for ( EntityDef ve : entityList )
             {
                 for ( ViewAttribute viewAttrib : ve.getAttributes() )
                 {

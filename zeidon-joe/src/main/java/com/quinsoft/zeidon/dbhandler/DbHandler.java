@@ -24,7 +24,7 @@ import java.util.List;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * The interface between Zeidon OE and the databases.
@@ -51,16 +51,16 @@ public interface DbHandler
     /**
      * Load all viewEntities under the parent.
      * @param view View being activated.
-     * @param viewEntity
+     * @param entityDef
      * @return LOAD_DONE (0)        - Entities loaded OK
      *         LOAD_NO_ENTITIES (1) - No entities loaded.
      */
-    int loadEntity( View view, ViewEntity viewEntity );
+    int loadEntity( View view, EntityDef entityDef );
 
     /**
-     * Returns true if there was qualification on viewEntity.
+     * Returns true if there was qualification on entityDef.
      */
-    boolean isQualified( ViewEntity viewEntity );
+    boolean isQualified( EntityDef entityDef );
 
     int insertEntity( View view, List<? extends EntityInstance> entityInstances );
     int insertRelationship( View view, EntityInstance entityInstance );

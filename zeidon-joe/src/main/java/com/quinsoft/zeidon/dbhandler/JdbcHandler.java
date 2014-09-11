@@ -52,7 +52,7 @@ import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
 
 /**
@@ -208,21 +208,21 @@ public class JdbcHandler extends AbstractSqlHandler
      * Returns the concatenated key values from the current row in the ResultSet.
      * This retrieves *ALL* keys, including parent keys.
      *
-     * @param viewEntity
+     * @param entityDef
      * @param rs
      * @return
      */
-    private String getFullKeyValuesForCurrentRow( ViewEntity viewEntity, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
+    private String getFullKeyValuesForCurrentRow( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
         List<String> values = new ArrayList<String>();
 
         // Add the entity name so we can keep track of the keys for multiple entities.
-        values.add( viewEntity.getName() );
+        values.add( entityDef.getName() );
 
         // Get the values for the keys.  If we're doing a join then we may need to add parent
         // keys as well.  This is necessary if a child entity instance is the child of two
         // different parents.
-        for ( ViewEntity ve = viewEntity; ve != null; ve = ve.getParent() )
+        for ( EntityDef ve = entityDef; ve != null; ve = ve.getParent() )
         {
             DataRecord dataRecord = ve.getDataRecord();
             assert dataRecord != null;
@@ -230,9 +230,9 @@ public class JdbcHandler extends AbstractSqlHandler
             // If ve is not in the dataRecords map then it's not part of this select statement.
             if ( ! stmt.dataRecords.containsKey( dataRecord ) )
             {
-                // The first viewEntity should *always* be in the dataRecords so if it's not
+                // The first entityDef should *always* be in the dataRecords so if it's not
                 // throw an assertion error.
-                assert ve != viewEntity : "viewEntity is not in dataRecords map";
+                assert ve != entityDef : "entityDef is not in dataRecords map";
                 break;
             }
 
@@ -256,18 +256,18 @@ public class JdbcHandler extends AbstractSqlHandler
      *
      * Internal note: We want this to produce the same output as EntityInstance.getKeyString()
      *
-     * @param viewEntity
+     * @param entityDef
      * @param rs
      * @return
      */
-    private String getKeyValuesForCurrentEntity( ViewEntity viewEntity, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
+    private String getKeyValuesForCurrentEntity( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
         StringBuilder builder = new StringBuilder();
 
-        DataRecord dataRecord = viewEntity.getDataRecord();
+        DataRecord dataRecord = entityDef.getDataRecord();
         assert dataRecord != null;
 
-        List<ViewAttribute> keys = viewEntity.getKeys();
+        List<ViewAttribute> keys = entityDef.getKeys();
         for ( ViewAttribute key : keys )
         {
             DataField dataField = dataRecord.getDataField( key );
@@ -291,7 +291,7 @@ public class JdbcHandler extends AbstractSqlHandler
     }
 
     @Override
-    protected int executeLoad(View view, ViewEntity viewEntity, SqlStatement stmt)
+    protected int executeLoad(View view, EntityDef entityDef, SqlStatement stmt)
     {
         int rc = 0;
         String sql = stmt.getAssembledCommand();
@@ -301,8 +301,8 @@ public class JdbcHandler extends AbstractSqlHandler
         try
         {
             Map<String,EntityInstance> loadedEntities = new HashMap<String, EntityInstance>();
-            IntegerLinkedHashMap<ViewEntity> entityCounts = new IntegerLinkedHashMap<ViewEntity>();
-            ps = prepareAndBind( stmt, sql, view, viewEntity, stmt.commandType );
+            IntegerLinkedHashMap<EntityDef> entityCounts = new IntegerLinkedHashMap<EntityDef>();
+            ps = prepareAndBind( stmt, sql, view, entityDef, stmt.commandType );
             rs = ps.executeQuery();
 
             while ( rs.next() )
@@ -313,16 +313,16 @@ public class JdbcHandler extends AbstractSqlHandler
                 // activating a single root.  We have to check after we've called loadAttributes
                 // because the root entity could be repeated in the result set if it is joined
                 // with children.
-                if ( entityCounts.get( viewEntity ) == 2  )
+                if ( entityCounts.get( entityDef ) == 2  )
                 {
                     rc = 1;  // Set return code to indicate we found multiple roots.
 
                     // If we're loading the root and we're only supposed to load a single root
                     // then stop loading.
-                    if ( viewEntity.getParent() == null && activateFlags.contains( ActivateFlags.fSINGLE ) )
+                    if ( entityDef.getParent() == null && activateFlags.contains( ActivateFlags.fSINGLE ) )
                     {
                         // We've loaded 2 root entities.  Delete the second (current) one.
-                        view.cursor( viewEntity ).dropEntity();
+                        view.cursor( entityDef ).dropEntity();
                         break;
                     }
                 }
@@ -330,9 +330,9 @@ public class JdbcHandler extends AbstractSqlHandler
 
             if ( task.dblog().isDebugEnabled() )
             {
-                for ( ViewEntity ve : entityCounts.keySet() )
+                for ( EntityDef ve : entityCounts.keySet() )
                 {
-                    ViewEntity parentEntity = ve.getParent();
+                    EntityDef parentEntity = ve.getParent();
                     if ( parentEntity != null )
                     {
                         EntityCursor parentCursor = view.cursor( parentEntity );
@@ -346,8 +346,8 @@ public class JdbcHandler extends AbstractSqlHandler
         catch ( Exception e )
         {
             throw ZeidonException.prependMessage( e, "SQL => %s\nDB: %s", sql, options.getOiSourceUrl() )
-                                 .prependViewEntity( viewEntity )
-                                 .prependDataRecord( viewEntity.getDataRecord() );
+                                 .prependEntityDef( entityDef )
+                                 .prependDataRecord( entityDef.getDataRecord() );
         }
         finally
         {
@@ -404,7 +404,7 @@ public class JdbcHandler extends AbstractSqlHandler
                                  ResultSet      rs,
                                  View           view,
                                  Map<String, EntityInstance> loadedEntities,
-                                 IntegerLinkedHashMap<ViewEntity> entityCount ) throws SQLException
+                                 IntegerLinkedHashMap<EntityDef> entityCount ) throws SQLException
     {
         // Some JDBC drivers don't allow us to retrieve the same column twice from the same statement.
         // To get around this we'll store the values in an array in case we need to use them again.
@@ -413,7 +413,7 @@ public class JdbcHandler extends AbstractSqlHandler
         // Loop through each of the DataRecords that are part of this statement.
         for ( DataRecord dataRecord : stmt.dataRecords.keySet() )
         {
-            final ViewEntity viewEntity = dataRecord.getViewEntity();
+            final EntityDef entityDef = dataRecord.getEntityDef();
             EntityInstance entityInstance = null;
 
             // For each DataRecord, load the attributes.
@@ -445,22 +445,22 @@ public class JdbcHandler extends AbstractSqlHandler
                         // To handle this we'll grab the key values for the entity and see if we've already loaded
                         // an instance with those keys.  Get a key string of all keys of this entity instance and
                         // its parents.
-                        String keyString = getFullKeyValuesForCurrentRow( viewEntity, rs, stmt, loadedObjects );
+                        String keyString = getFullKeyValuesForCurrentRow( entityDef, rs, stmt, loadedObjects );
                         entityInstance = loadedEntities.get( keyString );
                         if ( entityInstance != null )
                         {
                             // We've already loaded this entity instance.  Set the cursor and stop
                             // loading the attributes for this instance.  We need to set the cursor because
-                            // we might be loading instances that are children of viewEntity.
-                            view.cursor(  viewEntity ).setCursor( entityInstance );
+                            // we might be loading instances that are children of entityDef.
+                            view.cursor(  entityDef ).setCursor( entityInstance );
                             break;
                         }
 
-                        // If we're loading all instances of ViewEntity then we need to set the parent cursor
+                        // If we're loading all instances of EntityDef then we need to set the parent cursor
                         // to point to the correct entity.
-                        ViewEntity parent = viewEntity.getParent();
+                        EntityDef parent = entityDef.getParent();
                         RelRecord relRecord = dataRecord.getRelRecord();
-                        if ( selectAllInstances( viewEntity ) )
+                        if ( selectAllInstances( entityDef ) )
                         {
                             DataField keyField;
                             switch ( relRecord.getRelationshipType() )
@@ -482,16 +482,16 @@ public class JdbcHandler extends AbstractSqlHandler
 
                         // Create the entity but tell the OE not to spawn because this will cause the OE
                         // to attempt to spawn entities that we've already loaded.
-                        entityInstance = view.cursor( viewEntity ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+                        entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
                         loadedEntities.put( keyString, entityInstance );
-                        entityCount.increment( viewEntity );
+                        entityCount.increment( entityDef );
 
                         // We've created a new instance so now check to see if we link this instance with another.
-                        String entityKeyString = getKeyValuesForCurrentEntity( viewEntity, rs, stmt, loadedObjects );
+                        String entityKeyString = getKeyValuesForCurrentEntity( entityDef, rs, stmt, loadedObjects );
 
-                        if ( viewEntity.isRecursive() )
-                            checkForInfiniteRecursiveLoop( view, viewEntity, entityKeyString );
+                        if ( entityDef.isRecursive() )
+                            checkForInfiniteRecursiveLoop( view, entityDef, entityKeyString );
 
                         // TODO: We need to work out some problems if we're going to automatically relink.
                         // 1: Entities load different sets of attributes and if one entity doesn't load all the
@@ -502,27 +502,27 @@ public class JdbcHandler extends AbstractSqlHandler
 
                     ViewAttribute viewAttrib = dataField.getViewAttribute();
 
-                    // If the viewAttrib does not belong to viewEntity then it's a field from a many-to-many
+                    // If the viewAttrib does not belong to entityDef then it's a field from a many-to-many
                     // relationship that was used to set the cursor and shouldn't be copied.
-                    if ( viewAttrib.getViewEntity() != viewEntity )
+                    if ( viewAttrib.getEntityDef() != entityDef )
                         continue;
 
                     setAttribute( entityInstance, viewAttrib, value );
 
                     // Check to see if we should save this instance in the map of all loaded
                     // instances.
-                    if ( viewAttrib.isKey() && loadedInstances.containsKey( viewEntity ) )
+                    if ( viewAttrib.isKey() && loadedInstances.containsKey( entityDef ) )
                     {
                         // If we have a situation where the key is already in the map then
-                        // there are multiple instances of viewEntity.  This can happen if
+                        // there are multiple instances of entityDef.  This can happen if
                         // one of the parent relationships is many-to-one.  Duplicate keys
                         // nullifies the ability to load the children in a single select
-                        // so remove the viewEntity from loadedInstances to indicate we
+                        // so remove the entityDef from loadedInstances to indicate we
                         // can't load the children in one select.
-                        if ( loadedInstances.get(  viewEntity ).containsKey( value ) )
-                            loadedInstances.remove( viewEntity );
+                        if ( loadedInstances.get(  entityDef ).containsKey( value ) )
+                            loadedInstances.remove( entityDef );
                         else
-                            loadedInstances.get(  viewEntity ).put( value, entityInstance );
+                            loadedInstances.get(  entityDef ).put( value, entityInstance );
                     }
                 }
                 catch ( Exception e )
@@ -533,7 +533,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 }
             } // for each DataField...
 
-            assert assertNotNullKey( view, viewEntity ) : "Activated entity has null key";
+            assert assertNotNullKey( view, entityDef ) : "Activated entity has null key";
 
         } // for each DataRecord...
     }
@@ -542,28 +542,28 @@ public class JdbcHandler extends AbstractSqlHandler
      * Make sure the key string doesn't exist in parent entities.  This indicates an infinite loop.
      *
      * @param view
-     * @param viewEntity
+     * @param entityDef
      * @param entityKeyString
      */
-    private void checkForInfiniteRecursiveLoop( View view, ViewEntity viewEntity, String entityKeyString )
+    private void checkForInfiniteRecursiveLoop( View view, EntityDef entityDef, String entityKeyString )
     {
-        ViewEntity parent = viewEntity.getParent();
+        EntityDef parent = entityDef.getParent();
 
         // Search through the parent chain of the current entity.
         for ( EntityInstance ei = view.cursor( parent ).getEntityInstance(); ei != null; ei = ei.getParent() )
         {
-            // If the ei has a different relationship from viewEntity then it's not
+            // If the ei has a different relationship from entityDef then it's not
             // part of a recursive loop.
-            if ( ei.getViewEntity().getErRelToken() != viewEntity.getErRelToken() )
+            if ( ei.getEntityDef().getErRelToken() != entityDef.getErRelToken() )
                 continue;
 
             String parentKeyString = ei.getKeyString();
             if ( StringUtils.equals( entityKeyString, parentKeyString ) )
             {
                 throw new ZeidonException( "Infinite recursive loop detected while activating OI" )
-                                .appendMessage( "Child entity: %s", viewEntity.getName() )
+                                .appendMessage( "Child entity: %s", entityDef.getName() )
                                 .appendMessage( "Child key string: %s", entityKeyString )
-                                .appendMessage( "Parent entity: %s", ei.getViewEntity().getName() )
+                                .appendMessage( "Parent entity: %s", ei.getEntityDef().getName() )
                                 .appendMessage( "Parent key string: %s", parentKeyString );
             }
         }
@@ -632,13 +632,13 @@ public class JdbcHandler extends AbstractSqlHandler
      * @param stmt TODO
      * @param sql
      * @param view TODO
-     * @param viewEntity TODO
+     * @param entityDef TODO
      * @param commandType
      *
      * @return
      * @throws SQLException
      */
-    private PreparedStatement prepareAndBind(SqlStatement stmt, String sql, View view, ViewEntity viewEntity, SqlCommand commandType) throws SQLException
+    private PreparedStatement prepareAndBind(SqlStatement stmt, String sql, View view, EntityDef entityDef, SqlCommand commandType) throws SQLException
     {
         PreparedStatement ps = null;
 
@@ -658,9 +658,9 @@ public class JdbcHandler extends AbstractSqlHandler
             }
         }
 
-        if ( cacheThisCommand && cachedStatements != null && viewEntity != null )  // Are we using cached PreparedStatements?
+        if ( cacheThisCommand && cachedStatements != null && entityDef != null )  // Are we using cached PreparedStatements?
         {
-            PreparedStatementCacheKey key = new PreparedStatementCacheKey( viewEntity, commandType, sql );
+            PreparedStatementCacheKey key = new PreparedStatementCacheKey( entityDef, commandType, sql );
             PreparedStatementCacheValue value = cachedStatements.get( key.getKey() );
             if ( value == null )
             {
@@ -671,7 +671,7 @@ public class JdbcHandler extends AbstractSqlHandler
             }
             else
             {
-                task.dblog().trace( "Using cached statement for Entity => %s \n=> %s", viewEntity, sql );
+                task.dblog().trace( "Using cached statement for Entity => %s \n=> %s", entityDef, sql );
                 ps = value.ps;
             }
         }
@@ -711,7 +711,7 @@ public class JdbcHandler extends AbstractSqlHandler
         return ps;
     }
 
-    private String generateErrorMessageWithBoundAttributes( String sql, ViewEntity viewEntity, SqlStatement stmt )
+    private String generateErrorMessageWithBoundAttributes( String sql, EntityDef entityDef, SqlStatement stmt )
     {
         StringBuilder sb = new StringBuilder( "SQL => " );
         sb.append( sql );
@@ -727,12 +727,12 @@ public class JdbcHandler extends AbstractSqlHandler
                   .append( " [" ).append( o.getClass().getCanonicalName() ).append( "]" );
         }
 
-        sb.append( "\n   ViewEntity : " ).append( viewEntity );
+        sb.append( "\n   EntityDef : " ).append( entityDef );
         return sb.toString();
     }
 
     @Override
-    protected int executeStatement(View view, ViewEntity viewEntity, SqlStatement stmt)
+    protected int executeStatement(View view, EntityDef entityDef, SqlStatement stmt)
     {
         String sql = stmt.getAssembledCommand();
         logSql( stmt );
@@ -742,7 +742,7 @@ public class JdbcHandler extends AbstractSqlHandler
 
         try
         {
-            ps = prepareAndBind( stmt, sql, view, viewEntity, stmt.commandType );
+            ps = prepareAndBind( stmt, sql, view, entityDef, stmt.commandType );
 
             if ( stmt.commandType == SqlCommand.INSERT )
             {
@@ -776,7 +776,7 @@ public class JdbcHandler extends AbstractSqlHandler
         }
         catch ( Exception e )
         {
-            throw ZeidonException.prependMessage( e, generateErrorMessageWithBoundAttributes( sql, viewEntity, stmt ) );
+            throw ZeidonException.prependMessage( e, generateErrorMessageWithBoundAttributes( sql, entityDef, stmt ) );
         }
         finally
         {
@@ -796,17 +796,17 @@ public class JdbcHandler extends AbstractSqlHandler
      */
     static private class PreparedStatementCacheKey
     {
-        private final ViewEntity viewEntity;
+        private final EntityDef entityDef;
         private final SqlCommand commandType;
         private final String     sql;
 
-        private PreparedStatementCacheKey(ViewEntity viewEntity, SqlCommand commandType, String sql)
+        private PreparedStatementCacheKey(EntityDef entityDef, SqlCommand commandType, String sql)
         {
-            assert viewEntity != null;
+            assert entityDef != null;
             assert commandType != null;
             assert sql != null;
 
-            this.viewEntity = viewEntity;
+            this.entityDef = entityDef;
             this.commandType = commandType;
             this.sql = sql;
         }
@@ -825,7 +825,7 @@ public class JdbcHandler extends AbstractSqlHandler
             final int prime = 31;
             int result = 1;
             result = prime * result + commandType.hashCode();
-            result = prime * result + viewEntity.hashCode();
+            result = prime * result + entityDef.hashCode();
             result = prime * result + sql.hashCode();
             return result;
         }
@@ -845,7 +845,7 @@ public class JdbcHandler extends AbstractSqlHandler
             PreparedStatementCacheKey other = (PreparedStatementCacheKey) obj;
             if ( commandType != other.commandType )
                 return false;
-            if ( viewEntity != other.viewEntity )
+            if ( entityDef != other.entityDef )
                     return false;
             if ( ! sql.equals( other.sql ) )
                 return false;
@@ -856,7 +856,7 @@ public class JdbcHandler extends AbstractSqlHandler
         @Override
         public String toString()
         {
-            return viewEntity.toString() + " " + commandType.toString() + " " + StringUtils.substring( sql, 0, 50 );
+            return entityDef.toString() + " " + commandType.toString() + " " + StringUtils.substring( sql, 0, 50 );
         }
     }
 

@@ -33,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Displays attribute values for a selected entity instance.
@@ -118,10 +118,10 @@ public class AttributePanel extends JPanel
         if ( currentEntityInstance == null )
             return;
 
-        setEntity( currentEntityInstance.getViewEntity(), currentEntityInstance );
+        setEntity( currentEntityInstance.getEntityDef(), currentEntityInstance );
     }
 
-    void setEntity( ViewEntity viewEntity, EntityInstance ei )
+    void setEntity( EntityDef entityDef, EntityInstance ei )
     {
         splitPane.setDividerLocation( 0.900 );
         currentEntityInstance = ei;
@@ -143,7 +143,7 @@ public class AttributePanel extends JPanel
             row[2] = "";
             attrModel.addRow( row );
 
-            for ( ViewAttribute viewAttribute : viewEntity.getAttributes() )
+            for ( ViewAttribute viewAttribute : entityDef.getAttributes() )
             {
                 if ( ! viewAttribute.isKey() )
                 {
@@ -165,7 +165,7 @@ public class AttributePanel extends JPanel
             for ( EntityInstance linked : ei.getLinkedInstances() )
             {
                 int col = 0;
-                row[col++] = linked.getViewEntity().getName();
+                row[col++] = linked.getEntityDef().getName();
                 row[col++] = linked.getEntityKey();
                 row[col++] = linked.getObjectInstanceId();
                 linkedModel.addRow( row );

@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 
@@ -155,7 +155,7 @@ public class WriteOiToPorStream implements StreamWriter
                   ei != null;
                   ei = ei.getNextHier() )
             {
-                ViewEntity viewEntity = ei.getViewEntity();
+                EntityDef entityDef = ei.getEntityDef();
                 if ( ei.isHidden() && ! writeIncremental )
                 {
                     // EI is hidden and we're not writing incrementals, so skip this one
@@ -167,7 +167,7 @@ public class WriteOiToPorStream implements StreamWriter
                 ei.setHierIndex( hierIndex++ );
 
                 // Write out entity name and instance flags.
-                write( "e%-9s %d", viewEntity.getName(), ei.getLevel() );
+                write( "e%-9s %d", entityDef.getName(), ei.getLevel() );
                 if ( writeIncremental )
                 {
                     // Write the incremental flags.
@@ -293,7 +293,7 @@ public class WriteOiToPorStream implements StreamWriter
                                  linked.isRecordOwner() )
                             {
                                 assert ei.getHierIndex() != linked.getHierIndex() : "Mismatched record owners.";
-                                assert ei.getViewEntity().getErEntityToken() == linked.getViewEntity().getErEntityToken() :
+                                assert ei.getEntityDef().getErEntityToken() == linked.getEntityDef().getErEntityToken() :
                                        "Mismatched entity tokens";
 
                                 writeln("i%-9d %d", ei.getHierIndex(), linked.getHierIndex() );

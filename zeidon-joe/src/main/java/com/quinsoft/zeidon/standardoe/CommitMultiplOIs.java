@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.Timer;
 
 /**
@@ -63,7 +63,7 @@ class CommitMultiplOIs
         @Override
         public boolean hasPermission( EntityInstanceImpl ei )
         {
-            return ei.getViewEntity().isDelete();
+            return ei.getEntityDef().isDelete();
         }};
 
     private static final HasPermission hasUpdatePermission = new HasPermission(){
@@ -71,7 +71,7 @@ class CommitMultiplOIs
         @Override
         public boolean hasPermission( EntityInstanceImpl ei )
         {
-            return ei.getViewEntity().isUpdate();
+            return ei.getEntityDef().isUpdate();
         }};
 
     private static final HasPermission hasCreatePermission = new HasPermission(){
@@ -79,7 +79,7 @@ class CommitMultiplOIs
         @Override
         public boolean hasPermission( EntityInstanceImpl ei )
         {
-            return ei.getViewEntity().isCreate();
+            return ei.getEntityDef().isCreate();
         }};
 
     private static final HasPermission hasIncludePermission = new HasPermission(){
@@ -87,7 +87,7 @@ class CommitMultiplOIs
         @Override
         public boolean hasPermission( EntityInstanceImpl ei )
         {
-            return ei.getViewEntity().isInclude();
+            return ei.getEntityDef().isInclude();
         }};
 
     private static final HasPermission hasExcludePermission = new HasPermission(){
@@ -95,7 +95,7 @@ class CommitMultiplOIs
         @Override
         public boolean hasPermission( EntityInstanceImpl ei )
         {
-            return ei.getViewEntity().isExclude();
+            return ei.getEntityDef().isExclude();
         }};
 
     CommitMultiplOIs(TaskImpl task, CommitOptions options, Collection<View> views)
@@ -177,8 +177,8 @@ class CommitMultiplOIs
     {
         for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
         {
-            ViewEntity viewEntity = ei.getViewEntity();
-            if ( viewEntity.isDerivedPath() )
+            EntityDef entityDef = ei.getEntityDef();
+            if ( entityDef.isDerivedPath() )
                 continue;
 
             if ( permissionChecker.hasPermission( linked ) && oiSet.contains( linked.getObjectInstance() ) )
@@ -203,21 +203,21 @@ class CommitMultiplOIs
             ObjectInstance oi = view.getObjectInstance();
             for ( EntityInstanceImpl ei : oi.getEntities( true ) )
             {
-                ViewEntity viewEntity = ei.getViewEntity();
+                EntityDef entityDef = ei.getEntityDef();
 
                 // Unless we learn otherwise, assume this entity needs to be committed.
                 ei.dbhNeedsCommit = false;
 
-                if ( viewEntity.isDerivedPath() )
+                if ( entityDef.isDerivedPath() )
                     continue;
 
-                if ( viewEntity.getDataRecord() == null )
+                if ( entityDef.getDataRecord() == null )
                     continue;
 
                 if ( ei.isCreated() && ! ei.isDeleted() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! viewEntity.isCreate() && ! validatePermissionForEi( ei, oiSet, hasCreatePermission ) )
+                    if ( ! entityDef.isCreate() && ! validatePermissionForEi( ei, oiSet, hasCreatePermission ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have create authority:" );
@@ -228,7 +228,7 @@ class CommitMultiplOIs
                 if ( ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! viewEntity.isDelete() && ! validatePermissionForEi( ei, oiSet, hasDeletePermission ) )
+                    if ( ! entityDef.isDelete() && ! validatePermissionForEi( ei, oiSet, hasDeletePermission ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have delete authority:" );
@@ -239,7 +239,7 @@ class CommitMultiplOIs
                 if ( ei.isUpdated() && ! ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! viewEntity.isExclude() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission ) )
+                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have update authority:" );
@@ -250,7 +250,7 @@ class CommitMultiplOIs
                 if ( ei.isIncluded() && ! ei.isExcluded() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! viewEntity.isInclude() && ! validatePermissionForEi( ei, oiSet, hasIncludePermission ) )
+                    if ( ! entityDef.isInclude() && ! validatePermissionForEi( ei, oiSet, hasIncludePermission ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have include authority:" );
@@ -261,7 +261,7 @@ class CommitMultiplOIs
                 if ( ei.isExcluded() && ! ei.isIncluded() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! viewEntity.isExclude() && ! validatePermissionForEi( ei, oiSet, hasExcludePermission ) )
+                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasExcludePermission ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have exclude authority:" );

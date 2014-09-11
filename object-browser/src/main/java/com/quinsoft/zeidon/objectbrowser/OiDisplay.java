@@ -44,7 +44,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityCursor.CursorStatus;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -57,7 +57,7 @@ class OiDisplay extends JPanel
 {
     interface EntitySelectedListener
     {
-        void entitySelected( ViewEntity viewEntity, EntityInstance ei );
+        void entitySelected( EntityDef entityDef, EntityInstance ei );
         void scaleChanged(View view, Point newCorner);
     }
 
@@ -69,7 +69,7 @@ class OiDisplay extends JPanel
     private final ViewOd       viewOd;
     private final View         view;
     private       ViewOdLayout viewOdLayout;
-    private final Map<ViewEntity, EntitySquare> entities;
+    private final Map<EntityDef, EntitySquare> entities;
     private       EntitySquare selectedEntity;
     private final JScrollPane scroller;
     private final EntitySelectedListener entitySelectedListener;
@@ -86,7 +86,7 @@ class OiDisplay extends JPanel
         this.view = view;
         this.entitySelectedListener = listener;
 
-        entities = new HashMap<ViewEntity, EntitySquare>();
+        entities = new HashMap<EntityDef, EntitySquare>();
         drawingPane = new DrawingPane();
         drawingPane.setCursor( new Cursor( Cursor.MOVE_CURSOR ) );
         MouseHandler handler = new MouseHandler();
@@ -103,7 +103,7 @@ class OiDisplay extends JPanel
 
     private void setup( View view, Component parent )
     {
-        ViewEntity root = viewOd.getRoot();
+        EntityDef root = viewOd.getRoot();
         viewOdLayout = env.getOdLayout( viewOd );
 
         EntitySquare e = new EntitySquare( this, env, null ); // Create a dummy just to get the size.
@@ -123,28 +123,28 @@ class OiDisplay extends JPanel
         }
     }
 
-    private EntitySquare addEntity( ViewEntity viewEntity, int left, int right )
+    private EntitySquare addEntity( EntityDef entityDef, int left, int right )
     {
-        ViewEntityLayout layout = viewOdLayout.getViewEntityLayout( viewEntity );
+        EntityDefLayout layout = viewOdLayout.getEntityDefLayout( entityDef );
         EntitySquare e = new EntitySquare( this, env, layout );
 
         int totalWidth = right - left - e.getWidth();
         int middle = totalWidth / 2;
         int topPadding = TOP_PADDING * env.getPainterScaleFactor();
 
-        e.setBounds( left + middle, ( viewEntity.getLevel() - 1 ) * e.getPaddedSize().height + topPadding,
+        e.setBounds( left + middle, ( entityDef.getLevel() - 1 ) * e.getPaddedSize().height + topPadding,
                      e.getWidth(), e.getHeight() );
         drawingPane.add(  e );
-        entities.put( viewEntity, e );
+        entities.put( entityDef, e );
 
-        if ( viewEntity.getChildCount() == 0 )
+        if ( entityDef.getChildCount() == 0 )
             return e;
 
-        List<ViewEntity> children = viewEntity.getChildren();
+        List<EntityDef> children = entityDef.getChildren();
         int newLeft = left;
-        for ( ViewEntity child : children )
+        for ( EntityDef child : children )
         {
-            layout = viewOdLayout.getViewEntityLayout( child );
+            layout = viewOdLayout.getEntityDefLayout( child );
             int w = layout.getWidth() * e.getPaddedSize().width;
             addEntity( child, newLeft, newLeft + w );
             newLeft += w;
@@ -161,11 +161,11 @@ class OiDisplay extends JPanel
         return selectedEntity;
     }
 
-    void setSelectedEntityFromViewEntity( ViewEntity viewEntity )
+    void setSelectedEntityFromEntityDef( EntityDef entityDef )
     {
         EntitySquare prevSelected = getSelectedEntity();
 
-        EntitySquare square = entities.get( viewEntity );
+        EntitySquare square = entities.get( entityDef );
         setSelectedEntity( square );
         prevSelected.repaint();
         square.repaint();
@@ -191,12 +191,12 @@ class OiDisplay extends JPanel
     void setSelectedEntity( EntitySquare selectedEntity )
     {
         this.selectedEntity = selectedEntity;
-        ViewEntity viewEntity = selectedEntity.getViewEntity();
-        EntityCursor cursor = view.cursor( viewEntity );
+        EntityDef entityDef = selectedEntity.getEntityDef();
+        EntityCursor cursor = view.cursor( entityDef );
         if ( cursor.getStatus() == CursorStatus.SET )
-            entitySelectedListener.entitySelected( viewEntity, cursor.getEntityInstance() );
+            entitySelectedListener.entitySelected( entityDef, cursor.getEntityInstance() );
         else
-            entitySelectedListener.entitySelected( viewEntity, null );
+            entitySelectedListener.entitySelected( entityDef, null );
     }
 
     /**
@@ -228,13 +228,13 @@ class OiDisplay extends JPanel
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setPaint(Color.black);
 
-            for ( ViewEntity viewEntity : viewOd.getViewEntitiesHier() )
+            for ( EntityDef entityDef : viewOd.getViewEntitiesHier() )
             {
-                ViewEntity parent = viewEntity.getParent();
+                EntityDef parent = entityDef.getParent();
                 if ( parent == null )  // If this entity is the root we don't need to draw a line.
                     continue;
 
-                EntitySquare e = entities.get( viewEntity );
+                EntitySquare e = entities.get( entityDef );
                 EntitySquare p = entities.get( parent );
 
                 g2.draw(new Line2D.Double(p.getBottomAnchor(), e.getTopAnchor()));

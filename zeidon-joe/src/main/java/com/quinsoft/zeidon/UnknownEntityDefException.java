@@ -25,12 +25,12 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  * @author DG
  *
  */
-public class UnknownViewEntityException extends ZeidonException
+public class UnknownEntityDefException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
 
-    public UnknownViewEntityException( ViewOd viewOd, String viewEntityName )
+    public UnknownEntityDefException( ViewOd viewOd, String entityDefName )
     {
-        super( "Entity name %s does not exist for View OD %s.", viewEntityName, viewOd );
+        super( "Entity name %s does not exist for View OD %s.", entityDefName, viewOd );
     }
 }

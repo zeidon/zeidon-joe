@@ -20,7 +20,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * A helper class with some logic for parsing a RelField and determining
@@ -32,9 +32,9 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 class RelFieldParser
 {
     ViewAttribute srcViewAttrib;
-    ViewEntity srcViewEntity;
+    EntityDef srcEntityDef;
     ViewAttribute relViewAttrib;
-    ViewEntity relViewEntity;
+    EntityDef relEntityDef;
     EntityInstanceImpl relInstance;
     EntityInstanceImpl srcInstance;
 
@@ -58,24 +58,24 @@ class RelFieldParser
     RelFieldParser parse( RelField relField, EntityInstanceImpl ei )
     {
         srcViewAttrib = relField.getSrcDataField().getViewAttribute();
-        srcViewEntity = srcViewAttrib.getViewEntity();
+        srcEntityDef = srcViewAttrib.getEntityDef();
         relViewAttrib = relField.getRelDataField().getViewAttribute();
-        relViewEntity = relViewAttrib.getViewEntity();
+        relEntityDef = relViewAttrib.getEntityDef();
 
         // We now have the attributes--the source and relationship (i.e. target)
-        // attributes.  One is part of the current entity (lpViewEntity) and
+        // attributes.  One is part of the current entity (lpEntityDef) and
         // the other is a parent of the current entity.  Find the entity
         // instance of the parent entity.
 
-        if ( relViewEntity == ei.getViewEntity() )
+        if ( relEntityDef == ei.getEntityDef() )
         {
             relInstance = ei;
-            srcInstance = ei.findMatchingParent( srcViewEntity );
+            srcInstance = ei.findMatchingParent( srcEntityDef );
         }
         else
         {
             srcInstance = ei;
-            relInstance = ei.findMatchingParent( relViewEntity );
+            relInstance = ei.findMatchingParent( relEntityDef );
         }
 
         return this;

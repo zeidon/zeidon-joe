@@ -2045,7 +2045,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
        zVIEW  vQualObject;
        zVIEW  zqFrameOrig;
        zVIEW  zqFrame;
-       LPVIEWENTITY lpViewEntity;
+       LPVIEWENTITY lpEntityDef;
        LPVIEWATTRIB lpViewAttrib;
        LPDOMAIN     lpDomain;
        String  DataType;
@@ -2058,13 +2058,13 @@ public class ZGLOBAL1_Operation extends VmlOperation
 
        GetViewByName( wXferO, "wXferO", lpView, zLEVEL_TASK );
        lpReturnedString = "";
-       lpViewEntity = String MiGetViewEntityForView( lpView, entityName );
-       if ( lpViewEntity == 0 )
+       lpEntityDef = String MiGetEntityDefForView( lpView, entityName );
+       if ( lpEntityDef == 0 )
           return -16;
 
        // Position on attribute.
  #ifdef VIEWENTITY_OD
-       lpViewAttrib = String zGETPTR( lpViewEntity->hFirstOD_Attrib );
+       lpViewAttrib = String zGETPTR( lpEntityDef->hFirstOD_Attrib );
        nRC = 1;
        while ( lpViewAttrib > 0 && nRC > 0 )
        {
@@ -2075,7 +2075,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
              lpViewAttrib = String zGETPTR( lpViewAttrib->hNextOD_Attrib );
        }
  #else
-       lpViewAttrib = String zGETPTR( lpViewEntity->hFirstViewAttrib );
+       lpViewAttrib = String zGETPTR( lpEntityDef->hFirstViewAttrib );
        nRC = 1;
        while ( lpViewAttrib > 0 && nRC > 0 )
        {
@@ -2342,17 +2342,17 @@ public class ZGLOBAL1_Operation extends VmlOperation
                              String entityName,
                              String attributeName )
     {
-       LPVIEWENTITY lpViewEntity;
+       LPVIEWENTITY lpEntityDef;
        LPVIEWATTRIB lpViewAttrib;
        int nRC;
 
-       lpViewEntity = String zGETPTR( MiGetViewEntityForView( lpView, entityName ) );
-       if ( lpViewEntity == 0 )
+       lpEntityDef = String zGETPTR( MiGetEntityDefForView( lpView, entityName ) );
+       if ( lpEntityDef == 0 )
           return -16;
 
        // Position on attribute.
     #ifdef VIEWENTITY_OD
-       lpViewAttrib = String zGETPTR( lpViewEntity->hFirstOD_Attrib );
+       lpViewAttrib = String zGETPTR( lpEntityDef->hFirstOD_Attrib );
        nRC = 1;
        while ( lpViewAttrib > 0 && nRC > 0 )
        {
@@ -2363,7 +2363,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
              lpViewAttrib = String zGETPTR( lpViewAttrib->hNextOD_Attrib );
        }
     #else
-       lpViewAttrib = String zGETPTR( lpViewEntity->hFirstViewAttrib );
+       lpViewAttrib = String zGETPTR( lpEntityDef->hFirstViewAttrib );
        nRC = 1;
        while ( lpViewAttrib > 0 && nRC > 0 )
        {

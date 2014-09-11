@@ -35,7 +35,7 @@ import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * This is the object that contains all the attribute values for an entity.
@@ -47,7 +47,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
  */
 class AttributeListInstance
 {
-    private final ViewEntity             viewEntity;
+    private final EntityDef             entityDef;
 
     /**
      * Map of persistent attributes. Linked entities will reference the same
@@ -85,14 +85,14 @@ class AttributeListInstance
                                                          EntityInstanceImpl sourceInstance,
                                                          AttributeListInstance source )
     {
-        ViewEntity targetViewEntity = targetInstance.getViewEntity();
-        assert targetViewEntity.getErEntityToken() == sourceInstance.getViewEntity().getErEntityToken() :
+        EntityDef targetEntityDef = targetInstance.getEntityDef();
+        assert targetEntityDef.getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken() :
                     "Attempting to link view entities that are not the same ER entity";
 
         if ( targetAttributeList == null )
         {
             targetAttributeList = new AttributeListInstance( targetInstance );
-            targetAttributeList.workAttributes = new HashMap<Long, AttributeValue>( targetViewEntity.getWorkAttributeCount() );
+            targetAttributeList.workAttributes = new HashMap<Long, AttributeValue>( targetEntityDef.getWorkAttributeCount() );
         }
 
         source.addLinkedInstance( sourceInstance, targetInstance );
@@ -147,14 +147,14 @@ class AttributeListInstance
                                                            EntityInstanceImpl sourceInstance,
                                                            AttributeListInstance prevInstanceAttributeList, AttributeListInstance linkedAttributeList )
     {
-        ViewEntity viewEntity = temporalInstance.getViewEntity();
+        EntityDef entityDef = temporalInstance.getEntityDef();
         AttributeListInstance newList = new AttributeListInstance( temporalInstance );
 
-        newList.workAttributes = new HashMap<Long, AttributeValue>( viewEntity.getWorkAttributeCount() );
+        newList.workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
 
         if ( linkedAttributeList == null )
         {
-            newList.persistentAttributes = new HashMap<Long, AttributeValue>( viewEntity.getPersistentAttributeCount() );
+            newList.persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
 
             // Copy work and persistent attributes.
             newList.copyAttributes( task, prevInstanceAttributeList, true, true );
@@ -177,17 +177,17 @@ class AttributeListInstance
 
     static AttributeListInstance newAttributeList( EntityInstanceImpl entityInstance )
     {
-        ViewEntity viewEntity = entityInstance.getViewEntity();
+        EntityDef entityDef = entityInstance.getEntityDef();
         AttributeListInstance newList = new AttributeListInstance( entityInstance );
-        newList.workAttributes = new HashMap<Long, AttributeValue>( viewEntity.getWorkAttributeCount() );
-        newList.persistentAttributes = new HashMap<Long, AttributeValue>( viewEntity.getPersistentAttributeCount() );
+        newList.workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
+        newList.persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
         newList.initializeLinkedInstances( entityInstance );
         return newList;
     }
 
     private AttributeListInstance(EntityInstanceImpl entityInstance)
     {
-        viewEntity = entityInstance.getViewEntity();
+        entityDef = entityInstance.getEntityDef();
     }
 
     private void initializeLinkedInstances( EntityInstanceImpl first )
@@ -204,30 +204,30 @@ class AttributeListInstance
     }
 
     /**
-     * Validate that the entity instance for viewAttribute matches getViewEntity().  Check
+     * Validate that the entity instance for viewAttribute matches getEntityDef().  Check
      * to see if this is a recursive entity and if so return the
      * @param viewAttribute
      * @return
      */
     private ViewAttribute validateMatchingEntities( ViewAttribute viewAttribute )
     {
-        if ( viewAttribute.getViewEntity() == getViewEntity() )
+        if ( viewAttribute.getEntityDef() == getEntityDef() )
             return viewAttribute;
 
         // If viewAttribute points to a recursive child, find the parent attribute.
         // TODO: Do we have to do this for the reciprocal situation as well?
-        if ( viewAttribute.getViewEntity() == getViewEntity().getRecursiveParentViewEntity() )
+        if ( viewAttribute.getEntityDef() == getEntityDef().getRecursiveParentEntityDef() )
         {
-            // Find the attribute in getViewEntity() that matches viewAttribute.
-            for ( ViewAttribute va : getViewEntity().getAttributes() )
+            // Find the attribute in getEntityDef() that matches viewAttribute.
+            for ( ViewAttribute va : getEntityDef().getAttributes() )
             {
                 if ( va.getErAttributeToken().equals( viewAttribute.getErAttributeToken() ) )
                     return va;
             }
         }
 
-        throw new ZeidonException( "Mismatching entities.  ViewAttribEntity: %s, ViewEntity: %s",
-                                    viewAttribute.getViewEntity(), getViewEntity() );
+        throw new ZeidonException( "Mismatching entities.  ViewAttribEntity: %s, EntityDef: %s",
+                                    viewAttribute.getEntityDef(), getEntityDef() );
     }
 
     AttributeValue getAttribute( ViewAttribute viewAttribute )
@@ -272,9 +272,9 @@ class AttributeListInstance
         return this;
     }
 
-    private ViewEntity getViewEntity()
+    private EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 
     /**
@@ -300,9 +300,9 @@ class AttributeListInstance
                         if ( nextAttributeNumber <= attributeNumber )
                         {
                             nextAttributeNumber = attributeNumber + 1;
-                            while ( nextAttributeNumber < getViewEntity().getAttributeCount() )
+                            while ( nextAttributeNumber < getEntityDef().getAttributeCount() )
                             {
-                                ViewAttribute viewAttribute = getViewEntity().getAttribute( nextAttributeNumber );
+                                ViewAttribute viewAttribute = getEntityDef().getAttribute( nextAttributeNumber );
                                 AttributeValue attrib = getAttribute( viewAttribute );
                                 if ( ! attrib.isNull(task, viewAttribute) || attrib.isUpdated() )
                                     break;
@@ -311,14 +311,14 @@ class AttributeListInstance
                             }
                         }
 
-                        return nextAttributeNumber < getViewEntity().getAttributeCount();
+                        return nextAttributeNumber < getEntityDef().getAttributeCount();
                     }
 
                     @Override
                     public ViewAttribute next()
                     {
                         attributeNumber = nextAttributeNumber;
-                        return getViewEntity().getAttribute( attributeNumber );
+                        return getEntityDef().getAttribute( attributeNumber );
                     }
 
                     @Override

@@ -45,7 +45,7 @@ public enum ActivateFlags
     fASYNCHRONOUS,
 
     /**
-     * If set, then we won't load all ViewEntity instances in one SELECT statement.
+     * If set, then we won't load all EntityDef instances in one SELECT statement.
      */
     fIGNORE_LOAD_OPTIMIZATION;
 

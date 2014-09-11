@@ -19,7 +19,7 @@
 
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -29,9 +29,9 @@ public class UnknownViewAttributeException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
 
-    public UnknownViewAttributeException( ViewEntity viewEntity, String attributeName )
+    public UnknownViewAttributeException( EntityDef entityDef, String attributeName )
     {
         super( "Attribute name '%s' does not exist for View Entity", attributeName );
-        prependViewEntity( viewEntity );
+        prependEntityDef( entityDef );
     }
 }

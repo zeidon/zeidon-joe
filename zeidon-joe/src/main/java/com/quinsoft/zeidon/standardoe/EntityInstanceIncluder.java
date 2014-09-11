@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * This class defines the logic for including an entity instance into another
@@ -34,7 +34,7 @@ class EntityInstanceIncluder
 {
     private final EntityInstanceImpl rootSource;
     private final CursorPosition rootPosition;
-    private final ViewEntity rootTargetViewEntity;
+    private final EntityDef rootTargetEntityDef;
     private final EntityInstanceImpl rootTargetParent;
     private final EntityInstanceImpl rootTargetInstance;
     private final ObjectInstance targetOi;
@@ -45,7 +45,7 @@ class EntityInstanceIncluder
      * A convenience method for performing a full include.
      * @param targetInstance If specified, this is the twin that the new instance is inserted
      *                     before/after
-     * @param targetViewEntity Target ViewEntity of the include
+     * @param targetEntityDef Target EntityDef of the include
      * @param targetParent Parent EI of the new instance.
      * @param targetOI Target OI of the include.
      * @param source The source of the include.  The new EI is linked to source.
@@ -54,7 +54,7 @@ class EntityInstanceIncluder
      * @return Root of new entity instance.
      */
     static EntityInstanceImpl includeSubobject( EntityInstanceImpl targetInstance,
-                                                ViewEntity         targetViewEntity,
+                                                EntityDef         targetEntityDef,
                                                 EntityInstanceImpl targetParent,
                                                 ObjectInstance     targetOi,
                                                 EntityInstanceImpl source,
@@ -65,7 +65,7 @@ class EntityInstanceIncluder
         assert targetInstance == null || targetInstance.getParent() == targetParent;
 
         EntityInstanceIncluder includer =
-                new EntityInstanceIncluder( source, position, targetViewEntity, targetParent, targetInstance, targetOi );
+                new EntityInstanceIncluder( source, position, targetEntityDef, targetParent, targetInstance, targetOi );
 
         if ( performValidation )
             includer.performValidation();
@@ -80,7 +80,7 @@ class EntityInstanceIncluder
     /**
      * @param source The source of the include.  The new EI is linked to source.
      * @param targetOI Target OI of the include.
-     * @param targetViewEntity Target ViewEntity of the include
+     * @param targetEntityDef Target EntityDef of the include
      * @param targetParent Parent EI of the new instance.
      * @param targetInstance If specified, this is the twin that the new instance is inserted
      *                     before/after
@@ -88,7 +88,7 @@ class EntityInstanceIncluder
      */
     private EntityInstanceIncluder( EntityInstanceImpl source,
                                     CursorPosition position,
-                                    ViewEntity targetViewEntity,
+                                    EntityDef targetEntityDef,
                                     EntityInstanceImpl targetParent,
                                     EntityInstanceImpl targetInstance,
                                     ObjectInstance     targetOi )
@@ -96,7 +96,7 @@ class EntityInstanceIncluder
         this.rootSource = source;
         this.rootPosition = position;
         this.targetOi = targetOi;
-        this.rootTargetViewEntity = targetViewEntity;
+        this.rootTargetEntityDef = targetEntityDef;
         this.rootTargetParent = targetParent;
         this.rootTargetInstance = targetInstance;
 
@@ -109,13 +109,13 @@ class EntityInstanceIncluder
     private void performValidation()
     {
         // Make sure entities are link compatible..
-        EntityInstanceImpl.validateLinking( rootTargetViewEntity, rootSource.getViewEntity() );
+        EntityInstanceImpl.validateLinking( rootTargetEntityDef, rootSource.getEntityDef() );
 
-        if ( ! rootTargetViewEntity.isInclude() && rootTargetViewEntity.getParent() != null )
-            throw new ZeidonException( "Target Entity does not allow include." ).prependViewEntity( rootTargetViewEntity );
+        if ( ! rootTargetEntityDef.isInclude() && rootTargetEntityDef.getParent() != null )
+            throw new ZeidonException( "Target Entity does not allow include." ).prependEntityDef( rootTargetEntityDef );
 
-        if ( ! rootSource.getViewEntity().isIncludeSource() )
-            throw new ZeidonException( "Source Entity is not flagged as include source." ).prependViewEntity( rootSource.getViewEntity() );
+        if ( ! rootSource.getEntityDef().isIncludeSource() )
+            throw new ZeidonException( "Source Entity is not flagged as include source." ).prependEntityDef( rootSource.getEntityDef() );
 
         // TODO: Check for read-only target view.
 
@@ -139,12 +139,12 @@ class EntityInstanceIncluder
     private EntityInstanceImpl performInclude()
     {
         // Create the root instance and all children.  Sets rootInstance.
-        createInstance( rootSource, rootTargetViewEntity, rootTargetParent, rootTargetInstance, rootPosition );
+        createInstance( rootSource, rootTargetEntityDef, rootTargetParent, rootTargetInstance, rootPosition );
 
         // If the new entity is updated set OI flag to indicate it.
         // TODO: instance versioned?
         if ( ! targetOi.isUpdatedFile() && // Avoids the rest of the 'if' most of the time.
-             ! rootInstance.getViewEntity().isDerived() && ! rootSource.getViewEntity().isDerived() &&
+             ! rootInstance.getEntityDef().isDerived() && ! rootSource.getEntityDef().isDerived() &&
              ( rootInstance.isIncluded() || rootInstance.isCreated() || rootInstance.isUpdated() ) )
         {
             targetOi.setUpdated( true );
@@ -171,22 +171,22 @@ class EntityInstanceIncluder
     }
 
     /**
-     * Checks to see if any of the direct children of targetParentViewEntity have the same relationship with
-     * targetParentViewEntity that sourceViewEntity has with its parent.
+     * Checks to see if any of the direct children of targetParentEntityDef have the same relationship with
+     * targetParentEntityDef that sourceEntityDef has with its parent.
      *
-     * @param targetParentViewEntity
-     * @param sourceViewEntity
+     * @param targetParentEntityDef
+     * @param sourceEntityDef
      *
      * @return null if no entity with matching relationship found, otherwise the entity.
      */
-    private ViewEntity findChildIncludeViewEntity(ViewEntity targetParentViewEntity, ViewEntity sourceViewEntity)
+    private EntityDef findChildIncludeEntityDef(EntityDef targetParentEntityDef, EntityDef sourceEntityDef)
     {
-        ViewEntity childByToken = null;
-        for ( ViewEntity childTgtViewEntity : targetParentViewEntity.getChildren() )
+        EntityDef childByToken = null;
+        for ( EntityDef childTgtEntityDef : targetParentEntityDef.getChildren() )
         {
-            if ( sourceViewEntity.getErEntityToken() == childTgtViewEntity.getErEntityToken() &&
-                 sourceViewEntity.getErRelToken() == childTgtViewEntity.getErRelToken() &&
-                 sourceViewEntity.isErRelLink() == childTgtViewEntity.isErRelLink() )
+            if ( sourceEntityDef.getErEntityToken() == childTgtEntityDef.getErEntityToken() &&
+                 sourceEntityDef.getErRelToken() == childTgtEntityDef.getErRelToken() &&
+                 sourceEntityDef.isErRelLink() == childTgtEntityDef.isErRelLink() )
             {
                 // Check to see if the entities match by name also. If they do
                 // then we've found our man. If not we'll save the current view
@@ -194,10 +194,10 @@ class EntityInstanceIncluder
                 //
                 // TODO: Is it really possible for the same relationship to
                 // exist with two different names?
-                if ( sourceViewEntity.getName().equals( childTgtViewEntity.getName() ) )
-                    return childTgtViewEntity;
+                if ( sourceEntityDef.getName().equals( childTgtEntityDef.getName() ) )
+                    return childTgtEntityDef;
 
-                childByToken = childTgtViewEntity;
+                childByToken = childTgtEntityDef;
             }
         }
 
@@ -208,13 +208,13 @@ class EntityInstanceIncluder
      * Creates the new target instance from sourceInstance and all child entity instances.
      */
     private EntityInstanceImpl createInstance( final EntityInstanceImpl sourceInstance,
-                                               final ViewEntity         targetViewEntity,
+                                               final EntityDef         targetEntityDef,
                                                final EntityInstanceImpl targetParent,
                                                final EntityInstanceImpl targetInstance,
                                                final CursorPosition     position )
     {
         EntityInstanceImpl newInstance;
-        newInstance = new EntityInstanceImpl( targetOi, targetViewEntity, targetParent, targetInstance, position );
+        newInstance = new EntityInstanceImpl( targetOi, targetEntityDef, targetParent, targetInstance, position );
         if ( rootInstance == null )
             rootInstance = newInstance;
 
@@ -227,38 +227,38 @@ class EntityInstanceIncluder
         // Now loop through source's direct children and see if the need to be
         // copied to the current target.
         EntityInstanceImpl prevInstance = null;
-        ViewEntity sourceChildViewEntity = null;
-        ViewEntity targetChildViewEntity = null;
+        EntityDef sourceChildEntityDef = null;
+        EntityDef targetChildEntityDef = null;
         for ( EntityInstanceImpl child : sourceInstance.getDirectChildren() )
         {
             if ( child.isHidden() )
                 continue;
 
-            // Look for a child ViewEntity of source that matches the child.
-            // If sourceViewEntity = child.getViewEntity then we've already
-            // found the target ViewEntity.
-            if ( sourceChildViewEntity != child.getViewEntity() )
+            // Look for a child EntityDef of source that matches the child.
+            // If sourceEntityDef = child.getEntityDef then we've already
+            // found the target EntityDef.
+            if ( sourceChildEntityDef != child.getEntityDef() )
             {
-                sourceChildViewEntity = child.getViewEntity();
-                targetChildViewEntity = findChildIncludeViewEntity( targetViewEntity, sourceChildViewEntity );
+                sourceChildEntityDef = child.getEntityDef();
+                targetChildEntityDef = findChildIncludeEntityDef( targetEntityDef, sourceChildEntityDef );
 
-                // A new ViewEntity means that prevInstance points to a
-                // different ViewEntity.
+                // A new EntityDef means that prevInstance points to a
+                // different EntityDef.
                 // Null it out so that the next includeSubobject doesn't try to
                 // link the new
                 // instance with prevInstance.
                 prevInstance = null;
             }
 
-            if ( targetChildViewEntity == null )
-                continue; // No matching ViewEntity in the target object.
+            if ( targetChildEntityDef == null )
+                continue; // No matching EntityDef in the target object.
 
-            if ( targetChildViewEntity.isDerived() )
+            if ( targetChildEntityDef.isDerived() )
                 continue;
 
             // TODO: Check for versioning.
 
-            prevInstance = createInstance( child, targetChildViewEntity, newInstance, prevInstance, CursorPosition.LAST );
+            prevInstance = createInstance( child, targetChildEntityDef, newInstance, prevInstance, CursorPosition.LAST );
         }
 
         // Now check to see if the parent of the source is a child of the target.  If so,
@@ -280,25 +280,25 @@ class EntityInstanceIncluder
         //
         // If A is included from source to target we need to copy the C' entity
         // from the source.
-        ViewEntity sourceViewEntity = sourceInstance.getViewEntity();     // Source entity A'
-        ViewEntity sourceParentViewEntity = sourceParent.getViewEntity(); // Source entity C'
-        for ( ViewEntity childViewEntity : targetViewEntity.getChildren() )
+        EntityDef sourceEntityDef = sourceInstance.getEntityDef();     // Source entity A'
+        EntityDef sourceParentEntityDef = sourceParent.getEntityDef(); // Source entity C'
+        for ( EntityDef childEntityDef : targetEntityDef.getChildren() )
         {
-            // childViewEntity is one of the children of A.
+            // childEntityDef is one of the children of A.
 
             // Does C have same entity token as C'?
-            if ( childViewEntity.getErEntityToken() != sourceParentViewEntity.getErEntityToken() )
+            if ( childEntityDef.getErEntityToken() != sourceParentEntityDef.getErEntityToken() )
                 continue;
 
             // Is the relationship of C the same as A'?
-            if ( childViewEntity.getErRelToken() != sourceViewEntity.getErRelToken() )
+            if ( childEntityDef.getErRelToken() != sourceEntityDef.getErRelToken() )
                 continue;
 
-            if ( childViewEntity.isErRelLink() == sourceViewEntity.isErRelLink() )
+            if ( childEntityDef.isErRelLink() == sourceEntityDef.isErRelLink() )
                 continue;
 
             // If we get here then we need to copy C' to C.
-            createInstance( sourceParent, childViewEntity, newInstance, null, CursorPosition.LAST );
+            createInstance( sourceParent, childEntityDef, newInstance, null, CursorPosition.LAST );
 
             // We only need to copy one so we're done.
             break;

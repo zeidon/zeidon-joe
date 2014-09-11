@@ -20,7 +20,7 @@ import java.util.Set;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -85,14 +85,14 @@ class EntityComparator
     /**
      * Returns true if the entity instance has the same ER token.
      */
-    static class ViewEntityComparator extends EntityComparator
+    static class EntityDefComparator extends EntityComparator
     {
-        private final ViewEntity viewEntity;
+        private final EntityDef entityDef;
 
-        ViewEntityComparator( ViewEntity entity )
+        EntityDefComparator( EntityDef entity )
         {
             super( null, false, ANY_VALUE );
-            viewEntity = entity;
+            entityDef = entity;
         }
 
         @Override
@@ -101,7 +101,7 @@ class EntityComparator
             if ( ! super.isEqual( entityInstance ) )
                 return false;
 
-            if ( entityInstance.getViewEntity() == viewEntity )
+            if ( entityInstance.getEntityDef() == entityDef )
                 return true;
 
             //TODO: Handle recursive entities.

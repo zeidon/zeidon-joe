@@ -40,13 +40,13 @@ public class DataRecord implements PortableFileAttributeHandler
     private String type;
     private final List<DataField> dataFields = new ArrayList<DataField>();
     private RelRecord relRecord;
-    private final ViewEntity viewEntity;
+    private final EntityDef entityDef;
     private final Map<ViewAttribute, DataField> attributeMap = new HashMap<ViewAttribute, DataField>();
     private boolean joinable;
 
-    DataRecord( ViewEntity viewEntity )
+    DataRecord( EntityDef entityDef )
     {
-        this.viewEntity = viewEntity;
+        this.entityDef = entityDef;
     }
 
     @Override
@@ -63,9 +63,9 @@ public class DataRecord implements PortableFileAttributeHandler
             joinable = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
     }
 
-    public ViewEntity getViewEntity()
+    public EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 
     public String getRecordName()
@@ -112,7 +112,7 @@ public class DataRecord implements PortableFileAttributeHandler
     }
 
     // Loops through all the rel fields and sets the src and tgt datafields.
-    void setFields(ViewEntity currentViewEntity)
+    void setFields(EntityDef currentEntityDef)
     {
         for ( DataField dataField : dataFields )
             attributeMap.put( dataField.getViewAttribute(), dataField );
@@ -121,7 +121,7 @@ public class DataRecord implements PortableFileAttributeHandler
             return;
 
         Map<Integer, DataField> map = new HashMap<Integer, DataField>();
-        for ( ViewEntity ve = currentViewEntity; ve != null; ve = ve.getParent() )
+        for ( EntityDef ve = currentEntityDef; ve != null; ve = ve.getParent() )
         {
             DataRecord dataRecord = ve.getDataRecord();
             if ( dataRecord != null )
@@ -145,7 +145,7 @@ public class DataRecord implements PortableFileAttributeHandler
                 if ( relField.getSrcDataField() != null )
                 {
                     {
-                        if ( relField.getSrcDataField().getViewAttribute().getViewEntity() != getViewEntity() )
+                        if ( relField.getSrcDataField().getViewAttribute().getEntityDef() != getEntityDef() )
                             relRecord.setParentRelField( relField );
                     }
                 }
@@ -153,7 +153,7 @@ public class DataRecord implements PortableFileAttributeHandler
                 if ( relField.getRelDataField() != null )
                 {
                     {
-                        if ( relField.getRelDataField().getViewAttribute().getViewEntity() == getViewEntity() )
+                        if ( relField.getRelDataField().getViewAttribute().getEntityDef() == getEntityDef() )
                             relRecord.setChildRelField( relField );
                     }
                 }
@@ -170,6 +170,6 @@ public class DataRecord implements PortableFileAttributeHandler
     @Override
     public String toString()
     {
-        return viewEntity.toString() + "/" + recordName;
+        return entityDef.toString() + "/" + recordName;
     }
 }

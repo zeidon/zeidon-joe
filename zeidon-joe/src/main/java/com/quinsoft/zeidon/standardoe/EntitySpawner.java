@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * This object contains the logic for spawning creates and includes.
@@ -96,8 +96,8 @@ class EntitySpawner
             if ( child.isHidden() )
                 continue;
             
-            ViewEntity childViewEntity = child.getViewEntity();
-            if ( childViewEntity.isDerived() )
+            EntityDef childEntityDef = child.getEntityDef();
+            if ( childEntityDef.isDerived() )
                 continue;
             
             if ( child.isIncluded() )
@@ -114,7 +114,7 @@ class EntitySpawner
      * @return true if the instances are already spawned/linked.
      */
     private boolean checkForSpawnedInstance( EntityInstanceImpl linked, 
-                                             ViewEntity         childViewEntity,
+                                             EntityDef         childEntityDef,
                                              EntityInstanceImpl createdInstance )
     {
         // Find all the children under linked and make sure they aren't already
@@ -144,10 +144,10 @@ class EntitySpawner
         if ( entityInstance.getParent() == null )
             return;
 
-        final ViewEntity viewEntity = entityInstance.getViewEntity();
+        final EntityDef entityDef = entityInstance.getEntityDef();
         
         // We don't spawn derived entities.
-        if ( viewEntity.isDerived() )
+        if ( entityDef.isDerived() )
             return;
         
         final EntityInstanceImpl parentInstance = entityInstance.getParent();
@@ -164,21 +164,21 @@ class EntitySpawner
             // Go through the                          
             // child entity types of the linked parent and see if one exists which                        
             // matches the current entity type.                                                           
-            ViewEntity linkedViewEntity = linked.getViewEntity();
-            for ( ViewEntity searchViewEntity : linkedViewEntity.getChildren() )
+            EntityDef linkedEntityDef = linked.getEntityDef();
+            for ( EntityDef searchEntityDef : linkedEntityDef.getChildren() )
             {
-                if ( searchViewEntity.isDerived() )
+                if ( searchEntityDef.isDerived() )
                     continue;
                 
                 // Same relationship?
-                if ( searchViewEntity.getErRelToken() != viewEntity.getErRelToken() )
+                if ( searchEntityDef.getErRelToken() != entityDef.getErRelToken() )
                     continue; // Nope.
                 
-                if ( searchViewEntity.isErRelLink() != viewEntity.isErRelLink() )
+                if ( searchEntityDef.isErRelLink() != entityDef.isErRelLink() )
                     continue;
                 
                 // We found a spawn candidate.  Make sure they aren't already linked.
-                if ( checkForSpawnedInstance( linked, searchViewEntity, entityInstance ) )
+                if ( checkForSpawnedInstance( linked, searchEntityDef, entityInstance ) )
                     continue;
                 
                 // Find the position of the entity we're about to spawn.
@@ -217,7 +217,7 @@ class EntitySpawner
                 {
                     for ( EntityInstanceImpl search : linked.getDirectChildren() )
                     {
-                        if ( search.getViewEntity() == searchViewEntity )
+                        if ( search.getEntityDef() == searchEntityDef )
                         {
                             relativeEntity = search;
                             spawnPosition = CursorPosition.LAST;
@@ -230,7 +230,7 @@ class EntitySpawner
                         EntityInstanceImpl.createEntity( linked.getObjectInstance(), 
                                                          linked,
                                                          relativeEntity, 
-                                                         searchViewEntity,
+                                                         searchEntityDef,
                                                          spawnPosition );
                 newInstance.linkInternalInstances( entityInstance );
             }
@@ -248,17 +248,17 @@ class EntitySpawner
      */
     private void spawnInclude( EntityInstanceImpl entityInstance )
     {
-        ViewEntity viewEntity = entityInstance.getViewEntity();
+        EntityDef entityDef = entityInstance.getEntityDef();
         
         // Can't spawn a ROOT or a derived relationship.                                                 
-        if ( entityInstance.getParent() == null || viewEntity.isDerived() )
+        if ( entityInstance.getParent() == null || entityDef.isDerived() )
             return;
 
-        performSpawnPass( viewEntity, entityInstance, entityInstance.getParent(), true );
-        performSpawnPass( viewEntity, entityInstance.getParent(), entityInstance, false );
+        performSpawnPass( entityDef, entityInstance, entityInstance.getParent(), true );
+        performSpawnPass( entityDef, entityInstance.getParent(), entityInstance, false );
     }
     
-    private void performSpawnPass( ViewEntity         rootViewEntity,
+    private void performSpawnPass( EntityDef         rootEntityDef,
                                    EntityInstanceImpl startSearchInstance,
                                    EntityInstanceImpl startParentSearchInstance,
                                    boolean            matchingRelLinks )
@@ -275,23 +275,23 @@ class EntitySpawner
             if ( ! searchInstance.temporalVersionMatch( startSearchInstance ) )
                 continue;
 
-            ViewEntity searchViewEntity = searchInstance.getViewEntity();
+            EntityDef searchEntityDef = searchInstance.getEntityDef();
             
             // See if the linked entity instance has a child entity type                               
             // which is a non-derived inversion of the target entity type.                             
-            // We only want direct children of searchViewEntity
-            for ( ViewEntity workViewEntity : searchViewEntity.getChildren() )
+            // We only want direct children of searchEntityDef
+            for ( EntityDef workEntityDef : searchEntityDef.getChildren() )
             {
-                assert workViewEntity.getParent() == searchViewEntity;
+                assert workEntityDef.getParent() == searchEntityDef;
 
                 // Make sure it's the same relationship.
-                if ( workViewEntity.getErRelToken() != rootViewEntity.getErRelToken() )
+                if ( workEntityDef.getErRelToken() != rootEntityDef.getErRelToken() )
                     continue;
                 
-                if ( ( workViewEntity.isErRelLink() == rootViewEntity.isErRelLink() ) == matchingRelLinks )
+                if ( ( workEntityDef.isErRelLink() == rootEntityDef.isErRelLink() ) == matchingRelLinks )
                     continue;
                 
-                if ( ! workViewEntity.isPersistent() )
+                if ( ! workEntityDef.isPersistent() )
                     continue;
                 
                 // If we get here we have found an instance which has a child entity type for spawning. 
@@ -302,7 +302,7 @@ class EntitySpawner
                     if ( linked.getParent() != searchInstance )
                         continue;
                     
-                    if ( linked.getViewEntity() != workViewEntity )
+                    if ( linked.getEntityDef() != workEntityDef )
                         continue;
                     
                     searchChild = linked;
@@ -312,12 +312,12 @@ class EntitySpawner
                 if( searchChild != null )
                     continue;
 
-                // Find the first EI under searchInstance that has a ViewEntity matching workViewEntity.
+                // Find the first EI under searchInstance that has a EntityDef matching workEntityDef.
                 // This will be our relative instance.
                 EntityInstanceImpl relativeEntity = null;
                 for ( EntityInstanceImpl ei : searchInstance.getDirectChildren() )
                 {
-                    if ( ei.getViewEntity() == workViewEntity )
+                    if ( ei.getEntityDef() == workEntityDef )
                     {
                         relativeEntity = ei;
                         break;
@@ -327,13 +327,13 @@ class EntitySpawner
                 // If searchChild is null then we haven't spawned the inversion.  Do it now by calling
                 // includeSubobject recursively.
                 EntityInstanceIncluder.includeSubobject( relativeEntity,
-                                                         workViewEntity,
+                                                         workEntityDef,
                                                          searchInstance,
                                                          rootInstance.getObjectInstance(),
                                                          startParentSearchInstance, 
                                                          CursorPosition.LAST, false );
                 
-            } // for each workViewEntity...
+            } // for each workEntityDef...
         } // for each linked instance...
     }
 
@@ -361,7 +361,7 @@ class EntitySpawner
         
     private void spawnExclude( EntityInstanceImpl entityInstance )
     {
-        ViewEntity rootViewEntity = entityInstance.getViewEntity();
+        EntityDef rootEntityDef = entityInstance.getEntityDef();
 
         // Find all linked instances with the same parent relationship and mark them
         // as excluded.
@@ -371,9 +371,9 @@ class EntitySpawner
             if ( ! entityInstance.temporalVersionMatch( linked ) )
                 continue;
 
-            ViewEntity linkedViewEntity = linked.getViewEntity();
+            EntityDef linkedEntityDef = linked.getEntityDef();
             
-            if ( linkedViewEntity.getErRelToken() == rootViewEntity.getErRelToken() )
+            if ( linkedEntityDef.getErRelToken() == rootEntityDef.getErRelToken() )
             {
                 // The linked instance represents the same relationship ...
                 // see if its parent is a linked instance to the current parent.
@@ -389,9 +389,9 @@ class EntitySpawner
             }
             
             // See if the structure is inverted for a linked instance.
-            for ( ViewEntity childViewEntity : linkedViewEntity.getChildren() )
+            for ( EntityDef childEntityDef : linkedEntityDef.getChildren() )
             {
-                if ( childViewEntity.getErRelToken() == rootViewEntity.getErRelToken() )
+                if ( childEntityDef.getErRelToken() == rootEntityDef.getErRelToken() )
                 {
                     // We've found an inverted structure in the linked entity
                     // instance, now go and mark the child entity instance

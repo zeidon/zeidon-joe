@@ -46,7 +46,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -108,9 +108,9 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public EntityCursor cursor(ViewEntity viewentity)
+    public EntityCursor cursor(EntityDef entityDef)
     {
-        return view.cursor( viewentity );
+        return view.cursor( entityDef );
     }
 
     @Override
@@ -176,9 +176,9 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public EntityCursor getCursor(ViewEntity viewEntity)
+    public EntityCursor getCursor(EntityDef entityDef)
     {
-        return view.getCursor( viewEntity );
+        return view.getCursor( entityDef );
     }
 
     @Override

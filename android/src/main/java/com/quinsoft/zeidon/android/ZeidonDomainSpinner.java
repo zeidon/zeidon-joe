@@ -40,7 +40,7 @@ import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -118,8 +118,8 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
         
         View view = viewDelegate.findMappingView( );
         ViewOd viewOd = view.getViewOd();
-        ViewEntity viewEntity = viewOd.getViewEntity( viewDelegate.getEntityName( ) );
-        ViewAttribute viewAttribute = viewEntity.getAttribute( viewDelegate.getAttributeName() );
+        EntityDef entityDef = viewOd.getEntityDef( viewDelegate.getEntityName( ) );
+        ViewAttribute viewAttribute = entityDef.getAttribute( viewDelegate.getAttributeName() );
         Domain domain = viewAttribute.getDomain();
         if ( ! ( domain instanceof TableDomain ) )
             throw new ZeidonException( "Domain for attribute is not a TableDomain" )

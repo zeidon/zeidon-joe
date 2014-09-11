@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -122,7 +122,7 @@ class FileDbUtils
     String genKeyFilename( View view )
     {
         ViewOd viewOd = view.getViewOd();
-        ViewEntity root = viewOd.getRoot();
+        EntityDef root = viewOd.getRoot();
         List<ViewAttribute> keys = root.getKeys();
         if ( keys.size() > 1 )
             throw new ZeidonException( "File DB only supports root entities with a single key." );
@@ -137,7 +137,7 @@ class FileDbUtils
     {
         if ( StringUtils.isBlank( value ) )
             throw new ZeidonException( "Key value may not be null.  Key = %s.%s",
-                                       key.getViewEntity().getName(), key.getName() );
+                                       key.getEntityDef().getName(), key.getName() );
 
         return key.getName() + "_" + value;
     }

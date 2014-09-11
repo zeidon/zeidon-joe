@@ -29,7 +29,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -83,8 +83,8 @@ class ActivateObjectInstance
         EnumSet<ActivateFlags> control = options.getActivateFlags();
 
         // Make sure the OD has data records.
-        ViewEntity viewEntity = viewOd.getViewEntity( 0 );
-        if ( viewEntity.getDataRecord() == null )
+        EntityDef entityDef = viewOd.getEntityDef( 0 );
+        if ( entityDef.getDataRecord() == null )
             throw new ZeidonException("ViewOD %s does not have physical information", viewOd.getName() );
 
         // If the view defaults to having pessimistic locking and the flags indicate we don't want locking
@@ -127,14 +127,14 @@ class ActivateObjectInstance
      * This is used by internal code to activate a subobject as part of a lazy load.
      *
      * @param view
-     * @param childViewEntity
+     * @param childEntityDef
      */
-    void activate( ViewImpl view, ViewEntity childViewEntity )
+    void activate( ViewImpl view, EntityDef childEntityDef )
     {
         options.setPerformingLazyLoad( true );
         final Activator activator = selector.getActivator( getTask(), getApplication(), options );
         activator.init( getTask(), view, options );
-        activator.activate( childViewEntity );
+        activator.activate( childEntityDef );
         options.setPerformingLazyLoad( false );
     }
 

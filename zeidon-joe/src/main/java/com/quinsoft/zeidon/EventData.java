@@ -20,7 +20,7 @@
 package com.quinsoft.zeidon;
 
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Interface that defines data that can be retrieved by a Zeidon EventListener.
@@ -32,7 +32,7 @@ public interface EventData
 {
     Task           getTask();
     View           getView();
-    ViewEntity     getViewEntity();
+    EntityDef     getEntityDef();
     ViewAttribute  getViewAttribute();
     EntityInstance getEntityInstance();
 }

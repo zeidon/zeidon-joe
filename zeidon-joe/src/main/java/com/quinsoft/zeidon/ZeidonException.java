@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -218,9 +218,9 @@ public class ZeidonException extends RuntimeException
         return prependMessage( "ViewAttribute = %s", viewAttribute.toString() );
     }
 
-    public ZeidonException prependViewEntity( ViewEntity viewEntity )
+    public ZeidonException prependEntityDef( EntityDef entityDef )
     {
-        return prependMessage( "ViewEntity  = %s", viewEntity.toString() );
+        return prependMessage( "EntityDef  = %s", entityDef.toString() );
     }
 
     public ZeidonException prependViewOd( ViewOd viewOd )

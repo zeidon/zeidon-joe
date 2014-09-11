@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -253,11 +253,11 @@ public abstract class BrowserEnvironment
         return attributePanel;
     }
 
-    public void entitySelected( ViewEntity viewEntity, EntityInstance ei )
+    public void entitySelected( EntityDef entityDef, EntityInstance ei )
     {
-        attributePanel.setEntity( viewEntity, ei );
+        attributePanel.setEntity( entityDef, ei );
         twinInstancesPanel.setEntityInstance( ei );
-        entityListPanel.setViewEntity( viewEntity );
+        entityListPanel.setEntityDef( entityDef );
     }
 
     public abstract void restoreEnvironment();

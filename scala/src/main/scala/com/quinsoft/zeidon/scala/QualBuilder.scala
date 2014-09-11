@@ -12,7 +12,7 @@ import com.quinsoft.zeidon._
  * @author dgc
  *
  */
-class QualBuilder(private val view: View,
+class QualBuilder( private val view: View,
                    private val jviewOd: com.quinsoft.zeidon.objectdefinition.ViewOd )
             extends Dynamic {
 
@@ -21,8 +21,8 @@ class QualBuilder(private val view: View,
     jqual.setViewOd( jviewOd )
 
     def selectDynamic(entityName: String): EntityQualBuilder = {
-        val jviewEntity = jviewOd.getViewEntity(entityName)
-        new EntityQualBuilder( this, jviewEntity )
+        val jentityDef = jviewOd.getEntityDef(entityName)
+        new EntityQualBuilder( this, jentityDef )
     }
 
     def and( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
@@ -90,10 +90,10 @@ class QualBuilder(private val view: View,
         this
     }
 
-    def restrict( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.ViewEntity ) = restricting( restrictTo )
-    def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.ViewEntity ): QualBuilder = {
-        val entity = restrictTo( new EntitySelector )
-        jqual.restricting( entity.getName() )
+    def restrict( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ) = restricting( restrictTo )
+    def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
+        val jentityDef = restrictTo( new EntitySelector )
+        jqual.restricting( jentityDef.getName() )
         this
     }
 
@@ -120,62 +120,62 @@ class QualBuilder(private val view: View,
      * Builder for setting entity values.
      */
     class EntityQualBuilder( val qualBuilder: QualBuilder,
-                             val jviewEntity: com.quinsoft.zeidon.objectdefinition.ViewEntity )
+                             val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
             extends Dynamic {
 
         var jviewAttribute: com.quinsoft.zeidon.objectdefinition.ViewAttribute = null
 
         def > ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), ">", value )
+            jqual.addAttribQual(jentityDef.getName(), jviewAttribute.getName(), ">", value )
             return qualBuilder
         }
 
         def <> ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "!=", value )
+            jqual.addAttribQual(jentityDef.getName(), jviewAttribute.getName(), "!=", value )
             return qualBuilder
         }
 
         def >= ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), ">=", value )
+            jqual.addAttribQual(jentityDef.getName(), jviewAttribute.getName(), ">=", value )
             return qualBuilder
         }
 
         def < ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "<", value )
+            jqual.addAttribQual(jentityDef.getName(), jviewAttribute.getName(), "<", value )
             return qualBuilder
         }
 
         def <= ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "<=", value )
+            jqual.addAttribQual(jentityDef.getName(), jviewAttribute.getName(), "<=", value )
             return qualBuilder
         }
 
         def exists: QualBuilder = {
-            jqual.addAttribQualEntityExists( jviewEntity.getName() )
+            jqual.addAttribQualEntityExists( jentityDef.getName() )
            return qualBuilder
         }
 
         def selectDynamic( attributeName: String): EntityQualBuilder = {
-            jviewAttribute = jviewEntity.getAttribute( attributeName )
+            jviewAttribute = jentityDef.getAttribute( attributeName )
             return this
         }
 
         def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
             //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
-            jviewAttribute = jviewEntity.getAttribute( attributeName )
+            jviewAttribute = jentityDef.getAttribute( attributeName )
             return qualBuilder
         }
 
         def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
-            jviewAttribute = jviewEntity.getAttribute( attributeName )
-            jqual.addAttribQual(jviewEntity.getName(), jviewAttribute.getName(), "=", value )
+            jviewAttribute = jentityDef.getAttribute( attributeName )
+            jqual.addAttribQual(jentityDef.getName(), jviewAttribute.getName(), "=", value )
             return qualBuilder
         }
     }
 
     class EntitySelector() extends Dynamic {
-        def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.ViewEntity = {
-            jviewOd.getViewEntity( entityName )
+        def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.EntityDef = {
+            jviewOd.getEntityDef( entityName )
         }
     }
 }

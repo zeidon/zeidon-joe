@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.Timer;
 
@@ -88,7 +88,7 @@ class ActivateOiFromDB implements Activator
 
         try
         {
-            ViewEntity rootEntity = viewOd.getRoot();
+            EntityDef rootEntity = viewOd.getRoot();
             activate( rootEntity );
 
             if ( oi.getRootEntityInstance() != null ) // Did we load anything?
@@ -125,7 +125,7 @@ class ActivateOiFromDB implements Activator
      * @return
      */
     @Override
-    public int activate( ViewEntity subobjectRootEntity )
+    public int activate( EntityDef subobjectRootEntity )
     {
         Timer timer = new Timer();
         int rc = 0;
@@ -187,7 +187,7 @@ class ActivateOiFromDB implements Activator
         if ( ! parentCursor.setFirst().isSet() )
             return;
 
-        ViewEntity parentViewEntity = parentCursor.getViewEntity();
+        EntityDef parentEntityDef = parentCursor.getEntityDef();
 
         /*
          * Is parent recursive?  If so, then we have a situation like this:
@@ -198,11 +198,11 @@ class ActivateOiFromDB implements Activator
          * We need to iterate through each of the B's and set the recursive
          * structure so that B because the subobject root.
          */
-        boolean recursive = parentViewEntity.isRecursive();
+        boolean recursive = parentEntityDef.isRecursive();
         if ( recursive )
         {
-            // Reset parentViewEntity to point to A from the example above.
-            parentViewEntity = parentViewEntity.getRecursiveParentViewEntity();
+            // Reset parentEntityDef to point to A from the example above.
+            parentEntityDef = parentEntityDef.getRecursiveParentEntityDef();
         }
 
         // We can't use setNextContinue() because the recursiveness throws off the cursor.
@@ -217,37 +217,37 @@ class ActivateOiFromDB implements Activator
             if ( recursive )
                 parentCursor.setToSubobject(); // B will now become accessed via entity A.
 
-            for ( ViewEntity childViewEntity : parentViewEntity.getChildren() )
+            for ( EntityDef childEntityDef : parentEntityDef.getChildren() )
             {
-                if ( childViewEntity.isDerived() || childViewEntity.isDerivedPath() )
+                if ( childEntityDef.isDerived() || childEntityDef.isDerivedPath() )
                     continue;
 
-                if ( childViewEntity.getDataRecord() == null )
+                if ( childEntityDef.getDataRecord() == null )
                     continue;
 
-                if ( isLazyLoad( childViewEntity ) )
+                if ( isLazyLoad( childEntityDef ) )
                 {
-                    view.dblog().trace( "Entity %s is flagged as LazyLoad. Skipping activate", childViewEntity.getName() );
+                    view.dblog().trace( "Entity %s is flagged as LazyLoad. Skipping activate", childEntityDef.getName() );
                     continue;
                 }
 
-                if ( dbHandler.isQualified( childViewEntity ) )
+                if ( dbHandler.isQualified( childEntityDef ) )
                 {
                     parentEi.setIncomplete( true );
 
                     // Now set the flag for any parents that will cause the child to be deleted
                     // if the parent is deleted.
                     for ( EntityInstanceImpl p = parentEi;
-                          p != null && p.getViewEntity().isParentDelete();
+                          p != null && p.getEntityDef().isParentDelete();
                           p = p.getParent() )
                     {
                         p.setIncomplete( true );
                     }
                 }
 
-                int load = dbHandler.loadEntity( view, childViewEntity );
+                int load = dbHandler.loadEntity( view, childEntityDef );
                 if ( load == DbHandler.LOAD_DONE )
-                    activateChildren( view.cursor( childViewEntity ) );
+                    activateChildren( view.cursor( childEntityDef ) );
             }
 
             if ( recursive )
@@ -256,14 +256,14 @@ class ActivateOiFromDB implements Activator
     }
 
     /**
-     * returns true if viewEntity should be loaded lazily.
+     * returns true if entityDef should be loaded lazily.
      *
-     * @param viewEntity
+     * @param entityDef
      * @return
      */
-    private boolean isLazyLoad( ViewEntity viewEntity )
+    private boolean isLazyLoad( EntityDef entityDef )
     {
-        return viewEntity.getLazyLoadConfig().isLazyLoad() && ! control.contains(  ActivateFlags.fINCLUDE_LAZYLOAD );
+        return entityDef.getLazyLoadConfig().isLazyLoad() && ! control.contains(  ActivateFlags.fINCLUDE_LAZYLOAD );
     }
 
     /**
@@ -288,15 +288,15 @@ class ActivateOiFromDB implements Activator
     }
 
     /**
-     * Activate a single object instance or subobject, starting with rootViewEntity.
+     * Activate a single object instance or subobject, starting with rootEntityDef.
      * @return
      */
-    private int singleActivate( ViewEntity rootViewEntity )
+    private int singleActivate( EntityDef rootEntityDef )
     {
         // Are we loading the OI root?  If so we're loading the whole OI.
-        boolean isOiRoot = rootViewEntity.getParent() == null;
+        boolean isOiRoot = rootEntityDef.getParent() == null;
 
-        assert isOiRoot || rootViewEntity.getLazyLoadConfig().isLazyLoad() : "We're loading an entity that is neither root or lazyload";
+        assert isOiRoot || rootEntityDef.getLazyLoadConfig().isLazyLoad() : "We're loading an entity that is neither root or lazyload";
 
         ObjectInstance oi = view.getObjectInstance();
 
@@ -314,11 +314,11 @@ class ActivateOiFromDB implements Activator
         }
 
         dbHandler.beginActivate( view, qual, control );
-        int rc = dbHandler.loadEntity( view, rootViewEntity );
+        int rc = dbHandler.loadEntity( view, rootEntityDef );
 
         // Activate the child entities unless we're activating the root and ROOT_ONLY is set.
         if ( ! isOiRoot || ! control.contains( ActivateFlags.fROOT_ONLY ) )
-            activateChildren( view.cursor( rootViewEntity ) );
+            activateChildren( view.cursor( rootEntityDef ) );
 
         if ( rc == 0 ) // Did we load anything?
         {
@@ -336,10 +336,10 @@ class ActivateOiFromDB implements Activator
             {
                 // Get the parent of the loaded instance.  We don't want to use the rootEntity cursor because
                 // that will trigger a recursive loop that attempts to load the lazyload EIs.
-                EntityInstanceImpl ei = view.cursor( rootViewEntity.getParent() ).getEntityInstance();
+                EntityInstanceImpl ei = view.cursor( rootEntityDef.getParent() ).getEntityInstance();
 
                 // Should never be null since we check if any are loaded.
-                ei = ei.getFirstChildMatchingViewEntity( rootViewEntity );
+                ei = ei.getFirstChildMatchingEntityDef( rootEntityDef );
                 while ( ei != null )
                 {
                     assert ! ei.isHidden() : "We have a newly loaded EI that is hidden.";

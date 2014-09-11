@@ -538,19 +538,19 @@ public class EpammsEbTests
 //    view.displayObjectInstance();
    }
 
-   private ViewEntity findViewEntity( ViewEntity parentViewEntity, String entityName )
+   private EntityDef findEntityDef( EntityDef parentEntityDef, String entityName )
    {
-      ViewEntity ve;
+      EntityDef ve;
 
-      if ( parentViewEntity.getName().equals( entityName ) )
-         return parentViewEntity;
+      if ( parentEntityDef.getName().equals( entityName ) )
+         return parentEntityDef;
 
-      for ( ViewEntity childViewEntity : parentViewEntity.getChildren() )
+      for ( EntityDef childEntityDef : parentEntityDef.getChildren() )
       {
-         if ( childViewEntity.getName( ).equals( entityName ) )
-            return childViewEntity;
+         if ( childEntityDef.getName( ).equals( entityName ) )
+            return childEntityDef;
 
-         ve = findViewEntity( childViewEntity, entityName );
+         ve = findEntityDef( childEntityDef, entityName );
          if ( ve != null )
             return ve;
       }
@@ -574,10 +574,10 @@ public class EpammsEbTests
 
       View mMasLC = vKZXMLPGO.activateEmptyObjectInstance( "mMasLC", task.getApplication() );
       mMasLC.getViewOd().displayViewOD( task );
-      ViewEntity viewEntity = findViewEntity( mMasLC.getViewOd().getRoot(), "M_Usage" );
-      if ( viewEntity != null )
+      EntityDef entityDef = findEntityDef( mMasLC.getViewOd().getRoot(), "M_Usage" );
+      if ( entityDef != null )
       {
-         DataRecord dataRecord = viewEntity.getDataRecord();
+         DataRecord dataRecord = entityDef.getDataRecord();
          if ( dataRecord != null )
          {
             task.log().info( "    DataRecord: %s type=%s  count %d", dataRecord.getRecordName(), dataRecord.getType(), dataRecord.dataFields().size() );

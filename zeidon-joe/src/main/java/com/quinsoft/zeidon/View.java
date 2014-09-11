@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -66,7 +66,7 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     long getOiId();
 
     EntityCursor cursor( String entityName );
-    EntityCursor cursor( ViewEntity viewentity );
+    EntityCursor cursor( EntityDef entityDef );
 
     /**
      * Synonym for cursor( String entityName );
@@ -77,12 +77,12 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     EntityCursor getCursor( String entityName );
 
     /**
-     * Synonym for cursor( ViewEntity viewEntity ).
+     * Synonym for cursor( EntityDef entityDef ).
      *
-     * @param viewentity
+     * @param entityDef
      * @return
      */
-    EntityCursor getCursor( ViewEntity viewEntity );
+    EntityCursor getCursor( EntityDef entityDef );
 
     /**
      * @return The default select set.

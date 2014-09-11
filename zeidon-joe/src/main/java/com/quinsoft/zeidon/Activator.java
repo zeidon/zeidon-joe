@@ -18,7 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Defines the interface for an activator object that is used to activate OIs.
@@ -44,5 +44,5 @@ public interface Activator
      * @param subobjectRootEntity
      * @return
      */
-    int activate( ViewEntity subobjectRootEntity );
+    int activate( EntityDef subobjectRootEntity );
 }

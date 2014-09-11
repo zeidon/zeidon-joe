@@ -15,7 +15,7 @@ import com.quinsoft.zeidon.objectdefinition._
  */
 class EntityCursor( private[this] val view: View,
                     val jentityCursor: com.quinsoft.zeidon.EntityCursor )
-            extends AbstractEntity( jentityCursor.getViewEntity() )
+            extends AbstractEntity( jentityCursor.getEntityDef() )
             with Iterable[EntityInstance]
 {
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {

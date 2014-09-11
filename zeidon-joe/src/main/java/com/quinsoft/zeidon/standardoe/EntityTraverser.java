@@ -21,7 +21,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * A traverser is like a static iterator.  The getNext() method requires that the
@@ -56,9 +56,9 @@ interface EntityTraverser
             this.scopingEntity = null;
         }
 
-        NextTwinTraverser(ViewEntity viewEntity, EntityInstanceImpl scopingEntity )
+        NextTwinTraverser(EntityDef entityDef, EntityInstanceImpl scopingEntity )
         {
-            this.header = new HeaderInstance( scopingEntity.getFirstChildMatchingViewEntity( viewEntity ) );
+            this.header = new HeaderInstance( scopingEntity.getFirstChildMatchingEntityDef( entityDef ) );
             this.scopingEntity = scopingEntity;
         }
 
@@ -77,11 +77,11 @@ interface EntityTraverser
             EntityInstanceImpl next = e.getNextTwin();
             if ( next == null && scopingEntity != null )
             {
-                ViewEntity viewEntity = e.getViewEntity();
+                EntityDef entityDef = e.getEntityDef();
                 int level = e.getLevel();
                 for ( next = e.getNextHier(); next != null; next = next.getNextHier() )
                 {
-                    if ( next.getViewEntity() == viewEntity && next.getLevel() == level )
+                    if ( next.getEntityDef() == entityDef && next.getLevel() == level )
                         break; // We found what we're looking for.
                     
                     if ( next.getLevel() <= scopingEntity.getLevel() )
@@ -107,11 +107,11 @@ interface EntityTraverser
             EntityInstanceImpl prev = e.getPrevTwin();
             if ( prev == null && scopingEntity != null )
             {
-                ViewEntity viewEntity = e.getViewEntity();
+                EntityDef entityDef = e.getEntityDef();
                 int level = e.getLevel();
                 for ( prev = e.getPrevHier(); prev != null; prev = prev.getPrevHier() )
                 {
-                    if ( prev.getViewEntity() == viewEntity && prev.getLevel() == level )
+                    if ( prev.getEntityDef() == entityDef && prev.getLevel() == level )
                         break; // We found what we're looking for.
                     
                     if ( prev.getLevel() <= scopingEntity.getLevel() )
@@ -341,15 +341,15 @@ interface EntityTraverser
 
     class NextTwinWithinOiTraverser implements EntityTraverser
     {
-        private final ViewEntity         viewEntity;
+        private final EntityDef         entityDef;
         private       EntityInstanceImpl current;
         
         /**
          * 
          */
-        public NextTwinWithinOiTraverser( ObjectInstance oi, ViewEntity viewEntity )
+        public NextTwinWithinOiTraverser( ObjectInstance oi, EntityDef entityDef )
         {
-            this.viewEntity = viewEntity;
+            this.entityDef = entityDef;
             current = new HeaderInstance( oi.getRootEntityInstance() );
         }
         
@@ -359,7 +359,7 @@ interface EntityTraverser
         @Override
         public EntityInstanceImpl getNext(EntityInstanceImpl e)
         {
-            if ( current.getViewEntity() == viewEntity && current.getNextTwin() != null )
+            if ( current.getEntityDef() == entityDef && current.getNextTwin() != null )
             {
                 current = current.getNextTwin();
                 return current;
@@ -371,7 +371,7 @@ interface EntityTraverser
                 if ( current == null )
                     return null;
                 
-                if ( current.getViewEntity() == viewEntity )
+                if ( current.getEntityDef() == entityDef )
                     return current;
             }
         }
@@ -382,7 +382,7 @@ interface EntityTraverser
         @Override
         public EntityInstanceImpl getPrev(EntityInstanceImpl e)
         {
-            if ( current.getViewEntity() == viewEntity && current.getPrevTwin() != null )
+            if ( current.getEntityDef() == entityDef && current.getPrevTwin() != null )
             {
                 current = current.getPrevTwin();
                 return current;
@@ -394,7 +394,7 @@ interface EntityTraverser
                 if ( current == null )
                     return null;
                 
-                if ( current.getViewEntity() == viewEntity )
+                if ( current.getEntityDef() == entityDef )
                     return current;
             }
         }
@@ -420,7 +420,7 @@ interface EntityTraverser
     {
         private HeaderInstance( EntityInstanceImpl entityInstance )
         {
-            super( entityInstance.getViewEntity() );
+            super( entityInstance.getEntityDef() );
             setPrevTwin( entityInstance );
             setNextTwin( entityInstance );
             setNextHier( entityInstance );

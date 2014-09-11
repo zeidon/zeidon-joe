@@ -46,22 +46,22 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
  * @author DG
  *
  */
-public class ViewEntity implements PortableFileAttributeHandler, CacheMap
+public class EntityDef implements PortableFileAttributeHandler, CacheMap
 {
     private ViewOd     viewOd;
-    private ViewEntity prevHier;
-    private ViewEntity nextHier;
-    private ViewEntity parent;
-    private ViewEntity prevSibling;
-    private ViewEntity nextSibling;
+    private EntityDef prevHier;
+    private EntityDef nextHier;
+    private EntityDef parent;
+    private EntityDef prevSibling;
+    private EntityDef nextSibling;
     private String     name;
     private int        erEntityToken;
     private int        erRelToken;
     private boolean    erRelLink;  // RelLink direction.  True = '1' from the XOD file.
     private final int        level;
     private final int        entityNumber;
-    private List<ViewEntity> children;
-    private List<ViewEntity> childrenHier;
+    private List<EntityDef> children;
+    private List<EntityDef> childrenHier;
     private EventListener eventListener;
     private ArrayList<ViewAttribute> activateOrdering;
     private Integer    activateLimit;
@@ -89,7 +89,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
      *
      *  This is maintained at run-time which is why we need it to be a concurrent map.
      */
-    private final ConcurrentMap<ViewEntity, Boolean> attributeSuperset = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
+    private final ConcurrentMap<EntityDef, Boolean> attributeSuperset = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
 
     private final CacheMap cacheMap = new CacheMapImpl();
 
@@ -115,7 +115,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     private int        persistentAttributeCount;
     private int        workAttributeCount;
     private DataRecord dataRecord;
-    private ViewEntity recursiveParentViewEntity = null;
+    private EntityDef recursiveParentEntityDef = null;
     private int        minCardinality;
     private int        maxcardinality;
     private boolean    hasInitializedAttributes = false;
@@ -123,14 +123,14 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     /**
      * If this entity is a recursive parent then recursiveChild references the child.
      */
-    private ViewEntity recursiveChild;
+    private EntityDef recursiveChild;
 
     // Flags to help debug OI.
     private boolean    debugIncrementalFlag; // If true, then pop up a message when we change an incremental flag.
 
     private final LazyLoadConfig lazyLoadConfig;
 
-    public ViewEntity( ViewOd viewOd, int level )
+    public EntityDef( ViewOd viewOd, int level )
     {
         this.viewOd = viewOd;
         this.entityNumber = viewOd.getEntityCount();
@@ -276,13 +276,13 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
                 if ( reader.getAttributeName().equals( "RECURSIVE" ))
                 {
                     // Check to see if this entity is recursive.
-                    for ( ViewEntity search = parent; search != null; search = search.getParent() )
+                    for ( EntityDef search = parent; search != null; search = search.getParent() )
                     {
                         if ( search.getErEntityToken() == erEntityToken )
                         {
                             search.recursiveChild = this;
                             this.recursive = true;
-                            this.recursiveParentViewEntity = search;
+                            this.recursiveParentEntityDef = search;
                             break;
                         }
                     }
@@ -321,39 +321,39 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
         this.viewOd = viewOd;
     }
 
-    public ViewEntity getPrevHier()
+    public EntityDef getPrevHier()
     {
         return prevHier;
     }
 
-    public void setPrevHier(ViewEntity prevHier)
+    public void setPrevHier(EntityDef prevHier)
     {
         this.prevHier = prevHier;
     }
 
-    public ViewEntity getNextHier()
+    public EntityDef getNextHier()
     {
         return nextHier;
     }
 
-    public void setNextHier(ViewEntity nextHier)
+    public void setNextHier(EntityDef nextHier)
     {
         this.nextHier = nextHier;
     }
 
-    public ViewEntity getParent()
+    public EntityDef getParent()
     {
         return parent;
     }
 
-    void setParent(ViewEntity parent)
+    void setParent(EntityDef parent)
     {
         this.parent = parent;
         if ( parent.derivedPath )
             derivedPath = true;
 
         if ( parent.children == null )
-            parent.children = new ArrayList<ViewEntity>();
+            parent.children = new ArrayList<EntityDef>();
 
         LazyLoadConfig parentConfig = parent.getLazyLoadConfig();
         if ( parentConfig.isLazyLoad() )
@@ -371,22 +371,22 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
         parent.children.add( this );
     }
 
-    public ViewEntity getPrevSibling()
+    public EntityDef getPrevSibling()
     {
         return prevSibling;
     }
 
-    public void setPrevSibling(ViewEntity prevSibling)
+    public void setPrevSibling(EntityDef prevSibling)
     {
         this.prevSibling = prevSibling;
     }
 
-    public ViewEntity getNextSibling()
+    public EntityDef getNextSibling()
     {
         return nextSibling;
     }
 
-    public void setNextSibling(ViewEntity nextSibling)
+    public void setNextSibling(EntityDef nextSibling)
     {
         this.nextSibling = nextSibling;
     }
@@ -548,7 +548,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
      * Returns a list of the direct children of this entity.
      * @return
      */
-    public List<ViewEntity> getChildren()
+    public List<EntityDef> getChildren()
     {
         if ( children == null )
             return Collections.emptyList();
@@ -561,7 +561,7 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
      * in hier order.
      * @return
      */
-    public synchronized List<ViewEntity> getChildrenHier()
+    public synchronized List<EntityDef> getChildrenHier()
     {
         if ( children == null )
             return Collections.emptyList();
@@ -569,8 +569,8 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
         if ( childrenHier != null )
             return childrenHier;
 
-        List<ViewEntity> list = new ArrayList<ViewEntity>();
-        for ( ViewEntity child = this.getNextHier();
+        List<EntityDef> list = new ArrayList<EntityDef>();
+        for ( EntityDef child = this.getNextHier();
               child != null && child.getLevel() > this.getLevel();
               child = child.getNextHier() )
         {
@@ -588,12 +588,12 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
      *
      * @return
      */
-    public ViewEntity getLastChildHier()
+    public EntityDef getLastChildHier()
     {
         if ( children == null )
             return this;
 
-        List<ViewEntity> list = getChildrenHier();
+        List<EntityDef> list = getChildrenHier();
         return list.get( list.size() - 1 );
     }
 
@@ -694,11 +694,11 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
-     * If this ViewEntity is a recursive parent then this returns the recursive child.
+     * If this EntityDef is a recursive parent then this returns the recursive child.
      *
      * @return
      */
-    public ViewEntity getRecursiveChild()
+    public EntityDef getRecursiveChild()
     {
         return recursiveChild;
     }
@@ -733,21 +733,21 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
      *
      * @return
      */
-    public ViewEntity getRecursiveParentViewEntity()
+    public EntityDef getRecursiveParentEntityDef()
     {
-        return recursiveParentViewEntity;
+        return recursiveParentEntityDef;
     }
 
     /**
-     * If this ViewEntity is recursive then this returns the recursive parent,
+     * If this EntityDef is recursive then this returns the recursive parent,
      * otherwise returns 'this'.
      *
      * @return
      */
-    public ViewEntity getBaseViewEntity()
+    public EntityDef getBaseEntityDef()
     {
-        if ( getRecursiveParentViewEntity() != null )
-            return getRecursiveParentViewEntity();
+        if ( getRecursiveParentEntityDef() != null )
+            return getRecursiveParentEntityDef();
 
         return this;
     }
@@ -822,17 +822,17 @@ public class ViewEntity implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
-     * Returns true if 'this' ViewEntity has all the persistent attributes of
+     * Returns true if 'this' EntityDef has all the persistent attributes of
      * 'otherEntity'.  Intended to be used by includeProcessing.
      *
      * @param otherEntity
      * @return
      */
-    public boolean isAttributeSuperset( ViewEntity otherEntity )
+    public boolean isAttributeSuperset( EntityDef otherEntity )
     {
     	if ( getErEntityToken() != otherEntity.getErEntityToken() )
     		throw new ZeidonException( "Entities do not have matching ER Entity Tokens." )
-    						.prependViewEntity(this)
+    						.prependEntityDef(this)
     						.prependMessage("Other entity = %s", otherEntity );
 
     	// Have we already determined the superset status for this entity?

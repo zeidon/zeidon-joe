@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 import com.quinsoft.zeidon.utils.PortableFileReader;
@@ -114,35 +114,35 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
                                                      long flags)
     {
         String entityName = reader.getAttributeName();
-        ViewEntity viewEntity = viewOd.getViewEntity( entityName, ! ignoreInvalidEntityNames );
+        EntityDef entityDef = viewOd.getEntityDef( entityName, ! ignoreInvalidEntityNames );
 
-        // If the viewEntity is null then the entity name doesn't exist in the View OD and
+        // If the entityDef is null then the entity name doesn't exist in the View OD and
         // the user wants us to ignore unknown entities.
-        if ( viewEntity == null )
+        if ( entityDef == null )
         {
             entities.add( null );  // Needed so that link indexes in stream still point to valid entities.
             return new PortableFileAttributeHandler.NullAttributeHandler();
         }
 
-        int viewEntityLevel = viewEntity.getLevel() + view.getViewCursor().getRecursiveDiff();
-        if ( viewEntityLevel < level )
+        int entityDefLevel = entityDef.getLevel() + view.getViewCursor().getRecursiveDiff();
+        if ( entityDefLevel < level )
         {
-            // If the viewEntity level is < level than the last entity we created must
+            // If the entityDef level is < level than the last entity we created must
             // be the parent of the one we're about to create and we need to set the
             // cursor to the subobject.
-            view.cursor( lastInstance.getViewEntity() ).setToSubobject();
+            view.cursor( lastInstance.getEntityDef() ).setToSubobject();
         }
         else
         {
-            while ( viewEntityLevel > level )
+            while ( entityDefLevel > level )
             {
                 view.resetSubobject();
-                viewEntityLevel = viewEntity.getLevel() + view.getViewCursor().getRecursiveDiff();
+                entityDefLevel = entityDef.getLevel() + view.getViewCursor().getRecursiveDiff();
             }
         }
 
         // Create the new instance and add it to the list of entities.
-        EntityCursorImpl cursor = view.cursor( viewEntity );
+        EntityCursorImpl cursor = view.cursor( entityDef );
         lastInstance = cursor.createEntity( CursorPosition.LAST, CREATE_FLAGS );
         entities.add( lastInstance );
 
@@ -156,18 +156,18 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         final static long FLAGS_UPDATED   = 0x00000002;
 
         private final EntityInstanceImpl entityInstance;
-        private final ViewEntity         viewEntity;
+        private final EntityDef         entityDef;
 
         public AttributeSetter(EntityInstanceImpl entityInstance)
         {
             this.entityInstance = entityInstance;
-            viewEntity = entityInstance.getViewEntity();
+            entityDef = entityInstance.getEntityDef();
         }
 
         @Override
         public void setAttribute(PortableFileReader reader)
         {
-            ViewAttribute viewAttribute = viewEntity.getAttribute( reader.getAttributeName(), ! ignoreInvalidAttributeNames );
+            ViewAttribute viewAttribute = entityDef.getAttribute( reader.getAttributeName(), ! ignoreInvalidAttributeNames );
             if ( viewAttribute != null )
             {
                 if ( viewAttribute.getType() == InternalType.BLOB )
@@ -217,8 +217,8 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         EntityInstanceImpl targetInstance = entities.get( target );
         EntityInstanceImpl sourceInstance = entities.get( source );
         reader.getLogger().trace( "Linking %s (%d) with %s (%d)",
-                                  targetInstance.getViewEntity().getName(), target,
-                                  sourceInstance.getViewEntity().getName(), source );
+                                  targetInstance.getEntityDef().getName(), target,
+                                  sourceInstance.getEntityDef().getName(), source );
         targetInstance.linkInternalInstances( sourceInstance );
     }
 
@@ -227,7 +227,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
     {
         if ( reader.isIncremental() )
         {
-            assert lastInstance.getViewEntity().getName().equals( entityName );
+            assert lastInstance.getEntityDef().getName().equals( entityName );
             lastInstance.setIncrementalFlags( reader.getEntityFlags() );
         }
     }

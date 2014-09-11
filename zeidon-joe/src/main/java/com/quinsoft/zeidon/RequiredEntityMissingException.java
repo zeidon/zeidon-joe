@@ -18,7 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -32,11 +32,11 @@ public class RequiredEntityMissingException extends ZeidonException
      * @param format
      * @param strings
      */
-    public RequiredEntityMissingException( ViewEntity viewEntity )
+    public RequiredEntityMissingException( EntityDef entityDef )
     {
         super( "Required child entity has no instances." );
-        prependViewEntity( viewEntity );
-        prependViewOd( viewEntity.getViewOd() );
+        prependEntityDef( entityDef );
+        prependViewOd( entityDef.getViewOd() );
     }
 
 }

@@ -22,7 +22,7 @@ package com.quinsoft.zeidon.objectbrowser;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -35,7 +35,7 @@ class ViewOdLayout
     private final ViewOd             viewOd;
     private final int                height;
     private final int                width;
-    private final Map<ViewEntity, ViewEntityLayout> entityLayouts;
+    private final Map<EntityDef, EntityDefLayout> entityLayouts;
     
     /**
      * @param env
@@ -45,25 +45,25 @@ class ViewOdLayout
     {
         this.env = env;
         this.viewOd = viewOd;
-        entityLayouts = new HashMap<ViewEntity, ViewEntityLayout>();
+        entityLayouts = new HashMap<EntityDef, EntityDefLayout>();
         
-        ViewEntity root = viewOd.getRoot();
+        EntityDef root = viewOd.getRoot();
         
         // Following will add the entity layout to the map.
-        ViewEntityLayout rootLayout = new ViewEntityLayout( this, root );
+        EntityDefLayout rootLayout = new EntityDefLayout( this, root );
         
         width = rootLayout.getWidth();
         height = viewOd.getHeight();
     }
 
-    void addViewEntityLayout( ViewEntity viewEntity, ViewEntityLayout viewEntityLayout )
+    void addEntityDefLayout( EntityDef entityDef, EntityDefLayout entityDefLayout )
     {
-        entityLayouts.put( viewEntity, viewEntityLayout );
+        entityLayouts.put( entityDef, entityDefLayout );
     }
 
-    ViewEntityLayout getViewEntityLayout( ViewEntity viewEntity )
+    EntityDefLayout getEntityDefLayout( EntityDef entityDef )
     {
-        return entityLayouts.get( viewEntity );
+        return entityLayouts.get( entityDef );
     }
     
     public int getHeight()

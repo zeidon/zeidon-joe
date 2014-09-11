@@ -39,7 +39,7 @@ public class LazyLoadConfig
     /**
      * If an entity has a lazy load parent, this is the parent.
      */
-    private ViewEntity lazyLoadParent;
+    private EntityDef lazyLoadParent;
 
     public void setFlag( LazyLoadFlags flag )
     {
@@ -72,12 +72,12 @@ public class LazyLoadConfig
      * Get the parent that is flagged as lazy load.
      * @return
      */
-    public ViewEntity getLazyLoadParent()
+    public EntityDef getLazyLoadParent()
     {
         return lazyLoadParent;
     }
 
-    public void setLazyLoadParent( ViewEntity lazyLoadParent )
+    public void setLazyLoadParent( EntityDef lazyLoadParent )
     {
         this.lazyLoadParent = lazyLoadParent;
     }

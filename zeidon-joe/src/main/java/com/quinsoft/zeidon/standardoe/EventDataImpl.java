@@ -24,7 +24,7 @@ import com.quinsoft.zeidon.EventData;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -35,7 +35,7 @@ public class EventDataImpl implements EventData
     private final Task task;
     
     private View           view;
-    private ViewEntity     viewEntity;
+    private EntityDef     entityDef;
     private ViewAttribute  viewAttribute;
     private EntityInstance entityInstance;
     
@@ -65,9 +65,9 @@ public class EventDataImpl implements EventData
         return this;
     }
     
-    public EventDataImpl setViewEntity( ViewEntity ve )
+    public EventDataImpl setEntityDef( EntityDef ve )
     {
-        viewEntity = ve;
+        entityDef = ve;
         return this;
     }
     
@@ -96,12 +96,12 @@ public class EventDataImpl implements EventData
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EventData#getViewEntity()
+     * @see com.quinsoft.zeidon.EventData#getEntityDef()
      */
     @Override
-    public ViewEntity getViewEntity()
+    public EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 
     /* (non-Javadoc)

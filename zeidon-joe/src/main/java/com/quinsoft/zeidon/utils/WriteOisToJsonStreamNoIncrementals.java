@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Serializes an OI by writing it as a JSON stream.  This does not write any Zeidon
@@ -88,11 +88,11 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     {
         view = view.newView();  // To preserve cursor positions in the original view.
 
-        ViewEntity rootViewEntity = view.getViewOd().getRoot();
-        jg.writeArrayFieldStart( rootViewEntity.getName() );
+        EntityDef rootEntityDef = view.getViewOd().getRoot();
+        jg.writeArrayFieldStart( rootEntityDef.getName() );
         jg.writeStartObject();
         
-        for ( EntityInstance ei:  view.cursor( rootViewEntity ).eachEntity() )
+        for ( EntityInstance ei:  view.cursor( rootEntityDef ).eachEntity() )
         {
             if ( ei.hasPrevTwin() )
                 jg.writeStartObject();
@@ -107,12 +107,12 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         jg.writeEndArray();
     }
     
-    private ViewEntity writeEntity( EntityInstance ei ) throws Exception
+    private EntityDef writeEntity( EntityInstance ei ) throws Exception
     {
         try
         {
             // See if we need to open or close an array field.
-            final ViewEntity viewEntity = ei.getViewEntity();
+            final EntityDef entityDef = ei.getEntityDef();
 
             for ( AttributeInstance attrib : ei.attributeList( false ) )
             {
@@ -126,16 +126,16 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             // Loop through the children and add them.
             for ( EntityInstance child : ei.getDirectChildren() )
             {
-                ViewEntity childViewEntity = child.getViewEntity();
+                EntityDef childEntityDef = child.getEntityDef();
                 if ( ! child.hasPrevTwin() )
                 {
-                    if ( childViewEntity.getMaxCardinality() > 1 )
+                    if ( childEntityDef.getMaxCardinality() > 1 )
                     {
-                        jg.writeArrayFieldStart( childViewEntity.getName() );
+                        jg.writeArrayFieldStart( childEntityDef.getName() );
                         jg.writeStartObject();
                     }
                     else
-                        jg.writeObjectFieldStart( childViewEntity.getName() );
+                        jg.writeObjectFieldStart( childEntityDef.getName() );
                 }
                 else
                     jg.writeStartObject();
@@ -145,12 +145,12 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 jg.writeEndObject();
                 if ( ! child.hasNextTwin() )
                 {
-                    if ( childViewEntity.getMaxCardinality() > 1 )
+                    if ( childEntityDef.getMaxCardinality() > 1 )
                         jg.writeEndArray();
                 }
             }
 
-            return viewEntity;
+            return entityDef;
         }
 
         catch ( Exception e )

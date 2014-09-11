@@ -29,6 +29,6 @@ public class HiddenCursorException extends ZeidonException
     public HiddenCursorException(EntityCursor cursor)
     {
         super( "Cursor references a hidden instance" );
-        prependViewEntity( cursor.getViewEntity() );
+        prependEntityDef( cursor.getEntityDef() );
     }
 }

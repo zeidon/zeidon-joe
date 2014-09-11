@@ -28,7 +28,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author dgc
@@ -191,9 +191,9 @@ class AttributeInstanceImpl implements AttributeInstance
         return attributeValue.getInternalValue();
     }
 
-    private ViewEntity getViewEntity()
+    private EntityDef getEntityDef()
     {
-        return viewAttribute.getViewEntity();
+        return viewAttribute.getEntityDef();
     }
 
     private ObjectInstance getObjectInstance()
@@ -236,12 +236,12 @@ class AttributeInstanceImpl implements AttributeInstance
 
         // If the entity is derived or work, then we do not need to check if the
         // attribute can be updated.
-        if ( getViewEntity().isDerived() || getViewEntity().isDerivedPath() )
+        if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
             return;
 
         if ( getObjectInstance().isReadOnly() )
             throw new ZeidonException( "Object Instance is read-only" )
-                                .prependViewEntity( getViewEntity() );
+                                .prependEntityDef( getEntityDef() );
 
         for ( EntityInstanceImpl linked : entityInstance.getLinkedInstances() )
         {
@@ -267,7 +267,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public EntityInstance setValue( Object value, String contextName )
     {
         if ( viewAttribute.isHidden() )
-            throw new UnknownViewAttributeException( getViewEntity(), viewAttribute.getName() );
+            throw new UnknownViewAttributeException( getEntityDef(), viewAttribute.getName() );
 
         validateUpdateAttribute();
         contextName = checkContextName( contextName );
@@ -322,7 +322,7 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( view == null )
         {
             view = new ViewImpl( getObjectInstance() );
-            view.cursor( viewAttribute.getViewEntity() ).setCursor( entityInstance );
+            view.cursor( viewAttribute.getEntityDef() ).setCursor( entityInstance );
         }
 
         return view;

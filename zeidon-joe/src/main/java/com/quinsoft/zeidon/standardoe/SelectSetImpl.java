@@ -27,7 +27,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -38,7 +38,7 @@ class SelectSetImpl implements SelectSet
     private final Set<EntityInstance> selectSet = new HashSet<EntityInstance>();
     private final ViewImpl view;
     private       EntityInstance commonParent;
-    private       ViewEntity viewEntity;
+    private       EntityDef entityDef;
     private       EntityInstance referenceInstance;
 
     SelectSetImpl( ViewImpl view )
@@ -63,17 +63,17 @@ class SelectSetImpl implements SelectSet
     {
         ei = ei.getEntityInstance(); // Get EI from the cursor if a cursor was used.
 
-        if ( viewEntity == null )
+        if ( entityDef == null )
         {
-            viewEntity = ei.getViewEntity();
+            entityDef = ei.getEntityDef();
             commonParent = ei.getParent();
             referenceInstance = ei;
         }
         else
         {
-            if ( ! viewEntity.equals( ei.getViewEntity() ) )
-                throw new ZeidonException( "SelectSets may (currently) only select entities of the same ViewEntity. " )
-                                        .prependViewEntity( viewEntity );
+            if ( ! entityDef.equals( ei.getEntityDef() ) )
+                throw new ZeidonException( "SelectSets may (currently) only select entities of the same EntityDef. " )
+                                        .prependEntityDef( entityDef );
 
             // Find the greatest common parent.  If the commonParent is currently null then
             // we must be dealing with root entities.
@@ -96,7 +96,7 @@ class SelectSetImpl implements SelectSet
     {
         selectSet.remove( ei.getEntityInstance() );
         commonParent = null;
-        viewEntity = null;
+        entityDef = null;
         referenceInstance = null;
     }
 
@@ -113,9 +113,9 @@ class SelectSetImpl implements SelectSet
     public EntityIterator<? extends EntityInstance> eachEntity()
     {
         return new IteratorBuilder(view.getObjectInstance())
-                        .setCursor( view.cursor( viewEntity ) )
+                        .setCursor( view.cursor( entityDef ) )
                         .forTwinsOf( (EntityInstanceImpl) referenceInstance )
-                        .forViewEntity( viewEntity )
+                        .forEntityDef( entityDef )
                         .containedInSet( selectSet )
                         .build();
     }

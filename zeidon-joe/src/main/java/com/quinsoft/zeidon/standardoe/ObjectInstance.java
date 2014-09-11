@@ -291,9 +291,9 @@ class ObjectInstance implements Lockable
                     return false;
                 }
 
-                if ( scan.getNextTwin().getViewEntity() != scan.getViewEntity() )
+                if ( scan.getNextTwin().getEntityDef() != scan.getEntityDef() )
                 {
-                    writeValidateError( scan, scan.getNextTwin(), "ViewEntity next Twin pointers don't match" );
+                    writeValidateError( scan, scan.getNextTwin(), "EntityDef next Twin pointers don't match" );
                     return false;
                 }
             }
@@ -312,9 +312,9 @@ class ObjectInstance implements Lockable
                     return false;
                 }
 
-                if ( scan.getPrevTwin().getViewEntity() != scan.getViewEntity() )
+                if ( scan.getPrevTwin().getEntityDef() != scan.getEntityDef() )
                 {
-                    writeValidateError( scan, scan.getPrevTwin(), "Prev twin ViewEntity don't match" );
+                    writeValidateError( scan, scan.getPrevTwin(), "Prev twin EntityDef don't match" );
                     return false;
                 }
             }

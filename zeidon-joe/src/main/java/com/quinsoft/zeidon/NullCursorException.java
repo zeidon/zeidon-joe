@@ -18,7 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -28,18 +28,18 @@ public class NullCursorException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
     
-    private final ViewEntity viewEntity;
+    private final EntityDef entityDef;
 
     public NullCursorException(EntityCursor cursor)
     {
-        super( "Cursor for entity is null", cursor.getViewEntity() );
-        prependViewEntity( cursor.getViewEntity() );
-        viewEntity = cursor.getViewEntity();
+        super( "Cursor for entity is null", cursor.getEntityDef() );
+        prependEntityDef( cursor.getEntityDef() );
+        entityDef = cursor.getEntityDef();
     }
 
-    public ViewEntity getViewEntity()
+    public EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 
 }

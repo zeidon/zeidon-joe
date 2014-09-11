@@ -46,7 +46,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -68,18 +68,18 @@ public class EntitySquare extends JPanel implements MouseListener
     private static Color NOT_LOADED     = Color.LIGHT_GRAY;
 
     private final OiDisplay          oiDisplay;
-    private final ViewEntityLayout   viewEntityLayout;
+    private final EntityDefLayout   entityDefLayout;
     private final BrowserEnvironment env;
     private final Dimension          size;
     private final Dimension          paddedSize;
     private final Font font;
 
-    EntitySquare( OiDisplay display, BrowserEnvironment environment, ViewEntityLayout layout )
+    EntitySquare( OiDisplay display, BrowserEnvironment environment, EntityDefLayout layout )
     {
         super();
         this.env = environment;
         oiDisplay = display;
-        viewEntityLayout = layout;
+        entityDefLayout = layout;
         size = new Dimension( SMALLEST_WIDTH * env.getPainterScaleFactor(), SMALLEST_HEIGHT * env.getPainterScaleFactor() );
         paddedSize = new Dimension( ( SMALLEST_WIDTH + HORIZONTAL_PAD * 2 ) * env.getPainterScaleFactor(),
                                     ( SMALLEST_HEIGHT + VERTICAL_PAD * 2 ) * env.getPainterScaleFactor() );
@@ -101,10 +101,10 @@ public class EntitySquare extends JPanel implements MouseListener
         return new Point( b.x + b.width / 2, b.y + b.height );
     }
 
-    static String getKeyString( EntityInstance ei, ViewEntity viewEntity )
+    static String getKeyString( EntityInstance ei, EntityDef entityDef )
     {
         StringBuilder builder = new StringBuilder();
-        List<ViewAttribute> keys = viewEntity.getKeys();
+        List<ViewAttribute> keys = entityDef.getKeys();
         for ( ViewAttribute key : keys )
         {
         	if ( ! ei.isHidden())
@@ -128,9 +128,9 @@ public class EntitySquare extends JPanel implements MouseListener
         return oiDisplay.getView();
     }
 
-    ViewEntity getViewEntity()
+    EntityDef getEntityDef()
     {
-        return viewEntityLayout.getViewEntity();
+        return entityDefLayout.getEntityDef();
     }
 
     private String getSiblingCount( EntityCursor cursor )
@@ -184,8 +184,8 @@ public class EntitySquare extends JPanel implements MouseListener
     public void paint(Graphics g)
     {
         Graphics2D graphics2 = (Graphics2D) g;
-        ViewEntity viewEntity = getViewEntity();
-        EntityCursor cursor = getView().cursor( viewEntity );
+        EntityDef entityDef = getEntityDef();
+        EntityCursor cursor = getView().cursor( entityDef );
 
         if ( oiDisplay.getSelectedEntity() == this )
             g.setColor( SELECTED_COLOR );
@@ -220,7 +220,7 @@ public class EntitySquare extends JPanel implements MouseListener
 
         // Write the entity name
         graphics2.setFont( font );
-        paintCenteredText( graphics2, env.getPainterScaleFactor(),viewEntity.getName(), null );
+        paintCenteredText( graphics2, env.getPainterScaleFactor(),entityDef.getName(), null );
 
         switch ( cursor.getStatus() )
         {
@@ -237,7 +237,7 @@ public class EntitySquare extends JPanel implements MouseListener
                 break;
 
             default:
-                String s = getKeyString( cursor, viewEntity );
+                String s = getKeyString( cursor, entityDef );
                 paintCenteredText( graphics2, size.height / 2, s, null );
 
                 s = getSiblingCount( cursor );
@@ -325,7 +325,7 @@ public class EntitySquare extends JPanel implements MouseListener
         @Override
         public void actionPerformed( ActionEvent arg0 )
         {
-            EntityCursor cursor = getView().cursor( getViewEntity() );
+            EntityCursor cursor = getView().cursor( getEntityDef() );
             cursor.setToSubobject();
             oiDisplay.repaint();
         }
@@ -338,7 +338,7 @@ public class EntitySquare extends JPanel implements MouseListener
         @Override
         public void actionPerformed( ActionEvent arg0 )
         {
-            EntityCursor cursor = getView().cursor( getViewEntity() );
+            EntityCursor cursor = getView().cursor( getEntityDef() );
             cursor.resetSubobjectToParent();
             oiDisplay.repaint();
         }

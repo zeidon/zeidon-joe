@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectbrowser.OiDisplay.EntitySelectedListener;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * This is the main panel around the OI display.
@@ -50,7 +50,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     private static final String LAST_CURSOR  = "LastCursor";
 
     private final BrowserEnvironment env;
-    private       ViewEntity selectedViewEntity;
+    private       EntityDef selectedEntityDef;
     private final BorderLayout borderLayout;
     private       OiDisplay oiDisplay;
     private       View view;
@@ -96,49 +96,49 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         oiDisplay.revalidate();
     }
 
-    void setSelectedEntity( ViewEntity viewEntity )
+    void setSelectedEntity( EntityDef entityDef )
     {
-        oiDisplay.setSelectedEntityFromViewEntity( viewEntity );
+        oiDisplay.setSelectedEntityFromEntityDef( entityDef );
     }
 
     @Override
-    public void entitySelected( ViewEntity viewEntity, EntityInstance ei )
+    public void entitySelected( EntityDef entityDef, EntityInstance ei )
     {
-        selectedViewEntity = viewEntity;
-        env.entitySelected( viewEntity, ei );
+        selectedEntityDef = entityDef;
+        env.entitySelected( entityDef, ei );
 //        twinDialog.setEntityInstance( ei );
     }
 
     @Override
     public void scaleChanged( View view, Point p )
     {
-        ViewEntity ve = selectedViewEntity; // Save this because it'll be changed by displayView.
+        EntityDef ve = selectedEntityDef; // Save this because it'll be changed by displayView.
         displayView( view );
-        oiDisplay.setSelectedEntityFromViewEntity( ve );
+        oiDisplay.setSelectedEntityFromEntityDef( ve );
         oiDisplay.repositionScroll( p );
     }
 
     @Override
     public void actionPerformed(ActionEvent action)
     {
-        if ( selectedViewEntity == null ) // Possible when dialog is first displayed.
+        if ( selectedEntityDef == null ) // Possible when dialog is first displayed.
             return;
 
         if ( action.getActionCommand().equals( FIRST_CURSOR ) )
-            view.cursor( selectedViewEntity ).setFirst();
+            view.cursor( selectedEntityDef ).setFirst();
         else
         if ( action.getActionCommand().equals( PREV_CURSOR ) )
-            view.cursor( selectedViewEntity ).setPrev();
+            view.cursor( selectedEntityDef ).setPrev();
         else
         if ( action.getActionCommand().equals( NEXT_CURSOR ) )
-            view.cursor( selectedViewEntity ).setNext();
+            view.cursor( selectedEntityDef ).setNext();
         else
         if ( action.getActionCommand().equals( LAST_CURSOR ) )
-            view.cursor( selectedViewEntity ).setLast();
+            view.cursor( selectedEntityDef ).setLast();
         else
             throw new ZeidonException( "Internal action error" );
 
-        entitySelected( selectedViewEntity, view.cursor( selectedViewEntity ).getEntityInstance() );
+        entitySelected( selectedEntityDef, view.cursor( selectedEntityDef ).getEntityInstance() );
         oiDisplay.repaint();
     }
 }

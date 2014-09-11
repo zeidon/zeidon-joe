@@ -34,7 +34,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -431,13 +431,13 @@ public class QualificationBuilder
      */
     public QualificationBuilder fromEntityKeys( EntityInstance source, boolean linkEntities )
     {
-        ViewEntity viewEntity = source.getViewEntity();
+        EntityDef entityDef = source.getEntityDef();
 
-        if ( viewEntity.getKeys().size() > 1 )
+        if ( entityDef.getKeys().size() > 1 )
             addAttribQual( "(" );
 
         boolean firstKey = true;
-        for ( ViewAttribute key : viewEntity.getKeys() )
+        for ( ViewAttribute key : entityDef.getKeys() )
         {
             if ( firstKey )
                 firstKey = false;
@@ -447,7 +447,7 @@ public class QualificationBuilder
             addAttribQual( key.getName(), source.getStringFromAttribute( key ) );
         }
 
-        if ( viewEntity.getKeys().size() > 1 )
+        if ( entityDef.getKeys().size() > 1 )
             addAttribQual( ")" );
 
         if ( linkEntities == true )
@@ -521,8 +521,8 @@ public class QualificationBuilder
             // If the source instance is specified and is the same type as the root, then relink.
             if ( sourceEntityInstance != null )
             {
-                ViewEntity root = getViewOd().getRoot();
-                if ( root == sourceEntityInstance.getViewEntity() && view.cursor( root ).getEntityCount() == 1 )
+                EntityDef root = getViewOd().getRoot();
+                if ( root == sourceEntityInstance.getEntityDef() && view.cursor( root ).getEntityCount() == 1 )
                     view.cursor( root ).linkInstances( sourceEntityInstance );
 
                 // Null out the value so that it can be dropped by the GC if it's not
@@ -561,11 +561,11 @@ public class QualificationBuilder
     public static View generateQualFromEntityList( View sourceView, String entityName, String scopingEntity )
     {
         EntityCursor cursor = sourceView.cursor( entityName );
-        ViewEntity viewEntity = cursor.getViewEntity();
+        EntityDef entityDef = cursor.getEntityDef();
 
         // Find the key.
         ViewAttribute key = null;
-        for ( ViewAttribute attrib : viewEntity.getKeys() )
+        for ( ViewAttribute attrib : entityDef.getKeys() )
         {
             key = attrib;
         }

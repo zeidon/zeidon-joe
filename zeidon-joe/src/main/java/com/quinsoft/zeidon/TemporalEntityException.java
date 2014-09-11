@@ -29,6 +29,6 @@ public class TemporalEntityException extends ZeidonException
     public TemporalEntityException( EntityInstance entityInstance, String format, Object...strings )
     {
         super(String.format( format, strings ));
-        prependViewEntity( entityInstance.getViewEntity() );
+        prependEntityDef( entityInstance.getEntityDef() );
     }
 }

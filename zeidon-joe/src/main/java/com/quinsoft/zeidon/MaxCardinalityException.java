@@ -21,7 +21,7 @@
  */
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -35,10 +35,10 @@ public class MaxCardinalityException extends ZeidonException
      * @param format
      * @param strings
      */
-    public MaxCardinalityException( ViewEntity viewEntity )
+    public MaxCardinalityException( EntityDef entityDef )
     {
         super( "Entity violates max cardinality" );
-        prependViewEntity( viewEntity );
-        appendMessage( "Max number of child entities = %s", viewEntity.getMaxCardinality() );
+        prependEntityDef( entityDef );
+        appendMessage( "Max number of child entities = %s", entityDef.getMaxCardinality() );
     }
 }

@@ -56,7 +56,7 @@ import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -76,7 +76,7 @@ class EntityInstanceImpl implements EntityInstance
     private static final int  FLAG_HIDDEN         = 0x00000400;
 
     private final ObjectInstance  objectInstance;
-    private final ViewEntity      viewEntity;
+    private final EntityDef      entityDef;
     private final int             level;
     private final long            entityKey;
 
@@ -182,17 +182,17 @@ class EntityInstanceImpl implements EntityInstance
     /**
      * This keeps track of child entity instances that have been loaded lazily.
      */
-    private Set<ViewEntity> entitiesLoadedLazily;
+    private Set<EntityDef> entitiesLoadedLazily;
 
     static EntityInstanceImpl createEntity( ObjectInstance     oi,
                                             EntityInstanceImpl parent,
                                             EntityInstanceImpl relativeEntity,
-                                            ViewEntity         viewEntity,
+                                            EntityDef         entityDef,
                                             CursorPosition     position )
     {
         // Create a new instance and initialize the attributes.
         EntityInstanceImpl newInstance =
-            new EntityInstanceImpl( oi, viewEntity, parent, relativeEntity, position );
+            new EntityInstanceImpl( oi, entityDef, parent, relativeEntity, position );
         newInstance.setCreated( true );
         newInstance.attributeList = AttributeListInstance.newAttributeList( newInstance );
         return newInstance;
@@ -202,10 +202,10 @@ class EntityInstanceImpl implements EntityInstance
      * Creates an empty entity instance.  This gives us a way to create uninitialized
      * entity instances used for temporary traversal.
      */
-    EntityInstanceImpl( ViewEntity viewEntity )
+    EntityInstanceImpl( EntityDef entityDef )
     {
         super();
-        this.viewEntity = viewEntity;
+        this.entityDef = entityDef;
         objectInstance = null;
         entityKey = NumberUtils.LONG_ZERO;
         level = -1;
@@ -216,18 +216,18 @@ class EntityInstanceImpl implements EntityInstance
      * Creates an entity instance and adds it to the OI.
      *
      * @param objectInstance
-     * @param viewEntity
+     * @param entityDef
      * @param parentInstance
      * @param relativeInstance
      * @param position
      */
     EntityInstanceImpl(ObjectInstance        objectInstance,
-                       ViewEntity            viewEntity,
+                       EntityDef            entityDef,
                        EntityInstanceImpl    parentInstance,
                        EntityInstanceImpl    relativeInstance,
                        CursorPosition        position )
     {
-        this( objectInstance, viewEntity, parentInstance );
+        this( objectInstance, entityDef, parentInstance );
         insertInstance( objectInstance, parentInstance, relativeInstance, position, null );
     }
 
@@ -235,16 +235,16 @@ class EntityInstanceImpl implements EntityInstance
      * Creates an entity instance without inserting it into the chain.
      *
      * @param objectInstance
-     * @param viewEntity
+     * @param entityDef
      * @param parentInstance
      * @param initAttributes
      */
     EntityInstanceImpl(ObjectInstance        objectInstance,
-                       ViewEntity            viewEntity,
+                       EntityDef            entityDef,
                        EntityInstanceImpl    parentInstance )
     {
         this.objectInstance = objectInstance;
-        this.viewEntity = viewEntity;
+        this.entityDef = entityDef;
         this.attributeHashkeyMap = new AttributeHashKeyMap( objectInstance );
 
         // Set a unique identifier for this entity.  We use a number that's unique across
@@ -276,9 +276,9 @@ class EntityInstanceImpl implements EntityInstance
 
     void initializeDefaultAttributes()
     {
-        if ( getViewEntity().hasInitializedAttributes() )
+        if ( getEntityDef().hasInitializedAttributes() )
         {
-            for ( ViewAttribute viewAttribute : getViewEntity().getAttributes() )
+            for ( ViewAttribute viewAttribute : getEntityDef().getAttributes() )
             {
                 if ( StringUtils.isBlank( viewAttribute.getInitialValue() ) )
                     continue;
@@ -294,21 +294,21 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public ViewEntity getViewEntity()
+    public EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 
     /**
-     * If this ViewEntity is recursive then this returns the recursive parent,
-     * otherwise returns getViewEntity().
+     * If this EntityDef is recursive then this returns the recursive parent,
+     * otherwise returns getEntityDef().
      *
      * @return
      */
 
-    ViewEntity getBaseViewEntity()
+    EntityDef getBaseEntityDef()
     {
-        return viewEntity.getBaseViewEntity();
+        return entityDef.getBaseEntityDef();
     }
 
     EntityInstanceImpl getLatestVersion()
@@ -439,8 +439,8 @@ class EntityInstanceImpl implements EntityInstance
         this.parentInstance = getLatestVersion( parent );
         assert assertParent();
         // We match by ER entity token to handle recursive cases.
-        assert getViewEntity().getParent().getErEntityToken() == parent.getViewEntity().getErEntityToken() :
-            "Setting parent to mismatching VE.  Parent = " + parent.getViewEntity() + ", child = " + getViewEntity();
+        assert getEntityDef().getParent().getErEntityToken() == parent.getEntityDef().getErEntityToken() :
+            "Setting parent to mismatching VE.  Parent = " + parent.getEntityDef() + ", child = " + getEntityDef();
     }
 
     EntityInstanceImpl getPrevHier()
@@ -475,7 +475,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         this.prevTwinInstance = getLatestVersion( prevTwin );
         assert assertPrevTwin();
-        assert prevTwin == null || prevTwin.getViewEntity() == getViewEntity();
+        assert prevTwin == null || prevTwin.getEntityDef() == getEntityDef();
     }
 
     @Override
@@ -488,13 +488,13 @@ class EntityInstanceImpl implements EntityInstance
     {
         this.nextTwinInstance = getLatestVersion( nextTwin );
         assert assertNextTwin();
-        assert nextTwin == null || nextTwin.getViewEntity() == getViewEntity();
+        assert nextTwin == null || nextTwin.getEntityDef() == getEntityDef();
     }
 
     void setNextVersion( EntityInstanceImpl nextVersion )
     {
         this.nextVersion = nextVersion;
-        assert nextVersion == null || nextVersion.getViewEntity() == getViewEntity();
+        assert nextVersion == null || nextVersion.getEntityDef() == getEntityDef();
     }
 
     @Override
@@ -532,7 +532,7 @@ class EntityInstanceImpl implements EntityInstance
      */
     private void copyAllPointers( EntityInstanceImpl src )
     {
-        assert getViewEntity() == src.getViewEntity();
+        assert getEntityDef() == src.getEntityDef();
 
         // Don't use the set...() methods (eg. setNextHier) because it uses getLatestVersion() and
         // we want to set it explicitly.
@@ -604,7 +604,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( view == null )
         {
             view = new ViewImpl( getObjectInstance() );
-            view.cursor( viewAttribute.getViewEntity() ).setCursor( this );
+            view.cursor( viewAttribute.getEntityDef() ).setCursor( this );
         }
 
         viewAttribute.executeDerivedAttributeForGet( view );
@@ -672,15 +672,15 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
-     * Finds the first child/descendant entity that matches viewEntity.
-     * @param viewEntity
+     * Finds the first child/descendant entity that matches entityDef.
+     * @param entityDef
      * @return May return null.
      */
-    EntityInstanceImpl getFirstChildMatchingViewEntity( ViewEntity searchViewEntity )
+    EntityInstanceImpl getFirstChildMatchingEntityDef( EntityDef searchEntityDef )
     {
         for ( EntityInstanceImpl next = this.getNextHier(); next != null; next = next.getNextHier() )
         {
-            if ( next.getViewEntity() == searchViewEntity )
+            if ( next.getEntityDef() == searchEntityDef )
                 return next; // We found what we're looking for.
 
             if ( next.getLevel() <= this.getLevel() )
@@ -689,7 +689,7 @@ class EntityInstanceImpl implements EntityInstance
 
             // If we're looking at a descendant of 'e' then we can short-circuit
             // some of the entities by skipping to the last twin.
-            if ( next.getLevel() > searchViewEntity.getLevel() )
+            if ( next.getLevel() > searchEntityDef.getLevel() )
                 next = next.getLastTwin().getLastChildHier();
         }
 
@@ -703,36 +703,36 @@ class EntityInstanceImpl implements EntityInstance
      */
     void flagAllChildrenAsLazyLoaded()
     {
-        if ( ! getViewEntity().getLazyLoadConfig().hasLazyLoadChild() )
+        if ( ! getEntityDef().getLazyLoadConfig().hasLazyLoadChild() )
             return;  // EI doesn't have any children who are lazy loaded.
 
-        Set<ViewEntity> set = getEntitiesLoadedLazily();
-        for ( ViewEntity child: getViewEntity().getChildren() )
+        Set<EntityDef> set = getEntitiesLoadedLazily();
+        for ( EntityDef child: getEntityDef().getChildren() )
         {
             // We'll just add all children regardless of whether they belong.
             set.add( child );
         }
     }
 
-    boolean hasChildBeenLazyLoaded( ViewEntity childViewEntity )
+    boolean hasChildBeenLazyLoaded( EntityDef childEntityDef )
     {
-        return getEntitiesLoadedLazily().contains( childViewEntity );
+        return getEntitiesLoadedLazily().contains( childEntityDef );
     }
 
     /**
-     * This checks to see if the childViewEntity needs to be lazy loaded and, if so, loads it.
+     * This checks to see if the childEntityDef needs to be lazy loaded and, if so, loads it.
      *
      * @param view
-     * @param childViewEntity
+     * @param childEntityDef
      */
-    void lazyLoadChild( ViewImpl view, ViewEntity childViewEntity )
+    void lazyLoadChild( ViewImpl view, EntityDef childEntityDef )
     {
         // Is lazyLoad enabled for this view?
         if ( ! view.isLazyLoad() )
             return;
 
         // Is the child entity instance loaded lazily?
-        if ( ! childViewEntity.getLazyLoadConfig().isLazyLoad() )
+        if ( ! childEntityDef.getLazyLoadConfig().isLazyLoad() )
             return; // Nope.
 
         // Has this entity been created?  If so then nothing has been written to
@@ -741,16 +741,16 @@ class EntityInstanceImpl implements EntityInstance
             return;
 
         // Have we already loaded this child?
-        if ( hasChildBeenLazyLoaded( childViewEntity ) )
+        if ( hasChildBeenLazyLoaded( childEntityDef ) )
             return;  // Already loaded.  Don't do it again.
 
         // Add the entity to the map now.  This will prevent an infite loop when we try
         // to activate the EI from the DB.
-        getEntitiesLoadedLazily().add( childViewEntity );
+        getEntitiesLoadedLazily().add( childEntityDef );
 
-        view.dblog().debug( "Lazy-loading %s for parent %s", childViewEntity.getName(), this.toString() );
+        view.dblog().debug( "Lazy-loading %s for parent %s", childEntityDef.getName(), this.toString() );
         ActivateObjectInstance activator = new ActivateObjectInstance( view );
-        activator.activate( view, childViewEntity );
+        activator.activate( view, childEntityDef );
     }
 
     private boolean assertNoTwin( EntityInstanceImpl parent,
@@ -762,7 +762,7 @@ class EntityInstanceImpl implements EntityInstance
             // instance but we will verify because if there is then the chains will be thrown off.
             for ( EntityInstanceImpl search : parent.getDirectChildren() )
             {
-                if ( search.getViewEntity() == getViewEntity() )
+                if ( search.getEntityDef() == getEntityDef() )
                     return false; // We found a twin.
             }
         }
@@ -781,8 +781,8 @@ class EntityInstanceImpl implements EntityInstance
             if ( forAdd )
                 twinCount++;
 
-            if ( twinCount > viewEntity.getMaxCardinality() )
-                return new MaxCardinalityException( getViewEntity() );
+            if ( twinCount > entityDef.getMaxCardinality() )
+                return new MaxCardinalityException( getEntityDef() );
         }
 
         return null;
@@ -936,18 +936,18 @@ class EntityInstanceImpl implements EntityInstance
         EntityInstanceImpl prevTwin = this.getPrevTwin();
         if ( nextTwin == null && prevTwin == null && parent != null )
         {
-            // We didn't find a twin.  Find the last child under parent with a ViewEntity
+            // We didn't find a twin.  Find the last child under parent with a EntityDef
             // index < 'this' -- that will be the prev sibling.  Find the first child
             // with index > 'this' to be the next sibling.
             for ( EntityInstanceImpl child : parent.getDirectChildren() )
             {
-                ViewEntity ve = child.getViewEntity();
-                if ( ve.getHierIndex() < this.getViewEntity().getHierIndex() )
+                EntityDef ve = child.getEntityDef();
+                if ( ve.getHierIndex() < this.getEntityDef().getHierIndex() )
                 {
                     prevTwin = child;
                 }
                 else
-                if ( ve.getHierIndex() > this.getViewEntity().getHierIndex() )
+                if ( ve.getHierIndex() > this.getEntityDef().getHierIndex() )
                 {
                     nextTwin = child;
                     break;
@@ -1058,9 +1058,9 @@ class EntityInstanceImpl implements EntityInstance
      */
     CursorResult deleteEntity( boolean spawnRootDelete, View view )
     {
-        if ( ! getViewEntity().isDelete() )
+        if ( ! getEntityDef().isDelete() )
             throw new ZeidonException( "Entity is not flagged for delete." )
-                            .prependViewEntity( getViewEntity() );
+                            .prependEntityDef( getEntityDef() );
 
         if ( isIncomplete() )
             throw new ZeidonException( "This entity instance may not be deleted because it is incomplete.  " +
@@ -1069,19 +1069,19 @@ class EntityInstanceImpl implements EntityInstance
 
         // If checkRestrictedDelete is set, then make sure none of the child entities
         // have their parent-restrict delete flag set.
-        if ( getViewEntity().isCheckRestrictedDelete() )
+        if ( getEntityDef().isCheckRestrictedDelete() )
         {
             for ( EntityInstanceImpl child : this.getDirectChildren() )
             {
-                if ( child.getViewEntity().isRestrictParentDelete( ) )
+                if ( child.getEntityDef().isRestrictParentDelete( ) )
                     throw new ZeidonException( "Can't delete %s because of restrict constraint on child entity %s", this, child );
             }
         }
 
-        if ( getViewEntity().getEventListener() != null )
+        if ( getEntityDef().getEventListener() != null )
         {
             EventDataImpl data = new EventDataImpl( getTask() ).setEntityInstance( this ).setView( view );
-            getViewEntity().getEventListener().event( EventNotification.EntityDeleted, data );
+            getEntityDef().getEventListener().event( EventNotification.EntityDeleted, data );
         }
 
         EntitySpawner spawner = new EntitySpawner( this, view );
@@ -1102,7 +1102,7 @@ class EntityInstanceImpl implements EntityInstance
                 continue;
             }
 
-            if ( ! scan.getViewEntity().isParentDelete()  && scan != this )
+            if ( ! scan.getEntityDef().isParentDelete()  && scan != this )
             {
                 scan.excludeEntity( true ); // This will also exclude linked instances.
                 scan = scan.getNextNonDescendant();  // exclude() handled child entities so skip them.
@@ -1140,7 +1140,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( isVersioned() )
             return false;
 
-        if ( ! getViewEntity().isDerived() && ! getViewEntity().isDerivedPath() )
+        if ( ! getEntityDef().isDerived() && ! getEntityDef().isDerivedPath() )
         {
             // Entities that aren't flagged as created or included can't be dead.
             if ( ! isCreated() && ! isIncluded() && ( isDeleted() || isExcluded() ) )
@@ -1162,7 +1162,7 @@ class EntityInstanceImpl implements EntityInstance
             return false;
 
         // Entity instance is dead.  Drop it from the chain.
-        getTask().log().trace( "Cleaning up dead entity %s for %s", this, viewEntity );
+        getTask().log().trace( "Cleaning up dead entity %s for %s", this, entityDef );
         dropEntity();
         return true;
     }
@@ -1210,9 +1210,9 @@ class EntityInstanceImpl implements EntityInstance
     	}
 
     	// Validate the exclude.
-    	if ( ! getViewEntity().isExclude() )
+    	if ( ! getEntityDef().isExclude() )
     	    throw new ZeidonException( "Entity is not flagged for exclude." )
-    	                    .prependViewEntity( getViewEntity() );
+    	                    .prependEntityDef( getEntityDef() );
 
     	excludeEntity( true );
         return CursorResult.UNCHANGED;
@@ -1242,8 +1242,8 @@ class EntityInstanceImpl implements EntityInstance
         if ( source == this )
             return false;
 
-        if ( viewEntity.getErEntityToken() != source.getViewEntity().getErEntityToken() )
-            throw new ZeidonException("Unmatched ER tokens").appendMessage( "Target = %s\nSource = %s", viewEntity, source.getViewEntity() );
+        if ( entityDef.getErEntityToken() != source.getEntityDef().getErEntityToken() )
+            throw new ZeidonException("Unmatched ER tokens").appendMessage( "Target = %s\nSource = %s", entityDef, source.getEntityDef() );
 
         EntityInstanceImpl s = (EntityInstanceImpl) source.getEntityInstance();
 
@@ -1256,9 +1256,9 @@ class EntityInstanceImpl implements EntityInstance
             String key2 = s.getKeyString();
             if ( ! StringUtils.equals( key2, key1 ) )
                 throw new ZeidonException( "Attempting to relink instances with different keys.")
-                                .appendMessage( "Entity1 = %s.%s", getViewOd().getName(), getViewEntity().getName() )
+                                .appendMessage( "Entity1 = %s.%s", getViewOd().getName(), getEntityDef().getName() )
                                 .appendMessage( "Key1 = %s", key2 )
-                                .appendMessage( "Entity2 = %s.%s", s.getViewOd().getName(), s.getViewEntity().getName() )
+                                .appendMessage( "Entity2 = %s.%s", s.getViewOd().getName(), s.getEntityDef().getName() )
                                 .appendMessage( "Key2 = %s", key1 );
         }
 
@@ -1275,7 +1275,7 @@ class EntityInstanceImpl implements EntityInstance
      *
      * @return null if all attributes exist otherwise ViewAttribute of first missing attribute found.
      */
-    static private ViewAttribute checkForAllPersistentAttributes( ViewEntity source, ViewEntity target )
+    static private ViewAttribute checkForAllPersistentAttributes( EntityDef source, EntityDef target )
     {
         for ( ViewAttribute va : target.getAttributes() )
         {
@@ -1308,7 +1308,7 @@ class EntityInstanceImpl implements EntityInstance
      * @param source
      * @return
      */
-    static LinkValidation validateLinking( ViewEntity target, ViewEntity source )
+    static LinkValidation validateLinking( EntityDef target, EntityDef source )
     {
         if ( target == source )
             return LinkValidation.SOURCE_OK;
@@ -1320,15 +1320,15 @@ class EntityInstanceImpl implements EntityInstance
             return LinkValidation.SOURCE_OK;
 
         // Check to see if it's ok for target to be linked to source.
-        ViewEntityLinkInfo sourceInfo = getViewEntityLinkInfo( source );
+        EntityDefLinkInfo sourceInfo = getEntityDefLinkInfo( source );
         Boolean sourceOk = sourceInfo.mayBeLinked.get( target );
         if ( sourceOk == Boolean.TRUE )
             return LinkValidation.SOURCE_OK;
 
         /*  This leads to a NPE.  Some day we may try to fix it.
         // Check to see if source can be linked to 'this'.
-        ViewEntityLinkInfo targetInfo = getViewEntityLinkInfo( viewEntity );
-        Boolean targetOk = targetInfo.mayBeLinked.get( viewEntity );
+        EntityDefLinkInfo targetInfo = getEntityDefLinkInfo( entityDef );
+        Boolean targetOk = targetInfo.mayBeLinked.get( entityDef );
         if ( targetOk == Boolean.TRUE )
         {
             source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
@@ -1351,7 +1351,7 @@ class EntityInstanceImpl implements EntityInstance
         {
             missingViewAttribute = checkForAllPersistentAttributes( source, this );
             targetOk = missingViewAttribute == null;
-            targetInfo.mayBeLinked.putIfAbsent( sourceViewEntity, targetOk );
+            targetInfo.mayBeLinked.putIfAbsent( sourceEntityDef, targetOk );
             if ( targetOk == Boolean.TRUE )
             {
                 source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
@@ -1365,8 +1365,8 @@ class EntityInstanceImpl implements EntityInstance
         ex.appendMessage( "Source instance = %s", source );
         ex.appendMessage( "Target instance type = %s", target );
         ex.appendMessage( "Missing attribute = %s.%s.%s",
-                          missingViewAttribute.getViewEntity().getViewOd().getName(),
-                          missingViewAttribute.getViewEntity().getName(),
+                          missingViewAttribute.getEntityDef().getViewOd().getName(),
+                          missingViewAttribute.getEntityDef().getName(),
                           missingViewAttribute.getName() );
 
         throw ex;
@@ -1381,9 +1381,9 @@ class EntityInstanceImpl implements EntityInstance
     {
         assert source != null;
         assert source != this;
-        assert viewEntity.getErEntityToken() == source.getViewEntity().getErEntityToken();
+        assert entityDef.getErEntityToken() == source.getEntityDef().getErEntityToken();
 
-        LinkValidation valid = validateLinking( getViewEntity(), source.getViewEntity() );
+        LinkValidation valid = validateLinking( getEntityDef(), source.getEntityDef() );
         if ( valid == LinkValidation.SOURCE_OK )
         {
             this.attributeList = AttributeListInstance.newSharedAttributeList( this, this.attributeList,
@@ -1556,7 +1556,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( this.updated == isUpdated )
             return;
 
-        if ( getViewEntity().isDebugIncremental() )
+        if ( getEntityDef().isDebugIncremental() )
             JoeUtils.sysMessageBox( "Debug Incremental", "Changing update flag for " + toString() );
 
         // The isUpdated flag is only set for persistent attributes.
@@ -1714,7 +1714,7 @@ class EntityInstanceImpl implements EntityInstance
         //
         if ( isCreated() || isChanged() || isIncluded() )
         {
-            for ( ViewAttribute viewAttribute : getViewEntity().getAttributes() )
+            for ( ViewAttribute viewAttribute : getEntityDef().getAttributes() )
             {
                 // Ignore hidden attributes.
                 if ( viewAttribute.isHidden() )
@@ -1744,7 +1744,7 @@ class EntityInstanceImpl implements EntityInstance
         //
         // Make sure there is at least one instance of all required child entities.
         //
-        for ( ViewEntity childEntity : getViewEntity().getChildren() )
+        for ( EntityDef childEntity : getEntityDef().getChildren() )
         {
             if ( childEntity.getMinCardinality() == 0 )
                 continue;  // Child entities aren't required so ignore this one.
@@ -2186,27 +2186,27 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
-     * Find the parent entity instance of 'this' that has parentViewEntity as its
+     * Find the parent entity instance of 'this' that has parentEntityDef as its
      * entity definition.  Must work for recursive subobjects so the logic is a bit
      * more complicated than just doing a simple comparison.
      *
      * Used in commit processing to set foreign keys.
      *
-     * @param parentViewEntity
+     * @param parentEntityDef
      * @return
      */
-    EntityInstanceImpl findMatchingParent( ViewEntity parentViewEntity )
+    EntityInstanceImpl findMatchingParent( EntityDef parentEntityDef )
     {
         EntityInstanceImpl searchInstance = getParent();
-        while ( searchInstance != null && searchInstance.getViewEntity() != parentViewEntity )
+        while ( searchInstance != null && searchInstance.getEntityDef() != parentEntityDef )
         {
-            ViewEntity ve = searchInstance.getViewEntity();
+            EntityDef ve = searchInstance.getEntityDef();
 
             // If the parent entity we are looking for is a recursive parent,
             // then it's possible that the entity instance we are looking for
-            // has an lpViewEntity that is the recursive child entity.
-            if ( parentViewEntity.isRecursiveParent() && ve.isRecursive() &&
-                 parentViewEntity.getErEntityToken() == ve.getErEntityToken() )
+            // has an lpEntityDef that is the recursive child entity.
+            if ( parentEntityDef.isRecursiveParent() && ve.isRecursive() &&
+                 parentEntityDef.getErEntityToken() == ve.getErEntityToken() )
             {
                 break;
             }
@@ -2354,23 +2354,23 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public EntityIterator<? extends EntityInstance> getChildren( ViewEntity childViewEntity )
+    public EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef )
     {
         return new IteratorBuilder(getObjectInstance())
                         .allowHidden()
                         .withScoping( this )
-                        .forViewEntity( childViewEntity )
+                        .forEntityDef( childEntityDef )
                         .build();
     }
 
     @Override
-    public EntityIterator<? extends EntityInstance> getChildren( ViewEntity childViewEntity,
+    public EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef,
                                                                  boolean    allowHidden )
     {
         return new IteratorBuilder(getObjectInstance())
                         .allowHidden( false )
                         .withScoping( this )
-                        .forViewEntity( childViewEntity )
+                        .forEntityDef( childEntityDef )
                         .build();
     }
 
@@ -2451,7 +2451,7 @@ class EntityInstanceImpl implements EntityInstance
         boolean nonnull = false;  // We'll assume all keys are null until we find one that isn't.
         StringBuilder builder = new StringBuilder();
 
-        for ( ViewAttribute key : getViewEntity().getKeys() )
+        for ( ViewAttribute key : getEntityDef().getKeys() )
         {
             AttributeValue attr = getInternalAttribute( key );
             if ( ! attr.isNull( getTask(), key ) )
@@ -2473,8 +2473,8 @@ class EntityInstanceImpl implements EntityInstance
     {
         StringBuilder builder = new StringBuilder();
 
-        builder.append( getViewEntity().toString() ).append( " Keys: " );
-        for ( ViewAttribute key : getViewEntity().getKeys() )
+        builder.append( getEntityDef().toString() ).append( " Keys: " );
+        for ( ViewAttribute key : getEntityDef().getKeys() )
         {
             builder.append( key.getName() ).append( "=" );
             builder.append( getInternalAttribute( key ).toString() ).append( "; " );
@@ -2486,11 +2486,11 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityIterator<? extends EntityInstance> getChildren(String childEntityName)
     {
-        ViewEntity childViewEntity = getViewOd().getViewEntity( childEntityName );
-        if ( childViewEntity.getParent() != getViewEntity() )
-            throw new ZeidonException( "%s is not a direct child of %s", childEntityName, getViewEntity() );
+        EntityDef childEntityDef = getViewOd().getEntityDef( childEntityName );
+        if ( childEntityDef.getParent() != getEntityDef() )
+            throw new ZeidonException( "%s is not a direct child of %s", childEntityName, getEntityDef() );
 
-        return getChildren( childViewEntity );
+        return getChildren( childEntityDef );
     }
 
     @Override
@@ -2508,10 +2508,10 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public int setMatchingAttributesByName(EntityInstance sourceInstance, EnumSet<SetMatchingFlags> control)
     {
-        ViewEntity sourceViewEntity = sourceInstance.getViewEntity();
+        EntityDef sourceEntityDef = sourceInstance.getEntityDef();
 
         // Loop through the target attributes and set their value from the source entity.
-        for ( ViewAttribute targetAttr : this.getViewEntity().getAttributes() )
+        for ( ViewAttribute targetAttr : this.getEntityDef().getAttributes() )
         {
             if ( targetAttr.isHidden() )
                 continue;
@@ -2544,7 +2544,7 @@ class EntityInstanceImpl implements EntityInstance
                     continue;
             }
 
-            ViewAttribute sourceAttr = sourceViewEntity.getAttribute( targetAttr.getName(), false );
+            ViewAttribute sourceAttr = sourceEntityDef.getAttribute( targetAttr.getName(), false );
             if ( sourceAttr == null )
                 continue;  // No matching attribute by name.
 
@@ -2659,12 +2659,12 @@ class EntityInstanceImpl implements EntityInstance
 
         // If the entity is derived or work, then we do not need to check if the
         // attribute can be updated.
-        if ( getViewEntity().isDerived() || getViewEntity().isDerivedPath() )
+        if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
         	return;
 
         if ( getObjectInstance().isReadOnly() )
             throw new ZeidonException( "Object Instance is read-only" )
-                                .prependViewEntity( getViewEntity() );
+                                .prependEntityDef( getEntityDef() );
 
         for ( EntityInstanceImpl linked : this.getLinkedInstances() )
         {
@@ -2689,7 +2689,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityInstance setAttribute(String attributeName, Object value, String contextName) throws InvalidAttributeValueException
     {
-        return setAttribute( getViewEntity().getAttribute( attributeName ), value, contextName );
+        return setAttribute( getEntityDef().getAttribute( attributeName ), value, contextName );
     }
 
     /**
@@ -2708,7 +2708,7 @@ class EntityInstanceImpl implements EntityInstance
                                  boolean beingInitialized ) throws InvalidAttributeValueException
     {
         if ( viewAttribute.isHidden() )
-            throw new UnknownViewAttributeException( getViewEntity(), viewAttribute.getName() );
+            throw new UnknownViewAttributeException( getEntityDef(), viewAttribute.getName() );
 
         contextName = checkContextName( viewAttribute, contextName );
 
@@ -2752,7 +2752,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityInstance setAttribute(String attributeName, Object value)
     {
-        return setAttribute( getViewEntity().getAttribute( attributeName ), value );
+        return setAttribute( getEntityDef().getAttribute( attributeName ), value );
     }
 
     @Override
@@ -2761,7 +2761,7 @@ class EntityInstanceImpl implements EntityInstance
                                                      String srcEntityName,
                                                      String srcAttributeName )
     {
-        ViewAttribute tgtViewAttribute = getViewEntity().getAttribute( tgtAttributeName );
+        ViewAttribute tgtViewAttribute = getEntityDef().getAttribute( tgtAttributeName );
         Domain tgtDomain = tgtViewAttribute.getDomain();
         Object source;
         // If the target is a string, we'll ask the source to convert its value to a
@@ -2860,19 +2860,19 @@ class EntityInstanceImpl implements EntityInstance
 
     private void removeAllHashKeyAttributes()
     {
-        if ( getViewEntity().getHashKeyAttributes() == null )
+        if ( getEntityDef().getHashKeyAttributes() == null )
             return;
 
-        for ( ViewAttribute viewAttribute : getViewEntity().getHashKeyAttributes() )
+        for ( ViewAttribute viewAttribute : getEntityDef().getHashKeyAttributes() )
             removeHashKeyAttributeToMap( viewAttribute );
     }
 
     void addAllHashKeyAttributes()
     {
-        if ( getViewEntity().getHashKeyAttributes() == null )
+        if ( getEntityDef().getHashKeyAttributes() == null )
             return;
 
-        for ( ViewAttribute viewAttribute : getViewEntity().getHashKeyAttributes() )
+        for ( ViewAttribute viewAttribute : getEntityDef().getHashKeyAttributes() )
             addHashKeyAttributeToMap( viewAttribute );
     }
 
@@ -2926,7 +2926,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Integer getIntegerFromAttribute(String attributeName)
     {
-        return getIntegerFromAttribute( getViewEntity().getAttribute( attributeName ) );
+        return getIntegerFromAttribute( getEntityDef().getAttribute( attributeName ) );
     }
 
     Integer getIntegerFromAttribute( View view, ViewAttribute viewAttribute, String contextName )
@@ -2946,7 +2946,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Integer getIntegerFromAttribute(String attributeName, String contextName )
     {
-        return getIntegerFromAttribute( getViewEntity().getAttribute( attributeName ), contextName );
+        return getIntegerFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
     }
 
     Double getDoubleFromAttribute( View view, ViewAttribute viewAttribute)
@@ -2965,7 +2965,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Double getDoubleFromAttribute(String attributeName)
     {
-        return getDoubleFromAttribute( getViewEntity().getAttribute( attributeName ) );
+        return getDoubleFromAttribute( getEntityDef().getAttribute( attributeName ) );
     }
 
     Double getDoubleFromAttribute( View view, ViewAttribute viewAttribute, String contextName )
@@ -2985,7 +2985,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Double getDoubleFromAttribute(String attributeName, String contextName )
     {
-        return getDoubleFromAttribute( getViewEntity().getAttribute( attributeName ), contextName );
+        return getDoubleFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
     }
 
     DateTime getDateTimeFromAttribute( View view, ViewAttribute viewAttribute )
@@ -3004,7 +3004,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public DateTime getDateTimeFromAttribute(String attributeName)
     {
-        return getDateTimeFromAttribute( getViewEntity().getAttribute( attributeName ) );
+        return getDateTimeFromAttribute( getEntityDef().getAttribute( attributeName ) );
     }
 
     DateTime getDateTimeFromAttribute( View view, ViewAttribute viewAttribute, String contextName )
@@ -3024,7 +3024,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public DateTime getDateTimeFromAttribute(String attributeName, String contextName )
     {
-        return getDateTimeFromAttribute( getViewEntity().getAttribute( attributeName ), contextName );
+        return getDateTimeFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
     }
 
     Blob getBlobFromAttribute( View view, ViewAttribute viewAttribute )
@@ -3037,7 +3037,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Blob getBlobFromAttribute(String attributeName)
     {
-        ViewAttribute viewAttribute = getViewEntity().getAttribute( attributeName );
+        ViewAttribute viewAttribute = getEntityDef().getAttribute( attributeName );
         return getBlobFromAttribute( viewAttribute );
     }
 
@@ -3050,7 +3050,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public boolean isAttributeNull(String attributeName)
     {
-        return isAttributeNull( getViewEntity().getAttribute( attributeName ) );
+        return isAttributeNull( getEntityDef().getAttribute( attributeName ) );
     }
 
     boolean isAttributeNull( View view, ViewAttribute viewAttribute )
@@ -3088,7 +3088,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Object getInternalAttributeValue(String attributeName)
     {
-        return  getInternalAttributeValue( getViewEntity().getAttribute( attributeName ) );
+        return  getInternalAttributeValue( getEntityDef().getAttribute( attributeName ) );
     }
 
     int compareAttribute( View view, ViewAttribute viewAttribute, Object value)
@@ -3100,7 +3100,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public int compareAttribute(String attributeName, Object value)
     {
-        return compareAttribute( getViewEntity().getAttribute( attributeName ), value );
+        return compareAttribute( getEntityDef().getAttribute( attributeName ), value );
     }
 
     @Override
@@ -3112,8 +3112,8 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public int compareAttribute(String attributeName, EntityInstance entityInstance, String attributeName2)
     {
-        return compareAttribute( getViewEntity().getAttribute( attributeName ),
-                                 entityInstance, entityInstance.getViewEntity().getAttribute( attributeName2 ) );
+        return compareAttribute( getEntityDef().getAttribute( attributeName ),
+                                 entityInstance, entityInstance.getEntityDef().getAttribute( attributeName2 ) );
     }
 
     int compareAttribute( View view, ViewAttribute viewAttribute, EntityInstance entityInstance, ViewAttribute viewAttribute2 )
@@ -3139,7 +3139,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Object addToAttribute( String attributeName, Object value )
     {
-        return addToAttribute( getViewEntity().getAttribute( attributeName ), value );
+        return addToAttribute( getEntityDef().getAttribute( attributeName ), value );
     }
 
     @Override
@@ -3159,7 +3159,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Object multiplyAttribute( String attributeName, Object value )
     {
-        return multiplyAttribute( getViewEntity().getAttribute( attributeName ), value );
+        return multiplyAttribute( getEntityDef().getAttribute( attributeName ), value );
     }
 
     @Override
@@ -3219,7 +3219,7 @@ class EntityInstanceImpl implements EntityInstance
             {
                 EntityInstanceImpl prevVsn = ei.prevVersion;
                 prevVsn.setNextVersion( ei );
-                assert prevVsn.getViewEntity() == ei.getViewEntity();
+                assert prevVsn.getEntityDef() == ei.getEntityDef();
             }
 
             // Now we can use getLatestVersion to set the other pointers.
@@ -3250,7 +3250,7 @@ class EntityInstanceImpl implements EntityInstance
             prevVersionEi.removeAllHashKeyAttributes();
 
             final EntityInstanceImpl newInstance = new EntityInstanceImpl( prevVersionEi.getObjectInstance(),
-                                                                           prevVersionEi.getViewEntity(),
+                                                                           prevVersionEi.getEntityDef(),
                                                                            prevVersionEi.getParent() );
             newInstance.versionNumber = version;
             newInstance.setVersionStatus( VersionStatus.UNACCEPTED );
@@ -3315,7 +3315,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public void logEntity(boolean logChildren, int indentN)
     {
-        ViewEntity viewEntity = getViewEntity();
+        EntityDef entityDef = getEntityDef();
         String indent = StringUtils.repeat( "    ", indentN );
 
         StringBuilder flagStr = new StringBuilder();
@@ -3330,7 +3330,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( isExcluded() )
             flagStr.append( " Excluded" );
 
-        getTask().log().info( "%s[%s] %s (%x:%d)", indent, viewEntity.getName(), flagStr, hashCode(), getEntityKey() );
+        getTask().log().info( "%s[%s] %s (%x:%d)", indent, entityDef.getName(), flagStr, hashCode(), getEntityKey() );
         for ( ViewAttribute viewAttribute : getNonNullAttributeList() )
         {
             AttributeValue attrib = getInternalAttribute( viewAttribute );
@@ -3488,15 +3488,15 @@ class EntityInstanceImpl implements EntityInstance
      *
      * @return the entitiesLoadedLazily
      */
-    synchronized Set<ViewEntity> getEntitiesLoadedLazily()
+    synchronized Set<EntityDef> getEntitiesLoadedLazily()
     {
         // We should only get here if this entity instance can have children that can be
         // lazy loaded.
-        assert getViewEntity().getLazyLoadConfig().hasLazyLoadChild()
+        assert getEntityDef().getLazyLoadConfig().hasLazyLoadChild()
                             : "Attempting to get lazy load set for entity without LazyLoad children";
 
         if ( entitiesLoadedLazily == null )
-            entitiesLoadedLazily = new HashSet<ViewEntity>();
+            entitiesLoadedLazily = new HashSet<EntityDef>();
 
         return entitiesLoadedLazily;
     }
@@ -3504,7 +3504,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public AttributeInstance getAttribute( String attributeName )
     {
-        ViewAttribute viewAttribute = getViewEntity().getAttribute( attributeName );
+        ViewAttribute viewAttribute = getEntityDef().getAttribute( attributeName );
         return getAttribute( viewAttribute, null );
     }
 
@@ -3521,7 +3521,7 @@ class EntityInstanceImpl implements EntityInstance
         List<AttributeInstance> list = new ArrayList<>();
         if ( includeNullValues )
         {
-            for ( ViewAttribute viewAttribute : getViewEntity().getAttributes() )
+            for ( ViewAttribute viewAttribute : getEntityDef().getAttributes() )
                 list.add( getAttribute( viewAttribute ) );
         }
         else
@@ -3557,18 +3557,18 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public AttributeInstance createDynamicViewAttribute( DynamicViewAttributeConfiguration config )
     {
-        ViewAttribute viewAttribute = getViewEntity().createDynamicViewAttribute( config );
+        ViewAttribute viewAttribute = getEntityDef().createDynamicViewAttribute( config );
         return getAttribute( viewAttribute );
     }
 
-    static private synchronized ViewEntityLinkInfo getViewEntityLinkInfo( ViewEntity viewEntity )
+    static private synchronized EntityDefLinkInfo getEntityDefLinkInfo( EntityDef entityDef )
     {
-        ViewEntityLinkInfo info = viewEntity.getCacheMap( ViewEntityLinkInfo.class );
+        EntityDefLinkInfo info = entityDef.getCacheMap( EntityDefLinkInfo.class );
         if ( info != null )
             return info;
 
-        info = new ViewEntityLinkInfo();
-        viewEntity.putCacheMap( ViewEntityLinkInfo.class, info );
+        info = new EntityDefLinkInfo();
+        entityDef.putCacheMap( EntityDefLinkInfo.class, info );
         return info;
     }
 
@@ -3585,8 +3585,8 @@ class EntityInstanceImpl implements EntityInstance
     /**
      * This keeps track of whether two view entities can be validly linked together.
      */
-    private static class ViewEntityLinkInfo
+    private static class EntityDefLinkInfo
     {
-        private final ConcurrentMap<ViewEntity, Boolean> mayBeLinked = new MapMaker().concurrencyLevel( 4 ).makeMap();
+        private final ConcurrentMap<EntityDef, Boolean> mayBeLinked = new MapMaker().concurrencyLevel( 4 ).makeMap();
     }
 }

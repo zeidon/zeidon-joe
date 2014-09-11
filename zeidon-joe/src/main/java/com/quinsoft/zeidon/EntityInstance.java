@@ -27,7 +27,7 @@ import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 
 
@@ -46,7 +46,7 @@ public interface EntityInstance
     boolean isHidden();
     boolean isVersioned();
 
-    ViewEntity     getViewEntity();
+    EntityDef     getEntityDef();
     EntityInstance getParent();
     EntityInstance getPrevTwin();
     EntityInstance getNextTwin();
@@ -187,15 +187,15 @@ public interface EntityInstance
     int compareAttribute( ViewAttribute viewAttribute, EntityInstance entityInstance, ViewAttribute viewAttribute2 );
 
     /**
-     * Iterates through all the child entities that match childViewEntity, including
+     * Iterates through all the child entities that match childEntityDef, including
      * hidden entities.
      *
-     * @param childViewEntity
+     * @param childEntityDef
      * @return
      */
-    EntityIterator<? extends EntityInstance> getChildren( ViewEntity childViewEntity );
+    EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef );
     EntityIterator<? extends EntityInstance> getChildren( String childEntityName );
-    EntityIterator<? extends EntityInstance> getChildren( ViewEntity childViewEntity, boolean allowHidden );
+    EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef, boolean allowHidden );
 
     /**
      * Iterates through all the children of 'this' in heir order.  If includeParent

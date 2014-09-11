@@ -40,7 +40,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
 public class ViewAttribute implements PortableFileAttributeHandler, Serializable
 {
     private static final long serialVersionUID = 1L;
-    private final ViewEntity   viewEntity;
+    private final EntityDef   entityDef;
     private String       name;
     private Long         erAttributeToken;
     private InternalType type = InternalType.STRING;
@@ -81,23 +81,23 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     private boolean      debugChange;
     private Domain       domain;
     private String       domainName;
-    private ViewEntity   hashKeyParent;
+    private EntityDef   hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
     /**
-     * If true then this attribute was created at runtime via ViewEntity.createDynamicViewAttribute.
+     * If true then this attribute was created at runtime via EntityDef.createDynamicViewAttribute.
      */
     private boolean isDynamicAttribute = false;
 
-    public ViewAttribute(ViewEntity viewEntity)
+    public ViewAttribute(EntityDef entityDef)
     {
         super();
-        this.viewEntity = viewEntity;
-        attributeNumber = viewEntity.getAttributeCount();
+        this.entityDef = entityDef;
+        attributeNumber = entityDef.getAttributeCount();
     }
 
-    public ViewAttribute(ViewEntity viewEntity, DynamicViewAttributeConfiguration config )
+    public ViewAttribute(EntityDef entityDef, DynamicViewAttributeConfiguration config )
     {
-        this( viewEntity );
+        this( entityDef );
         setName( config.getAttributeName() );
         setDomain( config.getDomainName() );
         setDynamicAttribute( true );
@@ -118,7 +118,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
                 if ( reader.getAttributeName().equals( "AUTO_SEQ" ))
                 {
                     autoSeq = true;
-                    viewEntity.setAutoSeq( this );
+                    entityDef.setAutoSeq( this );
                 }
                 break;
 
@@ -165,8 +165,8 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
                 if ( reader.getAttributeName().equals( "GENKEY" ))
                 {
                     genKey = true;
-                    viewEntity.setGenKey( this );
-                    viewEntity.getViewOd().setHasGenKey( true );
+                    entityDef.setGenKey( this );
+                    entityDef.getViewOd().setHasGenKey( true );
                 }
                 break;
 
@@ -174,17 +174,17 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
                 if ( reader.getAttributeName().equals( "HASHKEY" ))
                 {
                     if ( hashKeyParent == null )
-                        hashKeyParent = getViewEntity().getParent();
+                        hashKeyParent = getEntityDef().getParent();
 
                     hashKeyType = AttributeHashKeyType.valueOf( reader.getAttributeValue() );
                     if ( hashKeyType != AttributeHashKeyType.NONE )
-                        viewEntity.addHashKeyAttribute( this );
+                        entityDef.addHashKeyAttribute( this );
                 }
                 else
                 if ( reader.getAttributeName().equals( "HASHKEY_PARENT" ))
                 {
                     String entityName = reader.getAttributeValue();
-                    for ( hashKeyParent = getViewEntity().getParent();
+                    for ( hashKeyParent = getEntityDef().getParent();
                           hashKeyParent != null;
                           hashKeyParent = hashKeyParent.getParent() )
                     {
@@ -206,14 +206,14 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
                 if ( reader.getAttributeName().equals( "INIT" ))
                 {
                     initialValue = reader.getAttributeValue();
-                    viewEntity.setHasInitializedAttributes( true );
+                    entityDef.setHasInitializedAttributes( true );
                 }
 
             case 'K':
                 if ( reader.getAttributeName().equals( "KEY" ))
                 {
                     key = true;
-                    viewEntity.addKey( this );
+                    entityDef.addKey( this );
                 }
                 break;
 
@@ -252,7 +252,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
 
                     // Find the first parent that can have multiple children.  If a parent has
                     // max cardinality of 1 then it can't be ordered.
-                    ViewEntity search = viewEntity;
+                    EntityDef search = entityDef;
                     while ( search.getMaxCardinality() == 1 )
                         search = search.getParent();
 
@@ -290,15 +290,15 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
 
     ViewAttribute setDomain( String domainName )
     {
-        Application app = viewEntity.getViewOd().getApplication();
+        Application app = entityDef.getViewOd().getApplication();
         this.domainName = domainName;
         domain = app.getDomain( domainName );
         return this;
     }
 
-    public ViewEntity getViewEntity()
+    public EntityDef getEntityDef()
     {
-        return viewEntity;
+        return entityDef;
     }
 
     ViewAttribute setName( String name )
@@ -340,7 +340,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     @Override
     public String toString()
     {
-        return viewEntity.toString() + "." + name;
+        return entityDef.toString() + "." + name;
     }
 
     int getXvaAttrToken()
@@ -542,7 +542,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
             try
             {
                 Object oper = constructor.newInstance( view );
-                Object[] argList = new Object[] { view, getViewEntity().getName(), getName(), DERIVED_GET };
+                Object[] argList = new Object[] { view, getEntityDef().getName(), getName(), DERIVED_GET };
                 method.invoke( oper, argList );
             }
             catch ( Throwable e )
@@ -584,7 +584,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
         @Override
         void callDerivedOperation( View view )
         {
-            AttributeInstance ai = view.cursor( getViewEntity() ).getAttribute( ViewAttribute.this );
+            AttributeInstance ai = view.cursor( getEntityDef() ).getAttribute( ViewAttribute.this );
             callDerivedOperation( ai );
         }
 
@@ -608,10 +608,10 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     public ViewAttribute getNextViewAttribute()
     {
         int idx = getAttributeNumber() + 1;
-        if ( idx == viewEntity.getAttributeCount() )
+        if ( idx == entityDef.getAttributeCount() )
             return null;
 
-        return viewEntity.getAttribute( idx );
+        return entityDef.getAttribute( idx );
     }
 
     /**
@@ -636,7 +636,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
      *
      * @return
      */
-    public ViewEntity getHashKeyParent()
+    public EntityDef getHashKeyParent()
     {
         return hashKeyParent;
     }
@@ -644,7 +644,7 @@ public class ViewAttribute implements PortableFileAttributeHandler, Serializable
     /**
      * Returns true if this ViewAttribute is a sequencing attribute in ascending order, false
      * if it's descending, and null if it's not a sequencing attribute.  See
-     * ViewEntity.getSequencingAttributes() for more.
+     * EntityDef.getSequencingAttributes() for more.
      *
      * @return
      */

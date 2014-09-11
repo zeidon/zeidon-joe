@@ -44,7 +44,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicViewAttributeConfiguration;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -302,8 +302,8 @@ class ActivateOisFromJsonStream implements StreamReader
     {
         for ( EntityInstance ei : selectedInstances )
         {
-            ViewEntity viewEntity = ei.getViewEntity();
-            view.cursor( viewEntity ).setCursor( ei );
+            EntityDef entityDef = ei.getEntityDef();
+            view.cursor( entityDef ).setCursor( ei );
         }
     }
 
@@ -353,7 +353,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
         assert token == JsonToken.START_OBJECT;
 
-        ViewEntity viewEntity = viewOd.getViewEntity( entityName );
+        EntityDef entityDef = viewOd.getEntityDef( entityName );
 
         // Read tokens until we find the token that ends the current list of entities.
         while ( ( token = jp.nextToken() ) != null )
@@ -381,7 +381,7 @@ class ActivateOisFromJsonStream implements StreamReader
             }
 
             assert token == JsonToken.FIELD_NAME;
-            EntityInstanceImpl ei = (EntityInstanceImpl) view.cursor( viewEntity ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+            EntityInstanceImpl ei = (EntityInstanceImpl) view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
             // Read tokens until we find the token that ends the current entity.
             EntityMeta entityMeta = null;
@@ -417,13 +417,13 @@ class ActivateOisFromJsonStream implements StreamReader
                     boolean recursiveChild = false;
 
                     // Validate that the entity name is valid.
-                    ViewEntity childEntity = viewOd.getViewEntity( fieldName );
-                    if ( childEntity.getParent() != viewEntity )
+                    EntityDef childEntity = viewOd.getEntityDef( fieldName );
+                    if ( childEntity.getParent() != entityDef )
                     {
                         // Check to see the childEntity is a recursive child.
                         if ( childEntity.isRecursive() )
                         {
-                            view.cursor( viewEntity ).setToSubobject();
+                            view.cursor( entityDef ).setToSubobject();
                             recursiveChild = true;
                         }
                         else
@@ -446,21 +446,21 @@ class ActivateOisFromJsonStream implements StreamReader
                 // This better be an attribute
                 // Try getting the attribute.  We won't throw an exception (yet) if there
                 // is no attribute with a matching name.
-                ViewAttribute viewAttribute = viewEntity.getAttribute( fieldName, false );
+                ViewAttribute viewAttribute = entityDef.getAttribute( fieldName, false );
                 if ( viewAttribute == null )
                 {
                     // We didn't find an attribute with a name matching fieldName.  Do we allow
                     // dynamic attributes for this entity?
                     if ( options.getAllowableDynamicEntities() == null ||
-                       ! options.getAllowableDynamicEntities().contains( viewEntity.getName() ) )
+                       ! options.getAllowableDynamicEntities().contains( entityDef.getName() ) )
                     {
-                        viewEntity.getAttribute( fieldName ); // This will throw the exception.
+                        entityDef.getAttribute( fieldName ); // This will throw the exception.
                     }
 
                     // We are allowing dynamic attributes.  Create one.
                     DynamicViewAttributeConfiguration config = new DynamicViewAttributeConfiguration();
                     config.setAttributeName( fieldName );
-                    viewAttribute = viewEntity.createDynamicViewAttribute( config );
+                    viewAttribute = entityDef.createDynamicViewAttribute( config );
                 }
 
                 ei.setInternalAttributeValue( viewAttribute, jp.getText(), false );
@@ -494,7 +494,7 @@ class ActivateOisFromJsonStream implements StreamReader
     private void readAttributeMeta( EntityInstanceImpl ei, String fieldName ) throws JsonParseException, IOException
     {
         String attribName = fieldName.substring( 1 ); // Remove the ".".
-        ViewAttribute viewAttribute = ei.getViewEntity().getAttribute( attribName );
+        ViewAttribute viewAttribute = ei.getEntityDef().getAttribute( attribName );
         AttributeValue attrib = ei.getInternalAttribute( viewAttribute );
 
         while ( jp.nextToken() != JsonToken.END_OBJECT )

@@ -39,7 +39,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 
@@ -155,10 +155,10 @@ public class ActivateOiFromRestServer implements Activator
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.standardoe.Activator#activate(com.quinsoft.zeidon.objectdefinition.ViewEntity)
+     * @see com.quinsoft.zeidon.standardoe.Activator#activate(com.quinsoft.zeidon.objectdefinition.EntityDef)
      */
     @Override
-    public int activate( ViewEntity subobjectRootEntity )
+    public int activate( EntityDef subobjectRootEntity )
     {
         throw new ZeidonException( "Lazy load activate is not supported for REST (yet)." );
     }

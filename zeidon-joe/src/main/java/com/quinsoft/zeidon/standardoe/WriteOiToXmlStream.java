@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DG
@@ -140,19 +140,19 @@ public class WriteOiToXmlStream implements StreamWriter
 
     private void writeEntity( final EntityInstanceImpl ei )
     {
-        final ViewEntity viewEntity = ei.getViewEntity();
+        final EntityDef entityDef = ei.getEntityDef();
 
-        currentIndent = viewEntity.getLevel();
+        currentIndent = entityDef.getLevel();
 
         if ( incremental )
-            startElement( viewEntity.getName(),
+            startElement( entityDef.getName(),
                           "Created",  yesNo( ei.isCreated() ),
                           "Delete",   yesNo( ei.isDeleted() ),
                           "Updated",  yesNo( ei.isUpdated() ),
                           "Included", yesNo( ei.isIncluded() ),
                           "Excluded", yesNo( ei.isExcluded() ) );
         else
-            startElement( viewEntity.getName() );
+            startElement( entityDef.getName() );
 
         currentIndent++;
         String[] attrIncr = new String[] { "Updated", null };
@@ -184,7 +184,7 @@ public class WriteOiToXmlStream implements StreamWriter
         }
 
         currentIndent--;
-        endElement( viewEntity.getName() );
+        endElement( entityDef.getName() );
     }
 
     public void writeToStream()

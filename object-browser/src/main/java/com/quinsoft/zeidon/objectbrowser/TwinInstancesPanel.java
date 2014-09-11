@@ -28,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.objectdefinition.ViewAttribute;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * @author DGC
@@ -69,9 +69,9 @@ class TwinInstancesPanel extends JPanel
     private String getAttributeString( EntityInstance ei )
     {
         StringBuilder sb = new StringBuilder();
-        ViewEntity viewEntity = ei.getViewEntity();
+        EntityDef entityDef = ei.getEntityDef();
         int count = 0;
-        for ( ViewAttribute viewAttribute : viewEntity.getAttributes() )
+        for ( ViewAttribute viewAttribute : entityDef.getAttributes() )
         {
             if ( viewAttribute.isKey() )
                 continue;
@@ -117,7 +117,7 @@ class TwinInstancesPanel extends JPanel
 
             int col = 0;
             row[col++] = model.getRowCount() + 1;
-            row[col++] = EntitySquare.getKeyString( ei, ei.getViewEntity() );
+            row[col++] = EntitySquare.getKeyString( ei, ei.getEntityDef() );
             row[col++] = getAttributeString( ei );
             model.addRow( row );
         }

@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 /**
  * This relinks multiple OIs.
  *
@@ -42,7 +42,7 @@ public class OiRelinker
 
     /**
      * The root map of all the entities.
-     *      Key = ViewEntity Entity tokens.
+     *      Key = EntityDef Entity tokens.
      *      Value = map of all entities for that entity token.
      *
      * The inner map is map of entities stored by key.
@@ -78,8 +78,8 @@ public class OiRelinker
         // string keys but since everybody uses an integer as the key we can be a bit more
         // restrictive for now.
         assert ! StringUtils.isBlank( entityKeyString );
-        ViewEntity viewEntity = ei.getViewEntity();
-        int token = viewEntity.getErEntityToken();
+        EntityDef entityDef = ei.getEntityDef();
+        int token = entityDef.getErEntityToken();
 
         Map<String, EntityInstance> tokenMap = entityTokens.get( token );
         if ( tokenMap == null )

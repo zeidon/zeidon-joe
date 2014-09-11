@@ -32,7 +32,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.ViewEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 
 /**
@@ -64,11 +64,11 @@ public class EntityListPanel extends JPanel
         env.setEntityListPanel( this );
     }
 
-    private DefaultMutableTreeNode addViewEntity( ViewEntity viewEntity )
+    private DefaultMutableTreeNode addEntityDef( EntityDef entityDef )
     {
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode( viewEntity.getName() );
-        for ( ViewEntity child : viewEntity.getChildren() )
-            node.add(  addViewEntity( child ) );
+        DefaultMutableTreeNode node = new DefaultMutableTreeNode( entityDef.getName() );
+        for ( EntityDef child : entityDef.getChildren() )
+            node.add(  addEntityDef( child ) );
 
         return node;
     }
@@ -77,7 +77,7 @@ public class EntityListPanel extends JPanel
     {
         this.view = view;
         ViewOd viewOd = view.getViewOd();
-        DefaultMutableTreeNode root = addViewEntity( viewOd.getRoot() );
+        DefaultMutableTreeNode root = addEntityDef( viewOd.getRoot() );
         jtree = new JTree( root );
         for (int i = 0; i < jtree.getRowCount(); i++)
             jtree.expandRow(i);
@@ -121,11 +121,11 @@ public class EntityListPanel extends JPanel
     /**
      * This is called when a new entity instance is selected in the OI view.
      *
-     * @param viewEntity
+     * @param entityDef
      */
-    void setViewEntity( ViewEntity viewEntity )
+    void setEntityDef( EntityDef entityDef )
     {
-        String name = viewEntity.getName();
+        String name = entityDef.getName();
 
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) jtree.getModel().getRoot();
         @SuppressWarnings("unchecked")
@@ -149,7 +149,7 @@ public class EntityListPanel extends JPanel
     public void valueChanged( DefaultMutableTreeNode selectedNode )
     {
         String name = (String) selectedNode.getUserObject();
-        ViewEntity viewEntity = view.getViewOd().getViewEntity( name );
-        env.getOiDisplay().setSelectedEntity( viewEntity );
+        EntityDef entityDef = view.getViewOd().getEntityDef( name );
+        env.getOiDisplay().setSelectedEntity( entityDef );
     }
 }
