@@ -29,7 +29,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Data and methods common to File DB activate and commit.
@@ -105,12 +105,12 @@ class FileDbUtils
         }
     }
 
-    String genFilename( ViewOd viewOd, String qualifier )
+    String genFilename( LodDef lodDef, String qualifier )
     {
         if ( isFile )
             return directoryName;
 
-        return directoryName + File.separator + viewOd.getName() + "_" + qualifier + streamFormat.getExtension();
+        return directoryName + File.separator + lodDef.getName() + "_" + qualifier + streamFormat.getExtension();
     }
 
     /**
@@ -121,8 +121,8 @@ class FileDbUtils
      */
     String genKeyFilename( View view )
     {
-        ViewOd viewOd = view.getViewOd();
-        EntityDef root = viewOd.getRoot();
+        LodDef lodDef = view.getLodDef();
+        EntityDef root = lodDef.getRoot();
         List<AttributeDef> keys = root.getKeys();
         if ( keys.size() > 1 )
             throw new ZeidonException( "File DB only supports root entities with a single key." );
@@ -130,7 +130,7 @@ class FileDbUtils
         AttributeDef key = keys.get( 0 );
         String value = view.cursor( root ).getAttribute( key ).getString();
         String qualifier = genKeyQualifier( key, value );
-        return genFilename( viewOd, qualifier );
+        return genFilename( lodDef, qualifier );
     }
 
     String genKeyQualifier( AttributeDef key, String value )

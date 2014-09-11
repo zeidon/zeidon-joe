@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownEntityDefException;
-import com.quinsoft.zeidon.UnknownViewOdException;
+import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
@@ -50,7 +50,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.Nu
  * @author DG
  *
  */
-public class ViewOd implements PortableFileAttributeHandler
+public class LodDef implements PortableFileAttributeHandler
 {
     private final Application  app;
     private String       name;
@@ -77,7 +77,7 @@ public class ViewOd implements PortableFileAttributeHandler
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
     static private final Class<?>[] constructorArgTypes2 = new Class<?>[] { Task.class };
 
-    public ViewOd(Task task, Application app, String name) throws UnknownViewOdException
+    public LodDef(Task task, Application app, String name) throws UnknownLodDefException
     {
         super();
         this.app = app;
@@ -93,9 +93,9 @@ public class ViewOd implements PortableFileAttributeHandler
         filename = app.getObjectDir() + "/" + xod;
         InputStream inputStream = JoeUtils.getInputStream( task, filename, getClass().getClassLoader() );
         if ( inputStream == null )
-            throw new UnknownViewOdException(name, filename, app );
+            throw new UnknownLodDefException(name, filename, app );
 
-        loadViewOD( task, inputStream );
+        loadLodDef( task, inputStream );
     }
 
     public Application getApplication()
@@ -122,7 +122,7 @@ public class ViewOd implements PortableFileAttributeHandler
         // We allow the dbhandler to use a special string to indicate the
         // root.
         if ( StringUtils.equals( entityName, DbHandler.ROOT_ENTITY ) )
-            return getEntityDef( 0 );  // Return the root view entity.
+            return getEntityDef( 0 );  // Return the root LodDef.
 
         EntityDef entityDef = nameMap.get( entityName );
         if ( entityDef == null && required )
@@ -142,12 +142,12 @@ public class ViewOd implements PortableFileAttributeHandler
         return entityDef;
     }
 
-    private void loadViewOD( Task task, InputStream file )
+    private void loadLodDef( Task task, InputStream file )
     {
         try
         {
-            PortableFileReader.ReadPortableFile( file, task.log(), new ViewOdHandler( this ) );
-            task.log().info( "View OD %s loaded from: %s", this, filename );
+            PortableFileReader.ReadPortableFile( file, task.log(), new LodDefHandler( this ) );
+            task.log().info( "LodDef %s loaded from: %s", this, filename );
         }
         catch ( Exception e )
         {
@@ -271,12 +271,12 @@ public class ViewOd implements PortableFileAttributeHandler
     }
 
     /**
-     * Traces the ViewOd to the log
+     * Traces the LodDef to the log
      * @param task
      */
-    public void displayViewOD( TaskQualification task )
+    public void displayLodDef( TaskQualification task )
     {
-        task.log().info( "Displaying View OD for %s", getName() );
+        task.log().info( "Displaying LodDef for %s", getName() );
         for ( EntityDef entityDef : getViewEntitiesHier() )
         {
             task.log().info( "%s %d, count = %d", entityDef.getName(),
@@ -361,7 +361,7 @@ public class ViewOd implements PortableFileAttributeHandler
         catch ( Exception e )
         {
             throw ZeidonException.wrapException( e )
-                                 .prependViewOd( ViewOd.this )
+                                 .prependLodDef( LodDef.this )
                                  .appendMessage( "Class name = %s", className )
                                  .appendMessage( "See inner exception for more info." );
         }
@@ -482,16 +482,16 @@ public class ViewOd implements PortableFileAttributeHandler
         return constraintOper;
     }
 
-    private class ViewOdHandler extends NullEntityHandler
+    private class LodDefHandler extends NullEntityHandler
     {
-        private final ViewOd viewOd;
+        private final LodDef lodDef;
         private EntityDef currentEntityDef = null;
         private final ArrayList<EntityDef> parentStack = new ArrayList<EntityDef>();
 
-        ViewOdHandler(ViewOd viewOd)
+        LodDefHandler(LodDef lodDef)
         {
             super();
-            this.viewOd = viewOd;
+            this.lodDef = lodDef;
             parentStack.add( null );
         }
 
@@ -514,7 +514,7 @@ public class ViewOd implements PortableFileAttributeHandler
                 if ( currentEntityDef != null )
                     addEntityDef( currentEntityDef );
 
-                EntityDef entityDef = new EntityDef( viewOd, level );
+                EntityDef entityDef = new EntityDef( lodDef, level );
 
                 if ( level >= parentStack.size() )
                     parentStack.add( entityDef );
@@ -559,7 +559,7 @@ public class ViewOd implements PortableFileAttributeHandler
             else
             if ( reader.getAttributeName().equals( "OBJECT" ))
             {
-                return viewOd;
+                return lodDef;
             }
             else
                 throw new ZeidonException( "Unknown entity '%s'", reader.getAttributeValue());
@@ -603,7 +603,7 @@ public class ViewOd implements PortableFileAttributeHandler
         @Override
         public void endFile()
         {
-            addEntityDef( currentEntityDef );  // Add the last view entity.
+            addEntityDef( currentEntityDef );  // Add the last LodDef.
 
             // Set the sibling pointers for all the view entities.
             entityList.get( 0 ).setSiblingsForChildren();
@@ -631,7 +631,7 @@ public class ViewOd implements PortableFileAttributeHandler
                 }
             }
         }
-    } // class ViewOdHandler
+    } // class LodDefHandler
 
     public int getHeight()
     {

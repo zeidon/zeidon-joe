@@ -25,7 +25,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.SerializeOi;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Implements the activate and commit logic for REST servers.  This is used by the
@@ -49,17 +49,17 @@ public class RestServerImplementation
     }
 
     private final ObjectEngine objectEngine;
-    private final ViewOd restResponse;
+    private final LodDef restResponse;
 
     public RestServerImplementation(ObjectEngine objectEngine)
     {
         this.objectEngine = objectEngine;
         Task systemTask = objectEngine.getSystemTask();
-        restResponse = systemTask.getApplication().getViewOd( systemTask, "kzrestresponse" );
+        restResponse = systemTask.getApplication().getLodDef( systemTask, "kzrestresponse" );
     }
 
     public String activate( Task   task,
-                            String viewOdName,
+                            String lodDefName,
                             String postContent,
                             DataFormat format )  // Currently we don't do anything with this because only JSON is supported.
     {
@@ -79,7 +79,7 @@ public class RestServerImplementation
             qual.logObjectInstance();
 
             ActivateOptions activateOptions = new ActivateOptions( task );
-            View view = task.activateObjectInstance( viewOdName, qual, activateOptions );
+            View view = task.activateObjectInstance( lodDefName, qual, activateOptions );
             SerializeOi writer = new SerializeOi().addView( rc, view ).withIncremental().toStringWriter().write();
             return writer.getString();
         }
@@ -101,14 +101,14 @@ public class RestServerImplementation
      * Activate an OI.
      *
      * @param applicationName
-     * @param viewOdName
+     * @param lodDefName
      * @param postContent The qualification object as JSON.  Assumed to be retrieved from
      *                    POST data.
      *
      * @return The activated OI as JSON string.
      */
     public String activate( String applicationName,
-                            String viewOdName,
+                            String lodDefName,
                             String postContent,
                             DataFormat format )  // Currently we don't do anything with this because only JSON is supported.
     {
@@ -116,7 +116,7 @@ public class RestServerImplementation
 
         try
         {
-            return activate( task, viewOdName, postContent, format );
+            return activate( task, lodDefName, postContent, format );
         }
         finally
         {

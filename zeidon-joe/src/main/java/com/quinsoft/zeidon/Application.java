@@ -21,7 +21,7 @@ package com.quinsoft.zeidon;
 import java.util.Collection;
 
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -32,13 +32,13 @@ public interface Application
     String getName();
 
     /**
-     * Return the view OD; load it from the .xod if necessary.
+     * Return the LodDef; load it from the .xod if necessary.
      *
      * @param taskQual - Used for logging only.
-     * @param name - Name of the ViewOD.
+     * @param name - Name of the LodDef.
      * @return
      */
-    ViewOd getViewOd( TaskQualification taskQual, String name );
+    LodDef getLodDef( TaskQualification taskQual, String name );
 
     String getObjectDir();
     String getBinDir();

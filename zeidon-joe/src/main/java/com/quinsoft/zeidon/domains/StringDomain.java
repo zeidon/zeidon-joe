@@ -168,7 +168,7 @@ public class StringDomain extends AbstractDomain
             return true;
         
         if ( value instanceof String &&
-             attributeDef.getEntityDef().getViewOd().getApplication().nullStringEqualsEmptyString() &&
+             attributeDef.getEntityDef().getLodDef().getApplication().nullStringEqualsEmptyString() &&
              StringUtils.isBlank( (String) value ) )
         {
             return true;

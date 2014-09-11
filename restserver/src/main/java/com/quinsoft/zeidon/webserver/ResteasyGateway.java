@@ -70,7 +70,7 @@ public class ResteasyGateway extends Application
     @Path("/activate")
     @Produces("text/plain")
     public String activateGet( @QueryParam("application") String applicationName,
-                               @QueryParam("viewOdName")  String viewOdName )
+                               @QueryParam("lodDefName")  String lodDefName )
     {
         return "<zOI></zOI>";
     }
@@ -80,10 +80,10 @@ public class ResteasyGateway extends Application
     @Produces("application/json")
     @Consumes("application/json")
     public String activatePost( @QueryParam("application") String applicationName,
-                                @QueryParam("viewOdName")  String viewOdName,
+                                @QueryParam("lodDefName")  String lodDefName,
                                 String content )
     {
-        return restImpl.activate( applicationName, viewOdName, content, DataFormat.JSON );
+        return restImpl.activate( applicationName, lodDefName, content, DataFormat.JSON );
     }
 
     @GET

@@ -40,7 +40,7 @@ import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 
 /**
@@ -72,7 +72,7 @@ public class ActivateOiFromRestServer implements Activator
 
         this.task = (TaskImpl) task;
         if ( initialView == null )
-            view = this.task.activateEmptyObjectInstance( options.getViewOd() );
+            view = this.task.activateEmptyObjectInstance( options.getLodDef() );
         else
             view = ((InternalView) initialView).getViewImpl();
 
@@ -86,16 +86,16 @@ public class ActivateOiFromRestServer implements Activator
     @Override
     public View activate()
     {
-        ViewOd viewOd = view.getViewOd();
-        Application application = viewOd.getApplication();
+        LodDef lodDef = view.getLodDef();
+        Application application = lodDef.getApplication();
         String stringResponse = null;
         BufferedBinaryStreamReader reader = null;
         HttpClient client = null;
 
         try
         {
-            String url = String.format( "%s/activate?application=%s&viewOdName=%s",
-                                        serverUrl, application.getName(), view.getViewOd().getName() );
+            String url = String.format( "%s/activate?application=%s&lodDefName=%s",
+                                        serverUrl, application.getName(), view.getLodDef().getName() );
             client = new DefaultHttpClient();
             HttpPost post = new HttpPost( url );
             View qual = activateOptions.getQualificationObject();

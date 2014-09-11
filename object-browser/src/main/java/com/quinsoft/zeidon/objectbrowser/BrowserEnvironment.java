@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * This object contains info about the browser environment that can be passed around
@@ -45,7 +45,7 @@ public abstract class BrowserEnvironment
     protected static final String UNNAMED_VIEW = "*** unnamed ***";
 
     private final ObjectEngine oe;
-    private final Map<ViewOd, ViewOdLayout> odLayouts;
+    private final Map<LodDef, LodDefLayout> odLayouts;
 
     private int     painterScaleFactor = 8;
     private boolean showHiddenAttributes = false;
@@ -68,7 +68,7 @@ public abstract class BrowserEnvironment
     {
         super();
         this.oe = oe;
-        odLayouts = new HashMap<ViewOd, ViewOdLayout>();
+        odLayouts = new HashMap<LodDef, LodDefLayout>();
     }
 
     protected ObjectEngine getOe()
@@ -76,18 +76,18 @@ public abstract class BrowserEnvironment
         return oe;
     }
 
-    ViewOdLayout getOdLayout( View view )
+    LodDefLayout getOdLayout( View view )
     {
-        return getOdLayout( view.getViewOd() );
+        return getOdLayout( view.getLodDef() );
     }
 
-    synchronized ViewOdLayout getOdLayout( ViewOd viewOd )
+    synchronized LodDefLayout getOdLayout( LodDef lodDef )
     {
-        ViewOdLayout layout = odLayouts.get( viewOd );
+        LodDefLayout layout = odLayouts.get( lodDef );
         if ( layout == null )
         {
-            layout = new ViewOdLayout( this, viewOd );
-            odLayouts.put( viewOd, layout );
+            layout = new LodDefLayout( this, lodDef );
+            odLayouts.put( lodDef, layout );
         }
 
         return layout;

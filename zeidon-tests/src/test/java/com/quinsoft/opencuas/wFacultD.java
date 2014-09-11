@@ -24,7 +24,7 @@ public wFacultD(Task task) {
 //                   VIEW mDegTrk  BASED ON LOD  mDegTrk )
     public int PERFORM_AuditReus( View viewToWindow, View mDegTrk )
     {
-        assert mDegTrk.getViewOd().getName().equals( "mDegTrk" );
+        assert mDegTrk.getLodDef().getName().equals( "mDegTrk" );
 //
 //   VIEW mStudenC      REGISTERED AS mStudenC
         View mStudenC = viewToWindow.getViewByName( "mStudenC" );

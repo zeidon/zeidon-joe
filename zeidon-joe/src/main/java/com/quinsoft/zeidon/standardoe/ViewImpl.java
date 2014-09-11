@@ -55,7 +55,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingViaDb;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  *
@@ -70,7 +70,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
                                                                       CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
                                                                       CreateEntityFlags.fIGNORE_PERMISSIONS);
 
-    private final ViewOd       viewOd;
+    private final LodDef       lodDef;
     private final long         id;
 
     /**
@@ -92,12 +92,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      */
     private boolean isReadOnly = false;
 
-    ViewImpl( TaskImpl task, ViewOd viewOd )
+    ViewImpl( TaskImpl task, LodDef lodDef )
     {
         super(task.getApplication() );
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
         id = task.getObjectEngine().getNextObjectKey();
-        viewCursor = new ViewCursor( task, this, viewOd );
+        viewCursor = new ViewCursor( task, this, lodDef );
         task.addNewView( this );
 
         // The task for this view is the same as the OI so we'll rely on using the
@@ -108,7 +108,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     ViewImpl( TaskImpl task, ViewImpl source )
     {
         super(source.getTask().getApplication());
-        this.viewOd = source.getViewOd();
+        this.lodDef = source.getLodDef();
         id = task.getObjectEngine().getNextObjectKey();
         viewCursor = new ViewCursor(this, source.viewCursor);
         task.addNewView( this );
@@ -123,7 +123,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         super(oi.getTask().getApplication());
         task = oi.getTask();
-        this.viewOd = oi.getViewOd();
+        this.lodDef = oi.getLodDef();
         id = task.getObjectEngine().getNextObjectKey();
         viewCursor = new ViewCursor( this, oi );
         task.addNewView( this );
@@ -152,17 +152,17 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
     @Override
     public Application getApplication()
     {
-        Application application = viewOd.getApplication();
+        Application application = lodDef.getApplication();
 
-        // If the application of the viewOD is the system application (i.e. ZeidonSystem)
+        // If the application of the LodDef is the system application (i.e. ZeidonSystem)
         // then we'll return the default application for the the task instead of
         // ZeidonSystem.
         if ( application.equals( getSystemTask().getApplication() ) )
@@ -216,7 +216,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void logObjectInstance( long flags )
     {
-        log().debug( "Displaying OI for %s", viewOd );
+        log().debug( "Displaying OI for %s", lodDef );
 
         for ( EntityInstanceImpl ei = viewCursor.getObjectInstance().getRootEntityInstance();
               ei != null;
@@ -265,7 +265,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         EntityDef entityDef = null;
         if ( ! StringUtils.isBlank( entityName ) )
-            entityDef = getViewOd().getEntityDef( entityName );
+            entityDef = getLodDef().getEntityDef( entityName );
 
         ObjectInstance oi = viewCursor.getObjectInstance();
         final EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
@@ -525,8 +525,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
 
         // TODO: Make sure there are no outstanding temporal entities.
 
-        ViewOd viewOd = srcView.getViewOd();
-        ViewImpl view = getTask().activateEmptyObjectInstance( viewOd );
+        LodDef lodDef = srcView.getLodDef();
+        ViewImpl view = getTask().activateEmptyObjectInstance( lodDef );
         ObjectInstance oi = view.getObjectInstance();
 
         EntityInstanceImpl firstSrcEntityInstance;
@@ -534,7 +534,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         if ( flags.contains( ActivateFlags.fSINGLE ) )
         {
             // We only want the root pointed to by the root cursor.
-            firstSrcEntityInstance = srcView.cursor( viewOd.getEntityDef( 0 ) ).getEntityInstance();
+            firstSrcEntityInstance = srcView.cursor( lodDef.getEntityDef( 0 ) ).getEntityInstance();
             lastSrcEntityInstance = firstSrcEntityInstance.getNextTwin();
         }
         else
@@ -648,7 +648,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public String toString()
     {
-        return String.format( "%d %s", id, getViewOd() );
+        return String.format( "%d %s", id, getLodDef() );
     }
 
     @Override
@@ -731,8 +731,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         // isn't a ViewImpl?
 
         ViewImpl source = ((InternalView) src).getViewImpl();
-        if ( getViewOd() != source.getViewOd() )
-            throw new ZeidonException( "Attempting to copy cursors from a different ViewOD. Target = %s, source = %s", this, source );
+        if ( getLodDef() != source.getLodDef() )
+            throw new ZeidonException( "Attempting to copy cursors from a different LodDef. Target = %s, source = %s", this, source );
 
         viewCursor = new ViewCursor(this, source.viewCursor);
     }
@@ -944,8 +944,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         if ( owningTask == null )
             owningTask = getTask();
 
-        EntityDef rootEntityDef = getViewOd().getRoot();
-        View copy = owningTask.activateEmptyObjectInstance( getViewOd() );
+        EntityDef rootEntityDef = getLodDef().getRoot();
+        View copy = owningTask.activateEmptyObjectInstance( getLodDef() );
         EntityCursor rootCursor = copy.cursor( rootEntityDef );
         for ( EntityInstance srcInstance = getObjectInstance().getRootEntityInstance();
                              srcInstance != null;

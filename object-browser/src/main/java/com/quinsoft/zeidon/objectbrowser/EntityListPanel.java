@@ -33,7 +33,7 @@ import javax.swing.tree.TreePath;
 
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author dgc
@@ -76,8 +76,8 @@ public class EntityListPanel extends JPanel
     void setView( View view )
     {
         this.view = view;
-        ViewOd viewOd = view.getViewOd();
-        DefaultMutableTreeNode root = addEntityDef( viewOd.getRoot() );
+        LodDef lodDef = view.getLodDef();
+        DefaultMutableTreeNode root = addEntityDef( lodDef.getRoot() );
         jtree = new JTree( root );
         for (int i = 0; i < jtree.getRowCount(); i++)
             jtree.expandRow(i);
@@ -149,7 +149,7 @@ public class EntityListPanel extends JPanel
     public void valueChanged( DefaultMutableTreeNode selectedNode )
     {
         String name = (String) selectedNode.getUserObject();
-        EntityDef entityDef = view.getViewOd().getEntityDef( name );
+        EntityDef entityDef = view.getLodDef().getEntityDef( name );
         env.getOiDisplay().setSelectedEntity( entityDef );
     }
 }

@@ -30,11 +30,11 @@ import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.UnknownViewOdException;
+import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
 
 /**
@@ -63,10 +63,10 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
      * @see com.quinsoft.zeidon.Task#activateEmptyObjectInstance(java.lang.String)
      */
     @Override
-    public ViewImpl activateEmptyObjectInstance(String viewOdName) throws UnknownViewOdException
+    public ViewImpl activateEmptyObjectInstance(String lodDefName) throws UnknownLodDefException
     {
-        ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
-        return activateEmptyObjectInstance( viewOd );
+        LodDef lodDef = getApplication().getLodDef( getTask(), lodDefName );
+        return activateEmptyObjectInstance( lodDef );
     }
 
     @Override
@@ -76,23 +76,23 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public ViewImpl activateEmptyObjectInstance( String viewOdName, Application app ) throws UnknownViewOdException
+    public ViewImpl activateEmptyObjectInstance( String lodDefName, Application app ) throws UnknownLodDefException
     {
-        ViewOd viewOd = app.getViewOd( getTask(), viewOdName );
-        return activateEmptyObjectInstance( viewOd );
+        LodDef lodDef = app.getLodDef( getTask(), lodDefName );
+        return activateEmptyObjectInstance( lodDef );
     }
 
     @Override
-    public ViewImpl activateEmptyObjectInstance( String viewOdName, String appName ) throws UnknownViewOdException
+    public ViewImpl activateEmptyObjectInstance( String lodDefName, String appName ) throws UnknownLodDefException
     {
-        ViewOd viewOd = getApplication( appName ).getViewOd( getTask(), viewOdName );
-        return activateEmptyObjectInstance( viewOd );
+        LodDef lodDef = getApplication( appName ).getLodDef( getTask(), lodDefName );
+        return activateEmptyObjectInstance( lodDef );
     }
 
     @Override
-    public ViewImpl activateEmptyObjectInstance(ViewOd viewOd)
+    public ViewImpl activateEmptyObjectInstance(LodDef lodDef)
     {
-        ViewImpl view = new ViewImpl( getTask(), viewOd );
+        ViewImpl view = new ViewImpl( getTask(), lodDef );
         return view;
     }
 
@@ -100,38 +100,38 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
      * @see com.quinsoft.zeidon.Task#activateObjectInstance(java.lang.String)
      */
     @Override
-    public View activateObjectInstance(String viewOdName, View qual, EnumSet<ActivateFlags> control ) throws UnknownViewOdException
+    public View activateObjectInstance(String lodDefName, View qual, EnumSet<ActivateFlags> control ) throws UnknownLodDefException
     {
-        ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
+        LodDef lodDef = getApplication().getLodDef( getTask(), lodDefName );
         ActivateOptions options = new ActivateOptions( getTask() );
-        options.setViewOd( viewOd );
+        options.setLodDef( lodDef );
         options.setQualificationObject( qual );
         options.setActivateFlags( control );
         return activateObjectInstance( options );
     }
 
     @Override
-    public View activateObjectInstance(ViewOd viewOd, View qual, EnumSet<ActivateFlags> control )
+    public View activateObjectInstance(LodDef lodDef, View qual, EnumSet<ActivateFlags> control )
     {
         ActivateOptions options = new ActivateOptions( getTask() );
-        options.setViewOd( viewOd );
+        options.setLodDef( lodDef );
         options.setQualificationObject( qual );
         options.setActivateFlags( control );
         return activateObjectInstance( options );
     }
 
     @Override
-    public  View activateObjectInstance( ActivateOptions options ) throws UnknownViewOdException
+    public  View activateObjectInstance( ActivateOptions options ) throws UnknownLodDefException
     {
         ActivateObjectInstance activator = new ActivateObjectInstance( getTask(), options );
         return activator.activate();
     }
 
     @Override
-    public View activateObjectInstance( String viewOdName, View qual, ActivateOptions options )
+    public View activateObjectInstance( String lodDefName, View qual, ActivateOptions options )
     {
-        ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
-        options.setViewOd( viewOd );
+        LodDef lodDef = getApplication().getLodDef( getTask(), lodDefName );
+        options.setLodDef( lodDef );
         options.setQualificationObject( qual );
         return activateObjectInstance( options );
     }
@@ -161,35 +161,35 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
-    public View activateOiFromFile( String viewOdName,
+    public View activateOiFromFile( String lodDefName,
                                     String filename )
     {
-        return activateOiFromFile( viewOdName, filename, null );
+        return activateOiFromFile( lodDefName, filename, null );
     }
 
     @Override
-    public View activateOiFromFile( String viewOdName,
+    public View activateOiFromFile( String lodDefName,
                                     String filename,
-                                    EnumSet<ActivateFlags> control) throws UnknownViewOdException
+                                    EnumSet<ActivateFlags> control) throws UnknownLodDefException
     {
-        ViewOd viewOd = getApplication().getViewOd( getTask(), viewOdName );
-        return activateOiFromFile( viewOd, filename, control );
+        LodDef lodDef = getApplication().getLodDef( getTask(), lodDefName );
+        return activateOiFromFile( lodDef, filename, control );
     }
 
     @Override
-    public View activateOiFromFile( ViewOd viewOd,
+    public View activateOiFromFile( LodDef lodDef,
                                     String filename,
                                     EnumSet<ActivateFlags> control )
     {
         return new DeserializeOi( this )
                         .fromFile( filename )
-                        .setViewOd( viewOd )
+                        .setLodDef( lodDef )
                         .setFlags( control )
                         .activateFirst();
     }
 
     @Override
-    public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownViewOdException
+    public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownLodDefException
     {
         try
         {

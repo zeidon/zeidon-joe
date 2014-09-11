@@ -80,7 +80,7 @@ public class TestZencas
 	    Map<String, String> envs = System.getenv();
         String fileDbUrl = StrSubstitutor.replace( "jdbc:sqlite:${ZENCAS_SQLITE_DIR}/zencasa.sqlite", envs );
         View stud = new QualificationBuilder( zencas )
-                        .setViewOd( "lStudDpt" )
+                        .setLodDef( "lStudDpt" )
                         .setOiSourceUrl( fileDbUrl )
                         .addAttribQual( "Status", "A" )
                         .addAttribQual( "AND" )
@@ -181,7 +181,7 @@ public class TestZencas
 	public void testJson() throws IOException
 	{
         View stud = new QualificationBuilder( zencas )
-                            .setViewOd( "lStudDpt" )
+                            .setLodDef( "lStudDpt" )
                             .singleRoot()
                             .addAttribQual( "Status", "A" )
                             .addAttribQual( "AND" )
@@ -190,7 +190,7 @@ public class TestZencas
         stud.relinkOis( (View[]) null );
 
         View person = new QualificationBuilder( zencas )
-                            .setViewOd( "mPerson" )
+                            .setLodDef( "mPerson" )
                             .addAttribQual( "ID", 50 )
                             .activate();
 
@@ -208,7 +208,7 @@ public class TestZencas
             v.logObjectInstance();
 
         stud = new QualificationBuilder( zencas )
-                            .setViewOd( "mCollege" )
+                            .setLodDef( "mCollege" )
                             .singleRoot()
                             .addAttribQual( "ID", 5 )
                             .activate();
@@ -230,7 +230,7 @@ public class TestZencas
 	public void testSelectSet()
 	{
         View stud = new QualificationBuilder( zencas )
-                            .setViewOd( "lStudDpt" )
+                            .setLodDef( "lStudDpt" )
                             .addAttribQual( "Status", "A" )
                             .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
@@ -311,7 +311,7 @@ public class TestZencas
         View         testview;
         testview = zencas.deserializeOi()
                          .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/TestInclude3-mFAProfO.por" )
-                         .setViewOd( "mFAProf" )
+                         .setLodDef( "mFAProf" )
                          .activateFirst();
 
         int rc = testview.cursor( "FinAidAward" ).setFirst( "ID", 50224 ).toInt();
@@ -322,7 +322,7 @@ public class TestZencas
 
         View view = zencas.deserializeOi()
                 .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/AfterPersonInclude.por" )
-                .setViewOd( "mFAProf" )
+                .setLodDef( "mFAProf" )
                 .activateFirst();
         Assert.assertTrue( "Views don't match after include", view.equalsOi( profn ) );
 
@@ -949,7 +949,7 @@ public class TestZencas
 //	@Test
     public void testCreateMultipleTwins()
     {
-	    View view = new QualificationBuilder( zencas ).setViewOd( "mCRStdP" ).addAttribQual( "ID", 580 ).activate();
+	    View view = new QualificationBuilder( zencas ).setLodDef( "mCRStdP" ).addAttribQual( "ID", 580 ).activate();
 	    view.cursor( "ClassRoomSession" ).createEntity( CursorPosition.LAST );
         view.cursor( "ClassRoomSession" ).createEntity( CursorPosition.LAST );
         view.commit();

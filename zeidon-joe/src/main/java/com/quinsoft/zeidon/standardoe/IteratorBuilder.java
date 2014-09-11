@@ -104,20 +104,20 @@ class IteratorBuilder
         {
             LazyLoadConfig targetLazyLoadConfig = targetEntityDef.getLazyLoadConfig();
 
-            // We're looking for a particular view entity.  Are any of the entities between
+            // We're looking for a particular LodDef.  Are any of the entities between
             // the target and the scoping entity flagged as lazy load?
             if ( ! targetLazyLoadConfig.hasLazyLoadParent() )
                 return null;  // No, so lazy load isn't needed.
 
-            // Determine the scoping view entity.  We'll initialize it to be the root
-            // view entity.
+            // Determine the scoping LodDef.  We'll initialize it to be the root
+            // LodDef.
             EntityDef scopingEntityDef = objectInstance.getRootEntityInstance().getEntityDef();
             if ( scopingInstance != null ) // Has a scoping entity been specified?
                 scopingEntityDef = scopingInstance.getEntityDef();
 
             LazyLoadInfo lazyLoadInfo = new LazyLoadInfo( objectInstance );
 
-            // Find the view entity between target and scoping that is lazy-loaded.
+            // Find the LodDef between target and scoping that is lazy-loaded.
             EntityDef lazyLoadEntityDef;
 
             for ( lazyLoadEntityDef = targetEntityDef;
@@ -133,7 +133,7 @@ class IteratorBuilder
                 }
                 else
                 {
-                    // If the lazyLoadView entity is the scoping instance then this path has already
+                    // If the lazyLoadLodDef is the scoping instance then this path has already
                     // been lazy-loaded so we don't need to attempt lazy loading.
                     if ( lazyLoadEntityDef == scopingEntityDef )
                         return null;
@@ -178,7 +178,7 @@ class IteratorBuilder
         // explicitly set to allow lazyLoading, so throw an error.  At some point
         // this check can be removed.
         if ( loadLazyEntities == null )
-            throw new ZeidonException( "Implement logic with null target view entity" );
+            throw new ZeidonException( "Implement logic with null target LodDef" );
 
         // If we get here then we must be looping through all the entities in the
         // OI.  This means we need to load all lazyload entities.

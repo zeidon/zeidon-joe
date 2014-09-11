@@ -41,13 +41,13 @@ import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.UnknownViewOdException;
+import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * A wrapper around a View to allow VML generation to closely resemble generated .c.
@@ -218,9 +218,9 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return view.getViewOd();
+        return view.getLodDef();
     }
 
     @Override
@@ -290,57 +290,57 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public View activateEmptyObjectInstance(String ViewOdName)
+    public View activateEmptyObjectInstance(String LodDefName)
     {
-        return view.activateEmptyObjectInstance( ViewOdName );
+        return view.activateEmptyObjectInstance( LodDefName );
     }
 
     @Override
-    public View activateEmptyObjectInstance(String ViewOdName, String appName)
+    public View activateEmptyObjectInstance(String LodDefName, String appName)
     {
-        return view.activateEmptyObjectInstance( ViewOdName, appName );
+        return view.activateEmptyObjectInstance( LodDefName, appName );
     }
 
     @Override
-    public View activateEmptyObjectInstance(String ViewOdName, Application app)
+    public View activateEmptyObjectInstance(String LodDefName, Application app)
     {
-        return view.activateEmptyObjectInstance( ViewOdName, app );
+        return view.activateEmptyObjectInstance( LodDefName, app );
     }
 
     @Override
-    public View activateEmptyObjectInstance(ViewOd viewOd)
+    public View activateEmptyObjectInstance(LodDef lodDef)
     {
-        return view.activateEmptyObjectInstance( viewOd );
+        return view.activateEmptyObjectInstance( lodDef );
     }
 
     @Override
-    public View activateObjectInstance(String ViewOdName, View qual, EnumSet<ActivateFlags> control)
+    public View activateObjectInstance(String LodDefName, View qual, EnumSet<ActivateFlags> control)
     {
-        return view.activateObjectInstance( ViewOdName, qual, control );
+        return view.activateObjectInstance( LodDefName, qual, control );
     }
 
     @Override
-    public View activateObjectInstance(ViewOd viewOd, View qual, EnumSet<ActivateFlags> control)
+    public View activateObjectInstance(LodDef lodDef, View qual, EnumSet<ActivateFlags> control)
     {
-        return view.activateObjectInstance( viewOd, qual, control );
+        return view.activateObjectInstance( lodDef, qual, control );
     }
 
     @Override
-    public View activateOiFromFile(String viewOdName, String filename)
+    public View activateOiFromFile(String lodDefName, String filename)
     {
-        return view.activateOiFromFile( viewOdName, filename, null );
+        return view.activateOiFromFile( lodDefName, filename, null );
     }
 
     @Override
-    public View activateOiFromFile(String viewOdName, String filename, EnumSet<ActivateFlags> control)
+    public View activateOiFromFile(String lodDefName, String filename, EnumSet<ActivateFlags> control)
     {
-        return view.activateOiFromFile( viewOdName, filename, control );
+        return view.activateOiFromFile( lodDefName, filename, control );
     }
 
     @Override
-    public View activateOiFromFile(ViewOd viewOd, String filename, EnumSet<ActivateFlags> control)
+    public View activateOiFromFile(LodDef lodDef, String filename, EnumSet<ActivateFlags> control)
     {
-        return view.activateOiFromFile( viewOd, filename, control );
+        return view.activateOiFromFile( lodDef, filename, control );
     }
 
     @Override
@@ -530,15 +530,15 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public View activateObjectInstance( ActivateOptions options ) throws UnknownViewOdException
+    public View activateObjectInstance( ActivateOptions options ) throws UnknownLodDefException
     {
         return view.activateObjectInstance( options );
     }
 
     @Override
-    public View activateObjectInstance( String viewOdName, View qual, ActivateOptions options )
+    public View activateObjectInstance( String lodDefName, View qual, ActivateOptions options )
     {
-        return view.activateObjectInstance( viewOdName, qual, options );
+        return view.activateObjectInstance( lodDefName, qual, options );
     }
 
     @Override
@@ -644,7 +644,7 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownViewOdException
+    public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownLodDefException
     {
         return getView().activateOisFromStream( options );
     }

@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * A builder for creating and manipulating Qualification objects.
@@ -64,7 +64,7 @@ public class QualificationBuilder
 
     /**
      * EntityInstance of the EntitySpec that qualifies the
-     * root of the target ViewOD.
+     * root of the target LodDef.
      */
     private EntityInstance rootInstance;
 
@@ -96,13 +96,13 @@ public class QualificationBuilder
     }
 
     /**
-     * @deprecated  Use QualificationBuilder( task ).setViewOd(...) instead.
+     * @deprecated  Use QualificationBuilder( task ).setLodDef(...) instead.
      */
     @Deprecated
-    public QualificationBuilder( TaskQualification taskQual, String viewOdName )
+    public QualificationBuilder( TaskQualification taskQual, String lodDefName )
     {
         this( taskQual );
-        setViewOd( viewOdName );
+        setLodDef( lodDefName );
     }
 
     public QualificationBuilder setApplication( Application application )
@@ -117,32 +117,32 @@ public class QualificationBuilder
         return this;
     }
 
-    public QualificationBuilder setViewOd( ViewOd viewOd )
+    public QualificationBuilder setLodDef( LodDef lodDef )
     {
-        activateOptions.setViewOd( viewOd );
+        activateOptions.setLodDef( lodDef );
         return this;
     }
 
-    public QualificationBuilder setViewOd( String viewOdName )
+    public QualificationBuilder setLodDef( String lodDefName )
     {
-        return setViewOd( application.getViewOd( task, viewOdName ) );
+        return setLodDef( application.getLodDef( task, lodDefName ) );
     }
 
-    public QualificationBuilder setViewOd( String applicationName, String viewOdName )
+    public QualificationBuilder setLodDef( String applicationName, String lodDefName )
     {
         setApplication( applicationName );
-        return setViewOd( application.getViewOd( task, viewOdName ) );
+        return setLodDef( application.getLodDef( task, lodDefName ) );
     }
 
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return activateOptions.getViewOd();
+        return activateOptions.getLodDef();
     }
 
     public QualificationBuilder loadFile( String filename )
     {
-        ViewOd qualViewOd = task.getSystemTask().getApplication().getViewOd( task, QUAL_XOD_NAME );
-        qualView = task.activateOiFromFile( qualViewOd, filename, null );
+        LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
+        qualView = task.activateOiFromFile( qualLodDef, filename, null );
         return this;
     }
 
@@ -281,7 +281,7 @@ public class QualificationBuilder
     {
         if ( rootInstance == null )
         {
-            String rootName = getViewOd().getRoot().getName();
+            String rootName = getLodDef().getRoot().getName();
             View temp = qualView.newView();
 
             if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", rootName ) != CursorResult.SET )
@@ -298,8 +298,8 @@ public class QualificationBuilder
 
     public QualificationBuilder forEntity( String entityName )
     {
-        if ( getViewOd() == null )
-            throw new ZeidonException( "Must specify ViewOD before setting qualification" );
+        if ( getLodDef() == null )
+            throw new ZeidonException( "Must specify LodDef before setting qualification" );
 
         if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", entityName ) != CursorResult.SET )
         {
@@ -307,7 +307,7 @@ public class QualificationBuilder
             qualView.cursor( ENTITYSPEC ).createEntity().setAttribute( "EntityName", entityName );
 
             // If this is the root then get the cursor.
-            if ( rootInstance == null && getViewOd().getRoot().getName().equals( entityName ) )
+            if ( rootInstance == null && getLodDef().getRoot().getName().equals( entityName ) )
                 rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
         }
 
@@ -319,7 +319,7 @@ public class QualificationBuilder
         // If we haven't created an entity spec for this qual OI then we'll automatically create
         // one for the root entity.
         if ( entitySpecCount == 0 )
-            forEntity( getViewOd().getRoot().getName() );
+            forEntity( getLodDef().getRoot().getName() );
 
     }
 
@@ -481,7 +481,7 @@ public class QualificationBuilder
      */
     public QualificationBuilder withLocking()
     {
-        return withLocking( getViewOd().getLockingLevel() );
+        return withLocking( getLodDef().getLockingLevel() );
     }
 
     public View getView()
@@ -521,7 +521,7 @@ public class QualificationBuilder
             // If the source instance is specified and is the same type as the root, then relink.
             if ( sourceEntityInstance != null )
             {
-                EntityDef root = getViewOd().getRoot();
+                EntityDef root = getLodDef().getRoot();
                 if ( root == sourceEntityInstance.getEntityDef() && view.cursor( root ).getEntityCount() == 1 )
                     view.cursor( root ).linkInstances( sourceEntityInstance );
 
@@ -535,25 +535,25 @@ public class QualificationBuilder
     }
 
     /**
-     * @deprecated  Use setViewOd(...).activate() instead.
+     * @deprecated  Use setLodDef(...).activate() instead.
      */
     @Deprecated
-    public View activate( String viewOdName )
+    public View activate( String lodDefName )
     {
-        setViewOd( viewOdName );
+        setLodDef( lodDefName );
         return activate();
     }
 
     public static View generateQualFromSingleRootValue( TaskQualification task,
-                                                        String            viewOdName,
+                                                        String            lodDefName,
                                                         String            attributeName,
                                                         Object            value )
     {
         Application app = task.getApplication();
-        ViewOd viewOd = app.getViewOd( task, viewOdName );
+        LodDef lodDef = app.getLodDef( task, lodDefName );
 
-        QualificationBuilder qual = new QualificationBuilder( task ).setViewOd( viewOdName );
-        qual.forEntity( viewOd.getRoot().getName() ).addAttribQual( attributeName, value.toString() );
+        QualificationBuilder qual = new QualificationBuilder( task ).setLodDef( lodDefName );
+        qual.forEntity( lodDef.getRoot().getName() ).addAttribQual( attributeName, value.toString() );
 
         return qual.getView();
     }
@@ -571,7 +571,7 @@ public class QualificationBuilder
         }
 
         QualificationBuilder qual = new QualificationBuilder( sourceView )
-                                            .setViewOd( sourceView.getViewOd() )
+                                            .setLodDef( sourceView.getLodDef() )
                                             .forEntity( DbHandler.ROOT_ENTITY )
                                             .addAttribQual( key.getName(), null );
         for ( EntityInstance ei : cursor.eachEntity() )
@@ -582,7 +582,7 @@ public class QualificationBuilder
 
     public static View activateFromFile( Task task, String filename )
     {
-        ViewOd qua = task.getSystemTask().getApplication().getViewOd( task, "kzdbhqua" );
+        LodDef qua = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
         return task.activateOiFromFile( qua, filename, null );
     }
 }

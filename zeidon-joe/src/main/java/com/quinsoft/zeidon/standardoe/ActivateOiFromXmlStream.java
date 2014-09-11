@@ -43,7 +43,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author dgc
@@ -63,7 +63,7 @@ class ActivateOiFromXmlStream implements StreamReader
     private boolean     ignoreInvalidAttributeNames;
 
     private Application              application;
-    private ViewOd                   viewOd;
+    private LodDef                   lodDef;
     private ViewImpl                 view;
     private EnumSet<ActivateFlags>   control;
     private boolean                  incremental = false;
@@ -85,7 +85,7 @@ class ActivateOiFromXmlStream implements StreamReader
             // If user wanted just one root remove others if we have more than one.
             // We don't want to abort the loading of entities in the middle of
             // the stream because that could throw off XML processing.
-            EntityCursorImpl rootCursor = view.getViewCursor().getEntityCursor( viewOd.getRoot() );
+            EntityCursorImpl rootCursor = view.getViewCursor().getEntityCursor( lodDef.getRoot() );
             if ( control.contains( ActivateFlags.fSINGLE ) && rootCursor.getEntityCount() > 1 )
             {
                 rootCursor.setFirst();
@@ -131,8 +131,8 @@ class ActivateOiFromXmlStream implements StreamReader
         if ( StringUtils.isBlank( odName ) )
             throw new ZeidonException("zOI element does not specify zObjectName" );
 
-        viewOd = application.getViewOd( task, odName );
-        view = (ViewImpl) task.activateEmptyObjectInstance( viewOd );
+        lodDef = application.getLodDef( task, odName );
+        view = (ViewImpl) task.activateEmptyObjectInstance( lodDef );
 
         String increFlags = attributes.getValue( "zIncreFlags" );
         if ( ! StringUtils.isBlank( increFlags ) )
@@ -142,7 +142,7 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private void createEntity( String entityName, Attributes attributes )
     {
-        currentEntityDef = viewOd.getEntityDef( entityName );
+        currentEntityDef = lodDef.getEntityDef( entityName );
         currentEntityStack.push( currentEntityDef );
         EntityCursorImpl cursor = view.cursor( currentEntityDef );
         cursor.createEntity( CursorPosition.LAST, CREATE_FLAGS );
@@ -179,7 +179,7 @@ class ActivateOiFromXmlStream implements StreamReader
                 throw new ZeidonException( "XML stream does not specify zOI element" );
 
             // Is the element name an entity name?
-            if ( viewOd.getEntityDef( qName, false ) != null )
+            if ( lodDef.getEntityDef( qName, false ) != null )
             {
                 createEntity( qName, attributes );
                 return;
@@ -221,7 +221,7 @@ class ActivateOiFromXmlStream implements StreamReader
             }
 
             // Is the element name an entity name?
-            if ( viewOd.getEntityDef( qName, false ) != null )
+            if ( lodDef.getEntityDef( qName, false ) != null )
             {
                 assert qName.equals( currentEntityDef.getName() ) : "Mismatching entity names in XML";
 

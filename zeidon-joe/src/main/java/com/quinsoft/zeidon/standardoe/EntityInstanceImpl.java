@@ -57,7 +57,7 @@ import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
@@ -549,9 +549,9 @@ class EntityInstanceImpl implements EntityInstance
         assert assertParent();
     }
 
-    ViewOd getViewOd()
+    LodDef getLodDef()
     {
-        return objectInstance.getViewOd();
+        return objectInstance.getLodDef();
     }
 
     long getInstanceFlags()
@@ -1256,9 +1256,9 @@ class EntityInstanceImpl implements EntityInstance
             String key2 = s.getKeyString();
             if ( ! StringUtils.equals( key2, key1 ) )
                 throw new ZeidonException( "Attempting to relink instances with different keys.")
-                                .appendMessage( "Entity1 = %s.%s", getViewOd().getName(), getEntityDef().getName() )
+                                .appendMessage( "Entity1 = %s.%s", getLodDef().getName(), getEntityDef().getName() )
                                 .appendMessage( "Key1 = %s", key2 )
-                                .appendMessage( "Entity2 = %s.%s", s.getViewOd().getName(), s.getEntityDef().getName() )
+                                .appendMessage( "Entity2 = %s.%s", s.getLodDef().getName(), s.getEntityDef().getName() )
                                 .appendMessage( "Key2 = %s", key1 );
         }
 
@@ -1316,7 +1316,7 @@ class EntityInstanceImpl implements EntityInstance
         AttributeDef missingAttributeDef = null;
 
         // If they have the same ER date we'll assume all is good.
-        if ( source.getViewOd().getErDate().equals( target.getViewOd().getErDate() ) )
+        if ( source.getLodDef().getErDate().equals( target.getLodDef().getErDate() ) )
             return LinkValidation.SOURCE_OK;
 
         // Check to see if it's ok for target to be linked to source.
@@ -1365,7 +1365,7 @@ class EntityInstanceImpl implements EntityInstance
         ex.appendMessage( "Source instance = %s", source );
         ex.appendMessage( "Target instance type = %s", target );
         ex.appendMessage( "Missing attribute = %s.%s.%s",
-                          missingAttributeDef.getEntityDef().getViewOd().getName(),
+                          missingAttributeDef.getEntityDef().getLodDef().getName(),
                           missingAttributeDef.getEntityDef().getName(),
                           missingAttributeDef.getName() );
 
@@ -2486,7 +2486,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityIterator<? extends EntityInstance> getChildren(String childEntityName)
     {
-        EntityDef childEntityDef = getViewOd().getEntityDef( childEntityName );
+        EntityDef childEntityDef = getLodDef().getEntityDef( childEntityName );
         if ( childEntityDef.getParent() != getEntityDef() )
             throw new ZeidonException( "%s is not a direct child of %s", childEntityName, getEntityDef() );
 
@@ -2565,7 +2565,7 @@ class EntityInstanceImpl implements EntityInstance
 
             Object sourceValue = sourceInstance.getInternalAttributeValue( sourceAttr );
             setAttribute( targetAttr, sourceValue );
-        } // for each target view attribute...
+        } // for each target AttributeDef...
 
         return 0;
     }

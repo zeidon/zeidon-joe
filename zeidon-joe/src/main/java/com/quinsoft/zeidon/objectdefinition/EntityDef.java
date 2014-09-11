@@ -48,7 +48,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
  */
 public class EntityDef implements PortableFileAttributeHandler, CacheMap
 {
-    private ViewOd     viewOd;
+    private LodDef     lodDef;
     private EntityDef prevHier;
     private EntityDef nextHier;
     private EntityDef parent;
@@ -84,7 +84,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * This map keeps track of entities that have been checked to see if 'this' entity
      * is an attribute superset.
-     * 	Key = View entity of 'child' entity.
+     * 	Key = LodDef of 'child' entity.
      *  Value = true if 'this' entity is a superset.
      *
      *  This is maintained at run-time which is why we need it to be a concurrent map.
@@ -130,10 +130,10 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     private final LazyLoadConfig lazyLoadConfig;
 
-    public EntityDef( ViewOd viewOd, int level )
+    public EntityDef( LodDef lodDef, int level )
     {
-        this.viewOd = viewOd;
-        this.entityNumber = viewOd.getEntityCount();
+        this.lodDef = lodDef;
+        this.entityNumber = lodDef.getEntityCount();
         this.level = level;
         keys = new ArrayList<AttributeDef>();
         lazyLoadConfig = new LazyLoadConfig();
@@ -311,14 +311,14 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return erEntityToken;
     }
 
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
-    public void setViewOD(ViewOd viewOd)
+    public void setLodDef(LodDef lodDef)
     {
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
     }
 
     public EntityDef getPrevHier()
@@ -448,7 +448,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     {
         if ( attributeNumber >= attributes.size() )
             throw new ZeidonException("Attribute index %d out of range for %s.",
-                                      attributeNumber, viewOd.getName() );
+                                      attributeNumber, lodDef.getName() );
 
         return attributes.get( attributeNumber );
     }
@@ -471,7 +471,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     @Override
     public String toString()
     {
-        return viewOd.toString() + "." + name;
+        return lodDef.toString() + "." + name;
     }
 
     /**
@@ -639,7 +639,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     void setDataRecord(DataRecord dataRecord)
     {
-        getViewOd().setHasPhysicalMappings( true );
+        getLodDef().setHasPhysicalMappings( true );
         this.dataRecord = dataRecord;
     }
 
@@ -781,7 +781,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
-     * If true, then there are other entities in this View OD that have duplicate relationships
+     * If true, then there are other entities in this LodDef that have duplicate relationships
      * that may need to be relinked after activation.
      */
     public boolean isDuplicateEntity()
@@ -893,7 +893,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
-     * Add the view attribute to the list of ordering attributes in the position
+     * Add the AttributeDef to the list of ordering attributes in the position
      * 'position'.  Note, position is 1-based.
      *
      * @param attributeDef

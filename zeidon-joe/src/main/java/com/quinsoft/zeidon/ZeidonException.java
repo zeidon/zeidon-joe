@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * The base exception class for all Zeidon-specific exceptions.  This class has the following
@@ -223,9 +223,9 @@ public class ZeidonException extends RuntimeException
         return prependMessage( "EntityDef  = %s", entityDef.toString() );
     }
 
-    public ZeidonException prependViewOd( ViewOd viewOd )
+    public ZeidonException prependLodDef( LodDef lodDef )
     {
-        return prependMessage( "ViewOD  = %s", viewOd.toString() );
+        return prependMessage( "LodDef  = %s", lodDef.toString() );
     }
 
     public ZeidonException prependEntityInstance( EntityInstance entityInstance )

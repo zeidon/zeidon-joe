@@ -36,7 +36,7 @@ public class RequiredEntityMissingException extends ZeidonException
     {
         super( "Required child entity has no instances." );
         prependEntityDef( entityDef );
-        prependViewOd( entityDef.getViewOd() );
+        prependLodDef( entityDef.getLodDef() );
     }
 
 }

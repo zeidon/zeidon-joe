@@ -21,7 +21,7 @@ package com.quinsoft.zeidon;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -36,21 +36,21 @@ public interface TaskQualification extends Lockable
     ZeidonLogger log();
     ZeidonLogger dblog();
 
-    View activateEmptyObjectInstance( String viewOdName ) throws UnknownViewOdException;
-    View activateEmptyObjectInstance( String viewOdName, String appName ) throws UnknownViewOdException;
-    View activateEmptyObjectInstance( String viewOdName, Application app ) throws UnknownViewOdException;
-    View activateEmptyObjectInstance( ViewOd viewOd );
+    View activateEmptyObjectInstance( String lodDefName ) throws UnknownLodDefException;
+    View activateEmptyObjectInstance( String lodDefName, String appName ) throws UnknownLodDefException;
+    View activateEmptyObjectInstance( String lodDefName, Application app ) throws UnknownLodDefException;
+    View activateEmptyObjectInstance( LodDef lodDef );
 
-    View activateObjectInstance( ActivateOptions options ) throws UnknownViewOdException;
-    View activateObjectInstance( String viewOdName, View qual, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
-    View activateObjectInstance( ViewOd viewOd, View qual, EnumSet<ActivateFlags> control );
-    View activateObjectInstance( String viewOdName, View qual, ActivateOptions options );
+    View activateObjectInstance( ActivateOptions options ) throws UnknownLodDefException;
+    View activateObjectInstance( String lodDefName, View qual, EnumSet<ActivateFlags> control ) throws UnknownLodDefException;
+    View activateObjectInstance( LodDef lodDef, View qual, EnumSet<ActivateFlags> control );
+    View activateObjectInstance( String lodDefName, View qual, ActivateOptions options );
 
-    View activateOiFromFile( String viewOdName, String filename ) throws UnknownViewOdException;
-    View activateOiFromFile( String viewOdName, String filename, EnumSet<ActivateFlags> control ) throws UnknownViewOdException;
-    View activateOiFromFile( ViewOd viewOd, String filename, EnumSet<ActivateFlags> control );
+    View activateOiFromFile( String lodDefName, String filename ) throws UnknownLodDefException;
+    View activateOiFromFile( String lodDefName, String filename, EnumSet<ActivateFlags> control ) throws UnknownLodDefException;
+    View activateOiFromFile( LodDef lodDef, String filename, EnumSet<ActivateFlags> control );
 
-    List<View> activateOisFromStream( DeserializeOi options ) throws UnknownViewOdException;
+    List<View> activateOisFromStream( DeserializeOi options ) throws UnknownLodDefException;
     SerializeOi serializeOi();
     DeserializeOi deserializeOi();
 

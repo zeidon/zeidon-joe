@@ -52,7 +52,7 @@ public class PortableFileReader
 
     public interface PortableFileEntityHandler
     {
-        void startFile( PortableFileReader reader, String viewOdName );
+        void startFile( PortableFileReader reader, String lodDefName );
         PortableFileAttributeHandler createEntity( PortableFileReader reader, int level, long flags );
         void endEntityAttributes( PortableFileReader reader, String entityName, int currentLevel );
         void endEntity( PortableFileReader reader, PortableFileAttributeHandler handler, int currentLevel );
@@ -67,7 +67,7 @@ public class PortableFileReader
         public abstract class NullEntityHandler implements PortableFileEntityHandler
         {
             @Override
-            public void startFile(PortableFileReader reader, String viewOdName)
+            public void startFile(PortableFileReader reader, String lodDefName)
             {
             }
 
@@ -308,8 +308,8 @@ public class PortableFileReader
                         if ( compressed )
                             throw new ZeidonException("Reading compressed streams not supported yet.");
 
-                        String viewOdName = StringUtils.split( line.substring( 24 ), " ", 3 )[0];
-                        entityHandler.startFile( this, viewOdName );
+                        String lodDefName = StringUtils.split( line.substring( 24 ), " ", 3 )[0];
+                        entityHandler.startFile( this, lodDefName );
 
                         if ( erDate && isIncremental() )
                         {

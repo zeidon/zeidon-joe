@@ -88,7 +88,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     {
         view = view.newView();  // To preserve cursor positions in the original view.
 
-        EntityDef rootEntityDef = view.getViewOd().getRoot();
+        EntityDef rootEntityDef = view.getLodDef().getRoot();
         jg.writeArrayFieldStart( rootEntityDef.getName() );
         jg.writeStartObject();
         

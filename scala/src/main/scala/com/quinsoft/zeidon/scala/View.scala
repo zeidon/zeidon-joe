@@ -4,7 +4,7 @@
 package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon.ZeidonException
-import com.quinsoft.zeidon.objectdefinition.ViewOd
+import com.quinsoft.zeidon.objectdefinition.LodDef
 import scala.language.dynamics
 
 /**
@@ -16,12 +16,12 @@ import scala.language.dynamics
  */
 class View( val task: Task ) extends Task( task ) {
 
-    var jviewOd: ViewOd = null
+    var jlodDef: LodDef = null
     var jview: com.quinsoft.zeidon.View = null
 
     def this( jv: com.quinsoft.zeidon.View ) = {
         this( new Task( jv.getTask() ) )
-        jviewOd = jv.getViewOd()
+        jlodDef = jv.getLodDef()
         jview = jv
     }
 
@@ -40,12 +40,12 @@ class View( val task: Task ) extends Task( task ) {
 
     private def setLod( lodName: String, appName: String = null ): View = {
         if ( appName == null )
-            jviewOd = task.jtask.getApplication().getViewOd( task.jtask, lodName )
+            jlodDef = task.jtask.getApplication().getLodDef( task.jtask, lodName )
         else
-            jviewOd = task.jtask.getApplication( appName ).getViewOd( task.jtask, lodName )
+            jlodDef = task.jtask.getApplication( appName ).getLodDef( task.jtask, lodName )
 
-        if ( jview != null && jview.getViewOd() != jviewOd )
-            throw new ZeidonException( "ViewOD set by basedOnLod doesn't match view." )
+        if ( jview != null && jview.getLodDef() != jlodDef )
+            throw new ZeidonException( "LodDef set by basedOnLod doesn't match view." )
 
         return this
     }
@@ -53,7 +53,7 @@ class View( val task: Task ) extends Task( task ) {
 
     def from( view: View ) = {
         jview = view.jview.newView()
-        jviewOd = jview.getViewOd()
+        jlodDef = jview.getLodDef()
         this
     }
 
@@ -66,22 +66,22 @@ class View( val task: Task ) extends Task( task ) {
     }
 
     def activateEmpty() = {
-        validateViewOd
-        jview = jtask.activateEmptyObjectInstance( jviewOd )
+        validateLodDef
+        jview = jtask.activateEmptyObjectInstance( jlodDef )
         this
     }
 
     def activateWhere( addQual: ( QualBuilder ) => QualBuilder ): View = {
-        validateViewOd
-        val builder = new QualBuilder( this, jviewOd )
+        validateLodDef
+        val builder = new QualBuilder( this, jlodDef )
         addQual( builder )
         builder.activate
         this
     }
 
     def activateAll(): View = {
-        validateViewOd
-        val builder = new QualBuilder( this, jviewOd )
+        validateLodDef
+        val builder = new QualBuilder( this, jlodDef )
         builder.activate
         this
     }
@@ -92,15 +92,15 @@ class View( val task: Task ) extends Task( task ) {
     }
 
     def buildQual(): QualBuilder = {
-        validateViewOd
-        val builder = new QualBuilder( this, jviewOd )
+        validateLodDef
+        val builder = new QualBuilder( this, jlodDef )
         return builder
     }
 
     def duplicate = new View( jview.newView )
     def name( viewName: String ) = jview.setName( viewName )
     def assert = new AssertView( this )
-    def odName = if ( jviewOd == null ) "*not specified*" else jviewOd.getName
+    def odName = if ( jlodDef == null ) "*not specified*" else jlodDef.getName
     def isEmpty = jview.isEmpty()
     def logObjectInstance = jview.logObjectInstance()
     def activateOptions = jview.getActivateOptions()
@@ -111,8 +111,8 @@ class View( val task: Task ) extends Task( task ) {
      * Returns the cursor of the root entity..
      */
     def root = {
-        validateViewOd
-        new EntityCursor( this, jview.cursor( jviewOd.getRoot() ) )
+        validateLodDef
+        new EntityCursor( this, jview.cursor( jlodDef.getRoot() ) )
     }
 
     /**
@@ -120,9 +120,9 @@ class View( val task: Task ) extends Task( task ) {
      * is used to find the entity cursor for a view.
      */
     def selectDynamic( entityName: String ): EntityCursor = {
-        validateViewOd
+        validateLodDef
 
-        val jentityDef = jviewOd.getEntityDef( entityName )
+        val jentityDef = jlodDef.getEntityDef( entityName )
         val jcur = jview.cursor( jentityDef )
         new EntityCursor( this, jcur )
     }
@@ -132,29 +132,29 @@ class View( val task: Task ) extends Task( task ) {
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
-        validateViewOd
+        validateLodDef
 
         val oe = task.objectEngine
-        val oper = oe.objectOperationMap.getObjectOperation( operationName, jviewOd, args: _* )
+        val oper = oe.objectOperationMap.getObjectOperation( operationName, jlodDef, args: _* )
         return oper.invokeOperation( this, args: _* )
     }
 
     override def toString = if ( jview != null ) jview.toString() else "*undefined*"
 
     /**
-     * Validates that the View OD is specified.
+     * Validates that the LodDef is specified.
      */
-    private def validateViewOd: Unit = {
-        if ( jviewOd == null )
+    private def validateLodDef: Unit = {
+        if ( jlodDef == null )
             throw new ZeidonException( "LOD name not established for this View" )
     }
 
     class LodChooser extends Dynamic {
 
         private def setLod( lodName: String ): View = {
-            jviewOd = task.jtask.getApplication().getViewOd( task.jtask, lodName )
-            if ( jview != null && jview.getViewOd() != jviewOd )
-                throw new ZeidonException( "ViewOD set by basedOnLod doesn't match view." )
+            jlodDef = task.jtask.getApplication().getLodDef( task.jtask, lodName )
+            if ( jview != null && jview.getLodDef() != jlodDef )
+                throw new ZeidonException( "LodDef set by basedOnLod doesn't match view." )
 
             View.this
         }

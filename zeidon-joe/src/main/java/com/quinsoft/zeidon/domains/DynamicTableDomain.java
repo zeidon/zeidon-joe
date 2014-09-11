@@ -36,7 +36,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -62,10 +62,10 @@ public class DynamicTableDomain extends AbstractTableDomain
     
     protected View activateApplicationDomain( Task task, DomainContext context )
     {
-        ViewOd viewOd = task.getApplication().getViewOd( task, "DomainT" );
+        LodDef lodDef = task.getApplication().getLodDef( task, "DomainT" );
         View view = new QualificationBuilder( task.getSystemTask() )
                                             .setApplication( task.getApplication() )
-                                            .setViewOd( viewOd )
+                                            .setLodDef( lodDef )
                                             .forEntity( "Domain" )
                                             .addAttribQual( "Name", context.getName() )
                                             .multipleRoots()

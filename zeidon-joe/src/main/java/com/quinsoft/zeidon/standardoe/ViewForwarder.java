@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -102,12 +102,12 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#getViewOd()
+     * @see com.quinsoft.zeidon.View#getLodDef()
      */
     @Override
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return getView().getViewOd();
+        return getView().getLodDef();
     }
 
     /* (non-Javadoc)

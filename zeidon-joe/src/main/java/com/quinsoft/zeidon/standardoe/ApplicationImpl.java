@@ -30,11 +30,11 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.UnknownViewOdException;
+import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 
@@ -49,7 +49,7 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
      * map to make it easier to load them.
      */
     private final Map<String, String> attributes = new LinkedHashMap<String,String>();
-    private final Map<String, ViewOd> viewOdList = new HashMap<String, ViewOd>();
+    private final Map<String, LodDef> lodDefList = new HashMap<String, LodDef>();
     private final String              zeidonRootDir;
     private final ViewNameList        viewNameList = new ViewNameList();
     private final NamedLockableList   lockList = new NamedLockableList();
@@ -108,16 +108,16 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     }
 
     @Override
-    public synchronized ViewOd getViewOd(TaskQualification taskQual, String name) throws UnknownViewOdException
+    public synchronized LodDef getLodDef(TaskQualification taskQual, String name) throws UnknownLodDefException
     {
         String lowerName = name.toLowerCase();
-        if ( viewOdList.containsKey( lowerName ))
-            return viewOdList.get( lowerName );
+        if ( lodDefList.containsKey( lowerName ))
+            return lodDefList.get( lowerName );
 
-        ViewOd viewOd = new ViewOd( taskQual.getTask(), this, name );
-        viewOdList.put( lowerName, viewOd );
+        LodDef lodDef = new LodDef( taskQual.getTask(), this, name );
+        lodDefList.put( lowerName, lodDef );
 
-        return viewOd;
+        return lodDef;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class CommitOptions extends AbstractOptionsConfiguration
     @Override
     public Application getApplication()
     {
-        return viewList.get( 0 ).getViewOd().getApplication();
+        return viewList.get( 0 ).getLodDef().getApplication();
     }
 
     public EnumSet<CommitFlags> getControl()

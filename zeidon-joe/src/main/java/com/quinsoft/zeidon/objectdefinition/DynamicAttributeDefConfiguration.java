@@ -23,9 +23,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.ZeidonException;
 
 /**
- * Specifies options when creating a dynamic view attribute.
+ * Specifies options when creating a dynamic AttributeDef.
  *
- * Dynamic view attributes are work attributes that are not defined in the XOD but
+ * Dynamic AttributeDefs are work attributes that are not defined in the XOD but
  * are created at runtime.
  *
  * @author dgc

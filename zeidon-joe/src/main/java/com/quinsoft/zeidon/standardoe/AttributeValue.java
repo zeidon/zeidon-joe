@@ -53,7 +53,7 @@ class AttributeValue
     {
         // We can't save attributeDef as part of this attribute instance because it might
         // be linked with a different entity.  Linked attribute instances can have
-        // different view attributes.  They should have the same:
+        // different AttributeDefs.  They should have the same:
         this.domain = attributeDef.getDomain();
         createAttribute = attributeDef;
     }

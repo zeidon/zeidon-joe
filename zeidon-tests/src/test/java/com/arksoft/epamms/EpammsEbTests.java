@@ -85,7 +85,7 @@ public class EpammsEbTests
    {
 
        View mMasProd = new QualificationBuilder( task )
-                               .setViewOd( "mMasProd" )
+                               .setLodDef( "mMasProd" )
                                .multipleRoots()
                                .withLocking( LockingLevel.PESSIMISTIC )
                                .activate();
@@ -94,7 +94,7 @@ public class EpammsEbTests
        try
        {
            new QualificationBuilder( task )
-                                   .setViewOd( "mMasProd" )
+                                   .setLodDef( "mMasProd" )
                                    .multipleRoots()
                                    .withLocking( LockingLevel.PESSIMISTIC )
                                    .activate();
@@ -105,7 +105,7 @@ public class EpammsEbTests
        }
 
        new QualificationBuilder( task )
-                       .setViewOd( "mMasProd" )
+                       .setLodDef( "mMasProd" )
                        .multipleRoots()
                        .readOnly()
                        .activate();
@@ -113,7 +113,7 @@ public class EpammsEbTests
        mMasProd.commit();  // This should drop pessimistic locks even though there are no changes.
 
        new QualificationBuilder( task )
-                       .setViewOd( "mMasProd" )
+                       .setLodDef( "mMasProd" )
                        .multipleRoots()
                        .withLocking( LockingLevel.PESSIMISTIC )
                        .activate();
@@ -573,8 +573,8 @@ public class EpammsEbTests
       qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
 
       View mMasLC = vKZXMLPGO.activateEmptyObjectInstance( "mMasLC", task.getApplication() );
-      mMasLC.getViewOd().displayViewOD( task );
-      EntityDef entityDef = findEntityDef( mMasLC.getViewOd().getRoot(), "M_Usage" );
+      mMasLC.getLodDef().displayLodDef( task );
+      EntityDef entityDef = findEntityDef( mMasLC.getLodDef().getRoot(), "M_Usage" );
       if ( entityDef != null )
       {
          DataRecord dataRecord = entityDef.getDataRecord();

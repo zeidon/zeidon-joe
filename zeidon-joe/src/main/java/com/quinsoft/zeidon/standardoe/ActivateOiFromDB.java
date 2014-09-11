@@ -31,7 +31,7 @@ import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.Timer;
 
 /**
@@ -44,7 +44,7 @@ class ActivateOiFromDB implements Activator
     private ViewImpl  view;
     private View      qual;
     private EnumSet<ActivateFlags> control;
-    private ViewOd      viewOd;
+    private LodDef      lodDef;
     private DbHandler   dbHandler;
     private ActivateOptions options;
 
@@ -55,15 +55,15 @@ class ActivateOiFromDB implements Activator
 
         this.task = (TaskImpl) task;
         if ( view == null )
-            view = task.activateEmptyObjectInstance( options.getViewOd() );
+            view = task.activateEmptyObjectInstance( options.getLodDef() );
         this.view = ((InternalView) view).getViewImpl();
 
         this.qual = options.getQualificationObject();
         this.options = options;
         control = options.getActivateFlags();
-        viewOd = options.getViewOd();
+        lodDef = options.getLodDef();
 
-        JdbcHandlerUtils helper = new JdbcHandlerUtils( options, viewOd.getDatabase() );
+        JdbcHandlerUtils helper = new JdbcHandlerUtils( options, lodDef.getDatabase() );
         dbHandler = helper.getDbHandler();
         return view;
     }
@@ -88,7 +88,7 @@ class ActivateOiFromDB implements Activator
 
         try
         {
-            EntityDef rootEntity = viewOd.getRoot();
+            EntityDef rootEntity = lodDef.getRoot();
             activate( rootEntity );
 
             if ( oi.getRootEntityInstance() != null ) // Did we load anything?
@@ -104,7 +104,7 @@ class ActivateOiFromDB implements Activator
                 }
 
                 view.reset();
-                view.getViewOd().executeActivateConstraint( view );
+                view.getLodDef().executeActivateConstraint( view );
     		}
             task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
 
@@ -118,7 +118,7 @@ class ActivateOiFromDB implements Activator
     }
 
     /**
-     * Activate a subobject with subobjectRootEntity as the root.  If subobjectRootootEntity = ViewOD.root then
+     * Activate a subobject with subobjectRootEntity as the root.  If subobjectRootootEntity = LodDef.root then
      * this activates the whole OI.
      *
      * @param subobjectRootEntity
@@ -131,7 +131,7 @@ class ActivateOiFromDB implements Activator
         int rc = 0;
         boolean transactionStarted = false;
         boolean commit = false;
-        String viewName = "__Load in progress " + viewOd.getName();
+        String viewName = "__Load in progress " + lodDef.getName();
         ObjectInstance oi = view.getObjectInstance();
         try
         {
@@ -143,7 +143,7 @@ class ActivateOiFromDB implements Activator
             // via cursor access.
             oi.setIgnoreLazyLoadEntities( true );
 
-            task.log().debug( "Activating %s from DB", viewOd.getName() );
+            task.log().debug( "Activating %s from DB", lodDef.getName() );
             view.setName( viewName );
 
             dbHandler.beginTransaction();
@@ -155,9 +155,9 @@ class ActivateOiFromDB implements Activator
         }
         catch ( Exception e )
         {
-            ZeidonException ze = ZeidonException.wrapException( e ).prependViewOd( view.getViewOd() );
+            ZeidonException ze = ZeidonException.wrapException( e ).prependLodDef( view.getLodDef() );
             if ( task.log().isDebugEnabled() )
-                ze.appendMessage( "XOD: %s", this.viewOd.getFileName() );
+                ze.appendMessage( "XOD: %s", this.lodDef.getFileName() );
             task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), ze );
             throw ze;
         }
@@ -169,9 +169,9 @@ class ActivateOiFromDB implements Activator
                 dbHandler.endTransaction( commit );
 
             if ( timer.getMilliTime() > 2000 )
-                task.log().info( "==> Activate for %s took %s seconds", viewOd, timer );
+                task.log().info( "==> Activate for %s took %s seconds", lodDef, timer );
             else
-                task.log().info( "==> Activate for %s took %d milliseconds", viewOd, timer.getMilliTime() );
+                task.log().info( "==> Activate for %s took %d milliseconds", lodDef, timer.getMilliTime() );
         }
 
 

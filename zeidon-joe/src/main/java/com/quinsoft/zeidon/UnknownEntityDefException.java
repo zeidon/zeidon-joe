@@ -19,7 +19,7 @@
 
 package com.quinsoft.zeidon;
 
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -29,8 +29,8 @@ public class UnknownEntityDefException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
 
-    public UnknownEntityDefException( ViewOd viewOd, String entityDefName )
+    public UnknownEntityDefException( LodDef lodDef, String entityDefName )
     {
-        super( "Entity name %s does not exist for View OD %s.", entityDefName, viewOd );
+        super( "Entity name %s does not exist for LodDef %s.", entityDefName, lodDef );
     }
 }

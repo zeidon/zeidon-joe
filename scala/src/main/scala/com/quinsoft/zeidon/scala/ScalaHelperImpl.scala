@@ -21,16 +21,16 @@ class ScalaHelperImpl extends ScalaHelper {
     def executeObjectConstraint( jview: com.quinsoft.zeidon.View,
                                  constraintType: ObjectConstraintType,
                                  loader: ClassLoader ): Integer = {
-      val jviewOd = jview.getViewOd()
-      val application = jviewOd.getApplication()
-      val objName = if ( jviewOd.getLibraryName() != null ) jviewOd.getLibraryName() else jviewOd.getName()
+      val jlodDef = jview.getLodDef()
+      val application = jlodDef.getApplication()
+      val objName = if ( jlodDef.getLibraryName() != null ) jlodDef.getLibraryName() else jlodDef.getName()
       val className = application.getPackage() + "." + objName
       val operationsClass = loader.loadClass( className );
       val constructors = operationsClass.getConstructors()
       val constructor = constructors(0)
-      val view = new View( jview ).basedOnLod( jviewOd.getName() )
+      val view = new View( jview ).basedOnLod( jlodDef.getName() )
       val instance = constructor.newInstance( view )
-      val method = instance.getClass.getMethod(jviewOd.getConstraintOper(), constraintType.getClass() )
+      val method = instance.getClass.getMethod(jlodDef.getConstraintOper(), constraintType.getClass() )
       val rc = method.invoke(instance, constraintType)
       return 0
     }

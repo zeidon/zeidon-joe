@@ -24,7 +24,7 @@ import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.SerializeOi;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author dgc
@@ -41,9 +41,9 @@ public class JsonUtils
     public static void writeXodToJsonStream( View view, Writer writer )
     {
         // Determine the name of the XOD for view.
-        ViewOd viewOd = view.getViewOd();
-        Application app = viewOd.getApplication();
-        String filename = app.getObjectDir() + "/" + viewOd.getName() + ".XOD";
+        LodDef lodDef = view.getLodDef();
+        Application app = lodDef.getApplication();
+        String filename = app.getObjectDir() + "/" + lodDef.getName() + ".XOD";
 
         // Load the XOD as a view.
         Application zeidonTools = view.getApplication( "ZeidonTools" );

@@ -27,17 +27,17 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  */
 class EntityDefLayout
 {
-    private final ViewOdLayout viewOdLayout;
+    private final LodDefLayout lodDefLayout;
     private final EntityDef   entityDef;
     private final int width;
     
     /**
-     * @param viewOdLayout
+     * @param lodDefLayout
      * @param entityDef
      */
-    EntityDefLayout(ViewOdLayout viewOdLayout, EntityDef entityDef)
+    EntityDefLayout(LodDefLayout lodDefLayout, EntityDef entityDef)
     {
-        this.viewOdLayout = viewOdLayout;
+        this.lodDefLayout = lodDefLayout;
         this.entityDef = entityDef;
         
         if ( entityDef.getChildCount() == 0 )
@@ -49,13 +49,13 @@ class EntityDefLayout
             int w = 0;
             for ( EntityDef child : entityDef.getChildren() )
             {
-                EntityDefLayout layout = new EntityDefLayout( viewOdLayout, child );
+                EntityDefLayout layout = new EntityDefLayout( lodDefLayout, child );
                 w += layout.getWidth();
             }
             width = w;
         }
         
-        this.viewOdLayout.addEntityDefLayout( this.entityDef, this );
+        this.lodDefLayout.addEntityDefLayout( this.entityDef, this );
     }
 
     public int getWidth()
@@ -63,9 +63,9 @@ class EntityDefLayout
         return width;
     }
 
-    public ViewOdLayout getViewOdLayout()
+    public LodDefLayout getLodDefLayout()
     {
-        return viewOdLayout;
+        return lodDefLayout;
     }
 
     public EntityDef getEntityDef()

@@ -42,7 +42,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
@@ -64,7 +64,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
 
     private Task    task;
     private Application application;
-    private ViewOd            viewOd;
+    private LodDef            lodDef;
     private ViewImpl          view;
     private Set<ActivateFlags>       control;
     private List<EntityInstanceImpl> entities;
@@ -90,7 +90,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         // If user wanted just one root remove others if we have more than one.
         // We don't want to abort the loading of entities in the middle of the stream
         // because that could throw off the link cards.
-        EntityCursorImpl rootCursor = view.getViewCursor().getEntityCursor( viewOd.getRoot() );
+        EntityCursorImpl rootCursor = view.getViewCursor().getEntityCursor( lodDef.getRoot() );
         if ( control.contains( ActivateFlags.fSINGLE ) && rootCursor.getEntityCount() > 1  )
         {
             rootCursor.setFirst();
@@ -103,9 +103,9 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         return view;
     }
 
-    void setViewOd( ViewOd viewOd )
+    void setLodDef( LodDef lodDef )
     {
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
     }
 
     @Override
@@ -114,9 +114,9 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
                                                      long flags)
     {
         String entityName = reader.getAttributeName();
-        EntityDef entityDef = viewOd.getEntityDef( entityName, ! ignoreInvalidEntityNames );
+        EntityDef entityDef = lodDef.getEntityDef( entityName, ! ignoreInvalidEntityNames );
 
-        // If the entityDef is null then the entity name doesn't exist in the View OD and
+        // If the entityDef is null then the entity name doesn't exist in the LodDef and
         // the user wants us to ignore unknown entities.
         if ( entityDef == null )
         {
@@ -233,18 +233,18 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
     }
 
     @Override
-    public void startFile(PortableFileReader reader, String viewOdName)
+    public void startFile(PortableFileReader reader, String lodDefName)
     {
-        // ViewOd may have already been given to us.
-        if ( viewOd == null )
-            viewOd = application.getViewOd( task, viewOdName );
+        // LodDef may have already been given to us.
+        if ( lodDef == null )
+            lodDef = application.getLodDef( task, lodDefName );
 
         if ( view == null )
-            view = ((InternalView) task.activateEmptyObjectInstance( viewOd )).getViewImpl();
+            view = ((InternalView) task.activateEmptyObjectInstance( lodDef )).getViewImpl();
         else
-        if ( view.getViewOd() != viewOd )
-            throw new ZeidonException( "ViewOD of empty view (%s) does not match ViewOD from OI stream (%s)",
-                                       view.getViewOd().getName(), viewOd.getName() );
+        if ( view.getLodDef() != lodDef )
+            throw new ZeidonException( "LodDef of empty view (%s) does not match LodDef from OI stream (%s)",
+                                       view.getLodDef().getName(), lodDef.getName() );
     }
 
     /**
@@ -258,9 +258,9 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         this.view = view;
     }
 
-    ViewOd getViewOd()
+    LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
     /**
@@ -282,7 +282,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         control = options.getFlags();
         entities = new ArrayList<EntityInstanceImpl>();
         inputStream = options.getInputStream();
-        viewOd = options.getViewOd();
+        lodDef = options.getLodDef();
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
 

@@ -85,7 +85,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.UnknownEntityDefException;
-import com.quinsoft.zeidon.UnknownViewOdException;
+import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
@@ -93,7 +93,7 @@ import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -1293,7 +1293,7 @@ public abstract class VmlOperation
       String    cpcMsgId;
       zVIEW     zView = new zVIEW();
       String    pchTitle;
-      ViewOd    lpViewOD;
+      LodDef    lpLodDef;
 
       task = taskQual.getTask();
       if ( task.isValid() )
@@ -1314,7 +1314,7 @@ public abstract class VmlOperation
       {
          task = null;
          zView = null;
-         lpViewOD = null;
+         lpLodDef = null;
       }
 
       SysGetBaseMessage( sbCoreMessage, nID, 256 );
@@ -1345,10 +1345,10 @@ public abstract class VmlOperation
 
       // See if we can determine the view object resulting in the error.
       // But don't do it for EE071 or EE101 as it implies erroneous information.
-      if ( isValid( zView ) && zView.getViewOd() != null && nID != 71 && nID != 101 )  // dks 2006.04.27
+      if ( isValid( zView ) && zView.getLodDef() != null && nID != 71 && nID != 101 )  // dks 2006.04.27
       {
           zstrcat( sbCoreMessage, ",\n\nView Object: " );
-          zstrcat( sbCoreMessage, zView.getViewOd().getName() );
+          zstrcat( sbCoreMessage, zView.getLodDef().getName() );
       }
 
       /**********
@@ -1896,8 +1896,8 @@ public abstract class VmlOperation
    protected int SetViewToSubobject( View view, String entityName )
    {
       int nRC;
-      ViewOd viewOd = view.getViewOd();
-      EntityDef entityDef = viewOd.getEntityDef( entityName );
+      LodDef lodDef = view.getLodDef();
+      EntityDef entityDef = lodDef.getEntityDef( entityName );
 
       // The C OE doesn't mind the user trying to set the subobject for non-recursive
       // entities but the JOE will throw an exception. To emulate the C OE we'll ignore
@@ -2377,31 +2377,31 @@ public abstract class VmlOperation
 
    protected static final String zGetFirstEntityNameForView( View view, String entityName )
    {
-      return view.getViewOd( ).getEntityDef( 0 ).getName( );
+      return view.getLodDef( ).getEntityDef( 0 ).getName( );
    }
 
    protected static final String zGetNextEntityNameForView( View view, String entityName )
    {
       int k;
-      int nCnt = view.getViewOd( ).getEntityCount( );
+      int nCnt = view.getLodDef( ).getEntityCount( );
 
       for ( k = 0; k < nCnt; k++ )
       {
-         if ( view.getViewOd( ).getEntityDef( k ).getName( ).compareTo( entityName ) == 0 )
+         if ( view.getLodDef( ).getEntityDef( k ).getName( ).compareTo( entityName ) == 0 )
          {
             if ( k < nCnt - 1 )
             {
-               return view.getViewOd( ).getEntityDef( k + 1 ).getName( );
+               return view.getLodDef( ).getEntityDef( k + 1 ).getName( );
             }
          }
       }
 
-      return view.getViewOd( ).getEntityDef( 0 ).getName( );
+      return view.getLodDef( ).getEntityDef( 0 ).getName( );
    }
 
    protected static final String zGetFirstAttributeNameForEntity( View view, String entityName, String attributeName )
    {
-      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
+      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
       if ( ve == null )
       {
          return null;
@@ -2412,7 +2412,7 @@ public abstract class VmlOperation
 
    protected static final String zGetNextAttributeNameForEntity( View view, String entityName, String attributeName )
    {
-      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
+      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
       if ( ve == null )
          return null;
 
@@ -4726,18 +4726,18 @@ public abstract class VmlOperation
       return nRC;
    }
 
-   protected int SfActivateSysEmptyOI( zVIEW returnView, String viewOdName, TaskQualification qualView, int control )
+   protected int SfActivateSysEmptyOI( zVIEW returnView, String lodDefName, TaskQualification qualView, int control )
    {
       View view = null;
       try
       {
           // Try with ZeidonSystem
-          view = qualView.activateEmptyObjectInstance( viewOdName, task.getSystemTask().getApplication() );
+          view = qualView.activateEmptyObjectInstance( lodDefName, task.getSystemTask().getApplication() );
       }
-      catch ( UnknownViewOdException e )
+      catch ( UnknownLodDefException e )
       {
           // Try with ZeidonTools
-          view = qualView.activateEmptyObjectInstance( viewOdName, task.getApplication( "ZeidonTools" ) );
+          view = qualView.activateEmptyObjectInstance( lodDefName, task.getApplication( "ZeidonTools" ) );
       }
 
       returnView.setView( view );
@@ -4745,16 +4745,16 @@ public abstract class VmlOperation
    }
 
    /**
-    * Activates an OI from file.  The application for the viewOdName is either ZeidonSystem or ZeidonTools.
+    * Activates an OI from file.  The application for the lodDefName is either ZeidonSystem or ZeidonTools.
     *
     * @param returnView
-    * @param viewOdName
+    * @param lodDefName
     * @param qualView
     * @param fileName
     * @param control
     * @return
     */
-    protected int SfActivateSysOI_FromFile( zVIEW returnView, String viewOdName, TaskQualification qualView,
+    protected int SfActivateSysOI_FromFile( zVIEW returnView, String lodDefName, TaskQualification qualView,
                                             String fileName, int control )
     {
         View view = null;
@@ -4765,17 +4765,17 @@ public abstract class VmlOperation
                            .fromFile( fileName )
                            .setFlags( control )
                            .setApplication( task.getSystemTask().getApplication() )
-                           .setViewOd( viewOdName )
+                           .setLodDef( lodDefName )
                            .activateFirst();
         }
-        catch ( UnknownViewOdException e )
+        catch ( UnknownLodDefException e )
         {
             // Try with ZeidonTools
             view = qualView.deserializeOi()
                             .fromFile( fileName )
                             .setFlags( control )
                             .setApplication( task.getApplication( "ZeidonTools" ) )
-                            .setViewOd( viewOdName )
+                            .setLodDef( lodDefName )
                             .activateFirst();
         }
 
@@ -4815,14 +4815,14 @@ public abstract class VmlOperation
     * Activate empty OI.  Since JOE doesn't care about the difference between single/multiple roots
     * we ignore the flag.
     */
-   protected int ActivateEmptyObjectInstance( zVIEW returnView, String viewOdName, TaskQualification qual, int control )
+   protected int ActivateEmptyObjectInstance( zVIEW returnView, String lodDefName, TaskQualification qual, int control )
    {
-      View view = qual.activateEmptyObjectInstance( viewOdName, qual.getApplication() );
+      View view = qual.activateEmptyObjectInstance( lodDefName, qual.getApplication() );
       returnView.setView( view );
       return 0;
    }
 
-   protected int ActivateObjectInstance( zVIEW returnView, String viewOdName, View qual,
+   protected int ActivateObjectInstance( zVIEW returnView, String lodDefName, View qual,
                                          View activateQualificationView, int control )
    {
       int nRC = 0;
@@ -4834,10 +4834,10 @@ public abstract class VmlOperation
       if ( control == 4 )
     	  control = 0;
 
-      View view = qual.activateObjectInstance( viewOdName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
-      ViewOd viewOd = view.getViewOd();
+      View view = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
+      LodDef lodDef = view.getLodDef();
       returnView.setView( view );
-      switch ( view.cursor( viewOd.getRoot().getName() ).getEntityCount() )
+      switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
       {
          case 0:
             nRC = -1;
@@ -4852,12 +4852,12 @@ public abstract class VmlOperation
             break;
       }
 
-      TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getViewOd().getName() );
+      TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getLodDef().getName() );
    // DisplayObjectInstance( view, "", "" );
       return nRC;
    }
 
-   protected int ActivateObjectInstance( zVIEW returnView, String viewOdName, TaskQualification qual,
+   protected int ActivateObjectInstance( zVIEW returnView, String lodDefName, TaskQualification qual,
                                          View activateQualificationView, int control )
    {
       if ( ! ( qual instanceof View ) )
@@ -4865,29 +4865,29 @@ public abstract class VmlOperation
          throw new ZeidonException( "qual is not a valid qualification view: " + qual.toString( ) );
       }
 
-      return ActivateObjectInstance( returnView, viewOdName, ((View) qual), activateQualificationView, control );
+      return ActivateObjectInstance( returnView, lodDefName, ((View) qual), activateQualificationView, control );
    }
 
-   protected int ActivateObjectInstance( zVIEW returnView, String viewOdName, TaskQualification qual, int view, int control )
+   protected int ActivateObjectInstance( zVIEW returnView, String lodDefName, TaskQualification qual, int view, int control )
    {
-      return ActivateObjectInstance( returnView, viewOdName, qual, null, control );
+      return ActivateObjectInstance( returnView, lodDefName, qual, null, control );
    }
 
-   public int ActivateOI_FromFile( zVIEW view, String viewOdName, View qualView, String fileName, int control )
+   public int ActivateOI_FromFile( zVIEW view, String lodDefName, View qualView, String fileName, int control )
    {
        view.setView( task.deserializeOi()
                          .fromFile( fileName )
-                         .setViewOd( viewOdName )
+                         .setLodDef( lodDefName )
                          .setFlags( control )
                          .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
                          .activateFirst() );
       return 0;
    }
 
-   protected int ActivateOI_FromXML_File( zVIEW view, String viewOdName, View viewToWindow, String fileName, int control )
+   protected int ActivateOI_FromXML_File( zVIEW view, String lodDefName, View viewToWindow, String fileName, int control )
    {
       // TODO Auto-generated method stub
-      int nRC = 0; // view.activateOiFromXML_File( view, viewOdName, viewToWindow, fileName, control );
+      int nRC = 0; // view.activateOiFromXML_File( view, lodDefName, viewToWindow, fileName, control );
       return nRC;
    }
 
@@ -4934,7 +4934,7 @@ public abstract class VmlOperation
    //              1 - Object instance activated, multiple roots found.  If
    //                  zSINGLE was specified, only the first was activated.
    //    zCALL_ERROR - Error Activating object instance
-   protected int SetOI_FromBlob( zVIEW returnView, StringBuilder sbViewOdName, TaskQualification qualView,
+   protected int SetOI_FromBlob( zVIEW returnView, StringBuilder sbLodDefName, TaskQualification qualView,
                                  View srcView, String srcEntity, String srcAttribute, int control )
    {
       EntityCursor cursor = srcView.cursor( srcEntity );
@@ -4957,15 +4957,15 @@ public abstract class VmlOperation
                        .activateFirst();
 
       returnView.setView( v );
-      sbViewOdName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-      sbViewOdName.append( v.getViewOd().getName() );
+      sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
+      sbLodDefName.append( v.getLodDef().getName() );
       return 0;
    }
 
-   protected String SetOI_FromBlob( zVIEW returnView, String viewOdName, TaskQualification qualView,
+   protected String SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
                                     View srcView, String srcEntity, String srcAttribute, int control )
    {
-      StringBuilder sb = new StringBuilder( viewOdName );
+      StringBuilder sb = new StringBuilder( lodDefName );
       int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
       if ( rc < 0 )
       {
@@ -4977,10 +4977,10 @@ public abstract class VmlOperation
       }
    }
 
-   // Not sure why but we have a lot of calls to SetOI_FromBlob where the viewOdName is
+   // Not sure why but we have a lot of calls to SetOI_FromBlob where the lodDefName is
    // 0. We never seem to use this value... So I am adding this override.
    //SetOI_FromBlob( mPerson, 0, mChurch, mChurch, "ACR_BatchItem", "BlobOI", zSINGLE );
-   protected String SetOI_FromBlob( zVIEW returnView, int viewOdName, TaskQualification qualView,
+   protected String SetOI_FromBlob( zVIEW returnView, int lodDefName, TaskQualification qualView,
                                     View srcView, String srcEntity, String srcAttribute, int control )
    {
       StringBuilder sb = new StringBuilder( );
@@ -5353,13 +5353,13 @@ public abstract class VmlOperation
    {
       int nRC = 0;
       sbObjectName.setLength( 0 );
-      sbObjectName.append( view.getViewOd( ).getName( ) );
+      sbObjectName.append( view.getLodDef( ).getName( ) );
       return 0;
    }
 
    protected String MiGetObjectNameForView( String strObjectName, View view )
    {
-      return view.getViewOd( ).getName( );
+      return view.getLodDef( ).getName( );
    }
 
    protected void SetViewUpdate( View view )
@@ -5388,7 +5388,7 @@ public abstract class VmlOperation
 
    protected String MiGetParentEntityNameForView( String stringParentEntity, View view, String entityName )
    {
-      return view.getViewOd( ).getEntityDef( entityName ).getParent( ).getName( );
+      return view.getLodDef( ).getEntityDef( entityName ).getParent( ).getName( );
    }
 
    protected int ResetView( View view )
@@ -5694,7 +5694,7 @@ public abstract class VmlOperation
    {
       if ( scopingEntity == zSCOPE_OI )
       {
-         return SetAllSelectStatesForEntity( view, entityName, selectState, view.getViewOd( ).getRoot( ).getName( ) );
+         return SetAllSelectStatesForEntity( view, entityName, selectState, view.getLodDef( ).getRoot( ).getName( ) );
       }
       else
       {
@@ -5745,7 +5745,7 @@ public abstract class VmlOperation
                               String contextName,
                               MutableInt index )
    {
-      AttributeDef attributeDef = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
+      AttributeDef attributeDef = view.getLodDef().getEntityDef( entityName ).getAttribute( attributeName );
       TableDomain domain = (TableDomain) attributeDef.getDomain();
       List<TableEntry> entries = domain.getTableEntries( view.getTask(), contextName );
 
@@ -5783,8 +5783,8 @@ public abstract class VmlOperation
 
    protected int zGetFirstEntityNameForView( View view, StringBuilder sbEntityName )
    {
-      ViewOd viewOd = view.getViewOd();
-      EntityDef entityDef = viewOd.getRoot();
+      LodDef lodDef = view.getLodDef();
+      EntityDef entityDef = lodDef.getRoot();
       sbEntityName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbEntityName.append( entityDef.getName() );
       return 0;
@@ -5792,8 +5792,8 @@ public abstract class VmlOperation
 
    protected int zGetNextEntityNameForView( View view, StringBuilder sbEntityName )
    {
-      ViewOd viewOd = view.getViewOd();
-      EntityDef entityDef = viewOd.getEntityDef( sbEntityName.toString() );
+      LodDef lodDef = view.getLodDef();
+      EntityDef entityDef = lodDef.getEntityDef( sbEntityName.toString() );
       entityDef = entityDef.getNextHier();
       if ( entityDef == null )
          return -1;
@@ -5805,7 +5805,7 @@ public abstract class VmlOperation
 
    protected int zGetFirstAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
-      EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
+      EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
       AttributeDef AttributeDef = entityDef.getAttribute( 0 );
       //if ( sbAttribName != null ) // Do we need this?
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
@@ -5815,7 +5815,7 @@ public abstract class VmlOperation
 
    protected int zGetNextAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
-      EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
+      EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
       AttributeDef AttributeDef = entityDef.getAttribute( sbAttribName.toString() );
       AttributeDef = AttributeDef.getNextAttributeDef();
       if ( AttributeDef == null )
@@ -7209,7 +7209,7 @@ public abstract class VmlOperation
          lpTempEntityDef = zGETPTR( lpEntityInstance->hEntityDef );
 
          // If lpEntityDef is not null, then we only want to change the flags
-         // for EI's that match that view entity.
+         // for EI's that match that LodDef.
          if ( lpEntityDef && lpTempEntityDef != lpEntityDef )
             continue;  // They don't match so continue with next EI.
 
@@ -7410,7 +7410,7 @@ public abstract class VmlOperation
 
 	  EntityInstance entityInstance = view.cursor(entityName).getEntityInstance();
 
-	  AttributeDef attributeDef = view.getViewOd().getEntityDef( entityName ).getAttribute( attributeName );
+	  AttributeDef attributeDef = view.getLodDef().getEntityDef( entityName ).getAttribute( attributeName );
 
 	  if ( entityInstance.isAttributeUpdated(attributeDef) )
 	     return 1;
@@ -7420,7 +7420,7 @@ public abstract class VmlOperation
 
    protected int zLodContainsEntity( View view, String entityName )
    {
-      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
+      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
       if ( ve != null )
       {
          return 1;
@@ -7433,7 +7433,7 @@ public abstract class VmlOperation
 
    protected int zLodContainsAttribute( View view, String entityName, String attribName )
    {
-      EntityDef ve = view.getViewOd( ).getEntityDef( entityName );
+      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
       if ( ve.getAttribute( attribName ) != null )
       {
          return 1;

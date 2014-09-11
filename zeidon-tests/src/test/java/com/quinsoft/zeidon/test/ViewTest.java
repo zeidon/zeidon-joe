@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
@@ -177,7 +177,7 @@ public class ViewTest
     {
         String oldfile = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD";
         String newfile = zeidonSystem.getTempDirectory() + "testxwd.XWD";
-        ViewOd xwdOD = zeidonSystem.getApplication( "ZeidonTools" ).getViewOd( zencas, "kzwdlgxo" );
+        LodDef xwdOD = zeidonSystem.getApplication( "ZeidonTools" ).getLodDef( zencas, "kzwdlgxo" );
         View xwd;
 
         xwd = zeidonSystem.activateEmptyObjectInstance( xwdOD );
@@ -216,7 +216,7 @@ public class ViewTest
     @Test
     public void testVersioning()
     {
-        ViewOd xwdOD = zeidonSystem.getApplication( "ZeidonTools" ).getViewOd( zencas, "kzwdlgxo" );
+        LodDef xwdOD = zeidonSystem.getApplication( "ZeidonTools" ).getLodDef( zencas, "kzwdlgxo" );
         View xwd = zencas.activateOiFromFile( xwdOD, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD", null );
         EntityCursor ctrl = xwd.cursor( "Ctrl" );
         EntityCursor ctrlMap = xwd.cursor( "CtrlMap" );
@@ -425,10 +425,10 @@ public class ViewTest
     }
 
     /**
-     * Test method for {@link com.quinsoft.zeidon.View#getViewOd()}.
+     * Test method for {@link com.quinsoft.zeidon.View#getLodDef()}.
      */
     @Test
-    public void testGetViewOD()
+    public void testGetLodDef()
     {
         for ( Application app : oe.getApplicationList() )
         {
@@ -436,9 +436,9 @@ public class ViewTest
         }
 
         mFASrc = zencas.activateEmptyObjectInstance( "mFASrc" );
-        mFASrc.getViewOd().displayViewOD( mFASrc );
+        mFASrc.getLodDef().displayLodDef( mFASrc );
         createTestOI();
-        assertEquals( "Wrong viewOD name", mFASrc.getViewOd().getName(), "mFASrc" );
+        assertEquals( "Wrong LodDef name", mFASrc.getLodDef().getName(), "mFASrc" );
     }
 
     /**

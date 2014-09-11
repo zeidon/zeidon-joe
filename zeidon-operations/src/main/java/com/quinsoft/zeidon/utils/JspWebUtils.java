@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -95,8 +95,8 @@ public class JspWebUtils
     public static List<TableEntry> getTableDomainValues( View view, String entityName, String attribName, String contextName )
     {
     	Task task = view.getTask();
-    	ViewOd viewOd = view.getViewOd();
-    	EntityDef entityDef = viewOd.getEntityDef(entityName);
+    	LodDef lodDef = view.getLodDef();
+    	EntityDef entityDef = lodDef.getEntityDef(entityName);
     	AttributeDef attributeDef = entityDef.getAttribute(attribName);
     	Domain domain = attributeDef.getDomain();
     	if ( domain.getDomainType() != DomainType.TABLE )

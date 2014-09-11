@@ -30,7 +30,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
@@ -45,7 +45,7 @@ public class DeserializeOi
 {
     private final Task task;
 
-    private ViewOd      viewOd;
+    private LodDef      lodDef;
     private InputStream inputStream;
     private String      resourceName;
     private EnumSet<ActivateFlags> flags = ActivateFlags.MULTIPLE;
@@ -206,26 +206,26 @@ public class DeserializeOi
     }
 
     /**
-     * @return the viewOd
+     * @return the lodDef
      */
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
     /**
-     * @param viewOd the viewOd to set
+     * @param lodDef the lodDef to set
      * @return
      */
-    public DeserializeOi setViewOd( ViewOd viewOd )
+    public DeserializeOi setLodDef( LodDef lodDef )
     {
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
         return this;
     }
 
-    public DeserializeOi setViewOd( String viewOdName )
+    public DeserializeOi setLodDef( String lodDefName )
     {
-        viewOd = getApplication().getViewOd( getTask(), viewOdName );
+        lodDef = getApplication().getLodDef( getTask(), lodDefName );
         return this;
     }
 
@@ -287,8 +287,8 @@ public class DeserializeOi
         if ( application != null )
             return application;
 
-        if ( viewOd != null )
-            return viewOd.getApplication();
+        if ( lodDef != null )
+            return lodDef.getApplication();
 
         return task.getApplication();
     }
@@ -307,8 +307,8 @@ public class DeserializeOi
      */
     public ZeidonException decorateException( ZeidonException e )
     {
-        if ( viewOd != null )
-            e.prependViewOd( viewOd );
+        if ( lodDef != null )
+            e.prependLodDef( lodDef );
 
         if ( inputStream instanceof ZeidonInputStream )
             e.prependFilename( ((ZeidonInputStream) inputStream).getDescription() );

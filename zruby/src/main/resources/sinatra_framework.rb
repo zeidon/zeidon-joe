@@ -228,7 +228,7 @@ end
 def activate_for_edit( args = {} )
   raise "ID not specified for edit" if params[:id].nil?
 
-  jviewod = @application.getViewOd( @task.jtask, @viewod )
+  jviewod = @application.getLodDef( @task.jtask, @viewod )
   jroot = jviewod.getRoot
   jkey = jroot.getKeys[0] # We're assuming there is one and only one key.
   @view = @task.activate @viewod, :qual => [ jkey.getName, params[:id] ]
@@ -274,7 +274,7 @@ helpers do
   def top_links
     html = "<table><tr>"
 
-    # Add link to list of all ViewODs
+    # Add link to list of all LodDefs
     html << "<td>|</td>"
     html << "<td><a href='" + url("/#{@application}/list") + "'>#{@application} List</a></td>"
 
@@ -286,7 +286,7 @@ helpers do
 
     # If we're editing/viewing a viewod, then check to see if we need a "to root" link.
     if @viewod and @entity
-      jviewod = @application.getViewOd( @task.jtask, @viewod )
+      jviewod = @application.getLodDef( @task.jtask, @viewod )
       viewod_root = jviewod.getRoot.getName
       if viewod_root != @entity
         html << "<td>|</td>"
@@ -362,7 +362,7 @@ def setup_environment
   session[:messages] = []
 
   if @viewod
-    jviewod = @application.getViewOd( @task.jtask, @viewod )
+    jviewod = @application.getLodDef( @task.jtask, @viewod )
     # Default entity to root of viewod
     if @entity.nil?
       @entity = jviewod.getRoot.getName
@@ -385,7 +385,7 @@ get '/:application/list' do
   @command = 'list'
   haml <<-code
 %title #{@application} List
-%h2 View OD list for #{@application}
+%h2 LodDef list for #{@application}
 = top_layout
 %table
   - get_viewod_list( @application.to_s ).each do |viewod|
@@ -556,7 +556,7 @@ def activate_include_source
 
   @include_source = @task.activate lod_name, :options => { :root_only_multiple => true }
   @include_source.set_name( list_view_name )
-  @select_entity = @include_source.getViewOd.getRoot.name
+  @select_entity = @include_source.getLodDef.getRoot.name
 end
 
 get '/:application/include/:viewod' do

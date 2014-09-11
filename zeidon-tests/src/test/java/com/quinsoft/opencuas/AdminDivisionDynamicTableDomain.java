@@ -46,7 +46,7 @@ import com.quinsoft.zeidon.domains.TableDomainContext;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.domains.TableListContext;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -64,13 +64,13 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
 /******** KELLY ********/
     protected View activateApplicationDomain( Task task, DomainContext context )
     {
-        ViewOd viewOd = task.getApplication().getViewOd( task, "DomainT" );
+        LodDef lodDef = task.getApplication().getLodDef( task, "DomainT" );
         QualificationBuilder qual = new QualificationBuilder( task.getSystemTask() )
                                             .setApplication( task.getApplication() )
-                                            .setViewOd( viewOd )
+                                            .setLodDef( lodDef )
                                             .forEntity( "Domain" )
                                             .addAttribQual( "Name", context.getName() );
-        View view = task.activateObjectInstance( viewOd, qual.getView(), ActivateFlags.MULTIPLE );
+        View view = task.activateObjectInstance( lodDef, qual.getView(), ActivateFlags.MULTIPLE );
         if ( view.cursor( "Domain" ).getEntityCount() == 0 )
             throw new ZeidonException( "Dynamic domain '%s' has no values in the DB", this.toString() );
         

@@ -82,9 +82,9 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         {
             View v = viewList.get( 0 );
 
-            // Is there a genkey handler in the ViewOd?  If not, then use
+            // Is there a genkey handler in the LodDef?  If not, then use
             // the committer that will let the DB generate the keys.
-            if ( StringUtils.isBlank( v.getViewOd().getGenkeyHandler() ) )
+            if ( StringUtils.isBlank( v.getLodDef().getGenkeyHandler() ) )
                 return new CommitToSqlWithDbGeneratedKeys();
             else
                 return new CommitToDbUsingGenkeyHandler();

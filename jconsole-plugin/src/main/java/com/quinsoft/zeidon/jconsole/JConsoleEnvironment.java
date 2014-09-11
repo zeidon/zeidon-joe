@@ -199,7 +199,7 @@ public class JConsoleEnvironment extends BrowserEnvironment
         return getOe().getSystemTask()
                       .deserializeOi()
                       .setApplication( app )
-                      .setViewOd( v.lodName )
+                      .setLodDef( v.lodName )
                       .fromString( json )
                       .asJson()
                       .activateFirst();

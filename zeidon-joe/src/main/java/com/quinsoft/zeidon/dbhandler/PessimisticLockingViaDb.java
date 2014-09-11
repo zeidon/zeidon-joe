@@ -39,11 +39,11 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.UnknownViewOdException;
+import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 
 /**
@@ -60,19 +60,19 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
 
     private boolean locked = false;
     private Task task;
-    private ViewOd viewOd;
+    private LodDef lodDef;
 
     @Override
     public void initialize( ActivateOptions options ) throws PessimisticLockingException
     {
         task = options.getTask();
-        viewOd = options.getViewOd();
+        lodDef = options.getLodDef();
         acquireGlobalLockViaReentrantLock();
     }
 
     private void acquireGlobalLockViaReentrantLock()
     {
-        ReentrantLock lock = getLock( task, viewOd );
+        ReentrantLock lock = getLock( task, lodDef );
         try
         {
             if ( ! lock.tryLock(15L, TimeUnit.SECONDS) )
@@ -91,21 +91,21 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
 
     /**
      * Acquire a global lock to prevent any other task from reading the same LOD
-     * as viewOd by writing a record to the DB.
+     * as lodDef by writing a record to the DB.
      *
      * @param task
-     * @param viewOd
+     * @param lodDef
      */
     private void acquireGlobalLockViaDb()
     {
-        View vlock = createLockOi( task, viewOd.getApplication() );
+        View vlock = createLockOi( task, lodDef.getApplication() );
 
         String user = task.getUserId();
         if ( StringUtils.isBlank( user ) )
             user = "unknown";
 
         vlock.cursor( "ZeidonLock" ).createEntity()
-                                    .setAttribute( "LOD_Name", viewOd.getName() )
+                                    .setAttribute( "LOD_Name", lodDef.getName() )
                                     .setAttribute( "KeyValue", GLOBAL_KEY )
                                     .setAttribute( "UserName", user )
                                     .setAttribute( "Timestamp", new Date() )
@@ -123,7 +123,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     {
         if ( locked )
         {
-            ReentrantLock lock = getLock( task, viewOd );
+            ReentrantLock lock = getLock( task, lodDef );
             lock.unlock();
             locked = false;
         }
@@ -134,9 +134,9 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         // See if the locking view exists.
         try
         {
-            application.getViewOd( task, "ZPLOCKO" );
+            application.getLodDef( task, "ZPLOCKO" );
         }
-        catch ( UnknownViewOdException e )
+        catch ( UnknownLodDefException e )
         {
             throw new ZeidonException( "LOD for pessimistic locking (ZPLOCKO) does not exist in the application.  " +
                                        "To create one use the Utilities menu in the ER diagram tool." )
@@ -154,11 +154,11 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     public void acquireLocks( View view ) throws PessimisticLockingException
     {
         Task task = view.getTask();
-        ViewOd viewOd = view.getViewOd();
+        LodDef lodDef = view.getLodDef();
         Application application = view.getApplication();
 
         View vlock = createLockOi( task, application );
-        EntityDef root = viewOd.getRoot();
+        EntityDef root = lodDef.getRoot();
 
         // For each root entity, create a locking record in ZPLOCKO
         for ( EntityInstance ei : view.cursor( root ).eachEntity() )
@@ -168,7 +168,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                 user = "unknown";
 
             vlock.cursor( "ZeidonLock" ).createEntity()
-                                        .setAttribute( "LOD_Name", viewOd.getName() )
+                                        .setAttribute( "LOD_Name", lodDef.getName() )
                                         .setAttribute( "KeyValue", ei.getKeyString() )
                                         .setAttribute( "UserName", user )
                                         .setAttribute( "Timestamp", new Date() )
@@ -285,8 +285,8 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                     throw new PessimisticLockingException( views, "Views are from different applications" );
             }
 
-            ViewOd     viewOd = view.getViewOd();
-            EntityDef root   = viewOd.getRoot();
+            LodDef     lodDef = view.getLodDef();
+            EntityDef root   = lodDef.getRoot();
 
             // For each root entity, create a locking record in ZPLOCKO.  Normally we'd activate the locking
             // records, delete them from the OI, and then commit it.  Instead we will set the incremental
@@ -294,7 +294,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             for ( EntityInstance ei : view.cursor( root ).eachEntity() )
             {
                 vlock.cursor( "ZeidonLock" ).createEntity()
-                                            .setAttribute( "LOD_Name", viewOd.getName() )
+                                            .setAttribute( "LOD_Name", lodDef.getName() )
                                             .setAttribute( "KeyValue", ei.getKeyString() )
                                             .setIncrementalFlags( IncrementalEntityFlags.DELETED );
             }
@@ -323,26 +323,26 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         releaseLocks( list );
     }
 
-    private ReentrantLock getLock( Task task, ViewOd viewOd )
+    private ReentrantLock getLock( Task task, LodDef lodDef )
     {
         ObjectEngine oe = task.getObjectEngine();
         GlobalLocks glocks = oe.getCacheMap( GlobalLocks.class );
         if ( glocks == null )
             glocks = oe.putCacheMap( GlobalLocks.class, new GlobalLocks() );
 
-        return glocks.getLock( viewOd );
+        return glocks.getLock( lodDef );
     }
 
     private static class GlobalLocks
     {
-        private final ConcurrentMap<ViewOd, ReentrantLock> locks = new MapMaker().concurrencyLevel( 2 ).makeMap();
+        private final ConcurrentMap<LodDef, ReentrantLock> locks = new MapMaker().concurrencyLevel( 2 ).makeMap();
 
-        private ReentrantLock getLock( ViewOd viewOd )
+        private ReentrantLock getLock( LodDef lodDef )
         {
-            if ( ! locks.containsKey( viewOd ) )
-                locks.putIfAbsent( viewOd, new ReentrantLock() );
+            if ( ! locks.containsKey( lodDef ) )
+                locks.putIfAbsent( lodDef, new ReentrantLock() );
 
-            return locks.get( viewOd );
+            return locks.get( lodDef );
         }
     }
 }

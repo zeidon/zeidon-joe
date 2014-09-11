@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.ObjectEngineEventListener;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonLogger;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaOeConfiguration;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -88,7 +88,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
                     list.add( map );
                     map.put( "taskId", task.getTaskId() );
                     map.put( "application", v.getApplication().getName() );
-                    map.put( "viewOd", v.getViewOd().getName() );
+                    map.put( "lodDef", v.getLodDef().getName() );
                     map.put( "name", name );
                     map.put( "oiId", Long.toString( v.getOiId() ) );
                 }
@@ -189,10 +189,10 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
 
     private EventInfo getEventInfo( View view )
     {
-        ViewOd viewOd = view.getViewOd();
-        EventInfo info = getEventInfo( viewOd.toString() );
-        if ( info.viewOd == null )
-            info.viewOd = viewOd;
+        LodDef lodDef = view.getLodDef();
+        EventInfo info = getEventInfo( lodDef.toString() );
+        if ( info.lodDef == null )
+            info.lodDef = lodDef;
 
         return info;
     }
@@ -249,7 +249,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
 
     private class EventInfo
     {
-        ViewOd viewOd;
+        LodDef lodDef;
         long totalActivateTime = 0;
         long activates = 0;
         long totalCommitTime = 0;
@@ -297,7 +297,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         for ( View view : task.getViewList() )
         {
             Collection<String> nameList = view.getNameList();
-            task.log().info( "View %s (%s)  Names = %s", view.getId(), view.getViewOd(), nameList );
+            task.log().info( "View %s (%s)  Names = %s", view.getId(), view.getLodDef(), nameList );
         }
 
         return "Views listed in log";
@@ -354,17 +354,17 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
 
         for ( View v : task.getViewList() )
         {
-            String viewOd = v.getViewOd().getName();
-            String app = v.getViewOd().getApplication().getName();
+            String lodDef = v.getLodDef().getName();
+            String app = v.getLodDef().getApplication().getName();
             Collection<String> nameList = v.getNameList();
             if ( nameList.size() == 0 )
             {
-                list.add( String.format( "%d,%d,%s,%s", v.getId(), v.getOiId(), viewOd, app ) );
+                list.add( String.format( "%d,%d,%s,%s", v.getId(), v.getOiId(), lodDef, app ) );
             }
             else
             {
                 for ( String name : nameList )
-                    list.add( String.format( "%d,%d,%s,%s,%s", v.getId(), v.getOiId(), viewOd, app, name ) );
+                    list.add( String.format( "%d,%d,%s,%s,%s", v.getId(), v.getOiId(), lodDef, app, name ) );
             }
         }
 

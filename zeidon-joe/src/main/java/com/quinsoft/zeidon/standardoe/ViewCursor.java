@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.standardoe;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
 class ViewCursor
 {
     private final ViewImpl         view;
-    private final ViewOd           viewOd;
+    private final LodDef           lodDef;
     private final EntityCursorImpl cursorList[];
     private final ObjectInstance   objectInstance;
 
@@ -49,41 +49,41 @@ class ViewCursor
 
     /**
      * When there is a subobject cursor defined, this represents the difference in levels
-     * between recursiveRoot and its view entity level.  When there's no subobject this is 0.
+     * between recursiveRoot and its LodDef level.  When there's no subobject this is 0.
      */
     private int recursiveDiff;
     private int firstValidCursorIndex;
     private int lastValidCursorIndex;
 
-    ViewCursor( TaskImpl task, ViewImpl view, ViewOd viewOd )
+    ViewCursor( TaskImpl task, ViewImpl view, LodDef lodDef )
     {
-        this( task, view, viewOd, null, null );
+        this( task, view, lodDef, null, null );
     }
 
     ViewCursor( ViewImpl view, ViewCursor sourceCursor )
     {
-        this( sourceCursor.getTask(), view, sourceCursor.getViewOD(), sourceCursor, null );
+        this( sourceCursor.getTask(), view, sourceCursor.getLodDef(), sourceCursor, null );
     }
 
     ViewCursor( ViewImpl view, ObjectInstance oi )
     {
-        this( oi.getTask(), view, oi.getViewOd(), null, oi );
+        this( oi.getTask(), view, oi.getLodDef(), null, oi );
     }
 
     /**
      * Create and initialize the entity cursors from a source cursor.
      *
      * @param task
-     * @param viewOd
+     * @param lodDef
      * @param sourceCursor - If not null, then initialize the cursors in the new ViewCursor to point to the same entities.
      */
-    private ViewCursor(TaskImpl task, ViewImpl view, ViewOd viewOd, ViewCursor sourceCursor, ObjectInstance oi )
+    private ViewCursor(TaskImpl task, ViewImpl view, LodDef lodDef, ViewCursor sourceCursor, ObjectInstance oi )
     {
         super();
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
         this.view = view;
-        cursorList = new EntityCursorImpl[ viewOd.getEntityCount() ];
-        for ( EntityDef entityDef : viewOd.getViewEntitiesHier() )
+        cursorList = new EntityCursorImpl[ lodDef.getEntityCount() ];
+        for ( EntityDef entityDef : lodDef.getViewEntitiesHier() )
         {
             int idx = entityDef.getHierIndex();
 
@@ -127,7 +127,7 @@ class ViewCursor
         }
         else
         {
-            objectInstance = new ObjectInstance(task, viewOd);
+            objectInstance = new ObjectInstance(task, lodDef);
             resetRecursiveParent();
         }
 
@@ -141,7 +141,7 @@ class ViewCursor
 
     protected EntityCursorImpl getEntityCursor( String entityName )
     {
-        return getEntityCursor( viewOd.getEntityDef( entityName ) );
+        return getEntityCursor( lodDef.getEntityDef( entityName ) );
     }
 
     protected EntityCursorImpl getEntityCursor( EntityDef entityDef )
@@ -154,9 +154,9 @@ class ViewCursor
         return objectInstance;
     }
 
-    protected ViewOd getViewOD()
+    protected LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
     void copyEntityCursors( ViewCursor source )
@@ -183,7 +183,7 @@ class ViewCursor
      * @param recursiveParent - The EI that will become the root of the new subobject.
      *                          May be null; if null then recursiveGrandParent MUST be
      *                          non-null.
-     * @param recursiveParentEntityDef - The view entity of recursiveParent.
+     * @param recursiveParentEntityDef - The LodDef of recursiveParent.
      * @param recursiveGrandParent - The parent of recursiveParent.  Must be non-null if
      *                          recursiveParent is null.  Some subobject processing needs
      *                          to know that parent for creates/inserts.  This is undefined
@@ -226,7 +226,7 @@ class ViewCursor
         EntityInstanceImpl currentRoot = getRecursiveRoot();
         if ( currentRoot == null )
             return;
-//            throw new ZeidonException("View %s has no subobject cursors", getViewOd() );
+//            throw new ZeidonException("View %s has no subobject cursors", getLodDef() );
 
         // We need to find the ancestor of currentRoot that has the same ER entity token
         // as current root.
@@ -280,11 +280,6 @@ class ViewCursor
     ViewImpl getView()
     {
         return view;
-    }
-
-    ViewOd getViewOd()
-    {
-        return viewOd;
     }
 
     /**

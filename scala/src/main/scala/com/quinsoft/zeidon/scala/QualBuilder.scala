@@ -13,15 +13,15 @@ import com.quinsoft.zeidon._
  *
  */
 class QualBuilder( private val view: View,
-                   private val jviewOd: com.quinsoft.zeidon.objectdefinition.ViewOd )
+                   private val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef )
             extends Dynamic {
 
     val jtask = view.jtask
     val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
-    jqual.setViewOd( jviewOd )
+    jqual.setLodDef( jlodDef )
 
     def selectDynamic(entityName: String): EntityQualBuilder = {
-        val jentityDef = jviewOd.getEntityDef(entityName)
+        val jentityDef = jlodDef.getEntityDef(entityName)
         new EntityQualBuilder( this, jentityDef )
     }
 
@@ -175,7 +175,7 @@ class QualBuilder( private val view: View,
 
     class EntitySelector() extends Dynamic {
         def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.EntityDef = {
-            jviewOd.getEntityDef( entityName )
+            jlodDef.getEntityDef( entityName )
         }
     }
 }

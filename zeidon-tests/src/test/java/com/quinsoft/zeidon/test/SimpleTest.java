@@ -17,7 +17,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
@@ -58,8 +58,8 @@ class SimpleTest
 
         Task zeidonSystem = oe.getSystemTask();
         View view = zeidonSystem.activateEmptyObjectInstance( "kzwdlgxo" );
-        ViewOd viewOd = view.getViewOd();
-        EntityDef rootEntity = viewOd.getRoot();
+        LodDef lodDef = view.getLodDef();
+        EntityDef rootEntity = lodDef.getRoot();
         int entityCount = 0;
         for ( int i = 0; i < 2000; i++ )
         {
@@ -162,7 +162,7 @@ class SimpleTest
         Task zencas = oe.createTask( "ZENCAs" );
 
         View stud = new QualificationBuilder( zencas )
-                            .setViewOd( "lStudDpt" )
+                            .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
                             .addAttribQual( "Status", "A" )
                             .addAttribQual( "AND" )
@@ -176,14 +176,14 @@ class SimpleTest
 
         View stud2 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud2.json" )
-                            .setViewOd( "lStudDpt" )
+                            .setLodDef( "lStudDpt" )
                             .asJson()
                             .activateFirst();
         stud2.logObjectInstance();
 
         List<View> stud3 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud.json" )
-                            .setViewOd( "lStudDpt" )
+                            .setLodDef( "lStudDpt" )
                             .asJson()
                             .activate();
         stud3.get( 0 ).logObjectInstance();
@@ -200,7 +200,7 @@ class SimpleTest
         stud.commit( options );
 
         stud = new QualificationBuilder( zencas )
-                            .setViewOd( "lStudDpt" )
+                            .setLodDef( "lStudDpt" )
                             .addAttribQual( "eMailAddress", "kellysautter@comcast.net" )
                             .setOiSourceUrl( fileDbUrl )
                             .activate();

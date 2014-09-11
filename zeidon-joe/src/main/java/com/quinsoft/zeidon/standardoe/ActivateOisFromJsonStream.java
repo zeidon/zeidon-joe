@@ -45,7 +45,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Reads all the OIs from a given stream in JSON format.
@@ -77,7 +77,7 @@ class ActivateOisFromJsonStream implements StreamReader
     private JsonParser                    jp;
     private Application                   application;
     private boolean                       incremental;
-    private ViewOd                        viewOd;
+    private LodDef                        lodDef;
     private View                          view;
     private final List<View>              returnList;
     private String version;
@@ -151,16 +151,16 @@ class ActivateOisFromJsonStream implements StreamReader
                     throw new ZeidonException( "First field must be version" );
                 }
 
-                if ( viewOd == null )
+                if ( lodDef == null )
                     throw new ZeidonException( "JSON stream appears to start with the root entity name (%s)" +
-                                               " but the ViewOD has not been specified.", fieldName );
+                                               " but the LodDef has not been specified.", fieldName );
 
-                String rootName = viewOd.getRoot().getName();
+                String rootName = lodDef.getRoot().getName();
                 if ( ! fieldName.equals( rootName ) )
                     throw new ZeidonException( "The first field in the JSON stream must be the root entity name" +
                                                " (%) or '.meta' but was %s.", rootName, fieldName );
 
-                view = task.activateEmptyObjectInstance( viewOd );
+                view = task.activateEmptyObjectInstance( lodDef );
                 returnList.add( view );
 
                 JsonReader reader = getSimpleReaderForVersion();
@@ -269,9 +269,9 @@ class ActivateOisFromJsonStream implements StreamReader
         if ( token != JsonToken.END_OBJECT )
         {
             fieldName = jp.getCurrentName();
-            if ( !StringUtils.equals( fieldName, viewOd.getRoot().getName() ) )
+            if ( !StringUtils.equals( fieldName, lodDef.getRoot().getName() ) )
                 throw new ZeidonException( "First entity specified in OI (%s) is not the root (%s)", fieldName,
-                                           viewOd.getRoot().getName() );
+                                           lodDef.getRoot().getName() );
 
             readEntity( fieldName );
             token = jp.nextToken();
@@ -318,7 +318,7 @@ class ActivateOisFromJsonStream implements StreamReader
         String fieldName = jp.getCurrentName();
 
         assert token == JsonToken.FIELD_NAME;
-        assert viewOd.getRoot().getName().equals( fieldName );
+        assert lodDef.getRoot().getName().equals( fieldName );
 
         // If the token after reading the .oimeta is END_OBJECT then the OI is empty.
         if ( token != JsonToken.END_OBJECT )
@@ -353,7 +353,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
         assert token == JsonToken.START_OBJECT;
 
-        EntityDef entityDef = viewOd.getEntityDef( entityName );
+        EntityDef entityDef = lodDef.getEntityDef( entityName );
 
         // Read tokens until we find the token that ends the current list of entities.
         while ( ( token = jp.nextToken() ) != null )
@@ -417,7 +417,7 @@ class ActivateOisFromJsonStream implements StreamReader
                     boolean recursiveChild = false;
 
                     // Validate that the entity name is valid.
-                    EntityDef childEntity = viewOd.getEntityDef( fieldName );
+                    EntityDef childEntity = lodDef.getEntityDef( fieldName );
                     if ( childEntity.getParent() != entityDef )
                     {
                         // Check to see the childEntity is a recursive child.
@@ -565,12 +565,12 @@ class ActivateOisFromJsonStream implements StreamReader
         }
 
         if ( odName == null )
-            throw new ZeidonException( "ViewOD not specified in JSON .oimeta" );
+            throw new ZeidonException( "LodDef not specified in JSON .oimeta" );
 
-        // We don't load the ViewOD until now because it's valid JSON to reorder
+        // We don't load the LodDef until now because it's valid JSON to reorder
         // the values in the .oimeta object.
-        viewOd = application.getViewOd( task, odName );
-        view = task.activateEmptyObjectInstance( viewOd );
+        lodDef = application.getLodDef( task, odName );
+        view = task.activateEmptyObjectInstance( lodDef );
         returnList.add( view );
         JsonToken token = jp.nextToken();
 
@@ -605,7 +605,7 @@ class ActivateOisFromJsonStream implements StreamReader
         this.task = options.getTask();
         this.stream = options.getInputStream();
         this.options = options;
-        viewOd = options.getViewOd();
+        lodDef = options.getLodDef();
         return read();
     }
 

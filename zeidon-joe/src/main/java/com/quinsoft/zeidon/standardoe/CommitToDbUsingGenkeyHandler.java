@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Commits a list of OIs to a DB using a DB handler.  It will use a genkey handler to generate
@@ -70,7 +70,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
         // TODO: We're using the first view in the list but maybe we should do something different?
         //       We'd like to some day support commits across multiple DBs.
         ViewImpl firstView = viewList.get( 0 );
-        JdbcHandlerUtils helper = new JdbcHandlerUtils( this.options, firstView.getViewOd().getDatabase() );
+        JdbcHandlerUtils helper = new JdbcHandlerUtils( this.options, firstView.getLodDef().getDatabase() );
         dbHandler = helper.getDbHandler();
         genkeyHandler = helper.getGenKeyHandler();
     }
@@ -718,14 +718,14 @@ class CommitToDbUsingGenkeyHandler implements Committer
 
         for ( final ViewImpl view : viewList )
         {
-            final ViewOd viewOd = view.getViewOd();
+            final LodDef lodDef = view.getLodDef();
 
-            // Skip this if the view OD doesn't have genkeys.
+            // Skip this if the LodDef doesn't have genkeys.
             // TODO: What about foreign keys?  They have to be processed?
-//            if ( ! viewOd.hasGenKey() )
+//            if ( ! lodDef.hasGenKey() )
 //                continue;
 
-            // TODO: Get genkey handler from ViewOd.
+            // TODO: Get genkey handler from LodDef.
 
             final ObjectInstance oi = view.getObjectInstance();
 

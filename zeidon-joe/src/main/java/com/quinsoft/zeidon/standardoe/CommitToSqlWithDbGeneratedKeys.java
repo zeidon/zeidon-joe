@@ -77,7 +77,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         //       We'd like to some day support commits across multiple DBs.
         ViewImpl firstView = viewList.get( 0 );
         this.options = options;
-        JdbcHandlerUtils helper = new JdbcHandlerUtils( this.options, firstView.getViewOd().getDatabase() );
+        JdbcHandlerUtils helper = new JdbcHandlerUtils( this.options, firstView.getLodDef().getDatabase() );
         dbHandler = helper.getDbHandler();
     }
 

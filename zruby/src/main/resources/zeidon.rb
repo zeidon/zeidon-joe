@@ -129,7 +129,7 @@ module Zeidon
 
     def initialize jview
       @jview = jview
-      @jviewod = @jview.getViewOd
+      @jviewod = @jview.getLodDef
       load_cursors              
     end
 
@@ -390,9 +390,9 @@ module Zeidon
     
     def initialize(jtask, view_od_name)
       @jqual = QualificationBuilder.new( jtask )
-      @jqual.setViewOd( view_od_name )
+      @jqual.setLodDef( view_od_name )
       @entities = {}
-      jviewod = @jqual.getViewOd
+      jviewod = @jqual.getLodDef
       jviewod.getViewEntitiesHier.each do |ve|
         name = ve.getName.to_s
         @entities[ name ] = QualEntity.new( @jqual, ve )

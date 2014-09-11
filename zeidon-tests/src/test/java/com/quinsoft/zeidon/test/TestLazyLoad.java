@@ -40,7 +40,7 @@ public class TestLazyLoad
     public void testLazyLoad()
     {
         View view = new QualificationBuilder( zencas )
-                            .setViewOd( "LazyLoad" )
+                            .setLodDef( "LazyLoad" )
                             .addAttribQual( "ID", 1 )
                             .multipleRoots()
                             .activate();
@@ -59,7 +59,7 @@ public class TestLazyLoad
 
         // Lets do it again and test cursor looping.
         view = new QualificationBuilder( zencas )
-                            .setViewOd( "LazyLoad" )
+                            .setLodDef( "LazyLoad" )
                             .addAttribQual( "ID", 2 )
                             .multipleRoots()
                             .activate();
@@ -71,7 +71,7 @@ public class TestLazyLoad
 
         // Lets do it again and test accessing a child of lazy-loaded object.
         view = new QualificationBuilder( zencas )
-                            .setViewOd( "LazyLoad" )
+                            .setLodDef( "LazyLoad" )
                             .addAttribQual( "ID", 2 )
                             .multipleRoots()
                             .activate();
@@ -83,7 +83,7 @@ public class TestLazyLoad
 
         // Try again.  This time we'll turn off lazy loading.
         view = new QualificationBuilder( zencas )
-                            .setViewOd( "LazyLoad" )
+                            .setLodDef( "LazyLoad" )
                             .addAttribQual( "ID", 1 )
                             .singleRoot()
                             .activate();

@@ -5,7 +5,7 @@ package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
-import com.quinsoft.zeidon.objectdefinition.ViewOd
+import com.quinsoft.zeidon.objectdefinition.LodDef
 
 /**
  * @author dgc
@@ -29,7 +29,7 @@ class TestOperations ( val task: Task ) extends ZeidonOperations{
     }
 
     def testParams( view : View @basedOn( "lStudDpt" ) ) = {
-        println( view.ViewOd.getName )
+        println( view.LodDef.getName )
     }
 
 	def TestOper() {

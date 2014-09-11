@@ -49,7 +49,7 @@ import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -179,7 +179,7 @@ class EntityCursorImpl implements EntityCursor
                 //    1) Has the same entityDef for the cursor we're trying to set.
                 //    2) Has the same instance level for the entityDef + recursive diff.
                 //       Checking for instance level will skip over recursive suboject
-                //       instances with the same view entity.
+                //       instances with the same LodDef.
                 int level = entityDef.getLevel() + viewCursor.getRecursiveDiff();
                 for ( ; searchInstance != null; searchInstance = searchInstance.getNextHier() )
                 {
@@ -360,7 +360,7 @@ class EntityCursorImpl implements EntityCursor
 
         // Check for an edge case.  See if the EntityDef of the parent is the same as the
         // one we're about to create.  If it is then we are creating the child of a recursive
-        // relationship.  If the EntityDef is the recursive parent then the View Entity of
+        // relationship.  If the EntityDef is the recursive parent then the LodDef of
         // the new instance should be the recursive child.
         if ( parent != null &&
             newInstanceEntityDef == parent.getEntityDef() && // Recursive relationship?
@@ -453,9 +453,9 @@ class EntityCursorImpl implements EntityCursor
         return ei;
     }
 
-    protected ViewOd getViewOD()
+    protected LodDef getLodDef()
     {
-        return viewCursor.getViewOD();
+        return viewCursor.getLodDef();
     }
 
     /**
@@ -891,7 +891,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setFirst();
 
-        return setFirst( getViewOD().getEntityDef( scopingEntityName ) );
+        return setFirst( getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     @Override
@@ -943,7 +943,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setFirst( attributeName, value );
 
-        EntityDef scopingEntity = getViewOD().getEntityDef( scopingEntityName );
+        EntityDef scopingEntity = getLodDef().getEntityDef( scopingEntityName );
         return setFirst( getEntityDef().getAttribute( attributeName ), value, scopingEntity );
     }
 
@@ -1003,7 +1003,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setNext();
 
-        return setNext( getViewOD().getEntityDef( scopingEntityName ) );
+        return setNext( getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     @Override
@@ -1051,7 +1051,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setNext(getEntityDef().getAttribute( attributeName ), value);
 
-        return setNext( getEntityDef().getAttribute( attributeName ), value, getViewOD().getEntityDef( scopingEntityName ) );
+        return setNext( getEntityDef().getAttribute( attributeName ), value, getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     @Override
@@ -1165,7 +1165,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setPosition( position );
 
-        EntityDef scopingEntity = getViewOD().getEntityDef( scopingEntityName );
+        EntityDef scopingEntity = getLodDef().getEntityDef( scopingEntityName );
         EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
                                             .withScoping( getScopingEntityInstance( scopingEntity ) )
                                             .forEntityDef( getEntityDef() )
@@ -1465,7 +1465,7 @@ class EntityCursorImpl implements EntityCursor
                 if ( s.length != 2 )
                     throw new ZeidonException( "Ill-formed order keys.  Entity.attrib name expected.  Got '%s'", name );
 
-                sortEntity = getViewOD().getEntityDef( s[0] );
+                sortEntity = getLodDef().getEntityDef( s[0] );
                 name = s[1];
             }
 
@@ -1647,7 +1647,7 @@ class EntityCursorImpl implements EntityCursor
     public boolean setToSubobject()
     {
         if ( entityDef.getParent() == null )
-            throw new ZeidonException("Entity %s is the root of the View OD", getEntityDef() );
+            throw new ZeidonException("Entity %s is the root of the LodDef", getEntityDef() );
 
         if ( ! entityDef.isRecursive() )
             throw new ZeidonException("Entity %s is not recursive");
@@ -1706,7 +1706,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public EntityIterator<? extends EntityInstance> getChildren(String childEntityName)
     {
-        return getChildren( getViewOD().getEntityDef( childEntityName ) );
+        return getChildren( getLodDef().getEntityDef( childEntityName ) );
     }
 
     /**
@@ -2057,7 +2057,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return eachEntity();
 
-        return eachEntity( getViewOD().getEntityDef( scopingEntityName ) );
+        return eachEntity( getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     @Override
@@ -2078,7 +2078,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setLast();
 
-        return setLast( getViewOD().getEntityDef( scopingEntityName ) );
+        return setLast( getLodDef().getEntityDef( scopingEntityName ) );
 	}
 
 	@Override
@@ -2110,7 +2110,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setLast( attributeName, value );
 
-        return setLast( getEntityDef().getAttribute( attributeName ), value, getViewOD().getEntityDef( scopingEntityName ) );
+        return setLast( getEntityDef().getAttribute( attributeName ), value, getLodDef().getEntityDef( scopingEntityName ) );
 	}
 
 	@Override
@@ -2162,7 +2162,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setPrev();
 
-        return setPrev( getViewOD().getEntityDef( scopingEntityName ) );
+        return setPrev( getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     @Override
@@ -2187,7 +2187,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return setPrev(getEntityDef().getAttribute( attributeName ), value);
 
-        return setPrev( getEntityDef().getAttribute( attributeName ), value, getViewOD().getEntityDef( scopingEntityName ) );
+        return setPrev( getEntityDef().getAttribute( attributeName ), value, getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     @Override
@@ -2468,7 +2468,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return hasAny();
 
-        return hasAny( getViewOD().getEntityDef( scopingEntityName ) );
+        return hasAny( getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     /* (non-Javadoc)
@@ -2556,7 +2556,7 @@ class EntityCursorImpl implements EntityCursor
         if ( StringUtils.isBlank( scopingEntityName ) )
             return hasAny( attributeName, value );
 
-        return hasAny( getEntityDef().getAttribute( attributeName ), value, getViewOD().getEntityDef( scopingEntityName ) );
+        return hasAny( getEntityDef().getAttribute( attributeName ), value, getLodDef().getEntityDef( scopingEntityName ) );
     }
 
     /* (non-Javadoc)

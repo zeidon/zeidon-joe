@@ -23,7 +23,7 @@ import java.util.EnumSet;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.objectdefinition.LockingLevel;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Encapsulates all activate options.
@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.objectdefinition.ViewOd;
  */
 public class ActivateOptions extends AbstractOptionsConfiguration
 {
-    private ViewOd                 viewOd;
+    private LodDef                 lodDef;
     private View                   qualificationObject;
     private EnumSet<ActivateFlags> activateFlags;
     private LockingLevel           lockingLevel = LockingLevel.NONE;
@@ -62,7 +62,7 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     {
         super( view.getTask() );
         activateFlags = EnumSet.of( ActivateFlags.fMULTIPLE );
-        viewOd = view.getViewOd();
+        lodDef = view.getLodDef();
     }
 
     /**
@@ -137,39 +137,39 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     }
 
     /**
-     * @return the viewOd
+     * @return the lodDef
      */
-    public ViewOd getViewOd()
+    public LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
     /**
-     * @param viewOd the viewOd to set
+     * @param lodDef the lodDef to set
      */
-    public ActivateOptions setViewOd( ViewOd viewOd )
+    public ActivateOptions setLodDef( LodDef lodDef )
     {
-        this.viewOd = viewOd;
-        setLockingLevel( viewOd.getLockingLevel() );
+        this.lodDef = lodDef;
+        setLockingLevel( lodDef.getLockingLevel() );
         return this;
     }
 
-    public ActivateOptions setViewOd( TaskQualification taskQual, String viewOdName )
+    public ActivateOptions setLodDef( TaskQualification taskQual, String lodDefName )
     {
-        setViewOd( taskQual.getApplication().getViewOd( taskQual, viewOdName ) );
+        setLodDef( taskQual.getApplication().getLodDef( taskQual, lodDefName ) );
         return this;
     }
 
-    public ActivateOptions setViewOd( TaskQualification taskQual, Application app, String viewOdName )
+    public ActivateOptions setLodDef( TaskQualification taskQual, Application app, String lodDefName )
     {
-        setViewOd( app.getViewOd( taskQual, viewOdName ) );
+        setLodDef( app.getLodDef( taskQual, lodDefName ) );
         return this;
     }
 
     @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder("Options: ViewOD = ").append( viewOd.getName() );
+        StringBuilder sb = new StringBuilder("Options: LodDef = ").append( lodDef.getName() );
         sb.append( " Flags = " ).append( activateFlags );
         if ( qualificationObject != null )
             sb.append( " Qual: Yes" );
@@ -191,7 +191,7 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     {
         if ( StringUtils.isBlank( qualificationName ) )
         {
-            StringBuilder builder = new StringBuilder( viewOd.getName() );
+            StringBuilder builder = new StringBuilder( lodDef.getName() );
             builder.append( "_" );
             if ( qualificationObject == null )
                 builder.append( "ALL_ENTITIES" );
@@ -248,7 +248,7 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     @Override
     public Application getApplication()
     {
-        return viewOd.getApplication();
+        return lodDef.getApplication();
     }
 
     public Activator getActivator()

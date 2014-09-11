@@ -46,6 +46,6 @@ public class BrowserView
 
     public BrowserView( BrowserTask task, View view, String viewName )
     {
-        this( task, view.getId(), view.getOiId(), viewName, view.getViewOd().getName(), view.getViewOd().getApplication().getName() );
+        this( task, view.getId(), view.getOiId(), viewName, view.getLodDef().getName(), view.getLodDef().getApplication().getName() );
     }
 }

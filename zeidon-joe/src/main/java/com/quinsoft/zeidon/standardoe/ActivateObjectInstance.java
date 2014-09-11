@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * This class contains the logic for validating an activate and determining
@@ -76,25 +76,25 @@ class ActivateObjectInstance
     {
         // TODO: check for activate continue.
 
-        ViewOd viewOd = options.getViewOd();
-        if ( viewOd == null )
-            throw new ZeidonException( "ViewOD not specified" );
+        LodDef lodDef = options.getLodDef();
+        if ( lodDef == null )
+            throw new ZeidonException( "LodDef not specified" );
 
         EnumSet<ActivateFlags> control = options.getActivateFlags();
 
         // Make sure the OD has data records.
-        EntityDef entityDef = viewOd.getEntityDef( 0 );
+        EntityDef entityDef = lodDef.getEntityDef( 0 );
         if ( entityDef.getDataRecord() == null )
-            throw new ZeidonException("ViewOD %s does not have physical information", viewOd.getName() );
+            throw new ZeidonException("LodDef %s does not have physical information", lodDef.getName() );
 
         // If the view defaults to having pessimistic locking and the flags indicate we don't want locking
         // then make sure we are read-only.
-        if ( viewOd.getLockingLevel().isPessimisticLock() &&        // Default is locking...
+        if ( lodDef.getLockingLevel().isPessimisticLock() &&        // Default is locking...
              ! options.getLockingLevel().isPessimisticLock() &&     // But no locking on this activate
              ! control.contains( ActivateFlags.fREAD_ONLY ) )       // Read-only?
         {
-            throw new ZeidonException("The ViewOD must be activated with pessimistic locking or read-only" )
-                        .prependViewOd( viewOd );
+            throw new ZeidonException("The LodDef must be activated with pessimistic locking or read-only" )
+                        .prependLodDef( lodDef );
         }
 
         final Activator activator = selector.getActivator( getTask(), getApplication(), options );
@@ -145,10 +145,10 @@ class ActivateObjectInstance
 
     /**
      * @return Application assigned to the task.
-     * TODO: Should this return the application for the ViewOD?
+     * TODO: Should this return the application for the LodDef?
      */
     private Application getApplication()
     {
-        return options.getViewOd().getApplication();
+        return options.getLodDef().getApplication();
     }
 }

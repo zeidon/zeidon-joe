@@ -6,7 +6,7 @@ package com.quinsoft.zeidon.scala
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
 import com.quinsoft.zeidon.ZeidonException
-import com.quinsoft.zeidon.objectdefinition.ViewOd
+import com.quinsoft.zeidon.objectdefinition.LodDef
 import scala.collection.concurrent.TrieMap
 import scala.collection.mutable.WrappedArray
 
@@ -74,8 +74,8 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
 private [scala] class ObjectOperationMap() {
     val map = new TrieMap[String, ObjectOperationCaller]()
 
-    def getObjectOperation( operName: String, jviewOd: ViewOd, args: AnyRef* ) = {
-        val className = jviewOd.getApplication().getPackage() + "." + jviewOd.getLibraryName()
+    def getObjectOperation( operName: String, jlodDef: LodDef, args: AnyRef* ) = {
+        val className = jlodDef.getApplication().getPackage() + "." + jlodDef.getLibraryName()
         val key = className + "." + operName
         if ( ! map.contains( key ) )
             map += (key -> new ObjectOperationCaller( operName, className, args:_* ) )

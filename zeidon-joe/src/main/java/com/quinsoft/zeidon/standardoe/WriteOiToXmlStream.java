@@ -190,7 +190,7 @@ public class WriteOiToXmlStream implements StreamWriter
     public void writeToStream()
     {
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
-        startElement( "zOI", "zObjectName", view.getViewOd().getName(),
+        startElement( "zOI", "zObjectName", view.getLodDef().getName(),
                              "zAppName", view.getApplication().getName(),
                              "zIncreFlags", yesNo( incremental ) );
 

@@ -31,7 +31,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Lockable;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.LazyLoadLock;
 
 /**
@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.utils.LazyLoadLock;
 class ObjectInstance implements Lockable
 {
     private TaskImpl            task;
-    private final ViewOd        viewOd;
+    private final LodDef        lodDef;
 
     /**
      * A unique internal ID created for each OI.  Note this ID is unique only within
@@ -93,31 +93,31 @@ class ObjectInstance implements Lockable
 
     /**
      * This is a weak map of the ViewCursors that refer to this ObjectInstance.
-     * Note: This is currently only used if the ViewOD has physical mappings; it
+     * Note: This is currently only used if the LodDef has physical mappings; it
      * is intended to be used by merge processing for commits that are made on
      * remote servers.
      */
     private final ConcurrentMap<ViewCursor, Boolean> referringViewCursors;
 
-    ObjectInstance(TaskImpl task, ViewOd viewOd)
+    ObjectInstance(TaskImpl task, LodDef lodDef)
     {
         this.task = task;
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
         id = task.getObjectEngine().getNextObjectKey();
         uuid = task.getObjectEngine().generateUuid();
         lock = new LazyLoadLock();
         versionedInstances = new AtomicInteger( 0 );
         attributeHashkeyMap = new AttributeHashKeyMap( this );
 
-        if ( viewOd.hasPhysicalMappings() )
+        if ( lodDef.hasPhysicalMappings() )
             referringViewCursors = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
         else
             referringViewCursors = null;
     }
 
-    ViewOd getViewOd()
+    LodDef getLodDef()
     {
-        return viewOd;
+        return lodDef;
     }
 
     TaskImpl getTask()
@@ -235,7 +235,7 @@ class ObjectInstance implements Lockable
     @Override
     public String toString()
     {
-        return viewOd.toString();
+        return lodDef.toString();
     }
 
     /* (non-Javadoc)

@@ -42,7 +42,7 @@ public class TestCheetah
 	public void testActivate()
 	{
 	    new QualificationBuilder( cheetah )
-	            .setViewOd( "mVerItem" )
+	            .setLodDef( "mVerItem" )
 //	            .restricting( "VerificationItem" )
 	            .addAttribQual( "BusinessUnit", "BusinessUnitID", "=", 10 )
 	            .activate();

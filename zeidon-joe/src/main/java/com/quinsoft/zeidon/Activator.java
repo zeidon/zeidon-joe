@@ -38,7 +38,7 @@ public interface Activator
     View activate();
 
     /**
-     * Activate a subobject with subobjectRootEntity as the root.  If subobjectRootootEntity = ViewOD.root then
+     * Activate a subobject with subobjectRootEntity as the root.  If subobjectRootootEntity = LodDef.root then
      * this activates the whole OI.
      *
      * @param subobjectRootEntity

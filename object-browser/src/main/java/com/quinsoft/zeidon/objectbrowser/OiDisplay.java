@@ -45,7 +45,7 @@ import com.quinsoft.zeidon.EntityCursor.CursorStatus;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * This is the graphical panel that paints the OI display.
@@ -66,9 +66,9 @@ class OiDisplay extends JPanel
 
     private final BrowserEnvironment env;
     private final DrawingPane  drawingPane;
-    private final ViewOd       viewOd;
+    private final LodDef       lodDef;
     private final View         view;
-    private       ViewOdLayout viewOdLayout;
+    private       LodDefLayout lodDefLayout;
     private final Map<EntityDef, EntitySquare> entities;
     private       EntitySquare selectedEntity;
     private final JScrollPane scroller;
@@ -82,7 +82,7 @@ class OiDisplay extends JPanel
     {
         super( new BorderLayout() );
         this.env = env;
-        this.viewOd = view.getViewOd();
+        this.lodDef = view.getLodDef();
         this.view = view;
         this.entitySelectedListener = listener;
 
@@ -103,12 +103,12 @@ class OiDisplay extends JPanel
 
     private void setup( View view, Component parent )
     {
-        EntityDef root = viewOd.getRoot();
-        viewOdLayout = env.getOdLayout( viewOd );
+        EntityDef root = lodDef.getRoot();
+        lodDefLayout = env.getOdLayout( lodDef );
 
         EntitySquare e = new EntitySquare( this, env, null ); // Create a dummy just to get the size.
-        Dimension size = new Dimension( viewOdLayout.getWidth() * e.getPaddedSize().width,
-                                        viewOdLayout.getHeight() * e.getPaddedSize().height );
+        Dimension size = new Dimension( lodDefLayout.getWidth() * e.getPaddedSize().width,
+                                        lodDefLayout.getHeight() * e.getPaddedSize().height );
         drawingPane.setPreferredSize( size );
         drawingPane.setVisible( true );
 
@@ -125,7 +125,7 @@ class OiDisplay extends JPanel
 
     private EntitySquare addEntity( EntityDef entityDef, int left, int right )
     {
-        EntityDefLayout layout = viewOdLayout.getEntityDefLayout( entityDef );
+        EntityDefLayout layout = lodDefLayout.getEntityDefLayout( entityDef );
         EntitySquare e = new EntitySquare( this, env, layout );
 
         int totalWidth = right - left - e.getWidth();
@@ -144,7 +144,7 @@ class OiDisplay extends JPanel
         int newLeft = left;
         for ( EntityDef child : children )
         {
-            layout = viewOdLayout.getEntityDefLayout( child );
+            layout = lodDefLayout.getEntityDefLayout( child );
             int w = layout.getWidth() * e.getPaddedSize().width;
             addEntity( child, newLeft, newLeft + w );
             newLeft += w;
@@ -228,7 +228,7 @@ class OiDisplay extends JPanel
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setPaint(Color.black);
 
-            for ( EntityDef entityDef : viewOd.getViewEntitiesHier() )
+            for ( EntityDef entityDef : lodDef.getViewEntitiesHier() )
             {
                 EntityDef parent = entityDef.getParent();
                 if ( parent == null )  // If this entity is the root we don't need to draw a line.

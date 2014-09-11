@@ -23,37 +23,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
  *
  */
-class ViewOdLayout
+class LodDefLayout
 {
     private final BrowserEnvironment env;
-    private final ViewOd             viewOd;
+    private final LodDef             lodDef;
     private final int                height;
     private final int                width;
     private final Map<EntityDef, EntityDefLayout> entityLayouts;
     
     /**
      * @param env
-     * @param viewOd
+     * @param lodDef
      */
-    ViewOdLayout(BrowserEnvironment env, ViewOd viewOd)
+    LodDefLayout(BrowserEnvironment env, LodDef lodDef)
     {
         this.env = env;
-        this.viewOd = viewOd;
+        this.lodDef = lodDef;
         entityLayouts = new HashMap<EntityDef, EntityDefLayout>();
         
-        EntityDef root = viewOd.getRoot();
+        EntityDef root = lodDef.getRoot();
         
         // Following will add the entity layout to the map.
         EntityDefLayout rootLayout = new EntityDefLayout( this, root );
         
         width = rootLayout.getWidth();
-        height = viewOd.getHeight();
+        height = lodDef.getHeight();
     }
 
     void addEntityDefLayout( EntityDef entityDef, EntityDefLayout entityDefLayout )

@@ -1,4 +1,6 @@
 1.0.7
+    - Renamed ViewOd, ViewEntity, and ViewAttribute to LodDef, EntityDef, and 
+      AttributeDef.
     - Renamed oiServerUrl to oiSourceUrl in zeidon.ini.
     - ObjectEngine.createTask( appName ) now creates a NON-persistent task.
       ObjectEngine.createTask( appName, taskId ) still creates persistent tasks.

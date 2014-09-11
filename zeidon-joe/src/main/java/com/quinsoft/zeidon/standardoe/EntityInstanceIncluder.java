@@ -120,7 +120,7 @@ class EntityInstanceIncluder
         // TODO: Check for read-only target view.
 
         // TODO: Check for DataRecords
-        // TODO: Check for matching attributes if target view entity does not have a datarecord.
+        // TODO: Check for matching attributes if target LodDef does not have a datarecord.
         // TODO: Check for versioned instance.
         // TODO: Validate insert position (fnValidateInsertPosition).
         // TODO: Run constraints.

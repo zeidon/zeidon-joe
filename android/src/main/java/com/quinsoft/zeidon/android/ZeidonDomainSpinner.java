@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.domains.TableEntry;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Implements a spinner for table domain values.
@@ -117,8 +117,8 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
             return;
         
         View view = viewDelegate.findMappingView( );
-        ViewOd viewOd = view.getViewOd();
-        EntityDef entityDef = viewOd.getEntityDef( viewDelegate.getEntityName( ) );
+        LodDef lodDef = view.getLodDef();
+        EntityDef entityDef = lodDef.getEntityDef( viewDelegate.getEntityName( ) );
         AttributeDef attributeDef = entityDef.getAttribute( viewDelegate.getAttributeName() );
         Domain domain = attributeDef.getDomain();
         if ( ! ( domain instanceof TableDomain ) )

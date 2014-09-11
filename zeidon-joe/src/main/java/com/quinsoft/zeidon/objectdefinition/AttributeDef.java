@@ -166,7 +166,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
                 {
                     genKey = true;
                     entityDef.setGenKey( this );
-                    entityDef.getViewOd().setHasGenKey( true );
+                    entityDef.getLodDef().setHasGenKey( true );
                 }
                 break;
 
@@ -290,7 +290,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
 
     AttributeDef setDomain( String domainName )
     {
-        Application app = entityDef.getViewOd().getApplication();
+        Application app = entityDef.getLodDef().getApplication();
         this.domainName = domainName;
         domain = app.getDomain( domainName );
         return this;

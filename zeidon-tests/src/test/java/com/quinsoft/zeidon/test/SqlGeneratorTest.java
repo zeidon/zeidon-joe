@@ -93,13 +93,13 @@ public class SqlGeneratorTest
     /**
      * Run an activate an compare the generator results with SQL stored in a file.
      *
-     * @param viewOdName
+     * @param lodDefName
      * @param filename
      * @param qualFile - Load a qualfication object from this file.
      * @return
      * @throws IOException
      */
-    private boolean runActivate( String viewOdName, String filename, String qualFile, String taskName ) throws IOException
+    private boolean runActivate( String lodDefName, String filename, String qualFile, String taskName ) throws IOException
     {
         // Load the qual object from a file if the filename is supplied.
         View qualView = null;
@@ -111,30 +111,30 @@ public class SqlGeneratorTest
             qualView = qual.getView();
         }
 
-        return runActivate( viewOdName, filename, qualView, taskName );
+        return runActivate( lodDefName, filename, qualView, taskName );
     }
 
     /**
      * Run an activate an compare the generator results with SQL stored in a file.
      *
-     * @param viewOdName
+     * @param lodDefName
      * @param filename
      * @param qualView
      * @return
      * @throws IOException
      */
-    private boolean runActivate( String viewOdName, String filename, View qualView, String taskName ) throws IOException
+    private boolean runActivate( String lodDefName, String filename, View qualView, String taskName ) throws IOException
     {
         Task task = tasks.get( taskName );
         ActivateOptions options = new ActivateOptions( task );
-        options.setViewOd( task, viewOdName );
+        options.setLodDef( task, lodDefName );
         options.overrideConfigValue( "JdbcConfigGroupName", "TestSql" );
         options.overrideConfigValue( "BindAllValues", "N" );
         TestSqlHandler testHandler = new TestSqlHandler( task, options );
         options.setDbHandler( testHandler );
 
         // Do the activate.
-        View v = tasks.get( taskName ).activateObjectInstance( viewOdName, qualView, options );
+        View v = tasks.get( taskName ).activateObjectInstance( lodDefName, qualView, options );
         return doCompare( testHandler, v, filename );
     }
 
@@ -169,13 +169,13 @@ public class SqlGeneratorTest
         return equals;
     }
 
-    private boolean runCommit( String viewOdName, String filename, String taskName ) throws IOException
+    private boolean runCommit( String lodDefName, String filename, String taskName ) throws IOException
     {
         Task task = tasks.get( taskName );
 
         // Load the OI from a file.
         String fullFilename = CORRECT_SQL_DIR + filename + ".oi";
-        View view = task.activateOiFromFile( viewOdName, fullFilename, ActivateFlags.MULTIPLE );
+        View view = task.activateOiFromFile( lodDefName, fullFilename, ActivateFlags.MULTIPLE );
 
         CommitOptions options = new CommitOptions( task );
         options.addView( view );

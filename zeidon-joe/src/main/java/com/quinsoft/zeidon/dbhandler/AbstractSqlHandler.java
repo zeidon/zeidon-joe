@@ -401,7 +401,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( StringUtils.isBlank( entityName ) )
                 throw new ZeidonException("Qualification view is missing entity name in EntitySpec" );
 
-            EntityDef entityDef = view.getViewOd().getEntityDef( entityName );
+            EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
             QualEntity qualEntity = new QualEntity( entitySpec, entityDef );
             qualMap.put( entityDef, qualEntity );
 
@@ -435,7 +435,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 if ( ! qualAttribInstance.isAttributeNull( "EntityName"  ) )
                 {
                     String qualEntityName = qualAttribInstance.getStringFromAttribute( "EntityName" );
-                    qualAttrib.entityDef = view.getViewOd().getEntityDef( qualEntityName );
+                    qualAttrib.entityDef = view.getLodDef().getEntityDef( qualEntityName );
 
                     if ( qualAttrib.entityDef.isDerived() || qualAttrib.entityDef.isDerivedPath() ||
                          qualAttrib.entityDef.getDataRecord() == null )
@@ -596,7 +596,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         loadedInstances = new HashMap<EntityDef, Map<Object,EntityInstance>>();
         loadInOneSelect = new HashSet<>();
 
-        for ( EntityDef entityDef : view.getViewOd().getViewEntitiesHier() )
+        for ( EntityDef entityDef : view.getLodDef().getViewEntitiesHier() )
         {
             EntityDef parent = entityDef.getParent();
             if ( parent == null )
@@ -2245,7 +2245,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     /*
-     * Check to see if we've created the cached data for this view entity. If we have,
+     * Check to see if we've created the cached data for this LodDef. If we have,
      * return it, otherwise create it and put it in the cache.
      */
     EntityDefSqlData getEntityDefData( EntityDef entityDef )

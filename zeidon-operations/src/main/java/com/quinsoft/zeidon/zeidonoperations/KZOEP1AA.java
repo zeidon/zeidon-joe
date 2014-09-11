@@ -5596,9 +5596,9 @@ public class KZOEP1AA extends VmlOperation
          // Message Object Definition.  The assumption that we are making
          // below is that the first object definition that is put on the
          // app struct will be the message object definition, so if there
-         // is already a pointer in the app struct, to a ViewOD chain, then
+         // is already a pointer in the app struct, to a LodDef chain, then
          // the message object must already be preloaded. (We Hope!!!)
-         pvReturnSubtask.getApplication().getViewOd( t, MESSAGE_OBJECT_NAME );
+         pvReturnSubtask.getApplication().getLodDef( t, MESSAGE_OBJECT_NAME );
          nRC = 0;
       }
       else
@@ -11441,7 +11441,7 @@ public class KZOEP1AA extends VmlOperation
    // ENTRY:    SetUpMapLOD
    //
    // PURPOSE:  This function sets up the SEL_LOD OI for Entity or
-   //           Attribute mapping.  If a current CtrlMapView entity
+   //           Attribute mapping.  If a current CtrlMapLodDef
    //           instance exists, it positions on the related ViewObjRef
    //           entity and activates the corresponding LOD.
    //

@@ -31,13 +31,13 @@ get '/zeidon/manager' do
   %tr
     %th Task ID
     %th View Name
-    %th View OD
+    %th LodDef
     %th OI ID
   - @view_list.each do |view|
     %tr
       %td= view['taskId']
       %td= view['name']
-      %td= view['viewOd']
+      %td= view['lodDef']
       %td= view['oiId']
       %td
         %a{:href => url("/zeidon/manager/dropview?taskId=" + view['taskId'] + "&name=" + view['name'])}

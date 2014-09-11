@@ -24,7 +24,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * @author DG
@@ -38,15 +38,15 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     /**
      * Returns the application for this View.  The logic is as follows:
      *
-     *  1) Gets the application of the ViewOD.  If this application is not ZeidonSystem,
+     *  1) Gets the application of the LodDef.  If this application is not ZeidonSystem,
      *     then it returns the application.
-     *  2) If the ViewOD belongs to ZeidonSystem, then the default application of the
+     *  2) If the LodDef belongs to ZeidonSystem, then the default application of the
      *     parent task is returned.
      */
     @Override
     Application getApplication();
 
-    ViewOd getViewOd();
+    LodDef getLodDef();
     boolean isReadOnly();
     void setReadOnly( boolean readOnly );
 

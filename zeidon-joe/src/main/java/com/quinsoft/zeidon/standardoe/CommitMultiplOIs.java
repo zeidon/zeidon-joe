@@ -118,7 +118,7 @@ class CommitMultiplOIs
         for ( View v : originalViewList )
         {
             if ( v.isReadOnly() )
-                throw new ZeidonException("Attempting to commit read-only view.  View = %s", v.getViewOd().getName() );
+                throw new ZeidonException("Attempting to commit read-only view.  View = %s", v.getLodDef().getName() );
 
             ViewImpl view = ((InternalView) v).getViewImpl();
             ObjectInstance oi = view.getObjectInstance();
@@ -279,7 +279,7 @@ class CommitMultiplOIs
     {
         // Call commit constraints.
         for ( ViewImpl view : viewList )
-            view.getViewOd().executeCommitConstraint( view );
+            view.getLodDef().executeCommitConstraint( view );
     }
 
     int commit()

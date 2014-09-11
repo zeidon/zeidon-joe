@@ -125,13 +125,13 @@ public class WriteOiToPorStream implements StreamWriter
         String optimisticOIs = "0";
         String attribFlags = writeIncremental ? "1" : "0";
 
-        String name = view.getViewOd().getName();
+        String name = view.getLodDef().getName();
         if ( writer instanceof FileWriter )
             name = options.getSourceName();
 
         String header = String.format( "z%s%s%s%s%sZeidon    %8s %s %s",
                                         erDate, incremental, compressed, optimisticOIs, attribFlags,
-                                        name, view.getViewOd().getName().toUpperCase(),
+                                        name, view.getLodDef().getName().toUpperCase(),
                                         DATE_FORMATTER.print( new DateTime() ) );
         try
         {

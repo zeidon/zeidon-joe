@@ -112,11 +112,11 @@ public class AndroidUtils
      * @param filename
      * @return
      */
-    public static View activateOiFromFile( TaskQualification task, String viewOdName, String filename )
+    public static View activateOiFromFile( TaskQualification task, String lodDefName, String filename )
     {
         return new DeserializeOi( task )
                         .fromFile( filename )
-                        .setViewOd( viewOdName )
+                        .setLodDef( lodDefName )
                         .activateFirst();
     }
 }

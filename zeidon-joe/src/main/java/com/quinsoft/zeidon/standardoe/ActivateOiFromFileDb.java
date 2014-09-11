@@ -36,7 +36,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.ViewOd;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Activates an OI from a Zeidon file DB, which is OIs stored in a directory.
@@ -50,7 +50,7 @@ public class ActivateOiFromFileDb implements Activator
     private ViewImpl        view;
     private View            qual;
     private EnumSet<ActivateFlags> control;
-    private ViewOd          viewOd;
+    private LodDef          lodDef;
     private ActivateOptions options;
     private EntityDef      rootEntityDef;
     private AttributeDef   qualAttributeDef;
@@ -67,14 +67,14 @@ public class ActivateOiFromFileDb implements Activator
 
         this.task = (TaskImpl) task;
         if ( initialView == null )
-            view = (ViewImpl) task.activateEmptyObjectInstance( options.getViewOd() );
+            view = (ViewImpl) task.activateEmptyObjectInstance( options.getLodDef() );
         else
             view = ((InternalView) initialView).getViewImpl();
 
         this.qual = options.getQualificationObject();
         this.options = options;
         control = options.getActivateFlags();
-        viewOd = options.getViewOd();
+        lodDef = options.getLodDef();
         fileDbUtils = new FileDbUtils( options );
 
         return view;
@@ -95,8 +95,8 @@ public class ActivateOiFromFileDb implements Activator
 
         entitySpec.setFirst();
         String entityName = entitySpec.getAttribute( "EntityName" ).getString();
-        rootEntityDef = viewOd.getEntityDef( entityName );
-        if ( ! rootEntityDef.equals( viewOd.getRoot() ) )
+        rootEntityDef = lodDef.getEntityDef( entityName );
+        if ( ! rootEntityDef.equals( lodDef.getRoot() ) )
             throw new ZeidonException( "File DB supports qualification on the root only" );
 
         EntityCursor qualAttrib = qual.cursor( "QualAttrib" );
@@ -136,12 +136,12 @@ public class ActivateOiFromFileDb implements Activator
             return activateByQualificationName();
 
         if ( qual == null )
-            return activateFile( fileDbUtils.genFilename( viewOd, "ALL_DATA" ) );
+            return activateFile( fileDbUtils.genFilename( lodDef, "ALL_DATA" ) );
 
         validateQual();
         if ( qualAttributeDef.isKey() )
         {
-            String filename = fileDbUtils.genFilename( viewOd, fileDbUtils.genKeyQualifier( qualAttributeDef, qualValue ) );
+            String filename = fileDbUtils.genFilename( lodDef, fileDbUtils.genKeyQualifier( qualAttributeDef, qualValue ) );
             return activateFile( filename );
         }
 
@@ -151,7 +151,7 @@ public class ActivateOiFromFileDb implements Activator
     }
 
     /**
-     * Activates each of the files in the directory that have the same ViewOd until if
+     * Activates each of the files in the directory that have the same LodDef until if
      * finds the right one.
      *
      * @return
@@ -160,13 +160,13 @@ public class ActivateOiFromFileDb implements Activator
     {
         task.dblog().debug( "FileDB: performing scan of %s", fileDbUtils.getDirectoryName() );
         File dir = new File( fileDbUtils.getDirectoryName() );
-        FileFilter fileFilter = new WildcardFileFilter( viewOd.getName() + "*" + fileDbUtils.getStreamFormat().getExtension() );
+        FileFilter fileFilter = new WildcardFileFilter( lodDef.getName() + "*" + fileDbUtils.getStreamFormat().getExtension() );
         File[] files = dir.listFiles( fileFilter );
         for ( File file : files )
         {
             task.dblog().debug( "Loading %s and checking for match", file.getAbsoluteFile() );
             View v = activateFile( file.getAbsolutePath() );
-            if ( v.cursor( viewOd.getRoot() ).setFirst( qualAttributeDef, qualValue ) == CursorResult.SET )
+            if ( v.cursor( lodDef.getRoot() ).setFirst( qualAttributeDef, qualValue ) == CursorResult.SET )
             {
                 task.dblog().debug( "Got a match!" );
                 return v;
@@ -188,7 +188,7 @@ public class ActivateOiFromFileDb implements Activator
 
     private View activateByQualificationName()
     {
-        String filename = fileDbUtils.genFilename( viewOd,  options.getQualificationName() );
+        String filename = fileDbUtils.genFilename( lodDef,  options.getQualificationName() );
         return activateFile( filename );
     }
 

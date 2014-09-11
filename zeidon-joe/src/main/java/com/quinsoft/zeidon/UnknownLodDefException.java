@@ -24,13 +24,13 @@ package com.quinsoft.zeidon;
  * @author DG
  *
  */
-public class UnknownViewOdException extends ZeidonException
+public class UnknownLodDefException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
 
-    public UnknownViewOdException(String viewOdName, String resourceName, Application app )
+    public UnknownLodDefException(String lodDefName, String resourceName, Application app )
     {
-        super( "Couldn't find View OD name '%s' in '%s' for application '%s'",
-                viewOdName, resourceName, app );
+        super( "Couldn't find LOD name '%s' in '%s' for application '%s'",
+                lodDefName, resourceName, app );
     }
 }
