@@ -110,7 +110,7 @@ public class SSNDomain extends StringDomain
     	if ( internalValue == null )
     		return StringDomain.checkNullString(task.getApplication(), null);
     	
-    	if ( !contextName.isEmpty() && !internalValue.toString().isEmpty())
+    	if ( ! StringUtils.isBlank( contextName ) && ! StringUtils.isBlank( internalValue.toString() ) )
     	{
             //Object newValue = convertInternalValue( task, attributeDef, internalValue );    	
             //return newValue.toString();    	

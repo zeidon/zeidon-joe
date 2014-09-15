@@ -172,7 +172,7 @@ public class WriteOiToXmlStream implements StreamWriter
         // Loop through the children and add them.  If 'incremental' is true then
         // we want hidden entities.
         boolean first = true;
-        for ( EntityInstanceImpl child : ei.getDirectChildren( incremental ) )
+        for ( EntityInstanceImpl child : ei.getDirectChildren( incremental, false ) )
         {
             if ( first )
             {

@@ -124,7 +124,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             }
 
             // Loop through the children and add them.
-            for ( EntityInstance child : ei.getDirectChildren() )
+            for ( EntityInstance child : ei.getDirectChildren( false, false ) )
             {
                 EntityDef childEntityDef = child.getEntityDef();
                 if ( ! child.hasPrevTwin() )

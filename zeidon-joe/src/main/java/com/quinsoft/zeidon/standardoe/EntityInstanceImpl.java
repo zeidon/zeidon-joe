@@ -52,11 +52,11 @@ import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
-import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -760,7 +760,7 @@ class EntityInstanceImpl implements EntityInstance
         {
             // The calling code has indicated that there are no twins of the newly created
             // instance but we will verify because if there is then the chains will be thrown off.
-            for ( EntityInstanceImpl search : parent.getDirectChildren() )
+            for ( EntityInstanceImpl search : parent.getDirectChildren( false, false ) )
             {
                 if ( search.getEntityDef() == getEntityDef() )
                     return false; // We found a twin.
@@ -939,7 +939,7 @@ class EntityInstanceImpl implements EntityInstance
             // We didn't find a twin.  Find the last child under parent with a EntityDef
             // index < 'this' -- that will be the prev sibling.  Find the first child
             // with index > 'this' to be the next sibling.
-            for ( EntityInstanceImpl child : parent.getDirectChildren() )
+            for ( EntityInstanceImpl child : parent.getDirectChildren( false, false ) )
             {
                 EntityDef ve = child.getEntityDef();
                 if ( ve.getHierIndex() < this.getEntityDef().getHierIndex() )
@@ -1071,7 +1071,7 @@ class EntityInstanceImpl implements EntityInstance
         // have their parent-restrict delete flag set.
         if ( getEntityDef().isCheckRestrictedDelete() )
         {
-            for ( EntityInstanceImpl child : this.getDirectChildren() )
+            for ( EntityInstanceImpl child : this.getDirectChildren( false, false ) )
             {
                 if ( child.getEntityDef().isRestrictParentDelete( ) )
                     throw new ZeidonException( "Can't delete %s because of restrict constraint on child entity %s", this, child );
@@ -2322,23 +2322,17 @@ class EntityInstanceImpl implements EntityInstance
     /**
      * Loops through all the direct EI children of 'this'.
      *
-     * NOTE: this will *NOT* load lazy-load entities if they haven't already
-     * been loaded.
-     *
      * @param allowHidden
      * @return
      */
     @Override
     public EntityIterator<EntityInstanceImpl> getDirectChildren()
     {
-        return getDirectChildren( false );
+        return getDirectChildren( false, true );
     }
 
     /**
      * Loops through all the direct EI children of 'this'.
-     *
-     * NOTE: this will *NOT* load lazy-load entities if they haven't already
-     * been loaded.
      *
      * @param allowHidden
      * @return
@@ -2346,10 +2340,16 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityIterator<EntityInstanceImpl> getDirectChildren( boolean allowHidden )
     {
+        return getDirectChildren( allowHidden, true );
+    }
+
+    @Override
+    public EntityIterator<EntityInstanceImpl> getDirectChildren( boolean allowHidden, boolean allowLazyLoad )
+    {
         return new IteratorBuilder(getObjectInstance())
                         .forDirectChildren( this )
                         .allowHidden( allowHidden )
-                        .setLazyLoad( false )
+                        .setLazyLoad( allowLazyLoad )
                         .build();
     }
 
@@ -3333,9 +3333,8 @@ class EntityInstanceImpl implements EntityInstance
         getTask().log().info( "%s[%s] %s (%x:%d)", indent, entityDef.getName(), flagStr, hashCode(), getEntityKey() );
         for ( AttributeDef attributeDef : getNonNullAttributeList() )
         {
-            AttributeValue attrib = getInternalAttribute( attributeDef );
-
-            String value = attrib.getString( getTask(), attributeDef );
+            AttributeInstanceImpl attrib = getAttribute( attributeDef );
+            String value = attrib.getString( null );
 //            if ( ( flags & View.DISPLAY_EMPTY_ATTRIBS ) == 0 && StringUtils.isBlank( value ) )
 //                continue;
 //

@@ -46,13 +46,13 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
-import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
 /**
@@ -993,8 +993,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             else
             {
                 Domain domain = dataField.getAttributeDef().getDomain();
+                Object value = domain.convertExternalValue( getTask(), qualAttrib.AttributeDef, null, qualAttrib.value );
                 StringBuilder buffer = new StringBuilder();
-                getSqlValue( stmt, domain, qualAttrib.AttributeDef, buffer, qualAttrib.value );
+                getSqlValue( stmt, domain, qualAttrib.AttributeDef, buffer, value );
                 stmt.appendWhere( qualAttrib.oper, " ", buffer.toString() );
             }
         }

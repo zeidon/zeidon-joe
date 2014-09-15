@@ -119,7 +119,7 @@ class EntitySpawner
     {
         // Find all the children under linked and make sure they aren't already
         // linked with createdInstance.
-        for ( EntityInstanceImpl search : linked.getDirectChildren() )
+        for ( EntityInstanceImpl search : linked.getDirectChildren( false, false ) )
         {
             if ( search.isLinked( createdInstance ) )
                 return true;
@@ -215,7 +215,7 @@ class EntitySpawner
                 // createEntity requires it if one exists.
                 if ( relativeEntity == null )
                 {
-                    for ( EntityInstanceImpl search : linked.getDirectChildren() )
+                    for ( EntityInstanceImpl search : linked.getDirectChildren( false, false ) )
                     {
                         if ( search.getEntityDef() == searchEntityDef )
                         {
@@ -315,7 +315,7 @@ class EntitySpawner
                 // Find the first EI under searchInstance that has a EntityDef matching workEntityDef.
                 // This will be our relative instance.
                 EntityInstanceImpl relativeEntity = null;
-                for ( EntityInstanceImpl ei : searchInstance.getDirectChildren() )
+                for ( EntityInstanceImpl ei : searchInstance.getDirectChildren( false, false ) )
                 {
                     if ( ei.getEntityDef() == workEntityDef )
                     {

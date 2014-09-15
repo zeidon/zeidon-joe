@@ -6,6 +6,7 @@ package com.quinsoft.zeidon.scala
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import scala.language.dynamics
+import com.quinsoft.zeidon.ActivateFlags
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -97,6 +98,19 @@ class View( val task: Task ) extends Task( task ) {
         return builder
     }
 
+    /**
+     * Creates a new OI that is a copy of the current OI.  If there are
+     * multiple roots then only the currently selected root is cloned.
+     * Returns a view to the cloned OI.
+     */
+    def cloneRoot: View = {
+        val cloned = jview.activateOiFromOi( ActivateFlags.fSINGLE )
+        new View( cloned )
+    }
+
+    /**
+     * Creates a new View that has the same cursor positions as the current view.
+     */
     def duplicate = new View( jview.newView )
     def name( viewName: String ) = jview.setName( viewName )
     def assert = new AssertView( this )

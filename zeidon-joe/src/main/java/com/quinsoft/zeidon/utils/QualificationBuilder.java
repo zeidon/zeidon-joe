@@ -32,9 +32,9 @@ import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
-import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
@@ -124,6 +124,15 @@ public class QualificationBuilder
     }
 
     public QualificationBuilder setLodDef( String lodDefName )
+    {
+        return setLodDef( application.getLodDef( task, lodDefName ) );
+    }
+
+    /**
+     * Use setLodDef instead.
+     */
+    @Deprecated
+    public QualificationBuilder setViewOd( String lodDefName )
     {
         return setLodDef( application.getLodDef( task, lodDefName ) );
     }

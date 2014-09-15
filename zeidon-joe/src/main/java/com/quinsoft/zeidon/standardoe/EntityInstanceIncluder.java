@@ -229,7 +229,7 @@ class EntityInstanceIncluder
         EntityInstanceImpl prevInstance = null;
         EntityDef sourceChildEntityDef = null;
         EntityDef targetChildEntityDef = null;
-        for ( EntityInstanceImpl child : sourceInstance.getDirectChildren() )
+        for ( EntityInstanceImpl child : sourceInstance.getDirectChildren( false, false ) )
         {
             if ( child.isHidden() )
                 continue;

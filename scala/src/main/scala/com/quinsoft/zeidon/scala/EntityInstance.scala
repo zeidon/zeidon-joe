@@ -13,7 +13,7 @@ import com.quinsoft.zeidon.objectdefinition._
  */
 class EntityInstance( private[this] val jentityInstance: com.quinsoft.zeidon.EntityInstance)
             extends AbstractEntity( jentityInstance.getEntityDef() )
-{    
+{
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityInstance
     def delete: CursorResult = jentityInstance.deleteEntity()
     def drop: CursorResult = jentityInstance.dropEntity()

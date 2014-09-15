@@ -29,10 +29,10 @@ import com.google.common.collect.Multimap;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
-import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.standardoe.EntityComparator.AlwaysTrueComparator;
 import com.quinsoft.zeidon.standardoe.EntityComparator.InSetComparator;
 import com.quinsoft.zeidon.standardoe.EntityComparator.NonHiddenComparator;
@@ -226,7 +226,7 @@ class IteratorBuilder
             return droppedInstance;
 
         // Loop through the children of the ei to find a matching EI.
-        for ( EntityInstanceImpl ei : parent.getDirectChildren( true ) )
+        for ( EntityInstanceImpl ei : parent.getDirectChildren( true, false ) )
         {
             if ( ei.getEntityDef() == droppedInstance.getEntityDef() )
             {

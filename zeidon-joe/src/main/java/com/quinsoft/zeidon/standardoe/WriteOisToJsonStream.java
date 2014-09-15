@@ -51,7 +51,7 @@ public class WriteOisToJsonStream implements StreamWriter
     private Writer writer;
     private SerializeOi options;
     private EnumSet<WriteOiFlags> flags;
-    private Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
+    private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
     private JsonGenerator jg;
     private View currentView;
 
@@ -183,7 +183,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
             // Loop through the children and add them.
             EntityDef lastChildEntityDef = null;
-            for ( EntityInstanceImpl child : ei.getDirectChildren( true ) )
+            for ( EntityInstanceImpl child : ei.getDirectChildren( true, false ) )
             {
                 lastChildEntityDef = writeEntity( child, lastChildEntityDef );
             }

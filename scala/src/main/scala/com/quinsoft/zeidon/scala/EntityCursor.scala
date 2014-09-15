@@ -13,8 +13,8 @@ import com.quinsoft.zeidon.objectdefinition._
  * @author dgc
  *
  */
-class EntityCursor( private[this] val view: View,
-                    val jentityCursor: com.quinsoft.zeidon.EntityCursor )
+class EntityCursor( private[this]  val view: View,
+                    private[scala] val jentityCursor: com.quinsoft.zeidon.EntityCursor )
             extends AbstractEntity( jentityCursor.getEntityDef() )
             with Iterable[EntityInstance]
 {
@@ -116,6 +116,13 @@ class EntityCursor( private[this] val view: View,
             def next = new EntityInstance( iter.next() )
         }
     }
+
+    override def childrenHier = super.childrenHier.setCursor(this)
+
+    /**
+     * Returns an iterator that will iterate through the direct children of the current entity.
+     */
+    override def directChildren = super.directChildren.setCursor(this)
 
     class HashSetter extends AbstractEntity( jentityDef ) {
         var rc: Boolean = false

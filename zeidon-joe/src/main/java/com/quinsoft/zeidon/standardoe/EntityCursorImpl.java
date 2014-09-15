@@ -45,10 +45,10 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
-import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
@@ -2915,6 +2915,12 @@ class EntityCursorImpl implements EntityCursor
     public EntityIterator<? extends EntityInstance> getDirectChildren( boolean allowHidden )
     {
         return getExistingInstance().getDirectChildren( allowHidden );
+    }
+
+    @Override
+    public EntityIterator<? extends EntityInstance> getDirectChildren( boolean allowHidden, boolean allowLazyLoad )
+    {
+        return getExistingInstance().getDirectChildren( allowHidden, allowLazyLoad );
     }
 
     @Override

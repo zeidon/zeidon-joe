@@ -25,8 +25,8 @@ import java.util.UUID;
 
 import org.joda.time.DateTime;
 
-import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 
@@ -50,12 +50,12 @@ public interface EntityInstance
     EntityInstance getParent();
     EntityInstance getPrevTwin();
     EntityInstance getNextTwin();
-    
+
     /**
      * @return true if this EntityInstance has a next, non-hidden, twin.
      */
     boolean hasNextTwin();
-    
+
     /**
      * @return true if this EntityInstance has a previous, non-hidden, twin.
      */
@@ -210,9 +210,6 @@ public interface EntityInstance
     /**
      * Loops through all the direct EI children of 'this'.
      *
-     * NOTE: this will *NOT* load lazy-load entities if they haven't already
-     * been loaded.
-     *
      * @param allowHidden
      * @return
      */
@@ -221,13 +218,18 @@ public interface EntityInstance
     /**
      * Loops through all the direct EI children of 'this'.
      *
-     * NOTE: this will *NOT* load lazy-load entities if they haven't already
-     * been loaded.
-     *
      * @param allowHidden
      * @return
      */
     EntityIterator<? extends EntityInstance> getDirectChildren( boolean allowHidden );
+
+    /**
+     * Loops through all the direct EI children of 'this'.
+     *
+     * @param allowHidden
+     * @return
+     */
+    EntityIterator<? extends EntityInstance> getDirectChildren( boolean allowHidden, boolean allowLazyLoad );
 
     /**
      * Returns an iterable list of entities linked with 'this'.  If there

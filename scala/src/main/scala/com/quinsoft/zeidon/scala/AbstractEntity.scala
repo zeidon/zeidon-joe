@@ -14,16 +14,23 @@ import com.quinsoft.zeidon.objectdefinition._
  * @author dgc
  *
  */
-abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
+private[scala] abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
                         extends Dynamic {
 
     /**
      * The subclasses implement this method to get the Java EntityInstance.
      */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance
-
+    def name = jentityDef.getName()
+    def position = getEntityInstance.getPosition()
+    def maxCardinality = jentityDef.getMaxCardinality()
     def logEntity = getEntityInstance.logEntity()
     def logEntity( displayChildren: Boolean ) = getEntityInstance.logEntity( displayChildren )
+
+    def parent = {
+        val parent = getEntityInstance.getParent()
+        if ( parent == null ) null else new EntityInstance( parent )
+    }
 
     /**
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.
@@ -69,6 +76,13 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
         return getEntityInstance.setMatchingAttributesByName()
     }
 
+    def childrenHier = new EntityInstanceIterator( getEntityInstance.getChildrenHier(false) )
+
+    /**
+     * Returns an iterator that will iterate through the direct children of the current entity.
+     */
+    def directChildren = new EntityInstanceIterator( getEntityInstance.getDirectChildren() )
+
     /**
      * Called dynamically to convert an attribute name with context value into a
      * Scala AttributeInstance.
@@ -81,6 +95,14 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
     }
 
     override def toString: String = getEntityInstance.toString
+
+    override def equals(o: Any) = o match {
+        case that: EntityInstance => that.getEntityInstance == this.getEntityInstance
+        case that: com.quinsoft.zeidon.EntityInstance => that == this.getEntityInstance
+        case _ => false
+    }
+
+    override def hashCode = getEntityInstance.hashCode()
 }
 
 object AbstractEntity {
