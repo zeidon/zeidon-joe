@@ -146,3 +146,10 @@ class EntityCursor( private[this]  val view: View,
         }
     }
 }
+
+object EntityCursor {
+    /**
+     * Convert a Scala EntityCursor to a Scala EntityInstance.
+     */
+    implicit def cursor2instance( cursor: EntityCursor ) = new EntityInstance( cursor.getEntityInstance )
+}

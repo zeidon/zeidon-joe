@@ -21,6 +21,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def setValue( any: Any ) = jattributeInstance.setValue( any )
     def value = jattributeInstance.getValue()
     def name = jattributeInstance .getAttributeDef().getName()
+    def attributeDef = jattributeInstance.getAttributeDef()
 
     override def equals(other: Any) = other match {
         // If 'other' is an AttributeInstance, get its value before calling compare.
