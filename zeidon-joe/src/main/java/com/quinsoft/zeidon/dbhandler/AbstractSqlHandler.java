@@ -877,9 +877,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             cachedStmts.put( entityDef, stmt );
         }
 
+        // If we're loading multiple entities at the same time we may need to reposition
+        // on the current parent.  Get it and save it.
         EntityDef parent = entityDef.getParent();
         EntityInstance parentEi = null;
-        if ( parent != null )
+        if ( parent != null && entityCanBeLoadedAtOnce( entityDef ) )
             parentEi = view.cursor( parent ).getEntityInstance();
 
         executeLoad( view, entityDef, stmt );

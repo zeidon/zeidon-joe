@@ -7,6 +7,7 @@ import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import scala.language.dynamics
 import com.quinsoft.zeidon.ActivateFlags
+import com.quinsoft.zeidon.objectdefinition.EntityDef
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -51,6 +52,7 @@ class View( val task: Task ) extends Task( task ) {
         return this
     }
 
+    def lodDef = jlodDef
 
     def from( view: View ) = {
         jview = view.jview.newView()
@@ -120,6 +122,11 @@ class View( val task: Task ) extends Task( task ) {
     def activateOptions = jview.getActivateOptions()
     def serializeOi = jview.serializeOi()
     override def deserializeOi = jview.deserializeOi()
+
+    def cursor( entityDef: EntityDef ) = {
+        validateLodDef
+        new EntityCursor( this, jview.cursor( entityDef ) )
+    }
 
     /**
      * Returns the cursor of the root entity..

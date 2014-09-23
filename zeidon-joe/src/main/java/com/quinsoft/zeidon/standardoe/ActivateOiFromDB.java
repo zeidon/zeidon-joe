@@ -334,13 +334,9 @@ class ActivateOiFromDB implements Activator
             }
             else
             {
-                // Get the parent of the loaded instance.  We don't want to use the rootEntity cursor because
-                // that will trigger a recursive loop that attempts to load the lazyload EIs.
-                EntityInstanceImpl ei = view.cursor( rootEntityDef.getParent() ).getEntityInstance();
+                EntityInstanceImpl loadedRoot = view.cursor( rootEntityDef ).getEntityInstance();
 
-                // Should never be null since we check if any are loaded.
-                ei = ei.getFirstChildMatchingEntityDef( rootEntityDef );
-                while ( ei != null )
+                for ( EntityInstanceImpl ei : loadedRoot.getChildrenHier( true, false ) )
                 {
                     assert ! ei.isHidden() : "We have a newly loaded EI that is hidden.";
                     for ( EntityInstanceImpl t : ei.getChildrenHier( true ) )

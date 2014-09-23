@@ -1765,7 +1765,7 @@ class EntityInstanceImpl implements EntityInstance
         }
 
         // Now run this on all direct children.
-        for ( EntityInstanceImpl childInstance : getDirectChildren() )
+        for ( EntityInstanceImpl childInstance : getDirectChildren( false, false ) )
             childInstance.validateSubobject( list );
     }
 
