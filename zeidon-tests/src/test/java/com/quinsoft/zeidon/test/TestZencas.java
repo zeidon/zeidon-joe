@@ -100,6 +100,28 @@ public class TestZencas
     }
 
 	@Test
+	public void testRecursion()
+	{
+        View tst = new QualificationBuilder( zencas )
+                            .setLodDef( "TstRecur" )
+                            .addAttribQual( "ID", 407 )
+                            .activate();
+
+        EntityCursor parent = tst.cursor( "FinancialApprovalRole" );
+        EntityCursor child = tst.cursor( "FinancialApprovalRoleChild" );
+
+        child.setToSubobject();
+        CursorResult rc = parent.setFirst("ID", 77);
+        Assert.assertEquals( "Recursive setFirst didn't set the cursor", CursorResult.SET, rc );
+        Assert.assertEquals( "Bad child ID value", child.getAttribute( "ID" ).getInteger(), (Integer) 135 );
+        child.setToSubobject();
+        Assert.assertEquals( "Bad parent ID value", parent.getAttribute( "ID" ).getInteger(), (Integer) 135 );
+        View tst2 = tst.newView();
+        tst2.resetSubobjectTop();
+        Assert.assertEquals( tst2.cursor( "FinancialApprovalRole" ).getAttribute( "ID" ).getInteger(), (Integer) 76 );
+	}
+
+	@Test
 	public void testAttributeUpdated()
 	{
 	    View         testview;

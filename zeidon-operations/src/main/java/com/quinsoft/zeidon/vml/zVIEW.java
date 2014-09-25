@@ -245,6 +245,12 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
+    public void resetSubobjectTop()
+    {
+        view.resetSubobjectTop();
+    }
+
+    @Override
     public void resetSubobject()
     {
         view.resetSubobject();

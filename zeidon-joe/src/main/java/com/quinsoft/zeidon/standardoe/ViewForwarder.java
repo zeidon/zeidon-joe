@@ -455,6 +455,15 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#resetSubobjectTop()
+     */
+    @Override
+    public void resetSubobjectTop()
+    {
+        getView().resetSubobjectTop();
+    }
+
+    /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#resetSubobject()
      */
     @Override

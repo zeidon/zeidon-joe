@@ -221,6 +221,20 @@ class ViewCursor
         lastValidCursorIndex = recursiveParentEntityDef.getLastChildHier().getHierIndex();
     }
 
+    void resetSubobjectTop()
+    {
+        EntityInstanceImpl currentRoot = getRecursiveRoot();
+        if ( currentRoot == null )
+            return;
+
+        EntityDef entityDef = currentRoot.getEntityDef();
+        if ( entityDef.getRecursiveParentEntityDef() != null )
+            entityDef = entityDef.getRecursiveParentEntityDef();
+
+        view.cursor( entityDef ).resetChildCursors( null );
+        resetRecursiveParent();
+    }
+
     void resetSubobjectToParent()
     {
         EntityInstanceImpl currentRoot = getRecursiveRoot();

@@ -2896,7 +2896,15 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public String getStringFromAttribute( AttributeDef attributeDef, String contextName )
     {
-        return getAttribute( attributeDef ).getString( contextName );
+        try
+        {
+            return getAttribute( attributeDef ).getString( contextName );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef )
+                                                    .appendMessage( "ContextName: %s", contextName );
+        }
     }
 
     String getStringFromAttribute( View view, AttributeDef attributeDef, String contextName )

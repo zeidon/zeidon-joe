@@ -619,6 +619,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         viewCursor.resetSubobjectToParent();
     }
 
+    @Override
+    public void resetSubobjectTop()
+    {
+        viewCursor.resetSubobjectTop();
+    }
+
     ViewCursor getViewCursor()
     {
         return viewCursor;

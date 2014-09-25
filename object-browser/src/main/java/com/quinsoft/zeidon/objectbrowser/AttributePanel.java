@@ -31,6 +31,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -155,9 +156,10 @@ public class AttributePanel extends JPanel
                 }
 
                 int col = 0;
+                AttributeInstance attrib = ei.getAttribute( attributeDef );
                 row[col++] = attributeDef.getName();
-                row[col++] = ei.getStringFromAttribute( attributeDef, null );
-                row[col++] = ei.isAttributeUpdated( attributeDef ) ? "Y" : "";
+                row[col++] = attrib.isNull() ? null : attrib.getString( null );
+                row[col++] = attrib.isUpdated() ? "Y" : "";
                 attrModel.addRow( row );
             }
 

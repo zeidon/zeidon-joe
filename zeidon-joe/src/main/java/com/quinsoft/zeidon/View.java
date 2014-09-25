@@ -278,7 +278,20 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     View getViewByName( String name, Level level );
     void setName(String name, Level level);
 
+    /**
+     * Reset the subobject cursor back to the top-level object.
+     * (I.e. cancels all subobject cursors).
+     */
+    void resetSubobjectTop();
+
+    /**
+     * Resets the subobject cursor to point to its parent.
+     */
     void resetSubobject();
+
+    /**
+     * Reset all cursors in the view.
+     */
     void reset();
 
     /**
