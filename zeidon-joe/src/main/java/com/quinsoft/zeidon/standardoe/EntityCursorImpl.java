@@ -398,7 +398,11 @@ class EntityCursorImpl implements EntityCursor
             spawner.spawnCreate();
         }
 
+        if ( flags.contains( CreateEntityFlags.fDBHANDLER ) )
+            newInstance.dbhLoaded = true;
+
         resetChildCursors( newInstance );
+
         assert validateChains() : "Something is wrong with the chain pointers";
         return newInstance;
     }

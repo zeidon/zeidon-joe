@@ -137,6 +137,10 @@ public class SerializeOi
             if ( writer == null )
                 throw new ZeidonException( "No output destination specified." );
 
+            // If closeWriter is true then we haven't run write() yet.  Do so now.
+            if ( closeWriter )
+                write();
+
             if ( writer instanceof StringWriter )
                 return writer.toString();
 

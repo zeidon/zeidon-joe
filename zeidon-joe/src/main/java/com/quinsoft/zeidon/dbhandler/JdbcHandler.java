@@ -48,11 +48,11 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
-import com.quinsoft.zeidon.objectdefinition.RelRecord;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
 
 /**
@@ -67,6 +67,7 @@ public class JdbcHandler extends AbstractSqlHandler
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
                                                                                CreateEntityFlags.fDONT_UPDATE_OI,
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
+                                                                               CreateEntityFlags.fDBHANDLER,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
 
     private final Map<String, PreparedStatementCacheValue> cachedStatements;

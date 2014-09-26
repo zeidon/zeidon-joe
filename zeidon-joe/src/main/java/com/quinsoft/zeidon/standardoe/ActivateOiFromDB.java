@@ -18,11 +18,13 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.Collection;
 import java.util.EnumSet;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
+import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -117,6 +119,15 @@ class ActivateOiFromDB implements Activator
         }
     }
 
+    private boolean assertValid()
+    {
+        Collection<ZeidonException> exceptions = view.validateOi();
+        if ( exceptions == null )
+            return true;
+
+        throw new SubobjectValidationException( exceptions );
+    }
+
     /**
      * Activate a subobject with subobjectRootEntity as the root.  If subobjectRootootEntity = LodDef.root then
      * this activates the whole OI.
@@ -152,6 +163,7 @@ class ActivateOiFromDB implements Activator
             rc = singleActivate( subobjectRootEntity );
 
             commit = true;
+            assert assertValid();
         }
         catch ( Exception e )
         {
@@ -163,10 +175,11 @@ class ActivateOiFromDB implements Activator
         }
         finally
         {
-            oi.setIgnoreLazyLoadEntities( false );
-            view.dropNameForView( viewName );
             if ( transactionStarted )
                 dbHandler.endTransaction( commit );
+
+            oi.setIgnoreLazyLoadEntities( false );
+            view.dropNameForView( viewName );
 
             if ( timer.getMilliTime() > 2000 )
                 task.log().info( "==> Activate for %s took %s seconds", lodDef, timer );
@@ -328,25 +341,28 @@ class ActivateOiFromDB implements Activator
                 for ( EntityInstanceImpl ei : oi.getEntities() )
                 {
                     assert assertFlagsAreOff( ei ) : "Error in attrib flags.  See log for more.";
+                    assert ei.dbhLoaded == true;
                     ei.setCreated( false );
                     ei.setUpdated( false );
+                    ei.dbhLoaded = false;
                 }
             }
             else
             {
-                EntityInstanceImpl loadedRoot = view.cursor( rootEntityDef ).getEntityInstance();
+                // If we get here then we should be lazy-loading the EI.
+                assert isLazyLoad( rootEntityDef );
 
+                EntityInstanceImpl loadedRoot = view.cursor( rootEntityDef.getParent() ).getEntityInstance();
                 for ( EntityInstanceImpl ei : loadedRoot.getChildrenHier( true, false ) )
                 {
-                    assert ! ei.isHidden() : "We have a newly loaded EI that is hidden.";
-                    for ( EntityInstanceImpl t : ei.getChildrenHier( true ) )
-                    {
-                        assert assertFlagsAreOff( t ) : "Error in attrib flags.  See log for more.";
-                        t.setCreated( false );
-                        t.setUpdated( false );
-                    }
+                    if ( ! ei.dbhLoaded )
+                        continue;
 
-                    ei = ei.getNextTwin();
+                    assert ! ei.isHidden() : "We have a newly loaded EI that is hidden.";
+                    assert assertFlagsAreOff( ei ) : "Error in attrib flags.  See log for more.";
+                    ei.setCreated( false );
+                    ei.setUpdated( false );
+                    ei.dbhLoaded = false;
                 }
             }
 

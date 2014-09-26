@@ -177,6 +177,9 @@ class CommitMultiplOIs
     {
         for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
         {
+            // Sanity check to make sure dbhLoaded is always off by the time we commit.
+            assert ei.dbhLoaded == false : ei.toString() + " still has dbhLoaded flag on";
+
             EntityDef entityDef = ei.getEntityDef();
             if ( entityDef.isDerivedPath() )
                 continue;

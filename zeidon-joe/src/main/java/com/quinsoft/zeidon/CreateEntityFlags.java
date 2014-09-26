@@ -22,7 +22,7 @@ package com.quinsoft.zeidon;
 import java.util.EnumSet;
 
 /**
- * 
+ *
  * @author DG
  *
  */
@@ -33,29 +33,34 @@ public enum CreateEntityFlags
      * from the DB or files, or when cloning OIs.
      */
     fNO_SPAWNING,
-    
+
     /**
      * Ignore the max cardinality when creating entities.  Used to make debugging easier.
      */
     fIGNORE_MAX_CARDINALITY,
-    
+
     /**
-     * Normally the create sets the Update flag for the OI.  This flag prevents the 
+     * Normally the create sets the Update flag for the OI.  This flag prevents the
      * Update flag from changing.
      */
     fDONT_UPDATE_OI,
-    
+
     /**
      * Ignore the CREATE flag permissions.  Intended to be used by the DBHandler to create
      * entities that are loaded from the DB.
      */
     fIGNORE_PERMISSIONS,
-    
+
     /**
-     * Don't initialize attributes.  Used by dbhandler.
+     * Don't initialize attributes.
      */
-    fDONT_INITIALIZE_ATTRIBUTES;
-    
+    fDONT_INITIALIZE_ATTRIBUTES,
+
+    /**
+     * Indicates this entity is being created by the DBHandler.
+     */
+    fDBHANDLER;
+
     public static final EnumSet<CreateEntityFlags> DEFAULT     = EnumSet.noneOf( CreateEntityFlags.class );
-    public static final EnumSet<CreateEntityFlags> NO_SPAWNING = EnumSet.of( CreateEntityFlags.fNO_SPAWNING );  
+    public static final EnumSet<CreateEntityFlags> NO_SPAWNING = EnumSet.of( CreateEntityFlags.fNO_SPAWNING );
 }

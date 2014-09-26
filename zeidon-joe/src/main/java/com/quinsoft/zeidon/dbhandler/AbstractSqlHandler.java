@@ -79,6 +79,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     protected AbstractOptionsConfiguration options;
 
     /**
+     * When activating, this is a cast of options as ActivateOptions.
+     * I.e. activateOptions = (ActivateOptions) options.
+     */
+    protected ActivateOptions activateOptions;
+
+    /**
      * Keeps a list of entities that are joinable for this activate.
      */
     protected Map<EntityDef, List<EntityDef>> joinableChildren = new HashMap<EntityDef, List<EntityDef>>();
@@ -576,6 +582,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         this.qual = qual;
         this.activateFlags = control;
+        activateOptions = (ActivateOptions) options;
         verifyQualificationObject( view );
 
         loadedViewEntities = new HashSet<>();
@@ -768,16 +775,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     private boolean entityCanBeLoadedAtOnce( EntityDef entityDef )
     {
-        // We should only be calling this as part of an activate so this cast
-        // is safe.
-        ActivateOptions aOptions = (ActivateOptions) options;
-
         // If we're activating as part of a lazy load then we shouldn't be loading all
         // instances because lazy load indicates we want partial loading.
-        if ( aOptions.isPerformingLazyLoad() )
+        if ( activateOptions.isPerformingLazyLoad() )
             return false;
 
-        if ( aOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_LOAD_OPTIMIZATION ) )
+        if ( activateOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_LOAD_OPTIMIZATION ) )
             return false;
 
         // Can't load children of recursive entities.

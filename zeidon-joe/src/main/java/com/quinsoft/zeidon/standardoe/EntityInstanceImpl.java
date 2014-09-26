@@ -172,6 +172,7 @@ class EntityInstanceImpl implements EntityInstance
     boolean dbhNoGenKey;
     boolean dbhForeignKey;
     boolean dbhNeedsCommit;
+    boolean dbhLoaded;  // True if this EI was just loaded by the DBHandler.
 
     /**
      * AttributeInstances cannot be be shared by multiple entities because the AttributeInstance
@@ -2328,7 +2329,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityIterator<EntityInstanceImpl> getDirectChildren()
     {
-        return getDirectChildren( false, true );
+        return getDirectChildren( false, false );
     }
 
     /**

@@ -50,16 +50,16 @@ class EntityInstanceIncluder
      * @param targetOI Target OI of the include.
      * @param source The source of the include.  The new EI is linked to source.
      * @param position Specifies where the new instance is inserted relative to targetInstance.
-     * @param performValidation if true, perform validation.  Set to false by the spawner.
+     * @param rootOfInclude if true, then this is the root of the subobject being included.
      * @return Root of new entity instance.
      */
     static EntityInstanceImpl includeSubobject( EntityInstanceImpl targetInstance,
-                                                EntityDef         targetEntityDef,
+                                                EntityDef          targetEntityDef,
                                                 EntityInstanceImpl targetParent,
                                                 ObjectInstance     targetOi,
                                                 EntityInstanceImpl source,
                                                 CursorPosition     position,
-                                                boolean            performValidation )
+                                                boolean            rootOfInclude )
     {
         // If targetInstance is specified then targetParent better be its parent.
         assert targetInstance == null || targetInstance.getParent() == targetParent;
@@ -67,10 +67,23 @@ class EntityInstanceIncluder
         EntityInstanceIncluder includer =
                 new EntityInstanceIncluder( source, position, targetEntityDef, targetParent, targetInstance, targetOi );
 
-        if ( performValidation )
+        // If this is the root validate that the includes is allowed.
+        if ( rootOfInclude )
             includer.performValidation();
 
         EntityInstanceImpl newInstance = includer.performInclude();
+
+        if ( ! rootOfInclude )
+        {
+            // This is not the root of the subobject.  If the targetEntityDef is flagged
+            // as lazy load then tell the parent EI that this entityDef has already
+            // been loaded.
+            if ( targetEntityDef.getLazyLoadConfig().isLazyLoad() )
+            {
+                targetParent.getEntitiesLoadedLazily().add( targetEntityDef );
+            }
+        }
+
         EntitySpawner spawner = new EntitySpawner( newInstance );
         spawner.spawnInclude();
         includer.markRootIncluded();
@@ -208,15 +221,25 @@ class EntityInstanceIncluder
      * Creates the new target instance from sourceInstance and all child entity instances.
      */
     private EntityInstanceImpl createInstance( final EntityInstanceImpl sourceInstance,
-                                               final EntityDef         targetEntityDef,
+                                               final EntityDef          targetEntityDef,
                                                final EntityInstanceImpl targetParent,
                                                final EntityInstanceImpl targetInstance,
                                                final CursorPosition     position )
     {
         EntityInstanceImpl newInstance;
         newInstance = new EntityInstanceImpl( targetOi, targetEntityDef, targetParent, targetInstance, position );
+        assert newInstance.getEntityDef() == targetEntityDef;
+
+        // If rootInstance is null then this is the first EI that has been created so set rootInstance.
         if ( rootInstance == null )
             rootInstance = newInstance;
+        else
+        {
+            if ( targetEntityDef.getLazyLoadConfig().isLazyLoad() )
+            {
+                newInstance.getParent().getEntitiesLoadedLazily().add( targetEntityDef );
+            }
+        }
 
         // TODO: Get oldest source version? .c code has this but it looks like
         // versioned instances aren't valid.
