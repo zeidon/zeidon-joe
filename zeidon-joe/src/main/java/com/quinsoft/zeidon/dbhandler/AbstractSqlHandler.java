@@ -243,7 +243,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
             // value instead of the data field.
-            if ( stmt.commandType == SqlCommand.INSERT )
+            // If the dataField belongs to entityInstance then we'll just copy the value from the EI.  This can
+            // happen when we are loading all child entities at once.
+            if ( stmt.commandType == SqlCommand.INSERT ||
+                 dataField.getAttributeDef().getEntityDef() == entityInstance.getEntityDef() )
             {
                 Object value = entityInstance.getInternalAttributeValue( dataField.getAttributeDef() );
                 stmt.addBoundAttribute( buffer, value );
@@ -667,11 +670,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // We need to keep the set of
         jc = new ArrayList<EntityDef>();
 
+        // Keep track of entityDefs that are not joinable.  None of their
+        // children are joinable either.
+        ArrayList<EntityDef> notJoinable = new ArrayList<EntityDef>();
+
         // Get the list of all children that can be joinable.
         for ( EntityDef child : getEntityDefData( entityDef ).getJoinedChildren() )
         {
-            if ( isJoinable( child ) )
+            boolean ignoreBecauseOfParent = false;
+            for ( EntityDef parent = child.getParent(); parent != null; parent = parent.getParent() )
+            {
+                if ( notJoinable.contains( parent ) )
+                {
+                    ignoreBecauseOfParent = true;
+                    break;
+                }
+            }
+            
+            if ( ignoreBecauseOfParent == false && isJoinable( child ) )
                 jc.add( child );
+            else
+                notJoinable.add( child );
         }
 
         joinableChildren.put( entityDef, Collections.unmodifiableList( jc ) );
@@ -684,7 +703,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
 
         QualEntity qualEntity = qualMap.get( entityDef );
-        if ( qualEntity != null && qualEntity.exclude )
+        if ( qualEntity != null )
             return false;
 
         //TODO: Add check to see if child is qualified.  If it is then it's not joinable.

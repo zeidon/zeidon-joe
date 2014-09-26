@@ -9,6 +9,8 @@
 	- Activate Limit.
 	- Lazy load can be ignored--all entities will be automatically loaded.
     - Added Boolean as one of the supported Zeidon types.
+    - Fixed bug that loaded child entities with a join even if they were qualified
+      with a RESTRICTING.
     - Added functionality for Dynamic View Attributes.
     - Restricted delete if child entities were loaded with qualification.
     - Added ability to specify multiple Java Edit Formats for parsing date strings.
