@@ -68,7 +68,7 @@ public class EntitySquare extends JPanel implements MouseListener
     private static Color NOT_LOADED     = Color.LIGHT_GRAY;
 
     private final OiDisplay          oiDisplay;
-    private final EntityDefLayout   entityDefLayout;
+    private final EntityDefLayout    entityDefLayout;
     private final BrowserEnvironment env;
     private final Dimension          size;
     private final Dimension          paddedSize;
@@ -311,10 +311,20 @@ public class EntitySquare extends JPanel implements MouseListener
             JMenuItem item = new JMenuItem( "Set to subobject" );
             item.addActionListener( new SubobjectMenuListener() );
             add( item );
-
+            if ( ! getEntityDef().isRecursive() )
+                item.setEnabled( false );
+            
             item = new JMenuItem( "Reset subobject to parent" );
             item.addActionListener( new ResetSubobjectMenuListener() );
             add( item );
+            if ( ! getEntityDef().isRecursive() )
+                item.setEnabled( false );
+            
+            item = new JMenuItem( "Load LazyLoad entities" );
+            item.addActionListener( new LazyLoadEntityMenuListener() );
+            add( item );
+            if ( ! getEntityDef().getLazyLoadConfig().isLazyLoad() )
+                item.setEnabled( false );
         }
     }
 
@@ -340,6 +350,20 @@ public class EntitySquare extends JPanel implements MouseListener
         {
             EntityCursor cursor = getView().cursor( getEntityDef() );
             cursor.resetSubobjectToParent();
+            oiDisplay.repaint();
+        }
+    }
+
+    private class LazyLoadEntityMenuListener extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            getView().setLazyLoad( true );
+            getView().cursor( getEntityDef() ).setFirst();
+            getView().setLazyLoad( false );
             oiDisplay.repaint();
         }
     }
