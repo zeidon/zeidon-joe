@@ -27,6 +27,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -37,9 +38,9 @@ import com.quinsoft.zeidon.utils.JoeUtils;
 public class StringDomain extends AbstractDomain
 {
     public static final String EMPTY_STRING = "";
-    
+
     private final int maxLth;
-    
+
     public StringDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
@@ -53,7 +54,7 @@ public class StringDomain extends AbstractDomain
     /**
      * Checks to see if the application treats null strings as equal
      * to empty strings.  If so, this will convert null to "".
-     * 
+     *
      * @param string
      * @return
      */
@@ -61,17 +62,17 @@ public class StringDomain extends AbstractDomain
     {
         if ( string == null )
             return app.nullStringEqualsEmptyString() ? EMPTY_STRING : null;
-        
+
         if ( string.equals( EMPTY_STRING ) )
             return EMPTY_STRING;
-        
+
         return string.toString();
     }
 
     /**
      * Checks to see if the application for this domain treats null strings as equal
      * to empty strings.  If so, this will convert "" to null.
-     * 
+     *
      * @param string
      * @return
      */
@@ -79,7 +80,7 @@ public class StringDomain extends AbstractDomain
     {
         return checkNullString( getApplication(), string );
     }
-    
+
     @Override
     public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
     {
@@ -88,19 +89,19 @@ public class StringDomain extends AbstractDomain
             String str = JoeUtils.serializeView( (View) externalValue );
             return str;
         }
-        
+
         return checkNullString( externalValue );
     }
-    
+
     @Override
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         // It better be a string.
         if ( ! ( internalValue instanceof String ) )
             throw new InvalidAttributeValueException( attributeDef, internalValue, "Value must be a string" );
-        
+
         String string = checkNullString( internalValue );
-            
+
         if ( string != null )
         {
             // If the max length is specified for the attribute, use it instead of the domain.
@@ -125,17 +126,37 @@ public class StringDomain extends AbstractDomain
     {
         return checkNullString( internalValue );
     }
-    
+
     @Override
     public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        return Integer.parseInt( (String) internalValue );
+        try
+        {
+            return Integer.parseInt( (String) internalValue );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e )
+                    .prependAttributeDef( attributeDef )
+                    .appendMessage( "Value = %s", internalValue )
+                    .appendMessage( "contextName = %s", contextName );
+        }
     }
 
     @Override
     public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        return Double.parseDouble( (String) internalValue );
+        try
+        {
+            return Double.parseDouble( (String) internalValue );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e )
+                    .prependAttributeDef( attributeDef )
+                    .appendMessage( "Value = %s", internalValue )
+                    .appendMessage( "contextName = %s", contextName );
+        }
     }
 
     /**
@@ -148,7 +169,7 @@ public class StringDomain extends AbstractDomain
         Object value = convertExternalValue( task, attributeDef, null, externalValue );
         String s1 = checkNullString( internalValue );
         String s2 = checkNullString( value );
-        
+
         Integer rc = compareNull( task, attributeDef, s1, s2);
         if ( rc != null )
             return rc;
@@ -160,20 +181,20 @@ public class StringDomain extends AbstractDomain
             return 1;
         return 0;
     }
-    
+
     @Override
     public boolean isNull( Task task, AttributeDef attributeDef, Object value )
     {
         if ( value == null )  // Null values are always null (duh).
             return true;
-        
+
         if ( value instanceof String &&
              attributeDef.getEntityDef().getLodDef().getApplication().nullStringEqualsEmptyString() &&
              StringUtils.isBlank( (String) value ) )
         {
             return true;
         }
-        
+
         return false;
     }
 }

@@ -20,6 +20,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def isNull = jattributeInstance.isNull()
     def setValue( any: Any ) = jattributeInstance.setValue( any )
     def value = jattributeInstance.getValue()
+    def getString( contextName: String ) = jattributeInstance.getString( contextName )
     def name = jattributeInstance .getAttributeDef().getName()
     def attributeDef = jattributeInstance.getAttributeDef()
 

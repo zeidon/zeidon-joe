@@ -25,3 +25,7 @@ package com.quinsoft.zeidon.scala
 case class ViewDef( val lodName: String, val applicationName: String ) {
 
 }
+
+object ViewDef {
+    implicit def viewDef2String( viewDef : ViewDef ) = viewDef.lodName
+}

@@ -686,7 +686,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     break;
                 }
             }
-            
+
             if ( ignoreBecauseOfParent == false && isJoinable( child ) )
                 jc.add( child );
             else
@@ -835,10 +835,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
 
         if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
-            return false;
-
-        // It's part of a parent join.
-        if ( isJoinable( entityDef ) )
             return false;
 
         return true;

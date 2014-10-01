@@ -37,4 +37,6 @@ class AttributeIterator( val jentityInstance: com.quinsoft.zeidon.EntityInstance
             }
         }
     }
+
+    def each(f: AttributeInstance => Unit) = foreach(f)
 }
