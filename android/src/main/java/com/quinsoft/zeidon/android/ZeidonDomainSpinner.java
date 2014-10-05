@@ -17,7 +17,7 @@
     Copyright 2009-2014 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.android;
 
@@ -45,7 +45,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * Implements a spinner for table domain values.
- * 
+ *
  * @author dgc
  *
  */
@@ -54,7 +54,7 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
     private final ZeidonAndroidViewDelegate viewDelegate = new ZeidonAndroidViewDelegate();
     private List<TableEntry> tableEntries;
     private TableDomain tableDomain;
-    
+
     /**
      * We will register an event listener so that we can set the attribute value
      * when the spinner is selected.  However, the app may want it's own listener
@@ -82,15 +82,17 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
             /**
              * Called when a new item was selected (in the Spinner)
              */
+            @Override
             public void onItemSelected( AdapterView<?> parent, android.view.View view, int pos, long id )
             {
                 TableEntry tableEntry = (TableEntry) parent.getItemAtPosition( pos );
                 viewDelegate.setAttribute( tableEntry.getInternalValue() );
-                
+
                 if ( selectedListener != null )
                     selectedListener.onItemSelected( parent, view, pos, id );
             }
 
+            @Override
             public void onNothingSelected( AdapterView<?> parent )
             {
                 if ( selectedListener != null )
@@ -100,7 +102,7 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
         });
     }
 
-    
+
     @Override
     public void setOnItemSelectedListener( OnItemSelectedListener listener )
     {
@@ -115,7 +117,7 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
     {
         if ( tableDomain != null )
             return;
-        
+
         View view = viewDelegate.findMappingView( );
         LodDef lodDef = view.getLodDef();
         EntityDef entityDef = lodDef.getEntityDef( viewDelegate.getEntityName( ) );
@@ -124,7 +126,7 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
         if ( ! ( domain instanceof TableDomain ) )
             throw new ZeidonException( "Domain for attribute is not a TableDomain" )
                             .prependAttributeDef( attributeDef );
-        
+
         tableDomain = (TableDomain) domain;
         String contextName = viewDelegate.getContextName();
         Task task = viewDelegate.findTaskQualification( ).getTask();
@@ -138,23 +140,23 @@ public class ZeidonDomainSpinner extends Spinner implements ZeidonDisplayView, Z
     {
         viewDelegate.setParentView( parent );
     }
-    
+
     @Override
     public void setFromOi()
     {
         initalizeAdapter();
-        
+
         viewDelegate.setEntityInstance();
         String value = viewDelegate.getStringFromAttribute( );
         int count = 0;
         for ( TableEntry entry : tableEntries )
         {
-            if ( entry.getExternalValue().equals( value ) )
+            if ( entry.getInternalValue().equals( value ) )
             {
                 setSelection( count );
                 break;
             }
-            
+
             count++;
         }
     }
