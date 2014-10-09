@@ -111,6 +111,10 @@ class QualBuilder( private val view: View,
         this
     }
 
+    def readOnly = {
+        jqual.readOnly()
+        this
+    }
     def activate(): View = {
         view.jview = jqual.activate()
         return view

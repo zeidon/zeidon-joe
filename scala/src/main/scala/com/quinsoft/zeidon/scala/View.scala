@@ -106,6 +106,7 @@ class View( val task: Task ) extends Task( task ) {
      * Returns a view to the cloned OI.
      */
     def cloneRoot: View = {
+        validateNonEmpty
         val cloned = jview.activateOiFromOi( ActivateFlags.fSINGLE )
         new View( cloned )
     }
@@ -113,18 +114,18 @@ class View( val task: Task ) extends Task( task ) {
     /**
      * Creates a new View that has the same cursor positions as the current view.
      */
-    def duplicate = new View( jview.newView )
-    def name( viewName: String ) = jview.setName( viewName )
+    def duplicate = { validateNonEmpty; new View( jview.newView ) }
+    def name( viewName: String ) = { validateNonEmpty; jview.setName( viewName ) }
     def assert = new AssertView( this )
     def odName = if ( jlodDef == null ) "*not specified*" else jlodDef.getName
-    def isEmpty = jview.isEmpty()
-    def logObjectInstance = jview.logObjectInstance()
-    def activateOptions = jview.getActivateOptions()
-    def serializeOi = jview.serializeOi()
-    override def deserializeOi = jview.deserializeOi()
+    def isEmpty = { validateNonEmpty; jview.isEmpty() }
+    def logObjectInstance = { validateNonEmpty; jview.logObjectInstance() }
+    def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
+    def serializeOi = { validateNonEmpty; jview.serializeOi() }
+    override def deserializeOi = { validateNonEmpty; jview.deserializeOi() }
 
     def cursor( entityDef: EntityDef ) = {
-        validateLodDef
+        validateNonEmpty
         new EntityCursor( this, jview.cursor( entityDef ) )
     }
 
@@ -132,7 +133,7 @@ class View( val task: Task ) extends Task( task ) {
      * Returns the cursor of the root entity..
      */
     def root = {
-        validateLodDef
+        validateNonEmpty
         new EntityCursor( this, jview.cursor( jlodDef.getRoot() ) )
     }
 
@@ -141,7 +142,7 @@ class View( val task: Task ) extends Task( task ) {
      * is used to find the entity cursor for a view.
      */
     def selectDynamic( entityName: String ): EntityCursor = {
-        validateLodDef
+        validateNonEmpty
 
         val jentityDef = jlodDef.getEntityDef( entityName )
         val jcur = jview.cursor( jentityDef )
@@ -153,7 +154,7 @@ class View( val task: Task ) extends Task( task ) {
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
-        validateLodDef
+        validateNonEmpty
 
         val oe = task.objectEngine
         val oper = oe.objectOperationMap.getObjectOperation( operationName, jlodDef, args: _* )
@@ -168,6 +169,11 @@ class View( val task: Task ) extends Task( task ) {
     private def validateLodDef: Unit = {
         if ( jlodDef == null )
             throw new ZeidonException( "LOD name not established for this View" )
+    }
+
+    private def validateNonEmpty: Unit = {
+        if ( jview == null )
+            throw new ZeidonException( "View does not have a valid OI.  Did you forget to call activateEmpty()?" )
     }
 
     class LodChooser extends Dynamic {

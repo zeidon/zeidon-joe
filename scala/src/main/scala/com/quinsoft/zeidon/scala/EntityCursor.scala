@@ -44,7 +44,7 @@ class EntityCursor( private[this]  val view: View,
     def include( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = {
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
-
+    def copySubobject( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.copySubobject( source, position )
     def count = jentityCursor.getEntityCount()
 
     def setFirst = jentityCursor.setFirst().isSet()
