@@ -53,6 +53,11 @@
         </dependency>
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>zeidon-joe</artifactId>
+            <version>${project.parent.version}</version>  
+        </dependency>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
             <artifactId>object-browser</artifactId>
             <version>${project.parent.version}</version>  
         </dependency>

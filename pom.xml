@@ -95,7 +95,9 @@
 
     <profiles>
         <!-- Put the test projects under a profile that is normally included.  This lets
-             us exclude the test projects when we are deploying to remote repos.
+             us exclude the test projects when we are deploying to remote repos.  Exclude
+	     with:
+	         mvn '-P!test-projects'
         -->
          <profile>
             <id>test-projects</id>

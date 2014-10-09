@@ -17,7 +17,7 @@
     Copyright 2009-2014 QuinSoft
  */
 
-package com.quinsoft.zeidon.test;
+package com.quinsoft.zeidon.standardoe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,8 @@ public class TestSqlHandler extends JdbcHandler
             max = Math.min(  max, entityDef.getMaxCardinality() );
         for ( int i = 0; i < max; i++ )
         {
-            csr.createEntity( CreateEntityFlags.fIGNORE_PERMISSIONS );
+            EntityInstanceImpl ei = (EntityInstanceImpl) csr.createEntity( CreateEntityFlags.fIGNORE_PERMISSIONS );
+            ei.dbhLoaded = true;
             for ( AttributeDef key : entityDef.getAttributes() )
             {
                 if ( key.isKey() || key.isForeignKey() )
@@ -101,6 +102,7 @@ public class TestSqlHandler extends JdbcHandler
     @Override
     protected int executeSql(String sql)
     {
+        task.dblog().debug( "<SQL>\n%s\n</SQL>", sql );
         sqlCommands.add( sql );
         return 0;
     }
