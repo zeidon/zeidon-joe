@@ -163,7 +163,8 @@ class ActivateOiFromDB implements Activator
             rc = singleActivate( subobjectRootEntity );
 
             commit = true;
-            assert assertValid();
+
+//            assert assertValid();
         }
         catch ( Exception e )
         {
