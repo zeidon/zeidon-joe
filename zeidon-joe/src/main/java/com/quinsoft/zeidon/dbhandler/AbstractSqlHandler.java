@@ -243,10 +243,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
             // value instead of the data field.
-            // If the dataField belongs to entityInstance then we'll just copy the value from the EI.  This can
-            // happen when we are loading all child entities at once.
-            if ( stmt.commandType == SqlCommand.INSERT ||
-                 dataField.getAttributeDef().getEntityDef() == entityInstance.getEntityDef() )
+            if ( stmt.commandType == SqlCommand.INSERT )
             {
                 Object value = entityInstance.getInternalAttributeValue( dataField.getAttributeDef() );
                 stmt.addBoundAttribute( buffer, value );
@@ -835,6 +832,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
 
         if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
+            return false;
+
+        if ( entityDef.getParent() != null && qualMap.containsKey( entityDef ) )
             return false;
 
         return true;

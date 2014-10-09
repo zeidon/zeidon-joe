@@ -72,6 +72,29 @@ public class SerializeOi
         addViews( views );
     }
 
+    public SerializeOi toTempFile()
+    {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "Specify at least one view before calling toTempFile()" );
+
+        View view = viewList.get( 0 );
+        String prefix = view.getLodDef().getName() + "_";
+        try
+        {
+
+            File file = File.createTempFile( prefix, getFormat().getExtension() );
+            writer = new FileWriter( file );
+            resourceName = file.getAbsolutePath();
+            view.log().debug( "Writing views to temp file %s", resourceName );
+        }
+        catch ( IOException e )
+        {
+            throw ZeidonException.wrapException( e );
+        }
+
+        return this;
+    }
+
     public SerializeOi toFile( String filename )
     {
         try

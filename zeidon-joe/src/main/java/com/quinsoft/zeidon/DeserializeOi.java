@@ -395,8 +395,9 @@ public class DeserializeOi
         return version;
     }
 
-    public void setVersion( String version )
+    public DeserializeOi setVersion( String version )
     {
         this.version = version;
+        return this;
     }
 }

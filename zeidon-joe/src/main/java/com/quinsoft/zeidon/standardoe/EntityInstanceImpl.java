@@ -1278,13 +1278,17 @@ class EntityInstanceImpl implements EntityInstance
      */
     static private AttributeDef checkForAllPersistentAttributes( EntityDef source, EntityDef target )
     {
-        for ( AttributeDef va : target.getAttributes() )
+        for ( AttributeDef attr : target.getAttributes() )
         {
-            if ( ! va.isPersistent() )
+            if ( ! attr.isPersistent() )
                 continue;
 
-            if ( source.getAttribute( va.getName(), false ) == null )
-                return va;
+            // It's ok if autoseq is missing because it's maintained by the relationship.
+            if ( attr.isAutoSeq() )
+                continue;
+
+            if ( source.getAttribute( attr.getName(), false ) == null )
+                return attr;
         }
 
         return null;
@@ -1362,7 +1366,8 @@ class EntityInstanceImpl implements EntityInstance
         }
         */
 
-        ZeidonException ex = new ZeidonException( "Attempting to link instances that don't have matching attributes" );
+        ZeidonException ex = new ZeidonException( "Attempting to link instances that don't have matching attributes.  "
+                                                + "You probably need to re-save the target LOD." );
         ex.appendMessage( "Source instance = %s", source );
         ex.appendMessage( "Target instance type = %s", target );
         ex.appendMessage( "Missing attribute = %s.%s.%s",

@@ -39,15 +39,15 @@ public class RegularExpressionDomain extends StringDomain
     {
         super( application, domainProperties, task );
     }
-    
+
     @Override
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         String string = checkNullString( internalValue );
-        
+
         // Validate string length
         super.validateInternalValue( task, attributeDef, string );
-        
+
         DomainContext context = getContext( task, null );
         context.validateInternalValue( task, attributeDef, string ); // Validate the regex.
     }
@@ -57,7 +57,7 @@ public class RegularExpressionDomain extends StringDomain
     {
         return new RegexContext( this );
     }
-    
+
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
@@ -74,7 +74,7 @@ public class RegularExpressionDomain extends StringDomain
 		{
 			super(domain);
 		}
-    	
+
 	    @Override
 	    public void validateInternalValue( Task task, AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException
 	    {
@@ -96,19 +96,5 @@ public class RegularExpressionDomain extends StringDomain
 	        else
 	            super.setAttribute( reader );
 	    }
-
-        @Override
-        public String convertToString( Task task, AttributeDef attributeDef, Object internalValue )
-        {
-            String string = super.convertToString( task, attributeDef, internalValue );
-            Matcher m = pattern.matcher( string );
-            if ( ! m.matches() )
-                return string;  // TODO: Should this be an error?
-            
-            if ( m.groupCount() == 0 )
-                return m.group( 0 );
-            
-            return m.group( 1 );
-        }
     }
 }
