@@ -255,21 +255,19 @@ public class DoubleDomain extends AbstractNumericDomain
                 }
 
                 int idx = Math.max( ps.getErrorIndex(), ps.getIndex() );
-                if ( idx != str.length() ) { throw new InvalidAttributeValueException(
-                                                                                       attributeDef,
-                                                                                       str,
-                                                                                       "Error parsing '"
-                                                                                               + str
-                                                                                               + "' at position "
-                                                                                               + ( idx + 1 ) ); }
+                if ( idx != str.length() )
+                {
+                    throw new InvalidAttributeValueException( attributeDef, str, "Error parsing '" + str
+                            + "' at position " + ( idx + 1 ) );
+                }
 
                 return d;
             }
 
             throw new InvalidAttributeValueException( attributeDef, externalValue,
-                                                      "Can't convert '%s' to Double", externalValue
-                                                              .getClass().getName() );
-        }
+                                                      "Can't convert '%s' to Double",
+                                                      externalValue.getClass().getName() );
+       }
 
         @Override
         public void setAttribute(PortableFileReader reader)
