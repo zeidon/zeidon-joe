@@ -5,6 +5,7 @@ package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
 import com.quinsoft.zeidon._
+import util.control.Breaks._
 
 /**
  * A trait that is added to a Scala object to give the object VML-like syntax.
@@ -40,6 +41,12 @@ trait ZeidonOperations {
       new SetCursorResult( cursor.jentityCursor.setNext(), cursor )
     }
 
+    /**
+     * For use inside of view.Entity.each{} loops, this will break execution of the
+     * current entity cursor and continue with the next.
+     */
+    def next() = break()
+
     def log = task.jtask.log()
 
     class EntityIterator( val cursor: EntityCursor ) {
@@ -67,9 +74,9 @@ trait ZeidonOperations {
 
       def DO( func: => Unit ) = {
         if ( scopingEntity != null )
-            cursor.iterator( scopingEntity ).foreach( ei => { if ( predicate() ) func } )
+            cursor.iterator( scopingEntity ).foreach( ei => { if ( predicate() ) breakable { func } } )
         else
-            cursor.iterator.foreach( ei => { if ( predicate() ) func } )
+            cursor.iterator.foreach( ei => { if ( predicate() ) breakable { func } } )
       }
 
       /*

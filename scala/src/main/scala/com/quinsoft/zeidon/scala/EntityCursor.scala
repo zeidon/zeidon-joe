@@ -7,6 +7,7 @@ import scala.language.dynamics
 import scala.collection.Iterable
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition._
+import util.control.Breaks._
 
 /**
  * Scala wrapper around a Ze
@@ -98,7 +99,9 @@ class EntityCursor( private[this]  val view: View,
         while ( iter.hasNext() )
         {
             val ei = iter.next()
-            looper
+            breakable {
+                looper
+            }
         }
     }
 

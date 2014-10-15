@@ -18,9 +18,10 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     var contextName: String = null
 
     def isNull = jattributeInstance.isNull()
+    def isEmpty = jattributeInstance.isNull() || jattributeInstance.compare( "" ) == 0
     def setValue( any: Any ) = jattributeInstance.setValue( any )
     def value = jattributeInstance.getValue()
-    def getString( contextName: String ) = jattributeInstance.getString( contextName )
+    def getString( contextName: String = null ) = jattributeInstance.getString( contextName )
     def name = jattributeInstance .getAttributeDef().getName()
     def attributeDef = jattributeInstance.getAttributeDef()
 

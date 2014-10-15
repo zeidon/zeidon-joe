@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon.EntityIterator
+import util.control.Breaks._
 
 /**
  * Scala iterator wrapper around Java entity iterator.
@@ -41,6 +42,11 @@ class EntityInstanceIterator( val jiterator: EntityIterator[_]) extends Iterable
                     entityCursor.jentityCursor.setCursor( ei )
                 ei
             }
+
+            /**
+             * Override foreach so we can wrap the call to function f with breakable.
+             */
+            override def foreach[U](f: EntityInstance => U) { while (hasNext) breakable{ f(next()) } }
         }
     }
 }
