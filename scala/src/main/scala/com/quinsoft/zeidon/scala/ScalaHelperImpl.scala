@@ -23,8 +23,7 @@ class ScalaHelperImpl extends ScalaHelper {
                                  loader: ClassLoader ): Integer = {
       val jlodDef = jview.getLodDef()
       val application = jlodDef.getApplication()
-      val objName = if ( jlodDef.getLibraryName() != null ) jlodDef.getLibraryName() else jlodDef.getName()
-      val className = application.getPackage() + "." + objName
+      val className = jlodDef.getSourceFileName()
       val operationsClass = loader.loadClass( className );
       val constructors = operationsClass.getConstructors()
       val constructor = constructors(0)
