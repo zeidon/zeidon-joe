@@ -21,6 +21,7 @@ package com.quinsoft.zeidon.domains;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -55,8 +56,8 @@ public class BooleanDomain extends AbstractDomain
      * @see com.quinsoft.zeidon.domains.Domain#convertExternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.String, java.lang.Object)
      */
     @Override
-    public Object convertExternalValue( Task task, AttributeDef attributeDef, String contextName,
-                                        Object externalValue ) throws InvalidAttributeValueException
+    public Object convertExternalValue( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef,
+                                        String contextName, Object externalValue ) throws InvalidAttributeValueException
     {
         if ( externalValue == null )
             return null;

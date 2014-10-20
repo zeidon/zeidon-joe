@@ -69,7 +69,7 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
         if ( domain instanceof DateTimeDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( getTask(), attributeDef, null, value );
+            Object v = domain.convertExternalValue( getTask(), null, attributeDef, null, value );
             String str = dateTimeFormatter.print( (DateTime) v );
             buffer.append( "#" ).append( str ).append( "#" );
             return true;
@@ -78,7 +78,7 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
         if ( domain instanceof DateDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( getTask(), attributeDef, null, value );
+            Object v = domain.convertExternalValue( getTask(), null, attributeDef, null, value );
             String str = dateFormatter.print( (DateTime) v );
             buffer.append( "#" ).append( str ).append( "#" );
             return true;

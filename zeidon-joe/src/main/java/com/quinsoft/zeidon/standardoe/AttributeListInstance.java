@@ -47,7 +47,8 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  */
 class AttributeListInstance
 {
-    private final EntityDef             entityDef;
+    private final EntityDef entityDef;
+    private final EntityInstanceImpl entityInstance;
 
     /**
      * Map of persistent attributes. Linked entities will reference the same
@@ -187,6 +188,7 @@ class AttributeListInstance
 
     private AttributeListInstance(EntityInstanceImpl entityInstance)
     {
+        this.entityInstance = entityInstance;
         entityDef = entityInstance.getEntityDef();
     }
 
@@ -243,6 +245,7 @@ class AttributeListInstance
 
     /**
      * Copies attribute values and flags from source list to 'this'.
+     *
      * @param task TODO
      * @param sourceList
      * @param copyPersist
@@ -253,15 +256,15 @@ class AttributeListInstance
     AttributeListInstance copyAttributes( TaskImpl task, AttributeListInstance sourceList,
                                           boolean copyPersist, boolean copyUpdateFlags )
     {
-        for ( AttributeDef AttributeDef : sourceList.getNonNullAttributeList(task) )
+        for ( AttributeDef attributeDef : sourceList.getNonNullAttributeList(task) )
         {
-            if ( AttributeDef.isPersistent() && !copyPersist )
+            if ( attributeDef.isPersistent() && !copyPersist )
                 continue;
 
-            AttributeValue source = sourceList.getAttribute( AttributeDef );
-            AttributeValue target = getAttribute( AttributeDef );
-            Object internalValue = sourceList.getAttribute( AttributeDef ).getInternalValue();
-            target.setInternalValue( task, AttributeDef, internalValue, true );
+            AttributeValue source = sourceList.getAttribute( attributeDef );
+            AttributeValue target = getAttribute( attributeDef );
+            Object internalValue = sourceList.getAttribute( attributeDef ).getInternalValue();
+            target.setInternalValue( task, attributeDef, internalValue, true );
 
             if ( copyUpdateFlags )
                 target.copyUpdateFlags( source );

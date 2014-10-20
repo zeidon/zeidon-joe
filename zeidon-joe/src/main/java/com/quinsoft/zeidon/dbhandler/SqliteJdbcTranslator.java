@@ -85,7 +85,7 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
         // Sqlite stores booleans as integers.
         if ( domain instanceof BooleanDomain )
         {
-            Object b = domain.convertExternalValue( getTask(), attributeDef, null, value );
+            Object b = domain.convertExternalValue( getTask(), null, attributeDef, null, value );
             buffer.append( (Boolean) b ? "1" : "0" );
             return true;
         }

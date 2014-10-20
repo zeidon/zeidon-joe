@@ -533,7 +533,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // internal value.
                     String value = qualAttribInstance.getAttribute( "Value" ).getString();
                     Domain domain = qualAttrib.attributeDef.getDomain();
-                    Object v = domain.convertExternalValue( task, qualAttrib.attributeDef, null, value );
+                    Object v = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
                     qualAttrib.value = domain.convertToString( task, qualAttrib.attributeDef, v );
                 }
 
@@ -1025,9 +1025,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             else
             {
                 Domain domain = dataField.getAttributeDef().getDomain();
-                Object value = domain.convertExternalValue( getTask(), qualAttrib.attributeDef, null, qualAttrib.value );
                 StringBuilder buffer = new StringBuilder();
-                getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, value );
+                getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, qualAttrib.value );
                 stmt.appendWhere( qualAttrib.oper, " ", buffer.toString() );
             }
         }

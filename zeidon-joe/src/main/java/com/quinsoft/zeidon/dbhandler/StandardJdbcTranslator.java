@@ -144,7 +144,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( domain instanceof DateTimeDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( task, attributeDef, null, value );
+            Object v = domain.convertExternalValue( task, null, attributeDef, null, value );
             String str = dateTimeFormatter.print( (DateTime) v );
             return appendString( stmt, buffer, str );
         }
@@ -152,7 +152,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( domain instanceof DateDomain )
         {
             // Convert the value (likely a string) to a date.
-            Object v = domain.convertExternalValue( task, attributeDef, null, value );
+            Object v = domain.convertExternalValue( task, null, attributeDef, null, value );
             String str = dateFormatter.print( (DateTime) v );
             return appendString( stmt, buffer, str );
         }
@@ -164,7 +164,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
 
         if ( domain instanceof BooleanDomain )
         {
-            Object b = domain.convertExternalValue( task, attributeDef, null, value );
+            Object b = domain.convertExternalValue( task, null, attributeDef, null, value );
             buffer.append( (Boolean) b ? "true" : "false" );
             return true;
         }

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -48,7 +49,7 @@ public class AbstractTableDomain extends AbstractDomain implements TableDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         DomainContext context = getContext( task, contextName );
         return context.convertExternalValue( task, attributeDef, externalValue );

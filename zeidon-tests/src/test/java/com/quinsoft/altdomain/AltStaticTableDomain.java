@@ -26,6 +26,7 @@ import java.util.Map;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -56,7 +57,7 @@ public class AltStaticTableDomain extends StaticTableDomain
 
     
     @Override
-    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
     	Object value = null;
         
@@ -69,7 +70,7 @@ public class AltStaticTableDomain extends StaticTableDomain
     		// throw the exception.
     		// KJS 02/06/14 - Since this is a static table domain, I believe "value" will always
     		// be a string. 
-            value = convertExternalValue( task, attributeDef, null, externalValue );   		
+            value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );   		
     	}
     	catch ( Throwable t )
     	{

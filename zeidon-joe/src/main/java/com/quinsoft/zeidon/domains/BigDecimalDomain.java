@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -41,7 +42,7 @@ public class BigDecimalDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue == null )
             return null;
@@ -70,17 +71,17 @@ public class BigDecimalDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        BigDecimal num = (BigDecimal) convertExternalValue( task, attributeDef, null, operand );
+        BigDecimal num = (BigDecimal) convertExternalValue( task, attributeInstance, attributeDef, null, operand );
         BigDecimal value = (BigDecimal) currentValue;
         return value.add( num );
     }
     
     @Override
-    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        BigDecimal num = (BigDecimal) convertExternalValue( task, attributeDef, null, operand );
+        BigDecimal num = (BigDecimal) convertExternalValue( task, attributeInstance, attributeDef, null, operand );
         BigDecimal value = (BigDecimal) currentValue;
         return value.multiply( num );
     }

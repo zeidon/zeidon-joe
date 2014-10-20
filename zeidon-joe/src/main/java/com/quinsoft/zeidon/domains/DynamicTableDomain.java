@@ -29,6 +29,7 @@ import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
@@ -140,11 +141,11 @@ public class DynamicTableDomain extends AbstractTableDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
             throws InvalidAttributeValueException
     {
         loadDomainView( task, getContext( task, contextName ) );
-        return super.convertExternalValue( task, attributeDef, contextName, externalValue );
+        return super.convertExternalValue( task, attributeInstance, attributeDef, contextName, externalValue );
     }
 
     @Override
