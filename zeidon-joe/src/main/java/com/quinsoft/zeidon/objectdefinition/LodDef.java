@@ -67,6 +67,7 @@ public class LodDef implements PortableFileAttributeHandler
     private int          height = 0;
     private LockingLevel lockingLevel = LockingLevel.NONE;
     private SourceFileType sourceFileType = SourceFileType.VML;
+    private String         sourceFileName;
 
     /**
      * True if any entities in this LOD have DataRecords.
@@ -226,6 +227,13 @@ public class LodDef implements PortableFileAttributeHandler
         if ( reader.getAttributeName().equals( "OCCOM" ))
         {
             commitConstraint = reader.getAttributeValue().startsWith( "Y" );
+        }
+        else
+        if ( reader.getAttributeName().equals( "OCSRCFILE" ))
+        {
+            sourceFileName = reader.getAttributeValue();
+            if ( ! sourceFileName.contains( "." ) )
+                sourceFileName = getApplication().getPackage() + "." + sourceFileName;
         }
         else
         if ( reader.getAttributeName().equals( "OCSRCTYPE" ))
@@ -654,6 +662,11 @@ public class LodDef implements PortableFileAttributeHandler
     public SourceFileType getSourceFileType()
     {
         return sourceFileType;
+    }
+
+    public String getSourceFileName()
+    {
+        return sourceFileName;
     }
 
     /**

@@ -41,6 +41,13 @@ class SelectSetImpl implements SelectSet
     private       EntityDef entityDef;
     private       EntityInstance referenceInstance;
 
+    /**
+     * Currently we can only iterate through the selected entities if they all
+     * have the same EntityDef and parent.  If we want to widen support we'll have to
+     * add some logic to the entity iterator.
+     */
+    private       boolean multipleEntityDefs = false;
+
     SelectSetImpl( ViewImpl view )
     {
         this.view = view;
@@ -61,6 +68,12 @@ class SelectSetImpl implements SelectSet
     @Override
     public void select(EntityInstance ei)
     {
+        select( ei, false );
+    }
+
+    @Override
+    public void select(EntityInstance ei, boolean includeChildren )
+    {
         ei = ei.getEntityInstance(); // Get EI from the cursor if a cursor was used.
 
         if ( entityDef == null )
@@ -72,9 +85,8 @@ class SelectSetImpl implements SelectSet
         else
         {
             if ( ! entityDef.equals( ei.getEntityDef() ) )
-                throw new ZeidonException( "SelectSets may (currently) only select entities of the same EntityDef. " )
-                                        .prependEntityDef( entityDef );
-
+                multipleEntityDefs = true;
+            else
             // Find the greatest common parent.  If the commonParent is currently null then
             // we must be dealing with root entities.
             if ( commonParent != null )
@@ -86,6 +98,12 @@ class SelectSetImpl implements SelectSet
         }
 
         selectSet.add( ei.getEntityInstance() );
+        if ( includeChildren )
+        {
+            multipleEntityDefs = true;
+            for ( EntityInstance child : ei.getChildrenHier( false ) )
+                selectSet.add( child );
+        }
     }
 
     /* (non-Javadoc)
@@ -112,6 +130,10 @@ class SelectSetImpl implements SelectSet
     @Override
     public EntityIterator<? extends EntityInstance> eachEntity()
     {
+        if ( multipleEntityDefs )
+            throw new ZeidonException( "SelectSets may (currently) only iterate through entities with the same parent. " )
+                                        .prependEntityDef( entityDef );
+
         return new IteratorBuilder(view.getObjectInstance())
                         .setCursor( view.cursor( entityDef ) )
                         .forTwinsOf( (EntityInstanceImpl) referenceInstance )
@@ -124,5 +146,11 @@ class SelectSetImpl implements SelectSet
     public Set<EntityInstance> getSet()
     {
         return Collections.unmodifiableSet( selectSet );
+    }
+
+    @Override
+    public String toString()
+    {
+        return selectSet.toString();
     }
 }

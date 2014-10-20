@@ -744,6 +744,15 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#createSelectSet()
+     */
+    @Override
+    public SelectSet createSelectSet()
+    {
+        return new SelectSetImpl( this );
+    }
+
+    /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet()
      */
     @Override
@@ -764,7 +773,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         SelectSet set = selectSets.get( index );
         if ( set == null )
         {
-            set = new SelectSetImpl( this );
+            set = createSelectSet();
             selectSets.put( index, set );
         }
 

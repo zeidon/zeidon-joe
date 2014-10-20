@@ -45,6 +45,14 @@ public interface SelectSet
     void select( EntityInstance ei );
 
     /**
+     * Adds the entity to the select set and potentially all its children.
+     *
+     * @param ei
+     * @param selectChildren if true then also select the children.
+     */
+    void select( EntityInstance ei, boolean selectChildren );
+
+    /**
      * Removes the entity from the select set.
      *
      * @param ei
