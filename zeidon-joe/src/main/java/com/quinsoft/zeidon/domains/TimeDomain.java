@@ -61,7 +61,7 @@ public class TimeDomain extends DateDomain
     }
 /*   
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, attributeDef attributeDef, String contextName, Object externalValue)
     {
     	if ( externalValue == null )
     		return null;
@@ -108,7 +108,7 @@ public class TimeDomain extends DateDomain
         private DateTimeFormatter formatter;
         
         @Override
-        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+        public String convertToString(Task task, attributeDef attributeDef, Object internalValue)
         {
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
@@ -117,7 +117,7 @@ public class TimeDomain extends DateDomain
         }
 
         @Override
-        public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value) throws InvalidAttributeValueException
+        public Object convertExternalValue(Task task, attributeDef attributeDef, Object value) throws InvalidAttributeValueException
         {
         	if ( value == null )
         		return null;

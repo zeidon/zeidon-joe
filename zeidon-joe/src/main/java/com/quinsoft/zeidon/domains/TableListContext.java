@@ -31,27 +31,30 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.TableDomain.ImmutableTableEntry;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Implementation of TableDomainContext that keeps the list of table entries in an internal list.
- * 
+ *
  * @author DG
  *
  */
-public class TableListContext extends BaseDomainContext implements TableDomainContext 
+public class TableListContext extends BaseDomainContext implements TableDomainContext
 {
+    /**
+     * Map of the internal value to TableEntry.
+     */
     private Map<String, TableEntry> internalMap = new HashMap<String, TableEntry>();
     private Map<String, TableEntry> externalMap = new HashMap<String, TableEntry>();
     private List<TableEntry>        entryList = new ArrayList<TableEntry>();
-    
+
     /**
      * We use a string domain to convert external values to a string.
      */
     private StringDomain            stringConverter;
-    
+
     private static final Map<String, Object> STRING_CONVERTER_PROPERTIES =
         Collections.unmodifiableMap( new HashMap<String, Object>() {
         private static final long serialVersionUID = 1L;
@@ -72,15 +75,12 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     {
         return entryList;
     }
-    
+
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
         String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, internalValue );
         TableEntry v = internalMap.get( string );
-        // KJS 02/16/11 - This used to be if ( v != null ) but then I had a case where v = "NULL/NULL" so I changed
-        // this to v.getInternalValue which in that case returned NULL.  Now, there is no null value in the internalMap and so
-        // v = null and v.getInternalValue causes a null exception.  Going to change this to v != null && v.getInternalValue().
         if ( v != null && v.getInternalValue() != null )
             return v.getExternalValue();
 
@@ -89,7 +89,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
      // if ( ! attributeDef.isRequired() && StringUtils.isBlank( string ) )
         if ( StringUtils.isBlank( string ) )
             return string;
-        
+
         throw new ZeidonException( "Internal Error: Table value '%s' is invalid for %s", internalValue, toString() );
     }
 
@@ -99,7 +99,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
         String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, value );
         if ( externalMap.containsKey( string ) )
             return;
-        
+
         if ( internalMap.containsKey( string ) )
             return;
 
@@ -120,11 +120,11 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
             return externalMap.get( string ).getInternalValue();
 
         TableEntry tableEntry = internalMap.get( string );
-        
+
         // If tableEntry is null then we must be removing the value for a non-required attribute.
         if ( tableEntry == null )
             return null; //stringConverter.convertExternalValue( task, attributeDef, null, null );
-        
+
         // If we get here then the input value matched an internal value so just return it.
         return tableEntry.getInternalValue();
     }
@@ -134,19 +134,19 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     {
         internalValue = StringDomain.checkNullString( getApplication(), internalValue );
         externalValue = StringDomain.checkNullString( getApplication(), externalValue );
-        
+
         ImmutableTableEntry tableEntry = new ImmutableTableEntry( entryList.size(), internalValue, externalValue );
         internalMap.put( tableEntry.getInternalValue(), tableEntry );
         externalMap.put( tableEntry.getExternalValue(), tableEntry );
         entryList.add( tableEntry );
     }
-    
+
     @Override
     public void addTableEntry(Task task, TableEntry tableEntry)
     {
         addTableEntry( task, tableEntry.getInternalValue(), tableEntry.getExternalValue() );
     }
-    
+
     @Override
     public void resetTableEntries(Task task)
     {
@@ -166,7 +166,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
         TableEntry t2 = getTableEntryByInternalValue( task, (String) o2 );
         return Integer.valueOf( t1.getIndex() ).compareTo( t2.getIndex() );
     }
-    
+
     @Override
     public String toString()
     {

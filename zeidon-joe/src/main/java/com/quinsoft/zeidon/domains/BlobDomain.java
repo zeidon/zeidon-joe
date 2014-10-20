@@ -59,7 +59,7 @@ public class BlobDomain extends AbstractDomain
         @SuppressWarnings("unused")
         Blob blob = (Blob) internalValue;
         
-        //TODO: Should blobs have a max value?  The length defined in the AttributeDef is the number of bytes
+        //TODO: Should blobs have a max value?  The length defined in the attributeDef is the number of bytes
         // the old C OE needed to store a blob pointer.
 //        if ( blob.getBytes().length > attributeDef.getLength() )
 //            throw new InvalidAttributeValueException( attributeDef, value,

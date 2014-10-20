@@ -94,7 +94,7 @@ public class PhoneDomain extends StringDomain
 
     /*
     @Override
-    public Object convertInternalValue(Task task, AttributeDef attributeDef, Object internalValue) throws InvalidAttributeValueException
+    public Object convertInternalValue(Task task, attributeDef attributeDef, Object internalValue) throws InvalidAttributeValueException
     {
         validateInternalValue( task, attributeDef, internalValue );
         String phone = internalValue.toString( );

@@ -38,8 +38,8 @@ import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DataField;
 
 /**
  * The standard JDBC domain translator.
@@ -169,9 +169,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             return true;
         }
 
-        Object v = domain.convertExternalValue( task, attributeDef, null, value );
-        String str = domain.convertToString( task, attributeDef, v );
-        return appendString( stmt, buffer, str );
+        return appendString( stmt, buffer, value );
     }
 
     /**
