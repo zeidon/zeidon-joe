@@ -10,7 +10,7 @@
       <outputDirectory>/</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>${basedir}/lib/jruby/1.8</directory>
+      <directory>${basedir}/lib/jruby/shared</directory>
       <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
