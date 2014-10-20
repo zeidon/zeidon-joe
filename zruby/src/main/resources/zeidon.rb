@@ -65,7 +65,7 @@ module Zeidon
       super
     end
 
-    def get_viewod_list
+    def get_loddef_list
       xoddir = @japp.getBinDir 
       files = Dir.glob("#{xoddir}/*.xod", File::FNM_CASEFOLD)
       if files.length == 0
@@ -129,13 +129,13 @@ module Zeidon
 
     def initialize jview
       @jview = jview
-      @jviewod = @jview.getLodDef
+      @jloddef = @jview.getLodDef
       load_cursors              
     end
 
     def load_cursors
       @cursors = {}
-      @jviewod.getViewEntitiesHier.each do |ve|
+      @jloddef.getViewEntitiesHier.each do |ve|
         name = ve.getName.to_s
         @cursors[ name ] = Cursor.new( self, ve, @jview.cursor( ve.getName ) )
       end
@@ -392,8 +392,8 @@ module Zeidon
       @jqual = QualificationBuilder.new( jtask )
       @jqual.setLodDef( view_od_name )
       @entities = {}
-      jviewod = @jqual.getLodDef
-      jviewod.getViewEntitiesHier.each do |ve|
+      jloddef = @jqual.getLodDef
+      jloddef.getViewEntitiesHier.each do |ve|
         name = ve.getName.to_s
         @entities[ name ] = QualEntity.new( @jqual, ve )
       end
