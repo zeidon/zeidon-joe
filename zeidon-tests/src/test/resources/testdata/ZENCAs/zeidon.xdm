@@ -11060,7 +11060,7 @@ aExternalValue Sibling
 aInternalValue B
 
 eDomain    2
-aJavaClass com.quinsoft.altdomain.AltPasswordDomain
+aJavaClass com.quinsoft.zeidon.domains.PasswordDomain
 aZKey      86698249
 aName      Password
 aDomainType A

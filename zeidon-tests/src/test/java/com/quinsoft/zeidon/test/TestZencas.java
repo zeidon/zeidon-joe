@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import junit.framework.Assert;
 
@@ -22,6 +23,7 @@ import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
@@ -130,6 +132,39 @@ public class TestZencas
 		tester.testAttributeUpdated( testview );
         System.out.println("===== Finished testAttributeUpdated ========");
 	}
+
+	/**
+	 * Test password encryption.
+	 */
+    @Test
+    public void testPassword()
+    {
+        String password = UUID.randomUUID().toString();
+
+        // Activate a user and set the password.
+        View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).addAttribQual( "ID", 490 ).activate();
+        AttributeInstance attr1 = mUser.cursor( "User" ).getAttribute( "Password" );
+        mUser.cursor( "User" ).getAttribute( "Password" ).setValue( password );
+        System.out.println( "Hash = " + attr1.getString() );
+        Assert.assertEquals( "Password doesn't match", 0, attr1.compare( password ) );
+        Assert.assertEquals( "Password matches different string", 1, attr1.compare(  "abc" ) );
+
+        // Commit the new password
+        System.out.println( "Hash = " + attr1.getString() );
+        mUser.commit();
+
+        // Make sure the commit didn't change anything.
+        Assert.assertEquals( "Password doesn't match", 0, attr1.compare( password ) );
+        Assert.assertEquals( "Password matches different string", 1, attr1.compare(  "abc" ) );
+
+        // Reload the user and verify the password.
+        View mUser2 = new QualificationBuilder( zencas ).setLodDef( "mUser" ).addAttribQual( "ID", 490 ).activate();
+        AttributeInstance attr2 = mUser2.cursor( "User" ).getAttribute( "Password" );
+        Assert.assertEquals( "After commit: Password doesn't match", 0, attr2.compare( password ) );
+        Assert.assertEquals( "After commit: Password matches different string", 1, attr2.compare( "abc" )  );
+
+        Assert.assertEquals( "Attributes don't compare correctly", 0, attr2.compare( attr1 ) );
+    }
 
 	@Test
 	// Some of the dynamic domains are dependent on the admin division.

@@ -27,6 +27,7 @@ import org.jasypt.salt.SaltGenerator;
 import org.jasypt.util.password.ConfigurablePasswordEncryptor;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -35,11 +36,11 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  * A domain for storing passwords using strong encryption.  The password itself is not stored
  * in the attribute but a hash instead.  It is extremely difficult to reverse engineer the
  * password from the hash.
- * 
+ *
  * By default this domain uses a random salt generator which means that two hashes cannot
  * be compared to each other to see if the passwords are the same.  The only way to compare
  * a password is to call compare(task, attributeDef, encryptedHash, plaintextPassword)
- * 
+ *
  * See http://www.jasypt.org/howtoencryptuserpasswords.html
  * @author DG
  *
@@ -49,9 +50,9 @@ public class PasswordDomain extends StringDomain
     public final String DEFAULT_ALGORITHM  = "SHA-256";
     public final String DEFAULT_ITERATIONS = "10000";
     public final String DEFAULT_PREFIX     = "zPrefix";
-    
+
     final private ConfigurablePasswordEncryptor encryptor;
-    
+
     /**
      * @param app
      * @param domainProperties
@@ -63,17 +64,17 @@ public class PasswordDomain extends StringDomain
         SaltGenerator saltGenerator = new RandomSaltGenerator();
         SimpleStringDigesterConfig digester = new SimpleStringDigesterConfig();
         digester.setSaltGenerator( saltGenerator );
-        
+
         String group = app.getName();
         String prefix = task.readZeidonConfig( group, "PasswordPrefix", DEFAULT_PREFIX );
         digester.setPrefix( prefix );
-        
+
         String iterations = task.readZeidonConfig( group, "PasswordIterations", DEFAULT_ITERATIONS );
         digester.setIterations( iterations );
-        
+
         String algorithm = task.readZeidonConfig( group, "PasswordAlgorithm", DEFAULT_ALGORITHM );
         digester.setAlgorithm( algorithm );
-        
+
         encryptor = new ConfigurablePasswordEncryptor();
         encryptor.setConfig( digester );
         encryptor.encryptPassword( "ABC" );  // Possible bug?  Looks like we need to encrypt something to prime the pump.
@@ -105,15 +106,15 @@ public class PasswordDomain extends StringDomain
     {
         if ( internalValue instanceof String )
             return;
-            
+
         throw new InvalidAttributeValueException( attributeDef, internalValue,
                                                   "Internal value of passwords must be strings.  Attempted %s",
                                                   internalValue.getClass().getName() );
     }
 
     /**
-     * Compares an unencrypted password to an encrypted hash to see if the password matches the hash. 
-     * 
+     * Compares an unencrypted password to an encrypted hash to see if the password matches the hash.
+     *
      * Note that there is no concept of a PW being greater or less than another PW.  They are either equal
      * (return 0) or not (return 1).
      */
@@ -124,9 +125,25 @@ public class PasswordDomain extends StringDomain
         if ( rc != null )
             return rc;
 
+        assert encyrptedHash instanceof String;
+
+        // Is the value we want to compare an AttributeInstance?  If so then we're comparing
+        // two attributes together.  Get the encryptedHash from the attribute.
+        if ( plaintextPassword instanceof AttributeInstance )
+        {
+            AttributeInstance attr = (AttributeInstance) plaintextPassword;
+            String hash = attr.getString();
+            if ( hash.compareTo( encyrptedHash.toString() ) == 0 )
+                return 0;
+            else
+                return 1;
+        }
+        else
+            assert plaintextPassword instanceof String;
+
         if ( encryptor.checkPassword( plaintextPassword.toString(), encyrptedHash.toString() ) )
             return 0;
-        
+
         return 1;
     }
 }

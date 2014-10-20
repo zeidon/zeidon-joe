@@ -381,16 +381,16 @@ public class JdbcHandler extends AbstractSqlHandler
      * Sets the attribute using the value retrieved from the DB.
      *
      * @param entityInstance
-     * @param AttributeDef
+     * @param attributeDef
      * @param value
      * @throws SQLException
      */
-    protected void setAttribute( EntityInstance entityInstance, AttributeDef AttributeDef, Object value ) throws SQLException
+    protected void setAttribute( EntityInstance entityInstance, AttributeDef attributeDef, Object value ) throws SQLException
     {
-        Object convertedValue = getTranslator().convertDbValue( AttributeDef.getDomain(), value );
-        entityInstance.getAttribute( AttributeDef).setInternalValue( convertedValue, false );
+        Object convertedValue = getTranslator().convertDbValue( attributeDef.getDomain(), value );
+        entityInstance.getAttribute( attributeDef).setInternalValue( convertedValue, false );
 
-        assert ! entityInstance.isAttributeUpdated( AttributeDef ) : "Attribute is updated " + AttributeDef.toString();
+        assert ! entityInstance.isAttributeUpdated( attributeDef ) : "Attribute is updated " + attributeDef.toString();
     }
 
     /**
@@ -503,7 +503,7 @@ public class JdbcHandler extends AbstractSqlHandler
 
                     AttributeDef AttributeDef = dataField.getAttributeDef();
 
-                    // If the AttributeDef does not belong to entityDef then it's a field from a many-to-many
+                    // If the attributeDef does not belong to entityDef then it's a field from a many-to-many
                     // relationship that was used to set the cursor and shouldn't be copied.
                     if ( AttributeDef.getEntityDef() != entityDef )
                         continue;
