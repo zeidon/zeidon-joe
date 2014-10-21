@@ -84,7 +84,7 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( ! attributeDef.isDerived() )
             return;
 
-        attributeDef.executeDerivedAttributeForGet( getView() );
+        attributeDef.executeDerivedAttributeForGet( this );
     }
 
     /* (non-Javadoc)
@@ -339,10 +339,10 @@ class AttributeInstanceImpl implements AttributeInstance
     {
         return attributeValue.compare( getTask(), attributeDef, value );
     }
-    
+
     @Override
     public String toString()
     {
-        return attributeDef.toString() + ": " + getValue(); 
+        return attributeDef.toString() + ": " + getValue();
     }
 }

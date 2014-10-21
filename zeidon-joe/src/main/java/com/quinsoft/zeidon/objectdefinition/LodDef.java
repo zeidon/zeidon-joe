@@ -74,6 +74,7 @@ public class LodDef implements PortableFileAttributeHandler
      */
     private boolean      hasPhysicalMappings = false;
     private String       libraryName;
+    private ScalaHelper scalaHelper;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
     static private final Class<?>[] constructorArgTypes2 = new Class<?>[] { Task.class };
@@ -410,26 +411,42 @@ public class LodDef implements PortableFileAttributeHandler
         }
     }
 
+    /**
+     * Gets a lod-specific ScalaHelper.
+     *
+     * @param taskQual
+     * @return
+     */
     @SuppressWarnings("unchecked")
-    private int executeScalaConstraint( View view, ObjectConstraintType type )
+    protected synchronized ScalaHelper getScalaHelper( TaskQualification taskQual ) throws InstantiationException, IllegalAccessException
     {
-        String className = "com.quinsoft.zeidon.scala.ScalaHelperImpl";
-        ObjectEngine oe = view.getObjectEngine();
-        ClassLoader classLoader = oe.getClassLoader( className );
-        Class<ScalaHelper> operationsClass;
-        try
+        if ( scalaHelper == null )
         {
-            operationsClass = (Class<ScalaHelper>) classLoader.loadClass( className );
-        }
-        catch ( ClassNotFoundException e )
-        {
-            throw new ZeidonException("Couldn't load %s.  Do you have zeidon-scala in your classpath?", className );
+            String className = "com.quinsoft.zeidon.scala.ScalaHelperImpl";
+            ObjectEngine oe = taskQual.getObjectEngine();
+            ClassLoader classLoader = oe.getClassLoader( className );
+            Class<ScalaHelper> operationsClass;
+            try
+            {
+                operationsClass = (Class<ScalaHelper>) classLoader.loadClass( className );
+            }
+            catch ( ClassNotFoundException e )
+            {
+                throw new ZeidonException("Couldn't load %s.  Do you have zeidon-scala in your classpath?", className );
+            }
+
+            scalaHelper = operationsClass.newInstance();
+            scalaHelper.setClassLoader( classLoader );
         }
 
+        return scalaHelper;
+    }
+
+    private int executeScalaConstraint( View view, ObjectConstraintType type )
+    {
         try
         {
-            ScalaHelper instance = operationsClass.newInstance();
-            return instance.executeObjectConstraint( view, type, classLoader );
+            return getScalaHelper( view ).executeObjectConstraint( view, type );
         }
         catch ( Exception e )
         {
