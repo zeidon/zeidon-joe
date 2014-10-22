@@ -121,7 +121,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
 
     ViewImpl( ObjectInstance oi )
     {
-        super(oi.getTask().getApplication());
+        super(oi.getLodDef().getApplication());
         task = oi.getTask();
         this.lodDef = oi.getLodDef();
         id = task.getObjectEngine().getNextObjectKey();
