@@ -74,9 +74,9 @@ trait ZeidonOperations {
 
       def DO( func: => Unit ) = {
         if ( scopingEntity != null )
-            cursor.iterator( scopingEntity ).foreach( ei => { if ( predicate() ) breakable { func } } )
+            cursor.under( scopingEntity ).foreach( ei => { if ( predicate() ) func } )
         else
-            cursor.iterator.foreach( ei => { if ( predicate() ) breakable { func } } )
+            cursor.iterator.foreach( ei => { if ( predicate() ) func} )
       }
 
       /*

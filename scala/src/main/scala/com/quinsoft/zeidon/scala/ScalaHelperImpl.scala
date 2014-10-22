@@ -52,7 +52,7 @@ class ScalaHelperImpl extends ScalaHelper {
         val operationsClass = classLoader.loadClass( className )
         val constructors = operationsClass.getConstructors()
         val constructor = constructors( 0 )
-        val view = new View( jview ).basedOnLod( jlodDef.getName() )
+        val view = new View( jview )
         val instance = constructor.newInstance( view )
         val ai: AttributeInstance = new AttributeInstance( attributeInstance )
         val method = instance.getClass.getMethod( jattrdef.getDerivedOperationName(), ai.getClass() )
