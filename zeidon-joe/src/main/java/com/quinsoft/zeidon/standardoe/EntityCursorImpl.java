@@ -260,7 +260,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public EntityInstance cloneSubobject( EntityInstance source, CursorPosition position )
+    public EntityInstance copySubobject( EntityInstance source, CursorPosition position )
     {
         if ( ! getViewEntity().isCreate() )
             throw new ZeidonException( "Entity is not flagged for create." )
@@ -305,7 +305,7 @@ class EntityCursorImpl implements EntityCursor
                 continue;
             }
 
-            throw new ZeidonException( "Cloned child entity is neither creatable or includable." )
+            throw new ZeidonException( "Copied child entity is neither creatable or includable." )
                             .prependViewEntity( childViewEntity );
         }
 
@@ -2179,8 +2179,8 @@ class EntityCursorImpl implements EntityCursor
 		currentIterator.prev();
 		return CursorResult.SET;
 
-    }    
-    
+    }
+
     @Override
     public CursorResult setPrev( String attributeName, Object value )
     {

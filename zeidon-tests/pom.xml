@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>zeidon</artifactId>
 		<groupId>com.quinsoft.zeidon</groupId>
-		<version>1.0.6-SNAPSHOT</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>zeidon-tests</artifactId>
 	<name>zeidon-tests</name>
@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>com.quinsoft.zeidon</groupId>
 			<artifactId>zeidon-operations</artifactId>
-			<version>1.0.6-SNAPSHOT</version>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.quinsoft.zeidon</groupId>
 			<artifactId>object-browser</artifactId>
-			<version>1.0.6-SNAPSHOT</version>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

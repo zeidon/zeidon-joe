@@ -1524,7 +1524,7 @@ public abstract class VmlOperation
 
             if ( DriverApplication.isValidSubtaskView( v ) )
             {
-               TraceLine( "SetNameForView (%d) Subtask (%d) level for Name: %s  Task: %s", view.getId(), v.getId(), name, t.getTaskId() );
+            // TraceLine( "SetNameForView (%d) Subtask (%d) level for Name: %s  Task: %s", view.getId(), v.getId(), name, t.getTaskId() );
                v.setNameForSubtask( name, view );
                break;
             }
@@ -1623,7 +1623,7 @@ public abstract class VmlOperation
 
                if ( isValid( returnView ) )
                {
-                  TraceLine( "GetViewByName located Subtask level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
+               // TraceLine( "GetViewByName located Subtask level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
                   return zLEVEL_SUBTASK;
                }
 
@@ -1641,11 +1641,11 @@ public abstract class VmlOperation
                {
                  if ( v == null )
                   {
-                     TraceLine( "GetViewByName located Task level view for Name: %s  Task: %s", name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Task level view for Name: %s  Task: %s", name, t.getTaskId() );
                   }
                   else
                   {
-                     TraceLine( "GetViewByName located Task level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Task level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
                   }
 
                   return zLEVEL_TASK;
@@ -1673,11 +1673,11 @@ public abstract class VmlOperation
                {
                   if ( v == null )
                   {
-                     TraceLine( "GetViewByName located Application (%s) level view for Name: %s  Task: %s", a.getName(), name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Application (%s) level view for Name: %s  Task: %s", a.getName(), name, t.getTaskId() );
                   }
                   else
                   {
-                     TraceLine( "GetViewByName located Application (%s) level view: %s  for Name: %s  Task: %s", a.getName(), v.getId(), name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Application (%s) level view: %s  for Name: %s  Task: %s", a.getName(), v.getId(), name, t.getTaskId() );
                   }
 
                   return zLEVEL_APPLICATION;
@@ -1705,11 +1705,11 @@ public abstract class VmlOperation
             {
                if ( v == null )
                {
-                  TraceLine( "GetViewByName located System level view for Name: %s  Task: %s", name, t.getTaskId() );
+               // TraceLine( "GetViewByName located System level view for Name: %s  Task: %s", name, t.getTaskId() );
                }
                else
                {
-                  TraceLine( "GetViewByName located System level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
+               // TraceLine( "GetViewByName located System level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
                }
 
                return zLEVEL_SYSTEM;

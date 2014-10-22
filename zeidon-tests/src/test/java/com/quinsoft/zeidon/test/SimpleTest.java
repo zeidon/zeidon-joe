@@ -17,7 +17,6 @@ import com.quinsoft.zeidon.objectdefinition.ViewEntity;
 import com.quinsoft.zeidon.objectdefinition.ViewOd;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -162,7 +161,7 @@ class SimpleTest
 
         View stud = new QualificationBuilder( zencas )
                             .setViewOd( "lStudDpt" )
-                            .setOiServerUrl( fileDbUrl )
+                            .setOiSourceUrl( fileDbUrl )
                             .addAttribQual( "Status", "A" )
                             .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
@@ -174,13 +173,13 @@ class SimpleTest
 //        stud.logObjectInstance();
 /*
         CommitOptions options = new CommitOptions( zencas );
-        options.setOiServerUrl( fileDbUrl );
+        options.setOiSourceUrl( fileDbUrl );
         stud.commit( options );
 
         stud = new QualificationBuilder( zencas )
                             .setViewOd( "lStudDpt" )
                             .addAttribQual( "eMailAddress", "kellysautter@comcast.net" )
-                            .setOiServerUrl( fileDbUrl )
+                            .setOiSourceUrl( fileDbUrl )
                             .activate();
 */
         stud.logObjectInstance();

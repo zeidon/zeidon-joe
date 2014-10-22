@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.CommitFlags;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.ObjectEngineEventListener;
-import com.quinsoft.zeidon.OiServerSelector;
+import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -56,7 +56,7 @@ class CommitMultiplOIs
     /**
      * Same day this may be provided by the OE options.
      */
-    private final OiServerSelector     selector = new DefaultOiServerSelector();
+    private final OiSourceSelector     selector = new DefaultOiSourceSelector();
 
     private interface HasPermission
     {

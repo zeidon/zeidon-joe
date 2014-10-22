@@ -89,7 +89,7 @@ public interface EntityCursor extends EntityInstance
      * @param position
      * @return
      */
-    EntityInstance cloneSubobject( EntityInstance source, CursorPosition position );
+    EntityInstance copySubobject( EntityInstance source, CursorPosition position );
 
     /**
      * Loops through all twin entities of this cursor, starting with the first.
