@@ -271,13 +271,10 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 RelField relField = relRecord.getRelFields().get( 0 );
                 RelFieldParser parser = new RelFieldParser( relField, ei );
 
-                // If the min cardinality is 1 then we had better be deleting the parent EI.
-                assert entityDef.getMinCardinality() == 0 || parser.relInstance.isDeleted();
-
-                // Don't bother excluding if we're deleting the parent.  We need to do this
-                // because if the min cardinality is 1 then setting the FK attribute to
-                // null will throw an exception.
-                if ( ! parser.relInstance.isDeleted() )
+                // Don't bother setting the FK if the min cardinality is > 0.
+                // If we get here then we've passed the cardinality check so we
+                // must be including a different entity which will update the FK.
+                if ( entityDef.getMinCardinality() == 0 )
                     parser.relInstance.getAttribute( parser.relAttributeDef ).setInternalValue( null, true );
             }
             else

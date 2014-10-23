@@ -18,28 +18,28 @@
 #       args - ?
 class RubyCodeDomain
   def input_field_for_attrib( attrib, param_name, args = {} )
-    return <<-code                                                                                                                                            
-<td valign="top" style="height: 400px; width: 700px">                                                                                                         
-    <input type='hidden'                                                                                                                                      
-           id='editorvalue'                                                                                                                                   
-           name='#{param_name}' />                                                                                                                            
-  <div id="editor" style="height: 400px; width: 700px">#{CGI::escapeHTML(attrib.to_s)}</div>                                                                  
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>                                                                               
-  <script>                                                                                                                                                    
-      function change() {                                                                                                                                     
-          var field = document.getElementById("editorvalue");                                                                                                 
-          value = editor.getValue();                                                                                                                          
-          field.value = value;                                                                                                                                
-      }                                                                                                                                                       
-                                                                                                                                                              
-      var editor = ace.edit("editor");                                                                                                                        
-      var session = editor.session;                                                                                                                           
-      session.setTabSize(4);                                                                                                                                  
-      session.setUseSoftTabs(true);                                                                                                                           
-      session.setMode("ace/mode/ruby");                                                                                                                       
-      session.on('change', change);                                                                                                                           
-  </script>                                                                                                                                                   
-</td>                                                                                                                                                         
+    return <<-code
+<td valign="top" style="height: 400px; width: 700px">
+    <input type='hidden'
+           id='editorvalue'
+           name='#{param_name}' />
+  <div id="editor" style="height: 400px; width: 700px">#{CGI::escapeHTML(attrib.to_s)}</div>
+  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+      function change() {
+          var field = document.getElementById("editorvalue");
+          value = editor.getValue();
+          field.value = value;
+      }
+
+      var editor = ace.edit("editor");
+      var session = editor.session;
+      session.setTabSize(4);
+      session.setUseSoftTabs(true);
+      session.setMode("ace/mode/ruby");
+      session.on('change', change);
+  </script>
+</td>
 code
  end
 end

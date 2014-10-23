@@ -21,8 +21,8 @@ set :domain_mappings, {}
 # This sets up a mapping between an entity name and the LOD that is used to retrieve a list.
 set :lod_for_entity_list, {}
 
-# The list of viewod's for each application.
-@@app_viewod_list={}
+# The list of loddef's for each application.
+@@app_loddef_list={}
 
 def domain_mapping( domain_name, mapper )
   settings.domain_mappings[domain_name] = mapper
@@ -162,11 +162,11 @@ def list_entities( top_entity, args = {} )
 
     links = [] # We'll create a list of edit links and then concat them at the end.
     if args[:include_only] # If true, then we're displaying a list of entities to include
-      links << "<a href='/#{@application}/select/#{@viewod}?id=#{top_entity.get_key.to_str}&entity=#{@entity}&viewname=#{@view_name}'>Select</a>"
+      links << "<a href='/#{@application}/select/#{@loddef}?id=#{top_entity.get_key.to_str}&entity=#{@entity}&viewname=#{@view_name}'>Select</a>"
     else
-      links << "<a href='/#{@application}/edit/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Edit</a>" if jtop_view_entity.isUpdate
-      links << "<a href='/#{@application}/exclude/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Exclude</a>" if jtop_view_entity.isExclude
-      links << "<a href='/#{@application}/delete/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Delete</a>" if jtop_view_entity.isDelete
+      links << "<a href='/#{@application}/edit/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Edit</a>" if jtop_view_entity.isUpdate
+      links << "<a href='/#{@application}/exclude/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Exclude</a>" if jtop_view_entity.isExclude
+      links << "<a href='/#{@application}/delete/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Delete</a>" if jtop_view_entity.isDelete
     end
 
     html << "<td>" << links.join("<br/>") << "</td>"
@@ -174,8 +174,8 @@ def list_entities( top_entity, args = {} )
     # Add move up/down links.
     if jtop_view_entity.getAutoSeq != nil 
       html << "<td>"
-      html << "<a href='/#{@application}/moveup/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Move Up</a><br/>"
-      html << "<a href='/#{@application}/movedown/#{@viewod}?id=#{top_entity.get_key.to_str}#{url_param}'>Move Down</a>"
+      html << "<a href='/#{@application}/moveup/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Move Up</a><br/>"
+      html << "<a href='/#{@application}/movedown/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Move Down</a>"
       html << "</td>"
     end
 
@@ -204,7 +204,7 @@ def list_entities( top_entity, args = {} )
     if top_entity.getEntityDef.isCreate
       html += haml <<-code
 %p
-%form{ :action => url('/#{@application}/new/#{@viewod}'),
+%form{ :action => url('/#{@application}/new/#{@loddef}'),
        :method => 'get', :enctype => 'multipart/form-data', :name => 'New_#{top_entity.get_name}' }
   %input{:type => "hidden", :name => "viewname", :value => "#{@view_name}"}
   %input{:type => "hidden", :name => "entity", :value => "#{top_entity.get_name}"}
@@ -213,7 +213,7 @@ code
     elsif top_entity.getEntityDef.isInclude
       html += haml <<-code
 %p
-%form{ :action => url('/#{@application}/include/#{@viewod}'),
+%form{ :action => url('/#{@application}/include/#{@loddef}'),
        :method => 'get', :enctype => 'multipart/form-data', :name => 'Include_#{top_entity.get_name}' }
   %input{:type => "hidden", :name => "viewname", :value => "#{@view_name}"}
   %input{:type => "hidden", :name => "entity", :value => "#{top_entity.get_name}"}
@@ -228,21 +228,21 @@ end
 def activate_for_edit( args = {} )
   raise "ID not specified for edit" if params[:id].nil?
 
-  jviewod = @application.getLodDef( @task.jtask, @viewod )
-  jroot = jviewod.getRoot
+  jloddef = @application.getLodDef( @task.jtask, @loddef )
+  jroot = jloddef.getRoot
   jkey = jroot.getKeys[0] # We're assuming there is one and only one key.
-  @view = @task.activate @viewod, :qual => [ jkey.getName, params[:id] ]
-  @view_name = "Edit_#{params[:viewod]}"
+  @view = @task.activate @loddef, :qual => [ jkey.getName, params[:id] ]
+  @view_name = "Edit_#{params[:loddef]}"
   @view.set_name( @view_name )
   return @view_name
 end
 
-def get_viewod_list app_name
-  puts "Getting viewod_list from #{@@app_viewod_list}"
+def get_loddef_list app_name
+  puts "Getting loddef_list from #{@@app_loddef_list}"
 
-  return @@app_viewod_list[ app_name ] if @@app_viewod_list[ app_name ]
+  return @@app_loddef_list[ app_name ] if @@app_loddef_list[ app_name ]
 
-  @@app_viewod_list[ app_name ] = []
+  @@app_loddef_list[ app_name ] = []
 
   puts "classpath="
   $CLASSPATH.each{|cp| puts "-> #{cp}"}
@@ -257,14 +257,14 @@ def get_viewod_list app_name
     begin
       jar = JarFile.new( url.getPath )
       jar.entries.each do |entry|
-        @@app_viewod_list[ app_name ] << File.basename( entry.toString, "." + $1) if entry.toString =~ regex
+        @@app_loddef_list[ app_name ] << File.basename( entry.toString, "." + $1) if entry.toString =~ regex
       end
     rescue
       puts "Error trying to load jar file #{url.getPath} protocol #{url.getProtocol}"
     end
   end
 
-  @@app_viewod_list[ app_name ].sort!
+  @@app_loddef_list[ app_name ].sort!
 end
 
 # ===== Helper methods =====
@@ -279,26 +279,26 @@ helpers do
     html << "<td><a href='" + url("/#{@application}/list") + "'>#{@application} List</a></td>"
 
     # Add link to list of root-level instances.
-    if @viewod
+    if @loddef
       html << "<td>|</td>"
-      html << "<td><a href='" + url("/#{@application}/list/#{@viewod}") + "'>#{@viewod} Root List</a></td>"
+      html << "<td><a href='" + url("/#{@application}/list/#{@loddef}") + "'>#{@loddef} Root List</a></td>"
    end
 
-    # If we're editing/viewing a viewod, then check to see if we need a "to root" link.
-    if @viewod and @entity
-      jviewod = @application.getLodDef( @task.jtask, @viewod )
-      viewod_root = jviewod.getRoot.getName
-      if viewod_root != @entity
+    # If we're editing/viewing a loddef, then check to see if we need a "to root" link.
+    if @loddef and @entity
+      jloddef = @application.getLodDef( @task.jtask, @loddef )
+      loddef_root = jloddef.getRoot.getName
+      if loddef_root != @entity
         html << "<td>|</td>"
-        html << "<td><a href='" + url("/#{@application}/#{@command}/#{@viewod}?viewname=#{@view_name}") + "'>Top of #{@viewod}</a></td>"
+        html << "<td><a href='" + url("/#{@application}/#{@command}/#{@loddef}?viewname=#{@view_name}") + "'>Top of #{@loddef}</a></td>"
       end
 
-      jentityDef = jviewod.getEntityDef( @entity )
+      jentityDef = jloddef.getEntityDef( @entity )
       jparent = jentityDef.getParent
-      if ! jparent.nil? and jparent.getName.to_s != viewod_root.to_s
+      if ! jparent.nil? and jparent.getName.to_s != loddef_root.to_s
         puts "jparent=#{jparent.getName}\nentity=#{@entity}"
         html << "<td>|</td>"
-        html << "<td><a href='" + url("/#{@application}/#{@command}/#{@viewod}?viewname=#{@view_name}&entity=#{jparent.getName}") + "'>Up to #{jparent.getName}</a></td>"
+        html << "<td><a href='" + url("/#{@application}/#{@command}/#{@loddef}?viewname=#{@view_name}&entity=#{jparent.getName}") + "'>Up to #{jparent.getName}</a></td>"
       end
     end
 
@@ -352,7 +352,7 @@ def setup_environment
 
   # Set some standard variables.
   @command = params[:cmd]
-  @viewod = params[:viewod]
+  @loddef = params[:loddef]
   @view_name = params[:viewname]
   @entity = params[:entity]
   @application, @task = get_task
@@ -361,22 +361,22 @@ def setup_environment
   @messages = session[:messages]
   session[:messages] = []
 
-  if @viewod
-    jviewod = @application.getLodDef( @task.jtask, @viewod )
-    # Default entity to root of viewod
+  if @loddef
+    jloddef = @application.getLodDef( @task.jtask, @loddef )
+    # Default entity to root of loddef
     if @entity.nil?
-      @entity = jviewod.getRoot.getName
+      @entity = jloddef.getRoot.getName
       @parent_entity = @entity
       @root_entity = @entity
     else
-      jparent = jviewod.getEntityDef( @entity ).getParent
+      jparent = jloddef.getEntityDef( @entity ).getParent
       @parent_entity = jparent.nil? ? @entity : jparent.getName
-      @root_entity = jviewod.getRoot.getName
+      @root_entity = jloddef.getRoot.getName
     end
   end
 end
 
-before '/:application/:cmd/:viewod' do
+before '/:application/:cmd/:loddef' do
   setup_environment
 end
 
@@ -388,22 +388,22 @@ get '/:application/list' do
 %h2 LodDef list for #{@application}
 = top_layout
 %table
-  - get_viewod_list( @application.to_s ).each do |viewod|
+  - get_loddef_list( @application.to_s ).each do |loddef|
     %tr
       %td
-        %a{:href => url("/#{@application}/list/" + viewod )}
+        %a{:href => url("/#{@application}/list/" + loddef )}
           = "List"
-          = viewod
+          = loddef
 = bottom_links
 code
 end
 
-get '/:application/list/:viewod' do
-  @view = @task.activate @viewod, :options => {:root_only_multiple => true}
-  @view.setName @viewod + "_list"
+get '/:application/list/:loddef' do
+  @view = @task.activate @loddef, :options => {:root_only_multiple => true}
+  @view.setName @loddef + "_list"
   return haml <<-code
-%title #{@viewod} List
-%h2 #{@viewod} List
+%title #{@loddef} List
+%h2 #{@loddef} List
 = top_layout
 %table
   %tbody
@@ -412,20 +412,20 @@ code
 end
 
 # Create a new empty entity and redirect to edit it.
-get '/:application/new/:viewod' do
+get '/:application/new/:loddef' do
   # If the view doesn't exist create the OI.
   if @view.nil?
-    @view = @task.activate_empty_object_instance @viewod
-    @view_name = "New_#{@viewod}"
+    @view = @task.activate_empty_object_instance @loddef
+    @view_name = "New_#{@loddef}"
     @view.set_name( @view_name )
   end
   
   @view.cursor( @entity ).createEntity
-  u = url("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}&entity=#{@entity}")
+  u = url("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}&entity=#{@entity}")
   redirect u
 end
 
-get '/:application/edit/:viewod' do
+get '/:application/edit/:loddef' do
   # If there is no named view then activate one using the URL params.
   activate_for_edit if @view.nil?
   cursor = @view.cursor( @entity )
@@ -437,10 +437,10 @@ get '/:application/edit/:viewod' do
   @save_button_text = ( @entity == @root_entity ) ? "Save" : "Accept"
 
   return haml <<-code
-%title #{@application} - Edit #{@viewod}.#{@entity}
+%title #{@application} - Edit #{@loddef}.#{@entity}
 %h2 Edit #{@entity}
 = top_layout
-%form{ :action => "/#{@application}/save/#{@viewod}", 
+%form{ :action => url('/#{@application}/save/#{@loddef}'), 
        :method => "post", :enctype => 'multipart/form-data', :name => 'New_#{@entity}'}
   %fieldset
     %input{:type => "hidden", :name => "viewname", :value => "#{@view_name}"}
@@ -459,7 +459,7 @@ get '/:application/edit/:viewod' do
 code
 end
 
-get '/:application/delete/:viewod' do
+get '/:application/delete/:loddef' do
   # If there is no named view then we are deleting the entire OI.
   if ! @view.nil?
     # We're deleting just an entity in the existing OI.
@@ -471,13 +471,28 @@ get '/:application/delete/:viewod' do
     puts "Deleting #{instance}"
     session[:messages] << "Entity #{instance} has been deleted and will be committed when OI is saved."
     cursor.deleteEntity
-    return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}&entity=#{@parent_entity}")
+    return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}&entity=#{@parent_entity}")
   end
 
   return "Not supported yet"
 end
 
-get '/:application/moveup/:viewod' do
+get '/:application/exclude/:loddef' do
+  return "No view found" if @view.nil?
+
+  # We're deleting just an entity in the existing OI.
+  puts "Excluding child entity"
+  cursor = @view.cursor( @entity )
+  key = cursor.get_key.getName
+  cursor.setFirst(key, params[:id] )
+  instance = cursor.jcursor.getEntityInstance
+  puts "Excluding #{instance}"
+  session[:messages] << "Entity #{instance} has been excluded and will be committed when OI is saved."
+  cursor.excludeEntity
+  return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}&entity=#{@parent_entity}")
+end
+
+get '/:application/moveup/:loddef' do
   puts "Moving child entity UP"
   cursor = @view.cursor( @entity )
   key = cursor.get_key.getName
@@ -491,10 +506,10 @@ get '/:application/moveup/:viewod' do
     puts "Instance is first instance so nothing to move"
   end
 
-  return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}&entity=#{@parent_entity}")
+  return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}&entity=#{@parent_entity}")
 end
 
-get '/:application/movedown/:viewod' do
+get '/:application/movedown/:loddef' do
   puts "Moving child entity DOWN"
   cursor = @view.cursor( @entity )
   key = cursor.get_key.getName
@@ -508,10 +523,10 @@ get '/:application/movedown/:viewod' do
     puts "Instance is last instance so nothing to move"
   end
 
-  return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}&entity=#{@parent_entity}")
+  return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}&entity=#{@parent_entity}")
 end
 
-post '/:application/save/:viewod' do
+post '/:application/save/:loddef' do
   raise ":viewname not specified" if @view_name.nil?
 
   # If 'duplicate' param is specified then we really want to duplicate the current
@@ -521,7 +536,7 @@ post '/:application/save/:viewod' do
     session[:messages] << "OI Duplicated.  Edit below."
     new_view = @view.duplicateOi
     new_view.setName @view_name
-    return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}")
+    return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}")
   end
 
   input = params[:input]
@@ -536,13 +551,13 @@ post '/:application/save/:viewod' do
   next_view_entity = ""
   if @entity == @root_entity
     @view.commit
-    session[:messages] << "#{@viewod} OI saved."
+    session[:messages] << "#{@loddef} OI saved."
   else
-    session[:messages] << "#{@viewod}.#{@entity} updated."
+    session[:messages] << "#{@loddef}.#{@entity} updated."
     next_view_entity = "&entity=#{@parent_entity}"
   end
 
-  return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}#{next_view_entity}")
+  return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}#{next_view_entity}")
 end
 
 def activate_include_source
@@ -559,13 +574,13 @@ def activate_include_source
   @select_entity = @include_source.getLodDef.getRoot.name
 end
 
-get '/:application/include/:viewod' do
+get '/:application/include/:loddef' do
   activate_include_source
   list_entities @include_source.cursor( @select_entity ), :include_only => true, :viewname => @view_name
 end
 
 # User selected an entity to be included.
-get '/:application/select/:viewod' do
+get '/:application/select/:loddef' do
   @select_entity = settings.lod_for_entity_list[ @entity ] || @entity
   list_view_name = "#{@entity}_List"
   @include_source = @task.get_view( list_view_name )
@@ -577,7 +592,7 @@ get '/:application/select/:viewod' do
 
   @view.cursor( @entity ).include_subobject( cursor )
 
-  return redirect to("/#{@application}/edit/#{@viewod}?viewname=#{@view_name}&entity=#{@parent_entity}")
+  return redirect to("/#{@application}/edit/#{@loddef}?viewname=#{@view_name}&entity=#{@parent_entity}")
 end
 
 get '/' do
@@ -602,6 +617,6 @@ end
 #==============================================================
 # Activate/Commit functions
 #==============================================================
-post '/:application/activate/:viewod' do
+post '/:application/activate/:loddef' do
   
 end

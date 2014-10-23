@@ -85,11 +85,11 @@
     <modules>
         <module>zeidon-joe</module>
         <module>object-browser</module>
+        <module>scala</module>
 	<module>jconsole-plugin</module>
         <module>zeidon-operations</module>
         <module>restserver</module>
         <module>zruby</module>
-        <module>scala</module>
         <module>android</module>
     </modules>
 

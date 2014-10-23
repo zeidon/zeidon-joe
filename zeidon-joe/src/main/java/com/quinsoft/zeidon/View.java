@@ -85,17 +85,28 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     EntityCursor getCursor( EntityDef entityDef );
 
     /**
-     * @return The default select set.
+     * @return The default select set.  If one doesn't exist then it will be created
+     * and stored in an internal hash set.
      */
     SelectSet getSelectSet();
 
     /**
-     * Returns the select set by index.
+     * Returns the select set by index.  If one doesn't exist then it will be created
+     * and stored in an internal hash set.
+     * 
      * @param index.
      * @return
      */
     SelectSet getSelectSet( Object index );
 
+    /**
+     * Creates a new SelectSet.  This is *not* stored in the internal SelectSet hash and
+     * can not be retrieved through getSelectSet.
+     * 
+     * @return new SelectSet.
+     */
+    SelectSet createSelectSet();
+    
     /**
      * Set the default select set, i.e. the select set that will be returned
      * by getSelectSet().

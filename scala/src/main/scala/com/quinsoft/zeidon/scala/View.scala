@@ -123,6 +123,7 @@ class View( val task: Task ) extends Task( task ) {
     def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
     def serializeOi = { validateNonEmpty; jview.serializeOi() }
     override def deserializeOi = { validateNonEmpty; jview.deserializeOi() }
+    def createSelectSet() = { validateNonEmpty; jview.createSelectSet() }
 
     def cursor( entityDef: EntityDef ) = {
         validateNonEmpty

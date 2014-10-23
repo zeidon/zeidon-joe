@@ -31,7 +31,7 @@ public class UnknownAttributeDefException extends ZeidonException
 
     public UnknownAttributeDefException( EntityDef entityDef, String attributeName )
     {
-        super( "Attribute name '%s' does not exist for LodDef", attributeName );
+        super( "Attribute name '%s' does not exist for EntityDef", attributeName );
         prependEntityDef( entityDef );
     }
 }

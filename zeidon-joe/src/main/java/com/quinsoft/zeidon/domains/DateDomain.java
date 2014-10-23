@@ -180,7 +180,7 @@ public class DateDomain extends AbstractDomain
         		return internalValue.toString();
 
         	if ( formatter == null )
-        	    throw new ZeidonException( "JaveEditString is not set for context %s", this.toString() );
+        	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
 
             return formatter.print( (DateTime) internalValue );
         }
@@ -206,7 +206,7 @@ public class DateDomain extends AbstractDomain
                 return JoeUtils.parseStandardDateString( s );
 
         	if ( formatter == null )
-        	    throw new ZeidonException( "JaveEditString is not set for context %s", this.toString() );
+        	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
 
         	try
         	{

@@ -3,7 +3,6 @@
 # to override defaults or set up additional web entry points.
 
 require 'rubygems'
-require 'bundler/setup'
 require 'sinatra'
 
 puts "Using local jar-bootstrap.rb"

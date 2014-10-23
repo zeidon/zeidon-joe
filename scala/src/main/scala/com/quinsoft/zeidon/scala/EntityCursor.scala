@@ -95,39 +95,33 @@ class EntityCursor( private[this]  val view: View,
     }
 
     def each( looper: => Any ) = {
-        val iter = jentityCursor.eachEntity()
-        while ( iter.hasNext() )
-        {
-            val ei = iter.next()
-            breakable {
-                looper
-            }
-        }
+        val iter = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this )
+        iter.each( looper )
     }
 
-    def iterator = {
-        val iter = jentityCursor.eachEntity
-        new Iterator[EntityInstance] {
-            def hasNext = iter.hasNext()
-            def next = new EntityInstance( iter.next() )
-        }
+    def iterator = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this ).iterator
+
+    def under( scopingEntity: String ) = {
+        new EntityInstanceIterator( jentityCursor.eachEntity( scopingEntity ) ).setCursor( this )
     }
 
-    def iterator( scopingEntity: String ) = {
-        val iter = jentityCursor.eachEntity( scopingEntity )
-        new Iterator[EntityInstance] {
-            def hasNext = iter.hasNext()
-            def next = new EntityInstance( iter.next() )
-        }
+    def under( scopingEntity: AbstractEntity ) = {
+        new EntityInstanceIterator( jentityCursor.eachEntity( scopingEntity.entityDef ) ).setCursor( this )
     }
 
-    override def childrenHier = super.childrenHier.setCursor(this)
+    /**
+     * Returns an iterator that will iterate through all the descendants of the current entity.
+     */
+    override def childrenHier: EntityInstanceIterator = super.childrenHier.setCursor(this)
 
     /**
      * Returns an iterator that will iterate through the direct children of the current entity.
      */
-    override def directChildren = super.directChildren.setCursor(this)
+    override def directChildren: EntityInstanceIterator = super.directChildren.setCursor(this)
 
+    /**
+     * Set the cursor using the Attribute Hash Key.
+     */
     class HashSetter extends AbstractEntity( jentityDef ) {
         var rc: Boolean = false
 

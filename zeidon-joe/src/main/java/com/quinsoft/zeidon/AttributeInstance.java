@@ -80,7 +80,7 @@ public interface AttributeInstance
 
     /**
      * Sets the value of the attribute without attempting to convert it first.  This still validates that the
-     * value is well-formed.
+     * value is well-formed.  This is intended to be used inside derived operations to set the value.
      *
      * @param value
      * @return this

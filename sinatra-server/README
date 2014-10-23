@@ -1,3 +1,7 @@
 This project builds the sinatra-server .jar.  It is a convenience .jar to make it
 easy build simple LOD servers from any Zeidon project.  See client-files directory
 for the files necessary to build and start a lod-server.
+
+To update JRuby or Sinatra for this project, install JRuby locally and then install
+the sinatra gem(s).  Then the gem directory can be copied from the JRuby installation
+into this project.
