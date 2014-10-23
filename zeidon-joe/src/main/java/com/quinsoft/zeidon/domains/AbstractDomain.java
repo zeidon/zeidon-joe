@@ -32,9 +32,9 @@ import com.quinsoft.zeidon.InvalidAttributeConversionException;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 
 /**
@@ -237,8 +237,8 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue == null )
             return null;
 
-        if ( internalValue instanceof Double )
-            return (Double) internalValue;
+        if ( internalValue instanceof Number )
+            return ((Number) internalValue).doubleValue();
 
         throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Double", attributeDef.toString() );
     }
@@ -297,7 +297,7 @@ public abstract class AbstractDomain implements Domain
         DomainContext context = contextList.get( lowerName );
         return context;
     }
-    
+
     protected DomainContext getDefaultContext()
     {
         if ( defaultContext != null )
