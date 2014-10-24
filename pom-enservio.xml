@@ -18,6 +18,11 @@
 
 	<description>Parent to all Zeidon Java projects</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scala.version>2.11.2</scala.version>
+    </properties>
+
         <parent>
           <groupId>com.enservio.maven</groupId>
           <artifactId>company-pom</artifactId>
@@ -41,18 +46,11 @@
 	<modules>
                 <module>zeidon-joe</module>
                 <module>object-browser</module>
+                <module>scala</module>
 		<module>jconsole-plugin</module>
-                <module>zeidon-operations</module>
-                <module>zeidon-tests</module>
                 <module>restserver</module>
                 <module>zruby</module>
-                <module>scala</module>
 		<module>sinatra-server</module>
 	</modules>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<dgc>this is a test</dgc>
-		<parent-pom>pom-enservio.xml</parent-pom>
-	</properties>
 </project>
