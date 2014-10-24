@@ -30,6 +30,20 @@ class QualBuilder( private val view: View,
         addQual( this )
     }
 
+    def any( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+        jqual.addAttribQual( "(" )
+
+        val iter = addQual.iterator
+        while ( iter.hasNext ) {
+            iter.next()( this )
+            if ( iter.hasNext )
+                jqual.addAttribQual( "OR" )
+        }
+
+        jqual.addAttribQual( ")" )
+        return this
+    }
+
     def andAny( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
         jqual.addAttribQual( "AND" )
         jqual.addAttribQual( "(" )
@@ -48,6 +62,20 @@ class QualBuilder( private val view: View,
     def or( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         addQual( this )
+    }
+
+    def all( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+        jqual.addAttribQual( "(" )
+
+        val iter = addQual.iterator
+        while ( iter.hasNext ) {
+            iter.next()( this )
+            if ( iter.hasNext )
+                jqual.addAttribQual( "AND" )
+        }
+
+        jqual.addAttribQual( ")" )
+        return this
     }
 
     def orAll( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {

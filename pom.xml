@@ -18,6 +18,11 @@
 
     <description>Parent to all Zeidon Java projects</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<scala.version>2.11.2</scala.version>
+    </properties>
+
     <!-- Set up distributionManagement to deploy to OSSRH central repo -->
     <distributionManagement>
         <snapshotRepository>
@@ -187,7 +192,4 @@
         </profile>
     </profiles>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

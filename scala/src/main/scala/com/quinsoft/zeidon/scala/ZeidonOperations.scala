@@ -16,6 +16,7 @@ import util.control.Breaks._
  */
 trait ZeidonOperations {
     val task: Task
+    private var cursorResult: SetCursorResult = null
 
     val ON = View.ON // Used to build "BASED ON LOD" syntax.
 
@@ -23,22 +24,27 @@ trait ZeidonOperations {
     val PREV  = CursorPosition.PREV
     val FIRST = CursorPosition.FIRST
     val LAST  = CursorPosition.LAST
+    val zCURSOR_SET = CursorResult.SET.toInt()
 
     def VIEW: View = new View( task )
 
     def GETVIEW( viewName: String ) = task.jtask.getViewByName( viewName )
 
     def FOREACH( cursor: EntityCursor ) = {
-      val iterator = new EntityIterator( cursor )
-      iterator
+        val iterator = new EntityIterator( cursor )
+        iterator
     }
 
+    def RESULT = cursorResult
+
     def SETFIRST( cursor: EntityCursor ): SetCursorResult = {
-      new SetCursorResult( cursor.jentityCursor.setFirst(), cursor )
+        cursorResult = new SetCursorResult( cursor.jentityCursor.setFirst(), cursor )
+        cursorResult
     }
 
     def SETNEXT( cursor: EntityCursor ): SetCursorResult = {
-      new SetCursorResult( cursor.jentityCursor.setNext(), cursor )
+        cursorResult = new SetCursorResult( cursor.jentityCursor.setNext(), cursor )
+        cursorResult
     }
 
     /**

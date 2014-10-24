@@ -25,3 +25,14 @@ class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
     def taskList = joe.getTaskList()
     def startBrowser = joe.startBrowser()
 }
+
+object ObjectEngine {
+
+    /**
+     * Returns a Scala ObjectEngine created by calling getInstance on the Java OE.
+     */
+    def getInstance = {
+        val joe = com.quinsoft.zeidon.standardoe.JavaObjectEngine.getInstance()
+        new ObjectEngine( joe )
+    }
+}
