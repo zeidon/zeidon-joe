@@ -8,7 +8,7 @@ package com.quinsoft.zeidon.scala
  *
  */
 class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
-    val systemTask = new Task( joe.getSystemTask() )
+    val systemTask = new Task( joe.getSystemTask(), this )
 
     private [scala] val objectOperationMap = new ObjectOperationMap
 
