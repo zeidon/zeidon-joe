@@ -23,8 +23,6 @@ import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.basedOn
-import com.quinsoft.zencas.scalasamples.SampleActivates;
-import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
 
 /**
  *  This gives examples of how to manipulate cursors.  Usually there are two
@@ -95,7 +93,7 @@ class SampleCursorManipulation( val task: Task ) extends ZeidonOperations {
          */
 
         // VML way
-        if ( SETFIRST( mUser.User ) WHERE( mUser.User.ID == 490 || mUser.User.ID == 491) ) {
+        if ( SETFIRST( mUser.User ) WHERE( mUser.User.ID == 490 || mUser.User.ID == 491 ) ) {
             println( "Cursor was set" )
         }
 
@@ -117,12 +115,12 @@ class SampleCursorManipulation( val task: Task ) extends ZeidonOperations {
          */
 
         // VML way
-        if ( SETFIRST( mUser.User ) WHERE( mUser.User.ID == 490 || mUser.User.ID == 491) ) {
+        if ( SETFIRST( mUser.Report ) UNDER( mUser.UserGroup ) WHERE( mUser.Report.ID == 589 ) ) {
             println( "Cursor was set" )
         }
 
         // Scala way
-        if ( mUser.User.setFirst( mUser.User.ID == 490  || mUser.User.ID == 491 ) ) {
+        if ( mUser.Report.setFirst( mUser.Report.ID == 589, mUser.UserGroup ) ) {
             println( "Cursor was set" )
         }
     }
@@ -139,9 +137,11 @@ object SampleCursorManipulation {
         val activator = new SampleActivates( task )
         var mUser = activator.activateSimple
 
+        oe.startBrowser
         val sampler = new SampleCursorManipulation( task )
         sampler.setCursorFirst(mUser)
         sampler.setCursorFirstWhere(mUser)
+        sampler.setCursorFirstWithScoping(mUser)
 
 //        mUser.logObjectInstance
     }

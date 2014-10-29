@@ -52,8 +52,8 @@ class EntityCursor( private[this]  val view: View,
     def setNext  = jentityCursor.setNext().isSet()
     def setLast  = jentityCursor.setLast().isSet()
 
-    def setFirst( predicate:  => Boolean, scopingEntity: String = null ): Boolean = {
-        val iter = jentityCursor.eachEntity( scopingEntity )
+    def setFirst( predicate:  => Boolean, scopingEntity: AbstractEntity = null ): Boolean = {
+        val iter = jentityCursor.eachEntity( if ( scopingEntity == null ) null else scopingEntity.entityDef )
         while ( iter.hasNext() )
         {
             iter.next()

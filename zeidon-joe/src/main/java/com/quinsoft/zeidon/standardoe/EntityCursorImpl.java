@@ -844,18 +844,12 @@ class EntityCursorImpl implements EntityCursor
      */
     private EntityInstanceImpl getScopingEntityInstance( EntityDef scopingEntity )
     {
-        if ( scopingEntity == null )
-            throw new ZeidonException( "ScopingEntity may not be null" );
-
         // If the entity for this cursor has no parent then scoping isn't required.
         if ( getEntityDef().getParent() == null )
             return null;
 
-// DGC 2013-02-21 Following is commented out in case the check-for-null at the beginning
-// of this method is incorrect.  You can remove the following code once it has been
-// verified that it is not needed.
-//        if ( scopingEntity == null )
-//            scopingEntity = getEntityDef().getParent();
+        if ( scopingEntity == null )
+            scopingEntity = getEntityDef().getParent();
 
         // If the scoping entity isn't the parent then we need to reset ancestor
         // cursors for everything under the scoping entity child.
@@ -901,6 +895,9 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setFirst(EntityDef scopingEntity)
     {
+        if ( scopingEntity == null )
+            return setFirst();
+
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .withScoping( getScopingEntityInstance( scopingEntity ) )
                                     .forEntityDef( getEntityDef() )

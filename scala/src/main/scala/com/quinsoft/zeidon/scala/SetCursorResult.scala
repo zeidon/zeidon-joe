@@ -4,6 +4,7 @@
 package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon.CursorResult
+import com.quinsoft.zeidon.objectdefinition.EntityDef
 
 /**
  * @author dgc
@@ -34,6 +35,10 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
         this
     }
 
+    def UNDER( scopingEntity: AbstractEntity ) = {
+        jcursorResult = cursor.jentityCursor.setFirst( scopingEntity.entityDef )
+        this
+    }
     /**
      * Set cursor to the next entity matching the predicate.
      */
