@@ -602,13 +602,8 @@ class EntityInstanceImpl implements EntityInstance
         if ( ! attributeDef.isDerived() )
             return;
 
-        if ( view == null )
-        {
-            view = new ViewImpl( getObjectInstance() );
-            view.cursor( attributeDef.getEntityDef() ).setCursor( this );
-        }
-
-        attributeDef.executeDerivedAttributeForGet( view );
+        AttributeInstanceImpl instance = getAttribute( attributeDef, view );
+        attributeDef.executeDerivedAttributeForGet( instance );
     }
 
     @Override

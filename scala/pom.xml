@@ -9,10 +9,6 @@
 
   <artifactId>zeidon-scala</artifactId>
 
-  <properties>
-    <scala.version>2.11.2</scala.version>
-  </properties>
-
  <dependencies>
     <dependency>
       <groupId>org.scala-lang</groupId>
@@ -45,15 +41,6 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    
-    <!-- This pulls in the .jar file with the Zeidon Apps -->
-    <dependency>
-      <groupId>com.quinsoft.zeidon</groupId>
-      <artifactId>zeidon-tests</artifactId>
-      <type>test-jar</type>
-      <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
  

@@ -183,6 +183,15 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#createSelectSet()
+     */
+    @Override
+    public SelectSet createSelectSet()
+    {
+        return getView().createSelectSet();
+    }
+
+    /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet()
      */
     @Override

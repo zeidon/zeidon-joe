@@ -457,6 +457,16 @@ public class zVIEW extends VmlOperation implements View
         return view.commit( options );
     }
 
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#createSelectSet()
+     */
+    @Override
+    public SelectSet createSelectSet()
+    {
+        return view.createSelectSet();
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet()
      */

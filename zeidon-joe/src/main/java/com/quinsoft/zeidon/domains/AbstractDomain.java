@@ -238,8 +238,8 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue == null )
             return null;
 
-        if ( internalValue instanceof Double )
-            return (Double) internalValue;
+        if ( internalValue instanceof Number )
+            return ((Number) internalValue).doubleValue();
 
         throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Double", attributeDef.toString() );
     }

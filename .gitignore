@@ -4,3 +4,4 @@ tmp/
 *.bak
 *.bat
 .tmpclasspath
+.cache

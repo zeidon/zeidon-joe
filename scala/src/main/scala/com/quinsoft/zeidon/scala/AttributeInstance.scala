@@ -11,7 +11,10 @@ object AttributeInstance {
     implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString( attr.contextName )
     implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.jattributeInstance.getInteger( attr.contextName )
     implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.jattributeInstance.getDouble( attr.contextName )
-    implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.jattributeInstance.getBoolean( attr.contextName )
+    implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = {
+        val b = attr.jattributeInstance.getBoolean( attr.contextName )
+        if ( b == null ) false else b
+    }
 }
 
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
@@ -19,7 +22,9 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
 
     def isNull = jattributeInstance.isNull()
     def isEmpty = jattributeInstance.isNull() || jattributeInstance.compare( "" ) == 0
+    def isUpdated = jattributeInstance.isUpdated()
     def setValue( any: Any ) = jattributeInstance.setValue( any )
+    def setDerivedValue( any: Any ) = jattributeInstance.setDerivedValue( any )
     def value = jattributeInstance.getValue()
     def getString( contextName: String = null ) = jattributeInstance.getString( contextName )
     def name = jattributeInstance .getAttributeDef().getName()

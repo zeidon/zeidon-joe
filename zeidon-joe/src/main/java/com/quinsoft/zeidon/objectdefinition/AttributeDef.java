@@ -26,10 +26,10 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.standardoe.ScalaHelper;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 
@@ -60,8 +60,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     // reference by inner classes.
     protected String          derivedOperationName;
     protected String          derivedOperationClassName;
-
-    private final ThreadLocal<DerivedOper> derivedOperations = new ThreadLocal<DerivedOper>();
+    private   SourceFileType  derivedOperationsourceFileType = SourceFileType.VML;
 
     private AttributeHashKeyType hashKeyType = AttributeHashKeyType.NONE;
 
@@ -81,12 +80,14 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private boolean      debugChange;
     private Domain       domain;
     private String       domainName;
-    private EntityDef   hashKeyParent;
+    private EntityDef    hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
+
     /**
      * If true then this attribute was created at runtime via EntityDef.createDynamicAttributeDef.
      */
     private boolean isDynamicAttribute = false;
+    private DerivedOper derivedOperation;
 
     public AttributeDef(EntityDef entityDef)
     {
@@ -128,11 +129,18 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
                 if ( reader.getAttributeName().equals( "DERIVEDC" ))
                 {
                     derivedOperationClassName = reader.getAttributeValue().intern();
+                    if ( ! derivedOperationClassName.contains( "." ) )
+                        derivedOperationClassName = getApplication().getPackage() + "." + derivedOperationClassName;
                 }
                 else
                 if ( reader.getAttributeName().equals( "DERIVEDF" ))
                 {
                     derivedOperationName = reader.getAttributeValue().intern();
+                }
+                else
+                if ( reader.getAttributeName().equals( "DRSRCTYPE" ))
+                {
+                    derivedOperationsourceFileType = SourceFileType.parse( reader.getAttributeValue() );
                 }
                 else
                 if ( reader.getAttributeName().equals( "DOMAIN" ))
@@ -288,6 +296,11 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         }
     }
 
+    private Application getApplication()
+    {
+        return getEntityDef().getLodDef().getApplication();
+    }
+
     AttributeDef setDomain( String domainName )
     {
         Application app = entityDef.getLodDef().getApplication();
@@ -368,76 +381,42 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         return attributeNumber;
     }
 
-    /**
-     * Loads the class that calls the derived operation from cache.  If the
-     * object doesn't exist in the cache, create one.
-     *
-     * @param task
-     * @return
-     */
-    private synchronized DerivedOper getDerivedOperation( Task task )
+    public String getDerivedOperationClassName()
     {
-
-        DerivedOper derivedOperation = derivedOperations.get();
-        if ( derivedOperation == null )
-        {
-            derivedOperation = loadDerivedOperation( task );
-            derivedOperations.set( derivedOperation );
-        }
-
-        return derivedOperation;
+        return derivedOperationClassName;
     }
 
-    private DerivedOper loadDerivedOperation( Task view )
+    public String getDerivedOperationName()
     {
-        DerivedOper derivedOperation = null;
+        return derivedOperationName;
+    }
+
+    private synchronized DerivedOper getDerivedOperation( Task task )
+    {
+        if ( derivedOperation != null )
+            return derivedOperation;
 
         try
         {
-            ObjectEngine oe = view.getObjectEngine();
-            ClassLoader classLoader = oe.getClassLoader( derivedOperationClassName );
-            Class<? extends Object> operationsClass;
-            operationsClass = classLoader.loadClass( derivedOperationClassName );
+            switch ( derivedOperationsourceFileType )
+            {
+                case VML:
+                    derivedOperation = new VmlDerivedOper( task );
+                    break;
 
-            Constructor<? extends Object> constructor;
-            try
-            {
-                // First try getting a constructor that uses a view.  Most derived operations are defined
-                // in the Object code so it must be created with a view.
-                constructor = operationsClass.getConstructor( CONSTRUCTOR_ARG_TYPES1 );
-            }
-            catch ( NoSuchMethodException e )
-            {
-                // We couldn't find a constructor that takes a view, so try to find one that
-                // takes a TaskQualification.  A derived attribute could be defined in a global
-                // operations class, which uses a TaskQual for the constructor.
-                try
-                {
-                    constructor = operationsClass.getConstructor( CONSTRUCTOR_ARG_TYPES2 );
-                }
-                catch ( NoSuchMethodException e2 )
-                {
-                    // One more time: try with no arguments.
-                    constructor = operationsClass.getConstructor();
-                }
+                case JAVA:
+                    derivedOperation = new JavaDerivedOper( task );
+                    break;
+
+                case SCALA:
+                    derivedOperation = new ScalaDerivedOper( task );
+                    break;
+
+                default:
+                    throw new ZeidonException( "Unsupported source file type for derived operations: %s",
+                                               derivedOperationsourceFileType );
             }
 
-            // First try to find a method with the exact name of derivedOperationName.  This is the
-            // old-style method as generated by VML.
-            Method method;
-            try
-            {
-                method = operationsClass.getMethod( derivedOperationName, ARGUMENT_TYPES1 );
-                derivedOperation = new DerivedOper( constructor, method );
-            }
-            catch ( NoSuchMethodException e )
-            {
-                // Try with the JOE-specific parameter list.
-                method = operationsClass.getMethod( derivedOperationName, ARGUMENT_TYPES2 );
-
-                // If we get here then it worked!
-                derivedOperation = new NewDerivedOper( constructor, method );
-            }
 
             return derivedOperation;
         }
@@ -492,44 +471,46 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
      * This calls the derived attribute function to set the internal attribute value.
      * The attribute value when then be retrieved by a get-attr method.
      *
-     * @param view
-     * @throws Exception
+     * @param attributeInstance
      */
-    public void executeDerivedAttributeForGet( View view )
-    {
-        getDerivedOperation( view.getTask() ).getDerivedValue( view );
-    }
-
     public void executeDerivedAttributeForGet( AttributeInstance attributeInstance )
     {
         getDerivedOperation( attributeInstance.getTask() ).getDerivedValue( attributeInstance );
     }
 
-    static private final Class<?>[] ARGUMENT_TYPES1        = new Class<?>[] { View.class, String.class, String.class, Integer.class };
-    static private final Class<?>[] ARGUMENT_TYPES2        = new Class<?>[] { AttributeInstance.class };
-    static private final Class<?>[] CONSTRUCTOR_ARG_TYPES1 = new Class<?>[] { View.class };
-    static private final Class<?>[] CONSTRUCTOR_ARG_TYPES2 = new Class<?>[] { TaskQualification.class };
+    static private final Class<?>[] ARGUMENT_TYPES_VML     = new Class<?>[] { View.class, String.class, String.class, Integer.class };
+    static private final Class<?>[] ARGUMENT_TYPES_JAVA    = new Class<?>[] { AttributeInstance.class };
+    static private final Class<?>[] CONSTRUCTOR_ARG_VML    = new Class<?>[] { View.class };
+    static private final Class<?>[] CONSTRUCTOR_ARG_JAVA   = new Class<?>[] { };
 
     /**
-     * Call a derived operation as it's defined in Java generated from VML.
+     * Call a derived operation.
      *
      * @author dg
      *
      */
-    private class DerivedOper
+    private abstract class DerivedOper
     {
         protected final Method method;
         protected final Constructor<? extends Object> constructor;
 
-        private DerivedOper( Constructor<? extends Object> constructor, Method method )
+        private DerivedOper( Task task, Class<?>[] constructorArgs, Class<?>[] argumentTypes ) throws Exception
         {
-            this.constructor = constructor;
-            this.method = method;
-        }
+            if ( constructorArgs != null )
+            {
+                ObjectEngine oe = task.getObjectEngine();
+                ClassLoader classLoader = oe.getClassLoader( derivedOperationClassName );
+                Class<? extends Object> operationsClass;
+                operationsClass = classLoader.loadClass( derivedOperationClassName );
 
-        private void getDerivedValue( View view )
-        {
-            callDerivedOperation( view );
+                constructor = operationsClass.getConstructor( constructorArgs );
+                method = operationsClass.getMethod( derivedOperationName, argumentTypes );
+            }
+            else
+            {
+                constructor = null;
+                method = null;
+            }
         }
 
         private void getDerivedValue( AttributeInstance attributeInstance )
@@ -537,10 +518,31 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
             callDerivedOperation( attributeInstance );
         }
 
-        void callDerivedOperation( View view )
+        abstract void callDerivedOperation( AttributeInstance attributeInstance );
+
+        @Override
+        public String toString()
+        {
+            return derivedOperationClassName + "." + derivedOperationName;
+        }
+    }
+
+    /**
+     * Call a derived operation as it's defined in Java generated from VML.
+     */
+    private class VmlDerivedOper extends DerivedOper
+    {
+        private VmlDerivedOper( Task task ) throws Exception
+        {
+            super( task, CONSTRUCTOR_ARG_VML, ARGUMENT_TYPES_VML );
+        }
+
+        @Override
+        void callDerivedOperation( AttributeInstance attributeInstance )
         {
             try
             {
+                View view = attributeInstance.getView();
                 Object oper = constructor.newInstance( view );
                 Object[] argList = new Object[] { view, getEntityDef().getName(), getName(), DERIVED_GET };
                 method.invoke( oper, argList );
@@ -551,41 +553,16 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
                                      .prependAttributeDef( AttributeDef.this  );
             }
         }
-
-        void callDerivedOperation( AttributeInstance attributeInstance )
-        {
-            callDerivedOperation( attributeInstance.getView() );
-        }
-
-        @Override
-        public String toString()
-        {
-            return derivedOperationClassName + "." + derivedOperationName;
-        }
     }
 
     /**
-     * Call a derived operation as it's defined in native java.  Note that in this case
-     * the Derived Object is instantiated as a singleton and reused.
-     *
-     * @author dg
-     *
+     * Call a derived operation as it's defined in hand-coded Java.
      */
-    private class NewDerivedOper extends DerivedOper
+    private class JavaDerivedOper extends DerivedOper
     {
-        private final Object oper;
-
-        private NewDerivedOper( Constructor<? extends Object> constructor, Method method ) throws Exception
+        private JavaDerivedOper( Task task ) throws Exception
         {
-            super( constructor, method );
-            oper = constructor.newInstance();
-        }
-
-        @Override
-        void callDerivedOperation( View view )
-        {
-            AttributeInstance ai = view.cursor( getEntityDef() ).getAttribute( AttributeDef.this );
-            callDerivedOperation( ai );
+            super( task, CONSTRUCTOR_ARG_JAVA, ARGUMENT_TYPES_JAVA );
         }
 
         @Override
@@ -593,9 +570,36 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         {
             try
             {
-                Object[] argList = new Object[] { attributeInstance };
-                Object value = method.invoke( oper, argList );
-                attributeInstance.setDerivedValue( value );
+                Object oper = constructor.newInstance( attributeInstance );
+                Object[] argList = new Object[] { attributeInstance, DERIVED_GET };
+                method.invoke( oper, argList );
+            }
+            catch ( Throwable e )
+            {
+                throw ZeidonException.prependMessage( e, "Oper: %s", this )
+                                     .prependAttributeDef( AttributeDef.this  );
+            }
+        }
+    }
+
+    /**
+     * Call a derived operation using the ScalaHelper.
+     *
+     */
+    private class ScalaDerivedOper extends DerivedOper
+    {
+        private ScalaDerivedOper( Task task ) throws Exception
+        {
+            super( task, null, null );
+        }
+
+        @Override
+        void callDerivedOperation( AttributeInstance attributeInstance )
+        {
+            try
+            {
+                ScalaHelper scalaHelper = getEntityDef().getLodDef().getScalaHelper( attributeInstance.getTask() );
+                scalaHelper.calculateDerivedAttribute( attributeInstance );
             }
             catch ( Throwable e )
             {

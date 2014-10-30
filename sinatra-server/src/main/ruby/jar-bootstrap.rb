@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'bundler/setup'
+#require 'bundler/setup'
 require 'sinatra'
 
 puts "Using default jar-bootstrap.jar"

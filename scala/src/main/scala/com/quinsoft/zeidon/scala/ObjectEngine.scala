@@ -8,7 +8,7 @@ package com.quinsoft.zeidon.scala
  *
  */
 class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
-    val systemTask = new Task( joe.getSystemTask() )
+    val systemTask = new Task( joe.getSystemTask(), this )
 
     private [scala] val objectOperationMap = new ObjectOperationMap
 
@@ -24,4 +24,15 @@ class ObjectEngine( val joe: com.quinsoft.zeidon.ObjectEngine ) {
                     new Task( joe.createTask( appName, persistent, taskId ), this )
     def taskList = joe.getTaskList()
     def startBrowser = joe.startBrowser()
+}
+
+object ObjectEngine {
+
+    /**
+     * Returns a Scala ObjectEngine created by calling getInstance on the Java OE.
+     */
+    def getInstance = {
+        val joe = com.quinsoft.zeidon.standardoe.JavaObjectEngine.getInstance()
+        new ObjectEngine( joe )
+    }
 }

@@ -49,4 +49,18 @@ class EntityInstanceIterator( val jiterator: EntityIterator[_]) extends Iterable
             override def foreach[U](f: EntityInstance => U) { while (hasNext) breakable{ f(next()) } }
         }
     }
+
+    def each( looper: => Any ) = {
+        var any: Any = null
+        val iter = iterator
+        while ( iter.hasNext )
+        {
+            val ei = iter.next()
+            breakable {
+                any = looper
+            }
+        }
+
+        any
+    }
 }

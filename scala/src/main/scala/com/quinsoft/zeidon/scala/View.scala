@@ -16,7 +16,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
  * @author dgc
  *
  */
-class View( val task: Task ) extends Task( task ) {
+class View( val task: Task ) extends Task( task ) with Dynamic {
 
     var jlodDef: LodDef = null
     var jview: com.quinsoft.zeidon.View = null
@@ -27,9 +27,8 @@ class View( val task: Task ) extends Task( task ) {
         jview = jv
     }
 
-    def this( jtask: com.quinsoft.zeidon.Task ) = {
-        this( new Task( jtask ) )
-    }
+    def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
+    def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
 
     def basedOn( viewDef: ViewDef ) = setLod( viewDef.lodName , viewDef.applicationName  )
     def basedOn( lodName: String ) = setLod( lodName )
@@ -112,6 +111,11 @@ class View( val task: Task ) extends Task( task ) {
     }
 
     /**
+     * Creates a new view with a different owning task.
+     */
+    def newView( task: Task = this.task ) = { validateNonEmpty; new View( task ).from( this ) }
+
+    /**
      * Creates a new View that has the same cursor positions as the current view.
      */
     def duplicate = { validateNonEmpty; new View( jview.newView ) }
@@ -123,6 +127,7 @@ class View( val task: Task ) extends Task( task ) {
     def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
     def serializeOi = { validateNonEmpty; jview.serializeOi() }
     override def deserializeOi = { validateNonEmpty; jview.deserializeOi() }
+    def createSelectSet() = { validateNonEmpty; jview.createSelectSet() }
 
     def cursor( entityDef: EntityDef ) = {
         validateNonEmpty

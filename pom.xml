@@ -18,6 +18,11 @@
 
     <description>Parent to all Zeidon Java projects</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<scala.version>2.11.2</scala.version>
+    </properties>
+
     <!-- Set up distributionManagement to deploy to OSSRH central repo -->
     <distributionManagement>
         <snapshotRepository>
@@ -85,11 +90,11 @@
     <modules>
         <module>zeidon-joe</module>
         <module>object-browser</module>
+        <module>scala</module>
 	<module>jconsole-plugin</module>
         <module>zeidon-operations</module>
         <module>restserver</module>
         <module>zruby</module>
-        <module>scala</module>
         <module>android</module>
     </modules>
 
@@ -187,7 +192,4 @@
         </profile>
     </profiles>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

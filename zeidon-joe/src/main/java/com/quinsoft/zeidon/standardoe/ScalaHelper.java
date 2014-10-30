@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.ObjectConstraintType;
 import com.quinsoft.zeidon.View;
 
@@ -30,5 +31,15 @@ import com.quinsoft.zeidon.View;
  */
 public interface ScalaHelper
 {
-    Integer executeObjectConstraint( View view, ObjectConstraintType constraintType, ClassLoader loader );
+    void setClassLoader( ClassLoader classLoader );
+    Integer executeObjectConstraint( View view, ObjectConstraintType constraintType );
+
+    /**
+     * This is called when the value for a derived attribute is requested.  The implementation
+     * of this should set the value in the attributeInstance using setDerivedValue().
+     *
+     * @param attributeInstance
+     * @return ignored
+     */
+    Object calculateDerivedAttribute( AttributeInstance attributeInstance );
 }

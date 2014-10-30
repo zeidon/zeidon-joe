@@ -1,17 +1,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
         <artifactId>zeidon</artifactId>
         <groupId>com.quinsoft.zeidon</groupId>
         <version>1.0.7-SNAPSHOT</version>
     </parent>
+
     <artifactId>zeidon-tests</artifactId>
     <name>zeidon-tests</name>
     <description>Zeidon JUnit tests.  This is in a separate package because it requires ZeidonOperations and application files.</description>
 
     <build>
         <plugins>
+          <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <version>3.2.0</version>
+    
+           <executions>
+              <execution>
+                <id>scala-compile-first</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                  <goal>compile</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>scala-test-compile</id>
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>testCompile</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -58,6 +84,11 @@
         </dependency>
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>zeidon-scala</artifactId>
+            <version>${project.parent.version}</version>  
+        </dependency>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
             <artifactId>object-browser</artifactId>
             <version>${project.parent.version}</version>  
         </dependency>
@@ -85,6 +116,16 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.0</version>
+        </dependency>
+        <dependency>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
+          <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-reflect</artifactId>
+          <version>${scala.version}</version>
         </dependency>
     </dependencies>
 

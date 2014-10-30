@@ -84,7 +84,7 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( ! attributeDef.isDerived() )
             return;
 
-        attributeDef.executeDerivedAttributeForGet( getView() );
+        attributeDef.executeDerivedAttributeForGet( this );
     }
 
     /* (non-Javadoc)

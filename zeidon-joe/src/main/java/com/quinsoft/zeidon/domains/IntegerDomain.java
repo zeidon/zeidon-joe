@@ -62,7 +62,7 @@ public class IntegerDomain extends AbstractNumericDomain
         	Integer num;
         	try
         	{
-        		num = Integer.parseInt( ((CharSequence) externalValue ).toString() );
+        		num = Integer.parseInt( externalValue.toString().trim() );
         	}
         	catch( Exception e )
         	{

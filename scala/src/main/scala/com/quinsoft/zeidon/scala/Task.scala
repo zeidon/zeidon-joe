@@ -3,22 +3,16 @@
  */
 package com.quinsoft.zeidon.scala
 
-import scala.language.dynamics
-
+import com.quinsoft.zeidon.scala.Ternary._
 /**
  * @author dgc
  *
  */
-case class Task ( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
+case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) {
 
-    private[scala] var objectEngine: ObjectEngine = null
+    val objectEngine: ObjectEngine = oe ?: new ObjectEngine( jtask.getObjectEngine() )
 
-    def this( jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine ) = {
-        this(jtask)
-        objectEngine = oe
-    }
-
-    def this( task: Task ) = this( task.jtask )
+    def this( task: Task ) = this( task.jtask, task.objectEngine  )
 
     def getView( viewName: String ): View = {
         val jview = jtask.getViewByName( viewName )
@@ -29,8 +23,6 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
     }
 
     def deserializeOi = jtask.deserializeOi()
-    def newView = new View( this )
-    def newView( source: View ) = new View( this ).from( source )
 }
 
 object Task {

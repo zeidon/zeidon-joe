@@ -151,7 +151,7 @@ public class SSNDomain extends StringDomain
 
         	// If the user has not entered a Java Format string, just return the internal value.
         	if ( editString == null )
-        	    throw new ZeidonException( "JaveEditString is not set for context %s", this.toString() );
+        	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
 
         	int formatLength = editString.length();
         	String internalString = internalValue.toString();

@@ -31,7 +31,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.quinsoft.zencas.ZGLOBAL1_Operation;
 import com.quinsoft.zencas.ZGLOBAL2_Operation;
-//import com.quinsoft.zencas.mProspct_Object;
+//import com.quinsoft.zencas.scalasamples.mProspct_Object;
 
 /**
    @author QuinSoft
