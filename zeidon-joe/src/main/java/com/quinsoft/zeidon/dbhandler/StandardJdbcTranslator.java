@@ -169,7 +169,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             return true;
         }
 
-        return appendString( stmt, buffer, value );
+        String string = domain.convertToString( task, attributeDef, value );
+        return appendString( stmt, buffer, string );
     }
 
     /**

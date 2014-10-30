@@ -2713,15 +2713,13 @@ class EntityInstanceImpl implements EntityInstance
 
         contextName = checkContextName( attributeDef, contextName );
 
-        // Validate that this attribute can be updated.  If we're in the process of initializing
-        // the attribute we'll allow it.
-        if ( ! beingInitialized )
-            validateUpdateAttribute( attributeDef );
-
         try
         {
             AttributeInstanceImpl attrib = getAttribute( attributeDef );
-            attrib.setValue( value, contextName );
+            if ( beingInitialized )
+                attrib.setInternalValue( value, false ); // This bypasses some validation.
+            else
+                attrib.setValue( value, contextName );
         }
         catch( Throwable t )
         {
