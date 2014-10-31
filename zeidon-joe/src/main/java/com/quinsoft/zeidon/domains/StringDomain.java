@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -82,7 +83,7 @@ public class StringDomain extends AbstractDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue instanceof View )
         {
@@ -164,9 +165,9 @@ public class StringDomain extends AbstractDomain
      * null before doing the comparison.
      */
     @Override
-    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
-        Object value = convertExternalValue( task, attributeDef, null, externalValue );
+        Object value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
         String s1 = checkNullString( internalValue );
         String s2 = checkNullString( value );
 

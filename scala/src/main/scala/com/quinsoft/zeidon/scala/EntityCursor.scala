@@ -22,7 +22,8 @@ class EntityCursor( private[this]  val view: View,
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
         val instance = jentityCursor.getEntityInstance()
         if ( instance == null )
-            throw new ZeidonException( "Cursor for '%s' is null.  Did you forget to create the entity?", jentityDef.getName() )
+            throw new ZeidonException( "Cursor is null.  Did you forget to create the entity?" )
+                                .prependEntityDef( jentityDef )
         instance
     }
 

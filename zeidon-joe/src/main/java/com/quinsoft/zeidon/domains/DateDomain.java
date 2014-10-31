@@ -31,6 +31,7 @@ import org.joda.time.format.DateTimeParser;
 import org.joda.time.format.DateTimePrinter;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
@@ -53,7 +54,7 @@ public class DateDomain extends AbstractDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	// KJS - Added 01/27/11 because of line 2836 in lTrnscpt_Object.java
     	// OrderEntityForView( lTrnscpt, "StudentMajorDegreeTrack", "wPrimarySortOrder A GraduationDate A" );
@@ -133,9 +134,9 @@ public class DateDomain extends AbstractDomain
      * Adds milliseconds to the datetime value.
      */
     @Override
-    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object addValue )
+    public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object addValue )
     {
-        DateTime date1 = (DateTime) convertExternalValue( task, attributeDef, null, currentValue );
+        DateTime date1 = (DateTime) convertExternalValue( task, attributeInstance, attributeDef, null, currentValue );
 
         if ( addValue == null )
             return date1;

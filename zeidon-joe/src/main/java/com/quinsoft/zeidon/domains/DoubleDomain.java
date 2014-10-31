@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
@@ -61,7 +62,7 @@ public class DoubleDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
     	if ( externalValue == null )
     		return null;
@@ -82,17 +83,17 @@ public class DoubleDomain extends AbstractNumericDomain
     }
 
     @Override
-    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Double num = (Double) convertExternalValue( task, attributeDef, null, operand );
+        Double num = (Double) convertExternalValue( task, attributeInstance, attributeDef, null, operand );
         Double value = (Double) currentValue;
         return value + num;
     }
 
     @Override
-    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
-        Double num = (Double) convertExternalValue( task, attributeDef, null, operand );
+        Double num = (Double) convertExternalValue( task, attributeInstance, attributeDef, null, operand );
         Double value = (Double) currentValue;
         return value * num;
     }

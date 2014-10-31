@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
@@ -239,8 +240,8 @@ public class DomainList
         }
 
         @Override
-        public Object convertExternalValue( Task task, AttributeDef attributeDef, String contextName,
-                                            Object externalValue ) throws InvalidAttributeValueException
+        public Object convertExternalValue( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef,
+                                            String contextName, Object externalValue ) throws InvalidAttributeValueException
         {
             throw new ZeidonException( "This should never get called" );
         }

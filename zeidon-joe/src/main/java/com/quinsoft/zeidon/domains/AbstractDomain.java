@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeConversionException;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
@@ -68,10 +69,10 @@ public abstract class AbstractDomain implements Domain
      * @see com.quinsoft.zeidon.domains.Domain#convertInternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
     @Override
-    public Object convertInternalValue(Task task, AttributeDef attributeDef, Object value) throws InvalidAttributeValueException
+    public Object convertInternalValue(Task task, AttributeInstance attributeInstance, Object value) throws InvalidAttributeValueException
     {
         // For most domains converting an internal value is the same as converting an external value.
-        return convertExternalValue( task, attributeDef, null, value );
+        return convertExternalValue( task, attributeInstance, attributeInstance.getAttributeDef(), null, value );
     }
 
     @Override
@@ -264,13 +265,13 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
-    public Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
+    public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
         throw new ZeidonException( "addToAttribute not supported for this domain" );
     }
 
     @Override
-    public Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand )
+    public Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
         throw new ZeidonException( "multiplyAttribute not supported for this domain" );
     }
@@ -370,11 +371,11 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
-    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
         try
         {
-            Object value = convertExternalValue( task, attributeDef, null, externalValue );
+            Object value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
             Integer rc = compareNull( task, attributeDef, internalValue, value);
             if ( rc != null )
                 return rc;

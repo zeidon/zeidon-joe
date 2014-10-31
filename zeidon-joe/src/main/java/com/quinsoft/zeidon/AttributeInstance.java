@@ -88,6 +88,21 @@ public interface AttributeInstance
     EntityInstance setDerivedValue( Object value );
 
     /**
+     * Add a value to the current attribute value.
+     *
+     * @param value
+     * @return
+     */
+    EntityInstance add( Object value );
+
+    /**
+     * Multiply an attribute by a value.
+     * @param value
+     * @return
+     */
+    EntityInstance multiply( Object value );
+
+    /**
      *
      * Sets the value of the attribute without attempting to convert it first.  This still validates that the
      * value is well-formed.

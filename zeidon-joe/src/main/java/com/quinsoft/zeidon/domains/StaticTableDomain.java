@@ -22,6 +22,7 @@ package com.quinsoft.zeidon.domains;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -40,11 +41,11 @@ public class StaticTableDomain extends AbstractTableDomain
     }
     
     @Override
-    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
         try
         {
-            Object value = convertExternalValue( task, attributeDef, null, externalValue );
+            Object value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
             Integer rc = compareNull( task, attributeDef, internalValue, value);
             if ( rc != null )
                 return rc;

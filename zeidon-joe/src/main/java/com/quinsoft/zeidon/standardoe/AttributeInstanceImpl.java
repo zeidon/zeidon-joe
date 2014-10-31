@@ -272,7 +272,7 @@ class AttributeInstanceImpl implements AttributeInstance
         validateUpdateAttribute();
         contextName = checkContextName( contextName );
         Object oldValue = attributeValue.getInternalValue();
-        if ( attributeValue.set( getTask(), attributeDef, value, contextName ) )
+        if ( attributeValue.set( getTask(), this, value, contextName ) )
         {
             if ( ! attributeDef.isDerived() )
                 entityInstance.setUpdated( true, true, attributeDef.isPersistent() );
@@ -298,7 +298,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public EntityInstanceImpl setInternalValue( Object value, boolean setIncremental )
     {
         Object oldValue = attributeValue.getInternalValue();
-        Object internalValue = attributeDef.getDomain().convertInternalValue( getTask(), attributeDef, value );
+        Object internalValue = attributeDef.getDomain().convertInternalValue( getTask(), this, value );
         if ( attributeValue.setInternalValue( getTask(), attributeDef, internalValue, setIncremental ) )
         {
             if ( ! attributeDef.isDerived() )
@@ -337,12 +337,26 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public int compare( Object value )
     {
-        return attributeValue.compare( getTask(), attributeDef, value );
+        return attributeValue.compare( getTask(), this, attributeDef, value );
     }
 
     @Override
     public String toString()
     {
         return attributeDef.toString() + ": " + getValue();
+    }
+
+    @Override
+    public EntityInstance add( Object value )
+    {
+        attributeValue.addToAttribute( getTask(), this, value );
+        return entityInstance;
+    }
+
+    @Override
+    public EntityInstance multiply( Object value )
+    {
+        attributeValue.multiplyAttribute( getTask(), this, value );
+        return entityInstance;
     }
 }

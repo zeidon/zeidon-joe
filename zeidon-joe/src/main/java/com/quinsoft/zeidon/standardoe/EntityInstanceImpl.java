@@ -2713,22 +2713,13 @@ class EntityInstanceImpl implements EntityInstance
 
         contextName = checkContextName( attributeDef, contextName );
 
-        // Validate that this attribute can be updated.  If we're in the process of initializing
-        // the attribute we'll allow it.
-        if ( !beingInitialized )
-            validateUpdateAttribute( attributeDef );
-
         try
         {
-            AttributeValue attrib = getInternalAttribute( attributeDef );
-            Object oldValue = attrib.getInternalValue();
-            if ( attrib.set( getTask(), attributeDef, value, contextName ) )
-            {
-                if ( ! attributeDef.isDerived() )
-                    setUpdated( true, true, attributeDef.isPersistent() );
-
-                updateHashKeyAttributeToMap( attributeDef, oldValue );
-            }
+            AttributeInstanceImpl attrib = getAttribute( attributeDef );
+            if ( beingInitialized )
+                attrib.setInternalValue( value, false ); // This bypasses some validation.
+            else
+                attrib.setValue( value, contextName );
         }
         catch( Throwable t )
         {
@@ -2783,18 +2774,8 @@ class EntityInstanceImpl implements EntityInstance
     {
         try
         {
-            AttributeValue attrib = getInternalAttribute( attributeDef );
-            Object oldValue = attrib.getInternalValue();
-
-            // The value is internal value but it may be a different data type.  Ask the domain to convert it and validate it.
-            Object newValue = attrib.convertInternalValue( getTask(), attributeDef, value );
-            if ( attrib.setInternalValue( getTask(), attributeDef, newValue, setIncremental ) )
-            {
-                if ( setIncremental && ! attributeDef.isDerived() )
-                    setUpdated( true, true, attributeDef.isPersistent() );
-
-                updateHashKeyAttributeToMap( attributeDef, oldValue );
-            }
+            AttributeInstanceImpl attrib = getAttribute( attributeDef );
+            attrib.setInternalValue( value, setIncremental );
         }
         catch( Throwable t )
         {
@@ -3103,7 +3084,8 @@ class EntityInstanceImpl implements EntityInstance
     int compareAttribute( View view, AttributeDef attributeDef, Object value)
     {
         executeDerivedOper( view, attributeDef );
-        return getInternalAttribute( attributeDef ).compare( getTask(), attributeDef, value );
+        AttributeInstanceImpl attrib = getAttribute( attributeDef );
+        return getInternalAttribute( attributeDef ).compare( getTask(), attrib, attributeDef, value );
     }
 
     @Override
@@ -3141,8 +3123,9 @@ class EntityInstanceImpl implements EntityInstance
     Object addToAttribute( View view, AttributeDef attributeDef, Object value )
     {
         executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.addToAttribute( getTask(), attributeDef, value );
+        AttributeInstanceImpl attrib = getAttribute( attributeDef );
+        attrib.add( value );
+        return attrib.getValue();
     }
 
     @Override
@@ -3159,10 +3142,10 @@ class EntityInstanceImpl implements EntityInstance
 
     Object multiplyAttribute( View view, AttributeDef attributeDef, Object value )
     {
-        // TODO: I don't think this is updating the entity flags.
         executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.multiplyAttribute( getTask(), attributeDef, value );
+        AttributeInstanceImpl attrib = getAttribute( attributeDef );
+        attrib.multiply( value );
+        return attrib.getValue();
     }
 
     @Override

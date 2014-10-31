@@ -26,6 +26,7 @@ import java.util.Map;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -53,7 +54,7 @@ public class AltDoubleDomain extends DoubleDomain
 
     
     @Override
-    public int compare(Task task, AttributeDef attributeDef, Object internalValue, Object externalValue)
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
     	Object value = null;
 
@@ -66,7 +67,7 @@ public class AltDoubleDomain extends DoubleDomain
     		// don't compare. In other words, in code we might be comparing a date to an invalid
     		// date value but since I'm not actually setting the value, then I don't want to 
     		// throw the exception.
-            value = convertExternalValue( task, attributeDef, null, externalValue );   		
+            value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );   		
     	}
     	catch ( Throwable t )
     	{

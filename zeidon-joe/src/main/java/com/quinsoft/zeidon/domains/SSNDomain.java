@@ -24,11 +24,13 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -77,7 +79,7 @@ public class SSNDomain extends StringDomain
     }
     
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue == null )
             return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );

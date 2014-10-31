@@ -23,8 +23,8 @@ import java.util.Map;
 
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -255,7 +255,7 @@ class AttributeHashKeyMap
             throw new ZeidonException( "Attempting to find null attribute hash value" )
                             .prependAttributeDef( attributeDef );
 
-        Object internalValue = domain.convertExternalValue( getTask(), attributeDef, null, externalValue );
+        Object internalValue = domain.convertExternalValue( getTask(), null, attributeDef, null, externalValue );
 
         Map<Object, EntityInstanceImpl> map = getHashMapForAttribute( attributeDef );
         EntityInstanceImpl ei = map.get( internalValue );

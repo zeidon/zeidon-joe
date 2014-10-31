@@ -23,12 +23,13 @@ package com.quinsoft.zeidon.domains;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DomainType;
 import com.quinsoft.zeidon.objectdefinition.InternalType;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Interface for all domains.
@@ -48,15 +49,18 @@ public interface Domain
      * Takes an external value and converts it into a value used internally value using domain processing.
      *
      * @param task TODO
+     * @param attributeInstance If not null, the is the target attribute.  May be null; this can happen
+     * when converting a value to be used in generated SQL.
      * @param attributeDef TODO
      * @param contextName - Context name.
      * @param externalValue - External value
      * @return internal value.
      */
-    Object convertExternalValue( Task          task,
-                                 AttributeDef attributeDef,
-                                 String        contextName,
-                                 Object        externalValue ) throws InvalidAttributeValueException;
+    Object convertExternalValue( Task              task,
+                                 AttributeInstance attributeInstance,
+                                 AttributeDef      attributeDef,
+                                 String            contextName,
+                                 Object            externalValue ) throws InvalidAttributeValueException;
 
     /**
      * Takes a value that is an internal value but may may be of a different type and converts it
@@ -67,19 +71,21 @@ public interface Domain
      * but when loaded from the DB the encrypting is not necessary.
      *
      * @param task
-     * @param attributeDef
+     * @param attributeInstance TODO
      * @param value
      * @return
      * @throws InvalidAttributeValueException
      */
     Object convertInternalValue( Task          task,
-                                 AttributeDef attributeDef,
+                                 AttributeInstance attributeInstance,
                                  Object        value ) throws InvalidAttributeValueException;
 
     /**
      * Compares an external value to an internal attribute value.
      *
      * @param task
+     * @param attributeInstance If not null, the is the target attribute.  May be null; this can happen
+     * when converting a value to be used in generated SQL.
      * @param attributeDef TODO
      * @param internalValue - Internal attribute value.
      * @param externalValue
@@ -87,7 +93,8 @@ public interface Domain
      *          0 if o1 = o2
      *          1 if o1 > o2
      */
-    int compare( Task task, AttributeDef attributeDef, Object internalValue, Object externalValue );
+    int compare( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue,
+                 Object externalValue );
 
     /**
      * Validates that the object 'value' is a valid class and value for this domain.
@@ -124,8 +131,8 @@ public interface Domain
     Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue );
     Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
 
-    Object addToAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand );
-    Object multiplyAttribute( Task task, AttributeDef attributeDef, Object currentValue, Object operand );
+    Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand );
+    Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand );
 
     /**
      * Creates an empty context which will then be initialized from values in zeidon.xdm.  Used when

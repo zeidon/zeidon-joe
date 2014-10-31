@@ -79,7 +79,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
-        String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, internalValue );
+        String string = (String) stringConverter.convertExternalValue( task, null, attributeDef, null, internalValue );
         TableEntry v = internalMap.get( string );
         if ( v != null && v.getInternalValue() != null )
             return v.getExternalValue();
@@ -96,7 +96,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     @Override
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException
     {
-        String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, value );
+        String string = (String) stringConverter.convertExternalValue( task, null, attributeDef, null, value );
         if ( externalMap.containsKey( string ) )
             return;
 
@@ -113,7 +113,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     @Override
     public Object convertExternalValue(Task task, AttributeDef attributeDef, Object value)
     {
-        String string = (String) stringConverter.convertExternalValue( task, attributeDef, null, value );
+        String string = (String) stringConverter.convertExternalValue( task, null, attributeDef, null, value );
         validateInternalValue( task, attributeDef, string );
 
         if ( externalMap.containsKey( string ) )

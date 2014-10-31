@@ -81,7 +81,7 @@ public class PasswordDomain extends StringDomain
     }
 
     @Override
-    public Object convertExternalValue(Task task, AttributeDef attributeDef, String contextName, Object externalValue)
+    public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         if ( externalValue == null )
             return null;
@@ -95,9 +95,9 @@ public class PasswordDomain extends StringDomain
     }
 
     @Override
-    public Object convertInternalValue(Task task, AttributeDef attributeDef, Object internalValue) throws InvalidAttributeValueException
+    public Object convertInternalValue(Task task, AttributeInstance attributeInstance, Object internalValue) throws InvalidAttributeValueException
     {
-        validateInternalValue( task, attributeDef, internalValue );
+        validateInternalValue( task, attributeInstance.getAttributeDef(), internalValue );
         return internalValue;
     }
 
@@ -119,7 +119,7 @@ public class PasswordDomain extends StringDomain
      * (return 0) or not (return 1).
      */
     @Override
-    public int compare(Task task, AttributeDef attributeDef, Object encyrptedHash, Object plaintextPassword)
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object encyrptedHash, Object plaintextPassword)
     {
         Integer rc = compareNull( task, attributeDef, encyrptedHash, plaintextPassword);
         if ( rc != null )

@@ -23,6 +23,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import org.joda.time.DateTime;
 
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
@@ -184,7 +185,7 @@ class AttributeValue
      * @param newValue
      * @return
      */
-    boolean set( TaskImpl task, AttributeDef attributeDef, Object newValue, String contextName )
+    boolean set( TaskImpl task, AttributeInstance attributeInstance, Object newValue, String contextName )
     {
         Object o;
         try
@@ -192,23 +193,24 @@ class AttributeValue
             if ( newValue == null )
                 o = null;
             else
-                o = domain.convertExternalValue( task, attributeDef, contextName, newValue );
+                o = domain.convertExternalValue( task, attributeInstance, attributeInstance.getAttributeDef(),
+                                                 contextName, newValue );
         }
         catch ( Throwable t )
         {
             throw ZeidonException.wrapException( t )
                                  .prependMessage( "New value = %s\nDomain = %s\nContext = %s", newValue, domain, contextName )
-                                 .prependAttributeDef( attributeDef );
+                                 .prependAttributeDef( attributeInstance.getAttributeDef() );
         }
 
-        return setInternalValue( task, attributeDef, o, true );
+        return setInternalValue( task, attributeInstance.getAttributeDef(), o, true );
     }
 
-    Object convertInternalValue( Task task, AttributeDef attributeDef, Object value )
+    Object convertInternalValue( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object value )
     {
         try
         {
-            Object newValue = domain.convertInternalValue( task, attributeDef, value );
+            Object newValue = domain.convertInternalValue( task, attributeInstance, value );
             if ( domain.isNull(task, attributeDef, newValue) )
             {
                 if ( attributeDef.isRequired() )
@@ -250,11 +252,11 @@ class AttributeValue
         return domain.isNull( task, attributeDef, value );
     }
 
-    int compare(TaskImpl task, AttributeDef attributeDef, Object o)
+    int compare(TaskImpl task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object o)
     {
         try
         {
-            return domain.compare( task, attributeDef, this.getInternalValue(), o );
+            return domain.compare( task, attributeInstance, attributeDef, this.getInternalValue(), o );
         }
         catch ( Throwable t )
         {
@@ -273,17 +275,17 @@ class AttributeValue
         return attributeValue == null ? "NULL" : attributeValue.toString();
     }
 
-    Object addToAttribute( TaskImpl task, AttributeDef attributeDef, Object value )
+    Object addToAttribute( TaskImpl task, AttributeInstance attributeInstance, Object value )
     {
-        Object newValue = domain.addToAttribute( task, attributeDef, getInternalValue(), value );
-        setInternalValue( task, attributeDef, newValue, true );
+        Object newValue = domain.addToAttribute( task, attributeInstance, attributeInstance.getAttributeDef(), getInternalValue(), value );
+        setInternalValue( task, attributeInstance.getAttributeDef(), newValue, true );
         return newValue;
     }
 
-    Object multiplyAttribute( TaskImpl task, AttributeDef attributeDef, Object value )
+    Object multiplyAttribute( TaskImpl task, AttributeInstance attributeInstance, Object value )
     {
-        Object newValue = domain.multiplyAttribute( task, attributeDef, getInternalValue(), value );
-        setInternalValue( task, attributeDef, newValue, true );
+        Object newValue = domain.multiplyAttribute( task, attributeInstance, attributeInstance.getAttributeDef(), getInternalValue(), value );
+        setInternalValue( task, attributeInstance.getAttributeDef(), newValue, true );
         return newValue;
     }
 
