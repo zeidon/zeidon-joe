@@ -90,20 +90,23 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
 
         EntityDef rootEntityDef = view.getLodDef().getRoot();
         jg.writeArrayFieldStart( rootEntityDef.getName() );
-        jg.writeStartObject();
-        
-        for ( EntityInstance ei:  view.cursor( rootEntityDef ).eachEntity() )
+        if ( ! view.isEmpty() )
         {
-            if ( ei.hasPrevTwin() )
-                jg.writeStartObject();
+            jg.writeStartObject();
             
-            writeEntity( ei );
-            
-            if ( ei.hasNextTwin() )
-                jg.writeEndObject();
+            for ( EntityInstance ei:  view.cursor( rootEntityDef ).eachEntity() )
+            {
+                if ( ei.hasPrevTwin() )
+                    jg.writeStartObject();
+                
+                writeEntity( ei );
+                
+                if ( ei.hasNextTwin() )
+                    jg.writeEndObject();
+            }
+    
+            jg.writeEndObject();
         }
-
-        jg.writeEndObject();
         jg.writeEndArray();
     }
     
