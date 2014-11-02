@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon.EntityIterator
+import com.quinsoft.zeidon.scala.Nexts._
 import util.control.Breaks._
 
 /**
@@ -46,18 +47,20 @@ class EntityInstanceIterator( val jiterator: EntityIterator[_]) extends Iterable
             /**
              * Override foreach so we can wrap the call to function f with breakable.
              */
-            override def foreach[U](f: EntityInstance => U) { while (hasNext) breakable{ f(next()) } }
+            override def foreach[U](f: EntityInstance => U) { breakable{ while (hasNext) nextable{ f(next()) } } }
         }
     }
 
     def each( looper: => Any ) = {
         var any: Any = null
         val iter = iterator
-        while ( iter.hasNext )
-        {
-            val ei = iter.next()
-            breakable {
-                any = looper
+        breakable {
+            while ( iter.hasNext )
+            {
+                val ei = iter.next()
+                nextable {
+                    any = looper
+                }
             }
         }
 

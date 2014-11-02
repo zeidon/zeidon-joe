@@ -124,6 +124,44 @@ class SampleCursorManipulation( val task: Task ) extends ZeidonOperations {
             println( "Cursor was set" )
         }
     }
+
+    def forEachCursor( mUser: View @basedOn( "mUser") ) = {
+
+        // VML way
+        FOREACH( mUser.Report ) UNDER( mUser.UserGroup ) WHERE( mUser.Report.ID == 589 ) DO {
+            if ( mUser.Report.ID == 594 ) {
+                println( "skipping " + mUser.Report.ID )
+                next()
+            }
+
+            println( "Report ID = " + mUser.Report.ID )
+
+            if ( mUser.Report.ID == 560 ) {
+                println( "Stopping after " + mUser.Report.ID )
+                break()
+            }
+        }
+
+        println( "Final ID = " + mUser.Report.ID )
+        println( "==================================================" )
+
+        // Scala way
+        mUser.Report.under( mUser.UserGroup ).each {
+            if ( mUser.Report.ID == 594 ) {
+                println( "skipping " + mUser.Report.ID )
+                next()
+            }
+
+            println( "Report ID = " + mUser.Report.ID )
+
+            if ( mUser.Report.ID == 560 ) {
+                println( "Stopping after " + mUser.Report.ID )
+                break()
+            }
+        }
+
+        println( "Final ID = " + mUser.Report.ID )
+    }
 }
 
 object SampleCursorManipulation {
@@ -137,12 +175,13 @@ object SampleCursorManipulation {
         val activator = new SampleActivates( task )
         var mUser = activator.activateSimple
 
-        oe.startBrowser
+//        oe.startBrowser
         val sampler = new SampleCursorManipulation( task )
         sampler.setCursorFirst(mUser)
         sampler.setCursorFirstWhere(mUser)
         sampler.setCursorFirstWithScoping(mUser)
 
+        sampler.forEachCursor(mUser)
 //        mUser.logObjectInstance
     }
 

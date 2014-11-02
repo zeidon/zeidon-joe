@@ -6,6 +6,7 @@ package com.quinsoft.zeidon.scala
 import scala.language.dynamics
 import com.quinsoft.zeidon._
 import util.control.Breaks._
+import com.quinsoft.zeidon.scala.Nexts._
 
 /**
  * A trait that is added to a Scala object to give the object VML-like syntax.
@@ -51,7 +52,9 @@ trait ZeidonOperations {
      * For use inside of view.Entity.each{} loops, this will break execution of the
      * current entity cursor and continue with the next.
      */
-    def next() = break()
+    def next() = Nexts.next()
+
+    def break() = util.control.Breaks.break()
 
     def log = task.jtask.log()
 
