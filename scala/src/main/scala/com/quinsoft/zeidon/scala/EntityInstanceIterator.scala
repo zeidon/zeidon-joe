@@ -66,4 +66,19 @@ class EntityInstanceIterator( val jiterator: EntityIterator[_]) extends Iterable
 
         any
     }
+
+    def setNext: CursorResult = {
+        if ( ! jiterator.hasNext() )
+            return EntityCursor.CURSOR_UNCHANGED
+
+        jiterator.next()
+        return EntityCursor.CURSOR_UNCHANGED
+    }
+
+    /**
+     * This should only be called once because it doesn't really set the cursor
+     * to the first entity; it was already done when the iterator was created.
+     * Maybe put in a check to only allow it once?
+     */
+    def setFirst = setNext
 }

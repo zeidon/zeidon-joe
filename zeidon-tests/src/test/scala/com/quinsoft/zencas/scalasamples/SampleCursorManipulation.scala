@@ -22,6 +22,7 @@ import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.scala.VmlCursorResult
 import com.quinsoft.zeidon.scala.basedOn
 
 /**
@@ -43,7 +44,7 @@ class SampleCursorManipulation( val task: Task ) extends ZeidonOperations {
          */
 
         // VML way 1
-        SETFIRST( mUser.User )
+        var RESULT = SETFIRST( mUser.User )
         if ( RESULT >= zCURSOR_SET ) {
             println( "Cursor was set" )
         }
@@ -125,7 +126,55 @@ class SampleCursorManipulation( val task: Task ) extends ZeidonOperations {
         }
     }
 
+    /**
+     * A hashkey is specified in the LOD for attribute values that are unique.  Zeidon JOE
+     * keeps a backing hashmap of the values that allow SET FIRST processing to set the
+     * cursor with a single lookup instead of looping through all the entities.
+     */
+    def setCursorFirstUsingHashkey( mUser: View @basedOn( "mUser") ) = {
+        if ( mUser.User.set( _.ID = 409 ) )
+            println( "Cursor is set" )
+    }
+
     def forEachCursor( mUser: View @basedOn( "mUser") ) = {
+
+        /* VML:
+         *          FOR EACH mUser.User WHERE mUser.User.ID = 490 OR mUser.User.ID = 491
+         *              ...
+         *          END
+         */
+
+        // VML way
+        FOREACH( mUser.User ) WHERE( mUser.User.ID == 490 || mUser.User.ID == 491 ) DO {
+
+            println( "User ID = " + mUser.User.ID )
+
+            if ( mUser.User.ID == 490 ) {
+                next() // This skips the following processing and continues with the next mUser.User
+            }
+
+            if ( mUser.Report.ID == 491 ) {
+                break() // This breaks the FOREACH loop.
+            }
+        }
+
+        // Scala way.  Note that this does not have an explicit WHERE clause.
+        mUser.User.each {
+            if ( mUser.User.ID == 490 || mUser.User.ID == 491 ) {
+                println( "User ID = " + mUser.User.ID )
+
+                if ( mUser.User.ID == 490 ) {
+                    next() // This skips the following processing and continues with the next mUser.User
+                }
+
+                if ( mUser.Report.ID == 491 ) {
+                    break() // This breaks the FOREACH loop.
+                }
+            }
+        }
+    }
+
+    def forEachCursorWithScoping( mUser: View @basedOn( "mUser") ) = {
 
         // VML way
         FOREACH( mUser.Report ) UNDER( mUser.UserGroup ) WHERE( mUser.Report.ID == 589 ) DO {

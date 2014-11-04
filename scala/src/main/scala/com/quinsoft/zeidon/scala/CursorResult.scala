@@ -18,35 +18,15 @@
  */
 package com.quinsoft.zeidon.scala
 
-import scala.util.control.ControlThrowable
-
 /**
- * This class is the equivalent of Scala's Breaks class.  It is used to give Zeidon
- * loop constructs the ability to execute "next()" to move to the next entity in a
- * cursor loop.  This is largely cribbed from Breaks.scala.
- *
  * @author dgc
  *
  */
-class Nexts {
-    private val nextException = new NextControl
+case class CursorResult( val jcursorResult: com.quinsoft.zeidon.CursorResult ) {
 
-    /**
-     * A block from which one can process the next entity in a cursor by
-     * using next().
-     */
-    def nextable( op: => Unit ) {
-        try {
-            op
-        } catch {
-            case ex: NextControl =>
-                if ( ex ne nextException ) throw ex
-        }
-    }
-
-    def next(): Nothing = { throw nextException }
 }
 
-object Nexts extends Nexts
-
-private class NextControl extends ControlThrowable
+object CursorResult {
+    implicit def result2boolean( result: CursorResult ) : Boolean = result.jcursorResult.isSet()
+    implicit def jresult2result( jresult: com.quinsoft.zeidon.CursorResult ) : CursorResult = new CursorResult( jresult )
+}
