@@ -7,10 +7,13 @@ import com.quinsoft.zeidon.CursorResult
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 
 /**
+ * This class is used to dupilcate VML-like syntax when manipulating
+ * cursors.  It is returned by SETFIRST and SETNEXT.
+ *
  * @author dgc
  *
  */
-class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
+class VmlCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
                        val cursor: EntityCursor ) {
 
     private var predicate: () => Boolean = {() => true}
@@ -19,7 +22,7 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
     def isSetNewParent = jcursorResult.isSetNewParent()
     def isSetRecursiveChild = jcursorResult.isSetRecursiveChild()
 
-    def WHERE( func: => Boolean ): SetCursorResult = {
+    def WHERE( func: => Boolean ): VmlCursorResult = {
         while ( isSet && !func )
             jcursorResult = cursor.jentityCursor.setNextContinue
 
@@ -27,7 +30,7 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
         this
     }
 
-    def WHERE( func: ( EntityInstance ) => Boolean ): SetCursorResult = {
+    def WHERE( func: ( EntityInstance ) => Boolean ): VmlCursorResult = {
         while ( isSet && !func( new EntityInstance( cursor.getEntityInstance ) ) )
             jcursorResult = cursor.jentityCursor.setNextContinue
 
@@ -42,7 +45,7 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
     /**
      * Set cursor to the next entity matching the predicate.
      */
-    def SETNEXT: SetCursorResult = {
+    def SETNEXT: VmlCursorResult = {
         jcursorResult = cursor.jentityCursor.setNextContinue
         while ( isSet && !predicate() )
             jcursorResult = cursor.jentityCursor.setNextContinue
@@ -50,7 +53,7 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
         this
     }
 
-    def SETNEXT( func: => Boolean ): SetCursorResult = {
+    def SETNEXT( func: => Boolean ): VmlCursorResult = {
         jcursorResult = cursor.jentityCursor.setNextContinue
         while ( isSet && !func )
             jcursorResult = cursor.jentityCursor.setNextContinue
@@ -60,7 +63,7 @@ class SetCursorResult( var jcursorResult: com.quinsoft.zeidon.CursorResult,
     }
 }
 
-object SetCursorResult {
-    implicit def result2Boolean( result: SetCursorResult ): Boolean = result.isSet
-    implicit def result2Int( result: SetCursorResult ): Int = result.jcursorResult.toInt()
+object VmlCursorResult {
+    implicit def result2Boolean( result: VmlCursorResult ): Boolean = result.isSet
+    implicit def result2Int( result: VmlCursorResult ): Int = result.jcursorResult.toInt()
 }

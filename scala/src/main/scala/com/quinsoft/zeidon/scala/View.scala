@@ -8,6 +8,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
 import scala.language.dynamics
 import com.quinsoft.zeidon.ActivateFlags
 import com.quinsoft.zeidon.objectdefinition.EntityDef
+import com.quinsoft.zeidon.CursorResult
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
