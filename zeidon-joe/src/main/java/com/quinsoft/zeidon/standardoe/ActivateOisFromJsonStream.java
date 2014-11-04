@@ -42,8 +42,8 @@ import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -158,7 +158,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 String rootName = lodDef.getRoot().getName();
                 if ( ! fieldName.equals( rootName ) )
                     throw new ZeidonException( "The first field in the JSON stream must be the root entity name" +
-                                               " (%) or '.meta' but was %s.", rootName, fieldName );
+                                               " (%s) or '.meta' but was %s.", rootName, fieldName );
 
                 view = task.activateEmptyObjectInstance( lodDef );
                 returnList.add( view );

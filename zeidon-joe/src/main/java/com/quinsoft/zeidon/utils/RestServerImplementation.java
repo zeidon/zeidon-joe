@@ -18,13 +18,12 @@
  */
 package com.quinsoft.zeidon.utils;
 
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
@@ -65,13 +64,11 @@ public class RestServerImplementation
     {
         View rc = task.activateEmptyObjectInstance( restResponse );
         EntityInstance rcEI = rc.cursor( "RestResponse" ).createEntity();
-        SerializeOi options = new SerializeOi();
-        options.withIncremental();
 
         try
         {
             rcEI.getAttribute( "ReturnCode" ).setValue( 0 ); // Assume everything is OK.
-            View qual = new DeserializeOi( task )
+            View qual = task.deserializeOi().setLodDef( lodDefName )
                                     .asJson()
                                     .fromString( postContent )
                                     .activateFirst();
@@ -80,7 +77,7 @@ public class RestServerImplementation
 
             ActivateOptions activateOptions = new ActivateOptions( task );
             View view = task.activateObjectInstance( lodDefName, qual, activateOptions );
-            SerializeOi writer = new SerializeOi().addView( rc, view ).withIncremental().toStringWriter().write();
+            SerializeOi writer = new SerializeOi().asJson().addView( rc, view ).withIncremental().toStringWriter().write();
             return writer.getString();
         }
         catch ( Exception e )
@@ -92,7 +89,7 @@ public class RestServerImplementation
             rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
 
             // Write the rc OI to a string.
-            SerializeOi writer = new SerializeOi().addView( rc ).withIncremental().toStringWriter().write();
+            SerializeOi writer = rc.serializeOi().asJson().withIncremental().toStringWriter().write();
             return writer.getString();
         }
     }
