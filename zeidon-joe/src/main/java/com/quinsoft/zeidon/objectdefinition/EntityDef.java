@@ -21,6 +21,9 @@
  */
 package com.quinsoft.zeidon.objectdefinition;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,8 +36,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.CacheMap;
+import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EventListener;
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig.LazyLoadFlags;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
@@ -49,11 +55,11 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
 public class EntityDef implements PortableFileAttributeHandler, CacheMap
 {
     private LodDef     lodDef;
-    private EntityDef prevHier;
-    private EntityDef nextHier;
-    private EntityDef parent;
-    private EntityDef prevSibling;
-    private EntityDef nextSibling;
+    private EntityDef  prevHier;
+    private EntityDef  nextHier;
+    private EntityDef  parent;
+    private EntityDef  prevSibling;
+    private EntityDef  nextSibling;
     private String     name;
     private int        erEntityToken;
     private int        erRelToken;
@@ -130,6 +136,20 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     private final LazyLoadConfig lazyLoadConfig;
 
+    /**
+     * SourceFileType for the entity constraint.
+     */
+    private SourceFileType sourceFileType = SourceFileType.VML;
+    private String         sourceFileName;
+    private String         constraintOper;
+
+    private boolean hasCancelConstraint;
+    private boolean hasAcceptConstraint;
+    private boolean hasExcludeConstraint;
+    private boolean hasIncludeConstraint;
+    private boolean hasDeleteConstraint;
+    private boolean hasCreateConstraint;
+
     public EntityDef( LodDef lodDef, int level )
     {
         this.lodDef = lodDef;
@@ -201,6 +221,53 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 break;
 
             case 'E':
+                if ( reader.getAttributeName().equals( "ECESRCFILE" ))
+                {
+                    sourceFileName = reader.getAttributeValue();
+                    if ( ! sourceFileName.contains( "." ) )
+                        sourceFileName = getLodDef().getApplication().getPackage() + "." + sourceFileName;
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECESRCTYPE" ))
+                {
+                    sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECEOPER" ))
+                {
+                    constraintOper = reader.getAttributeValue().intern();
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECCR" ))
+                {
+                    hasCreateConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECDEL" ))
+                {
+                    hasDeleteConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECINC" ))
+                {
+                    hasIncludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECEXC" ))
+                {
+                    hasExcludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECACC" ))
+                {
+                    hasAcceptConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                else
+                if ( reader.getAttributeName().equals( "ECCAN" ))
+                {
+                    hasCancelConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                else
                 if ( reader.getAttributeName().equals( "ERENT_TOK" ))
                 {
                     erEntityToken = Integer.parseInt( reader.getAttributeValue() );
@@ -916,5 +983,145 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     public Integer getActivateLimit()
     {
         return activateLimit;
+    }
+
+    public SourceFileType getSourceFileType()
+    {
+        return sourceFileType;
+    }
+
+    public String getSourceFileName()
+    {
+        return sourceFileName;
+    }
+
+    public String getConstraintOper()
+    {
+        return constraintOper;
+    }
+
+    public boolean hasCancelConstraint()
+    {
+        return hasCancelConstraint;
+    }
+
+    public void setHasCancelConstraint( boolean hasCancelConstraint )
+    {
+        this.hasCancelConstraint = hasCancelConstraint;
+    }
+
+    public boolean hasAcceptConstraint()
+    {
+        return hasAcceptConstraint;
+    }
+
+    public void setHasAcceptConstraint( boolean hasAcceptConstraint )
+    {
+        this.hasAcceptConstraint = hasAcceptConstraint;
+    }
+
+    public boolean hasExcludeConstraint()
+    {
+        return hasExcludeConstraint;
+    }
+
+    public void setHasExcludeConstraint( boolean hasExcludeConstraint )
+    {
+        this.hasExcludeConstraint = hasExcludeConstraint;
+    }
+
+    public boolean hasIncludeConstraint()
+    {
+        return hasIncludeConstraint;
+    }
+
+    public void setHasIncludeConstraint( boolean hasIncludeConstraint )
+    {
+        this.hasIncludeConstraint = hasIncludeConstraint;
+    }
+
+    public boolean hasDeleteConstraint()
+    {
+        return hasDeleteConstraint;
+    }
+
+    public void setHasDeleteConstraint( boolean hasDeleteConstraint )
+    {
+        this.hasDeleteConstraint = hasDeleteConstraint;
+    }
+
+    public boolean hasCreateConstraint()
+    {
+        return hasCreateConstraint;
+    }
+
+    public void setHasCreateConstraint( boolean hasCreateConstraint )
+    {
+        this.hasCreateConstraint = hasCreateConstraint;
+    }
+
+    /**
+     * Execute the entity constraint for the view.
+     *
+     * @param view
+     * @param type
+     * @return
+     */
+    public int executeEntityConstraint( View view, EntityConstraintType type )
+    {
+        switch ( sourceFileType )
+        {
+            case VML:
+                return executeVmlConstraint( view, type );
+
+            case SCALA:
+                return executeScalaConstraint( view, type );
+
+            case JAVA:
+            default:
+                throw new ZeidonException( "Unsupported Entity Constraint SourceFileType: %s", type );
+        }
+    }
+
+    static private final Class<?>[] VML_CONSTRUCTOR_ARG_TYPES  = new Class<?>[] { View.class };
+    static private final Class<?>[] VML_ARGUMENT_TYPES = new Class<?>[] { View.class, String.class, Integer.class, Integer.class };
+
+    private int executeVmlConstraint( View view, EntityConstraintType type )
+    {
+        ObjectEngine oe = view.getObjectEngine();
+        String className = getSourceFileName();
+        try
+        {
+            ClassLoader classLoader = oe.getClassLoader( className );
+            Class<?> operationsClass;
+            operationsClass = classLoader.loadClass( className );
+            Constructor<?> constructor = operationsClass.getConstructor( VML_CONSTRUCTOR_ARG_TYPES );
+            Object object = constructor.newInstance( view );
+            Method method = object.getClass().getMethod( getConstraintOper(), VML_ARGUMENT_TYPES );
+            return (Integer) method.invoke( object, view, this.getName(), type.toInt(), 0 );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e )
+                                 .prependEntityDef( this )
+                                 .appendMessage( "EntityConstraint class = %s", className )
+                                 .appendMessage( "Constraint oper = %s", getConstraintOper() )
+                                 .appendMessage( "See inner exception for more info." );
+        }
+    }
+
+    private int executeScalaConstraint( View view, EntityConstraintType type )
+    {
+        try
+        {
+            return getLodDef().getScalaHelper( view ).executeEntityConstraint( view, this, type );
+        }
+        catch ( Exception e )
+        {
+            if ( e instanceof InvocationTargetException )
+                throw ZeidonException.wrapException( ((InvocationTargetException) e).getTargetException() );
+            else
+                throw ZeidonException.wrapException( e );
+        }
     }
 }

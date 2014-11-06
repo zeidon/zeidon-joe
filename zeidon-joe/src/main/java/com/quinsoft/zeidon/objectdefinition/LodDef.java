@@ -74,10 +74,9 @@ public class LodDef implements PortableFileAttributeHandler
      */
     private boolean      hasPhysicalMappings = false;
     private String       libraryName;
-    private ScalaHelper scalaHelper;
+    private ScalaHelper  scalaHelper;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
-    static private final Class<?>[] constructorArgTypes2 = new Class<?>[] { Task.class };
 
     public LodDef(Task task, Application app, String name) throws UnknownLodDefException
     {
@@ -339,33 +338,17 @@ public class LodDef implements PortableFileAttributeHandler
     private Object getConstraintObject( View view )
     {
         ObjectEngine oe = view.getObjectEngine();
-        String className = getApplication().getPackage() + "." + getName() + "_Object";
+        String className = getSourceFileName();
+        if ( StringUtils.isBlank( className ) )
+            className = getApplication().getPackage() + "." + getName() + "_Object";
+
         try
         {
             ClassLoader classLoader = oe.getClassLoader( className );
             Class<?> operationsClass;
             operationsClass = classLoader.loadClass( className );
-            try
-            {
-                // First try with View as the constructor args.
-                Constructor<?> constructor = operationsClass.getConstructor( constructorArgTypes );
-                return constructor.newInstance( view );
-            }
-            catch ( NoSuchMethodException e )
-            {
-                try
-                {
-                    // Maybe with a task constructor?
-                    Constructor<?> constructor = operationsClass.getConstructor( constructorArgTypes2 );
-                    return constructor.newInstance( view.getTask() );
-                }
-                catch ( NoSuchMethodException e2 )
-                {
-                    // Now try with an empty constructor.
-                    Constructor<?> constructor = operationsClass.getConstructor();
-                    return constructor.newInstance();
-                }
-            }
+            Constructor<?> constructor = operationsClass.getConstructor( constructorArgTypes );
+            return constructor.newInstance( view );
         }
         catch ( Exception e )
         {
@@ -374,7 +357,6 @@ public class LodDef implements PortableFileAttributeHandler
                                  .appendMessage( "Class name = %s", className )
                                  .appendMessage( "See inner exception for more info." );
         }
-
     }
 
     static private final Class<?>[] ARGUMENT_TYPES1 = new Class<?>[] { View.class, Integer.class, Integer.class };
@@ -382,9 +364,22 @@ public class LodDef implements PortableFileAttributeHandler
 
     private int executeConstraint( View view, ObjectConstraintType type )
     {
-        if ( getSourceFileType() == SourceFileType.SCALA )
-            return executeScalaConstraint( view, type );
+        switch ( sourceFileType )
+        {
+            case VML:
+                return executeVmlConstraint( view, type );
 
+            case SCALA:
+                return executeScalaConstraint( view, type );
+
+            case JAVA:
+            default:
+                throw new ZeidonException( "Unsupported Entity Constraint SourceFileType: %s", type );
+        }
+    }
+
+    private int executeVmlConstraint( View view, ObjectConstraintType type )
+    {
         Object object = getConstraintObject( view );
 
         try

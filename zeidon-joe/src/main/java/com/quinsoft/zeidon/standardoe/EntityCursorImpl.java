@@ -403,6 +403,15 @@ class EntityCursorImpl implements EntityCursor
 
         resetChildCursors( newInstance );
 
+        // Check to see if we need to execute the create constraint.  We'll assume we don't
+        // execute it if the initialize flag is set because we don't want to execute the
+        // constraint when loading from DB/file.
+        if ( getEntityDef().hasCreateConstraint() &&
+             ! flags.contains( CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES ) )
+        {
+
+        }
+
         assert validateChains() : "Something is wrong with the chain pointers";
         return newInstance;
     }

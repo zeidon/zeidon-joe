@@ -1,7 +1,0 @@
-z1000-Zeidon    ZEIDON   KZAPPLOO 08/05/07   20:24:42 1.0a2    
-eZEIDON    1
-aZEIDON_BIN ZeidonSystem
-aZEIDON_SYS ZeidonSystem
-aZEIDON_LOC ZeidonSystem
-aZEIDON_SHR ZeidonSystem
-

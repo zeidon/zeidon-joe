@@ -160,6 +160,7 @@ class SimpleTest
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
+        Task gp = oe.createTask( "GlobalProps" );
 
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
