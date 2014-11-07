@@ -87,6 +87,10 @@ public class PhoneDomain extends StringDomain
         if ( externalValue == null )
            return null;
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         String phone = externalValue.toString( );
         if ( phone.isEmpty() )
            return phone;

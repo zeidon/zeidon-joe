@@ -109,6 +109,66 @@ class EntityCursor( private[this]  val view: View,
         hashSetter.getResult
     }
 
+    /**
+     * Set the cursor to reference the max attribute value for the specified attribute.
+     * If more than one attribute has the same max value then the first attribute is used.
+     * Returns the AttributeInstance.
+     *
+     * Example: sets the cursor to the oldest child:
+     *
+     *      view.Child.setMax( _.Age )
+     */
+    def setMax( f_attr: (AbstractEntity ) => AttributeInstance ): AttributeInstance = {
+        var maxAttr: AttributeInstance = null
+        each {
+            val attr = f_attr( this )
+            maxAttr =
+                if ( maxAttr == null )
+                    attr
+                else
+                if ( attr @> maxAttr )
+                    attr
+                else
+                    maxAttr
+        }
+
+        if ( maxAttr == null )
+            throw new ZeidonException( "setMax called on empty cursor or all attributes are null" )
+
+        jentityCursor.setCursor( maxAttr.jattributeInstance.getEntityInstance() )
+        maxAttr
+    }
+
+    /**
+     * Set the cursor to reference the minimum attribute value for the specified attribute.
+     * If more than one attribute has the same min value then the first attribute is used.
+     * Returns the AttributeInstance.
+     *
+     * Example: sets the cursor to the youngest child:
+     *
+     *      view.Child.setMin( _.Age )
+     */
+    def setMin( f_attr: (AbstractEntity ) => AttributeInstance ): AttributeInstance = {
+        var minAttr: AttributeInstance = null
+        each {
+            val attr = f_attr( this )
+            minAttr =
+                if ( minAttr == null )
+                    attr
+                else
+                if ( attr @< minAttr )
+                    attr
+                else
+                    minAttr
+        }
+
+        if ( minAttr == null )
+            throw new ZeidonException( "setmin called on empty cursor or all attributes are null" )
+
+        jentityCursor.setCursor( minAttr.jattributeInstance.getEntityInstance() )
+        minAttr
+    }
+
     def each( looper: => Any ) = {
         val iter = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this )
         iter.each( looper )

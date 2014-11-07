@@ -91,6 +91,10 @@ public class StringDomain extends AbstractDomain
             return str;
         }
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+        
         return checkNullString( externalValue );
     }
 

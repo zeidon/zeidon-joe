@@ -62,6 +62,10 @@ public class DateDomain extends AbstractDomain
     	if ( externalValue == null )
     		return null;
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         if ( externalValue instanceof DateTime )
             return externalValue;
 
@@ -194,6 +198,10 @@ public class DateDomain extends AbstractDomain
         {
         	if ( value == null )
         		return null;
+
+            // If external value is an AttributeInstance then get *its* internal value.
+            if ( value instanceof AttributeInstance )
+                value = ((AttributeInstance) value).getValue();
 
             String s = (String) value;
 

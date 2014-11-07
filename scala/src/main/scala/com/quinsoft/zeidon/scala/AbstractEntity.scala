@@ -24,9 +24,11 @@ private[scala] abstract class AbstractEntity( val jentityDef: com.quinsoft.zeido
     def name = jentityDef.getName()
     def position = getEntityInstance.getPosition()
     def maxCardinality = jentityDef.getMaxCardinality()
-    def logEntity = getEntityInstance.logEntity()
-    def logEntity( displayChildren: Boolean ) = getEntityInstance.logEntity( displayChildren )
+    def logEntity( displayChildren: Boolean = false ) = getEntityInstance.logEntity( displayChildren )
     def entityDef = jentityDef
+    def isUpdated = getEntityInstance.isUpdated()
+    def isIncluded = getEntityInstance.isIncluded()
+    def isCreated = getEntityInstance.isCreated()
 
     def parent = {
         val parent = getEntityInstance.getParent()

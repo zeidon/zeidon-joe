@@ -47,6 +47,10 @@ public class BigDecimalDomain extends AbstractNumericDomain
         if ( externalValue == null )
             return null;
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         // VML operations use "" as synonymous with null.
         if ( externalValue instanceof String && StringUtils.isBlank( (String) externalValue ) )
             return null;
