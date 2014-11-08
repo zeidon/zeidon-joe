@@ -162,8 +162,6 @@ public class TestZencas
         AttributeInstance attr2 = mUser2.cursor( "User" ).getAttribute( "Password" );
         Assert.assertEquals( "After commit: Password doesn't match", 0, attr2.compare( password ) );
         Assert.assertEquals( "After commit: Password matches different string", 1, attr2.compare( "abc" )  );
-
-        Assert.assertEquals( "Attributes don't compare correctly", 0, attr2.compare( attr1 ) );
     }
 
 	@Test

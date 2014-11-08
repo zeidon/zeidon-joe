@@ -84,6 +84,10 @@ public class SSNDomain extends StringDomain
         if ( externalValue == null )
             return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         String SSN = externalValue.toString( );
         if ( SSN.isEmpty() )
            return SSN;

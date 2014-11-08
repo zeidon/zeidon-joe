@@ -23,7 +23,7 @@ package com.quinsoft.zeidon.scala
  *
  */
 case class CursorResult( val jcursorResult: com.quinsoft.zeidon.CursorResult ) {
-
+    def isSet = jcursorResult .isSet()
 }
 
 object CursorResult {

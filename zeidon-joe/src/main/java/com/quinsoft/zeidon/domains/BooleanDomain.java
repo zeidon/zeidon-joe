@@ -62,6 +62,10 @@ public class BooleanDomain extends AbstractDomain
         if ( externalValue == null )
             return null;
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         if ( externalValue instanceof Boolean )
             return externalValue;
 

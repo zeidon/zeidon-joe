@@ -289,6 +289,9 @@ class IteratorBuilder
             // If currentInstance is then we should be setting cursor to First/Last.
             if ( currentInstance == null )
             {
+                if ( initialInstance == null && targetEntityDef.getParent() == null )
+                    initialInstance = objectInstance.getRootEntityInstance();
+
                 if ( initialInstance != null && initialInstance.isDropped() )
                 {
                     // If we get here then the initial instance has been dropped and thus

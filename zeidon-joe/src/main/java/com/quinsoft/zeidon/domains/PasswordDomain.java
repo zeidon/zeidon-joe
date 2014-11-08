@@ -86,6 +86,10 @@ public class PasswordDomain extends StringDomain
         if ( externalValue == null )
             return null;
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         String password = externalValue.toString();
         if ( password.isEmpty() )
            return password;
@@ -127,6 +131,7 @@ public class PasswordDomain extends StringDomain
 
         assert encyrptedHash instanceof String;
 
+/* It doesn't make sense to compare two Password attributes to one another
         // Is the value we want to compare an AttributeInstance?  If so then we're comparing
         // two attributes together.  Get the encryptedHash from the attribute.
         if ( plaintextPassword instanceof AttributeInstance )
@@ -139,6 +144,7 @@ public class PasswordDomain extends StringDomain
                 return 1;
         }
         else
+*/            
             assert plaintextPassword instanceof String;
 
         if ( encryptor.checkPassword( plaintextPassword.toString(), encyrptedHash.toString() ) )

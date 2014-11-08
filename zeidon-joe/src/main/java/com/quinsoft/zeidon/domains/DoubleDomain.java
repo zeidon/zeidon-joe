@@ -67,6 +67,10 @@ public class DoubleDomain extends AbstractNumericDomain
     	if ( externalValue == null )
     		return null;
 
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
         DomainContext context = getContext( task, contextName );
         return context.convertExternalValue( task, attributeDef, externalValue );
     }
@@ -204,6 +208,10 @@ public class DoubleDomain extends AbstractNumericDomain
         public Object convertExternalValue( Task task, AttributeDef attributeDef, Object externalValue )
                                 throws InvalidAttributeValueException
         {
+            // If external value is an AttributeInstance then get *its* internal value.
+            if ( externalValue instanceof AttributeInstance )
+                externalValue = ((AttributeInstance) externalValue).getValue();
+
             if ( externalValue instanceof Number )
             {
                 if ( decimalPlaces == null )

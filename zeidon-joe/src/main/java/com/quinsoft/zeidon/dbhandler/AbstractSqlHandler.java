@@ -238,9 +238,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * @param dataField
      * @param entityInstance
      */
-    void getAttributeValue(SqlStatement stmt, StringBuilder buffer, DataField dataField, EntityInstance entityInstance)
+    void getAttributeValue(SqlStatement stmt, StringBuilder buffer, DataField dataField, EntityInstance entityInstance, boolean ignoreBind )
     {
-        if ( isBindAllValues() )
+        if ( ignoreBind == false && isBindAllValues() )
         {
             // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
             // value instead of the data field.
@@ -258,6 +258,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         AttributeDef attributeDef = dataField.getAttributeDef();
         Object value = entityInstance.getInternalAttributeValue( attributeDef );
         getSqlValue( stmt, attributeDef.getDomain(), attributeDef, buffer, value );
+    }
+
+    void getAttributeValue(SqlStatement stmt, StringBuilder buffer, DataField dataField, EntityInstance entityInstance )
+    {
+        getAttributeValue( stmt, buffer, dataField, entityInstance, false );
     }
 
     protected Task getTask()
@@ -1570,7 +1575,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 stmt.appendWhere( ", " );
 
             foundNonNullValues = true;
-            getAttributeValue( stmt, stmt.where, srcDataField, ei );
+            getAttributeValue( stmt, stmt.where, srcDataField, ei, true );
         }
 
         stmt.appendWhere( " ) " );
@@ -1730,19 +1735,34 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         SqlStatement stmt = initializeCommand( SqlCommand.UPDATE, view );
         task.dblog().debug( "Updating entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
+        boolean updateCorrespondenceTable = false;
+
         stmt.appendCmd( "UPDATE ", dataRecord.getRecordName(), "\nSET    " );  // Extra spaces after SET to match indentation.
         int updateCount = 0;
         for ( DataField dataField : dataRecord.dataFields() )
         {
-            AttributeDef AttributeDef = dataField.getAttributeDef();
-            if ( ! AttributeDef.isPersistent() )
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ! attributeDef.isPersistent() )
                 continue;
 
-            if ( ! entityInstance.isAttributeUpdated( AttributeDef ) )
+            if ( ! entityInstance.isAttributeUpdated( attributeDef ) )
                 continue;
 
-            if ( AttributeDef.isKey() )
-               throw new ZeidonException( "Trying to update key %s", AttributeDef.toString() );
+            if ( attributeDef.isKey() )
+               throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
+
+            // If this is an autosequencing attribute then we need to check to see if the
+            // relationship is m-to-m.  If it is then we need to update the correspondence
+            // table instead of the main table.
+            if ( attributeDef.isAutoSeq() && entityDef.getParent() != null )
+            {
+                RelRecord relRecord = dataRecord.getRelRecord();
+                if ( relRecord.getRelationshipType().isManyToMany() )
+                {
+                    updateCorrespondenceTable = true;
+                    continue;
+                }
+            }
 
             if ( updateCount > 0 )
                 stmt.appendCmd( ",\n" );
@@ -1754,14 +1774,19 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         // If there were no attributes found to need updating then there's nothing to do.
-        if ( updateCount == 0 )
-            return 0;
+        if ( updateCount > 0 )
+        {
+            stmt.buildWhere( stmt, entityInstance );
+            executeStatement( view, entityDef, entityInstance, stmt );
+        }
 
-        stmt.buildWhere( stmt, entityInstance );
-
-        executeStatement( view, entityDef, entityInstance, stmt );
-
-        // TODO: Update correspondence table if entity has autoseq.
+        // Update the correspondence table only if the entity wasn't created/excluded.
+        // If it was c/i then the correspondence table was just created and doesn't
+        // need to be updated.
+        if ( updateCorrespondenceTable && ! entityInstance.isCreated() && ! entityInstance.isIncluded() )
+        {
+            throw new ZeidonException( "Updating correspondance table not supported yet" );
+        }
 
         return 0;
     }

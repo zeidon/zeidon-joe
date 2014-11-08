@@ -3,18 +3,18 @@
  */
 package com.quinsoft.zeidon.scala
 
+import scala.util.matching.Regex
+import com.quinsoft.zeidon.ZeidonException
+
 /**
  * @author dgc
  *
  */
 object AttributeInstance {
-    implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString( attr.contextName )
-    implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.jattributeInstance.getInteger( attr.contextName )
-    implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.jattributeInstance.getDouble( attr.contextName )
-    implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = {
-        val b = attr.jattributeInstance.getBoolean( attr.contextName )
-        if ( b == null ) false else b
-    }
+    implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString
+    implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.toInt
+    implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.toDouble
+    implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.toBoolean
 }
 
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
@@ -30,13 +30,74 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def name = jattributeInstance .getAttributeDef().getName()
     def attributeDef = jattributeInstance.getAttributeDef()
 
-    override def equals(other: Any) = other match {
+    /**
+     * Compares a value to an attribute.  For an explanation on the distinction between
+     * @>= and >= see the documentation on @==.
+     */
+    def @>=( other: Any ) = compare(other) >= 0
+
+    /**
+     * Compares a value to an attribute.  For an explanation on the distinction between
+     * @<= and <= see the documentation on @==.
+     */
+    def @<=( other: Any ) = compare(other) <= 0
+
+    /**
+     * Compares a value to an attribute.  For an explanation on the distinction between
+     * @> and > see the documentation on @==.
+     */
+    def @>( other: Any ) = compare(other) > 0
+
+    /**
+     * Compares a value to an attribute.  For an explanation on the distinction between
+     * @< and < see the documentation on @==.
+     */
+    def @<( other: Any ) = compare(other) < 0
+
+    /**
+     * Compares a value to an attribute.  For an explanation on the distinction between
+     * @!= and != see the documentation on @==.
+     */
+    def @!=( other: Any ) = compare(other) != 0
+
+    /**
+     * Compares a value to an attribute and returns true if they are equal.
+     *
+     * The difference between @== and == is that the left-hand value is not implicitly
+     * converted before comparing when using @==.  For example, in this statement:
+     *      if ( view.Entity.Attr == 0 )...
+     * Scala will implicitly convert the attribute value to an integer and compare the
+     * result to 0.  If the attribute is null this will throw an exception.
+     *
+     * The following statement will instead use Zeidon domain processing to compare the
+     * 0 to the internal value of view.Entity.Attr.  If the attribute value is null
+     * then the comparison will return false (assuming the domain allows comparing
+     * a null value).
+     *      if ( view.Entity.Attr @== 0 )...
+     */
+    def @==( other: Any ) = compare( other ) == 0
+
+    def compare(other: Any): Int = other match {
         // If 'other' is an AttributeInstance, get its value before calling compare.
-        case attr: AttributeInstance => jattributeInstance.compare(attr.jattributeInstance.getInternalAttributeValue()) == 0
+        case attr: AttributeInstance => jattributeInstance.compare( attr.jattributeInstance )
+
+        // If 'other' is a regex then see if the attribute value matches the regex.
+        case regex: Regex =>
+            if ( regex.findFirstIn( jattributeInstance.getString() ) == None )
+                -1
+            else
+                0
 
         // Default case: call compare with the value.
-        case _ => jattributeInstance.compare(other) == 0
+        case _ => jattributeInstance.compare(other)
     }
 
+    override def equals(other: Any) = compare( other ) == 0
     override def toString = jattributeInstance.getString()
+
+    private def checkNull() = if ( isNull ) throw new ZeidonException( "Attribute is null" ).prependAttributeDef( attributeDef )
+
+    def toBoolean: Boolean = if ( isNull ) false else jattributeInstance.getBoolean()
+    def toInt: Int = { checkNull(); jattributeInstance.getInteger() }
+    def toDouble: Double = if ( isNull ) Double.NaN else jattributeInstance.getDouble
 }

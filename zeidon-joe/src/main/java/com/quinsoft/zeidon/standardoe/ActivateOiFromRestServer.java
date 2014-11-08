@@ -30,13 +30,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -99,7 +97,7 @@ public class ActivateOiFromRestServer implements Activator
             client = new DefaultHttpClient();
             HttpPost post = new HttpPost( url );
             View qual = activateOptions.getQualificationObject();
-            String qualStr = new SerializeOi().asJson().toStringWriter().write( qual ).getString();
+            String qualStr = qual.serializeOi().asJson().withIncremental().toStringWriter().write().getString();
             StringEntity entity = new StringEntity( qualStr );
             post.setEntity( entity );
             post.setHeader( "Content-Type", "application/json" );
@@ -127,7 +125,7 @@ public class ActivateOiFromRestServer implements Activator
             }
 
 
-            List<View> views = new DeserializeOi( getTask() )
+            List<View> views = getTask().deserializeOi()
                                         .asJson()
                                         .fromInputStream( stream )
                                         .activate();
