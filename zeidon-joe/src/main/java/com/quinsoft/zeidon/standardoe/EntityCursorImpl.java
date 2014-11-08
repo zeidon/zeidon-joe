@@ -35,6 +35,7 @@ import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
@@ -409,7 +410,7 @@ class EntityCursorImpl implements EntityCursor
         if ( getEntityDef().hasCreateConstraint() &&
              ! flags.contains( CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES ) )
         {
-
+            entityDef.executeEntityConstraint( getView(), EntityConstraintType.CREATE );
         }
 
         assert validateChains() : "Something is wrong with the chain pointers";

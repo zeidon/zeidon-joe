@@ -107,6 +107,15 @@ public class ViewTest
         return mFASrc;
     }
 
+    @Test
+    public void testConstraints()
+    {
+        Task gp = oe.createTask( "GlobalProps" );
+        View tc = gp.activateEmptyObjectInstance( "TestConstraints" );
+        tc.cursor( "ConfigurationSet" ).createEntity();
+        tc.logObjectInstance();
+    }
+
 //    @Test
 //    public void testDynamicDomains()
 //    {

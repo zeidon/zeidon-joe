@@ -52,8 +52,8 @@ class ScalaHelperImpl extends ScalaHelper {
         val constructor = constructors( 0 )
         val view = new View( jview ).basedOn( jview.getLodDef().getName() )
         val instance = constructor.newInstance( view )
-        val method = instance.getClass.getMethod( entityDef.getConstraintOper(), constraintType.getClass() )
-        val rc = method.invoke( instance, constraintType )
+        val method = instance.getClass.getMethod( entityDef.getConstraintOper(), entityDef.getClass(), constraintType.getClass() )
+        val rc = method.invoke( instance, entityDef, constraintType )
         return 0
     }
 

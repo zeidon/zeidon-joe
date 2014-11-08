@@ -72,4 +72,4 @@ aAPP_LOCAL /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
 aAPP_SHARED /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
 aAPP_QLPLR /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
 aAPP_SOURCE /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_PACKAGE com.quinsoft.epamms
+aAPP_PACKAGE com.quinsoft.globprops.scala

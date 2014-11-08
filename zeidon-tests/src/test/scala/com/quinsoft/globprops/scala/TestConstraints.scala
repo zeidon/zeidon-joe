@@ -34,6 +34,8 @@ class TestConstraints( val view: View ) extends ObjectOperations {
 
     def configurationSetConstraint(  entityDef: EntityDef, event: EntityConstraintType ) = {
 
+        view.ConfigurationSet.wConstraintCallCount = view.ConfigurationSet.wConstraintCallCount + 1
+
         event match {
             case EntityConstraintType.ACCEPT => {
                 testConstraint.log.info( "ACCEPT constraint called with entity %s", entityDef.getName )
