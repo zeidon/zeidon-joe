@@ -3,7 +3,6 @@
  */
 package com.quinsoft.zeidon.scala
 
-import com.quinsoft.zeidon.CursorResult
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 
 /**
