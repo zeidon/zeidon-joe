@@ -34,7 +34,8 @@ class TestConstraints( val view: View ) extends ObjectOperations {
 
     def configurationSetConstraint(  entityDef: EntityDef, event: EntityConstraintType ) = {
 
-        view.ConfigurationSet.wConstraintCallCount = view.ConfigurationSet.wConstraintCallCount + 1
+        view.ConfigurationSet.wConstraintCallCount += 1L
+        testConstraint.log.info( "Constraint count = %s", view.ConfigurationSet.wConstraintCallCount )
 
         event match {
             case EntityConstraintType.ACCEPT => {
@@ -43,6 +44,22 @@ class TestConstraints( val view: View ) extends ObjectOperations {
 
             case EntityConstraintType.CREATE => {
                 testConstraint.log.info( "CREATE constraint called with entity %s", entityDef.getName )
+            }
+
+            case EntityConstraintType.CANCEL => {
+                testConstraint.log.info( "CANCEL constraint called with entity %s", entityDef.getName )
+            }
+
+            case EntityConstraintType.DELETE => {
+                testConstraint.log.info( "DELETE constraint called with entity %s", entityDef.getName )
+            }
+
+            case EntityConstraintType.INCLUDE => {
+                testConstraint.log.info( "INCLUDE constraint called with entity %s", entityDef.getName )
+            }
+
+            case EntityConstraintType.EXCLUDE => {
+                testConstraint.log.info( "EXCLUDE constraint called with entity %s", entityDef.getName )
             }
 
             case _ => testConstraint.log.error( "Constraint %s called but we don't have any code!", event )

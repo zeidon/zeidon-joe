@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -112,7 +113,17 @@ public class ViewTest
     {
         Task gp = oe.createTask( "GlobalProps" );
         View tc = gp.activateEmptyObjectInstance( "TestConstraints" );
-        tc.cursor( "ConfigurationSet" ).createEntity();
+        EntityCursor configSet = tc.cursor( "ConfigurationSet" );
+        configSet.createEntity();
+        assertEquals( "Constraint not called", configSet.getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
+        String tempfile = tc.serializeOi().toTempFile().write().getSourceName();
+        tc = gp.deserializeOi().fromFile( tempfile ).setLodDef( "TestConstraint" ).activateFirst();
+        assertEquals( "Constraint was called as part of deserialize", configSet.getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
+        new File( tempfile ).delete();
+
+        configSet.createTemporalEntity();
+        assertEquals( "Constraint not called", configSet.getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 2 );
+
         tc.logObjectInstance();
     }
 

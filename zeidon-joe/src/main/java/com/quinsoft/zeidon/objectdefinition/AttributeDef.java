@@ -570,8 +570,8 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         {
             try
             {
-                Object oper = constructor.newInstance( attributeInstance );
-                Object[] argList = new Object[] { attributeInstance, DERIVED_GET };
+                Object oper = constructor.newInstance( );
+                Object[] argList = new Object[] { attributeInstance };
                 method.invoke( oper, argList );
             }
             catch ( Throwable e )

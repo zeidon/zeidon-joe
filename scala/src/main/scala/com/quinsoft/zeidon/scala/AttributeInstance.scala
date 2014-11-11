@@ -77,6 +77,25 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      */
     def @==( other: Any ) = compare( other ) == 0
 
+    def +( x: Int ) = toInt + x
+    def +( x: Float ) = toDouble + x
+    def +( x: Double ) = toDouble + x
+    def +( x: String ) = toString + x
+    def +( x: Long ): Long = value.asInstanceOf[Any] match {
+        // If the internal value of the attribute is long we'll use it, otherwise
+        // we'll call getInt.
+        case l: java.lang.Long => l + x
+        case l: Long => l + x
+        case _ => toInt + x
+    }
+
+    def +=( x: Any ) = jattributeInstance.add( x )
+
+    def -=( x: Int ) = jattributeInstance.add( -x )
+    def -=( x: Long ) = jattributeInstance.add( -x )
+    def -=( x: Float ) = jattributeInstance.add( -x )
+    def -=( x: Double ) = jattributeInstance.add( -x )
+
     def compare(other: Any): Int = other match {
         // If 'other' is an AttributeInstance, get its value before calling compare.
         case attr: AttributeInstance => jattributeInstance.compare( attr.jattributeInstance )
