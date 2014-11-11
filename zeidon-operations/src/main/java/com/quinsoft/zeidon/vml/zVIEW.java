@@ -51,7 +51,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
  * A wrapper around a View to allow VML generation to closely resemble generated .c.
- * This is a delegate wrapper around a view.
+ * This is a delegate wrapper around a view().
  *
  * @author DG
  *
@@ -82,47 +82,60 @@ public class zVIEW extends VmlOperation implements View
     {
         return view;
     }
+    
+    /**
+     * Returns the view.  If the view is null then an exception is thrown.
+     * 
+     * @return
+     */
+    private View view()
+    {
+        if ( view == null )
+            throw new ZeidonException( "VIEW does not reference a valid OI." );
+            
+        return view;
+    }
 
     @Override
     public View activateOiFromOi(Set<ActivateFlags> flags)
     {
-        return view.activateOiFromOi( flags );
+        return view().activateOiFromOi( flags );
     }
 
     @Override
     public View activateOiFromOi(ActivateFlags flag)
     {
-        return view.activateOiFromOi( flag );
+        return view().activateOiFromOi( flag );
     }
 
     @Override
     public int commit()
     {
-        return view.commit();
+        return view().commit();
     }
 
     @Override
     public EntityCursor cursor(String entityName)
     {
-        return view.cursor( entityName );
+        return view().cursor( entityName );
     }
 
     @Override
     public EntityCursor cursor(EntityDef entityDef)
     {
-        return view.cursor( entityDef );
+        return view().cursor( entityDef );
     }
 
     @Override
     public void logObjectInstance()
     {
-        view.logObjectInstance();
+        view().logObjectInstance();
     }
 
     @Override
     public void logObjectInstance(long flags)
     {
-        view.logObjectInstance( flags );
+        view().logObjectInstance( flags );
     }
 
     /**
@@ -148,91 +161,91 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public void dropDbLocks()
     {
-        view.dropDbLocks();
+        view().dropDbLocks();
     }
 
     @Override
     public void dropNameForSubtask(String name, View view)
     {
-        view.dropNameForSubtask( name, view );
+        view().dropNameForSubtask( name, view );
     }
 
     @Override
     public void dropNameForView(String name)
     {
-        view.dropNameForView( name );
+        view().dropNameForView( name );
     }
 
     @Override
     public void drop()
     {
-        view.drop();
+        view().drop();
     }
 
     @Override
     public EntityCursor getCursor(String entityName)
     {
-        return view.getCursor( entityName );
+        return view().getCursor( entityName );
     }
 
     @Override
     public EntityCursor getCursor(EntityDef entityDef)
     {
-        return view.getCursor( entityDef );
+        return view().getCursor( entityDef );
     }
 
     @Override
     public Iterable<EntityInstance> getHierEntityList()
     {
-        return view.getHierEntityList();
+        return view().getHierEntityList();
     }
 
     @Override
     public Iterable<EntityInstance> getHierEntityList( boolean includeRoot )
     {
-        return view.getHierEntityList( includeRoot );
+        return view().getHierEntityList( includeRoot );
     }
 
     @Override
     public Collection<String> getNameList()
     {
-        return view.getNameList();
+        return view().getNameList();
     }
 
     @Override
     public Collection<String> getSubtaskNameList()
     {
-        return view.getSubtaskNameList();
+        return view().getSubtaskNameList();
     }
 
     @Override
     public View getViewByName(String name, Level level)
     {
-        return view.getViewByName( name, level );
+        return view().getViewByName( name, level );
     }
 
     @Override
     public View getViewByNameForSubtask(String name)
     {
-        return view.getViewByNameForSubtask( name );
+        return view().getViewByNameForSubtask( name );
     }
 
     @Override
     public LodDef getLodDef()
     {
-        return view.getLodDef();
+        return view().getLodDef();
     }
 
     @Override
     public boolean isReadOnly()
     {
-        return view.isReadOnly();
+        return view().isReadOnly();
     }
 
     @Override
     public View newView()
     {
-        return view.newView();
+        return view().newView();
     }
 
     /* (non-Javadoc)
@@ -241,49 +254,49 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public View newView( TaskQualification task )
     {
-        return view.newView( task );
+        return view().newView( task );
     }
 
     @Override
     public void resetSubobjectTop()
     {
-        view.resetSubobjectTop();
+        view().resetSubobjectTop();
     }
 
     @Override
     public void resetSubobject()
     {
-        view.resetSubobject();
+        view().resetSubobject();
     }
 
     @Override
     public void setNameForSubtask(String name, View viewToBeNamed)
     {
-        view.setNameForSubtask( name, viewToBeNamed );
+        view().setNameForSubtask( name, viewToBeNamed );
     }
 
     @Override
     public void setName(String name)
     {
-        view.setName( name );
+        view().setName( name );
     }
 
     @Override
     public void setName(String name, Level level)
     {
-        view.setName( name, level );
+        view().setName( name, level );
     }
 
     @Override
     public void setReadOnly(boolean readOnly)
     {
-        view.setReadOnly( readOnly );
+        view().setReadOnly( readOnly );
     }
 
     @Override
     public void writeOiToFile(String filename, EnumSet<WriteOiFlags> control)
     {
-        view.writeOiToFile( filename, control );
+        view().writeOiToFile( filename, control );
     }
 
     /* (non-Javadoc)
@@ -292,151 +305,151 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public void writeOiToXml(String filename, EnumSet<WriteOiFlags> control)
     {
-        view.writeOiToXml( filename, control );
+        view().writeOiToXml( filename, control );
     }
 
     @Override
     public View activateEmptyObjectInstance(String LodDefName)
     {
-        return view.activateEmptyObjectInstance( LodDefName );
+        return view().activateEmptyObjectInstance( LodDefName );
     }
 
     @Override
     public View activateEmptyObjectInstance(String LodDefName, String appName)
     {
-        return view.activateEmptyObjectInstance( LodDefName, appName );
+        return view().activateEmptyObjectInstance( LodDefName, appName );
     }
 
     @Override
     public View activateEmptyObjectInstance(String LodDefName, Application app)
     {
-        return view.activateEmptyObjectInstance( LodDefName, app );
+        return view().activateEmptyObjectInstance( LodDefName, app );
     }
 
     @Override
     public View activateEmptyObjectInstance(LodDef lodDef)
     {
-        return view.activateEmptyObjectInstance( lodDef );
+        return view().activateEmptyObjectInstance( lodDef );
     }
 
     @Override
     public View activateObjectInstance(String LodDefName, View qual, EnumSet<ActivateFlags> control)
     {
-        return view.activateObjectInstance( LodDefName, qual, control );
+        return view().activateObjectInstance( LodDefName, qual, control );
     }
 
     @Override
     public View activateObjectInstance(LodDef lodDef, View qual, EnumSet<ActivateFlags> control)
     {
-        return view.activateObjectInstance( lodDef, qual, control );
+        return view().activateObjectInstance( lodDef, qual, control );
     }
 
     @Override
     public View activateOiFromFile(String lodDefName, String filename)
     {
-        return view.activateOiFromFile( lodDefName, filename, null );
+        return view().activateOiFromFile( lodDefName, filename, null );
     }
 
     @Override
     public View activateOiFromFile(String lodDefName, String filename, EnumSet<ActivateFlags> control)
     {
-        return view.activateOiFromFile( lodDefName, filename, control );
+        return view().activateOiFromFile( lodDefName, filename, control );
     }
 
     @Override
     public View activateOiFromFile(LodDef lodDef, String filename, EnumSet<ActivateFlags> control)
     {
-        return view.activateOiFromFile( lodDef, filename, control );
+        return view().activateOiFromFile( lodDef, filename, control );
     }
 
     @Override
     public Application getApplication()
     {
-        return view.getApplication();
+        return view().getApplication();
     }
 
     @Override
     public Application getApplication(String appName)
     {
-        return view.getApplication( appName );
+        return view().getApplication( appName );
     }
 
     @Override
     public ObjectEngine getObjectEngine()
     {
-        return view.getObjectEngine();
+        return view().getObjectEngine();
     }
 
     @Override
     public Task getSystemTask()
     {
-        return view.getSystemTask();
+        return view().getSystemTask();
     }
 
     @Override
     public Task getTask()
     {
-        return view.getTask();
+        return view().getTask();
     }
 
     @Override
     public View getViewByName(String name)
     {
-        return view.getViewByName( name );
+        return view().getViewByName( name );
     }
 
     @Override
     public ZeidonLogger log()
     {
-        return view.log();
+        return view().log();
     }
 
     @Override
     public ReentrantReadWriteLock getLock()
     {
-        return view.getLock();
+        return view().getLock();
     }
 
     @Override
     public Blob writeOiToBlob(long control)
     {
-        return view.writeOiToBlob( control );
+        return view().writeOiToBlob( control );
     }
 
     @Override
     public String getTempDirectory()
     {
-        return view.getTempDirectory();
+        return view().getTempDirectory();
     }
 
     @Override
     public long getId()
     {
-        return view.getId();
+        return view().getId();
     }
 
     @Override
     public long getOiId()
     {
-        return view.getOiId();
+        return view().getOiId();
     }
 
     @Override
     public View getViewByKey(long key)
     {
-        return view.getViewByKey( key );
+        return view().getViewByKey( key );
     }
 
     @Override
     public ZeidonLogger dblog()
     {
-        return view.dblog();
+        return view().dblog();
     }
 
     @Override
     public void reset()
     {
-        view.reset();
+        view().reset();
     }
 
     /* (non-Javadoc)
@@ -445,7 +458,7 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public void copyCursors(View src)
     {
-        view.copyCursors( src );
+        view().copyCursors( src );
     }
 
     /* (non-Javadoc)
@@ -454,7 +467,7 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public int commit( CommitOptions options )
     {
-        return view.commit( options );
+        return view().commit( options );
     }
 
 
@@ -464,7 +477,7 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public SelectSet createSelectSet()
     {
-        return view.createSelectSet();
+        return view().createSelectSet();
     }
 
     /* (non-Javadoc)
@@ -473,7 +486,7 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public SelectSet getSelectSet()
     {
-        return view.getSelectSet();
+        return view().getSelectSet();
     }
 
     /* (non-Javadoc)
@@ -482,13 +495,13 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public SelectSet getSelectSet(Object index)
     {
-        return view.getSelectSet( index );
+        return view().getSelectSet( index );
     }
 
     @Override
     public Object setCurrentSelectSet( Object key )
     {
-        return view.setCurrentSelectSet( key );
+        return view().setCurrentSelectSet( key );
     }
 
     /* (non-Javadoc)
@@ -497,19 +510,19 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public EntityInstance getEntityByHierPosition(long position)
     {
-        return view.getEntityByHierPosition( position );
+        return view().getEntityByHierPosition( position );
     }
 
     @Override
     public String readZeidonConfig(String group, String key)
     {
-        return view.readZeidonConfig( group, key );
+        return view().readZeidonConfig( group, key );
     }
 
     @Override
     public String readZeidonConfig(String group, String key, String defaultValue)
     {
-        return view.readZeidonConfig( group, key, defaultValue );
+        return view().readZeidonConfig( group, key, defaultValue );
     }
 
     @Override
@@ -518,7 +531,7 @@ public class zVIEW extends VmlOperation implements View
         if ( view == null )
             return "<null>";
 
-        return view.toString();
+        return view().toString();
     }
 
     /* (non-Javadoc)
@@ -527,7 +540,7 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public boolean equalsOi(View view)
     {
-        return this.view.equalsOi( view );
+        return this.view().equalsOi( view );
     }
 
     /* (non-Javadoc)
@@ -536,31 +549,31 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public int relinkOis( View... otherViews )
     {
-        return this.view.relinkOis( otherViews );
+        return this.view().relinkOis( otherViews );
     }
 
     @Override
     public Collection<ZeidonException> validateOi()
     {
-        return view.validateOi();
+        return view().validateOi();
     }
 
     @Override
     public View activateObjectInstance( ActivateOptions options ) throws UnknownLodDefException
     {
-        return view.activateObjectInstance( options );
+        return view().activateObjectInstance( options );
     }
 
     @Override
     public View activateObjectInstance( String lodDefName, View qual, ActivateOptions options )
     {
-        return view.activateObjectInstance( lodDefName, qual, options );
+        return view().activateObjectInstance( lodDefName, qual, options );
     }
 
     @Override
     public Iterable<EntityInstance> getHierEntityList( boolean includeRoot, String entityName )
     {
-        return view.getHierEntityList( includeRoot, entityName );
+        return view().getHierEntityList( includeRoot, entityName );
     }
 
     @Override
