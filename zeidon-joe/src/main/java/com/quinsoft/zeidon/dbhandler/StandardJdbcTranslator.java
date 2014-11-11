@@ -26,7 +26,6 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Task;
@@ -56,7 +55,6 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
      **/
     protected final DateTimeFormatter dateFormatter;
     protected final DateTimeFormatter dateTimeFormatter;
-    protected final DateTimeFormatter dateTimeFormatterShort;
 
     private final Task        task;
 
@@ -71,23 +69,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         super();
         this.task = task;
         bindAllValues = handler.isBindAllValues();
-        String dateFormat = handler.getDateAsStringFormat();
-        dateFormatter     = DateTimeFormat.forPattern( dateFormat );
-        if ( dateFormat.indexOf("HH:mm:ss.SSS") >= 0 )
-        {
-            dateTimeFormatter = DateTimeFormat.forPattern( dateFormat );
-            dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat.substring(0,  dateFormat.length() - 4) );
-        }
-        else if (dateFormat.indexOf("HH:mm:ss.SSS") < 0 && dateFormat.indexOf("HH:mm:ss") >= 0)
-        {
-        	dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + ".SSS" );
-            dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat );
-        }
-        else
-        {
-        	dateTimeFormatter = DateTimeFormat.forPattern( dateFormat + " HH:mm:ss.SSS" );
-            dateTimeFormatterShort = DateTimeFormat.forPattern( dateFormat + " HH:mm:ss" );
-        }
+        dateFormatter = handler.getDateFormatter();
+        dateTimeFormatter = handler.getDateTimeFormatter();
     }
 
     protected Task getTask()
@@ -190,17 +173,14 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             if ( dbValue instanceof CharSequence )
             {
                 String date = dbValue.toString();
-                DateTimeFormatter formatter = dateTimeFormatter;
-                if ( date.length() <= 19 )
-                    formatter = dateTimeFormatterShort;
                 try
                 {
-                    return formatter.parseDateTime( date );
+                    return dateTimeFormatter.parseDateTime( date );
                 }
                 catch ( IllegalArgumentException e )
                 {
-                    throw ZeidonException.prependMessage( e, "Invalid date format.  Got '%s' but expected format '%s'",
-                                                          date, formatter.toString() );
+                    throw ZeidonException.prependMessage( e, "Invalid datetime format.  Got '%s' but expected format '%s'",
+                                                          date, dateTimeFormatter );
                 }
             }
         }

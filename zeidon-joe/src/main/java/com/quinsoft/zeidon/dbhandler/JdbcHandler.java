@@ -34,6 +34,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
@@ -54,6 +55,7 @@ import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
+import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
  * A DB handler for JDBC.
@@ -87,7 +89,8 @@ public class JdbcHandler extends AbstractSqlHandler
 
     private final String configGroupName;
     private JdbcDomainTranslator translator;
-    private String dateFormat;
+    private DateTimeFormatter dateFormat;
+    private DateTimeFormatter dateTimeFormat;
     private String drivers;
 
     /**
@@ -1029,17 +1032,39 @@ public class JdbcHandler extends AbstractSqlHandler
         return translator;
     }
 
-    public String getDateAsStringFormat()
+    public DateTimeFormatter getDateFormatter()
     {
         if ( dateFormat == null )
         {
-            dateFormat = getConfigValue( "DateFormat" );
-            if ( StringUtils.isBlank( dateFormat ) )
-                dateFormat = "yyyy-MM-dd";
+            String format = getConfigValue( "DateFormat" );
+            if ( StringUtils.isBlank( format ) )
+                format = "yyyy-MM-dd";
+
+            dateFormat = JoeUtils.createDateFormatterFromEditString( format );
         }
 
         return dateFormat;
-   }
+    }
+
+    public DateTimeFormatter getDateTimeFormatter()
+    {
+        if ( dateTimeFormat == null )
+        {
+            String format = getConfigValue( "dateTimeFormat" );
+            if ( StringUtils.isBlank( format ) )
+            {
+                format = getConfigValue( "DateFormat" );
+                if ( StringUtils.isBlank( format ) )
+                    format = "yyyy-MM-dd";
+
+                format = format + " HH:mm:ss.SSS|" + format + " HH:mm:ss";
+            }
+
+            dateTimeFormat = JoeUtils.createDateFormatterFromEditString( format );
+        }
+
+        return dateTimeFormat;
+    }
 
     public String getDrivers()
     {

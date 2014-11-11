@@ -26,9 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
-import org.joda.time.format.DateTimePrinter;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -233,28 +230,7 @@ public class DateDomain extends AbstractDomain
         private void setEditString( String editString )
         {
             this.editString = editString;
-            String[] strings = editString.split( "\\|" );
-            DateTimeParser list[] = new DateTimeParser[ strings.length ];
-            DateTimePrinter printer = null;
-            for ( int i = 0; i < strings.length; i++ )
-            {
-                try
-                {
-                    DateTimeFormatter f = DateTimeFormat.forPattern( strings[i] );
-                    if ( printer == null )
-                        printer = f.getPrinter();
-
-                    list[ i ] = f.getParser();
-                }
-                catch ( Exception e )
-                {
-                    throw ZeidonException.wrapException( e ).appendMessage( "Format string = %s", strings[i] );
-                }
-            }
-
-            DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
-            builder.append( printer, list );
-            formatter = builder.toFormatter();
+            formatter = JoeUtils.createDateFormatterFromEditString( editString );
         }
 
         @Override

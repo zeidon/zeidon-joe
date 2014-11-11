@@ -36,6 +36,11 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.DateTimeParser;
+import org.joda.time.format.DateTimePrinter;
 
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -305,6 +310,45 @@ public class JoeUtils
         }
 
         return true;
+    }
+
+    /**
+     * Returns a DateTimeFormatter that can parse and print dates in the format of
+     * editString.  There can be multiple edit strings which are separated by a "|"
+     * character.  If there are more than one then the first one is considered to
+     * be the "print" format.
+     *
+     * @param editString
+     * @return
+     */
+    public static DateTimeFormatter createDateFormatterFromEditString( String editString )
+    {
+        String[] strings = editString.split( "\\|" );
+        if ( strings.length == 1 )
+            return DateTimeFormat.forPattern( strings[0] );
+
+        DateTimeParser list[] = new DateTimeParser[ strings.length ];
+        DateTimePrinter printer = null;
+        for ( int i = 0; i < strings.length; i++ )
+        {
+            try
+            {
+                DateTimeFormatter f = DateTimeFormat.forPattern( strings[i] );
+                if ( printer == null )
+                    printer = f.getPrinter();
+
+                list[ i ] = f.getParser();
+            }
+            catch ( Exception e )
+            {
+                throw ZeidonException.wrapException( e ).appendMessage( "Format string = %s", strings[i] );
+            }
+        }
+
+        DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+        builder.append( printer, list );
+        DateTimeFormatter formatter = builder.toFormatter();
+        return formatter;
     }
 
     /**
