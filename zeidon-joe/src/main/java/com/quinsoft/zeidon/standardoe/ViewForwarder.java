@@ -629,7 +629,7 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         return getView().isLocked();
     }
 
-    @Override
+//    @Override
     public void close() throws Exception
     {
         getView().drop();

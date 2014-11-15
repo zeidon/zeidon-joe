@@ -682,7 +682,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult excludeEntity(CursorPosition position)
     {
-        getExistingInstance().excludeEntity();
+        getExistingInstance().excludeEntity( getView() );
         assert validateChains() : "Something is wrong with the chain pointers";
         return repositionCursor( position );
     }
@@ -748,6 +748,11 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public void includeSubobject(EntityInstance sourceEi, CursorPosition position) throws NullCursorException
     {
+        // Include constraints take some work.  Since nobody appears to use them let's not
+        // worry about implementing them for now.
+        if ( entityDef.hasIncludeConstraint() )
+            throw new UnsupportedOperationException( "Include constraints not supported yet." );
+
         validateMaxCardinality();
         validateOiUpdate();
         EntityInstanceImpl source = (EntityInstanceImpl) sourceEi.getEntityInstance();
@@ -1225,7 +1230,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public EntityInstance cancelSubobject()
     {
-        EntityInstanceImpl ei = getExistingInstance().cancelSubobject();
+        EntityInstanceImpl ei = getExistingInstance().cancelSubobject( getView() );
         setEntityInstance( ei );
 
         // The child cursors may still point to the new version.  Reset them all to point

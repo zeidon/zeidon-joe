@@ -64,7 +64,7 @@ class ScalaHelperImpl extends ScalaHelper {
      * @param attributeInstance
      * @return ignored
      */
-    def calculateDerivedAttribute( attributeInstance: com.quinsoft.zeidon.AttributeInstance ): Object = {
+    def calculateDerivedAttribute( attributeInstance: com.quinsoft.zeidon.AttributeInstance ): Integer = {
         val jview = attributeInstance.getView()
         val jlodDef = jview.getLodDef()
         val jattrdef = attributeInstance.getAttributeDef()
@@ -77,7 +77,7 @@ class ScalaHelperImpl extends ScalaHelper {
         val ai: AttributeInstance = new AttributeInstance( attributeInstance )
         val method = instance.getClass.getMethod( jattrdef.getDerivedOperationName(), ai.getClass() )
         val rc = method.invoke( instance, ai )
-        return ""
+        return 0
     }
 
 }

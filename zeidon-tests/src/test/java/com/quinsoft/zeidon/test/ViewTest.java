@@ -113,16 +113,16 @@ public class ViewTest
     {
         Task gp = oe.createTask( "GlobalProps" );
         View tc = gp.activateEmptyObjectInstance( "TestConstraints" );
-        EntityCursor configSet = tc.cursor( "ConfigurationSet" );
-        configSet.createEntity();
-        assertEquals( "Constraint not called", configSet.getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
+        tc.cursor( "ConfigurationSet" ).createEntity();
+        assertEquals( "Constraint not called", tc.cursor( "ConfigurationSet" ).getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
         String tempfile = tc.serializeOi().toTempFile().write().getSourceName();
-        tc = gp.deserializeOi().fromFile( tempfile ).setLodDef( "TestConstraint" ).activateFirst();
-        assertEquals( "Constraint was called as part of deserialize", configSet.getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
+        tc = gp.deserializeOi().fromFile( tempfile ).setLodDef( "TestConstraints" ).activateFirst();
+        assertEquals( "Constraint was called as part of deserialize", tc.cursor( "ConfigurationSet" ).getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
         new File( tempfile ).delete();
+        tc.logObjectInstance();
 
-        configSet.createTemporalEntity();
-        assertEquals( "Constraint not called", configSet.getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 2 );
+        tc.cursor( "ConfigurationSet" ).createTemporalEntity();
+        assertEquals( "Constraint not called", (Integer) 1, tc.cursor( "ConfigurationSet" ).getAttribute( "wConstraintCallCount" ).getInteger());
 
         tc.logObjectInstance();
     }

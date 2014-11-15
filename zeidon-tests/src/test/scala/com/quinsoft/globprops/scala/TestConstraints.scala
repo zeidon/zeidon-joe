@@ -34,6 +34,7 @@ class TestConstraints( val view: View ) extends ObjectOperations {
 
     def configurationSetConstraint(  entityDef: EntityDef, event: EntityConstraintType ) = {
 
+        testConstraint.log.info( "Before: Constraint count = %s", view.ConfigurationSet.wConstraintCallCount )
         view.ConfigurationSet.wConstraintCallCount += 1L
         testConstraint.log.info( "Constraint count = %s", view.ConfigurationSet.wConstraintCallCount )
 

@@ -44,5 +44,5 @@ public interface ScalaHelper
      * @param attributeInstance
      * @return ignored
      */
-    Object calculateDerivedAttribute( AttributeInstance attributeInstance );
+    Integer calculateDerivedAttribute( AttributeInstance attributeInstance );
 }

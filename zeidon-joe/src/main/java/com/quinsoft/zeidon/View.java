@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * @author DG
  *
  */
-public interface View extends TaskQualification, CacheMap, AutoCloseable
+public interface View extends TaskQualification, CacheMap
 {
     final static long DISPLAY_HIDDEN        = 0x00000001;
     final static long DISPLAY_EMPTY_ATTRIBS = 0x00000002;
@@ -93,7 +93,7 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     /**
      * Returns the select set by index.  If one doesn't exist then it will be created
      * and stored in an internal hash set.
-     * 
+     *
      * @param index.
      * @return
      */
@@ -102,11 +102,11 @@ public interface View extends TaskQualification, CacheMap, AutoCloseable
     /**
      * Creates a new SelectSet.  This is *not* stored in the internal SelectSet hash and
      * can not be retrieved through getSelectSet.
-     * 
+     *
      * @return new SelectSet.
      */
     SelectSet createSelectSet();
-    
+
     /**
      * Set the default select set, i.e. the select set that will be returned
      * by getSelectSet().

@@ -320,10 +320,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public View getView()
     {
         if ( view == null )
-        {
-            view = new ViewImpl( getObjectInstance() );
-            view.cursor( attributeDef.getEntityDef() ).setCursor( entityInstance );
-        }
+            view = getObjectInstance().createView( entityInstance );
 
         return view;
     }

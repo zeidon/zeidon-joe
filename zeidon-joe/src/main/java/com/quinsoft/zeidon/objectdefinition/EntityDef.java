@@ -251,6 +251,10 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 if ( reader.getAttributeName().equals( "ECINC" ))
                 {
                     hasIncludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+
+                    // Include constraints take some work.  Since nobody appears to use them let's not
+                    // worry about implementing them for now.
+                    throw new UnsupportedOperationException( "Include constraints not supported yet." );
                 }
                 else
                 if ( reader.getAttributeName().equals( "ECEXC" ))

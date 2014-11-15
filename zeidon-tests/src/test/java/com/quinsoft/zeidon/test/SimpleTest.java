@@ -9,6 +9,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.joda.time.format.DateTimeFormatter;
+
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
@@ -19,6 +21,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -160,7 +163,10 @@ class SimpleTest
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
-        Task gp = oe.createTask( "GlobalProps" );
+
+        DateTimeFormatter parser = JoeUtils.createDateFormatterFromEditString( "EEE MMM dd HH:mm:ss 'xxx' yyyy" );
+        parser.parseDateTime( "Sun Nov 09 23:29:27 EST 2014" );
+        System.out.println( "here" );
 
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )

@@ -1013,7 +1013,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return getObjectInstance().isLocked();
     }
 
-    @Override
+ //   @Override
     public void close() throws Exception
     {
         drop();

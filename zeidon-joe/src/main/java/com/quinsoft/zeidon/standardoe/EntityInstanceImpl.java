@@ -37,6 +37,7 @@ import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.EventNotification;
@@ -1031,7 +1032,15 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public CursorResult deleteEntity()
     {
-        return deleteEntity(true, null);
+        View view = null;
+
+        if ( entityDef.hasDeleteConstraint() )
+        {
+            view = getObjectInstance().createView( this );
+            entityDef.executeEntityConstraint( view, EntityConstraintType.DELETE );
+        }
+
+        return deleteEntity( true, view );
     }
 
     /**
@@ -1043,6 +1052,9 @@ class EntityInstanceImpl implements EntityInstance
      */
     CursorResult deleteEntity( View view )
     {
+        if ( entityDef.hasDeleteConstraint() )
+            entityDef.executeEntityConstraint( view, EntityConstraintType.DELETE );
+
         return deleteEntity( true, view );
     }
 
@@ -1193,6 +1205,19 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public CursorResult excludeEntity()
     {
+        return excludeEntity( null );
+    }
+
+    CursorResult excludeEntity( View view )
+    {
+        if ( entityDef.hasExcludeConstraint() )
+        {
+            if ( view == null )
+                view = getObjectInstance().createView( this );
+
+            entityDef.executeEntityConstraint( view, EntityConstraintType.EXCLUDE );
+        }
+
         // If there is no parent then excluding the entity is the same as dropping it.
     	if ( getParent() == null )
     	{
@@ -1906,6 +1931,18 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityInstanceImpl cancelSubobject()
     {
+        return cancelSubobject( null );
+    }
+
+    /**
+     * Cancels the temporal subobject.  The view that is passed in is used to call
+     * the entity constraint (if it exists).  If view is null then a temporary view
+     * will be created.
+     *
+     * @return
+     */
+    EntityInstanceImpl cancelSubobject( ViewImpl view )
+    {
         // If the entity is a temporal entity created via createTemporal we'll cancel it.
         if ( versionStatus == VersionStatus.UNACCEPTED_ENTITY )
         {
@@ -1915,6 +1952,14 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( versionStatus != VersionStatus.UNACCEPTED_ROOT )
             throw new TemporalEntityException(this, "Entity is not the root of a temporal subobject" );
+
+        if ( entityDef.hasCancelConstraint() )
+        {
+            if ( view == null )
+                view = getObjectInstance().createView( this );
+
+            entityDef.executeEntityConstraint( view, EntityConstraintType.CANCEL );
+        }
 
         // All we need to do is go through all of the entities in the subobject and set their
         // pointers to null.  Everything else will be taken care of by normal processing.

@@ -694,7 +694,7 @@ public class zVIEW extends VmlOperation implements View
         return getView().isLocked();
     }
 
-    @Override
+//    @Override
     public void close() throws Exception
     {
         drop();
