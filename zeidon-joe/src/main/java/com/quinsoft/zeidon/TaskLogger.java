@@ -51,7 +51,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         }
     };
    
-    private static Map<Logger,Level> defaultLevel = new HashMap<Logger, Level>();
+    private static Map<Logger,Level> originalLevel = new HashMap<Logger, Level>();
     
     private       Level  level;
     private final String prefix;
@@ -71,13 +71,13 @@ public class TaskLogger extends Logger implements ZeidonLogger
         // want to change the level of the parent logger to TRACE so that the parent logger
         // will write all messages.  Store the initial level of parentLogger in a map and
         // set it to TRACE.
-        synchronized ( defaultLevel )
+        synchronized ( originalLevel )
         {
-            level = defaultLevel.get( parentLogger );
+            level = originalLevel.get( parentLogger );
             if ( level == null )
             {
                 level = parentLogger.getEffectiveLevel();
-                defaultLevel.put( parentLogger, level );
+                originalLevel.put( parentLogger, level );
                 parentLogger.setLevel( Level.TRACE );
             }
         }

@@ -72,8 +72,12 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
     }
 }
 
+/**
+ * This class is used to keep track of object operations by name.
+ */
 private [scala] class ObjectOperationMap() {
-    val map = new TrieMap[String, ObjectOperationCaller]()
+
+    private val map = new TrieMap[String, ObjectOperationCaller]()
 
     def getObjectOperation( operName: String, jlodDef: LodDef, args: AnyRef* ) = {
         var className = jlodDef.getSourceFileName()
