@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -106,25 +105,6 @@ public class ViewTest
             }
         }
         return mFASrc;
-    }
-
-    @Test
-    public void testConstraints()
-    {
-        Task gp = oe.createTask( "GlobalProps" );
-        View tc = gp.activateEmptyObjectInstance( "TestConstraints" );
-        tc.cursor( "ConfigurationSet" ).createEntity();
-        assertEquals( "Constraint not called", tc.cursor( "ConfigurationSet" ).getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
-        String tempfile = tc.serializeOi().toTempFile().write().getSourceName();
-        tc = gp.deserializeOi().fromFile( tempfile ).setLodDef( "TestConstraints" ).activateFirst();
-        assertEquals( "Constraint was called as part of deserialize", tc.cursor( "ConfigurationSet" ).getAttribute( "wConstraintCallCount" ).getInteger(), (Integer) 1 );
-        new File( tempfile ).delete();
-        tc.logObjectInstance();
-
-        tc.cursor( "ConfigurationSet" ).createTemporalEntity();
-        assertEquals( "Constraint not called", (Integer) 1, tc.cursor( "ConfigurationSet" ).getAttribute( "wConstraintCallCount" ).getInteger());
-
-        tc.logObjectInstance();
     }
 
 //    @Test

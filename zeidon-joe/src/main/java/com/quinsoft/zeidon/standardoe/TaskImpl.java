@@ -195,6 +195,12 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     }
 
     @Override
+    public int getViewCount()
+    {
+        return viewList.keySet().size();
+    }
+
+    @Override
     public String getTaskId()
     {
         return taskId;

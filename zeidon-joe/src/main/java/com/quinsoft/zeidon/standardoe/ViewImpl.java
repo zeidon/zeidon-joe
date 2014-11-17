@@ -1018,4 +1018,10 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         drop();
     }
+
+    @Override
+    public int getEntityCount( boolean includeHidden )
+    {
+        return getObjectInstance().getEntityCount( includeHidden );
+    }
 }

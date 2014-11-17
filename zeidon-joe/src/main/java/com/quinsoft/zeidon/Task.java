@@ -41,6 +41,14 @@ public interface Task extends TaskQualification, CacheMap
     Collection<? extends View> getViewList();
 
     /**
+     * Returns an approximate count of views for this task.  It is approximate because
+     * the GC may not have cleaned up some views.
+     *
+     * @return
+     */
+    int getViewCount();
+
+    /**
      * Get a string ID that uniquely defines this task.  Is not restricted to digits.
      * @return
      */

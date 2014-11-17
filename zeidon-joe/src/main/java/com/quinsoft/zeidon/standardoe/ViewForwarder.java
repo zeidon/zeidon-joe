@@ -634,4 +634,10 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         getView().drop();
     }
+
+    @Override
+    public int getEntityCount( boolean includeHidden )
+    {
+        return getView().getEntityCount( includeHidden );
+    }
 }

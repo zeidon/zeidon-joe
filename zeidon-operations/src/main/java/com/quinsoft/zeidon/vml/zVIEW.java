@@ -82,17 +82,17 @@ public class zVIEW extends VmlOperation implements View
     {
         return view;
     }
-    
+
     /**
      * Returns the view.  If the view is null then an exception is thrown.
-     * 
+     *
      * @return
      */
     private View view()
     {
         if ( view == null )
             throw new ZeidonException( "VIEW does not reference a valid OI." );
-            
+
         return view;
     }
 
@@ -579,115 +579,115 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public void setLazyLoad( boolean lazyLoad )
     {
-        getView().setLazyLoad( lazyLoad );
+        view().setLazyLoad( lazyLoad );
     }
 
     @Override
     public boolean isLazyLoad()
     {
-        return getView().isLazyLoad();
+        return view().isLazyLoad();
     }
 
     @Override
     public boolean isUpdated()
     {
-        return getView().isUpdated();
+        return view().isUpdated();
     }
 
     @Override
     public boolean isUpdatedFile()
     {
-        return getView().isUpdatedFile();
+        return view().isUpdatedFile();
     }
 
     @Override
     public void writeOi( Writer writer, EnumSet<WriteOiFlags> flags )
     {
-        getView().writeOi( writer, flags );
+        view().writeOi( writer, flags );
     }
 
     @Override
     public void writeOi( Writer writer, WriteOiFlags flag )
     {
-        getView().writeOi( writer, flag );
+        view().writeOi( writer, flag );
     }
 
     @Override
     public void writeOi( Writer writer, WriteOiFlags... flags )
     {
-        getView().writeOi( writer, flags );
+        view().writeOi( writer, flags );
     }
 
     @Override
     public void writeOi( Writer writer )
     {
-        getView().writeOi( writer );
+        view().writeOi( writer );
     }
 
     @Override
     public <T> T putCacheMap( Class<T> key, T value )
     {
-        return getView().putCacheMap( key, value );
+        return view().putCacheMap( key, value );
     }
 
     @Override
     public <T> T getCacheMap( Class<T> key )
     {
-        return getView().getCacheMap( key );
+        return view().getCacheMap( key );
     }
 
     @Override
     public String readZeidonConfig( String applicationName, String group, String key, String defaultValue )
     {
-        return getView().readZeidonConfig( applicationName, group, key, defaultValue );
+        return view().readZeidonConfig( applicationName, group, key, defaultValue );
     }
 
     @Override
     public String readZeidonConfig( Application application, String group, String key, String defaultValue )
     {
-        return getView().readZeidonConfig( application, group, key, defaultValue );
+        return view().readZeidonConfig( application, group, key, defaultValue );
     }
 
     @Override
     public View duplicateOi( )
     {
-        return getView().duplicateOi();
+        return view().duplicateOi();
     }
 
     @Override
     public View duplicateOi( DuplicateOiOptions options )
     {
-        return getView().duplicateOi( options );
+        return view().duplicateOi( options );
     }
 
     @Override
     public ActivateOptions getActivateOptions()
     {
-        return getView().getActivateOptions();
+        return view().getActivateOptions();
     }
 
     @Override
     public boolean isEmpty()
     {
-        return getView().isEmpty();
+        return view().isEmpty();
     }
 
     @Override
     public List<View> activateOisFromStream( DeserializeOi options ) throws UnknownLodDefException
     {
-        return getView().activateOisFromStream( options );
+        return view().activateOisFromStream( options );
     }
 
     @Override
     public SerializeOi serializeOi()
     {
-        return getView().serializeOi();
+        return view().serializeOi();
     }
 
     @Override
     public DeserializeOi deserializeOi()
     {
-        return getView().deserializeOi();
+        return view().deserializeOi();
     }
     @Override
     public View newView( boolean readOnly )
@@ -698,18 +698,24 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public View newView( TaskQualification owningTask, boolean readOnly )
     {
-        return getView().newView( owningTask, readOnly );
+        return view().newView( owningTask, readOnly );
     }
 
     @Override
     public boolean isLocked()
     {
-        return getView().isLocked();
+        return view().isLocked();
     }
 
 //    @Override
     public void close() throws Exception
     {
         drop();
+    }
+
+    @Override
+    public int getEntityCount( boolean includeHidden )
+    {
+        return view().getEntityCount( includeHidden );
     }
 }

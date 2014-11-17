@@ -62,6 +62,20 @@ public interface JmxObjectEngineMonitorMBean
     Collection<String> getTaskList();
 
     /**
+     * Write the task list to the logs.
+     *
+     * @return debug message.
+     */
+    String logTaskList();
+
+    /**
+     * Write all tasks and view information to the log.
+     *
+     * @return debug message.
+     */
+    String logAllTasksAndViews();
+
+    /**
      * Writes a list of all active views to the Zeidon log for the supplied task.
      *
      * @param taskId

@@ -351,4 +351,13 @@ public interface View extends TaskQualification, CacheMap
      * @return
      */
     boolean isEmpty();
+    
+    /**
+     * Return the number of entities in the OI.
+     * 
+     * @param includeHidden if true, count hidden entities.
+     * 
+     * @return
+     */
+    int getEntityCount( boolean includeHidden );
 }

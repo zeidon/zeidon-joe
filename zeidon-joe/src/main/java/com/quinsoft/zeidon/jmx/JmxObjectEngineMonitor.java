@@ -297,7 +297,8 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         for ( View view : task.getViewList() )
         {
             Collection<String> nameList = view.getNameList();
-            task.log().info( "View %s (%s)  Names = %s", view.getId(), view.getLodDef(), nameList );
+            task.log().info( "View %s (%s)  Count = %d  Names = %s",
+                             view.getId(), view.getLodDef(), view.getEntityCount( true ), nameList );
         }
 
         return "Views listed in log";
@@ -386,5 +387,27 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
             return "NO VIEW";
 
         return view.serializeOi().asJson().toStringWriter().withIncremental().compressed().write().getString();
+    }
+
+    @Override
+    public String logTaskList()
+    {
+        for ( Task task : oe.getTaskList() )
+            task.log().info( "Task ID %s for %s has ~ %d views",
+                             task.getTaskId(), task.getApplication().getName(), task.getViewCount() );
+
+        return "Tasks logged";
+    }
+
+    @Override
+    public String logAllTasksAndViews()
+    {
+        for ( Task task : oe.getTaskList() )
+        {
+            task.log().info( "Task ID %s for %s", task.getTaskId(), task.getApplication().getName() );
+            logViews( task.getTaskId() );
+        }
+
+        return "Tasks logged";
     }
 }

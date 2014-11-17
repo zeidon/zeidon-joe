@@ -2015,6 +2015,7 @@ public class TestZencas
 			//:                        mStudent.ContactActivity.ID = 0
 			o_fnLocalBuildQual_50( ViewToWindow, vTempViewVar_0, 15541 );
 			RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
+			mStudent.log().info( "Entity count = %d", mStudent.getEntityCount( true ) );
 			DropView( vTempViewVar_0 );
 			DropView( mStudent );
 			DropView( lTermLST );

@@ -399,4 +399,16 @@ class ObjectInstance implements Lockable
 
         return view;
     }
+    
+    int getEntityCount( boolean includeHidden )
+    {
+        int count = 0;
+        for ( EntityInstanceImpl ei = rootEntityInstance; ei != null; ei = ei.getNextHier() )
+        {
+            if ( includeHidden || ! ei.isHidden() )
+                count++;
+        }
+        
+        return count;
+    }
 }
