@@ -49,6 +49,7 @@ public class JsonUtils
         Application zeidonTools = view.getApplication( "ZeidonTools" );
         View xod = new DeserializeOi( view )
                             .fromFile( filename )
+                            .asJson()
                             .setApplication( zeidonTools )
                             .activateFirst();
 
