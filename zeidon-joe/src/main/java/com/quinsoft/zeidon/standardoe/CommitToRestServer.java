@@ -35,13 +35,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
+import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonRestException;
 
@@ -125,8 +125,7 @@ public class CommitToRestServer implements Committer
         {
             copyEntityKeysToTags();
 
-            SerializeOi writer = new SerializeOi().asJson().toStringWriter().withIncremental().write( viewList );
-            String json = writer.getString();
+            String json = task.serializeOi().asJson().withIncremental().addViews( viewList ).toStringWriter().toString();
             List<View> views = makePostCall( json );
             View restRc = views.get( 0 );
             views.remove( 0 ); // Remove the RC from the list of views.

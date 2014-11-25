@@ -18,6 +18,8 @@
  */
 package com.quinsoft.zeidon;
 
+import java.io.Writer;
+
 /**
  * Defines the methods needed to write an OI to a stream.
  *
@@ -26,5 +28,5 @@ package com.quinsoft.zeidon;
  */
 public interface StreamWriter
 {
-    public void writeToStream( SerializeOi options );
+    public void writeToStream( SerializeOi options, Writer writer );
 }

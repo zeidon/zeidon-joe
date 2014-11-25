@@ -46,16 +46,14 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     private final static String VERSION = "1";
 
     private Collection<? extends View> viewList;
-    private Writer writer;
     private EnumSet<WriteOiFlags> flags;
 
     private JsonGenerator jg;
 
     @Override
-    public void writeToStream( SerializeOi options )
+    public void writeToStream( SerializeOi options, Writer writer )
     {
         this.viewList = options.getViewList();
-        this.writer = options.getWriter();
         if ( options.getFlags() == null )
             flags = EnumSet.noneOf( WriteOiFlags.class );
         else

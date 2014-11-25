@@ -56,10 +56,10 @@ public class WriteOisToJsonStream implements StreamWriter
     private View currentView;
 
     @Override
-    public void writeToStream( SerializeOi options )
+    public void writeToStream( SerializeOi options, Writer writer )
     {
         this.viewList = options.getViewList();
-        this.writer = options.getWriter();
+        this.writer = writer;
         this.options = options;
         if ( options.getFlags() == null )
             flags = EnumSet.noneOf( WriteOiFlags.class );

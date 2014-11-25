@@ -386,7 +386,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         if ( view == null )
             return "NO VIEW";
 
-        return view.serializeOi().asJson().toStringWriter().withIncremental().compressed().write().getString();
+        return view.serializeOi().asJson().withIncremental().compressed().toStringWriter().toString();
     }
 
     @Override

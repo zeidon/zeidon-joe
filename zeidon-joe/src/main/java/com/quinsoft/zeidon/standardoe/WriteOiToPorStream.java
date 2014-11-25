@@ -64,14 +64,14 @@ public class WriteOiToPorStream implements StreamWriter
     private SerializeOi options;
 
     @Override
-    public void writeToStream( SerializeOi options )
+    public void writeToStream( SerializeOi options, Writer writer )
     {
         List<View> viewList = options.getViewList();
         if ( viewList.size() > 1 )
             throw new ZeidonException( "POR stream processing can only handle a single OI" );
 
         view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
-        writer = options.getWriter();
+        this.writer = writer;
         flags = options.getFlags();
         this.options = options;
         writeToStream();

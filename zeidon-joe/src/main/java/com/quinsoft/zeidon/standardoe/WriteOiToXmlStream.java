@@ -50,7 +50,7 @@ public class WriteOiToXmlStream implements StreamWriter
     private SerializeOi options;
 
     @Override
-    public void writeToStream( SerializeOi options )
+    public void writeToStream( SerializeOi options, Writer writer )
     {
         List<View> viewList = options.getViewList();
         if ( viewList.size() > 1 )
@@ -58,7 +58,7 @@ public class WriteOiToXmlStream implements StreamWriter
 
         view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
         this.options = options;
-        writer = options.getWriter();
+        this.writer = writer;
         control = options.getFlags();
         incremental = this.control.contains( WriteOiFlags.INCREMENTAL );
     }

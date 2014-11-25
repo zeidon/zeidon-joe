@@ -97,7 +97,7 @@ public class ActivateOiFromRestServer implements Activator
             client = new DefaultHttpClient();
             HttpPost post = new HttpPost( url );
             View qual = activateOptions.getQualificationObject();
-            String qualStr = qual.serializeOi().asJson().withIncremental().toStringWriter().write().getString();
+            String qualStr = qual.serializeOi().asJson().withIncremental().toStringWriter().toString();
             StringEntity entity = new StringEntity( qualStr );
             post.setEntity( entity );
             post.setHeader( "Content-Type", "application/json" );
