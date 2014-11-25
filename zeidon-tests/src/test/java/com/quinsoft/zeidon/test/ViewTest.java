@@ -128,7 +128,7 @@ public class ViewTest
     {
         View v = zencas.activateOiFromFile( "mStudent", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudent_ac.por" );
         String filename = v.getTempDirectory() + "mstudent_ac.json";
-        new SerializeOi().asJson().withIncremental().toFile( filename ).write( v );
+        v.serializeOi().asJson().withIncremental().toFile( filename );
 
         View v2 = new DeserializeOi( zencas )
                             .asJson()

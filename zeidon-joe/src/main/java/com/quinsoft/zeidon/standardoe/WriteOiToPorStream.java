@@ -127,7 +127,7 @@ public class WriteOiToPorStream implements StreamWriter
 
         String name = view.getLodDef().getName();
         if ( writer instanceof FileWriter )
-            name = options.getSourceName();
+            name = options.getResourceName();
 
         String header = String.format( "z%s%s%s%s%sZeidon    %8s %s %s",
                                         erDate, incremental, compressed, optimisticOIs, attribFlags,

@@ -132,7 +132,7 @@ public class SerializeOi
         attribute.setValue( writer.toString() );
     }
 
-    public String getSourceName()
+    public String getResourceName()
     {
         return resourceName;
     }

@@ -8678,10 +8678,9 @@ public abstract class VmlOperation
    public void
    WriteOiToJson( View view, String filename, int control )
    {
-       new SerializeOi().asJson()
+       view.serializeOi().asJson()
                           .setFlags( WriteOiFlags.convertLongFlags( control ) )
-                          .toFile( filename )
-                          .write( view );
+                          .toFile( filename );
    }
 
    public View
