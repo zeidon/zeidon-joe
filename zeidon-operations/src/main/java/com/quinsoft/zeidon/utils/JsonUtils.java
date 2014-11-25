@@ -20,10 +20,10 @@ package com.quinsoft.zeidon.utils;
 
 import java.io.Writer;
 
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.SerializeOi;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
@@ -49,11 +49,10 @@ public class JsonUtils
         Application zeidonTools = view.getApplication( "ZeidonTools" );
         View xod = new DeserializeOi( view )
                             .fromFile( filename )
-                            .asJson()
                             .setApplication( zeidonTools )
                             .activateFirst();
 
         // Write it.
-        new SerializeOi().toWriter( writer ).write( xod );
+        new SerializeOi().asJson().toWriter( writer ).write( xod );
     }
 }

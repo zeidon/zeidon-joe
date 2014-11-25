@@ -143,6 +143,15 @@ class QualBuilder( private val view: View,
         jqual.readOnly()
         this
     }
+
+    /**
+     * Indicates this activate should be done asynchronously.
+     */
+    def asynchronous = {
+        jqual.asynchronous()
+        this
+    }
+
     def activate(): View = {
         view.jview = jqual.activate()
         return view

@@ -131,6 +131,26 @@ class SampleActivates( val task: Task ) extends ZeidonOperations {
          *  -
          */
     }
+
+    def asynchronousActivate = {
+        /* VML:
+         *
+         * No equivalent in VML.
+         */
+
+        val mUser = VIEW basedOn "mUser"
+        mUser.buildQual( _.User.ID = 490 )
+                    .or( _.User.ID = 491 )
+                    .asynchronous
+                    .activate
+
+        // ...do other work here...
+
+        // First reference of mUser will block until activate is finished.
+        println( "ID = " + mUser.User.ID )
+
+        mUser
+    }
 }
 
 object SampleActivates {
@@ -148,6 +168,7 @@ object SampleActivates {
         mUser = sample.activateWithOr
         mUser = sample.activateWithGrouping
         mUser = sample.activateWithRestricting
+        mUser = sample.asynchronousActivate
 
 //        mUser.logObjectInstance
     }
