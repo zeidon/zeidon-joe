@@ -36,7 +36,7 @@ class SampleViewManipulations( val task: Task ) extends ZeidonOperations  {
      * Returns the filename.
      */
     def serializeSingleOiToJsonFile( view: View ) : String = {
-        view.serializeOi.asJson.toTempFile().withIncremental().write().getSourceName()
+        view.serializeOi.asJson.withIncremental.toTempFile()
     }
 
     /**
