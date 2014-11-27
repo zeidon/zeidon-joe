@@ -184,7 +184,7 @@ public class ViewListTable extends JTable
             {
                 String filename = chooser.getSelectedFile().getAbsolutePath();
                 View v = env.getView( view );
-                v.serializeOi().setFormat( format ).toFile( filename ).withIncremental().write();
+                v.serializeOi().setFormat( format ).withIncremental().toFile( filename );
                 env.getOe().getSystemTask().log().info( "OI written to %s", filename );
             }
         }

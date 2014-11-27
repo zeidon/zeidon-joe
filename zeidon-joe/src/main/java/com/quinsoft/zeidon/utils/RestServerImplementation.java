@@ -18,6 +18,8 @@
  */
 package com.quinsoft.zeidon.utils;
 
+import java.io.Writer;
+
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -77,8 +79,8 @@ public class RestServerImplementation
 
             ActivateOptions activateOptions = new ActivateOptions( task );
             View view = task.activateObjectInstance( lodDefName, qual, activateOptions );
-            SerializeOi writer = new SerializeOi().asJson().addView( rc, view ).withIncremental().toStringWriter().write();
-            return writer.getString();
+            Writer writer = new SerializeOi().asJson().addView( rc, view ).withIncremental().toStringWriter();
+            return writer.toString();
         }
         catch ( Exception e )
         {
@@ -89,8 +91,8 @@ public class RestServerImplementation
             rcEI.getAttribute( "ErrorMessage" ).setValue( e.getMessage() );
 
             // Write the rc OI to a string.
-            SerializeOi writer = rc.serializeOi().asJson().withIncremental().toStringWriter().write();
-            return writer.getString();
+            Writer writer = rc.serializeOi().asJson().withIncremental().toStringWriter();
+            return writer.toString();
         }
     }
 

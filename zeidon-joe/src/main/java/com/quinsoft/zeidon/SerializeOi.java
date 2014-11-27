@@ -46,14 +46,10 @@ public class SerializeOi
 {
     private final List<View> viewList;
 
-    private boolean closeWriter = true;
-    private Writer  writer;
     private StreamFormat format;
     private String resourceName;
     private EnumSet<WriteOiFlags> flags = EnumSet.noneOf( WriteOiFlags.class );
     private StreamWriter streamWriter;
-
-    private AttributeInstance targetAttribute;
 
     public SerializeOi()
     {
@@ -72,13 +68,14 @@ public class SerializeOi
         addViews( views );
     }
 
-    public SerializeOi toTempFile()
+    public String toTempFile()
     {
         if ( viewList.size() == 0 )
             throw new ZeidonException( "Specify at least one view before calling toTempFile()" );
 
         View view = viewList.get( 0 );
         String prefix = view.getLodDef().getName() + "_";
+        FileWriter writer = null;
         try
         {
 
@@ -86,95 +83,71 @@ public class SerializeOi
             writer = new FileWriter( file );
             resourceName = file.getAbsolutePath();
             view.log().debug( "Writing views to temp file %s", resourceName );
+            write( writer );
+            return resourceName;
         }
         catch ( IOException e )
         {
             throw ZeidonException.wrapException( e );
         }
-
-        return this;
+        finally
+        {
+            IOUtils.closeQuietly( writer );
+        }
     }
 
-    public SerializeOi toFile( String filename )
+    public String toFile( String filename )
     {
+        FileWriter writer = null;
         try
         {
             File file = new File( filename );
-            writer = new FileWriter( file );
+            writer  = new FileWriter( file );
+            resourceName = filename;
+            setFormatFromFilename( resourceName );
+            write( writer );
+            return resourceName;
         }
         catch ( IOException e )
         {
             throw ZeidonException.wrapException( e ).prependFilename( filename );
         }
-
-        resourceName = filename;
-        setFormatFromFilename( resourceName );
-        return this;
+        finally
+        {
+            IOUtils.closeQuietly( writer );
+        }
     }
 
-    public SerializeOi toWriter( Writer writer )
+    public Writer toWriter( Writer writer )
     {
-        this.writer = writer;
-        closeWriter = false;  // We'll assume the caller will close it.
         resourceName = "*External writer*";
-        return this;
+        write( writer );
+        return writer;
     }
 
-    public SerializeOi toAttribute( AttributeInstance attribute )
+    public void toAttribute( AttributeInstance attribute )
     {
-        targetAttribute = attribute;
-        toStringWriter();
-        return this;
+        Writer writer = toStringWriter();
+        write( writer );
+        attribute.setValue( writer.toString() );
     }
 
-    public String getSourceName()
+    public String getResourceName()
     {
         return resourceName;
     }
 
     /**
-     * Write the JSON to a StringWriter.  The resulting string can be retrieved
-     * using getJsonString();
+     * Write the OI to a StringWriter.
+     * 
      * @return
      */
-    public SerializeOi toStringWriter()
+    public Writer toStringWriter()
     {
-        writer = new StringWriter();
+        StringWriter writer = new StringWriter();
         resourceName = "*String*";
-        return this;
-    }
-
-    private void close()
-    {
-        if ( closeWriter )
-        {
-            IOUtils.closeQuietly( writer );
-            closeWriter = false;
-        }
-    }
-
-    public String getString()
-    {
-        try
-        {
-            if ( writer == null )
-                throw new ZeidonException( "No output destination specified." );
-
-            // If closeWriter is true then we haven't run write() yet.  Do so now.
-            if ( closeWriter )
-                write();
-
-            if ( writer instanceof StringWriter )
-                return writer.toString();
-
-            throw new ZeidonException( "Writer is not an instance of StringWriter.  Class = %s",
-                                       writer.getClass().getCanonicalName() );
-        }
-        catch ( Exception e )
-        {
-            close();
-            throw e;
-        }
+        write( writer );
+        return writer;
     }
 
     /**
@@ -242,79 +215,49 @@ public class SerializeOi
         return this;
     }
 
-    public SerializeOi write( View view, View... views )
-    {
-        viewList.add( view );
-        if ( views != null && views.length > 0 )
-        {
-            for ( View v : views )
-                viewList.add( v );
-        }
-
-        return write();
-    }
-
-    public SerializeOi write( Collection<? extends View> views )
-    {
-        viewList.addAll( views );
-        return write();
-    }
-
     public List<View> getViewList()
     {
         return viewList;
     }
 
-    public Writer getWriter()
+    private StreamWriter getStreamWriter()
     {
-        return writer;
-    }
-
-    public SerializeOi write()
-    {
-        try
+        if ( streamWriter == null )
         {
-            if ( viewList.size() == 0 )
-                throw new ZeidonException( "No views have been selected to write" );
-
-            if ( writer == null )
-                throw new ZeidonException( "No output destination specified." );
-
-            if ( streamWriter == null )
+            switch ( getFormat() )
             {
-                switch ( getFormat() )
-                {
-                    case JSON:
-                        if ( flags.contains( WriteOiFlags.INCREMENTAL ) )
-                            streamWriter = new WriteOisToJsonStream();
-                        else
-                            streamWriter = new WriteOisToJsonStreamNoIncrementals();
-                        break;
+                case JSON:
+                    if ( flags.contains( WriteOiFlags.INCREMENTAL ) )
+                        streamWriter = new WriteOisToJsonStream();
+                    else
+                        streamWriter = new WriteOisToJsonStreamNoIncrementals();
+                    break;
 
-                    case XML:
-                        streamWriter = new WriteOiToXmlStream();
-                        break;
+                case XML:
+                    streamWriter = new WriteOiToXmlStream();
+                    break;
 
-                    case POR:
-                        streamWriter = new WriteOiToPorStream();
-                        break;
+                case POR:
+                    streamWriter = new WriteOiToPorStream();
+                    break;
 
-                    default:
-                        throw new ZeidonException( "Unknown format", getFormat() );
-                }
+                default:
+                    throw new ZeidonException( "Unknown format", getFormat() );
             }
-
-            streamWriter.writeToStream( this );
-
-            if ( targetAttribute != null )
-                targetAttribute.setValue( getString() );
-
-            return this;
         }
-        finally
-        {
-            close();
-        }
+        
+        return streamWriter;
+    }
+    
+    private void write( Writer writer )
+    {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "No views have been selected to write" );
+
+        if ( writer == null )
+            throw new ZeidonException( "No output destination specified." );
+
+        getStreamWriter().writeToStream( this, writer );
     }
 
     public EnumSet<WriteOiFlags> getFlags()

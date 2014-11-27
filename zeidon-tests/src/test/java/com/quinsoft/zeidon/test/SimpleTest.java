@@ -178,8 +178,8 @@ class SimpleTest
 
         stud.cursor( "Student" ).setPosition( 6 );
         String id = stud.cursor( "Student" ).getAttribute( "ID" ).getString();
-        stud.serializeOi().toFile( "/tmp/stud.json" ).asJson().withIncremental().compressed().write();
-        stud.serializeOi().toFile( "/tmp/stud2.json" ).asJson().write();
+        stud.serializeOi().asJson().withIncremental().compressed().toFile( "/tmp/stud.json" );
+        stud.serializeOi().asJson().toFile( "/tmp/stud2.json" );
 
         View stud2 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud2.json" )

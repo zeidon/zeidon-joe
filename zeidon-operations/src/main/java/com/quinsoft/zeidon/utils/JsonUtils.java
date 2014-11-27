@@ -22,7 +22,6 @@ import java.io.Writer;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.DeserializeOi;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -53,6 +52,6 @@ public class JsonUtils
                             .activateFirst();
 
         // Write it.
-        new SerializeOi().asJson().toWriter( writer ).write( xod );
+        xod.serializeOi().asJson().toWriter( writer );
     }
 }
