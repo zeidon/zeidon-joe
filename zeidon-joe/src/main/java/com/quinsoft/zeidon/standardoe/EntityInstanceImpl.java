@@ -33,6 +33,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.MapMaker;
+import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CursorPosition;
@@ -736,6 +737,14 @@ class EntityInstanceImpl implements EntityInstance
         // the DB that can be lazy loaded.
         if ( isCreated() )
             return;
+
+        // Was this OI activated with the flag that indicates that entities marked
+        // as lazy loaded should be loaded anyway?
+        if ( getObjectInstance().getActivateOptions() != null &&
+             getObjectInstance().getActivateOptions().getActivateFlags().contains( ActivateFlags.fINCLUDE_LAZYLOAD ) )
+        {
+            return; // Entities flagged as lazy load have already been loaded.
+        }
 
         // Have we already loaded this child?
         if ( hasChildBeenLazyLoaded( childEntityDef ) )
