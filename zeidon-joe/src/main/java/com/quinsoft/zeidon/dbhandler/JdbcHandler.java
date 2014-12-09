@@ -471,7 +471,7 @@ public class JdbcHandler extends AbstractSqlHandler
                             {
                                 case MANY_TO_MANY: keyField = relRecord.getParentRelField().getSrcDataField(); break;
                                 case ONE_TO_MANY:  keyField = relRecord.getRelFields().get( 0 ).getRelDataField(); break;
-                                default: throw new ZeidonException( "Unknown reltype" );
+                                default: throw new ZeidonException( "Unsupported reltype" ); // Should never happen.
                             }
 
                             columnIdx = stmt.getColumns().get( keyField );

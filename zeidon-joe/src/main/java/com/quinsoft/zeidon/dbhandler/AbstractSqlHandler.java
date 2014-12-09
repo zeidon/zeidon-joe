@@ -621,14 +621,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         for ( EntityDef entityDef : view.getLodDef().getViewEntitiesHier() )
         {
-            EntityDef parent = entityDef.getParent();
-            if ( parent == null )
-                continue;
-
-            if ( entityCanBeLoadedAtOnce( entityDef ) )
+            if ( entityCanBeLoadedWithSingleSelect( entityDef ) )
             {
-                loadedInstances.put( parent, new HashMap<Object, EntityInstance>() );
                 loadInOneSelect.add( entityDef );
+
+                EntityDef parent = entityDef.getParent();
+                if ( parent != null && ! loadedInstances.containsKey( parent ) )
+                    loadedInstances.put( parent, new HashMap<Object, EntityInstance>() );
             }
         }
     }
@@ -640,14 +639,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     protected boolean selectAllInstances( EntityDef entityDef )
     {
-        if ( loadInOneSelect.contains( entityDef ) )
-        {
-            EntityDef parent = entityDef.getParent();
-            if ( loadedInstances.containsKey( parent ) )
-                return true;
-        }
+        // Root entities are handled differently.
+        if ( entityDef.getParent() == null )
+            return false;
 
-        return false;
+        return loadInOneSelect.contains( entityDef );
     }
 
     protected boolean activatingWithJoins()
@@ -658,6 +654,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
             return false;
 
+        // Check the zeidon.ini file.
         if ( ignoreJoins() )
             return false;
 
@@ -710,6 +707,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return jc;
     }
 
+    /**
+     * Returns true if entityDef can be loaded by joining with its parent.
+     *
+     * @param entityDef
+     * @return
+     */
     protected boolean isJoinable( EntityDef entityDef )
     {
         if ( ! activatingWithJoins() )
@@ -805,25 +808,45 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return null;
     }
 
-    private boolean entityCanBeLoadedAtOnce( EntityDef entityDef )
+    /**
+     * Returns true if all instances of entityDef can be loaded in a single SELECT
+     * statement.
+     *
+     * @param entityDef
+     * @return
+     */
+    private boolean entityCanBeLoadedWithSingleSelect( EntityDef entityDef )
     {
+        // Root entity is handled differently from other entities but we'll pretend it's
+        // loadable to make things easier.
+        if ( entityDef.getParent() == null )
+            return true;
+
+//        if ( ! entityDef.getName().equals( "xxx" ) )
+//            return false;
+
         // If we're activating as part of a lazy load then we shouldn't be loading all
-        // instances because lazy load indicates we want partial loading.
+        // instances because the lazy load indicates we want partial loading.
         if ( activateOptions.isPerformingLazyLoad() )
             return false;
 
         if ( activateOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_LOAD_OPTIMIZATION ) )
             return false;
 
-        // Can't load children of recursive entities.
-        for ( EntityDef ve = entityDef; ve != null; ve = ve.getParent() )
-        {
-            if ( ve.isRecursive() )
-                return false;
-        }
+        // If the parent can't be loaded in a single select then neither
+        // can this one.  If the parent isn't in loadInOneSelect then it
+        // can't be loaded.
+        if ( ! loadInOneSelect.contains( entityDef.getParent() ) )
+            return false;
 
-        // If this is being joined with its parent then we don't need to load the
-        // child in a separate SELECT.
+        // If this entity is qualified we can't do it.
+        // TODO: logically we should be able to load entities even if they are qualified;
+        // it will just take a lot of work to get right.
+        if ( qualMap.containsKey( entityDef ) )
+            return false;
+
+        // We can't load an entity that is joined in one select because it's being
+        // joined with its parent.
         if ( isJoinable( entityDef ) )
             return false;
 
@@ -839,6 +862,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( relType == null )
             return false;
 
+        // We don't support m-to-1 relationships because it is too hard
+        // to figure out where the children go.  In most cases this doesn't
+        // matter because m-to-1 children should be joined with the parent.
         if ( relType.isManyToOne() )
             return false;
 
@@ -850,8 +876,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
             return false;
 
-        if ( entityDef.getParent() != null && qualMap.containsKey( entityDef ) )
-            return false;
+        // Can't load children of recursive entities.
+        for ( EntityDef ve = entityDef; ve != null; ve = ve.getParent() )
+        {
+            if ( ve.isRecursive() )
+                return false;
+        }
 
         return true;
     }
@@ -915,7 +945,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // on the current parent.  Get it and save it.
         EntityDef parent = entityDef.getParent();
         EntityInstance parentEi = null;
-        if ( parent != null && entityCanBeLoadedAtOnce( entityDef ) )
+        if ( parent != null && loadInOneSelect.contains( entityDef ) )
             parentEi = view.cursor( parent ).getEntityInstance();
 
         executeLoad( view, entityDef, stmt );
@@ -2444,6 +2474,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return isBindAllValues;
     }
 
+    /**
+     * Checks the zeidon.ini to see if we should ignore joins.
+     * @return
+     */
     public boolean ignoreJoins()
     {
         if ( ignoreJoins == null )
