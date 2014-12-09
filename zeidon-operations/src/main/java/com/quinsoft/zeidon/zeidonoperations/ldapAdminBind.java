@@ -66,7 +66,8 @@ public class ldapAdminBind
 			String filter = "(&(objectCategory=Person)(objectclass=User)(sAMAccountName=" + username + "))";
 
 			// Search for the object using the username (sAMAccountName), under the following path.
-			NamingEnumeration answer = ldapContext.search("OU=ENC,DC=enc-ad,DC=enc,DC=edu", filter, ctls);
+			//NamingEnumeration answer = ldapContext.search("OU=ENC,DC=enc-ad,DC=enc,DC=edu", filter, ctls);
+			NamingEnumeration answer = ldapContext.search("DC=AD,DC=SWAU,DC=EDU", filter, ctls);
 			while (answer.hasMore()) 
 			{  
 				// Username was found. We need to get the user's "distinguishedName" in order to be
@@ -76,7 +77,7 @@ public class ldapAdminBind
 	            Attribute dn = attrs.get("distinguishedName");
 	            String dnValue = (String) dn.get(0);
 	            Attribute psw = attrs.get("userPassword");
-	            psw.set(0, password);
+	            //psw.set(0, password);
 	            //dn.set(0, "NewPassword");
 	            // Loops through attributes to see what they are...
 	            /*
