@@ -1,6 +1,8 @@
 1.0.7
     - Renamed ViewOd, ViewEntity, and ViewAttribute to LodDef, EntityDef, and 
       AttributeDef.
+    - Implemented activate optimization: the DBHandler will attempt to load all
+      child entities from the same table in a single select statement.
     - Renamed oiServerUrl to oiSourceUrl in zeidon.ini.
     - ObjectEngine.createTask( appName ) now creates a NON-persistent task.
       ObjectEngine.createTask( appName, taskId ) still creates persistent tasks.
@@ -11,12 +13,14 @@
     - Added Boolean as one of the supported Zeidon types.
     - Fixed bug that loaded child entities with a join even if they were qualified
       with a RESTRICTING.
-    - Added functionality for Dynamic View Attributes.
+    - Added functionality for creating Dynamic View Attributes.
+    - Removed some uses of ThreadLocalStorage.
     - Restricted delete if child entities were loaded with qualification.
     - Added ability to specify multiple Java Edit Formats for parsing date strings.
       To use, specify multiple formats seperated by a '|' in the domain context.
     - Fixes to pessimistic locking.
     - Update to Object Browser to run in a single window.
+    - Added some JMX debugging.
     - Added jconsole plugin to run Object Browser.
     - Added SerializeOi and DeserializeOi builders.
     - Numerous changes Scala DSL for VML.

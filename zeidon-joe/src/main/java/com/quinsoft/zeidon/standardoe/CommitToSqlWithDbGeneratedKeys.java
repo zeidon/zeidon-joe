@@ -274,7 +274,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 // Don't bother setting the FK if the min cardinality is > 0.
                 // If we get here then we've passed the cardinality check so we
                 // must be including a different entity which will update the FK.
-                if ( entityDef.getMinCardinality() == 0 )
+                if ( entityDef.getMinCardinality() == 0 && ! parser.relInstance.isDeleted() )
                     parser.relInstance.getAttribute( parser.relAttributeDef ).setInternalValue( null, true );
             }
             else
