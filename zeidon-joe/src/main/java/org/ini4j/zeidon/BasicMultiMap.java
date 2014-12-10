@@ -185,23 +185,6 @@ public class BasicMultiMap<K, V> implements MultiMap<K, V>, Serializable
         return (prev == null) ? null : prev.get(0);
     }
 
-    @Override public V remove(Object key, int index)
-    {
-        V ret = null;
-        List<V> values = getList(key, false);
-
-        if (values != null)
-        {
-            ret = values.remove(index);
-            if (values.isEmpty())
-            {
-                _impl.remove(key);
-            }
-        }
-
-        return ret;
-    }
-
     @Override public int size()
     {
         return _impl.size();

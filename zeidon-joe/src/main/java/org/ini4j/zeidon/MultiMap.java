@@ -34,5 +34,4 @@ public interface MultiMap<K, V> extends Map<K, V>
 
     List<V> putAll(K key, List<V> values);
 
-    V remove(Object key, int index);
 }
