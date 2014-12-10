@@ -96,9 +96,10 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         oiDisplay.revalidate();
     }
 
-    void setSelectedEntity( EntityDef entityDef )
+    EntitySquare setSelectedEntity( EntityDef entityDef )
     {
         oiDisplay.setSelectedEntityFromEntityDef( entityDef );
+        return oiDisplay.getSelectedEntity();
     }
 
     @Override

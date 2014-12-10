@@ -39,17 +39,20 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * @author DG
+ * Builds the square (well, rectangle) that depicts an entity in the browser.
  *
  */
 public class EntitySquare extends JPanel implements MouseListener
@@ -73,6 +76,8 @@ public class EntitySquare extends JPanel implements MouseListener
     private final Dimension          size;
     private final Dimension          paddedSize;
     private final Font font;
+    
+    private EntityInstance currentEi;
 
     EntitySquare( OiDisplay display, BrowserEnvironment environment, EntityDefLayout layout )
     {
@@ -87,6 +92,25 @@ public class EntitySquare extends JPanel implements MouseListener
         font = new Font( Font.SANS_SERIF, Font.PLAIN, env.getPainterScaleFactor() );
         setCursor( new Cursor( Cursor.DEFAULT_CURSOR ) );
         addMouseListener( this );
+        
+        getInputMap().put( KeyStroke.getKeyStroke( "HOME" ),  "setFirst" );
+        getActionMap().put("setFirst", new SetCursorAction( CursorPosition.FIRST ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "PAGE_UP" ),  "setPrev" );
+        getActionMap().put("setPrev", new SetCursorAction( CursorPosition.PREV ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "PAGE_DOWN" ),  "setNext" );
+        getActionMap().put("setNext", new SetCursorAction( CursorPosition.NEXT ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "END" ),  "setLast" );
+        getActionMap().put("setLast", new SetCursorAction( CursorPosition.LAST ) );
+
+        getInputMap().put( KeyStroke.getKeyStroke( "UP" ),  "moveUp" );
+        getActionMap().put("moveUp", new ChangeSelectedEntityDefAction( 1 ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "DOWN" ),  "moveDown" );
+        getActionMap().put("moveDown", new ChangeSelectedEntityDefAction( 2 ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "LEFT" ),  "moveLeft" );
+        getActionMap().put("moveLeft", new ChangeSelectedEntityDefAction( 3 ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "RIGHT" ),  "moveRight" );
+        getActionMap().put("moveRight", new ChangeSelectedEntityDefAction( 4 ) );
+
     }
 
     Point getTopAnchor()
@@ -243,11 +267,61 @@ public class EntitySquare extends JPanel implements MouseListener
                 s = getSiblingCount( cursor );
                 paintCenteredText( graphics2, size.height - env.getPainterScaleFactor(), s, null );
         }
+        
+        setToolTipText( cursor );
+    }
+
+    /**
+     * Sets the tooltip text from the current selected EI.
+     * 
+     * @param cursor
+     */
+    private void setToolTipText( EntityCursor cursor )
+    {
+        EntityInstance ei = cursor.getEntityInstance();
+        if ( ei == currentEi )
+            return;
+
+        currentEi = ei;
+        
+        if ( ei == null )
+        {
+            setToolTipText( "" );
+            return;
+        }
+        
+        StringBuilder html = new StringBuilder( "<html><table>");
+        
+        EntityDef entityDef = cursor.getEntityDef();
+        for ( AttributeDef attributeDef : entityDef.getAttributes() )
+        {
+            if ( attributeDef.isHidden() )
+                continue;
+            
+            if ( ei.getAttribute( attributeDef ).isNull() ) 
+                continue;
+                    
+            String value = ei.getAttribute( attributeDef ).getString();
+            
+            // Skip null attributes.
+            if ( StringUtils.isBlank( value ) )
+                continue;
+
+            html.append( "<tr><td>" ).append( attributeDef.getName() ).append( "</td>" );
+            
+            if ( StringUtils.length( value ) > 50 )
+                value = value.substring( 0, 50 );
+            html.append( "<td>" ).append( value ).append( "</td></tr>" );
+        }
+        
+        html.append( "</table></html>" );
+        setToolTipText( html.toString() );
     }
 
     @Override
     public void mouseClicked( MouseEvent arg0 )
     {
+        requestFocus();
         EntitySquare prevSelected = oiDisplay.getSelectedEntity();
         if ( prevSelected == this )
             return;
@@ -308,7 +382,21 @@ public class EntitySquare extends JPanel implements MouseListener
 
         private EntityPopupMenu()
         {
-            JMenuItem item = new JMenuItem( "Set to subobject" );
+            EntityCursor cursor = getView().cursor( getEntityDef() );
+
+            JMenuItem item = new JMenuItem( "Set to previous" );
+            item.addActionListener( new SetCursorAction( CursorPosition.PREV ) );
+            add( item );
+            if ( cursor.isNull() || ! cursor.hasPrev() )
+                item.setEnabled( false );
+
+            item = new JMenuItem( "Set to next" );
+            item.addActionListener( new SetCursorAction( CursorPosition.NEXT ) );
+            add( item );
+            if ( cursor.isNull() || ! cursor.hasNext() )
+                item.setEnabled( false );
+
+            item = new JMenuItem( "Set to subobject" );
             item.addActionListener( new SubobjectMenuListener() );
             add( item );
             if ( ! getEntityDef().isRecursive() )
@@ -325,6 +413,95 @@ public class EntitySquare extends JPanel implements MouseListener
             add( item );
             if ( ! getEntityDef().getLazyLoadConfig().isLazyLoad() )
                 item.setEnabled( false );
+        }
+    }
+
+    private class SetCursorAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private final CursorPosition cursorMovement;
+        
+        public SetCursorAction( CursorPosition cursorMovement )
+        {
+            super();
+            this.cursorMovement = cursorMovement;
+        }
+
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            EntityDef entityDef = getEntityDef();
+            EntityCursor cursor = getView().cursor( entityDef );
+            switch ( cursorMovement )
+            {
+                case FIRST: cursor.setFirst(); break;
+                case PREV: cursor.setPrev(); break;
+                case NEXT: cursor.setNext(); break;
+                case LAST: cursor.setLast(); break;
+                default: throw new ZeidonException( "Unsupported cursor movement" );
+            }
+            
+            oiDisplay.setSelectedEntity( EntitySquare.this ); // Resets attribute values.
+            oiDisplay.repaint();
+        }
+    }
+
+    private class ChangeSelectedEntityDefAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        
+        private final int direction;
+
+        public ChangeSelectedEntityDefAction(int direction)
+        {
+            super();
+            this.direction = direction;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            EntityDef entityDef = getEntityDef();
+            if ( entityDef == null )
+                entityDef = getView().getLodDef().getRoot();
+            else
+            {
+                switch ( direction )
+                {
+                    case 1: entityDef = entityDef.getParent(); break;
+                    case 2: entityDef = entityDef.getNextHier(); break;
+                    case 3:
+                    {
+                        int level = entityDef.getLevel();
+                        entityDef = entityDef.getPrevHier();
+                        while ( entityDef != null && entityDef.getLevel() != level )
+                            entityDef = entityDef.getPrevHier();
+                        
+                        break;
+                    }
+                    case 4:
+                    {
+                        int level = entityDef.getLevel();
+                        entityDef = entityDef.getNextHier();
+                        while ( entityDef != null && entityDef.getLevel() != level )
+                            entityDef = entityDef.getNextHier();
+                        
+                        break;
+                    }
+                    
+                    default: throw new ZeidonException( "Unsupported direction" );
+                }
+                
+                if ( entityDef == null )
+                    return;
+            }
+
+            // Did selection change?
+            if ( entityDef == getEntityDef() )
+                return; 
+            
+            env.getOiDisplay().setSelectedEntity( entityDef ).requestFocus();
         }
     }
 

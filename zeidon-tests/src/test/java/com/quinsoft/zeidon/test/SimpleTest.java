@@ -164,10 +164,6 @@ class SimpleTest
         ObjectEngine oe = JavaObjectEngine.getInstance();
         Task zencas = oe.createTask( "ZENCAs" );
 
-        DateTimeFormatter parser = JoeUtils.createDateFormatterFromEditString( "EEE MMM dd HH:mm:ss 'xxx' yyyy" );
-        parser.parseDateTime( "Sun Nov 09 23:29:27 EST 2014" );
-        System.out.println( "here" );
-
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )

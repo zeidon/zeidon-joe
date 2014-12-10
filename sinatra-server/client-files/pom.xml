@@ -15,24 +15,24 @@
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zeidon-sinatra-server</artifactId>
-	    <version>1.0.7-SNAPSHOT</version>
+	    <version>*version*</version>
 	  </dependency>
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zruby</artifactId>
-	    <version>1.0.7-SNAPSHOT</version>
+	    <version>*version*</version>
  	  </dependency>
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zeidon-joe</artifactId>
-	    <version>1.0.7-SNAPSHOT</version>
+	    <version>*version*</version>
  	  </dependency>
 
 	  <!-- Add dependencies for client applications here.  Below is an exmaple. -->
 	  <dependency>
 	    <groupId>com.quinsoft.zeidon</groupId>
 	    <artifactId>zeidon-tests</artifactId>
-	    <version>1.0.7-SNAPSHOT</version>
+	    <version>*version*</version>
 	  </dependency>
 	</dependencies>
 </project>
