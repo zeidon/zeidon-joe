@@ -63,8 +63,6 @@ public class ObjectBrowser
         // Display the window.
         mainFrame.setVisible( true );
         
-        ToolTipManager.sharedInstance().setInitialDelay( 0 );
-
         // Use invokeLater otherwise toFront() won't always work.
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override

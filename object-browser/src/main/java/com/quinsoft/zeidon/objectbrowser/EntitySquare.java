@@ -125,14 +125,14 @@ public class EntitySquare extends JPanel implements MouseListener
         return new Point( b.x + b.width / 2, b.y + b.height );
     }
 
-    static String getKeyString( EntityInstance ei, EntityDef entityDef )
+    static String getKeyString( EntityInstance ei, EntityDef entityDef, BrowserEnvironment env )
     {
         StringBuilder builder = new StringBuilder();
-        List<AttributeDef> keys = entityDef.getKeys();
+        List<AttributeDef> keys = env.getEntityDisplayAttributes().getAttributeList( entityDef );
         for ( AttributeDef key : keys )
         {
         	if ( ! ei.isHidden())
-                builder.append( key.getName() ).append( ": " ).append( ei.getStringFromAttribute( key ) );
+                builder.append( key.getName() ).append( ": " ).append( ei.getStringFromAttribute( key ) ).append( "\n" );
         	else
         	{
         		if (ei.isDeleted())
@@ -196,9 +196,19 @@ public class EntitySquare extends JPanel implements MouseListener
             graphics2.setColor( color );
 
         FontMetrics fm = graphics2.getFontMetrics();
-        int lth = fm.stringWidth( text );
-        int mid = size.width / 2;
-        graphics2.drawString( text, mid - lth/2, y );
+
+        String lines[] = text.split( "\n" );
+        
+        // Adjust y if there is more than one line.
+        y -= (lines.length - 1 ) * fm.getHeight() / 2;
+        
+        for ( String line : lines )
+        {
+            int lth = fm.stringWidth( line );
+            int mid = size.width / 2;
+            graphics2.drawString( line, mid - lth/2, y );
+            y += fm.getHeight();
+        }
 
         if ( color != null )
             graphics2.setColor( prevColor );
@@ -244,12 +254,12 @@ public class EntitySquare extends JPanel implements MouseListener
 
         // Write the entity name
         graphics2.setFont( font );
-        paintCenteredText( graphics2, env.getPainterScaleFactor(),entityDef.getName(), null );
+        paintCenteredText( graphics2, env.getPainterScaleFactor(), entityDef.getName(), null );
 
         switch ( cursor.getStatus() )
         {
             case NULL:
-                // Do nothing.
+                paintCenteredText( graphics2, size.height / 2, "null", Color.WHITE );
                 break;
 
             case NOT_LOADED:
@@ -257,11 +267,11 @@ public class EntitySquare extends JPanel implements MouseListener
                 break;
 
             case OUT_OF_SCOPE:
-                paintCenteredText( graphics2, size.height / 2, "Out of Scope", Color.WHITE );
+                paintCenteredText( graphics2, size.height / 2, "(Out of Scope)", Color.WHITE );
                 break;
 
             default:
-                String s = getKeyString( cursor, entityDef );
+                String s = getKeyString( cursor, entityDef, env );
                 paintCenteredText( graphics2, size.height / 2, s, null );
 
                 s = getSiblingCount( cursor );
@@ -279,39 +289,38 @@ public class EntitySquare extends JPanel implements MouseListener
     private void setToolTipText( EntityCursor cursor )
     {
         EntityInstance ei = cursor.getEntityInstance();
-        if ( ei == currentEi )
+        if ( ei == currentEi && ei != null )
             return;
 
         currentEi = ei;
         
-        if ( ei == null )
-        {
-            setToolTipText( "" );
-            return;
-        }
-        
         StringBuilder html = new StringBuilder( "<html><table>");
         
         EntityDef entityDef = cursor.getEntityDef();
-        for ( AttributeDef attributeDef : entityDef.getAttributes() )
+        html.append( "<tr><td><b>" ).append( entityDef.getName() ).append( "</b></td><td></td></tr>" );
+        
+        if ( ei != null )
         {
-            if ( attributeDef.isHidden() )
-                continue;
-            
-            if ( ei.getAttribute( attributeDef ).isNull() ) 
-                continue;
-                    
-            String value = ei.getAttribute( attributeDef ).getString();
-            
-            // Skip null attributes.
-            if ( StringUtils.isBlank( value ) )
-                continue;
-
-            html.append( "<tr><td>" ).append( attributeDef.getName() ).append( "</td>" );
-            
-            if ( StringUtils.length( value ) > 50 )
-                value = value.substring( 0, 50 );
-            html.append( "<td>" ).append( value ).append( "</td></tr>" );
+            for ( AttributeDef attributeDef : entityDef.getAttributes() )
+            {
+                if ( attributeDef.isHidden() )
+                    continue;
+                
+                if ( ei.getAttribute( attributeDef ).isNull() ) 
+                    continue;
+                        
+                String value = ei.getAttribute( attributeDef ).getString();
+                
+                // Skip null attributes.
+                if ( StringUtils.isBlank( value ) )
+                    continue;
+    
+                html.append( "<tr><td>" ).append( attributeDef.getName() ).append( "</td>" );
+                
+                if ( StringUtils.length( value ) > 50 )
+                    value = value.substring( 0, 50 );
+                html.append( "<td>" ).append( value ).append( "</td></tr>" );
+            }
         }
         
         html.append( "</table></html>" );
@@ -413,6 +422,11 @@ public class EntitySquare extends JPanel implements MouseListener
             add( item );
             if ( ! getEntityDef().getLazyLoadConfig().isLazyLoad() )
                 item.setEnabled( false );
+
+            
+            item = new JMenuItem( "Copy entity name" );
+            item.addActionListener( env.createCopyAction( getEntityDef().getName() ) );
+            add( item );
         }
     }
 

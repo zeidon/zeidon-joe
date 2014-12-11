@@ -36,7 +36,7 @@ public class TaskList extends JTable
 {
     private static final long serialVersionUID = 1L;
     private static String[] TASKLISTCOLS = { "Task ID", "Application Name" };
-    private static TaskListComparitor TASK_COMPARATOR = new TaskListComparitor();
+    private static TaskListComparator TASK_COMPARATOR = new TaskListComparator();
 
     private final BrowserEnvironment env;
 
@@ -131,7 +131,7 @@ public class TaskList extends JTable
         return currentTaskList.toString();
     }
     
-    private static class TaskListComparitor implements Comparator<BrowserTask>
+    private static class TaskListComparator implements Comparator<BrowserTask>
     {
         @Override
         public int compare( BrowserTask a, BrowserTask b )
@@ -142,7 +142,7 @@ public class TaskList extends JTable
             {
                 long id1 = Long.parseLong( a.taskId );
                 long id2 = Long.parseLong( b.taskId );
-                return Long.compare( id1, id2 );
+                return Long.compare( id1, id2 ) * -1; // We'll reverse the value to put newest tasks first.
             }
             catch( NumberFormatException e )
             {
