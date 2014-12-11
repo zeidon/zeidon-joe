@@ -7,7 +7,7 @@
     <groupId>com.quinsoft.zeidon</groupId>
     <artifactId>zeidon</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
 
     <licenses>
         <license>
