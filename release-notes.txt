@@ -1,3 +1,6 @@
+1.1.0
+    - Load all many-to-one child entities with a join.
+
 1.0.7
     - Renamed ViewOd, ViewEntity, and ViewAttribute to LodDef, EntityDef, and 
       AttributeDef.

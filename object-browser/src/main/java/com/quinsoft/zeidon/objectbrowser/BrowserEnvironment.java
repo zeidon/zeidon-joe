@@ -21,10 +21,17 @@ package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.AbstractAction;
+import javax.swing.ToolTipManager;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -59,6 +66,7 @@ public abstract class BrowserEnvironment
     private Map<String, BrowserTask> currentTaskList;
     private TwinInstancesPanel twinInstancesPanel;
     private EntityListPanel entityListPanel;
+    private EntityDisplayAttributes entityDisplayAttributes;
 
     /**
      * @param oe
@@ -69,6 +77,10 @@ public abstract class BrowserEnvironment
         super();
         this.oe = oe;
         odLayouts = new HashMap<LodDef, LodDefLayout>();
+        entityDisplayAttributes = new EntityDisplayAttributes( getBrowserDir() );
+        ToolTipManager.sharedInstance().setInitialDelay( 0 );
+        ToolTipManager.sharedInstance().setDismissDelay( 9999999 );
+        ToolTipManager.sharedInstance().setReshowDelay( 0 );
     }
 
     protected ObjectEngine getOe()
@@ -333,5 +345,41 @@ public abstract class BrowserEnvironment
     protected OiDisplayPanel getOiDisplay()
     {
         return oiDisplay;
+    }
+
+    public EntityDisplayAttributes getEntityDisplayAttributes()
+    {
+        return entityDisplayAttributes;
+    }
+
+    void setClipboardContents( String aString )
+    {
+        StringSelection stringSelection = new StringSelection( aString );
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents( stringSelection, oiDisplay );
+    }
+
+    CopyAction createCopyAction( String value )
+    {
+        return new CopyAction( value );
+    }
+    
+    private class CopyAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private final String value;
+        
+        public CopyAction(String value)
+        {
+            super();
+            this.value = value;
+        }
+
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            setClipboardContents( value );
+        }
     }
 }

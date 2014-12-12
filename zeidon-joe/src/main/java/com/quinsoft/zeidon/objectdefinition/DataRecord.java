@@ -44,6 +44,12 @@ public class DataRecord implements PortableFileAttributeHandler
     private final Map<AttributeDef, DataField> attributeMap = new HashMap<AttributeDef, DataField>();
     private boolean joinable;
 
+    /**
+     * If true then the JOIN attribute was specified in the XOD.  We want to know this
+     * so we can default many-to-one relationships to use JOIN.
+     */
+    boolean joinSpecified;
+
     DataRecord( EntityDef entityDef )
     {
         this.entityDef = entityDef;
@@ -60,7 +66,10 @@ public class DataRecord implements PortableFileAttributeHandler
             type = reader.getAttributeValue();
         else
         if ( attributeName.equals( "JOIN" ) )
+        {
             joinable = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
+            joinSpecified = true;
+        }
     }
 
     public EntityDef getEntityDef()
@@ -119,6 +128,16 @@ public class DataRecord implements PortableFileAttributeHandler
 
         if ( relRecord == null )
             return;
+
+        // If the min cardinality of a m-to-1 relationship is one we will assume
+        // we want to join these records unless they specifically said no.
+        if ( relRecord.getRelationshipType() != null &&
+             relRecord.getRelationshipType().isManyToOne() &&
+             entityDef.getMinCardinality() == 1 )
+        {
+            if ( ! joinSpecified )
+                joinable = true;
+        }
 
         Map<Integer, DataField> map = new HashMap<Integer, DataField>();
         for ( EntityDef ve = currentEntityDef; ve != null; ve = ve.getParent() )

@@ -75,11 +75,6 @@ public class BasicRegistry extends BasicProfile implements Registry
         return (Key) super.remove(key);
     }
 
-    @Override public Key remove(Object key, int index)
-    {
-        return (Key) super.remove(key, index);
-    }
-
     @Override Key newSection(String name)
     {
         return new BasicRegistryKey(this, name);

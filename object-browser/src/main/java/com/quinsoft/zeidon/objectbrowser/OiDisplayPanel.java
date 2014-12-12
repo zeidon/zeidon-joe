@@ -22,13 +22,20 @@ package com.quinsoft.zeidon.objectbrowser;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -41,7 +48,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  * @author DG
  *
  */
-class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionListener
+class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionListener, ClipboardOwner
 {
     private static final long serialVersionUID = 1L;
     private static final String FIRST_CURSOR = "FirstCursor";
@@ -68,19 +75,40 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         //
         JPanel buttonPane = new JPanel();
         buttonPane.add( new JLabel( "Cursors:" ) );
-        addButton( buttonPane, "First", FIRST_CURSOR );
-        addButton( buttonPane, "Prev", PREV_CURSOR );
-        addButton( buttonPane, "Next", NEXT_CURSOR );
-        addButton( buttonPane, "Last", LAST_CURSOR );
+        addButton( buttonPane, "First", FIRST_CURSOR, "[Home]" );
+        addButton( buttonPane, "Prev", PREV_CURSOR, "[Page Up]" );
+        addButton( buttonPane, "Next", NEXT_CURSOR, "[Page Down]" );
+        addButton( buttonPane, "Last", LAST_CURSOR, "[End]" );
+        
+        // Add a dummy, invisible label for spacing.  It's a hack but it's easy.
+        JLabel dummy = new JLabel( "                                            " );
+        buttonPane.add( dummy );
+        
+        // Add a button who's only purpose is to be a mouse over tooltip.
+        URL url = Resources.getResource("help-text.html");
+        String text;
+        try
+        {
+            text = Resources.toString(url, Charsets.UTF_8);
+            JButton button = new JButton( "Help" );
+            button.setToolTipText( text );
+            buttonPane.add( button );
+        }
+        catch ( IOException e )
+        {
+            env.getOe().getSystemTask().log().error( "Couldn't open help-text.html" );
+        }
+        
         add( buttonPane, BorderLayout.NORTH );
         setVisible( true );
     }
 
-    private void addButton( JPanel buttonPane, String title, String command )
+    private void addButton( JPanel buttonPane, String title, String command, String tooltip )
     {
         JButton button = new JButton( title );
         button.setActionCommand( command );
         button.addActionListener( this );
+        button.setToolTipText( tooltip );
         buttonPane.add( button );
     }
 
@@ -96,9 +124,10 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         oiDisplay.revalidate();
     }
 
-    void setSelectedEntity( EntityDef entityDef )
+    EntitySquare setSelectedEntity( EntityDef entityDef )
     {
         oiDisplay.setSelectedEntityFromEntityDef( entityDef );
+        return oiDisplay.getSelectedEntity();
     }
 
     @Override
@@ -140,5 +169,11 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
 
         entitySelected( selectedEntityDef, view.cursor( selectedEntityDef ).getEntityInstance() );
         oiDisplay.repaint();
+    }
+
+    @Override
+    public void lostOwnership( Clipboard arg0, Transferable arg1 )
+    {
+        // Do nothing.
     }
 }

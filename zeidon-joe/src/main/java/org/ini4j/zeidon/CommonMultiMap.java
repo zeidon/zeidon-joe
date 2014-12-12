@@ -71,18 +71,6 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
         return ret;
     }
 
-    @Override public V remove(Object key, int index)
-    {
-        V ret = super.remove(key, index);
-
-        if (length(key) == 0)
-        {
-            removeMeta(key);
-        }
-
-        return ret;
-    }
-
     @Override public String removeComment(Object key)
     {
         return (String) removeMeta(META_COMMENT, key);

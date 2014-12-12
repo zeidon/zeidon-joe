@@ -24,6 +24,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.ToolTipManager;
 
 import com.quinsoft.zeidon.ObjectEngine;
 
@@ -61,7 +62,7 @@ public class ObjectBrowser
 
         // Display the window.
         mainFrame.setVisible( true );
-
+        
         // Use invokeLater otherwise toFront() won't always work.
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override

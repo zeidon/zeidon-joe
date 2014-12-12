@@ -99,8 +99,6 @@ public interface Registry extends Profile
 
     @Override Key remove(Object key);
 
-    @Override Key remove(Object key, int index);
-
     interface Key extends Section
     {
         String DEFAULT_NAME = "@";
