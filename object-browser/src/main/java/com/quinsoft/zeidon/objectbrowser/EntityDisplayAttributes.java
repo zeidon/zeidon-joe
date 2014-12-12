@@ -16,6 +16,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Joiner;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -114,7 +115,7 @@ public class EntityDisplayAttributes
     void addAttribute( AttributeDef attributeDef )
     {
         String attributes = getProperty( attributeDef );
-        if ( ! StringUtils.isBlank( attributes ) )
+        if ( ! StringUtils.isBlank( attributes ) && ! attributes.endsWith( ";" ))
             attributes = attributes + ";";
         
         attributes += attributeDef.getName();
@@ -138,7 +139,7 @@ public class EntityDisplayAttributes
             }
         }
         
-        String newString = StringUtils.join( array, ";" );
+        String newString = Joiner.on( ";" ).skipNulls().join( array );
         putProperty( attributeDef, newString );
         save();
     }
@@ -178,14 +179,12 @@ public class EntityDisplayAttributes
         List<AttributeDef> list = new ArrayList<>();
         for ( String attr : attrs )
         {
-            AttributeDef a = entityDef.getAttribute( attr, false );
-            if ( a == null )
-            {
-                removeAttribute( a );
+            if ( StringUtils.isBlank( attr ) )
                 continue;
-            }
             
-            list.add( a );
+            AttributeDef a = entityDef.getAttribute( attr, false );
+            if ( a != null )
+                list.add( a );
         }
         
         if ( list.size() == 0 )
