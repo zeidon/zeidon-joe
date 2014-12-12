@@ -6,6 +6,7 @@
         <artifactId>zeidon</artifactId>
         <groupId>com.quinsoft.zeidon</groupId>
         <version>1.0.7</version>
+	<relativePath>../../</relativePath>
     </parent>
 
     <packaging>pom</packaging>

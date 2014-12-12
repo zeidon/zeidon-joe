@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0.7</version>
 
+    <url>https://github.com/DeegC/zeidon-joe</url>
     <licenses>
         <license>
             <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
@@ -22,6 +23,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<scala.version>2.11.2</scala.version>
     </properties>
+
+    <scm>
+      <connection>scm:git@github.com:DeegC/zeidon-joe.git</connection>
+      <developerConnection>scm:git@github.com:DeegC/zeidon-joe.git</developerConnection>
+      <url>scm:git@github.com:DeegC/zeidon-joe.git</url>
+    </scm>
+
+    <developers>
+      <developer>
+	<id>deegc</id>
+	<name>DG</name>
+      </developer>
+    </developers>
 
     <!-- Set up distributionManagement to deploy to OSSRH central repo -->
     <distributionManagement>

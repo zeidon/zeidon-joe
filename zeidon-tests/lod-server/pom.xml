@@ -11,6 +11,7 @@
         <artifactId>zeidon</artifactId>
         <groupId>com.quinsoft.zeidon</groupId>
         <version>1.0.7</version>
+	<relativePath>../../</relativePath>
     </parent>
 
     <description>LOD server for Zeidon Test applications.</description>
