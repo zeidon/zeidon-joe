@@ -103,8 +103,8 @@
 
     <modules>
         <module>zeidon-joe</module>
-        <module>object-browser</module>
         <module>scala</module>
+        <module>object-browser</module>
 	<module>jconsole-plugin</module>
         <module>zeidon-operations</module>
         <module>restserver</module>
@@ -150,7 +150,7 @@
         </profile>
  
         <!-- 
-            Builds required objects for deploying to 
+            Builds required objects for deploying to OSSRH
          -->
         <profile>
             <id>release</id>
@@ -199,10 +199,11 @@
                 </plugins>
             </build>
 
-            <!-- Make sure sinatra-server is included. -->
+            <!-- Make sure sinatra-server is included. 
             <modules>
                 <module>sinatra-server</module>
             </modules>
+-->
         </profile>
     </profiles>
 

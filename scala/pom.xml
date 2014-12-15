@@ -7,6 +7,8 @@
     <version>1.0.7</version>
   </parent>
 
+  <packaging>jar</packaging>
+  <name>zeidon-scala</name>
   <artifactId>zeidon-scala</artifactId>
 
  <dependencies>
@@ -77,38 +79,15 @@
               <goal>testCompile</goal>
             </goals>
           </execution>
+          <execution>
+            <id>scala-javadoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>doc-jar</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
-
-    <!-- Create an empty javadoc file so we pass the OSSHR deployment requirements -->
-             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-			<goals>
-			    <goal>run</goal>
-			</goals>
-			<phase>package</phase>
-                         <configuration>
-                            <target name="copy jar file">
-                                <copy file="../zeidon-joe/target/zeidon-joe-${project.parent.version}.jar"
-                                      tofile="target/zeidon-scala-${project.parent.version}-javadoc.jar"
-                                      failonerror="false" />
-                                <copy file="../zeidon-joe/target/zeidon-joe-${project.parent.version}.jar.asc"
-                                      tofile="target/zeidon-scala-${project.parent.version}-javadoc.jar.asc"
-                                      failonerror="false" />
-                                <copy file="../zeidon-joe/target/zeidon-joe-${project.parent.version}.jar.asc.asc"
-                                      tofile="target/zeidon-scala-${project.parent.version}-javadoc.jar.asc.asc"
-                                      failonerror="false" />
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-             </plugin>
-
     </plugins>
   </build>
 </project>
