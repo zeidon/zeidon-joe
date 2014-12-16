@@ -27,7 +27,7 @@
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-assembly-plugin</artifactId>
-	<version>2.4</version>
+	<version>2.5.2</version>
 	<executions>
 	  <execution>
 	    <id>assemble</id>
@@ -61,11 +61,11 @@
 	        <goals>
 	            <goal>run</goal>
 	        </goals>
-	        <phase>deploy</phase>
+	        <phase>package</phase>
 	        <configuration>
 	            <target name="copy jar file">
 	                <copy
-	                    file="../zscala/target/zeidon-scala-${project.parent.version}-javadoc.jar"
+	                    file="../zeidon-joe/target/zeidon-joe-${project.parent.version}-javadoc.jar"
 	                    tofile="target/zeidon-sinatra-server-${project.parent.version}-javadoc.jar"
 	                    failonerror="false" />
 	            </target>
