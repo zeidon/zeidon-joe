@@ -9,8 +9,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-import org.joda.time.format.DateTimeFormatter;
-
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
@@ -21,7 +19,6 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -172,9 +169,10 @@ class SimpleTest
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
 
+        stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "dgc@xyz.com" );
         stud.cursor( "Student" ).setPosition( 6 );
         String id = stud.cursor( "Student" ).getAttribute( "ID" ).getString();
-        stud.serializeOi().asJson().withIncremental().compressed().toFile( "/tmp/stud.json" );
+//        stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
         stud.serializeOi().asJson().toFile( "/tmp/stud2.json" );
 
         View stud2 = new DeserializeOi( zencas )
@@ -182,15 +180,12 @@ class SimpleTest
                             .setLodDef( "lStudDpt" )
                             .asJson()
                             .activateFirst();
-        stud2.logObjectInstance();
+//        stud2.logObjectInstance();
 
         List<View> stud3 = new DeserializeOi( zencas )
                             .fromResource( "/tmp/stud.json" )
-                            .setLodDef( "lStudDpt" )
-                            .asJson()
                             .activate();
         stud3.get( 0 ).logObjectInstance();
-        oe.startBrowser();
 
         String id2 = stud3.get( 0 ).cursor( "Student" ).getAttribute( "ID" ).getString();
         if ( ! id.equals( id2 ) )

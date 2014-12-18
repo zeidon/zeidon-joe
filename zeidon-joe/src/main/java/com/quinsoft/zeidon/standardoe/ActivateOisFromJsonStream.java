@@ -383,6 +383,8 @@ class ActivateOisFromJsonStream implements StreamReader
             assert token == JsonToken.FIELD_NAME;
             EntityInstanceImpl ei = (EntityInstanceImpl) view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
+            List<AttributeMeta> attributeMetas = new ArrayList<>();
+
             // Read tokens until we find the token that ends the current entity.
             EntityMeta entityMeta = null;
             while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )
@@ -407,7 +409,8 @@ class ActivateOisFromJsonStream implements StreamReader
 
                 if ( fieldName.startsWith( "." ) )
                 {
-                    readAttributeMeta( ei, fieldName );
+                    AttributeMeta am = readAttributeMeta( ei, fieldName );
+                    attributeMetas.add( am );
                     continue;
                 }
 
@@ -473,6 +476,10 @@ class ActivateOisFromJsonStream implements StreamReader
                 }
             } // while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )...
 
+            // Apply all the attribute metas to correctly set the attribute flags.
+            for ( AttributeMeta am : attributeMetas )
+                am.apply( ei );
+
             // Now that we've updated everyting, set the flags.
             if ( entityMeta != null )
             {
@@ -491,20 +498,37 @@ class ActivateOisFromJsonStream implements StreamReader
         } // while ( ( token = jp.nextToken() ) != null )...
     }
 
-    private void readAttributeMeta( EntityInstanceImpl ei, String fieldName ) throws JsonParseException, IOException
+    private AttributeMeta readAttributeMeta( EntityInstanceImpl ei, String fieldName ) throws JsonParseException, IOException
     {
         String attribName = fieldName.substring( 1 ); // Remove the ".".
-        AttributeDef attributeDef = ei.getEntityDef().getAttribute( attribName );
-        AttributeValue attrib = ei.getInternalAttribute( attributeDef );
+        AttributeMeta meta = new AttributeMeta();
+        meta.attributeDef = ei.getEntityDef().getAttribute( attribName );
 
         while ( jp.nextToken() != JsonToken.END_OBJECT )
         {
             fieldName = jp.getCurrentName();
 
             if ( fieldName.equals( "updated" ) )
-                attrib.setUpdated( true );
+                meta.updated = true;
             else
                 task.log().warn( "Unknown entity meta value %s", fieldName );
+        }
+
+        return meta;
+    }
+
+    private class AttributeMeta
+    {
+        private AttributeDef attributeDef;
+        private boolean updated = false;
+
+        private void apply( EntityInstanceImpl ei )
+        {
+            if ( updated )
+            {
+                AttributeValue attrib = ei.getInternalAttribute( attributeDef );
+                attrib.setUpdated( true );
+            }
         }
     }
 
