@@ -21,6 +21,8 @@ package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -40,7 +42,8 @@ import com.quinsoft.zeidon.View;
 public class ViewListTable extends JTable
 {
     private static final long serialVersionUID = 1L;
-    private static String[] VIEWLISTCOLS = { "View ID", "OI ID", "Name", "OD Name" };
+    private static final String[] VIEWLISTCOLS = { "View ID", "OI ID", "Name", "OD Name" };
+    private static final ViewListComparator VIEWLIST_COMPARATOR = new ViewListComparator();
 
     private final BrowserEnvironment env;
     private final DefaultTableModel  model;
@@ -120,6 +123,10 @@ public class ViewListTable extends JTable
 
         Object[] row = new Object[ VIEWLISTCOLS.length ];
         List<BrowserView> viewList = env.refreshBrowserViewList( task );
+        
+        // Sort the view list in descending order of view ID.
+        Collections.sort( viewList, VIEWLIST_COMPARATOR );
+        
         idx = -1;
         int count = 0;
         for ( BrowserView view : viewList )
@@ -206,5 +213,32 @@ public class ViewListTable extends JTable
             env.dropViewName( view );
             refresh( view.task );
         }
+    }
+    
+    /**
+     * Compares BrowserViews in reverse order of their View Id. 
+     */
+    private static class ViewListComparator implements Comparator<BrowserView>
+    {
+        @Override
+        public int compare( BrowserView v1, BrowserView v2 )
+        {
+            if ( ! v1.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
+            {
+                if ( ! v2.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
+                    return v1.viewName.compareTo( v2.viewName );
+                
+                return -1; // Named views always come before unnamed views.
+            }
+            
+            if ( ! v2.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
+            {
+                // If we get here then we know v1 is unnamed.
+                return 1;
+            }
+            
+            return Long.compare( v1.viewId, v2.viewId ) * -1;
+        }
+        
     }
 }

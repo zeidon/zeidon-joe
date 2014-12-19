@@ -117,7 +117,7 @@ class TwinInstancesPanel extends JPanel
 
             int col = 0;
             row[col++] = model.getRowCount() + 1;
-            row[col++] = EntitySquare.getKeyString( ei, ei.getEntityDef() );
+            row[col++] = EntitySquare.getKeyString( ei, ei.getEntityDef(), env );
             row[col++] = getAttributeString( ei );
             model.addRow( row );
         }

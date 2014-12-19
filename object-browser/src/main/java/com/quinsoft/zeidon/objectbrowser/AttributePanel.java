@@ -20,15 +20,22 @@
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.AttributeInstance;
@@ -52,6 +59,7 @@ public class AttributePanel extends JPanel
     private final BrowserEnvironment env;
     private final JTable attributeTable;
     private       EntityInstance currentEntityInstance;
+    private       AttributeDef   currentAttribute;
     private final JCheckBox showHidden;
     private final JCheckBox showNull;
     private final JTable linkedTable;
@@ -92,6 +100,7 @@ public class AttributePanel extends JPanel
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers( COLS );
         attributeTable.setModel( model );
+        attributeTable.addMouseListener( new AttributePanelMouseListener() );
 
         linkedTable = new JTable();
         linkedTable.setName( "AttributeLinkedTable" );
@@ -173,5 +182,92 @@ public class AttributePanel extends JPanel
                 linkedModel.addRow( row );
             }
         }
+    }
+
+    private void doPop( MouseEvent e )
+    {
+        AttributePopupMenu menu = new AttributePopupMenu();
+        menu.show( e.getComponent(), e.getX(), e.getY() );
+    }
+
+    private boolean findCurrentAttribute()
+    {
+        int row = attributeTable.getSelectedRow();
+        DefaultTableModel attrModel = (DefaultTableModel) attributeTable.getModel();
+        String attrName = attrModel.getValueAt( row, 0 ).toString();
+        
+        AttributeDef attributeDef = currentEntityInstance.getEntityDef().getAttribute( attrName, false );
+        if ( attributeDef == null )
+            return false;  // Must have selected *entitykey*
+        
+        currentAttribute = attributeDef;
+        return true;
+    }
+    
+    private class AttributeDisplayAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private final AttributeDef attributeDef;
+        
+        public AttributeDisplayAction( AttributeDef value )
+        {
+            super();
+            this.attributeDef = value;
+        }
+
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            if ( env.getEntityDisplayAttributes().containsAttribute( attributeDef ) )
+                env.getEntityDisplayAttributes().removeAttribute( attributeDef );
+            else
+                env.getEntityDisplayAttributes().addAttribute( attributeDef );
+            
+            env.getEntityDisplayAttributes().printAttributes( attributeDef );
+            env.getOiDisplay().setSelectedEntity( attributeDef.getEntityDef() );
+        }
+    }
+    
+    private class AttributePopupMenu extends JPopupMenu
+    {
+        private static final long serialVersionUID = 1L;
+
+        private AttributePopupMenu()
+        {
+            if ( findCurrentAttribute() )
+            {
+                JMenuItem item = new JMenuItem( "Copy attribute value" );
+                item.addActionListener( env.createCopyAction( currentEntityInstance.getAttribute( currentAttribute ).getString( "" ) ) );
+                add( item );
+    
+                item = new JMenuItem( "Copy attribute name" );
+                item.addActionListener( env.createCopyAction( currentAttribute.getName() ) );
+                add( item );
+                
+                JCheckBoxMenuItem check = new JCheckBoxMenuItem( "Attribute displayed" );
+                check.setSelected( env.getEntityDisplayAttributes().containsAttribute( currentAttribute ) );
+                check.addActionListener( new AttributeDisplayAction( currentAttribute ) );
+                add( check );
+            }
+        }
+    }
+
+    private class AttributePanelMouseListener extends MouseInputAdapter
+    {
+        @Override
+        public void mousePressed( MouseEvent e )
+        {
+            if ( e.isPopupTrigger() )
+                doPop( e );
+        }
+
+        @Override
+        public void mouseReleased( MouseEvent e )
+        {
+            if ( e.isPopupTrigger() )
+                doPop( e );
+        }
+        
     }
 }
