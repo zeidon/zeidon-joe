@@ -62,17 +62,24 @@ public class SSNDomain extends StringDomain
            //
            // Examples: 879-89-8989; 869878789 etc.
 
-           // Initialize reg ex for SSN. 
-           String expression = "^\\d{3}[- ]?\\d{2}[- ]?\\d{4}$";
-           CharSequence inputStr = strSSN;
-           Pattern pattern = Pattern.compile( expression );
-           Matcher matcher = pattern.matcher( inputStr );
-           if ( matcher.matches( ) == false )
-           {
-               task.log().trace( "Invalid SSN: " + strSSN );
-               throw new InvalidAttributeValueException( attributeDef, strSSN, "Value must be a valid SSN" );
-           }
-           strSSN = strSSN.replaceAll( "[^0-9]", "" );
+        	
+            // Need to validate for context SSN_SecurityDisplay. How do I do this... since I am not passing the context...
+            // Is this something that should be changed, or do we just assume that SSN can have a display context?
+        	// KJS 12/16/17, now this iscoming in as 1090. 
+            if (strSSN.indexOf("*****", 0) < 0 && strSSN.length()!= 4)
+            {
+            // Initialize reg ex for SSN. 
+            String expression = "^\\d{3}[- ]?\\d{2}[- ]?\\d{4}$";
+            CharSequence inputStr = strSSN;
+            Pattern pattern = Pattern.compile( expression );
+            Matcher matcher = pattern.matcher( inputStr );
+            if ( matcher.matches( ) == false )
+            {
+                task.log().trace( "Invalid SSN: " + strSSN );
+                throw new InvalidAttributeValueException( attributeDef, strSSN, "Value must be a valid SSN" );
+            }
+            strSSN = strSSN.replaceAll( "[^0-9]", "" );
+            }
        }
         
         super.validateInternalValue( task, attributeDef, strSSN );
