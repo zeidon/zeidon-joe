@@ -127,7 +127,7 @@
             <id>sinatra-server</id>
             <activation>
                 <file>
-                    <missing>sinatra-server/target</missing>
+                    <missing>sinatra-server/target/zeidon-sinatra-server-${version}.jar</missing>
                 </file>
             </activation>
             <modules>
