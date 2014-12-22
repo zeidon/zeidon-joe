@@ -312,15 +312,16 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
 
         try
         {
-            oe.startBrowser();
+            if ( oe.startBrowser() )
+                return "Browser started";
+            else
+                return "Error starting browser.  See log for more info.";
         }
         catch ( Exception e )
         {
             oe.getSystemTask().log().error( e );
             return "Error starting browser: " + e.getMessage();
         }
-
-        return "Browser started";
     }
 
     @Override
