@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <version>1.1.0-SNAPSHOT</version>
 
+    <url>https://github.com/DeegC/zeidon-joe</url>
     <licenses>
         <license>
             <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
@@ -22,6 +23,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<scala.version>2.11.2</scala.version>
     </properties>
+
+    <scm>
+      <connection>scm:git@github.com:DeegC/zeidon-joe.git</connection>
+      <developerConnection>scm:git@github.com:DeegC/zeidon-joe.git</developerConnection>
+      <url>scm:git@github.com:DeegC/zeidon-joe.git</url>
+    </scm>
+
+    <developers>
+      <developer>
+	<id>deegc</id>
+	<name>DG</name>
+      </developer>
+    </developers>
 
     <!-- Set up distributionManagement to deploy to OSSRH central repo -->
     <distributionManagement>
@@ -89,8 +103,8 @@
 
     <modules>
         <module>zeidon-joe</module>
-        <module>object-browser</module>
         <module>scala</module>
+        <module>object-browser</module>
 	<module>jconsole-plugin</module>
         <module>zeidon-operations</module>
         <module>restserver</module>
@@ -136,7 +150,7 @@
         </profile>
  
         <!-- 
-            Builds required objects for deploying to 
+            Builds required objects for deploying to OSSRH
          -->
         <profile>
             <id>release</id>
@@ -185,10 +199,11 @@
                 </plugins>
             </build>
 
-            <!-- Make sure sinatra-server is included. -->
+            <!-- Make sure sinatra-server is included. 
             <modules>
                 <module>sinatra-server</module>
             </modules>
+	    -->
         </profile>
     </profiles>
 
