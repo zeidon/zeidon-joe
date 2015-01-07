@@ -35,6 +35,18 @@ public class SqliteJdbcHandler extends JdbcHandler
         super( task, options );
     }
 
+    /**
+     * Indicate that we always want to add the value of the generated key to the
+     * insert statement.  This should result in a value of NULL.  Sqlite requires
+     * genkeys (i.e. columns that are specified as INTEGER PRIMARY KEY) be set
+     * to NULL for insert statements.
+     */
+    @Override
+    protected boolean addGeneratedKeyForInsert()
+    {
+        return true;
+    }
+
     @Override
     protected void addActivateLimit( int limit, SqlStatement stmt )
     {

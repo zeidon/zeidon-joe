@@ -39,7 +39,7 @@ import com.quinsoft.zeidon.objectdefinition.InternalType;
 
 
 /**
- * @author DG
+ * Implements default domain processing.
  *
  */
 public abstract class AbstractDomain implements Domain
@@ -81,7 +81,7 @@ public abstract class AbstractDomain implements Domain
         if ( internalValue instanceof String )
             return;
 
-        throw new InvalidAttributeValueException( attributeDef, internalValue, "Attribute isn't expecting a String, got %s", internalValue.getClass() );
+        throw new InvalidAttributeValueException( attributeDef, internalValue, "Attribute is expecting a String, got %s", internalValue.getClass() );
     }
 
     @Override
@@ -196,65 +196,31 @@ public abstract class AbstractDomain implements Domain
     @Override
     public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        if ( internalValue == null )
-            return null;
-
-        if ( internalValue instanceof Blob )
-            return (Blob) internalValue;
-
-        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Blob", attributeDef.toString() );
+        return convertToBlob( task, attributeDef, internalValue );
     }
 
     @Override
     public Boolean convertToBoolean(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        if ( internalValue == null )
-            return null;
-
-        if ( internalValue instanceof Boolean )
-            return (Boolean) internalValue;
-
-        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Boolean", attributeDef.toString() );
+        return convertToBoolean( task, attributeDef, internalValue );
     }
 
     @Override
     public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        if ( internalValue == null )
-            return null;
-
-        if ( internalValue instanceof DateTime )
-            return (DateTime) internalValue;
-
-        if ( internalValue instanceof Date )
-            return new DateTime( internalValue );
-
-        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Date", attributeDef.toString() );
+        return convertToDate( task, attributeDef, internalValue );
     }
 
     @Override
     public Double convertToDouble(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        if ( internalValue == null )
-            return null;
-
-        if ( internalValue instanceof Number )
-            return ((Number) internalValue).doubleValue();
-
-        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Double", attributeDef.toString() );
+        return convertToDouble( task, attributeDef, internalValue );
     }
 
     @Override
     public Integer convertToInteger(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
-        // TODO: Should we just use the context like in convertToString()?
-        if ( internalValue == null )
-            return null;
-
-        if ( internalValue instanceof Integer )
-            return (Integer) internalValue;
-
-        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Integer", attributeDef.toString() );
+        return convertToInteger( task, attributeDef, internalValue );
     }
 
     @Override
