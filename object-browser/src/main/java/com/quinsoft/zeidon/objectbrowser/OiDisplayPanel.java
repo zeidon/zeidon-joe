@@ -79,17 +79,16 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         addButton( buttonPane, "Prev", PREV_CURSOR, "[Page Up]" );
         addButton( buttonPane, "Next", NEXT_CURSOR, "[Page Down]" );
         addButton( buttonPane, "Last", LAST_CURSOR, "[End]" );
-        
+
         // Add a dummy, invisible label for spacing.  It's a hack but it's easy.
         JLabel dummy = new JLabel( "                                            " );
         buttonPane.add( dummy );
-        
+
         // Add a button who's only purpose is to be a mouse over tooltip.
-        URL url = Resources.getResource("help-text.html");
-        String text;
         try
         {
-            text = Resources.toString(url, Charsets.UTF_8);
+            URL url = Resources.getResource("help-text.html");
+            String text = Resources.toString(url, Charsets.UTF_8);
             JButton button = new JButton( "Help" );
             button.setToolTipText( text );
             buttonPane.add( button );
@@ -98,7 +97,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         {
             env.getOe().getSystemTask().log().error( "Couldn't open help-text.html" );
         }
-        
+
         add( buttonPane, BorderLayout.NORTH );
         setVisible( true );
     }
