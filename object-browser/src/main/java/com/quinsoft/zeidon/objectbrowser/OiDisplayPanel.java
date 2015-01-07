@@ -93,7 +93,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
             button.setToolTipText( text );
             buttonPane.add( button );
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
             env.getOe().getSystemTask().log().error( "Couldn't open help-text.html" );
         }
