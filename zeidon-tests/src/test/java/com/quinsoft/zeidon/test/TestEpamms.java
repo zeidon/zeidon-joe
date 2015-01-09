@@ -240,7 +240,8 @@ public class TestEpamms
 			   //://NAME VIEW mSPLDef "mSPLDef"
 			   //://CommitOI_ToFile( mSPLDef, "c:\temp\SPLD.por", zASCII )
 			   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\SPLD.por", zSINGLE )
-			   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test3.por", zSINGLE );
+			   // mSPLDefO is the new version of mSPLDef.
+			   ActivateOI_FromFile( mSPLDef, "mSPLDefO", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test3.por", zSINGLE );
 			   //:NAME VIEW mSPLDef "mSPLDef"
 			   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
 			   //:SET CURSOR NEXT mSPLDef.LLD_Block 
