@@ -85,6 +85,16 @@ public class TestEpamms
         System.out.println("===== Finished ExecuteJOE_TemporalDeleteError ========");
 	}
 
+	@Test
+	public void ExecuteJOE_TestSubobjectCheckExistence()
+	{
+	    View         testview;
+		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( testview );
+		tester.ExecuteJOE_TestSubobjectCheckExistence( testview );
+        System.out.println("===== Finished ExecuteJOE_TestSubobjectCheckExistence ========");
+	}
+
 
 	private class VmlTester extends VmlObjectOperations
 	{
@@ -217,6 +227,33 @@ public class TestEpamms
 		// END
 		}
 
+
+		public int
+		ExecuteJOE_TestSubobjectCheckExistence( View     ViewToWindow )
+		{
+			   zVIEW    mSPLDef = new zVIEW( );
+			   int      RESULT = 0;
+			   int      lTempInteger_0 = 0;
+
+
+			   //://ACTIVATE mSPLDef SingleForUpdate WHERE mSPLDef.SubregPhysicalLabelDef.ID = 5
+			   //://NAME VIEW mSPLDef "mSPLDef"
+			   //://CommitOI_ToFile( mSPLDef, "c:\temp\SPLD.por", zASCII )
+			   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\SPLD.por", zSINGLE )
+			   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test3.por", zSINGLE );
+			   //:NAME VIEW mSPLDef "mSPLDef"
+			   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
+			   //:SET CURSOR NEXT mSPLDef.LLD_Block 
+			   RESULT = SetCursorNextEntity( mSPLDef, "LLD_Block", "" );
+			   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" ) 
+			   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
+			   //:IF mSPLDef.ContinuationStatement EXISTS
+			   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "ContinuationStatement" );
+		
+		   return 0;
+		}
+		
+		
 		public int
 		ExecuteJOE_TestSubobjectCreateView( View     ViewToWindow )
 		{
