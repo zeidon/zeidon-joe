@@ -79,7 +79,6 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.SelectSet;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -4243,15 +4242,7 @@ public abstract class VmlOperation
    {
       int nRC;
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.isNull() )
-      {
-         nRC = zCURSOR_NULL;
-      }
-      else
-      {
-         nRC = cursor.checkExistenceOfEntity().toInt();
-      }
-
+      nRC = cursor.checkExistenceOfEntity().toInt();
       return nRC;
    }
 

@@ -42,6 +42,7 @@ import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.HiddenCursorException;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.NullCursorException;
+import com.quinsoft.zeidon.OutOfScopeException;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
 import com.quinsoft.zeidon.View;
@@ -220,6 +221,9 @@ class EntityCursorImpl implements EntityCursor
      */
     private EntityInstanceImpl getExistingInstance( boolean allowHidden ) throws NullCursorException
     {
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
+
         EntityInstanceImpl ei = getEntityInstance();  // Potentially sets UNSET_CSR.
         if ( ei == null )
             throw new NullCursorException( this );
@@ -1302,6 +1306,9 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean isNull()
     {
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
+
         EntityInstanceImpl ei = getEntityInstance();
         return ei == null || ei.isHidden();
     }
@@ -1610,7 +1617,10 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult checkExistenceOfEntity()
     {
-        // First check to see if the entity is null.
+        if ( ! viewCursor.isCursorInScope( this ) )
+            return CursorResult.UNDEFINED;
+
+        // Check to see if the entity is null.
         if ( ! isNull() )
             return CursorResult.SET;
 

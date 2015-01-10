@@ -999,6 +999,7 @@ eContext   3
 aZKey      68568167
 aName      YYYY/MM/DD HH:MM:SS.S AM
 aEditString YYYY/mm/dd HH:MI:SS.9 AM
+aJavaEditString yyyy/MM/dd KK:mm:ss.S a
 aIsDefault Y
 
 eContext   3

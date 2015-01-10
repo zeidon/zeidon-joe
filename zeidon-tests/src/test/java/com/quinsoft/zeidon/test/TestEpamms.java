@@ -9,6 +9,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
@@ -244,17 +245,21 @@ public class TestEpamms
 			   ActivateOI_FromFile( mSPLDef, "mSPLDefO", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test3.por", zSINGLE );
 			   //:NAME VIEW mSPLDef "mSPLDef"
 			   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
-			   //:SET CURSOR NEXT mSPLDef.LLD_Block 
+			   //:SET CURSOR NEXT mSPLDef.LLD_Block
 			   RESULT = SetCursorNextEntity( mSPLDef, "LLD_Block", "" );
-			   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" ) 
+			   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
 			   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
+			   mSPLDef.logObjectInstance();
 			   //:IF mSPLDef.ContinuationStatement EXISTS
-			   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "ContinuationStatement" );
-		
+               lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "ContinuationStatement" );
+               Assert.assertEquals( "Unexpected RC", CursorResult.UNDEFINED.toInt(),  lTempInteger_0 );
+			   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "LLD_SubBlock" );
+               Assert.assertEquals( "Unexpected RC", CursorResult.NULL.toInt(),  lTempInteger_0 );
+
 		   return 0;
 		}
-		
-		
+
+
 		public int
 		ExecuteJOE_TestSubobjectCreateView( View     ViewToWindow )
 		{

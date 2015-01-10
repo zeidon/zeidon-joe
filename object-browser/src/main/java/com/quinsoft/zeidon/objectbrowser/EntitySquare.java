@@ -76,7 +76,7 @@ public class EntitySquare extends JPanel implements MouseListener
     private final Dimension          size;
     private final Dimension          paddedSize;
     private final Font font;
-    
+
     private EntityInstance currentEi;
 
     EntitySquare( OiDisplay display, BrowserEnvironment environment, EntityDefLayout layout )
@@ -92,7 +92,7 @@ public class EntitySquare extends JPanel implements MouseListener
         font = new Font( Font.SANS_SERIF, Font.PLAIN, env.getPainterScaleFactor() );
         setCursor( new Cursor( Cursor.DEFAULT_CURSOR ) );
         addMouseListener( this );
-        
+
         getInputMap().put( KeyStroke.getKeyStroke( "HOME" ),  "setFirst" );
         getActionMap().put("setFirst", new SetCursorAction( CursorPosition.FIRST ) );
         getInputMap().put( KeyStroke.getKeyStroke( "PAGE_UP" ),  "setPrev" );
@@ -198,10 +198,10 @@ public class EntitySquare extends JPanel implements MouseListener
         FontMetrics fm = graphics2.getFontMetrics();
 
         String lines[] = text.split( "\n" );
-        
+
         // Adjust y if there is more than one line.
         y -= (lines.length - 1 ) * fm.getHeight() / 2;
-        
+
         for ( String line : lines )
         {
             int lth = fm.stringWidth( line );
@@ -260,14 +260,17 @@ public class EntitySquare extends JPanel implements MouseListener
         {
             case NULL:
                 paintCenteredText( graphics2, size.height / 2, "null", Color.WHITE );
+                setToolTipText( cursor );
                 break;
 
             case NOT_LOADED:
                 paintCenteredText( graphics2, size.height / 2, "(Not yet loaded)", Color.WHITE );
+                setToolTipText( entityDef.getName() );
                 break;
 
             case OUT_OF_SCOPE:
                 paintCenteredText( graphics2, size.height / 2, "(Out of Scope)", Color.WHITE );
+                setToolTipText( entityDef.getName() );
                 break;
 
             default:
@@ -276,14 +279,14 @@ public class EntitySquare extends JPanel implements MouseListener
 
                 s = getSiblingCount( cursor );
                 paintCenteredText( graphics2, size.height - env.getPainterScaleFactor(), s, null );
+                setToolTipText( cursor );
         }
-        
-        setToolTipText( cursor );
+
     }
 
     /**
      * Sets the tooltip text from the current selected EI.
-     * 
+     *
      * @param cursor
      */
     private void setToolTipText( EntityCursor cursor )
@@ -293,36 +296,36 @@ public class EntitySquare extends JPanel implements MouseListener
             return;
 
         currentEi = ei;
-        
+
         StringBuilder html = new StringBuilder( "<html><table>");
-        
+
         EntityDef entityDef = cursor.getEntityDef();
         html.append( "<tr><td><b>" ).append( entityDef.getName() ).append( "</b></td><td></td></tr>" );
-        
+
         if ( ei != null )
         {
             for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
                 if ( attributeDef.isHidden() )
                     continue;
-                
-                if ( ei.getAttribute( attributeDef ).isNull() ) 
+
+                if ( ei.getAttribute( attributeDef ).isNull() )
                     continue;
-                        
+
                 String value = ei.getAttribute( attributeDef ).getString();
-                
+
                 // Skip null attributes.
                 if ( StringUtils.isBlank( value ) )
                     continue;
-    
+
                 html.append( "<tr><td>" ).append( attributeDef.getName() ).append( "</td>" );
-                
+
                 if ( StringUtils.length( value ) > 50 )
                     value = value.substring( 0, 50 );
                 html.append( "<td>" ).append( value ).append( "</td></tr>" );
             }
         }
-        
+
         html.append( "</table></html>" );
         setToolTipText( html.toString() );
     }
@@ -410,20 +413,20 @@ public class EntitySquare extends JPanel implements MouseListener
             add( item );
             if ( ! getEntityDef().isRecursive() )
                 item.setEnabled( false );
-            
+
             item = new JMenuItem( "Reset subobject to parent" );
             item.addActionListener( new ResetSubobjectMenuListener() );
             add( item );
             if ( ! getEntityDef().isRecursive() )
                 item.setEnabled( false );
-            
+
             item = new JMenuItem( "Load LazyLoad entities" );
             item.addActionListener( new LazyLoadEntityMenuListener() );
             add( item );
             if ( ! getEntityDef().getLazyLoadConfig().isLazyLoad() )
                 item.setEnabled( false );
 
-            
+
             item = new JMenuItem( "Copy entity name" );
             item.addActionListener( env.createCopyAction( getEntityDef().getName() ) );
             add( item );
@@ -434,7 +437,7 @@ public class EntitySquare extends JPanel implements MouseListener
     {
         private static final long serialVersionUID = 1L;
         private final CursorPosition cursorMovement;
-        
+
         public SetCursorAction( CursorPosition cursorMovement )
         {
             super();
@@ -455,7 +458,7 @@ public class EntitySquare extends JPanel implements MouseListener
                 case LAST: cursor.setLast(); break;
                 default: throw new ZeidonException( "Unsupported cursor movement" );
             }
-            
+
             oiDisplay.setSelectedEntity( EntitySquare.this ); // Resets attribute values.
             oiDisplay.repaint();
         }
@@ -464,7 +467,7 @@ public class EntitySquare extends JPanel implements MouseListener
     private class ChangeSelectedEntityDefAction extends AbstractAction
     {
         private static final long serialVersionUID = 1L;
-        
+
         private final int direction;
 
         public ChangeSelectedEntityDefAction(int direction)
@@ -491,7 +494,7 @@ public class EntitySquare extends JPanel implements MouseListener
                         entityDef = entityDef.getPrevHier();
                         while ( entityDef != null && entityDef.getLevel() != level )
                             entityDef = entityDef.getPrevHier();
-                        
+
                         break;
                     }
                     case 4:
@@ -500,21 +503,21 @@ public class EntitySquare extends JPanel implements MouseListener
                         entityDef = entityDef.getNextHier();
                         while ( entityDef != null && entityDef.getLevel() != level )
                             entityDef = entityDef.getNextHier();
-                        
+
                         break;
                     }
-                    
+
                     default: throw new ZeidonException( "Unsupported direction" );
                 }
-                
+
                 if ( entityDef == null )
                     return;
             }
 
             // Did selection change?
             if ( entityDef == getEntityDef() )
-                return; 
-            
+                return;
+
             env.getOiDisplay().setSelectedEntity( entityDef ).requestFocus();
         }
     }

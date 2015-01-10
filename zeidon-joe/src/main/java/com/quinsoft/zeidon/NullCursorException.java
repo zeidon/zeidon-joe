@@ -21,13 +21,13 @@ package com.quinsoft.zeidon;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * @author DG
+ * An attempt was made to access a cursor that is null.
  *
  */
 public class NullCursorException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
-    
+
     private final EntityDef entityDef;
 
     public NullCursorException(EntityCursor cursor)
