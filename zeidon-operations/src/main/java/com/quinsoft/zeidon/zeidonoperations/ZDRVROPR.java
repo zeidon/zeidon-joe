@@ -252,19 +252,21 @@ public class ZDRVROPR extends VmlOperation
       return 0;
     }
 
-    public int ConvertXMLToPDF( String xml, String xsl, String pdf )
-    {
-        // Examples can be found...
-        //http://xmlgraphics.apache.org/fop/1.0/embedding.html#examples
-        pdf = pdf + ".pdf";
+   public int ConvertXMLToPDF( String xml, String xsl, String pdf )
+   {
+      // Examples can be found...
+      //http://xmlgraphics.apache.org/fop/1.0/embedding.html#examples
+      pdf = pdf + ".pdf";
 
-        StringBuilder sb_szPathName;
-        sb_szPathName = new StringBuilder( 200 );
-        //m_KZOEP1AA.SysReadZeidonIni( -1, "[App.Zencas]", "WebDirectory", sb_szPathName );
-        String szPathName = task.readZeidonConfig( task.getApplication().getName(), "WebDirectory" );
+      StringBuilder sb_szPathName;
+      sb_szPathName = new StringBuilder( 200 );
+   // m_KZOEP1AA.SysReadZeidonIni( -1, "[App.Zencas]", "WebDirectory", sb_szPathName );
+   // String szPathName = task.readZeidonConfig( task.getApplication().getName(), "WebDirectory" );
+      String szPathName = task.readZeidonConfig( "[App." + task.getApplication().getName() + "]", "WebDirectory" );
+      szPathName = m_KZOEP1AA.SysConvertEnvironmentString( "", szPathName );
 
 		//String copyPdf = "C:/Program Files/Apache Group/Tomcat 6.0/webapps/ROOT/zencas/pdf/" + pdf;
-		String copyPdf = szPathName.toString( ) + "pdf/" + pdf;
+		String copyPdf = szPathName + "pdf/" + pdf;
 		try
 		{
 			// Step 1: Construct a FopFactory
