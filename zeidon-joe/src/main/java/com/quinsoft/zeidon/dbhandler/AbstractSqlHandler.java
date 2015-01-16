@@ -822,6 +822,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( entityDef.getParent() == null )
             return true;
 
+        if ( entityDef != null )
+            return false;
+
 //        if ( ! entityDef.getName().equals( "xxx" ) )
 //            return false;
 
