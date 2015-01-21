@@ -70,17 +70,8 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
     @Override
     public boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, AttributeDef attributeDef, Object value)
     {
-        if ( bindAllValues )
-        {
-            stmt.addBoundAttribute( buffer, value );
-            return true;
-        }
-
-        if ( value == null )
-        {
-            buffer.append( "null" );
-            return true;
-        }
+        if ( bindAllValues || value == null )
+            return super.appendSqlValue( stmt, buffer, domain, attributeDef, value );
 
         // Sqlite stores booleans as integers.
         if ( domain instanceof BooleanDomain )
@@ -92,5 +83,4 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
 
         return super.appendSqlValue( stmt, buffer, domain, attributeDef, value );
     }
-
 }

@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -37,6 +38,7 @@ import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.GeneratedKeyDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 
@@ -121,6 +123,14 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( value == null )
         {
             buffer.append( "null" );
+            return true;
+        }
+
+        if ( domain instanceof GeneratedKeyDomain )
+        {
+            // The default for DBs is that the key is an integer so copy the value of the
+            // attribute directly to the buffer (i.e. without quotes).
+            buffer.append( ((GeneratedKey) value).getString() );
             return true;
         }
 
