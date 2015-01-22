@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.scala.basedOn
  *  ways to manipulate cursors in Scala, the "VML" way and the "Scala" way.
  *  When appropriate both ways will be shown.
  */
-class SampleCursorManipulation( val task: Task ) extends ZeidonOperations {
+class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
 
     /**
      * Simple SET CURSOR FIRST

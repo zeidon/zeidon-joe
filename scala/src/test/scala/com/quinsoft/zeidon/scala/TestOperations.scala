@@ -11,7 +11,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
  * @author dgc
  *
  */
-class TestOperations ( val task: Task ) extends ZeidonOperations{
+class TestOperations ( var task: Task ) extends ZeidonOperations{
    /**
     * Following constructor allows this to be called from Zeidon JOE.
     */

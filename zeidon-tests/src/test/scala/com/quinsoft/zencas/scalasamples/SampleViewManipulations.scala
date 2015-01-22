@@ -27,7 +27,7 @@ import com.quinsoft.zeidon.scala.View
  * Examples of how to make miscellaneous View calls. For sample Cursor manipulations
  * see SampleCursorManipulation.
  */
-class SampleViewManipulations( val task: Task ) extends ZeidonOperations  {
+class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
 
     /**
      * Serialize an OI to a temporary file.  This writes the incremental values
