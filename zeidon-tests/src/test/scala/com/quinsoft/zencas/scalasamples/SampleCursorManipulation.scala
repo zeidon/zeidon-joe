@@ -211,6 +211,38 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
 
         println( "Final ID = " + mUser.Report.ID )
     }
+    
+    def sortEntities( mUser: View @basedOn( "mUser") ) = {
+        
+        // Sort Report entities by Name in ascending order.
+        mUser.Report.sort( "Name A" )
+        println( "\nSort Name A: " )
+        mUser.Report.each( println( mUser.Report.Name ) )
+
+        // Sort Report entities by Name in DESCENDING order.
+        mUser.Report.sortWith( _.Name > _.Name )
+        println( "\nSort Name descending: " )
+        mUser.Report.each( println( mUser.Report.Name ) )
+        
+        // Sort Report entities by Name in ASCENDING order.
+        mUser.Report.sortWith( _.Name < _.Name )
+        println( "\nSort Name ascending: " )
+        mUser.Report.each( println( mUser.Report.Name ) )
+        
+        mUser.Report.sortWith( _.ID > _.ID )
+        println( "\nSort ID descending: " )
+        mUser.Report.each( println( mUser.Report.ID ) )
+        
+        // Sort by Name and ID
+        mUser.Report.sortWith( (ei1, ei2) => {
+            if ( ei1.Name == ei2.Name )
+                ei1.ID < ei2.ID
+            else
+                ei1.Name < ei2.Name
+        } )
+        println( "\nSort multiple: " )
+        mUser.Report.each( println( mUser.Report.Name ) )
+    }
 }
 
 object SampleCursorManipulation {
@@ -231,6 +263,7 @@ object SampleCursorManipulation {
         sampler.setCursorFirstWithScoping(mUser)
 
         sampler.forEachCursor(mUser)
+        sampler.sortEntities(mUser)
 //        mUser.logObjectInstance
     }
 
