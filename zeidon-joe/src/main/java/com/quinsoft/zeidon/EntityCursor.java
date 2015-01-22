@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
+import java.util.Comparator;
 import java.util.EnumSet;
 
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -197,6 +198,11 @@ public interface EntityCursor extends EntityInstance
      * @param orderKeys
      */
     void orderEntities( String orderKeys );
+
+    /**
+     * Sorts the entities using the comparator.
+     */
+    void orderEntities( Comparator<? extends EntityInstance> comparator );
 
     /**
      * Get the view associated with this entity cursor.

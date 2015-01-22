@@ -76,6 +76,12 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      *      if ( view.Entity.Attr @== 0 )...
      */
     def @==( other: Any ) = compare( other ) == 0
+    
+    def <( other: AttributeInstance ) = compare( other ) < 0 
+    def >( other: AttributeInstance ) = compare( other ) > 0 
+    def >=( other: AttributeInstance ) = compare( other ) >= 0 
+    def <=( other: AttributeInstance ) = compare( other ) <= 0 
+    def !=( other: AttributeInstance ) = compare( other ) != 0 
 
     def +( x: Int ) = toInt + x
     def +( x: Float ) = toDouble + x
@@ -112,7 +118,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     }
 
     override def equals(other: Any) = compare( other ) == 0
-    override def toString = jattributeInstance.getString()
+    override def toString = jattributeInstance.getString( "" )
 
     private def checkNull() = if ( isNull ) throw new ZeidonException( "Attribute is null" ).prependAttributeDef( attributeDef )
 
