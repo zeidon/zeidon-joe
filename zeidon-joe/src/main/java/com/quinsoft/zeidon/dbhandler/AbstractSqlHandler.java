@@ -191,8 +191,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             // If the DB is generating the keys then don't add generated keys to
             // the list of columns.
-            AttributeDef AttributeDef = dataField.getAttributeDef();
-            if ( useDbGenerateKeys() && AttributeDef.isGenKey() && entityInstance.getAttribute( AttributeDef ).isNull() )
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() && entityInstance.getAttribute( attributeDef ).isNull() )
                 continue;
 
             if ( firstColumn )
@@ -231,6 +231,22 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return isDbGenerateKeys;
     }
 
+    /**
+     * Indicates whether we should add the generated key as part of the insert.
+     * By default the value is 'false' if we're using generated keys because
+     * the DB will infer it.  This means the genkey will not appear at all
+     * in the INSERT statements.
+     * 
+     * However some DBs (e.g. SQLite) require us to insert a NULL value for
+     * the key.  Sqlite will then generate its own key.
+     *  
+     * @return
+     */
+    protected boolean addGeneratedKeyForInsert()
+    {
+        return ! isDbGenerateKeys;
+    }
+    
     /**
      * Add the attribute value to the buffer.
      * @param stmt TODO
@@ -305,8 +321,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         for ( DataField dataField : dataRecord.dataFields() )
         {
-            AttributeDef AttributeDef = dataField.getAttributeDef();
-            if ( ( control & COL_KEYS_ONLY ) != 0 && AttributeDef.isKey() )
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ( control & COL_KEYS_ONLY ) != 0 && attributeDef.isKey() )
                 continue;
 
             // If nControl indicates that we don't want hidden attributes, then
@@ -314,9 +330,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // they are hidden, should be included.  Same thing with auto sequencing
             // attributes.
             if ( ( control & COL_NO_HIDDEN ) == 0 &&
-                 ( AttributeDef.isHidden() && ! AttributeDef.isKey() &&
-                                            ! AttributeDef.isForeignKey() &&
-                                            ! AttributeDef.isAutoSeq() ))
+                 ( attributeDef.isHidden() && ! attributeDef.isKey() &&
+                                            ! attributeDef.isForeignKey() &&
+                                            ! attributeDef.isAutoSeq() ))
             {
                 continue;
             }
@@ -325,7 +341,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // is many-to-many then the attribute is stored in the corresponding
             // table.  If the command type is also INSERT then the attribute is
             // not to be included in this list.
-            if ( AttributeDef.isAutoSeq() &&
+            if ( attributeDef.isAutoSeq() &&
                  relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY &&
                  stmt.commandType == SqlCommand.INSERT )
             {
@@ -335,16 +351,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // Skip the attribute if it wasn't updated.
             if ( entityInstance != null && stmt.commandType != SqlCommand.INSERT)
             {
-                if ( ! entityInstance.isAttributeUpdated( AttributeDef ) )
+                if ( ! entityInstance.isAttributeUpdated( attributeDef ) )
                     continue;
             }
 
-            if ( stmt.commandType == SqlCommand.INSERT && useDbGenerateKeys() )
+            if ( attributeDef.isGenKey() && stmt.commandType == SqlCommand.INSERT && ! addGeneratedKeyForInsert() )
             {
                 // If the DB is generating the keys then don't add generated keys to
                 // the list of columns UNLESS the key is not null.  If the key is not
                 // null then someone must have set it on purpose and we'll use that value.
-                if ( AttributeDef.isGenKey() && entityInstance.getAttribute( AttributeDef ).isNull() )
+                if ( entityInstance.getAttribute( attributeDef ).isNull() )
                     continue;
             }
 
@@ -356,7 +372,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ( control & COL_FULL_QUAL ) != 0 )
             {
                 String tableName;
-                if ( AttributeDef.isAutoSeq() &&
+                if ( attributeDef.isAutoSeq() &&
                      relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
                 {
                     // This is the autoseq attribute.  The autoseq is stored in the correspondance

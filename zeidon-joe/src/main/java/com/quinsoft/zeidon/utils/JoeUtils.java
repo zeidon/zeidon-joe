@@ -35,6 +35,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -54,6 +55,8 @@ import com.quinsoft.zeidon.ZeidonException;
  */
 public class JoeUtils
 {
+    private static final Logger LOG = Logger.getLogger( JoeUtils.class );
+
     private final static Pattern PIPE_DELIMITER = Pattern.compile( "\\|" );
 
     /**
@@ -117,11 +120,17 @@ public class JoeUtils
             ZeidonInputStream stream = null;
             for ( Enumeration<URL> url = classLoader.getResources( resourceName ); url.hasMoreElements(); )
             {
+                URL element = url.nextElement();
+                if ( task != null )
+                    task.log().debug( "Found resource at " + element );
+                else
+                    LOG.debug( "Found resource at " + element );
+
                 count++;
                 if ( count > 1 )
                     throw new ZeidonException( "Found multiple resources that match resourceName %s", resourceName );
 
-                stream = ZeidonInputStream.create( url.nextElement() );
+                stream = ZeidonInputStream.create( element );
             }
 
             if ( stream != null )

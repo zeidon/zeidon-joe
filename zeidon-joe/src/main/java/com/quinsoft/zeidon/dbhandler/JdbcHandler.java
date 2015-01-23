@@ -428,16 +428,7 @@ public class JdbcHandler extends AbstractSqlHandler
                     Integer columnIdx = stmt.getColumns().get( dataField );
                     Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
                     if ( value == null )
-                    {
-                        AttributeDef attributeDef = dataField.getAttributeDef();
-                        if ( attributeDef.getInitialValue() != null )
-                        {
-                            view.dblog().warn( "Attribute %s is null in DB but has Initial Value '%s' which will be ignored",
-                                               attributeDef.toString(), attributeDef.getInitialValue() );
-                        }
-
                         continue; // Value is null so don't bother setting it.
-                    }
 
                     // Create the new entity if we haven't already loaded this instance, otherwise set the cursor to it.
                     if ( entityInstance == null )
