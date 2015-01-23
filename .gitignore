@@ -5,3 +5,6 @@ tmp/
 *.bat
 .tmpclasspath
 .cache
+.settings
+.project
+.classpath
