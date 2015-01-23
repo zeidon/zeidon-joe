@@ -3,12 +3,11 @@ package com.quinsoft.zencas.scalasamples
 import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.Task
-import com.quinsoft.zencas.scalasamples.SampleActivates;
 
 /**
  * Examples of how to execute Zeidon activates using Scala.
  */
-class SampleActivates( val task: Task ) extends ZeidonOperations {
+class SampleActivates( var task: Task ) extends ZeidonOperations {
 
     /**
      * This method shows how to execute a simple activate.  The activate uses the

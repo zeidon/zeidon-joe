@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils
  */
 trait ObjectOperations extends ZeidonOperations {
     val view: View
-    val task: Task = view.task
+    var task: Task = view.task
 }
 
 /**

@@ -1542,8 +1542,18 @@ class EntityCursorImpl implements EntityCursor
      *
      * @param orderKeys
      */
-     @Override
+
+    @Override
     public void orderEntities(String orderKeys)
+    {
+        List<SortKey> sortAttribs = parseOrderKeys( orderKeys );
+        EntitySorter comparator = new EntitySorter( sortAttribs );
+        orderEntities( comparator );
+    }
+
+    @SuppressWarnings("unchecked") // For Collections.sort(...)
+    @Override
+    public void orderEntities( Comparator<? extends EntityInstance> comparator )
     {
          // If there is an autoseq attribute then ordering for this entity matters, so
          // validate that it can be updated.
@@ -1567,7 +1577,6 @@ class EntityCursorImpl implements EntityCursor
              return; // There's only one instance so there's no need to re-order.
 
          EntityInstanceImpl lastHier = lastInstance.getLastChildHier().getNextHier();
-         List<SortKey> sortAttribs = parseOrderKeys( orderKeys );
 
          // Copy the entities into a list.  We null out the next/prev twin pointers so
          // we can re-insert them later.
@@ -1596,7 +1605,7 @@ class EntityCursorImpl implements EntityCursor
              getObjectInstance().setRootEntityInstance( null );
 
          // Sort the entities.
-         Collections.sort( entities, new EntitySorter( sortAttribs ) );
+         Collections.sort( entities, (Comparator<? super EntityInstance>) comparator );
 
          // Re-insert them into the chain.  We re-insert them starting with the last
          // twin because it's a bit faster.

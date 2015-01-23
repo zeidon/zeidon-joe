@@ -23,7 +23,7 @@ trait ZeidonOperations {
     val LAST = CursorPosition.LAST
     val zCURSOR_SET = com.quinsoft.zeidon.CursorResult.SET.toInt()
 
-    val task: Task
+    var task: Task
 
     val ON = View.ON // Used to build "BASED ON LOD" syntax.
 
