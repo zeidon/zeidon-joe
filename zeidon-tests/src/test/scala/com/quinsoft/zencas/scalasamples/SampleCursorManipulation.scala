@@ -225,7 +225,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         mUser.Report.each( println( mUser.Report.Name ) )
         
         // Sort Report entities by Name in ASCENDING order.
-        mUser.Report.sortWith( _.Name < _.Name )
+        mUser.Report.sortBy( _.Name )
         println( "\nSort Name ascending: " )
         mUser.Report.each( println( mUser.Report.Name ) )
         

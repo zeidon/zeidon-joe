@@ -75,7 +75,17 @@ class EntityCursor( private[this]  val view: View,
      *
      */
     def sort( orderKeys: String ) = jentityCursor.orderEntities( orderKeys )
-    
+
+    /**
+     * Sorts the entities in ascending order by an attribute.  
+     * 
+     * Example: to sort by Name use
+     *      view.MyEntity.sortBy( _.Name ) 
+     */
+    def sortBy( attr : (AbstractEntity) => AttributeInstance ) = {
+        sortWith( (ei1, ei2) => attr(ei1) <= attr( ei2 ) )
+    }
+
     /**
      * Sorts the entities using Scala syntax.  Example:
      * 
