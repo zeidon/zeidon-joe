@@ -453,8 +453,8 @@ public class EntitySquare extends JPanel implements MouseListener
             switch ( cursorMovement )
             {
                 case FIRST: cursor.setFirst(); break;
-                case PREV: cursor.setPrev(); break;
-                case NEXT: cursor.setNext(); break;
+                case PREV: cursor.setPrevWithinOi(); break;
+                case NEXT: cursor.setNextWithinOi(); break;
                 case LAST: cursor.setLast(); break;
                 default: throw new ZeidonException( "Unsupported cursor movement" );
             }

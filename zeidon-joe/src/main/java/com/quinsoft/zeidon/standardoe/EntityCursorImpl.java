@@ -2644,13 +2644,22 @@ class EntityCursorImpl implements EntityCursor
                                     .forEntityDef( getEntityDef() )
                                     .setLast()
                                     .build();
-        if ( ! currentIterator.hasNext() )
+
+        if ( ! currentIterator.hasPrev() )
             return CursorResult.UNCHANGED;
 
-        currentIterator.next();
+        currentIterator.prev();
+        assert assertParentCursors() : "Parent cursors are out of whack";
         return CursorResult.SET;
     }
 
+    private boolean assertParentCursors()
+    {
+        if ( getParentCursor() == null )
+            return true;
+
+        return getParentCursor().getEntityInstance() == getEntityInstance().getParent();
+    }
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EntityCursor#setPrevWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */
