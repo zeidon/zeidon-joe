@@ -922,7 +922,7 @@ class IteratorBuilder
             findPrev();
 
             if ( cursor != null )
-                cursor.resetChildCursors( currentInstance );
+                cursor.setCursor( currentInstance );
 
             return currentInstance;
         }

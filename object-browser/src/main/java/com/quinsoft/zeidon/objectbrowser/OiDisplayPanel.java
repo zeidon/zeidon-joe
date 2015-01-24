@@ -27,7 +27,6 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.JButton;
@@ -76,8 +75,8 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         JPanel buttonPane = new JPanel();
         buttonPane.add( new JLabel( "Cursors:" ) );
         addButton( buttonPane, "First", FIRST_CURSOR, "[Home]" );
-        addButton( buttonPane, "Prev", PREV_CURSOR, "[Page Up]" );
-        addButton( buttonPane, "Next", NEXT_CURSOR, "[Page Down]" );
+        addButton( buttonPane, "Prev in OI", PREV_CURSOR, "[Page Up]" );
+        addButton( buttonPane, "Next in OI", NEXT_CURSOR, "[Page Down]" );
         addButton( buttonPane, "Last", LAST_CURSOR, "[End]" );
 
         // Add a dummy, invisible label for spacing.  It's a hack but it's easy.
@@ -156,10 +155,10 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
             view.cursor( selectedEntityDef ).setFirst();
         else
         if ( action.getActionCommand().equals( PREV_CURSOR ) )
-            view.cursor( selectedEntityDef ).setPrev();
+            view.cursor( selectedEntityDef ).setPrevWithinOi();
         else
         if ( action.getActionCommand().equals( NEXT_CURSOR ) )
-            view.cursor( selectedEntityDef ).setNext();
+            view.cursor( selectedEntityDef ).setNextWithinOi();
         else
         if ( action.getActionCommand().equals( LAST_CURSOR ) )
             view.cursor( selectedEntityDef ).setLast();
