@@ -24,7 +24,7 @@ import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
- * @author DG
+ * The class for retrieving information about a Zeidon application.
  *
  */
 public interface Application
