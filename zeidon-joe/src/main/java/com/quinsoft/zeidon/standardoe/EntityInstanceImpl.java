@@ -1079,9 +1079,11 @@ class EntityInstanceImpl implements EntityInstance
             throw new ZeidonException( "Entity is not flagged for delete." )
                             .prependEntityDef( getEntityDef() );
 
-        if ( isIncomplete() )
+        if ( isIncomplete() && getEntityDef().isPersistent() )
             throw new ZeidonException( "This entity instance may not be deleted because it is incomplete.  " +
-                                       "One or more of its children were activated with qualification that limited results." )
+                                       "One or more of its children were activated with qualification that limited results.  " +
+                                       "or a child entity was dropped.  It might be possible to get around this error by " +
+                                       "dropping %s instead of deleting it", getEntityDef().getName() )
                                     .prependEntityInstance( this );
 
         // If checkRestrictedDelete is set, then make sure none of the child entities
@@ -2036,6 +2038,9 @@ class EntityInstanceImpl implements EntityInstance
             throw new ZeidonException( "Invalid operation: can't drop a temporal entity." );
 
         dropped = true;
+
+        if ( getParent() != null )
+            getParent().setIncomplete( getEntityDef() );
 
         // Following comments may no longer be apropos now that we don't allow dropping
         // versioned objects.  2011-04-12.
@@ -3622,9 +3627,40 @@ class EntityInstanceImpl implements EntityInstance
         return incomplete;
     }
 
-    void setIncomplete( boolean incomplete )
+    /**
+     * This method is called if 'this' entity instance does not have all its children.
+     * This can happen if an OI was activated with a RESTRICTING clause or if a child
+     * was dropped via dropEntity().
+     *
+     * In this situation we want to set a flag to indicate that 'this' entity cannot
+     * be deleted.
+     *
+     * @param childEntity
+     */
+    void setIncomplete( EntityDef childEntity )
     {
-        this.incomplete = incomplete;
+        // If we've already set the flag then return.
+        if ( incomplete )
+            return;
+
+        // If the child entity isn't deleted when 'this' entity is deleted then
+        // we're good.
+        if ( ! childEntity.isParentDelete() )
+            return;
+
+        if ( childEntity.isDerived() )
+            return;
+
+        // If this entity is already deleted then we'll assume the user knows what
+        // she's doing.
+        if ( isDeleted() )
+            return;
+
+        incomplete = true;
+
+        // If there is a parent entity then we'll set its incomplete flag.
+        if ( getParent() != null )
+            getParent().setIncomplete( getEntityDef() );
     }
 
     /**

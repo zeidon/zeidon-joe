@@ -20,12 +20,16 @@
 package com.quinsoft.zeidon;
 
 /**
+ * <p>
  * Cache maps are a way to store objects in Zeidon objects in a thread-safe way.  The
  * life of the CacheMap is tied to the implementing object.  For example, a value stored
  * in the CacheMap of a view will live until the View is garbage collected.
  * The key is a class object to help reduce the number of possible key collisions.
- *
+ * </p>
+ * <p>
  * For example, application code could cache a value in a task like this:
+ * </p>
+ * <p>
  * <pre>
  * {@code
  * Task task = ...
