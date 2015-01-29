@@ -1679,7 +1679,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public boolean setToSubobject()
+    public void setToSubobject()
     {
         if ( entityDef.getParent() == null )
             throw new ZeidonException("Entity %s is the root of the LodDef", getEntityDef() );
@@ -1695,14 +1695,12 @@ class EntityCursorImpl implements EntityCursor
         EntityDef recursiveParentEntityDef = getEntityDef().getRecursiveParentEntityDef();
         viewCursor.setRecursiveParent( ei, getEntityDef(), parentOfSubobject );
         viewCursor.getEntityCursor( recursiveParentEntityDef ).resetChildCursors( ei );
-        return true;
     }
 
     @Override
     public boolean resetSubobjectToParent()
     {
-        viewCursor.resetSubobjectToParent();
-        return true;
+        return viewCursor.resetSubobjectToParent();
     }
 
     EntityCursorImpl getParentCursor()

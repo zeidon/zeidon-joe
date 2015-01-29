@@ -29,8 +29,6 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  * because an EntityCursor can be used any place an EntityInstance can be used.  The only
  * difference is that EntityCursor methods can throw NullCursorException.
  *
- * @author DG
- *
  */
 public interface EntityCursor extends EntityInstance
 {
@@ -399,9 +397,14 @@ public interface EntityCursor extends EntityInstance
 
     /**
      * Sets the cursor to a recursive subobject child entity.
-     * @return
      */
-    boolean setToSubobject();
+    void setToSubobject();
+
+    /**
+     * Reset to parent subobject.
+     *
+     * @return true if set to parent, false if parent was already root of recursive subobject.
+     */
     boolean resetSubobjectToParent();
 
     /**
@@ -446,6 +449,25 @@ public interface EntityCursor extends EntityInstance
      */
     int getEntityCount() throws NullCursorException;
 
+    /**
+     * Move an entity instance to a new position under its parent and potentially change
+     * the current cursor.
+     *
+     * @param position relative position to source
+     * @param source current instance is moved adjacent to this as specified by position
+     * @param sourceReposition reposition cursor depending on this.
+     *
+     * @return CursorResult.SET
+     */
     CursorResult moveSubobject( CursorPosition position, EntityCursor source, CursorPosition sourceReposition );
+
+    /**
+     * Move an entity instance to a new position under its parent
+     *
+     * @param position relative position to source
+     * @param source current instance is moved adjacent to this as specified by position
+     *
+     * @return CursorResult.SET
+     */
     CursorResult moveSubobject( CursorPosition position, EntityInstance source );
 }

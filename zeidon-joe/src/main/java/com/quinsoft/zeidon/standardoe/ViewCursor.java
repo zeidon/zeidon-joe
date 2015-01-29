@@ -235,12 +235,14 @@ class ViewCursor
         resetRecursiveParent();
     }
 
-    void resetSubobjectToParent()
+    /**
+     * @return true if set to parent, false if parent was already root of recursive subobject.
+     */
+    boolean resetSubobjectToParent()
     {
         EntityInstanceImpl currentRoot = getRecursiveRoot();
         if ( currentRoot == null )
-            return;
-//            throw new ZeidonException("View %s has no subobject cursors", getLodDef() );
+            return false;
 
         // We need to find the ancestor of currentRoot that has the same ER entity token
         // as current root.
@@ -253,6 +255,7 @@ class ViewCursor
         setRecursiveParent( ancestor, ancestor.getEntityDef(), null );
         view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
         view.cursor( entityDef ).setCursor( currentRoot );    // Set the cursor for the recursive child.
+        return true;
     }
 
     EntityInstanceImpl getRecursiveRoot()

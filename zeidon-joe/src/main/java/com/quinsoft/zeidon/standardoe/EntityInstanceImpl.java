@@ -1780,25 +1780,31 @@ class EntityInstanceImpl implements EntityInstance
 
         //
         // Make sure there is at least one instance of all required child entities.
+        // We only care about the child entities if 'this' has been created.  If it
+        // hasn't been created then there shouldn't be any issues with cardinality
+        // of the children.
         //
-        for ( EntityDef childEntity : getEntityDef().getChildren() )
+        if ( isCreated() )
         {
-            if ( childEntity.getMinCardinality() == 0 )
-                continue;  // Child entities aren't required so ignore this one.
-
-            // Make sure there is at least one child instance that matches this.
-            if ( getChildren( childEntity, false ).hasNext() )
-                continue;
-
-            // If the child is being lazy-loaded and 'this' EI hasn't been created
-            // then we'll assume the child just hasn't been loaded and we're good.
-            if ( childEntity.getLazyLoadConfig().isLazyLoad() )
+            for ( EntityDef childEntity : getEntityDef().getChildren() )
             {
-                if ( ! isCreated() && ! isIncluded() )
-                    continue;
-            }
+                if ( childEntity.getMinCardinality() == 0 )
+                    continue;  // Child entities aren't required so ignore this one.
 
-            list.add( new RequiredEntityMissingException( childEntity ) );
+                // Make sure there is at least one child instance that matches this.
+                if ( getChildren( childEntity, false ).hasNext() )
+                    continue;
+
+                // If the child is being lazy-loaded and 'this' EI hasn't been created
+                // then we'll assume the child just hasn't been loaded and we're good.
+                if ( childEntity.getLazyLoadConfig().isLazyLoad() )
+                {
+                    if ( ! isCreated() && ! isIncluded() )
+                        continue;
+                }
+
+                list.add( new RequiredEntityMissingException( childEntity ) );
+            }
         }
 
         // Now run this on all direct children.

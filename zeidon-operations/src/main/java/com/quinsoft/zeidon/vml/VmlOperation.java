@@ -1894,7 +1894,6 @@ public abstract class VmlOperation
    //          zCALL_ERROR - error creating new view
    protected int SetViewToSubobject( View view, String entityName )
    {
-      int nRC;
       LodDef lodDef = view.getLodDef();
       EntityDef entityDef = lodDef.getEntityDef( entityName );
 
@@ -1906,16 +1905,8 @@ public abstract class VmlOperation
           return 0;
 
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.setToSubobject() )
-      {
-         nRC = 0;
-      }
-      else
-      {
-         nRC = -1;
-      }
-
-      return nRC;
+      cursor.setToSubobject();
+      return 0;
    }
 
    //  RETURNS: 0           - View successfully reset
