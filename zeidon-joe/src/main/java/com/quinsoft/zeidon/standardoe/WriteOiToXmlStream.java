@@ -142,7 +142,7 @@ public class WriteOiToXmlStream implements StreamWriter
     {
         final EntityDef entityDef = ei.getEntityDef();
 
-        currentIndent = entityDef.getLevel();
+        currentIndent = entityDef.getDepth();
 
         if ( incremental )
             startElement( entityDef.getName(),

@@ -37,18 +37,95 @@ import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
  */
 public interface EntityInstance
 {
-    int getLevel();
+    /**
+     * Returns the depth of the entity instance.  The root has a depth of 1.
+     *
+     * @return the depth.
+     */
+    int getDepth();
+
+    /**
+     * Returns true if any of the persistent attributes in the entity instance have
+     * been updated.
+     *
+     * @return true if entity instance has been updated.
+     */
     boolean isUpdated();
+
+    /**
+     * Returns true if this entity instance has been deleted.  This is intended to be used
+     * just by DB handlers.
+     *
+     * @return true if the entity instance has been created.
+     */
     boolean isDeleted();
+
+    /**
+     * Returns true of the entity instance has been created.  This will be false for persistent
+     * entities loaded from the DB.
+     *
+     * @return true if the entity instance has been created.
+     */
     boolean isCreated();
+
+    /**
+     * Returns true if the entity instance has been included.  An included entity is a pre-existing entity
+     * that had its relationship with its parent created
+     *
+     * @return true if the entity instance has been created.
+     */
     boolean isIncluded();
+
+    /**
+     * Returns true if the entity instance has been excluded.  I.e. the relationship with its parent has
+     * been severed but the entity instance has not been deleted.  This is intended to be used by DB
+     * handlers.
+     *
+     * @return true if the entity instance has been excluded.
+     */
     boolean isExcluded();
+
+    /**
+     * Returns true if the entity instance has been deleted or excluded.  Intended to be used
+     * by DB handlers.
+     *
+     * @return true if the entity instance has been deleted or excluded.
+     */
     boolean isHidden();
+
+    /**
+     * Returns true if this entity instance is a temporal version.
+     *
+     * @return true if this entity instance is a temporal version.
+     */
     boolean isVersioned();
 
-    EntityDef     getEntityDef();
+    /**
+     * Returns the entity definition for this entity instance.
+     *
+     * @return the entity's definition.
+     */
+    EntityDef      getEntityDef();
+
+    /**
+     * Returns the parent entity instance or null if the entity is the root.
+     *
+     * @return the parent entity instance of null if the entity is the root.
+     */
     EntityInstance getParent();
+
+    /**
+     * Returns the previous twin of this entity or null if there is none.
+     *
+     * @return the previous twin of this entity or null if there is none.
+     */
     EntityInstance getPrevTwin();
+
+    /**
+     * Returns the next twin of this entity or null if there is none.
+     *
+     * @return the next twin of this entity or null if there is none.
+     */
     EntityInstance getNextTwin();
 
     /**
@@ -61,16 +138,67 @@ public interface EntityInstance
      */
     boolean hasPrevTwin();
 
+    /**
+     * Returns a UUID that has been generated for this entity instance.  Every entity instance
+     * has a unique UUID, including linked entity instances.
+     *
+     * @return unique UUID for the entity instance.
+     */
     UUID getEntityUuid();
+
+    /**
+     * Returns a UUID that has been generated for the object instance.  All entity instances in
+     * the same OI will share the same OI UUID.
+     *
+     * @return the UUID for the object instance.
+     */
     UUID getObjectInstanceUuid();
 
+    /**
+     * Returns a value that is unique for all entity instances that have been created by the
+     * current Object Engine.  Use UUID if a key that is unique across all Object Engines
+     * is needed.
+     *
+     * @return a key that is unique for this Object Engine.
+     */
     long getEntityKey();
+
     long getObjectInstanceId();
 
+    /**
+     * Creates a temporal version of the entity instance and its children (i.e. the subobject).  Changes made
+     * to the temporal subobject are not copied to the object instance until acceptSubobject() is called.  The
+     * changes made be canceled with canceSubobject().
+     *
+     * @return the temporal entity instance.
+     */
     EntityInstance createTemporalSubobjectVersion();
+
+    /**
+     * Accepts the changes made to the temporal subobject and are copied to the object instance.  Accept can
+     * only be called on the root of the temporal suboject.
+     *
+     * @return the root of the accepted subobject.
+     */
     EntityInstance acceptSubobject();
-    void acceptTemporalEntity();
+
+    /**
+     * Cancels the temporal subobject and throws away the changes.
+     *
+     * @return the original version of the entity instance.
+     */
     EntityInstance cancelSubobject();
+
+    /**
+     * Accepts a temporal entity and updates the object instance.
+     */
+    void acceptTemporalEntity();
+
+    /**
+     * Cancels a temporal entity and throws away the changes.
+     *
+     * @return If this is called via a cursor, it returns the cursor positioning.  Otherwise returns CursorResult.SET.
+     */
     CursorResult cancelTemporalEntity();
 
     /**
@@ -78,8 +206,7 @@ public interface EntityInstance
      *  1) Checks for required attributes.
      *  2) Validates min/max cardinality.
      *
-     *  @returns a list of exceptions found.  If no exceptions found,
-     *  returns null.
+     *  @returns a list of exceptions found.  If no exceptions found returns null.
      */
     Collection<ZeidonException> validateSubobject();
 

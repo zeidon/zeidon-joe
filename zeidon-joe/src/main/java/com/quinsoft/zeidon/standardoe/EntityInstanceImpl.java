@@ -79,7 +79,7 @@ class EntityInstanceImpl implements EntityInstance
 
     private final ObjectInstance  objectInstance;
     private final EntityDef      entityDef;
-    private final int             level;
+    private final int             depth;
     private final long            entityKey;
 
     private UUID                  uuid;
@@ -211,7 +211,7 @@ class EntityInstanceImpl implements EntityInstance
         this.entityDef = entityDef;
         objectInstance = null;
         entityKey = NumberUtils.LONG_ZERO;
-        level = -1;
+        depth = -1;
         this.attributeHashkeyMap = null;
     }
 
@@ -258,7 +258,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( parentInstance != null )
         {
             this.setParent( parentInstance );
-            this.level = parentInstance.getLevel() + 1;
+            this.depth = parentInstance.getDepth() + 1;
             if ( parentInstance.isVersioned() )
                 setVersionStatus( VersionStatus.UNACCEPTED );
             else
@@ -273,7 +273,7 @@ class EntityInstanceImpl implements EntityInstance
         {
             setVersionStatus( VersionStatus.NONE );
             this.versionNumber = 0;
-            this.level = 1;
+            this.depth = 1;
         }
     }
 
@@ -609,9 +609,9 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public int getLevel()
+    public int getDepth()
     {
-        return level;
+        return depth;
     }
 
     /**
@@ -633,15 +633,15 @@ class EntityInstanceImpl implements EntityInstance
                 return getNextTwin().getPrevHier();
         }
 
-        // If 'this' doesn't have a next hier or if the next hier has a level that is
+        // If 'this' doesn't have a next hier or if the next hier has a depth that is
         // not below 'this' then return 'this' because it has no descendants.
-        if ( getNextHier() == null || getNextHier().getLevel() <= level )
+        if ( getNextHier() == null || getNextHier().getDepth() <= depth )
             return this;
 
         EntityInstanceImpl prev = null;
         EntityInstanceImpl search;
         for ( search = this.getNextHier();
-              search != null && search.getLevel() > level;
+              search != null && search.getDepth() > depth;
               prev = search, search = search.getNextHier() )
         {
             // We can short-circuit descendants by going to the last twin.
@@ -681,13 +681,13 @@ class EntityInstanceImpl implements EntityInstance
             if ( next.getEntityDef() == searchEntityDef )
                 return next; // We found what we're looking for.
 
-            if ( next.getLevel() <= this.getLevel() )
+            if ( next.getDepth() <= this.getDepth() )
                 // We've gone past the last hier so we're done.
                 return null;
 
             // If we're looking at a descendant of 'e' then we can short-circuit
             // some of the entities by skipping to the last twin.
-            if ( next.getLevel() > searchEntityDef.getLevel() )
+            if ( next.getDepth() > searchEntityDef.getDepth() )
                 next = next.getLastTwin().getLastChildHier();
         }
 
@@ -1108,9 +1108,9 @@ class EntityInstanceImpl implements EntityInstance
         // Run through the entity and all it's children and set the delete flag.
         // We start with 'this' because the logic below spawns the delete and
         // we want to spawn the deletes for all entities.
-        int startLevel = getLevel();
+        int startLevel = getDepth();
         EntityInstanceImpl scan = this;
-        while ( scan != null && ( scan.getLevel() > startLevel || scan == this ) )
+        while ( scan != null && ( scan.getDepth() > startLevel || scan == this ) )
         {
             // If the instance in question is already hidden, skip it
             // and all of its descendants since it may have been excluded or
@@ -1902,7 +1902,7 @@ class EntityInstanceImpl implements EntityInstance
         // Now go through and drop any dead instances.  We do it here after all the
         // chain pointers have been changed.
         EntityInstanceImpl search = getNextHier();
-        while ( search != null && search.getLevel() > this.getLevel() )
+        while ( search != null && search.getDepth() > this.getDepth() )
         {
             if ( search.isDead() )
             {

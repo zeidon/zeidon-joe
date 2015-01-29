@@ -201,14 +201,14 @@ class ViewCursor
         this.recursiveRootParent = recursiveGrandParent;
         int recursiveLevel;
         if ( recursiveParent == null )
-            recursiveLevel = recursiveGrandParent.getLevel() + 1;
+            recursiveLevel = recursiveGrandParent.getDepth() + 1;
         else
-            recursiveLevel = recursiveParent.getLevel();
+            recursiveLevel = recursiveParent.getDepth();
 
         // Calculate the recursiveDiff.
         if ( recursiveParentEntityDef.getRecursiveParentEntityDef() != null )
             recursiveParentEntityDef = recursiveParentEntityDef.getRecursiveParentEntityDef();
-        recursiveDiff = recursiveLevel - recursiveParentEntityDef.getLevel();
+        recursiveDiff = recursiveLevel - recursiveParentEntityDef.getDepth();
         if ( recursiveDiff == 0 )
         {
             // We've reset the cursor back to its "normal" state so there is no recursiveRoot.

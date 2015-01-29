@@ -5488,7 +5488,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         miLevel.setValue( cursor.getLevel( ) );
+         miLevel.setValue( cursor.getDepth( ) );
          sbEntityName.append( hierInstanceEntityName );
          miPos.setValue( 0 );
       }
@@ -5545,7 +5545,7 @@ public abstract class VmlOperation
       hierInstanceEntityName = ei.getEntityDef().getName();
       int nRC = view.cursor( hierInstanceEntityName ).setCursor( ei ).toInt();
       sbEntityName.append( hierInstanceEntityName );
-      miLevel.setValue( view.cursor( hierInstanceEntityName ).getLevel( ) );
+      miLevel.setValue( view.cursor( hierInstanceEntityName ).getDepth( ) );
       return nRC;
    }
 

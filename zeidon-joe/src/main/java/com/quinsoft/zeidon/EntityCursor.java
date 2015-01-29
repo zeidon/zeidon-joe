@@ -148,7 +148,7 @@ public interface EntityCursor extends EntityInstance
    /**
     * Deletes the selected entity and repositions the cursor.  If position =
     * CursorPosition.NONE then the cursor is NOT repositioned and is considered to
-    * point to be NULL.
+    * be NULL.
     *
     * A deleted entity and all its children will be removed from the DB if the
     * OI is committed unless parent-delete behavior is set to Restrict.
@@ -157,6 +157,12 @@ public interface EntityCursor extends EntityInstance
     * @return the result of the reposition.
     */
     CursorResult   deleteEntity( CursorPosition position );
+
+    /**
+     * Convenience method for deleteEntity( CursorPosition.NEXT );
+     */
+    @Override
+    CursorResult  deleteEntity();
 
     /**
      * Deletes the currently selected entity and all its twins.

@@ -132,7 +132,7 @@ class OiDisplay extends JPanel
         int middle = totalWidth / 2;
         int topPadding = TOP_PADDING * env.getPainterScaleFactor();
 
-        e.setBounds( left + middle, ( entityDef.getLevel() - 1 ) * e.getPaddedSize().height + topPadding,
+        e.setBounds( left + middle, ( entityDef.getDepth() - 1 ) * e.getPaddedSize().height + topPadding,
                      e.getWidth(), e.getHeight() );
         drawingPane.add(  e );
         entities.put( entityDef, e );

@@ -490,18 +490,18 @@ public class EntitySquare extends JPanel implements MouseListener
                     case 2: entityDef = entityDef.getNextHier(); break;
                     case 3:
                     {
-                        int level = entityDef.getLevel();
+                        int level = entityDef.getDepth();
                         entityDef = entityDef.getPrevHier();
-                        while ( entityDef != null && entityDef.getLevel() != level )
+                        while ( entityDef != null && entityDef.getDepth() != level )
                             entityDef = entityDef.getPrevHier();
 
                         break;
                     }
                     case 4:
                     {
-                        int level = entityDef.getLevel();
+                        int level = entityDef.getDepth();
                         entityDef = entityDef.getNextHier();
-                        while ( entityDef != null && entityDef.getLevel() != level )
+                        while ( entityDef != null && entityDef.getDepth() != level )
                             entityDef = entityDef.getNextHier();
 
                         break;

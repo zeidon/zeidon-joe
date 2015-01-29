@@ -78,13 +78,13 @@ interface EntityTraverser
             if ( next == null && scopingEntity != null )
             {
                 EntityDef entityDef = e.getEntityDef();
-                int level = e.getLevel();
+                int level = e.getDepth();
                 for ( next = e.getNextHier(); next != null; next = next.getNextHier() )
                 {
-                    if ( next.getEntityDef() == entityDef && next.getLevel() == level )
+                    if ( next.getEntityDef() == entityDef && next.getDepth() == level )
                         break; // We found what we're looking for.
 
-                    if ( next.getLevel() <= scopingEntity.getLevel() )
+                    if ( next.getDepth() <= scopingEntity.getDepth() )
                     {
                         // We've gone past the scoping entity so we've come to the end.
                         next = null;
@@ -93,7 +93,7 @@ interface EntityTraverser
 
                     // If we're looking at a descendant of 'e' then we can short-circuit
                     // some of the entities by skipping to the last twin.
-                    if ( next.getLevel() > level )
+                    if ( next.getDepth() > level )
                         next = next.getLastTwin().getLastChildHier();
                 }
             }
@@ -108,13 +108,13 @@ interface EntityTraverser
             if ( prev == null && scopingEntity != null )
             {
                 EntityDef entityDef = e.getEntityDef();
-                int level = e.getLevel();
+                int level = e.getDepth();
                 for ( prev = e.getPrevHier(); prev != null; prev = prev.getPrevHier() )
                 {
-                    if ( prev.getEntityDef() == entityDef && prev.getLevel() == level )
+                    if ( prev.getEntityDef() == entityDef && prev.getDepth() == level )
                         break; // We found what we're looking for.
 
-                    if ( prev.getLevel() <= scopingEntity.getLevel() )
+                    if ( prev.getDepth() <= scopingEntity.getDepth() )
                     {
                         prev = null;
                         break;
@@ -197,7 +197,7 @@ interface EntityTraverser
             this.ignoreHidden = ignoreHidden;
 
             child = parent.getNextHier();
-            if ( child != null && child.getLevel() <= parent.getLevel() )
+            if ( child != null && child.getDepth() <= parent.getDepth() )
                 child = null;
         }
 
@@ -215,7 +215,7 @@ interface EntityTraverser
                 else
                 {
                     child = child.getNextHier();
-                    while ( child != null && child.getLevel() > parent.getLevel() + 1 )
+                    while ( child != null && child.getDepth() > parent.getDepth() + 1 )
                     {
                         if ( child.getNextTwin() != null )
                             child = child.getNextTwin();
@@ -224,7 +224,7 @@ interface EntityTraverser
                     }
                 }
 
-                if ( child != null && child.getLevel() <= parent.getLevel() )
+                if ( child != null && child.getDepth() <= parent.getDepth() )
                     child = null;
 
                 // If we're not ignoring hidden entities then return the one we have.
@@ -284,7 +284,7 @@ interface EntityTraverser
          */
         HierTraverser( EntityInstanceImpl parent, boolean includeParent )
         {
-            this( parent, includeParent, parent.getLevel() );
+            this( parent, includeParent, parent.getDepth() );
         }
 
         /**
@@ -323,7 +323,7 @@ interface EntityTraverser
 
             // If the entity has a level <= rootLevel then it is not a child of the original
             // parent so we're done.
-            if ( ei.getLevel() <= rootLevel )
+            if ( ei.getDepth() <= rootLevel )
                 return null;
 
             return ei;
@@ -344,7 +344,7 @@ interface EntityTraverser
 
             // If the entity has a level <= rootLevel then it is not a child of the original
             // parent so we're done.
-            if ( ei.getLevel() <= rootLevel )
+            if ( ei.getDepth() <= rootLevel )
                 return null;
 
             return ei;
