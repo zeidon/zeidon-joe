@@ -1,0 +1,87 @@
+{
+  ".meta" : {
+    "version" : "1",
+    "date" : "2015-01-29T13:15:28.933"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "OpenCUAS",
+      "odName" : "mSAProf",
+      "incremental" : true
+    },
+    "StudentAccountProfile" : [ {
+      ".meta" : {
+        "selected" : true
+      },
+      "ID" : "4613",
+      "AccountBalance" : "0.0",
+      "Note" : "Called left message to come see me. jp 4.11.12  :)",
+      "BalanceForward" : "0.0",
+      "HealthInsuranceWaiver" : "Y",
+      "NoInterest" : "Y",
+      "InterestPercent" : "0.0",
+      "MealPlanWaiver" : "Y",
+      "BillingNeedsUpdated" : "Y",
+      "BillingFlagAcademics" : "Y",
+      "Cleared" : "Y",
+      "dBalance" : "0.0",
+      "dPreviousBalance" : "0.0",
+      "dClassCharges" : "0.0",
+      "dTotalCreditHours" : "0.0",
+      "dTotalCharges" : "0.0",
+      "dTotalSACredits" : "0.0",
+      "wOrigHealthInsuranceWaiver" : "Y",
+      "wOrigMealPlanWaiver" : "Y",
+      "FKIDADMINISTRATIVE" : "1",
+      "FK_ID_STUDENT" : "50670",
+      "ProfileAdministrativeDivision" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "1",
+        "Name" : "SWAU",
+        "Description" : "Single Campus for Traditional and Distance Learning",
+        "FK_ID_DOCUMENT" : "921"
+      } ],
+      "Title4AuthorizationFlagHistory" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "7",
+        "Title4AuthorizationFlagValue" : "N",
+        "ModifiedDateTime" : "20110715024507",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      }, {
+        "ID" : "6",
+        "Title4AuthorizationFlagValue" : "N",
+        "ModifiedDateTime" : "20110712130748",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      }, {
+        "ID" : "5",
+        "Title4AuthorizationFlagValue" : "Y",
+        "ModifiedDateTime" : "20110712130729",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      }, {
+        "ID" : "4",
+        "Title4AuthorizationFlagValue" : "N",
+        "ModifiedDateTime" : "20110712130705",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      }, {
+        "ID" : "3",
+        "Title4AuthorizationFlagValue" : "Y",
+        "ModifiedDateTime" : "20110712121733",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      }, {
+        "ID" : "2",
+        "Title4AuthorizationFlagValue" : "N",
+        "ModifiedDateTime" : "20110624095952",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      }, {
+        "ID" : "1",
+        "Title4AuthorizationFlagValue" : "Y",
+        "ModifiedDateTime" : "20110624095907",
+        "FKIDSTUDENTACCOUNT" : "4613"
+      } ]
+    } ]
+  } ]
+}
