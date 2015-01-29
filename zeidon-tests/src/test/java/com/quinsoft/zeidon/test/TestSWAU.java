@@ -44,6 +44,16 @@ public class TestSWAU
 	}
 
 	@Test
+	public void testIntegrityRules()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mSAProf" );
+		SwauVmlTester tester = new SwauVmlTester( testview );
+		tester.testIntegrityRules( testview );
+        System.out.println("===== Finished testIntegrityRules ========");
+	}
+
+	@Test
 	public void testSAProfIncludeMealPlan()
 	{
 	    View         testview;
@@ -61,6 +71,35 @@ public class TestSWAU
 			super( view );
 		}
 
+		public int
+		testIntegrityRules( View ViewToWindow )
+		{
+			zVIEW    mSAProfT      = new zVIEW( );
+			int RESULT=0;
+			   
+			   // This is an object where the entity STUDENT (under the root) has been restricted. STUDENT
+			   // is a 1 to 1 with root, but the commit should not cause an error.
+		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
+		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.por", zSINGLE );
+			   //omSAProf_fnLocalBuildQual_29( mSAProf, vTempViewVar_0 );
+			   //RESULT = ActivateObjectInstance( mSAProfT, "mSAProf", mSAProf, vTempViewVar_0, zSINGLE );
+			   //DropView( vTempViewVar_0 );
+			   //:COMMIT mSAProfT
+			   RESULT = CommitObjectInstance( mSAProfT );
+			   DropObjectInstance( mSAProfT );
+
+			   // This is an object where the entity STUDENT (under the root) exists. 
+			   // Excluding Student and then committing should cause an error.
+		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
+		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfTWStud.por", zSINGLE );
+			   //:EXCLUDE mSAProfT.Student 
+			   RESULT = ExcludeEntity( mSAProfT, "Student", zREPOS_AFTER );
+
+			   //:COMMIT mSAProfT
+			   RESULT = CommitObjectInstance( mSAProfT );
+			   DropObjectInstance( mSAProfT );
+			return 0;
+		}
 
 		public int
 		testSAProfIncludeMealPlan( View ViewToWindow )
