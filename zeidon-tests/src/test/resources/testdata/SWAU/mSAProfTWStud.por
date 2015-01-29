@@ -188,7 +188,7 @@ aType      Billing
 aLine1     Men's Dorm FAKE STUDENT 2
 aCity      Keene
 aStateProvince TX
-aCountry   USA
+aCountry   US
 aPostalCode 76059
 aFK_ID_PERSON 175633
 
@@ -206,7 +206,7 @@ aType      Permanent
 aLine1     Men's Dorm FAKE Student 3
 aCity      Keene
 aStateProvince TX
-aCountry   USA
+aCountry   US
 aPostalCode 76059
 aFK_ID_PERSON 175633
 
