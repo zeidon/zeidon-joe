@@ -261,7 +261,7 @@ class IteratorBuilder
             if ( currentInstance == null )
             {
                 currentInstance = scopingInstance.getNextHier();
-                if ( currentInstance == null || currentInstance.getLevel() <= scopingInstance.getLevel() )
+                if ( currentInstance == null || currentInstance.getDepth() <= scopingInstance.getDepth() )
                     return s_emptyIterator;
             }
 
@@ -307,14 +307,14 @@ class IteratorBuilder
                     // which really amounts to no scoping.  However, the initialInstance references the parent
                     // scoping EI.  Find the first EI matching targetEntityDef under the current initialInstance.
                     assert targetEntityDef.getParent() == initialInstance.getEntityDef();
-                    int level = initialInstance.getLevel();
+                    int level = initialInstance.getDepth();
                     initialInstance = initialInstance.getNextHier();
-                    while ( initialInstance != null && initialInstance.getEntityDef() != targetEntityDef && initialInstance.getLevel() > level )
+                    while ( initialInstance != null && initialInstance.getEntityDef() != targetEntityDef && initialInstance.getDepth() > level )
                     {
                         initialInstance = initialInstance.getLastTwin().getLastChildHier().getNextHier();
                     }
 
-                    if ( initialInstance != null && initialInstance.getLevel() <= level )
+                    if ( initialInstance != null && initialInstance.getDepth() <= level )
                         initialInstance = null;
 
                     assert initialInstance == null || initialInstance.getEntityDef() == targetEntityDef;
@@ -832,7 +832,7 @@ class IteratorBuilder
                 if ( targetEntityDef != null &&
                      ( ! targetEntityDef.isRecursive() && ! targetEntityDef.isRecursiveParent() ) )
                 {
-                    if ( nextInstance.getLevel() > targetEntityDef.getLevel() )
+                    if ( nextInstance.getDepth() > targetEntityDef.getDepth() )
                         nextInstance = nextInstance.getLastTwin().getLastChildHier();
                 }
             }
@@ -922,7 +922,7 @@ class IteratorBuilder
             findPrev();
 
             if ( cursor != null )
-                cursor.resetChildCursors( currentInstance );
+                cursor.setCursor( currentInstance );
 
             return currentInstance;
         }

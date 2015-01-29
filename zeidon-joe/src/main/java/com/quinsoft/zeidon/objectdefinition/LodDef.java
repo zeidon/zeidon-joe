@@ -159,7 +159,7 @@ public class LodDef implements PortableFileAttributeHandler
     private void addEntityDef( EntityDef entityDef )
     {
         nameMap.put( entityDef.getName(), entityDef );
-        height = Math.max( height, entityDef.getLevel() );
+        height = Math.max( height, entityDef.getDepth() );
         entityList.add( entityDef );
     }
 
@@ -288,7 +288,7 @@ public class LodDef implements PortableFileAttributeHandler
         for ( EntityDef entityDef : getViewEntitiesHier() )
         {
             task.log().info( "%s %d, count = %d", entityDef.getName(),
-                              entityDef.getLevel(), entityDef.getChildCount() );
+                              entityDef.getDepth(), entityDef.getChildCount() );
             for ( AttributeDef attrib : entityDef.getAttributes() )
             {
                 Domain domain = attrib.getDomain();

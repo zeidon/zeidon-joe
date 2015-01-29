@@ -124,7 +124,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
             return new PortableFileAttributeHandler.NullAttributeHandler();
         }
 
-        int entityDefLevel = entityDef.getLevel() + view.getViewCursor().getRecursiveDiff();
+        int entityDefLevel = entityDef.getDepth() + view.getViewCursor().getRecursiveDiff();
         if ( entityDefLevel < level )
         {
             // If the entityDef level is < level than the last entity we created must
@@ -137,7 +137,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
             while ( entityDefLevel > level )
             {
                 view.resetSubobject();
-                entityDefLevel = entityDef.getLevel() + view.getViewCursor().getRecursiveDiff();
+                entityDefLevel = entityDef.getDepth() + view.getViewCursor().getRecursiveDiff();
             }
         }
 

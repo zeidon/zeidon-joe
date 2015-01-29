@@ -20,10 +20,15 @@
 package com.quinsoft.zeidon;
 
 /**
- * @author DG
+ * Interface for defining how an object browser can be started.
  *
  */
 public interface BrowserStarter
 {
+    /**
+     * Start the browser for the specified object engine.
+     *
+     * @param oe the object engine to browse.
+     */
     void startBrowser( ObjectEngine oe );
 }

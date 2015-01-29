@@ -721,7 +721,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             // entity is below the other.
             DataRecord dataRecord;
             EntityInstanceImpl childInstance;
-            if ( srcInstance.getLevel() < ei.getLevel() )
+            if ( srcInstance.getDepth() < ei.getDepth() )
             {
                 // ei is under srcInstance
                 dataRecord = entityDef.getDataRecord();

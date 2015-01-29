@@ -1894,7 +1894,6 @@ public abstract class VmlOperation
    //          zCALL_ERROR - error creating new view
    protected int SetViewToSubobject( View view, String entityName )
    {
-      int nRC;
       LodDef lodDef = view.getLodDef();
       EntityDef entityDef = lodDef.getEntityDef( entityName );
 
@@ -1906,16 +1905,8 @@ public abstract class VmlOperation
           return 0;
 
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.setToSubobject() )
-      {
-         nRC = 0;
-      }
-      else
-      {
-         nRC = -1;
-      }
-
-      return nRC;
+      cursor.setToSubobject();
+      return 0;
    }
 
    //  RETURNS: 0           - View successfully reset
@@ -5497,7 +5488,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         miLevel.setValue( cursor.getLevel( ) );
+         miLevel.setValue( cursor.getDepth( ) );
          sbEntityName.append( hierInstanceEntityName );
          miPos.setValue( 0 );
       }
@@ -5554,7 +5545,7 @@ public abstract class VmlOperation
       hierInstanceEntityName = ei.getEntityDef().getName();
       int nRC = view.cursor( hierInstanceEntityName ).setCursor( ei ).toInt();
       sbEntityName.append( hierInstanceEntityName );
-      miLevel.setValue( view.cursor( hierInstanceEntityName ).getLevel( ) );
+      miLevel.setValue( view.cursor( hierInstanceEntityName ).getDepth( ) );
       return nRC;
    }
 

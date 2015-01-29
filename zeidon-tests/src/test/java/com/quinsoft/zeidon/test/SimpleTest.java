@@ -159,6 +159,7 @@ class SimpleTest
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
+        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
 
         View stud = new QualificationBuilder( zencas )
@@ -172,6 +173,7 @@ class SimpleTest
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "dgc@xyz.com" );
         stud.cursor( "Student" ).setPosition( 6 );
         String id = stud.cursor( "Student" ).getAttribute( "ID" ).getString();
+        stud.cursor(  "StudentMajorDegreeTrack" ).setPrevWithinOi();
 //        stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
         stud.serializeOi().asJson().toFile( "/tmp/stud2.json" );
 

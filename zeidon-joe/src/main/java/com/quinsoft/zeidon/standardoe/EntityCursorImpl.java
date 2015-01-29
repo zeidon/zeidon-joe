@@ -153,7 +153,7 @@ class EntityCursorImpl implements EntityCursor
                 // Do some validity checking.  Parent shouldn't be higher in the hier structure
                 // than the recursive root.
                 if ( viewCursor.getRecursiveRoot() != null &&
-                     viewCursor.getRecursiveRoot().getLevel() > parentInstance.getLevel() )
+                     viewCursor.getRecursiveRoot().getDepth() > parentInstance.getDepth() )
                 {
                     throw new ZeidonException("Internal error: parent level for %s doesn't match " +
                                               "level for suboject root %s", parentInstance,
@@ -182,7 +182,7 @@ class EntityCursorImpl implements EntityCursor
                 //    2) Has the same instance level for the entityDef + recursive diff.
                 //       Checking for instance level will skip over recursive suboject
                 //       instances with the same LodDef.
-                int level = entityDef.getLevel() + viewCursor.getRecursiveDiff();
+                int level = entityDef.getDepth() + viewCursor.getRecursiveDiff();
                 for ( ; searchInstance != null; searchInstance = searchInstance.getNextHier() )
                 {
                     // TODO: Since we're running through all the entities
@@ -190,7 +190,7 @@ class EntityCursorImpl implements EntityCursor
 
                     // If the searchInstance level is less than the parent then there is no
                     // entity that matches what we want.
-                    if ( searchInstance.getLevel() <= parentInstance.getLevel() )
+                    if ( searchInstance.getDepth() <= parentInstance.getDepth() )
                     {
                         searchInstance = null;
                         break;
@@ -200,7 +200,7 @@ class EntityCursorImpl implements EntityCursor
                         continue;
 
                     EntityDef searchEntityDef = searchInstance.getEntityDef();
-                    if ( searchEntityDef == entityDef && searchInstance.getLevel() == level )
+                    if ( searchEntityDef == entityDef && searchInstance.getDepth() == level )
                         break;
                 }
 
@@ -298,7 +298,7 @@ class EntityCursorImpl implements EntityCursor
         // Now copy children.  We can't use the usual iterator because we need to skip over
         // children if we include a child entity.
         for ( EntityInstanceImpl child = sourceInstance.getNextHier();
-              child != null && child.getLevel() > sourceInstance.getLevel();
+              child != null && child.getDepth() > sourceInstance.getDepth();
               child = child.getNextHier() )
         {
             if ( child.isHidden() )
@@ -490,7 +490,7 @@ class EntityCursorImpl implements EntityCursor
 
         setEntityInstance( ei );
         for ( EntityCursorImpl resetCsr = this.getNextHierCursor();
-              resetCsr != null && resetCsr.getEntityDef().getLevel() > this.getEntityDef().getLevel();
+              resetCsr != null && resetCsr.getEntityDef().getDepth() > this.getEntityDef().getDepth();
               resetCsr = resetCsr.getNextHierCursor() )
         {
             resetCsr.setEntityInstance( null );
@@ -786,9 +786,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public int getLevel() throws NullCursorException
+    public int getDepth() throws NullCursorException
     {
-        return getExistingInstance().getLevel();
+        return getExistingInstance().getDepth();
     }
 
     /**
@@ -1330,7 +1330,7 @@ class EntityCursorImpl implements EntityCursor
         {
             return new Iterator<EntityCursorImpl>() {
                 private EntityCursorImpl current = cursor;
-                private final int startLevel = cursor.getEntityDef().getLevel();
+                private final int startLevel = cursor.getEntityDef().getDepth();
 
                 @Override
                 public boolean hasNext()
@@ -1339,7 +1339,7 @@ class EntityCursorImpl implements EntityCursor
                     if ( next == null )
                         return false;
 
-                    if ( next.getEntityDef().getLevel() <= startLevel )
+                    if ( next.getEntityDef().getDepth() <= startLevel )
                         return false;
 
                     return true;
@@ -1679,7 +1679,7 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public boolean setToSubobject()
+    public void setToSubobject()
     {
         if ( entityDef.getParent() == null )
             throw new ZeidonException("Entity %s is the root of the LodDef", getEntityDef() );
@@ -1695,14 +1695,12 @@ class EntityCursorImpl implements EntityCursor
         EntityDef recursiveParentEntityDef = getEntityDef().getRecursiveParentEntityDef();
         viewCursor.setRecursiveParent( ei, getEntityDef(), parentOfSubobject );
         viewCursor.getEntityCursor( recursiveParentEntityDef ).resetChildCursors( ei );
-        return true;
     }
 
     @Override
     public boolean resetSubobjectToParent()
     {
-        viewCursor.resetSubobjectToParent();
-        return true;
+        return viewCursor.resetSubobjectToParent();
     }
 
     EntityCursorImpl getParentCursor()
@@ -2644,13 +2642,22 @@ class EntityCursorImpl implements EntityCursor
                                     .forEntityDef( getEntityDef() )
                                     .setLast()
                                     .build();
-        if ( ! currentIterator.hasNext() )
+
+        if ( ! currentIterator.hasPrev() )
             return CursorResult.UNCHANGED;
 
-        currentIterator.next();
+        currentIterator.prev();
+        assert assertParentCursors() : "Parent cursors are out of whack";
         return CursorResult.SET;
     }
 
+    private boolean assertParentCursors()
+    {
+        if ( getParentCursor() == null )
+            return true;
+
+        return getParentCursor().getEntityInstance() == getEntityInstance().getParent();
+    }
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EntityCursor#setPrevWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
      */

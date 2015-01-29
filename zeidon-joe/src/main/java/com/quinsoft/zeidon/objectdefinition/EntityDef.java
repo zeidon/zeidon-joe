@@ -64,7 +64,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private int        erEntityToken;
     private int        erRelToken;
     private boolean    erRelLink;  // RelLink direction.  True = '1' from the XOD file.
-    private final int        level;
+    private final int        depth;
     private final int        entityNumber;
     private List<EntityDef> children;
     private List<EntityDef> childrenHier;
@@ -154,7 +154,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     {
         this.lodDef = lodDef;
         this.entityNumber = lodDef.getEntityCount();
-        this.level = level;
+        this.depth = level;
         keys = new ArrayList<AttributeDef>();
         lazyLoadConfig = new LazyLoadConfig();
     }
@@ -462,9 +462,14 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         this.nextSibling = nextSibling;
     }
 
-    public int getLevel()
+    /**
+     * Returns the depth of this EntityDef.  The root has a depth of 1.
+     *
+     * @return entity depth.
+     */
+    public int getDepth()
     {
-        return level;
+        return depth;
     }
 
     void addAttributeDef( AttributeDef attributeDef )
@@ -642,7 +647,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
         List<EntityDef> list = new ArrayList<EntityDef>();
         for ( EntityDef child = this.getNextHier();
-              child != null && child.getLevel() > this.getLevel();
+              child != null && child.getDepth() > this.getDepth();
               child = child.getNextHier() )
         {
             list.add( child );

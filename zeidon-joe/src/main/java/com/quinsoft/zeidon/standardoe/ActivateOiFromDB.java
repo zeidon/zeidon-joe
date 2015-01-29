@@ -245,19 +245,10 @@ class ActivateOiFromDB implements Activator
                     continue;
                 }
 
+                // If the child entity has qualification then we won't have all of the children
+                // loaded.  Call setIncomplete to prevent this entity from being deleted.
                 if ( dbHandler.isQualified( childEntityDef ) )
-                {
-                    parentEi.setIncomplete( true );
-
-                    // Now set the flag for any parents that will cause the child to be deleted
-                    // if the parent is deleted.
-                    for ( EntityInstanceImpl p = parentEi;
-                          p != null && p.getEntityDef().isParentDelete();
-                          p = p.getParent() )
-                    {
-                        p.setIncomplete( true );
-                    }
-                }
+                    parentEi.setIncomplete( childEntityDef );
 
                 int load = dbHandler.loadEntity( view, childEntityDef );
                 if ( load == DbHandler.LOAD_DONE )

@@ -23,8 +23,6 @@ import java.util.EnumSet;
 
 /**
  * Enum of commit flags.
- * 
- * @author DG
  *
  */
 public enum CommitFlags
@@ -33,19 +31,15 @@ public enum CommitFlags
      * Don't commit OIs but drop any pessimistic locks.
      */
     fDROP_LOCKS_ONLY,
-    
-    /**
-     * Force commit to be in its own transaction.
-     */
-    fFORCE_TRANSACTION,
-    
+
     /**
      * Don't drop pessimistic locks
      */
     fKEEP_LOCKS,
-    
+
     /**
-     * Do not execute commit constraints.
+     * Do not execute commit constraints.  This is intended to be used by
+     * DB Handlers.
      */
     fNO_CONSTRAINTS,
 
@@ -54,6 +48,6 @@ public enum CommitFlags
      * internally by client-server processing to send new flags to client.
      */
     fNO_CLEANUP;
-    
+
     public static final EnumSet<CommitFlags> NONE = EnumSet.noneOf( CommitFlags.class );
 }

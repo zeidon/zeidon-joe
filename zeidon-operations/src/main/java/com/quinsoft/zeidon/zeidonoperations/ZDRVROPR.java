@@ -139,29 +139,29 @@ public class ZDRVROPR extends VmlOperation
 
          try
          {
-        	 if ( from != null && !from.isEmpty() )
+          if ( from != null && !from.isEmpty() )
                 fromAddress = new InternetAddress(from);
-        	 if ( szRecipientEmailAddress != null && !szRecipientEmailAddress.isEmpty() )
-        	 {
-	             for(int iCnt =0; iCnt< to.length; iCnt++)
-	             {
-	            	 toAddress[iCnt] = new InternetAddress(to[iCnt]);
-	             }
-        	 }
-        	 if ( szCCAddress != null && !szCCAddress.isEmpty() )
-        	 {
-	             for(int iCnt =0; iCnt< cc.length; iCnt++)
-	             {
-	            	 ccAddress[iCnt] = new InternetAddress(cc[iCnt]);
-	             }
-        	 }
-        	 if ( szBCCAddress != null && !szBCCAddress.isEmpty() )
-        	 {
-	             for(int iCnt =0; iCnt< bcc.length; iCnt++)
-	             {
-	            	 bccAddress[iCnt] = new InternetAddress(bcc[iCnt]);
-	             }
-        	 }
+          if ( szRecipientEmailAddress != null && !szRecipientEmailAddress.isEmpty() )
+          {
+                for(int iCnt =0; iCnt< to.length; iCnt++)
+                {
+                   toAddress[iCnt] = new InternetAddress(to[iCnt]);
+                }
+          }
+          if ( szCCAddress != null && !szCCAddress.isEmpty() )
+          {
+                for(int iCnt =0; iCnt< cc.length; iCnt++)
+                {
+                   ccAddress[iCnt] = new InternetAddress(cc[iCnt]);
+                }
+          }
+          if ( szBCCAddress != null && !szBCCAddress.isEmpty() )
+          {
+                for(int iCnt =0; iCnt< bcc.length; iCnt++)
+                {
+                   bccAddress[iCnt] = new InternetAddress(bcc[iCnt]);
+                }
+          }
          } catch (AddressException e) {
              task.log().error( "*** CreateSeeMessage: setting addresses **** " );
              task.log().error( e );
@@ -170,12 +170,12 @@ public class ZDRVROPR extends VmlOperation
          // Set the FROM message
          msg.setFrom(fromAddress);
 
-    	 if ( szRecipientEmailAddress != null && !szRecipientEmailAddress.isEmpty() )
-    		 msg.setRecipients(Message.RecipientType.TO, toAddress);
+       if ( szRecipientEmailAddress != null && !szRecipientEmailAddress.isEmpty() )
+          msg.setRecipients(Message.RecipientType.TO, toAddress);
          if ( szCCAddress != null && !szCCAddress.isEmpty() )
              msg.setRecipients(Message.RecipientType.CC, ccAddress);
-     	 if ( szBCCAddress != null && !szBCCAddress.isEmpty() )
-     		 msg.setRecipients(Message.RecipientType.BCC, bccAddress);
+       if ( szBCCAddress != null && !szBCCAddress.isEmpty() )
+          msg.setRecipients(Message.RecipientType.BCC, bccAddress);
 
           // Set the message subject and date we sent it.
           msg.setSubject(szSubjectText);
@@ -220,37 +220,37 @@ public class ZDRVROPR extends VmlOperation
        return 0;
     }
 
-    public void RefreshCtrl( View ViewToWindow, String ctrlName )
-    {
-       // TODO - Do we need to create code here?
-    }
+   public void RefreshCtrl( View ViewToWindow, String ctrlName )
+   {
+      // TODO - Do we need to create code here?
+   }
 
-    public int PrintReportToPDF( View ViewToWindow, View view, String entityName,
-                                 String reportDefName, String reportName, int flag)
-    {
-      //String pdfName="";
-      String xmlName="";
-      String xslName="";
-      //StringBuilder xsltPath;
-      //StringBuilder pdfPath;
+   public int PrintReportToPDF( View ViewToWindow, View view, String entityName,
+                                String reportDefName, String reportName, int flag)
+   {
+     //String pdfName="";
+     String xmlName="";
+     String xslName="";
+     //StringBuilder xsltPath;
+     //StringBuilder pdfPath;
 
-      // We need to create the xml file.  Then call ConvertXMLToPDF which uses the XSLT file created
-      // from within the report to create a pdf file.
-      //GenerateXSLT_XML( view, reportDefName, reportName, entityName );
-      //m_TZRPSXML.oTZRPSRCO_GenerateXSLT_XML( view, reportDefName, reportName, entityName );
-      new TZRPSXML_Object( ViewToWindow ).oTZRPSRCO_GenerateXSLT_XML( view, reportDefName, reportName, entityName );
-       //pdfPath = new StringBuilder( );
-      String xsltPath = task.readZeidonConfig( task.getApplication().getName(), "XSLTDirectory" );
-      //m_KZOEP1AA.SysReadZeidonIni( -1, "[App.Zencas]", "XSLTDirectory", xsltPath );
+     // We need to create the xml file.  Then call ConvertXMLToPDF which uses the XSLT file created
+     // from within the report to create a pdf file.
+     //GenerateXSLT_XML( view, reportDefName, reportName, entityName );
+     //m_TZRPSXML.oTZRPSRCO_GenerateXSLT_XML( view, reportDefName, reportName, entityName );
+     new TZRPSXML_Object( ViewToWindow ).oTZRPSRCO_GenerateXSLT_XML( view, reportDefName, reportName, entityName );
+      //pdfPath = new StringBuilder( );
+     String xsltPath = task.readZeidonConfig( task.getApplication().getName(), "XSLTDirectory" );
+     //m_KZOEP1AA.SysReadZeidonIni( -1, "[App.Zencas]", "XSLTDirectory", xsltPath );
 
-      //pdfName = pdfPath.toString() + "pdf/" + reportName + ".pdf";
-      xmlName = xsltPath + reportName + ".xml";
-      xslName = xsltPath + reportDefName + ".xsl";
+     //pdfName = pdfPath.toString() + "pdf/" + reportName + ".pdf";
+     xmlName = xsltPath + reportName + ".xml";
+     xslName = xsltPath + reportDefName + ".xsl";
 
-      ConvertXMLToPDF( xmlName, xslName, reportName );
+     ConvertXMLToPDF( xmlName, xslName, reportName );
 
-      return 0;
-    }
+     return 0;
+   }
 
    public int ConvertXMLToPDF( String xml, String xsl, String pdf )
    {
@@ -265,72 +265,75 @@ public class ZDRVROPR extends VmlOperation
       String szPathName = task.readZeidonConfig( "[App." + task.getApplication().getName() + "]", "WebDirectory" );
       szPathName = m_KZOEP1AA.SysConvertEnvironmentString( "", szPathName );
 
-		//String copyPdf = "C:/Program Files/Apache Group/Tomcat 6.0/webapps/ROOT/zencas/pdf/" + pdf;
-		String copyPdf = szPathName + "pdf/" + pdf;
-		try
-		{
-			// Step 1: Construct a FopFactory
-			// (reuse if you plan to render multiple documents!)
-			FopFactory fopFactory = FopFactory.newInstance();
+      //String copyPdf = "C:/Program Files/Apache Group/Tomcat 6.0/webapps/ROOT/zencas/pdf/" + pdf;
+      String copyPdf = szPathName + "pdf/" + pdf;
+      try
+      {
+         // Step 1: Construct a FopFactory
+         // (reuse if you plan to render multiple documents!)
+         FopFactory fopFactory = FopFactory.newInstance();
 
-			// Step 2: Set up output stream.
-			// Note: Using BufferedOutputStream for performance reasons (helpful with FileOutputStreams).
-			//OutputStream out = new BufferedOutputStream(new FileOutputStream(new File("C:/temp/name.pdf")));
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(copyPdf)));
-            try
-            {
-	           // Step 3: Construct fop with desired output format
-	           Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
+         // Step 2: Set up output stream.
+         // Note: Using BufferedOutputStream for performance reasons (helpful with FileOutputStreams).
+         //OutputStream out = new BufferedOutputStream(new FileOutputStream(new File("C:/temp/name.pdf")));
+         OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(copyPdf)));
+         try
+         {
+            // Step 3: Construct fop with desired output format
+            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
 
-	           // Step 4: Setup JAXP using identity transformer
-	           TransformerFactory factory = TransformerFactory.newInstance();
-	           //Transformer transformer = factory.newTransformer(); // identity transformer
+            // Step 4: Setup JAXP using identity transformer
+            TransformerFactory factory = TransformerFactory.newInstance();
+            //Transformer transformer = factory.newTransformer(); // identity transformer
 
-	           //without XSLT:
-	           //Transformer transformer = factory.newTransformer(); // identity transformer
+            //without XSLT:
+            //Transformer transformer = factory.newTransformer(); // identity transformer
 
-	           //with XSLT:
-	           //javax.xml.transform.Source xslt = new StreamSource(new File("c:/temp/name2fo.xsl"));
-	           javax.xml.transform.Source xslt = new StreamSource(new File(xsl));
-	           Transformer transformer = factory.newTransformer(xslt);
+            //with XSLT:
+            //javax.xml.transform.Source xslt = new StreamSource(new File("c:/temp/name2fo.xsl"));
+            javax.xml.transform.Source xslt = new StreamSource(new File(xsl));
+            Transformer transformer = factory.newTransformer(xslt);
 
-	           // Step 5: Setup input and output for XSLT transformation
-	           // Setup input stream
-	           //Source src = new StreamSource(new File("C:/Temp/myfile.fo"));
-	           //javax.xml.transform.Source src = new StreamSource(new File("C:/temp/name.xml"));
-	           javax.xml.transform.Source src = new StreamSource(new File(xml));
-	           // Resulting SAX events (the generated FO) must be piped through to FOP
-	           Result res = new SAXResult(fop.getDefaultHandler());
+            // Step 5: Setup input and output for XSLT transformation
+            // Setup input stream
+            //Source src = new StreamSource(new File("C:/Temp/myfile.fo"));
+            //javax.xml.transform.Source src = new StreamSource(new File("C:/temp/name.xml"));
+            javax.xml.transform.Source src = new StreamSource(new File(xml));
+            // Resulting SAX events (the generated FO) must be piped through to FOP
+            Result res = new SAXResult(fop.getDefaultHandler());
 
-	           // Step 6: Start XSLT transformation and FOP processing
-	           transformer.transform(src, res);
+            // Step 6: Start XSLT transformation and FOP processing
+            transformer.transform(src, res);
 
-	           // We set the report name in KZXMLPGO so that
-	           // we can retrieve this name in FindOpenFile (kzoejava.c) when trying to
-	           // open the file in the jsp files.
-	           View vKZXMLPGO = task.getViewByName( "_KZXMLPGO" );
-	           vKZXMLPGO.cursor("Session").setAttribute("PrintFileName", pdf);
-	           vKZXMLPGO.cursor("Session").setAttribute("PrintFileType", "pdf");
+            // We set the report name in KZXMLPGO so that
+            // we can retrieve this name in FindOpenFile (kzoejava.c) when trying to
+            // open the file in the jsp files.
+            View vKZXMLPGO = task.getViewByName( "_KZXMLPGO" );
+            vKZXMLPGO.cursor("Session").setAttribute("PrintFileName", pdf);
+            vKZXMLPGO.cursor("Session").setAttribute("PrintFileType", "pdf");
+         }
+         catch (Exception e)
+         {
+            task.log().error( "*** ConvertXMLToPDF transform exception **** " + e );
+         } finally {
+            //Clean-up
+            out.close();
+         }
+      }
+      catch (Exception e)
+      {
+         task.log().error( "*** ConvertXMLToPDF factory exception **** " + e );
+      }
 
-            } finally {
-              //Clean-up
-              out.close();
-            }
-        }
-        catch (Exception e)
-        {
+      return 0;
+   }
 
-        }
-
-     return 0;
-    }
-
-    public int PrintReportToHTML( View viewToWindow, View resultSetSingle,
-                                  String rootEntityName, String reportName, String reportFullName, int i )
-    {
-       // TODO ... DKS???
-       return 0;
-    }
+   public int PrintReportToHTML( View viewToWindow, View resultSetSingle,
+                                 String rootEntityName, String reportName, String reportFullName, int i )
+   {
+      // TODO ... DKS???
+      return 0;
+   }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //

@@ -167,7 +167,7 @@ public class WriteOiToPorStream implements StreamWriter
                 ei.setHierIndex( hierIndex++ );
 
                 // Write out entity name and instance flags.
-                write( "e%-9s %d", entityDef.getName(), ei.getLevel() );
+                write( "e%-9s %d", entityDef.getName(), ei.getDepth() );
                 if ( writeIncremental )
                 {
                     // Write the incremental flags.

@@ -21,14 +21,26 @@ package com.quinsoft.zeidon;
 import java.util.List;
 
 /**
- * Interface that defines methods used to commit an object to a DB.
- *
- * @author dgc
+ * Interface that defines methods used to commit an object to a DB.  DB handlers
+ * will implement this interface.
  *
  */
 public interface Committer
 {
+    /**
+     * Initialize the committer to commit.
+     * @param task the owning task.
+     * @param viewList the list of views that will be committed.  When applicable all
+     * views should be committed in the same transaction.
+     * @param options commit options.
+     */
     void init( Task task, List<? extends View> viewList, CommitOptions options );
 
+    /**
+     * Commit the views specified in the init() call.
+     *
+     * @return the list of committed views that correspond to the original views.
+     * Usually they will be the same views but it is not guaranteed.
+     */
     List<? extends View> commit();
 }

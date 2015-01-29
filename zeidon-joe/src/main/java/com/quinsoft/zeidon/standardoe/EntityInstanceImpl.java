@@ -79,7 +79,7 @@ class EntityInstanceImpl implements EntityInstance
 
     private final ObjectInstance  objectInstance;
     private final EntityDef      entityDef;
-    private final int             level;
+    private final int             depth;
     private final long            entityKey;
 
     private UUID                  uuid;
@@ -211,7 +211,7 @@ class EntityInstanceImpl implements EntityInstance
         this.entityDef = entityDef;
         objectInstance = null;
         entityKey = NumberUtils.LONG_ZERO;
-        level = -1;
+        depth = -1;
         this.attributeHashkeyMap = null;
     }
 
@@ -258,7 +258,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( parentInstance != null )
         {
             this.setParent( parentInstance );
-            this.level = parentInstance.getLevel() + 1;
+            this.depth = parentInstance.getDepth() + 1;
             if ( parentInstance.isVersioned() )
                 setVersionStatus( VersionStatus.UNACCEPTED );
             else
@@ -273,7 +273,7 @@ class EntityInstanceImpl implements EntityInstance
         {
             setVersionStatus( VersionStatus.NONE );
             this.versionNumber = 0;
-            this.level = 1;
+            this.depth = 1;
         }
     }
 
@@ -609,9 +609,9 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public int getLevel()
+    public int getDepth()
     {
-        return level;
+        return depth;
     }
 
     /**
@@ -633,15 +633,15 @@ class EntityInstanceImpl implements EntityInstance
                 return getNextTwin().getPrevHier();
         }
 
-        // If 'this' doesn't have a next hier or if the next hier has a level that is
+        // If 'this' doesn't have a next hier or if the next hier has a depth that is
         // not below 'this' then return 'this' because it has no descendants.
-        if ( getNextHier() == null || getNextHier().getLevel() <= level )
+        if ( getNextHier() == null || getNextHier().getDepth() <= depth )
             return this;
 
         EntityInstanceImpl prev = null;
         EntityInstanceImpl search;
         for ( search = this.getNextHier();
-              search != null && search.getLevel() > level;
+              search != null && search.getDepth() > depth;
               prev = search, search = search.getNextHier() )
         {
             // We can short-circuit descendants by going to the last twin.
@@ -681,13 +681,13 @@ class EntityInstanceImpl implements EntityInstance
             if ( next.getEntityDef() == searchEntityDef )
                 return next; // We found what we're looking for.
 
-            if ( next.getLevel() <= this.getLevel() )
+            if ( next.getDepth() <= this.getDepth() )
                 // We've gone past the last hier so we're done.
                 return null;
 
             // If we're looking at a descendant of 'e' then we can short-circuit
             // some of the entities by skipping to the last twin.
-            if ( next.getLevel() > searchEntityDef.getLevel() )
+            if ( next.getDepth() > searchEntityDef.getDepth() )
                 next = next.getLastTwin().getLastChildHier();
         }
 
@@ -1079,9 +1079,11 @@ class EntityInstanceImpl implements EntityInstance
             throw new ZeidonException( "Entity is not flagged for delete." )
                             .prependEntityDef( getEntityDef() );
 
-        if ( isIncomplete() )
+        if ( isIncomplete() && getEntityDef().isPersistent() )
             throw new ZeidonException( "This entity instance may not be deleted because it is incomplete.  " +
-                                       "One or more of its children were activated with qualification that limited results." )
+                                       "One or more of its children were activated with qualification that limited results.  " +
+                                       "or a child entity was dropped.  It might be possible to get around this error by " +
+                                       "dropping %s instead of deleting it", getEntityDef().getName() )
                                     .prependEntityInstance( this );
 
         // If checkRestrictedDelete is set, then make sure none of the child entities
@@ -1106,9 +1108,9 @@ class EntityInstanceImpl implements EntityInstance
         // Run through the entity and all it's children and set the delete flag.
         // We start with 'this' because the logic below spawns the delete and
         // we want to spawn the deletes for all entities.
-        int startLevel = getLevel();
+        int startLevel = getDepth();
         EntityInstanceImpl scan = this;
-        while ( scan != null && ( scan.getLevel() > startLevel || scan == this ) )
+        while ( scan != null && ( scan.getDepth() > startLevel || scan == this ) )
         {
             // If the instance in question is already hidden, skip it
             // and all of its descendants since it may have been excluded or
@@ -1778,25 +1780,31 @@ class EntityInstanceImpl implements EntityInstance
 
         //
         // Make sure there is at least one instance of all required child entities.
+        // We only care about the child entities if 'this' has been created.  If it
+        // hasn't been created then there shouldn't be any issues with cardinality
+        // of the children.
         //
-        for ( EntityDef childEntity : getEntityDef().getChildren() )
+        if ( isCreated() )
         {
-            if ( childEntity.getMinCardinality() == 0 )
-                continue;  // Child entities aren't required so ignore this one.
-
-            // Make sure there is at least one child instance that matches this.
-            if ( getChildren( childEntity, false ).hasNext() )
-                continue;
-
-            // If the child is being lazy-loaded and 'this' EI hasn't been created
-            // then we'll assume the child just hasn't been loaded and we're good.
-            if ( childEntity.getLazyLoadConfig().isLazyLoad() )
+            for ( EntityDef childEntity : getEntityDef().getChildren() )
             {
-                if ( ! isCreated() && ! isIncluded() )
-                    continue;
-            }
+                if ( childEntity.getMinCardinality() == 0 )
+                    continue;  // Child entities aren't required so ignore this one.
 
-            list.add( new RequiredEntityMissingException( childEntity ) );
+                // Make sure there is at least one child instance that matches this.
+                if ( getChildren( childEntity, false ).hasNext() )
+                    continue;
+
+                // If the child is being lazy-loaded and 'this' EI hasn't been created
+                // then we'll assume the child just hasn't been loaded and we're good.
+                if ( childEntity.getLazyLoadConfig().isLazyLoad() )
+                {
+                    if ( ! isCreated() && ! isIncluded() )
+                        continue;
+                }
+
+                list.add( new RequiredEntityMissingException( childEntity ) );
+            }
         }
 
         // Now run this on all direct children.
@@ -1894,7 +1902,7 @@ class EntityInstanceImpl implements EntityInstance
         // Now go through and drop any dead instances.  We do it here after all the
         // chain pointers have been changed.
         EntityInstanceImpl search = getNextHier();
-        while ( search != null && search.getLevel() > this.getLevel() )
+        while ( search != null && search.getDepth() > this.getDepth() )
         {
             if ( search.isDead() )
             {
@@ -2036,6 +2044,9 @@ class EntityInstanceImpl implements EntityInstance
             throw new ZeidonException( "Invalid operation: can't drop a temporal entity." );
 
         dropped = true;
+
+        if ( getParent() != null )
+            getParent().setIncomplete( getEntityDef() );
 
         // Following comments may no longer be apropos now that we don't allow dropping
         // versioned objects.  2011-04-12.
@@ -3622,9 +3633,40 @@ class EntityInstanceImpl implements EntityInstance
         return incomplete;
     }
 
-    void setIncomplete( boolean incomplete )
+    /**
+     * This method is called if 'this' entity instance does not have all its children.
+     * This can happen if an OI was activated with a RESTRICTING clause or if a child
+     * was dropped via dropEntity().
+     *
+     * In this situation we want to set a flag to indicate that 'this' entity cannot
+     * be deleted.
+     *
+     * @param childEntity
+     */
+    void setIncomplete( EntityDef childEntity )
     {
-        this.incomplete = incomplete;
+        // If we've already set the flag then return.
+        if ( incomplete )
+            return;
+
+        // If the child entity isn't deleted when 'this' entity is deleted then
+        // we're good.
+        if ( ! childEntity.isParentDelete() )
+            return;
+
+        if ( childEntity.isDerived() )
+            return;
+
+        // If this entity is already deleted then we'll assume the user knows what
+        // she's doing.
+        if ( isDeleted() )
+            return;
+
+        incomplete = true;
+
+        // If there is a parent entity then we'll set its incomplete flag.
+        if ( getParent() != null )
+            getParent().setIncomplete( getEntityDef() );
     }
 
     /**

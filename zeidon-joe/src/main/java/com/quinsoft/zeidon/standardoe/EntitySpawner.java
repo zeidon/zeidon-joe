@@ -52,7 +52,7 @@ class EntitySpawner
     {
         EntityInstanceImpl ei = rootInstance;
         while ( ei != null && 
-                ( ei.getLevel() > rootInstance.getLevel() || ei == rootInstance ) )
+                ( ei.getDepth() > rootInstance.getDepth() || ei == rootInstance ) )
         {
             if ( ei.isDeleted() )
                 spawnDelete( ei );
