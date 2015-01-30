@@ -76,11 +76,11 @@ public class TestSWAU
 		{
 			zVIEW    mSAProfT      = new zVIEW( );
 			int RESULT=0;
-			   
+
 			   // This is an object where the entity STUDENT (under the root) has been restricted. STUDENT
 			   // is a 1 to 1 with root, but the commit should not cause an error.
 		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.por", zSINGLE );
+		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.json", zSINGLE );
 			   //omSAProf_fnLocalBuildQual_29( mSAProf, vTempViewVar_0 );
 			   //RESULT = ActivateObjectInstance( mSAProfT, "mSAProf", mSAProf, vTempViewVar_0, zSINGLE );
 			   //DropView( vTempViewVar_0 );
@@ -88,11 +88,11 @@ public class TestSWAU
 			   RESULT = CommitObjectInstance( mSAProfT );
 			   DropObjectInstance( mSAProfT );
 
-			   // This is an object where the entity STUDENT (under the root) exists. 
+			   // This is an object where the entity STUDENT (under the root) exists.
 			   // Excluding Student and then committing should cause an error.
 		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfTWStud.por", zSINGLE );
-			   //:EXCLUDE mSAProfT.Student 
+		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfTWStud.json", zSINGLE );
+			   //:EXCLUDE mSAProfT.Student
 			   RESULT = ExcludeEntity( mSAProfT, "Student", zREPOS_AFTER );
 
 			   //:COMMIT mSAProfT

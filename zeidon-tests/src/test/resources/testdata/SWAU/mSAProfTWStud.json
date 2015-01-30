@@ -5,7 +5,7 @@
   },
   "OIs" : [ {
     ".oimeta" : {
-      "application" : "OpenCUAS",
+      "application" : "SWAU",
       "odName" : "mSAProf",
       "incremental" : true
     },

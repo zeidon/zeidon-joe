@@ -53,4 +53,17 @@ public class SqliteJdbcHandler extends JdbcHandler
         stmt.appendSuffix( "LIMIT " );
         stmt.appendSuffix( limit );
     }
+
+    /**
+     * Default insert count to 1 if it isn't specified.
+     */
+    @Override
+    public Integer getInsertCount()
+    {
+        Integer ic = super.getInsertCount();
+        if ( ic == null || ic == 0 )
+            return 1;
+
+        return ic;
+    }
 }

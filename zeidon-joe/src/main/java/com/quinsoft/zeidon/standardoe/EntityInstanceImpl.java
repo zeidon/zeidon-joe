@@ -1779,21 +1779,16 @@ class EntityInstanceImpl implements EntityInstance
             list.add( e );
 
         //
-        // Make sure there is at least one instance of all required child entities.
-        // We only care about the child entities if 'this' has been created.  If it
-        // hasn't been created then there shouldn't be any issues with cardinality
-        // of the children.
+        // Make sure there is at least one instance of all required child entities.  We
+        // won't bother checking an incomplete EI because it might not have all its
+        // children loaded.
         //
-        if ( isCreated() )
+        if ( ! isIncomplete() )
         {
             for ( EntityDef childEntity : getEntityDef().getChildren() )
             {
                 if ( childEntity.getMinCardinality() == 0 )
                     continue;  // Child entities aren't required so ignore this one.
-
-                // Make sure there is at least one child instance that matches this.
-                if ( getChildren( childEntity, false ).hasNext() )
-                    continue;
 
                 // If the child is being lazy-loaded and 'this' EI hasn't been created
                 // then we'll assume the child just hasn't been loaded and we're good.
@@ -1802,6 +1797,10 @@ class EntityInstanceImpl implements EntityInstance
                     if ( ! isCreated() && ! isIncluded() )
                         continue;
                 }
+
+                // Make sure there is at least one child instance that matches this.
+                if ( getChildren( childEntity, false ).hasNext() )
+                    continue;
 
                 list.add( new RequiredEntityMissingException( childEntity ) );
             }
@@ -3628,6 +3627,11 @@ class EntityInstanceImpl implements EntityInstance
         return info;
     }
 
+    /**
+     * @returns true if 'this' entity instance does not have all its children loaded.
+     * This can happen if an OI was activated with a RESTRICTING clause or if a child
+     * was dropped via dropEntity().  An incomplete EI cannot be deleted.
+     */
     boolean isIncomplete()
     {
         return incomplete;
