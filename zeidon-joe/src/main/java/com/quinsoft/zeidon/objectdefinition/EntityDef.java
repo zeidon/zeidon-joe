@@ -388,7 +388,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
             if ( childRecord.isActivateWithSingleSelect() )
             {
                 if ( childRecord.isJoinable() )
-                    throw new ZeidonException( "EntityDef shouldn't be JOIN and ACTIVATESINGLE" );
+                    throw new ZeidonException( "EntityDef shouldn't be JOIN and ACTIVATONE" );
 
                 RelRecord relRecord = childRecord.getRelRecord();
                 RelationshipType relType = relRecord.getRelationshipType();
