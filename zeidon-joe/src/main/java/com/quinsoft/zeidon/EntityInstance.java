@@ -210,118 +210,345 @@ public interface EntityInstance
      */
     Collection<ZeidonException> validateSubobject();
 
+    /**
+     * Deletes the entity.  If this object instance is committed to the DB it will be removed
+     * along with all of its children.
+     *
+     * @return If this is called via a cursor, it returns the cursor positioning.  Otherwise returns CursorResult.SET.
+     */
     CursorResult  deleteEntity();
+
+    /**
+     * Drops this entity and its children from the object instance.  The OI is not flagged
+     * as updated and if the OI is committed the entities will *NOT* be removed from the DB.
+     *
+     * @return If this is called via a cursor, it returns the cursor positioning.  Otherwise returns CursorResult.SET.
+     */
     CursorResult  dropEntity();
+
+    /**
+     * Removes this entity and its children from the object instance by deleting the relationship
+     * between this entity and its parent.  If this OI is committed to the DB then the relationship
+     * will be removed but no entities will be deleted.
+     *
+     * @return If this is called via a cursor, it returns the cursor positioning.  Otherwise returns CursorResult.SET.
+     */
     CursorResult  excludeEntity();
 
     //
     // Attribute methods.
     //
+
+    /**
+     * Returns the AttributeInstance for the specified attribute name.
+     *
+     * @param attributeName attribute name.
+     * @return AttributeInstance
+     */
     AttributeInstance getAttribute( String attributeName );
+
+    /**
+     * Returns the AttributeInstance for the specified attribute name.
+     *
+     * @param attributeDef attribute definition
+     * .
+     * @return AttributeInstance
+     */
     AttributeInstance getAttribute( AttributeDef attributeDef );
+
+    /**
+     * Returns a list of AttributeInstances for this entity instance.
+     *
+     * @param includeNullValues if true then attributes with NULL values will be included in the
+     * response, otherwise only non-NULL attributes will be included.
+     *
+     * @return list of AttributeInstances.
+     */
     List<AttributeInstance> attributeList( boolean includeNullValues );
 
     /**
-     * Creates a work attribute for this entity type.
+     * Creates a work attribute for this entity definition.  The definition for this work
+     * attribute will exist for the life of the Object Engine.  Once the OE is restarted
+     * the attribute definition will no longer exist.
      *
-     * @param config
-     * @return
+     * @param config configuration values for the new work attribute.
+     *
+     * @return the AttributeInstance for the new work attribute.
      */
     AttributeInstance createDynamicAttributeDef( DynamicAttributeDefConfiguration config );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).isNull() instead.
+     */
+    @Deprecated
     boolean isAttributeNull( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeDef ).isNull() instead.
+     */
+    @Deprecated
     boolean isAttributeNull( AttributeDef attributeDef );
+
+    /**
+     * @deprecated use getAttribute( attributeDef ).isUpdated() instead.
+     */
+    @Deprecated
     boolean isAttributeUpdated( AttributeDef attributeDef );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
+     */
+    @Deprecated
     EntityInstance setAttribute( String attributeName, Object value ) throws InvalidAttributeValueException;
+
+    /**
+     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
+     */
+    @Deprecated
     EntityInstance setAttribute( String attributeName, Object value, String contextName ) throws InvalidAttributeValueException;
+
+    /**
+     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
+     */
+    @Deprecated
     EntityInstance setAttribute( AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException;
+
+    /**
+     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
+     */
+    @Deprecated
     EntityInstance setAttribute( AttributeDef attributeDef, Object value, String contextName ) throws InvalidAttributeValueException;
+
+    /**
+     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
+     */
+    @Deprecated
     EntityInstance setAttributeFromAttribute( String tgtAttributeName, View srcView, String srcEntityName, String srcAttributeName ) throws InvalidAttributeValueException;
 
     /**
-     * Sets the value of the attribute without attempting to convert it first.  This still validates that the
-     * value is well-formed.  Does *NOT* set the update flag.
-     *
-     * @param attributeDef
-     * @param value
-     * @param setIncremental TODO
-     * @return
-     * @throws InvalidAttributeValueException
+     * @deprecated use getAttribute( attributeName ).setInternalValue(...) instead.
      */
+    @Deprecated
     EntityInstance setInternalAttributeValue( AttributeDef attributeDef, Object value, boolean setIncremental ) throws InvalidAttributeValueException;
 
     /**
      * Sets the incremental update flags for this entity.  Does not set OI flags.
      *
-     * @param flags
-     * @return
+     * @param flags flags to set
+     *
+     * @return this
      */
     EntityInstance setIncrementalFlags( EnumSet<IncrementalEntityFlags> flags );
+
+    /**
+     * Sets the incremental update flag for this entity.  Does not set OI flags.
+     *
+     * @param flag flag to set
+     *
+     * @return this
+     */
     EntityInstance setIncrementalFlags( IncrementalEntityFlags flag );
 
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Object getInternalAttributeValue( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Object getInternalAttributeValue( AttributeDef attributeDef );
 
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     String getStringFromAttribute( AttributeDef attributeDef );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     String getStringFromAttribute( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     String getStringFromAttribute( AttributeDef attributeDef, String contextName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     String getStringFromAttribute( String attributeName, String contextName );
 
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Integer getIntegerFromAttribute( AttributeDef attributeDef );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Integer getIntegerFromAttribute( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Integer getIntegerFromAttribute( AttributeDef attributeDef, String contextName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Integer getIntegerFromAttribute( String attributeName, String contextName );
 
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Double getDoubleFromAttribute( AttributeDef attributeDef );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Double getDoubleFromAttribute( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Double getDoubleFromAttribute( AttributeDef attributeDef, String contextName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Double getDoubleFromAttribute( String attributeName, String contextName );
 
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     DateTime getDateTimeFromAttribute( AttributeDef attributeDef );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     DateTime getDateTimeFromAttribute( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     DateTime getDateTimeFromAttribute( AttributeDef attributeDef, String contextName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     DateTime getDateTimeFromAttribute( String attributeName, String contextName );
 
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Blob getBlobFromAttribute( String attributeName );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
+     */
+    @Deprecated
     Blob getBlobFromAttribute( AttributeDef attributeDef );
 
     /**
      * Returns a string representation of the key values of this entity.  If all keys are
      * null then returns null.
      *
-     * @return
+     * @return string representing all key attributes or null
      */
     String getKeyString();
 
+    /**
+     * @deprecated use getAttribute( attributeName ).add(...) instead.
+     */
+    @Deprecated
     Object addToAttribute( String attributeName, Object value );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).add(...) instead.
+     */
+    @Deprecated
     Object addToAttribute( AttributeDef attributeDef, Object value );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).multiply(...) instead.
+     */
+    @Deprecated
     Object multiplyAttribute( String attributeName, Object value );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).multiply(...) instead.
+     */
+    @Deprecated
     Object multiplyAttribute( AttributeDef attributeDef, Object value );
 
     /**
-     * Compares the value of the named attribute with 'value'.  This will convert the value of 'value'
-     * to the internal representation before doing the comparison.
-     *
-     * Null values are considered less than all other values except null (if both values are null then
-     * the return value is 0).
-     *
-     * @param attributeName
-     * @param value
-     * @return -1, 0, or 1 depending on attribute <=> value.
+     * @deprecated use getAttribute( attributeName ).compare(...) instead.
      */
+    @Deprecated
     int compareAttribute( String attributeName, Object value );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).compare(...) instead.
+     */
+    @Deprecated
     int compareAttribute( AttributeDef attributeDef, Object value );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).compare(...) instead.
+     */
+    @Deprecated
     int compareAttribute( String attributeName, EntityInstance entityInstance, String attributeName2 );
+
+    /**
+     * @deprecated use getAttribute( attributeName ).compare(...) instead.
+     */
+    @Deprecated
     int compareAttribute( AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 );
 
     /**
-     * Iterates through all the child entities that match childEntityDef, including
-     * hidden entities.
+     * Iterates through all the child entities that match childEntityDef.
      *
-     * @param childEntityDef
-     * @return
+     * @param childEntityDef definition of child entity
+     * @return entity instance iterator
      */
     EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef );
+
+    /**
+     * Iterates through all the child entities that match childEntityDef.
+     *
+     * @param childEntityName name of child entity
+     * @return entity instance iterator
+     */
     EntityIterator<? extends EntityInstance> getChildren( String childEntityName );
+
+    /**
+     * Iterates through all the child entities that match childEntityDef.  Hidden entities
+     * may be included.
+     *
+     * @param childEntityDef definition of child entity
+     * @param allowHidden set to true to include hidden children when looping.
+     * @return entity instance iterator
+     */
     EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef, boolean allowHidden );
 
     /**

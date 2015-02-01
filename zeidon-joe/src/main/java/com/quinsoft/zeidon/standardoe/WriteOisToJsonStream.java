@@ -284,7 +284,7 @@ public class WriteOisToJsonStream implements StreamWriter
         boolean selectedCursor = currentView.cursor( entityDef ).getEntityInstance() == ei;
 
         String str = createIncrementalStr( ei );
-        if ( StringUtils.isBlank( str ) && recordOwner == null && ! selectedCursor )
+        if ( StringUtils.isBlank( str ) && recordOwner == null && ! selectedCursor && ! ei.isIncomplete() )
             return writeAttributes;
 
         jg.writeObjectFieldStart( ".meta" );
@@ -294,6 +294,9 @@ public class WriteOisToJsonStream implements StreamWriter
 
         if ( selectedCursor )
             jg.writeBooleanField( "selected", true );
+
+        if ( ei.isIncomplete() )
+            jg.writeStringField( "incomplete", "true" );
 
         if ( recordOwner != null )
         {

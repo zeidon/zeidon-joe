@@ -2413,7 +2413,6 @@ class EntityInstanceImpl implements EntityInstance
     {
         return new IteratorBuilder(getObjectInstance())
                         .forDirectChildren( this )
-                        .allowHidden( allowHidden )
                         .setLazyLoad( allowLazyLoad )
                         .build();
     }
@@ -2422,7 +2421,6 @@ class EntityInstanceImpl implements EntityInstance
     public EntityIterator<? extends EntityInstance> getChildren( EntityDef childEntityDef )
     {
         return new IteratorBuilder(getObjectInstance())
-                        .allowHidden()
                         .withScoping( this )
                         .forEntityDef( childEntityDef )
                         .build();
@@ -2433,7 +2431,7 @@ class EntityInstanceImpl implements EntityInstance
                                                                  boolean    allowHidden )
     {
         return new IteratorBuilder(getObjectInstance())
-                        .allowHidden( false )
+                        .allowHidden( allowHidden )
                         .withScoping( this )
                         .forEntityDef( childEntityDef )
                         .build();
@@ -3653,18 +3651,23 @@ class EntityInstanceImpl implements EntityInstance
         if ( incomplete )
             return;
 
-        // If the child entity isn't deleted when 'this' entity is deleted then
-        // we're good.
-        if ( ! childEntity.isParentDelete() )
-            return;
+        // If childEntity is null then we are performing a root-only activate
+        // so we don't need to check the children.
+        if ( childEntity != null )
+        {
+            // If the child entity isn't deleted when 'this' entity is deleted then
+            // we're good.
+            if ( ! childEntity.isParentDelete() )
+                return;
 
-        if ( childEntity.isDerived() )
-            return;
+            if ( childEntity.isDerived() )
+                return;
 
-        // If this entity is already deleted then we'll assume the user knows what
-        // she's doing.
-        if ( isDeleted() )
-            return;
+            // If this entity is already deleted then we'll assume the user knows what
+            // she's doing.
+            if ( isDeleted() )
+                return;
+        }
 
         incomplete = true;
 

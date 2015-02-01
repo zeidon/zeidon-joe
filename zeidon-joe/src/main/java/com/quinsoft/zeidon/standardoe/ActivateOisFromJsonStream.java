@@ -488,6 +488,8 @@ class ActivateOisFromJsonStream implements StreamReader
                 ei.setDeleted( entityMeta.deleted );
                 ei.setIncluded( entityMeta.included );
                 ei.setExcluded( entityMeta.excluded );
+                if ( entityMeta.incomplete )
+                    ei.setIncomplete( null );
             }
 
             // If the entity list didn't start with a [ then there is only one entity
@@ -546,6 +548,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 case  "entityKey" :      meta.entityKey = jp.getText(); break;
                 case  "linkedSource" :   meta.linkedSource = jp.getText(); break;
                 case  "selected" :       selectedInstances.add( ei ); break;
+                case  "incomplete" :     meta.incomplete = true; break;
 
                 default: task.log().warn( "Unknown entity meta value %s", fieldName );
             }
@@ -621,6 +624,7 @@ class ActivateOisFromJsonStream implements StreamReader
         private boolean deleted  = false;
         private boolean included = false;
         private boolean excluded = false;
+        private boolean incomplete;
     }
 
     @Override

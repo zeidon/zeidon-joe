@@ -236,17 +236,17 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * By default the value is 'false' if we're using generated keys because
      * the DB will infer it.  This means the genkey will not appear at all
      * in the INSERT statements.
-     * 
+     *
      * However some DBs (e.g. SQLite) require us to insert a NULL value for
      * the key.  Sqlite will then generate its own key.
-     *  
+     *
      * @return
      */
     protected boolean addGeneratedKeyForInsert()
     {
         return ! isDbGenerateKeys;
     }
-    
+
     /**
      * Add the attribute value to the buffer.
      * @param stmt TODO
@@ -440,7 +440,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             int parenCount = 0;
 
-            for ( EntityInstance qualAttribInstance : entitySpec.getChildren( "QualAttrib" ) )
+            EntityDef qualAttribDef = entitySpec.getEntityDef().getLodDef().getEntityDef( "QualAttrib" );
+            for ( EntityInstance qualAttribInstance : entitySpec.getChildren( qualAttribDef, true ) )
             {
                 //
                 // Verify Oper

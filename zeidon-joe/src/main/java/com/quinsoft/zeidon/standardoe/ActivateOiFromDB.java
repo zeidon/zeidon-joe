@@ -322,7 +322,16 @@ class ActivateOiFromDB implements Activator
         int rc = dbHandler.loadEntity( view, rootEntityDef );
 
         // Activate the child entities unless we're activating the root and ROOT_ONLY is set.
-        if ( ! isOiRoot || ! control.contains( ActivateFlags.fROOT_ONLY ) )
+        if ( isOiRoot && control.contains( ActivateFlags.fROOT_ONLY ) )
+        {
+            // We're only loading the roots.  Set the incomplete flag for each of the entities.
+            for ( EntityInstanceImpl ei : oi.getEntities() )
+            {
+                assert ei.getParent() == null;
+                ei.setIncomplete( null );
+            }
+        }
+        else
             activateChildren( view.cursor( rootEntityDef ) );
 
         if ( rc == 0 ) // Did we load anything?
