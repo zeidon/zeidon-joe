@@ -415,6 +415,18 @@ public class PortableFileReader
         return attributeValue;
     }
 
+    /**
+     * Convenience method for getAttributeValue().toUpperCase().startsWith( "..." )
+     *
+     * @param str string to compare.
+     *
+     * @return true if attribute value starts with str.
+     */
+    public boolean valueStartsWith( String str )
+    {
+        return getAttributeValue().toUpperCase().startsWith( str );
+    }
+
     public byte[] getAttributeValueAsBytes()
     {
         return attributeValueBytes;

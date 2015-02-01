@@ -53,7 +53,6 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
-import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
 /**
@@ -839,9 +838,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( entityDef.getParent() == null )
             return true;
 
-//        if ( ! entityDef.getName().equals( "xxx" ) )
-//            return false;
-
         // If we're activating as part of a lazy load then we shouldn't be loading all
         // instances because the lazy load indicates we want partial loading.
         if ( activateOptions.isPerformingLazyLoad() )
@@ -862,45 +858,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( qualMap.containsKey( entityDef ) )
             return false;
 
-        // We can't load an entity that is joined in one select because it's being
-        // joined with its parent.
-        if ( isJoinable( entityDef ) )
-            return false;
-
         DataRecord childRecord = entityDef.getDataRecord();
-        if ( childRecord == null )
-            return false;
-
-        RelRecord relRecord = childRecord.getRelRecord();
-        if ( relRecord == null )
-            return false;
-
-        RelationshipType relType = relRecord.getRelationshipType();
-        if ( relType == null )
-            return false;
-
-        // We don't support m-to-1 relationships because it is too hard
-        // to figure out where the children go.  In most cases this doesn't
-        // matter because m-to-1 children should be joined with the parent.
-        if ( relType.isManyToOne() )
-            return false;
-
-        // We can only handle it if there is a single key between child
-        // and parent.
-        if ( relType.isOneToMany() && relRecord.getRelFields().size() > 1 )
-            return false;
-
-        if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
-            return false;
-
-        // Can't load children of recursive entities.
-        for ( EntityDef ve = entityDef; ve != null; ve = ve.getParent() )
-        {
-            if ( ve.isRecursive() )
-                return false;
-        }
-
-        return true;
+        return childRecord.isActivateWithSingleSelect();
     }
 
     /* (non-Javadoc)

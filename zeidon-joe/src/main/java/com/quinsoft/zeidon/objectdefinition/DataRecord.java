@@ -43,12 +43,7 @@ public class DataRecord implements PortableFileAttributeHandler
     private final EntityDef entityDef;
     private final Map<AttributeDef, DataField> attributeMap = new HashMap<AttributeDef, DataField>();
     private boolean joinable;
-
-    /**
-     * If true then the JOIN attribute was specified in the XOD.  We want to know this
-     * so we can default many-to-one relationships to use JOIN.
-     */
-    boolean joinSpecified;
+    private boolean activateWithSingleSelect;
 
     DataRecord( EntityDef entityDef )
     {
@@ -59,16 +54,25 @@ public class DataRecord implements PortableFileAttributeHandler
     public void setAttribute(PortableFileReader reader)
     {
         String attributeName = reader.getAttributeName();
-        if ( attributeName.equals( "RECNAME" ) )
-            recordName = reader.getAttributeValue();
-        else
-        if ( attributeName.equals( "TYPE" ) )
-            type = reader.getAttributeValue();
-        else
-        if ( attributeName.equals( "JOIN" ) )
+        switch ( attributeName )
         {
-            joinable = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
-            joinSpecified = true;
+            case "RECNAME":     recordName = reader.getAttributeValue(); break;
+            case "TYPE":        type = reader.getAttributeValue(); break;
+            case "JOIN":        joinable = reader.valueStartsWith( "Y" ); break;
+            case "ACTIVATEONE":
+                activateWithSingleSelect = reader.valueStartsWith( "Y" );
+                // Make sure all parents have activateWithSingleSelect turned on.
+                for ( EntityDef def = entityDef; def.getParent() != null; def = def.getParent() )
+                {
+                    DataRecord dataRecord = def.getDataRecord();
+                    if ( ! dataRecord.isActivateWithSingleSelect() && ! dataRecord.isJoinable() )
+                    {
+                        reader.getLogger().error( "Child DataRecord = %s\nParent DataRecord = %s",
+                                                  this.toString(), dataRecord.toString() );
+                        throw new ZeidonException( "Internal error.  Parent isn't set to ACTIVATESINGLE.  See logs for more" );
+                    }
+                }
+                break;
         }
     }
 
@@ -129,16 +133,6 @@ public class DataRecord implements PortableFileAttributeHandler
         if ( relRecord == null )
             return;
 
-        // If the min cardinality of a m-to-1 relationship is one we will assume
-        // we want to join these records unless they specifically said no.
-        if ( relRecord.getRelationshipType() != null &&
-             relRecord.getRelationshipType().isManyToOne() &&
-             entityDef.getMinCardinality() == 1 )
-        {
-            if ( ! joinSpecified )
-                joinable = true;
-        }
-
         Map<Integer, DataField> map = new HashMap<Integer, DataField>();
         for ( EntityDef ve = currentEntityDef; ve != null; ve = ve.getParent() )
         {
@@ -190,5 +184,10 @@ public class DataRecord implements PortableFileAttributeHandler
     public String toString()
     {
         return entityDef.toString() + "/" + recordName;
+    }
+
+    public boolean isActivateWithSingleSelect()
+    {
+        return activateWithSingleSelect;
     }
 }

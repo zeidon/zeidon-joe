@@ -43,6 +43,7 @@ import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.LazyLoadConfig.LazyLoadFlags;
+import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.EventStackTrace;
 import com.quinsoft.zeidon.utils.PortableFileReader;
@@ -370,6 +371,51 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 }
                 break;
         }
+    }
+
+    /**
+     * This is called after the entity def has been completely loaded.  We'll validate that
+     * the entity def is configured correctly.
+     *
+     * @param reader used to pass the task.
+     */
+    void validateEntityDef( PortableFileReader reader )
+    {
+        DataRecord childRecord = getDataRecord();
+        if ( childRecord != null )
+        {
+            // Make sure SINGLE SELECT is configured properly.
+            if ( childRecord.isActivateWithSingleSelect() )
+            {
+                if ( childRecord.isJoinable() )
+                    throw new ZeidonException( "EntityDef shouldn't be JOIN and ACTIVATESINGLE" );
+
+                RelRecord relRecord = childRecord.getRelRecord();
+                RelationshipType relType = relRecord.getRelationshipType();
+
+                // We don't support m-to-1 relationships because it is too hard
+                // to figure out where the children go.  In most cases this doesn't
+                // matter because m-to-1 children should be joined with the parent.
+                if ( relType.isManyToOne() )
+                    throw new ZeidonException( "m-to-1 relationships not supported in a single select." );
+
+                // We can only handle it if there is a single key between child
+                // and parent.
+                if ( relType.isOneToMany() && relRecord.getRelFields().size() > 1 )
+                    throw new ZeidonException( "Only single keys supported in a single select." );
+
+                if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
+                    throw new ZeidonException( "Only single keys supported in a single select." );
+
+                // Can't load children of recursive entities.
+                for ( EntityDef ve = this; ve != null; ve = ve.getParent() )
+                {
+                    if ( ve.isRecursive() )
+                        throw new ZeidonException( "Recursive entities not supported in a single select." );
+                }
+            }
+        }
+
     }
 
     public String getName()

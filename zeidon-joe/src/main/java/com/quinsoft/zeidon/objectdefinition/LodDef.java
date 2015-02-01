@@ -605,6 +605,7 @@ public class LodDef implements PortableFileAttributeHandler
 
                 entityDef.setPersistentAttributeCount( persistentCount );
                 entityDef.setWorkAttributeCount( workCount );
+                entityDef.validateEntityDef( reader );
             }
             else
             if ( handler instanceof AttributeDef )
