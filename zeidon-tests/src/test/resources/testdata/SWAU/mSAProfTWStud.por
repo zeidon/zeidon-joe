@@ -1,13 +1,9 @@
-z01001Zeidon    C:\Users\kellysautter\Documents\mSAProfTWStud.por MSAPROF 2015/01/29 08:56:04
+z01001Zeidon    C:\Users\kellysautter\Documents\mSAProfTWStud.por MSAPROF 2015/02/03 10:00:51
 mOIFLAGS    0
 eStudentAccountProfile 1,0
 aID        4613
-aAccountBalance 10721.0
-aNote      101
-12/29/2014: Third Test
-Called left message to come see me. jp 4.11.12  :)
-This a test
-Another test
+aAccountBalance 0.0
+aNote      Called left message to come see me. jp 4.11.12  :)
 aBalanceForward 0.0
 aHealthInsuranceWaiver Y
 aNoInterest Y
@@ -31,19 +27,18 @@ aSA_TeacherCertificationFeeFlag Y
 aLS_syStudentID 94657
 aFKIDADMINISTRATIVE 1
 aFK_ID_PERSON 175633
-aFK_ID_STUDENTHEALT 24376
+aFK_ID_STUDENTHEALT 24259
 
 ePerson    3,0
 aID        175633
-aLastName  Portal
-aFirstName Joseph
+aLastName  Portalxx
+aFirstName Josephxx
 aMiddleName Bates
-aSuffix    jr
 aSSN       900111090
 aCampusID  111090
 aGender    M
 aLS_syStudentID 94657
-aFK_ID_ADDRESS 370618
+aFK_ID_ADDRESS 325427
 aFK_ID_CHURCH 4051
 aFK_ID_DEGREETRACK 3961
 aFK_ID_FINAIDPROFIL 26059
@@ -52,7 +47,6 @@ eFinAidProfile 4,0
 aID        26059
 aExpectedCreditLoad 12.0
 aDependencyStatus D
-aFullPartTime F
 aFK_ID_FINAIDADMIN 84
 aFK_ID_FINAIDTRACK 1
 aFK_ID_PERSON 175633
@@ -166,63 +160,59 @@ aBeginDate 20130701
 aEndDate   20140630
 
 eAddress   4,0
-aID        370618
-aLine1     New Test
-aCity      Boston
-aStateProvince MA
-aType      Previous
+aID        325427
+aLine1     1 Permanent
+aCity      Steamboat Springs
+aStateProvince CO
+aCountry   USA
+aPostalCode 54321
+aType      Permanent
 aFK_ID_PERSON 175633
 
 eAllAddress 4,0
-aID        368107
-aType      Campus
-aLine1     Men's Dorm FAKE student 1
-aCity      Keene
-aStateProvince TX
-aPostalCode 76059
-aFK_ID_PERSON 175633
-
-eAllAddress 4,0
-aID        368455
+aID        342510
 aType      Billing
-aLine1     Men's Dorm FAKE STUDENT 2
-aCity      Keene
-aStateProvince TX
-aCountry   US
-aPostalCode 76059
-aFK_ID_PERSON 175633
-
-eAllAddress 4,0
-aID        370618
-aType      Previous
-aLine1     New Test
-aCity      Boston
-aStateProvince MA
+aLine1     Attn: Joe
+aLine2     Morgan Stanley
+aCity      Umpire
+aStateProvince AR
+aCountry   USA
+aPostalCode 71971
 aFK_ID_PERSON 175633
 
 eAllAddress 4,0
 aID        325427
 aType      Permanent
-aLine1     Men's Dorm FAKE Student 3
-aCity      Keene
-aStateProvince TX
-aCountry   US
-aPostalCode 76059
+aLine1     1 Permanent
+aCity      Steamboat Springs
+aStateProvince CO
+aCountry   USA
+aPostalCode 54321
+aFK_ID_PERSON 175633
+
+eAllAddress 4,0
+aID        322057
+aType      Campus
+aLine1     33 On Campus Rd
+aCity      Wherever Else
+aStateProvince AL
+aCountry   USA
+aPostalCode 76554
 aFK_ID_PERSON 175633
 
 eProspect  4,0
 aID        104025
-aType      6
+aType      4
 aStatus    A
 aFKIDADMINISTRATIVE 1
 aFKIDADMISSIONSMAJO 94
 aFKIDADMISSIONSMA02 151
 aFKIDADMISSIONSMA03 21
-aFK_IDADMISSIONTRAC 7
+aFK_IDADMISSIONTRAC 27
 aFK_ID_COLLEGE 1
 aFK_ID_PERSON 175633
-aFK_ID_STAFF 128
-aFK_ID_TERRITORY 26
+aFK_ID_STAFF 130
+aFK_ID_TERRITORY 25
 
 eDemographics 4,0
 aID        167766
@@ -1678,7 +1668,7 @@ aEndDate   20120630
 eCourse    5,0
 aID        3485
 aNumber    BIOL101
-aTitle     Anatomy & Physiology I
+aTitle     Anatomy & Physiology
 aCourseLabFeeFlag Y
 aFK_ID_COLLEGE 1
 aFK_ID_COLLEGEYEA02 3
@@ -3503,7 +3493,7 @@ aEndDate   20130630
 eCourse    5,0
 aID        3485
 aNumber    BIOL101
-aTitle     Anatomy & Physiology I
+aTitle     Anatomy & Physiology
 aCourseLabFeeFlag Y
 aFK_ID_COLLEGE 1
 aFK_ID_COLLEGEYEA02 3
@@ -3563,7 +3553,7 @@ aEndDate   20130630
 eCourse    5,0
 aID        2222
 aNumber    BIOL101L
-aTitle     Anatomy & Physiology I Lab
+aTitle     Anatomy & Physiology Lab
 aFK_ID_COLLEGE 1
 aFK_ID_COLLEGEYEA02 4
 aFK_ID_DEPARTMENT 45
@@ -5250,7 +5240,7 @@ aFKIDADMINISTRATIVE 1
 eEnrolled  3,0
 aID        2660885
 aCreditHours 4.0
-aDroppedDate 20141218
+aDroppedDate 20140901
 aStatus    D
 aFK_ID_CLASS 110974
 aFK_ID_STUDENT 50670
@@ -5260,7 +5250,7 @@ aID        110974
 aSection   01
 aStatus    O
 aCreditHours 4.0
-aCourseTitle Anatomy & Physiology I
+aCourseTitle Anatomy & Physiology
 aLabFee    40.0
 aClassStartDate 20140825
 aClassEndDate 20141217
@@ -5284,7 +5274,7 @@ aEndDate   20150630
 eCourse    5,0
 aID        3485
 aNumber    BIOL101
-aTitle     Anatomy & Physiology I
+aTitle     Anatomy & Physiology
 aCourseLabFeeFlag Y
 aFK_ID_COLLEGE 1
 aFK_ID_COLLEGEYEA02 3
@@ -5311,7 +5301,7 @@ aFKIDADMINISTRATIVE 1
 eEnrolled  3,0
 aID        2660886
 aCreditHours 0.0
-aDroppedDate 20141218
+aDroppedDate 20140901
 aStatus    D
 aFK_ID_CLASS 110976
 aFK_ID_STUDENT 50670
@@ -5344,7 +5334,7 @@ aEndDate   20150630
 eCourse    5,0
 aID        2222
 aNumber    BIOL101L
-aTitle     Anatomy & Physiology I Lab
+aTitle     Anatomy & Physiology Lab
 aFK_ID_COLLEGE 1
 aFK_ID_COLLEGEYEA02 4
 aFK_ID_DEPARTMENT 45
@@ -5483,7 +5473,7 @@ aFKIDADMINISTRATIVE 1
 eEnrolled  3,0
 aID        2660889
 aCreditHours 1.0
-aDroppedDate 20141218
+aDroppedDate 20140818
 aStatus    D
 aFK_ID_CLASS 111486
 aFK_ID_STUDENT 50670
@@ -5536,67 +5526,6 @@ aDescription UNIV 110 Fee
 aFKIDADMINISTRATIVE 1
 aFK_ID_GLCHARTENTRY 6059
 aCRID_GLCHARTENTRY 6169
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2678216
-aCreditHours 1.0
-aDroppedDate 20141218
-aStatus    D
-aFK_ID_CLASS 112171
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        112171
-aSection   01
-aStatus    O
-aCreditHours 1.0
-aCourseTitle University Singers
-aLabFee    50.0
-aClassStartDate 20140825
-aClassEndDate 20141217
-aFKIDCLASSROOMSTAND 779
-aFK_ID_COLLEGETERM 324
-aFK_ID_COURSE 7288
-aFK_ID_FACULTY 2086
-aFK_ID_ROOM 707
-
-eCurrentCollegeTerm 5,0
-aID        324
-aYearSemester 2014-2015 Fall
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        7288
-aNumber    MUEN113
-aTitle     University Singers
-aCourseLabFeeFlag Y
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 52
-aFK_ID_DEPARTMENT 50
-
-eDepartment 6,0
-aID        50
-aName      Music
-aFKIDACADEMICDIVISI 8
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2086
-
-eSALabTransactionCode 6,0
-aID        3663
-aDescription University Singers Fee
-aFKIDADMINISTRATIVE 1
-aFK_ID_GLCHARTENTRY 6059
-aCRID_GLCHARTENTRY 6174
 
 eCourseCollege 6,0
 aID        1
@@ -5878,161 +5807,6 @@ aID        1
 aFKIDADMINISTRATIVE 1
 
 eEnrolled  3,0
-aID        2678112
-aCreditHours 3.0
-aDroppedDate 20141218
-aStatus    D
-aFK_ID_CLASS 111169
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111169
-aSection   01
-aStatus    L
-aCreditHours 3.0
-aCourseTitle Freshman Composition
-aClassStartDate 20140825
-aClassEndDate 20141217
-aFKIDCLASSROOMSTAND 595
-aFK_ID_COLLEGETERM 324
-aFK_ID_COURSE 2686
-aFK_ID_FACULTY 1725
-aFK_ID_ROOM 703
-
-eCurrentCollegeTerm 5,0
-aID        324
-aYearSemester 2014-2015 Fall
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        2686
-aNumber    ENGL121
-aTitle     Freshman Composition
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 15
-aFK_ID_DEPARTMENT 49
-
-eDepartment 6,0
-aID        49
-aName      English
-aFKIDACADEMICDIVISI 8
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 1992
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2678113
-aCreditHours 3.0
-aDroppedDate 20141218
-aStatus    D
-aFK_ID_CLASS 111274
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111274
-aSection   04
-aStatus    L
-aCreditHours 3.0
-aCourseTitle Algebra
-aClassStartDate 20140825
-aClassEndDate 20141217
-aFKIDCLASSROOMSTAND 755
-aFK_ID_COLLEGETERM 324
-aFK_ID_COURSE 6436
-aFK_ID_FACULTY 2003
-aFK_ID_ROOM 722
-
-eCurrentCollegeTerm 5,0
-aID        324
-aYearSemester 2014-2015 Fall
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        6436
-aNumber    MATH013
-aTitle     Algebra
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 49
-aFK_ID_DEPARTMENT 52
-
-eDepartment 6,0
-aID        52
-aName      Mathematics & Physical Science
-aFKIDACADEMICDIVISI 5
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 1994
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2678114
-aCreditHours 3.0
-aDroppedDate 20141218
-aStatus    D
-aFK_ID_CLASS 111434
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111434
-aSection   01
-aStatus    O
-aCreditHours 3.0
-aCourseTitle Life and Teachings of Jesus
-aClassStartDate 20140825
-aClassEndDate 20141217
-aFKIDCLASSROOMSTAND 603
-aFK_ID_COLLEGETERM 324
-aFK_ID_COURSE 3235
-aFK_ID_FACULTY 2118
-aFK_ID_ROOM 699
-
-eCurrentCollegeTerm 5,0
-aID        324
-aYearSemester 2014-2015 Fall
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        3235
-aNumber    RLGN211
-aTitle     Life and Teachings of Jesus
-aFK_ID_COLLEGE 1
-aFK_ID_DEPARTMENT 55
-
-eDepartment 6,0
-aID        55
-aName      Religion
-aFKIDACADEMICDIVISI 8
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2118
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
 aID        2664638
 aCreditHours 3.0
 aDroppedDate 20140630
@@ -6147,7 +5921,6 @@ aID        111195
 aSection   01
 aStatus    O
 aCreditHours 3.0
-aCourseTitle Reading II
 aClassStartDate 20140825
 aClassEndDate 20141217
 aFKIDCLASSROOMSTAND 763
@@ -6297,399 +6070,6 @@ eCourseCollege 6,0
 aID        1
 aFKIDADMINISTRATIVE 1
 
-eEnrolled  3,0
-aID        2684701
-aCreditHours 3.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 111526
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111526
-aSection   01
-aStatus    O
-aCreditHours 3.0
-aCourseTitle Accounting Principles II
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 594
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 3483
-aFK_ID_FACULTY 2143
-aFK_ID_ROOM 710
-aFK_ID_ROOM02 710
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        3483
-aNumber    ACCT212
-aTitle     Accounting Principles II
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 4
-aFK_ID_DEPARTMENT 1
-
-eDepartment 6,0
-aID        1
-aName      Business Administration
-aFKIDACADEMICDIVISI 3
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2112
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2684702
-aCreditHours 4.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 111551
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111551
-aSection   01
-aStatus    L
-aCreditHours 4.0
-aCourseTitle Human Biology
-aLabFee    40.0
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 595
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 3404
-aFK_ID_FACULTY 2178
-aFK_ID_ROOM 493
-aFK_ID_ROOM02 493
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        3404
-aNumber    BIOL104
-aTitle     Human Biology
-aCourseLabFeeFlag Y
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 1
-aFK_ID_DEPARTMENT 45
-
-eDepartment 6,0
-aID        45
-aName      Biology
-aFKIDACADEMICDIVISI 7
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2178
-
-eSALabTransactionCode 6,0
-aID        3117
-aDescription Biology Lab Fee
-aFKIDADMINISTRATIVE 1
-aFK_ID_GLCHARTENTRY 6059
-aCRID_GLCHARTENTRY 6170
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2684703
-aCreditHours 0.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 111555
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111555
-aSection   02
-aStatus    O
-aCreditHours 0.0
-aCourseTitle Human Biology Lab
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 628
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 2209
-aFK_ID_FACULTY 2178
-aFK_ID_ROOM 733
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        2209
-aNumber    BIOL104L
-aTitle     Human Biology Lab
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 4
-aFK_ID_DEPARTMENT 45
-
-eDepartment 6,0
-aID        45
-aName      Biology
-aFKIDACADEMICDIVISI 7
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2178
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2684704
-aCreditHours 3.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 111637
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111637
-aSection   01
-aStatus    O
-aCreditHours 3.0
-aCourseTitle Photojournalism
-aLabFee    150.0
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 604
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 4278
-aFK_ID_FACULTY 1785
-aFK_ID_ROOM 874
-aFK_ID_ROOM02 874
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        4278
-aNumber    COMM324
-aTitle     Photojournalism
-aCourseLabFeeFlag Y
-aFK_ID_COLLEGE 1
-aFK_ID_DEPARTMENT 46
-
-eDepartment 6,0
-aID        46
-aName      Communication
-aFKIDACADEMICDIVISI 3
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2146
-
-eSALabTransactionCode 6,0
-aID        3627
-aDescription Photojournalism Supplies Fee
-aFKIDADMINISTRATIVE 1
-aFK_ID_GLCHARTENTRY 6059
-aCRID_GLCHARTENTRY 6171
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2684705
-aCreditHours 3.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 111666
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111666
-aSection   01
-aStatus    L
-aCreditHours 3.0
-aCourseTitle Microeconomics
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 593
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 2570
-aFK_ID_FACULTY 2255
-aFK_ID_ROOM 710
-aFK_ID_ROOM02 710
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        2570
-aNumber    ECON212
-aTitle     Microeconomics
-aFK_ID_COLLEGE 1
-aFK_ID_DEPARTMENT 1
-
-eDepartment 6,0
-aID        1
-aName      Business Administration
-aFKIDACADEMICDIVISI 3
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2112
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2684706
-aCreditHours 3.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 113893
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        113893
-aSection   03
-aStatus    O
-aCreditHours 3.0
-aCourseTitle Research Writing
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 606
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 2687
-aFK_ID_FACULTY 1992
-aFK_ID_ROOM 703
-aFK_ID_ROOM02 703
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        2687
-aNumber    ENGL220
-aTitle     Research Writing
-aFK_ID_COLLEGE 1
-aFK_ID_DEPARTMENT 49
-
-eDepartment 6,0
-aID        49
-aName      English
-aFKIDACADEMICDIVISI 8
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 1992
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
-eEnrolled  3,0
-aID        2684707
-aCreditHours 1.0
-aDroppedDate 20150123
-aStatus    D
-aFK_ID_CLASS 111888
-aFK_ID_STUDENT 50670
-
-eClass     4,0
-aID        111888
-aSection   01
-aStatus    O
-aCreditHours 1.0
-aCourseTitle Wind Symphony
-aLabFee    50.0
-aClassStartDate 20150112
-aClassEndDate 20150506
-aFKIDCLASSROOMSTAND 657
-aFK_ID_COLLEGETERM 325
-aFK_ID_COURSE 7291
-aFK_ID_FACULTY 1985
-aFK_ID_ROOM 708
-
-eCurrentCollegeTerm 5,0
-aID        325
-aYearSemester 2014-2015 Spring
-aFK_ID_COLLEGEYEAR 53
-
-eEnrollmentCollegeYear 6,0
-aID        53
-aYear      2014-2015
-aBeginDate 20140701
-aEndDate   20150630
-
-eCourse    5,0
-aID        7291
-aNumber    MUEN155
-aTitle     Wind Symphony
-aCourseLabFeeFlag Y
-aFK_ID_COLLEGE 1
-aFK_ID_COLLEGEYEA02 52
-aFK_ID_DEPARTMENT 50
-
-eDepartment 6,0
-aID        50
-aName      Music
-aFKIDACADEMICDIVISI 8
-aFKIDADMINISTRATIVE 1
-aFK_ID_FACULTY 2086
-
-eSALabTransactionCode 6,0
-aID        3660
-aDescription WS Ensemble Fee
-aFKIDADMINISTRATIVE 1
-aFK_ID_GLCHARTENTRY 6059
-aCRID_GLCHARTENTRY 6175
-
-eCourseCollege 6,0
-aID        1
-aFKIDADMINISTRATIVE 1
-
 eAdministrativeDivision 3,0
 aID        1
 aName      SWAU
@@ -6737,10 +6117,11 @@ aFK_ID_COLLEGEYEAR 49
 aFK_ID_DEGREEMAJOR 198
 
 eStudentHealth 3,0
-aID        24376
+aID        24259
+aInsuranceCompany Lighthouse Insurance
+aInsuranceCompanyNumber Go To Sea 42
 aInsuranceSubscriber Old Man Bates
 aInsuranceEmployer Best foods
-aInternalInsuranceCompanyFlag Y
 
 eProfileAdministrativeDivision 2,0
 aID        1

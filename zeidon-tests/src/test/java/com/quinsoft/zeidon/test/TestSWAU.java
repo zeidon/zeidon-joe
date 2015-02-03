@@ -81,6 +81,7 @@ public class TestSWAU
 			   // is a 1 to 1 with root, but the commit should not cause an error.
 		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
 		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.json", zSINGLE );
+               //zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.por", zSINGLE );
 			   //omSAProf_fnLocalBuildQual_29( mSAProf, vTempViewVar_0 );
 			   //RESULT = ActivateObjectInstance( mSAProfT, "mSAProf", mSAProf, vTempViewVar_0, zSINGLE );
 			   //DropView( vTempViewVar_0 );
