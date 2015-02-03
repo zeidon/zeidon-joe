@@ -18,9 +18,13 @@
  */
 package com.quinsoft.zeidon;
 
+/**
+ *  Stream formats that are supported automatically by Zeidon OI (de-)serialization.
+ *
+ */
 public enum StreamFormat
 {
-    POR( ".por" ), XML( ".xml" ), JSON( ".json" );
+    POR( ".por" ), XML( ".xml" ), JSON( ".json" ), CSV( ".csv" );
 
     private final String extension;
 
