@@ -5,12 +5,14 @@ package com.quinsoft.zeidon.test;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
@@ -81,11 +83,6 @@ public class TestSWAU
 			   // is a 1 to 1 with root, but the commit should not cause an error.
 		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
 		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.json", zSINGLE );
-               //zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.por", zSINGLE );
-			   //omSAProf_fnLocalBuildQual_29( mSAProf, vTempViewVar_0 );
-			   //RESULT = ActivateObjectInstance( mSAProfT, "mSAProf", mSAProf, vTempViewVar_0, zSINGLE );
-			   //DropView( vTempViewVar_0 );
-			   //:COMMIT mSAProfT
 			   RESULT = CommitObjectInstance( mSAProfT );
 			   DropObjectInstance( mSAProfT );
 
@@ -96,8 +93,13 @@ public class TestSWAU
 			   //:EXCLUDE mSAProfT.Student
 			   RESULT = ExcludeEntity( mSAProfT, "Student", zREPOS_AFTER );
 
-			   //:COMMIT mSAProfT
-			   RESULT = CommitObjectInstance( mSAProfT );
+			   try {
+    			   RESULT = CommitObjectInstance( mSAProfT );
+    		       Assert.assertEquals( "Commit did not throw error with missing child", 1, 0 );
+				}
+				catch (ZeidonException e) {
+				    // Do nothing because this exception is expected.
+				}			   //:COMMIT mSAProfT
 			   DropObjectInstance( mSAProfT );
 			return 0;
 		}
