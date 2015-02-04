@@ -60,6 +60,8 @@ class ActivateOisFromJsonStream implements StreamReader
                                                                                CreateEntityFlags.fDONT_UPDATE_OI,
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
+    private static final EntityMeta DEFAULT_ENTITY_META = new EntityMeta();
+
     private Task                    task;
     private InputStream             stream;
 
@@ -386,7 +388,7 @@ class ActivateOisFromJsonStream implements StreamReader
             List<AttributeMeta> attributeMetas = new ArrayList<>();
 
             // Read tokens until we find the token that ends the current entity.
-            EntityMeta entityMeta = null;
+            EntityMeta entityMeta = DEFAULT_ENTITY_META;
             while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )
             {
                 String fieldName = jp.getCurrentName();
@@ -481,16 +483,13 @@ class ActivateOisFromJsonStream implements StreamReader
                 am.apply( ei );
 
             // Now that we've updated everyting, set the flags.
-            if ( entityMeta != null )
-            {
-                ei.setCreated( entityMeta.created );
-                ei.setUpdated( entityMeta.updated );
-                ei.setDeleted( entityMeta.deleted );
-                ei.setIncluded( entityMeta.included );
-                ei.setExcluded( entityMeta.excluded );
-                if ( entityMeta.incomplete )
-                    ei.setIncomplete( null );
-            }
+            ei.setCreated( entityMeta.created );
+            ei.setUpdated( entityMeta.updated );
+            ei.setDeleted( entityMeta.deleted );
+            ei.setIncluded( entityMeta.included );
+            ei.setExcluded( entityMeta.excluded );
+            if ( entityMeta.incomplete )
+                ei.setIncomplete( null );
 
             // If the entity list didn't start with a [ then there is only one entity
             // in the list of twins so exit.
@@ -624,7 +623,7 @@ class ActivateOisFromJsonStream implements StreamReader
         private boolean deleted  = false;
         private boolean included = false;
         private boolean excluded = false;
-        private boolean incomplete;
+        private boolean incomplete = false;
     }
 
     @Override
