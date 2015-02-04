@@ -1097,9 +1097,9 @@ public class TestZencas
 	       // Check spawning after createEntity
 	       RESULT= mFAProf2.cursor("FinAidAwardDisbursement").setFirst( "Amount", 123 ).toInt();
  		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getDoubleFromAttribute("Amount");
- 		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 123.0, dAmount);
+ 		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 123.0, dAmount, 0.1);
  		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getDoubleFromAttribute("AmountExpected");
- 		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 321.0, dAmount);
+ 		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 321.0, dAmount, 0.1);
 
 		   RESULT = IncludeSubobjectFromSubobject( mFAProf1, "FinAidAwardPeriod", mFAProf1, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
 		   RESULT = CheckExistenceOfEntity( mFAProf2, "FinAidAwardPeriod");
@@ -1114,7 +1114,7 @@ public class TestZencas
 	       // Check spawning after createTemporalEntity and acceptTemporalEntity
            RESULT= mFAProf2.cursor("FinAidAwardDisbursement").setCursor( mFAProf1.cursor("FinAidAwardDisbursement") ).toInt();
  		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getDoubleFromAttribute("Amount");
- 		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 234.0, dAmount);
+ 		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 234.0, dAmount, 0.1);
  		   // I am assuming in above assert that when we create an entity and accept in mFAProf1 we would be on
  		   // positioned on that entity in mFAProf2.  In case that wouldn't be the case, I have the below code that
  		   // would be used instead.

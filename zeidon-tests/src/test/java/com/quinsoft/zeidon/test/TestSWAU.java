@@ -95,7 +95,7 @@ public class TestSWAU
 
 			   try {
     			   RESULT = CommitObjectInstance( mSAProfT );
-    		       Assert.assertEquals( "Commit did not throw error with missing child", 1, 0 );
+    		       Assert.fail( "Commit did not throw error with missing child");
 				}
 				catch (ZeidonException e) {
 				    // Do nothing because this exception is expected.

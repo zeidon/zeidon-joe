@@ -299,6 +299,12 @@ public class DeserializeOi
         return this;
     }
 
+    public DeserializeOi setApplication( String appName )
+    {
+        this.application = task.getApplication( appName );
+        return this;
+    }
+
     /**
      * Add data about the activate options to the exception.
      *

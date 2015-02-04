@@ -1779,31 +1779,43 @@ class EntityInstanceImpl implements EntityInstance
             list.add( e );
 
         //
-        // Make sure there is at least one instance of all required child entities.  We
-        // won't bother checking an incomplete EI because it might not have all its
-        // children loaded.
+        // Make sure there is at least one instance of all required child entities.
         //
-        if ( ! isIncomplete() )
+        for ( EntityDef childEntity : getEntityDef().getChildren() )
         {
-            for ( EntityDef childEntity : getEntityDef().getChildren() )
+            if ( childEntity.getMinCardinality() == 0 )
+                continue;  // Child entities aren't required so ignore this one.
+
+            // If the child is being lazy-loaded and 'this' EI hasn't been created
+            // then we'll assume the child just hasn't been loaded and we're good.
+            if ( childEntity.getLazyLoadConfig().isLazyLoad() )
             {
-                if ( childEntity.getMinCardinality() == 0 )
-                    continue;  // Child entities aren't required so ignore this one.
-
-                // If the child is being lazy-loaded and 'this' EI hasn't been created
-                // then we'll assume the child just hasn't been loaded and we're good.
-                if ( childEntity.getLazyLoadConfig().isLazyLoad() )
-                {
-                    if ( ! isCreated() && ! isIncluded() )
-                        continue;
-                }
-
-                // Make sure there is at least one child instance that matches this.
-                if ( getChildren( childEntity, false ).hasNext() )
+                if ( ! isCreated() && ! isIncluded() )
                     continue;
-
-                list.add( new RequiredEntityMissingException( childEntity ) );
             }
+
+            // Make sure there is at least one child instance that matches this.
+            int hidden = 0;
+            int nonhidden = 0;
+            for ( EntityInstance ei : getChildren( childEntity, true ) )
+            {
+                if ( ei.isHidden() )
+                    hidden++;
+                else
+                    nonhidden++;
+            }
+
+            if ( isIncomplete() && hidden == 0 )
+            {
+                // The parent of childEntity is incomplete which means not all of it's children
+                // were loaded.  We only need to validate min cardinality if the user
+                // deleted/excluded and of the children.  If we get here then they
+                // didn't so we're good.
+                continue;
+            }
+
+            if ( childEntity.getMinCardinality() > nonhidden )
+                list.add( new RequiredEntityMissingException( childEntity ) );
         }
 
         // Now run this on all direct children.

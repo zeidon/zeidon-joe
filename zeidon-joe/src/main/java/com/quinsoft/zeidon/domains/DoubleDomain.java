@@ -64,12 +64,12 @@ public class DoubleDomain extends AbstractNumericDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
-    	if ( externalValue == null )
-    		return null;
-
         // If external value is an AttributeInstance then get *its* internal value.
         if ( externalValue instanceof AttributeInstance )
             externalValue = ((AttributeInstance) externalValue).getValue();
+
+        if ( externalValue == null )
+            return null;
 
         DomainContext context = getContext( task, contextName );
         return context.convertExternalValue( task, attributeDef, externalValue );
