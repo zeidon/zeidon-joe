@@ -1,13 +1,9 @@
-z01001Zeidon    C:\Users\kellysautter\Documents\mSAProfT.por MSAPROF 2015/01/28 16:25:44
+z01001Zeidon    C:\Users\kellysautter\Documents\mSAProfT.por MSAPROF 2015/02/03 10:01:51
 mOIFLAGS    0
 eStudentAccountProfile 1,0
 aID        4613
-aAccountBalance 10721.0
-aNote      101
-12/29/2014: Third Test
-Called left message to come see me. jp 4.11.12  :)
-This a test
-Another test
+aAccountBalance 0.0
+aNote      Called left message to come see me. jp 4.11.12  :)
 aBalanceForward 0.0
 aHealthInsuranceWaiver Y
 aNoInterest Y

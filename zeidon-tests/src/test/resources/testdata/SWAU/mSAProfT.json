@@ -1,11 +1,11 @@
 {
   ".meta" : {
     "version" : "1",
-    "date" : "2015-02-02T20:25:59.350"
+    "date" : "2015-02-03T09:58:59.819"
   },
   "OIs" : [ {
     ".oimeta" : {
-      "application" : "OpenCUAS",
+      "application" : "SWAU",
       "odName" : "mSAProf",
       "incremental" : true
     },
@@ -35,69 +35,6 @@
       "wOrigMealPlanWaiver" : "Y",
       "FKIDADMINISTRATIVE" : "1",
       "FK_ID_STUDENT" : "50670",
-      "BillingPeriod" : [ {
-        ".meta" : {
-          "selected" : true
-        },
-        "ID" : "90491",
-        "PeriodDesignator" : "2014-2015 Fall",
-        "BeginDate" : "20140825",
-        "EndDate" : "20141214",
-        "ResidencyStatusTerm" : "O",
-        "NonresidencyReasonTerm" : "PT",
-        "OffCampusContactPersonTerm" : "Ex President Clinton",
-        "OffCampusContactPhoneTerm" : "8175552121",
-        "BookStoreAccountChargeAmount" : "0.0",
-        "LastModifiedBy" : "testerplUBP",
-        "ModifiedDateTime" : "20140318085603",
-        "FKIDSTUDENTACCOUNT" : "4613",
-        "FK_ID_STUDENTHEALT" : "22542",
-        "PeriodCollegeTerm" : [ {
-          ".meta" : {
-            "selected" : true
-          },
-          "ID" : "324",
-          "Semester" : "01",
-          "YearSemester" : "2014-2015 Fall",
-          "CurrentTermFlag" : "Y",
-          "OpenForRegistrarFlag" : "Y",
-          "CourseStartDate" : "20140825",
-          "CourseEndDate" : "20141217",
-          "ResidencyStartDate" : "20140824",
-          "ResidencyEndDate" : "20141217",
-          "OpenForClassScheduling" : "Y",
-          "CurrentForStudentAccounts" : "Y",
-          "AddDropDeadlineDate" : "20140829",
-          "FullTimeMinCredits" : "12.0",
-          "PartTimeMinCredits" : "1.0",
-          "HalfTimeMinCredits" : "6.0",
-          "OverloadMinCredits" : "18.0",
-          "InsuranceBenefitDateDomestic" : "20140814",
-          "InsuranceBenefitDateInternat" : "20140814",
-          "FK_ID_COLLEGEYEAR" : "53",
-          "PeriodCollegeYear" : [ {
-            ".meta" : {
-              "selected" : true
-            },
-            "ID" : "53",
-            "Year" : "2014-2015",
-            "BeginDate" : "20140701",
-            "EndDate" : "20150630"
-          } ]
-        } ],
-        "BillingPeriodStudentHealth" : [ {
-          ".meta" : {
-            "selected" : true
-          },
-          "ID" : "22542",
-          "InsuranceCompany" : "Lighthouse Insurance",
-          "InsuranceCompanyNumber" : "Go To Sea 42",
-          "InsuranceSubscriber" : "Old Man Bates",
-          "InsuranceEmployer" : "Best foods",
-          "InsurancePhone" : "5434534534",
-          "InsuranceExpirationDate" : "20120520"
-        } ]
-      } ],
       "ProfileAdministrativeDivision" : [ {
         ".meta" : {
           "selected" : true

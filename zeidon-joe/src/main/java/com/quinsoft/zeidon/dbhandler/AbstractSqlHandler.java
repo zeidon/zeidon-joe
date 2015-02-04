@@ -859,6 +859,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
 
         DataRecord childRecord = entityDef.getDataRecord();
+        // Work entity, childRecord is null
+        if ( childRecord == null )
+            return false;
+
         return childRecord.isActivateWithSingleSelect();
     }
 

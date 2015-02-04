@@ -210,6 +210,10 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
                         activator= new ActivateOiFromXmlStream();
                         break;
 
+                    case CSV:
+                        activator= new ActivateOisFromCsv();
+                        break;
+
                     default:
                         throw new ZeidonException( "Unknown stream type %s", options.getFormat() );
                 }
