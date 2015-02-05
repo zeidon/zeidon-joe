@@ -604,7 +604,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( ! attributeDef.isDerived() )
             return;
 
-        AttributeInstanceImpl instance = getAttribute( attributeDef, view );
+        AttributeInstanceImpl instance = getAttribute( view, attributeDef );
         attributeDef.executeDerivedAttributeForGet( instance );
     }
 
@@ -2934,13 +2934,13 @@ class EntityInstanceImpl implements EntityInstance
 
     String getStringFromAttribute( View view, AttributeDef attributeDef )
     {
-        return getAttribute( attributeDef, view ).getString();
+        return getAttribute( view, attributeDef ).getString();
     }
 
     @Override
     public String getStringFromAttribute( AttributeDef attributeDef )
     {
-        return getAttribute( attributeDef, null ).getString();
+        return getAttribute( null, attributeDef ).getString();
     }
 
     @Override
@@ -2965,7 +2965,7 @@ class EntityInstanceImpl implements EntityInstance
 
     String getStringFromAttribute( View view, AttributeDef attributeDef, String contextName )
     {
-        return getAttribute( attributeDef, view ).getString( contextName );
+        return getAttribute( view, attributeDef ).getString( contextName );
     }
 
     @Override
@@ -3570,13 +3570,13 @@ class EntityInstanceImpl implements EntityInstance
     public AttributeInstance getAttribute( String attributeName )
     {
         AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
-        return getAttribute( attributeDef, null );
+        return getAttribute( null, attributeDef );
     }
 
     @Override
     public AttributeInstanceImpl getAttribute( AttributeDef attributeDef )
     {
-        return getAttribute( attributeDef, null );
+        return getAttribute( null, attributeDef );
     }
 
 
@@ -3598,7 +3598,7 @@ class EntityInstanceImpl implements EntityInstance
         return list;
     }
 
-    private synchronized AttributeInstanceImpl getAttribute( AttributeDef attributeDef, View view )
+    private synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
     {
         if ( attributeInstanceMap == null )
             attributeInstanceMap = new HashMap<AttributeDef, AttributeInstanceImpl>();
