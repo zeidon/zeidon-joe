@@ -3598,7 +3598,7 @@ class EntityInstanceImpl implements EntityInstance
         return list;
     }
 
-    private synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
+    synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
     {
         if ( attributeInstanceMap == null )
             attributeInstanceMap = new HashMap<AttributeDef, AttributeInstanceImpl>();
