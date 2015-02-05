@@ -393,7 +393,7 @@ public class JdbcHandler extends AbstractSqlHandler
         Object convertedValue = getTranslator().convertDbValue( attributeDef.getDomain(), value );
         entityInstance.getAttribute( attributeDef).setInternalValue( convertedValue, false );
 
-        assert ! entityInstance.isAttributeUpdated( attributeDef ) : "Attribute is updated " + attributeDef.toString();
+        assert ! entityInstance.getAttribute( attributeDef ).isUpdated() : "Attribute is updated " + attributeDef.toString();
     }
 
     /**

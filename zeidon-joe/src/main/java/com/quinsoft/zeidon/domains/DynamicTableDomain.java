@@ -105,10 +105,10 @@ public class DynamicTableDomain extends AbstractTableDomain
         context.resetTableEntries(task);
         for ( EntityInstance entity : domainView.cursor( "Domain" ).getChildren( "DomainValue" ) )
         {
-            String internalValue = entity.getStringFromAttribute( "InternalStringValue" );
+            String internalValue = entity.getAttribute( "InternalStringValue" ).getString();
             if ( StringUtils.isBlank( internalValue ) )
-                internalValue = entity.getStringFromAttribute( "InternalIntegerValue" );
-            String externalValue = entity.getStringFromAttribute( "ExternalDescription" );
+                internalValue = entity.getAttribute( "InternalIntegerValue" ).getString();
+            String externalValue = entity.getAttribute( "ExternalDescription" ).getString();
             context.addTableEntry( task, internalValue, externalValue );
         }
     }

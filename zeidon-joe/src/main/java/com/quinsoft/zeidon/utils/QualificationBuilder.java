@@ -371,13 +371,13 @@ public class QualificationBuilder
     public QualificationBuilder addAttribQual( String attribName, Object attribValue )
     {
         validateEntity();
-        return addAttribQual( qualView.cursor( ENTITYSPEC ).getStringFromAttribute( ENTITYNAME ), attribName, "=", attribValue );
+        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "=", attribValue );
     }
 
     @Deprecated // use addAttribQual instead.
     public QualificationBuilder newAttribSpec( String attribName, String attribValue )
     {
-        return addAttribQual( qualView.cursor( ENTITYSPEC ).getStringFromAttribute( ENTITYNAME ), attribName, "=", attribValue );
+        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "=", attribValue );
     }
 
     /**
@@ -386,7 +386,7 @@ public class QualificationBuilder
     @Deprecated
     public QualificationBuilder newAttribSpec( String attribName, String oper, String attribValue )
     {
-        return addAttribQual( qualView.cursor( ENTITYSPEC ).getStringFromAttribute( ENTITYNAME ), attribName, oper, attribValue );
+        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, oper, attribValue );
     }
 
     public QualificationBuilder newEntityKey( Integer key )
@@ -453,7 +453,7 @@ public class QualificationBuilder
             else
                 addAttribQual( " AND " );
 
-            addAttribQual( key.getName(), source.getStringFromAttribute( key ) );
+            addAttribQual( key.getName(), source.getAttribute( key ).getString() );
         }
 
         if ( entityDef.getKeys().size() > 1 )
@@ -584,7 +584,7 @@ public class QualificationBuilder
                                             .forEntity( DbHandler.ROOT_ENTITY )
                                             .addAttribQual( key.getName(), null );
         for ( EntityInstance ei : cursor.eachEntity() )
-            qual.newEntityKey( ei.getIntegerFromAttribute( key ) );
+            qual.newEntityKey( ei.getAttribute( key ).getInteger() );
 
         return qual.getView();
     }

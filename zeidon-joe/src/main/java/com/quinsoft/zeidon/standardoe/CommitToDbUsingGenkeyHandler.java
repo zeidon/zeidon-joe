@@ -805,7 +805,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     currentGenKeyEntity = entityDef;
                 }
 
-                Integer count = genKeyCursor.getIntegerFromAttribute( "EntityCount" );
+                Integer count = genKeyCursor.getAttribute( "EntityCount" ).getInteger();
                 count = ( count == null ) ? 1 : count + 1;
                 genKeyCursor.setAttribute( "EntityCount", count );
                 oi.dbhNeedsGenKeys = true;

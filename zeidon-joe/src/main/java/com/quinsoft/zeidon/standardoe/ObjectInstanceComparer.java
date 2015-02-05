@@ -175,8 +175,8 @@ class ObjectInstanceComparer
             for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
                 String s = String.format( "   %s: %s %s", attributeDef.getName(), 
-                                                            ei.getStringFromAttribute( attributeDef ),
-                                                            ei.isAttributeUpdated( attributeDef ) ? "(Up)" : "(Up)" );
+                                                            ei.getAttribute( attributeDef ).getString(),
+                                                            ei.getAttribute( attributeDef ).isUpdated() ? "(Up)" : "(Up)" );
                 list.add( s );
             }
         }

@@ -2628,17 +2628,17 @@ class EntityInstanceImpl implements EntityInstance
                 continue;
 
             // Ignore if both are null.
-            if ( getInternalAttribute( targetAttr ).isNull( getTask(), targetAttr ) && sourceInstance.isAttributeNull( sourceAttr ) )
+            if ( getInternalAttribute( targetAttr ).isNull( getTask(), targetAttr ) && sourceInstance.getAttribute( sourceAttr ).isNull() )
                 continue;
 
             if ( control.contains( SetMatchingFlags.fSET_SRCNOTNULL ) )
             {
                 // User doesn't want NULL source attributes to be copied.
-                if ( sourceInstance.isAttributeNull( sourceAttr ) )
+                if ( sourceInstance.getAttribute( sourceAttr ).isNull() )
                     continue;
             }
 
-            Object sourceValue = sourceInstance.getInternalAttributeValue( sourceAttr );
+            Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
             setAttribute( targetAttr, sourceValue );
         } // for each target AttributeDef...
 
@@ -2833,9 +2833,9 @@ class EntityInstanceImpl implements EntityInstance
         // If the target is a string, we'll ask the source to convert its value to a
         // string.  This is necessary for copying Dates to strings. Should we do this with other data types?
         if ( tgtDomain.getDataType() == InternalType.STRING )
-            source = srcView.cursor( srcEntityName ).getStringFromAttribute( srcAttributeName );
+            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getString();
         else
-            source = srcView.cursor( srcEntityName ).getInternalAttributeValue( srcAttributeName );
+            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getValue();
 
         return setAttribute( tgtAttributeDef, source );
     }
@@ -3184,7 +3184,7 @@ class EntityInstanceImpl implements EntityInstance
     int compareAttribute( View view, AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 )
     {
         executeDerivedOper( view, attributeDef );
-        Object value = entityInstance.getInternalAttributeValue( attributeDef2 );
+        Object value = entityInstance.getAttribute( attributeDef2 ).getValue();
         return compareAttribute( attributeDef, value );
     }
 
