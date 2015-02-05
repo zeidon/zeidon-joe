@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This edits java files in the zeidon-joe directory and updates the code
+# to convert the deprecated code to the new format.
+
 export ch_print=Y
 
 call_perl() {
