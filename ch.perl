@@ -6,7 +6,7 @@ my $printall = $ENV{'ch_print'};
 
 # Find the line with $find string.  Group $1 will be text before $find, $3 will be after.
 if ( /(^.*)(\.$find)(\(.*)/xg ) {
-    if ( $printall != "Y" ) {
+    if ( $printall ne "Y" ) {
 	print "--\n";
 	print $_;
     }
@@ -33,7 +33,7 @@ if ( /(^.*)(\.$find)(\(.*)/xg ) {
 }
 else
 {
-    if ( $printall == "Y" ) {
-	print "$_\n";
+    if ( $printall eq "Y" ) {
+	print "$_";
     }
 }
