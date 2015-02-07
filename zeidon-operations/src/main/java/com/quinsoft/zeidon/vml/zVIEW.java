@@ -718,4 +718,16 @@ public class zVIEW extends VmlOperation implements View
     {
         return view().getEntityCount( includeHidden );
     }
+
+    @Override
+    public boolean isAllowHiddenEntities()
+    {
+        return getView().isAllowHiddenEntities();
+    }
+
+    @Override
+    public boolean setAllowHiddenEntities( boolean allowHiddenEntities )
+    {
+        return getView().setAllowHiddenEntities( allowHiddenEntities );
+    }
 }

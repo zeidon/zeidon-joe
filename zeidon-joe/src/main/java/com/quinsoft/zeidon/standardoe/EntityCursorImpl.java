@@ -243,7 +243,7 @@ class EntityCursorImpl implements EntityCursor
 
     private EntityInstanceImpl getExistingInstance() throws NullCursorException
     {
-        return getExistingInstance( false );
+        return getExistingInstance( getView().isAllowHiddenEntities() );
     }
 
     private EntityInstanceImpl setEntityInstance( EntityInstanceImpl entityInstance )
