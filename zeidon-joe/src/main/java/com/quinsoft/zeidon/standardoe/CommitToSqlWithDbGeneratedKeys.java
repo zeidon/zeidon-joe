@@ -214,6 +214,9 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
     private void commitView(ViewImpl view)
     {
+        // Set up view to allow the DBhandler to access hidden entities.
+        view.setAllowHiddenEntities( true );
+
         ObjectInstance oi = view.getObjectInstance();
 
         // TODO: implement optimistic locking check.

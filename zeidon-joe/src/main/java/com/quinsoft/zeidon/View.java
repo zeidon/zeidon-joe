@@ -51,6 +51,24 @@ public interface View extends TaskQualification, CacheMap
     void setReadOnly( boolean readOnly );
 
     /**
+     * If true then allow cursors to refer to hidden entities without throwing
+     * an exception.  Intended to be used  by DBHandlers.
+     *
+     * @return true if the view can reference hidden (e.g. deleted) entities.
+     */
+    boolean isAllowHiddenEntities();
+
+    /**
+     * If set to true then this view can reference hidden entities without throwing
+     * an exception.  Intended to be used by DBHandlers.
+     *
+     * @param allowHiddenEntities
+     *
+     * @return the previous value of allowHiddenEntities.
+     */
+    boolean setAllowHiddenEntities( boolean allowHiddenEntities );
+
+    /**
      * Returns an ID for the view that is unique for the JVM.
      *
      * @return unique key.
@@ -351,12 +369,12 @@ public interface View extends TaskQualification, CacheMap
      * @return
      */
     boolean isEmpty();
-    
+
     /**
      * Return the number of entities in the OI.
-     * 
+     *
      * @param includeHidden if true, count hidden entities.
-     * 
+     *
      * @return
      */
     int getEntityCount( boolean includeHidden );

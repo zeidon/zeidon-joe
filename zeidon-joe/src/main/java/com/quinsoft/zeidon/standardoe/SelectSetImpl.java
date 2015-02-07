@@ -53,6 +53,15 @@ class SelectSetImpl implements SelectSet
         this.view = view;
     }
 
+    SelectSetImpl( ViewImpl view, SelectSetImpl sourceSelectSet )
+    {
+        this( view );
+        selectSet.addAll( sourceSelectSet.selectSet );
+        commonParent = sourceSelectSet.commonParent;
+        entityDef = sourceSelectSet.entityDef;
+        referenceInstance = sourceSelectSet.referenceInstance;
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.SelectSet#isSelected(com.quinsoft.zeidon.EntityInstance)
      */
