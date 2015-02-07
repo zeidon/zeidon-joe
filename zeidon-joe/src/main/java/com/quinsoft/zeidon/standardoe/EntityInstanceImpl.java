@@ -243,12 +243,15 @@ class EntityInstanceImpl implements EntityInstance
      * @param initAttributes
      */
     EntityInstanceImpl(ObjectInstance        objectInstance,
-                       EntityDef            entityDef,
+                       EntityDef             entityDef,
                        EntityInstanceImpl    parentInstance )
     {
         this.objectInstance = objectInstance;
         this.entityDef = entityDef;
-        this.attributeHashkeyMap = new AttributeHashKeyMap( objectInstance );
+        if ( entityDef.hasAttributeHaskKeys() )
+            this.attributeHashkeyMap = new AttributeHashKeyMap( objectInstance );
+        else
+            this.attributeHashkeyMap = null;
 
         // Set a unique identifier for this entity.  We use a number that's unique across
         // all tasks in case the entity is included into another task.
