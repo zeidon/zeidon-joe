@@ -19,9 +19,11 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,7 +90,6 @@ class EntityInstanceImpl implements EntityInstance
     private EntityInstanceImpl    nextHierInstance;
     private EntityInstanceImpl    prevTwinInstance;
     private EntityInstanceImpl    nextTwinInstance;
-    private AttributeListInstance attributeList;
     private boolean updated  = false;
     private boolean deleted  = false;
     private boolean created  = false;
@@ -96,6 +97,27 @@ class EntityInstanceImpl implements EntityInstance
     private boolean hidden   = false;
     private boolean excluded = false;
     private boolean dropped  = false;
+
+    /**
+     * Map of persistent attributes. Linked entities will reference the same
+     * persistentAttributes.
+     *      Key = ER Attribute token
+     */
+    private Map<Long, AttributeValue> persistentAttributes;
+
+    /**
+     * Map of work attributes. Every entity, even linked ones, will have their
+     * own set of workAttributes.
+     *      Key = ER Attribute token
+     */
+    private Map<Long, AttributeValue> workAttributes;
+
+    /**
+     * List of instances linked with this one. This is a set of weak references;
+     * when one of the entity instances is dropped the GC will remove it from
+     * this list. The boolean value a dummy value required to make this a map.
+     */
+    private volatile ConcurrentMap<EntityInstanceImpl, Boolean> linkedInstances;
 
     /**
      * This keeps track of attribute hash keys that are under this EI.  Intended for use
@@ -190,14 +212,17 @@ class EntityInstanceImpl implements EntityInstance
     static EntityInstanceImpl createEntity( ObjectInstance     oi,
                                             EntityInstanceImpl parent,
                                             EntityInstanceImpl relativeEntity,
-                                            EntityDef         entityDef,
+                                            EntityDef          entityDef,
                                             CursorPosition     position )
     {
         // Create a new instance and initialize the attributes.
         EntityInstanceImpl newInstance =
             new EntityInstanceImpl( oi, entityDef, parent, relativeEntity, position );
         newInstance.setCreated( true );
-        newInstance.attributeList = AttributeListInstance.newAttributeList( newInstance );
+        newInstance.workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
+        newInstance.persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
+        newInstance.linkedInstances = null;
+
         return newInstance;
     }
 
@@ -225,7 +250,7 @@ class EntityInstanceImpl implements EntityInstance
      * @param position
      */
     EntityInstanceImpl(ObjectInstance        objectInstance,
-                       EntityDef            entityDef,
+                       EntityDef             entityDef,
                        EntityInstanceImpl    parentInstance,
                        EntityInstanceImpl    relativeInstance,
                        CursorPosition        position )
@@ -278,6 +303,8 @@ class EntityInstanceImpl implements EntityInstance
             this.versionNumber = 0;
             this.depth = 1;
         }
+
+        workAttributes = new HashMap<Long, AttributeValue>( getEntityDef().getWorkAttributeCount() );
     }
 
     void initializeDefaultAttributes()
@@ -587,7 +614,51 @@ class EntityInstanceImpl implements EntityInstance
 
     Iterable<AttributeDef> getNonNullAttributeList()
     {
-        return attributeList.getNonNullAttributeList(  getTask() );
+        return new Iterable<AttributeDef>()
+        {
+            @Override
+            public Iterator<AttributeDef> iterator()
+            {
+                return new Iterator<AttributeDef>()
+                {
+                    private int attributeNumber     = -1;
+                    private int nextAttributeNumber = -1;
+
+                    @Override
+                    public boolean hasNext()
+                    {
+                        if ( nextAttributeNumber <= attributeNumber )
+                        {
+                            nextAttributeNumber = attributeNumber + 1;
+                            while ( nextAttributeNumber < getEntityDef().getAttributeCount() )
+                            {
+                                AttributeDef attributeDef = getEntityDef().getAttribute( nextAttributeNumber );
+                                AttributeValue attrib = getInternalAttribute( attributeDef );
+                                if ( ! attrib.isNull( getTask(), attributeDef) || attrib.isUpdated() )
+                                    break;
+
+                                nextAttributeNumber++;
+                            }
+                        }
+
+                        return nextAttributeNumber < getEntityDef().getAttributeCount();
+                    }
+
+                    @Override
+                    public AttributeDef next()
+                    {
+                        attributeNumber = nextAttributeNumber;
+                        return getEntityDef().getAttribute( attributeNumber );
+                    }
+
+                    @Override
+                    public void remove()
+                    {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -597,9 +668,50 @@ class EntityInstanceImpl implements EntityInstance
      * @param AttributeDef
      * @return
      */
-    AttributeValue getInternalAttribute(AttributeDef AttributeDef)
+    AttributeValue getInternalAttribute(AttributeDef attributeDef )
     {
-        return attributeList.getAttribute( AttributeDef );
+        AttributeDef va = validateMatchingEntities( attributeDef );
+
+        Map<Long, AttributeValue> attributes = getInstanceMap( va );
+        if ( ! attributes.containsKey( va.getErAttributeToken() ) )
+            attributes.put( va.getErAttributeToken(), new AttributeValue( va ) );
+
+        return attributes.get( va.getErAttributeToken() );
+    }
+
+    private Map<Long, AttributeValue> getInstanceMap( AttributeDef attributeDef )
+    {
+        if ( attributeDef.isPersistent() )
+            return persistentAttributes;
+
+        return workAttributes;
+    }
+
+    /**
+     * Validate that the entity instance for attributeDef matches getEntityDef().  Check
+     * to see if this is a recursive entity and if so return the
+     * @param attributeDef
+     * @return
+     */
+    private AttributeDef validateMatchingEntities( AttributeDef attributeDef )
+    {
+        if ( attributeDef.getEntityDef() == getEntityDef() )
+            return attributeDef;
+
+        // If attributeDef points to a recursive child, find the parent attribute.
+        // TODO: Do we have to do this for the reciprocal situation as well?
+        if ( attributeDef.getEntityDef() == getEntityDef().getRecursiveParentEntityDef() )
+        {
+            // Find the attribute in getEntityDef() that matches attributeDef.
+            for ( AttributeDef va : getEntityDef().getAttributes() )
+            {
+                if ( va.getErAttributeToken().equals( attributeDef.getErAttributeToken() ) )
+                    return va;
+            }
+        }
+
+        throw new ZeidonException( "Mismatching entities.  AttributeDefEntity: %s, EntityDef: %s",
+                                    attributeDef.getEntityDef(), getEntityDef() );
     }
 
     private void executeDerivedOper( View view, AttributeDef attributeDef )
@@ -1417,23 +1529,60 @@ class EntityInstanceImpl implements EntityInstance
      *
      * @param source
      */
-    void linkInternalInstances( EntityInstanceImpl source )
+    void linkInternalInstances( EntityInstanceImpl sourceInstance )
     {
-        assert source != null;
-        assert source != this;
-        assert entityDef.getErEntityToken() == source.getEntityDef().getErEntityToken();
+        assert sourceInstance != null;
+        assert sourceInstance != this;
+        assert entityDef.getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken();
 
-        LinkValidation valid = validateLinking( getEntityDef(), source.getEntityDef() );
-        if ( valid == LinkValidation.SOURCE_OK )
+        LinkValidation valid = validateLinking( getEntityDef(), sourceInstance.getEntityDef() );
+        if ( valid != LinkValidation.SOURCE_OK )
         {
-            this.attributeList = AttributeListInstance.newSharedAttributeList( this, this.attributeList,
-                                                                               source, source.attributeList );
-            return;
+            // We should never get here because validateLinking() should throw an exception if
+            // it doesn't return SOURCE_OK but just in case...
+            throw new ZeidonException( "Internal error.  validateLinking returned something invalid." );
         }
 
-        // We should never get here because validateLinking() should throw an exception if
-        // it doesn't return SOURCE_OK but just in case...
-        throw new ZeidonException( "Internal error.  validateLinking returned something invalid." );
+        assert getEntityDef().getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken() : "Attempting to link view entities that are not the same ER entity";
+        sourceInstance.addLinkedInstance( this );
+    }
+
+    /**
+     * Link newInstance with 'this'.  Will create this.linkedInstances if necessary.
+     * @param newInstance
+     */
+    private void addLinkedInstance( EntityInstanceImpl newInstance )
+    {
+        synchronized( getObjectInstance() )
+        {
+            if ( linkedInstances == null )
+            {
+                if ( newInstance.linkedInstances != null )
+                {
+                    linkedInstances = newInstance.linkedInstances;
+                    linkedInstances.putIfAbsent( this, Boolean.TRUE );
+                    persistentAttributes = newInstance.persistentAttributes;
+                    attributeInstanceMap = null;
+                    return;
+                }
+
+                // Create a concurrent map that uses weak references for the keys.
+                // This will allow the GC to clean up if a linked instance goes away.
+                // Initialize it with firstInstance.
+                linkedInstances = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
+                linkedInstances.put( this, Boolean.TRUE );
+            }
+
+            // Check to see if targetInstance is already linked and if it is remove
+            // it. This can happen when merging an OI committed on a web server.
+            if ( newInstance.linkedInstances != null )
+                newInstance.linkedInstances.remove( newInstance );
+
+            linkedInstances.putIfAbsent( newInstance, Boolean.TRUE );
+            newInstance.linkedInstances = linkedInstances;
+            newInstance.persistentAttributes = persistentAttributes;
+            newInstance.attributeInstanceMap = null;
+        }
     }
 
     TaskImpl getTask()
@@ -1698,7 +1847,8 @@ class EntityInstanceImpl implements EntityInstance
                     // Update the attribute values of the linked instance to point to the new
                     // attribute list.
                     linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
-                    AttributeListInstance.updateSharedAttributeList( linked.attributeList, this.attributeList );
+                    linked.persistentAttributes = persistentAttributes;
+                    linked.attributeInstanceMap = null;
                     linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
 
                     // The spawn logic should have correctly set most of the flags.  The only one we have to
@@ -1718,7 +1868,7 @@ class EntityInstanceImpl implements EntityInstance
                         linked.getObjectInstance().setUpdated( true );
                 }
 
-                prevVersion.attributeList.mergeLinkedInstances( prevVersion, this.attributeList );
+                prevVersion.mergeLinkedInstances( this );
             }
 
             // DON'T null out prevVersion.nextVersion.  That will allow any cursors pointing to the
@@ -1742,6 +1892,22 @@ class EntityInstanceImpl implements EntityInstance
         // If this entity has been changed then set the flag for the OI.
         if ( isChanged() )
             getObjectInstance().setUpdated( true );
+    }
+
+    /**
+     * Add the linked instances from source to 'this'. Intended to be used by
+     * Accept logic for merging linked instances from a new, accepted, entity.
+     *
+     * @param source
+     */
+    private void mergeLinkedInstances( EntityInstanceImpl source )
+    {
+        // If source doesn't have any linkedInstances than there's nothing to do.
+        if ( source.linkedInstances == null )
+            return;
+
+        for ( EntityInstanceImpl linked : source.linkedInstances.keySet() )
+            addLinkedInstance( linked );
     }
 
     void validateSubobject( Collection<ZeidonException> list )
@@ -2183,7 +2349,7 @@ class EntityInstanceImpl implements EntityInstance
      */
     Collection<EntityInstanceImpl> getAllLinkedInstances()
     {
-        return attributeList.getLinkedInstances( false, false, this );
+        return getLinkedInstances( false, false );
     }
 
     /**
@@ -2195,7 +2361,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Collection<EntityInstanceImpl> getLinkedInstances()
     {
-        return attributeList.getLinkedInstances( false, true, this );
+        return getLinkedInstances( false, true );
     }
 
     /**
@@ -2207,7 +2373,58 @@ class EntityInstanceImpl implements EntityInstance
      */
     Collection<EntityInstanceImpl> getAllLinkedInstances( boolean includeDropped )
     {
-        return attributeList.getLinkedInstances( includeDropped, false, this );
+        return getLinkedInstances( includeDropped, false );
+    }
+
+    /**
+     * Returns the linked instances if there are any. If 'excludeSource' is true
+     * then 'source' will be ignored when building the return list. This allows
+     * the caller to get a list of all other linked instances.
+     *
+     * Note that entities that have been dropped but not reclaimed by the GC
+     * will still show up in this list. We can skip most of those by ignoring
+     * ones flagged as dropped.
+     *
+     * @param source
+     *            Ignore this EI when creating the list.
+     *
+     * @return List of linked instances. If there are none, an empty list is
+     *         returned.
+     */
+    private Collection<EntityInstanceImpl> getLinkedInstances( boolean includeDropped, boolean excludeSource )
+    {
+        // If linkedInstances == null then this EI has never been linked to
+        // anything.
+        if ( linkedInstances == null )
+        {
+            if ( excludeSource )
+                return Collections.emptyList();
+
+            List<EntityInstanceImpl> list = new ArrayList<EntityInstanceImpl>();
+            list.add( this );
+            return list;
+        }
+
+        // We'll use a hash set instead of a list because some callers will use
+        // .contains(...)
+        // and a hash set is faster.
+        HashSet<EntityInstanceImpl> list = new HashSet<EntityInstanceImpl>( linkedInstances.size() );
+        for ( EntityInstanceImpl ei : linkedInstances.keySet() )
+        {
+            if ( ei == null )
+                continue;
+
+            if ( excludeSource && ei == this )
+                continue;
+
+            if ( ei.isDropped() && !includeDropped )
+                continue;
+
+            list.add( ei );
+        }
+
+        assert list.size() > 0  : "getLinkedInstances returned empty list";
+        return list;
     }
 
     /**
@@ -2394,9 +2611,24 @@ class EntityInstanceImpl implements EntityInstance
         return null;
     }
 
-    void copyAttributes(EntityInstanceImpl source, boolean copyPersist, boolean copyUpdateFlags)
+    void copyAttributes(EntityInstanceImpl sourceInstance, boolean copyPersist, boolean copyUpdateFlags)
     {
-        attributeList.copyAttributes( getTask(), source.attributeList, copyPersist, copyUpdateFlags );
+        for ( AttributeDef attributeDef : sourceInstance.getNonNullAttributeList() )
+        {
+            if ( attributeDef.isPersistent() && !copyPersist )
+                continue;
+
+            AttributeValue source = sourceInstance.getInternalAttribute( attributeDef );
+            AttributeValue target = getInternalAttribute( attributeDef );
+            Object internalValue = source.getInternalValue();
+            target.setInternalValue( getTask(), attributeDef, internalValue, true );
+            addHashKeyAttributeToMap( attributeDef );
+
+            if ( copyUpdateFlags )
+                target.copyUpdateFlags( source );
+            else
+                target.setUpdated( true );
+        }
     }
 
     /**
@@ -2706,50 +2938,6 @@ class EntityInstanceImpl implements EntityInstance
     public boolean isDbhForeignKey()
     {
         return dbhForeignKey;
-    }
-
-    /**
-     * Makes sure the attribute can be updated.
-     *
-     * @param attributeDef
-     */
-    private void validateUpdateAttribute( AttributeDef attributeDef )
-    {
-        // If this EI is versioned they we'll assume that it's ok because the versioning
-        // code should have already verified that none of the other instances are versioned.
-        if ( isVersioned() )
-            return;
-
-        // If the attribute is derived or work, then we do not need to check if the
-        // attribute can be updated.
-        if ( attributeDef.isDerived() )
-        	return;
-
-        // If the attribute is Persistent, then it is an attribute from the ER.
-        // Otherwise it's a work attribute and can be updated even if the
-        // object is read only.
-        if ( ! attributeDef.isPersistent() )
-        	return;
-
-        if ( ! attributeDef.isUpdate() )
-            throw new ZeidonException( "Attribute is defined as read-only" )
-                                .prependAttributeDef( attributeDef );
-
-        // If the entity is derived or work, then we do not need to check if the
-        // attribute can be updated.
-        if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
-        	return;
-
-        if ( getObjectInstance().isReadOnly() )
-            throw new ZeidonException( "Object Instance is read-only" )
-                                .prependEntityDef( getEntityDef() );
-
-        for ( EntityInstanceImpl linked : this.getLinkedInstances() )
-        {
-            if ( ! this.temporalVersionMatch( linked ) )
-                throw new TemporalEntityException( this,
-                            "Attempting to update an entity that is linked to a versioned instance" );
-        }
     }
 
     /**
@@ -3339,26 +3527,58 @@ class EntityInstanceImpl implements EntityInstance
             // Check to see if this instance is linked to another instance that
             // is versioned.  If one is found we'll copy its persistent attributes to newInstance.
             // We can do this by checking to see if any linked instances have the same version number.
-            AttributeListInstance linkedAttributeList = null;
+            EntityInstanceImpl linkedSourceInstance = null;
             for ( EntityInstanceImpl linked : prevVersionEi.getLinkedInstances() )
             {
                 if ( linked.versionNumber == version )
                 {
-                    linkedAttributeList = linked.attributeList;
+                    linkedSourceInstance = linked;
                     break;
                 }
             }
 
             // This adds the newInstance to the linked instances list.
-            newInstance.attributeList =
-                AttributeListInstance.newTemporalAttributeList( task,
-                                                                newInstance,
-                                                                prevVersionEi,
-                                                                prevVersionEi.attributeList, linkedAttributeList );
-
+            newInstance.newTemporalAttributeList( prevVersionEi, linkedSourceInstance );
             return newInstance;
         }
     } // private static class TemporalVersionCreator
+
+    /**
+     * Creates a new AttributeListInstance for a temporal entity. The work
+     * attributes are copied from prevInstanceAttributeList. Persistent
+     * attributes are copied from prevInstanceAttributeList unless
+     * linkedAttributeList is not null.
+     *
+     * If linkedAttributeList is not null then temporalInstance is linked to
+     * another instance so we'll just use the linked instance's persistent
+     * attribute.
+     *
+     * @param sourceInstance - source EI for the temporal instance.
+     * @param linkedSourceInstnce - If non-null, then the temporal instance will be linked to this one.
+     */
+    void newTemporalAttributeList( EntityInstanceImpl sourceInstance,
+                                   EntityInstanceImpl linkedSourceInstance )
+    {
+        workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
+
+        if ( linkedSourceInstance == null )
+        {
+            persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
+
+            // Copy work and persistent attributes.
+            copyAttributes( sourceInstance, true, true );
+            linkedInstances = null;
+        }
+        else
+        {
+            linkedSourceInstance.addLinkedInstance( this );
+
+            // Copy just work attributes.
+            copyAttributes( sourceInstance, false, true );
+        }
+
+        attributeInstanceMap = null;
+    }
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EntityInstance#logEntity()
@@ -3497,8 +3717,8 @@ class EntityInstanceImpl implements EntityInstance
         if ( ei == null )
             return false;
 
-        EntityInstanceImpl temp = (EntityInstanceImpl) ei.getEntityInstance();
-        return temp.attributeList.isLinkedWith( this.attributeList );
+        EntityInstanceImpl otherInstance = (EntityInstanceImpl) ei.getEntityInstance();
+        return persistentAttributes == otherInstance.persistentAttributes;
     }
 
     /**

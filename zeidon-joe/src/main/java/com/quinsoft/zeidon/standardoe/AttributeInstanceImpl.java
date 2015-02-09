@@ -182,12 +182,14 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public Object getInternalAttributeValue()
     {
+        executeDerivedOper();
         return attributeValue.getInternalValue();
     }
 
     @Override
     public Object getValue()
     {
+        executeDerivedOper();
         return attributeValue.getInternalValue();
     }
 

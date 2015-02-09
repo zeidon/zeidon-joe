@@ -1197,15 +1197,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 if ( ! rc.isSet() )
                 {
                     // Genkey entry doesn't exist, so add it.
-                    cursor.createEntity().setAttribute( "TableName", tableName  )
-                                         .setAttribute( "CurrentGenkey", 0  );
+                    cursor.createEntity().getAttribute( "TableName" ).setValue( tableName  )
+                                         .getAttribute( "CurrentGenkey" ).setValue( 0 );
                 }
 
                 genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getInteger(),
                                   cursor.getAttribute( "CurrentGenkey" ).getInteger() + 1 );
                 Integer count = genkey.getAttribute( "EntityCount" ).getInteger();
                 Integer c = cursor.getAttribute( "CurrentGenkey" ).getInteger();
-                cursor.setAttribute( "CurrentGenkey", count + c );
+                cursor.getAttribute( "CurrentGenkey" ).setValue( count + c );
             }
 
             genkeys.commit();
