@@ -137,7 +137,7 @@ public class ZeidonEntitySpinner extends Spinner implements ZeidonDisplayView, Z
         View view = viewDelegate.findMappingView( ).newView(); // Create a temp view.
         for ( EntityInstance ei : view.cursor( viewDelegate.getEntityName( ) ).eachEntity() )
         {
-            String value = ei.getStringFromAttribute( viewDelegate.getAttributeName() );
+            String value = ei.getAttribute( viewDelegate.getAttributeName() ).getString();
             stringList.add( value );
         }
 

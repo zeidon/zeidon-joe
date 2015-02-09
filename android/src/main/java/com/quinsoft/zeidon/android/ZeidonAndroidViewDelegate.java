@@ -380,13 +380,13 @@ public class ZeidonAndroidViewDelegate
             if ( entityInstance == null )
                 throw new ZeidonException( "Delegate entityInstance is null.  Did you forget to call setEntityInstance()?" );
 
-            if ( nullRepresentation != null && entityInstance.isAttributeNull( attributeName ) )
+            if ( nullRepresentation != null && entityInstance.getAttribute( attributeName ).isNull() )
                 return nullRepresentation;
 
             if ( StringUtils.isBlank( contextName ) )
-                return entityInstance.getStringFromAttribute( attributeName );
+                return entityInstance.getAttribute( attributeName ).getString();
 
-            return entityInstance.getStringFromAttribute( attributeName, contextName );
+            return entityInstance.getAttribute( attributeName ).getString( contextName );
         }
         catch ( Exception e )
         {
