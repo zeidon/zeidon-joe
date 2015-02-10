@@ -222,12 +222,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void logObjectInstance( )
     {
-        logObjectInstance( 0 );
-    }
-
-    @Override
-    public void logObjectInstance( long flags )
-    {
         log().debug( "Displaying OI for %s", lodDef );
 
         for ( EntityInstanceImpl ei = viewCursor.getObjectInstance().getRootEntityInstance();
@@ -247,17 +241,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void displayObjectInstance( )
     {
-        logObjectInstance( 0 );
-    }
-
-    /**
-     * @deprecated Use logObjectInstance instead.
-     */
-    @Deprecated
-    @Override
-    public void displayObjectInstance( long flags )
-    {
-        logObjectInstance( flags );
+        logObjectInstance();
     }
 
     @Override

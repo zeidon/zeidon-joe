@@ -134,19 +134,67 @@ public interface View extends TaskQualification, CacheMap
      */
     Object setCurrentSelectSet( Object key );
 
+    /**
+     * Writes the OI to a file using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOiToFile( String filename, EnumSet<WriteOiFlags> control );
 
     /**
-     * Writes the OI to a Java Writer.
+     * Writes the OI to a writer using POR formatting.
      *
-     * @param writer
+     * @deprecated use view.serializeOi() methods instead.
+     *
      */
+    @Deprecated
     void writeOi( Writer writer, EnumSet<WriteOiFlags> flags );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOi( Writer writer );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOi( Writer writer, WriteOiFlags flag );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOi( Writer writer, WriteOiFlags... flags );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOiToXml( String filename, EnumSet<WriteOiFlags> control );
 
+    /**
+     * Writes the OI to a blob using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     Blob writeOiToBlob( long control );
 
     /**
@@ -187,6 +235,10 @@ public interface View extends TaskQualification, CacheMap
 
     /**
      * Create a new view from the existing view and set the cursors to be the same.
+     *
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
      * @return new view.
      */
     View newView();
@@ -194,18 +246,39 @@ public interface View extends TaskQualification, CacheMap
     /**
      * Create a new view but set its owning task to a different task.
      *
-     * @param owningTask
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
+     * @param owningTask the view will be assigned to this task.
+     *
      * @return
      */
     View newView( TaskQualification owningTask );
 
     /**
-     * Create a new view that is readonly if readonly is true.
+     * Create a new view.  If readOnly is true then the new view will be read-only.
      *
-     * @return
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
+     * @param readOnly if true then the new view will be read-only
+     *
+     * @return new view.
      */
     View newView( boolean readOnly );
 
+    /**
+     * Create a new view.  If readOnly is true then the new view will be read-only.
+     * The owning task is specified by owningTask.
+     *
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
+     * @param owningTask the view will be assigned to this task.
+     * @param readOnly if true then the new view will be read-only
+     *
+     * @return the new view.
+     */
     View newView( TaskQualification owningTask, boolean readOnly );
 
     /**
@@ -213,7 +286,7 @@ public interface View extends TaskQualification, CacheMap
      * Whether an entity instance is created or included form the source OI is dependent on the
      * permissions as specified in the LOD.
      *
-     * @return
+     * @return duplicated OI.
      */
     View duplicateOi();
 
@@ -250,21 +323,31 @@ public interface View extends TaskQualification, CacheMap
      */
     void drop();
 
+    /**
+     * Writes the OI to the Zeidon logs.
+     */
     void logObjectInstance();
-    void logObjectInstance(long flags);
 
     /**
      * @deprecated Use logObjectInstance instead.
      */
     @Deprecated
     void displayObjectInstance();
-    /**
-     * @deprecated Use logObjectInstance instead.
-     */
-    @Deprecated
-    void displayObjectInstance(long flags);
 
+    /**
+     * Commit the changes to this OI to the backing DB.
+     *
+     * @return
+     */
     int commit();
+
+    /**
+     * Commits the changes to this OI to the backing DB with options specified.
+     *
+     * @param options
+     *
+     * @return
+     */
     int commit( CommitOptions options );
 
     /**

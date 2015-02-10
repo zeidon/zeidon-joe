@@ -15,7 +15,7 @@ files="../../zeidon-joe/src/main/java/com/quinsoft/zeidon/dbhandler/AbstractSqlH
        ../../zeidon-joe/src/main/java/com/quinsoft/zeidon/standardoe/EntityInstanceImpl.java
        ../../zeidon-joe/src/main/java/com/quinsoft/zeidon/standardoe/EntityCursorImpl.java"
 
-files=`find ../../zeidon-joe -name \*.java`
+files=`find ../../android -name \*.java`
 
 for f in $files; do 
     call_perl $f getInternalAttributeValue "getValue()"
