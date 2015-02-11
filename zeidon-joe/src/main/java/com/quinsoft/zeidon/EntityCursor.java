@@ -233,6 +233,13 @@ public interface EntityCursor extends EntityInstance
     EntityIterator<? extends EntityInstance> eachEntity( EntityDef scopingEntity );
 
     /**
+     * Loops through all the entities in the OI.
+     *
+     * @return EntityInstance iterator
+     */
+    EntityIterator<? extends EntityInstance> allEntities();
+
+    /**
      * Sets the cursor to the first twin.
      *
      * @return CursorResult.SET if the cursor is set<br>

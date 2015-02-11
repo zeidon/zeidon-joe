@@ -77,10 +77,10 @@ class EntityCursor( private[this]  val view: View,
     def sort( orderKeys: String ) = jentityCursor.orderEntities( orderKeys )
 
     /**
-     * Sorts the entities in ascending order by an attribute.  
-     * 
+     * Sorts the entities in ascending order by an attribute.
+     *
      * Example: to sort by Name use
-     *      view.MyEntity.sortBy( _.Name ) 
+     *      view.MyEntity.sortBy( _.Name )
      */
     def sortBy( attr : (AbstractEntity) => AttributeInstance ) = {
         sortWith( (ei1, ei2) => attr(ei1) <= attr( ei2 ) )
@@ -88,9 +88,9 @@ class EntityCursor( private[this]  val view: View,
 
     /**
      * Sorts the entities using Scala syntax.  Example:
-     * 
+     *
      *      view.MyEntity.sortWith( _.MyAttribute < _.MyAttribute )
-     *      
+     *
      * Will sort MyEntity entities in ascending order of MyAttribute attribute values.
      */
     def sortWith( comparator : ( AbstractEntity, AbstractEntity ) => Boolean ) = {
@@ -101,10 +101,10 @@ class EntityCursor( private[this]  val view: View,
             case v if v.startsWith("1.6") => new Java6Comparitor( comparator )
             case _ => new JavaComparitor( comparator )
         }
-        
+
         jentityCursor.orderEntities( jcomparitor )
     }
-    
+
     def setFirst = new CursorResult( jentityCursor.setFirst() )
     def setNext  = new CursorResult( jentityCursor.setNext() )
     def setLast  = new CursorResult( jentityCursor.setLast() )
@@ -211,8 +211,19 @@ class EntityCursor( private[this]  val view: View,
         minAttr
     }
 
+    /**
+     * Loop through all entities of a single type under the current parent.
+     */
     def each( looper: => Any ) = {
         val iter = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this )
+        iter.each( looper )
+    }
+
+    /**
+     * Loop through all entities of a single type in the OI
+     */
+    def all( looper: => Any ) = {
+        val iter = new EntityInstanceIterator( jentityCursor.allEntities() ).setCursor( this )
         iter.each( looper )
     }
 
@@ -266,11 +277,11 @@ class EntityCursor( private[this]  val view: View,
      * This class is a java.util.Comparator wrapper around the Scala scomparitor so
      * that we can use Java's sort method with Scala code.
      */
-    private[this] class Java6Comparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean ) 
+    private[this] class Java6Comparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean )
                         extends java.util.Comparator[com.quinsoft.zeidon.EntityInstance] {
-        
+
         /**
-         * This code relies on the Java 6 MergeSort algorithm using just "compare(...) > 0" and 
+         * This code relies on the Java 6 MergeSort algorithm using just "compare(...) > 0" and
          * "compare(...) <= 0".  If Java 6 ever uses a different algorithm this will break.
          */
         def compare(ei1: com.quinsoft.zeidon.EntityInstance, ei2: com.quinsoft.zeidon.EntityInstance): Int = {
@@ -287,11 +298,11 @@ class EntityCursor( private[this]  val view: View,
      * This class is a java.util.Comparator wrapper around the Scala scomparitor so
      * that we can use Java's sort method with Scala code.
      */
-    private[this] class JavaComparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean ) 
+    private[this] class JavaComparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean )
                         extends java.util.Comparator[com.quinsoft.zeidon.EntityInstance] {
-        
+
         /**
-         * This code relies on the Java 7+ TisSort algorithm using just "compare(...) < 0" and 
+         * This code relies on the Java 7+ TisSort algorithm using just "compare(...) < 0" and
          * "compare(...) >= 0".  If Java 7 ever uses a different algorithm this will break.
          */
         def compare(ei1: com.quinsoft.zeidon.EntityInstance, ei2: com.quinsoft.zeidon.EntityInstance): Int = {
@@ -307,7 +318,7 @@ class EntityCursor( private[this]  val view: View,
 
 object EntityCursor {
     private val JAVA_VERSION = System.getProperty("java.version");
-    
+
     val CURSOR_SET = CursorResult( com.quinsoft.zeidon.CursorResult.SET )
     val CURSOR_UNCHANGED = CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
 

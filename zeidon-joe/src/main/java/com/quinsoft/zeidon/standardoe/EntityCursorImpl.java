@@ -2975,4 +2975,14 @@ class EntityCursorImpl implements EntityCursor
     {
         return getExistingInstance().hasPrevTwin();
     }
+
+    @Override
+    public EntityIterator<? extends EntityInstance> allEntities()
+    {
+        return new IteratorBuilder( getObjectInstance() )
+                                    .setCursor( this )
+                                    .withOiScoping( getObjectInstance() )
+                                    .forEntityDef( getEntityDef() )
+                                    .build();
+    }
 }
