@@ -2453,11 +2453,22 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean hasNext()
     {
-        EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
-                                            .currentInstance( getEntityInstance() )
-                                            .forEntityDef( getEntityDef() )
-                                            .build();
-        return iter.hasNext();
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
+
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return false;
+
+        // See if there is a next, nonhidden twin.
+        for ( EntityInstanceImpl search = ei.getNextTwin(); search != null; search = search.getNextTwin() )
+        {
+            if ( !search.isHidden() )
+                return true;
+        }
+
+        // If we get here then we didn't find any non-hidden EIs.
+        return false;
     }
 
     /* (non-Javadoc)
@@ -2466,13 +2477,22 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean hasPrev()
     {
-        EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
-                                                .forEntityDef( getEntityDef() )
-                                                .currentInstance( getEntityInstance() )
-                                                .setLast()
-                                                .build();
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
 
-        return iter.hasPrev();
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return false;
+
+        // Look for a prev non-hidden twin.
+        for ( EntityInstanceImpl search = ei.getPrevTwin(); search != null; search = search.getPrevTwin() )
+        {
+            if ( ! search.isHidden() )
+                return true;
+        }
+
+        // If we get here then we didn't find any non-hidden EIs.
+        return false;
     }
 
     /* (non-Javadoc)
@@ -2481,13 +2501,32 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean hasAny()
     {
-        EntityIterator<EntityInstanceImpl> iter =
-                new IteratorBuilder( getObjectInstance() )
-                        .forEntityDef( getEntityDef() )
-                        .forTwinsOf( getEntityInstance() )
-                        .build();
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
 
-        return iter.hasNext();
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return false;
+
+        if ( ! ei.isHidden() )
+            return true;
+
+        // If we get here then ei is hidden. See if there are any non-hidden EIs
+        // either before or after this ei.
+        for ( EntityInstanceImpl search = ei.getPrevTwin(); search != null; search = search.getPrevTwin() )
+        {
+            if ( ! search.isHidden() )
+                return true;
+        }
+
+        for ( EntityInstanceImpl search = ei.getNextTwin(); search != null; search = search.getNextTwin() )
+        {
+            if ( !search.isHidden() )
+                return true;
+        }
+
+        // If we get here then we didn't find any non-hidden EIs.
+        return false;
     }
 
     /* (non-Javadoc)
