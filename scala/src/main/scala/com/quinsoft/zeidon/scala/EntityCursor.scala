@@ -33,6 +33,9 @@ class EntityCursor( private[this]  val view: View,
             extends AbstractEntity( jentityCursor.getEntityDef() )
             with Iterable[EntityInstance]
 {
+    /**
+      * Returns the underlying Java EntityCursor.
+      */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
         val instance = jentityCursor.getEntityInstance()
         if ( instance == null )
@@ -41,19 +44,61 @@ class EntityCursor( private[this]  val view: View,
         instance
     }
 
+    /** Creates a new entity instance.
+      * 
+      * Creates a new entity instance that is positioned after the currently selected
+      * entity instance.
+      * 
+      * @returns this
+      */
     def create: EntityCursor = {
         jentityCursor.createEntity()
         this
     }
 
+    /** Creates a new entity instance.
+      * 
+      * Creates a new entity instance.  The position of the new instance is determined
+      * by CursorPosition.
+      * 
+      * @returns this
+      */
     def create( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
         jentityCursor.createEntity()
         this
     }
 
-    def exists = jentityCursor.checkExistenceOfEntity().isSet()
+    /** 
+      *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
+      */
+    def exists = jentityCursor.hasAny()
+    
+    /**
+     * Returns true if this cursor points to a non-hidden entity instance.
+     */
+    def isSet = jentityCursor.checkExistenceOfEntity().isSet()
+    
+    /**
+     * Removes the selected entity from the OI but does not flag it for deletion.
+     *
+     * Note: If this entity is persistent then it may prevent the parent entity from
+     * being deleted.
+     *
+     * @return the result of the reposition.
+     */
     def drop: CursorResult = jentityCursor.dropEntity()
+    
+    /**
+     * Removes the selected entity from the OI but does not flag it for deletion.
+     *
+     * Note: If this entity is persistent then it may prevent the parent entity from
+     * being deleted.
+     *
+     * @param position specifies the new position of the cursor.
+     * @return the result of the reposition.
+     */
     def drop( reposition: CursorPosition ): CursorResult = jentityCursor.dropEntity( reposition )
+
     def delete(): CursorResult = jentityCursor.deleteEntity()
     def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
     def exclude( position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.excludeEntity( position )
@@ -143,24 +188,24 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /**
-     * Set the cursor using a hashkey attribute value.
-     */
-    def set( setter: (HashSetter) => Any ): CursorResult = {
+      * Set the cursor using a hashkey attribute value.
+      */
+    def set( setter: ( HashSetter ) => Any ): CursorResult = {
         val hashSetter = new HashSetter()
         setter( hashSetter )
         hashSetter.getResult
     }
 
     /**
-     * Set the cursor to reference the max attribute value for the specified attribute.
-     * If more than one attribute has the same max value then the first attribute is used.
-     * Returns the AttributeInstance.
-     *
-     * Example: sets the cursor to the oldest child:
-     *
-     *      view.Child.setMax( _.Age )
-     */
-    def setMax( f_attr: (AbstractEntity ) => AttributeInstance ): AttributeInstance = {
+      * Set the cursor to reference the max attribute value for the specified attribute.
+      * If more than one attribute has the same max value then the first attribute is used.
+      * Returns the AttributeInstance.
+      *
+      * Example: sets the cursor to the oldest child:
+      *
+      *      view.Child.setMax( _.Age )
+      */
+    def setMax( f_attr: ( AbstractEntity ) => AttributeInstance ): AttributeInstance = {
         var maxAttr: AttributeInstance = null
         each {
             val attr = f_attr( this )
@@ -182,15 +227,15 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /**
-     * Set the cursor to reference the minimum attribute value for the specified attribute.
-     * If more than one attribute has the same min value then the first attribute is used.
-     * Returns the AttributeInstance.
-     *
-     * Example: sets the cursor to the youngest child:
-     *
-     *      view.Child.setMin( _.Age )
-     */
-    def setMin( f_attr: (AbstractEntity ) => AttributeInstance ): AttributeInstance = {
+      * Set the cursor to reference the minimum attribute value for the specified attribute.
+      * If more than one attribute has the same min value then the first attribute is used.
+      * Returns the AttributeInstance.
+      *
+      * Example: sets the cursor to the youngest child:
+      *
+      *      view.Child.setMin( _.Age )
+      */
+    def setMin( f_attr: ( AbstractEntity ) => AttributeInstance ): AttributeInstance = {
         var minAttr: AttributeInstance = null
         each {
             val attr = f_attr( this )

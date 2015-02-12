@@ -192,8 +192,8 @@ public interface EntityCursor extends EntityInstance
     CursorResult   excludeEntity( CursorPosition position );
 
 
-    void           includeSubobject( EntityInstance source, CursorPosition position );
-    void           includeSubobject( EntityInstance source );
+    void includeSubobject( EntityInstance source, CursorPosition position );
+    void includeSubobject( EntityInstance source );
 
     /**
      * This will create a new entity and copy non-key attributes from 'source'.  This
@@ -335,6 +335,13 @@ public interface EntityCursor extends EntityInstance
     CursorResult setFirstWithinOi( AttributeDef attributeDef, Object value );
 
     CursorResult setNext();
+
+    /**
+     * Sets the cursor to the next entity using the search configuration of the most
+     * recent setFirst/setNext call.  This allows for faster iteration through entities.
+     *
+     * @return
+     */
     CursorResult setNextContinue();
     CursorResult setNext( String scopingEntityName );
     CursorResult setNext( EntityDef scopingEntity );
@@ -356,7 +363,13 @@ public interface EntityCursor extends EntityInstance
      */
     boolean hasPrev();
 
+    /**
+     * Returns true if there are any non-hidden twins for this cursor.
+     *
+     * @return true if there are any non-hidden twins for this cursor.
+     */
     boolean hasAny();
+
     boolean hasAny( String scopingEntityName );
     boolean hasAny( EntityDef entityDef );
     boolean hasAny( String attributeName, Object value );
