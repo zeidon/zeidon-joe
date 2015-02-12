@@ -604,6 +604,12 @@ public interface EntityInstance
      */
     int setMatchingAttributesByName( EntityInstance sourceInstance, EnumSet<SetMatchingFlags> control );
     int setMatchingAttributesByName( EntityInstance sourceInstance );
+
+    /**
+     * Creates a builder for copying attributes from one entity to another.
+     *
+     * @return new matcher.
+     */
     SetMatchingFlagsBuilder setMatchingAttributesByName();
 
     void logEntity();

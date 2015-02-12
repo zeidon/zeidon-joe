@@ -10,7 +10,6 @@ import java.io.Writer;
 import java.util.List;
 
 import com.quinsoft.zeidon.CursorResult;
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
@@ -177,14 +176,14 @@ class SimpleTest
 //        stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
         stud.serializeOi().asJson().toFile( "/tmp/stud2.json" );
 
-        View stud2 = new DeserializeOi( zencas )
+        View stud2 = zencas.deserializeOi()
                             .fromResource( "/tmp/stud2.json" )
                             .setLodDef( "lStudDpt" )
                             .asJson()
                             .activateFirst();
 //        stud2.logObjectInstance();
 
-        List<View> stud3 = new DeserializeOi( zencas )
+        List<View> stud3 = zencas.deserializeOi()
                             .fromResource( "/tmp/stud.json" )
                             .activate();
         stud3.get( 0 ).logObjectInstance();

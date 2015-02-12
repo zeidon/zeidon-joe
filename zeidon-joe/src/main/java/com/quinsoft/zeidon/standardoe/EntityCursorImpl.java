@@ -59,7 +59,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  */
 class EntityCursorImpl implements EntityCursor
 {
-    private final EntityDef       entityDef;
+    private final EntityDef        entityDef;
     private final ViewCursor       viewCursor;
     private final EntityCursorImpl parentCursor;
 
@@ -2929,9 +2929,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public AttributeInstance getAttribute( AttributeDef attributeDef )
     {
-        AttributeInstanceImpl attributeInstance = getExistingInstance().getAttribute( attributeDef );
-        attributeInstance.setView( getView() );
-        return attributeInstance;
+        return getExistingInstance().getAttribute( getView(), attributeDef );
     }
 
     @Override
