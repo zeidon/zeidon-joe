@@ -132,46 +132,48 @@ public class TestSWAU
 		   	   SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
 		   	   
 		       RESULT = SetCursorFirstEntity( mPerson, "Address", "" );
-		       while ( RESULT > zCURSOR_UNCHANGED )
-		       { 
-		          //:IF mPerson.Address.Type = "Permanent"
-		          if ( CompareAttributeToString( mPerson, "Address", "Type", "Permanent" ) == 0 )
-		          { 
-		             //:szPermanent = "Y" 
-		              {StringBuilder sb_szPermanent;
-		             if ( szPermanent == null )
-		                sb_szPermanent = new StringBuilder( 32 );
-		             else
-		                sb_szPermanent = new StringBuilder( szPermanent );
-		                         ZeidonStringCopy( sb_szPermanent, 1, 0, "Y", 1, 0, 2 );
-		             szPermanent = sb_szPermanent.toString( );}
-		             //:// Check if this address is their primary.
-		             lTempInteger_1 = CheckExistenceOfEntity( mPerson, "PrimaryAddress" );
-		             if ( lTempInteger_1 == 0 )
-		             { 
-		                //:// The permanent address and the primary address are not the same.
-		                //:// Make the permanent address the primary address.
-		                if ( CompareAttributeToAttribute( mPerson, "PrimaryAddress", "ID", mPerson, "Address", "ID" ) != 0 )
-		                { 
-		                   //:// Getting an error on PrimaryForPerson (cardinality) so relink before excluding.
-		                   lTempInteger_2 = CheckExistenceOfEntity( mPerson, "PrimaryForPerson" );
-		                   if ( lTempInteger_2 == 0 )
-		                   { 
-		                      //:RelinkInstanceToInstance( mPerson, "PrimaryForPerson", mPerson, "Person" )
-		                      RelinkInstanceToInstance( mPerson, "PrimaryForPerson", mPerson, "Person" );
-		                   } 
-
-		                   RESULT = ExcludeEntity( mPerson, "PrimaryAddress", zREPOS_AFTER );
-		                   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
-		    			   try {
-		                   RESULT = CommitObjectInstance( mPerson );
-		    			   }
-		   				   catch (ZeidonException e) {
-			    		       Assert.fail( "Commit did not throw error with missing child");
-						}			   
-		                } 
-		             } 
-		          } 
+                while ( RESULT > zCURSOR_UNCHANGED )
+                {
+                    // :IF mPerson.Address.Type = "Permanent"
+                    if ( CompareAttributeToString( mPerson, "Address", "Type", "Permanent" ) == 0 )
+                    {
+                        // :szPermanent = "Y"
+                        {
+                            StringBuilder sb_szPermanent;
+                            if ( szPermanent == null )
+                                sb_szPermanent = new StringBuilder( 32 );
+                            else
+                                sb_szPermanent = new StringBuilder( szPermanent );
+                            ZeidonStringCopy( sb_szPermanent, 1, 0, "Y", 1, 0, 2 );
+                            szPermanent = sb_szPermanent.toString();
+                        }
+                        // :// Check if this address is their primary.
+                        lTempInteger_1 = CheckExistenceOfEntity( mPerson, "PrimaryAddress" );
+                        if ( lTempInteger_1 == 0 )
+                        {
+                            // :// The permanent address and the primary address are
+                            // not the same.
+                            // :// Make the permanent address the primary address.
+                            if ( CompareAttributeToAttribute( mPerson, "PrimaryAddress", "ID", mPerson,
+                                    "Address", "ID" ) != 0 )
+                            {
+                                // :// Getting an error on PrimaryForPerson
+                                // (cardinality) so relink before excluding.
+                                lTempInteger_2 = CheckExistenceOfEntity( mPerson, "PrimaryForPerson" );
+                                if ( lTempInteger_2 == 0 )
+                                {
+                                    // :RelinkInstanceToInstance( mPerson,
+                                    // "PrimaryForPerson", mPerson, "Person" )
+                                    RelinkInstanceToInstance( mPerson, "PrimaryForPerson", mPerson, "Person" );
+                                }
+    
+                                RESULT = ExcludeEntity( mPerson, "PrimaryAddress", zREPOS_AFTER );
+                                RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson,
+                                        "Address", zPOS_AFTER );
+                                RESULT = CommitObjectInstance( mPerson );
+                            }
+                        }
+                    }
 
 		          RESULT = SetCursorNextEntity( mPerson, "Address", "" );
 		          //:END 
