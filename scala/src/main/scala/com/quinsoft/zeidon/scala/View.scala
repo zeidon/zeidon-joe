@@ -30,8 +30,19 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
 
+    /**
+     * Sets the LOD definition for this View.
+     */
     def basedOn( viewDef: ViewDef ) = setLod( viewDef.lodName , viewDef.applicationName  )
+
+    /**
+     * Sets the LOD definition for this View.
+     */
     def basedOn( lodName: String ) = setLod( lodName )
+    
+    /**
+     * Sets the LOD definition for this view as BASED ON LOD lod-name
+     */
     def BASED( f: VmlSyntaxFiller ) = this
     def LOD( lodName: String ): View = setLod( lodName )
     def LOD( viewDef: ViewDef ): View = setLod( viewDef.lodName , viewDef.applicationName  )
@@ -51,28 +62,52 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
         return this
     }
 
+    /**
+     * Returns the LodDef for this view.  MAY BE NULL if the View was created without
+     * basedOn.
+     */
     def lodDef = jlodDef
 
-    def from( view: View ) = {
-        jview = view.jview.newView()
+    /**
+     * Sets the jview and lodDef from srcView. 
+     */
+    private def from( srcView: View ) = {
+        jview = srcView.jview.newView()
         jlodDef = jview.getLodDef()
         this
     }
 
-    def copyCursors( view: View ) = {
+    /**
+     * Creates a new View that has the same cursor positions as the current view.
+     */
+    def duplicate = { validateNonEmpty; new View( jview.newView ) }
+    
+    /**
+     * Set the cursors from sourceView to 'this'.
+     */
+    def copyCursors( sourceView: View ) = {
         if ( jview == null )
             throw new ZeidonException( "View has no OI" )
 
-        jview.copyCursors( view.jview )
+        jview.copyCursors( sourceView.jview )
         this
     }
 
+    /**
+     * Creates an empty OI for this view.  The LOD must have been previously
+     * specified with basedOn.
+     */
     def activateEmpty() = {
         validateLodDef
         jview = jtask.activateEmptyObjectInstance( jlodDef )
         this
     }
 
+    /**
+     * Activates an OI from the DB with simple qualification.
+     * 
+     * Returns 'this' for convenience.
+     */
     def activateWhere( addQual: ( QualBuilder ) => QualBuilder ): View = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
@@ -81,6 +116,12 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
         this
     }
 
+    /**
+     * Activates all data from the DB for this LOD.  I.e. activates without
+     * qualification.  Use carefully.
+     * 
+     * Returns 'this' for convenience.
+     */
     def activateAll(): View = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
@@ -88,11 +129,17 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
         this
     }
 
+    /**
+     * Creates a QualBuilder for creating activate qualification.
+     */
     def buildQual( addQual: ( QualBuilder ) => QualBuilder ): QualBuilder = {
         val builder = buildQual()
         addQual( builder )
     }
 
+    /**
+     * Creates a QualBuilder for creating activate qualification.
+     */
     def buildQual(): QualBuilder = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
@@ -116,19 +163,51 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     def newView( task: Task = this.task ) = { validateNonEmpty; new View( task ).from( this ) }
 
     /**
-     * Creates a new View that has the same cursor positions as the current view.
+     * Sets the name of this view in its owning task.
      */
-    def duplicate = { validateNonEmpty; new View( jview.newView ) }
     def name( viewName: String ) = { validateNonEmpty; jview.setName( viewName ) }
+    
     def assert = new AssertView( this )
-    def odName = if ( jlodDef == null ) "*not specified*" else jlodDef.getName
+    
+    /**
+     * Returns the name of the LOD associated with this View or "*not specified*"
+     * if it hasn't been specified.
+     */
+    def lodName = if ( jlodDef == null ) "*not specified*" else jlodDef.getName
+    
+    /**
+     * Returns true if the OI is empty (i.e. has no root entities).
+     */
     def isEmpty = { validateNonEmpty; jview.isEmpty() }
+    
+    /**
+     * Writes the entire OI to the log file.
+     */
     def logObjectInstance = { validateNonEmpty; jview.logObjectInstance() }
+    
+    /**
+     * Returns the options that were used to activate this OI.
+     */
     def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
+    
+    /**
+     * Returns a serializer that can be used to serialize this OI.
+     */
     def serializeOi = { validateNonEmpty; jview.serializeOi() }
+    
+    /**
+     * Returns a deserializer for that can be used to deserialize an OI.
+     */
     override def deserializeOi = { validateNonEmpty; jview.deserializeOi() }
+    
+    /**
+     * Creates a SelectSet for this View.
+     */
     def createSelectSet() = { validateNonEmpty; jview.createSelectSet() }
 
+    /**
+     * Returns an EntityCursor for the entity specified by entityDef.
+     */
     def cursor( entityDef: EntityDef ) = {
         validateNonEmpty
         new EntityCursor( this, jview.cursor( entityDef ) )
@@ -145,6 +224,8 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     /**
      * This is called when the compiler doesn't recognize a method name.  This
      * is used to find the entity cursor for a view.
+     * 
+     * Not intended to be called directly by user code.
      */
     def selectDynamic( entityName: String ): EntityCursor = {
         validateNonEmpty
@@ -156,6 +237,8 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     /**
      * Called dynamically to process a Object Operation.
+     * 
+     * Not intended to be called directly by user code.
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
@@ -180,26 +263,12 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
         if ( jview == null )
             throw new ZeidonException( "View does not have a valid OI.  Did you forget to call activateEmpty()?" )
     }
-
-    class LodChooser extends Dynamic {
-
-        private def setLod( lodName: String ): View = {
-            jlodDef = task.jtask.getApplication().getLodDef( task.jtask, lodName )
-            if ( jview != null && jview.getLodDef() != jlodDef )
-                throw new ZeidonException( "LodDef set by basedOnLod doesn't match view." )
-
-            View.this
-        }
-
-        /**
-         * This is called when the compiler doesn't recognize a method name.  This
-         * is used to find the LOD name for basedOnLod
-         */
-        def selectDynamic( lodName: String ): View = setLod( lodName )
-        //        def applyDynamic( lodName: String)(args: Any* ) = setLod( lodName )
-    }
 }
 
+/**
+ * A class who's sole purpose is to allow Scala syntax to mirror VML syntax.  For example, this
+ * is used to allow "VIEW BASED ON LOD lod-name" syntax.
+ */
 class VmlSyntaxFiller {}
 
 object View {
