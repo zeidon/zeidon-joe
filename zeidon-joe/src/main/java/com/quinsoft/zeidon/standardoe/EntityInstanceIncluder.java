@@ -152,7 +152,7 @@ class EntityInstanceIncluder
     private EntityInstanceImpl performInclude()
     {
         // Create the root instance and all children.  Sets rootInstance.
-        createInstance( rootSource, rootTargetEntityDef, rootTargetParent, rootTargetInstance, rootPosition );
+        createIncludedInstance( rootSource, rootTargetEntityDef, rootTargetParent, rootTargetInstance, rootPosition );
 
         // If the new entity is updated set OI flag to indicate it.
         // TODO: instance versioned?
@@ -220,11 +220,11 @@ class EntityInstanceIncluder
     /**
      * Creates the new target instance from sourceInstance and all child entity instances.
      */
-    private EntityInstanceImpl createInstance( final EntityInstanceImpl sourceInstance,
-                                               final EntityDef          targetEntityDef,
-                                               final EntityInstanceImpl targetParent,
-                                               final EntityInstanceImpl targetInstance,
-                                               final CursorPosition     position )
+    private EntityInstanceImpl createIncludedInstance( final EntityInstanceImpl sourceInstance,
+                                                       final EntityDef targetEntityDef,
+                                                       final EntityInstanceImpl targetParent,
+                                                       final EntityInstanceImpl targetInstance,
+                                                       final CursorPosition position )
     {
         EntityInstanceImpl newInstance;
         newInstance = new EntityInstanceImpl( targetOi, targetEntityDef, targetParent, targetInstance, position );
@@ -281,7 +281,7 @@ class EntityInstanceIncluder
 
             // TODO: Check for versioning.
 
-            prevInstance = createInstance( child, targetChildEntityDef, newInstance, prevInstance, CursorPosition.LAST );
+            prevInstance = createIncludedInstance( child, targetChildEntityDef, newInstance, prevInstance, CursorPosition.LAST );
         }
 
         // Now check to see if the parent of the source is a child of the target.  If so,
@@ -321,7 +321,7 @@ class EntityInstanceIncluder
                 continue;
 
             // If we get here then we need to copy C' to C.
-            createInstance( sourceParent, childEntityDef, newInstance, null, CursorPosition.LAST );
+            createIncludedInstance( sourceParent, childEntityDef, newInstance, null, CursorPosition.LAST );
 
             // We only need to copy one so we're done.
             break;

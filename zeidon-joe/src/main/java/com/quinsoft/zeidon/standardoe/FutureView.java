@@ -164,4 +164,20 @@ class FutureView extends InternalViewForwarder implements Future<View>
         // Call super to get the view without waiting for the future to return.
         return super.getView().getActivateOptions();
     }
+
+    @Override
+    public boolean isAllowHiddenEntities()
+    {
+        // We don't need to wait for the activate to get this flag.
+        // Call super to get the view without waiting for the future to return.
+        return super.getView().isAllowHiddenEntities();
+    }
+
+    @Override
+    public boolean setAllowHiddenEntities( boolean allowHiddenEntities )
+    {
+        // We don't need to wait for the activate to set this flag.
+        // Call super to get the view without waiting for the future to return.
+        return super.getView().setAllowHiddenEntities( allowHiddenEntities );
+    }
 }

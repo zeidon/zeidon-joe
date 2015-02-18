@@ -27,7 +27,9 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
- * @author DG
+ * A View is the main interface for manipulating Zeidon data organized in Object Instances
+ * (OIs).  A view is a set of EntityCursors, one for each entity specified in the LOD.
+ * The EntityCursor is used to scan through existing Entity Instances in an OI.
  *
  */
 public interface View extends TaskQualification, CacheMap
@@ -46,9 +48,46 @@ public interface View extends TaskQualification, CacheMap
     @Override
     Application getApplication();
 
+    /**
+     * Returns the LodDef for this View.
+     *
+     * @return the LodDef for this view.
+     */
     LodDef getLodDef();
+
+    /**
+     * Returns 'true' if this View is read-only.  A read-only view can not be used
+     * to update the underlying OI.  It is possible for a different view to update
+     * the same OI.
+     *
+     * @return true if this View is read-only.
+     */
     boolean isReadOnly();
+
+    /**
+     * Used to set the read-only flag for this view.
+     *
+     * @param readOnly if 'true' then this View will be read-only.
+     */
     void setReadOnly( boolean readOnly );
+
+    /**
+     * If true then allow cursors to refer to hidden entities without throwing
+     * an exception.  Intended to be used  by DBHandlers.
+     *
+     * @return true if the view can reference hidden (e.g. deleted) entities.
+     */
+    boolean isAllowHiddenEntities();
+
+    /**
+     * If set to true then this view can reference hidden entities without throwing
+     * an exception.  Intended to be used by DBHandlers.
+     *
+     * @param allowHiddenEntities
+     *
+     * @return the previous value of allowHiddenEntities.
+     */
+    boolean setAllowHiddenEntities( boolean allowHiddenEntities );
 
     /**
      * Returns an ID for the view that is unique for the JVM.
@@ -65,22 +104,38 @@ public interface View extends TaskQualification, CacheMap
      */
     long getOiId();
 
+    /**
+     * Returns the EntityCursor for the entity specified by name.
+     *
+     * @param entityName name of the entity.
+     *
+     * @return the EntityCursor.
+     */
     EntityCursor cursor( String entityName );
+
+    /**
+     * Returns the EntityCursor for the entity specified by EntityDef.
+     *
+     * @param entityDef definition of the entity.
+     *
+     * @return the EntityCursor.
+     */
     EntityCursor cursor( EntityDef entityDef );
 
     /**
      * Synonym for cursor( String entityName );
      *
-     * @param entityName
-     * @return
+     * @param entityName name of the entity.
+     *
+     * @return the EntityCursor.
      */
     EntityCursor getCursor( String entityName );
 
     /**
      * Synonym for cursor( EntityDef entityDef ).
      *
-     * @param entityDef
-     * @return
+     * @param entityDef definition of the entity.
+     * @return the EntityCursor.
      */
     EntityCursor getCursor( EntityDef entityDef );
 
@@ -116,19 +171,67 @@ public interface View extends TaskQualification, CacheMap
      */
     Object setCurrentSelectSet( Object key );
 
+    /**
+     * Writes the OI to a file using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOiToFile( String filename, EnumSet<WriteOiFlags> control );
 
     /**
-     * Writes the OI to a Java Writer.
+     * Writes the OI to a writer using POR formatting.
      *
-     * @param writer
+     * @deprecated use view.serializeOi() methods instead.
+     *
      */
+    @Deprecated
     void writeOi( Writer writer, EnumSet<WriteOiFlags> flags );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOi( Writer writer );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOi( Writer writer, WriteOiFlags flag );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOi( Writer writer, WriteOiFlags... flags );
+
+    /**
+     * Writes the OI to a writer using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     void writeOiToXml( String filename, EnumSet<WriteOiFlags> control );
 
+    /**
+     * Writes the OI to a blob using POR formatting.
+     *
+     * @deprecated use view.serializeOi() methods instead.
+     *
+     */
+    @Deprecated
     Blob writeOiToBlob( long control );
 
     /**
@@ -169,6 +272,10 @@ public interface View extends TaskQualification, CacheMap
 
     /**
      * Create a new view from the existing view and set the cursors to be the same.
+     *
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
      * @return new view.
      */
     View newView();
@@ -176,18 +283,39 @@ public interface View extends TaskQualification, CacheMap
     /**
      * Create a new view but set its owning task to a different task.
      *
-     * @param owningTask
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
+     * @param owningTask the view will be assigned to this task.
+     *
      * @return
      */
     View newView( TaskQualification owningTask );
 
     /**
-     * Create a new view that is readonly if readonly is true.
+     * Create a new view.  If readOnly is true then the new view will be read-only.
      *
-     * @return
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
+     * @param readOnly if true then the new view will be read-only
+     *
+     * @return new view.
      */
     View newView( boolean readOnly );
 
+    /**
+     * Create a new view.  If readOnly is true then the new view will be read-only.
+     * The owning task is specified by owningTask.
+     *
+     * This method is thread-safe, meaning that multiple threads can create a new
+     * view from the same one.
+     *
+     * @param owningTask the view will be assigned to this task.
+     * @param readOnly if true then the new view will be read-only
+     *
+     * @return the new view.
+     */
     View newView( TaskQualification owningTask, boolean readOnly );
 
     /**
@@ -195,7 +323,7 @@ public interface View extends TaskQualification, CacheMap
      * Whether an entity instance is created or included form the source OI is dependent on the
      * permissions as specified in the LOD.
      *
-     * @return
+     * @return duplicated OI.
      */
     View duplicateOi();
 
@@ -224,29 +352,42 @@ public interface View extends TaskQualification, CacheMap
     ActivateOptions getActivateOptions();
 
     /**
-     * Drops all view names for this view.  The view will not be cleaned up by the GC
-     * until all application references are removed.
+     * Drops all view names for this view and flags this view as invalid.
      *
      * This will only attempt to remove the view from the default application view list.
      * If this view was named for a different application then it must be removed explicitly.
+     *
+     * Note: this only drops the view but does not drop the OI unless there are no
+     * other Views that reference the OI.  Dropping a view will have no effect on
+     * other views.
      */
     void drop();
 
+    /**
+     * Writes the OI to the Zeidon logs.
+     */
     void logObjectInstance();
-    void logObjectInstance(long flags);
 
     /**
      * @deprecated Use logObjectInstance instead.
      */
     @Deprecated
     void displayObjectInstance();
-    /**
-     * @deprecated Use logObjectInstance instead.
-     */
-    @Deprecated
-    void displayObjectInstance(long flags);
 
+    /**
+     * Commit the changes to this OI to the backing DB.
+     *
+     * @return
+     */
     int commit();
+
+    /**
+     * Commits the changes to this OI to the backing DB with options specified.
+     *
+     * @param options
+     *
+     * @return
+     */
     int commit( CommitOptions options );
 
     /**
@@ -277,16 +418,89 @@ public interface View extends TaskQualification, CacheMap
     //
     // View name methods.
     //
+
+    /**
+     * Sets the name for this view inside its task.  This view can be retrieved by
+     * its name given its task.  For example:
+     *
+     * <code>
+     *      View view = task.activate....();
+     *      view.setName( "MyName" );
+     *      ...
+     *      View anotherView = task.getViewByName( "MyName" ); // anotherView == view
+     * </code>
+     *
+     * @param name Name of the view.
+     */
     void setName(String name);
+
+    /**
+     * Drops a name for the view.  This does not drop the view.
+     *
+     * @param name name to be dropped.
+     */
     void dropNameForView(String name);
+
+    /**
+     * Gets the list of all names for this view.
+     *
+     * @return list of all names for this view.
+     */
     Collection<String> getNameList();
 
+    /**
+     * Retrieves a view by name that was assigned under a subtask view.  See
+     * setNameForSubtaskView for more info.
+     *
+     * @param name Name of view to retrieve.
+     *
+     * @return named view if it exists.
+     */
     View getViewByNameForSubtask(String name);
+
+    /**
+     * Names a view within another view (which is known as a subtask).  This allows
+     * views to be grouped together under a single view.  View names do not have to be
+     * unique across all views.  For example:
+     *
+     * <code>
+     *  View subtask1 = task.activate...();
+     *  View subtask2 = task.activate...();
+     *  View v1 = task.activate...();
+     *  view v2 = task.activate...();
+     *
+     *  subtask1.setNameForSubtask( "MyName", v1 );
+     *  subtask2.setNameForSubtask( "MyName", v2 );
+     *
+     *  View temp = subtask1.getViewByNameForSubtask( "MyName" ); // temp == v1
+     * </code>
+     *
+     * @param name Name to give to subtask view.
+     * @param view View that will be named under the subtask view.
+     */
     void setNameForSubtask(String name, View view);
+
+    /**
+     * Drops the name for a subtask view.
+     *
+     * @param name Name to drop
+     * @param view view to drop.  TODO: Is this necessary?
+     */
     void dropNameForSubtask(String name, View view);
+
+    /**
+     * Returns the view names that have been added under this subtask.
+     *
+     * @return list of subtask view names.
+     */
     Collection<String> getSubtaskNameList();
 
+    /**
+     * @deprecated use the appropriate getViewByName.
+     */
+    @Deprecated
     View getViewByName( String name, Level level );
+
     void setName(String name, Level level);
 
     /**
@@ -329,6 +543,11 @@ public interface View extends TaskQualification, CacheMap
      */
     void setLazyLoad( boolean lazyLoad );
 
+    /**
+     * Returns true if the lazy-load is enabled for this View.  See setLazyLoad for more.
+     *
+     * @return true if Lazy Load is enabled for this view.
+     */
     boolean isLazyLoad();
 
     /**
@@ -351,12 +570,12 @@ public interface View extends TaskQualification, CacheMap
      * @return
      */
     boolean isEmpty();
-    
+
     /**
      * Return the number of entities in the OI.
-     * 
+     *
      * @param includeHidden if true, count hidden entities.
-     * 
+     *
      * @return
      */
     int getEntityCount( boolean includeHidden );

@@ -59,7 +59,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  */
 class EntityCursorImpl implements EntityCursor
 {
-    private final EntityDef       entityDef;
+    private final EntityDef        entityDef;
     private final ViewCursor       viewCursor;
     private final EntityCursorImpl parentCursor;
 
@@ -243,7 +243,7 @@ class EntityCursorImpl implements EntityCursor
 
     private EntityInstanceImpl getExistingInstance() throws NullCursorException
     {
-        return getExistingInstance( false );
+        return getExistingInstance( getView().isAllowHiddenEntities() );
     }
 
     private EntityInstanceImpl setEntityInstance( EntityInstanceImpl entityInstance )
@@ -1363,14 +1363,13 @@ class EntityCursorImpl implements EntityCursor
 
     private static class SortKey
     {
-        AttributeDef AttributeDef;
+        AttributeDef attributeDef;
         boolean       ascending;
-        @SuppressWarnings("unused")
         String        context;
 
         SortKey(AttributeDef AttributeDef, boolean ascending, String context)
         {
-            this.AttributeDef = AttributeDef;
+            this.attributeDef = AttributeDef;
             this.ascending = ascending;
             this.context = context;
         }
@@ -1418,7 +1417,7 @@ class EntityCursorImpl implements EntityCursor
                 EntityInstanceImpl cei1 = ei1;
                 EntityInstanceImpl cei2 = ei2;
 
-                EntityDef sortEntity = key.AttributeDef.getEntityDef();
+                EntityDef sortEntity = key.attributeDef.getEntityDef();
                 if ( cei1.getEntityDef() != sortEntity )
                 {
                     cei1 = findMatchingChild( cei1, sortEntity );
@@ -1442,14 +1441,14 @@ class EntityCursorImpl implements EntityCursor
                 if (key.context != null)
                 {
                 	// Use context for sort order.
-                	String value1 = cei1.getStringFromAttribute(key.AttributeDef,  key.context);
-                	String value2 = cei2.getStringFromAttribute(key.AttributeDef,  key.context);
+                	String value1 = cei1.getAttribute(key.attributeDef ).getString( key.context );
+                	String value2 = cei2.getAttribute(key.attributeDef ).getString( key.context );
 
                 	cmp = value1.compareTo(value2);
                 }
                 else
                 {
-                	cmp = cei1.compareAttribute( key.AttributeDef, cei2, key.AttributeDef );
+                	cmp = cei1.compareAttribute( key.attributeDef, cei2, key.attributeDef );
                 }
                 if ( ! key.ascending )
                     cmp = -cmp;
@@ -1875,13 +1874,13 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public String getStringFromAttribute(String attributeName)
     {
-        return getExistingInstance().getStringFromAttribute( getView(), getEntityDef().getAttribute( attributeName ) );
+        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getString();
     }
 
     @Override
     public String getStringFromAttribute(String attributeName, String contextName )
     {
-        return getExistingInstance().getStringFromAttribute( getView(), getEntityDef().getAttribute( attributeName ), contextName );
+        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getString( contextName );
     }
 
     @Override
@@ -1914,43 +1913,43 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public Object getInternalAttributeValue(String attributeName)
     {
-        return getExistingInstance().getInternalAttributeValue( getView(), getEntityDef().getAttribute( attributeName ) );
+        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getValue();
     }
 
     @Override
     public Object getInternalAttributeValue( AttributeDef attributeDef )
     {
-        return getExistingInstance( true ).getInternalAttributeValue( getView(), attributeDef );
+        return getExistingInstance( true ).getAttribute( getView(), attributeDef ).getValue();
     }
 
     @Override
     public String getStringFromAttribute(AttributeDef attributeDef)
     {
-        return getExistingInstance().getStringFromAttribute( getView(), attributeDef );
+        return getExistingInstance().getAttribute( getView(), attributeDef ).getString();
     }
 
     @Override
     public String getStringFromAttribute(AttributeDef attributeDef, String contextName )
     {
-        return getExistingInstance().getStringFromAttribute( getView(), attributeDef, contextName );
+        return getExistingInstance().getAttribute( getView(), attributeDef ).getString( contextName );
     }
 
     @Override
     public boolean isAttributeNull(String attributeName)
     {
-        return getExistingInstance().isAttributeNull( getView(), getEntityDef().getAttribute( attributeName ) );
+        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).isNull();
     }
 
     @Override
     public boolean isAttributeNull(AttributeDef attributeDef)
     {
-        return getExistingInstance().isAttributeNull( getView(), attributeDef );
+        return getExistingInstance().getAttribute( getView(), attributeDef ).isNull();
     }
 
     @Override
     public boolean isAttributeUpdated(AttributeDef attributeDef)
     {
-        return getExistingInstance().isAttributeUpdated( attributeDef );
+        return getExistingInstance().getAttribute( attributeDef ).isUpdated();
     }
 
     @Override
@@ -1978,25 +1977,25 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public Integer getIntegerFromAttribute(String attributeName)
     {
-        return getExistingInstance().getIntegerFromAttribute( getView(), getEntityDef().getAttribute( attributeName ) );
+        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getInteger();
     }
 
     @Override
     public Integer getIntegerFromAttribute( AttributeDef attributeDef )
     {
-        return getExistingInstance().getIntegerFromAttribute( getView(), attributeDef );
+        return getExistingInstance().getAttribute( getView(), attributeDef ).getInteger();
     }
 
     @Override
     public Integer getIntegerFromAttribute(String attributeName, String contextName )
     {
-        return getExistingInstance().getIntegerFromAttribute( getView(), getEntityDef().getAttribute( attributeName ), contextName );
+        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getInteger( contextName );
     }
 
     @Override
     public Integer getIntegerFromAttribute( AttributeDef attributeDef, String contextName )
     {
-        return getExistingInstance().getIntegerFromAttribute( getView(), attributeDef, contextName );
+        return getExistingInstance().getAttribute( getView(), attributeDef ).getInteger( contextName );
     }
 
     @Override
@@ -2454,11 +2453,22 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean hasNext()
     {
-        EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
-                                            .currentInstance( getEntityInstance() )
-                                            .forEntityDef( getEntityDef() )
-                                            .build();
-        return iter.hasNext();
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
+
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return false;
+
+        // See if there is a next, nonhidden twin.
+        for ( EntityInstanceImpl search = ei.getNextTwin(); search != null; search = search.getNextTwin() )
+        {
+            if ( !search.isHidden() )
+                return true;
+        }
+
+        // If we get here then we didn't find any non-hidden EIs.
+        return false;
     }
 
     /* (non-Javadoc)
@@ -2467,13 +2477,22 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean hasPrev()
     {
-        EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
-                                                .forEntityDef( getEntityDef() )
-                                                .currentInstance( getEntityInstance() )
-                                                .setLast()
-                                                .build();
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
 
-        return iter.hasPrev();
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return false;
+
+        // Look for a prev non-hidden twin.
+        for ( EntityInstanceImpl search = ei.getPrevTwin(); search != null; search = search.getPrevTwin() )
+        {
+            if ( ! search.isHidden() )
+                return true;
+        }
+
+        // If we get here then we didn't find any non-hidden EIs.
+        return false;
     }
 
     /* (non-Javadoc)
@@ -2482,13 +2501,32 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public boolean hasAny()
     {
-        EntityIterator<EntityInstanceImpl> iter =
-                new IteratorBuilder( getObjectInstance() )
-                        .forEntityDef( getEntityDef() )
-                        .forTwinsOf( getEntityInstance() )
-                        .build();
+        if ( ! viewCursor.isCursorInScope( this ) )
+            throw new OutOfScopeException( this );
 
-        return iter.hasNext();
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return false;
+
+        if ( ! ei.isHidden() )
+            return true;
+
+        // If we get here then ei is hidden. See if there are any non-hidden EIs
+        // either before or after this ei.
+        for ( EntityInstanceImpl search = ei.getPrevTwin(); search != null; search = search.getPrevTwin() )
+        {
+            if ( ! search.isHidden() )
+                return true;
+        }
+
+        for ( EntityInstanceImpl search = ei.getNextTwin(); search != null; search = search.getNextTwin() )
+        {
+            if ( !search.isHidden() )
+                return true;
+        }
+
+        // If we get here then we didn't find any non-hidden EIs.
+        return false;
     }
 
     /* (non-Javadoc)
@@ -2930,9 +2968,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public AttributeInstance getAttribute( AttributeDef attributeDef )
     {
-        AttributeInstanceImpl attributeInstance = getExistingInstance().getAttribute( attributeDef );
-        attributeInstance.setView( getView() );
-        return attributeInstance;
+        return getExistingInstance().getAttribute( getView(), attributeDef );
     }
 
     @Override
@@ -2975,5 +3011,15 @@ class EntityCursorImpl implements EntityCursor
     public boolean hasPrevTwin()
     {
         return getExistingInstance().hasPrevTwin();
+    }
+
+    @Override
+    public EntityIterator<? extends EntityInstance> allEntities()
+    {
+        return new IteratorBuilder( getObjectInstance() )
+                                    .setCursor( this )
+                                    .withOiScoping( getObjectInstance() )
+                                    .forEntityDef( getEntityDef() )
+                                    .build();
     }
 }

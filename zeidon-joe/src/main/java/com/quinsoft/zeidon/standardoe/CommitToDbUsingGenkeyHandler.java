@@ -32,12 +32,12 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
-import com.quinsoft.zeidon.objectdefinition.DataRecord;
-import com.quinsoft.zeidon.objectdefinition.RelField;
-import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.objectdefinition.RelField;
+import com.quinsoft.zeidon.objectdefinition.RelRecord;
 
 /**
  * Commits a list of OIs to a DB using a DB handler.  It will use a genkey handler to generate
@@ -174,6 +174,9 @@ class CommitToDbUsingGenkeyHandler implements Committer
 
     private void commitView(ViewImpl view)
     {
+        // Set up view to allow the DBhandler to access hidden entities.
+        view.setAllowHiddenEntities( true );
+
         ObjectInstance oi = view.getObjectInstance();
 
         // TODO: implement optimistic locking check.
@@ -805,7 +808,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     currentGenKeyEntity = entityDef;
                 }
 
-                Integer count = genKeyCursor.getIntegerFromAttribute( "EntityCount" );
+                Integer count = genKeyCursor.getAttribute( "EntityCount" ).getInteger();
                 count = ( count == null ) ? 1 : count + 1;
                 genKeyCursor.setAttribute( "EntityCount", count );
                 oi.dbhNeedsGenKeys = true;

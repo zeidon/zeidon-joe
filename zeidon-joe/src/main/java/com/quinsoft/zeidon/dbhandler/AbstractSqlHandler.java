@@ -261,7 +261,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // value instead of the data field.
             if ( stmt.commandType == SqlCommand.INSERT )
             {
-                Object value = entityInstance.getInternalAttributeValue( dataField.getAttributeDef() );
+                Object value = entityInstance.getAttribute( dataField.getAttributeDef() ).getValue();
                 stmt.addBoundAttribute( buffer, value );
                 return;
             }
@@ -271,7 +271,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         AttributeDef attributeDef = dataField.getAttributeDef();
-        Object value = entityInstance.getInternalAttributeValue( attributeDef );
+        Object value = entityInstance.getAttribute( attributeDef ).getValue();
         getSqlValue( stmt, attributeDef.getDomain(), attributeDef, buffer, value );
     }
 
@@ -299,7 +299,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         if ( ! isBindAllValues() )
         {
-            if ( entityInstance.isAttributeNull( dataField.getAttributeDef() ) )
+            if ( entityInstance.getAttribute( dataField.getAttributeDef() ).isNull() )
             {
                 buffer.append( " IS null" );
                 return false;
@@ -350,7 +350,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // Skip the attribute if it wasn't updated.
             if ( entityInstance != null && stmt.commandType != SqlCommand.INSERT)
             {
-                if ( ! entityInstance.isAttributeUpdated( attributeDef ) )
+                if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
                     continue;
             }
 
@@ -426,10 +426,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         for ( EntityInstance entitySpec : qual.cursor( "EntitySpec" ).eachEntity() )
         {
-            if ( entitySpec.isAttributeNull( "EntityName" ) )
+            if ( entitySpec.getAttribute( "EntityName" ).isNull() )
                 throw new ZeidonException("Qualification view is missing entity name in EntitySpec" );
 
-            String entityName = entitySpec.getStringFromAttribute( "EntityName" );
+            String entityName = entitySpec.getAttribute( "EntityName" ).getString();
             if ( StringUtils.isBlank( entityName ) )
                 throw new ZeidonException("Qualification view is missing entity name in EntitySpec" );
 
@@ -445,10 +445,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 // Verify Oper
                 //
-                if ( qualAttribInstance.isAttributeNull( "Oper" ) )
+                if ( qualAttribInstance.getAttribute( "Oper" ).isNull() )
                     throw new ZeidonException( "QualAttrib for " + entityName + " is missing Oper" );
 
-                QualAttrib qualAttrib = new QualAttrib( qualAttribInstance.getStringFromAttribute( "Oper" ) );
+                QualAttrib qualAttrib = new QualAttrib( qualAttribInstance.getAttribute( "Oper" ).getString() );
                 if ( qualAttrib.oper.equals( "EXCLUDE" ) )
                 {
                     qualEntity.exclude = true;
@@ -465,9 +465,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 // Verify EntityName
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "EntityName"  ) )
+                if ( ! qualAttribInstance.getAttribute( "EntityName"  ).isNull() )
                 {
-                    String qualEntityName = qualAttribInstance.getStringFromAttribute( "EntityName" );
+                    String qualEntityName = qualAttribInstance.getAttribute( "EntityName" ).getString();
                     qualAttrib.entityDef = lodDef.getEntityDef( qualEntityName );
 
                     if ( qualAttrib.entityDef.isDerived() || qualAttrib.entityDef.isDerivedPath() ||
@@ -502,11 +502,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 // Verify AttribName
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "AttributeName"  ) || qualAttrib.attributeDef != null )
+                if ( ! qualAttribInstance.getAttribute( "AttributeName"  ).isNull() || qualAttrib.attributeDef != null )
                 {
                     if ( qualAttrib.attributeDef == null )
                     {
-                        String attribName = qualAttribInstance.getStringFromAttribute( "AttributeName" );
+                        String attribName = qualAttribInstance.getAttribute( "AttributeName" ).getString();
                         if ( qualAttrib.entityDef == null )
                             throw new ZeidonException( "QualAttrib has attribute defined but no valid entity" );
 
@@ -544,7 +544,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 // Verify Value
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "Value"  ) )
+                if ( ! qualAttribInstance.getAttribute( "Value"  ).isNull() )
                 {
                     if ( qualAttrib.attributeDef == null )
                         throw new ZeidonException("QualAttrib with value requires Entity.Attrib");
@@ -569,7 +569,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     else
                         keyList.append( ", " );
 
-                    keyList.append( kl.getStringFromAttribute( "IntegerValue" ) );
+                    keyList.append( kl.getAttribute( "IntegerValue" ).getString() );
                 }
 
                 if ( keyList != null && ! StringUtils.isBlank( keyList.toString() ) )
@@ -578,19 +578,19 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 // Verify SourceViewName
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "SourceViewName"  ) )
+                if ( ! qualAttribInstance.getAttribute( "SourceViewName"  ).isNull() )
                     throw new ZeidonException( "SourceViewName is currently unsupported for Activate Qualification" );
 
-                if ( ! qualAttribInstance.isAttributeNull( "SourceViewID"  ) )
+                if ( ! qualAttribInstance.getAttribute( "SourceViewID"  ).isNull() )
                     throw new ZeidonException( "SourceViewID is not supported by Java Object Engine" );
 
                 //
                 // Verify SourceEntityName
                 //
-                if ( ! qualAttribInstance.isAttributeNull( "SourceEntityName"  ) )
+                if ( ! qualAttribInstance.getAttribute( "SourceEntityName"  ).isNull() )
                     throw new ZeidonException( "SourceEntityName is currently unsupported for Activate Qualification" );
 
-                if ( ! qualAttribInstance.isAttributeNull( "SourceAttributeName"  ) )
+                if ( ! qualAttribInstance.getAttribute( "SourceAttributeName"  ).isNull() )
                     throw new ZeidonException( "SourceAttributeName is currently unsupported for Activate Qualification" );
 
                 // =================================================================
@@ -1192,20 +1192,20 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             EntityCursor cursor = genkeys.cursor( "ZeidonGenkeyTable" );
             for ( EntityInstance genkey : kzgkhwob.cursor( "Genkey" ).eachEntity() )
             {
-                String tableName = genkey.getStringFromAttribute( "TableName" );
+                String tableName = genkey.getAttribute( "TableName" ).getString();
                 CursorResult rc = cursor.setFirst( "TableName", tableName );
                 if ( ! rc.isSet() )
                 {
                     // Genkey entry doesn't exist, so add it.
-                    cursor.createEntity().setAttribute( "TableName", tableName  )
-                                         .setAttribute( "CurrentGenkey", 0  );
+                    cursor.createEntity().getAttribute( "TableName" ).setValue( tableName  )
+                                         .getAttribute( "CurrentGenkey" ).setValue( 0 );
                 }
 
-                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getIntegerFromAttribute( "EntityID" ),
-                                  cursor.getIntegerFromAttribute( "CurrentGenkey" ) + 1 );
-                Integer count = genkey.getIntegerFromAttribute( "EntityCount" );
-                Integer c = cursor.getIntegerFromAttribute( "CurrentGenkey" );
-                cursor.setAttribute( "CurrentGenkey", count + c );
+                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getInteger(),
+                                  cursor.getAttribute( "CurrentGenkey" ).getInteger() + 1 );
+                Integer count = genkey.getAttribute( "EntityCount" ).getInteger();
+                Integer c = cursor.getAttribute( "CurrentGenkey" ).getInteger();
+                cursor.getAttribute( "CurrentGenkey" ).setValue( count + c );
             }
 
             genkeys.commit();
@@ -1755,7 +1755,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ! attributeDef.isPersistent() )
                 continue;
 
-            if ( ! entityInstance.isAttributeUpdated( attributeDef ) )
+            if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
                 continue;
 
             if ( attributeDef.isKey() )
@@ -1912,7 +1912,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 appendWhere( getTableName( dataRecord ),
                              ".", dataField.getName() );
 
-                if ( entityInstance.isAttributeNull( AttributeDef ) )
+                if ( entityInstance.getAttribute( AttributeDef ).isNull() )
                     appendWhere(" IS NULL " );
                 else
                 {

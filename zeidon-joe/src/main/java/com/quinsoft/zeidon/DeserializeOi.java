@@ -36,10 +36,24 @@ import com.quinsoft.zeidon.utils.ZeidonInputStream;
 
 /**
  * Encapsulates all options available for activating OI's from streams and offers
- * convenience methods activate() and activateFirst().
+ * convenience methods activate() and activateFirst().  Can deserialize an OI
+ * from different sources and formats.  The standard example looks like:
  *
- * @author dgc
+ * <code>
+ *       View stud2 = zencas.deserializeOi()
+ *                           .fromResource( "/tmp/stud2.json" )
+ *                           .setLodDef( "lStudDpt" )
+ *                           .asJson()
+ *                           .activateFirst();
+ * </code
  *
+ * Some configuration values can be implied from the other values or from the
+ * the serialized stream.  The above sample can be simplified:
+ * <code>
+ *       View stud2 = zencas.deserializeOi()
+ *                           .fromResource( "/tmp/stud2.json" )
+ *                           .activateFirst();
+ * </code
  */
 public class DeserializeOi
 {
@@ -67,12 +81,20 @@ public class DeserializeOi
      */
     private boolean closeStream = true;
 
+    /**
+     * Create a deserializer.  Client apps should use task.deserializeOi() instead
+     * of creating one directly.
+     *
+     * @param task
+     */
     public DeserializeOi( TaskQualification task )
     {
         this.task = task.getTask();
     }
 
     /**
+     * Returns the input stream.
+     *
      * @return the inputStream
      */
     public InputStream getInputStream()
@@ -83,11 +105,12 @@ public class DeserializeOi
     /**
      * Sets the inputStream from whence the OI(s) will be loaded.
      *
-     * Note: the resource stream will be automatically closed by the activate unless it is
+     * Note: the resource stream will be automatically closed by the activate method unless it is
      * overridden by calling setCloseStream( false ).
      *
      * @param inputStream the inputStream to set
-     * @return
+     *
+     * @return this
      */
     public DeserializeOi fromInputStream( InputStream inputStream )
     {
@@ -100,10 +123,14 @@ public class DeserializeOi
 
     /**
      * Set the input stream by opening the resource.  The resource can be either a
-     * filename or a resource name on the classpath.
+     * filename or a resource name on the classpath.  If the resource name is a file
+     * then the format of the stream can be determined from the name of the file.
+     * For example, if the file is "/tmp/myfile.json" then the format is assumed
+     * to be JSON.  This can be overridden by calling setFormat().
      *
-     * @param resourceName
-     * @return
+     * @param resourceName name of a file or a resource on the classpath.
+     *
+     * @return this
      */
     public DeserializeOi fromResource( String resourceName )
     {
@@ -116,16 +143,29 @@ public class DeserializeOi
         return this;
     }
 
+    /**
+     * Get the stream from the Zeidon attribute.  The attribute must be retrievable
+     * as a string.
+     *
+     * @param attribute Zeidon attribute.
+     *
+     * @return this
+     */
     public DeserializeOi fromAttribute( AttributeInstance attribute )
     {
         return fromString( attribute.getString() );
     }
 
     /**
-     * Set the input stream by opening the file.
+     * Set the input stream by opening the file.  the format of the stream can be determined from the name of the file.
+     * For example, if the file is "/tmp/myfile.json" then the format is assumed
+     * to be JSON.  This can be overridden by calling setFormat().
      *
-     * @param resourceName
-     * @return
+     * This is a synonym for fromResource().
+     *
+     * @param resourceName name of the file.
+     *
+     * @return this
      */
     public DeserializeOi fromFile( String filename )
     {
@@ -141,8 +181,9 @@ public class DeserializeOi
     /**
      * Set the input stream by opening the file.
      *
-     * @param resourceName
-     * @return
+     * @param file the file
+     *
+     * @return this
      */
     public DeserializeOi fromFile( File file )
     {
@@ -160,12 +201,11 @@ public class DeserializeOi
     }
 
     /**
-     * Sets the input stream to be a string..
+     * Sets the input stream to be from a string.
      *
-     * overridden by calling setCloseStream( false ).
+     * @param inputString the input string.
      *
-     * @param resourceName
-     * @return
+     * @return this
      */
     public DeserializeOi fromString( String inputString )
     {
@@ -215,7 +255,7 @@ public class DeserializeOi
 
     /**
      * @param lodDef the lodDef to set
-     * @return
+     * @return this
      */
     public DeserializeOi setLodDef( LodDef lodDef )
     {
@@ -223,6 +263,13 @@ public class DeserializeOi
         return this;
     }
 
+    /**
+     * Sets the LOD definition by name.
+     *
+     * @param lodDefName name of the LOD.
+     *
+     * @return this
+     */
     public DeserializeOi setLodDef( String lodDefName )
     {
         lodDef = getApplication().getLodDef( getTask(), lodDefName );
@@ -234,7 +281,7 @@ public class DeserializeOi
      *
      * @param filename
      * @param ifNull if true only set format if it is null.
-     * @return
+     * @return this
      */
     private DeserializeOi setFormatFromFilename( String filename, boolean ifNull )
     {
@@ -253,6 +300,14 @@ public class DeserializeOi
         return this;
     }
 
+    /**
+     * Sets the format of the input stream.  Note that this can be determined if the
+     * source stream is a file or filename.
+     *
+     * @param format
+     *
+     * @return this
+     */
     public DeserializeOi setFormat( StreamFormat format )
     {
         this.format = format;
@@ -293,12 +348,28 @@ public class DeserializeOi
         return task.getApplication();
     }
 
+    /**
+     * Sets the application for this deserializer.  It is used to find the LodDef and
+     * is only necessary to override the default application for the task.
+     *
+     * @param application the application
+     *
+     * @return this
+     */
     public DeserializeOi setApplication( Application application )
     {
         this.application = application;
         return this;
     }
 
+    /**
+     * Sets the application for this deserializer.  It is used to find the LodDef and
+     * is only necessary to override the default application for the task.
+     *
+     * @param appName the name of the application
+     *
+     * @return this
+     */
     public DeserializeOi setApplication( String appName )
     {
         this.application = task.getApplication( appName );
@@ -346,12 +417,22 @@ public class DeserializeOi
         return setFlags( ActivateFlags.convertLongFlags( control ) );
     }
 
+    /**
+     * Specifies that the format of the input stream is JSON.
+     *
+     * @return this
+     */
     public DeserializeOi asJson()
     {
         format = StreamFormat.JSON;
         return this;
     }
 
+    /**
+     * Specifies that the format of the input stream is XML.
+     *
+     * @return this
+     */
     public DeserializeOi asXml()
     {
         format = StreamFormat.XML;
@@ -359,19 +440,35 @@ public class DeserializeOi
     }
 
     /**
-     * If true, then automatically close the stream after activating.
+     * If true, then the stream will be automatically closed after activation.
      */
     public boolean isCloseStream()
     {
         return closeStream;
     }
 
+    /**
+     * If set to true then the stream will be automatically closed after activation.
+     * Default is true.
+     *
+     * @param closeStream
+     *
+     * @return this
+     */
     public DeserializeOi closeStream( boolean closeStream )
     {
         this.closeStream = closeStream;
         return this;
     }
 
+    /**
+     * If an unknown attribute name is found for the specified entity, instead of throwing
+     * an error or ignoring it a dynamic attribute is created.
+     *
+     * @param entityName name of the entity that will accept dynamic attributes.
+     *
+     * @return this
+     */
     public DeserializeOi allowDynamicAttributesFor( String entityName )
     {
         if ( allowDynamicAttributes == null )
@@ -381,16 +478,30 @@ public class DeserializeOi
         return this;
     }
 
+    /**
+     * Returns list of entity names that allow dynamic attribute to be created.
+     * @return
+     */
     public Set<String> getAllowableDynamicEntities()
     {
         return allowDynamicAttributes;
     }
 
+    /**
+     * Returns the stream reader.
+     *
+     * @return the stream reader
+     */
     public StreamReader getStreamReader()
     {
         return streamReader;
     }
 
+    /**
+     * Specifies a different stream reader than the default.
+     *
+     * @param streamReader
+     */
     public void using( StreamReader streamReader )
     {
         this.streamReader = streamReader;
@@ -401,6 +512,15 @@ public class DeserializeOi
         return version;
     }
 
+    /**
+     * Sets the expected version of the input stream and overrides the value in the stream.
+     * This allows a deserializer to accept a stream that doesn't have a version specified
+     * or overrides it.
+     *
+     * @param version expected version
+     *
+     * @return this
+     */
     public DeserializeOi setVersion( String version )
     {
         this.version = version;

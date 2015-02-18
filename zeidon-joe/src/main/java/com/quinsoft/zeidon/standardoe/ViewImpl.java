@@ -92,6 +92,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      */
     private boolean isReadOnly = false;
 
+    private boolean allowHiddenEntities = false;
+
     ViewImpl( TaskImpl task, LodDef lodDef )
     {
         super(task.getApplication() );
@@ -111,6 +113,16 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         this.lodDef = source.getLodDef();
         id = task.getObjectEngine().getNextObjectKey();
         viewCursor = new ViewCursor(this, source.viewCursor);
+        isReadOnly = source.isReadOnly;
+        allowHiddenEntities = source.allowHiddenEntities;
+        enableLazyLoad = source.enableLazyLoad;
+        if ( source.selectSets != null )
+        {
+            selectSets = new HashMap<Object,SelectSet>();
+            for ( Object key : source.selectSets.keySet() )
+                selectSets.put( key, new SelectSetImpl( this, (SelectSetImpl) source.selectSets.get( key ) ) );
+        }
+
         task.addNewView( this );
 
         if ( task.equals( source.getTask() ) )
@@ -210,12 +222,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void logObjectInstance( )
     {
-        logObjectInstance( 0 );
-    }
-
-    @Override
-    public void logObjectInstance( long flags )
-    {
         log().debug( "Displaying OI for %s", lodDef );
 
         for ( EntityInstanceImpl ei = viewCursor.getObjectInstance().getRootEntityInstance();
@@ -235,17 +241,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void displayObjectInstance( )
     {
-        logObjectInstance( 0 );
-    }
-
-    /**
-     * @deprecated Use logObjectInstance instead.
-     */
-    @Deprecated
-    @Override
-    public void displayObjectInstance( long flags )
-    {
-        logObjectInstance( flags );
+        logObjectInstance();
     }
 
     @Override
@@ -1023,5 +1019,25 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     public int getEntityCount( boolean includeHidden )
     {
         return getObjectInstance().getEntityCount( includeHidden );
+    }
+
+    /**
+     * If true then allow cursors to refer to hidden entities without throwing
+     * an exception.  Intended to be used  by DBHandlers.
+     *
+     * @return true if the view can reference hidden (e.g. deleted) entities.
+     */
+    @Override
+    public boolean isAllowHiddenEntities()
+    {
+        return allowHiddenEntities;
+    }
+
+    @Override
+    public boolean setAllowHiddenEntities( boolean allowHiddenEntities )
+    {
+        boolean prev = this.allowHiddenEntities;
+        this.allowHiddenEntities = allowHiddenEntities;
+        return prev;
     }
 }

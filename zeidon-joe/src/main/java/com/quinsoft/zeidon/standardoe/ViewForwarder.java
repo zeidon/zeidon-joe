@@ -326,15 +326,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         getView().logObjectInstance();
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#displayObjectInstance(long)
-     */
-    @Override
-    public void logObjectInstance( long flags )
-    {
-        getView().logObjectInstance( flags );
-    }
-
     /**
      * @deprecated Use logObjectInstance instead.
      */
@@ -342,17 +333,7 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     @Override
     public void displayObjectInstance( )
     {
-        logObjectInstance( 0 );
-    }
-
-    /**
-     * @deprecated Use logObjectInstance instead.
-     */
-    @Deprecated
-    @Override
-    public void displayObjectInstance( long flags )
-    {
-        logObjectInstance( flags );
+        logObjectInstance();
     }
 
     /* (non-Javadoc)

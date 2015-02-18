@@ -33,13 +33,14 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  * us to keep a hashmap of the attributes values pointing to the entity instance.  This can
  * make cursor processing much faster if we're setting the cursor by the attribute value.
  *
- * @author dg
- *
  */
 class AttributeHashKeyMap
 {
     private final ObjectInstance objectInstance;
 
+    /**
+     * A map is kept for each attribute that can be a hash key.
+     */
     private Map<AttributeDef,Map<Object,EntityInstanceImpl>> hashKeyAttributeMap;
 
     /**

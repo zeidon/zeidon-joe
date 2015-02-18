@@ -132,12 +132,6 @@ public class zVIEW extends VmlOperation implements View
         view().logObjectInstance();
     }
 
-    @Override
-    public void logObjectInstance(long flags)
-    {
-        view().logObjectInstance( flags );
-    }
-
     /**
      * @deprecated Use logObjectInstance instead.
      */
@@ -145,17 +139,7 @@ public class zVIEW extends VmlOperation implements View
     @Override
     public void displayObjectInstance( )
     {
-        logObjectInstance( 0 );
-    }
-
-    /**
-     * @deprecated Use logObjectInstance instead.
-     */
-    @Deprecated
-    @Override
-    public void displayObjectInstance( long flags )
-    {
-        logObjectInstance( flags );
+        logObjectInstance();
     }
 
     @Override
@@ -717,5 +701,17 @@ public class zVIEW extends VmlOperation implements View
     public int getEntityCount( boolean includeHidden )
     {
         return view().getEntityCount( includeHidden );
+    }
+
+    @Override
+    public boolean isAllowHiddenEntities()
+    {
+        return getView().isAllowHiddenEntities();
+    }
+
+    @Override
+    public boolean setAllowHiddenEntities( boolean allowHiddenEntities )
+    {
+        return getView().setAllowHiddenEntities( allowHiddenEntities );
     }
 }

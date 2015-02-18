@@ -26,8 +26,6 @@ import java.util.List;
 /**
  * Optional options for commit.
  *
- * @author dgc
- *
  */
 public class CommitOptions extends AbstractOptionsConfiguration
 {

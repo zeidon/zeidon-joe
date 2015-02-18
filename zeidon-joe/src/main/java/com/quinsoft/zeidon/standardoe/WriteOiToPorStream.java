@@ -236,14 +236,14 @@ public class WriteOiToPorStream implements StreamWriter
 
                     if ( AttributeDef.getType() == InternalType.BLOB )
                     {
-                        Blob blob = (Blob) ei.getInternalAttributeValue( AttributeDef );
+                        Blob blob = (Blob) ei.getAttribute( AttributeDef ).getValue();
                         byte[] bytes = blob.getBytes();
                         writeln("%d", bytes.length );
                         write( bytes.toString() );
                     }
                     else
                     {
-                        String value = ei.getStringFromAttribute( AttributeDef );
+                        String value = ei.getAttribute( AttributeDef ).getString();
 
                         // If the attribute type is a string then check to see if it contains "special"
                         // characters that interfere with normal attribute values, like "\n".

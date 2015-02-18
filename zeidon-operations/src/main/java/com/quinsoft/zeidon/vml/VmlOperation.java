@@ -926,7 +926,7 @@ public abstract class VmlOperation
       {
          task.log().debug( "ZeidonOperation: " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment
       }
-   }
+   } // set breakpoint here
 
    // Returns the underlying view of zVIEW if view is an instance of zVIEW.
    // This is used in a few cases where we need to have the View instead of zVIEW.
@@ -1922,6 +1922,21 @@ public abstract class VmlOperation
       else
       {
          view.resetSubobject();
+      }
+
+      return nRC;
+   }
+
+   protected int ResetViewFromSubobjectTop( View view )
+   {
+      int nRC = 0;
+      if ( isValid( view ) == false )
+      {
+         nRC = zCALL_ERROR;
+      }
+      else
+      {
+         view.resetSubobjectTop();
       }
 
       return nRC;
