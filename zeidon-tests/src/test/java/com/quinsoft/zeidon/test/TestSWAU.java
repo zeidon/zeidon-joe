@@ -126,7 +126,7 @@ public class TestSWAU
             // In this example, we exclude/include PrimaryAddress (which is under root Person),
 		    // Doing that changes the displayed entity PrimaryForPerson (Person) under Address.
 		    // Because PrimaryForPerson is not set as include/exclude in the object, the commit fails on
-		    // this entity. If I change PrimaryForPerson to be inc/exc, then the commit works.
+		    // this entity. If I change PrimaryForPerson to be inc/exc, then the commit seems to work.
 		    ActivateOI_FromFile( mPerson, "mPerson", ViewToWindow,
 		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mPersonPrimaryAddress.json", zSINGLE );
 		   	   SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
@@ -163,12 +163,7 @@ public class TestSWAU
 
 		                   RESULT = ExcludeEntity( mPerson, "PrimaryAddress", zREPOS_AFTER );
 		                   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
-		    			   try {
 		                   RESULT = CommitObjectInstance( mPerson );
-		    			   }
-		   				   catch (ZeidonException e) {
-			    		       Assert.fail( "Commit did not throw error with missing child");
-						}			   
 		                } 
 		             } 
 		          } 
