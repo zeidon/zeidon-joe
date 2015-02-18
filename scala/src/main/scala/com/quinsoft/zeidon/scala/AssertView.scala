@@ -17,7 +17,7 @@ class AssertView( val view: View ) {
     }
     
     def lodName( lodName: String ) = {
-        if ( view.odName != lodName )
+        if ( view.lodName != lodName )
             throw new ZeidonException( "Unexpected LOD name for view.  Expected %s, found %s.",
                                        lodName, view.odName )
         

@@ -7,9 +7,7 @@ import scala.language.dynamics
 import com.quinsoft.zeidon._
 
 /**
- * Used to build qualification.
- *
- * @author dgc
+ * Used to build qualification for Scala code.
  *
  */
 class QualBuilder( private val view: View,
@@ -139,6 +137,9 @@ class QualBuilder( private val view: View,
         this
     }
 
+    /**
+     * Indicates that the resulting view (and backing OI) should be read-only.
+     */
     def readOnly = {
         jqual.readOnly()
         this
@@ -152,6 +153,11 @@ class QualBuilder( private val view: View,
         this
     }
 
+    /**
+     * Performs the activate on the view using the specified qualification.
+     * 
+     * Returns the view for convenience.
+     */
     def activate(): View = {
         view.jview = jqual.activate()
         return view

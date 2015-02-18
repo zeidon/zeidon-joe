@@ -89,13 +89,13 @@ private[scala] abstract class AbstractEntity( val jentityDef: com.quinsoft.zeido
     /**
      * Called dynamically to convert an attribute name with context value into a
      * Scala AttributeInstance.
-     */
     def applyDynamic( attributeName: String)(args: Any*): AttributeInstance = {
 //        println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
         val attr = getAttribute(attributeName)
         attr.contextName = args(0).toString
         return attr
     }
+     */
 
     override def toString: String = getEntityInstance.toString
 
