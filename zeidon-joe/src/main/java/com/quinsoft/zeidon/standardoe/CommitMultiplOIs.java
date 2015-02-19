@@ -19,9 +19,11 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.quinsoft.zeidon.CommitFlags;
@@ -49,9 +51,22 @@ class CommitMultiplOIs
     private final CommitOptions        options;
 
     /**
-     * Same day this may be provided by the OE options.
+     * This will hold the pairings of all the includes that
+     * have explicit authority to do the include for all the OIs.
      */
-    private final OiSourceSelector     selector = new DefaultOiSourceSelector();
+    private Map<Object,Object> includableRelationships;
+    
+    /**
+     * This will hold the pairings of all the excludes that
+     * have explicit authority to do the exclude for all the OIs.
+     */
+    private Map<Object,Object> excludableRelationships;
+    
+    /**
+     * This is used to determine where an OI is activated from.
+     * Some day this may be provided by the OE options.
+     */
+    private final OiSourceSelector selector = new DefaultOiSourceSelector();
 
     private interface HasPermission
     {
@@ -173,24 +188,120 @@ class CommitMultiplOIs
      * @param permissionChecker
      * @return
      */
-    private boolean validatePermissionForEi( EntityInstanceImpl ei, Set<ObjectInstance> oiSet, HasPermission permissionChecker )
+    private boolean validatePermissionForEi( EntityInstanceImpl ei, 
+                                             Set<ObjectInstance> oiSet, 
+                                             HasPermission permissionChecker,
+                                             Map<Object, Object> permissionMap )
     {
-        for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
-        {
-            // Sanity check to make sure dbhLoaded is always off by the time we commit.
-            assert ei.dbhLoaded == false : ei.toString() + " still has dbhLoaded flag on";
+        // Sanity check to make sure dbhLoaded is always off by the time we commit.
+        assert ei.dbhLoaded == false : ei.toString() + " still has dbhLoaded flag on";
 
-            EntityDef entityDef = ei.getEntityDef();
-            if ( entityDef.isDerivedPath() )
+        // Does the EI have permission?
+        if ( permissionChecker.hasPermission( ei ) )
+            return true;
+        
+        EntityInstanceImpl parent = ei.getParent();
+        if ( permissionMap != null && parent != null )
+        {
+            // permissionMap has a pairing of all includes/excludes that have explicit
+            // permission to do the include/exclude.  If we get here then ei doesn't
+            // have explicit permission to do the include/exclude.  We'll use the
+            // permission map to see if the same relationship exists in linked EIs
+            // that does have permission.
+            
+            // Check relationship in one direction.
+            if ( permissionMap.get( ei.getUniqueLinkedObject() ) == parent.getUniqueLinkedObject() )
+                return true;
+
+            // Now check the other direction.
+            if ( permissionMap.get( parent.getUniqueLinkedObject() ) == ei.getUniqueLinkedObject() )
+                return true;
+
+            // Permission map is defined for includes/excludes.  If we don't have a match
+            // then we have a problem.
+            return false;
+        }
+        
+        // If we get here then the EI doesn't have permission to perform its operation.
+        // We need to go through all the entities linked with ei to see if *they* have
+        // permission.  We'll start by creating a list of valid linked EIs.
+        Set<EntityInstanceImpl> linkedEis = new HashSet<>();
+        for ( EntityInstanceImpl linked : ei.getLinkedInstances() )
+        {
+            EntityDef linkedEntityDef = linked.getEntityDef();
+            assert linkedEntityDef.getErEntityToken() == ei.getEntityDef().getErEntityToken() : "Mismatching ER tokens";
+            
+            if ( linkedEntityDef.isDerivedPath() )
                 continue;
 
-            if ( permissionChecker.hasPermission( linked ) && oiSet.contains( linked.getObjectInstance() ) )
+            // We only want EIs that are part of the OIs that are being committed.
+            if ( ! oiSet.contains( linked.getObjectInstance() ) )
+                continue;
+
+            linkedEis.add( linked );
+        }
+        
+        if ( linkedEis.size() == 0 )
+            return false;
+        
+        // First check the simple case.  Do any of the linked EIs have the same parent
+        // relationship with permission?
+        for ( EntityInstanceImpl linked : linkedEis )
+        {
+            if ( permissionChecker.hasPermission( linked ) ) // Does the linked EI have the required authority?
+            {
+                // We found a linked instance that has the correct authority.
                 return true;
+            }
         }
 
         return false;
     }
 
+    /**
+     * This creates two maps, one for includes and one for excludes.  Each map will contain
+     * all the includes/excludes that have explicit permission (via EntityDef flags) to do
+     * the include/exclude.
+     * 
+     * The keys and values of the maps are taken from ei.getUniqueLinkedObject().  This allows
+     * us to do a quick verification for authority for all linked EIs.
+     */
+    private void accumulatePermissionMaps()
+    {
+        includableRelationships = new HashMap<>();
+        excludableRelationships = new HashMap<>();
+        
+        for ( ViewImpl view : viewList )
+        {
+            ObjectInstance oi = view.getObjectInstance();
+            for ( EntityInstanceImpl ei : oi.getEntities( true ) )
+            {
+                EntityInstanceImpl parent = ei.getParent();
+                
+                if ( parent == null )
+                    continue;
+                
+                EntityDef entityDef = ei.getEntityDef();
+                if ( entityDef.isDerivedPath() )
+                    continue;
+
+                if ( entityDef.getDataRecord() == null )
+                    continue;
+
+                if ( ei.isIncluded() && entityDef.isInclude() )
+                {
+                    includableRelationships.put( ei.getUniqueLinkedObject(), parent.getUniqueLinkedObject() );
+                }
+
+                if ( ei.isExcluded() && entityDef.isExclude() )
+                {
+                    excludableRelationships.put( ei.getUniqueLinkedObject(), parent.getUniqueLinkedObject() );
+                }
+            } // each entityInstance
+        } // each view
+        
+    }
+    
     /**
      * For each entity instance that has been changed in all the OIs, make sure that
      * one of the OI's has the permission to create/delete/update/etc.
@@ -200,7 +311,8 @@ class CommitMultiplOIs
     private void validatePermissions( Set<ObjectInstance> oiSet )
     {
         boolean missingPermission = false;
-
+        accumulatePermissionMaps();
+        
         for ( ViewImpl view : viewList )
         {
             ObjectInstance oi = view.getObjectInstance();
@@ -220,7 +332,7 @@ class CommitMultiplOIs
                 if ( ei.isCreated() && ! ei.isDeleted() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isCreate() && ! validatePermissionForEi( ei, oiSet, hasCreatePermission ) )
+                    if ( ! entityDef.isCreate() && ! validatePermissionForEi( ei, oiSet, hasCreatePermission, null ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have create authority:" );
@@ -231,7 +343,7 @@ class CommitMultiplOIs
                 if ( ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isDelete() && ! validatePermissionForEi( ei, oiSet, hasDeletePermission ) )
+                    if ( ! entityDef.isDelete() && ! validatePermissionForEi( ei, oiSet, hasDeletePermission, null ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have delete authority:" );
@@ -242,7 +354,7 @@ class CommitMultiplOIs
                 if ( ei.isUpdated() && ! ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission ) )
+                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have update authority:" );
@@ -253,7 +365,7 @@ class CommitMultiplOIs
                 if ( ei.isIncluded() && ! ei.isExcluded() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isInclude() && ! validatePermissionForEi( ei, oiSet, hasIncludePermission ) )
+                    if ( ! entityDef.isInclude() && ! validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have include authority:" );
@@ -264,7 +376,7 @@ class CommitMultiplOIs
                 if ( ei.isExcluded() && ! ei.isIncluded() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasExcludePermission ) )
+                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have exclude authority:" );

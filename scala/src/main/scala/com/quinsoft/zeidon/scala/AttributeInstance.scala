@@ -180,6 +180,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     
     private def checkNull() = if ( isNull ) throw new ZeidonException( "Attribute is null" ).prependAttributeDef( attributeDef )
 
+    def isTruthy: Boolean = { ! isNull && toBoolean }
     def toBoolean: Boolean = { checkNull(); jattributeInstance.getBoolean() }
     def toInt: Int = { checkNull(); jattributeInstance.getInteger() }
     def toDouble: Double = { checkNull(); jattributeInstance.getDouble }
