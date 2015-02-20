@@ -4005,7 +4005,7 @@ public abstract class VmlOperation
       }
       else
       {
-         d = cursor.getDoubleFromAttribute( attributeName );
+         d = cursor.getAttribute(attributeName).getDouble();
          if ( d == null )
          {
             nRC = -1;

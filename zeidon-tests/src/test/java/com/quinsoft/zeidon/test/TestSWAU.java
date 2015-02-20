@@ -56,6 +56,16 @@ public class TestSWAU
 	}
 
 	@Test
+	public void testIntegrityRules2()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mSAProf" );
+		SwauVmlTester tester = new SwauVmlTester( testview );
+		tester.testIntegrityRules2( testview );
+        System.out.println("===== Finished testIntegrityRules2 ========");
+	}
+
+	@Test
 	public void testSAProfIncludeMealPlan()
 	{
 	    View         testview;
@@ -101,6 +111,68 @@ public class TestSWAU
 				    // Do nothing because this exception is expected.
 				}			   //:COMMIT mSAProfT
 			   DropObjectInstance( mSAProfT );
+			return 0;
+		}
+
+		public int
+		testIntegrityRules2( View ViewToWindow )
+		{
+			zVIEW    mPerson      = new zVIEW( );
+		    String   szPermanent = null;
+			int RESULT=0;
+		    int      lTempInteger_1 = 0;
+		    int      lTempInteger_2 = 0;
+
+            // In this example, we exclude/include PrimaryAddress (which is under root Person),
+		    // Doing that changes the displayed entity PrimaryForPerson (Person) under Address.
+		    // Because PrimaryForPerson is not set as include/exclude in the object, the commit fails on
+		    // this entity. If I change PrimaryForPerson to be inc/exc, then the commit seems to work.
+		    ActivateOI_FromFile( mPerson, "mPerson", ViewToWindow,
+		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mPersonPrimaryAddress.json", zSINGLE );
+		   	   SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
+		   	   
+		       RESULT = SetCursorFirstEntity( mPerson, "Address", "" );
+		       while ( RESULT > zCURSOR_UNCHANGED )
+		       { 
+		          //:IF mPerson.Address.Type = "Permanent"
+		          if ( CompareAttributeToString( mPerson, "Address", "Type", "Permanent" ) == 0 )
+		          { 
+		             //:szPermanent = "Y" 
+		              {StringBuilder sb_szPermanent;
+		             if ( szPermanent == null )
+		                sb_szPermanent = new StringBuilder( 32 );
+		             else
+		                sb_szPermanent = new StringBuilder( szPermanent );
+		                         ZeidonStringCopy( sb_szPermanent, 1, 0, "Y", 1, 0, 2 );
+		             szPermanent = sb_szPermanent.toString( );}
+		             //:// Check if this address is their primary.
+		             lTempInteger_1 = CheckExistenceOfEntity( mPerson, "PrimaryAddress" );
+		             if ( lTempInteger_1 == 0 )
+		             { 
+		                //:// The permanent address and the primary address are not the same.
+		                //:// Make the permanent address the primary address.
+		                if ( CompareAttributeToAttribute( mPerson, "PrimaryAddress", "ID", mPerson, "Address", "ID" ) != 0 )
+		                { 
+		                   //:// Getting an error on PrimaryForPerson (cardinality) so relink before excluding.
+		                   lTempInteger_2 = CheckExistenceOfEntity( mPerson, "PrimaryForPerson" );
+		                   if ( lTempInteger_2 == 0 )
+		                   { 
+		                      //:RelinkInstanceToInstance( mPerson, "PrimaryForPerson", mPerson, "Person" )
+		                      RelinkInstanceToInstance( mPerson, "PrimaryForPerson", mPerson, "Person" );
+		                   } 
+
+		                   RESULT = ExcludeEntity( mPerson, "PrimaryAddress", zREPOS_AFTER );
+		                   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
+		                   RESULT = CommitObjectInstance( mPerson );
+		                } 
+		             } 
+		          } 
+
+		          RESULT = SetCursorNextEntity( mPerson, "Address", "" );
+		          //:END 
+		       } 
+		                   
+			   DropObjectInstance( mPerson );
 			return 0;
 		}
 

@@ -1,0 +1,316 @@
+{
+  ".meta" : {
+    "version" : "1",
+    "date" : "2015-02-18T11:37:19.092"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "SWAU",
+      "odName" : "mPerson",
+      "incremental" : true
+    },
+    "Person" : [ {
+      ".meta" : {
+        "selected" : true,
+        "incomplete" : "true"
+      },
+      "ID" : "175633",
+      "ModifiedDateTime" : "20150218112101",
+      "LastName" : "Portal",
+      "FirstName" : "Joseph",
+      "MiddleName" : "Bates",
+      "Suffix" : "jr",
+      "PreferedFirstName" : "Joey",
+      "SSN" : "900111090",
+      "DateOfBirth" : "19910828",
+      "Gender" : "M",
+      "CampusID" : "111090",
+      "HomePhone" : "8176453921",
+      "MobilePhone" : "6633435432",
+      "eMailAddress" : "lewis@swau.edu",
+      "WorkEMailAddress" : "potterj@sswau.edu",
+      "ChurchDenomination" : "AB",
+      "wOriginalSSN" : "900111090",
+      "dPersonType" : "Fin Aid",
+      "dFullNameFML" : "Joseph Bates Portal jr",
+      "dFullNameLFM" : "Portal, Joseph Bates jr",
+      "EmergencyContactName" : "Mom Mother Te",
+      "EmergencyContactHomePhone" : "817-202-6666",
+      "EmergencyContactMobilePhone" : "817-559-7665",
+      "EmergencyContactRelationship" : "mother",
+      "EmergencyContactAddressLine1" : "3454 Dead End st.",
+      "EmergencyContactAddressCity" : "San Diego",
+      "EmergencyContactAddressState" : "TX",
+      "EmergencyContactAddressZipCode" : "76059",
+      "EmergencyContactNote" : "Dont call after 8pm",
+      "FK_ID_ADDRESS" : "370618",
+      "FK_ID_CHURCH" : "4051",
+      "FK_ID_DEGREETRACK" : "3961",
+      "Address" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "368107",
+        "Latitude" : "32.39",
+        "Longitude" : "-97.32",
+        "Type" : "Campus",
+        "Line1" : "Men's Dorm FAKE student 1",
+        "City" : "Keene",
+        "StateProvince" : "TX",
+        "PostalCode" : "76059",
+        "CreatedDateTime" : "20141017183352",
+        "ModifiedDateTime" : "20150121072117",
+        "LastModifiedBy" : "Admin",
+        "FK_ID_PERSON" : "175633"
+      }, {
+        "ID" : "368455",
+        "Latitude" : "32.39",
+        "Longitude" : "-97.32",
+        "Type" : "Billing",
+        "Line1" : "Men's Dorm FAKE STUDENT 2",
+        "City" : "Keene",
+        "StateProvince" : "TX",
+        "Country" : "US",
+        "PostalCode" : "76059",
+        "Phone1" : "8172026262",
+        "ModifiedDateTime" : "20150126103527",
+        "LastModifiedBy" : "lewis",
+        "FK_ID_PERSON" : "175633"
+      }, {
+        ".meta" : {
+          "isLinkedSource" : "true",
+          "entityKey" : "9459"
+        },
+        "ID" : "370618",
+        "Type" : "Previous",
+        "Line1" : "New Test",
+        "City" : "Boston",
+        "StateProvince" : "MA",
+        "CreatedDateTime" : "20150121072237",
+        "ModifiedDateTime" : "20150128060826",
+        "LastModifiedBy" : "Admin",
+        "FK_ID_PERSON" : "175633",
+        "PrimaryForPerson" : [ {
+          "ID" : "175633",
+          "FK_ID_ADDRESS" : "370618",
+          "FK_ID_CHURCH" : "4051",
+          "FK_ID_DEGREETRACK" : "3961"
+        } ]
+      }, {
+        "ID" : "325427",
+        "Latitude" : "32.39",
+        "Longitude" : "-97.32",
+        "Type" : "Permanent",
+        "Line1" : "Men's Dorm FAKE Student 3",
+        "City" : "Keene",
+        "StateProvince" : "TX",
+        "Country" : "US",
+        "PostalCode" : "76059",
+        "Phone1" : "8175597665",
+        "ModifiedDateTime" : "20150121072117",
+        "LastModifiedBy" : "Admin",
+        "FK_ID_PERSON" : "175633"
+      } ],
+      "PrimaryAddress" : [ {
+        ".meta" : {
+          "selected" : true,
+          "linkedSource" : "9459"
+        }
+      } ],
+      "HomeChurch" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "4051",
+        "Name" : "General - Seventh-day Adventist",
+        "Denomination" : "AB"
+      } ],
+      "PriorEducation" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "61561",
+        "LastYearAttended" : "2010",
+        "TranscriptReceivedDate" : "20100701",
+        "GradePointAverage" : "3.11",
+        "AdmissionsTranscriptStatus" : "F",
+        "FK_ID_PERSON" : "175633",
+        "FK_ID_SCHOOL" : "50612",
+        "School" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "50612",
+          "Category" : "H",
+          "Name" : "Ozark Adventist Academy",
+          "Phone" : "4797362221",
+          "Website" : "www.ozarkacademy.org",
+          "Code" : "040880",
+          "ModifiedDateTime" : "20100525094408",
+          "FK_ID_ADDRESS" : "286664",
+          "PriorSchoolAddress" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "286664",
+            "City" : "Gentry ",
+            "StateProvince" : "AR",
+            "FK_ID_SCHOOL" : "50612"
+          } ]
+        } ]
+      } ],
+      "Demographics" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "167766",
+        "PlaceOfBirthCity" : "Omaha",
+        "PlaceOfBirthStateProvince" : "NE",
+        "CitizenshipCode" : "US",
+        "PrimaryLanguage" : "EN",
+        "Ethnicity" : "UN",
+        "IPEDS_Ethnicity" : "Hispanic",
+        "EthnicityHispanic" : "Y",
+        "EthnicityWhite" : "Y",
+        "NationOfCitizenship" : "US",
+        "FK_ID_PERSON" : "175633"
+      } ],
+      "FinAidProfile" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "26059",
+        "FK_ID_FINAIDADMIN" : "84",
+        "FK_ID_FINAIDTRACK" : "1",
+        "FK_ID_PERSON" : "175633",
+        "FinAidAdmin" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "84",
+          "DisbursementPeriodsPerYear" : "2",
+          "FullTimeMinCredits" : "12.0",
+          "PartTimeMinCredits" : "8.0",
+          "FullTimeCalculated" : "S",
+          "FKIDADMINISTRATIVE" : "1",
+          "FK_ID_COLLEGEYEAR" : "53",
+          "CollegeYear" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "53",
+            "Year" : "2014-2015",
+            "BeginDate" : "20140701",
+            "EndDate" : "20150630"
+          } ]
+        } ]
+      }, {
+        "ID" : "18434",
+        "FK_ID_FINAIDADMIN" : "82",
+        "FK_ID_FINAIDTRACK" : "1",
+        "FK_ID_PERSON" : "175633",
+        "FinAidAdmin" : [ {
+          "ID" : "82",
+          "DisbursementPeriodsPerYear" : "2",
+          "FullTimeMinCredits" : "12.0",
+          "PartTimeMinCredits" : "8.0",
+          "FullTimeCalculated" : "S",
+          "FKIDADMINISTRATIVE" : "1",
+          "FK_ID_COLLEGEYEAR" : "49",
+          "CollegeYear" : [ {
+            "ID" : "49",
+            "Year" : "2012-2013",
+            "BeginDate" : "20120701",
+            "EndDate" : "20130630"
+          } ]
+        } ]
+      }, {
+        "ID" : "13491",
+        "FK_ID_FINAIDADMIN" : "67",
+        "FK_ID_FINAIDTRACK" : "1",
+        "FK_ID_PERSON" : "175633",
+        "FinAidAdmin" : [ {
+          "ID" : "67",
+          "DisbursementPeriodsPerYear" : "3",
+          "FullTimeMinCredits" : "12.0",
+          "PartTimeMinCredits" : "8.0",
+          "ThreeQuarterTimeMinCredits" : "8.0",
+          "HalfTimeMinCredits" : "6.0",
+          "OneQuarterTimeMinCredits" : "4.0",
+          "FullTimeCalculated" : "S",
+          "FKIDADMINISTRATIVE" : "1",
+          "FK_ID_COLLEGEYEAR" : "36",
+          "CollegeYear" : [ {
+            "ID" : "36",
+            "Year" : "2008-2009",
+            "BeginDate" : "20080701",
+            "EndDate" : "20090630"
+          } ]
+        } ]
+      }, {
+        "ID" : "16187",
+        "FK_ID_FINAIDADMIN" : "81",
+        "FK_ID_FINAIDTRACK" : "1",
+        "FK_ID_PERSON" : "175633",
+        "FinAidAdmin" : [ {
+          "ID" : "81",
+          "DisbursementPeriodsPerYear" : "2",
+          "FullTimeMinCredits" : "12.0",
+          "PartTimeMinCredits" : "8.0",
+          "FullTimeCalculated" : "S",
+          "FKIDADMINISTRATIVE" : "1",
+          "FK_ID_COLLEGEYEAR" : "48",
+          "CollegeYear" : [ {
+            "ID" : "48",
+            "Year" : "2011-2012",
+            "BeginDate" : "20110701",
+            "EndDate" : "20120630"
+          } ]
+        } ]
+      }, {
+        "ID" : "13804",
+        "FK_ID_FINAIDADMIN" : "69",
+        "FK_ID_FINAIDTRACK" : "1",
+        "FK_ID_PERSON" : "175633",
+        "FinAidAdmin" : [ {
+          "ID" : "69",
+          "DisbursementPeriodsPerYear" : "2",
+          "FullTimeMinCredits" : "12.0",
+          "PartTimeMinCredits" : "8.0",
+          "ThreeQuarterTimeMinCredits" : "8.0",
+          "HalfTimeMinCredits" : "6.0",
+          "OneQuarterTimeMinCredits" : "4.0",
+          "FullTimeCalculated" : "S",
+          "FKIDADMINISTRATIVE" : "1",
+          "FK_ID_COLLEGEYEAR" : "39",
+          "CollegeYear" : [ {
+            "ID" : "39",
+            "Year" : "2010-2011",
+            "BeginDate" : "20100701",
+            "EndDate" : "20110630"
+          } ]
+        } ]
+      }, {
+        "ID" : "22718",
+        "FK_ID_FINAIDADMIN" : "83",
+        "FK_ID_FINAIDTRACK" : "1",
+        "FK_ID_PERSON" : "175633",
+        "FinAidAdmin" : [ {
+          "ID" : "83",
+          "DisbursementPeriodsPerYear" : "2",
+          "FullTimeMinCredits" : "12.0",
+          "PartTimeMinCredits" : "8.0",
+          "FullTimeCalculated" : "S",
+          "FKIDADMINISTRATIVE" : "1",
+          "FK_ID_COLLEGEYEAR" : "52",
+          "CollegeYear" : [ {
+            "ID" : "52",
+            "Year" : "2013-2014",
+            "BeginDate" : "20130701",
+            "EndDate" : "20140630"
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}

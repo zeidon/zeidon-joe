@@ -431,7 +431,7 @@ class ActivateOisFromJsonStream implements StreamReader
                     if ( childEntity.getParent() != entityDef )
                     {
                         // Check to see the childEntity is a recursive child.
-                        if ( childEntity.isRecursive() )
+                        if ( entityDef.isRecursive() )
                         {
                             view.cursor( entityDef ).setToSubobject();
                             recursiveChild = true;
