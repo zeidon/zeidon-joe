@@ -123,6 +123,12 @@ class QualBuilder( private val view: View,
         this
     }
 
+    def exclude( excludeEntity: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
+        val jentityDef = excludeEntity( new EntitySelector )
+        jqual.excludeEntity( jentityDef.getName() )
+        this    
+    }
+    
     def to( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
         addQual( this )
     }
