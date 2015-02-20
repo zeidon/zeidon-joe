@@ -83,7 +83,12 @@ class ActivateOisFromJsonStream implements StreamReader
     private View                          view;
     private final List<View>              returnList;
     private String version;
-    private List<EntityInstance>    selectedInstances;
+
+    /**
+     * Used to keep track of the instances that are flagged as selected in the input
+     * stream.  Cursors will be set afterwards.
+     */
+    private List<EntityInstance> selectedInstances;
 
     /**
      * If true then mark the OI that is being read as readonly.
