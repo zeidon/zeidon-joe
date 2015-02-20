@@ -68,6 +68,12 @@ public class SerializeOi
         addViews( views );
     }
 
+    /**
+     * Writes the OI to a temp file.  The name of the temp file is created using File.createTempFile
+     * with the name of the LOD and the desired extension (e.g. .XML or .JSON).
+     *
+     * @return the name of the generated file name.
+     */
     public String toTempFile()
     {
         if ( viewList.size() == 0 )
@@ -75,29 +81,45 @@ public class SerializeOi
 
         View view = viewList.get( 0 );
         String prefix = view.getLodDef().getName() + "_";
-        FileWriter writer = null;
+        File file;
         try
         {
-
-            File file = File.createTempFile( prefix, getFormat().getExtension() );
-            writer = new FileWriter( file );
-            resourceName = file.getAbsolutePath();
-            view.log().debug( "Writing views to temp file %s", resourceName );
-            write( writer );
-            return resourceName;
+            file = File.createTempFile( prefix, getFormat().getExtension() );
         }
         catch ( IOException e )
         {
-            throw ZeidonException.wrapException( e );
+            throw ZeidonException.wrapException( e ).appendMessage( "Filename = %s", prefix );
         }
-        finally
-        {
-            IOUtils.closeQuietly( writer );
-        }
+
+        return toFile( file.getAbsolutePath() );
     }
 
+    /**
+     * Writes the OI to the system temp dir which is determined by java.io.tmpdir.
+     *
+     * @return the name of the generated file name.
+     */
+    public String toTempDir( String baseFilename )
+    {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "Specify at least one view before calling toTempDir()" );
+
+        String tempFile = System.getProperty( "java.io.tmpdir" ) + File.separator + baseFilename;
+        return toFile( tempFile );
+    }
+
+    /**
+     * Serializes the OI to the specified file name.
+     *
+     * @param filename
+     *
+     * @return the filename
+     */
     public String toFile( String filename )
     {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "Specify at least one view before calling toFile()" );
+
         FileWriter writer = null;
         try
         {
@@ -139,7 +161,7 @@ public class SerializeOi
 
     /**
      * Write the OI to a StringWriter.
-     * 
+     *
      * @return
      */
     public Writer toStringWriter()
@@ -245,10 +267,10 @@ public class SerializeOi
                     throw new ZeidonException( "Unknown format", getFormat() );
             }
         }
-        
+
         return streamWriter;
     }
-    
+
     private void write( Writer writer )
     {
         if ( viewList.size() == 0 )

@@ -22,11 +22,14 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.EntityCursor.CursorStatus;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
@@ -45,6 +48,7 @@ public class WriteOiToXmlStream implements StreamWriter
     private Writer writer;
     private EnumSet<WriteOiFlags> control;
     private boolean incremental;
+    private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
 
     private int currentIndent;
     private SerializeOi options;
@@ -56,11 +60,22 @@ public class WriteOiToXmlStream implements StreamWriter
         if ( viewList.size() > 1 )
             throw new ZeidonException( "XML stream processing can only handle a single OI" );
 
+        // Create a set of all the OIs and turn off the record owner flag.  The record owner
+        // flag will be used to determine if a linked EI has been written to the stream.
+        for ( View view : viewList )
+        {
+            ObjectInstance oi = ((InternalView) view).getViewImpl().getObjectInstance();
+            ois.add( oi );
+            for ( EntityInstanceImpl ei = oi.getRootEntityInstance(); ei != null; ei = ei.getNextTwin() )
+                ei.setRecordOwner( false );
+        }
+
         view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
         this.options = options;
         this.writer = writer;
         control = options.getFlags();
         incremental = this.control.contains( WriteOiFlags.INCREMENTAL );
+        writeToStream();
     }
 
     private void write( String string )
@@ -114,7 +129,9 @@ public class WriteOiToXmlStream implements StreamWriter
             for ( int i = 0; i < attributes.length; i += 2 )
             {
                 String esc = StringEscapeUtils.escapeXml( attributes[ i + 1 ] );
-                write( " %s=\"%s\"", attributes[ i ], esc );
+                // Don't bother printing if it's empty.
+                if ( ! StringUtils.isBlank( esc ) )
+                    write( " %s=\"%s\"", attributes[ i ], esc );
             }
         }
 
@@ -138,35 +155,106 @@ public class WriteOiToXmlStream implements StreamWriter
         write( "</%s>\n", elementName );
     }
 
+    /**
+     * If this EI is linked with another EI in the OI set then this returns the record owner.
+     * If no record owner, returns EI.
+     *
+     * @param ei
+     * @return
+     */
+    private EntityInstanceImpl findLinkedRecordOwner( EntityInstanceImpl ei )
+    {
+        // Keep track of whether we found another EI linked with this one.
+        boolean foundLinked = false;
+
+        // Run through the list of the other linked instances.
+        for ( EntityInstanceImpl linked : ei.getLinkedInstances() )
+        {
+            if ( ois.contains( linked.getObjectInstance() ) )
+            {
+                foundLinked = true;
+                if ( linked.isRecordOwner() )
+                    return linked;
+            }
+        }
+
+        // If we get here then we didn't find a record owner.  if foundLinked is true
+        // then we did find a linked EI.
+        if ( foundLinked )
+            return ei;
+
+        // Didn't find any EI's that are linked with ei.
+        return null;
+    }
+
     private void writeEntity( final EntityInstanceImpl ei )
     {
         final EntityDef entityDef = ei.getEntityDef();
 
         currentIndent = entityDef.getDepth();
 
+        boolean writeAttributes = true;
         if ( incremental )
+        {
+            EntityCursorImpl cursor = view.cursor( entityDef );
+
+            // Check to see if the current ei is the selected EI.  We first check the status because
+            // calling getEntityInstance() could potentially trigger a lazy-load.
+            boolean selected = cursor.getStatus() == CursorStatus.SET &&
+                               cursor.getEntityInstance() == ei;
+
+            EntityInstanceImpl recordOwner = findLinkedRecordOwner( ei );
+            String entityKey = null;
+            String isLinkedSource = null;
+            if ( recordOwner != null )
+            {
+                if ( recordOwner == ei )
+                {
+                    // TODO: validate that ei.entityDef has all the attributes in the shared
+                    // attribute hash.
+                    ei.setRecordOwner( true );
+                    isLinkedSource = "Y";
+                    entityKey = Long.toString( ei.getEntityKey() );
+                }
+                else
+                {
+                    // Write the entity key of the record owner.
+                    entityKey = Long.toString( ei.getEntityKey() );
+                    writeAttributes = false;
+                }
+            }
+
             startElement( entityDef.getName(),
-                          "Created",  yesNo( ei.isCreated() ),
-                          "Delete",   yesNo( ei.isDeleted() ),
-                          "Updated",  yesNo( ei.isUpdated() ),
-                          "Included", yesNo( ei.isIncluded() ),
-                          "Excluded", yesNo( ei.isExcluded() ) );
+                          "created",    yesNull( ei.isCreated() ),
+                          "delete",     yesNull( ei.isDeleted() ),
+                          "updated",    yesNull( ei.isUpdated() ),
+                          "included",   yesNull( ei.isIncluded() ),
+                          "excluded",   yesNull( ei.isExcluded() ),
+                          "incomplete", yesNull( ei.isIncomplete() ),
+                          "selected",   yesNull( selected ),
+                          "readonly",   yesNull( view.isReadOnly() ),
+                          "isLinkedSource", isLinkedSource,
+                          "entityKey",  entityKey );
+        }
         else
             startElement( entityDef.getName() );
 
         currentIndent++;
-        String[] attrIncr = new String[] { "Updated", null };
-        for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
+        String[] attrIncr = new String[] { "updated", null };
+        if ( writeAttributes )
         {
-            AttributeValue attrib = ei.getInternalAttribute( attributeDef );
-            String value = attrib.getString( view.getTask(), attributeDef );
-            if ( incremental )
+            for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
-                attrIncr[ 1 ] = yesNo( attrib.isUpdated() );
-                startElement( attributeDef.getName(), value, true, attrIncr );
+                AttributeValue attrib = ei.getInternalAttribute( attributeDef );
+                String value = attrib.getString( view.getTask(), attributeDef );
+                if ( incremental )
+                {
+                    attrIncr[ 1 ] = yesNo( attrib.isUpdated() );
+                    startElement( attributeDef.getName(), value, true, attrIncr );
+                }
+                else
+                    startElement( attributeDef.getName(), value, true, (String[]) null );
             }
-            else
-                startElement( attributeDef.getName(), value, true, (String[]) null );
         }
 
         // Loop through the children and add them.  If 'incremental' is true then
@@ -187,12 +275,12 @@ public class WriteOiToXmlStream implements StreamWriter
         endElement( entityDef.getName() );
     }
 
-    public void writeToStream()
+    private void writeToStream()
     {
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
-        startElement( "zOI", "zObjectName", view.getLodDef().getName(),
-                             "zAppName", view.getApplication().getName(),
-                             "zIncreFlags", yesNo( incremental ) );
+        startElement( "zOI", "objectName", view.getLodDef().getName(),
+                             "appName", view.getApplication().getName(),
+                             "increFlags", yesNo( incremental ) );
 
         currentIndent = 0;
 
@@ -205,6 +293,11 @@ public class WriteOiToXmlStream implements StreamWriter
         }
 
         endElement( "zOI" );
+    }
+
+    private String yesNull( boolean b )
+    {
+        return b ? "Y" : "";
     }
 
     private String yesNo( boolean b )
