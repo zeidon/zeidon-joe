@@ -20,7 +20,6 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Stack;
@@ -67,7 +66,17 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private Application              application;
     private LodDef                   lodDef;
-    private ViewImpl                 view;
+
+    /**
+     * Current view being read.
+     */
+    private ViewImpl view;
+
+    /**
+     * List of returned views.
+     */
+    private final List<View> viewList = new ArrayList<>();
+
     private EnumSet<ActivateFlags>   control;
     private boolean                  incremental = false;
     private Stack<Attributes>        entityAttributes = new Stack<Attributes>();
@@ -82,7 +91,7 @@ class ActivateOiFromXmlStream implements StreamReader
      */
     private List<EntityInstance> selectedInstances;
 
-    ViewImpl read()
+    private ViewImpl read()
     {
         try
         {
@@ -165,6 +174,7 @@ class ActivateOiFromXmlStream implements StreamReader
 
         lodDef = application.getLodDef( task, odName );
         view = (ViewImpl) task.activateEmptyObjectInstance( lodDef );
+        viewList.add( view );
 
         String increFlags = attributes.getValue( "increFlags" );
         if ( ! StringUtils.isBlank( increFlags ) )
@@ -204,6 +214,12 @@ class ActivateOiFromXmlStream implements StreamReader
                                   String qName,
                                   Attributes attributes ) throws SAXException
         {
+            if ( StringUtils.equalsIgnoreCase( qName, "zOIs" ) )
+            {
+                // Nothing to do.
+                return;
+            }
+
             if ( StringUtils.equalsIgnoreCase( qName, "zOI" ) )
             {
                 createOi( qName, attributes );
@@ -287,9 +303,15 @@ class ActivateOiFromXmlStream implements StreamReader
 
             if ( StringUtils.equalsIgnoreCase( qName, "zOI" ) )
             {
-                // TODO: Stop parsing.
                 return;
             }
+
+            if ( StringUtils.equalsIgnoreCase( qName, "zOIs" ) )
+            {
+                return;
+            }
+
+            throw new ZeidonException( "Unexpected qname: %s", qName );
         } // endElement
 
         @Override
@@ -311,6 +333,6 @@ class ActivateOiFromXmlStream implements StreamReader
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
         read();
-        return Arrays.asList( (View) view );
+        return viewList;
     }
 }

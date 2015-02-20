@@ -172,16 +172,21 @@ class SimpleTest
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "dgc@xyz.com" );
         stud.cursor( "Student" ).setPosition( 6 );
         String id = stud.cursor( "Student" ).getAttribute( "ID" ).getString();
-        stud.cursor(  "StudentMajorDegreeTrack" ).setPrevWithinOi();
-//        stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
-        stud.serializeOi().asJson().toFile( "/tmp/stud2.json" );
+//        stud.cursor(  "StudentMajorDegreeTrack" ).setPrevWithinOi();
+        stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
+        String jsonFile = stud.serializeOi().withIncremental().toFile( "/tmp/stud2.json" );
 
         View stud2 = zencas.deserializeOi()
-                            .fromResource( "/tmp/stud2.json" )
+                            .fromResource( jsonFile )
                             .setLodDef( "lStudDpt" )
-                            .asJson()
                             .activateFirst();
 //        stud2.logObjectInstance();
+
+        String xmlFile = stud.serializeOi().withIncremental().compressed().toTempDir( "stud2.xml" );
+        stud2 = zencas.deserializeOi().fromResource( xmlFile ).activateFirst();
+
+        if ( ! stud.cursor( "Student" ).getAttribute( "ID" ).getString().equals( stud2.cursor( "Student" ).getAttribute( "ID" ).getString() ) )
+            throw new ZeidonException( "Mismatching IDs" );
 
         List<View> stud3 = zencas.deserializeOi()
                             .fromResource( "/tmp/stud.json" )

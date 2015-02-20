@@ -44,7 +44,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  */
 public class WriteOiToXmlStream implements StreamWriter
 {
-    private ViewImpl view;
+    private ViewImpl currentView;
     private Writer writer;
     private EnumSet<WriteOiFlags> control;
     private boolean incremental;
@@ -57,8 +57,6 @@ public class WriteOiToXmlStream implements StreamWriter
     public void writeToStream( SerializeOi options, Writer writer )
     {
         List<View> viewList = options.getViewList();
-        if ( viewList.size() > 1 )
-            throw new ZeidonException( "XML stream processing can only handle a single OI" );
 
         // Create a set of all the OIs and turn off the record owner flag.  The record owner
         // flag will be used to determine if a linked EI has been written to the stream.
@@ -70,12 +68,29 @@ public class WriteOiToXmlStream implements StreamWriter
                 ei.setRecordOwner( false );
         }
 
-        view = ((InternalView) viewList.get( 0 ) ).getViewImpl();
+        currentView = ((InternalView) viewList.get( 0 ) ).getViewImpl();
         this.options = options;
         this.writer = writer;
         control = options.getFlags();
         incremental = this.control.contains( WriteOiFlags.INCREMENTAL );
-        writeToStream();
+
+        if ( viewList.size() > 1 )
+        {
+            startElement( "zOIs" );
+            currentIndent++;
+        }
+
+        for ( View view : viewList )
+        {
+            currentView = ((InternalView) view ).getViewImpl();
+            writeViewToStream();
+        }
+
+        if ( viewList.size() > 1 )
+        {
+            currentIndent--;
+            endElement( "zOIs" );
+        }
     }
 
     private void write( String string )
@@ -138,21 +153,28 @@ public class WriteOiToXmlStream implements StreamWriter
         if ( value != null )
         {
             String esc = StringEscapeUtils.escapeXml( value );
-            write(">%s</%s>\n", esc, elementName );
+            write(">%s</%s>", esc, elementName );
+            if ( ! options.isCompressed() )
+                write( "\n" );
         }
         else
         {
             if ( close )
-                write( "/>\n" );
+                write( "/>" );
             else
-                write( ">\n" );
+                write( ">" );
+
+            if ( ! options.isCompressed() )
+                write( "\n" );
         }
     }
 
     private void endElement( final String elementName )
     {
         writeIndent();
-        write( "</%s>\n", elementName );
+        write( "</%s>", elementName );
+        if ( ! options.isCompressed() )
+            write( "\n" );
     }
 
     /**
@@ -196,7 +218,7 @@ public class WriteOiToXmlStream implements StreamWriter
         boolean writeAttributes = true;
         if ( incremental )
         {
-            EntityCursorImpl cursor = view.cursor( entityDef );
+            EntityCursorImpl cursor = currentView.cursor( entityDef );
 
             // Check to see if the current ei is the selected EI.  We first check the status because
             // calling getEntityInstance() could potentially trigger a lazy-load.
@@ -232,7 +254,7 @@ public class WriteOiToXmlStream implements StreamWriter
                           "excluded",   yesNull( ei.isExcluded() ),
                           "incomplete", yesNull( ei.isIncomplete() ),
                           "selected",   yesNull( selected ),
-                          "readonly",   yesNull( view.isReadOnly() ),
+                          "readonly",   yesNull( currentView.isReadOnly() ),
                           "isLinkedSource", isLinkedSource,
                           "entityKey",  entityKey );
         }
@@ -246,10 +268,10 @@ public class WriteOiToXmlStream implements StreamWriter
             for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
                 AttributeValue attrib = ei.getInternalAttribute( attributeDef );
-                String value = attrib.getString( view.getTask(), attributeDef );
+                String value = attrib.getString( currentView.getTask(), attributeDef );
                 if ( incremental )
                 {
-                    attrIncr[ 1 ] = yesNo( attrib.isUpdated() );
+                    attrIncr[ 1 ] = yesNull( attrib.isUpdated() );
                     startElement( attributeDef.getName(), value, true, attrIncr );
                 }
                 else
@@ -264,7 +286,8 @@ public class WriteOiToXmlStream implements StreamWriter
         {
             if ( first )
             {
-                write("\n");
+                if ( ! options.isCompressed() )
+                    write( "\n" );
                 first = false;
             }
 
@@ -275,16 +298,16 @@ public class WriteOiToXmlStream implements StreamWriter
         endElement( entityDef.getName() );
     }
 
-    private void writeToStream()
+    private void writeViewToStream()
     {
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
-        startElement( "zOI", "objectName", view.getLodDef().getName(),
-                             "appName", view.getApplication().getName(),
+        startElement( "zOI", "objectName", currentView.getLodDef().getName(),
+                             "appName", currentView.getApplication().getName(),
                              "increFlags", yesNo( incremental ) );
 
-        currentIndent = 0;
+        currentIndent++;
 
-        for ( EntityInstanceImpl ei = view.getObjectInstance().getRootEntityInstance();
+        for ( EntityInstanceImpl ei = currentView.getObjectInstance().getRootEntityInstance();
               ei != null;
               ei = ei.getNextTwin() )
         {
@@ -292,6 +315,7 @@ public class WriteOiToXmlStream implements StreamWriter
                 writeEntity( ei );
         }
 
+        currentIndent--;
         endElement( "zOI" );
     }
 
