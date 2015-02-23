@@ -2971,6 +2971,10 @@ class EntityCursorImpl implements EntityCursor
         return getExistingInstance().getAttribute( getView(), attributeDef );
     }
 
+    /**
+     * @deprecated use getAttributes( includeNullValues ) instead.
+     */
+    @Deprecated
     @Override
     public List<AttributeInstance> attributeList( boolean includeNullValues )
     {
@@ -3021,5 +3025,17 @@ class EntityCursorImpl implements EntityCursor
                                     .withOiScoping( getObjectInstance() )
                                     .forEntityDef( getEntityDef() )
                                     .build();
+    }
+
+    @Override
+    public List<AttributeInstance> getAttributes()
+    {
+        return getExistingInstance( true ).getAttributes();
+    }
+
+    @Override
+    public List<AttributeInstance> getAttributes( boolean includeNullValues )
+    {
+        return getExistingInstance( true ).getAttributes( includeNullValues );
     }
 }
