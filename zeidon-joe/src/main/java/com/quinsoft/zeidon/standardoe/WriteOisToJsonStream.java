@@ -298,6 +298,15 @@ public class WriteOisToJsonStream implements StreamWriter
         if ( ei.isIncomplete() )
             jg.writeStringField( "incomplete", "true" );
 
+        if ( ei.hasLoadedLazyChildren() )
+        {
+            StringBuilder sb = new StringBuilder();
+            for ( EntityDef def : ei.getEntitiesLoadedLazily() )
+                sb.append( "," ).append( def.getName() );
+            sb.deleteCharAt( 0 );
+            jg.writeStringField( "lazyLoaded", sb.toString() );
+        }
+
         if ( recordOwner != null )
         {
             if ( recordOwner == ei )

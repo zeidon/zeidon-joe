@@ -42,7 +42,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  * @author DG
  *
  */
-public class WriteOiToXmlStream implements StreamWriter
+public class WriteOisToXmlStream implements StreamWriter
 {
     private ViewImpl currentView;
     private Writer writer;
@@ -246,6 +246,14 @@ public class WriteOiToXmlStream implements StreamWriter
                 }
             }
 
+            StringBuilder lazyLoaded = new StringBuilder();
+            if ( ei.hasLoadedLazyChildren() )
+            {
+                for ( EntityDef def : ei.getEntitiesLoadedLazily() )
+                    lazyLoaded.append( "," ).append( def.getName() );
+                lazyLoaded.deleteCharAt( 0 );
+            }
+
             startElement( entityDef.getName(),
                           "created",    yesNull( ei.isCreated() ),
                           "delete",     yesNull( ei.isDeleted() ),
@@ -256,7 +264,8 @@ public class WriteOiToXmlStream implements StreamWriter
                           "selected",   yesNull( selected ),
                           "readonly",   yesNull( currentView.isReadOnly() ),
                           "isLinkedSource", isLinkedSource,
-                          "entityKey",  entityKey );
+                          "entityKey",  entityKey,
+                          "lazyLoaded", lazyLoaded.toString() );
         }
         else
             startElement( entityDef.getName() );

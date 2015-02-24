@@ -24,6 +24,7 @@ import scala.util.control.Breaks._
 import com.quinsoft.zeidon.objectdefinition._
 import com.quinsoft.zeidon.CursorPosition
 import com.quinsoft.zeidon.ZeidonException
+import com.quinsoft.zeidon.EntityCursor.CursorStatus
 
 /**
  * Scala wrapper around a Zeiden EntityCursor.
@@ -106,8 +107,17 @@ class EntityCursor( private[this]  val view: View,
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
     def copySubobject( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.copySubobject( source, position )
+    
+    /**
+     * Returns the number of twins for this entity cursor.
+     */
     def count = jentityCursor.getEntityCount()
 
+    /**
+     * Returns the status of this entity cursor.
+     */
+    def status: CursorStatus = jentityCursor.getStatus()
+    
     /**
      * Sorts the entities according to the value of orderKeys.
      *      orderKeys = String of paired 'words', consisting of "AttributeName x",

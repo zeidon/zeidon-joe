@@ -487,7 +487,7 @@ class ActivateOisFromJsonStream implements StreamReader
             for ( AttributeMeta am : attributeMetas )
                 am.apply( ei );
 
-            // Now that we've updated everyting, set the flags.
+            // Now that we've updated everything, set the flags.
             ei.setCreated( entityMeta.created );
             ei.setUpdated( entityMeta.updated );
             ei.setDeleted( entityMeta.deleted );
@@ -495,6 +495,12 @@ class ActivateOisFromJsonStream implements StreamReader
             ei.setExcluded( entityMeta.excluded );
             if ( entityMeta.incomplete )
                 ei.setIncomplete( null );
+            if ( entityMeta.lazyLoaded != null )
+            {
+                String[] names = entityMeta.lazyLoaded.split( "," );
+                for ( String name: names )
+                    ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name ) );
+            }
 
             // If the entity list didn't start with a [ then there is only one entity
             // in the list of twins so exit.
@@ -553,6 +559,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 case  "linkedSource" :   meta.linkedSource = jp.getText(); break;
                 case  "selected" :       selectedInstances.add( ei ); break;
                 case  "incomplete" :     meta.incomplete = true; break;
+                case  "lazyLoaded" :     meta.lazyLoaded = jp.getText(); break;
 
                 default: task.log().warn( "Unknown entity meta value %s", fieldName );
             }
@@ -620,6 +627,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
     private static class EntityMeta
     {
+        private String lazyLoaded = null;
         private String linkedSource;
         private String entityKey;
         private boolean isLinkedSource;

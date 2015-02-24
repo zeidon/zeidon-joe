@@ -207,7 +207,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
                         break;
 
                     case XML:
-                        activator= new ActivateOiFromXmlStream();
+                        activator= new ActivateOisFromXmlStream();
                         break;
 
                     case CSV:

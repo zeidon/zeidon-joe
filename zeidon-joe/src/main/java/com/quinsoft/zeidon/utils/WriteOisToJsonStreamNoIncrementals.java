@@ -123,6 +123,10 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                     continue;
 
                 String value = attrib.getString( null );
+
+                // getAttributes will include null attributes if they have been updated
+                // (i.e. explicitly set to null).  Since we aren't writing incrementals
+                // we don't want those so check for null.
                 if ( ! StringUtils.isBlank( value ) )
                     jg.writeStringField( attrib.getAttributeDef().getName(), value );
             }

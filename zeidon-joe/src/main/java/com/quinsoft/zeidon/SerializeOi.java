@@ -31,7 +31,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.standardoe.WriteOiToPorStream;
-import com.quinsoft.zeidon.standardoe.WriteOiToXmlStream;
+import com.quinsoft.zeidon.standardoe.WriteOisToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
 import com.quinsoft.zeidon.utils.WriteOisToJsonStreamNoIncrementals;
 
@@ -256,7 +256,7 @@ public class SerializeOi
                     break;
 
                 case XML:
-                    streamWriter = new WriteOiToXmlStream();
+                    streamWriter = new WriteOisToXmlStream();
                     break;
 
                 case POR:

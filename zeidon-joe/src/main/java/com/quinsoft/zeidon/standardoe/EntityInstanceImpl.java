@@ -80,7 +80,11 @@ class EntityInstanceImpl implements EntityInstance
     private static final int  FLAG_HIDDEN         = 0x00000400;
 
     private final ObjectInstance  objectInstance;
-    private final EntityDef      entityDef;
+    private final EntityDef       entityDef;
+
+    /**
+     * Depth of this EI from the root.  If this is root then depth = 1.
+     */
     private final int             depth;
     private final long            entityKey;
 
@@ -820,11 +824,7 @@ class EntityInstanceImpl implements EntityInstance
             return;  // EI doesn't have any children who are lazy loaded.
 
         Set<EntityDef> set = getEntitiesLoadedLazily();
-        for ( EntityDef child: getEntityDef().getChildren() )
-        {
-            // We'll just add all children regardless of whether they belong.
-            set.add( child );
-        }
+        set.addAll( getEntityDef().getChildren() ); // We'll just add all children regardless of whether they are lazyload.
     }
 
     boolean hasChildBeenLazyLoaded( EntityDef childEntityDef )
@@ -3825,6 +3825,15 @@ class EntityInstanceImpl implements EntityInstance
             entitiesLoadedLazily = new HashSet<EntityDef>();
 
         return entitiesLoadedLazily;
+    }
+
+    /**
+     * Returns true if this EI has attempted to load any lazy-load children.
+     * @return
+     */
+    boolean hasLoadedLazyChildren()
+    {
+        return entitiesLoadedLazily != null && entitiesLoadedLazily.size() > 0;
     }
 
     @Override

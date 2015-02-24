@@ -29,6 +29,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
@@ -51,7 +52,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * @author dgc
  *
  */
-class ActivateOiFromXmlStream implements StreamReader
+class ActivateOisFromXmlStream implements StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
@@ -79,9 +80,9 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private EnumSet<ActivateFlags>   control;
     private boolean                  incremental = false;
-    private Stack<Attributes>        entityAttributes = new Stack<Attributes>();
-    private Stack<Attributes>        attributeAttributes = new Stack<Attributes>();
-    private Stack<EntityDef>         currentEntityStack = new Stack<EntityDef>();
+    private final Stack<Attributes>  entityAttributes = new Stack<Attributes>();
+    private final Stack<Attributes>  attributeAttributes = new Stack<Attributes>();
+    private final Stack<EntityDef>   currentEntityStack = new Stack<EntityDef>();
     private EntityDef                currentEntityDef;
     private StringBuilder            characterBuffer;
 
@@ -90,6 +91,11 @@ class ActivateOiFromXmlStream implements StreamReader
      * stream.  Cursors will be set afterwards.
      */
     private List<EntityInstance> selectedInstances;
+
+    /**
+     * Keeps track of current location in SAX parser.
+     */
+    private Locator locator;
 
     private ViewImpl read()
     {
@@ -121,7 +127,11 @@ class ActivateOiFromXmlStream implements StreamReader
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e );
+            ZeidonException ze = ZeidonException.wrapException( e );
+            if ( locator != null )
+                ze.appendMessage( "Line/col = %d/%d", locator.getLineNumber(), locator.getColumnNumber() );
+
+            throw ze;
         }
     }
 
@@ -208,6 +218,14 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private class SaxParserHandler extends DefaultHandler
     {
+        // this will be called when XML-parser starts reading
+        // XML-data; here we save reference to current position in XML:
+        @Override
+        public void setDocumentLocator(Locator locator)
+        {
+            ActivateOisFromXmlStream.this.locator = locator;
+        }
+
         @Override
         public void startElement( String uri,
                                   String localName,
@@ -230,16 +248,16 @@ class ActivateOiFromXmlStream implements StreamReader
             if ( view == null )
                 throw new ZeidonException( "XML stream does not specify zOI element" );
 
+            if ( currentEntityDef != null && currentEntityDef.getAttribute( qName, false ) != null )
+            {
+                setAttribute( qName, attributes );
+                return;
+            }
+
             // Is the element name an entity name?
             if ( lodDef.getEntityDef( qName, false ) != null )
             {
                 createEntity( qName, attributes );
-                return;
-            }
-
-            if ( currentEntityDef.getAttribute( qName, false ) != null )
-            {
-                setAttribute( qName, attributes );
                 return;
             }
 
@@ -259,17 +277,27 @@ class ActivateOiFromXmlStream implements StreamReader
             AttributeDef attributeDef = currentEntityDef.getAttribute( qName, false );
             if ( attributeDef != null )
             {
-                EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
-                ei.setInternalAttributeValue( attributeDef, characterBuffer.toString(), false );
-                characterBuffer = null;
-
-                if ( incremental )
+                if ( characterBuffer == null )
                 {
-                    Attributes attributes = attributeAttributes.pop();
-                    ei.setAttributeUpdated( attributeDef, isYes( attributes.getValue( "updated" ) ) );
+                    // If we get here then we should be in a situation where an attribute name
+                    // is the same as its containing entity.  We've already read the attribute
+                    // so qName should be the entity name.  Verify.
+                    assert lodDef.getEntityDef( qName, false ) != null : "Unexpected null characterBuffer";
                 }
+                else
+                {
+                    EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
+                    ei.setInternalAttributeValue( attributeDef, characterBuffer.toString(), false );
+                    characterBuffer = null; // Indicates we've read the attribute.
 
-                return;
+                    if ( incremental )
+                    {
+                        Attributes attributes = attributeAttributes.pop();
+                        ei.setAttributeUpdated( attributeDef, isYes( attributes.getValue( "updated" ) ) );
+                    }
+
+                    return;
+                }
             }
 
             // Is the element name an entity name?
@@ -291,6 +319,13 @@ class ActivateOiFromXmlStream implements StreamReader
                         ei.setIncomplete( null );
                     if ( isYes( attributes.getValue( "selected" ) ) )
                         selectedInstances.add( ei );
+                    String lazyLoaded = attributes.getValue( "lazyLoaded" );
+                    if ( ! StringUtils.isBlank( lazyLoaded ) )
+                    {
+                        String[] names = lazyLoaded.split( "," );
+                        for ( String name: names )
+                            ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name ) );
+                    }
                 }
 
                 // The top of the stack equals currentEntityDef.  Pop it off the stack and
