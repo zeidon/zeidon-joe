@@ -126,14 +126,7 @@ public class WriteOisToJsonStream implements StreamWriter
             lastEntityDef = writeEntity( ei, lastEntityDef );
         }
 
-        // If lastEntityDef is null then the OI is empty so write a start array
-        // to indicate it's empty.
-        if ( lastEntityDef == null )
-        {
-//            jg.writeStartObject();
-//            jg.writeEndObject();
-        }
-        else
+        if ( lastEntityDef != null )
             jg.writeEndArray();
     }
 
