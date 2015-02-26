@@ -16,8 +16,15 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
  */
 class View( val task: Task ) extends Task( task ) with Dynamic {
 
-    var jlodDef: LodDef = null
-    var jview: com.quinsoft.zeidon.View = null
+    /**
+     * The underlying EntityDef for this View.  May be null.
+     */
+    private var jlodDef: LodDef = null
+
+    /**
+     * The underlying Java view for this Scala View.  may be null.
+     */
+    private[scala] var jview: com.quinsoft.zeidon.View = null
 
     def this( jv: com.quinsoft.zeidon.View ) = {
         this( new Task( jv.getTask() ) )
@@ -95,6 +102,10 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     /**
      * Creates an empty OI for this view.  The LOD must have been previously
      * specified with basedOn.
+     * {{{
+     *      val mUser = new View( task ) basedOn "mUser"
+     *      mUser activateEmpty()
+     * }}}
      */
     def activateEmpty() = {
         validateLodDef
@@ -104,8 +115,12 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     /**
      * Activates an OI from the DB with simple qualification.
-     *
      * Returns 'this' for convenience.
+     *
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID = 490 )
+     * }}}
      */
     def activateWhere( addQual: ( EntityQualBuilder ) => Unit ): View = {
         validateLodDef
@@ -130,10 +145,18 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     /**
      * Creates a QualBuilder for creating activate qualification.
+     * A typical use case:
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID = 490 )
+     *                  .or( _.User.ID = 491 )
+     *                  .asynchronous
+     *                  .activate
+     * }}}
      */
-    def buildQual( addQual: ( EntityQualBuilder ) => Unit ): QualBuilder = {
+    def buildQual( initialQual: ( EntityQualBuilder ) => Unit ): QualBuilder = {
         val builder = buildQual()
-        addQual( builder.entityQualBuilder )
+        initialQual( builder.entityQualBuilder ) // Add the qualifcation.
         builder
     }
 
@@ -158,14 +181,39 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     }
 
     /**
-     * Creates a new view with a different owning task.
+     * Creates a new view, potentially with a different owning task.
      */
     def newView( task: Task = this.task ) = { validateNonEmpty; new View( task ).from( this ) }
 
     /**
      * Sets the name of this view in its owning task.
+     * Note: this will NOT drop other names this view might have.  I.e. a view
+     * can have multiple names.
+     *
+     * {{{
+     * val myView = new View( task ) basedOn MyLOD
+     * myView.activateEmpty
+     * myView.name( "This Is a Name" )
+     * }}}
+     *
+     * This is a synonym for view.name = "..."
      */
     def name( viewName: String ) = { validateNonEmpty; jview.setName( viewName ) }
+
+    /**
+     * Sets the name of the view as an attribute.
+     * Note: this will NOT drop other names this view might have.  I.e. a view
+     * can have multiple names.
+     *
+     * {{{
+     * val myView = new View( task ) basedOn MyLOD
+     * myView.activateEmpty
+     * myView.name = "This Is a Name"
+     * }}}
+     *
+     * This is a synonym for view.name( "..." )
+     */
+    def name_=( viewName: String ) = name( viewName )
 
     def assert = new AssertView( this )
 
@@ -186,19 +234,29 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     def logObjectInstance = { validateNonEmpty; jview.logObjectInstance() }
 
     /**
+     * Writes the entire OI to the log file.
+     */
+    def logOi = logObjectInstance
+
+    /**
      * Returns the options that were used to activate this OI.
      */
     def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
 
     /**
      * Returns a serializer that can be used to serialize this OI.
+     *
+     * To serialize the OI as JSON to a file:
+     * {{{
+     * myView.serializeOi.toFile( "myfile.json" )
+     * }}}
+     *
+     * To serialize the OI as XML to a string.
+     * {{{
+     * val str = myView.serializeOi.asXml.toString
+     * }}}
      */
     def serializeOi = { validateNonEmpty; jview.serializeOi() }
-
-    /**
-     * Returns a deserializer for that can be used to deserialize an OI.
-     */
-    override def deserializeOi = { validateNonEmpty; jview.deserializeOi() }
 
     /**
      * Creates a SelectSet for this View.
@@ -214,7 +272,23 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     }
 
     /**
-     * Returns the cursor of the root entity..
+     * Returns an EntityCursor for the entity specified by entityDef.
+     */
+    def cursor( entityName: String ) = {
+        validateNonEmpty
+        new EntityCursor( this, jview.cursor( entityName ) )
+    }
+
+    /**
+     * Returns the cursor of the root entity.  This allows code to generically
+     * refer to the root entity of a View.
+     *
+     * The following example counts the number of root entities for
+     * any myView regardless of the LOD.
+     *
+     * {{{
+     *      val count = myView.root.count
+     * }}}
      */
     def root = {
         validateNonEmpty

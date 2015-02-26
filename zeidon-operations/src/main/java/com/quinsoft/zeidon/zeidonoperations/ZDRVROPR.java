@@ -265,8 +265,10 @@ public class ZDRVROPR extends VmlOperation
       String szPathName = task.readZeidonConfig( "[App." + task.getApplication().getName() + "]", "WebDirectory" );
       szPathName = m_KZOEP1AA.SysConvertEnvironmentString( "", szPathName );
 
-      //String copyPdf = "C:/Program Files/Apache Group/Tomcat 6.0/webapps/ROOT/zencas/pdf/" + pdf;
+      //String copyPdf = "C:/Program Files/Apache Group/Tomcat 7.0/webapps/ROOT/epamms/pdf/" + pdf;
       String copyPdf = szPathName + "pdf/" + pdf;
+      task.log().error( "*** ConvertXMLToPDF file: " + copyPdf );
+
       try
       {
          // Step 1: Construct a FopFactory
@@ -309,8 +311,8 @@ public class ZDRVROPR extends VmlOperation
             // we can retrieve this name in FindOpenFile (kzoejava.c) when trying to
             // open the file in the jsp files.
             View vKZXMLPGO = task.getViewByName( "_KZXMLPGO" );
-            vKZXMLPGO.cursor("Session").setAttribute("PrintFileName", pdf);
-            vKZXMLPGO.cursor("Session").setAttribute("PrintFileType", "pdf");
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( pdf );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( pdf );
          }
          catch (Exception e)
          {
@@ -323,6 +325,83 @@ public class ZDRVROPR extends VmlOperation
       catch (Exception e)
       {
          task.log().error( "*** ConvertXMLToPDF factory exception **** " + e );
+      }
+
+      return 0;
+   }
+
+   public int ConvertXML_ToPDF( String directory, String application, String label )
+   {
+      // Examples can be found...
+      //http://xmlgraphics.apache.org/fop/1.0/embedding.html#examples
+      String pdf = label + ".pdf";
+      String root = directory + application;
+      String xml = root + "xml/";
+      String xsl = root + "xsl/";
+      String copyPdf = root + "pdf/";
+      SysValidDirOrFile( xml, 1, 1, 256 );
+      SysValidDirOrFile( xsl, 1, 1, 256 );
+      SysValidDirOrFile( copyPdf, 1, 1, 256 );
+      xml += label + ".xml";
+      xsl += label + ".xsl";
+      copyPdf += pdf;
+      task.log().error( "*** ConvertXML_ToPDF xml file: " + xml + "   xsl file: " + xsl + "   pdf file: " + copyPdf );
+
+      try
+      {
+         // Step 1: Construct a FopFactory
+         // (reuse if you plan to render multiple documents!)
+         FopFactory fopFactory = FopFactory.newInstance();
+
+         // Step 2: Set up output stream.
+         // Note: Using BufferedOutputStream for performance reasons (helpful with FileOutputStreams).
+         //OutputStream out = new BufferedOutputStream(new FileOutputStream(new File("C:/temp/name.pdf")));
+         OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(copyPdf)));
+         try
+         {
+            // Step 3: Construct fop with desired output format
+            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
+
+            // Step 4: Setup JAXP using identity transformer
+            TransformerFactory factory = TransformerFactory.newInstance();
+            //Transformer transformer = factory.newTransformer(); // identity transformer
+
+            //without XSLT:
+            //Transformer transformer = factory.newTransformer(); // identity transformer
+
+            //with XSLT:
+            //javax.xml.transform.Source xslt = new StreamSource(new File("c:/temp/name2fo.xsl"));
+            javax.xml.transform.Source xslt = new StreamSource(new File(xsl));
+            Transformer transformer = factory.newTransformer(xslt);
+
+            // Step 5: Setup input and output for XSLT transformation
+            // Setup input stream
+            //Source src = new StreamSource(new File("C:/Temp/myfile.fo"));
+            //javax.xml.transform.Source src = new StreamSource(new File("C:/temp/name.xml"));
+            javax.xml.transform.Source src = new StreamSource(new File(xml));
+            // Resulting SAX events (the generated FO) must be piped through to FOP
+            Result res = new SAXResult(fop.getDefaultHandler());
+
+            // Step 6: Start XSLT transformation and FOP processing
+            transformer.transform(src, res);
+
+            // We set the report name in KZXMLPGO so that
+            // we can retrieve this name in FindOpenFile (kzoejava.c) when trying to
+            // open the file in the jsp files.
+            View vKZXMLPGO = task.getViewByName( "_KZXMLPGO" );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( application + "pdf/" + pdf );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( application + "pdf/" + pdf );
+         }
+         catch (Exception e)
+         {
+            task.log().error( "*** ConvertXML_ToPDF transform exception **** " + e );
+         } finally {
+            out.close();  //Clean-up
+         }
+      }
+      catch (Exception e)
+      {
+         task.log().error( "*** ConvertXML_ToPDF factory exception **** " + e );
       }
 
       return 0;

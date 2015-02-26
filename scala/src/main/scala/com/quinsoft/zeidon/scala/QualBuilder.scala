@@ -8,14 +8,14 @@ import com.quinsoft.zeidon._
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
- * use case is below:
- * <code>
+ * use case:
+ * {{{
  *      val mUser = VIEW basedOn "mUser"
  *      mUser.buildQual( _.User.ID = 490 )
  *                  .or( _.User.ID = 491 )
  *                  .asynchronous
  *                  .activate
- * </code>
+ * }}}
  *
  */
 class QualBuilder( val view: View,
@@ -53,12 +53,12 @@ class QualBuilder( val view: View,
      * Adds multiple attribute qualifications as a single group
      * of OR statements.
      *
-     * <code>
+     * {{{
      *      val mUser = VIEW basedOn "mUser"
      *      mUser.buildQual( _.User.LastName = "Smith" )
      *              .andAny( _.User.FirstName = "Tom", _.User.FirstName = "Harry" )
      *              .activate
-     * </code>
+     * }}}
      *
      */
     def andAny( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {

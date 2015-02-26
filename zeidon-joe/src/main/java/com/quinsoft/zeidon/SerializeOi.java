@@ -31,8 +31,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.standardoe.WriteOiToPorStream;
-import com.quinsoft.zeidon.standardoe.WriteOisToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
+import com.quinsoft.zeidon.standardoe.WriteOisToXmlStream;
 import com.quinsoft.zeidon.utils.WriteOisToJsonStreamNoIncrementals;
 
 /**
@@ -109,7 +109,9 @@ public class SerializeOi
     }
 
     /**
-     * Serializes the OI to the specified file name.
+     * Serializes the OI to the specified file name.  If the format has not yet been specified
+     * the format will be determined (if possible) from the filename extension.  E.g. "myfile.json"
+     * indicates the format is JSON.
      *
      * @param filename
      *
@@ -117,20 +119,35 @@ public class SerializeOi
      */
     public String toFile( String filename )
     {
+        File file = new File( filename );
+        return toFile( file );
+    }
+
+    /**
+     * Serializes the OI to the specified file name.  If the format has not yet been specified
+     * the format will be determined (if possible) from the filename extension.  E.g. "myfile.json"
+     * indicates the format is JSON.
+     *
+     * @param file
+     *
+     * @return the filename
+     */
+    public String toFile( File file )
+    {
         if ( viewList.size() == 0 )
             throw new ZeidonException( "Specify at least one view before calling toFile()" );
 
+        String filename = file.getAbsolutePath();
         FileWriter writer = null;
         try
         {
-            File file = new File( filename );
             writer  = new FileWriter( file );
             resourceName = filename;
             setFormatFromFilename( resourceName );
             write( writer );
             return resourceName;
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
             throw ZeidonException.wrapException( e ).prependFilename( filename );
         }
@@ -170,6 +187,18 @@ public class SerializeOi
         resourceName = "*String*";
         write( writer );
         return writer;
+    }
+
+    /**
+     * Write the OI to a string and return the string.
+     */
+    @Override
+    public String toString()
+    {
+        if ( viewList.size() == 0 )
+            return "";
+
+        return toStringWriter().toString();
     }
 
     /**
@@ -242,6 +271,12 @@ public class SerializeOi
         return viewList;
     }
 
+    /**
+     * Get the streamWriter that will serialize the OI to the stream.  If
+     * one hasn't been created then this will do so.
+     *
+     * @return
+     */
     private StreamWriter getStreamWriter()
     {
         if ( streamWriter == null )
@@ -316,7 +351,7 @@ public class SerializeOi
         return this;
     }
     /**
-     * @return the format
+     * @return the format.  If it hasn't been set then the default is the Zeidon POR format.
      */
     public StreamFormat getFormat()
     {
