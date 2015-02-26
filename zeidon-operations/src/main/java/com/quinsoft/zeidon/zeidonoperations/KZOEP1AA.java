@@ -304,6 +304,13 @@ public class KZOEP1AA extends VmlOperation
       return stringReturnValue;
    }
 
+   public static final int SysGetEnvVar( StringBuilder sbReturnValue, String stringVariableName, int nMaxReturnLth )
+   {
+      sbReturnValue.setLength( 0 );
+      sbReturnValue.append( JoeUtils.getEnvProperty( stringVariableName, false ) );
+      return sbReturnValue.length( );
+   }
+
    public final String SysReadZeidonIni( int file, String group, String parameter )
    {
       return task.readZeidonConfig( group, parameter );
@@ -630,6 +637,11 @@ public class KZOEP1AA extends VmlOperation
       }
 
       sbTarget.setLength( targetLength );
+      for ( k = 0; k < targetLength; k++ ) {
+         if ( sbTarget.charAt( k ) == '\\' ) {
+            sbTarget.setCharAt( k, '/' );
+         }
+      }
    }
 
    public String SysConvertEnvironmentString( String target, String source )
@@ -1792,11 +1804,7 @@ public class KZOEP1AA extends VmlOperation
       // For each type which has a syncronization date later than our own,
       // issue an activate for that lod
       CreateViewFromViewForTask( vWkTZCMLPLO, vTZCMLPLO, null );
-      while ( ResetViewFromSubobject( vWkTZCMLPLO ) == 0 )
-      {
-         ;
-      }
-
+      ResetViewFromSubobjectTop( vWkTZCMLPLO );
       szWork = GetStringFromAttribute( vTZCMLPLO, "W_MetaDef", "LastSyncDate" );
       DropView( vWkTZCMLPLO );
       // return success
@@ -2308,11 +2316,7 @@ public class KZOEP1AA extends VmlOperation
       // For each type which has a syncronization date later than our own,
       // issue an activate for that type
       CreateViewFromViewForTask( vWkTZCMLPLO, vTZCMLPLO, null );
-      while ( ResetViewFromSubobject( vWkTZCMLPLO ) == 0 )
-      {
-         ;
-      }
-
+      ResetViewFromSubobjectTop( vWkTZCMLPLO );
       szWork = GetStringFromAttribute( vTZCMLPLO, "W_MetaDef", "LastSyncDate" );
 
       // FORCE THE ER/MODEL IN REGARDLESS OF THE SYNC DATE
@@ -5200,7 +5204,7 @@ public class KZOEP1AA extends VmlOperation
       if ( pchLPLR_NameIn.isEmpty() == false &&
            SetCursorFirstEntityByString( WKS_View, "LPLR", "Name", pchLPLR_NameIn, "" ) == zCURSOR_SET )
       {
-         ;  // nothing to do here
+         // nothing to do here
          DisplayEntityInstance( WKS_View, "LPLR" );
       }
       else
@@ -10414,7 +10418,7 @@ public class KZOEP1AA extends VmlOperation
       File[] fileList = folder.listFiles();
       File file;
 
-      for ( int k = 0; k < fileList.length; k++)
+      for ( int k = 0; k < fileList.length; k++ )
       {
          if ( fileList[ k ].isFile() )
          {
