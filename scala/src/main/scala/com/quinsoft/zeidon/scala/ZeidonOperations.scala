@@ -45,6 +45,12 @@ trait ZeidonOperations {
         new VmlCursorResult( cursor.jentityCursor.setNext(), cursor )
     }
 
+    /**
+     * Includes an entity.  Use like:
+     * {{{
+     * INCLUDE targetView.EntityName FROM sourceView.EntityName
+     * }}}
+     */
     def INCLUDE( cursor: EntityCursor ) = new EntityIncluder( cursor )
     
     /**
@@ -92,6 +98,9 @@ trait ZeidonOperations {
         }
     }
     
+    /**
+     * Short-lived class to allow Scala code to mirror VML when including an entity.
+     */
     class EntityIncluder( val targetCursor: EntityCursor ) {
         def FROM( source: EntityCursor ) = targetCursor.include( targetCursor )
         def FROM( source: EntityCursor, position: CursorPosition ) = targetCursor.include( targetCursor, position )

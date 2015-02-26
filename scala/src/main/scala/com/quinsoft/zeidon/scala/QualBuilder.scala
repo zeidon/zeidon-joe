@@ -21,7 +21,7 @@ import com.quinsoft.zeidon._
 class QualBuilder( val view: View,
                    val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
 
-    val jtask = view.jtask
+    val jtask = view.task.jtask
     val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
     val entityQualBuilder = new EntityQualBuilder( this )

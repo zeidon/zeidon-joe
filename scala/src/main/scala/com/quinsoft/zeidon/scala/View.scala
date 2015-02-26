@@ -14,7 +14,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
  */
-class View( val task: Task ) extends Task( task ) with Dynamic {
+class View( val task: Task ) extends Dynamic {
 
     /**
      * The underlying EntityDef for this View.  May be null.
@@ -22,9 +22,9 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     private var jlodDef: LodDef = null
 
     /**
-     * The underlying Java view for this Scala View.  may be null.
+     * The underlying Java view for this Scala View.  May be null.
      */
-    private[scala] var jview: com.quinsoft.zeidon.View = null
+    var jview: com.quinsoft.zeidon.View = null
 
     def this( jv: com.quinsoft.zeidon.View ) = {
         this( new Task( jv.getTask() ) )
@@ -109,7 +109,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
      */
     def activateEmpty() = {
         validateLodDef
-        jview = jtask.activateEmptyObjectInstance( jlodDef )
+        jview = task.jtask.activateEmptyObjectInstance( jlodDef )
         this
     }
 
