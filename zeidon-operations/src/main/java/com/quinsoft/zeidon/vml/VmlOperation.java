@@ -96,6 +96,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
+import java.io.File;
 
 /*
 //package org.kodejava.example.lowagie;
@@ -903,15 +904,15 @@ public abstract class VmlOperation
 
    public VmlOperation( TaskQualification taskQual )
    {
-       super( );
-       if ( taskQual != null )
-           setTaskQual( taskQual );
+      super( );
+      if ( taskQual != null )
+         setTaskQual( taskQual );
    }
 
    protected void setTaskQual( TaskQualification taskQual )
    {
       if ( taskQual != null )
-          this.task = taskQual.getTask();
+         this.task = taskQual.getTask();
    }
 
    public static void SetZeidonSessionAttribute( HttpSession session, TaskQualification qual, String strCallingJSP, String strActionToProcess )
@@ -1060,7 +1061,7 @@ public abstract class VmlOperation
       StringBuilder sb = new StringBuilder();
       for ( EntityInstance ei : vMsgQ.cursor( "WebMsg" ).eachEntity() )
       {
-         sb.append( ei.getStringFromAttribute( "ErrorMsg" ) );
+         sb.append( ei.getAttribute( "ErrorMsg" ).getString() );
          sb.append( "\n" );
       }
 
@@ -1086,11 +1087,11 @@ public abstract class VmlOperation
    {
       View vMsgQ = getMessageObject( taskQual );
       vMsgQ.cursor( "WebMsg" ).createEntity()
-                              .setAttribute( "Id", msgId )
-                              .setAttribute( "Title", msgTitle )
-                              .setAttribute( "ErrorMsg", msgText )
-                              .setAttribute( "Type", msgType )
-                              .setAttribute( "Beep", beep );
+                              .getAttribute( "Id" ).setValue( msgId )
+                              .getAttribute( "Title").setValue( msgTitle )
+                              .getAttribute( "ErrorMsg").setValue( msgText )
+                              .getAttribute( "Type").setValue( msgType )
+                              .getAttribute( "Beep").setValue( beep );
       return 0;
    }
 
@@ -1421,7 +1422,7 @@ public abstract class VmlOperation
       // Create an entity in the message queue object.
       View vMsgQ = VmlOperation.getMessageObject( task );  // message queue
       vMsgQ.cursor( "WebMsg" ).createEntity( CursorPosition.NEXT );
-      vMsgQ.cursor( "WebMsg" ).setAttribute( "ControlTag", controlTag );
+      vMsgQ.cursor( "WebMsg" ).getAttribute( "ControlTag" ).setValue( controlTag );
       if ( errorReason.equals( "Invalid table domain value." ) )
       {
          errorReason = "The value '" + mapValue + "' is invalid.";
@@ -1430,8 +1431,8 @@ public abstract class VmlOperation
       // error message. Take double quotes out.
       errorReason = errorReason.replace("\"", "\'");
 
-      vMsgQ.cursor( "WebMsg" ).setAttribute( "ErrorMsg", errorReason );
-      vMsgQ.cursor( "WebMsg" ).setAttribute( "ErrorMapValue", mapValue );
+      vMsgQ.cursor( "WebMsg" ).getAttribute( "ErrorMsg" ).setValue( errorReason );
+      vMsgQ.cursor( "WebMsg" ).getAttribute( "ErrorMapValue" ).setValue( mapValue );
    }
 
    public static void ReplaceMessage( Task task, String controlTag, String errorReason, String mapValue, boolean evenWithError )
@@ -1444,11 +1445,11 @@ public abstract class VmlOperation
       if ( vMsgQ.cursor( "Task" ).setFirst( "Id", task.getTask( ).getTaskId( ) ).isSet() &&
            vMsgQ.cursor( "WebMsg" ).setFirst( "ControlTag", controlTag ).isSet() )
       {
-         String s = vMsgQ.cursor( "WebMsg" ).getStringFromAttribute( "ErrorMsg" );
+         String s = vMsgQ.cursor( "WebMsg" ).getAttribute( "ErrorMsg" ).toString();
          if ( s == null || s.isEmpty( ) || evenWithError )
          {
-            vMsgQ.cursor( "WebMsg" ).setAttribute( "ErrorMsg", errorReason );
-            vMsgQ.cursor( "WebMsg" ).setAttribute( "ErrorMapValue", mapValue );
+            vMsgQ.cursor( "WebMsg" ).getAttribute( "ErrorMsg" ).setValue( errorReason );
+            vMsgQ.cursor( "WebMsg" ).getAttribute( "ErrorMapValue" ).setValue( mapValue );
          }
       }
       else
@@ -1518,7 +1519,7 @@ public abstract class VmlOperation
 
             if ( DriverApplication.isValidSubtaskView( v ) )
             {
-               TraceLine( "SetNameForView (%d) Subtask (%d) level for Name: %s  Task: %s", view.getId(), v.getId(), name, t.getTaskId() );
+            // TraceLine( "SetNameForView (%d) Subtask (%d) level for Name: %s  Task: %s", view.getId(), v.getId(), name, t.getTaskId() );
                v.setNameForSubtask( name, view );
                break;
             }
@@ -1527,17 +1528,17 @@ public abstract class VmlOperation
             throw new ZeidonException( "Invalid subtask used in SetNameForView: %s", name );
 
          case zLEVEL_TASK:
-            TraceLine( "SetNameForView (%d) Task level for Name: %s  Task: %s", view.getId(), name, t.getTaskId() );
+         // TraceLine( "SetNameForView (%d) Task level for Name: %s  Task: %s", view.getId(), name, t.getTaskId() );
             t.setNameForView( name, view );
             break;
 
          case zLEVEL_APPLICATION:
-            TraceLine( "SetNameForView (%d) Application (%s) level for Name: %s  Task: %s", view.getId(), a.getName(), name, t.getTaskId() );
+         // TraceLine( "SetNameForView (%d) Application (%s) level for Name: %s  Task: %s", view.getId(), a.getName(), name, t.getTaskId() );
             a.setNameForView( name, view );
             break;
 
          case zLEVEL_SYSTEM:
-            TraceLine( "SetNameForView (%d) System level for Name: %s  Task: %s", view.getId(), name, t.getSystemTask().getTaskId() );
+         // TraceLine( "SetNameForView (%d) System level for Name: %s  Task: %s", view.getId(), name, t.getSystemTask().getTaskId() );
             t.getSystemTask().setNameForView( name, view );
             break;
 
@@ -4702,21 +4703,21 @@ public abstract class VmlOperation
          if ( contextName.equals("Month"))
          {
             int nMonths = ((Number) value).intValue();
-            DateTime date = (DateTime) view.cursor(entityName).getInternalAttributeValue(attributeName);
+            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
             DateTime date2 = date.plusMonths(nMonths);
-            view.cursor(entityName).setAttribute(attributeName, date2);
+            view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
          if ( contextName.equals("Day"))
          {
             int nDays = ((Number) value).intValue();
-            DateTime date = (DateTime) view.cursor(entityName).getInternalAttributeValue(attributeName);
+            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
             DateTime date2 = date.plusDays(nDays);
-            view.cursor(entityName).setAttribute(attributeName, date2);
+            view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
          {
-            cursor.addToAttribute( attributeName, value );
+            cursor.getAttribute( attributeName ).add( value );
          }
       }
 
@@ -8321,12 +8322,12 @@ public abstract class VmlOperation
             else
             if (HTMLElements.getEndTagOptionalElementNames().contains(elementName))
             {
-               if (elementName==HTMLElementName.LI && !isValidLITag(tag))
+               if (elementName.equals( HTMLElementName.LI ) && !isValidLITag(tag))
                {
                   return false; // reject invalid LI tags
                }
 
-               if (element.getEndTag()==null)
+               if (element.getEndTag() == null)
                {
                   outputDocument.insert(element.getEnd(),getEndTagHTML(elementName)); // insert optional end tag if it is missing
                }
@@ -8335,14 +8336,14 @@ public abstract class VmlOperation
             outputDocument.replace(tag,getStartTagHTML(element.getStartTag()));
          }
          else
-         if (tag.getTagType()==EndTagType.NORMAL)
+         if (tag.getTagType() == EndTagType.NORMAL)
          {
-            if (tag.getElement()==null)
+            if (tag.getElement() == null)
             {
                return false;
             } // reject end tags that aren't associated with a start tag
 
-            if (elementName==HTMLElementName.LI && !isValidLITag(tag))
+            if (elementName.equals( HTMLElementName.LI ) && !isValidLITag(tag))
             {
                return false;
             } // reject invalid LI tags
@@ -8359,18 +8360,18 @@ public abstract class VmlOperation
 
       private boolean isValidLITag(Tag tag)
       {
-         Element parentElement=tag.getElement().getParentElement();
-         if (parentElement==null)
+         Element parentElement = tag.getElement().getParentElement();
+         if (parentElement == null)
          {
             return false; // ignore LI elements without a parent
          }
 
-         if (parentElement.getStartTag().getUserData()!=VALID_MARKER)
+         if (parentElement.getStartTag().getUserData() != VALID_MARKER)
          {
             return false; // ignore LI elements who's parent is not valid
          }
 
-         return parentElement.getName()==HTMLElementName.UL || parentElement.getName()==HTMLElementName.OL; // only accept LI tags who's immediate parent is UL or OL.
+         return parentElement.getName().equals( HTMLElementName.UL ) || parentElement.getName().equals( HTMLElementName.OL ); // only accept LI tags who's immediate parent is UL or OL.
       }
 
       private void reencodeTextSegment(Source source, OutputDocument outputDocument, int begin, int end, boolean formatWhiteSpace)
@@ -8396,7 +8397,7 @@ public abstract class VmlOperation
             if (VALID_ATTRIBUTE_NAMES.contains(attribute.getKey()))
             {
                sb.append(' ').append(attribute.getName());
-               if (attribute.getValue()!=null)
+               if (attribute.getValue() != null)
                {
                   sb.append("=\"");
                   sb.append(CharacterReference.encode(attribute.getValue()));
@@ -8405,7 +8406,7 @@ public abstract class VmlOperation
             }
          }
 
-         if (startTag.getElement().getEndTag()==null && !HTMLElements.getEndTagOptionalElementNames().contains(startTag.getName()))
+         if (startTag.getElement().getEndTag() == null && !HTMLElements.getEndTagOptionalElementNames().contains(startTag.getName()))
          {
             sb.append(" /");
          }
@@ -8589,17 +8590,68 @@ public abstract class VmlOperation
       return( 0 );
    }
 
+   // This function checks for the existence of the specified file/directory.
+   // If it is a check for a valid file, that's all we do.  For a directory,
+   // if the directory does not exist (and bCheckCreate is TRUE) the directory is created.
+   //
+   // Return:
+   //   1  - the directory exists (or was created)
+   //   0 - the directory does not exist or was not specified or could not be created
+
+   public static int
+   SysValidDirOrFile( String directory,
+                      int    bDirectory,
+                      int    bCheckCreate,
+                      int    nMaxPathLth )
+   {
+      if ( directory == null || directory.isEmpty() )
+         return 0;     // no directory was specified
+
+      // file.exists() == false ==> file.isDirectory() == false AND file.isFile() == false
+      // file.isDirectory() == true OR file.isFile() == true ==> file.exists() == true
+      // file.isDirectory() == true ==> file.isFile() == false
+      // file.isFile() == true ==> file.isDirectory() == false
+
+      File file = new File( directory );
+      boolean exists;
+ 
+      if ( file.exists() )
+      {
+         if ( (bDirectory != 0 && file.isDirectory()) || (bDirectory == 0 && file.isFile()) )
+            exists = true;
+         else
+            exists = false;
+      }
+      else
+      {
+         if ( bDirectory != 0 )
+         {
+            // mkdirs() creates the directory specified including any necessary parent directories.
+            // It will return true if the directory is created successfully or false otherwise.
+            exists = file.mkdirs();
+            if ( exists == false )
+            {
+            // task.log().error( "SysValidDirOrFile unable to create directory: " + directory );
+            }
+         }
+         else
+         {
+            exists = false;
+         }
+      }
+      return exists ? 1 : 0;
+   }
+
    // NOT EXACTLY SURE WHAT TO DO HERE... THE FOLLOWING CODE IS TECHNICALLY CREATED FROM TZ VML CODE
    // AND IS IN ZeidonTools... but then we want to call that code from here... but I'm not sure that
    // DG wants the ZeidonTools to need to be in JOE... which perhaps vmlOperations whould be moved
-   // out as well... So I am copying these three Operations into vmlOperations temporarily to see how things
-   // work...
+   // out as well... So I am copying these three Operations into vmlOperations temporarily to see how
+   // things work...
 
    //:   VIEW vReportDef     BASED ON LOD TZRPSRCO
 
-
    public static String
-   FindOpenFile( Task task)
+   FindOpenFile( Task task )
    {
       String szDir;
       String szFileName;
@@ -8608,13 +8660,16 @@ public abstract class VmlOperation
       szFileName = null;
       View vKZXMLPGO = task.getViewByName( WEB_SESSION_VIEW_NAME );
 
-      szFileName = vKZXMLPGO.cursor("Session").getStringFromAttribute("PrintFileName");
-      szFileExt = vKZXMLPGO.cursor("Session").getStringFromAttribute("PrintFileType");
-      if ( szFileName != null && szFileName != "" )
+      szFileName = vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).getString();
+      szFileExt = vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).getString();
+      if ( szFileName != null && szFileName.isEmpty() == false )
       {
          szDir = "./pdf/";
-         szFileName = szDir + szFileName;
-         if ( szFileName.indexOf(".") < 0 )
+         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false )
+         {
+            szFileName = szDir + szFileName;
+         }
+         if ( szFileName.contains(".") == false )
          {
             szFileName = szFileName + ".";
 
@@ -8634,8 +8689,8 @@ public abstract class VmlOperation
       }
 
       //TraceLineS( "Get Open File ===========>> ", szFileName );
-      vKZXMLPGO.cursor("Session").setAttribute("PrintFileName", "");
-      vKZXMLPGO.cursor("Session").setAttribute("PrintFileType", "");
+      vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( "" );
+      vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( "" );
 
       // Don't think we will need to do the following...?
       /*
@@ -8665,7 +8720,7 @@ public abstract class VmlOperation
       {
          if ( vKZXMLPGO.cursor( "Window" ).setFirst( "WindowName", szWindow ).isSet() )
          {
-            szFileName = vKZXMLPGO.cursor("Window").getStringFromAttribute("FocusCtrl");
+            szFileName = vKZXMLPGO.cursor("Window").getAttribute("FocusCtrl").getString();
          }
       }
 
