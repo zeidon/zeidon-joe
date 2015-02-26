@@ -24,6 +24,7 @@ import scala.util.control.Breaks._
 import com.quinsoft.zeidon.objectdefinition._
 import com.quinsoft.zeidon.CursorPosition
 import com.quinsoft.zeidon.ZeidonException
+import com.quinsoft.zeidon.EntityCursor.CursorStatus
 
 /**
  * Scala wrapper around a Zeiden EntityCursor.
@@ -33,6 +34,9 @@ class EntityCursor( private[this]  val view: View,
             extends AbstractEntity( jentityCursor.getEntityDef() )
             with Iterable[EntityInstance]
 {
+    /**
+      * Returns the underlying Java EntityCursor.
+      */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
         val instance = jentityCursor.getEntityInstance()
         if ( instance == null )
@@ -41,19 +45,51 @@ class EntityCursor( private[this]  val view: View,
         instance
     }
 
+    /** Creates a new entity instance.
+      *
+      * Creates a new entity instance that is positioned after the currently selected
+      * entity instance.
+      *
+      * @returns this
+      */
     def create: EntityCursor = {
         jentityCursor.createEntity()
         this
     }
 
+    /** Creates a new entity instance.
+      *
+      * Creates a new entity instance.  The position of the new instance is determined
+      * by CursorPosition.
+      *
+      * @returns this
+      */
     def create( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
         jentityCursor.createEntity()
         this
     }
 
-    def exists = jentityCursor.checkExistenceOfEntity().isSet()
-    def drop: CursorResult = jentityCursor.dropEntity()
-    def drop( reposition: CursorPosition ): CursorResult = jentityCursor.dropEntity( reposition )
+    /**
+      *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
+      */
+    def exists = jentityCursor.hasAny()
+
+    /**
+     * Returns true if this cursor points to a non-hidden entity instance.
+     */
+    def isSet = jentityCursor.checkExistenceOfEntity().isSet()
+
+    /**
+     * Removes the selected entity from the OI but does not flag it for deletion.
+     *
+     * Note: If this entity is persistent then it may prevent the parent entity from
+     * being deleted.
+     *
+     * @param position specifies the new position of the cursor.
+     * @return the result of the reposition.
+     */
+    def drop( reposition: CursorPosition = CursorPosition.NEXT ): CursorResult = jentityCursor.dropEntity( reposition )
+
     def delete(): CursorResult = jentityCursor.deleteEntity()
     def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
     def exclude( position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.excludeEntity( position )
@@ -61,7 +97,16 @@ class EntityCursor( private[this]  val view: View,
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
     def copySubobject( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.copySubobject( source, position )
+
+    /**
+     * Returns the number of twins for this entity cursor.
+     */
     def count = jentityCursor.getEntityCount()
+
+    /**
+     * Returns the status of this entity cursor.
+     */
+    def status: CursorStatus = jentityCursor.getStatus()
 
     /**
      * Sorts the entities according to the value of orderKeys.
@@ -77,10 +122,10 @@ class EntityCursor( private[this]  val view: View,
     def sort( orderKeys: String ) = jentityCursor.orderEntities( orderKeys )
 
     /**
-     * Sorts the entities in ascending order by an attribute.  
-     * 
+     * Sorts the entities in ascending order by an attribute.
+     *
      * Example: to sort by Name use
-     *      view.MyEntity.sortBy( _.Name ) 
+     *      view.MyEntity.sortBy( _.Name )
      */
     def sortBy( attr : (AbstractEntity) => AttributeInstance ) = {
         sortWith( (ei1, ei2) => attr(ei1) <= attr( ei2 ) )
@@ -88,9 +133,9 @@ class EntityCursor( private[this]  val view: View,
 
     /**
      * Sorts the entities using Scala syntax.  Example:
-     * 
+     *
      *      view.MyEntity.sortWith( _.MyAttribute < _.MyAttribute )
-     *      
+     *
      * Will sort MyEntity entities in ascending order of MyAttribute attribute values.
      */
     def sortWith( comparator : ( AbstractEntity, AbstractEntity ) => Boolean ) = {
@@ -101,10 +146,10 @@ class EntityCursor( private[this]  val view: View,
             case v if v.startsWith("1.6") => new Java6Comparitor( comparator )
             case _ => new JavaComparitor( comparator )
         }
-        
+
         jentityCursor.orderEntities( jcomparitor )
     }
-    
+
     def setFirst = new CursorResult( jentityCursor.setFirst() )
     def setNext  = new CursorResult( jentityCursor.setNext() )
     def setLast  = new CursorResult( jentityCursor.setLast() )
@@ -143,24 +188,24 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /**
-     * Set the cursor using a hashkey attribute value.
-     */
-    def set( setter: (HashSetter) => Any ): CursorResult = {
+      * Set the cursor using a hashkey attribute value.
+      */
+    def set( setter: ( HashSetter ) => Any ): CursorResult = {
         val hashSetter = new HashSetter()
         setter( hashSetter )
         hashSetter.getResult
     }
 
     /**
-     * Set the cursor to reference the max attribute value for the specified attribute.
-     * If more than one attribute has the same max value then the first attribute is used.
-     * Returns the AttributeInstance.
-     *
-     * Example: sets the cursor to the oldest child:
-     *
-     *      view.Child.setMax( _.Age )
-     */
-    def setMax( f_attr: (AbstractEntity ) => AttributeInstance ): AttributeInstance = {
+      * Set the cursor to reference the max attribute value for the specified attribute.
+      * If more than one attribute has the same max value then the first attribute is used.
+      * Returns the AttributeInstance.
+      *
+      * Example: sets the cursor to the oldest child:
+      *
+      *      view.Child.setMax( _.Age )
+      */
+    def setMax( f_attr: ( AbstractEntity ) => AttributeInstance ): AttributeInstance = {
         var maxAttr: AttributeInstance = null
         each {
             val attr = f_attr( this )
@@ -182,15 +227,15 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /**
-     * Set the cursor to reference the minimum attribute value for the specified attribute.
-     * If more than one attribute has the same min value then the first attribute is used.
-     * Returns the AttributeInstance.
-     *
-     * Example: sets the cursor to the youngest child:
-     *
-     *      view.Child.setMin( _.Age )
-     */
-    def setMin( f_attr: (AbstractEntity ) => AttributeInstance ): AttributeInstance = {
+      * Set the cursor to reference the minimum attribute value for the specified attribute.
+      * If more than one attribute has the same min value then the first attribute is used.
+      * Returns the AttributeInstance.
+      *
+      * Example: sets the cursor to the youngest child:
+      *
+      *      view.Child.setMin( _.Age )
+      */
+    def setMin( f_attr: ( AbstractEntity ) => AttributeInstance ): AttributeInstance = {
         var minAttr: AttributeInstance = null
         each {
             val attr = f_attr( this )
@@ -211,6 +256,9 @@ class EntityCursor( private[this]  val view: View,
         minAttr
     }
 
+    /**
+     * Loop through all entities of a single type under the current parent.
+     */
     def each( looper: => Any ) = {
         val iter = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this )
         iter.each( looper )
@@ -266,11 +314,11 @@ class EntityCursor( private[this]  val view: View,
      * This class is a java.util.Comparator wrapper around the Scala scomparitor so
      * that we can use Java's sort method with Scala code.
      */
-    private[this] class Java6Comparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean ) 
+    private[this] class Java6Comparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean )
                         extends java.util.Comparator[com.quinsoft.zeidon.EntityInstance] {
-        
+
         /**
-         * This code relies on the Java 6 MergeSort algorithm using just "compare(...) > 0" and 
+         * This code relies on the Java 6 MergeSort algorithm using just "compare(...) > 0" and
          * "compare(...) <= 0".  If Java 6 ever uses a different algorithm this will break.
          */
         def compare(ei1: com.quinsoft.zeidon.EntityInstance, ei2: com.quinsoft.zeidon.EntityInstance): Int = {
@@ -287,11 +335,11 @@ class EntityCursor( private[this]  val view: View,
      * This class is a java.util.Comparator wrapper around the Scala scomparitor so
      * that we can use Java's sort method with Scala code.
      */
-    private[this] class JavaComparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean ) 
+    private[this] class JavaComparitor( scomparitor: ( AbstractEntity, AbstractEntity ) => Boolean )
                         extends java.util.Comparator[com.quinsoft.zeidon.EntityInstance] {
-        
+
         /**
-         * This code relies on the Java 7+ TisSort algorithm using just "compare(...) < 0" and 
+         * This code relies on the Java 7+ TisSort algorithm using just "compare(...) < 0" and
          * "compare(...) >= 0".  If Java 7 ever uses a different algorithm this will break.
          */
         def compare(ei1: com.quinsoft.zeidon.EntityInstance, ei2: com.quinsoft.zeidon.EntityInstance): Int = {
@@ -307,7 +355,7 @@ class EntityCursor( private[this]  val view: View,
 
 object EntityCursor {
     private val JAVA_VERSION = System.getProperty("java.version");
-    
+
     val CURSOR_SET = CursorResult( com.quinsoft.zeidon.CursorResult.SET )
     val CURSOR_UNCHANGED = CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
 
