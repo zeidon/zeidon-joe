@@ -90,12 +90,37 @@ class EntityCursor( private[this]  val view: View,
      */
     def drop( reposition: CursorPosition = CursorPosition.NEXT ): CursorResult = jentityCursor.dropEntity( reposition )
 
-    def delete(): CursorResult = jentityCursor.deleteEntity()
-    def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
+    /**
+     * Deletes the Entity Instance refered to by this cursor.
+     */
+    def delete( reposition: CursorPosition = CursorPosition.NEXT ): CursorResult = jentityCursor.deleteEntity( reposition )
+
+    /**
+     * Excludes the Entity Instance refered to by this cursor.
+     */
     def exclude( position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.excludeEntity( position )
+
+    /**
+     * Includes the entity source to this entity.  This will also include any child entities and
+     * potentially spawn the include to other linked entities.  By default the newly included
+     * entity will be after the current entity.
+     *
+     * @param source the source subobject to include
+     * @param position indicates relative position of where newly included entity will be inserted.
+     */
     def include( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = {
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
+
+    /**
+     * This will create a new entity and copy non-key attributes from 'source'.  This
+     * will also create child entities.  If a child is not create-able but is include-able
+     * then the new child entity will be included from 'source' instead of created.
+     *
+     * @param source the source subobject to copy.
+     * @param position where to copy
+     * @return
+     */
     def copySubobject( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.copySubobject( source, position )
 
     /**
@@ -104,7 +129,8 @@ class EntityCursor( private[this]  val view: View,
     def count = jentityCursor.getEntityCount()
 
     /**
-     * Returns the status of this entity cursor.
+     * Returns the status of this entity cursor.  The status can be used to query a cursor
+     * without triggering a lazy load.
      */
     def status: CursorStatus = jentityCursor.getStatus()
 
@@ -125,7 +151,9 @@ class EntityCursor( private[this]  val view: View,
      * Sorts the entities in ascending order by an attribute.
      *
      * Example: to sort by Name use
+     * {{{
      *      view.MyEntity.sortBy( _.Name )
+     * }}}
      */
     def sortBy( attr : (AbstractEntity) => AttributeInstance ) = {
         sortWith( (ei1, ei2) => attr(ei1) <= attr( ei2 ) )
@@ -133,9 +161,9 @@ class EntityCursor( private[this]  val view: View,
 
     /**
      * Sorts the entities using Scala syntax.  Example:
-     *
+     * {{{
      *      view.MyEntity.sortWith( _.MyAttribute < _.MyAttribute )
-     *
+     * }}}
      * Will sort MyEntity entities in ascending order of MyAttribute attribute values.
      */
     def sortWith( comparator : ( AbstractEntity, AbstractEntity ) => Boolean ) = {
@@ -150,11 +178,44 @@ class EntityCursor( private[this]  val view: View,
         jentityCursor.orderEntities( jcomparitor )
     }
 
+    /**
+     * Sets the cursor to point to the first twin.
+     */
     def setFirst = new CursorResult( jentityCursor.setFirst() )
+
+    /**
+     * Sets the cursor to point to the next twin.
+     */
     def setNext  = new CursorResult( jentityCursor.setNext() )
+
+    /**
+     * Sets the cursor to point to the previous twin.
+     */
+    def setPrev = new CursorResult( jentityCursor.setPrev() )
+
+    /**
+     * Sets the cursor to point to the last twin.
+     */
     def setLast  = new CursorResult( jentityCursor.setLast() )
 
-    def setFirst( predicate:  => Boolean, scopingEntity: AbstractEntity = null ): CursorResult = {
+    /**
+     * Sets the cursor to the first entity instance for which the specified predicate
+     * is true.
+     *
+     * Following example sets the cursor to point to the first entity with the
+     * attribute FirstName equal to "Fred":
+     * {{{
+     * val result = myView.SomeEntity.setFirst( myView.SomeEntity.FirstName == "Fred" )
+     * }}}
+     *
+     * The return value can be automatically coerced to a boolean:
+     * {{{
+     * if ( myView.SomeEntity.setFirst( myView.SomeEntity.FirstName == "Fred" ) ) {
+     *    // Found 'Fred'.  Do something here.
+     * }
+     * }}}
+     */
+    def setFirst( predicate: => Boolean, scopingEntity: AbstractEntity = null ): CursorResult = {
         val iter = jentityCursor.eachEntity( if ( scopingEntity == null ) null else scopingEntity.entityDef )
         while ( iter.hasNext() )
         {
