@@ -4,11 +4,14 @@
 package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon.scala.Ternary._
+import scala.language.dynamics
+import com.quinsoft.zeidon.objectdefinition.EntityDef
+
 /**
  * @author dgc
  *
  */
-case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) {
+case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) extends Dynamic {
 
     val objectEngine: ObjectEngine = oe ?: new ObjectEngine( jtask.getObjectEngine() )
 
@@ -23,6 +26,26 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null )
     }
 
     def deserializeOi = jtask.deserializeOi()
+    
+    /**
+     * This is called when the compiler doesn't recognize a method name.  This
+     * is used to create an empty View based on a LOD name.  This allows user
+     * code to do:
+     * {{{
+     * val view = task.mUser activateEmpty
+     * }}}
+     *
+     * Not intended to be called directly by user code.
+     */
+    def selectDynamic( entityName: String ): View = {
+        val lod = jtask.getApplication().getLodDef( jtask, entityName )
+        new View( this ) basedOn lod
+    }
+
+}
+
+class ViewCreator( val task: Task, val entityDef : EntityDef ) {
+    
 }
 
 object Task {

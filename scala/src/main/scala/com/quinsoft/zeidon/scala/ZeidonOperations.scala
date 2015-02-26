@@ -45,6 +45,8 @@ trait ZeidonOperations {
         new VmlCursorResult( cursor.jentityCursor.setNext(), cursor )
     }
 
+    def INCLUDE( cursor: EntityCursor ) = new EntityIncluder( cursor )
+    
     /**
      * For use inside of view.Entity.each{} loops, this will break execution of the
      * current entity cursor and continue with the next.
@@ -88,5 +90,10 @@ trait ZeidonOperations {
                     cursor.iterator.foreach( ei => { if ( predicate() ) nextable { func } } )
                 }
         }
+    }
+    
+    class EntityIncluder( val targetCursor: EntityCursor ) {
+        def FROM( source: EntityCursor ) = targetCursor.include( targetCursor )
+        def FROM( source: EntityCursor, position: CursorPosition ) = targetCursor.include( targetCursor, position )
     }
 }
