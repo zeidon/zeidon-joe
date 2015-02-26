@@ -168,7 +168,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     def assert = new AssertView( this )
 
-    /**
+        /**
      * Returns the name of the LOD associated with this View or "*not specified*"
      * if it hasn't been specified.
      */

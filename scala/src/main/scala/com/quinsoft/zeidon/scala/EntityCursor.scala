@@ -46,10 +46,10 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /** Creates a new entity instance.
-      * 
+      *
       * Creates a new entity instance that is positioned after the currently selected
       * entity instance.
-      * 
+      *
       * @returns this
       */
     def create: EntityCursor = {
@@ -58,10 +58,10 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /** Creates a new entity instance.
-      * 
+      *
       * Creates a new entity instance.  The position of the new instance is determined
       * by CursorPosition.
-      * 
+      *
       * @returns this
       */
     def create( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
@@ -69,26 +69,16 @@ class EntityCursor( private[this]  val view: View,
         this
     }
 
-    /** 
+    /**
       *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
       */
     def exists = jentityCursor.hasAny()
-    
+
     /**
      * Returns true if this cursor points to a non-hidden entity instance.
      */
     def isSet = jentityCursor.checkExistenceOfEntity().isSet()
-    
-    /**
-     * Removes the selected entity from the OI but does not flag it for deletion.
-     *
-     * Note: If this entity is persistent then it may prevent the parent entity from
-     * being deleted.
-     *
-     * @return the result of the reposition.
-     */
-    def drop: CursorResult = jentityCursor.dropEntity()
-    
+
     /**
      * Removes the selected entity from the OI but does not flag it for deletion.
      *
@@ -98,7 +88,7 @@ class EntityCursor( private[this]  val view: View,
      * @param position specifies the new position of the cursor.
      * @return the result of the reposition.
      */
-    def drop( reposition: CursorPosition ): CursorResult = jentityCursor.dropEntity( reposition )
+    def drop( reposition: CursorPosition = CursorPosition.NEXT ): CursorResult = jentityCursor.dropEntity( reposition )
 
     def delete(): CursorResult = jentityCursor.deleteEntity()
     def delete( reposition: CursorPosition ): CursorResult = jentityCursor.deleteEntity( reposition )
@@ -107,7 +97,7 @@ class EntityCursor( private[this]  val view: View,
         jentityCursor.includeSubobject( source.getEntityInstance, position )
     }
     def copySubobject( source: AbstractEntity, position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.copySubobject( source, position )
-    
+
     /**
      * Returns the number of twins for this entity cursor.
      */
@@ -117,7 +107,7 @@ class EntityCursor( private[this]  val view: View,
      * Returns the status of this entity cursor.
      */
     def status: CursorStatus = jentityCursor.getStatus()
-    
+
     /**
      * Sorts the entities according to the value of orderKeys.
      *      orderKeys = String of paired 'words', consisting of "AttributeName x",
