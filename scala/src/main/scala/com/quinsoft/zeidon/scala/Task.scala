@@ -11,11 +11,11 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
  * @author dgc
  *
  */
-case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) extends Dynamic {
+case class Task private[zeidon] ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) extends Dynamic {
 
     val objectEngine: ObjectEngine = oe ?: new ObjectEngine( jtask.getObjectEngine() )
 
-    def this( task: Task ) = this( task.jtask, task.objectEngine  )
+    private[zeidon] def this( task: Task ) = this( task.jtask, task.objectEngine  )
 
     def getView( viewName: String ): View = {
         val jview = jtask.getViewByName( viewName )
@@ -41,11 +41,6 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null )
         val lod = jtask.getApplication().getLodDef( jtask, entityName )
         new View( this ) basedOn lod
     }
-
-}
-
-class ViewCreator( val task: Task, val entityDef : EntityDef ) {
-    
 }
 
 object Task {
