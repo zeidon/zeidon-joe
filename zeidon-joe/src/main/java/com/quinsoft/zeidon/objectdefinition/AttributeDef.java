@@ -598,7 +598,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         {
             try
             {
-                ScalaHelper scalaHelper = getEntityDef().getLodDef().getScalaHelper( attributeInstance.getTask() );
+                ScalaHelper scalaHelper = attributeInstance.getTask().getScalaHelper();
                 scalaHelper.calculateDerivedAttribute( attributeInstance );
             }
             catch ( Throwable e )

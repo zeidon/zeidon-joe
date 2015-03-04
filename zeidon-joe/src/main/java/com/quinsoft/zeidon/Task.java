@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import com.quinsoft.zeidon.standardoe.ScalaHelper;
+
 
 /**
  * All methods operating on a task.
@@ -178,4 +180,11 @@ public interface Task extends TaskQualification, CacheMap
      * @param locks
      */
     void unlockAll( Lock...locks );
+
+    /**
+     * Returns a helper object for calling Scala code from the JOE.  Creates one per task.
+     *
+     * @return a task-specific Scala helper.
+     */
+    ScalaHelper getScalaHelper();
 }

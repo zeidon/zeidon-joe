@@ -24,12 +24,14 @@ import java.io.Writer;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.EntityCursor.CursorStatus;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
@@ -309,6 +311,11 @@ public class WriteOisToXmlStream implements StreamWriter
 
     private void writeViewToStream()
     {
+        SelectSet rootSelectSet = null;
+        Map<Long, SelectSet> sets = options.getRootSelectSets();
+        if ( sets != null )
+            rootSelectSet = sets.get( currentView.getOiId() );
+
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
         startElement( "zOI", "objectName", currentView.getLodDef().getName(),
                              "appName", currentView.getApplication().getName(),
@@ -320,6 +327,10 @@ public class WriteOisToXmlStream implements StreamWriter
               ei != null;
               ei = ei.getNextTwin() )
         {
+            // If we have a root select set and the EI is not selected then skip it.
+            if ( rootSelectSet != null && rootSelectSet.isSelected( ei ) )
+                continue;
+
             if ( incremental || ! ei.isHidden() )
                 writeEntity( ei );
         }

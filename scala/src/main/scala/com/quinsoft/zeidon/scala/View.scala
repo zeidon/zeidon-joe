@@ -34,6 +34,7 @@ class View( val task: Task ) extends Dynamic {
 
     def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
+    def this( task: com.quinsoft.zeidon.TaskQualification ) = this( task.getTask() )
 
     /**
      * Sets the LOD definition for this View.

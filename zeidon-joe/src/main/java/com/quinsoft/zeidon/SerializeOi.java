@@ -26,7 +26,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
@@ -50,6 +52,7 @@ public class SerializeOi
     private String resourceName;
     private EnumSet<WriteOiFlags> flags = EnumSet.noneOf( WriteOiFlags.class );
     private StreamWriter streamWriter;
+    private Map<Long,SelectSet> rootSelectSets;
 
     public SerializeOi()
     {
@@ -380,5 +383,34 @@ public class SerializeOi
     public SerializeOi compressed()
     {
         return setCompressed( true );
+    }
+
+    public Map<Long, SelectSet> getRootSelectSets()
+    {
+        return rootSelectSets;
+    }
+
+    /**
+     * Only the root entities that are currently selected by a cursor
+     * will be written.
+     *
+     * @return
+     */
+    public SerializeOi onlyCurrentRoots()
+    {
+        if ( rootSelectSets == null )
+            rootSelectSets = new HashMap<>();
+
+        for ( View v : viewList )
+        {
+            if ( ! rootSelectSets.containsKey( v.getOiId() ) )
+            {
+                SelectSet selectSet = v.createSelectSet();
+                selectSet.select( v.cursor( v.getLodDef().getRoot() ) );
+                rootSelectSets.put( v.getOiId(), selectSet );
+            }
+        }
+
+        return this;
     }
 }
