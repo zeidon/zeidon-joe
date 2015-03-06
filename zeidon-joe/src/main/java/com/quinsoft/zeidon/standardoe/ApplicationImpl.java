@@ -72,39 +72,9 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     }
 
     @Override
-    public String getBinDir()
-    {
-        return attributes.get( "APP_DLL" );
-    }
-
-    @Override
     public String getObjectDir()
     {
         return attributes.get( "APP_ADOBIN" );
-    }
-
-    @Override
-    public String getLocalDir()
-    {
-        return attributes.get( "APP_LOCAL" );
-    }
-
-    @Override
-    public String getQlplrDir()
-    {
-        return attributes.get( "APP_QLPLR" );
-    }
-
-    @Override
-    public String getSharedDir()
-    {
-        return attributes.get( "APP_SHARED" );
-    }
-
-    @Override
-    public String getSourceDir()
-    {
-        return attributes.get( "APP_SOURCE" );
     }
 
     @Override

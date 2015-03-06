@@ -25,10 +25,8 @@ import com.quinsoft.zeidon.ZeidonException;
  * Hard-coded values for Zeidon System application info.  Since this is automatically
  * loaded by the JOE we don't need to read it from the zeidon.app
  *
- * @author dgc
- *
  */
-public class SystemApplication extends ApplicationImpl
+class SystemApplication extends ApplicationImpl
 {
 
     SystemApplication( String zeidonRootDir )
@@ -50,51 +48,6 @@ public class SystemApplication extends ApplicationImpl
      */
     @Override
     public String getObjectDir()
-    {
-        return ObjectEngine.ZEIDON_SYSTEM_APP_NAME;
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Application#getBinDir()
-     */
-    @Override
-    public String getBinDir()
-    {
-        return ObjectEngine.ZEIDON_SYSTEM_APP_NAME;
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Application#getLocalDir()
-     */
-    @Override
-    public String getLocalDir()
-    {
-        return ObjectEngine.ZEIDON_SYSTEM_APP_NAME;
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Application#getSharedDir()
-     */
-    @Override
-    public String getSharedDir()
-    {
-        return ObjectEngine.ZEIDON_SYSTEM_APP_NAME;
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Application#getSourceDir()
-     */
-    @Override
-    public String getSourceDir()
-    {
-        return ObjectEngine.ZEIDON_SYSTEM_APP_NAME;
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Application#getQlplrDir()
-     */
-    @Override
-    public String getQlplrDir()
     {
         return ObjectEngine.ZEIDON_SYSTEM_APP_NAME;
     }
