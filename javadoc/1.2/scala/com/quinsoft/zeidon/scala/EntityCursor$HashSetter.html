@@ -165,26 +165,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.AbstractEntity#applyDynamic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="applyDynamic(attributeName:String)(args:Any*):com.quinsoft.zeidon.scala.AttributeInstance"></a>
-      <a id="applyDynamic(String)(Any*):AttributeInstance"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">applyDynamic</span><span class="params">(<span name="attributeName">attributeName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result">: <a href="AttributeInstance.html" class="extype" name="com.quinsoft.zeidon.scala.AttributeInstance">AttributeInstance</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor$HashSetter@applyDynamic(attributeName:String)(args:Any*):com.quinsoft.zeidon.scala.AttributeInstance" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Called dynamically to convert an attribute name with context value into a
-Scala AttributeInstance.</p><div class="fullcomment"><div class="comment cmt"><p>Called dynamically to convert an attribute name with context value into a
-Scala AttributeInstance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractEntity</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -779,7 +759,16 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractEntity → AnyRef → Any</dd></dl></div>
+      <p class="shortcomment cmt">Called dynamically to convert an attribute name with context value into a
+Scala AttributeInstance.</p><div class="fullcomment"><div class="comment cmt"><p>Called dynamically to convert an attribute name with context value into a
+Scala AttributeInstance.
+    def applyDynamic( attributeName: String)(args: Any*): AttributeInstance = {
+//        println( s&quot;method '$attributeName' called with arguments ${args.mkString(&quot;'&quot;, &quot;', '&quot;, &quot;'&quot;)}&quot; )
+        val attr = getAttribute(attributeName)
+        attr.contextName = args(0).toString
+        return attr
+    }
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractEntity → AnyRef → Any</dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.AbstractEntity#updateDynamic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateDynamic(attributeName:String)(value:Any):Any"></a>
       <a id="updateDynamic(String)(Any):Any"></a>

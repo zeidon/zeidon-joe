@@ -43,14 +43,18 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">QualBuilder</span><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
+        <span class="name">QualBuilder</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Used to build qualification.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Used to build qualification for Scala code and then activate the OI.  A typical
+use case:</p><pre><span class="kw">val</span> mUser = VIEW basedOn <span class="lit">"mUser"</span>
+mUser.buildQual( _.User.ID = <span class="num">490</span> )
+            .or( _.User.ID = <span class="num">491</span> )
+            .asynchronous
+            .activate</pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Dynamic">Dynamic</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -68,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.quinsoft.zeidon.scala.QualBuilder"><span>QualBuilder</span></li><li class="in" name="scala.Dynamic"><span>Dynamic</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.quinsoft.zeidon.scala.QualBuilder"><span>QualBuilder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -110,24 +114,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.quinsoft.zeidon.scala.QualBuilder.EntityQualBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="EntityQualBuilderextendsDynamic"></a>
-      <a id="EntityQualBuilder:EntityQualBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="QualBuilder$EntityQualBuilder.html"><span class="name">EntityQualBuilder</span></a><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@EntityQualBuilderextendsDynamic" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Builder for setting entity values.</p>
-    </li><li name="com.quinsoft.zeidon.scala.QualBuilder.EntitySelector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.quinsoft.zeidon.scala.QualBuilder.EntitySelector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="EntitySelectorextendsDynamic"></a>
       <a id="EntitySelector:EntitySelector"></a>
       <h4 class="signature">
@@ -202,7 +189,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#activate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#activate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="activate():com.quinsoft.zeidon.scala.View"></a>
       <a id="activate():View"></a>
       <h4 class="signature">
@@ -218,71 +205,77 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Performs the activate on the view using the specified qualification.</p><div class="fullcomment"><div class="comment cmt"><p>Performs the activate on the view using the specified qualification.</p><p>Returns the view for convenience.
+</p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#all" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="all(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="all((QualBuilder)⇒QualBuilder*):QualBuilder"></a>
+      <a id="all(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="all((EntityQualBuilder)⇒Unit*):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">all</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">all</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@all(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@all(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#and" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="and(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="and((QualBuilder)⇒QualBuilder):QualBuilder"></a>
+      <a id="and(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="and((EntityQualBuilder)⇒Unit):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">and</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">and</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@and(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@and(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#andAny" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="andAny(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="andAny((QualBuilder)⇒QualBuilder*):QualBuilder"></a>
+      <p class="shortcomment cmt">Add qualification as 'and'.</p>
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#andAny" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andAny(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="andAny((EntityQualBuilder)⇒Unit*):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andAny</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">andAny</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@andAny(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@andAny(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Adds multiple attribute qualifications as a single group
+of OR statements.</p><div class="fullcomment"><div class="comment cmt"><p>Adds multiple attribute qualifications as a single group
+of OR statements.</p><pre><span class="kw">val</span> mUser = VIEW basedOn <span class="lit">"mUser"</span>
+mUser.buildQual( _.User.LastName = <span class="lit">"Smith"</span> )
+        .andAny( _.User.FirstName = <span class="lit">"Tom"</span>, _.User.FirstName = <span class="lit">"Harry"</span> )
+        .activate</pre></div></div>
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#any" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="any(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="any((QualBuilder)⇒QualBuilder*):QualBuilder"></a>
+      <a id="any(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="any((EntityQualBuilder)⇒Unit*):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">any</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">any</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@any(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@any(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -361,6 +354,40 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#conditional" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="conditional(predicate:Boolean,addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="conditional(Boolean,(QualBuilder)⇒Unit):QualBuilder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">conditional</span><span class="params">(<span name="predicate">predicate: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@conditional(predicate:Boolean,addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#entityQualBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="entityQualBuilder:com.quinsoft.zeidon.scala.EntityQualBuilder"></a>
+      <a id="entityQualBuilder:EntityQualBuilder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">entityQualBuilder</span><span class="result">: <a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@entityQualBuilder:com.quinsoft.zeidon.scala.EntityQualBuilder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -395,6 +422,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#exclude" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="exclude(excludeEntity:QualBuilder.this.EntitySelector=&gt;com.quinsoft.zeidon.objectdefinition.EntityDef):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="exclude((EntitySelector)⇒EntityDef):QualBuilder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exclude</span><span class="params">(<span name="excludeEntity">excludeEntity: (<a href="QualBuilder$EntitySelector.html" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder.EntitySelector">EntitySelector</a>) ⇒ <span class="extype" name="com.quinsoft.zeidon.objectdefinition.EntityDef">EntityDef</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@exclude(excludeEntity:QualBuilder.this.EntitySelector=&gt;com.quinsoft.zeidon.objectdefinition.EntityDef):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -486,6 +530,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#jlodDef" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="jlodDef:com.quinsoft.zeidon.objectdefinition.LodDef"></a>
+      <a id="jlodDef:LodDef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">jlodDef</span><span class="result">: <span class="extype" name="com.quinsoft.zeidon.objectdefinition.LodDef">LodDef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@jlodDef:com.quinsoft.zeidon.objectdefinition.LodDef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#jqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="jqual:com.quinsoft.zeidon.utils.QualificationBuilder"></a>
       <a id="jqual:QualificationBuilder"></a>
@@ -606,35 +667,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#or" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="or(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="or((QualBuilder)⇒QualBuilder):QualBuilder"></a>
+      <a id="or(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="or((EntityQualBuilder)⇒Unit):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">or</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">or</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@or(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@or(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#orAll" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="orAll(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="orAll((QualBuilder)⇒QualBuilder*):QualBuilder"></a>
+      <a id="orAll(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="orAll((EntityQualBuilder)⇒Unit*):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orAll</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">orAll</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span>*</span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@orAll(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@orAll(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit*):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -655,7 +716,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Indicates that the resulting view (and backing OI) should be read-only.</p>
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#restrict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="restrict(restrictTo:QualBuilder.this.EntitySelector=&gt;com.quinsoft.zeidon.objectdefinition.EntityDef):com.quinsoft.zeidon.scala.QualBuilder"></a>
       <a id="restrict((EntitySelector)⇒EntityDef):QualBuilder"></a>
@@ -724,23 +785,6 @@
       </a>
     </span>
       
-    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#selectDynamic" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="selectDynamic(entityName:String):QualBuilder.this.EntityQualBuilder"></a>
-      <a id="selectDynamic(String):EntityQualBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">selectDynamic</span><span class="params">(<span name="entityName">entityName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="QualBuilder$EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder.EntityQualBuilder">EntityQualBuilder</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@selectDynamic(entityName:String):QualBuilder.this.EntityQualBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -776,18 +820,18 @@
     </span>
       
     </li><li name="com.quinsoft.zeidon.scala.QualBuilder#to" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="to(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="to((QualBuilder)⇒QualBuilder):QualBuilder"></a>
+      <a id="to(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="to((EntityQualBuilder)⇒QualBuilder):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">to</span><span class="params">(<span name="addQual">addQual: (<a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">to</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@to(addQual:com.quinsoft.zeidon.scala.QualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@to(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;com.quinsoft.zeidon.scala.QualBuilder):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -809,6 +853,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder#view" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="view:com.quinsoft.zeidon.scala.View"></a>
+      <a id="view:View"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">view</span><span class="result">: <a href="View.html" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.QualBuilder@view:com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -887,9 +948,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Dynamic">
-              <h3>Inherited from <span class="extype" name="scala.Dynamic">Dynamic</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

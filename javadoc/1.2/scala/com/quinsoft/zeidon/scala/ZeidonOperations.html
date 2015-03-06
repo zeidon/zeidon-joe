@@ -94,7 +94,24 @@ Requires a task.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.quinsoft.zeidon.scala.ZeidonOperations.EntityIterator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.quinsoft.zeidon.scala.ZeidonOperations.EntityIncluder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EntityIncluderextendsAnyRef"></a>
+      <a id="EntityIncluder:EntityIncluder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ZeidonOperations$EntityIncluder.html"><span class="name">EntityIncluder</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.ZeidonOperations@EntityIncluderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Short-lived class to allow Scala code to mirror VML when including an entity.</p>
+    </li><li name="com.quinsoft.zeidon.scala.ZeidonOperations.EntityIterator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="EntityIteratorextendsAnyRef"></a>
       <a id="EntityIterator:EntityIterator"></a>
       <h4 class="signature">
@@ -240,6 +257,23 @@ Requires a task.
       </a>
     </span>
       
+    </li><li name="com.quinsoft.zeidon.scala.ZeidonOperations#INCLUDE" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="INCLUDE(cursor:com.quinsoft.zeidon.scala.EntityCursor):ZeidonOperations.this.EntityIncluder"></a>
+      <a id="INCLUDE(EntityCursor):EntityIncluder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">INCLUDE</span><span class="params">(<span name="cursor">cursor: <a href="EntityCursor.html" class="extype" name="com.quinsoft.zeidon.scala.EntityCursor">EntityCursor</a></span>)</span><span class="result">: <a href="ZeidonOperations$EntityIncluder.html" class="extype" name="com.quinsoft.zeidon.scala.ZeidonOperations.EntityIncluder">EntityIncluder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.ZeidonOperations@INCLUDE(cursor:com.quinsoft.zeidon.scala.EntityCursor):ZeidonOperations.this.EntityIncluder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Includes an entity.</p><div class="fullcomment"><div class="comment cmt"><p>Includes an entity.  Use like:</p><pre>INCLUDE( targetView.EntityName ) FROM sourceView.EntityName</pre><p>To specify a cursor position, use:</p><pre>INCLUDE( targetView.EntityName ) FROM( sourceView.EntityName, CursorPosition.LAST )</pre></div></div>
     </li><li name="com.quinsoft.zeidon.scala.ZeidonOperations#LAST" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LAST:com.quinsoft.zeidon.CursorPosition"></a>
       <a id="LAST:CursorPosition"></a>
@@ -392,7 +426,8 @@ Requires a task.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">For use inside of view.Entity.each{} and FOREACH loops, this will break execution of the
+current entity and stop looping.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -574,7 +609,7 @@ Requires a task.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">For use inside of view.Entity.each{} loops, this will break execution of the
+      <p class="shortcomment cmt">For use inside of view.Entity.each{} and FOREACH loops, this will break execution of the
 current entity cursor and continue with the next.</p>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>

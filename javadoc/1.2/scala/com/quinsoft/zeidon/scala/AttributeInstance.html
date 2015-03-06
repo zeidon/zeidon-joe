@@ -563,7 +563,7 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the AttributeDef for this attribute.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -600,23 +600,6 @@ a null value).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.AttributeInstance@compare(other:Any):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#contextName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contextName:String"></a>
-      <a id="contextName:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">contextName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.AttributeInstance@contextName:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -695,7 +678,7 @@ a null value).
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#getString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#getString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getString(contextName:String):String"></a>
       <a id="getString(String):String"></a>
       <h4 class="signature">
@@ -704,14 +687,17 @@ a null value).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getString</span><span class="params">(<span name="contextName">contextName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">getString</span><span class="params">(<span name="contextName">contextName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.AttributeInstance@getString(contextName:String):String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the attribute value as a string.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the attribute value as a string.  If the context is not specified then
+the default context will be used.</p><p>toString() is the preferred method for getting a string value.  This is included
+for compatibility with the Java way of getting strings.
+</p></div></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -745,7 +731,8 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns true if the attribute is null or the string representation of the
+attribute value is the empty string (&quot;&quot;).</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -779,7 +766,27 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns true if the attribute is null.</p>
+    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#isTruthy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isTruthy:Boolean"></a>
+      <a id="isTruthy:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isTruthy</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.AttributeInstance@isTruthy:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns true if this attribute is &quot;truthy&quot;</p><div class="fullcomment"><div class="comment cmt"><p>Returns true if this attribute is &quot;truthy&quot;</p><p>A truthy attribute is an attribute that is not null and the internal value can
+be intepreted as &quot;true&quot;.  E.g. an integer is non-0.  The advantage of this over
+toBoolean is that it can handle null attributes.
+</p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#isUpdated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="isUpdated:Boolean"></a>
       <a id="isUpdated:Boolean"></a>
@@ -796,7 +803,7 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns true if this attribute has been updated since being read from the DB.</p>
     </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#jattributeInstance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="jattributeInstance:com.quinsoft.zeidon.AttributeInstance"></a>
       <a id="jattributeInstance:zeidon.AttributeInstance"></a>
@@ -830,7 +837,7 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the name of this attribute.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -882,7 +889,7 @@ a null value).
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#setDerivedValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#setDerivedValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setDerivedValue(any:Any):com.quinsoft.zeidon.EntityInstance"></a>
       <a id="setDerivedValue(Any):zeidon.EntityInstance"></a>
       <h4 class="signature">
@@ -898,8 +905,10 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#setValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Sets the value of a derived attribute.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the value of a derived attribute.</p><p>This does not set the Updated flag for the containing entity instance.
+This is intended to be used from inside derived domain code.
+</p></div></div>
+    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#setValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setValue(any:Any):com.quinsoft.zeidon.EntityInstance"></a>
       <a id="setValue(Any):zeidon.EntityInstance"></a>
       <h4 class="signature">
@@ -915,7 +924,9 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Sets the value of this attribute.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the value of this attribute.</p><p>Domain processing will be used to potentially convert the value from the
+source object to the internal value.
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -1000,7 +1011,28 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.quinsoft.zeidon.scala.AttributeInstance">AttributeInstance</a> → AnyRef → Any</dd></dl></div>
+      <p class="shortcomment cmt">Returns the value of the attribute as a string using the default context.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of the attribute as a string using the default context.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.quinsoft.zeidon.scala.AttributeInstance">AttributeInstance</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString(contextName:String):String"></a>
+      <a id="toString(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">(<span name="contextName">contextName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.AttributeInstance@toString(contextName:String):String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the attribute value as a string.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the attribute value as a string.  If the context is not specified then
+the default context will be used.</p><p>toString() is the preferred method for getting a string value.  This is included
+for compatibility with the Java way of doing things.
+</p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.AttributeInstance#value" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="value:Object"></a>
       <a id="value:AnyRef"></a>
@@ -1017,7 +1049,7 @@ a null value).
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the internal value of the attribute.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

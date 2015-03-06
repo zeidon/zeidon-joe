@@ -390,26 +390,6 @@
     </span>
       <p class="shortcomment cmt">Loop through all entities of a single type in the OI
 </p>
-    </li><li name="com.quinsoft.zeidon.scala.AbstractEntity#applyDynamic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="applyDynamic(attributeName:String)(args:Any*):com.quinsoft.zeidon.scala.AttributeInstance"></a>
-      <a id="applyDynamic(String)(Any*):AttributeInstance"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">applyDynamic</span><span class="params">(<span name="attributeName">attributeName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result">: <a href="AttributeInstance.html" class="extype" name="com.quinsoft.zeidon.scala.AttributeInstance">AttributeInstance</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@applyDynamic(attributeName:String)(args:Any*):com.quinsoft.zeidon.scala.AttributeInstance" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Called dynamically to convert an attribute name with context value into a
-Scala AttributeInstance.</p><div class="fullcomment"><div class="comment cmt"><p>Called dynamically to convert an attribute name with context value into a
-Scala AttributeInstance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractEntity</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -572,7 +552,7 @@ Scala AttributeInstance.
       <p class="shortcomment cmt">Copies attributes by name.</p><div class="fullcomment"><div class="comment cmt"><p>Copies attributes by name.  Normal invocation is:
      tgtView.Entity.copyAttributes.from( srcView.Entity )
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractEntity</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#copySubobject" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#copySubobject" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="copySubobject(source:com.quinsoft.zeidon.scala.AbstractEntity,position:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.EntityInstance"></a>
       <a id="copySubobject(AbstractEntity,CursorPosition):zeidon.EntityInstance"></a>
       <h4 class="signature">
@@ -588,7 +568,11 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">This will create a new entity and copy non-key attributes from 'source'.</p><div class="fullcomment"><div class="comment cmt"><p>This will create a new entity and copy non-key attributes from 'source'.  This
+will also create child entities.  If a child is not create-able but is include-able
+then the new child entity will be included from 'source' instead of created.
+</p></div><dl class="paramcmts block"><dt class="param">source</dt><dd class="cmt"><p>the source subobject to copy.</p></dd><dt class="param">position</dt><dd class="cmt"><p>where to copy</p></dd><dt>returns</dt><dd class="cmt"><p>
+</p></dd></dl></div>
     </li><li name="scala.collection.IterableLike#copyToArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="copyToArray[B&gt;:A](xs:Array[B],start:Int,len:Int):Unit"></a>
       <a id="copyToArray[B&gt;:EntityInstance](Array[B],Int,Int):Unit"></a>
@@ -673,7 +657,7 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the number of twins for this entity cursor.</p>
     </li><li name="scala.collection.TraversableOnce#count" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="count(p:A=&gt;Boolean):Int"></a>
       <a id="count((EntityInstance)⇒Boolean):Int"></a>
@@ -691,7 +675,7 @@ Scala AttributeInstance.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#create" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="create(position:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.EntityCursor"></a>
       <a id="create(CursorPosition):EntityCursor"></a>
       <h4 class="signature">
@@ -707,8 +691,10 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#create" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Creates a new entity instance.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new entity instance.</p><p>Creates a new entity instance.  The position of the new instance is determined
+by CursorPosition.
+</p></div></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="create:com.quinsoft.zeidon.scala.EntityCursor"></a>
       <a id="create:EntityCursor"></a>
       <h4 class="signature">
@@ -724,7 +710,9 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Creates a new entity instance.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new entity instance.</p><p>Creates a new entity instance that is positioned after the currently selected
+entity instance.
+</p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="delete(reposition:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.CursorResult"></a>
       <a id="delete(CursorPosition):CursorResult"></a>
@@ -734,31 +722,14 @@ Scala AttributeInstance.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="reposition">reposition: <span class="extype" name="com.quinsoft.zeidon.CursorPosition">CursorPosition</span></span>)</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+        <span class="name">delete</span><span class="params">(<span name="reposition">reposition: <span class="extype" name="com.quinsoft.zeidon.CursorPosition">CursorPosition</span> = <span class="symbol"><span class="name"><a href="../../../package.html">CursorPosition.NEXT</a></span></span></span>)</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@delete(reposition:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="delete():com.quinsoft.zeidon.scala.CursorResult"></a>
-      <a id="delete():CursorResult"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">delete</span><span class="params">()</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@delete():com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
+      <p class="shortcomment cmt">Deletes the Entity Instance refered to by this cursor.</p>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#directChildren" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="directChildren:com.quinsoft.zeidon.scala.EntityInstanceIterator"></a>
       <a id="directChildren:EntityInstanceIterator"></a>
@@ -777,7 +748,7 @@ Scala AttributeInstance.
     </span>
       <p class="shortcomment cmt">Returns an iterator that will iterate through the direct children of the current entity.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an iterator that will iterate through the direct children of the current entity.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.quinsoft.zeidon.scala.EntityCursor">EntityCursor</a> → AbstractEntity</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#drop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="drop(reposition:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.CursorResult"></a>
       <a id="drop(CursorPosition):CursorResult"></a>
       <h4 class="signature">
@@ -786,31 +757,17 @@ Scala AttributeInstance.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">drop</span><span class="params">(<span name="reposition">reposition: <span class="extype" name="com.quinsoft.zeidon.CursorPosition">CursorPosition</span></span>)</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+        <span class="name">drop</span><span class="params">(<span name="reposition">reposition: <span class="extype" name="com.quinsoft.zeidon.CursorPosition">CursorPosition</span> = <span class="symbol"><span class="name"><a href="../../../package.html">CursorPosition.NEXT</a></span></span></span>)</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@drop(reposition:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#drop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="drop:com.quinsoft.zeidon.scala.CursorResult"></a>
-      <a id="drop:CursorResult"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">drop</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@drop:com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
+      <p class="shortcomment cmt">Removes the selected entity from the OI but does not flag it for deletion.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the selected entity from the OI but does not flag it for deletion.</p><p>Note: If this entity is persistent then it may prevent the parent entity from
+being deleted.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the result of the reposition.
+</p></dd></dl></div>
     </li><li name="scala.collection.IterableLike#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="drop(n:Int):Repr"></a>
       <a id="drop(Int):Iterable[EntityInstance]"></a>
@@ -946,8 +903,8 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#exists" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Excludes the Entity Instance refered to by this cursor.</p>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exists:Boolean"></a>
       <a id="exists:Boolean"></a>
       <h4 class="signature">
@@ -963,7 +920,8 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"> Returns true if there are any valid twins for this cursor.</p><div class="fullcomment"><div class="comment cmt"><p> Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
+</p></div></div>
     </li><li name="scala.collection.IterableLike#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exists(p:A=&gt;Boolean):Boolean"></a>
       <a id="exists((EntityInstance)⇒Boolean):Boolean"></a>
@@ -1258,7 +1216,7 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The subclasses implement this method to get the Java EntityInstance.</p><div class="fullcomment"><div class="comment cmt"><p>The subclasses implement this method to get the Java EntityInstance.
+      <p class="shortcomment cmt">Returns the underlying Java EntityCursor.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the underlying Java EntityCursor.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.quinsoft.zeidon.scala.EntityCursor">EntityCursor</a> → AbstractEntity</dd></dl></div>
     </li><li name="scala.collection.TraversableLike#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="groupBy[K](f:A=&gt;K):scala.collection.immutable.Map[K,Repr]"></a>
@@ -1362,7 +1320,7 @@ Scala AttributeInstance.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#include" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#include" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="include(source:com.quinsoft.zeidon.scala.AbstractEntity,position:com.quinsoft.zeidon.CursorPosition):Unit"></a>
       <a id="include(AbstractEntity,CursorPosition):Unit"></a>
       <h4 class="signature">
@@ -1378,7 +1336,11 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Includes the entity source to this entity.</p><div class="fullcomment"><div class="comment cmt"><p>Includes the entity source to this entity.  This will also include any child entities and
+potentially spawn the include to other linked entities.  By default the newly included
+entity will be after the current entity.
+</p></div><dl class="paramcmts block"><dt class="param">source</dt><dd class="cmt"><p>the source subobject to include</p></dd><dt class="param">position</dt><dd class="cmt"><p>indicates relative position of where newly included entity will be inserted.
+</p></dd></dl></div>
     </li><li name="scala.collection.TraversableLike#init" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="init:Repr"></a>
       <a id="init:Iterable[EntityInstance]"></a>
@@ -1481,6 +1443,23 @@ Scala AttributeInstance.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#isSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isSet:Boolean"></a>
+      <a id="isSet:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSet</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@isSet:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns true if this cursor points to a non-hidden entity instance.</p>
     </li><li name="scala.collection.TraversableLike#isTraversableAgain" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraversableAgain:Boolean"></a>
       <a id="isTraversableAgain:Boolean"></a>
@@ -2250,7 +2229,7 @@ Scala AttributeInstance.
       </a>
     </span>
       
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setFirst" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setFirst" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setFirst(predicate:=&gt;Boolean,scopingEntity:com.quinsoft.zeidon.scala.AbstractEntity):com.quinsoft.zeidon.scala.CursorResult"></a>
       <a id="setFirst(⇒Boolean,AbstractEntity):CursorResult"></a>
       <h4 class="signature">
@@ -2266,7 +2245,12 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Sets the cursor to the first entity instance for which the specified predicate
+is true.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the cursor to the first entity instance for which the specified predicate
+is true.</p><p>Following example sets the cursor to point to the first entity with the
+attribute FirstName equal to &quot;Fred&quot;:</p><pre><span class="kw">val</span> result = myView.SomeEntity.setFirst( myView.SomeEntity.FirstName == <span class="lit">"Fred"</span> )</pre><p>The return value can be automatically coerced to a boolean:</p><pre><span class="kw">if</span> ( myView.SomeEntity.setFirst( myView.SomeEntity.FirstName == <span class="lit">"Fred"</span> ) ) {
+<span class="cmt">// Found 'Fred'.  Do something here.</span>
+}</pre></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setFirst" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setFirst:com.quinsoft.zeidon.scala.CursorResult"></a>
       <a id="setFirst:CursorResult"></a>
@@ -2283,7 +2267,7 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Sets the cursor to point to the first twin.</p>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setLast" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="setLast:com.quinsoft.zeidon.scala.CursorResult"></a>
       <a id="setLast:CursorResult"></a>
@@ -2300,7 +2284,7 @@ Scala AttributeInstance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Sets the cursor to point to the last twin.</p>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setMax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setMax(f_attr:com.quinsoft.zeidon.scala.AbstractEntity=&gt;com.quinsoft.zeidon.scala.AttributeInstance):com.quinsoft.zeidon.scala.AttributeInstance"></a>
       <a id="setMax((AbstractEntity)⇒AttributeInstance):AttributeInstance"></a>
@@ -2357,7 +2341,24 @@ Returns the AttributeInstance.</p><p>Example: sets the cursor to the youngest ch
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Sets the cursor to point to the next twin.</p>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setPrev" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setPrev:com.quinsoft.zeidon.scala.CursorResult"></a>
+      <a id="setPrev:CursorResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setPrev</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setPrev:com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets the cursor to point to the previous twin.</p>
     </li><li name="com.quinsoft.zeidon.scala.AbstractEntity#setValue" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setValue(jattributeDef:com.quinsoft.zeidon.objectdefinition.AttributeDef,value:Any):Any"></a>
       <a id="setValue(AttributeDef,Any):Any"></a>
@@ -2481,9 +2482,7 @@ Returns the AttributeInstance.</p><p>Example: sets the cursor to the youngest ch
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Sorts the entities in ascending order by an attribute.</p><div class="fullcomment"><div class="comment cmt"><p>Sorts the entities in ascending order by an attribute.</p><p>Example: to sort by Name use
-     view.MyEntity.sortBy( _.Name )
-</p></div></div>
+      <p class="shortcomment cmt">Sorts the entities in ascending order by an attribute.</p><div class="fullcomment"><div class="comment cmt"><p>Sorts the entities in ascending order by an attribute.</p><p>Example: to sort by Name use</p><pre>view.MyEntity.sortBy( _.Name )</pre></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#sortWith" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sortWith(comparator:(com.quinsoft.zeidon.scala.AbstractEntity,com.quinsoft.zeidon.scala.AbstractEntity)=&gt;Boolean):Unit"></a>
       <a id="sortWith((AbstractEntity,AbstractEntity)⇒Boolean):Unit"></a>
@@ -2500,7 +2499,7 @@ Returns the AttributeInstance.</p><p>Example: sets the cursor to the youngest ch
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Sorts the entities using Scala syntax.</p><div class="fullcomment"><div class="comment cmt"><p>Sorts the entities using Scala syntax.  Example:</p><p>     view.MyEntity.sortWith( _.MyAttribute &lt; _.MyAttribute )</p><p>Will sort MyEntity entities in ascending order of MyAttribute attribute values.
+      <p class="shortcomment cmt">Sorts the entities using Scala syntax.</p><div class="fullcomment"><div class="comment cmt"><p>Sorts the entities using Scala syntax.  Example:</p><pre>view.MyEntity.sortWith( _.MyAttribute &lt; _.MyAttribute )</pre><p>Will sort MyEntity entities in ascending order of MyAttribute attribute values.
 </p></div></div>
     </li><li name="scala.collection.TraversableLike#span" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="span(p:A=&gt;Boolean):(Repr,Repr)"></a>
@@ -2536,6 +2535,25 @@ Returns the AttributeInstance.</p><p>Example: sets the cursor to the youngest ch
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="status:com.quinsoft.zeidon.EntityCursor.CursorStatus"></a>
+      <a id="status:CursorStatus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">status</span><span class="result">: <span class="extype" name="com.quinsoft.zeidon.EntityCursor.CursorStatus">CursorStatus</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@status:com.quinsoft.zeidon.EntityCursor.CursorStatus" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the status of this entity cursor.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the status of this entity cursor.  The status can be used to query a cursor
+without triggering a lazy load.
+</p></div></div>
     </li><li name="scala.collection.TraversableLike#stringPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
