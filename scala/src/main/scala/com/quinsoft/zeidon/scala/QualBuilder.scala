@@ -49,6 +49,13 @@ class QualBuilder( val view: View,
         return this
     }
 
+    def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
+        if ( predicate )
+            addQual( this )
+            
+        this
+    }
+    
     /**
      * Adds multiple attribute qualifications as a single group
      * of OR statements.

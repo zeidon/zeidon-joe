@@ -48,7 +48,17 @@ import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
 /**
- * @author DG
+ * <p>
+ * This is the standard implementation of the ObjectEngine.  The JavaObjectInstance is
+ * instantiated using a set of options that the engine uses for configuration.  Typical
+ * instantiation:
+ * </p>
+ *
+ * <pre><code>
+ *  JavaOeConfiguration configuration = new DefaultJavaOeConfiguration();
+ *  configuration.set....;
+ *  ObjectEngine oe = new JavaObjectEngine( configuration );
+ * </code></pre>
  *
  */
 public class JavaObjectEngine implements ObjectEngine
@@ -118,18 +128,6 @@ public class JavaObjectEngine implements ObjectEngine
             s_objectEngine = new JavaObjectEngine( options );
 
         return s_objectEngine;
-    }
-
-    @Deprecated
-    public final static ObjectEngine getInstance( String configFileName )
-    {
-        ObjectEngine oe = getInstance();
-        if ( ! StringUtils.isBlank( configFileName ) )
-            oe.getSystemTask().log().
-                error( "Using JavaObjectEngine.getInstance with a Spring config file is no longer supported." +
-            	       "  Use getInstance() to load a default configuration or instantiate the OE yourself." );
-
-        return oe;
     }
 
     /**

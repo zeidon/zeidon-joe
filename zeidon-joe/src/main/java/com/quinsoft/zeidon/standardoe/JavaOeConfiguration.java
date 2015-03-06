@@ -33,16 +33,33 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
 /**
  * Defines the configuration options for instantiating a JavaObjectEngine.
  *
- * @author dg
- *
  */
 public interface JavaOeConfiguration
 {
+    /**
+     * The Zeidon home directory is used override the classpath for determining
+     * the location of application files.  Use this with caution.
+     *
+     * @return object for determining the Zeidon home directory.
+     */
     HomeDirectory             getHomeDirectory();
+
     DomainClassLoader         getDomainClassLoader();
-    ZeidonLogger              getZeidonLogger();
-    ZeidonPreferencesFactory  getPreferencesFactory();
     ObjectEngineEventListener getObjectEngineListener();
+
+    /**
+     * Returns the logger used while bootstrapping the Object Engine.
+     *
+     * @return the logger used while bootstrapping the Object Engine.
+     */
+    ZeidonLogger              getZeidonLogger();
+
+    /**
+     * Returns the factory that the OE uses for loading application preferences.
+     *
+     * @return the factory that the OE uses for loading application preferences.
+     */
+    ZeidonPreferencesFactory  getPreferencesFactory();
 
     /**
      * Returns the thread pool used for asynchronous activates.

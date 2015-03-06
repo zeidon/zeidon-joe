@@ -21,9 +21,8 @@ package com.quinsoft.zeidon;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * Defines the interface for an activator object that is used to activate OIs.
- *
- * @author dgc
+ * Defines the interface for an activator object that is used to activate OIs.  Intended to be
+ * used by DB-handler creators.
  *
  */
 public interface Activator

@@ -226,6 +226,9 @@ public abstract class AbstractDomain implements Domain
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
+        if ( internalValue == null )
+            return null;
+
         DomainContext context = getContext( task, contextName );
         return context.convertToString( task, attributeDef, internalValue );
     }

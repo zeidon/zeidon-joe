@@ -50,7 +50,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
 /**
- * @author DG
+ * A collection of static utility methods.
  *
  */
 public class JoeUtils

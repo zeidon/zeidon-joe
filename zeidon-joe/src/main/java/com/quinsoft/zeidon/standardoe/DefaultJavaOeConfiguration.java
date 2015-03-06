@@ -53,8 +53,6 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  * Returns the default configuration options for the Java Object Engine.  This is designed to be
  * easily subclassed.
  *
- * @author dg
- *
  */
 public class DefaultJavaOeConfiguration implements JavaOeConfiguration
 {

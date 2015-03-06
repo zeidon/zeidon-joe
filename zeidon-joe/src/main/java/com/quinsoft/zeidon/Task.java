@@ -26,11 +26,35 @@ import com.quinsoft.zeidon.standardoe.ScalaHelper;
 
 
 /**
- * All methods operating on a task.
+ * <p>
+ * All methods operating on a task.  A task is the basic container for Zeidon Object
+ * Instances (OIs). When a task is no longer referenced all of its OIs will be dropped.
+ * </p>
  *
- * When a task is no longer referenced all of its OIs will be dropped.
+ * <p>
+ * A task is created by the Object Engine and has three main properties:
+ * <ul>
+ *    <li>
+ *    <b>Default application</b>: when calling methods that take a LOD name then the LOD is
+ *            retrieved from the default application.  (Some methods allow for a
+ *            different application to be specified.)
+ *    </li>
+ *    <li>
+ *    <b>Task ID</b>: A unique string that can be used to retrieve the task from the OE.  If
+ *            the ID is not specified when the task is created it will default to a
+ *            unique integer.
+ *    </li>
+ *    <li>
+ *    <b>Persistent</b>: It a task is persistent then the ObjectEngine will keep an internal
+ *            reference to the task to prevent the task from being garbage-collected.
+ *            By default tasks are NOT persistent.
+ *    </li>
+ * </ul></p>
  *
- * @author DG
+ * Tasks are usually created like:
+ * <pre><code>
+ *      Task task = objectEngine.createTask( "DefaultApplication" );
+ * </code></pre>
  *
  */
 public interface Task extends TaskQualification, CacheMap

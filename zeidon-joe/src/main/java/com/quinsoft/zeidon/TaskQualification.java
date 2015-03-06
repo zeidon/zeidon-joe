@@ -24,7 +24,9 @@ import java.util.List;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
- * @author DG
+ * Objects that implement this interface can be used to find a Zeidon task.
+ * A Zeidon task is the basic container for instantiated data (e.g. Object
+ * Instances).
  *
  */
 public interface TaskQualification extends Lockable
@@ -163,9 +165,8 @@ public interface TaskQualification extends Lockable
     View activateOiFromFile( LodDef lodDef, String filename, EnumSet<ActivateFlags> control );
 
     /**
-     * @deprecated use task.deserializeOi instead.
+     * Used internally to deseralize streams.
      */
-    @Deprecated
     List<View> activateOisFromStream( DeserializeOi options ) throws UnknownLodDefException;
 
     /**

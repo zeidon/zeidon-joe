@@ -423,12 +423,12 @@ public interface View extends TaskQualification, CacheMap
      * Sets the name for this view inside its task.  This view can be retrieved by
      * its name given its task.  For example:
      *
-     * <code>
+     * <pre><code>
      *      View view = task.activate....();
      *      view.setName( "MyName" );
      *      ...
      *      View anotherView = task.getViewByName( "MyName" ); // anotherView == view
-     * </code>
+     * </code></pre>
      *
      * @param name Name of the view.
      */
