@@ -12,12 +12,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Assert;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -303,7 +302,7 @@ public class TestZencas
         selectSet.select( student );
 
         int count = 0;
-        Set<EntityInstance> set = selectSet.getSet();
+        Set<EntityInstance> set = selectSet;
         for ( EntityInstance ei : selectSet.eachEntity() )
         {
             count++;
@@ -319,7 +318,7 @@ public class TestZencas
         EntityCursor track = stud.cursor( "StudentMajorDegreeTrack" );
         track.setPosition( 2 );
         selectSet.select( track );
-        set = selectSet.getSet();
+        set = selectSet;
         for ( EntityInstance ei : selectSet.eachEntity() )
         {
             long p = ei.getPosition();

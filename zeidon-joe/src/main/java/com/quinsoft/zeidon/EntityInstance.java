@@ -577,6 +577,21 @@ public interface EntityInstance
     EntityIterator<? extends EntityInstance> getChildrenHier( boolean includeParent );
 
     /**
+     *
+     * Iterates through all the children of 'this' in heir order.  If includeParent
+     * is true, then the iteration includes 'this' at the beginning.
+     *
+     * @param includeParent if true, include 'this'.
+     * @param excludeHidden if true, exclude hidden entites.
+     * @param forceLazyLoad if true then load any lazy child entities.
+     *
+     * @return hierarchical iterator.
+     */
+    EntityIterator<? extends EntityInstance> getChildrenHier( boolean includeParent,
+                                                              boolean excludeHidden,
+                                                              boolean forceLazyLoad );
+
+    /**
      * Loops through all the direct EI children of 'this'.
      *
      * @param allowHidden

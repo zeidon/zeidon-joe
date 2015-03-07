@@ -354,7 +354,7 @@ class ActivateOiFromDB implements Activator
                 assert isLazyLoad( rootEntityDef );
 
                 EntityInstanceImpl loadedRoot = view.cursor( rootEntityDef.getParent() ).getEntityInstance();
-                for ( EntityInstanceImpl ei : loadedRoot.getChildrenHier( true, false ) )
+                for ( EntityInstanceImpl ei : loadedRoot.getChildrenHier( true, false, false ) )
                 {
                     if ( ! ei.dbhLoaded )
                         continue;

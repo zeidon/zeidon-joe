@@ -67,7 +67,8 @@ class IteratorBuilder
     private boolean              directChildren    = false;
     private boolean              includeHierParent = false;
     private EntityCursorImpl     cursor;
-    private EntityDef           targetEntityDef;
+    private ViewImpl             view;
+    private EntityDef            targetEntityDef;
     private EntityInstanceImpl   currentInstance;
     private EntityComparator     comparator;
     private EntityInstanceImpl   scopingInstance;
@@ -177,7 +178,7 @@ class IteratorBuilder
         // If we get here and loadLazyEntities is null then the iterator wasn't
         // explicitly set to allow lazyLoading, so throw an error.  At some point
         // this check can be removed.
-        if ( loadLazyEntities == null )
+        if ( loadLazyEntities == null && view == null )
             throw new ZeidonException( "Implement logic with null target LodDef" );
 
         // If we get here then we must be looping through all the entities in the
@@ -393,6 +394,7 @@ class IteratorBuilder
         }
 
         iterator.setCursor( cursor );
+        iterator.setView( view );
 
         return iterator;
     }
@@ -545,6 +547,18 @@ class IteratorBuilder
         return this;
     }
 
+    /**
+     * When next() or prev() is called this cursor will be set.
+     *
+     * @param cursor
+     * @return
+     */
+    IteratorBuilder setView( ViewImpl view )
+    {
+        this.view = view;
+        return this;
+    }
+
     private void setHashKeyAttribute( AttributeDef attributeDef, Object value )
     {
         AttributeHashKeyMap map;
@@ -641,11 +655,12 @@ class IteratorBuilder
          */
         private       EntityInstanceImpl   nextInstance;
         private       EntityInstanceImpl   currentInstance;
-        private final EntityDef           targetEntityDef;
+        private final EntityDef            targetEntityDef;
         private final EntityTraverser      traverser;
         private final EntityComparator     comparator;
         private final boolean              usingAttributeHashKey;
         private       EntityCursorImpl     cursor;
+        private       ViewImpl             view;
         private final List<AttributeValue> attributeValueList;
 
         /**
@@ -717,6 +732,11 @@ class IteratorBuilder
         private void setCursor( EntityCursorImpl cursor )
         {
             this.cursor = cursor;
+        }
+
+        private void setView( ViewImpl view )
+        {
+            this.view = view;
         }
 
         private boolean matchesCriteria()
@@ -853,6 +873,9 @@ class IteratorBuilder
             if ( cursor != null )
                 cursor.setCursor( currentInstance );
 
+            if ( view != null )
+                view.cursor( currentInstance.getEntityDef() ).setCursor( currentInstance );
+
             return currentInstance;
         }
 
@@ -923,6 +946,9 @@ class IteratorBuilder
 
             if ( cursor != null )
                 cursor.setCursor( currentInstance );
+
+            if ( view != null )
+                view.cursor( currentInstance.getEntityDef() ).setCursor( currentInstance );
 
             return currentInstance;
         }

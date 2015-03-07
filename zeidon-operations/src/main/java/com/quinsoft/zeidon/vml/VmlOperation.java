@@ -29,6 +29,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
@@ -96,7 +97,6 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
-import java.io.File;
 
 /*
 //package org.kodejava.example.lowagie;
@@ -5432,28 +5432,23 @@ public abstract class VmlOperation
             break;
 
          case zAPPL_DIR_LIB:
-            sbFileName.append( app.getBinDir( ) );
-            break;
+            throw new ZeidonException( "No longer supported" );
 
          case zAPPL_DIR_OBJECT:
             sbFileName.append( app.getObjectDir( ) );
             break;
 
          case zAPPL_DIR_LOCAL:
-            sbFileName.append( app.getLocalDir( ) );
-            break;
+             throw new ZeidonException( "No longer supported" );
 
          case zAPPL_DIR_SHARED:
-            sbFileName.append( app.getSharedDir( ) );
-            break;
+             throw new ZeidonException( "No longer supported" );
 
          case zAPPL_DIR_QLPLR:
-            sbFileName.append( app.getQlplrDir( ) );
-            break;
+             throw new ZeidonException( "No longer supported" );
 
          case zAPPL_DIR_SOURCE:
-            sbFileName.append( app.getSourceDir( ) );
-            break;
+             throw new ZeidonException( "No longer supported" );
 
          default:
             throw new ZeidonException( "Unknown control value %d", lControl );
@@ -8614,7 +8609,7 @@ public abstract class VmlOperation
 
       File file = new File( directory );
       boolean exists;
- 
+
       if ( file.exists() )
       {
          if ( (bDirectory != 0 && file.isDirectory()) || (bDirectory == 0 && file.isFile()) )

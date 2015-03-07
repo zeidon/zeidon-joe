@@ -22,12 +22,12 @@ package com.quinsoft.zeidon;
 import java.util.Set;
 
 /**
- * An interface for keeping track of selected entities.
- *
- * @author DG
- *
+ * An interface for keeping track of selected entities.  This is largely just
+ * a Java Set<EntityInstance>.  The main difference is that when an EI is
+ * added to the set with select(...) there is an option to also add all of
+ * its children.
  */
-public interface SelectSet
+public interface SelectSet extends Set<EntityInstance>
 {
     /**
      * Returns true if the entity is selected in this set.
@@ -60,17 +60,15 @@ public interface SelectSet
     void deselect( EntityInstance ei );
 
     /**
-     * Remove all the entities from the select set.
+     * Removes the entity from the select set.
+     *
+     * @param ei
+     * @param removeChildren if true then remove all of the children of ei.
      */
-    void clear();
+    void deselect( EntityInstance ei, boolean removeChildren );
 
     /**
      * Iterates over each of the entities in the set in hierarchical order.
      */
     EntityIterator<? extends EntityInstance> eachEntity();
-
-    /**
-     * Returns the set of entity instances in this SelectSet.
-     */
-    Set<EntityInstance> getSet();
 }

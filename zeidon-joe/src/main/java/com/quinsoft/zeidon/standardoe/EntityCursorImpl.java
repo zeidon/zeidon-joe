@@ -1752,9 +1752,21 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public EntityIterator<EntityInstanceImpl> getChildrenHier( boolean includeParent )
     {
+        return getChildrenHier( includeParent, true, true );
+    }
+
+    @Override
+    public EntityIterator<EntityInstanceImpl> getChildrenHier( boolean includeParent,
+                                                               boolean excludeHidden,
+                                                               boolean forceLazyLoad )
+    {
+        // We don't call getExistingEntity().getChildrenHier(...) because we want to set the
+        // view so that the iterator changes the cursor.
         EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
                                                             .withScoping( getEntityInstance() )
-                                                            .setLazyLoad( true )
+                                                            .allowHidden( ! excludeHidden )
+                                                            .setLazyLoad( forceLazyLoad )
+                                                            .setView( getView() )
                                                             .includeHierParent( includeParent )
                                                             .build();
         if ( ! includeParent && iter.hasNext() )

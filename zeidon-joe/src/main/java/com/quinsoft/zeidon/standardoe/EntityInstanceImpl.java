@@ -2047,7 +2047,7 @@ class EntityInstanceImpl implements EntityInstance
         assert prevVersion != null : "Unaccepted root has null prevVersion";
 
         // Make sure none of the child EIs are an unaccepted root.
-        for ( final EntityInstanceImpl ei : getChildrenHier( false, false ) ) // Loop through all children, including excluded.
+        for ( final EntityInstanceImpl ei : getChildrenHier( false, false, false ) ) // Loop through all children, including excluded.
         {
             if ( ei.versionStatus == VersionStatus.UNACCEPTED_ROOT )
                 throw new TemporalEntityException( this, "Entity has children that are unaccepted version roots" );
@@ -2168,7 +2168,7 @@ class EntityInstanceImpl implements EntityInstance
         // The getChildrenHier uses an iterator that needs the nextHier pointers so we'll
         // create a temporary list before nulling them out.
         List<EntityInstanceImpl> list = new ArrayList<EntityInstanceImpl>();
-        for ( EntityInstanceImpl ei : this.getChildrenHier( true, false ) )
+        for ( EntityInstanceImpl ei : this.getChildrenHier( true, false, false ) )
             list.add( ei );
 
         // Now we can set the pointers to null without a problem.
@@ -2191,7 +2191,7 @@ class EntityInstanceImpl implements EntityInstance
         // Before we change any version pointers let's validate the entity and attribute values.
         validateSubobjectThrowException();
 
-        for ( EntityInstanceImpl ei : getChildrenHier( true, false ) )
+        for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
             ei.setVersionStatus( VersionStatus.NONE );
 
         EntitySpawner spawner = new EntitySpawner( this );
@@ -2749,11 +2749,28 @@ class EntityInstanceImpl implements EntityInstance
      */
     EntityIterator<EntityInstanceImpl> getChildrenHier( boolean includeParent, boolean excludeHidden )
     {
-        IteratorBuilder iter = new IteratorBuilder(getObjectInstance()).withScoping( this ).setLazyLoad( false );
-        if ( ! excludeHidden )
-            iter.allowHidden();
+        return getChildrenHier( includeParent, excludeHidden, false );
+    }
 
-        EntityIterator<EntityInstanceImpl> iterable = iter.build();
+    /**
+     * Loop through the children.
+     *
+     * @param includeParent
+     * @param excludeHidden
+     * @return
+     */
+    @Override
+    public EntityIterator<EntityInstanceImpl> getChildrenHier( boolean includeParent,
+                                                               boolean excludeHidden,
+                                                               boolean loadLazyEntities )
+    {
+        EntityIterator<EntityInstanceImpl> iterable =
+                    new IteratorBuilder(getObjectInstance())
+                                       .withScoping( this )
+                                       .allowHidden( ! excludeHidden )
+                                       .setLazyLoad( loadLazyEntities )
+                                       .build();
+
         if ( ! includeParent )
             iterable.next();
 
@@ -2762,7 +2779,8 @@ class EntityInstanceImpl implements EntityInstance
 
     /**
      * Iterates through all the children of 'this' in heir order.  If includeParent
-     * is true, then the iteration includes 'this' at the beginning.
+     * is true, then the iteration includes 'this' at the beginning.  This will force
+     * lazy load.
      *
      * @param includeParent If true, include 'this'.
      *
@@ -2771,7 +2789,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityIterator<EntityInstanceImpl> getChildrenHier( boolean includeParent )
     {
-        return getChildrenHier( includeParent, true );
+        return getChildrenHier( includeParent, true, true );
     }
 
     /**
@@ -3489,7 +3507,7 @@ class EntityInstanceImpl implements EntityInstance
             // Create temporal entities for the root and all its children.
             final EntityInstanceImpl newRoot = createTemporalEntity( root );
             newRoot.setVersionStatus( VersionStatus.UNACCEPTED_ROOT );
-            for ( final EntityInstanceImpl ei : root.getChildrenHier( false, true ) )
+            for ( final EntityInstanceImpl ei : root.getChildrenHier( false, true, true ) )
                 createTemporalEntity( ei );
 
             // We've created all the new entity versions but their prev/next pointers
