@@ -52,11 +52,51 @@ public class ldapAdminBind
 		catch (Exception e) 
 		{
 			System.out.println(" bind error: " + e);
-			e.printStackTrace();
-			System.exit(-1);
+			System.out.println("update password error: " + e);
+			return;
+			//e.printStackTrace();
+			//System.exit(-1);
 		}
 	}
-	public int updatePassword(String username, String password) 
+	
+    public int updatePassword(String username, String password) {
+        try {
+            String quotedPassword = "\"" + password + "\"";
+            char unicodePwd[] = quotedPassword.toCharArray();
+            byte pwdArray[] = new byte[unicodePwd.length * 2];
+            for (int i = 0; i < unicodePwd.length; i++) {
+                pwdArray[i * 2 + 1] = (byte) (unicodePwd[i] >>> 8);
+                pwdArray[i * 2 + 0] = (byte) (unicodePwd[i] & 0xff);
+            }
+            ModificationItem[] mods = new ModificationItem[1];
+            mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+                    new BasicAttribute("UnicodePwd", pwdArray));
+            SearchControls ctls = new SearchControls();
+            ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            String filter = "(&(objectCategory=Person)(objectclass=User)(sAMAccountName=" + username + "))";
+
+            // Search for the object using the username (sAMAccountName), under the following path.
+            NamingEnumeration answer = ldapContext.search("DC=AD,DC=SWAU,DC=EDU", filter, ctls);
+            if (answer.hasMore()) {
+                SearchResult sr = (SearchResult) answer.next();
+                Attributes attrs = sr.getAttributes();
+                Attribute dn = attrs.get("distinguishedName");
+                String dnValue = (String) dn.get(0);
+                System.out.println(dnValue);
+                ldapContext.modifyAttributes(dnValue, mods);
+                return 0;
+            }
+
+            // If we get here, then the username was not found in ActiveDirectory.
+            // Return an error.
+            return -1;
+        } catch (Exception e) {
+            System.out.println("update password error: " + e);
+            return -1;
+        }
+    }
+
+	public int updatePasswordENC(String username, String password) 
 	{
 		try 
 		{
@@ -109,9 +149,6 @@ public class ldapAdminBind
 		
 				ModificationItem[] mods = new ModificationItem[1];
 				mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-				//new BasicAttribute("userPassword", "Test4444"));
-				//new BasicAttribute("userPassword", "F82b7mk,9j"));
-				//new BasicAttribute("userPassword", newUnicodePassword));
 				new BasicAttribute("userPassword", password));
 				//new BasicAttribute("sn", "TestLN"));
 				//"CN=Test Z,OU=Infrastructure,OU=Users,OU=ENC,DC=enc-ad,DC=enc,DC=edu"
