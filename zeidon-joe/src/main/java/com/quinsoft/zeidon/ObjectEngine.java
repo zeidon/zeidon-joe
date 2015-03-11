@@ -25,8 +25,9 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
 
 
 /**
- *
- * @author DG
+ * This is the main container of all Zeidon objects.  User applications generally
+ * use it just to create Tasks.  The standard implementation of the ObjectEngine
+ * is JavaObjectEngine.
  *
  */
 public interface ObjectEngine extends CacheMap
@@ -46,7 +47,22 @@ public interface ObjectEngine extends CacheMap
      */
     String getId();
 
+    /**
+     * Returns the list of all known applications.  The list of known applications
+     * is found by searching through the classpath and opening all zeidon.app resources
+     * that are found.
+     *
+     * @return the list of known applications.
+     */
     List<? extends Application> getApplicationList();
+
+    /**
+     * Returns the application object for the specified application.
+     *
+     * @param appName name of the application.
+     * @return Application object.
+     * @throws UnknownApplicationException
+     */
     Application getApplication(String appName ) throws UnknownApplicationException;
 
     /**
@@ -56,7 +72,7 @@ public interface ObjectEngine extends CacheMap
      *
      * @param applicationName
      * @throws UnknownApplicationException
-     * @return new persistent task.
+     * @return new NON-persistent task.
      */
     Task createTask( String applicationName ) throws UnknownApplicationException;
 
@@ -65,7 +81,7 @@ public interface ObjectEngine extends CacheMap
      *
      * @param applicationName
      * @param taskId
-     * @return
+     * @return a new persistent task.
      * @throws UnknownApplicationException
      */
     Task createTask( String applicationName, String taskId ) throws UnknownApplicationException;
@@ -107,6 +123,12 @@ public interface ObjectEngine extends CacheMap
      */
     Task getTaskById( String id );
 
+    /**
+     * Return the list of current tasks sorted by task ID.  Note that holding on
+     * to this list could prevent non-persistent tasks from being garbage-collected.
+     *
+     * @return list of current tasks.
+     */
     List<? extends Task> getTaskList();
 
     /**

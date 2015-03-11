@@ -3,22 +3,27 @@
  */
 package com.quinsoft.zeidon.scala
 
-import com.quinsoft.zeidon.ZeidonException
-import com.quinsoft.zeidon.objectdefinition.LodDef
 import scala.language.dynamics
+
 import com.quinsoft.zeidon.ActivateFlags
+import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.EntityDef
+import com.quinsoft.zeidon.objectdefinition.LodDef
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
- *
- * @author dgc
- *
  */
-class View( val task: Task ) extends Task( task ) with Dynamic {
+class View( val task: Task ) extends Dynamic {
 
-    var jlodDef: LodDef = null
+    /**
+     * The underlying EntityDef for this View.  May be null.
+     */
+    private var jlodDef: LodDef = null
+
+    /**
+     * The underlying Java view for this Scala View.  May be null.
+     */
     var jview: com.quinsoft.zeidon.View = null
 
     def this( jv: com.quinsoft.zeidon.View ) = {
@@ -29,6 +34,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
+    def this( task: com.quinsoft.zeidon.TaskQualification ) = this( task.getTask() )
 
     /**
      * Sets the LOD definition for this View.
@@ -39,7 +45,8 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
      * Sets the LOD definition for this View.
      */
     def basedOn( lodName: String ) = setLod( lodName )
-    
+    def basedOn( lodDef : LodDef ) = { jlodDef = lodDef; this }
+
     /**
      * Sets the LOD definition for this view as BASED ON LOD lod-name
      */
@@ -69,7 +76,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     def lodDef = jlodDef
 
     /**
-     * Sets the jview and lodDef from srcView. 
+     * Sets the jview and lodDef from srcView.
      */
     private def from( srcView: View ) = {
         jview = srcView.jview.newView()
@@ -81,7 +88,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
      * Creates a new View that has the same cursor positions as the current view.
      */
     def duplicate = { validateNonEmpty; new View( jview.newView ) }
-    
+
     /**
      * Set the cursors from sourceView to 'this'.
      */
@@ -96,22 +103,30 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     /**
      * Creates an empty OI for this view.  The LOD must have been previously
      * specified with basedOn.
+     * {{{
+     *      val mUser = new View( task ) basedOn "mUser"
+     *      mUser activateEmpty()
+     * }}}
      */
     def activateEmpty() = {
         validateLodDef
-        jview = jtask.activateEmptyObjectInstance( jlodDef )
+        jview = task.jtask.activateEmptyObjectInstance( jlodDef )
         this
     }
 
     /**
      * Activates an OI from the DB with simple qualification.
-     * 
      * Returns 'this' for convenience.
+     *
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID = 490 )
+     * }}}
      */
-    def activateWhere( addQual: ( QualBuilder ) => QualBuilder ): View = {
+    def activateWhere( addQual: ( EntityQualBuilder ) => Unit ): View = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
-        addQual( builder )
+        addQual( builder.entityQualBuilder )
         builder.activate
         this
     }
@@ -119,7 +134,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     /**
      * Activates all data from the DB for this LOD.  I.e. activates without
      * qualification.  Use carefully.
-     * 
+     *
      * Returns 'this' for convenience.
      */
     def activateAll(): View = {
@@ -131,10 +146,19 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     /**
      * Creates a QualBuilder for creating activate qualification.
+     * A typical use case:
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID = 490 )
+     *                  .or( _.User.ID = 491 )
+     *                  .asynchronous
+     *                  .activate
+     * }}}
      */
-    def buildQual( addQual: ( QualBuilder ) => QualBuilder ): QualBuilder = {
+    def buildQual( initialQual: ( EntityQualBuilder ) => Unit ): QualBuilder = {
         val builder = buildQual()
-        addQual( builder )
+        initialQual( builder.entityQualBuilder ) // Add the qualifcation.
+        builder
     }
 
     /**
@@ -158,48 +182,83 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     }
 
     /**
-     * Creates a new view with a different owning task.
+     * Creates a new view, potentially with a different owning task.
      */
     def newView( task: Task = this.task ) = { validateNonEmpty; new View( task ).from( this ) }
 
     /**
      * Sets the name of this view in its owning task.
+     * Note: this will NOT drop other names this view might have.  I.e. a view
+     * can have multiple names.
+     *
+     * {{{
+     * val myView = new View( task ) basedOn MyLOD
+     * myView.activateEmpty
+     * myView.name( "This Is a Name" )
+     * }}}
+     *
+     * This is a synonym for view.name = "..."
      */
     def name( viewName: String ) = { validateNonEmpty; jview.setName( viewName ) }
-    
+
+    /**
+     * Sets the name of the view as an attribute.
+     * Note: this will NOT drop other names this view might have.  I.e. a view
+     * can have multiple names.
+     *
+     * {{{
+     * val myView = new View( task ) basedOn MyLOD
+     * myView.activateEmpty
+     * myView.name = "This Is a Name"
+     * }}}
+     *
+     * This is a synonym for view.name( "..." )
+     */
+    def name_=( viewName: String ) = name( viewName )
+
     def assert = new AssertView( this )
-    
+
     /**
      * Returns the name of the LOD associated with this View or "*not specified*"
      * if it hasn't been specified.
      */
     def lodName = if ( jlodDef == null ) "*not specified*" else jlodDef.getName
-    
+
     /**
      * Returns true if the OI is empty (i.e. has no root entities).
      */
     def isEmpty = { validateNonEmpty; jview.isEmpty() }
-    
+
     /**
      * Writes the entire OI to the log file.
      */
     def logObjectInstance = { validateNonEmpty; jview.logObjectInstance() }
-    
+
+    /**
+     * Writes the entire OI to the log file.
+     */
+    def logOi = logObjectInstance
+
     /**
      * Returns the options that were used to activate this OI.
      */
     def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
-    
+
     /**
      * Returns a serializer that can be used to serialize this OI.
+     *
+     * To serialize the OI as JSON to a file:
+     * {{{
+     * myView.serializeOi.toFile( "myfile.json" )
+     * }}}
+     *
+     * To serialize the OI as XML to a string.
+     * {{{
+     * val str = myView.serializeOi.asXml.toString
+     * }}}
      */
     def serializeOi = { validateNonEmpty; jview.serializeOi() }
-    
-    /**
-     * Returns a deserializer for that can be used to deserialize an OI.
-     */
-    override def deserializeOi = { validateNonEmpty; jview.deserializeOi() }
-    
+
     /**
      * Creates a SelectSet for this View.
      */
@@ -214,7 +273,23 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     }
 
     /**
-     * Returns the cursor of the root entity..
+     * Returns an EntityCursor for the entity specified by entityDef.
+     */
+    def cursor( entityName: String ) = {
+        validateNonEmpty
+        new EntityCursor( this, jview.cursor( entityName ) )
+    }
+
+    /**
+     * Returns the cursor of the root entity.  This allows code to generically
+     * refer to the root entity of a View.
+     *
+     * The following example counts the number of root entities for
+     * any myView regardless of the LOD.
+     *
+     * {{{
+     *      val count = myView.root.count
+     * }}}
      */
     def root = {
         validateNonEmpty
@@ -224,7 +299,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
     /**
      * This is called when the compiler doesn't recognize a method name.  This
      * is used to find the entity cursor for a view.
-     * 
+     *
      * Not intended to be called directly by user code.
      */
     def selectDynamic( entityName: String ): EntityCursor = {
@@ -237,7 +312,7 @@ class View( val task: Task ) extends Task( task ) with Dynamic {
 
     /**
      * Called dynamically to process a Object Operation.
-     * 
+     *
      * Not intended to be called directly by user code.
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {

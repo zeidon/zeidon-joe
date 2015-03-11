@@ -257,14 +257,29 @@ public interface EntityInstance
     AttributeInstance getAttribute( AttributeDef attributeDef );
 
     /**
-     * Returns a list of AttributeInstances for this entity instance.
+     * @deprecated use getAttributes( includeNullValues ) instead.
+     */
+    @Deprecated
+    List<AttributeInstance> attributeList( boolean includeNullValues );
+
+    /**
+     * Returns a list of AttributeInstances for this entity instance, including
+     * hidden and null attributes.
+     *
+     * @return list of AttributeInstances.
+     */
+    List<AttributeInstance> getAttributes();
+
+    /**
+     * Returns a list of AttributeInstances for this entity instance including hidden
+     * attributes.
      *
      * @param includeNullValues if true then attributes with NULL values will be included in the
      * response, otherwise only non-NULL attributes will be included.
      *
      * @return list of AttributeInstances.
      */
-    List<AttributeInstance> attributeList( boolean includeNullValues );
+    List<AttributeInstance> getAttributes(  boolean includeNullValues );
 
     /**
      * Creates a work attribute for this entity definition.  The definition for this work

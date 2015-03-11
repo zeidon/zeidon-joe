@@ -40,7 +40,6 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.standardoe.ScalaHelper;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
@@ -74,7 +73,6 @@ public class LodDef implements PortableFileAttributeHandler
      */
     private boolean      hasPhysicalMappings = false;
     private String       libraryName;
-    private ScalaHelper  scalaHelper;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
 
@@ -406,42 +404,11 @@ public class LodDef implements PortableFileAttributeHandler
         }
     }
 
-    /**
-     * Gets a lod-specific ScalaHelper.
-     *
-     * @param taskQual
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    protected synchronized ScalaHelper getScalaHelper( TaskQualification taskQual ) throws InstantiationException, IllegalAccessException
-    {
-        if ( scalaHelper == null )
-        {
-            String className = "com.quinsoft.zeidon.scala.ScalaHelperImpl";
-            ObjectEngine oe = taskQual.getObjectEngine();
-            ClassLoader classLoader = oe.getClassLoader( className );
-            Class<ScalaHelper> operationsClass;
-            try
-            {
-                operationsClass = (Class<ScalaHelper>) classLoader.loadClass( className );
-            }
-            catch ( ClassNotFoundException e )
-            {
-                throw new ZeidonException("Couldn't load %s.  Do you have zeidon-scala in your classpath?", className );
-            }
-
-            scalaHelper = operationsClass.newInstance();
-            scalaHelper.setClassLoader( classLoader );
-        }
-
-        return scalaHelper;
-    }
-
     private int executeScalaConstraint( View view, ObjectConstraintType type )
     {
         try
         {
-            return getScalaHelper( view ).executeObjectConstraint( view, type );
+            return view.getTask().getScalaHelper().executeObjectConstraint( view, type );
         }
         catch ( Exception e )
         {

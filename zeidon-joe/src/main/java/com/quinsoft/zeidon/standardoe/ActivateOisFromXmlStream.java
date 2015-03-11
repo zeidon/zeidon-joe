@@ -19,7 +19,7 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Stack;
@@ -29,7 +29,9 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.quinsoft.zeidon.ActivateFlags;
@@ -37,6 +39,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -49,7 +52,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * @author dgc
  *
  */
-class ActivateOiFromXmlStream implements StreamReader
+class ActivateOisFromXmlStream implements StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
@@ -64,16 +67,37 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private Application              application;
     private LodDef                   lodDef;
-    private ViewImpl                 view;
+
+    /**
+     * Current view being read.
+     */
+    private ViewImpl view;
+
+    /**
+     * List of returned views.
+     */
+    private final List<View> viewList = new ArrayList<>();
+
     private EnumSet<ActivateFlags>   control;
     private boolean                  incremental = false;
-    private Stack<Attributes>        entityAttributes = new Stack<Attributes>();
-    private Stack<Attributes>        attributeAttributes = new Stack<Attributes>();
-    private Stack<EntityDef>        currentEntityStack = new Stack<EntityDef>();
-    private EntityDef               currentEntityDef;
+    private final Stack<Attributes>  entityAttributes = new Stack<Attributes>();
+    private final Stack<Attributes>  attributeAttributes = new Stack<Attributes>();
+    private final Stack<EntityDef>   currentEntityStack = new Stack<EntityDef>();
+    private EntityDef                currentEntityDef;
     private StringBuilder            characterBuffer;
 
-    ViewImpl read()
+    /**
+     * Used to keep track of the instances that are flagged as selected in the input
+     * stream.  Cursors will be set afterwards.
+     */
+    private List<EntityInstance> selectedInstances;
+
+    /**
+     * Keeps track of current location in SAX parser.
+     */
+    private Locator locator;
+
+    private ViewImpl read()
     {
         try
         {
@@ -94,12 +118,20 @@ class ActivateOiFromXmlStream implements StreamReader
                 rootCursor.setFirst();
             }
 
-            view.reset();
+            if ( selectedInstances.size() > 0 )
+                setCursors();
+            else
+                view.reset();
+
             return view;
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e );
+            ZeidonException ze = ZeidonException.wrapException( e );
+            if ( locator != null )
+                ze.appendMessage( "Line/col = %d/%d", locator.getLineNumber(), locator.getColumnNumber() );
+
+            throw ze;
         }
     }
 
@@ -120,23 +152,46 @@ class ActivateOiFromXmlStream implements StreamReader
         }
     }
 
+    /**
+     * The view has been loaded from the stream and it was indicated that there are
+     * cursor selections.  Reset them.
+     */
+    private void setCursors()
+    {
+        for ( EntityInstance ei : selectedInstances )
+        {
+            EntityDef entityDef = ei.getEntityDef();
+            view.cursor( entityDef ).setCursor( ei );
+        }
+    }
+
+    /**
+     * Called to handle the zOI entity.
+     *
+     * @param qName
+     * @param attributes
+     */
     private void createOi( String qName, Attributes attributes )
     {
-        String appName = attributes.getValue( "zAppName" );
+        String appName = attributes.getValue( "appName" );
         if ( StringUtils.isBlank( appName ) )
-            throw new ZeidonException("zOI element does not specify zAppName" );
+            throw new ZeidonException("zOI element does not specify appName" );
 
         application = task.getApplication( appName );
-        String odName = attributes.getValue( "zObjectName" );
+        String odName = attributes.getValue( "objectName" );
         if ( StringUtils.isBlank( odName ) )
-            throw new ZeidonException("zOI element does not specify zObjectName" );
+            throw new ZeidonException("zOI element does not specify objectName" );
 
         lodDef = application.getLodDef( task, odName );
         view = (ViewImpl) task.activateEmptyObjectInstance( lodDef );
+        viewList.add( view );
 
-        String increFlags = attributes.getValue( "zIncreFlags" );
+        String increFlags = attributes.getValue( "increFlags" );
         if ( ! StringUtils.isBlank( increFlags ) )
             incremental = isYes( increFlags );
+
+        // Create a list to keep track of selected instances.
+        selectedInstances = new ArrayList<>();
     }
 
 
@@ -147,9 +202,10 @@ class ActivateOiFromXmlStream implements StreamReader
         EntityCursorImpl cursor = view.cursor( currentEntityDef );
         cursor.createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
-        // If we're setting incremental flags, save them for later.
+        // If we're setting incremental flags, save them for later.  Create
+        // a copy of the AttributesImpl because the original gets reused.
         if ( incremental )
-            entityAttributes.push( attributes );
+            entityAttributes.push( new AttributesImpl( attributes ) );
     }
 
     private void setAttribute( String attributeName, Attributes attributes )
@@ -162,12 +218,26 @@ class ActivateOiFromXmlStream implements StreamReader
 
     private class SaxParserHandler extends DefaultHandler
     {
+        // this will be called when XML-parser starts reading
+        // XML-data; here we save reference to current position in XML:
+        @Override
+        public void setDocumentLocator(Locator locator)
+        {
+            ActivateOisFromXmlStream.this.locator = locator;
+        }
+
         @Override
         public void startElement( String uri,
                                   String localName,
                                   String qName,
                                   Attributes attributes ) throws SAXException
         {
+            if ( StringUtils.equalsIgnoreCase( qName, "zOIs" ) )
+            {
+                // Nothing to do.
+                return;
+            }
+
             if ( StringUtils.equalsIgnoreCase( qName, "zOI" ) )
             {
                 createOi( qName, attributes );
@@ -178,16 +248,16 @@ class ActivateOiFromXmlStream implements StreamReader
             if ( view == null )
                 throw new ZeidonException( "XML stream does not specify zOI element" );
 
+            if ( currentEntityDef != null && currentEntityDef.getAttribute( qName, false ) != null )
+            {
+                setAttribute( qName, attributes );
+                return;
+            }
+
             // Is the element name an entity name?
             if ( lodDef.getEntityDef( qName, false ) != null )
             {
                 createEntity( qName, attributes );
-                return;
-            }
-
-            if ( currentEntityDef.getAttribute( qName, false ) != null )
-            {
-                setAttribute( qName, attributes );
                 return;
             }
 
@@ -207,17 +277,27 @@ class ActivateOiFromXmlStream implements StreamReader
             AttributeDef attributeDef = currentEntityDef.getAttribute( qName, false );
             if ( attributeDef != null )
             {
-                EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
-                ei.setInternalAttributeValue( attributeDef, characterBuffer.toString(), false );
-                characterBuffer = null;
-
-                if ( incremental )
+                if ( characterBuffer == null )
                 {
-                    Attributes attributes = attributeAttributes.pop();
-                    ei.setAttributeUpdated( attributeDef, isYes( attributes.getValue( "Updated" ) ) );
+                    // If we get here then we should be in a situation where an attribute name
+                    // is the same as its containing entity.  We've already read the attribute
+                    // so qName should be the entity name.  Verify.
+                    assert lodDef.getEntityDef( qName, false ) != null : "Unexpected null characterBuffer";
                 }
+                else
+                {
+                    EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
+                    ei.setInternalAttributeValue( attributeDef, characterBuffer.toString(), false );
+                    characterBuffer = null; // Indicates we've read the attribute.
 
-                return;
+                    if ( incremental )
+                    {
+                        Attributes attributes = attributeAttributes.pop();
+                        ei.setAttributeUpdated( attributeDef, isYes( attributes.getValue( "updated" ) ) );
+                    }
+
+                    return;
+                }
             }
 
             // Is the element name an entity name?
@@ -230,11 +310,22 @@ class ActivateOiFromXmlStream implements StreamReader
                     EntityInstanceImpl ei = view.cursor( qName ).getEntityInstance();
                     Attributes attributes = entityAttributes.pop();
 
-                    ei.setUpdated( isYes( attributes.getValue( "Updated" ) ) );
-                    ei.setCreated( isYes( attributes.getValue( "Created" ) ) );
-                    ei.setIncluded( isYes( attributes.getValue( "Included" ) ) );
-                    ei.setExcluded( isYes( attributes.getValue( "Excluded" ) ) );
-                    ei.setDeleted( isYes( attributes.getValue( "Deleted" ) ) );
+                    ei.setUpdated( isYes( attributes.getValue( "updated" ) ) );
+                    ei.setCreated( isYes( attributes.getValue( "created" ) ) );
+                    ei.setIncluded( isYes( attributes.getValue( "included" ) ) );
+                    ei.setExcluded( isYes( attributes.getValue( "excluded" ) ) );
+                    ei.setDeleted( isYes( attributes.getValue( "deleted" ) ) );
+                    if ( isYes( attributes.getValue( "incomplete" ) ) )
+                        ei.setIncomplete( null );
+                    if ( isYes( attributes.getValue( "selected" ) ) )
+                        selectedInstances.add( ei );
+                    String lazyLoaded = attributes.getValue( "lazyLoaded" );
+                    if ( ! StringUtils.isBlank( lazyLoaded ) )
+                    {
+                        String[] names = lazyLoaded.split( "," );
+                        for ( String name: names )
+                            ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name ) );
+                    }
                 }
 
                 // The top of the stack equals currentEntityDef.  Pop it off the stack and
@@ -247,9 +338,15 @@ class ActivateOiFromXmlStream implements StreamReader
 
             if ( StringUtils.equalsIgnoreCase( qName, "zOI" ) )
             {
-                // TODO: Stop parsing.
                 return;
             }
+
+            if ( StringUtils.equalsIgnoreCase( qName, "zOIs" ) )
+            {
+                return;
+            }
+
+            throw new ZeidonException( "Unexpected qname: %s", qName );
         } // endElement
 
         @Override
@@ -271,6 +368,6 @@ class ActivateOiFromXmlStream implements StreamReader
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
         read();
-        return Arrays.asList( (View) view );
+        return viewList;
     }
 }

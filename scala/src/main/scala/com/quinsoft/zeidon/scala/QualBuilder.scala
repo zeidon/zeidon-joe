@@ -7,33 +7,40 @@ import scala.language.dynamics
 import com.quinsoft.zeidon._
 
 /**
- * Used to build qualification for Scala code.
+ * Used to build qualification for Scala code and then activate the OI.  A typical
+ * use case:
+ * {{{
+ *      val mUser = VIEW basedOn "mUser"
+ *      mUser.buildQual( _.User.ID = 490 )
+ *                  .or( _.User.ID = 491 )
+ *                  .asynchronous
+ *                  .activate
+ * }}}
  *
  */
-class QualBuilder( private val view: View,
-                   private val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef )
-            extends Dynamic {
+class QualBuilder( val view: View,
+                   val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
 
-    val jtask = view.jtask
+    val jtask = view.task.jtask
     val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
+    val entityQualBuilder = new EntityQualBuilder( this )
 
-    def selectDynamic(entityName: String): EntityQualBuilder = {
-        val jentityDef = jlodDef.getEntityDef(entityName)
-        new EntityQualBuilder( this, jentityDef )
-    }
-
-    def and( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
+    /**
+     * Add qualification as 'and'.
+     */
+    def and( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
         jqual.addAttribQual( "AND" )
-        addQual( this )
+        addQual( entityQualBuilder )
+        this
     }
 
-    def any( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+    def any( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( this )
+            iter.next()( entityQualBuilder )
             if ( iter.hasNext )
                 jqual.addAttribQual( "OR" )
         }
@@ -42,13 +49,32 @@ class QualBuilder( private val view: View,
         return this
     }
 
-    def andAny( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+    def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
+        if ( predicate )
+            addQual( this )
+            
+        this
+    }
+    
+    /**
+     * Adds multiple attribute qualifications as a single group
+     * of OR statements.
+     *
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.LastName = "Smith" )
+     *              .andAny( _.User.FirstName = "Tom", _.User.FirstName = "Harry" )
+     *              .activate
+     * }}}
+     *
+     */
+    def andAny( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "AND" )
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( this )
+            iter.next()( entityQualBuilder )
             if ( iter.hasNext )
                 jqual.addAttribQual( "OR" )
         }
@@ -57,17 +83,18 @@ class QualBuilder( private val view: View,
         return this
     }
 
-    def or( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
+    def or( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
         jqual.addAttribQual( "OR" )
-        addQual( this )
+        addQual( entityQualBuilder )
+        this
     }
 
-    def all( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+    def all( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( this )
+            iter.next()( entityQualBuilder )
             if ( iter.hasNext )
                 jqual.addAttribQual( "AND" )
         }
@@ -76,13 +103,13 @@ class QualBuilder( private val view: View,
         return this
     }
 
-    def orAll( addQual: (QualBuilder) => QualBuilder* ): QualBuilder = {
+    def orAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( this )
+            iter.next()( entityQualBuilder )
             if ( iter.hasNext )
                 jqual.addAttribQual( "AND" )
         }
@@ -123,8 +150,14 @@ class QualBuilder( private val view: View,
         this
     }
 
-    def to( addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
-        addQual( this )
+    def exclude( excludeEntity: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
+        val jentityDef = excludeEntity( new EntitySelector )
+        jqual.excludeEntity( jentityDef.getName() )
+        this
+    }
+
+    def to( addQual: (EntityQualBuilder) => QualBuilder ): QualBuilder = {
+        addQual( entityQualBuilder )
     }
 
     def cachedAs( cacheName: String, qualtask: com.quinsoft.zeidon.Task = jtask ): QualBuilder = {
@@ -155,7 +188,7 @@ class QualBuilder( private val view: View,
 
     /**
      * Performs the activate on the view using the specified qualification.
-     * 
+     *
      * Returns the view for convenience.
      */
     def activate(): View = {
@@ -163,66 +196,75 @@ class QualBuilder( private val view: View,
         return view
     }
 
-    /**
-     * Builder for setting entity values.
-     */
-    class EntityQualBuilder( val qualBuilder: QualBuilder,
-                             val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
-            extends Dynamic {
-
-        var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
-
-        def > ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), ">", value )
-            return qualBuilder
-        }
-
-        def <> ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "!=", value )
-            return qualBuilder
-        }
-
-        def >= ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), ">=", value )
-            return qualBuilder
-        }
-
-        def < ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "<", value )
-            return qualBuilder
-        }
-
-        def <= ( value: Any ): QualBuilder = {
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "<=", value )
-            return qualBuilder
-        }
-
-        def exists: QualBuilder = {
-            jqual.addAttribQualEntityExists( jentityDef.getName() )
-           return qualBuilder
-        }
-
-        def selectDynamic( attributeName: String): EntityQualBuilder = {
-            jattributeDef = jentityDef.getAttribute( attributeName )
-            return this
-        }
-
-        def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
-            //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
-            jattributeDef = jentityDef.getAttribute( attributeName )
-            return qualBuilder
-        }
-
-        def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
-            jattributeDef = jentityDef.getAttribute( attributeName )
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
-            return qualBuilder
-        }
-    }
 
     class EntitySelector() extends Dynamic {
         def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.EntityDef = {
             jlodDef.getEntityDef( entityName )
         }
+    }
+}
+
+class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
+    def selectDynamic(entityName: String): AttributeQualBuilder = {
+        val jentityDef = qualBuilder.jlodDef.getEntityDef(entityName)
+        new AttributeQualBuilder( qualBuilder, jentityDef )
+    }
+}
+
+/**
+ * Builder for setting attribute values for an entity.
+ */
+class AttributeQualBuilder( val qualBuilder: QualBuilder,
+                            val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
+        extends Dynamic {
+
+    var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
+    val jqual = qualBuilder.jqual
+
+    def > ( value: Any ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), ">", value )
+        return qualBuilder
+    }
+
+    def <> ( value: Any ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "!=", value )
+        return qualBuilder
+    }
+
+    def >= ( value: Any ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), ">=", value )
+        return qualBuilder
+    }
+
+    def < ( value: Any ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "<", value )
+        return qualBuilder
+    }
+
+    def <= ( value: Any ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "<=", value )
+        return qualBuilder
+    }
+
+    def exists: QualBuilder = {
+        jqual.addAttribQualEntityExists( jentityDef.getName() )
+       return qualBuilder
+    }
+
+    def selectDynamic( attributeName: String): AttributeQualBuilder = {
+        jattributeDef = jentityDef.getAttribute( attributeName )
+        return this
+    }
+
+    def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
+        //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
+        jattributeDef = jentityDef.getAttribute( attributeName )
+        return qualBuilder
+    }
+
+    def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
+        jattributeDef = jentityDef.getAttribute( attributeName )
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
+        return qualBuilder
     }
 }

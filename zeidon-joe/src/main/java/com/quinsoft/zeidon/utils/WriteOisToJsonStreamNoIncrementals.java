@@ -22,6 +22,8 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -91,23 +93,23 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         if ( ! view.isEmpty() )
         {
             jg.writeStartObject();
-            
+
             for ( EntityInstance ei:  view.cursor( rootEntityDef ).eachEntity() )
             {
                 if ( ei.hasPrevTwin() )
                     jg.writeStartObject();
-                
+
                 writeEntity( ei );
-                
+
                 if ( ei.hasNextTwin() )
                     jg.writeEndObject();
             }
-    
+
             jg.writeEndObject();
         }
         jg.writeEndArray();
     }
-    
+
     private EntityDef writeEntity( EntityInstance ei ) throws Exception
     {
         try
@@ -115,13 +117,18 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             // See if we need to open or close an array field.
             final EntityDef entityDef = ei.getEntityDef();
 
-            for ( AttributeInstance attrib : ei.attributeList( false ) )
+            for ( AttributeInstance attrib : ei.getAttributes( false ) )
             {
                 if ( attrib.getAttributeDef().isHidden() )
                     continue;
-                
+
                 String value = attrib.getString( null );
-                jg.writeStringField( attrib.getAttributeDef().getName(), value );
+
+                // getAttributes will include null attributes if they have been updated
+                // (i.e. explicitly set to null).  Since we aren't writing incrementals
+                // we don't want those so check for null.
+                if ( ! StringUtils.isBlank( value ) )
+                    jg.writeStringField( attrib.getAttributeDef().getName(), value );
             }
 
             // Loop through the children and add them.
@@ -140,9 +147,9 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 }
                 else
                     jg.writeStartObject();
-                
+
                 writeEntity( child );
-                
+
                 jg.writeEndObject();
                 if ( ! child.hasNextTwin() )
                 {

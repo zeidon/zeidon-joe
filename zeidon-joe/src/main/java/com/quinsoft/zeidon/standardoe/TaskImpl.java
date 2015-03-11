@@ -77,6 +77,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
      * versioned.
      **/
     private final AtomicLong versionCounter = new AtomicLong();
+    private ScalaHelper scalaHelper;
 
     TaskImpl(JavaObjectEngine objectEngine, Application app, String taskId)
     {
@@ -533,5 +534,33 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     public SerializeOi serializeOi()
     {
         return new SerializeOi();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public synchronized ScalaHelper getScalaHelper()
+    {
+        if ( scalaHelper == null )
+        {
+            String className = "com.quinsoft.zeidon.scala.ScalaHelperImpl";
+            ClassLoader classLoader = getObjectEngine().getClassLoader( className );
+            Class<ScalaHelper> operationsClass;
+            try
+            {
+                operationsClass = (Class<ScalaHelper>) classLoader.loadClass( className );
+                scalaHelper = operationsClass.newInstance();
+                scalaHelper.setClassLoader( classLoader );
+            }
+            catch ( ClassNotFoundException e )
+            {
+                throw new ZeidonException("Couldn't load %s.  Do you have zeidon-scala in your classpath?", className );
+            }
+            catch ( Exception e )
+            {
+                throw ZeidonException.wrapException( e );
+            }
+        }
+
+        return scalaHelper;
     }
 }

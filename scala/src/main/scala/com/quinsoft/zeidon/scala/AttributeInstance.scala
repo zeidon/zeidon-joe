@@ -23,34 +23,34 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * Returns true if the attribute is null.
      */
     def isNull = jattributeInstance.isNull()
-    
+
     /**
      * Returns true if the attribute is null or the string representation of the
      * attribute value is the empty string ("").
      */
     def isEmpty = jattributeInstance.isNull() || jattributeInstance.compare( "" ) == 0
-    
+
     /**
      * Returns true if this attribute has been updated since being read from the DB.
      */
     def isUpdated = jattributeInstance.isUpdated()
-    
+
     /**
      * Sets the value of this attribute.
-     * 
+     *
      * Domain processing will be used to potentially convert the value from the
      * source object to the internal value.
      */
     def setValue( any: Any ) = jattributeInstance.setValue( any )
-    
+
     /**
      * Sets the value of a derived attribute.
-     * 
+     *
      * This does not set the Updated flag for the containing entity instance.
      * This is intended to be used from inside derived domain code.
      */
     def setDerivedValue( any: Any ) = jattributeInstance.setDerivedValue( any )
-    
+
     /**
      * Returns the internal value of the attribute.
      */
@@ -60,7 +60,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * Returns the name of this attribute.
      */
     def name = jattributeInstance .getAttributeDef().getName()
-    
+
     /**
      * Returns the AttributeDef for this attribute.
      */
@@ -112,12 +112,12 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      *      if ( view.Entity.Attr @== 0 )...
      */
     def @==( other: Any ) = compare( other ) == 0
-    
-    def <( other: AttributeInstance ) = compare( other ) < 0 
-    def >( other: AttributeInstance ) = compare( other ) > 0 
-    def >=( other: AttributeInstance ) = compare( other ) >= 0 
-    def <=( other: AttributeInstance ) = compare( other ) <= 0 
-    def !=( other: AttributeInstance ) = compare( other ) != 0 
+
+    def <( other: AttributeInstance ) = compare( other ) < 0
+    def >( other: AttributeInstance ) = compare( other ) > 0
+    def >=( other: AttributeInstance ) = compare( other ) >= 0
+    def <=( other: AttributeInstance ) = compare( other ) <= 0
+    def !=( other: AttributeInstance ) = compare( other ) != 0
 
     def +( x: Int ) = toInt + x
     def +( x: Float ) = toDouble + x
@@ -154,11 +154,11 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     }
 
     override def equals(other: Any) = compare( other ) == 0
-    
+
     /**
      * Returns the attribute value as a string.  If the context is not specified then
      * the default context will be used.
-     * 
+     *
      * toString() is the preferred method for getting a string value.  This is included
      * for compatibility with the Java way of getting strings.
      */
@@ -167,19 +167,26 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     /**
      * Returns the attribute value as a string.  If the context is not specified then
      * the default context will be used.
-     * 
+     *
      * toString() is the preferred method for getting a string value.  This is included
-     * for compatibility with the Java way of doing things. 
+     * for compatibility with the Java way of doing things.
      */
     def toString( contextName : String = "" ) = jattributeInstance.getString( contextName )
-    
+
     /**
-     * Returns the value of the attribute using the default context.
+     * Returns the value of the attribute as a string using the default context.
      */
     override def toString = jattributeInstance.getString( "" )
-    
+
     private def checkNull() = if ( isNull ) throw new ZeidonException( "Attribute is null" ).prependAttributeDef( attributeDef )
 
+    /**
+     * Returns true if this attribute is "truthy"
+     *
+     * A truthy attribute is an attribute that is not null and the internal value can
+     * be intepreted as "true".  E.g. an integer is non-0.  The advantage of this over
+     * toBoolean is that it can handle null attributes.
+     */
     def isTruthy: Boolean = { ! isNull && toBoolean }
     def toBoolean: Boolean = { checkNull(); jattributeInstance.getBoolean() }
     def toInt: Int = { checkNull(); jattributeInstance.getInteger() }

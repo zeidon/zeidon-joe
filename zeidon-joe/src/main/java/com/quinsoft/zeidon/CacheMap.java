@@ -26,20 +26,15 @@ package com.quinsoft.zeidon;
  * in the CacheMap of a view will live until the View is garbage collected.
  * The key is a class object to help reduce the number of possible key collisions.
  * </p>
- * <p>
  * For example, application code could cache a value in a task like this:
- * </p>
- * <p>
- * <pre>
- * {@code
+ * <pre><code>
  * Task task = ...
  * MyCache value = task.getCacheMap( MyCache.class );
  * if ( value == null ) {
  *     value = ...
  *     value = task.putCacheMap( MyCache.class, value );
  * }
- * </pre>
- * <p>
+ * </code></pre>
  *
  */
 public interface CacheMap

@@ -26,13 +26,15 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.standardoe.WriteOiToPorStream;
-import com.quinsoft.zeidon.standardoe.WriteOiToXmlStream;
 import com.quinsoft.zeidon.standardoe.WriteOisToJsonStream;
+import com.quinsoft.zeidon.standardoe.WriteOisToXmlStream;
 import com.quinsoft.zeidon.utils.WriteOisToJsonStreamNoIncrementals;
 
 /**
@@ -50,6 +52,7 @@ public class SerializeOi
     private String resourceName;
     private EnumSet<WriteOiFlags> flags = EnumSet.noneOf( WriteOiFlags.class );
     private StreamWriter streamWriter;
+    private Map<Long,SelectSet> rootSelectSets;
 
     public SerializeOi()
     {
@@ -68,6 +71,12 @@ public class SerializeOi
         addViews( views );
     }
 
+    /**
+     * Writes the OI to a temp file.  The name of the temp file is created using File.createTempFile
+     * with the name of the LOD and the desired extension (e.g. .XML or .JSON).
+     *
+     * @return the name of the generated file name.
+     */
     public String toTempFile()
     {
         if ( viewList.size() == 0 )
@@ -75,40 +84,73 @@ public class SerializeOi
 
         View view = viewList.get( 0 );
         String prefix = view.getLodDef().getName() + "_";
-        FileWriter writer = null;
+        File file;
         try
         {
-
-            File file = File.createTempFile( prefix, getFormat().getExtension() );
-            writer = new FileWriter( file );
-            resourceName = file.getAbsolutePath();
-            view.log().debug( "Writing views to temp file %s", resourceName );
-            write( writer );
-            return resourceName;
+            file = File.createTempFile( prefix, getFormat().getExtension() );
         }
         catch ( IOException e )
         {
-            throw ZeidonException.wrapException( e );
+            throw ZeidonException.wrapException( e ).appendMessage( "Filename = %s", prefix );
         }
-        finally
-        {
-            IOUtils.closeQuietly( writer );
-        }
+
+        return toFile( file.getAbsolutePath() );
     }
 
+    /**
+     * Writes the OI to the system temp dir which is determined by java.io.tmpdir.
+     *
+     * @return the name of the generated file name.
+     */
+    public String toTempDir( String baseFilename )
+    {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "Specify at least one view before calling toTempDir()" );
+
+        String tempFile = System.getProperty( "java.io.tmpdir" ) + File.separator + baseFilename;
+        return toFile( tempFile );
+    }
+
+    /**
+     * Serializes the OI to the specified file name.  If the format has not yet been specified
+     * the format will be determined (if possible) from the filename extension.  E.g. "myfile.json"
+     * indicates the format is JSON.
+     *
+     * @param filename
+     *
+     * @return the filename
+     */
     public String toFile( String filename )
     {
+        File file = new File( filename );
+        return toFile( file );
+    }
+
+    /**
+     * Serializes the OI to the specified file name.  If the format has not yet been specified
+     * the format will be determined (if possible) from the filename extension.  E.g. "myfile.json"
+     * indicates the format is JSON.
+     *
+     * @param file
+     *
+     * @return the filename
+     */
+    public String toFile( File file )
+    {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "Specify at least one view before calling toFile()" );
+
+        String filename = file.getAbsolutePath();
         FileWriter writer = null;
         try
         {
-            File file = new File( filename );
             writer  = new FileWriter( file );
             resourceName = filename;
             setFormatFromFilename( resourceName );
             write( writer );
             return resourceName;
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
             throw ZeidonException.wrapException( e ).prependFilename( filename );
         }
@@ -139,7 +181,7 @@ public class SerializeOi
 
     /**
      * Write the OI to a StringWriter.
-     * 
+     *
      * @return
      */
     public Writer toStringWriter()
@@ -148,6 +190,18 @@ public class SerializeOi
         resourceName = "*String*";
         write( writer );
         return writer;
+    }
+
+    /**
+     * Write the OI to a string and return the string.
+     */
+    @Override
+    public String toString()
+    {
+        if ( viewList.size() == 0 )
+            return "";
+
+        return toStringWriter().toString();
     }
 
     /**
@@ -220,6 +274,12 @@ public class SerializeOi
         return viewList;
     }
 
+    /**
+     * Get the streamWriter that will serialize the OI to the stream.  If
+     * one hasn't been created then this will do so.
+     *
+     * @return
+     */
     private StreamWriter getStreamWriter()
     {
         if ( streamWriter == null )
@@ -234,7 +294,7 @@ public class SerializeOi
                     break;
 
                 case XML:
-                    streamWriter = new WriteOiToXmlStream();
+                    streamWriter = new WriteOisToXmlStream();
                     break;
 
                 case POR:
@@ -245,10 +305,10 @@ public class SerializeOi
                     throw new ZeidonException( "Unknown format", getFormat() );
             }
         }
-        
+
         return streamWriter;
     }
-    
+
     private void write( Writer writer )
     {
         if ( viewList.size() == 0 )
@@ -294,7 +354,7 @@ public class SerializeOi
         return this;
     }
     /**
-     * @return the format
+     * @return the format.  If it hasn't been set then the default is the Zeidon POR format.
      */
     public StreamFormat getFormat()
     {
@@ -323,5 +383,34 @@ public class SerializeOi
     public SerializeOi compressed()
     {
         return setCompressed( true );
+    }
+
+    public Map<Long, SelectSet> getRootSelectSets()
+    {
+        return rootSelectSets;
+    }
+
+    /**
+     * Only the root entities that are currently selected by a cursor
+     * will be written.
+     *
+     * @return
+     */
+    public SerializeOi onlyCurrentRoots()
+    {
+        if ( rootSelectSets == null )
+            rootSelectSets = new HashMap<>();
+
+        for ( View v : viewList )
+        {
+            if ( ! rootSelectSets.containsKey( v.getOiId() ) )
+            {
+                SelectSet selectSet = v.createSelectSet();
+                selectSet.select( v.cursor( v.getLodDef().getRoot() ) );
+                rootSelectSets.put( v.getOiId(), selectSet );
+            }
+        }
+
+        return this;
     }
 }

@@ -80,7 +80,11 @@ class EntityInstanceImpl implements EntityInstance
     private static final int  FLAG_HIDDEN         = 0x00000400;
 
     private final ObjectInstance  objectInstance;
-    private final EntityDef      entityDef;
+    private final EntityDef       entityDef;
+
+    /**
+     * Depth of this EI from the root.  If this is root then depth = 1.
+     */
     private final int             depth;
     private final long            entityKey;
 
@@ -820,11 +824,7 @@ class EntityInstanceImpl implements EntityInstance
             return;  // EI doesn't have any children who are lazy loaded.
 
         Set<EntityDef> set = getEntitiesLoadedLazily();
-        for ( EntityDef child: getEntityDef().getChildren() )
-        {
-            // We'll just add all children regardless of whether they belong.
-            set.add( child );
-        }
+        set.addAll( getEntityDef().getChildren() ); // We'll just add all children regardless of whether they are lazyload.
     }
 
     boolean hasChildBeenLazyLoaded( EntityDef childEntityDef )
@@ -1411,7 +1411,7 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( isLinked( s ) )
             return false;
-        
+
         linkInternalInstances( s );
         return true;
     }
@@ -1581,7 +1581,7 @@ class EntityInstanceImpl implements EntityInstance
             newInstance.linkedInstances = linkedInstances;
             newInstance.persistentAttributes = persistentAttributes;
             newInstance.attributeInstanceMap = null;
-            
+
             assert assertLinkedInstances() : "Error with linked instances";
         }
     }
@@ -1893,7 +1893,7 @@ class EntityInstanceImpl implements EntityInstance
         // If this entity has been changed then set the flag for the OI.
         if ( isChanged() )
             getObjectInstance().setUpdated( true );
-        
+
         assert assertLinkedInstances() : "Error with linked instances";
     }
 
@@ -2381,7 +2381,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         return getLinkedInstances( includeDropped, false );
     }
-    
+
     /**
      * Validate that all the linked instances have correct data.
      */
@@ -2389,7 +2389,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         if ( linkedInstances == null )
             return true;
-        
+
         for ( EntityInstanceImpl ei : linkedInstances.keySet() )
         {
             if ( ei == null )
@@ -3749,16 +3749,16 @@ class EntityInstanceImpl implements EntityInstance
     /**
      * This returns an object that can be used to compare two EIs to see if they
      * are linked.  E.g. ei1 and ei2 are linked if:
-     * 
+     *
      *      ei1.getUniqueLinkedObject() == ei2.getUniqueLinkedObject()
-     *  
+     *
      *  This can be used to create hashmaps.
      */
     Object getUniqueLinkedObject()
     {
         return persistentAttributes;
     }
-    
+
     /**
      * @return The total number of non-hidden twins for this entity, including this one.
      */
@@ -3827,6 +3827,15 @@ class EntityInstanceImpl implements EntityInstance
         return entitiesLoadedLazily;
     }
 
+    /**
+     * Returns true if this EI has attempted to load any lazy-load children.
+     * @return
+     */
+    boolean hasLoadedLazyChildren()
+    {
+        return entitiesLoadedLazily != null && entitiesLoadedLazily.size() > 0;
+    }
+
     @Override
     public AttributeInstance getAttribute( String attributeName )
     {
@@ -3840,23 +3849,14 @@ class EntityInstanceImpl implements EntityInstance
         return getAttribute( null, attributeDef );
     }
 
-
+    /**
+     * @deprecated use getAttributes( includeNullValues ) instead.
+     */
+    @Deprecated
     @Override
     public List<AttributeInstance> attributeList( boolean includeNullValues )
     {
-        List<AttributeInstance> list = new ArrayList<>();
-        if ( includeNullValues )
-        {
-            for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
-                list.add( getAttribute( attributeDef ) );
-        }
-        else
-        {
-            for ( AttributeDef attributeDef : getNonNullAttributeList() )
-                list.add( getAttribute( attributeDef ) );
-        }
-
-        return list;
+        return getAttributes( includeNullValues );
     }
 
     synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
@@ -3955,5 +3955,29 @@ class EntityInstanceImpl implements EntityInstance
     private static class EntityDefLinkInfo
     {
         private final ConcurrentMap<EntityDef, Boolean> mayBeLinked = new MapMaker().concurrencyLevel( 4 ).makeMap();
+    }
+
+    @Override
+    public List<AttributeInstance> getAttributes()
+    {
+        return getAttributes( true );
+    }
+
+    @Override
+    public List<AttributeInstance> getAttributes( boolean includeNullValues )
+    {
+        List<AttributeInstance> list = new ArrayList<>();
+        if ( includeNullValues )
+        {
+            for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
+                list.add( getAttribute( attributeDef ) );
+        }
+        else
+        {
+            for ( AttributeDef attributeDef : getNonNullAttributeList() )
+                list.add( getAttribute( attributeDef ) );
+        }
+
+        return list;
     }
 }

@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +32,7 @@ import org.joda.time.LocalDateTime;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
@@ -114,6 +116,11 @@ public class WriteOisToJsonStream implements StreamWriter
 
     private void writeOi( View view ) throws Exception
     {
+        SelectSet rootSelectSet = null;
+        Map<Long, SelectSet> sets = options.getRootSelectSets();
+        if ( sets != null )
+            rootSelectSet = sets.get( view.getOiId() );
+
         writeOiMeta( view );
 
         EntityDef lastEntityDef = null;
@@ -123,17 +130,14 @@ public class WriteOisToJsonStream implements StreamWriter
               ei != null;
               ei = ei.getNextTwin() )
         {
+            // If we have a root select set and the EI is not selected then skip it.
+            if ( rootSelectSet != null && rootSelectSet.isSelected( ei ) )
+                continue;
+
             lastEntityDef = writeEntity( ei, lastEntityDef );
         }
 
-        // If lastEntityDef is null then the OI is empty so write a start array
-        // to indicate it's empty.
-        if ( lastEntityDef == null )
-        {
-//            jg.writeStartObject();
-//            jg.writeEndObject();
-        }
-        else
+        if ( lastEntityDef != null )
             jg.writeEndArray();
     }
 
@@ -297,6 +301,15 @@ public class WriteOisToJsonStream implements StreamWriter
 
         if ( ei.isIncomplete() )
             jg.writeStringField( "incomplete", "true" );
+
+        if ( ei.hasLoadedLazyChildren() )
+        {
+            StringBuilder sb = new StringBuilder();
+            for ( EntityDef def : ei.getEntitiesLoadedLazily() )
+                sb.append( "," ).append( def.getName() );
+            sb.deleteCharAt( 0 );
+            jg.writeStringField( "lazyLoaded", sb.toString() );
+        }
 
         if ( recordOwner != null )
         {

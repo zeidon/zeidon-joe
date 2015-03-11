@@ -39,21 +39,21 @@ import com.quinsoft.zeidon.utils.ZeidonInputStream;
  * convenience methods activate() and activateFirst().  Can deserialize an OI
  * from different sources and formats.  The standard example looks like:
  *
- * <code>
+ * <pre><code>
  *       View stud2 = zencas.deserializeOi()
  *                           .fromResource( "/tmp/stud2.json" )
  *                           .setLodDef( "lStudDpt" )
  *                           .asJson()
  *                           .activateFirst();
- * </code
+ * </code></pre>
  *
  * Some configuration values can be implied from the other values or from the
  * the serialized stream.  The above sample can be simplified:
- * <code>
+ * <pre><code>
  *       View stud2 = zencas.deserializeOi()
  *                           .fromResource( "/tmp/stud2.json" )
  *                           .activateFirst();
- * </code
+ * </code></pre>
  */
 public class DeserializeOi
 {
@@ -220,6 +220,11 @@ public class DeserializeOi
         }
     }
 
+    /**
+     * Activate all the OIs from the stream and return a list of views.
+     *
+     * @return list of views in the stream.
+     */
     public List<View> activate()
     {
         try
@@ -237,7 +242,7 @@ public class DeserializeOi
     /**
      * Activates the OI(s) from the stream and returns the first one.
      *
-     * @return
+     * @return the first View from the stream.
      */
     public View activateFirst()
     {
@@ -374,26 +379,6 @@ public class DeserializeOi
     {
         this.application = task.getApplication( appName );
         return this;
-    }
-
-    /**
-     * Add data about the activate options to the exception.
-     *
-     * @param e
-     * @return
-     */
-    public ZeidonException decorateException( ZeidonException e )
-    {
-        if ( lodDef != null )
-            e.prependLodDef( lodDef );
-
-        if ( inputStream instanceof ZeidonInputStream )
-            e.prependFilename( ((ZeidonInputStream) inputStream).getDescription() );
-        else
-        if ( resourceName != null )
-            e.prependFilename( resourceName );
-
-        return e;
     }
 
     public EnumSet<ActivateFlags> getFlags()

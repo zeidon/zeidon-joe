@@ -32,23 +32,46 @@ public interface Application
     String getName();
 
     /**
-     * Return the LodDef; load it from the .xod if necessary.
+     * Return the LodDef; load it from the .xod if necessary.  The LodDef
+     * will be cached indefinitely.
      *
-     * @param taskQual - Used for logging only.
+     * @param taskQual - Used for logging only; specifies the task to perform logging.
      * @param name - Name of the LodDef.
-     * @return
+     *
+     * @return the LodDef
      */
     LodDef getLodDef( TaskQualification taskQual, String name );
 
+    /**
+     * Returns the path of the directory that holds the .XOD files for this application.
+     * The OE will use this path when attempting to load LodDefs.
+     *
+     * It may be a relative path, a absolute path, or a path on the classpath.  In standard
+     * use the path will reference a directory in the classpath (e.g. in a .jar file).
+     *
+     * @return path to .XOD files.
+     */
     String getObjectDir();
-    String getBinDir();
-    String getLocalDir();
-    String getSharedDir();
-    String getSourceDir();
-    String getQlplrDir();
+
+    /**
+     * Returns the default Java package name for this application.
+     *
+     * @return default package name.
+     */
     String getPackage();
 
+    /**
+     * Get the domain by name for this application.
+     * @param name domain name
+     * @return Domain object.
+     */
     Domain getDomain( String name );
+
+    /**
+     *
+     * @param name
+     * @return
+     */
     View getViewByName( String name );
     void dropNameForView( String name, View view );
     void dropView( View view );

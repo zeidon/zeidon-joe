@@ -46,11 +46,27 @@ trait ZeidonOperations {
     }
 
     /**
-     * For use inside of view.Entity.each{} loops, this will break execution of the
+     * Includes an entity.  Use like:
+     * {{{
+     * INCLUDE( targetView.EntityName ) FROM sourceView.EntityName
+     * }}}
+     * To specify a cursor position, use:
+     * {{{
+     * INCLUDE( targetView.EntityName ) FROM( sourceView.EntityName, CursorPosition.LAST )
+     * }}}
+     */
+    def INCLUDE( cursor: EntityCursor ) = new EntityIncluder( cursor )
+    
+    /**
+     * For use inside of view.Entity.each{} and FOREACH loops, this will break execution of the
      * current entity cursor and continue with the next.
      */
     def next() = Nexts.next()
 
+    /**
+     * For use inside of view.Entity.each{} and FOREACH loops, this will break execution of the
+     * current entity and stop looping.
+     */
     def break() = util.control.Breaks.break()
 
     def log = task.jtask.log()
@@ -88,5 +104,13 @@ trait ZeidonOperations {
                     cursor.iterator.foreach( ei => { if ( predicate() ) nextable { func } } )
                 }
         }
+    }
+    
+    /**
+     * Short-lived class to allow Scala code to mirror VML when including an entity.
+     */
+    class EntityIncluder( val targetCursor: EntityCursor ) {
+        def FROM( source: EntityCursor ) = targetCursor.include( targetCursor )
+        def FROM( source: EntityCursor, position: CursorPosition ) = targetCursor.include( targetCursor, position )
     }
 }

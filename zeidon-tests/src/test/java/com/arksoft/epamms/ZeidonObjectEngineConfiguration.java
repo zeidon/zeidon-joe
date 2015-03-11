@@ -66,8 +66,15 @@ public class ZeidonObjectEngineConfiguration extends DefaultJavaOeConfiguration
         {
             if ( notification.getCause() == RemovalCause.EXPIRED )
             {
-                notification.getValue().log().info( "This task was ejected from task cache map because it expired." );
-                notification.getValue().dropTask(); // Tell Zeidon to drop this task from the task list.
+                // It's possible that the SystemTask will be ejected.  This is ok because this cache is only
+                // used to prevent GC on a task and the JOE keeps a reference to the system task.  However,
+                // we won't drop it.
+                Task task = notification.getValue();
+                if ( task != task.getSystemTask() )
+                {
+                    notification.getValue().log().info( "This task was ejected from task cache map because it expired." );
+                    notification.getValue().dropTask(); // Tell Zeidon to drop this task from the task list.
+                }
             }
         }
     }

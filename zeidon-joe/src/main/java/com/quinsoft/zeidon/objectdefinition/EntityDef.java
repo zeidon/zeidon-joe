@@ -983,13 +983,13 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
-     * @return true if this EntityDef has hashkey attributes. 
+     * @return true if this EntityDef has hashkey attributes.
      */
     public boolean hasAttributeHaskKeys()
     {
         return hashKeyAttributes == null;
     }
-    
+
     /**
      * @return the hashKeyAttribute
      */
@@ -1177,7 +1177,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     {
         try
         {
-            return getLodDef().getScalaHelper( view ).executeEntityConstraint( view, this, type );
+            return view.getTask().getScalaHelper().executeEntityConstraint( view, this, type );
         }
         catch ( Exception e )
         {
