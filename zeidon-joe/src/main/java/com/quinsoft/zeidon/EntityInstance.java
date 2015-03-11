@@ -568,7 +568,8 @@ public interface EntityInstance
 
     /**
      * Iterates through all the children of 'this' in heir order.  If includeParent
-     * is true, then the iteration includes 'this' at the beginning.
+     * is true, then the iteration includes 'this' at the beginning.  This will lazy-load
+     * any child entities.
      *
      * @param includeParent If true, include 'this'.
      *
@@ -579,7 +580,8 @@ public interface EntityInstance
     /**
      *
      * Iterates through all the children of 'this' in heir order.  If includeParent
-     * is true, then the iteration includes 'this' at the beginning.
+     * is true, then the iteration includes 'this' at the beginning.  If this is
+     * called on an EntityCursor then the cursors will be updated.
      *
      * @param includeParent if true, include 'this'.
      * @param excludeHidden if true, exclude hidden entites.

@@ -123,9 +123,8 @@ public interface TaskQualification extends Lockable
     View activateEmptyObjectInstance( LodDef lodDef );
 
     /**
-     * @deprecated use QualficationBuilder instead.
+     * Activates using the specified options.  This call is normally made from QualificationBuilder.
      */
-    @Deprecated
     View activateObjectInstance( ActivateOptions options ) throws UnknownLodDefException;
 
     /**

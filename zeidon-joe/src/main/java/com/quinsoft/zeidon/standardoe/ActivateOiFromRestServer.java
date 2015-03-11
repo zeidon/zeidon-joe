@@ -47,7 +47,7 @@ import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
  * @author dgc
  *
  */
-public class ActivateOiFromRestServer implements Activator
+class ActivateOiFromRestServer implements Activator
 {
     final private String serverUrl;
 

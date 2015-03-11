@@ -27,18 +27,18 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * @author DG
+ * Implementation of EventData.
  *
  */
-public class EventDataImpl implements EventData
+class EventDataImpl implements EventData
 {
     private final Task task;
-    
+
     private View           view;
     private EntityDef     entityDef;
     private AttributeDef  attributeDef;
     private EntityInstance entityInstance;
-    
+
     /**
      * @param task
      */
@@ -58,25 +58,25 @@ public class EventDataImpl implements EventData
         entityInstance = ei;
         return this;
     }
-    
+
     public EventDataImpl setView( View v )
     {
         view = v;
         return this;
     }
-    
+
     public EventDataImpl setEntityDef( EntityDef ve )
     {
         entityDef = ve;
         return this;
     }
-    
+
     public EventDataImpl setAttributeDef( AttributeDef va )
     {
         attributeDef = va;
         return this;
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EventData#getTask()
      */

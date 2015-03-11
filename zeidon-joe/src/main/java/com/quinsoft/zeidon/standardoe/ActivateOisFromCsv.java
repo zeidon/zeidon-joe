@@ -27,9 +27,9 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
- *
+ * Load an OI from a CSV.
  */
-public class ActivateOisFromCsv implements StreamReader
+class ActivateOisFromCsv implements StreamReader
 {
     private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
                                                                                CreateEntityFlags.fIGNORE_MAX_CARDINALITY,

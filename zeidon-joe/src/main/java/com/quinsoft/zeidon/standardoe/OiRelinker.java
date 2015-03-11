@@ -30,10 +30,7 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 /**
- * This relinks multiple OIs.
- *
- * @author DG
- *
+ * This relinks multiple OIs.  Intended to be used by a DB Handler.
  */
 public class OiRelinker
 {

@@ -22,9 +22,8 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.EnumSet;
 
 /**
- * Enum of IncrementalEntity flags.
- *
- * @author DG
+ * Enum of IncrementalEntity flags.  Used to explicitly set the incremental
+ * flags for an entity instance.
  *
  */
 public enum IncrementalEntityFlags

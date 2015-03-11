@@ -33,8 +33,11 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
 /**
- * Determines where an OI is activated from by the oiSourceUrl.  E.g. if
+ * Determines where an OI is activated the oiSourceUrl.  E.g. if
  * URL begins with "jdbc:" then the source is a JDBC database.
+ *
+ * This is the default OI selector used by Zeidon.  It can be
+ * overridden when instantiating a JavaObjectEngine.
  *
  */
 public class DefaultOiSourceSelector implements OiSourceSelector

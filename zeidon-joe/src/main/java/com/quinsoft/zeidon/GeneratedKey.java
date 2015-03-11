@@ -23,6 +23,8 @@ package com.quinsoft.zeidon;
  * is DB-specific, e.g. integer for MySql, GUID for Sql Server, or Object ID for MongoDB.
  * The value can be extracted only as a string in application code.
  *
+ * This is paired with GeneratedKeyDomain.
+ *
  */
 public interface GeneratedKey
 {

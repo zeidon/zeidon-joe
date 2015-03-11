@@ -29,7 +29,6 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
 
 /**
  * A simple forwarder for the ObjectEngine interface.
- * @author dg
  *
  */
 public abstract class ObjectEngineForwarder implements ObjectEngine

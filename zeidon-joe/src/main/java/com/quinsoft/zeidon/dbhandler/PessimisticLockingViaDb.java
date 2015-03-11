@@ -105,11 +105,11 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             user = "unknown";
 
         vlock.cursor( "ZeidonLock" ).createEntity()
-                                    .setAttribute( "LOD_Name", lodDef.getName() )
-                                    .setAttribute( "KeyValue", GLOBAL_KEY )
-                                    .setAttribute( "UserName", user )
-                                    .setAttribute( "Timestamp", new Date() )
-                                    .setAttribute( "AllowRead", "N" );
+                                    .getAttribute( "LOD_Name" ).setValue ( lodDef.getName() )
+                                    .getAttribute( "KeyValue" ).setValue ( GLOBAL_KEY )
+                                    .getAttribute( "UserName" ).setValue ( user )
+                                    .getAttribute( "Timestamp" ).setValue ( new Date() )
+                                    .getAttribute( "AllowRead" ).setValue ( "N" );
 
         addCallStack( vlock.cursor( "ZeidonLock" ) );
         addHostname( vlock.cursor( "ZeidonLock" ) );
@@ -168,11 +168,11 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                 user = "unknown";
 
             vlock.cursor( "ZeidonLock" ).createEntity()
-                                        .setAttribute( "LOD_Name", lodDef.getName() )
-                                        .setAttribute( "KeyValue", ei.getKeyString() )
-                                        .setAttribute( "UserName", user )
-                                        .setAttribute( "Timestamp", new Date() )
-                                        .setAttribute( "AllowRead", "Y" );
+                                        .getAttribute( "LOD_Name" ).setValue ( lodDef.getName() )
+                                        .getAttribute( "KeyValue" ).setValue ( ei.getKeyString() )
+                                        .getAttribute( "UserName" ).setValue ( user )
+                                        .getAttribute( "Timestamp" ).setValue ( new Date() )
+                                        .getAttribute( "AllowRead" ).setValue ( "Y" );
 
             addCallStack( vlock.cursor( "ZeidonLock" ) );
             addHostname( vlock.cursor( "ZeidonLock" ) );
@@ -294,8 +294,8 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             for ( EntityInstance ei : view.cursor( root ).eachEntity() )
             {
                 vlock.cursor( "ZeidonLock" ).createEntity()
-                                            .setAttribute( "LOD_Name", lodDef.getName() )
-                                            .setAttribute( "KeyValue", ei.getKeyString() )
+                                            .getAttribute( "LOD_Name" ).setValue( lodDef.getName() )
+                                            .getAttribute( "KeyValue" ).setValue( ei.getKeyString() )
                                             .setIncrementalFlags( IncrementalEntityFlags.DELETED );
             }
         }

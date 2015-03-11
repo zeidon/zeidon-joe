@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.View;
  * @author dgc
  *
  */
-public class CommitOiToFileDb implements Committer
+class CommitOiToFileDb implements Committer
 {
     private List<ViewImpl>       viewList;
     private Task                 task;

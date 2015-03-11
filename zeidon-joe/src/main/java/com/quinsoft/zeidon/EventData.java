@@ -24,15 +24,12 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Interface that defines data that can be retrieved by a Zeidon EventListener.
- * 
- * @author DG
- *
  */
 public interface EventData
 {
     Task           getTask();
     View           getView();
-    EntityDef     getEntityDef();
-    AttributeDef  getAttributeDef();
+    EntityDef      getEntityDef();
+    AttributeDef   getAttributeDef();
     EntityInstance getEntityInstance();
 }

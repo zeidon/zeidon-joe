@@ -49,7 +49,7 @@ import com.quinsoft.zeidon.ZeidonRestException;
  * @author dgc
  *
  */
-public class CommitToRestServer implements Committer
+class CommitToRestServer implements Committer
 {
     /**
      * The WriteOptions for creating the JSON stream.

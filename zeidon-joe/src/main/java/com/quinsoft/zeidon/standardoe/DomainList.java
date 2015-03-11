@@ -44,7 +44,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.Nu
  * @author DG
  *
  */
-public class DomainList
+class DomainList
 {
     private static final String S_DOMAIN_FILE = "zeidon.xdm";
 

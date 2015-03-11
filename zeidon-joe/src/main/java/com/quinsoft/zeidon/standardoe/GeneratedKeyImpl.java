@@ -22,8 +22,7 @@ import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.ZeidonException;
 
 /**
- * @author dgc
- *
+ * Standard implementation of a GeneratedKey.
  */
 public class GeneratedKeyImpl implements GeneratedKey
 {

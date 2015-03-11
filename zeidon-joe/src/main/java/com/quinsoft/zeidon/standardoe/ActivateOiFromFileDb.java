@@ -26,10 +26,10 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -44,7 +44,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * @author dgc
  *
  */
-public class ActivateOiFromFileDb implements Activator
+class ActivateOiFromFileDb implements Activator
 {
     private TaskImpl        task;
     private ViewImpl        view;

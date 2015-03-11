@@ -29,8 +29,8 @@ import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 
 /**
- * Loads a domain Java class.
- * 
+ * Loads a domain defined in a Java class.
+ *
  * @author DG
  *
  */
