@@ -83,6 +83,8 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private EntityDef    hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
 
+    private boolean      isCaseSensitive = true;
+
     /**
      * If true then this attribute was created at runtime via EntityDef.createDynamicAttributeDef.
      */
@@ -123,6 +125,13 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
                 }
                 break;
 
+            case 'C':
+                if ( reader.getAttributeName().equals( "CASESENS" ))
+                {
+                    isCaseSensitive = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                }
+                break;
+
             case 'D':
                 // DERIVEDC is the name of the Java class that declares the derived function.
                 // Java only (e.g. not in the C OE).
@@ -150,7 +159,6 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
                 else
                 if ( reader.getAttributeName().equals( "DEBUGCHG" ))
                 {
-                    // requires commons-lang-2.4.jar or later
                     debugChange = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
                 }
                 break;
@@ -665,5 +673,10 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     void setDynamicAttribute( boolean isDynamicAttribute )
     {
         this.isDynamicAttribute = isDynamicAttribute;
+    }
+
+    public boolean isCaseSensitive()
+    {
+        return isCaseSensitive;
     }
 }
