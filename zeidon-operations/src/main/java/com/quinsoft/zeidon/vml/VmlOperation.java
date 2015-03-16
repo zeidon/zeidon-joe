@@ -1005,7 +1005,7 @@ public abstract class VmlOperation
       if ( vMsgQ == null )
       {
          vMsgQ = taskQual.activateEmptyObjectInstance( MESSAGE_OBJECT_NAME );
-         vMsgQ.cursor( "Task" ).createEntity().setAttribute( "Id", taskQual.getTask().getTaskId() );
+         vMsgQ.cursor( "Task" ).createEntity().getAttribute( "Id" ).setValue( taskQual.getTask().getTaskId() );
          vMsgQ.setName( MSGQ_OBJECT_NAME );
       }
 
@@ -1018,7 +1018,7 @@ public abstract class VmlOperation
       if ( vMsgQ == null )
       {
          vMsgQ = task.activateEmptyObjectInstance( MESSAGE_OBJECT_NAME );
-         vMsgQ.cursor( "Task" ).createEntity().setAttribute( "Id", task.getTask().getTaskId() );
+         vMsgQ.cursor( "Task" ).createEntity().getAttribute( "Id" ).setValue( task.getTask().getTaskId() );
          vMsgQ.setName( MSGQ_OBJECT_NAME );
       }
 
@@ -4329,7 +4329,7 @@ public abstract class VmlOperation
          nRC = 0;
          //if ( value instanceof DateTime )
          //    return externalValue;
-         cursor.setAttribute( attributeName, value );
+         cursor.getAttribute( attributeName ).setValue( value );
       }
 
       return 0;
@@ -4438,7 +4438,7 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.compareAttribute( attributeName, value );
+         int nRC = cursor.getAttribute( attributeName ).compare( value );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }
@@ -4452,7 +4452,7 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.compareAttribute( attributeName, sbValue.toString( ) );
+         int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }
@@ -4470,7 +4470,7 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.compareAttribute( attributeName, value );
+         int nRC = cursor.getAttribute( attributeName ).compare( value );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }
@@ -4489,7 +4489,7 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor1.compareAttribute( attributeName1, cursor2.getEntityInstance(), attributeName2 );
+         int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ).getString() );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }
@@ -4514,7 +4514,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, value );
+         cursor.getAttribute( attributeName ).setValue( value );
       }
 
       return nRC;
@@ -4531,7 +4531,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, sbValue.toString( ) );
+         cursor.getAttribute( attributeName ).setValue( sbValue.toString( ) );
       }
 
       return nRC;
@@ -4550,7 +4550,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, value );
+         cursor.getAttribute( attributeName ).setValue( value );
       }
 
       return nRC;
@@ -4569,7 +4569,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, value );
+         cursor.getAttribute( attributeName ).setValue( value );
       }
 
       return nRC;
@@ -4610,7 +4610,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, value );
+         cursor.getAttribute( attributeName ).setValue( value );
       }
 
       return nRC;
@@ -4641,7 +4641,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, srcView );
+         cursor.getAttribute( attributeName ).setValue( srcView );
       }
 
       return nRC;
@@ -4660,7 +4660,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.setAttribute( attributeName, blob, "" );
+         cursor.getAttribute( attributeName ).setValue( blob, "" );
       }
 
       return nRC;
@@ -4700,7 +4700,7 @@ public abstract class VmlOperation
       }
       else
       {
-         if ( contextName.equals("Month"))
+         if ( contextName.equals( "Month" ))
          {
             int nMonths = ((Number) value).intValue();
             DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
@@ -4708,7 +4708,7 @@ public abstract class VmlOperation
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
-         if ( contextName.equals("Day"))
+         if ( contextName.equals( "Day" ))
          {
             int nDays = ((Number) value).intValue();
             DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
@@ -7755,10 +7755,10 @@ public abstract class VmlOperation
       if ( StringUtils.isBlank( feedback ) == false )
       {
          v.cursor( "Feedback" ).createEntity( CursorPosition.LAST );
-         v.cursor( "Feedback" ).setAttribute( "UserId", szUserId );
-         v.cursor( "Feedback" ).setAttribute( "Dialog", dialogTag );
-         v.cursor( "Feedback" ).setAttribute( "Window", windowTag );
-         v.cursor( "Feedback" ).setAttribute( "Comment", feedback );
+         v.cursor( "Feedback" ).getAttribute( "UserId" ).setValue( szUserId );
+         v.cursor( "Feedback" ).getAttribute( "Dialog").setValue( dialogTag );
+         v.cursor( "Feedback" ).getAttribute( "Window" ).setValue( windowTag );
+         v.cursor( "Feedback" ).getAttribute( "Comment" ).setValue( feedback );
          CommitObjectInstance( v );
          return 0;
       }
@@ -8609,7 +8609,7 @@ public abstract class VmlOperation
 
       File file = new File( directory );
       boolean exists;
-
+ 
       if ( file.exists() )
       {
          if ( (bDirectory != 0 && file.isDirectory()) || (bDirectory == 0 && file.isFile()) )
