@@ -83,7 +83,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private EntityDef    hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
 
-    private boolean      isCaseSensitive = true;
+    private boolean      isCaseSensitive = false;
 
     /**
      * If true then this attribute was created at runtime via EntityDef.createDynamicAttributeDef.
