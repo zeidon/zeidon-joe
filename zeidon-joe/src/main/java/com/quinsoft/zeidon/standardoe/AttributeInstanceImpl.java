@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
@@ -357,5 +358,17 @@ class AttributeInstanceImpl implements AttributeInstance
     {
         attributeValue.multiplyAttribute( getTask(), this, value );
         return entityInstance;
+    }
+
+    @Override
+    public boolean isBlank()
+    {
+        return isEmpty() || StringUtils.isBlank( getString() );
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return isNull() || compare( "" ) == 0;
     }
 }

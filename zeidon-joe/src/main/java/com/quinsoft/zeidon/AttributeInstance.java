@@ -252,6 +252,28 @@ public interface AttributeInstance
     boolean isNull();
 
     /**
+     * Returns true if attribute value is:
+     *  Null
+     *  -or-
+     *  Comparison with "" is true (which is domain-specific).
+     *  -or-
+     *  String value is all white-space.
+     *
+     * @return true if Null, empty string, or whitespace.
+     */
+    boolean isBlank();
+
+    /**
+     * Returns true if attribute value is:
+     *  Null
+     *  -or-
+     *  Comparison with "" is true (which is domain-specific).
+     *
+     * @return true if Null or empty string.
+     */
+    boolean isEmpty();
+
+    /**
      * Determines if the attribute value has been updated since it was loaded from the
      * database.  I.e. this can be considered as a 'dirty' flag.  If the OI is committed
      * this attribute will be updated.
