@@ -1048,6 +1048,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     stmt.appendWhere( " IS NULL " );
             }
             else
+            if ( StringUtils.equals( qualAttrib.oper, "LIKE" ) )
+            {
+                stmt.appendWhere( qualAttrib.oper, " \"", qualAttrib.value, "\"" );
+            }
+            else
             {
                 Domain domain = dataField.getAttributeDef().getDomain();
                 StringBuilder buffer = new StringBuilder();
