@@ -58,7 +58,7 @@ public class DefaultOiSourceSelector implements OiSourceSelector
                                 .appendMessage( "Configuration source: %s", options.getConfigSource() )
                                 .appendMessage( "Application: %s", options.getApplication().getName() );
 
-        if ( url.startsWith( "jdbc:" ) )
+        if ( url.startsWith( "jdbc:" ) || url.startsWith( "testsql:" ) )
             return new ActivateOiFromDB();
 
         if ( url.startsWith( "http:" ) || url.startsWith( "https:" ) )

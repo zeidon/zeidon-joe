@@ -8,9 +8,15 @@
         <version>1.3.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.quinsoft.zeidon</groupId>
     <artifactId>zruby</artifactId>
     <packaging>jar</packaging>
     <name>zruby</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>zeidon-joe</artifactId>
+            <version>${project.parent.version}</version>  
+        </dependency>
+    </dependencies>
 </project>

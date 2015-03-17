@@ -86,6 +86,9 @@ public class JdbcHandlerUtils
             if ( conn.startsWith( "jdbc:sqlite:" ) )
                 handlerName = SqliteJdbcHandler.class.getCanonicalName();
             else
+            if ( conn.startsWith( "testsql:" ) )
+                handlerName = TestSqlHandler.class.getCanonicalName();
+            else
                 handlerName = JdbcHandler.class.getCanonicalName();
         }
 

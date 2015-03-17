@@ -161,6 +161,14 @@ class SimpleTest
         oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
 
+        Task cheetah = oe.createTask(  "Cheetah" );
+        View fPerson = new QualificationBuilder( cheetah )
+                                .setLodDef( "fPerson" )
+                                .setOiSourceUrl( "testsql:" )
+                                .loadFile( "testdata/Cheetah/KZDBHQUA_fPerson.json" )
+                                .activate();
+        fPerson.logObjectInstance();
+
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
