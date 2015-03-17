@@ -158,7 +158,7 @@ class SimpleTest
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
-        oe.startBrowser();
+//        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
 
         Task cheetah = oe.createTask(  "Cheetah" );
