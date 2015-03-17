@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=1.2
+version=1.3
 echo "Creating javadoc for $version"
 
 pushd ../zeidon-dev
