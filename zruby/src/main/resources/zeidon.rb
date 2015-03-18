@@ -1,8 +1,8 @@
 include Java
 
-include_class 'com.quinsoft.zeidon.standardoe.JavaObjectEngine'
-include_class 'com.quinsoft.zeidon.CursorPosition'
-include_class 'com.quinsoft.zeidon.CursorResult'
+java_import 'com.quinsoft.zeidon.standardoe.JavaObjectEngine'
+java_import 'com.quinsoft.zeidon.CursorPosition'
+java_import 'com.quinsoft.zeidon.CursorResult'
 
 #alias :where :lambda
 
@@ -82,7 +82,7 @@ module Zeidon
   end # Application
   
   class Task
-    include_class "com.quinsoft.zeidon.ActivateFlags"
+    java_import "com.quinsoft.zeidon.ActivateFlags"
     attr_reader :jtask
 
     def initialize( app, jtask )
@@ -151,117 +151,8 @@ module Zeidon
     end
   end # View
   
-  class Cursor
-    attr_reader :jcursor
-
-    def initialize view, entity_name
-      @view = view
-      raise "Internal error" unless @view.kind_of? View
-      @jcursor = @view.jview.cursor( entity_name )
-      @jentityDef = @jcursor.getEntityDef
-   end
-
-    def get_name
-      return @jentityDef.getName
-    end
-
-    def get_parent
-      jparent = @jcursor.getParent
-      return nil if jparent.nil?
-      return @view.cursor( jparent.getName )
-    end
-
-    def attributes
-      return @attributes.values
-    end
-    
-    def get_attribute attr
-      return @jcursor.getAttribute( attr )
-    end
-    
-    def get_key
-      @attributes.each_pair do |name,attr|
-        return attr if attr.is_key?
-      end
-    end
-
-    def set_attribute attr, *args
-      value = args[0]
-      value = value.internal_value if value.kind_of?( Attribute )
-      @jcursor.setAttribute( attr, value );
-    end
-
-    def include_subobject( cursor )
-      @jcursor.includeSubobject( cursor.jcursor, CursorPosition::LAST )
-    end
-
-    def each( args = {} )
-      if args[:scope]
-        if args[:scope] == :oi
-          rc = @jcursor.setFirstWithinOi
-        else
-          rc = @jcursor.setFirst( args[:scope] )
-        end
-      else
-        rc = @jcursor.setFirst
-      end
-
-      while ( rc.isSet )
-        yield self
-        rc = @jcursor.setNextContinue
-      end
-    end
- 
-    def matching( args = {} ) # not fully functional
-      matches = []
-      if args[:scope]
-        if args[:scope] == :oi
-          rc = @jcursor.setFirstWithinOi
-          @jcursor.logEntity
-        else
-          rc = @jcursor.setFirst( args[:scope] )
-        end
-      else
-        rc = @jcursor.setFirst
-      end
-
-      while ( rc.isSet )
-        # What do we add to matches?
-        matches << yield 
-        rc = @jcursor.setNextContinue
-      end
-      
-    end
-
-    def create( position = CursorPosition::NEXT )
-      @jcursor.createEntity( position )
-    end
-
-    def each_child
-      @jcursor.getEntityDef.getChildren.each do |jve|
-        yield @view.cursor( jve.getName )
-      end
-    end
-
-    def respond_to?( id )
-      return @jcursor.respond_to?( id ) || @attributes[id.to_s] || id.to_s =~ /(.*)=/ || super
-    end
-    
-    def method_missing( id, *args, &block )
-      return @jcursor.send( id, *args, &block ) if @jcursor.respond_to?( id )
-      return get_attribute( id.to_s ) if ! @jentityDef.getAttribute( id.to_s ).nil?
-      
-      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
-      if id.to_s =~ /(.*)=/
-        name = $1
-        return set_attribute( name, *args ) if @attributes[name]
-      end
-      super
-    end
-  end # Cursor
-
   class Qualification
-    include_class "com.quinsoft.zeidon.utils.QualificationBuilder"
+    java_import "com.quinsoft.zeidon.utils.QualificationBuilder"
     
     def initialize(jtask, view_od_name)
       @jqual = QualificationBuilder.new( jtask )
@@ -378,9 +269,10 @@ module Zeidon
       createEntity( position )
     end
 
+    # Loop through the child *cursors* of this cursor. 
     def each_child
       getEntityDef.getChildren.each do |jve|
-        yield @view.cursor( jve.getName )
+        yield getView.cursor( jve.getName )
       end
     end
     

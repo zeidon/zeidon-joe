@@ -467,7 +467,7 @@ get '/:application/delete/:loddef' do
     cursor = @view.cursor( @entity )
     key = cursor.get_key.getName
     cursor.setFirst(key, params[:id] )
-    instance = cursor.jcursor.getEntityInstance
+    instance = cursor.getEntityInstance
     puts "Deleting #{instance}"
     session[:messages] << "Entity #{instance} has been deleted and will be committed when OI is saved."
     cursor.deleteEntity
@@ -485,7 +485,7 @@ get '/:application/exclude/:loddef' do
   cursor = @view.cursor( @entity )
   key = cursor.get_key.getName
   cursor.setFirst(key, params[:id] )
-  instance = cursor.jcursor.getEntityInstance
+  instance = cursor.getEntityInstance
   puts "Excluding #{instance}"
   session[:messages] << "Entity #{instance} has been excluded and will be committed when OI is saved."
   cursor.excludeEntity
@@ -499,7 +499,7 @@ get '/:application/moveup/:loddef' do
   cursor.setFirst(key, params[:id] )
   temp = @view.new_view
   if temp.cursor( @entity ).setPrev == CursorResult::SET
-    instance = cursor.jcursor.getEntityInstance
+    instance = cursor.getEntityInstance
     puts "Moving #{temp.cursor( @entity ).getEntityInstance} before #{instance}"
     temp.cursor( @entity ).moveSubobject( CursorPosition::PREV, instance )
   else
@@ -516,7 +516,7 @@ get '/:application/movedown/:loddef' do
   cursor.setFirst(key, params[:id] )
   temp = @view.new_view
   if temp.cursor( @entity ).setNext == CursorResult::SET
-    instance = cursor.jcursor.getEntityInstance
+    instance = cursor.getEntityInstance
     puts "Moving up: #{instance}"
     cursor.moveSubobject( CursorPosition::NEXT, temp.cursor( @entity ).getEntityInstance )
   else

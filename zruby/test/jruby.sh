@@ -60,4 +60,5 @@ JMXOPTS="-J-Dcom.sun.management.jmxremote
          -J-Dcom.sun.management.jmxremote.ssl=false"
 
 echo "Calling jruby..."
-jruby -w -J-cp "$cp" $DEBUG_FLAGS $JMXOPTS $* | tee /tmp/jruby.log
+jruby -w -J-cp "$cp" $DEBUG_FLAGS $JMXOPTS $* 2>&1 | tee /tmp/jruby.log
+echo "Log is /tmp/jruby.log"
