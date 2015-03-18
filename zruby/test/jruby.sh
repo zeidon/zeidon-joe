@@ -23,6 +23,11 @@ while getopts "cdx:" option; do
     esac
 done
 
+if [ -z "$1" ]; then
+    echo "Script to execute is required"
+    exit
+fi
+
 #
 # Create a temp file with the classpath.
 #
@@ -54,4 +59,5 @@ JMXOPTS="-J-Dcom.sun.management.jmxremote
          -J-Dcom.sun.management.jmxremote.authenticate=false
          -J-Dcom.sun.management.jmxremote.ssl=false"
 
-jruby -J-cp "$cp" $DEBUG_FLAGS $JMXOPTS $* | tee /tmp/jruby.log
+echo "Calling jruby..."
+jruby -w -J-cp "$cp" $DEBUG_FLAGS $JMXOPTS $* | tee /tmp/jruby.log

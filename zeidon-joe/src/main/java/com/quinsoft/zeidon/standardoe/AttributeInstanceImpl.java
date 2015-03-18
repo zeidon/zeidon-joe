@@ -38,7 +38,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 class AttributeInstanceImpl implements AttributeInstance
 {
     private       View               view;
-    private final AttributeDef      attributeDef;
+    private final AttributeDef       attributeDef;
     private final AttributeValue     attributeValue;
     private final EntityInstanceImpl entityInstance;
 

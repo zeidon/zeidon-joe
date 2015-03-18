@@ -331,19 +331,56 @@ module Zeidon
 
   # Re-open EntityCursor definition and add some Ruby stuff
   class Java::ComQuinsoftZeidonStandardoe::EntityCursorImpl
+
+    def name
+      return entity_def.name
+    end
   
     def has_attribute( attr_name )
       return ! getEntityDef.getAttribute( attr_name.to_s, false ).nil?
     end
   
-    def attributes( include_null_attributes = true )
-      return getAttributes( include_null_attributes )
+    def attributes( options = {} )
+      include_null_attributes = options.fetch( :include_null, true )
+      include_hidden_attributes = options.fetch( :include_hidden, false )
+      list = getAttributes( include_null_attributes )
+      list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
+      return list
     end
     
-    def each_attrib( include_null_attributes = true, &block )
-      iter = attributes( include_null_attributes ).iterator
-      while i.hasNext
-          block.call i.next
+    def each_attrib( options = {} )
+      list = attributes( options )
+      list.each do |attrib|
+        yield attrib
+      end
+    end
+    
+    # Loop through each sibling for this cursor.  Sets the cursor.
+    def each( args = {} )
+      scoping = args[:scope] || args[:scoping] || args[:under] || ""
+      if scoping == :oi
+        iter = allEntities()
+      else
+        iter = eachEntity( scoping )
+      end
+
+      while iter.hasNext
+        yield iter.next
+      end
+    end
+    
+    def get_key
+      # We assume one and-only-one key.
+      attribute( entity_def.keys[ 0 ] )
+    end
+    
+    def create( position = CursorPosition::NEXT )
+      createEntity( position )
+    end
+
+    def each_child
+      getEntityDef.getChildren.each do |jve|
+        yield @view.cursor( jve.getName )
       end
     end
     
@@ -376,6 +413,65 @@ module Zeidon
     end
   end # EntityCursorImpl
   
+  class Java::ComQuinsoftZeidonStandardoe::EntityInstanceImpl
+  
+    def name
+      return entity_def.name
+    end
+  
+    def has_attribute( attr_name )
+      return ! getEntityDef.getAttribute( attr_name.to_s, false ).nil?
+    end
+  
+    def attributes( options = {} )
+      include_null_attributes = options.fetch( :include_null, true )
+      include_hidden_attributes = options.fetch( :include_hidden, false )
+      list = getAttributes( include_null_attributes )
+      list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
+      return list
+    end
+    
+    def each_attrib( options = {} )
+      list = attributes( options )
+      list.each do |attrib|
+        yield attrib
+      end
+    end
+    
+    def get_key
+      # We assume one and-only-one key.
+      attribute( entity_def.keys[ 0 ] )
+    end
+    
+    def respond_to?( id )
+      return true if has_attribute( id )
+      
+      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
+      if id.to_s =~ /(.*)=/
+        name = $1
+        return true if has_attribute( name )
+      end
+  
+      super
+    end
+    
+    def method_missing( id, *args, &block )
+      return getAttribute( id.to_s ) if has_attribute( id )
+      
+      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
+      if id.to_s =~ /(.*)=/
+        name = $1
+        if has_attribute( name )
+          attrib = getAttribute( name )
+          attrib.setValue( args[0] )
+          return attrib 
+        end
+      end
+      
+      super
+    end
+  end # EntityInstanceImpl
+
   # Re-open AttributeInstanceImpl definition and add some Ruby stuff
   class Java::ComQuinsoftZeidonStandardoe::AttributeInstanceImpl
     
@@ -456,7 +552,7 @@ module Zeidon
     # Override the toString() method.
     java_signature 'String toString()'  
     def to_s
-      return getString("")
+      return getString("") || ""
     end
   end # AttributeInstanceImpl
 

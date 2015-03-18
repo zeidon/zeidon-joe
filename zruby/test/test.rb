@@ -16,10 +16,22 @@ puts "email class = #{email.class}"
 puts "email = #{email.getString }"
 
 
-mUser.User.attributes(false).each { |attrib|
+mUser.User.attributes(:include_hidden => false).each { |attrib|
   puts "#{attrib.name} = #{attrib}"
 }
 
-mUser.User.attributes(false).each { |attrib|
+puts "-----------"
+
+mUser.User.each_attrib(:include_hidden => false, :include_null => false) { |attrib|
   puts "#{attrib.name} = #{attrib}"
 }
+
+mUser.Activity.each {
+  puts "Activity.ID = #{mUser.Activity.ID}"
+}
+
+mUser.Activity.each { |attr|
+  puts "Activity.ID = #{attr.ID}"
+}
+
+#mUser.logObjectInstance
