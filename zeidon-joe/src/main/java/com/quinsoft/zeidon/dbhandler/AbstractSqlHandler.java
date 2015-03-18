@@ -549,12 +549,23 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     if ( qualAttrib.attributeDef == null )
                         throw new ZeidonException("QualAttrib with value requires Entity.Attrib");
 
-                    // Get the string value from the qualification object, convert it to the
-                    // domain's internal value, and then to an a string representation of the
-                    // internal value.
                     String value = qualAttribInstance.getAttribute( "Value" ).getString();
-                    Domain domain = qualAttrib.attributeDef.getDomain();
-                    qualAttrib.value = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
+
+                    if ( qualAttrib.oper.equals( "LIKE" ) )
+                    {
+                        // If oper is "LIKE" then a qualification value that is invalid for the domain
+                        // is possible.  E.g. "(617)%' is valid qualification for a phone number.  We'll
+                        // assume the user knows what she's doing so we'll skip domain processing.
+                        qualAttrib.value = value;
+                    }
+                    else
+                    {
+                        // Get the string value from the qualification object, convert it to the
+                        // domain's internal value, and then to an a string representation of the
+                        // internal value.
+                        Domain domain = qualAttrib.attributeDef.getDomain();
+                        qualAttrib.value = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
+                    }
                 }
 
                 //
@@ -1035,6 +1046,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     stmt.appendWhere( " IS NOT NULL " );
                 else
                     stmt.appendWhere( " IS NULL " );
+            }
+            else
+            if ( StringUtils.equals( qualAttrib.oper, "LIKE" ) )
+            {
+                stmt.appendWhere( qualAttrib.oper, " \"", qualAttrib.value, "\"" );
             }
             else
             {
@@ -2068,7 +2084,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( checkForComma && tables.size() > 0 )
             {
             	if ( activatingWithJoins() )
-                    from.append( " JOIN\n");
+                    from.append( " LEFT JOIN\n");
             	else
                     from.append( ",");
             }

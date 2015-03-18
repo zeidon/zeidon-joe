@@ -61,7 +61,7 @@ def input_field_for_attrib( attrib, args = {} )
   name="input[#{attrib.entity_name}][#{attrib.name}]"
 
   # Hidden attributes just get included as hidden fields.
-  if attrib.is_hidden
+  if attrib.hidden?
     return <<-code
     <input type='hidden' 
            name='#{name}'
@@ -120,9 +120,9 @@ def input_fields_for_entity( entity, args = {} )
   args = args.clone # So we can add to the hash without changing original one.
   html = "<table>\n"
   entity.attributes.each do |attrib|
-    html << "<tr>\n<td valign=\"top\">#{attrib.name}:</td>\n" if ! attrib.is_hidden
+    html << "<tr>\n<td valign=\"top\">#{attrib.name}:</td>\n" if ! attrib.hidden?
     html << input_field_for_attrib( attrib, args )
-    html << "\n</tr>\n" if ! attrib.is_hidden
+    html << "\n</tr>\n" if ! attrib.hidden?
   end
   html << "</table>\n"
   return html
@@ -143,18 +143,20 @@ def list_entities( top_entity, args = {} )
 
   # Add column headers.
   html = "<table border='1'>\n<tr><th></th>"
-  html << "<th></th>"  if jtop_view_entity.getAutoSeq != nil 
+  html << "<th></th>"  if jtop_view_entity.getAutoSeq != nil
+  puts "class = #{top_entity.class}" 
   entity_list.each do |entity|
-    html << "<th>#{entity.get_name}--></th>" if entity != top_entity
-    entity.attributes.each do |attrib|
-      next if attrib.is_hidden
+    puts "name = #{entity.name}" 
+    html << "<th>#{entity.name}--></th>" if entity != top_entity
+    entity.entityDef.attributes.each do |attrib|
+      next if attrib.hidden?
       html << "<th>#{attrib.name}</th>"
     end
   end
 
   html << "</tr>\n"
 
-  url_param = "&entity=#{top_entity.get_name}"
+  url_param = "&entity=#{top_entity.name}"
   url_param << "&viewname=#{@view_name}" if args[:viewname]
 
   top_entity.each do # For each top-level entity instance...
@@ -162,11 +164,11 @@ def list_entities( top_entity, args = {} )
 
     links = [] # We'll create a list of edit links and then concat them at the end.
     if args[:include_only] # If true, then we're displaying a list of entities to include
-      links << "<a href='/#{@application}/select/#{@loddef}?id=#{top_entity.get_key.to_str}&entity=#{@entity}&viewname=#{@view_name}'>Select</a>"
+      links << "<a href='/#{@application}/select/#{@loddef}?id=#{top_entity.get_key.to_s}&entity=#{@entity}&viewname=#{@view_name}'>Select</a>"
     else
-      links << "<a href='/#{@application}/edit/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Edit</a>" if jtop_view_entity.isUpdate
-      links << "<a href='/#{@application}/exclude/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Exclude</a>" if jtop_view_entity.isExclude
-      links << "<a href='/#{@application}/delete/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Delete</a>" if jtop_view_entity.isDelete
+      links << "<a href='/#{@application}/edit/#{@loddef}?id=#{top_entity.get_key.to_s}#{url_param}'>Edit</a>" if jtop_view_entity.isUpdate
+      links << "<a href='/#{@application}/exclude/#{@loddef}?id=#{top_entity.get_key.to_s}#{url_param}'>Exclude</a>" if jtop_view_entity.isExclude
+      links << "<a href='/#{@application}/delete/#{@loddef}?id=#{top_entity.get_key.to_s}#{url_param}'>Delete</a>" if jtop_view_entity.isDelete
     end
 
     html << "<td>" << links.join("<br/>") << "</td>"
@@ -174,19 +176,19 @@ def list_entities( top_entity, args = {} )
     # Add move up/down links.
     if jtop_view_entity.getAutoSeq != nil 
       html << "<td>"
-      html << "<a href='/#{@application}/moveup/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Move Up</a><br/>"
-      html << "<a href='/#{@application}/movedown/#{@loddef}?id=#{top_entity.get_key.to_str}#{url_param}'>Move Down</a>"
+      html << "<a href='/#{@application}/moveup/#{@loddef}?id=#{top_entity.get_key.to_s}#{url_param}'>Move Up</a><br/>"
+      html << "<a href='/#{@application}/movedown/#{@loddef}?id=#{top_entity.get_key.to_s}#{url_param}'>Move Down</a>"
       html << "</td>"
     end
 
     entity_list.each do |entity|
       html << "<td></td>" if entity != top_entity
-      entity.attributes.each do |attrib|
-        next if attrib.is_hidden
-        if entity.isNull or attrib.is_null?
+      entity.entityDef.attributes.each do |attrib_def|
+        next if attrib_def.hidden?
+        if entity.isNull or entity.getAttribute( attrib_def ).is_null?
           html << "<td></td>\n"
         else
-          value = attrib.getStringFromAttribute(attrib.name, nil)
+          value = entity.getAttribute( attrib_def ).getString
           if value && value.length > 100
             value = /^([^\n]*)/.match(value)[1][0..100] + "..."
           end
@@ -205,19 +207,19 @@ def list_entities( top_entity, args = {} )
       html += haml <<-code
 %p
 %form{ :action => url('/#{@application}/new/#{@loddef}'),
-       :method => 'get', :enctype => 'multipart/form-data', :name => 'New_#{top_entity.get_name}' }
+       :method => 'get', :enctype => 'multipart/form-data', :name => 'New_#{top_entity.name}' }
   %input{:type => "hidden", :name => "viewname", :value => "#{@view_name}"}
-  %input{:type => "hidden", :name => "entity", :value => "#{top_entity.get_name}"}
-  %input{:type => "submit", :value => "New #{top_entity.get_name}", :class => "button" }
+  %input{:type => "hidden", :name => "entity", :value => "#{top_entity.name}"}
+  %input{:type => "submit", :value => "New #{top_entity.name}", :class => "button" }
 code
     elsif top_entity.getEntityDef.isInclude
       html += haml <<-code
 %p
 %form{ :action => url('/#{@application}/include/#{@loddef}'),
-       :method => 'get', :enctype => 'multipart/form-data', :name => 'Include_#{top_entity.get_name}' }
+       :method => 'get', :enctype => 'multipart/form-data', :name => 'Include_#{top_entity.name}' }
   %input{:type => "hidden", :name => "viewname", :value => "#{@view_name}"}
-  %input{:type => "hidden", :name => "entity", :value => "#{top_entity.get_name}"}
-  %input{:type => "submit", :value => "Include #{top_entity.get_name}", :class => "button" }
+  %input{:type => "hidden", :name => "entity", :value => "#{top_entity.name}"}
+  %input{:type => "submit", :value => "Include #{top_entity.name}", :class => "button" }
 code
     end
   end
@@ -247,7 +249,7 @@ def get_loddef_list app_name
   puts "classpath="
   $CLASSPATH.each{|cp| puts "-> #{cp}"}
   oe = Zeidon.get_object_engine
-  bindir = oe.get_app( app_name ).getBinDir
+  bindir = oe.get_app( app_name ).getObjectDir
   puts "bindir = #{bindir}"
   regex = /^#{bindir}.*\.(XOD|xod)$/
 
@@ -449,7 +451,7 @@ get '/:application/edit/:loddef' do
   %input{:type => "submit", :name => "save", :value => "#{@save_button_text}", :class => "button"}
   %input{:type => "submit", :name => "duplicate", :value => "Duplicate", :class => "button"}
 - @view.cursor( @entity ).each_child do |child_cursor|
-  - cname = child_cursor.get_name
+  - cname = child_cursor.name
   %p
   %table{:border=>"1"}
     %tr
@@ -467,7 +469,7 @@ get '/:application/delete/:loddef' do
     cursor = @view.cursor( @entity )
     key = cursor.get_key.getName
     cursor.setFirst(key, params[:id] )
-    instance = cursor.jcursor.getEntityInstance
+    instance = cursor.getEntityInstance
     puts "Deleting #{instance}"
     session[:messages] << "Entity #{instance} has been deleted and will be committed when OI is saved."
     cursor.deleteEntity
@@ -485,7 +487,7 @@ get '/:application/exclude/:loddef' do
   cursor = @view.cursor( @entity )
   key = cursor.get_key.getName
   cursor.setFirst(key, params[:id] )
-  instance = cursor.jcursor.getEntityInstance
+  instance = cursor.getEntityInstance
   puts "Excluding #{instance}"
   session[:messages] << "Entity #{instance} has been excluded and will be committed when OI is saved."
   cursor.excludeEntity
@@ -499,7 +501,7 @@ get '/:application/moveup/:loddef' do
   cursor.setFirst(key, params[:id] )
   temp = @view.new_view
   if temp.cursor( @entity ).setPrev == CursorResult::SET
-    instance = cursor.jcursor.getEntityInstance
+    instance = cursor.getEntityInstance
     puts "Moving #{temp.cursor( @entity ).getEntityInstance} before #{instance}"
     temp.cursor( @entity ).moveSubobject( CursorPosition::PREV, instance )
   else
@@ -516,7 +518,7 @@ get '/:application/movedown/:loddef' do
   cursor.setFirst(key, params[:id] )
   temp = @view.new_view
   if temp.cursor( @entity ).setNext == CursorResult::SET
-    instance = cursor.jcursor.getEntityInstance
+    instance = cursor.getEntityInstance
     puts "Moving up: #{instance}"
     cursor.moveSubobject( CursorPosition::NEXT, temp.cursor( @entity ).getEntityInstance )
   else
@@ -544,7 +546,7 @@ post '/:application/save/:loddef' do
     cursor = @view.cursor( entity_name )
     values.each_pair do |attrib_name, value|
       attrib = cursor.get_attribute( attrib_name )
-      attrib.set( value ) unless attrib.is_hidden || attrib.isGenKey || ! attrib.isUpdate
+      attrib.set( value ) unless attrib.hidden? || attrib.isGenKey || ! attrib.isUpdate
     end
   end
 
