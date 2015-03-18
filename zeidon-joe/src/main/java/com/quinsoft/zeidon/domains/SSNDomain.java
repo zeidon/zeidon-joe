@@ -20,18 +20,19 @@
 package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author DKS
@@ -51,7 +52,7 @@ public class SSNDomain extends StringDomain
     {
         String strSSN = checkNullString( internalValue );
         if ( strSSN != null && strSSN.isEmpty( ) == false )
-        {               
+        {
            // Validate Social Security number (SSN) using Java reg ex.
            // SSN format xxx-xx-xxxx, xxxxxxxxx, xxx-xxxxxx; xxxxx-xxxx:
            // ^\\d{3}: Starts with three numeric digits.
@@ -62,13 +63,13 @@ public class SSNDomain extends StringDomain
            //
            // Examples: 879-89-8989; 869878789 etc.
 
-        	
+
             // Need to validate for context SSN_SecurityDisplay. How do I do this... since I am not passing the context...
             // Is this something that should be changed, or do we just assume that SSN can have a display context?
-        	// KJS 12/16/17, now this iscoming in as 1090. 
+        	// KJS 12/16/17, now this iscoming in as 1090.
             if (strSSN.indexOf("*****", 0) < 0 && strSSN.length()!= 4)
             {
-            // Initialize reg ex for SSN. 
+            // Initialize reg ex for SSN.
             String expression = "^\\d{3}[- ]?\\d{2}[- ]?\\d{4}$";
             CharSequence inputStr = strSSN;
             Pattern pattern = Pattern.compile( expression );
@@ -81,10 +82,10 @@ public class SSNDomain extends StringDomain
             strSSN = strSSN.replaceAll( "[^0-9]", "" );
             }
        }
-        
+
         super.validateInternalValue( task, attributeDef, strSSN );
     }
-    
+
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
@@ -107,7 +108,7 @@ public class SSNDomain extends StringDomain
     {
     		// no context given.
             validateInternalValue( task, attributeDef, internalValue );
-            
+
             if ( internalValue == null )
                 return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
         	//if ( StringUtils.isBlank((String) internalValue))
@@ -115,18 +116,18 @@ public class SSNDomain extends StringDomain
 
             return(internalValue.toString( ));
     }
-    
+
 
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
     	if ( internalValue == null )
     		return StringDomain.checkNullString(task.getApplication(), null);
-    	
+
     	if ( ! StringUtils.isBlank( contextName ) && ! StringUtils.isBlank( internalValue.toString() ) )
     	{
-            //Object newValue = convertInternalValue( task, attributeDef, internalValue );    	
-            //return newValue.toString();    	
+            //Object newValue = convertInternalValue( task, attributeDef, internalValue );
+            //return newValue.toString();
             DomainContext context = getContext( task, contextName );
             return context.convertToString( task, attributeDef, internalValue );
     	}
@@ -137,7 +138,21 @@ public class SSNDomain extends StringDomain
         //return checkNullString( internalValue );
     }
 
-
+    /**
+     * Generate a random test value for this domain.  This is used by test code to create random
+     * test data.
+     *
+     * @param task current task
+     * @param attributeDef def of the attribute.
+     * @param entityInstance if not null this is the EntityInstance that will store the test data.
+     *
+     * @return random test data for this domain.
+     */
+    @Override
+    public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
+    {
+        return "999-99-9999";
+    }
 
     @Override
     public DomainContext newContext(Task task)
@@ -153,7 +168,7 @@ public class SSNDomain extends StringDomain
         }
 
         private String            editString;
-        
+
         @Override
         public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
@@ -177,14 +192,14 @@ public class SSNDomain extends StringDomain
                {
             	   if ( i < 5 )
             	   {
-	                    tempCharArray[i] = 
-		                        editString.charAt(i);          		
+	                    tempCharArray[i] =
+		                        editString.charAt(i);
             	   }
             	   else
             	   {
-	                    tempCharArray[i] = 
-                        internalString.charAt(i);             		   
-            	   }           		   
+	                    tempCharArray[i] =
+                        internalString.charAt(i);
+            	   }
                }
             }
             else
@@ -192,24 +207,24 @@ public class SSNDomain extends StringDomain
 	            // Look at the JavaEditString (editString) and wherever there is a '9', replace it with
 	            // the correct value from the internalValue.  Otherwise, use whatever format character is
 	            // given.
-	            for (int i = 0; i < formatLength; i++) 
+	            for (int i = 0; i < formatLength; i++)
 	            {
 	            	if ( editString.charAt(i) != '9' )
 	            	{
-	                    tempCharArray[i] = 
-	                        editString.charAt(i);          		
+	                    tempCharArray[i] =
+	                        editString.charAt(i);
 	            	}
 	            	else
 	            	{
-	                    tempCharArray[i] = 
-	                        internalString.charAt(j); 
+	                    tempCharArray[i] =
+	                        internalString.charAt(j);
 	                    j++;
 	            	}
-	            } 
+	            }
             }
-            
+
             return (new String(tempCharArray));
-            
+
         }
 
         /**
@@ -220,7 +235,7 @@ public class SSNDomain extends StringDomain
         {
         	if ( value == null )
         		return null;
-        	
+
             String s = (String) value;
 
             // VML operations use "" as synonymous with null.

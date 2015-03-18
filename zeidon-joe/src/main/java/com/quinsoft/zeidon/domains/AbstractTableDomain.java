@@ -21,8 +21,7 @@ package com.quinsoft.zeidon.domains;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.RandomStringUtils;
+import java.util.Random;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -39,6 +38,8 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  */
 public class AbstractTableDomain extends AbstractDomain implements TableDomain
 {
+    private static final Random RANDOM = new Random();
+
     public AbstractTableDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
@@ -102,6 +103,6 @@ public class AbstractTableDomain extends AbstractDomain implements TableDomain
     {
         List<TableEntry> entries = getTableEntries( task, "" );
         int lth = entries.size();
-        return RandomStringUtils.randomAlphanumeric( lth );
+        return entries.get( RANDOM.nextInt( lth  ) ).getExternalValue();
     }
 }

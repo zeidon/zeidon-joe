@@ -161,15 +161,15 @@ class SimpleTest
 //        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
 
-        Task cheetah = oe.createTask(  "Cheetah" );
-        View fPerson = new QualificationBuilder( cheetah )
-                                .setLodDef( "fPerson" )
-                                .setOiSourceUrl( "testsql:" )
-                                .loadFile( "testdata/Cheetah/KZDBHQUA_fPerson.json" )
-                                .activate();
-        fPerson.logObjectInstance();
-        if ( ! fPerson.isEmpty() )
-            return;
+//        Task cheetah = oe.createTask(  "Cheetah" );
+//        View fPerson = new QualificationBuilder( cheetah )
+//                                .setLodDef( "fPerson" )
+//                                .setOiSourceUrl( "testsql:" )
+//                                .loadFile( "testdata/Cheetah/KZDBHQUA_fPerson.json" )
+//                                .activate();
+//        fPerson.logObjectInstance();
+//        if ( ! fPerson.isEmpty() )
+//            return;
 
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )

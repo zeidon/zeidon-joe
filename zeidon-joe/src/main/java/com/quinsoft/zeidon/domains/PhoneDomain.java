@@ -20,19 +20,19 @@
 package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
-import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author DKS
@@ -54,7 +54,7 @@ public class PhoneDomain extends StringDomain
         if ( phone != null && phone.isEmpty( ) == false )
         {
            // Checks for US style telephone numbers ...
-           // 10 digit accepts () around area code, and doesn't allow preceeding 1 as country code 
+           // 10 digit accepts () around area code, and doesn't allow preceeding 1 as country code
            // Phone Number formats: (nnn)nnn-nnnn; nnnnnnnnnn; nnn-nnn-nnnn
            // ^\\(? : May start with an optional "(" .
            // (\\d{3}): Followed by 3 digits.
@@ -80,7 +80,7 @@ public class PhoneDomain extends StringDomain
 
         super.validateInternalValue( task, attributeDef, phone );
     }
-    
+
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
@@ -125,21 +125,21 @@ public class PhoneDomain extends StringDomain
             validateInternalValue( task, attributeDef, internalValue );
         	if ( internalValue == null )
         		return null;
-        	
+
             return(internalValue.toString( ));
     }
-    
+
 
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
     	if ( internalValue == null )
     		return StringDomain.checkNullString(task.getApplication(), null);
-    	
+
         if ( ! StringUtils.isBlank( contextName ) && ! StringUtils.isBlank( internalValue.toString() ) )
     	{
-            //Object newValue = convertInternalValue( task, attributeDef, internalValue );    	
-            //return newValue.toString();    	
+            //Object newValue = convertInternalValue( task, attributeDef, internalValue );
+            //return newValue.toString();
             DomainContext context = getContext( task, contextName );
             return context.convertToString( task, attributeDef, internalValue );
     	}
@@ -160,7 +160,7 @@ public class PhoneDomain extends StringDomain
                phone = "(" + phone.substring( 0, 3 ) + ") " + phone.substring( 3, 6 ) + "-" + phone.substring( 6 );
 
             return phone;
-    	
+
     	}
         //return checkNullString( internalValue );
     }
@@ -172,6 +172,22 @@ public class PhoneDomain extends StringDomain
         return new PhoneContext( this );
     }
 
+    /**
+     * Generate a RANDOM test value for this domain.  This is used by test code to create RANDOM
+     * test data.
+     *
+     * @param task current task
+     * @param attributeDef def of the attribute.
+     * @param entityInstance if not null this is the EntityInstance that will store the test data.
+     *
+     * @return RANDOM test data for this domain.
+     */
+    @Override
+    public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
+    {
+        return "(617) 555-1212";
+    }
+
     private class PhoneContext extends BaseDomainContext
     {
         public PhoneContext(Domain domain)
@@ -180,42 +196,42 @@ public class PhoneDomain extends StringDomain
         }
 
         private String            editString;
-        
+
         @Override
         public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
-        	
+
         	// If the user has not entered a Java Format string, just return the internal value.
         	if ( editString == null )
         	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
-        	
+
         	int formatLength = editString.length();
         	String internalString = internalValue.toString();
             int j = 0;
             char[] tempCharArray = new char[formatLength];
-            
+
             // Look at the JavaEditString (editString) and wherever there is a '9', replace it with
             // the correct value from the internalValue.  Otherwise, use whatever format character is
             // given.
-            for (int i = 0; i < formatLength; i++) 
+            for (int i = 0; i < formatLength; i++)
             {
             	if ( editString.charAt(i) != '9' )
             	{
-                    tempCharArray[i] = 
-                        editString.charAt(i);          		
+                    tempCharArray[i] =
+                        editString.charAt(i);
             	}
             	else
             	{
-                    tempCharArray[i] = 
-                        internalString.charAt(j); 
+                    tempCharArray[i] =
+                        internalString.charAt(j);
                     j++;
             	}
-            } 
-            
+            }
+
             return (new String(tempCharArray));
-            
+
         }
 
         /**
@@ -226,7 +242,7 @@ public class PhoneDomain extends StringDomain
         {
         	if ( value == null )
         		return null;
-        	
+
             String s = (String) value;
 
             // VML operations use "" as synonymous with null.

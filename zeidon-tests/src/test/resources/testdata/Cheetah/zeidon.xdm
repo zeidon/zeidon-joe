@@ -3354,7 +3354,7 @@ aExternalValue No longer on plan
 aInternalValue NLOP
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aJavaClass com.quinsoft.zeidon.domains.EmailAddressDomain
 aZKey      92658988
 aName      EMailAddress
 aDomainType E
