@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -133,6 +134,18 @@ public interface Domain
 
     Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand );
     Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand );
+
+    /**
+     * Generate a random test value for this domain.  This is used by test code to create random
+     * test data.
+     *
+     * @param task current task
+     * @param attributeDef def of the attribute.
+     * @param entityInstance if not null this is the EntityInstance that will store the test data.
+     *
+     * @return random test data for this domain.
+     */
+    Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance );
 
     /**
      * Creates an empty context which will then be initialized from values in zeidon.xdm.  Used when

@@ -20,11 +20,14 @@
 package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
+import java.util.Random;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -41,6 +44,7 @@ public class StringDomain extends AbstractDomain
     public static final String EMPTY_STRING = "";
 
     private final int maxLth;
+    private final Random random = new Random();
 
     public StringDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
@@ -94,7 +98,7 @@ public class StringDomain extends AbstractDomain
         // If external value is an AttributeInstance then get *its* internal value.
         if ( externalValue instanceof AttributeInstance )
             externalValue = ((AttributeInstance) externalValue).getValue();
-        
+
         return checkNullString( externalValue );
     }
 
@@ -201,5 +205,22 @@ public class StringDomain extends AbstractDomain
         }
 
         return false;
+    }
+
+    /**
+     * Generate a random test value for this domain.  This is used by test code to create random
+     * test data.
+     *
+     * @param task current task
+     * @param attributeDef def of the attribute.
+     * @param entityInstance if not null this is the EntityInstance that will store the test data.
+     *
+     * @return random test data for this domain.
+     */
+    @Override
+    public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
+    {
+        int lth = random.nextInt( attributeDef.getLength() );
+        return RandomStringUtils.randomAlphanumeric( lth );
     }
 }

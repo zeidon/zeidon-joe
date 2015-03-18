@@ -168,6 +168,8 @@ class SimpleTest
                                 .loadFile( "testdata/Cheetah/KZDBHQUA_fPerson.json" )
                                 .activate();
         fPerson.logObjectInstance();
+        if ( ! fPerson.isEmpty() )
+            return;
 
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
