@@ -138,16 +138,16 @@ module Zeidon
     
     def method_missing( id, *args, &block )
       return @jview.send( id, *args, &block ) if @jview.respond_to?( id )
-      return jview.cursor( id.to_s ) if ! @jloddef.getEntityDef( id.to_s, false).nil?
+      return @jview.cursor( id.to_s ) if ! @jloddef.getEntityDef( id.to_s, false).nil?
       super
     end
     
     def cursor entity_name
-      return Cursor.new( jview, entity_name )
+      return @jview.cursor( entity_name )
     end
 
     def copy_view
-      return View.new( jview.newView )
+      return View.new( @jview.newView )
     end
   end # View
   
@@ -262,7 +262,7 @@ module Zeidon
     
     def get_key
       # We assume one and-only-one key.
-      attribute( entity_def.keys[ 0 ] )
+      getAttribute( entity_def.keys[ 0 ] )
     end
     
     def create( position = CursorPosition::NEXT )
@@ -367,15 +367,11 @@ module Zeidon
   # Re-open AttributeInstanceImpl definition and add some Ruby stuff
   class Java::ComQuinsoftZeidonStandardoe::AttributeInstanceImpl
     
-    def name
-      getAttributeDef().getName()
-    end
-    
-    def to_i
-      getInteger().to_i
-    end
-  
-    def to_f
+    def entity_name
+       return getAttributeDef.getEntityDef.getName
+     end
+
+     def to_f
       getDouble().to_f
     end
   
@@ -446,6 +442,16 @@ module Zeidon
     def to_s
       return getString("") || ""
     end
+
+    def respond_to?( id )
+      return getAttributeDef.respond_to?( id ) || super
+    end
+    
+    def method_missing( id, *args, &block )
+      return getAttributeDef.send( id, *args, &block ) if getAttributeDef.respond_to?( id )
+      super
+    end
+
   end # AttributeInstanceImpl
 
 end # module Zeidon
