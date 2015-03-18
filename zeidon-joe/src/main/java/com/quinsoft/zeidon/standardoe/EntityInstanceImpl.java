@@ -2230,7 +2230,9 @@ class EntityInstanceImpl implements EntityInstance
 
         dropped = true;
 
-        if ( getParent() != null )
+        // If we're dropping this entity without first having deleted/excluded it then
+        // this OI is potentially incomplete.  Set the flag.
+        if ( getParent() != null && ! isHidden() )
             getParent().setIncomplete( getEntityDef() );
 
         // Following comments may no longer be apropos now that we don't allow dropping
