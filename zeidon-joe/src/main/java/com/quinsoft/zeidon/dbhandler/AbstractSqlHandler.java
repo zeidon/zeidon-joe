@@ -2107,7 +2107,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( checkForComma && tables.size() > 0 )
             {
             	if ( activatingWithJoins() )
-                    from.append( " JOIN\n");
+                    from.append( " LEFT JOIN\n");
             	else
                     from.append( ",");
             }
