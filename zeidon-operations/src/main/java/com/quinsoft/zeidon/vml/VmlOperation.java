@@ -2032,7 +2032,10 @@ public abstract class VmlOperation
 
    protected static final int zstrcpy( StringBuilder sb, int nOffset, String s )
    {
-      sb.setLength( 0 );
+      if ( nOffset < sb.length() )
+      {
+         sb.setLength( nOffset );
+      }
       if ( s != null )  // insert unfortunately appends the string "null" if inserting a null string
       {
          sb.insert( nOffset, s );
