@@ -1,0 +1,4 @@
+This directory contains a short example of calling Zeidon from Ruby code.
+To run, execute:
+
+   ./jruby.sh example.rb

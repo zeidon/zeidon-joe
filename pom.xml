@@ -145,6 +145,7 @@
                 <module>zeidon-tests/rest-server</module>
                 <module>zeidon-tests/lod-server</module>
                 <module>zeidon-tests/jconsole</module>
+                <module>zeidon-tests/ruby</module>
             </modules>
         </profile>
  
