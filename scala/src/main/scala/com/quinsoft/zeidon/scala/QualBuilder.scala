@@ -52,10 +52,10 @@ class QualBuilder( val view: View,
     def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
         if ( predicate )
             addQual( this )
-            
+
         this
     }
-    
+
     /**
      * Adds multiple attribute qualifications as a single group
      * of OR statements.
@@ -222,33 +222,44 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     val jqual = qualBuilder.jqual
 
     def > ( value: Any ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), ">", value )
-        return qualBuilder
+        return addQual( ">", value )
     }
 
     def <> ( value: Any ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "!=", value )
-        return qualBuilder
+        return addQual( "!=", value )
     }
 
     def >= ( value: Any ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), ">=", value )
-        return qualBuilder
+        return addQual( ">=", value )
     }
 
     def < ( value: Any ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "<", value )
-        return qualBuilder
+        return addQual( "<", value )
     }
 
     def <= ( value: Any ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "<=", value )
-        return qualBuilder
+        return addQual( "<=", value )
     }
 
     def exists: QualBuilder = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
        return qualBuilder
+    }
+
+    private def addQualFromAttributeBuilder( oper: String, any: Any ): QualBuilder = {
+        val attr = any.asInstanceOf[AttributeQualBuilder]
+        val colName = "@" + attr.jattributeDef.getEntityDef().getName() + "." + attr.jattributeDef.getName();
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, colName )
+        return qualBuilder
+    }
+
+    private def addQual( oper: String, value: Any ): QualBuilder = {
+        if ( value.isInstanceOf[AttributeQualBuilder] ) {
+            addQualFromAttributeBuilder( oper, value )
+        } else {
+            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, value )
+        }
+        return qualBuilder
     }
 
     def selectDynamic( attributeName: String): AttributeQualBuilder = {
@@ -263,8 +274,13 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 
     def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
+        println( s"method '$attributeName' called with argument ${value}" )
         jattributeDef = jentityDef.getAttribute( attributeName )
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
+        if ( value.isInstanceOf[AttributeQualBuilder] ) {
+            addQualFromAttributeBuilder( "=", value )
+        } else {
+            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
+        }
         return qualBuilder
     }
 }

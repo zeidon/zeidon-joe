@@ -174,7 +174,7 @@ class SimpleTest
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
-                            .addAttribQual( "Status", "A" )
+                            .addAttribQual( "Status", "@Student.eMailAddress" )
                             .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();

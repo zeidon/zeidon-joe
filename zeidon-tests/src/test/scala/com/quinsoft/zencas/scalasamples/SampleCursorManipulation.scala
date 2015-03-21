@@ -172,6 +172,26 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
                 }
             }
         }
+
+        // Scala way #2.  Scala has a standard 'foreach' method for running through an iterator.
+        // The difference is that using foreach must specify the object that is being returned
+        // for each iterator (which is an EntityInstance for cursors).
+        // Note that this does not have an explicit WHERE clause.
+        mUser.User.foreach { ei => {
+            // You can use either the full cursor or 'ei'.
+            if ( mUser.User.ID == 490 || ei.ID == 491 ) {
+                println( "User ID = " + mUser.User.ID )
+
+                if ( mUser.User.ID == 490 ) {
+                    next() // This skips the following processing and continues with the next mUser.User
+                }
+
+                if ( ei.ID == 491 ) {
+                    break() // This breaks the FOREACH loop.
+                }
+            } }
+        }
+
     }
 
     def forEachCursorWithScoping( mUser: View @basedOn( "mUser") ) = {
@@ -211,9 +231,9 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
 
         println( "Final ID = " + mUser.Report.ID )
     }
-    
+
     def sortEntities( mUser: View @basedOn( "mUser") ) = {
-        
+
         // Sort Report entities by Name in ascending order.
         mUser.Report.sort( "Name A" )
         println( "\nSort Name A: " )
@@ -223,16 +243,16 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         mUser.Report.sortWith( _.Name > _.Name )
         println( "\nSort Name descending: " )
         mUser.Report.each( println( mUser.Report.Name ) )
-        
+
         // Sort Report entities by Name in ASCENDING order.
         mUser.Report.sortBy( _.Name )
         println( "\nSort Name ascending: " )
         mUser.Report.each( println( mUser.Report.Name ) )
-        
+
         mUser.Report.sortWith( _.ID > _.ID )
         println( "\nSort ID descending: " )
         mUser.Report.each( println( mUser.Report.ID ) )
-        
+
         // Sort by Name and ID
         mUser.Report.sortWith( (ei1, ei2) => {
             if ( ei1.Name == ei2.Name )
