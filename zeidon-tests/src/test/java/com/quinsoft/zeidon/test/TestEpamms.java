@@ -140,7 +140,6 @@ public class TestEpamms
          mLLD2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
       /* ec2.setLast();
          ec2.setToSubobject();
->>>>>>> 9593b0eb0480440d18a8d04feaba2ab99b548e2c
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
       */
          mLLD.logObjectInstance();
