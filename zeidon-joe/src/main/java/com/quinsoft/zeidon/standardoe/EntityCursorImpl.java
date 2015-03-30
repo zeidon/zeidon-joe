@@ -2328,7 +2328,7 @@ class EntityCursorImpl implements EntityCursor
         getExistingInstance().logEntity( displayChildren, indent );
     }
 
-    private void moveTwin(EntityInstanceImpl target, CursorPosition position, EntityInstanceImpl source)
+    private CursorResult moveTwin(EntityInstanceImpl target, CursorPosition position, EntityInstanceImpl source)
     {
         validateOiUpdate();
         EntityInstanceImpl lastHierChild = source.removeEntityFromChains();
@@ -2342,6 +2342,7 @@ class EntityCursorImpl implements EntityCursor
         }
 
         assert validateChains() : "Something is wrong with the chain pointers";
+        return CursorResult.SET;
     }
 
     /**
@@ -2380,9 +2381,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult moveSubobject(CursorPosition position, EntityCursor source, CursorPosition sourceReposition)
     {
-        EntityInstance sourceInstance = source.getEntityInstance();
-        ((EntityCursorImpl) source).repositionCursor( sourceReposition );
-        return moveSubobject( position, sourceInstance );
+        return moveSubobject(position, (EntityInstance) source, sourceReposition );
     }
 
     /* (non-Javadoc)
@@ -2391,19 +2390,80 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult moveSubobject(CursorPosition position, EntityInstance source)
     {
-        validateOiUpdate();
-        EntityInstanceImpl target = getExistingInstance();
+        return moveSubobject(position, source, CursorPosition.NEXT );
+    }
 
-        // If source and target are the same then there's nothing to do.
-        if ( target == source )
+    private void verifySubobjectMove( EntityInstance source )
+    {
+        // Make sure source is not a parent of target.  If it is we're attempting to
+        // move a parent under it's child.
+        EntityInstanceImpl target = getEntityInstance();
+        if ( target == null )
+            target = getParentCursor().getExistingInstance();
+        if ( target.isChildOf( source ) )
+            throw new ZeidonException( "Attempting to move an entity instance under one of its children" )
+                            .appendMessage( "Target Entity = %s", getEntityDef().getName() )
+                            .appendMessage( "Child entity = %s", source.getEntityDef().getName() );
+        
+        if ( ! getEntityDef().isInclude() )
+            throw new ZeidonException( "Target of moveSubobject be be includable" )
+                            .appendMessage( "Target = %s", getEntityDef().getName() );
+        
+        if ( ! source.getEntityDef().isExclude() )
+            throw new ZeidonException( "Source of moveSubobject be be excludable" )
+                            .appendMessage( "Source = %s", source.getEntityDef().getName() );
+        
+        // Verify that the EntityDefs are the same for source and target -or- one is a recursive
+        // child of the other.
+        // TODO: The COE requires them to be the same EntityDef but is that really necessary?
+        if ( getEntityDef() == source.getEntityDef() )
+            return;
+
+        if ( source.getEntityDef().getLodDef() != getEntityDef().getLodDef() )
+            throw new ZeidonException( "When moving subobjects, source and target OIs must be using the same LOD" );
+        
+        if ( getEntityDef().isRecursiveParent() && source.getEntityDef().isRecursive() &&
+             getEntityDef().isAncestorOf( source.getEntityDef() ) )
+        {
+            return;
+        }
+
+        if ( source.getEntityDef().isRecursiveParent() && getEntityDef().isRecursive() &&
+             source.getEntityDef().isAncestorOf( getEntityDef() ) )
+        {
+            return;
+        }
+
+        // If we get here then user has specified incorrect EntityDefs.
+        throw new ZeidonException( "When moving subobjects, source and target must be the same entity type " +
+                                   "or one must be a recursive parent of the other" );
+    }
+    
+    private CursorResult moveSubobject(CursorPosition position, EntityInstance source, CursorPosition sourceReposition)
+    {
+        validateOiUpdate();
+        
+        EntityInstanceImpl target = getEntityInstance();
+
+        // If source and target are the same then there's nothing to do.  Call getEntityInstance() on
+        // source because it may be a EntityCursor.
+        if ( target == source.getEntityInstance() )
             return CursorResult.UNCHANGED;
 
-        // Currently we only support moving entities with the same parent.
+        // If they have the same parent then we're moving twins.  Call a different method.
         // If this changes then we need to verify max cardinality.
-        if ( target.getParent() != source.getParent() )
-            throw new ZeidonException( "moveSubobject only supported for twin entities" );
+        if ( target != null && target.getParent() == source.getParent() )
+            return moveTwin( target, position, (EntityInstanceImpl) source.getEntityInstance() );
 
-        moveTwin( target, position, (EntityInstanceImpl) source );
+        // Verify that the subobject can be moved between different parents.
+        verifySubobjectMove( source );
+        
+        // If we get here then everything should be good.
+        includeSubobject( source, position );
+        if ( source instanceof EntityCursor )
+            return ((EntityCursor) source).excludeEntity( sourceReposition );
+
+        source.excludeEntity();
         return CursorResult.SET;
     }
 

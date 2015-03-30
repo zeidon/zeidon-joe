@@ -3927,7 +3927,27 @@ class EntityInstanceImpl implements EntityInstance
     {
         return incomplete;
     }
+    
+    boolean isParentOf( EntityInstance child )
+    {
+        child = child.getEntityInstance(); // In case child is an EntityCursor.
+        while ( child != null )
+        {
+            if ( child == this )
+                return true;
+            
+            child = child.getParent();
+        }
+        
+        return false;
+    }
 
+    boolean isChildOf( EntityInstance parent )
+    {
+        EntityInstanceImpl p = (EntityInstanceImpl) parent.getEntityInstance();
+        return p.isParentOf( this );
+    }
+    
     /**
      * This method is called if 'this' entity instance does not have all its children.
      * This can happen if an OI was activated with a RESTRICTING clause or if a child
