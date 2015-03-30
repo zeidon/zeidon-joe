@@ -626,28 +626,44 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         } // for each EntitySpec...
     } // method loadQualificationObject
 
+    /**
+     * The value in the qualification is a column name, not a text value.  This means that the
+     * qualification is comparing the column to another column.  Load the values in qualAttrib.
+     *
+     * @param lodDef
+     * @param qualAttribInstance
+     * @param qualAttrib
+     */
     private void loadQualAttributeColumn( LodDef lodDef, EntityInstance qualAttribInstance, QualAttrib qualAttrib )
     {
         // TODO: Get entity/attrib names directly from Qual once we update the XOD.
         String value = qualAttribInstance.getAttribute( "Value" ).getString();
         value = value.substring( 1 ); // Remove '@' prefix.
         String[] str = value.split( "\\." );
-        String entityName = str[0];
-        String attributeName = str[1];
+        String srcEntityName = str[0];
+        String srcAttributeName = str[1];
 
-        EntityDef entityDef = lodDef.getEntityDef( entityName, false );
+        EntityDef entityDef = lodDef.getEntityDef( srcEntityName, false );
         if ( entityDef == null )
-            throw new ZeidonException( "EntityName specified in qualification is unknown: %s", entityName );
+            throw new ZeidonException( "EntityName specified in qualification is unknown: %s", srcEntityName );
 
-        AttributeDef attributeDef = entityDef.getAttribute( attributeName, false );
+        AttributeDef attributeDef = entityDef.getAttribute( srcAttributeName, false );
         if ( attributeDef == null )
-            throw new ZeidonException( "AttributeName specified in qualification is unknown: %s", attributeName );
+            throw new ZeidonException( "AttributeName specified in qualification is unknown: %s", srcAttributeName );
 
         qualAttrib.columnAttributeValue = attributeDef;
 
-        //TODO: Verify that columnAttributeValue is in qual.entityDef or a parent.
-        // We could conceivably handle a 1-to-1 child but that requires more work.
-
+        // Verify that columnAttributeValue.getViewEntity is a child of qualAttrib.viewEntity or
+        // vice-versa.  We could potentially support siblings if they have 1-to-1 relationships
+        // with their parents.
+        if ( ! entityDef.isAncestorOf( qualAttrib.entityDef ) && ! qualAttrib.entityDef.isAncestorOf( entityDef ) )
+            throw new ZeidonException( "When qualifying an attribute with another attribute in the same query, " +
+                                       "one attribute must be a descendant of the other (i.e. they may not be " +
+                                       "siblings." )
+                                       .appendMessage( "Attribute 1 = %s.%s", qualAttrib.entityDef.getName(),
+                                                                              qualAttrib.attributeDef.getName() )
+                                       .appendMessage( "Attribute 2 = %s.%s", entityDef.getName(),
+                                                                              attributeDef.getName() );
     }
 
     @Override

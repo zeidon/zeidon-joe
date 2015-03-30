@@ -246,8 +246,16 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
        return qualBuilder
     }
 
+    /**
+     * This adds qualification on an attribute using another attribute from the same
+     * query.  In SQL terms this qualifies a column on using a different column from
+     * the same SELECT statement.
+     */
     private def addQualFromAttributeBuilder( oper: String, any: Any ): QualBuilder = {
         val attr = any.asInstanceOf[AttributeQualBuilder]
+        //TODO: We are using a short-term hack of prepending the entity.attr name with a '@'.
+        // Once KZDBHQUA.XOD is updated to have a separate attribute for this value this
+        // needs to change.
         val colName = "@" + attr.jattributeDef.getEntityDef().getName() + "." + attr.jattributeDef.getName();
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, colName )
         return qualBuilder
