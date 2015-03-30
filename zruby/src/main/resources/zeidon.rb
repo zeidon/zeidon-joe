@@ -1,8 +1,8 @@
 include Java
 
-include_class 'com.quinsoft.zeidon.standardoe.JavaObjectEngine'
-include_class 'com.quinsoft.zeidon.CursorPosition'
-include_class 'com.quinsoft.zeidon.CursorResult'
+java_import 'com.quinsoft.zeidon.standardoe.JavaObjectEngine'
+java_import 'com.quinsoft.zeidon.CursorPosition'
+java_import 'com.quinsoft.zeidon.CursorResult'
 
 #alias :where :lambda
 
@@ -82,7 +82,7 @@ module Zeidon
   end # Application
   
   class Task
-    include_class "com.quinsoft.zeidon.ActivateFlags"
+    java_import "com.quinsoft.zeidon.ActivateFlags"
     attr_reader :jtask
 
     def initialize( app, jtask )
@@ -130,263 +130,29 @@ module Zeidon
     def initialize jview
       @jview = jview
       @jloddef = @jview.getLodDef
-      load_cursors              
     end
 
-    def load_cursors
-      @cursors = {}
-      @jloddef.getViewEntitiesHier.each do |ve|
-        name = ve.getName.to_s
-        @cursors[ name ] = Cursor.new( self, ve, @jview.cursor( ve.getName ) )
-      end
-    end
-    
     def respond_to?( id )
-      return @jview.respond_to?( id ) || @cursors[id.to_s] || super
+      return @jview.respond_to?( id ) || ! @jloddef.getEntityDef( id, false).nil? || super
     end
     
     def method_missing( id, *args, &block )
       return @jview.send( id, *args, &block ) if @jview.respond_to?( id )
-      return @cursors[id.to_s] || super
+      return @jview.cursor( id.to_s ) if ! @jloddef.getEntityDef( id.to_s, false).nil?
+      super
     end
     
-    def entities
-      return @cursors.keys
-    end
-
     def cursor entity_name
-      return @cursors[entity_name]
+      return @jview.cursor( entity_name )
     end
 
     def copy_view
-      return View.new( jview.newView )
+      return View.new( @jview.newView )
     end
   end # View
   
-  class Cursor
-    attr_reader :jcursor
-
-    def initialize view, jview_entity, jcursor
-      @view = view
-      raise "Internal error" unless @view.kind_of? View
-      @jcursor = jcursor
-      
-      @attributes = {}
-      jview_entity.getAttributes.each do |va|
-        name = va.getName.to_s
-        @attributes[ name ] = Attribute.new @jcursor, name, va
-      end
-    end
-
-    def get_name
-      return @jcursor.getEntityDef.getName
-    end
-
-    def get_parent
-      jparent = @jcursor.getParent
-      return nil if jparent.nil?
-      return @view.cursor( jparent.getName )
-    end
-
-    def attributes
-      return @attributes.values
-    end
-    
-    def get_attribute attr
-      return @attributes[ attr ]
-    end
-    
-    def get_key
-      @attributes.each_pair do |name,attr|
-        return attr if attr.is_key?
-      end
-    end
-
-    def set_attribute attr, *args
-      value = args[0]
-      value = value.internal_value if value.kind_of?( Attribute )
-      @jcursor.setAttribute( attr, value );
-    end
-
-    def include_subobject( cursor )
-      @jcursor.includeSubobject( cursor.jcursor, CursorPosition::LAST )
-    end
-
-    def each( args = {} )
-      if args[:scope]
-        if args[:scope] == :oi
-          rc = @jcursor.setFirstWithinOi
-        else
-          rc = @jcursor.setFirst( args[:scope] )
-        end
-      else
-        rc = @jcursor.setFirst
-      end
-
-      while ( rc.isSet )
-        yield self
-        rc = @jcursor.setNextContinue
-      end
-    end
- 
-    def matching( args = {} ) # not fully functional
-      matches = []
-      if args[:scope]
-        if args[:scope] == :oi
-          rc = @jcursor.setFirstWithinOi
-          @jcursor.logEntity
-        else
-          rc = @jcursor.setFirst( args[:scope] )
-        end
-      else
-        rc = @jcursor.setFirst
-      end
-
-      while ( rc.isSet )
-        # What do we add to matches?
-        matches << yield 
-        rc = @jcursor.setNextContinue
-      end
-      
-    end
-
-    def create( position = CursorPosition::NEXT )
-      @jcursor.createEntity( position )
-    end
-
-    def each_child
-      @jcursor.getEntityDef.getChildren.each do |jve|
-        yield @view.cursor( jve.getName )
-      end
-    end
-
-    def respond_to?( id )
-      return @jcursor.respond_to?( id ) || @attributes[id.to_s] || id.to_s =~ /(.*)=/ || super
-    end
-    
-    def method_missing( id, *args, &block )
-      return @jcursor.send( id, *args, &block ) if @jcursor.respond_to?( id )
-      return get_attribute( id.to_s ) if @attributes[id.to_s]
-      if id.to_s =~ /(.*)=/
-        name = $1
-        return set_attribute( name, *args ) if @attributes[name]
-      end
-      super
-    end
-  end # Cursor
-  
-  class Attribute
-    attr_reader :name
-
-    def initialize jcursor, name, jAttributeDefute
-      @name = name
-      @jcursor = jcursor
-      @jAttributeDefute = jAttributeDefute
-    end
-
-    def coerce(other)
- #     puts "In coerce other = #{other.class}"
-      return case
-               when other.kind_of?( Fixnum )
-                   [other,self.to_i]
-               when other.kind_of?( String )
-                   [other,self.to_s] 
-               else
-                   raise "Can't convert"
-             end
-    end
-
-    def set( *args )
-      @jcursor.setAttribute( @name, *args )
-    end
-
-    def to_s
-      @jcursor.getStringFromAttribute( @name )
-    end
- 
-    alias :to_str :to_s # So that Ruby automatically converts an Attribute to a string.
-
-    def to_i
-      @jcursor.getIntegerFromAttribute( @name ).to_i
-    end
-
-    def to_f
-      @jcursor.getDoubleFromAttribute( @name ).to_f
-    end
-
-    def internal_value
-      return @jcursor.getInternalAttributeValue( @jAttributeDefute )
-    end
-
-    def entity_name
-      return @jAttributeDefute.getEntityDef.getName
-    end
-
-    def operators( op, value )
-#      puts "Op = #{op.to_s} value = #{value.to_s}"
-      return self.to_i.send( op, value ) if value.kind_of? Fixnum
-      return self.to_f.send( op, value ) if value.kind_of? Float
-      return self.to_s.send( op, value.to_s )
-    end
-
-    def +( value )
-      return operators( :+, value )
-    end
-    
-    def *( value )
-      return operators( :*, value )
-    end
-    
-    def -( value )
-      return operators( :-, value )
-    end
-    
-    def /( value )
-      return operators( :/, value )
-    end
-    
-    def ==( value )
-      return operators( :==, value )
-    end
-
-    def <( value )
-      return operators( :<, value )
-    end
-
-    def >( value )
-      return operators( :>, value )
-    end
-
-    def <=( value )
-      return operators( :<=, value )
-    end
-
-    def >=( value )
-      return operators( :>=, value )
-    end
-
-    def is_hidden?
-      return @jAttributeDefute.isHidden
-    end      
-
-    def is_null?
-      return @jcursor.isAttributeNull( @jAttributeDefute)
-    end
-
-    def respond_to?( id )
-     return @jAttributeDefute.respond_to?( id ) || super
-    end
-
-    def method_missing( id, *args, &block )
-      return @jAttributeDefute.send( id, *args, &block ) if @jAttributeDefute.respond_to?( id )
-      return @jcursor.send( id, *args, &block ) if @jcursor.respond_to?( id )
-      super
-    end
-
-  end # Attribute
-
   class Qualification
-    include_class "com.quinsoft.zeidon.utils.QualificationBuilder"
+    java_import "com.quinsoft.zeidon.utils.QualificationBuilder"
     
     def initialize(jtask, view_od_name)
       @jqual = QualificationBuilder.new( jtask )
@@ -453,5 +219,239 @@ module Zeidon
     end
   end # class QualEntity
 
-end # module Zeidon
 
+  # Re-open EntityCursor definition and add some Ruby stuff
+  class Java::ComQuinsoftZeidonStandardoe::EntityCursorImpl
+
+    def name
+      return entity_def.name
+    end
+  
+    def has_attribute( attr_name )
+      return ! getEntityDef.getAttribute( attr_name.to_s, false ).nil?
+    end
+  
+    def attributes( options = {} )
+      include_null_attributes = options.fetch( :include_null, true )
+      include_hidden_attributes = options.fetch( :include_hidden, false )
+      list = getAttributes( include_null_attributes )
+      list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
+      return list
+    end
+    
+    def each_attrib( options = {} )
+      list = attributes( options )
+      list.each do |attrib|
+        yield attrib
+      end
+    end
+    
+    # Loop through each sibling for this cursor.  Sets the cursor.
+    def each( args = {} )
+      scoping = args[:scope] || args[:scoping] || args[:under] || ""
+      if scoping == :oi
+        iter = allEntities()
+      else
+        iter = eachEntity( scoping )
+      end
+
+      while iter.hasNext
+        yield iter.next
+      end
+    end
+    
+    def get_key
+      # We assume one and-only-one key.
+      getAttribute( entity_def.keys[ 0 ] )
+    end
+    
+    def create( position = CursorPosition::NEXT )
+      createEntity( position )
+    end
+
+    # Loop through the child *cursors* of this cursor. 
+    def each_child
+      getEntityDef.getChildren.each do |jve|
+        yield getView.cursor( jve.getName )
+      end
+    end
+    
+    def respond_to?( id )
+      return true if has_attribute( id )
+      
+      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
+      if id.to_s =~ /(.*)=/
+        name = $1
+        return true if has_attribute( name )
+      end
+  
+      super
+    end
+    
+    def method_missing( id, *args, &block )
+      return getAttribute( id.to_s ) if has_attribute( id )
+      
+      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
+      if id.to_s =~ /(.*)=/
+        name = $1
+        if has_attribute( name )
+          attrib = getAttribute( name )
+          attrib.setValue( args[0] )
+          return attrib 
+        end
+      end
+      
+      super
+    end
+  end # EntityCursorImpl
+  
+  class Java::ComQuinsoftZeidonStandardoe::EntityInstanceImpl
+  
+    def name
+      return entity_def.name
+    end
+  
+    def has_attribute( attr_name )
+      return ! getEntityDef.getAttribute( attr_name.to_s, false ).nil?
+    end
+  
+    def attributes( options = {} )
+      include_null_attributes = options.fetch( :include_null, true )
+      include_hidden_attributes = options.fetch( :include_hidden, false )
+      list = getAttributes( include_null_attributes )
+      list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
+      return list
+    end
+    
+    def each_attrib( options = {} )
+      list = attributes( options )
+      list.each do |attrib|
+        yield attrib
+      end
+    end
+    
+    def get_key
+      # We assume one and-only-one key.
+      attribute( entity_def.keys[ 0 ] )
+    end
+    
+    def respond_to?( id )
+      return true if has_attribute( id )
+      
+      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
+      if id.to_s =~ /(.*)=/
+        name = $1
+        return true if has_attribute( name )
+      end
+  
+      super
+    end
+    
+    def method_missing( id, *args, &block )
+      return getAttribute( id.to_s ) if has_attribute( id )
+      
+      # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
+      if id.to_s =~ /(.*)=/
+        name = $1
+        if has_attribute( name )
+          attrib = getAttribute( name )
+          attrib.setValue( args[0] )
+          return attrib 
+        end
+      end
+      
+      super
+    end
+  end # EntityInstanceImpl
+
+  # Re-open AttributeInstanceImpl definition and add some Ruby stuff
+  class Java::ComQuinsoftZeidonStandardoe::AttributeInstanceImpl
+    
+    def entity_name
+       return getAttributeDef.getEntityDef.getName
+     end
+
+     def to_f
+      getDouble().to_f
+    end
+  
+    def internal_value
+      getValue()
+    end
+  
+    def operators( op, value )
+  #      puts "Op = #{op.to_s} value = #{value.to_s}"
+      return self.to_i.send( op, value ) if value.kind_of? Fixnum
+      return self.to_f.send( op, value ) if value.kind_of? Float
+      return self.to_s.send( op, value.to_s )
+    end
+  
+    def +( value )
+      return operators( :+, value )
+    end
+    
+    def *( value )
+      return operators( :*, value )
+    end
+    
+    def -( value )
+      return operators( :-, value )
+    end
+    
+    def /( value )
+      return operators( :/, value )
+    end
+    
+    def ==( value )
+      return operators( :==, value )
+    end
+  
+    def <( value )
+      return operators( :<, value )
+    end
+  
+    def >( value )
+      return operators( :>, value )
+    end
+  
+    def <=( value )
+      return operators( :<=, value )
+    end
+  
+    def >=( value )
+      return operators( :>=, value )
+    end
+
+    # This will attempt to convert an attribute value to a Ruby type.  This is
+    # necessary so that Ruby can parse something like:
+    #    n = 4 + view.EntityName.IntAttribute
+    def coerce(other)
+  #     puts "In coerce other = #{other.class}"
+      return case
+               when other.kind_of?( Fixnum )
+                   [other,self.to_i]
+               when other.kind_of?( String )
+                   [other,self.to_s] 
+               else
+                   raise "Can't convert"
+             end
+    end
+  
+    # Override the toString() method.
+    java_signature 'String toString()'  
+    def to_s
+      return getString("") || ""
+    end
+
+    def respond_to?( id )
+      return getAttributeDef.respond_to?( id ) || super
+    end
+    
+    def method_missing( id, *args, &block )
+      return getAttributeDef.send( id, *args, &block ) if getAttributeDef.respond_to?( id )
+      super
+    end
+
+  end # AttributeInstanceImpl
+
+end # module Zeidon

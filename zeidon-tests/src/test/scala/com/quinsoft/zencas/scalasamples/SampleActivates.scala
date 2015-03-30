@@ -131,6 +131,9 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
          */
     }
 
+    /**
+     * Executing an activate asynchronously.
+     */
     def asynchronousActivate = {
         /* VML:
          *
@@ -150,6 +153,42 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
 
         mUser
     }
+
+    /**
+     * Activate an entity by comparing two of its attributes.  This generates SQL that
+     * compares two columns.
+     */
+    def activateWithColumnQualification = {
+        /* VML:
+         *
+         * No equivalent in VML.
+         */
+
+        /*
+         * Load all Users that were created by the same user that last modified them.
+         * Note: the QualBuilder must be explicitly named ('qual' in example below)
+         * because it is used twice.  Using "_" would cause a Scala compile error.
+         */
+        val mUser = VIEW basedOn "mUser"
+        mUser.buildQual( qual => qual.User.LastModifiedBy > qual.User.CreatedBy )
+                    .activate
+
+        println( "Found = " + mUser.User.count )
+
+        /*
+         * Children can be qualified on attributes from a parent.  The following will
+         * load all Users that have a Person entity with the same email address as
+         * the User email address.
+         */
+        mUser.buildQual( qual => qual.User.eMailAddress = qual.Person.eMailAddress )
+            .rootOnlyMultiple()
+            .activate
+
+        mUser.logObjectInstance()
+
+        mUser
+
+    }
 }
 
 object SampleActivates {
@@ -163,11 +202,12 @@ object SampleActivates {
         val sample = new SampleActivates( task )
 
         var mUser = sample.activateSimple
-        mUser = sample.activateSimpleWithOtherComparators
-        mUser = sample.activateWithOr
-        mUser = sample.activateWithGrouping
-        mUser = sample.activateWithRestricting
-        mUser = sample.asynchronousActivate
+//        mUser = sample.activateSimpleWithOtherComparators
+//        mUser = sample.activateWithOr
+//        mUser = sample.activateWithGrouping
+//        mUser = sample.activateWithRestricting
+//        mUser = sample.asynchronousActivate
+        mUser = sample.activateWithColumnQualification
 
 //        mUser.logObjectInstance
     }

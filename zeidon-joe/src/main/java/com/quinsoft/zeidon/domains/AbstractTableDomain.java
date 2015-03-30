@@ -21,21 +21,25 @@ package com.quinsoft.zeidon.domains;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * Common domain code for static and dynamic table domains.
- * 
+ *
  * @author DG
  *
  */
 public class AbstractTableDomain extends AbstractDomain implements TableDomain
 {
+    private static final Random RANDOM = new Random();
+
     public AbstractTableDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
@@ -61,7 +65,7 @@ public class AbstractTableDomain extends AbstractDomain implements TableDomain
         DomainContext context = getContext( task, contextName );
         return context.convertToString( task, attributeDef, internalValue );
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.objectdefinition.TableDomain#getTableEntries()
      */
@@ -82,5 +86,23 @@ public class AbstractTableDomain extends AbstractDomain implements TableDomain
     public String toString()
     {
         return "Table domain: " + getName();
+    }
+
+    /**
+     * Generate a random test value for this domain.  This is used by test code to create random
+     * test data.
+     *
+     * @param task current task
+     * @param attributeDef def of the attribute.
+     * @param entityInstance if not null this is the EntityInstance that will store the test data.
+     *
+     * @return random test data for this domain.
+     */
+    @Override
+    public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
+    {
+        List<TableEntry> entries = getTableEntries( task, "" );
+        int lth = entries.size();
+        return entries.get( RANDOM.nextInt( lth  ) ).getExternalValue();
     }
 }

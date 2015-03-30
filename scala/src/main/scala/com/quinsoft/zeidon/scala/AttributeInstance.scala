@@ -28,7 +28,13 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * Returns true if the attribute is null or the string representation of the
      * attribute value is the empty string ("").
      */
-    def isEmpty = jattributeInstance.isNull() || jattributeInstance.compare( "" ) == 0
+    def isEmpty = jattributeInstance.isEmpty
+
+    /**
+     * Returns true if the attribute is null, the string representation of the
+     * attribute value is the empty string (""), or the string is all whitespace.
+     */
+    def isBlank = jattributeInstance.isBlank
 
     /**
      * Returns true if this attribute has been updated since being read from the DB.

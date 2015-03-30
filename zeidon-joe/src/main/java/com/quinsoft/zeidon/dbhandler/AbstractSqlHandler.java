@@ -549,12 +549,29 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     if ( qualAttrib.attributeDef == null )
                         throw new ZeidonException("QualAttrib with value requires Entity.Attrib");
 
-                    // Get the string value from the qualification object, convert it to the
-                    // domain's internal value, and then to an a string representation of the
-                    // internal value.
                     String value = qualAttribInstance.getAttribute( "Value" ).getString();
-                    Domain domain = qualAttrib.attributeDef.getDomain();
-                    qualAttrib.value = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
+
+                    if ( qualAttrib.oper.equals( "LIKE" ) )
+                    {
+                        // If oper is "LIKE" then a qualification value that is invalid for the domain
+                        // is possible.  E.g. "(617)%' is valid qualification for a phone number.  We'll
+                        // assume the user knows what she's doing so we'll skip domain processing.
+                        qualAttrib.value = value;
+                    }
+                    else
+                    // TODO: The '@' is a hack until we can update the qual XOD.
+                    if ( value.startsWith( "@" ) )
+                    {
+                        loadQualAttributeColumn( lodDef, qualAttribInstance, qualAttrib );
+                    }
+                    else
+                    {
+                        // Get the string value from the qualification object, convert it to the
+                        // domain's internal value, and then to an a string representation of the
+                        // internal value.
+                        Domain domain = qualAttrib.attributeDef.getDomain();
+                        qualAttrib.value = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
+                    }
                 }
 
                 //
@@ -608,6 +625,30 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         } // for each EntitySpec...
     } // method loadQualificationObject
+
+    private void loadQualAttributeColumn( LodDef lodDef, EntityInstance qualAttribInstance, QualAttrib qualAttrib )
+    {
+        // TODO: Get entity/attrib names directly from Qual once we update the XOD.
+        String value = qualAttribInstance.getAttribute( "Value" ).getString();
+        value = value.substring( 1 ); // Remove '@' prefix.
+        String[] str = value.split( "\\." );
+        String entityName = str[0];
+        String attributeName = str[1];
+
+        EntityDef entityDef = lodDef.getEntityDef( entityName, false );
+        if ( entityDef == null )
+            throw new ZeidonException( "EntityName specified in qualification is unknown: %s", entityName );
+
+        AttributeDef attributeDef = entityDef.getAttribute( attributeName, false );
+        if ( attributeDef == null )
+            throw new ZeidonException( "AttributeName specified in qualification is unknown: %s", attributeName );
+
+        qualAttrib.columnAttributeValue = attributeDef;
+
+        //TODO: Verify that columnAttributeValue is in qual.entityDef or a parent.
+        // We could conceivably handle a 1-to-1 child but that requires more work.
+
+    }
 
     @Override
     public int beginActivate( View view, View qual, EnumSet<ActivateFlags> control )
@@ -765,6 +806,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // If the entity we're loading is not the root of the OD then add parent FKs to WHERE clause.
         if ( entityDef.getParent() != null )  // Is it the root?
         {
+            // Not the root.
             // If the table is qualified then we're going to add more stuff later
             // so let's add an opening paren.
             if ( qualEntity != null )
@@ -981,6 +1023,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 continue;
 
             addForeignKeys( stmt, view, qualAttrib.entityDef, entityDef );
+
+            if ( qualAttrib.columnAttributeValue != null )
+                addForeignKeys( stmt, view, qualAttrib.columnAttributeValue.getEntityDef(), entityDef );
         }
 
         if ( stmt.conjunctionNeeded )
@@ -1021,6 +1066,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( qualAttrib.keyList != null )
             {
                 stmt.appendWhere( " IN ( ", qualAttrib.keyList, " ) " );
+                continue;
+            }
+
+            if ( qualAttrib.columnAttributeValue != null )
+            {
+                DataRecord srcDataRecord = qualAttrib.columnAttributeValue.getEntityDef().getDataRecord();
+                String table = stmt.getTableName( srcDataRecord );
+                DataField srcDataField = srcDataRecord.getDataField( qualAttrib.columnAttributeValue );
+                stmt.appendWhere( qualAttrib.oper, " ", table, ".", srcDataField.getName() );
                 continue;
             }
 
@@ -2016,7 +2070,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             {
                 // We've got a table listed twice but with different relationships.  We need to create
                 // an alias name.
-                for ( int i = 1; i < 20; i++ )
+                for ( int i = 1; i < 40; i++ )
                 {
                     if ( ! tables.containsValue( tableName + i ) )
                     {
@@ -2034,6 +2088,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 tables.put( source, tableName );
 
             return tables.get( source );
+        }
+
+        String getTableName( EntityDef entityDef )
+        {
+            DataRecord dataRecord = entityDef.getDataRecord();
+            return getTableName( dataRecord.getRecordName(), dataRecord );
         }
 
         String getTableName( DataRecord dataRecord )
@@ -2068,7 +2128,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( checkForComma && tables.size() > 0 )
             {
             	if ( activatingWithJoins() )
-                    from.append( " JOIN\n");
+                    from.append( " LEFT JOIN\n");
             	else
                     from.append( ",");
             }
@@ -2263,6 +2323,31 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     }
                 }
             }
+
+            if ( qualAttrib.columnAttributeValue != null &&
+                 qualAttrib.columnAttributeValue.getEntityDef() != entityDef )
+            {
+                usesChildQualification = true;
+
+                // Check to see if there is a one-to-many or m-to-m relationship because if there
+                // is we'll need to use "distinct" as part of the SQL.
+                for ( EntityDef search = qualAttrib.columnAttributeValue.getEntityDef();
+                                search != entityDef;
+                                search = search.getParent() )
+                {
+                    DataRecord dataRecord = search.getDataRecord();
+                    if ( dataRecord == null )
+                        throw new ZeidonException( "Trying to qualify %s by using the derived entity %s", entityDef, qualAttrib.entityDef );
+
+                    RelRecord relRecord = dataRecord.getRelRecord();
+                    if ( relRecord.getRelationshipType() != RelRecord.CHILD_IS_SOURCE )
+                    {
+                        // The child qual is either many-to-many or one-to-many.
+                        childQualIsManyToMany = true;
+                        break;
+                    }
+                }
+            }
         }
 
         @Override
@@ -2283,9 +2368,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         public Object value;
         String        oper;
-        EntityDef    entityDef;
+        EntityDef     entityDef;
         String        keyList;
-        AttributeDef attributeDef;
+        AttributeDef  attributeDef;
+
+        /**
+         * If non-null this value specifies an attribute in the target LOD that will
+         * be used as qualification.  It allows qualification to refer to another
+         * column in the query.
+         */
+        AttributeDef  columnAttributeValue;
 
         private QualAttrib(String oper)
         {

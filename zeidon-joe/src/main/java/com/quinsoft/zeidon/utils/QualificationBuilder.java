@@ -151,7 +151,8 @@ public class QualificationBuilder
     public QualificationBuilder loadFile( String filename )
     {
         LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
-        qualView = task.activateOiFromFile( qualLodDef, filename, null );
+        qualView = task.deserializeOi().setLodDef( qualLodDef ).fromResource( filename ).activateFirst();
+        activateOptions.setQualificationObject( qualView );
         return this;
     }
 

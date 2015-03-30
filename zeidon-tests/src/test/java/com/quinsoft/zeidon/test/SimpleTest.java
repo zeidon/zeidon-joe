@@ -158,13 +158,23 @@ class SimpleTest
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
-        oe.startBrowser();
+//        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
+
+//        Task cheetah = oe.createTask(  "Cheetah" );
+//        View fPerson = new QualificationBuilder( cheetah )
+//                                .setLodDef( "fPerson" )
+//                                .setOiSourceUrl( "testsql:" )
+//                                .loadFile( "testdata/Cheetah/KZDBHQUA_fPerson.json" )
+//                                .activate();
+//        fPerson.logObjectInstance();
+//        if ( ! fPerson.isEmpty() )
+//            return;
 
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
-                            .addAttribQual( "Status", "A" )
+                            .addAttribQual( "Status", "@Student.eMailAddress" )
                             .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();

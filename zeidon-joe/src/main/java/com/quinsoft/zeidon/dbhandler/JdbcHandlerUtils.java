@@ -51,6 +51,13 @@ public class JdbcHandlerUtils
             return configGroupName;
 
         String dbUrl = options.getOiSourceUrl();
+        if ( dbUrl.startsWith( "testsql:" ) )
+        {
+            configGroupName = options.getApplication().getName() + "." + "TestSql";
+            options.overrideConfigValue( "JdbcConfigGroupName", configGroupName );
+            return configGroupName;
+        }
+
         if ( ! dbUrl.startsWith( "jdbc:" ) )
             throw new ZeidonException( "Expecting jdbc url for oiSourceUrl: %s", dbUrl );
 
@@ -85,6 +92,9 @@ public class JdbcHandlerUtils
             else
             if ( conn.startsWith( "jdbc:sqlite:" ) )
                 handlerName = SqliteJdbcHandler.class.getCanonicalName();
+            else
+            if ( conn.startsWith( "testsql:" ) )
+                handlerName = TestSqlHandler.class.getCanonicalName();
             else
                 handlerName = JdbcHandler.class.getCanonicalName();
         }
