@@ -82,31 +82,31 @@ public class TestEpamms
 	@Test
 	public void ExecuteJOE_TestSubobjectCreateView()
 	{
-	    View         testview;
+	   View         testview;
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_TestSubobjectCreateView( testview );
-        System.out.println("===== Finished ExecuteJOE_TestSubobjectCreateView ========");
+       System.out.println("===== Finished ExecuteJOE_TestSubobjectCreateView ========");
 	}
 
 	@Test
 	public void ExecuteJOE_TestTemporalError()
 	{
-	    View         testview;
+	   View         testview;
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_TemporalDeleteError( testview );
-        System.out.println("===== Finished ExecuteJOE_TemporalDeleteError ========");
+       System.out.println("===== Finished ExecuteJOE_TemporalDeleteError ========");
 	}
 
 	@Test
 	public void ExecuteJOE_TestSubobjectCheckExistence()
 	{
-	    View         testview;
+	   View         testview;
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_TestSubobjectCheckExistence( testview );
-        System.out.println("===== Finished ExecuteJOE_TestSubobjectCheckExistence ========");
+      System.out.println("===== Finished ExecuteJOE_TestSubobjectCheckExistence ========");
 	}
 
 
