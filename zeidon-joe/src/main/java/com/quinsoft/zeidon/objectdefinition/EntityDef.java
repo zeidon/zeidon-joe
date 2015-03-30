@@ -816,6 +816,34 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
+     * Returns true if 'this' is an ancestor of entityDef.
+     *
+     * @param entityDef
+     * @return true if 'this' is an ancestor of entityDef.
+     */
+    public boolean isAncestorOf( EntityDef entityDef )
+    {
+        for ( EntityDef t = entityDef.getParent(); t != null; t = t.getParent() )
+        {
+            if ( t == this )
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if 'this' is a descendant of entityDef.
+     *
+     * @param entityDef
+     * @return true if 'this' is a descendant of entityDef.
+     */
+    public boolean isDescendantOf( EntityDef entityDef )
+    {
+        return entityDef.isAncestorOf( this );
+    }
+
+    /**
      * If this EntityDef is a recursive parent then this returns the recursive child.
      *
      * @return
