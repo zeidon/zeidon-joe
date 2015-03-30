@@ -87,6 +87,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     private void writeOi( View view ) throws Exception
     {
         view = view.newView();  // To preserve cursor positions in the original view.
+        view.setInternal( true );  // So it doesn't show up in the browser.
 
         EntityDef rootEntityDef = view.getLodDef().getRoot();
         jg.writeArrayFieldStart( rootEntityDef.getName() );

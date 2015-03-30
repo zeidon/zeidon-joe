@@ -572,6 +572,22 @@ public interface View extends TaskQualification, CacheMap
     boolean isEmpty();
 
     /**
+     * Returns true if this view was created by internal JOE processing.  This is intended
+     * to be used by the browser to ignore views that weren't created by the user.  
+     * 
+     * @return Returns true if this view was created by internal JOE processing.
+     */
+    boolean isInternal();
+    
+    /**
+     * Sets the 'internal' flag.
+     * 
+     * @param internal
+     * @return
+     */
+    View setInternal( boolean internal );
+    
+    /**
      * Return the number of entities in the OI.
      *
      * @param includeHidden if true, count hidden entities.

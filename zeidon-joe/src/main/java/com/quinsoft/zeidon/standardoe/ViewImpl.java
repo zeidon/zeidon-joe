@@ -91,7 +91,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * True if this view is read only.
      */
     private boolean isReadOnly = false;
-
+    
+    /**
+     * True if this view was created by internal JOE processing.  This is intended
+     * to be used by the browser to ignore views that weren't created by the user. 
+     */
+    private boolean isInternal = false;
+    
     private boolean allowHiddenEntities = false;
 
     ViewImpl( TaskImpl task, LodDef lodDef )
@@ -392,13 +398,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public ViewImpl newView()
     {
-        return newView( getTask(), false );
+        return newView( getTask(), isReadOnly() );
     }
 
     @Override
     public ViewImpl newView( TaskQualification owningTask )
     {
-        return newView( owningTask, false );
+        return newView( owningTask, isReadOnly() );
     }
 
     @Override
@@ -422,6 +428,16 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return newView;
     }
 
+    /**
+     * Create a new internal view.
+     */
+    ViewImpl newInternalView()
+    {
+        ViewImpl newView = newView( getTask(), isReadOnly() );
+        newView.setInternal( true );
+        return newView;
+    }
+    
     @Override
     public View getViewByName(String name)
     {
@@ -1039,5 +1055,24 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         boolean prev = this.allowHiddenEntities;
         this.allowHiddenEntities = allowHiddenEntities;
         return prev;
+    }
+
+    /**
+     * Returns true if this view was created by internal JOE processing.  This is intended
+     * to be used by the browser to ignore views that weren't created by the user.  
+     * 
+     * @return Returns true if this view was created by internal JOE processing.
+     */
+    @Override
+    public boolean isInternal()
+    {
+        return isInternal;
+    }
+
+    @Override
+    public View setInternal( boolean isInternal )
+    {
+        this.isInternal = isInternal;
+        return this;
     }
 }

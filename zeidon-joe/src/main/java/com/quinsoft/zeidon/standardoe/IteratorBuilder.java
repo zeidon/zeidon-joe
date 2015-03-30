@@ -643,6 +643,7 @@ class IteratorBuilder
         private LazyLoadInfo( ObjectInstance oi )
         {
             view = new ViewImpl( oi );
+            view.setInternal( true ); // So this doesn't show up in the browser.
         }
     }
 

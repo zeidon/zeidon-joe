@@ -714,4 +714,22 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().setAllowHiddenEntities( allowHiddenEntities );
     }
+    
+    /**
+     * Returns true if this view was created by internal JOE processing.  This is intended
+     * to be used by the browser to ignore views that weren't created by the user.  
+     * 
+     * @return Returns true if this view was created by internal JOE processing.
+     */
+    @Override
+    public boolean isInternal()
+    {
+        return getView().isInternal();
+    }
+
+    @Override
+    public View setInternal( boolean isInternal )
+    {
+        return getView().setInternal( isInternal );
+    }
 }

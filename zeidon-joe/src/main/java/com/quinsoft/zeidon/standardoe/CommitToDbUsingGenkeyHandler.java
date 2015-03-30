@@ -128,7 +128,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     if ( ! view.getObjectInstance().isUpdated() )
                         continue;
 
-                    commitView( view.newView() );
+                    commitView( view.newInternalView() );
                 }
                 commit = true;
             }

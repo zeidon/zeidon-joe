@@ -291,15 +291,14 @@ public class QualificationBuilder
         if ( rootInstance == null )
         {
             String rootName = getLodDef().getRoot().getName();
-            View temp = qualView.newView();
 
             if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", rootName ) != CursorResult.SET )
             {
                 entitySpecCount++;
-                qualView.cursor( ENTITYSPEC ).createEntity().setAttribute( "EntityName", rootName );
+                qualView.cursor( ENTITYSPEC ).createEntity().getAttribute( "EntityName" ).setValue( rootName );
             }
 
-            rootInstance = temp.cursor( ENTITYSPEC ).getEntityInstance();
+            rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
         }
 
         return rootInstance;
@@ -313,7 +312,7 @@ public class QualificationBuilder
         if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", entityName ) != CursorResult.SET )
         {
             entitySpecCount++;
-            qualView.cursor( ENTITYSPEC ).createEntity().setAttribute( "EntityName", entityName );
+            qualView.cursor( ENTITYSPEC ).createEntity().getAttribute( "EntityName").setValue( entityName );
 
             // If this is the root then get the cursor.
             if ( rootInstance == null && getLodDef().getRoot().getName().equals( entityName ) )
@@ -539,6 +538,7 @@ public class QualificationBuilder
                 sourceEntityInstance = null;
             }
 
+            qualView.setInternal( true ); // So it doesn't show up in the browser.
             return view;
         }
     }
