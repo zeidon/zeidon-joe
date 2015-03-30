@@ -2056,6 +2056,30 @@ public abstract class VmlOperation
       return sb.length( );
    }
 
+   
+   protected static final  String zstrncpyoffset( String s, String s2, int nLth, int nOffset )
+   {
+      if ( s2.length() < nOffset + nLth )
+      {
+         nLth = s2.length() - nOffset;
+      }
+
+      s = s2.substring( nOffset, nOffset + nLth );
+      return s;
+   }
+
+   public int zstrncpyoffset( StringBuilder sb, String s2, int nLth, int nOffset )
+   {
+      if ( s2.length() < nOffset + nLth )
+      {
+         nLth = s2.length() - nOffset;
+      }
+
+      sb.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
+      sb.append( s2.substring( nOffset, nOffset + nLth ) );
+      return sb.length();
+   }
+
    protected static final String zstrncpy( String s, String s2, int nLth )
    {
       if ( s2.length() < nLth )
