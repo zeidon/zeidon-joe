@@ -3,6 +3,7 @@
  */
 package com.quinsoft.zeidon.test;
 
+import com.quinsoft.zeidon.CursorPosition;
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -11,6 +12,7 @@ import org.junit.Test;
 
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -47,23 +49,34 @@ public class TestEpamms
 	}
 
 	@Test
+	public void ExecuteJOE_Test0()
+	{
+	   View         mLLD;
+
+		mLLD = ePamms.activateEmptyObjectInstance( "mLLD" );
+		VmlTester tester = new VmlTester( mLLD );
+		tester.ExecuteJOE_Test0( mLLD );
+      System.out.println("===== Finished ExecuteJOE_Test0 ========");
+	}
+
+	@Test
 	public void ExecuteJOE_Test1()
 	{
-	    View         testview;
+	   View         testview;
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_Test1( testview );
-        System.out.println("===== Finished ExecuteJOE_Test1 ========");
+      System.out.println("===== Finished ExecuteJOE_Test1 ========");
 	}
 
 	@Test
 	public void ExecuteJOE_Test2()
 	{
-	    View         testview;
+	   View         testview;
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_Test2( testview );
-        System.out.println("===== Finished ExecuteJOE_Test2 ========");
+      System.out.println("===== Finished ExecuteJOE_Test2 ========");
 	}
 
 	@Test
@@ -104,6 +117,29 @@ public class TestEpamms
 			super( view );
 		}
 
+		public int
+		ExecuteJOE_Test0( View     mLLD )
+		{
+         EntityCursor ec = mLLD.getCursor( "LLD" );
+         ec.createEntity( CursorPosition.FIRST );
+         ec = mLLD.getCursor( "LLD_Page" );
+         ec.createEntity( CursorPosition.FIRST );
+         ec = mLLD.getCursor( "LLD_Panel" );
+         ec.createEntity( CursorPosition.FIRST );
+         ec = mLLD.getCursor( "LLD_Block" );
+         ec.createEntity( CursorPosition.FIRST );
+         ec.getAttribute( "Tag" ).setValue( "B1" );
+         ec.createEntity( CursorPosition.NEXT );
+         ec.getAttribute( "Tag" ).setValue( "B2" );
+         mLLD.logObjectInstance();
+         ec.setFirst();
+         EntityCursor ec2 = mLLD.getCursor( "LLD_Block" );
+         ec2.setLast();
+         ec2.setToSubobject();
+         ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mLLD.logObjectInstance();
+         return 0;
+      }
 
 		public int
 		ExecuteJOE_Test1( View     ViewToWindow )
