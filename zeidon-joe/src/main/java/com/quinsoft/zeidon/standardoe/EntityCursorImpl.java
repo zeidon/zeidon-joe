@@ -1684,7 +1684,7 @@ class EntityCursorImpl implements EntityCursor
             throw new ZeidonException("Entity %s is the root of the LodDef", getEntityDef() );
 
         if ( ! entityDef.isRecursive() )
-            throw new ZeidonException("Entity %s is not recursive");
+            throw new ZeidonException("Entity %s is not recursive", entityDef );
 
         // TODO: Check to see if subobject entity is already the parent?
 

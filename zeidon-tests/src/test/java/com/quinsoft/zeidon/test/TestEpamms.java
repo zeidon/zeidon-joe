@@ -135,7 +135,8 @@ public class TestEpamms
          ec.setFirst();
          EntityCursor ec2 = mLLD.getCursor( "LLD_Block" );
          ec2.setLast();
-         ec2.setToSubobject();
+         mLLD.getCursor( "LLD_SubBlock" ).setToSubobject();
+//         ec2.setToSubobject();
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mLLD.logObjectInstance();
          return 0;
