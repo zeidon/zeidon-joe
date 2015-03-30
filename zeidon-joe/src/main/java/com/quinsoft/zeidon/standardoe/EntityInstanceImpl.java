@@ -477,7 +477,7 @@ class EntityInstanceImpl implements EntityInstance
         assert assertParent();
         // We match by ER entity token to handle recursive cases.
         assert getEntityDef().getParent().getErEntityToken() == parent.getEntityDef().getErEntityToken() :
-            "Setting parent to mismatching VE.  Parent = " + parent.getEntityDef() + ", child = " + getEntityDef();
+            "Setting parent to mismatching EntityDef.  Parent = " + parent.getEntityDef() + ", child = " + getEntityDef();
     }
 
     EntityInstanceImpl getPrevHier()

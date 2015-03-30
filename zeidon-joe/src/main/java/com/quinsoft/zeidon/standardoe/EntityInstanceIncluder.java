@@ -63,6 +63,11 @@ class EntityInstanceIncluder
     {
         // If targetInstance is specified then targetParent better be its parent.
         assert targetInstance == null || targetInstance.getParent() == targetParent;
+        
+        // Check for edge case: the target is a recursive subobject that is current set to a child
+        // subobject.
+        if ( targetEntityDef.isRecursiveParent() && targetParent.getEntityDef().isRecursiveParent() )
+            targetEntityDef = targetEntityDef.getRecursiveChild();
 
         EntityInstanceIncluder includer =
                 new EntityInstanceIncluder( source, position, targetEntityDef, targetParent, targetInstance, targetOi );

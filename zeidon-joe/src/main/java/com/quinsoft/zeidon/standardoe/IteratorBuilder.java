@@ -97,9 +97,15 @@ class IteratorBuilder
         if ( loadLazyEntities != null && ! loadLazyEntities )
             return null;
 
+        if ( ! objectInstance.getLodDef().hasLazyLoadEntities() )
+            return null;
+
         if ( objectInstance.isIgnoreLazyLoadEntities() )
             return null;
 
+        if ( scopingInstance != null && ! scopingInstance.getEntityDef().getLazyLoadConfig().hasLazyLoadChild() )
+            return null;
+        
         // Determine if we are going to lazy-load entities.
         if ( targetEntityDef != null )
         {

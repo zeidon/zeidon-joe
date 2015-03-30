@@ -67,6 +67,7 @@ public class LodDef implements PortableFileAttributeHandler
     private LockingLevel lockingLevel = LockingLevel.NONE;
     private SourceFileType sourceFileType = SourceFileType.VML;
     private String         sourceFileName;
+    private boolean      hasLazyLoadEntities;
 
     /**
      * True if any entities in this LOD have DataRecords.
@@ -667,5 +668,20 @@ public class LodDef implements PortableFileAttributeHandler
     public String getLibraryName()
     {
         return libraryName;
+    }
+
+    /**
+     * Returns true if this LOD has entities that are lazy-loaded.
+     * 
+     * @return
+     */
+    public boolean hasLazyLoadEntities()
+    {
+        return hasLazyLoadEntities;
+    }
+
+    void setHasLazyLoadEntities( boolean hasLazyLoadEntities )
+    {
+        this.hasLazyLoadEntities = hasLazyLoadEntities;
     }
 }

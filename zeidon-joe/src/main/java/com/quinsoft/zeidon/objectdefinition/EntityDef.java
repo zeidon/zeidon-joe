@@ -315,6 +315,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
                     LazyLoadConfig parentConfig = getParent().getLazyLoadConfig();
                     parentConfig.setFlag( LazyLoadFlags.HAS_LAZYLOAD_CHILD );
+                    getLodDef().setHasLazyLoadEntities( true );
                 }
                 break;
 
