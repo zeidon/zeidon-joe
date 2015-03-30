@@ -133,10 +133,15 @@ public class TestEpamms
          ec.getAttribute( "Tag" ).setValue( "B2" );
          mLLD.logObjectInstance();
          ec.setFirst();
-         EntityCursor ec2 = mLLD.getCursor( "LLD_Block" );
-         ec2.setLast();
+
+         View mLLD2 = mLLD.newView();
+         mLLD2.getCursor( "LLD_Block" ).setLast();
+         mLLD2.getCursor( "LLD_SubBlock" ).setToSubobject();
+         mLLD2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+      /* ec2.setLast();
          ec2.setToSubobject();
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+      */
          mLLD.logObjectInstance();
          return 0;
       }
