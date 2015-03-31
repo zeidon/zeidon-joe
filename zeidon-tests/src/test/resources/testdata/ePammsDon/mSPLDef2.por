@@ -1,4 +1,4 @@
-z00000Zeidon    C:\workspace\zeidon\zeidon-tests\src\test\resources\testdata\ePammsDon\mSPLDef2.por MSPLDEF 2015/03/31 18:11:40
+z00000Zeidon    C:\workspace\zeidon\zeidon-tests\src\test\resources\testdata\ePammsDon\mSPLDef2.por MSPLDEF 2015/03/31 18:35:48
 eSubregPhysicalLabelDef 1
 aID        6
 aName      spld name

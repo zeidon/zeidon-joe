@@ -173,6 +173,8 @@ public class TestEpamms
          CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zASCII );
          ActivateOI_FromFile( mSPLDef, "mSPLDef", view, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zSINGLE );
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
+
+         // Try to move the SubBlock back to a panel.
          mSPLDef.resetSubobjectTop();
 
          mSPLDef2 = mSPLDef.newView();
