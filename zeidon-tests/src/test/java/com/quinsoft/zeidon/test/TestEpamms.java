@@ -60,6 +60,17 @@ public class TestEpamms
 	}
 
 	@Test
+	public void ExecuteJOE_Test00()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_Test00( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_Test00 ========");
+	}
+
+	@Test
 	public void ExecuteJOE_Test1()
 	{
 	   View         testview;
@@ -117,6 +128,67 @@ public class TestEpamms
 			super( view );
 		}
 
+      private void displaySPLD( View vLLD, String entity, String msg ) {
+         TraceLineS( "displaySPLD: ", msg );
+         EntityCursor ec;
+         if ( entity != null ) {
+            ec = vLLD.getCursor( entity );
+            ec.logEntity( false );
+         }
+         View t = vLLD.newView();
+         t.resetSubobjectTop();
+         ec = t.getCursor( "SPLD_LLD" );
+         ec.logEntity( true );
+         t.drop();
+      }
+
+		public int
+		ExecuteJOE_Test00( View     view )
+		{
+         zVIEW    mSPLDef = new zVIEW();
+         
+         ActivateOI_FromFile( mSPLDef, "mSPLDef", view, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef.por", zSINGLE );
+         displaySPLD( mSPLDef, "SPLD_LLD", "First Activate" );
+
+         EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
+         ec.setFirst();
+         View mSPLDef2 = mSPLDef.newView();
+
+      // this works ...
+         mSPLDef2.getCursor( "LLD_Block" ).setLast();
+         mSPLDef2.getCursor( "LLD_SubBlock" ).setToSubobject();
+         mSPLDef2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mSPLDef2.resetSubobjectTop();
+         displaySPLD( mSPLDef2, "SPLD_LLD", "After moveSubobject" );
+      //
+      /* also works
+         EntityCursor ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.setLast();
+         ec2 = mSPLDef2.getCursor( "LLD_SubBlock" );
+         ec2.setToSubobject();
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mSPLDef.logObjectInstance();
+      */
+         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zASCII );
+         ActivateOI_FromFile( mSPLDef, "mSPLDef", view, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zSINGLE );
+         displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
+         mSPLDef.resetSubobjectTop();
+
+         mSPLDef2 = mSPLDef.newView();
+         mSPLDef2.getCursor( "LLD_Panel" ).setFirst();
+
+         ec = mSPLDef.getCursor( "LLD_SubBlock" );
+         ec.setToSubobject();
+         ec = mSPLDef.getCursor( "LLD_Block" );
+
+         mSPLDef2.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+
+         displaySPLD( mSPLDef2, "SPLD_LLD", "After second moveSubobject" );
+
+         return 0;
+      }
+
 		public int
 		ExecuteJOE_Test0( View     mLLD )
 		{
@@ -138,10 +210,6 @@ public class TestEpamms
          mLLD2.getCursor( "LLD_Block" ).setLast();
          mLLD2.getCursor( "LLD_SubBlock" ).setToSubobject();
          mLLD2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
-      /* ec2.setLast();
-         ec2.setToSubobject();
-         ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
-      */
          mLLD.logObjectInstance();
          return 0;
       }
@@ -389,7 +457,8 @@ public class TestEpamms
 		   int      RESULT = 0;
 		   int      lTempInteger_0 = 0;
 
-
+         if ( RESULT == 0 )
+            return 0;
 		   //:// Execute Tests to Check for JOE Bugs.
 
 		   //:// TEST 2
@@ -455,7 +524,9 @@ public class TestEpamms
 		   zVIEW    mSPLDef2 = new zVIEW( );
 		   int      RESULT = 0;
 		   int      lTempInteger_0 = 0;
-           int      SaveID = 0;
+         int      SaveID = 0;
+         if ( RESULT == 0 )
+            return 0;
 
            // A temporal subobject is created for LLD_Page. Then a subentity LLD_Panel is deleted.
            // After the CancelSubobject LLD_Page, the LLD_Panel should exist again, but it does not.

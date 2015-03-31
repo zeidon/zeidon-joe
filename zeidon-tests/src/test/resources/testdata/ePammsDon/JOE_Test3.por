@@ -16,7 +16,7 @@ aFK_ID_MASTERLABELCONTENT 10
 eSubregProduct 3
 aID        3
 aName      KennelSol
-aNumber    10634-MA-1
+aNumber    10634
 aDescription Germicidal Detergent & Deodorant
 aChemicalFamily DQ
 aEPA_RegistrationNumber 62472-1

@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 06/06/14   12:19:59 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 03/25/15   09:54:24 1.0a2    
 eDomainGroup 1
 aName      ePamms
 
@@ -259,6 +259,7 @@ eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      70220060
 aName      ClaimsClassification
+aDesc      Bacteria, Viruses, Fungi, Protozoa
 aDomainType T
 aDataType  S
 aMaxStringLth 16
@@ -434,14 +435,32 @@ aName      ContainerVolume
 aIsDefault Y
 
 eTableEntry 4
+aZKey      120260123
+
+eTableEntry 4
 aZKey      2844697
-aExternalValue <= 1 gallon
+aExternalValue 1 gallon
 aInternalValue 1
 
 eTableEntry 4
+aZKey      120260120
+aExternalValue 2 gallon
+aInternalValue 2
+
+eTableEntry 4
 aZKey      2844698
-aExternalValue > 1 gallon
+aExternalValue 5 gallon
 aInternalValue 5
+
+eTableEntry 4
+aZKey      120260121
+aExternalValue 10 gallon
+aInternalValue 10
+
+eTableEntry 4
+aZKey      120260122
+aExternalValue 15 gallon
+aInternalValue 15
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -577,12 +596,13 @@ aJavaEditString yyyyMMdd
 eContext   3
 aZKey      68568092
 aName      Day
+aEditString DDD
 aJavaEditString DDD
 
 eContext   3
 aZKey      68568093
 aName      DayOfMonth
-aEditString D
+aEditString DD
 aJavaEditString dd
 
 eContext   3
@@ -690,6 +710,7 @@ aJavaEditString MMM dd, yyyy
 eContext   3
 aZKey      68568109
 aName      Month
+aEditString MM
 aJavaEditString MM
 
 eContext   3
@@ -707,11 +728,13 @@ aJavaEditString MMMM
 eContext   3
 aZKey      68568112
 aName      MSWindowsLongSetting
+aEditString yyyy.MM.dd HH:mm:ss.SSS
 aJavaEditString yyyy.MM.dd HH:mm:ss.SSS
 
 eContext   3
 aZKey      68568113
 aName      MSWindowsShortSetting
+aEditString yyyy-MM-dd HH:mm:ss.SSS
 aJavaEditString yyyy-MM-dd HH:mm:ss.SSS
 
 eContext   3
@@ -723,11 +746,13 @@ aJavaEditString 'REV'MMddyy
 eContext   3
 aZKey      68568114
 aName      WeekOfYear
+aEditString ww
 aJavaEditString ww
 
 eContext   3
 aZKey      68568115
 aName      Year
+aEditString yyyy
 aJavaEditString yyyy
 
 eContext   3
@@ -801,211 +826,260 @@ eContext   3
 aZKey      68568142
 aName      Date
 aEditString YYYYmmdd
+aJavaEditString yyyyMMdd
 
 eContext   3
 aZKey      68568143
 aName      DateTime
 aEditString YYYYmmddHHMISS999
+aJavaEditString yyyyMMddHHmmssSSS
 
 eContext   3
 aZKey      68568144
 aName      Day
+aEditString E
+aJavaEditString E
 
 eContext   3
 aZKey      68568145
 aName      DayOfMonth
 aEditString D
+aJavaEditString d
 
 eContext   3
 aZKey      68568146
 aName      DayOfWeek
 aEditString Dddd
+aJavaEditString E
 
 eContext   3
 aZKey      68568147
 aName      DayOfYear
 aEditString jjj
+aJavaEditString DDD
 
 eContext   3
 aZKey      68568148
 aName      DD-MM-YY
 aEditString dd-mm-YY
+aJavaEditString dd-MM-yy
 
 eContext   3
 aZKey      68568149
 aName      DD-MM-YYYY
 aEditString dd-mm-YYYY
+aJavaEditString dd-MM-yyyy
 
 eContext   3
 aZKey      68568150
 aName      DD/MM/YY
 aEditString dd/mm/YY
+aJavaEditString dd/MM/yy
 
 eContext   3
 aZKey      68568151
 aName      DD/MM/YYYY
 aEditString dd/mm/YYYY
+aJavaEditString dd/MM/yyyy
 
 eContext   3
 aZKey      68568152
 aName      DD/MM/YYYY HH:MM:SS.S
 aEditString dd/mm/YYYY HH:MI:SS.9
+aJavaEditString dd/MM/yyyy HH:mm:ss:SSS
 
 eContext   3
 aZKey      68568153
 aName      DD/MM/YYYY HH:MM:SS.S AM
 aEditString dd/mm/YYYY HH:MI:SS.9 AM
+aJavaEditString dd/MM/yyyy HH:mm:ss:SSS aa
 
 eContext   3
 aZKey      68568154
 aName      DDMonthYYYY
 aEditString dd Mmmm, YYYY
+aJavaEditString dd MMMM, yyyy
 
 eContext   3
 aZKey      68568155
 aName      DDMonYYYY
 aEditString dd Mmm YYYY
+aJavaEditString dd MMM yyyy
 
 eContext   3
 aZKey      68568156
 aName      HH:MM:SS.S
 aEditString HH:MI:SS.9
+aJavaEditString HH:mm:ss:S
 
 eContext   3
 aZKey      68568157
 aName      HH:MM:SS.S AM
 aEditString HH:MI:SS.9 AM
+aJavaEditString HH:mm:ss:S aa
 
 eContext   3
 aZKey      68568158
 aName      Hour
 aEditString HH
+aJavaEditString HH
 
 eContext   3
 aZKey      68568159
 aName      ListDisplay
 aEditString DD Mmm YY (HH:MI AM)
+aJavaEditString dd MMM yy (HH:mm a)
 
 eContext   3
 aZKey      68568160
 aName      ListDisplayNumeric
 aEditString YY/MM/DD - HH:MI
+aJavaEditString yy/MM/dd - HH:mm
 
 eContext   3
 aZKey      68568161
 aName      Minute
 aEditString MI
+aJavaEditString mm
 
 eContext   3
 aZKey      68568162
 aName      MM-DD-YY
 aEditString mm-dd-YY
+aJavaEditString MM-dd-yy
 
 eContext   3
 aZKey      68568163
 aName      MM-DD-YYYY
 aEditString mm-dd-YYYY
+aJavaEditString MM-dd-yyyy
 
 eContext   3
 aZKey      68568164
 aName      MM/DD/YY
 aEditString mm/dd/YY
+aJavaEditString MM/dd/yy
 
 eContext   3
 aZKey      68568165
 aName      MM/DD/YYYY
 aEditString mm/dd/YYYY
+aJavaEditString MM/dd/yyyy
 
 eContext   3
 aZKey      68568166
 aName      MM/DD/YYYY HH:MM:SS.S
 aEditString mm/dd/YYYY HH:MI:SS.9
+aJavaEditString MM/dd/yyyy HH:mm:ss:SSS
 
 eContext   3
 aZKey      68568168
 aName      MMDDYYYY
 aEditString MMDDYYYY
+aJavaEditString MMddyyyy
 
 eContext   3
 aZKey      68568169
 aName      MonDDYYYY
 aEditString Mmm dd, YYYY
+aJavaEditString MMM dd, yyyy
 
 eContext   3
 aZKey      68568170
 aName      Month
+aEditString MMM
+aJavaEditString MMM
 
 eContext   3
 aZKey      68568171
 aName      MonthDDYYYY
 aEditString Mmmm dd, YYYY
+aJavaEditString MMMM dd, yyyy
 
 eContext   3
 aZKey      68568172
 aName      MonthOfYear
 aEditString Mmmm
+aJavaEditString MMMM
 
 eContext   3
 aZKey      68568173
 aName      MSWindowsLongSetting
+aEditString dd/MM/yyyy HH:mm:ss:SSS aa
+aJavaEditString dd/MM/yyyy HH:mm:ss:SSS aa
 
 eContext   3
 aZKey      68568174
 aName      MSWindowsSetting
+aEditString dd/MM/yyyy
+aJavaEditString dd/MM/yyyy
 
 eContext   3
 aZKey      68568175
 aName      MSWindowsShortSetting
+aEditString dd/MM/yyyy
+aJavaEditString dd/MM/yyyy
 
 eContext   3
 aZKey      68568176
 aName      Second
 aEditString SS
+aJavaEditString ss
 
 eContext   3
 aZKey      68568177
 aName      Time
 aEditString HHMISS999
+aJavaEditString HHmmssSSS
 
 eContext   3
 aZKey      68568178
 aName      WeekOfYear
+aEditString w
+aJavaEditString w
 
 eContext   3
 aZKey      68568179
 aName      Year
+aEditString YYYY
+aJavaEditString yyyy
 
 eContext   3
 aZKey      68568180
 aName      YY
 aEditString YY
+aJavaEditString yy
 
 eContext   3
 aZKey      68568181
 aName      YYJJJ
 aEditString YYjjj
+aJavaEditString yyDDD
 
 eContext   3
 aZKey      68568182
 aName      YYYY
 aEditString YYYY
+aJavaEditString yyyy
 
 eContext   3
 aZKey      68568183
 aName      YYYY-MM-DD
 aEditString YYYY-MM-DD
+aJavaEditString yyyy-MM-dd
 
 eContext   3
 aZKey      68568167
 aName      YYYY/MM/DD HH:MM:SS.S AM
 aEditString YYYY/mm/dd HH:MI:SS.9 AM
-aJavaEditString yyyy/MM/dd KK:mm:ss.S a
+aJavaEditString yyyy/MM/dd HH:mm:ss:SSS aa
 aIsDefault Y
 
 eContext   3
 aZKey      68568184
 aName      YYYYJJJ
 aEditString YYYYjjj
+aJavaEditString yyyyDDD
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
@@ -1959,6 +2033,38 @@ aExternalValue Bactericidal stability of  Use-dilution
 aInternalValue BU
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      130001702
+aName      DonTest
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      130001703
+aName      DonTest
+aIsDefault Y
+
+eTableEntry 4
+aZKey      130001712
+
+eTableEntry 4
+aZKey      130001704
+aExternalValue Test
+aInternalValue T
+
+eTableEntry 4
+aZKey      130001705
+aExternalValue Incomplete
+aInternalValue I
+
+eTableEntry 4
+aZKey      130001709
+aExternalValue More
+aInternalValue M
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      68568053
 aName      EMailAddress
@@ -2292,6 +2398,21 @@ aName      GeneralName_Address
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.CaseAwareStringDomain
+aZKey      110002352
+aName      GeneralNameCaseInsensitive
+aDesc      Case Insensitive General Text (names, streets, cities, etc.)
+aDomainType E
+aDataType  S
+aMaxStringLth 128
+aContextRestriction N
+
+eContext   3
+aZKey      110002353
+aName      GeneralNameCaseInsensitive
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      69055597
 aName      GeneralSectionType
@@ -2345,6 +2466,61 @@ eTableEntry 4
 aZKey      69055601
 aExternalValue F
 aInternalValue F
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003579
+aName      HazardLocationSeparator
+aDesc      Separator when multiple hazard locations are specified (e.g. [], (), /, \)
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      110003580
+aName      HazardLocationSeparator
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110003581
+aExternalValue Brackets
+aInternalValue []
+
+eTableEntry 4
+aZKey      110003582
+aExternalValue Parens
+aInternalValue ()
+
+eTableEntry 4
+aZKey      110003612
+aExternalValue Braces
+aInternalValue {}
+
+eTableEntry 4
+aZKey      110003583
+aExternalValue Backslash
+aInternalValue \
+
+eTableEntry 4
+aZKey      110003584
+aExternalValue Slash
+aInternalValue /
+
+eTableEntry 4
+aZKey      110003585
+aExternalValue Pipe
+aInternalValue |
+
+eTableEntry 4
+aZKey      110003588
+aExternalValue Dash
+aInternalValue -
+
+eTableEntry 4
+aZKey      110003586
+aExternalValue Comma
+aInternalValue ,
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2512,9 +2688,6 @@ aName      LLD_ColumnListType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      120150313
-
-eTableEntry 4
 aZKey      120150078
 aExternalValue Usage List - 2 Column
 aInternalValue C2
@@ -2664,6 +2837,23 @@ aName      Note
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.RegularExpressionDomain
+aZKey      18568062
+aName      NumericId
+aDesc      Numeric Text (0-9).
+aDomainType F
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      18568063
+aName      NumericId
+aEditString 99999999999999999999999999999999
+aJavaEditString ^[0-9]*$
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.PasswordDomain
 aZKey      68568077
 aName      Password
@@ -2700,7 +2890,7 @@ eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
 aZKey      68568211
 aName      Percent
-aDesc      Percent as a decimal <= 1
+aDesc      Percent as a decimal, such that 1.00 is 100%.
 aDomainType E
 aDataType  M
 aContextRestriction N
@@ -2801,9 +2991,6 @@ eContext   3
 aZKey      120129883
 aName      SelectUsageType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      120130712
 
 eTableEntry 4
 aZKey      120129884
@@ -2917,10 +3104,6 @@ aContextRestriction N
 eContext   3
 aZKey      1160423
 aName      States
-aIsDefault Y
-
-eTableEntry 4
-aZKey      120130709
 
 eTableEntry 4
 aZKey      86698070
@@ -3185,9 +3368,7 @@ aInternalValue WY
 eContext   3
 aZKey      1160420
 aName      States - Full Name
-
-eTableEntry 4
-aZKey      120130710
+aIsDefault Y
 
 eTableEntry 4
 aZKey      85698070
@@ -3504,9 +3685,6 @@ aName      TemplateStatementFormat
 aIsDefault Y
 
 eTableEntry 4
-aZKey      4143975
-
-eTableEntry 4
 aZKey      69081358
 aExternalValue Separate Paragraph
 aInternalValue SP
@@ -3637,9 +3815,6 @@ eContext   3
 aZKey      4322673
 aName      TextAlign
 aIsDefault Y
-
-eTableEntry 4
-aZKey      120162450
 
 eTableEntry 4
 aZKey      4322674
@@ -3809,6 +3984,9 @@ aZKey      68567483
 aName      Default
 
 eTableEntry 4
+aZKey      44805127
+
+eTableEntry 4
 aZKey      68567484
 aExternalValue Default
 aInternalValue Y
@@ -3832,9 +4010,16 @@ aZKey      68567488
 aExternalValue N
 aInternalValue N
 
+eTableEntry 4
+aZKey      44805126
+aExternalValue N
+
 eContext   3
 aZKey      1518816
 aName      Yes/No
+
+eTableEntry 4
+aZKey      44805128
 
 eTableEntry 4
 aZKey      1518817
