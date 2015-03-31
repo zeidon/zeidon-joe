@@ -145,9 +145,7 @@ public class TestEpamms
 		public int
 		ExecuteJOE_Test00( View     view )
 		{
-         zVIEW    mSPLDef = new zVIEW();
-         
-         ActivateOI_FromFile( mSPLDef, "mSPLDef", view, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef.por", zSINGLE );
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDef.por" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "First Activate" );
 
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
@@ -171,7 +169,7 @@ public class TestEpamms
          mSPLDef.logObjectInstance();
       */
          CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zASCII );
-         ActivateOI_FromFile( mSPLDef, "mSPLDef", view, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zSINGLE );
+         mSPLDef = view.deserializeOi().fromZeidonHomeFile( "/ePammsDon/mSPLDef2.por" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
          mSPLDef.resetSubobjectTop();
 

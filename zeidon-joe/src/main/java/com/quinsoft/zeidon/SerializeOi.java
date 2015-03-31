@@ -127,6 +127,28 @@ public class SerializeOi
     }
 
     /**
+     * Convenience method that prepends the Zeidon HOME to the filename.
+     *  
+     * @param filename
+     * @return
+     */
+    public String toZeidonHomeFile( String filename )
+    {
+        if ( viewList.size() == 0 )
+            throw new ZeidonException( "Specify at least one view before calling toZeidonHomeFile()" );
+        
+        String tfile = viewList.get( 0 ).getTask().getObjectEngine().getHomeDirectory();
+        
+        // Append the dir separator if it's not specified.
+        if ( ! tfile.endsWith( "\\" ) && ! tfile.endsWith( "/" ) && filename.startsWith( "\\" ) && filename.startsWith( "/" ) )
+            tfile += "/";
+        
+        tfile += filename;
+        
+        return toFile( tfile );
+    }
+    
+    /**
      * Serializes the OI to the specified file name.  If the format has not yet been specified
      * the format will be determined (if possible) from the filename extension.  E.g. "myfile.json"
      * indicates the format is JSON.

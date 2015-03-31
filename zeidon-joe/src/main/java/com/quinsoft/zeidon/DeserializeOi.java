@@ -179,6 +179,24 @@ public class DeserializeOi
     }
 
     /**
+     * Convenience method that prepends the Zeidon HOME to the filename.
+     *  
+     * @param filename
+     * @return
+     */
+    public DeserializeOi fromZeidonHomeFile( String filename )
+    {
+        String tfile = getTask().getObjectEngine().getHomeDirectory();
+        
+        // Append the dir separator if it's not specified.
+        if ( ! tfile.endsWith( "\\" ) && ! tfile.endsWith( "/" ) && filename.startsWith( "\\" ) && filename.startsWith( "/" ) )
+            tfile += "/";
+        
+        tfile += filename;
+        return fromFile( tfile );
+    }
+
+    /**
      * Set the input stream by opening the file.
      *
      * @param file the file
