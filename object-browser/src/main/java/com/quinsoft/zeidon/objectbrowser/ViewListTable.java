@@ -123,10 +123,10 @@ public class ViewListTable extends JTable
 
         Object[] row = new Object[ VIEWLISTCOLS.length ];
         List<BrowserView> viewList = env.refreshBrowserViewList( task );
-        
+
         // Sort the view list in descending order of view ID.
         Collections.sort( viewList, VIEWLIST_COMPARATOR );
-        
+
         idx = -1;
         int count = 0;
         for ( BrowserView view : viewList )
@@ -154,12 +154,16 @@ public class ViewListTable extends JTable
 
         public ViewPopupMenu(BrowserView v)
         {
-            JMenuItem item = new JMenuItem( "Write to POR file" );
-            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.POR ) );
+            JMenuItem item = new JMenuItem( "Write to JSON file" );
+            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.JSON ) );
             add( item );
 
-            item = new JMenuItem( "Write to JSON file" );
-            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.JSON ) );
+            item = new JMenuItem( "Write to XML file" );
+            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.XML ) );
+            add( item );
+
+            item = new JMenuItem( "Write to POR file" );
+            item.addActionListener( new WriteViewMenuListener( v, StreamFormat.POR ) );
             add( item );
 
             item = new JMenuItem( "Drop View Name" );
@@ -190,6 +194,9 @@ public class ViewListTable extends JTable
             if ( returnVal == JFileChooser.APPROVE_OPTION )
             {
                 String filename = chooser.getSelectedFile().getAbsolutePath();
+                if ( ! filename.contains( "." ) )
+                    filename += format.getExtension();
+
                 View v = env.getView( view );
                 v.serializeOi().setFormat( format ).withIncremental().toFile( filename );
                 env.getOe().getSystemTask().log().info( "OI written to %s", filename );
@@ -214,9 +221,9 @@ public class ViewListTable extends JTable
             refresh( view.task );
         }
     }
-    
+
     /**
-     * Compares BrowserViews in reverse order of their View Id. 
+     * Compares BrowserViews in reverse order of their View Id.
      */
     private static class ViewListComparator implements Comparator<BrowserView>
     {
@@ -227,18 +234,18 @@ public class ViewListTable extends JTable
             {
                 if ( ! v2.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
                     return v1.viewName.compareTo( v2.viewName );
-                
+
                 return -1; // Named views always come before unnamed views.
             }
-            
+
             if ( ! v2.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
             {
                 // If we get here then we know v1 is unnamed.
                 return 1;
             }
-            
+
             return Long.compare( v1.viewId, v2.viewId ) * -1;
         }
-        
+
     }
 }
