@@ -3,19 +3,20 @@
  */
 package com.quinsoft.zeidon.test;
 
-import com.quinsoft.zeidon.CursorPosition;
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
-import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityCursor;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
@@ -192,13 +193,15 @@ public class TestEpamms
          ec = mSPLDef.getCursor( "LLD_SubBlock" );
          ec.setToSubobject();
          ec = mSPLDef.getCursor( "LLD_Block" );
+         if ( ec.isNull() )
+             throw new ZeidonException("This shouldn't be null" );
 
          mSPLDef2.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          displaySPLD( mSPLDef2, "SPLD_LLD", "After second moveSubobject" );
 
          return 0;
       }
-         
+
 		public int
 		ExecuteJOE_Test00( View     view )
 		{

@@ -2400,19 +2400,23 @@ class EntityCursorImpl implements EntityCursor
         EntityInstanceImpl target = getEntityInstance();
         if ( target == null )
             target = getParentCursor().getExistingInstance();
+
+        if ( source.getEntityInstance() == null )
+            throw new ZeidonException( "Source EntityCursor is null" );
+
         if ( target.isChildOf( source ) )
             throw new ZeidonException( "Attempting to move an entity instance under one of its children" )
                             .appendMessage( "Target Entity = %s", getEntityDef().getName() )
                             .appendMessage( "Child entity = %s", source.getEntityDef().getName() );
-        
+
         if ( ! getEntityDef().isInclude() )
             throw new ZeidonException( "Target of moveSubobject be be includable" )
                             .appendMessage( "Target = %s", getEntityDef().getName() );
-        
+
         if ( ! source.getEntityDef().isExclude() )
             throw new ZeidonException( "Source of moveSubobject be be excludable" )
                             .appendMessage( "Source = %s", source.getEntityDef().getName() );
-        
+
         // Verify that the EntityDefs are the same for source and target -or- one is a recursive
         // child of the other.
         // TODO: The COE requires them to be the same EntityDef but is that really necessary?
@@ -2421,7 +2425,7 @@ class EntityCursorImpl implements EntityCursor
 
         if ( source.getEntityDef().getLodDef() != getEntityDef().getLodDef() )
             throw new ZeidonException( "When moving subobjects, source and target OIs must be using the same LOD" );
-        
+
         if ( getEntityDef().isRecursiveParent() && source.getEntityDef().isRecursive() &&
              getEntityDef().isAncestorOf( source.getEntityDef() ) )
         {
@@ -2438,11 +2442,11 @@ class EntityCursorImpl implements EntityCursor
         throw new ZeidonException( "When moving subobjects, source and target must be the same entity type " +
                                    "or one must be a recursive parent of the other" );
     }
-    
+
     private CursorResult moveSubobject(CursorPosition position, EntityInstance source, CursorPosition sourceReposition)
     {
         validateOiUpdate();
-        
+
         EntityInstanceImpl target = getEntityInstance();
 
         // If source and target are the same then there's nothing to do.  Call getEntityInstance() on
@@ -2457,7 +2461,7 @@ class EntityCursorImpl implements EntityCursor
 
         // Verify that the subobject can be moved between different parents.
         verifySubobjectMove( source );
-        
+
         // If we get here then everything should be good.
         includeSubobject( source, position );
         if ( source instanceof EntityCursor )
