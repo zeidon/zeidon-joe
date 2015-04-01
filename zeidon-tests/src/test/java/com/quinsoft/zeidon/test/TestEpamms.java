@@ -178,14 +178,15 @@ public class TestEpamms
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mSPLDef.logObjectInstance();
       */
-         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
-         mSPLDef = ePamms.activateOiFromFile( "mSPLDef", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", null );
-         displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
+//       CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
+//       mSPLDef = ePamms.activateOiFromFile( "mSPLDef", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", null );
+//       displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
          // Try to move the SubBlock back to a panel.
-         mSPLDef.resetSubobjectTop();
+         mSPLDef2.resetSubobjectTop();
+         displaySPLD( mSPLDef2, "SPLD_LLD", "After Activate mSPLDef2" );
 
-         mSPLDef2 = mSPLDef.newView();
+         mSPLDef = mSPLDef2.newView();
          mSPLDef2.getCursor( "LLD_Panel" ).setFirst();
 
          ec = mSPLDef.getCursor( "LLD_SubBlock" );
