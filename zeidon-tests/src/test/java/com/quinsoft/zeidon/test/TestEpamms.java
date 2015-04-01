@@ -186,11 +186,17 @@ public class TestEpamms
          // Try to move the SubBlock back to a panel.
          mSPLDef2.resetSubobjectTop();
          displaySPLD( mSPLDef2, "SPLD_LLD", "After Activate mSPLDef2" );
+         CursorResult cr = mSPLDef2.getCursor( "LLD_Panel" ).setFirst();
 
          mSPLDef = mSPLDef2.newView();
-         mSPLDef2.getCursor( "LLD_Panel" ).setFirst();
+         mSPLDef.resetSubobjectTop();
+         displaySPLD( mSPLDef, "SPLD_LLD", "After Activate/Reset New mSPLDef" );
+         cr = mSPLDef.cursor( "LLD_Page" ).setFirst();
+         cr = mSPLDef.cursor( "LLD_Panel" ).setFirst();
 
          ec = mSPLDef.getCursor( "LLD_SubBlock" );
+         TraceLineS( "Logging LLD_SubBlock", "" );
+         ec.logEntity();
          ec.setToSubobject();
          ec = mSPLDef.getCursor( "LLD_Block" );
          if ( ec.isNull() )
@@ -205,7 +211,7 @@ public class TestEpamms
 		public int
 		ExecuteJOE_Test00( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDef.por" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefGood.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "First Activate" );
 
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
@@ -228,8 +234,8 @@ public class TestEpamms
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mSPLDef.logObjectInstance();
       */
-         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zASCII );
-         mSPLDef = view.deserializeOi().fromZeidonHomeFile( "/ePammsDon/mSPLDef2.por" ).activateFirst();
+         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
+         mSPLDef = view.deserializeOi().fromZeidonHomeFile( "/ePammsDon/mSPLDef2.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
          // Try to move the SubBlock back to a panel.
