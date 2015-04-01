@@ -63,4 +63,5 @@ public enum CreateEntityFlags
 
     public static final EnumSet<CreateEntityFlags> DEFAULT     = EnumSet.noneOf( CreateEntityFlags.class );
     public static final EnumSet<CreateEntityFlags> NO_SPAWNING = EnumSet.of( CreateEntityFlags.fNO_SPAWNING );
+    public static final EnumSet<CreateEntityFlags> IGNORE_PERMISSIONS = EnumSet.of( CreateEntityFlags.fIGNORE_PERMISSIONS );
 }
