@@ -48,6 +48,17 @@ public class TestEpamms
 		zeidonSystem = oe.getSystemTask();
 	}
 
+   @Test
+	public void ExecuteJOE_Test000()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_Test000( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_Test000 ========");
+	}
+
 	@Test
 	public void ExecuteJOE_Test0()
 	{
@@ -142,6 +153,51 @@ public class TestEpamms
          t.drop();
       }
 
+      public int
+		ExecuteJOE_Test000( View     view ) {
+         View mSPLDef = ePamms.activateOiFromFile( "mSPLDef", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDefGood.json", null );
+         displaySPLD( mSPLDef, "SPLD_LLD", "Triple Zero Activate" );
+
+         EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
+         ec.setFirst();
+         View mSPLDef2 = mSPLDef.newView();
+
+      // this works ...
+         mSPLDef2.getCursor( "LLD_Block" ).setLast();
+         mSPLDef2.getCursor( "LLD_SubBlock" ).setToSubobject();
+         mSPLDef2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mSPLDef2.resetSubobjectTop();
+         displaySPLD( mSPLDef2, "SPLD_LLD", "After moveSubobject" );
+      //
+      /* also works
+         EntityCursor ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.setLast();
+         ec2 = mSPLDef2.getCursor( "LLD_SubBlock" );
+         ec2.setToSubobject();
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mSPLDef.logObjectInstance();
+      */
+         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
+         mSPLDef = ePamms.activateOiFromFile( "mSPLDef", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", null );
+         displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
+
+         // Try to move the SubBlock back to a panel.
+         mSPLDef.resetSubobjectTop();
+
+         mSPLDef2 = mSPLDef.newView();
+         mSPLDef2.getCursor( "LLD_Panel" ).setFirst();
+
+         ec = mSPLDef.getCursor( "LLD_SubBlock" );
+         ec.setToSubobject();
+         ec = mSPLDef.getCursor( "LLD_Block" );
+
+         mSPLDef2.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         displaySPLD( mSPLDef2, "SPLD_LLD", "After second moveSubobject" );
+
+         return 0;
+      }
+         
 		public int
 		ExecuteJOE_Test00( View     view )
 		{
@@ -171,6 +227,8 @@ public class TestEpamms
          CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.por", zASCII );
          mSPLDef = view.deserializeOi().fromZeidonHomeFile( "/ePammsDon/mSPLDef2.por" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
+
+         // Try to move the SubBlock back to a panel.
          mSPLDef.resetSubobjectTop();
 
          mSPLDef2 = mSPLDef.newView();

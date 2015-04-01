@@ -1,0 +1,2966 @@
+{
+  "version" : "1",
+  "SubregPhysicalLabelDef" : [ {
+    "ID" : "6",
+    "Name" : "spld name",
+    "ProductName" : "product name",
+    "SubregLabelContent" : {
+      "ID" : "7",
+      "Description" : "slc name",
+      "Version" : "slc version",
+      "SubregProduct" : {
+        "ID" : "8",
+        "Name" : "MAQUAT 256-NHQ",
+        "Number" : "00000",
+        "Description" : "2 oz packet",
+        "ChemicalFamily" : "Quat Disinfectant",
+        "EPA_RegistrationNumber" : "10324",
+        "ESL_Date" : "20150323",
+        "Subregistrant" : {
+          "ID" : "7",
+          "SubregOrganization" : {
+            "ID" : "22",
+            "LoginName" : "ATP",
+            "Name" : "ATP",
+            "Description" : "Veterinary Products Supplier",
+            "AdministratorPassword" : "zPrefixhtzPJhQ9kziNAWNN1vy16SkAp5d1gksXWP+ren0Zatmoxdd3KPCa6A==",
+            "Role" : "Subregistrant"
+          }
+        },
+        "MasterProduct" : {
+          "ID" : "6",
+          "Name" : "MAQUAT 256-NHQ",
+          "Number" : "62472",
+          "Description" : "One Step Disinfectant\r\nGermicidal Detergent and Deodorant",
+          "ChemicalFamily" : "Quat Disinfectant",
+          "EPA_EstablishmentNumber" : "10324-IL-1",
+          "EPA_ToxicityCategory" : "IV",
+          "PrimaryRegistrant" : {
+            "ID" : "15",
+            "EPA_CompanyNumber" : "10324",
+            "Organization" : {
+              "ID" : "21",
+              "LoginName" : "Mason",
+              "Name" : "Mason Chemical Company",
+              "Description" : "The Quaternary Specialists",
+              "AdministratorPassword" : "zPrefixJiNPY+drS/4vDAxqbnxmk/9ayF0nNwh03yofjDRxVgAZLpi5hN/wcg==",
+              "Role" : "Primary Registrant"
+            }
+          }
+        }
+      },
+      "MasterLabelContent" : {
+        "ID" : "11",
+        "Version" : "1.0",
+        "RevisionDate" : "20150324",
+        "CreatedDateTime" : "2015/03/24 00:00:00:000 AM"
+      }
+    },
+    "SPLD_GeneralSection" : [ {
+      "ID" : "100",
+      "Title" : "FIRST AID",
+      "SectionType" : "F",
+      "SPLD_GeneralStatement" : [ {
+        "ID" : "199",
+        "Text" : "IF ON SKIN OR CLOTHING: Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes. Call a poison control center or doctor for treatment advice.",
+        "S_GeneralStatement" : {
+          "ID" : "91"
+        }
+      }, {
+        "ID" : "200",
+        "Text" : "IF IN EYES: Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes.  Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye. Call a poison control center or doctor for treatment advice.",
+        "S_GeneralStatement" : {
+          "ID" : "92"
+        }
+      }, {
+        "ID" : "201",
+        "Text" : "If swallowed: Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of water if able to swallow.  Do not induce vomiting unless told to do so by the poison control center or doctor. Do not give anything by mouth to an unconscious person.",
+        "S_GeneralStatement" : {
+          "ID" : "93"
+        }
+      }, {
+        "ID" : "202",
+        "Text" : "IF INHALED: Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible. Call a poison control center or doctor for treatment advice.",
+        "S_GeneralStatement" : {
+          "ID" : "94"
+        }
+      }, {
+        "ID" : "203",
+        "Text" : "NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage.",
+        "S_GeneralStatement" : {
+          "ID" : "95"
+        }
+      }, {
+        "ID" : "204",
+        "Text" : "Have the product container or label with you when calling a poison control center or doctor or going for treatment.",
+        "S_GeneralStatement" : {
+          "ID" : "96"
+        }
+      } ],
+      "S_GeneralSection" : {
+        "ID" : "46"
+      }
+    }, {
+      "ID" : "101",
+      "Title" : "PRECAUTIONARY STATEMENTS",
+      "Subtitle" : "HAZARDS TO HUMANS AND DOMESTIC ANIMALS",
+      "SectionType" : "P",
+      "SPLD_GeneralStatement" : [ {
+        "ID" : "205",
+        "Text" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.",
+        "S_GeneralStatement" : {
+          "ID" : "97"
+        }
+      } ],
+      "S_GeneralSection" : {
+        "ID" : "47"
+      }
+    }, {
+      "ID" : "102",
+      "Title" : "PHYSICAL OR CHEMICAL OR ENVIRONMENTAL HAZARDS",
+      "SectionType" : "E",
+      "SPLD_GeneralStatement" : [ {
+        "ID" : "206",
+        "Text" : "PHYSICAL OR CHEMICAL HAZARDS\r\nDo not mix with oxidizers, anionic soaps and detergents.\r\nDo not use or store near heat or open flame.",
+        "S_GeneralStatement" : {
+          "ID" : "98"
+        }
+      }, {
+        "ID" : "207",
+        "Text" : "ENVIRONMENTAL HAZARDS\r\nDo not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge.  Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority.  For guidance contact your State Water Board or Regional Office of the EPA.\r\n",
+        "S_GeneralStatement" : {
+          "ID" : "99"
+        }
+      } ],
+      "S_GeneralSection" : {
+        "ID" : "48"
+      }
+    } ],
+    "SPLD_IngredientsSection" : [ {
+      "ID" : "34",
+      "ActiveTitle" : "Active Ingredients:",
+      "InertTitle" : "INERT INGREDIENTS:",
+      "GeneralInactivePercent" : "83.1",
+      "SPLD_IngredientsStatement" : [ {
+        "ID" : "67",
+        "ChemicalName" : "Didecyl Dimethyl Ammonium Chloride",
+        "Active" : "Active",
+        "Percent" : "10.14",
+        "S_IngredientsStatement" : {
+          "ID" : "31"
+        }
+      }, {
+        "ID" : "68",
+        "ChemicalName" : "n-Alkyl (C<sub>14</sub> 50%, C<sub>13</sub> 40%, C<sub>16</sub> 10%)\r\ndimethyl benzyl ammonium chloride",
+        "Active" : "Active",
+        "Percent" : "6.76",
+        "S_IngredientsStatement" : {
+          "ID" : "32"
+        }
+      } ],
+      "S_IngredientsSection" : {
+        "ID" : "16"
+      }
+    } ],
+    "SPLD_StorageDisposalSection" : [ {
+      "ID" : "61",
+      "Title" : "STORAGE AND DISPOSAL > 1 gallon",
+      "Subtitle" : "Do not contaminate water, food or feed by storage and disposal.",
+      "SPLD_StorageDisposalStatement" : [ {
+        "ID" : "166",
+        "NotForUseType" : "Not Applicable",
+        "S_StorageDisposalStatement" : {
+          "ID" : "76"
+        }
+      }, {
+        "ID" : "167",
+        "Title" : "PESTICIDE STORAGE:",
+        "Text" : "Open dumping is prohibited.  Store only in original container. Do not reuse empty container. Keep this product under locked storage sufficient to make it inaccessible to children or persons unfamiliar with its proper use.",
+        "NotForUseType" : "Not Applicable",
+        "S_StorageDisposalStatement" : {
+          "ID" : "77"
+        }
+      }, {
+        "ID" : "168",
+        "Title" : "Pesticide Disposal",
+        "Text" : "Pesticide wastes are acutely hazardous.  Improper disposal of excess pesticide, spray mixture, or rinsate is a violation of Federal law.  If these wastes cannot be disposed of by use according to label instructions, contact your State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.",
+        "NotForUseType" : "Not Applicable",
+        "S_StorageDisposalStatement" : {
+          "ID" : "78"
+        }
+      }, {
+        "ID" : "169",
+        "Title" : "Container Disposal",
+        "Text" : "(Plastic containers:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning, or puncture and dispose of in a sanitary landfill, or incinerate, or if allowed by state and local authorities, burn.  If burned, stay out of smoke.\r\n(Fiber Drums With Liner:) Completely empty liner by shaking and tapping sides and bottom to loosen clinging particles.  Empty residue into application equipment.  Then dispose of liner in a sanitary landfill or by incineration if allowed by state and local authorities.  If drum is contaminated and cannot by reused, dispose of in the same manner.\r\n(Metal Container:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning or puncture and dispose of in a sanitary landfill, or dispose of by other procedures approved by state and local authorities.\r\n(For Bag-in-Box Containers:) Completely empty bag into application equipment. Dispose of empty bag in a sanitary landfill or by incineration, or if allowed by state and local authorities by burning or dispose of by other procedures approved by state and local authorities.  If burned, stay out of smoke.",
+        "NotForUseType" : "Not Applicable",
+        "S_StorageDisposalStatement" : {
+          "ID" : "79"
+        }
+      } ],
+      "S_StorageDisposalSection" : {
+        "ID" : "25"
+      }
+    }, {
+      "ID" : "62",
+      "Title" : "STORAGE AND DISPOSAL <= 1 gallon",
+      "SPLD_StorageDisposalStatement" : [ {
+        "ID" : "170",
+        "Title" : "STORAGE AND DISPOSAL",
+        "Text" : "Store in original container in areas inaccessible to children. Do not reuse empty container.  Wrap and discard in trash (or recycle).",
+        "NotForUseType" : "Not Applicable",
+        "S_StorageDisposalStatement" : {
+          "ID" : "80"
+        }
+      } ],
+      "S_StorageDisposalSection" : {
+        "ID" : "26"
+      }
+    }, {
+      "ID" : "63",
+      "Title" : "STORAGE AND DISPOSAL - 2 FLUID OZ.",
+      "SPLD_StorageDisposalStatement" : [ {
+        "ID" : "171",
+        "Title" : "DISPOSAL:",
+        "Text" : "Do not reuse container.  Wrap and put in trash collection.",
+        "NotForUseType" : "Not Applicable",
+        "S_StorageDisposalStatement" : {
+          "ID" : "81"
+        }
+      } ],
+      "S_StorageDisposalSection" : {
+        "ID" : "27"
+      }
+    } ],
+    "SPLD_DirectionsForUseSection" : [ {
+      "ID" : "395",
+      "Name" : "DIRECTIONS FOR USE",
+      "SPLD_DirectionsForUseStatement" : [ {
+        "ID" : "2703",
+        "Title" : "It is a violation of Federal law to use this product in a manner inconsistent with its labeling.\r\n",
+        "Text" : "This product is not to be used as a terminal sterilant / high level disinfectant on any surface or instrument that (1) is introduced directly into the human body, either into or in contact with the bloodstream or normally sterile areas of the body, or (2) contacts intact mucous membranes but which does not ordinarily penetrate the blood barrier or otherwise enter normally sterile areas of the body.  This product may be used to preclean or decontaminate critical or semi-critical devices prior to sterilization or high-level disinfection.",
+        "NotForUseType" : "Not Applicable",
+        "S_DirectionsForUseStatement" : {
+          "ID" : "68"
+        }
+      }, {
+        "ID" : "2704",
+        "Title" : "IF not used on metal and or stainless steel surfaces in medical premises.",
+        "Text" : "This product is not for use on medical device surfaces.",
+        "NotForUseType" : "Not Applicable",
+        "S_DirectionsForUseStatement" : {
+          "ID" : "69"
+        }
+      } ],
+      "S_DirectionsForUseSection" : {
+        "ID" : "27"
+      }
+    } ],
+    "SPLD_MarketingSection" : [ {
+      "ID" : "2902",
+      "Name" : "optional marketing language",
+      "Title" : "Marketing Title",
+      "SPLD_MarketingStatement" : [ {
+        "ID" : "2930",
+        "Text" : "Concentrate (Concentrated)\r\nNeutral (Neutral pH)\r\nDisinfects (Disinfectant)\r\nCleans (Cleaner)\r\nDeodorizes (Deodorizer)\r\n\r\nA multi-purpose, neutral pH, germicidal detergent and deodorant effective in hard water up to 400 ppm (calculated as CaCO3) in the presence of a moderate amount of soil (5% organic serum) according to the AOAC Use-dilution Test.  Disinfects, cleans, and deodorizes in one labor-saving step.\r\n\r\nRecommended for use in hospitals, nursing homes, schools, colleges, commercial and industrial institutions, office buildings, veterinary clinics, animal life science laboratories, zoos, federally inspected meat and poultry plants, equine farms, tack shops, pet shops, airports, kennels, hotels, motels, poultry farms, turkey farms, dairy farms, hog farms, breeding establishments, grooming establishments, funeral homes, and households.  Use to clean and disinfect non-medical (i.e. industrial and fire-fighting) respirators in industrial, commercial and institutional premises.\r\n\r\nDisinfects, cleans, and deodorizes the following hard nonporous inanimate surfaces: floors, walls, (non-medical) metal surfaces, (non-medical) stainless steel surfaces, glazed porcelain, plastic surfaces (such as polypropylene, polystyrene, etc.).\r\n\r\nUse [on] [to clean and disinfect] nonporous athletic mats, wrestling mats, gymnastic mats, exercise equipment and training tables.\r\nUse [on] [to clean and disinfect] nonporous personal protective safety equipment, wrestling headgear, boxing headgear, protective headgear, athletic helmets, hard hats, half mask respirators, full face breathing apparatus, gas masks, goggles, spectacles, face shields, hearing protectors, and ear muffs.  Rinse all equipment that comes in prolonged contact with skin with warm water and allow to air dry before reuse.  [Caution: Cleaning at the recommended 120F. temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.]",
+        "S_MarketingStatement" : {
+          "ID" : "143",
+          "Text" : "Concentrate (Concentrated)\r\nNeutral (Neutral pH)\r\nDisinfects (Disinfectant)\r\nCleans (Cleaner)\r\nDeodorizes (Deodorizer)\r\n\r\nA multi-purpose, neutral pH, germicidal detergent and deodorant effective in hard water up to 400 ppm (calculated as CaCO3) in the presence of a moderate amount of soil (5% organic serum) according to the AOAC Use-dilution Test.  Disinfects, cleans, and deodorizes in one labor-saving step.\r\n\r\nRecommended for use in hospitals, nursing homes, schools, colleges, commercial and industrial institutions, office buildings, veterinary clinics, animal life science laboratories, zoos, federally inspected meat and poultry plants, equine farms, tack shops, pet shops, airports, kennels, hotels, motels, poultry farms, turkey farms, dairy farms, hog farms, breeding establishments, grooming establishments, funeral homes, and households.  Use to clean and disinfect non-medical (i.e. industrial and fire-fighting) respirators in industrial, commercial and institutional premises.\r\n\r\nDisinfects, cleans, and deodorizes the following hard nonporous inanimate surfaces: floors, walls, (non-medical) metal surfaces, (non-medical) stainless steel surfaces, glazed porcelain, plastic surfaces (such as polypropylene, polystyrene, etc.).\r\n\r\nUse [on] [to clean and disinfect] nonporous athletic mats, wrestling mats, gymnastic mats, exercise equipment and training tables.\r\nUse [on] [to clean and disinfect] nonporous personal protective safety equipment, wrestling headgear, boxing headgear, protective headgear, athletic helmets, hard hats, half mask respirators, full face breathing apparatus, gas masks, goggles, spectacles, face shields, hearing protectors, and ear muffs.  Rinse all equipment that comes in prolonged contact with skin with warm water and allow to air dry before reuse.  [Caution: Cleaning at the recommended 120F. temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.]"
+        }
+      } ],
+      "S_MarketingSection" : {
+        "ID" : "88"
+      }
+    } ],
+    "SPLD_HumanHazardSection" : [ {
+      "ID" : "34",
+      "EPA_SignalWord" : "DANGER",
+      "EPA_ChildHazardWarning" : "KEEP OUT OF REACH OF CHILDREN",
+      "PrecautionaryStatement" : "See {{Precautionary Panel Location}} Panel {{Precautionary Label Location}} for Precautionary Statements",
+      "BoldItalic" : "Regular",
+      "LocationSeparator" : "Parens",
+      "PanelLoc1" : "Left",
+      "PanelLoc2" : "Back",
+      "PanelLoc3" : "Side",
+      "PanelLoc4" : "Right",
+      "LabelLoc1" : "of label",
+      "LabelLoc2" : "below",
+      "S_HumanHazardSection" : {
+        "ID" : "7"
+      }
+    } ],
+    "SPLD_Usage" : [ {
+      "ID" : "37682",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Pseudomonas aeruginosa",
+      "S_Usage" : {
+        "ID" : "1207",
+        "M_Usage" : {
+          "ID" : "1895",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Pseudomonas aeruginosa",
+          "M_UsageFootnoteUsed" : {
+            "ID" : "2",
+            "Text" : "ATCC & antibiotic-resistant strain"
+          }
+        }
+      }
+    }, {
+      "ID" : "37683",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Escherichia coli",
+      "S_Usage" : {
+        "ID" : "1208",
+        "M_Usage" : {
+          "ID" : "1904",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Escherichia coli",
+          "M_UsageFootnoteUsed" : {
+            "ID" : "2",
+            "Text" : "ATCC & antibiotic-resistant strain"
+          }
+        }
+      }
+    }, {
+      "ID" : "37684",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Kiebsiella pneumoniae",
+      "S_Usage" : {
+        "ID" : "1209",
+        "M_Usage" : {
+          "ID" : "1906",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Kiebsiella pneumoniae",
+          "M_UsageFootnoteUsed" : {
+            "ID" : "2",
+            "Text" : "ATCC & antibiotic-resistant strain"
+          }
+        }
+      }
+    }, {
+      "ID" : "37685",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Streptococcus faecalis",
+      "S_Usage" : {
+        "ID" : "1210",
+        "M_Usage" : {
+          "ID" : "1921",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Streptococcus faecalis",
+          "M_UsageFootnoteUsed" : {
+            "ID" : "2",
+            "Text" : "ATCC & antibiotic-resistant strain"
+          }
+        }
+      }
+    }, {
+      "ID" : "37686",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Staphylococcus aureus",
+      "S_Usage" : {
+        "ID" : "1211",
+        "M_Usage" : {
+          "ID" : "1952",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus aureus",
+          "M_UsageFootnoteUsed" : {
+            "ID" : "2",
+            "Text" : "ATCC & antibiotic-resistant strain"
+          }
+        }
+      }
+    }, {
+      "ID" : "37687",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Staphylococcus epidermidis",
+      "S_Usage" : {
+        "ID" : "1212",
+        "M_Usage" : {
+          "ID" : "1920",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus epidermidis",
+          "M_UsageFootnoteUsed" : {
+            "ID" : "3",
+            "Text" : "antibiotic-resistant strain only"
+          }
+        }
+      }
+    }, {
+      "ID" : "37688",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Adenovirus Type 4",
+      "S_Usage" : {
+        "ID" : "1213",
+        "M_Usage" : {
+          "ID" : "1872",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Adenovirus Type 4"
+        }
+      }
+    }, {
+      "ID" : "37689",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Hepatitis B Virus (HBV)",
+      "S_Usage" : {
+        "ID" : "1214",
+        "M_Usage" : {
+          "ID" : "1873",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Hepatitis B Virus (HBV)"
+        }
+      }
+    }, {
+      "ID" : "37690",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Hepatitis C Virus (HCV)",
+      "S_Usage" : {
+        "ID" : "1215",
+        "M_Usage" : {
+          "ID" : "1874",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Hepatitis C Virus (HCV)"
+        }
+      }
+    }, {
+      "ID" : "37691",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Herpes Simplex Type 1",
+      "S_Usage" : {
+        "ID" : "1216",
+        "M_Usage" : {
+          "ID" : "1875",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Herpes Simplex Type 1"
+        }
+      }
+    }, {
+      "ID" : "37692",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Herpes Simplex Type 2",
+      "S_Usage" : {
+        "ID" : "1217",
+        "M_Usage" : {
+          "ID" : "1876",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Herpes Simplex Type 2"
+        }
+      }
+    }, {
+      "ID" : "37693",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Human coronavirus ",
+      "S_Usage" : {
+        "ID" : "1218",
+        "M_Usage" : {
+          "ID" : "1877",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Human coronavirus "
+        }
+      }
+    }, {
+      "ID" : "37694",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*HIV-1 (AIDS virus)",
+      "S_Usage" : {
+        "ID" : "1219",
+        "M_Usage" : {
+          "ID" : "1878",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*HIV-1 (AIDS virus)"
+        }
+      }
+    }, {
+      "ID" : "37695",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Influenza A/ Hong Kong",
+      "S_Usage" : {
+        "ID" : "1220",
+        "M_Usage" : {
+          "ID" : "1879",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Influenza A/ Hong Kong"
+        }
+      }
+    }, {
+      "ID" : "37696",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Respiratory Syncytial Virus (RSV)",
+      "S_Usage" : {
+        "ID" : "1221",
+        "M_Usage" : {
+          "ID" : "1880",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Respiratory Syncytial Virus (RSV)"
+        }
+      }
+    }, {
+      "ID" : "37697",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Rubella (German Measles)",
+      "S_Usage" : {
+        "ID" : "1222",
+        "M_Usage" : {
+          "ID" : "1881",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Rubella (German Measles)"
+        }
+      }
+    }, {
+      "ID" : "37698",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Vaccinia [Pox virus]",
+      "S_Usage" : {
+        "ID" : "1223",
+        "M_Usage" : {
+          "ID" : "1882",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Vaccinia [Pox virus]"
+        }
+      }
+    }, {
+      "ID" : "37699",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Avian polyomavirus",
+      "S_Usage" : {
+        "ID" : "1224",
+        "M_Usage" : {
+          "ID" : "1883",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Avian polyomavirus"
+        }
+      }
+    }, {
+      "ID" : "37700",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Canine distemper",
+      "S_Usage" : {
+        "ID" : "1225",
+        "M_Usage" : {
+          "ID" : "1884",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Canine distemper"
+        }
+      }
+    }, {
+      "ID" : "37701",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Canine parvovirus- at 2 oz. per gallon",
+      "S_Usage" : {
+        "ID" : "1226",
+        "M_Usage" : {
+          "ID" : "1885",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Canine parvovirus- at 2 oz. per gallon"
+        }
+      }
+    }, {
+      "ID" : "37702",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Feline leukemia",
+      "S_Usage" : {
+        "ID" : "1227",
+        "M_Usage" : {
+          "ID" : "1886",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Feline leukemia"
+        }
+      }
+    }, {
+      "ID" : "37703",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Feline picomavirus",
+      "S_Usage" : {
+        "ID" : "1228",
+        "M_Usage" : {
+          "ID" : "1887",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Feline picomavirus"
+        }
+      }
+    }, {
+      "ID" : "37704",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Infectious bovine rhinotracheitis",
+      "S_Usage" : {
+        "ID" : "1229",
+        "M_Usage" : {
+          "ID" : "1888",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Infectious bovine rhinotracheitis"
+        }
+      }
+    }, {
+      "ID" : "37705",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Infectious bronchitis (Avian IBV)",
+      "S_Usage" : {
+        "ID" : "1230",
+        "M_Usage" : {
+          "ID" : "1889",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Infectious bronchitis (Avian IBV)"
+        }
+      }
+    }, {
+      "ID" : "37706",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Pseudorabies (PRV)",
+      "S_Usage" : {
+        "ID" : "1231",
+        "M_Usage" : {
+          "ID" : "1890",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Pseudorabies (PRV)"
+        }
+      }
+    }, {
+      "ID" : "37707",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Viruses",
+      "Name" : "*Rabies",
+      "S_Usage" : {
+        "ID" : "1232",
+        "M_Usage" : {
+          "ID" : "1891",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Rabies"
+        }
+      }
+    }, {
+      "ID" : "37708",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Fungi",
+      "Name" : "Aspergillus niger",
+      "S_Usage" : {
+        "ID" : "1233",
+        "M_Usage" : {
+          "ID" : "1892",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "Aspergillus niger"
+        }
+      }
+    }, {
+      "ID" : "37709",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Fungi",
+      "Name" : "Candida albicans",
+      "S_Usage" : {
+        "ID" : "1234",
+        "M_Usage" : {
+          "ID" : "1893",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "Candida albicans"
+        }
+      }
+    }, {
+      "ID" : "37710",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Fungi",
+      "Name" : "Trichophyton mentagrophytes [Athlete's Foot Fungus]",
+      "S_Usage" : {
+        "ID" : "1235",
+        "M_Usage" : {
+          "ID" : "1894",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "Trichophyton mentagrophytes [Athlete's Foot Fungus]"
+        }
+      }
+    }, {
+      "ID" : "37711",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Acinetobacter calcoaceticus",
+      "S_Usage" : {
+        "ID" : "1236",
+        "M_Usage" : {
+          "ID" : "1898",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Acinetobacter calcoaceticus"
+        }
+      }
+    }, {
+      "ID" : "37712",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Bordetella bronchiseptica",
+      "S_Usage" : {
+        "ID" : "1237",
+        "M_Usage" : {
+          "ID" : "1899",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Bordetella bronchiseptica"
+        }
+      }
+    }, {
+      "ID" : "37713",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Chlamydia psittaci",
+      "S_Usage" : {
+        "ID" : "1238",
+        "M_Usage" : {
+          "ID" : "1900",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Chlamydia psittaci"
+        }
+      }
+    }, {
+      "ID" : "37714",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Enterobacter aerogenes",
+      "S_Usage" : {
+        "ID" : "1239",
+        "M_Usage" : {
+          "ID" : "1901",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Enterobacter aerogenes"
+        }
+      }
+    }, {
+      "ID" : "37715",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Enterobacter cloacae",
+      "S_Usage" : {
+        "ID" : "1240",
+        "M_Usage" : {
+          "ID" : "1902",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Enterobacter cloacae"
+        }
+      }
+    }, {
+      "ID" : "37716",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Enterococcus faecalis- Vancomycin Resistant (VRE)",
+      "S_Usage" : {
+        "ID" : "1241",
+        "M_Usage" : {
+          "ID" : "1903",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Enterococcus faecalis- Vancomycin Resistant (VRE)"
+        }
+      }
+    }, {
+      "ID" : "37717",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Fusobacterium necrophorum",
+      "S_Usage" : {
+        "ID" : "1242",
+        "M_Usage" : {
+          "ID" : "1905",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Fusobacterium necrophorum"
+        }
+      }
+    }, {
+      "ID" : "37718",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Legionella pneumophilia",
+      "S_Usage" : {
+        "ID" : "1243",
+        "M_Usage" : {
+          "ID" : "1907",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Legionella pneumophilia"
+        }
+      }
+    }, {
+      "ID" : "37719",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Listeria monocytogenes",
+      "S_Usage" : {
+        "ID" : "1244",
+        "M_Usage" : {
+          "ID" : "1908",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Listeria monocytogenes"
+        }
+      }
+    }, {
+      "ID" : "37720",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Pasteurella multocida ",
+      "S_Usage" : {
+        "ID" : "1245",
+        "M_Usage" : {
+          "ID" : "1909",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Pasteurella multocida "
+        }
+      }
+    }, {
+      "ID" : "37721",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Proteus mirabilis",
+      "S_Usage" : {
+        "ID" : "1246",
+        "M_Usage" : {
+          "ID" : "1910",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Proteus mirabilis"
+        }
+      }
+    }, {
+      "ID" : "37722",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Proteus vulgaris",
+      "S_Usage" : {
+        "ID" : "1247",
+        "M_Usage" : {
+          "ID" : "1911",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Proteus vulgaris"
+        }
+      }
+    }, {
+      "ID" : "37723",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Staphylococcus aureus- Methicillin resistant (MRSA)",
+      "S_Usage" : {
+        "ID" : "1248",
+        "M_Usage" : {
+          "ID" : "1918",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus aureus- Methicillin resistant (MRSA)"
+        }
+      }
+    }, {
+      "ID" : "37724",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Staphylococcus aureus- Vancomycin Intermediate Resistant (VISA)",
+      "S_Usage" : {
+        "ID" : "1249",
+        "M_Usage" : {
+          "ID" : "1919",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus aureus- Vancomycin Intermediate Resistant (VISA)"
+        }
+      }
+    }, {
+      "ID" : "37725",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Steptococcus pyogenes [cause of Scarlet fever]",
+      "S_Usage" : {
+        "ID" : "1250",
+        "M_Usage" : {
+          "ID" : "1922",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Steptococcus pyogenes [cause of Scarlet fever]"
+        }
+      }
+    }, {
+      "ID" : "37726",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Salmonella choleraesuis ",
+      "S_Usage" : {
+        "ID" : "1251",
+        "M_Usage" : {
+          "ID" : "1953",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella choleraesuis "
+        }
+      }
+    }, {
+      "ID" : "37727",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Salmonella enteritidis",
+      "S_Usage" : {
+        "ID" : "1252",
+        "M_Usage" : {
+          "ID" : "1968",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella enteritidis"
+        }
+      }
+    }, {
+      "ID" : "37728",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Salmonella typhi",
+      "S_Usage" : {
+        "ID" : "1253",
+        "M_Usage" : {
+          "ID" : "1969",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella typhi"
+        }
+      }
+    }, {
+      "ID" : "37729",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Salmonella typhimurium",
+      "S_Usage" : {
+        "ID" : "1254",
+        "M_Usage" : {
+          "ID" : "1970",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella typhimurium"
+        }
+      }
+    }, {
+      "ID" : "37730",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Serratia marcescens",
+      "S_Usage" : {
+        "ID" : "1255",
+        "M_Usage" : {
+          "ID" : "1971",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Serratia marcescens"
+        }
+      }
+    }, {
+      "ID" : "37731",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Shigella fiexneri",
+      "S_Usage" : {
+        "ID" : "1256",
+        "M_Usage" : {
+          "ID" : "1972",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Shigella fiexneri"
+        }
+      }
+    }, {
+      "ID" : "37732",
+      "UsageType" : "C",
+      "ClaimsClassification" : "Bacteria",
+      "Name" : "Shigella sonnei",
+      "S_Usage" : {
+        "ID" : "1257",
+        "M_Usage" : {
+          "ID" : "1973",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Shigella sonnei"
+        }
+      }
+    }, {
+      "ID" : "37733",
+      "UsageType" : "S",
+      "Name" : "Use Formulatin HWS-256 on washable hard",
+      "S_Usage" : {
+        "ID" : "1258",
+        "M_Usage" : {
+          "ID" : "1979",
+          "UsageType" : "S",
+          "Name" : "Use Formulatin HWS-256 on washable hard"
+        }
+      }
+    }, {
+      "ID" : "37734",
+      "UsageType" : "S",
+      "Name" : "Appliances",
+      "S_Usage" : {
+        "ID" : "1259",
+        "M_Usage" : {
+          "ID" : "1980",
+          "UsageType" : "S",
+          "Name" : "Appliances"
+        }
+      }
+    }, {
+      "ID" : "37735",
+      "UsageType" : "S",
+      "Name" : "Bathroom fixtures",
+      "S_Usage" : {
+        "ID" : "1260",
+        "M_Usage" : {
+          "ID" : "1981",
+          "UsageType" : "S",
+          "Name" : "Bathroom fixtures"
+        }
+      }
+    }, {
+      "ID" : "37736",
+      "UsageType" : "S",
+      "Name" : "Bathtubs (Fiberglass)",
+      "S_Usage" : {
+        "ID" : "1261",
+        "M_Usage" : {
+          "ID" : "1982",
+          "UsageType" : "S",
+          "Name" : "Bathtubs (Fiberglass)"
+        }
+      }
+    }, {
+      "ID" : "37737",
+      "UsageType" : "S",
+      "Name" : "Cabinets",
+      "S_Usage" : {
+        "ID" : "1262",
+        "M_Usage" : {
+          "ID" : "1983",
+          "UsageType" : "S",
+          "Name" : "Cabinets"
+        }
+      }
+    }, {
+      "ID" : "37738",
+      "UsageType" : "S",
+      "Name" : "Cages",
+      "S_Usage" : {
+        "ID" : "1263",
+        "M_Usage" : {
+          "ID" : "1984",
+          "UsageType" : "S",
+          "Name" : "Cages"
+        }
+      }
+    }, {
+      "ID" : "37739",
+      "UsageType" : "S",
+      "Name" : "Chairs",
+      "S_Usage" : {
+        "ID" : "1264",
+        "M_Usage" : {
+          "ID" : "1985",
+          "UsageType" : "S",
+          "Name" : "Chairs"
+        }
+      }
+    }, {
+      "ID" : "37740",
+      "UsageType" : "S",
+      "Name" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps",
+      "S_Usage" : {
+        "ID" : "1265",
+        "M_Usage" : {
+          "ID" : "1986",
+          "UsageType" : "S",
+          "Name" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps"
+        }
+      }
+    }, {
+      "ID" : "37741",
+      "UsageType" : "S",
+      "Name" : "Conductive flooring",
+      "S_Usage" : {
+        "ID" : "1266",
+        "M_Usage" : {
+          "ID" : "1987",
+          "UsageType" : "S",
+          "Name" : "Conductive flooring"
+        }
+      }
+    }, {
+      "ID" : "37742",
+      "UsageType" : "S",
+      "Name" : "Counters (countertops)",
+      "S_Usage" : {
+        "ID" : "1267",
+        "M_Usage" : {
+          "ID" : "1988",
+          "UsageType" : "S",
+          "Name" : "Counters (countertops)"
+        }
+      }
+    }, {
+      "ID" : "37743",
+      "UsageType" : "S",
+      "Name" : "Countertop laminates",
+      "S_Usage" : {
+        "ID" : "1268",
+        "M_Usage" : {
+          "ID" : "1989",
+          "UsageType" : "S",
+          "Name" : "Countertop laminates"
+        }
+      }
+    }, {
+      "ID" : "37744",
+      "UsageType" : "S",
+      "Name" : "Desks",
+      "S_Usage" : {
+        "ID" : "1269",
+        "M_Usage" : {
+          "ID" : "1990",
+          "UsageType" : "S",
+          "Name" : "Desks"
+        }
+      }
+    }, {
+      "ID" : "37745",
+      "UsageType" : "S",
+      "Name" : "Doorknobs",
+      "S_Usage" : {
+        "ID" : "1270",
+        "M_Usage" : {
+          "ID" : "1991",
+          "UsageType" : "S",
+          "Name" : "Doorknobs"
+        }
+      }
+    }, {
+      "ID" : "37746",
+      "UsageType" : "S",
+      "Name" : "Floors",
+      "S_Usage" : {
+        "ID" : "1271",
+        "M_Usage" : {
+          "ID" : "1992",
+          "UsageType" : "S",
+          "Name" : "Floors"
+        }
+      }
+    }, {
+      "ID" : "37747",
+      "UsageType" : "S",
+      "Name" : "Garbage cans",
+      "S_Usage" : {
+        "ID" : "1272",
+        "M_Usage" : {
+          "ID" : "1993",
+          "UsageType" : "S",
+          "Name" : "Garbage cans"
+        }
+      }
+    }, {
+      "ID" : "37748",
+      "UsageType" : "S",
+      "Name" : "Highchairs",
+      "S_Usage" : {
+        "ID" : "1273",
+        "M_Usage" : {
+          "ID" : "1994",
+          "UsageType" : "S",
+          "Name" : "Highchairs"
+        }
+      }
+    }, {
+      "ID" : "37749",
+      "UsageType" : "S",
+      "Name" : "Kennel runs",
+      "S_Usage" : {
+        "ID" : "1274",
+        "M_Usage" : {
+          "ID" : "1995",
+          "UsageType" : "S",
+          "Name" : "Kennel runs"
+        }
+      }
+    }, {
+      "ID" : "37750",
+      "UsageType" : "S",
+      "Name" : "Microwave ovens",
+      "S_Usage" : {
+        "ID" : "1275",
+        "M_Usage" : {
+          "ID" : "1996",
+          "UsageType" : "S",
+          "Name" : "Microwave ovens"
+        }
+      }
+    }, {
+      "ID" : "37751",
+      "UsageType" : "S",
+      "Name" : "Outdoor furniture",
+      "S_Usage" : {
+        "ID" : "1276",
+        "M_Usage" : {
+          "ID" : "1997",
+          "UsageType" : "S",
+          "Name" : "Outdoor furniture"
+        }
+      }
+    }, {
+      "ID" : "37752",
+      "UsageType" : "S",
+      "Name" : "Refrigerators",
+      "S_Usage" : {
+        "ID" : "1277",
+        "M_Usage" : {
+          "ID" : "1998",
+          "UsageType" : "S",
+          "Name" : "Refrigerators"
+        }
+      }
+    }, {
+      "ID" : "37753",
+      "UsageType" : "S",
+      "Name" : "Refrigerated storage and display equipment",
+      "S_Usage" : {
+        "ID" : "1278",
+        "M_Usage" : {
+          "ID" : "1999",
+          "UsageType" : "S",
+          "Name" : "Refrigerated storage and display equipment"
+        }
+      }
+    }, {
+      "ID" : "37754",
+      "UsageType" : "S",
+      "Name" : "Tanning Beds",
+      "S_Usage" : {
+        "ID" : "1279",
+        "M_Usage" : {
+          "ID" : "2000",
+          "UsageType" : "S",
+          "Name" : "Tanning Beds"
+        }
+      }
+    }, {
+      "ID" : "37755",
+      "UsageType" : "S",
+      "Name" : "Tanning Equipment",
+      "S_Usage" : {
+        "ID" : "1280",
+        "M_Usage" : {
+          "ID" : "2001",
+          "UsageType" : "S",
+          "Name" : "Tanning Equipment"
+        }
+      }
+    }, {
+      "ID" : "37756",
+      "UsageType" : "S",
+      "Name" : "Telephones",
+      "S_Usage" : {
+        "ID" : "1281",
+        "M_Usage" : {
+          "ID" : "2002",
+          "UsageType" : "S",
+          "Name" : "Telephones"
+        }
+      }
+    }, {
+      "ID" : "37757",
+      "UsageType" : "S",
+      "Name" : "Other hard nonporous surfaces made of:",
+      "S_Usage" : {
+        "ID" : "1282",
+        "M_Usage" : {
+          "ID" : "2003",
+          "UsageType" : "S",
+          "Name" : "Other hard nonporous surfaces made of:"
+        }
+      }
+    }, {
+      "ID" : "37758",
+      "UsageType" : "S",
+      "Name" : "Glazed ceramic",
+      "S_Usage" : {
+        "ID" : "1283",
+        "M_Usage" : {
+          "ID" : "2004",
+          "UsageType" : "S",
+          "Name" : "Glazed ceramic"
+        }
+      }
+    }, {
+      "ID" : "37759",
+      "UsageType" : "S",
+      "Name" : "Glazed enameled surfaces",
+      "S_Usage" : {
+        "ID" : "1284",
+        "M_Usage" : {
+          "ID" : "2005",
+          "UsageType" : "S",
+          "Name" : "Glazed enameled surfaces"
+        }
+      }
+    }, {
+      "ID" : "37760",
+      "UsageType" : "S",
+      "Name" : "Laminated surfaces",
+      "S_Usage" : {
+        "ID" : "1285",
+        "M_Usage" : {
+          "ID" : "2006",
+          "UsageType" : "S",
+          "Name" : "Laminated surfaces"
+        }
+      }
+    }, {
+      "ID" : "37761",
+      "UsageType" : "S",
+      "Name" : "Metal",
+      "S_Usage" : {
+        "ID" : "1286",
+        "M_Usage" : {
+          "ID" : "2007",
+          "UsageType" : "S",
+          "Name" : "Metal"
+        }
+      }
+    }, {
+      "ID" : "37762",
+      "UsageType" : "S",
+      "Name" : "Plastic (such as polystyrene or polypropylene)",
+      "S_Usage" : {
+        "ID" : "1287",
+        "M_Usage" : {
+          "ID" : "2008",
+          "UsageType" : "S",
+          "Name" : "Plastic (such as polystyrene or polypropylene)"
+        }
+      }
+    }, {
+      "ID" : "37763",
+      "UsageType" : "S",
+      "Name" : "Sealed granite",
+      "S_Usage" : {
+        "ID" : "1288",
+        "M_Usage" : {
+          "ID" : "2009",
+          "UsageType" : "S",
+          "Name" : "Sealed granite"
+        }
+      }
+    }, {
+      "ID" : "37764",
+      "UsageType" : "S",
+      "Name" : "Sealed limestone",
+      "S_Usage" : {
+        "ID" : "1289",
+        "M_Usage" : {
+          "ID" : "2010",
+          "UsageType" : "S",
+          "Name" : "Sealed limestone"
+        }
+      }
+    }, {
+      "ID" : "37765",
+      "UsageType" : "S",
+      "Name" : "Sealed marble",
+      "S_Usage" : {
+        "ID" : "1290",
+        "M_Usage" : {
+          "ID" : "2011",
+          "UsageType" : "S",
+          "Name" : "Sealed marble"
+        }
+      }
+    }, {
+      "ID" : "37766",
+      "UsageType" : "S",
+      "Name" : "Sealed slate",
+      "S_Usage" : {
+        "ID" : "1291",
+        "M_Usage" : {
+          "ID" : "2012",
+          "UsageType" : "S",
+          "Name" : "Sealed slate"
+        }
+      }
+    }, {
+      "ID" : "37767",
+      "UsageType" : "S",
+      "Name" : "Sealed stone",
+      "S_Usage" : {
+        "ID" : "1292",
+        "M_Usage" : {
+          "ID" : "2013",
+          "UsageType" : "S",
+          "Name" : "Sealed stone"
+        }
+      }
+    }, {
+      "ID" : "37768",
+      "UsageType" : "S",
+      "Name" : "Sealed terra cotta",
+      "S_Usage" : {
+        "ID" : "1293",
+        "M_Usage" : {
+          "ID" : "2014",
+          "UsageType" : "S",
+          "Name" : "Sealed terra cotta"
+        }
+      }
+    }, {
+      "ID" : "37769",
+      "UsageType" : "S",
+      "Name" : "Sealed terrazzo",
+      "S_Usage" : {
+        "ID" : "1294",
+        "M_Usage" : {
+          "ID" : "2015",
+          "UsageType" : "S",
+          "Name" : "Sealed terrazzo"
+        }
+      }
+    }, {
+      "ID" : "37770",
+      "UsageType" : "S",
+      "Name" : "Stainless steel",
+      "S_Usage" : {
+        "ID" : "1295",
+        "M_Usage" : {
+          "ID" : "2016",
+          "UsageType" : "S",
+          "Name" : "Stainless steel"
+        }
+      }
+    }, {
+      "ID" : "37771",
+      "UsageType" : "S",
+      "Name" : "Upholstery",
+      "S_Usage" : {
+        "ID" : "1296",
+        "M_Usage" : {
+          "ID" : "2017",
+          "UsageType" : "S",
+          "Name" : "Upholstery"
+        }
+      }
+    }, {
+      "ID" : "37772",
+      "UsageType" : "S",
+      "Name" : "Woodwork",
+      "S_Usage" : {
+        "ID" : "1297",
+        "M_Usage" : {
+          "ID" : "2018",
+          "UsageType" : "S",
+          "Name" : "Woodwork"
+        }
+      }
+    }, {
+      "ID" : "37773",
+      "UsageType" : "U",
+      "Name" : "Bathrooms",
+      "S_Usage" : {
+        "ID" : "1298",
+        "M_Usage" : {
+          "ID" : "2020",
+          "UsageType" : "U",
+          "Name" : "Bathrooms"
+        }
+      }
+    }, {
+      "ID" : "37774",
+      "UsageType" : "U",
+      "Name" : "Homes (Households)",
+      "S_Usage" : {
+        "ID" : "1299",
+        "M_Usage" : {
+          "ID" : "2021",
+          "UsageType" : "U",
+          "Name" : "Homes (Households)"
+        }
+      }
+    }, {
+      "ID" : "37775",
+      "UsageType" : "U",
+      "Name" : "Kitchens",
+      "S_Usage" : {
+        "ID" : "1300",
+        "M_Usage" : {
+          "ID" : "2022",
+          "UsageType" : "U",
+          "Name" : "Kitchens"
+        }
+      }
+    }, {
+      "ID" : "37776",
+      "UsageType" : "U",
+      "Name" : "Dental Offices",
+      "S_Usage" : {
+        "ID" : "1301",
+        "M_Usage" : {
+          "ID" : "2023",
+          "UsageType" : "U",
+          "Name" : "Dental Offices"
+        }
+      }
+    }, {
+      "ID" : "37777",
+      "UsageType" : "U",
+      "Name" : "Health Care Facilities",
+      "S_Usage" : {
+        "ID" : "1302",
+        "M_Usage" : {
+          "ID" : "2024",
+          "UsageType" : "U",
+          "Name" : "Health Care Facilities"
+        }
+      }
+    }, {
+      "ID" : "37778",
+      "UsageType" : "U",
+      "Name" : "Hospitals",
+      "S_Usage" : {
+        "ID" : "1303",
+        "M_Usage" : {
+          "ID" : "2025",
+          "UsageType" : "U",
+          "Name" : "Hospitals"
+        }
+      }
+    }, {
+      "ID" : "37779",
+      "UsageType" : "U",
+      "Name" : "Medical Clinics",
+      "S_Usage" : {
+        "ID" : "1304",
+        "M_Usage" : {
+          "ID" : "2026",
+          "UsageType" : "U",
+          "Name" : "Medical Clinics"
+        }
+      }
+    }, {
+      "ID" : "37780",
+      "UsageType" : "U",
+      "Name" : "Medical Offices",
+      "S_Usage" : {
+        "ID" : "1305",
+        "M_Usage" : {
+          "ID" : "2027",
+          "UsageType" : "U",
+          "Name" : "Medical Offices"
+        }
+      }
+    }, {
+      "ID" : "37781",
+      "UsageType" : "U",
+      "Name" : "Nursing Homes",
+      "S_Usage" : {
+        "ID" : "1306",
+        "M_Usage" : {
+          "ID" : "2028",
+          "UsageType" : "U",
+          "Name" : "Nursing Homes"
+        }
+      }
+    }, {
+      "ID" : "37782",
+      "UsageType" : "U",
+      "Name" : "Day Care Centers",
+      "S_Usage" : {
+        "ID" : "1307",
+        "M_Usage" : {
+          "ID" : "2029",
+          "UsageType" : "U",
+          "Name" : "Day Care Centers"
+        }
+      }
+    }, {
+      "ID" : "37783",
+      "UsageType" : "U",
+      "Name" : "Nurseries",
+      "S_Usage" : {
+        "ID" : "1308",
+        "M_Usage" : {
+          "ID" : "2030",
+          "UsageType" : "U",
+          "Name" : "Nurseries"
+        }
+      }
+    }, {
+      "ID" : "37784",
+      "UsageType" : "U",
+      "Name" : "Schools",
+      "S_Usage" : {
+        "ID" : "1309",
+        "M_Usage" : {
+          "ID" : "2031",
+          "UsageType" : "U",
+          "Name" : "Schools"
+        }
+      }
+    }, {
+      "ID" : "37785",
+      "UsageType" : "U",
+      "Name" : "Bars",
+      "S_Usage" : {
+        "ID" : "1310",
+        "M_Usage" : {
+          "ID" : "2032",
+          "UsageType" : "U",
+          "Name" : "Bars"
+        }
+      }
+    }, {
+      "ID" : "37786",
+      "UsageType" : "U",
+      "Name" : "Cafeterias",
+      "S_Usage" : {
+        "ID" : "1311",
+        "M_Usage" : {
+          "ID" : "2033",
+          "UsageType" : "U",
+          "Name" : "Cafeterias"
+        }
+      }
+    }, {
+      "ID" : "37787",
+      "UsageType" : "U",
+      "Name" : "Convenience Stores",
+      "S_Usage" : {
+        "ID" : "1312",
+        "M_Usage" : {
+          "ID" : "2034",
+          "UsageType" : "U",
+          "Name" : "Convenience Stores"
+        }
+      }
+    }, {
+      "ID" : "37788",
+      "UsageType" : "U",
+      "Name" : "Food Processing Plants",
+      "S_Usage" : {
+        "ID" : "1313",
+        "M_Usage" : {
+          "ID" : "2035",
+          "UsageType" : "U",
+          "Name" : "Food Processing Plants"
+        }
+      }
+    }, {
+      "ID" : "37789",
+      "UsageType" : "U",
+      "Name" : "Food Storage Areas",
+      "S_Usage" : {
+        "ID" : "1314",
+        "M_Usage" : {
+          "ID" : "2036",
+          "UsageType" : "U",
+          "Name" : "Food Storage Areas"
+        }
+      }
+    }, {
+      "ID" : "37790",
+      "UsageType" : "U",
+      "Name" : "Institutional Kitchens",
+      "S_Usage" : {
+        "ID" : "1315",
+        "M_Usage" : {
+          "ID" : "2037",
+          "UsageType" : "U",
+          "Name" : "Institutional Kitchens"
+        }
+      }
+    }, {
+      "ID" : "37791",
+      "UsageType" : "U",
+      "Name" : "Restaurants",
+      "S_Usage" : {
+        "ID" : "1316",
+        "M_Usage" : {
+          "ID" : "2038",
+          "UsageType" : "U",
+          "Name" : "Restaurants"
+        }
+      }
+    }, {
+      "ID" : "37792",
+      "UsageType" : "U",
+      "Name" : "USDA Inspected Food Processing Facilities",
+      "S_Usage" : {
+        "ID" : "1317",
+        "M_Usage" : {
+          "ID" : "2039",
+          "UsageType" : "U",
+          "Name" : "USDA Inspected Food Processing Facilities"
+        }
+      }
+    }, {
+      "ID" : "37793",
+      "UsageType" : "U",
+      "Name" : "Athletic Facilities",
+      "S_Usage" : {
+        "ID" : "1318",
+        "M_Usage" : {
+          "ID" : "2040",
+          "UsageType" : "U",
+          "Name" : "Athletic Facilities"
+        }
+      }
+    }, {
+      "ID" : "37794",
+      "UsageType" : "U",
+      "Name" : "Barber Shops",
+      "S_Usage" : {
+        "ID" : "1319",
+        "M_Usage" : {
+          "ID" : "2041",
+          "UsageType" : "U",
+          "Name" : "Barber Shops"
+        }
+      }
+    }, {
+      "ID" : "37795",
+      "UsageType" : "U",
+      "Name" : "Business and Office Buildings",
+      "S_Usage" : {
+        "ID" : "1320",
+        "M_Usage" : {
+          "ID" : "2042",
+          "UsageType" : "U",
+          "Name" : "Business and Office Buildings"
+        }
+      }
+    }, {
+      "ID" : "37796",
+      "UsageType" : "U",
+      "Name" : "Colleges",
+      "S_Usage" : {
+        "ID" : "1321",
+        "M_Usage" : {
+          "ID" : "2043",
+          "UsageType" : "U",
+          "Name" : "Colleges"
+        }
+      }
+    }, {
+      "ID" : "37797",
+      "UsageType" : "U",
+      "Name" : "Commercial Institutions",
+      "S_Usage" : {
+        "ID" : "1322",
+        "M_Usage" : {
+          "ID" : "2044",
+          "UsageType" : "U",
+          "Name" : "Commercial Institutions"
+        }
+      }
+    }, {
+      "ID" : "37798",
+      "UsageType" : "U",
+      "Name" : "Correctional Facilities",
+      "S_Usage" : {
+        "ID" : "1323",
+        "M_Usage" : {
+          "ID" : "2045",
+          "UsageType" : "U",
+          "Name" : "Correctional Facilities"
+        }
+      }
+    }, {
+      "ID" : "37799",
+      "UsageType" : "U",
+      "Name" : "Factories",
+      "S_Usage" : {
+        "ID" : "1324",
+        "M_Usage" : {
+          "ID" : "2046",
+          "UsageType" : "U",
+          "Name" : "Factories"
+        }
+      }
+    }, {
+      "ID" : "37800",
+      "UsageType" : "U",
+      "Name" : "Hotels",
+      "S_Usage" : {
+        "ID" : "1325",
+        "M_Usage" : {
+          "ID" : "2047",
+          "UsageType" : "U",
+          "Name" : "Hotels"
+        }
+      }
+    }, {
+      "ID" : "37801",
+      "UsageType" : "U",
+      "Name" : "Industrial Institutions",
+      "S_Usage" : {
+        "ID" : "1326",
+        "M_Usage" : {
+          "ID" : "2048",
+          "UsageType" : "U",
+          "Name" : "Industrial Institutions"
+        }
+      }
+    }, {
+      "ID" : "37802",
+      "UsageType" : "U",
+      "Name" : "Institutional Facilities",
+      "S_Usage" : {
+        "ID" : "1327",
+        "M_Usage" : {
+          "ID" : "2049",
+          "UsageType" : "U",
+          "Name" : "Institutional Facilities"
+        }
+      }
+    }, {
+      "ID" : "37803",
+      "UsageType" : "U",
+      "Name" : "Institutions",
+      "S_Usage" : {
+        "ID" : "1328",
+        "M_Usage" : {
+          "ID" : "2050",
+          "UsageType" : "U",
+          "Name" : "Institutions"
+        }
+      }
+    }, {
+      "ID" : "37804",
+      "UsageType" : "U",
+      "Name" : "Laundry Industry",
+      "S_Usage" : {
+        "ID" : "1329",
+        "M_Usage" : {
+          "ID" : "2051",
+          "UsageType" : "U",
+          "Name" : "Laundry Industry"
+        }
+      }
+    }, {
+      "ID" : "37805",
+      "UsageType" : "U",
+      "Name" : "Locker Rooms",
+      "S_Usage" : {
+        "ID" : "1330",
+        "M_Usage" : {
+          "ID" : "2052",
+          "UsageType" : "U",
+          "Name" : "Locker Rooms"
+        }
+      }
+    }, {
+      "ID" : "37806",
+      "UsageType" : "U",
+      "Name" : "Morgues",
+      "S_Usage" : {
+        "ID" : "1331",
+        "M_Usage" : {
+          "ID" : "2053",
+          "UsageType" : "U",
+          "Name" : "Morgues"
+        }
+      }
+    }, {
+      "ID" : "37807",
+      "UsageType" : "U",
+      "Name" : "Mortuaries",
+      "S_Usage" : {
+        "ID" : "1332",
+        "M_Usage" : {
+          "ID" : "2054",
+          "UsageType" : "U",
+          "Name" : "Mortuaries"
+        }
+      }
+    }, {
+      "ID" : "37808",
+      "UsageType" : "U",
+      "Name" : "Motels",
+      "S_Usage" : {
+        "ID" : "1333",
+        "M_Usage" : {
+          "ID" : "2055",
+          "UsageType" : "U",
+          "Name" : "Motels"
+        }
+      }
+    }, {
+      "ID" : "37809",
+      "UsageType" : "U",
+      "Name" : "Office Buildings",
+      "S_Usage" : {
+        "ID" : "1334",
+        "M_Usage" : {
+          "ID" : "2056",
+          "UsageType" : "U",
+          "Name" : "Office Buildings"
+        }
+      }
+    }, {
+      "ID" : "37810",
+      "UsageType" : "U",
+      "Name" : "Prisons",
+      "S_Usage" : {
+        "ID" : "1335",
+        "M_Usage" : {
+          "ID" : "2057",
+          "UsageType" : "U",
+          "Name" : "Prisons"
+        }
+      }
+    }, {
+      "ID" : "37811",
+      "UsageType" : "U",
+      "Name" : "Public Facilities",
+      "S_Usage" : {
+        "ID" : "1336",
+        "M_Usage" : {
+          "ID" : "2058",
+          "UsageType" : "U",
+          "Name" : "Public Facilities"
+        }
+      }
+    }, {
+      "ID" : "37812",
+      "UsageType" : "U",
+      "Name" : "Public Rest Rooms",
+      "S_Usage" : {
+        "ID" : "1337",
+        "M_Usage" : {
+          "ID" : "2059",
+          "UsageType" : "U",
+          "Name" : "Public Rest Rooms"
+        }
+      }
+    }, {
+      "ID" : "37813",
+      "UsageType" : "U",
+      "Name" : "Schools",
+      "S_Usage" : {
+        "ID" : "1338",
+        "M_Usage" : {
+          "ID" : "2060",
+          "UsageType" : "U",
+          "Name" : "Schools"
+        }
+      }
+    }, {
+      "ID" : "37814",
+      "UsageType" : "U",
+      "Name" : "Shower and Bath Areas",
+      "S_Usage" : {
+        "ID" : "1339",
+        "M_Usage" : {
+          "ID" : "2061",
+          "UsageType" : "U",
+          "Name" : "Shower and Bath Areas"
+        }
+      }
+    }, {
+      "ID" : "37815",
+      "UsageType" : "U",
+      "Name" : "Salons (Beauty)",
+      "S_Usage" : {
+        "ID" : "1340",
+        "M_Usage" : {
+          "ID" : "2062",
+          "UsageType" : "U",
+          "Name" : "Salons (Beauty)"
+        }
+      }
+    }, {
+      "ID" : "37816",
+      "UsageType" : "U",
+      "Name" : "Tanning Salons",
+      "S_Usage" : {
+        "ID" : "1341",
+        "M_Usage" : {
+          "ID" : "2063",
+          "UsageType" : "U",
+          "Name" : "Tanning Salons"
+        }
+      }
+    }, {
+      "ID" : "37817",
+      "UsageType" : "U",
+      "Name" : "Whirlpool and Foot Spa Use",
+      "S_Usage" : {
+        "ID" : "1342",
+        "M_Usage" : {
+          "ID" : "2064",
+          "UsageType" : "U",
+          "Name" : "Whirlpool and Foot Spa Use"
+        }
+      }
+    }, {
+      "ID" : "37818",
+      "UsageType" : "U",
+      "Name" : "Camp Grounds",
+      "S_Usage" : {
+        "ID" : "1343",
+        "M_Usage" : {
+          "ID" : "2065",
+          "UsageType" : "U",
+          "Name" : "Camp Grounds"
+        }
+      }
+    }, {
+      "ID" : "37819",
+      "UsageType" : "U",
+      "Name" : "Playground Equipment",
+      "S_Usage" : {
+        "ID" : "1344",
+        "M_Usage" : {
+          "ID" : "2066",
+          "UsageType" : "U",
+          "Name" : "Playground Equipment"
+        }
+      }
+    }, {
+      "ID" : "37820",
+      "UsageType" : "U",
+      "Name" : "Protective Safety Gear",
+      "S_Usage" : {
+        "ID" : "1345",
+        "M_Usage" : {
+          "ID" : "2067",
+          "UsageType" : "U",
+          "Name" : "Protective Safety Gear"
+        }
+      }
+    }, {
+      "ID" : "37821",
+      "UsageType" : "U",
+      "Name" : "Animal Laboratories",
+      "S_Usage" : {
+        "ID" : "1346",
+        "M_Usage" : {
+          "ID" : "2068",
+          "UsageType" : "U",
+          "Name" : "Animal Laboratories"
+        }
+      }
+    }, {
+      "ID" : "37822",
+      "UsageType" : "U",
+      "Name" : "Animal Life Science Laboratories",
+      "S_Usage" : {
+        "ID" : "1347",
+        "M_Usage" : {
+          "ID" : "2069",
+          "UsageType" : "U",
+          "Name" : "Animal Life Science Laboratories"
+        }
+      }
+    }, {
+      "ID" : "37823",
+      "UsageType" : "U",
+      "Name" : "Dairy Farms",
+      "S_Usage" : {
+        "ID" : "1348",
+        "M_Usage" : {
+          "ID" : "2070",
+          "UsageType" : "U",
+          "Name" : "Dairy Farms"
+        }
+      }
+    }, {
+      "ID" : "37824",
+      "UsageType" : "U",
+      "Name" : "Equine Farms",
+      "S_Usage" : {
+        "ID" : "1349",
+        "M_Usage" : {
+          "ID" : "2071",
+          "UsageType" : "U",
+          "Name" : "Equine Farms"
+        }
+      }
+    }, {
+      "ID" : "37825",
+      "UsageType" : "U",
+      "Name" : "Farms",
+      "S_Usage" : {
+        "ID" : "1350",
+        "M_Usage" : {
+          "ID" : "2072",
+          "UsageType" : "U",
+          "Name" : "Farms"
+        }
+      }
+    }, {
+      "ID" : "37826",
+      "UsageType" : "U",
+      "Name" : "Federally Inspected Meat and Poultry Plants",
+      "S_Usage" : {
+        "ID" : "1351",
+        "M_Usage" : {
+          "ID" : "2073",
+          "UsageType" : "U",
+          "Name" : "Federally Inspected Meat and Poultry Plants"
+        }
+      }
+    }, {
+      "ID" : "37827",
+      "UsageType" : "U",
+      "Name" : "Funeral Homes",
+      "S_Usage" : {
+        "ID" : "1352",
+        "M_Usage" : {
+          "ID" : "2074",
+          "UsageType" : "U",
+          "Name" : "Funeral Homes"
+        }
+      }
+    }, {
+      "ID" : "37828",
+      "UsageType" : "U",
+      "Name" : "Hog Farms",
+      "S_Usage" : {
+        "ID" : "1353",
+        "M_Usage" : {
+          "ID" : "2075",
+          "UsageType" : "U",
+          "Name" : "Hog Farms"
+        }
+      }
+    }, {
+      "ID" : "37829",
+      "UsageType" : "U",
+      "Name" : "Kennels",
+      "S_Usage" : {
+        "ID" : "1354",
+        "M_Usage" : {
+          "ID" : "2076",
+          "UsageType" : "U",
+          "Name" : "Kennels"
+        }
+      }
+    }, {
+      "ID" : "37830",
+      "UsageType" : "U",
+      "Name" : "Mushroom Farms",
+      "S_Usage" : {
+        "ID" : "1355",
+        "M_Usage" : {
+          "ID" : "2077",
+          "UsageType" : "U",
+          "Name" : "Mushroom Farms"
+        }
+      }
+    }, {
+      "ID" : "37831",
+      "UsageType" : "U",
+      "Name" : "Poultry Farms",
+      "S_Usage" : {
+        "ID" : "1356",
+        "M_Usage" : {
+          "ID" : "2078",
+          "UsageType" : "U",
+          "Name" : "Poultry Farms"
+        }
+      }
+    }, {
+      "ID" : "37832",
+      "UsageType" : "U",
+      "Name" : "Pet Animal Quarters",
+      "S_Usage" : {
+        "ID" : "1357",
+        "M_Usage" : {
+          "ID" : "2079",
+          "UsageType" : "U",
+          "Name" : "Pet Animal Quarters"
+        }
+      }
+    }, {
+      "ID" : "37833",
+      "UsageType" : "U",
+      "Name" : "Pet Shops",
+      "S_Usage" : {
+        "ID" : "1358",
+        "M_Usage" : {
+          "ID" : "2080",
+          "UsageType" : "U",
+          "Name" : "Pet Shops"
+        }
+      }
+    }, {
+      "ID" : "37834",
+      "UsageType" : "U",
+      "Name" : "Tack Shops",
+      "S_Usage" : {
+        "ID" : "1359",
+        "M_Usage" : {
+          "ID" : "2081",
+          "UsageType" : "U",
+          "Name" : "Tack Shops"
+        }
+      }
+    }, {
+      "ID" : "37835",
+      "UsageType" : "U",
+      "Name" : "Turkey Farms",
+      "S_Usage" : {
+        "ID" : "1360",
+        "M_Usage" : {
+          "ID" : "2082",
+          "UsageType" : "U",
+          "Name" : "Turkey Farms"
+        }
+      }
+    }, {
+      "ID" : "37836",
+      "UsageType" : "U",
+      "Name" : "Verterinary Clinics",
+      "S_Usage" : {
+        "ID" : "1361",
+        "M_Usage" : {
+          "ID" : "2083",
+          "UsageType" : "U",
+          "Name" : "Verterinary Clinics"
+        }
+      }
+    }, {
+      "ID" : "37837",
+      "UsageType" : "U",
+      "Name" : "Zoos",
+      "S_Usage" : {
+        "ID" : "1362",
+        "M_Usage" : {
+          "ID" : "2084",
+          "UsageType" : "U",
+          "Name" : "Zoos"
+        }
+      }
+    }, {
+      "ID" : "37838",
+      "UsageType" : "U",
+      "Name" : "Beverage Plants",
+      "S_Usage" : {
+        "ID" : "1363",
+        "M_Usage" : {
+          "ID" : "2085",
+          "UsageType" : "U",
+          "Name" : "Beverage Plants"
+        }
+      }
+    }, {
+      "ID" : "37839",
+      "UsageType" : "U",
+      "Name" : "Breeding and Grooming Establishments",
+      "S_Usage" : {
+        "ID" : "1364",
+        "M_Usage" : {
+          "ID" : "2086",
+          "UsageType" : "U",
+          "Name" : "Breeding and Grooming Establishments"
+        }
+      }
+    }, {
+      "ID" : "37840",
+      "UsageType" : "U",
+      "Name" : "Breweries",
+      "S_Usage" : {
+        "ID" : "1365",
+        "M_Usage" : {
+          "ID" : "2087",
+          "UsageType" : "U",
+          "Name" : "Breweries"
+        }
+      }
+    }, {
+      "ID" : "37841",
+      "UsageType" : "U",
+      "Name" : "Carpeting",
+      "S_Usage" : {
+        "ID" : "1366",
+        "M_Usage" : {
+          "ID" : "2088",
+          "UsageType" : "U",
+          "Name" : "Carpeting"
+        }
+      }
+    }, {
+      "ID" : "37842",
+      "UsageType" : "U",
+      "Name" : "Citus Plants ",
+      "S_Usage" : {
+        "ID" : "1367",
+        "M_Usage" : {
+          "ID" : "2089",
+          "UsageType" : "U",
+          "Name" : "Citus Plants "
+        }
+      }
+    }, {
+      "ID" : "37843",
+      "UsageType" : "U",
+      "Name" : "Airplanes",
+      "S_Usage" : {
+        "ID" : "1368",
+        "M_Usage" : {
+          "ID" : "2090",
+          "UsageType" : "U",
+          "Name" : "Airplanes"
+        }
+      }
+    }, {
+      "ID" : "37844",
+      "UsageType" : "U",
+      "Name" : "Airports",
+      "S_Usage" : {
+        "ID" : "1369",
+        "M_Usage" : {
+          "ID" : "2091",
+          "UsageType" : "U",
+          "Name" : "Airports"
+        }
+      }
+    }, {
+      "ID" : "37845",
+      "UsageType" : "U",
+      "Name" : "Automotive Industy",
+      "S_Usage" : {
+        "ID" : "1370",
+        "M_Usage" : {
+          "ID" : "2092",
+          "UsageType" : "U",
+          "Name" : "Automotive Industy"
+        }
+      }
+    }, {
+      "ID" : "37846",
+      "UsageType" : "U",
+      "Name" : "Boats",
+      "S_Usage" : {
+        "ID" : "1371",
+        "M_Usage" : {
+          "ID" : "2093",
+          "UsageType" : "U",
+          "Name" : "Boats"
+        }
+      }
+    }, {
+      "ID" : "37847",
+      "UsageType" : "U",
+      "Name" : "Buses",
+      "S_Usage" : {
+        "ID" : "1372",
+        "M_Usage" : {
+          "ID" : "2094",
+          "UsageType" : "U",
+          "Name" : "Buses"
+        }
+      }
+    }, {
+      "ID" : "37848",
+      "UsageType" : "U",
+      "Name" : "Campers",
+      "S_Usage" : {
+        "ID" : "1373",
+        "M_Usage" : {
+          "ID" : "2095",
+          "UsageType" : "U",
+          "Name" : "Campers"
+        }
+      }
+    }, {
+      "ID" : "37849",
+      "UsageType" : "U",
+      "Name" : "Cars",
+      "S_Usage" : {
+        "ID" : "1374",
+        "M_Usage" : {
+          "ID" : "2096",
+          "UsageType" : "U",
+          "Name" : "Cars"
+        }
+      }
+    }, {
+      "ID" : "37850",
+      "UsageType" : "U",
+      "Name" : "Emergency Vehicles",
+      "S_Usage" : {
+        "ID" : "1375",
+        "M_Usage" : {
+          "ID" : "2097",
+          "UsageType" : "U",
+          "Name" : "Emergency Vehicles"
+        }
+      }
+    }, {
+      "ID" : "37851",
+      "UsageType" : "U",
+      "Name" : "Mobile Homes",
+      "S_Usage" : {
+        "ID" : "1376",
+        "M_Usage" : {
+          "ID" : "2098",
+          "UsageType" : "U",
+          "Name" : "Mobile Homes"
+        }
+      }
+    }, {
+      "ID" : "37852",
+      "UsageType" : "U",
+      "Name" : "Recreational Vehicle Use",
+      "S_Usage" : {
+        "ID" : "1377",
+        "M_Usage" : {
+          "ID" : "2099",
+          "UsageType" : "U",
+          "Name" : "Recreational Vehicle Use"
+        }
+      }
+    }, {
+      "ID" : "37853",
+      "UsageType" : "U",
+      "Name" : "Ships",
+      "S_Usage" : {
+        "ID" : "1378",
+        "M_Usage" : {
+          "ID" : "2100",
+          "UsageType" : "U",
+          "Name" : "Ships"
+        }
+      }
+    }, {
+      "ID" : "37854",
+      "UsageType" : "U",
+      "Name" : "Taxis",
+      "S_Usage" : {
+        "ID" : "1379",
+        "M_Usage" : {
+          "ID" : "2101",
+          "UsageType" : "U",
+          "Name" : "Taxis"
+        }
+      }
+    }, {
+      "ID" : "37855",
+      "UsageType" : "U",
+      "Name" : "Trailers",
+      "S_Usage" : {
+        "ID" : "1380",
+        "M_Usage" : {
+          "ID" : "2102",
+          "UsageType" : "U",
+          "Name" : "Trailers"
+        }
+      }
+    }, {
+      "ID" : "37856",
+      "UsageType" : "U",
+      "Name" : "Trains",
+      "S_Usage" : {
+        "ID" : "1381",
+        "M_Usage" : {
+          "ID" : "2103",
+          "UsageType" : "U",
+          "Name" : "Trains"
+        }
+      }
+    }, {
+      "ID" : "37857",
+      "UsageType" : "U",
+      "Name" : "Transportation Terminals",
+      "S_Usage" : {
+        "ID" : "1382",
+        "M_Usage" : {
+          "ID" : "2104",
+          "UsageType" : "U",
+          "Name" : "Transportation Terminals"
+        }
+      }
+    }, {
+      "ID" : "37858",
+      "UsageType" : "T",
+      "Name" : "Disinfectant",
+      "S_Usage" : {
+        "ID" : "1383",
+        "M_Usage" : {
+          "ID" : "2121",
+          "UsageType" : "T",
+          "Name" : "Disinfectant"
+        }
+      }
+    }, {
+      "ID" : "37859",
+      "UsageType" : "T",
+      "Name" : "Sanitizer",
+      "S_Usage" : {
+        "ID" : "1384",
+        "M_Usage" : {
+          "ID" : "2122",
+          "UsageType" : "T",
+          "Name" : "Sanitizer"
+        }
+      }
+    }, {
+      "ID" : "37860",
+      "UsageType" : "T",
+      "Name" : "Viruscide",
+      "S_Usage" : {
+        "ID" : "1385",
+        "M_Usage" : {
+          "ID" : "2123",
+          "UsageType" : "T",
+          "Name" : "Viruscide"
+        }
+      }
+    }, {
+      "ID" : "37861",
+      "UsageType" : "T",
+      "Name" : "Fungicide",
+      "S_Usage" : {
+        "ID" : "1386",
+        "M_Usage" : {
+          "ID" : "2124",
+          "UsageType" : "T",
+          "Name" : "Fungicide"
+        }
+      }
+    }, {
+      "ID" : "37862",
+      "UsageType" : "T",
+      "Name" : "Algaecide",
+      "S_Usage" : {
+        "ID" : "1387",
+        "M_Usage" : {
+          "ID" : "2125",
+          "UsageType" : "T",
+          "Name" : "Algaecide"
+        }
+      }
+    }, {
+      "ID" : "37863",
+      "UsageType" : "T",
+      "Name" : "General Purpose Anti-microbial",
+      "S_Usage" : {
+        "ID" : "1388",
+        "M_Usage" : {
+          "ID" : "2126",
+          "UsageType" : "T",
+          "Name" : "General Purpose Anti-microbial"
+        }
+      }
+    }, {
+      "ID" : "37864",
+      "UsageType" : "T",
+      "Name" : "Tuberculocide",
+      "S_Usage" : {
+        "ID" : "1389",
+        "M_Usage" : {
+          "ID" : "2127",
+          "UsageType" : "T",
+          "Name" : "Tuberculocide"
+        }
+      }
+    } ],
+    "SPLD_LLD" : [ {
+      "ID" : "11",
+      "Tag" : "label",
+      "ContinuationPreviousPageText" : "** Continued on Side Panel",
+      "ContNextPageTextMarketing" : "** Continued from Mrktg Previous Page",
+      "ContNextPageTextDirForUse" : "** Continued from DU Previous Page",
+      "Depth" : "0",
+      "LLD_Page" : [ {
+        "ID" : "27",
+        "Tag" : "page1",
+        "Height" : "14.6",
+        "Width" : "19.6",
+        "PageNbr" : "1",
+        "Depth" : "0",
+        "LLD_Panel" : [ {
+          "ID" : "54",
+          "Tag" : "Tag54",
+          "Top" : "1",
+          "Left" : "1",
+          "Height" : "10.43",
+          "Width" : "13.38",
+          "TextColor" : "#ffffff",
+          "BackgroundColor" : "#ffffff",
+          "BorderColor" : "#ffffff",
+          "Depth" : "1",
+          "LLD_Block" : [ {
+            "ID" : "801",
+            "Tag" : "Tag101",
+            "Top" : "0.51",
+            "Left" : "0.62",
+            "Height" : "1",
+            "Width" : "1",
+            "Depth" : "2",
+            "wComputedTopPosition" : "0.51",
+            "LLD_SubBlock" : [ {
+              "ID" : "800",
+              "Tag" : "Tag100",
+              "Top" : "1.16",
+              "Left" : "8.83",
+              "Height" : "3.12",
+              "Width" : "2.98",
+              "TextColor" : "#ffffff",
+              "BackgroundColor" : "#ffffff",
+              "BorderColor" : "#ffffff",
+              "Depth" : "2"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ],
+    "CompositeComponentList" : [ {
+      "Type" : "SPLD_GeneralSection",
+      "SelectLevel" : "1",
+      "Value" : "FIRST AID",
+      "OriginalTypeID" : "100",
+      "DisplayType" : "General",
+      "DisplayTypeIndent" : "General",
+      "DisplayValue" : "FIRST AID"
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "IF ON SKIN OR CLOTHING: Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes. Call a poison control center or doctor for treatment advice.",
+      "OriginalTypeID" : "199",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "IF ON SKIN OR CLOTHING: Take off contaminated clothing. Rinse skin immediately with plenty of water ....."
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "IF IN EYES: Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes.  Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye. Call a poison control center or doctor for treatment advice.",
+      "OriginalTypeID" : "200",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "IF IN EYES: Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes.  Remove contac....."
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "If swallowed: Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of water if able to swallow.  Do not induce vomiting unless told to do so by the poison control center or doctor. Do not give anything by mouth to an unconscious person.",
+      "OriginalTypeID" : "201",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "If swallowed: Call a poison control center or doctor immediately for treatment advice. Have person s....."
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "IF INHALED: Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible. Call a poison control center or doctor for treatment advice.",
+      "OriginalTypeID" : "202",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "IF INHALED: Move person to fresh air. If person is not breathing, call 911 or an ambulance, then giv....."
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage.",
+      "OriginalTypeID" : "203",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage......"
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "Have the product container or label with you when calling a poison control center or doctor or going for treatment.",
+      "OriginalTypeID" : "204",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Have the product container or label with you when calling a poison control center or doctor or going....."
+    }, {
+      "Type" : "SPLD_GeneralSection",
+      "SelectLevel" : "1",
+      "Value" : "PRECAUTIONARY STATEMENTS",
+      "OriginalTypeID" : "101",
+      "DisplayType" : "General",
+      "DisplayTypeIndent" : "General",
+      "DisplayValue" : "PRECAUTIONARY STATEMENTS"
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.",
+      "OriginalTypeID" : "205",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get i....."
+    }, {
+      "Type" : "SPLD_GeneralSection",
+      "SelectLevel" : "1",
+      "Value" : "PHYSICAL OR CHEMICAL OR ENVIRONMENTAL HAZARDS",
+      "OriginalTypeID" : "102",
+      "DisplayType" : "General",
+      "DisplayTypeIndent" : "General",
+      "DisplayValue" : "PHYSICAL OR CHEMICAL OR ENVIRONMENTAL HAZARDS"
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "PHYSICAL OR CHEMICAL HAZARDS\r\nDo not mix with oxidizers, anionic soaps and detergents.\r\nDo not use or store near heat or open flame.",
+      "OriginalTypeID" : "206",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "PHYSICAL OR CHEMICAL HAZARDS\r\nDo not mix with oxidizers, anionic soaps and detergents.\r\nDo not use o....."
+    }, {
+      "Type" : "SPLD_GeneralStatement",
+      "SelectLevel" : "2",
+      "Value" : "ENVIRONMENTAL HAZARDS\r\nDo not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge.  Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority.  For guidance contact your State Water Board or Regional Office of the EPA.\r\n",
+      "OriginalTypeID" : "207",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "ENVIRONMENTAL HAZARDS\r\nDo not discharge effluent containing this product into lakes, streams, ponds,....."
+    }, {
+      "Type" : "SPLD_IngredientsSection",
+      "SelectLevel" : "1",
+      "Value" : "Active Ingredients:",
+      "OriginalTypeID" : "34",
+      "DisplayType" : "Ingredients",
+      "DisplayTypeIndent" : "Ingredients",
+      "DisplayValue" : "Active Ingredients:"
+    }, {
+      "Type" : "SPLD_IngredientsStatement",
+      "SelectLevel" : "2",
+      "Value" : "Didecyl Dimethyl Ammonium Chloride",
+      "OriginalTypeID" : "67",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Didecyl Dimethyl Ammonium Chloride"
+    }, {
+      "Type" : "SPLD_IngredientsStatement",
+      "SelectLevel" : "2",
+      "Value" : "n-Alkyl (C<sub>14</sub> 50%, C<sub>13</sub> 40%, C<sub>16</sub> 10%)\r\ndimethyl benzyl ammonium chloride",
+      "OriginalTypeID" : "68",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "n-Alkyl (C<sub>14</sub> 50%, C<sub>13</sub> 40%, C<sub>16</sub> 10%)\r\ndimethyl benzyl ammonium chloride"
+    }, {
+      "Type" : "SPLD_StorageDisposalSection",
+      "SelectLevel" : "1",
+      "Value" : "STORAGE AND DISPOSAL > 1 gallon",
+      "OriginalTypeID" : "61",
+      "DisplayType" : "StorageDisposal",
+      "DisplayTypeIndent" : "StorageDisposal",
+      "DisplayValue" : "STORAGE AND DISPOSAL > 1 gallon"
+    }, {
+      "Type" : "SPLD_StorageDisposalStatement",
+      "SelectLevel" : "2",
+      "OriginalTypeID" : "166",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "....."
+    }, {
+      "Type" : "SPLD_StorageDisposalTitle",
+      "SelectLevel" : "2",
+      "Value" : "PESTICIDE STORAGE:",
+      "OriginalTypeID" : "167",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_StorageDisposalStatement",
+      "SelectLevel" : "2",
+      "Value" : "Open dumping is prohibited.  Store only in original container. Do not reuse empty container. Keep this product under locked storage sufficient to make it inaccessible to children or persons unfamiliar with its proper use.",
+      "OriginalTypeID" : "167",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Open dumping is prohibited.  Store only in original container. Do not reuse empty container. Keep th....."
+    }, {
+      "Type" : "SPLD_StorageDisposalTitle",
+      "SelectLevel" : "2",
+      "Value" : "Pesticide Disposal",
+      "OriginalTypeID" : "168",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_StorageDisposalStatement",
+      "SelectLevel" : "2",
+      "Value" : "Pesticide wastes are acutely hazardous.  Improper disposal of excess pesticide, spray mixture, or rinsate is a violation of Federal law.  If these wastes cannot be disposed of by use according to label instructions, contact your State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.",
+      "OriginalTypeID" : "168",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Pesticide wastes are acutely hazardous.  Improper disposal of excess pesticide, spray mixture, or ri....."
+    }, {
+      "Type" : "SPLD_StorageDisposalTitle",
+      "SelectLevel" : "2",
+      "Value" : "Container Disposal",
+      "OriginalTypeID" : "169",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_StorageDisposalStatement",
+      "SelectLevel" : "2",
+      "Value" : "(Plastic containers:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning, or puncture and dispose of in a sanitary landfill, or incinerate, or if allowed by state and local authorities, burn.  If burned, stay out of smoke.\r\n(Fiber Drums With Liner:) Completely empty liner by shaking and tapping sides and bottom to loosen clinging particles.  Empty residue into application equipment.  Then dispose of liner in a sanitary landfill or by incineration if allowed by state and local authorities.  If drum is contaminated and cannot by reused, dispose of in the same manner.\r\n(Metal Container:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning or puncture and dispose of in a sanitary landfill, or dispose of by other procedures approved by state and local authorities.\r\n(For Bag-in-Box Containers:) Completely empty bag into application equipment. Dispose of empty bag in a sanitary landfill or by incineration, or if allowed by state and local authorities by burning or dispose of by other procedures approved by state and local authorities.  If burned, stay out of smoke.",
+      "OriginalTypeID" : "169",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "(Plastic containers:) Triple rinse (or equivalent).  Then offer for recycling or reconditioning, or ....."
+    }, {
+      "Type" : "SPLD_StorageDisposalSection",
+      "SelectLevel" : "1",
+      "Value" : "STORAGE AND DISPOSAL <= 1 gallon",
+      "OriginalTypeID" : "62",
+      "DisplayType" : "StorageDisposal",
+      "DisplayTypeIndent" : "StorageDisposal",
+      "DisplayValue" : "STORAGE AND DISPOSAL <= 1 gallon"
+    }, {
+      "Type" : "SPLD_StorageDisposalTitle",
+      "SelectLevel" : "2",
+      "Value" : "STORAGE AND DISPOSAL",
+      "OriginalTypeID" : "170",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_StorageDisposalStatement",
+      "SelectLevel" : "2",
+      "Value" : "Store in original container in areas inaccessible to children. Do not reuse empty container.  Wrap and discard in trash (or recycle).",
+      "OriginalTypeID" : "170",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Store in original container in areas inaccessible to children. Do not reuse empty container.  Wrap a....."
+    }, {
+      "Type" : "SPLD_StorageDisposalSection",
+      "SelectLevel" : "1",
+      "Value" : "STORAGE AND DISPOSAL - 2 FLUID OZ.",
+      "OriginalTypeID" : "63",
+      "DisplayType" : "StorageDisposal",
+      "DisplayTypeIndent" : "StorageDisposal",
+      "DisplayValue" : "STORAGE AND DISPOSAL - 2 FLUID OZ."
+    }, {
+      "Type" : "SPLD_StorageDisposalTitle",
+      "SelectLevel" : "2",
+      "Value" : "DISPOSAL:",
+      "OriginalTypeID" : "171",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_StorageDisposalStatement",
+      "SelectLevel" : "2",
+      "Value" : "Do not reuse container.  Wrap and put in trash collection.",
+      "OriginalTypeID" : "171",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Do not reuse container.  Wrap and put in trash collection......"
+    }, {
+      "Type" : "SPLD_DirectionsForUseSection",
+      "SelectLevel" : "1",
+      "Value" : "DIRECTIONS FOR USE",
+      "OriginalTypeID" : "395",
+      "DisplayType" : "DirectionsForUse",
+      "DisplayTypeIndent" : "DirectionsForUse",
+      "DisplayValue" : "DIRECTIONS FOR USE"
+    }, {
+      "Type" : "SPLD_DirectionsForUseTitle",
+      "SelectLevel" : "2",
+      "Value" : "It is a violation of Federal law to use this product in a manner inconsistent with its labeling.\r\n",
+      "OriginalTypeID" : "2703",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_DirectionsForUseStatement",
+      "SelectLevel" : "2",
+      "Value" : "This product is not to be used as a terminal sterilant / high level disinfectant on any surface or instrument that (1) is introduced directly into the human body, either into or in contact with the bloodstream or normally sterile areas of the body, or (2) contacts intact mucous membranes but which does not ordinarily penetrate the blood barrier or otherwise enter normally sterile areas of the body.  This product may be used to preclean or decontaminate critical or semi-critical devices prior to sterilization or high-level disinfection.",
+      "OriginalTypeID" : "2703",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "This product is not to be used as a terminal sterilant / high level disinfectant on any surface or i....."
+    }, {
+      "Type" : "SPLD_DirectionsForUseTitle",
+      "SelectLevel" : "2",
+      "Value" : "IF not used on metal and or stainless steel surfaces in medical premises.",
+      "OriginalTypeID" : "2704",
+      "DisplayType" : "Title",
+      "DisplayTypeIndent" : "...Stmt Title"
+    }, {
+      "Type" : "SPLD_DirectionsForUseStatement",
+      "SelectLevel" : "2",
+      "Value" : "This product is not for use on medical device surfaces.",
+      "OriginalTypeID" : "2704",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "This product is not for use on medical device surfaces......"
+    }, {
+      "Type" : "SPLD_MarketingSection",
+      "SelectLevel" : "1",
+      "Value" : "optional marketing language - Marketing Title",
+      "OriginalTypeID" : "2902",
+      "DisplayType" : "Marketing",
+      "DisplayTypeIndent" : "Marketing",
+      "DisplayValue" : "optional marketing language - Marketing Title"
+    }, {
+      "Type" : "SPLD_MarketingStatement",
+      "SelectLevel" : "2",
+      "Value" : "Concentrate (Concentrated)\r\nNeutral (Neutral pH)\r\nDisinfects (Disinfectant)\r\nCleans (Cleaner)\r\nDeodorizes (Deodorizer)\r\n\r\nA multi-purpose, neutral pH, germicidal detergent and deodorant effective in hard water up to 400 ppm (calculated as CaCO3) in the presence of a moderate amount of soil (5% organic serum) according to the AOAC Use-dilution Test.  Disinfects, cleans, and deodorizes in one labor-saving step.\r\n\r\nRecommended for use in hospitals, nursing homes, schools, colleges, commercial and industrial institutions, office buildings, veterinary clinics, animal life science laboratories, zoos, federally inspected meat and poultry plants, equine farms, tack shops, pet shops, airports, kennels, hotels, motels, poultry farms, turkey farms, dairy farms, hog farms, breeding establishments, grooming establishments, funeral homes, and households.  Use to clean and disinfect non-medical (i.e. industrial and fire-fighting) respirators in industrial, commercial and institutional premises.\r\n\r\nDisinfects, cleans, and deodorizes the following hard nonporous inanimate surfaces: floors, walls, (non-medical) metal surfaces, (non-medical) stainless steel surfaces, glazed porcelain, plastic surfaces (such as polypropylene, polystyrene, etc.).\r\n\r\nUse [on] [to clean and disinfect] nonporous athletic mats, wrestling mats, gymnastic mats, exercise equipment and training tables.\r\nUse [on] [to clean and disinfect] nonporous personal protective safety equipment, wrestling headgear, boxing headgear, protective headgear, athletic helmets, hard hats, half mask respirators, full face breathing apparatus, gas masks, goggles, spectacles, face shields, hearing protectors, and ear muffs.  Rinse all equipment that comes in prolonged contact with skin with warm water and allow to air dry before reuse.  [Caution: Cleaning at the recommended 120. temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.]",
+      "OriginalTypeID" : "2930",
+      "DisplayType" : "Statement",
+      "DisplayTypeIndent" : "...Statement",
+      "DisplayValue" : "Concentrate (Concentrated)\r\nNeutral (Neutral pH)\r\nDisinfects (Disinfectant)\r\nCleans (Cleaner)\r\nDeodo....."
+    }, {
+      "Type" : "SPLD_HumanHazardSection",
+      "SelectLevel" : "1",
+      "OriginalTypeID" : "34",
+      "DisplayTypeIndent" : "Hazards"
+    }, {
+      "SelectLevel" : "2",
+      "DisplayTypeIndent" : "...Signal Word",
+      "DisplayValue" : "DANGER"
+    }, {
+      "SelectLevel" : "2",
+      "DisplayTypeIndent" : "...Child Warning",
+      "DisplayValue" : "U"
+    }, {
+      "SelectLevel" : "2",
+      "DisplayTypeIndent" : "...Precautionary Stmt",
+      "DisplayValue" : "See {{Precautionary Panel Location}} Panel {{Precautionary Label Location}} for Precautionary Statements"
+    }, {
+      "DisplayTypeIndent" : "Location",
+      "DisplayValue" : "...Left / Back / Side / Right"
+    } ]
+  } ]
+}
