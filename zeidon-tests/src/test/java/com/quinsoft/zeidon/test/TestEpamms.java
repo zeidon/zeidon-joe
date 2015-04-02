@@ -202,7 +202,7 @@ public class TestEpamms
          if ( ec.isNull() )
              throw new ZeidonException("This shouldn't be null" );
 
-         mSPLDef2.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mSPLDef2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          displaySPLD( mSPLDef2, "SPLD_LLD", "After second moveSubobject" );
 
          return 0;
@@ -235,7 +235,7 @@ public class TestEpamms
          mSPLDef.logObjectInstance();
       */
          CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
-         mSPLDef = view.deserializeOi().fromZeidonHomeFile( "/ePammsDon/mSPLDef2.json" ).activateFirst();
+         mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDef2.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
          // Try to move the SubBlock back to a panel.

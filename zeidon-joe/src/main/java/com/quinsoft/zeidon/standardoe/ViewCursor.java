@@ -121,6 +121,7 @@ class ViewCursor
         {
             objectInstance = sourceCursor.getObjectInstance();
             recursiveRoot = sourceCursor.getRecursiveRoot();
+            recursiveRootParent = sourceCursor.getRecursiveRootParent();
             setRecursiveDiff( sourceCursor.getRecursiveDiff() );
             firstValidCursorIndex = sourceCursor.firstValidCursorIndex;
             lastValidCursorIndex = sourceCursor.lastValidCursorIndex;
@@ -172,6 +173,7 @@ class ViewCursor
     private void resetRecursiveParent()
     {
         recursiveRoot = null;
+        recursiveRootParent = null;
         recursiveDiff = 0;
     }
 
@@ -213,6 +215,7 @@ class ViewCursor
         {
             // We've reset the cursor back to its "normal" state so there is no recursiveRoot.
             recursiveRoot = null;
+            recursiveRootParent = null;
             return;
         }
 
@@ -224,15 +227,22 @@ class ViewCursor
     void resetSubobjectTop()
     {
         EntityInstanceImpl currentRoot = getRecursiveRoot();
-        if ( currentRoot == null )
+        if ( currentRoot == null && getRecursiveRootParent() == null ) // Nothing to do; it's already at the top.
             return;
 
-        EntityDef entityDef = currentRoot.getEntityDef();
-        if ( entityDef.getRecursiveParentEntityDef() != null )
-            entityDef = entityDef.getRecursiveParentEntityDef();
+        EntityDef entityDef;
+        if ( currentRoot == null )
+            entityDef = getRecursiveRootParent().getEntityDef();
+        else
+        {
+            entityDef = currentRoot.getEntityDef();
+            if ( entityDef.getRecursiveParentEntityDef() != null )
+                entityDef = entityDef.getRecursiveParentEntityDef();
+        }
 
         view.cursor( entityDef ).resetChildCursors( null );
         resetRecursiveParent();
+        assert recursiveDiff == 0 : "recursiveDiff is not 0";
     }
 
     /**

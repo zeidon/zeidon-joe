@@ -272,7 +272,8 @@ class EntityCursorImpl implements EntityCursor
                 return getViewCursor().getRecursiveRootParent();
             }
             else
-                assert getViewCursor().getRecursiveRoot().getParent() == parentCursor.getExistingInstance();
+                return getViewCursor().getRecursiveRoot().getParent();
+//                assert getViewCursor().getRecursiveRoot().getParent() == parentCursor.getExistingInstance();
         }
 
         EntityInstanceImpl parent = parentCursor.getExistingInstance();
