@@ -254,7 +254,7 @@ public class TestEpamms
          ec.setToSubobject();
          ec = mSPLDef.getCursor( "LLD_Block" );
 
-         mSPLDef2.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mSPLDef2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
 
          displaySPLD( mSPLDef2, "SPLD_LLD", "After second moveSubobject" );
 
@@ -293,7 +293,7 @@ public class TestEpamms
          ec = mLLD2.getCursor( "LLD_Block" );
          ec.logEntity();
          mLLD.cursor( "LLD_Panel" ).logEntity();
-         mLLD.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mLLD.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mLLD.logObjectInstance();
          return 0;
       }
