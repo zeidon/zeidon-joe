@@ -192,7 +192,13 @@ public class TestEpamms
          mSPLDef.resetSubobjectTop();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate/Reset New mSPLDef" );
          cr = mSPLDef.cursor( "LLD_Page" ).setFirst();
+         displaySPLD( mSPLDef, "LLD_Page", "After LLD_Page setFirst" );
          cr = mSPLDef.cursor( "LLD_Panel" ).setFirst();
+         displaySPLD( mSPLDef, "LLD_Panel", "After LLD_Panel setFirst" );
+         cr = mSPLDef.cursor( "LLD_Block" ).setFirst();
+         displaySPLD( mSPLDef, "LLD_Block", "After LLD_Block setFirst" );
+         cr = mSPLDef.cursor( "LLD_SubBlock" ).setFirst();
+         displaySPLD( mSPLDef, "LLD_SubBlock", "After LLD_SubBlock setFirst" );
 
          ec = mSPLDef.getCursor( "LLD_SubBlock" );
          TraceLineS( "Logging LLD_SubBlock", "" );
