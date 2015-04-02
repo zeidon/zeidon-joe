@@ -80,7 +80,7 @@ class TestOperations ( var task: Task ) extends ZeidonOperations{
         view.Person create NEXT
 		view.Person.ID = 1
 
-		view.Person.create.ID = 2
+		view.Person.create().ID = 2
 		val person = view.Person
 		person.ID = 2
 

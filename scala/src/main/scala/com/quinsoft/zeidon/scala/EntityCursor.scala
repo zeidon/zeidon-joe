@@ -25,6 +25,8 @@ import com.quinsoft.zeidon.objectdefinition._
 import com.quinsoft.zeidon.CursorPosition
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.EntityCursor.CursorStatus
+import java.util.EnumSet
+import com.quinsoft.zeidon.CreateEntityFlags
 
 /**
  * Scala wrapper around a Zeiden EntityCursor.
@@ -47,25 +49,14 @@ class EntityCursor( private[this]  val view: View,
 
     /** Creates a new entity instance.
       *
-      * Creates a new entity instance that is positioned after the currently selected
-      * entity instance.
-      *
-      * @returns this
-      */
-    def create: EntityCursor = {
-        jentityCursor.createEntity()
-        this
-    }
-
-    /** Creates a new entity instance.
-      *
       * Creates a new entity instance.  The position of the new instance is determined
       * by CursorPosition.
       *
       * @returns this
       */
-    def create( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
-        jentityCursor.createEntity()
+    def create( position: CursorPosition = CursorPosition.NEXT,
+                createFlags: EnumSet[CreateEntityFlags] = CreateEntityFlags.DEFAULT ): EntityCursor = {
+        jentityCursor.createEntity( position, createFlags )
         this
     }
 
