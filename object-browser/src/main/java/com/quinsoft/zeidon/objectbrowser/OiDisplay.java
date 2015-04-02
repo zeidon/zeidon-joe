@@ -74,6 +74,11 @@ class OiDisplay extends JPanel
     private final JScrollPane scroller;
     private final EntitySelectedListener entitySelectedListener;
     private       Point mousePoint;
+    
+    /**
+     * True if we think the mouse is down.
+     */
+    private boolean mouseDown;
 
     /**
      * @param env
@@ -242,6 +247,18 @@ class OiDisplay extends JPanel
         }
     }
 
+    void repositionScrollLater( final Point p )
+    {
+        javax.swing.SwingUtilities.invokeLater( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                repositionScroll( p );
+            }
+        } );
+    }
+    
     void repositionScroll( Point p )
     {
         // Make sure we aren't scrolling off the screen
@@ -281,7 +298,19 @@ class OiDisplay extends JPanel
         @Override
         public void mousePressed( MouseEvent e )
         {
+            mouseDown = true;
             mousePoint = new Point( e.getX(), e.getY() );
+            super.mouseReleased( e );
+        }
+        
+        /* (non-Javadoc)
+         * @see java.awt.event.MouseAdapter#mouseReleased(java.awt.event.MouseEvent)
+         */
+        @Override
+        public void mouseReleased( MouseEvent e )
+        {
+            mouseDown = false;
+            super.mouseReleased( e );
         }
 
         private void changeScale( MouseEvent e, int scale )
@@ -302,14 +331,30 @@ class OiDisplay extends JPanel
 
                 entitySelectedListener.scaleChanged( view, newCorner );
             }
-
         }
 
         @Override
         public void mouseWheelMoved( MouseWheelEvent e )
         {
-            int scale = env.getPainterScaleFactor() + - e.getWheelRotation();
-            changeScale( e, scale );
+            if ( e.isControlDown() )
+            {
+                int scale = env.getPainterScaleFactor() + - e.getWheelRotation();
+                changeScale( e, scale );
+            }
+            if ( e.isAltDown() || mouseDown )
+            {
+                // Scroll horizontally
+                final Point p = scroller.getViewport().getViewPosition();
+                p.x += e.getWheelRotation() * env.getPainterScaleFactor() * EntitySquare.SMALLEST_WIDTH * 4;
+                repositionScrollLater( p );
+            }
+            else
+            {
+                // Scroll vertically
+                final Point p = scroller.getViewport().getViewPosition();
+                p.y += e.getWheelRotation() * env.getPainterScaleFactor() * EntitySquare.SMALLEST_HEIGHT * 2;
+                repositionScrollLater( p );
+            }
         }
 
         @Override

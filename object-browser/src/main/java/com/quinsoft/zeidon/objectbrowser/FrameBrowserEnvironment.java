@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -112,7 +114,12 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     {
         Task task = getOe().getTaskById( v.task.taskId );
         View view = task.getViewByKey( v.viewId );
-        view.setLazyLoad( false ); // Set lazy load so the browser doesn't change anything.
+        if ( view == null )
+            JOptionPane.showMessageDialog( null, "This view has been reclaimed by the Garbage Collector.  Hit Refresh to remove.", 
+                                           "Invalid View", JOptionPane.INFORMATION_MESSAGE );
+        else
+            view.setLazyLoad( false ); // Set lazy load so the browser doesn't change anything.
+        
         return view;
     }
 

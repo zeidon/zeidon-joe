@@ -59,8 +59,8 @@ public class EntitySquare extends JPanel implements MouseListener
 {
     private static final long serialVersionUID = 1L;
 
-    private static final int SMALLEST_WIDTH  = 10;
-    private static final int SMALLEST_HEIGHT = 7;
+    static final int SMALLEST_WIDTH  = 10;
+    static final int SMALLEST_HEIGHT = 7;
     private static final int VERTICAL_PAD    = 3;
     private static final int HORIZONTAL_PAD  = 2;
 

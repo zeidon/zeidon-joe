@@ -86,7 +86,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         // Add a button who's only purpose is to be a mouse over tooltip.
         try
         {
-            URL url = Resources.getResource("help-text.html");
+            URL url = Resources.getResource("help-text.html.txt");
             String text = Resources.toString(url, Charsets.UTF_8);
             JButton button = new JButton( "Help" );
             button.setToolTipText( text );
@@ -94,7 +94,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         }
         catch ( Exception e )
         {
-            env.getOe().getSystemTask().log().error( "Couldn't open help-text.html" );
+            env.getOe().getSystemTask().log().error( "Couldn't open help-text.html.txt" );
         }
 
         add( buttonPane, BorderLayout.NORTH );
