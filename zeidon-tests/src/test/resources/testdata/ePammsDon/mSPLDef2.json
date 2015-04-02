@@ -144,7 +144,7 @@
       "SPLD_IngredientsStatement" : [ {
         "ID" : "67",
         "ChemicalName" : "Didecyl Dimethyl Ammonium Chloride",
-        "Active" : "Active",
+        "Active" : "A",
         "Percent" : "10.14",
         "S_IngredientsStatement" : {
           "ID" : "31"
@@ -152,7 +152,7 @@
       }, {
         "ID" : "68",
         "ChemicalName" : "n-Alkyl (C<sub>14</sub> 50%, C<sub>13</sub> 40%, C<sub>16</sub> 10%)\r\ndimethyl benzyl ammonium chloride",
-        "Active" : "Active",
+        "Active" : "A",
         "Percent" : "6.76",
         "S_IngredientsStatement" : {
           "ID" : "32"

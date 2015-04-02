@@ -206,7 +206,7 @@ public class TestEpamms
          ec.setToSubobject();
          ec = mSPLDef.getCursor( "LLD_Block" );
          if ( ec.isNull() )
-             throw new ZeidonException("This shouldn't be null" );
+             throw new ZeidonException( "This shouldn't be null" );
 
          mSPLDef2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          displaySPLD( mSPLDef2, "SPLD_LLD", "After second moveSubobject" );
@@ -240,7 +240,7 @@ public class TestEpamms
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mSPLDef.logObjectInstance();
       */
-         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
+         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDefX.json", zASCII );
          mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDef2.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
@@ -282,6 +282,18 @@ public class TestEpamms
          mLLD2.getCursor( "LLD_Block" ).setLast();
          mLLD2.getCursor( "LLD_SubBlock" ).setToSubobject();
          mLLD2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
+         mLLD.logObjectInstance();
+         
+         mLLD.resetSubobjectTop();
+         mLLD2.resetSubobjectTop();
+         
+         ec = mLLD2.getCursor( "LLD_SubBlock" );
+         ec.logEntity();
+         ec.setToSubobject();
+         ec = mLLD2.getCursor( "LLD_Block" );
+         ec.logEntity();
+         mLLD.cursor( "LLD_Panel" ).logEntity();
+         mLLD.cursor( "LLD_Panel" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mLLD.logObjectInstance();
          return 0;
       }
