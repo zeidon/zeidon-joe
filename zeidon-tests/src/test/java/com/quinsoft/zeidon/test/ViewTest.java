@@ -116,49 +116,6 @@ public class ViewTest
 //                                    .setAttribute( "AcceptanceStatus", "xx" );
 //    }
 
-    String jsonLabel = "{ \".oimeta\" : { \"application\" : \"epamms\", \"odName\" : \"mLLD\", \"incremental\" : \"true\" }," +
-    	"\"LLD\" : [ { \".meta\" : { \"created\" : \"true\" }, \"Name\" : \"Drop area ...\" , " +
-    	"\"Panel\" : [ { \".meta\" : { \"created\" : \"true\" }, \"Order\" : \"1\" , \"Tag\" : \"panel1\" , \"Top\" : \"0px\", \"Left\" : \"0px\", \"Height\" : \"600px\", \"Width\" : \"650px\", \"Level\" : \"0\" , " +
-    	"\"Block\" : [ { \".meta\" : { \"created\" : \"true\" } , \"Top\" : \"143px\", \"Left\" : \"179px\", \"Height\" : \"317px\", \"Width\" : \"311px\", \"Tag\" : \"Tag100\" , \"Level\" : \"1\" , " +
-    	"\"Block\" : [ { \".meta\" : { \"created\" : \"true\" } , \"Top\" : \"100px\", \"Left\" : \"98px\", \"Height\" : \"100px\", \"Width\" : \"100px\", \"Tag\" : \"Tag101\" , \"Level\" : \"2\"  } ] } ]}, " +
-    	"{ \".meta\" : { \"created\" : \"true\" }, \"Order\" : \"2\" , \"Tag\" : \"panel2\" , \"Top\" : \"0px\", \"Left\" : \"0px\", \"Height\" : \"600px\", \"Width\" : \"650px\", \"Level\" : \"0\" }, " +
-    	"{ \".meta\" : { \"created\" : \"true\" }, \"Order\" : \"9\" , \"Tag\" : \"panel9\" , \"Top\" : \"0px\", \"Left\" : \"0px\", \"Height\" : \"600px\", \"Width\" : \"650px\", \"Level\" : \"0\"  } ] } ]}";
-    @Test
-    public void testJson() throws Exception
-    {
-        View v = zencas.activateOiFromFile( "mStudent", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudent_ac.por" );
-        String filename = v.getTempDirectory() + "mstudent_ac.json";
-        v.serializeOi().asJson().withIncremental().toFile( filename );
-
-        View v2 = new DeserializeOi( zencas )
-                            .asJson()
-                            .fromResource( filename )
-                            .activateFirst();
-        filename = v.getTempDirectory() + "mstudent_ac.por";
-        v2.writeOiToFile( filename, null );
-
-        filename = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mlld.json";
-        try {
-            Task epamms = oe.createTask( "ePamms" );
-            View v3 = new DeserializeOi( epamms )
-                                    .asJson()
-                                    .fromResource( filename )
-                                    .activateFirst();
-            v3.logObjectInstance();
-            EntityCursor block = v3.cursor( "Block" );
-            CursorResult r = block.setFirst();
-            assertEquals( "Invalid OI from Json - Block not found", r, CursorResult.SET );
-            assertEquals( "Unexpected attribute value", block.getAttribute( "Tag" ).getString(), "Tag100" );
-            r = block.setNext();
-            assertEquals( "Invalid OI from Json - Block should be child, not twin", r, CursorResult.SET );
-            r = block.setNext();
-            assertEquals( "Invalid OI from Json - Block should be child, not twin", r, CursorResult.UNCHANGED );
-         } catch( ZeidonException ze ) {
-            assertEquals( "Error processing Json Label: " + ze.getMessage(), 0, 1 );
-         }
-
-    }
-
     @Test
     public void testCommitToFile()
     {
