@@ -99,7 +99,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         }
 
         // Scala way
-        if ( mUser.User.setFirst( mUser.User.ID == 490  || mUser.User.ID == 491 ) ) {
+        if ( mUser.User.setFirst( mUser.User.ID == 490 || mUser.User.ID == 491 ) ) {
             println( "Cursor was set" )
         }
     }
@@ -117,12 +117,17 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
 
         // VML way
         if ( SETFIRST( mUser.Report ) UNDER( mUser.UserGroup ) WHERE( mUser.Report.ID == 589 ) ) {
-            println( "Cursor was set" )
+            println( "Cursor was set to " + mUser.Report.ID )
         }
 
-        // Scala way
+        // Scala way 1
+        if ( mUser.Report.under( mUser.UserGroup ).setFirst( mUser.Report.ID == 589 ) ) {
+            println( "Cursor was set to " + mUser.Report.ID )
+        }
+
+        // Scala way 2
         if ( mUser.Report.setFirst( mUser.Report.ID == 589, mUser.UserGroup ) ) {
-            println( "Cursor was set" )
+            println( "Cursor was set to " + mUser.Report.ID )
         }
     }
 
@@ -145,7 +150,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
          */
 
         // VML way
-        FOREACH( mUser.User ) WHERE( mUser.User.ID == 490 || mUser.User.ID == 491 ) DO {
+        FOREACH( mUser.User ) WHERE ( mUser.User.ID == 490 || mUser.User.ID == 491 ) DO {
 
             println( "User ID = " + mUser.User.ID )
 
@@ -158,7 +163,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
             }
         }
 
-        // Scala way.  Note that this does not have an explicit WHERE clause.
+        // Scala way #1.  Note that this does not have an explicit WHERE clause.
         mUser.User.each {
             if ( mUser.User.ID == 490 || mUser.User.ID == 491 ) {
                 println( "User ID = " + mUser.User.ID )
@@ -173,7 +178,8 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
             }
         }
 
-        // Scala way #2.  Scala has a standard 'foreach' method for running through an iterator.
+        // Scala way #2.
+        // Scala has a standard 'foreach' method for running through an iterator.
         // The difference is that using foreach must specify the object that is being returned
         // for each iterator (which is an EntityInstance for cursors).
         // Note that this does not have an explicit WHERE clause.
@@ -192,6 +198,11 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
             } }
         }
 
+        // Scala way #3
+        // The 'for' comprehension can be used to run through all entities.  It can be used
+        // to generate a list of attributes.
+        val ids = ( for ( e <- mUser.Report ) yield e.ID ).mkString( "," )
+        println( "ID list = " + ids )
     }
 
     def forEachCursorWithScoping( mUser: View @basedOn( "mUser") ) = {
@@ -239,12 +250,12 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         println( "\nSort Name A: " )
         mUser.Report.each( println( mUser.Report.Name ) )
 
-        // Sort Report entities by Name in DESCENDING order.
+        // Sort Report entities by Name in DESCENDING order using sortWith.
         mUser.Report.sortWith( _.Name > _.Name )
         println( "\nSort Name descending: " )
         mUser.Report.each( println( mUser.Report.Name ) )
 
-        // Sort Report entities by Name in ASCENDING order.
+        // Sort Report entities by Name in ASCENDING order using sortBy.
         mUser.Report.sortBy( _.Name )
         println( "\nSort Name ascending: " )
         mUser.Report.each( println( mUser.Report.Name ) )
