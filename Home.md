@@ -1,6 +1,6 @@
 ---
-title: This is my Zeidon title
-layout: post
+title: What is Zeidon
+layout: default
 ---
 
 # Sample Zeidon Application: Admin
