@@ -135,13 +135,6 @@ class TestOperations ( var task: Task ) extends ZeidonOperations{
 	}
 }
 
-/*
-import com.quinsoft.zeidon._
-import com.quinsoft.zeidon.standardoe.JavaObjectEngine
-import com.quinsoft.zeidon.scala._
-val oe = JavaObjectEngine.getInstance()
-val task = oe.createTask("Cheetah")
- */
 object TestOperations {
 
     def main(args: Array[String]): Unit = {

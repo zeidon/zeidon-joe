@@ -15,6 +15,7 @@ object AttributeInstance {
     implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.toInt
     implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.toDouble
     implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.toBoolean
+    implicit def attributeInstance2JAI( attr: AttributeInstance ) = attr.jattributeInstance
 }
 
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
@@ -42,12 +43,17 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def isUpdated = jattributeInstance.isUpdated()
 
     /**
+     * Returns true if this value is read-only (i.e. can not be changed).
+     */
+    def isReadOnly =  ! jattributeInstance.getAttributeDef().isUpdate()
+
+    /**
      * Sets the value of this attribute.
      *
      * Domain processing will be used to potentially convert the value from the
      * source object to the internal value.
      */
-    def setValue( any: Any ) = jattributeInstance.setValue( any )
+    def setValue( any: Any, contextName: String = null ) = jattributeInstance.setValue( any, contextName )
 
     /**
      * Sets the value of a derived attribute.
@@ -194,7 +200,26 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * toBoolean is that it can handle null attributes.
      */
     def isTruthy: Boolean = { ! isNull && toBoolean }
+
+    /**
+     * Converts the attribute value to a boolean using domain processing.
+     *
+     * @throws NullAttributeException if the attribute is null.  Use isTruthy to
+     *         handle null values.
+     */
     def toBoolean: Boolean = { checkNull(); jattributeInstance.getBoolean() }
+
+    /**
+     * Converts the attribute value to an integer using domain processing.
+     *
+     * @throws NullAttributeException if the attribute is null.
+     */
     def toInt: Int = { checkNull(); jattributeInstance.getInteger() }
+
+    /**
+     * Converts the attribute value to a double using domain processing.
+     *
+     * @throws NullAttributeException if the attribute is null.
+     */
     def toDouble: Double = { checkNull(); jattributeInstance.getDouble }
 }

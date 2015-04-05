@@ -56,7 +56,7 @@ trait ZeidonOperations {
      * }}}
      */
     def INCLUDE( cursor: EntityCursor ) = new EntityIncluder( cursor )
-    
+
     /**
      * For use inside of view.Entity.each{} and FOREACH loops, this will break execution of the
      * current entity cursor and continue with the next.
@@ -105,7 +105,7 @@ trait ZeidonOperations {
                 }
         }
     }
-    
+
     /**
      * Short-lived class to allow Scala code to mirror VML when including an entity.
      */
