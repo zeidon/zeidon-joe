@@ -11,6 +11,8 @@ Zeidon is an application framework for developing data-oriented applications.  I
 
 The abstraction also helps engineers manage the complexity of applications with many tables and relationships.
 
+For more details see [What Is Zeidon?](WhatIsZeidon.html)
+
 ### Additional Documentation
 JOE 1.2  
 
