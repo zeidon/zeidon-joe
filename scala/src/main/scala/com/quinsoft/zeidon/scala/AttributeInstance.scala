@@ -203,23 +203,16 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
 
     /**
      * Converts the attribute value to a boolean using domain processing.
-     *
-     * @throws NullAttributeException if the attribute is null.  Use isTruthy to
-     *         handle null values.
      */
-    def toBoolean: Boolean = { checkNull(); jattributeInstance.getBoolean() }
+    def toBoolean: Boolean = { jattributeInstance.getBoolean() }
 
     /**
      * Converts the attribute value to an integer using domain processing.
-     *
-     * @throws NullAttributeException if the attribute is null.
      */
-    def toInt: Int = { checkNull(); jattributeInstance.getInteger() }
+    def toInt: Int = { jattributeInstance.getInteger() }
 
     /**
      * Converts the attribute value to a double using domain processing.
-     *
-     * @throws NullAttributeException if the attribute is null.
      */
-    def toDouble: Double = { checkNull(); jattributeInstance.getDouble }
+    def toDouble: Double = { jattributeInstance.getDouble }
 }
