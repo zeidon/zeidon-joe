@@ -50,6 +50,49 @@ public class TestEpamms
 	}
 
    @Test
+	public void ExecuteJOE_TestBB()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestBB( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestBB ========");
+	}
+
+   @Test
+	public void ExecuteJOE_TestBBB()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestBBB( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestBBB ========");
+	}
+
+	public void ExecuteJOE_TestB()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestB( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestB ========");
+	}
+
+   @Test
+	public void ExecuteJOE_TestAA()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestAA( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestAA ========");
+	}
+
+   @Test
 	public void ExecuteJOE_Test000()
 	{
 	   View         mSPLDef;
@@ -152,6 +195,170 @@ public class TestEpamms
          ec = t.getCursor( "SPLD_LLD" );
          ec.logEntity( true );
          t.drop();
+      }
+
+		public int
+		ExecuteJOE_TestB( View     view )
+		{
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefFull.json" ).activateFirst();
+         mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
+
+         EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "600" );
+         View mSPLDef2 = mSPLDef.newView();
+         EntityCursor ec2 = mSPLDef2.getCursor( "LLD_Panel" );
+         ec2.setFirstWithinOi( "ID", "52" );
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.LAST, ec1, CursorPosition.FIRST );
+         displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
+
+         ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "600" );
+         EntityInstance ei = ec1.getEntityInstance();
+         EntityInstance eip = ei.getParent();
+         String ID = eip.getAttribute( "ID" ).getString();
+         TraceLineS( "Block 600's parent ID: ", ID );
+         Assert.assertEquals( "Block 600's parent ID: ", "52", ID );
+
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.setFirstWithinOi( "ID", "598" );
+         ec2 = mSPLDef2.getCursor( "LLD_SubBlock" );
+         ec2.setToSubobject();
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.LAST, ec1, CursorPosition.FIRST );
+         displaySPLD( mSPLDef, "LLD_Page", "After 2nd moveSubobject" );
+
+         ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "600" );
+         ei = ec1.getEntityInstance();
+         eip = ei.getParent();
+         ID = eip.getAttribute( "ID" ).getString();
+         TraceLineS( "Block 600's original parent ID: ", ID );
+         Assert.assertEquals( "Block 600's parent ID: ", "598", ID );
+
+         return 0;
+      }
+
+		public int
+		ExecuteJOE_TestBB( View     view )
+		{
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefFull.json" ).activateFirst();
+         mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
+
+      //EntityCursor ec1 = mSPLDef.getCursor( "LLD_SubBlock" );
+         EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "600" );
+      // ec1.setToSubobject();
+      // ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.logEntity( false );
+
+         View mSPLDef2 = mSPLDef.newView();
+         EntityCursor ec2 = mSPLDef2.getCursor( "LLD_Panel" );
+         ec2.setFirstWithinOi( "ID", "52" );
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
+         displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
+
+         ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "600" );
+         EntityInstance ei = ec1.getEntityInstance();
+         EntityInstance eip = ei.getParent();
+         String ID = eip.getAttribute( "ID" ).getString();
+         TraceLineS( "Block 600's parent ID: ", ID );
+         Assert.assertEquals( "Block 600's parent ID: ", "52", ID );
+
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.setFirstWithinOi( "ID", "598" );
+         ec2 = mSPLDef2.getCursor( "LLD_SubBlock" );
+         ec2.setToSubobject();
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
+         displaySPLD( mSPLDef, "LLD_Page", "After 2nd moveSubobject" );
+
+         ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "600" );
+         ei = ec1.getEntityInstance();
+         eip = ei.getParent();
+         ID = eip.getAttribute( "ID" ).getString();
+         TraceLineS( "Block 600's original parent ID: ", ID );
+         Assert.assertEquals( "Block 600's parent ID: ", "598", ID );
+
+         return 0;
+      }
+
+		public int
+		ExecuteJOE_TestBBB( View     view )
+		{
+         String ID = "812";
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefMason.json" ).activateFirst();
+      // mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
+
+      //EntityCursor ec1 = mSPLDef.getCursor( "LLD_SubBlock" );
+         EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", ID );
+         EntityInstance ei = ec1.getEntityInstance();
+         ei.getAttribute( "wPE" ).setValue( "panel" );
+         ei.getAttribute( "wPID" ).setValue( "64" );
+         ei.getAttribute( "wE" ).setValue( "block" );
+         ei.getAttribute( "wID" ).setValue( ID );
+         EntityCursor ec2 = mSPLDef.getCursor( "LLD_SubBlock" );
+         ec2.setFirst( "ID", "813" );
+         ei = ec2.getEntityInstance();
+         ei.getAttribute( "wPE" ).setValue( "block" );
+         ei.getAttribute( "wPID" ).setValue( "812" );
+         ei.getAttribute( "wE" ).setValue( "block" );
+         ei.getAttribute( "wID" ).setValue( "813" );
+
+         ec1.logEntity( true );
+
+         View mSPLDef2 = mSPLDef.newView();
+         ec2 = mSPLDef2.getCursor( "LLD_Panel" );
+         ec2.setFirstWithinOi( "ID", "64" );
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         displaySPLD( mSPLDef, null, "Before moveSubobject" );
+         ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
+         mSPLDef2.drop();
+         displaySPLD( mSPLDef, null, "After moveSubobject" );
+
+         // Now check for the attributs that were set on the OI.
+         mSPLDef2 = mSPLDef.newView();
+         ec1 = mSPLDef.getCursor( "LLD_Block" );
+         CursorResult cr = ec1.setFirstWithinOi( "ID", ID );
+         Assert.assertEquals( "Cursor Result looking for ID: " + ID, cr, CursorResult.SET );
+
+         ei = ec1.getEntityInstance();  // this is the entity that we are moving (812 in test)
+         String wPID = ec1.getAttribute( "wPID" ).getString();
+         EntityInstance eip = null;
+         eip = ei.getParent();
+         String IDP = eip.getAttribute( "ID" ).getString();  // get ID of parent
+         Assert.assertEquals( "Parent ID's are not the same", wPID, IDP );
+
+         return 0;
+      }
+
+		public int
+		ExecuteJOE_TestAA( View     view )
+		{
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefAA.json" ).activateFirst();
+         mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
+
+         EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "805" );
+         View mSPLDef2 = mSPLDef.newView();
+         EntityCursor ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.setFirstWithinOi( "ID", "808" );
+         ec2 = mSPLDef2.getCursor( "LLD_SubBlock" );
+         ec2.setToSubobject();
+         ec2 = mSPLDef2.getCursor( "LLD_Block" );
+         ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
+         mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
+
+         return 0;
       }
 
       public int
@@ -264,6 +471,13 @@ public class TestEpamms
 		public int
 		ExecuteJOE_Test0( View     mLLD )
 		{
+         
+         //    A             A               A
+         //   / \    ==>     |      ==>     / \
+         //  B1 B2           B2            B2 B1
+         //                  |
+         //                B1Sub 
+         
          EntityCursor ec = mLLD.getCursor( "LLD" );
          ec.createEntity( CursorPosition.FIRST );
          ec = mLLD.getCursor( "LLD_Page" );

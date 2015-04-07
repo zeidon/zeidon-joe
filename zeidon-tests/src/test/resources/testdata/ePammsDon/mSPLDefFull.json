@@ -1,0 +1,2193 @@
+{
+  ".meta" : {
+    "version" : "1",
+    "date" : "2015-04-06T13:40:16.895"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "epamms",
+      "odName" : "mSPLDef",
+      "incremental" : true
+    },
+    "SubregPhysicalLabelDef" : [ {
+      ".meta" : {
+        "selected" : true
+      },
+      "ID" : "5",
+      "Name" : "KennelSol 5 Gallon",
+      "ProductName" : "KennelSol",
+      "FK_ID_SUBREGLABELCONTENT" : "6",
+      "SubregLabelContent" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "6",
+        "Description" : "KennelSol 5 Gallon",
+        "Version" : "Version 1",
+        "ModifiedDateTime" : "20140530",
+        "FK_ID_SUBREGPRODUCT" : "3",
+        "FK_ID_MASTERLABELCONTENT" : "10",
+        "SubregProduct" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "3",
+          "Name" : "KennelSol",
+          "Number" : "129",
+          "Description" : "Germicidal Detergent & Deodorant",
+          "ChemicalFamily" : "DQ",
+          "EPA_RegistrationNumber" : "62472-1",
+          "EPA_DraftLabel" : "20120611",
+          "ESL_Date" : "20150225",
+          "FK_ID_MASTERPRODUCT" : "3",
+          "FK_ID_SUBREGISTRANT" : "1",
+          "Subregistrant" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "1",
+            "FK_ID_ORGANIZATION" : "9",
+            "SubregOrganization" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "9",
+              "LoginName" : "ATP",
+              "Name" : "Alpha Tech Pet, Inc.",
+              "Description" : "Veterinary Products Supplier",
+              "AdministratorPassword" : "zPrefixwbGCLcTEc1awjOg1uMX9Wv49CifkDp+PQBKjTWS4HPpFQWUw5KuxYQ==",
+              "Role" : "S"
+            } ]
+          } ],
+          "MasterProduct" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "3",
+            "Name" : "FORMULATION HWS-256",
+            "Number" : "129",
+            "Description" : "ONE-STEP DISINFECTANT\r\nGERMICIDAL DETERGENT AND DEODORANT",
+            "ChemicalFamily" : "DQ",
+            "EPA_EstablishmentNumber" : "00000",
+            "EPA_ToxicityCategory" : "2",
+            "FK_ID_PRIMARYREGISTRANT" : "8",
+            "PrimaryRegistrant" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "8",
+              "EPA_CompanyNumber" : "47371",
+              "FK_ID_EPAMMS" : "1",
+              "FK_ID_ORGANIZATION" : "8",
+              "Organization" : [ {
+                ".meta" : {
+                  "selected" : true
+                },
+                "ID" : "8",
+                "LoginName" : "Lonza",
+                "Name" : "Lonza",
+                "AdministratorPassword" : "zPrefixwbGCLcTEc1awjOg1uMX9Wv49CifkDp+PQBKjTWS4HPpFQWUw5KuxYQ==",
+                "Role" : "P"
+              } ]
+            } ]
+          } ]
+        } ],
+        "MasterLabelContent" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "10",
+          "Version" : "1 or 5 Gallon",
+          "RevisionDate" : "20150401",
+          "CreatedDateTime" : "20150401",
+          "FK_ID_MASTERLABELCONTENT" : "9",
+          "FK_ID_MASTERPRODUCT" : "3"
+        } ]
+      } ],
+      "SPLD_GeneralSection" : [ {
+        "ID" : "109",
+        "Title" : "PRECAUTIONARY STATEMENTS",
+        "Subtitle" : "HAZARDS TO HUMANS AND DOMESTIC ANIMALS",
+        "BoldItalic" : "R",
+        "SectionType" : "P",
+        "AUTOSEQ02" : "1",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_GENERALSECTION" : "43",
+        "SPLD_GeneralStatement" : [ {
+          "ID" : "220",
+          "Text" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.",
+          "BoldItalic" : "R",
+          "FK_ID_SPLD_GENERALSECTION" : "109",
+          "FK_ID_S_GENERALSTATEMENT" : "85",
+          "S_GeneralStatement" : [ {
+            "ID" : "85",
+            "FK_ID_M_GENERALSTATEMENT" : "53",
+            "FK_ID_S_GENERALSECTION" : "43"
+          } ]
+        } ],
+        "S_GeneralSection" : [ {
+          "ID" : "43",
+          "FK_ID_M_GENERALSECTION" : "26",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "110",
+        "BoldItalic" : "R",
+        "SectionType" : "F",
+        "ContactNote" : "Call a poison control center or doctor for treatment advice.\r\nHave the product container or label with you when calling a poison control center or doctor or going for treatment.",
+        "NoteToPhysician" : "<p><strong>NOTE TO PHYSICIAN: </strong>Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depression and convulsion may be needed.</p>",
+        "AUTOSEQ02" : "2",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_GENERALSECTION" : "44",
+        "SPLD_GeneralStatement" : [ {
+          "ID" : "221",
+          "Text" : "Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes. Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+          "Title" : "If in eyes:",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLD_GENERALSECTION" : "110",
+          "FK_ID_S_GENERALSTATEMENT" : "86",
+          "S_GeneralStatement" : [ {
+            "ID" : "86",
+            "FK_ID_M_GENERALSTATEMENT" : "54",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        }, {
+          "ID" : "222",
+          "Text" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes.",
+          "Title" : "If on skin or clothing:",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLD_GENERALSECTION" : "110",
+          "FK_ID_S_GENERALSTATEMENT" : "87",
+          "S_GeneralStatement" : [ {
+            "ID" : "87",
+            "FK_ID_M_GENERALSTATEMENT" : "55",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        }, {
+          "ID" : "223",
+          "Text" : "Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of water if able to swallow. Do not induce vomiting unless told to do so by the poison control center or doctor. Do not give anything by mouth to an unconscious person.",
+          "Title" : "If swallowed:",
+          "AUTOSEQ" : "3",
+          "FK_ID_SPLD_GENERALSECTION" : "110",
+          "FK_ID_S_GENERALSTATEMENT" : "88",
+          "S_GeneralStatement" : [ {
+            "ID" : "88",
+            "FK_ID_M_GENERALSTATEMENT" : "56",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        }, {
+          "ID" : "224",
+          "Text" : "Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible. Call a poison control center or doctor for treatment advice. Have the product container or label with you when calling a poison control center or doctor or going for treatment. NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depression and convulsion may be needed.ove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+          "Title" : "If inhaled:",
+          "AUTOSEQ" : "4",
+          "FK_ID_SPLD_GENERALSECTION" : "110",
+          "FK_ID_S_GENERALSTATEMENT" : "89",
+          "S_GeneralStatement" : [ {
+            "ID" : "89",
+            "FK_ID_M_GENERALSTATEMENT" : "57",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        } ],
+        "S_GeneralSection" : [ {
+          "ID" : "44",
+          "FK_ID_M_GENERALSECTION" : "27",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "111",
+        "Title" : "ENVIRONMENTAL HAZARDS",
+        "BoldItalic" : "R",
+        "SectionType" : "E",
+        "ReviewerNote" : "(Note to reviewer: If container size is 5 gallons or greater, the following Environmental Hazards statements will be used:)",
+        "AUTOSEQ02" : "3",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_GENERALSECTION" : "45",
+        "SPLD_GeneralStatement" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "225",
+          "Text" : "Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge. Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority. For guidance contact your State Water Board or Regional Office of the EPA.",
+          "BoldItalic" : "R",
+          "FK_ID_SPLD_GENERALSECTION" : "111",
+          "FK_ID_S_GENERALSTATEMENT" : "90",
+          "S_GeneralStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "90",
+            "FK_ID_M_GENERALSTATEMENT" : "58",
+            "FK_ID_S_GENERALSECTION" : "45"
+          } ]
+        } ],
+        "S_GeneralSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "45",
+          "FK_ID_M_GENERALSECTION" : "28",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_IngredientsSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "37",
+        "ActiveTitle" : "Active Ingredients:",
+        "ActiveBoldItalic" : "R",
+        "InertTitle" : "Inert Ingredients:",
+        "GeneralInactivePercent" : "95.775",
+        "AUTOSEQ02" : "1",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_INGREDIENTSSECTION" : "15",
+        "SPLD_IngredientsStatement" : [ {
+          "ID" : "73",
+          "ChemicalName" : "Didecyl dimethyl ammonium chloride",
+          "BoldItalic" : "R",
+          "Active" : "A",
+          "Percent" : "2.535",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLD_INGREDIENTSSECTION" : "37",
+          "FK_ID_S_INGREDIENTSSTATEMENT" : "29",
+          "S_IngredientsStatement" : [ {
+            "ID" : "29",
+            "FK_ID_S_INGREDIENTSSECTION" : "15",
+            "FK_ID_M_INGREDIENTSSTATEMENT" : "17"
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "74",
+          "ChemicalName" : "n-Alkyll (C<sub>14</sub> 50%, C<sub>12</sub> 40%, C<sub>16</sub> 10%) dimethyl benzyl ammonium chloride",
+          "BoldItalic" : "R",
+          "Active" : "A",
+          "Percent" : "1.69",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLD_INGREDIENTSSECTION" : "37",
+          "FK_ID_S_INGREDIENTSSTATEMENT" : "30",
+          "S_IngredientsStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "30",
+            "FK_ID_S_INGREDIENTSSECTION" : "15",
+            "FK_ID_M_INGREDIENTSSTATEMENT" : "18"
+          } ]
+        } ],
+        "S_IngredientsSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "15",
+          "FK_ID_SUBREGLABELCONTENT" : "6",
+          "FK_ID_M_INGREDIENTSSECTION" : "9"
+        } ]
+      } ],
+      "SPLD_StorageDisposalSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "66",
+        "ContainerVolume" : "5",
+        "SDSectionType" : "StorageDisposal1",
+        "Title" : "STORAGE AND DISPOSAL",
+        "BoldItalic" : "R",
+        "ReviewerNote" : "<p>Note to reviewer: If the container size is greater than one gallon, the following Storage and Disposal directions will be used:)</p>",
+        "AUTOSEQ02" : "1",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_STORAGEDISPOSALSECTION" : "24",
+        "SPLD_StorageDisposalStatement" : [ {
+          "ID" : "182",
+          "Title" : "Storage and Disposal",
+          "BoldItalic" : "R",
+          "Text" : "(containers for household/residential use) Store in original container in areas inaccessible to children. Nonrefillable container. Do not reuse or refill this container. Offer for recycling if available.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "66",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "71",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "71",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "42",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          "ID" : "183",
+          "Title" : "Storage and Disposal",
+          "BoldItalic" : "R",
+          "Text" : "(containers for commercial, industrial, and institutional use) Do not contaminate water, food, or feed by storage or disposal.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "66",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "72",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "72",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "43",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          "ID" : "184",
+          "Title" : "Pesticide Disposal",
+          "BoldItalic" : "R",
+          "Text" : "Store in original container in areas inaccessible to children. Open dumping is prohibited. Do not reuse empty container.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "3",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "66",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "73",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "73",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "44",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          "ID" : "185",
+          "Title" : "Pesticide Disposal",
+          "BoldItalic" : "R",
+          "Text" : "Pesticide wastes are acutely hazardous. Improper disposal of excess pesticide, spray mixture or rinsate is a violation of Federal Law. If these wastes cannot be disposed of by use according to label instruction, contact your local State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "4",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "66",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "74",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "74",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "45",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "186",
+          "Title" : "Container Handling",
+          "BoldItalic" : "R",
+          "Text" : "(Plastic containers:) Nonrefillable container. Do not reuse or refill this container. Triple rinse container (or equivalent) promptly after emptying. Triple rinse as follows: Fill container 1/4 full with water. Tip container on side and roll it back and forth, ensuring at least one complete revolution for 30 seconds. Stand container on its end and tip it back and forth several times. Turn the container over its other end and tip it back and forth several times. Follow Pesticide Disposal instructions for rinsate disposal. Repeat two more times.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "5",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "66",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "75",
+          "S_StorageDisposalStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "75",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "46",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        } ],
+        "S_StorageDisposalSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "24",
+          "FK_ID_M_STORAGEDISPOSALSECTION" : "18",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_DirectionsForUseSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "419",
+        "Name" : "Five Gallon Directions of Use",
+        "AUTOSEQ02" : "1",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_DIRECTIONSFORUSESECTION" : "26",
+        "SPLD_DirectionsForUseStatement" : [ {
+          "ID" : "2866",
+          "Text" : "It is a violation of Federal Law to use this product in a manner inconsistent with its labeling.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "61",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "61",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "181",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "2867",
+          "Title" : "DIRECTIONS FOR DISINFECTlNG: (Bactericidal, Fungicidal, Virucidal)",
+          "Text" : "For use on hard, non-porous surfaces in animal care facilities such as floors, walls, metal surfaces, stainless steel surfaces, glazed porcelain, and plastic surfaces. Remove gross filth and heavy soil deposits then thoroughly wet surfaces. Use 2 ounces per gallon of water (8 ounces per gallon against canine parvovirus and Porcine parvovirus) for a minimum contact time of 10 minutes in a single application. Can be applied with a cloth, mop, or sponge, as well as by coarse spray or soaking. The use solution is prepared fresh for each use then discarded. Rinsing is not necessary unless floors are to be waxed or polished. This product is not for use on medical device surfaces.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "62",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "62",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "182",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "2868",
+          "Title" : "FUNGICIDAL DIRECTIONS:",
+          "Text" : "For use in areas such as locker rooms, dressing rooms, shower and bath areas and exercise facilities follow disinfection directions.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "3",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "63",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "63",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "183",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "2869",
+          "Title" : "MILDEWSTATIC INSTRUCTIONS:",
+          "Text" : "Will effectively control the growth of mold and mildew plus the odors caused by them when applied to hard, non-porous surfaces such as walls, floors, and table tops. Apply solution (2 ounces per gallon of water) with a cloth, mop, sponge or coarse spray making sure to wet all surfaces completely. Let air dry. Repeat application weekly or when growth reappears.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "4",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "64",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "64",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "184",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "2870",
+          "Title" : "VETERINARY CLINICS / ANIMAL CARE / ANIMAL LIFE SCIENCE LABORATORIES / ZOOS / PET SHOP / KENNELS / BREEDING AND GROOMING ESTABLISHMENTS / EQUINE FARMS DISINFECTION DIRECTIONS:",
+          "Text" : "For disinfecting the following hard nonporous surfaces: equipment not used for animal food or water, utensils, instruments, cages, kennels, stables, catteries, etc. Remove all animals and feeds from premises, animal transportation vehicles, crates, etc. Remove all litter, droppings and manure from floors, walls and surfaces of facilities occupied or traversed by animals. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with a solution of 2 oz of KennelSol per gallon of water (or equivalent dilution) (8 ounces per gallon against Canine parvovirus or Porcine parvovirus), using a cloth, mop, sponge, spray, or soaking for a period of 10 minutes. Ventilate buildings and other closed spaces. Do not house animals or employ equipment until treatment has been absorbed, set or dried.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "5",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "65",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "65",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "185",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "2871",
+          "Title" : "*FOR CANINE PARVOVIRUS (AND PORCINE PARVOVIRUS) ACTIVITY:",
+          "Text" : "KennelSol is effective against Canine Parvovirus (and Porcine parvovirus) at 8 oz. per gallon. Follow Veterinary Practice / Animal Care / Animal Laboratory / Zoos / Pet Shop / Kennels Disinfection Directions.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "6",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "66",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "66",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "186",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "2872",
+          "Title" : "**SPECIAL INSTRUCTIONS FOR INACTIVATING AVIAN INFLUENZA:",
+          "Text" : "Remove all poultry and feeds from premises, trucks, coops, and crates. Remove all litter and droppings from floors, walls, and surfaces of facilities occupied or traversed by poultry. Empty all troughs, racks, and other feeding and watering appliances. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with the disinfecting solution (2 oz per gallon of water) (660 ppm active quat) (equivalent use dilution) for a period of 10 minutes. Immerse all halters, ropes and other types of equipment sed in handling and restraining animals as well as forks, shovels, and scrapers used in removing litter and manure. Ventilate buildings, coops, and other closed spaces. Do not house poultry or employ equipment until treatment has been absorbed, set, or dried. Thoroughly scrub treated feed racks, troughs, automatic feeders, fountains, and waterers with soap or detergent, and rinse with potable water before reuse.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "7",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "419",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "67",
+          "S_DirectionsForUseStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "67",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "188",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        } ],
+        "S_DirectionsForUseSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "26",
+          "FK_ID_M_DIRECTIONSFORUSESECTION" : "34",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_MarketingSection" : [ {
+        "ID" : "3087",
+        "Name" : "Germicidal Detergent",
+        "AUTOSEQ02" : "1",
+        "FK_ID_S_MARKETINGSECTION" : "80",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3115",
+          "Text" : "Germicidal Detergent and Deordorant",
+          "FK_ID_S_MARKETINGSTATEMENT" : "135",
+          "S_MarketingStatement" : [ {
+            "ID" : "135",
+            "Text" : "Germicidal Detergent and Deordorant",
+            "FK_ID_S_MARKETINGSECTION" : "80",
+            "FK_ID_M_MARKETINGSTATEMENT" : "103"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "80",
+          "FK_ID_M_MARKETINGSECTION" : "35",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3088",
+        "Name" : "For Use Areas / Surfaces",
+        "AUTOSEQ02" : "2",
+        "FK_ID_S_MARKETINGSECTION" : "81",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3116",
+          "Text" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanimate surfaces: {{Surface}}, etc.).",
+          "FK_ID_S_MARKETINGSTATEMENT" : "136",
+          "S_MarketingStatement" : [ {
+            "ID" : "136",
+            "Text" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanimate surfaces: {{Surface}}, etc.).",
+            "FK_ID_S_MARKETINGSECTION" : "81",
+            "FK_ID_M_MARKETINGSTATEMENT" : "101"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "81",
+          "FK_ID_M_MARKETINGSECTION" : "33",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3089",
+        "Name" : "For Use Areas Only",
+        "Title" : "For use in:",
+        "AUTOSEQ02" : "3",
+        "FK_ID_S_MARKETINGSECTION" : "82",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3117",
+          "Text" : "For use in {{Area Of Use}}.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "137",
+          "S_MarketingStatement" : [ {
+            "ID" : "137",
+            "Text" : "For use in {{Area Of Use}}.",
+            "FK_ID_S_MARKETINGSECTION" : "82",
+            "FK_ID_M_MARKETINGSTATEMENT" : "104"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "82",
+          "FK_ID_M_MARKETINGSECTION" : "37",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3090",
+        "Name" : "Multi-Purpose Detergent",
+        "AUTOSEQ02" : "4",
+        "FK_ID_S_MARKETINGSECTION" : "83",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3118",
+          "Text" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5 % organic serum. Disinfects, cleans, and deodorizes in one labor saving step.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "138",
+          "S_MarketingStatement" : [ {
+            "ID" : "138",
+            "Text" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5 % organic serum. Disinfects, cleans, and deodorizes in one labor saving step.",
+            "FK_ID_S_MARKETINGSECTION" : "83",
+            "FK_ID_M_MARKETINGSTATEMENT" : "106"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "83",
+          "FK_ID_M_MARKETINGSECTION" : "38",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3091",
+        "Name" : "Recommended Use",
+        "Title" : "Recommeded for use in:",
+        "AUTOSEQ02" : "5",
+        "FK_ID_S_MARKETINGSECTION" : "84",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3119",
+          "Text" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food products and packaging materials must be removed from the room or carefully protected. Use product in accordance with its label. All surfaces must be thoroughly rinsed with potable water.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "139",
+          "S_MarketingStatement" : [ {
+            "ID" : "139",
+            "Text" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food products and packaging materials must be removed from the room or carefully protected. Use product in accordance with its label. All surfaces must be thoroughly rinsed with potable water.",
+            "FK_ID_S_MARKETINGSECTION" : "84",
+            "FK_ID_M_MARKETINGSTATEMENT" : "102"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "84",
+          "FK_ID_M_MARKETINGSECTION" : "34",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3092",
+        "Name" : "Bactericidal Claims",
+        "AUTOSEQ02" : "6",
+        "FK_ID_S_MARKETINGSECTION" : "85",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3120",
+          "Text" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test method, current edition, modified in the presence of 400 ppm synthetic hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum:",
+          "FK_ID_S_MARKETINGSTATEMENT" : "140",
+          "S_MarketingStatement" : [ {
+            "ID" : "140",
+            "Text" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test method, current edition, modified in the presence of 400 ppm synthetic hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum:",
+            "FK_ID_S_MARKETINGSECTION" : "85",
+            "FK_ID_M_MARKETINGSTATEMENT" : "105"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "7048",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "59699",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3120",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "59699",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+              "FK_ID_S_USAGE" : "1204"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "7049",
+            "wSortOrder" : "2",
+            "AUTOSEQ" : "2",
+            "FK_ID_SPLD_USAGE" : "59700",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3120",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "59700",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Bordetella bronchiseptica",
+              "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+              "FK_ID_S_USAGE" : "1205"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "85",
+          "FK_ID_M_MARKETINGSECTION" : "36",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3093",
+        "Name" : "Fungicidal",
+        "AUTOSEQ02" : "7",
+        "FK_ID_S_MARKETINGSECTION" : "86",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3121",
+          "Text" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presense of 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "141",
+          "S_MarketingStatement" : [ {
+            "ID" : "141",
+            "Text" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presense of 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum.",
+            "FK_ID_S_MARKETINGSECTION" : "86",
+            "FK_ID_M_MARKETINGSTATEMENT" : "107"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "86",
+          "FK_ID_M_MARKETINGSECTION" : "39",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "3094",
+        "Name" : "Virucidal",
+        "AUTOSEQ02" : "8",
+        "FK_ID_S_MARKETINGSECTION" : "87",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "SPLD_MarketingStatement" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "3122",
+          "Text" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 400 ppm hard water (calculated as CaCO3) plus 5 % organic serum.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "142",
+          "S_MarketingStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "142",
+            "Text" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 400 ppm hard water (calculated as CaCO3) plus 5 % organic serum.",
+            "FK_ID_S_MARKETINGSECTION" : "87",
+            "FK_ID_M_MARKETINGSTATEMENT" : "108"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "7050",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "59699",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3122",
+            "SPLD_MarketingUsage" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "59699",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+              "FK_ID_S_USAGE" : "1204"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "87",
+          "FK_ID_M_MARKETINGSECTION" : "40",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_HumanHazardSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "37",
+        "EPA_SignalWord" : "DANGER",
+        "EPA_ChildHazardWarning" : "U",
+        "PrecautionaryStatement" : "See {{Precautionary Position}} Panel for Precautionary Statements and First Aid",
+        "BoldItalic" : "R",
+        "PanelLoc1" : "right",
+        "PanelLoc2" : "left",
+        "PanelLoc3" : "side",
+        "PanelLoc4" : "back",
+        "AUTOSEQ" : "1",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_HUMANHAZARDSECTION" : "6",
+        "S_HumanHazardSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "6",
+          "FK_ID_M_HUMANHAZARDSECTION" : "9",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_Usage" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "59699",
+        "UsageType" : "C",
+        "ClaimsClassification" : "Bacteria",
+        "Name" : "Acinetobacter calcoaceticus",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_USAGE" : "1204",
+        "S_Usage" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "1204",
+          "FK_ID_M_USAGE" : "1683",
+          "FK_ID_S_USAGETYPE" : "1",
+          "M_Usage" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "1683",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Acinetobacter calcoaceticus",
+            "FK_ID_M_USAGETYPE" : "1"
+          } ]
+        } ]
+      }, {
+        "ID" : "59700",
+        "UsageType" : "C",
+        "ClaimsClassification" : "Bacteria",
+        "Name" : "Bordetella bronchiseptica",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_USAGE" : "1205",
+        "S_Usage" : [ {
+          "ID" : "1205",
+          "FK_ID_M_USAGE" : "1684",
+          "FK_ID_S_USAGETYPE" : "1",
+          "M_Usage" : [ {
+            "ID" : "1684",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Bordetella bronchiseptica",
+            "FK_ID_M_USAGETYPE" : "1"
+          } ]
+        } ]
+      }, {
+        "ID" : "59701",
+        "UsageType" : "C",
+        "ClaimsClassification" : "Bacteria",
+        "Name" : "Chlamydia psittaci",
+        "AUTOSEQ" : "3",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_USAGE" : "1206",
+        "S_Usage" : [ {
+          "ID" : "1206",
+          "FK_ID_M_USAGE" : "1685",
+          "FK_ID_S_USAGETYPE" : "1",
+          "M_Usage" : [ {
+            "ID" : "1685",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Chlamydia psittaci",
+            "FK_ID_M_USAGETYPE" : "1"
+          } ]
+        } ]
+      }, {
+        "ID" : "59702",
+        "UsageType" : "C",
+        "ClaimsClassification" : "Bacteria",
+        "Name" : "Escherichia coli",
+        "AUTOSEQ" : "4",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_USAGE" : "1390",
+        "S_Usage" : [ {
+          "ID" : "1390",
+          "FK_ID_M_USAGE" : "1689",
+          "FK_ID_S_USAGETYPE" : "1",
+          "M_Usage" : [ {
+            "ID" : "1689",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Escherichia coli",
+            "FK_ID_M_USAGEFOOTNOTE" : "4",
+            "FK_ID_M_USAGETYPE" : "1",
+            "M_UsageFootnoteUsed" : [ {
+              "ID" : "4",
+              "Text" : "ATCC and antibiotic-resistant strain",
+              "FK_ID_MASTERLABELCONTENT" : "10"
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : "59703",
+        "UsageType" : "C",
+        "ClaimsClassification" : "Bacteria",
+        "Name" : "Staphylococcus epidermidis",
+        "AUTOSEQ" : "5",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "FK_ID_S_USAGE" : "1391",
+        "S_Usage" : [ {
+          "ID" : "1391",
+          "FK_ID_M_USAGE" : "1708",
+          "FK_ID_S_USAGETYPE" : "1",
+          "M_Usage" : [ {
+            "ID" : "1708",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Staphylococcus epidermidis",
+            "FK_ID_M_USAGEFOOTNOTE" : "5",
+            "FK_ID_M_USAGETYPE" : "1",
+            "M_UsageFootnoteUsed" : [ {
+              "ID" : "5",
+              "Text" : "antibiotic-resistant strain only",
+              "FK_ID_MASTERLABELCONTENT" : "10"
+            } ]
+          } ]
+        } ]
+      } ],
+      "SPLD_LLD" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "10",
+        "Tag" : "label",
+        "Name" : "Four Panel Across",
+        "ContNextPageTextDirForUse" : "** Continued from Previous Page",
+        "Depth" : "0",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "5",
+        "LLD_Page" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "18",
+          "Tag" : "page1",
+          "Height" : "14.6",
+          "Width" : "19.6",
+          "PageNbr" : "1",
+          "Depth" : "0",
+          "FK_ID_SPLD_LLD" : "10",
+          "LLD_Panel" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "53",
+            "Tag" : "Tag53",
+            "Top" : "0.35",
+            "Left" : "0.58",
+            "Height" : "8.01",
+            "Width" : "5.52",
+            "TextColor" : "#ffffff",
+            "BackgroundColor" : "#ffffff",
+            "BorderColor" : "#ffffff",
+            "Depth" : "1",
+            "FK_ID_LLD_PAGE" : "18",
+            "LLD_Block" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "626",
+              "Tag" : "Tag626",
+              "LLD_SectionType" : "DirectionsForUse",
+              "Top" : "0.04",
+              "Left" : "0.04",
+              "Height" : "7.15",
+              "Width" : "5.4",
+              "TextColor" : "#ffffff",
+              "BackgroundColor" : "#ffffff",
+              "BorderColor" : "#ffffff",
+              "Depth" : "2",
+              "wComputedTopPosition" : "0.04",
+              "AUTOSEQ" : "1",
+              "FK_ID_LLD_PANEL" : "53",
+              "LLD_SpecialSectionAttribute" : [ {
+                ".meta" : {
+                  "selected" : true
+                },
+                "ID" : "199",
+                "Name" : "Title",
+                "PF1ID_LLD_BLOCK" : "626",
+                "PF2ID_LLD_BLOCK" : "627",
+                "LLD_SpecialSectionAttrBlock" : [ {
+                  ".meta" : {
+                    "selected" : true
+                  },
+                  "ID" : "627",
+                  "FontSize" : "8pt",
+                  "MarginTop" : "0.05"
+                } ]
+              }, {
+                "ID" : "200",
+                "Name" : "Text",
+                "PF1ID_LLD_BLOCK" : "626",
+                "PF2ID_LLD_BLOCK" : "628",
+                "LLD_SpecialSectionAttrBlock" : [ {
+                  "ID" : "628",
+                  "FontSize" : "8pt",
+                  "MarginTop" : "0.05"
+                } ]
+              } ]
+            } ]
+          }, {
+            "ID" : "49",
+            "Tag" : "Tag49",
+            "Top" : "0.35",
+            "Left" : "6.33",
+            "Height" : "6.88",
+            "Width" : "5.1",
+            "TextColor" : "#ffffff",
+            "BackgroundColor" : "#ffffff",
+            "BorderColor" : "#ffffff",
+            "Depth" : "1",
+            "FK_ID_LLD_PAGE" : "18",
+            "LLD_Block" : [ {
+              "ID" : "597",
+              "Tag" : "Tag597",
+              "BlockTitle" : "xxx",
+              "LLD_SectionType" : "Graphic",
+              "ImageName" : "KennelSolHeader.jpg",
+              "Top" : "0.08",
+              "Left" : "0.05",
+              "Height" : "3.47",
+              "Width" : "4.35",
+              "TextColor" : "#ffffff",
+              "BackgroundColor" : "#ea2b2b",
+              "BorderColor" : "#ffffff",
+              "Depth" : "2",
+              "wComputedTopPosition" : "0.08",
+              "AUTOSEQ" : "1",
+              "FK_ID_LLD_PANEL" : "49"
+            }, {
+              "ID" : "598",
+              "Tag" : "Tag598",
+              "Top" : "3.5",
+              "Left" : "0.1",
+              "Height" : "3.0",
+              "Width" : "4.8",
+              "TextColor" : "#ffffff",
+              "BackgroundColor" : "#ffffff",
+              "BorderColor" : "#ffffff",
+              "Depth" : "2",
+              "wComputedTopPosition" : "3.5",
+              "AUTOSEQ" : "2",
+              "FK_ID_LLD_PANEL" : "49",
+              "LLD_SubBlock" : [ {
+                "ID" : "600",
+                "Tag" : "Tag600",
+                "LLD_SectionType" : "HumanHazard",
+                "Top" : "1.25",
+                "Left" : "0.1",
+                "Height" : "0.85",
+                "Width" : "4.59",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "FontSize" : "16pt",
+                "TextAlign" : "center",
+                "Depth" : "3",
+                "wComputedTopPosition" : "1.25",
+                "FK_ID_LLD_BLOCK" : "598",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "220",
+                  "Name" : "Hazards Warning",
+                  "PF1ID_LLD_BLOCK" : "600",
+                  "PF2ID_LLD_BLOCK" : "652",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "652",
+                    "FontSize" : "16pt",
+                    "FontWeight" : "bold",
+                    "TextAlign" : "center"
+                  } ]
+                }, {
+                  "ID" : "221",
+                  "Name" : "Hazards Signal Word",
+                  "PF1ID_LLD_BLOCK" : "600",
+                  "PF2ID_LLD_BLOCK" : "653",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "653",
+                    "FontSize" : "20pt",
+                    "FontWeight" : "bold",
+                    "TextAlign" : "center"
+                  } ]
+                }, {
+                  "ID" : "222",
+                  "Name" : "Hazards Precautionary",
+                  "PF1ID_LLD_BLOCK" : "600",
+                  "PF2ID_LLD_BLOCK" : "654",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "654",
+                    "FontSize" : "10pt",
+                    "TextAlign" : "center"
+                  } ]
+                } ]
+              }, {
+                "ID" : "601",
+                "Tag" : "Tag601",
+                "LLD_SectionType" : "NetContents",
+                "Top" : "2.1",
+                "Left" : "0.1",
+                "Height" : "0.2",
+                "Width" : "4.8",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "2.1",
+                "FK_ID_LLD_BLOCK" : "598",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "223",
+                  "Name" : "Block",
+                  "PF1ID_LLD_BLOCK" : "601",
+                  "PF2ID_LLD_BLOCK" : "655",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "655",
+                    "TextAlign" : "center"
+                  } ]
+                } ]
+              }, {
+                "ID" : "602",
+                "Tag" : "Tag602",
+                "LLD_SectionType" : "EPA_RegAndEstNbr",
+                "Top" : "2.3",
+                "Left" : "0.1",
+                "Height" : "0.2",
+                "Width" : "4.8",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "2.3",
+                "FK_ID_LLD_BLOCK" : "598",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "224",
+                  "Name" : "Block",
+                  "PF1ID_LLD_BLOCK" : "602",
+                  "PF2ID_LLD_BLOCK" : "656",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "656",
+                    "TextAlign" : "center"
+                  } ]
+                } ]
+              }, {
+                "ID" : "599",
+                "Tag" : "Tag599",
+                "LLD_SectionType" : "Ingredients",
+                "Top" : "0.2",
+                "Left" : "0.2",
+                "Height" : "1.0",
+                "Width" : "4.4",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "MarginTop" : "0.2",
+                "MarginLeft" : "0.05",
+                "MarginRight" : "0.05",
+                "MarginOverride" : "Y",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.2",
+                "FK_ID_LLD_BLOCK" : "598",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "218",
+                  "Name" : "Ingredients Title",
+                  "PF1ID_LLD_BLOCK" : "599",
+                  "PF2ID_LLD_BLOCK" : "650",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "650",
+                    "MarginBottom" : "0.05"
+                  } ]
+                }, {
+                  "ID" : "219",
+                  "Name" : "Ingredients Total",
+                  "PF1ID_LLD_BLOCK" : "599",
+                  "PF2ID_LLD_BLOCK" : "651",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "651",
+                    "MarginTop" : "0.05"
+                  } ]
+                } ]
+              } ],
+              "LLD_SpecialSectionAttribute" : [ {
+                "ID" : "185",
+                "Name" : "Block",
+                "PF1ID_LLD_BLOCK" : "598",
+                "PF2ID_LLD_BLOCK" : "603",
+                "LLD_SpecialSectionAttrBlock" : [ {
+                  "ID" : "603",
+                  "BorderStyle" : "solid",
+                  "BorderWidth" : "1.0"
+                } ]
+              } ]
+            } ]
+          }, {
+            "ID" : "52",
+            "Tag" : "Tag52",
+            "Top" : "0.35",
+            "Left" : "11.63",
+            "Height" : "7.81",
+            "Width" : "7.45",
+            "TextColor" : "#ffffff",
+            "BackgroundColor" : "#ffffff",
+            "BorderColor" : "#ffffff",
+            "Depth" : "1",
+            "FK_ID_LLD_PAGE" : "18",
+            "LLD_Block" : [ {
+              "ID" : "620",
+              "Tag" : "Tag620",
+              "Top" : "0.0",
+              "Left" : "0.0",
+              "Height" : "5.2",
+              "Width" : "5.0",
+              "TextColor" : "#ffffff",
+              "BackgroundColor" : "#ffffff",
+              "BorderColor" : "#ffffff",
+              "Depth" : "2",
+              "wComputedTopPosition" : "0.0",
+              "AUTOSEQ" : "1",
+              "FK_ID_LLD_PANEL" : "52",
+              "LLD_SubBlock" : [ {
+                "ID" : "621",
+                "Tag" : "Tag621",
+                "LLD_SectionType" : "Product Name",
+                "Top" : "0.05",
+                "Left" : "0.0",
+                "Height" : "0.4",
+                "Width" : "5.0",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.05",
+                "FK_ID_LLD_BLOCK" : "620",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "225",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "621",
+                  "PF2ID_LLD_BLOCK" : "657",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "657",
+                    "TextColor" : "red",
+                    "FontFamily" : "serif",
+                    "FontSize" : "26pt",
+                    "FontWeight" : "bold",
+                    "TextAlign" : "center"
+                  } ]
+                } ]
+              }, {
+                "ID" : "623",
+                "Tag" : "Tag623",
+                "Name" : "Germicidal Detergent",
+                "LLD_SectionType" : "Marketing",
+                "Top" : "0.5",
+                "Left" : "0.0",
+                "Height" : "0.3",
+                "Width" : "5.0",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.5",
+                "FK_ID_LLD_BLOCK" : "620",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "226",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "623",
+                  "PF2ID_LLD_BLOCK" : "658",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "658",
+                    "TextColor" : "red",
+                    "FontFamily" : "serif",
+                    "FontSize" : "20pt",
+                    "FontWeight" : "bold",
+                    "TextAlign" : "center"
+                  } ]
+                } ]
+              }, {
+                "ID" : "629",
+                "Tag" : "Tag629",
+                "Name" : "Multi-Purpose Detergent",
+                "LLD_SectionType" : "Marketing",
+                "Top" : "0.96",
+                "Left" : "0.07",
+                "Height" : "0.4",
+                "Width" : "4.8",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.96",
+                "FK_ID_LLD_BLOCK" : "620"
+              }, {
+                "ID" : "630",
+                "Tag" : "Tag630",
+                "Name" : "For Use Areas Only",
+                "LLD_SectionType" : "Marketing",
+                "Top" : "1.46",
+                "Left" : "0.1",
+                "Height" : "0.48",
+                "Width" : "4.72",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "1.46",
+                "FK_ID_LLD_BLOCK" : "620"
+              }, {
+                "ID" : "622",
+                "Tag" : "Tag622",
+                "Name" : "Bactericidal Claims",
+                "LLD_SectionType" : "Marketing",
+                "LLD_ColumnListType" : "C2",
+                "Top" : "1.75",
+                "Left" : "0.1",
+                "Height" : "2.56",
+                "Width" : "4.86",
+                "TextColor" : "#ee1637",
+                "TextColorOverride" : "Y",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#132a95",
+                "BorderColorOverride" : "Y",
+                "Depth" : "3",
+                "wComputedTopPosition" : "1.75",
+                "FK_ID_LLD_BLOCK" : "620",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "201",
+                  "Name" : "Column List",
+                  "PF1ID_LLD_BLOCK" : "622",
+                  "PF2ID_LLD_BLOCK" : "631",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "631",
+                    "MarginTop" : "0.5",
+                    "MarginLeft" : "0.02"
+                  } ]
+                }, {
+                  "ID" : "202",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "622",
+                  "PF2ID_LLD_BLOCK" : "632",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "632",
+                    "TextColor" : "blue"
+                  } ]
+                } ]
+              }, {
+                "ID" : "633",
+                "Tag" : "Tag633",
+                "Name" : "Fungicidal",
+                "LLD_SectionType" : "Marketing",
+                "Top" : "4.5",
+                "Left" : "0.1",
+                "Height" : "0.4",
+                "Width" : "4.8",
+                "Depth" : "3",
+                "wComputedTopPosition" : "4.5",
+                "FK_ID_LLD_BLOCK" : "620"
+              }, {
+                "ID" : "634",
+                "Tag" : "Tag634",
+                "Name" : "Virucidal",
+                "LLD_SectionType" : "Marketing",
+                "Top" : "4.85",
+                "Left" : "0.1",
+                "Height" : "0.8",
+                "Width" : "4.8",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "4.85",
+                "FK_ID_LLD_BLOCK" : "620"
+              } ],
+              "LLD_SpecialSectionAttribute" : [ {
+                "ID" : "198",
+                "Name" : "Block",
+                "PF1ID_LLD_BLOCK" : "620",
+                "PF2ID_LLD_BLOCK" : "624",
+                "LLD_SpecialSectionAttrBlock" : [ {
+                  "ID" : "624",
+                  "BorderStyle" : "solid",
+                  "BorderColor" : "red",
+                  "BorderWidth" : "2.0"
+                } ]
+              } ]
+            }, {
+              "ID" : "625",
+              "Tag" : "Tag625",
+              "LLD_SectionType" : "Graphic",
+              "ImageName" : "AlphaTechPetBase.jpg",
+              "Top" : "5.51",
+              "Left" : "0.0",
+              "Height" : "1.05",
+              "Width" : "5.05",
+              "TextColor" : "#ffffff",
+              "BackgroundColor" : "#ffffff",
+              "BorderColor" : "#ffffff",
+              "Depth" : "2",
+              "wComputedTopPosition" : "5.51",
+              "AUTOSEQ" : "2",
+              "FK_ID_LLD_PANEL" : "52"
+            } ]
+          }, {
+            "ID" : "50",
+            "Tag" : "Tag50",
+            "Top" : "8.3",
+            "Left" : "1.0",
+            "Height" : "2.8",
+            "Width" : "16.6",
+            "Depth" : "1",
+            "FK_ID_LLD_PAGE" : "18",
+            "LLD_Block" : [ {
+              "ID" : "659",
+              "Tag" : "Tag659",
+              "Top" : "0.0",
+              "Left" : "0.0",
+              "Height" : "2.8",
+              "Width" : "16.56",
+              "Depth" : "2",
+              "wComputedTopPosition" : "0.0",
+              "AUTOSEQ" : "1",
+              "FK_ID_LLD_PANEL" : "50",
+              "LLD_SubBlock" : [ {
+                "ID" : "660",
+                "Tag" : "Tag660",
+                "LLD_SectionType" : "StorageDisposal",
+                "Top" : "0.1",
+                "Left" : "0.2",
+                "Height" : "2.5",
+                "Width" : "3.8",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.1",
+                "FK_ID_LLD_BLOCK" : "659",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "227",
+                  "Name" : "Title",
+                  "PF1ID_LLD_BLOCK" : "660",
+                  "PF2ID_LLD_BLOCK" : "661",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "661",
+                    "MarginTop" : "0.04",
+                    "TextAlign" : "center"
+                  } ]
+                }, {
+                  "ID" : "228",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "660",
+                  "PF2ID_LLD_BLOCK" : "662",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "662",
+                    "FontSize" : "9pt",
+                    "MarginTop" : "0.01"
+                  } ]
+                } ]
+              }, {
+                "ID" : "663",
+                "Tag" : "Tag663",
+                "LLD_SectionType" : "StorageDisposal",
+                "ContinuationBlockFlag" : "Y",
+                "Top" : "0.1",
+                "Left" : "4.3",
+                "Height" : "2.0",
+                "Width" : "3.8",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.1",
+                "FK_ID_LLD_BLOCK" : "659",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "229",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "663",
+                  "PF2ID_LLD_BLOCK" : "664",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "664",
+                    "MarginTop" : "0.04"
+                  } ]
+                }, {
+                  "ID" : "239",
+                  "Name" : "Title",
+                  "PF1ID_LLD_BLOCK" : "663",
+                  "PF2ID_LLD_BLOCK" : "679"
+                } ]
+              }, {
+                "ID" : "669",
+                "Tag" : "Tag669",
+                "LLD_SectionType" : "Precautionary",
+                "Top" : "1.8",
+                "Left" : "4.3",
+                "Height" : "1.0",
+                "Width" : "3.8",
+                "Depth" : "3",
+                "wComputedTopPosition" : "1.8",
+                "FK_ID_LLD_BLOCK" : "659",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "234",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "669",
+                  "PF2ID_LLD_BLOCK" : "674"
+                }, {
+                  "ID" : "235",
+                  "Name" : "Title",
+                  "PF1ID_LLD_BLOCK" : "669",
+                  "PF2ID_LLD_BLOCK" : "675"
+                } ]
+              }, {
+                "ID" : "665",
+                "Tag" : "Tag665",
+                "LLD_SectionType" : "Precautionary",
+                "ContinuationBlockFlag" : "Y",
+                "Top" : "0.1",
+                "Left" : "8.4",
+                "Height" : "0.2",
+                "Width" : "3.8",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.1",
+                "FK_ID_LLD_BLOCK" : "659"
+              }, {
+                "ID" : "667",
+                "Tag" : "Tag667",
+                "LLD_SectionType" : "FirstAid",
+                "Top" : "0.3",
+                "Left" : "8.4",
+                "Height" : "1.5",
+                "Width" : "3.8",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.3",
+                "FK_ID_LLD_BLOCK" : "659",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "236",
+                  "Name" : "Title",
+                  "PF1ID_LLD_BLOCK" : "667",
+                  "PF2ID_LLD_BLOCK" : "676"
+                }, {
+                  "ID" : "237",
+                  "Name" : "FIRST AID Header",
+                  "PF1ID_LLD_BLOCK" : "667",
+                  "PF2ID_LLD_BLOCK" : "677"
+                }, {
+                  "ID" : "238",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "667",
+                  "PF2ID_LLD_BLOCK" : "678"
+                } ]
+              }, {
+                "ID" : "666",
+                "Tag" : "Tag666",
+                "LLD_SectionType" : "FirstAid",
+                "ContinuationBlockFlag" : "Y",
+                "Top" : "0.1",
+                "Left" : "12.5",
+                "Height" : "1.0",
+                "Width" : "3.8",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.1",
+                "FK_ID_LLD_BLOCK" : "659"
+              }, {
+                "ID" : "668",
+                "Tag" : "Tag668",
+                "LLD_SectionType" : "PhysicalHazard",
+                "Top" : "0.8",
+                "Left" : "12.5",
+                "Height" : "1.5",
+                "Width" : "3.8",
+                "TextColor" : "#ffffff",
+                "BackgroundColor" : "#ffffff",
+                "BorderColor" : "#ffffff",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.8",
+                "FK_ID_LLD_BLOCK" : "659"
+              } ],
+              "LLD_SpecialSectionAttribute" : [ {
+                "ID" : "230",
+                "Name" : "Block",
+                "PF1ID_LLD_BLOCK" : "659",
+                "PF2ID_LLD_BLOCK" : "670"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ],
+      "CompositeComponentList" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralSection",
+        "SelectLevel" : "1",
+        "Value" : "PRECAUTIONARY STATEMENTS",
+        "OriginalTypeID" : "109",
+        "DisplayType" : "General",
+        "DisplayTypeIndent" : "General",
+        "DisplayValue" : "PRECAUTIONARY STATEMENTS"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.",
+        "OriginalTypeID" : "220",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get i....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralSection",
+        "SelectLevel" : "1",
+        "OriginalTypeID" : "110",
+        "DisplayType" : "General",
+        "DisplayTypeIndent" : "General"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes. Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+        "OriginalTypeID" : "221",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes. Remove contact lenses, if ....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes.",
+        "OriginalTypeID" : "222",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes......"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of water if able to swallow. Do not induce vomiting unless told to do so by the poison control center or doctor. Do not give anything by mouth to an unconscious person.",
+        "OriginalTypeID" : "223",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of ....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible. Call a poison control center or doctor for treatment advice. Have the product container or label with you when calling a poison control center or doctor or going for treatment. NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depression and convulsion may be needed.ove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+        "OriginalTypeID" : "224",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralSection",
+        "SelectLevel" : "1",
+        "Value" : "ENVIRONMENTAL HAZARDS",
+        "OriginalTypeID" : "111",
+        "DisplayType" : "General",
+        "DisplayTypeIndent" : "General",
+        "DisplayValue" : "ENVIRONMENTAL HAZARDS"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge. Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority. For guidance contact your State Water Board or Regional Office of the EPA.",
+        "OriginalTypeID" : "225",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or ....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_IngredientsSection",
+        "SelectLevel" : "1",
+        "Value" : "Active Ingredients:",
+        "OriginalTypeID" : "37",
+        "DisplayType" : "Ingredients",
+        "DisplayTypeIndent" : "Ingredients",
+        "DisplayValue" : "Active Ingredients:"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_IngredientsStatement",
+        "SelectLevel" : "2",
+        "Value" : "Didecyl dimethyl ammonium chloride",
+        "OriginalTypeID" : "73",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Didecyl dimethyl ammonium chloride"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_IngredientsStatement",
+        "SelectLevel" : "2",
+        "Value" : "n-Alkyll (C<sub>14</sub> 50%, C<sub>12</sub> 40%, C<sub>16</sub> 10%) dimethyl benzyl ammonium chloride",
+        "OriginalTypeID" : "74",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "n-Alkyll (C<sub>14</sub> 50%, C<sub>12</sub> 40%, C<sub>16</sub> 10%) dimethyl benzyl ammonium chloride"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalSection",
+        "SelectLevel" : "1",
+        "Value" : "STORAGE AND DISPOSAL",
+        "OriginalTypeID" : "66",
+        "DisplayType" : "StorageDisposal",
+        "DisplayTypeIndent" : "StorageDisposal",
+        "DisplayValue" : "STORAGE AND DISPOSAL"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Storage and Disposal",
+        "OriginalTypeID" : "182",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "SelectLevel" : "2",
+        "Value" : "(containers for household/residential use) Store in original container in areas inaccessible to children. Nonrefillable container. Do not reuse or refill this container. Offer for recycling if available.",
+        "OriginalTypeID" : "182",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "(containers for household/residential use) Store in original container in areas inaccessible to chil....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Storage and Disposal",
+        "OriginalTypeID" : "183",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "SelectLevel" : "2",
+        "Value" : "(containers for commercial, industrial, and institutional use) Do not contaminate water, food, or feed by storage or disposal.",
+        "OriginalTypeID" : "183",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "(containers for commercial, industrial, and institutional use) Do not contaminate water, food, or fe....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Pesticide Disposal",
+        "OriginalTypeID" : "184",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "SelectLevel" : "2",
+        "Value" : "Store in original container in areas inaccessible to children. Open dumping is prohibited. Do not reuse empty container.",
+        "OriginalTypeID" : "184",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Store in original container in areas inaccessible to children. Open dumping is prohibited. Do not re....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Pesticide Disposal",
+        "OriginalTypeID" : "185",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "SelectLevel" : "2",
+        "Value" : "Pesticide wastes are acutely hazardous. Improper disposal of excess pesticide, spray mixture or rinsate is a violation of Federal Law. If these wastes cannot be disposed of by use according to label instruction, contact your local State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.",
+        "OriginalTypeID" : "185",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Pesticide wastes are acutely hazardous. Improper disposal of excess pesticide, spray mixture or rins....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Container Handling",
+        "OriginalTypeID" : "186",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "SelectLevel" : "2",
+        "Value" : "(Plastic containers:) Nonrefillable container. Do not reuse or refill this container. Triple rinse container (or equivalent) promptly after emptying. Triple rinse as follows: Fill container 1/4 full with water. Tip container on side and roll it back and forth, ensuring at least one complete revolution for 30 seconds. Stand container on its end and tip it back and forth several times. Turn the container over its other end and tip it back and forth several times. Follow Pesticide Disposal instructions for rinsate disposal. Repeat two more times.",
+        "OriginalTypeID" : "186",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "(Plastic containers:) Nonrefillable container. Do not reuse or refill this container. Triple rinse c....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseSection",
+        "SelectLevel" : "1",
+        "Value" : "Five Gallon Directions of Use",
+        "OriginalTypeID" : "419",
+        "DisplayType" : "DirectionsForUse",
+        "DisplayTypeIndent" : "DirectionsForUse",
+        "DisplayValue" : "Five Gallon Directions of Use"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "It is a violation of Federal Law to use this product in a manner inconsistent with its labeling.",
+        "OriginalTypeID" : "2866",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "It is a violation of Federal Law to use this product in a manner inconsistent with its labeling......"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "DIRECTIONS FOR DISINFECTlNG: (Bactericidal, Fungicidal, Virucidal)",
+        "OriginalTypeID" : "2867",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "For use on hard, non-porous surfaces in animal care facilities such as floors, walls, metal surfaces, stainless steel surfaces, glazed porcelain, and plastic surfaces. Remove gross filth and heavy soil deposits then thoroughly wet surfaces. Use 2 ounces per gallon of water (8 ounces per gallon against canine parvovirus and Porcine parvovirus) for a minimum contact time of 10 minutes in a single application. Can be applied with a cloth, mop, or sponge, as well as by coarse spray or soaking. The use solution is prepared fresh for each use then discarded. Rinsing is not necessary unless floors are to be waxed or polished. This product is not for use on medical device surfaces.",
+        "OriginalTypeID" : "2867",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "For use on hard, non-porous surfaces in animal care facilities such as floors, walls, metal surfaces....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "FUNGICIDAL DIRECTIONS:",
+        "OriginalTypeID" : "2868",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "For use in areas such as locker rooms, dressing rooms, shower and bath areas and exercise facilities follow disinfection directions.",
+        "OriginalTypeID" : "2868",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "For use in areas such as locker rooms, dressing rooms, shower and bath areas and exercise facilities....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "MILDEWSTATIC INSTRUCTIONS:",
+        "OriginalTypeID" : "2869",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "Will effectively control the growth of mold and mildew plus the odors caused by them when applied to hard, non-porous surfaces such as walls, floors, and table tops. Apply solution (2 ounces per gallon of water) with a cloth, mop, sponge or coarse spray making sure to wet all surfaces completely. Let air dry. Repeat application weekly or when growth reappears.",
+        "OriginalTypeID" : "2869",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Will effectively control the growth of mold and mildew plus the odors caused by them when applied to....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "VETERINARY CLINICS / ANIMAL CARE / ANIMAL LIFE SCIENCE LABORATORIES / ZOOS / PET SHOP / KENNELS / BREEDING AND GROOMING ESTABLISHMENTS / EQUINE FARMS DISINFECTION DIRECTIONS:",
+        "OriginalTypeID" : "2870",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "For disinfecting the following hard nonporous surfaces: equipment not used for animal food or water, utensils, instruments, cages, kennels, stables, catteries, etc. Remove all animals and feeds from premises, animal transportation vehicles, crates, etc. Remove all litter, droppings and manure from floors, walls and surfaces of facilities occupied or traversed by animals. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with a solution of 2 oz of KennelSol per gallon of water (or equivalent dilution) (8 ounces per gallon against Canine parvovirus or Porcine parvovirus), using a cloth, mop, sponge, spray, or soaking for a period of 10 minutes. Ventilate buildings and other closed spaces. Do not house animals or employ equipment until treatment has been absorbed, set or dried.",
+        "OriginalTypeID" : "2870",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "For disinfecting the following hard nonporous surfaces: equipment not used for animal food or water,....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "*FOR CANINE PARVOVIRUS (AND PORCINE PARVOVIRUS) ACTIVITY:",
+        "OriginalTypeID" : "2871",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "KennelSol is effective against Canine Parvovirus (and Porcine parvovirus) at 8 oz. per gallon. Follow Veterinary Practice / Animal Care / Animal Laboratory / Zoos / Pet Shop / Kennels Disinfection Directions.",
+        "OriginalTypeID" : "2871",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "KennelSol is effective against Canine Parvovirus (and Porcine parvovirus) at 8 oz. per gallon. Follo....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "**SPECIAL INSTRUCTIONS FOR INACTIVATING AVIAN INFLUENZA:",
+        "OriginalTypeID" : "2872",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "Remove all poultry and feeds from premises, trucks, coops, and crates. Remove all litter and droppings from floors, walls, and surfaces of facilities occupied or traversed by poultry. Empty all troughs, racks, and other feeding and watering appliances. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with the disinfecting solution (2 oz per gallon of water) (660 ppm active quat) (equivalent use dilution) for a period of 10 minutes. Immerse all halters, ropes and other types of equipment sed in handling and restraining animals as well as forks, shovels, and scrapers used in removing litter and manure. Ventilate buildings, coops, and other closed spaces. Do not house poultry or employ equipment until treatment has been absorbed, set, or dried. Thoroughly scrub treated feed racks, troughs, automatic feeders, fountains, and waterers with soap or detergent, and rinse with potable water before reuse.",
+        "OriginalTypeID" : "2872",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Remove all poultry and feeds from premises, trucks, coops, and crates. Remove all litter and droppin....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "Germicidal Detergent",
+        "OriginalTypeID" : "3087",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "Germicidal Detergent"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Germicidal Detergent and Deordorant",
+        "OriginalTypeID" : "3115",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Germicidal Detergent and Deordorant....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "For Use Areas / Surfaces",
+        "OriginalTypeID" : "3088",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "For Use Areas / Surfaces"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanimate surfaces: {{Surface}}, etc.).",
+        "OriginalTypeID" : "3116",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanim....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "For Use Areas Only - For use in:",
+        "OriginalTypeID" : "3089",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "For Use Areas Only - For use in:"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "For use in {{Area Of Use}}.",
+        "OriginalTypeID" : "3117",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "For use in {{Area Of Use}}......"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "Multi-Purpose Detergent",
+        "OriginalTypeID" : "3090",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "Multi-Purpose Detergent"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5 % organic serum. Disinfects, cleans, and deodorizes in one labor saving step.",
+        "OriginalTypeID" : "3118",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "Recommended Use - Recommeded for use in:",
+        "OriginalTypeID" : "3091",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "Recommended Use - Recommeded for use in:"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food products and packaging materials must be removed from the room or carefully protected. Use product in accordance with its label. All surfaces must be thoroughly rinsed with potable water.",
+        "OriginalTypeID" : "3119",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "Bactericidal Claims",
+        "OriginalTypeID" : "3092",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "Bactericidal Claims"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test method, current edition, modified in the presence of 400 ppm synthetic hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum:",
+        "OriginalTypeID" : "3120",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test metho....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Acinetobacter calcoaceticus",
+        "OriginalTypeID" : "59699",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "DisplayValue" : "Acinetobacter calcoaceticus"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bordetella bronchiseptica",
+        "OriginalTypeID" : "59700",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "DisplayValue" : "Bordetella bronchiseptica"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "Fungicidal",
+        "OriginalTypeID" : "3093",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "Fungicidal"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presense of 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum.",
+        "OriginalTypeID" : "3121",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presen....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "SelectLevel" : "1",
+        "Value" : "Virucidal",
+        "OriginalTypeID" : "3094",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "DisplayValue" : "Virucidal"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 400 ppm hard water (calculated as CaCO3) plus 5 % organic serum.",
+        "OriginalTypeID" : "3122",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "DisplayValue" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 4....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Acinetobacter calcoaceticus",
+        "OriginalTypeID" : "59699",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "DisplayValue" : "Acinetobacter calcoaceticus"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_HumanHazardSection",
+        "SelectLevel" : "1",
+        "OriginalTypeID" : "37",
+        "DisplayTypeIndent" : "Hazards"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "SelectLevel" : "2",
+        "DisplayTypeIndent" : "...Signal Word",
+        "DisplayValue" : "DANGER"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "SelectLevel" : "2",
+        "DisplayTypeIndent" : "...Child Warning",
+        "DisplayValue" : "U"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "SelectLevel" : "2",
+        "DisplayTypeIndent" : "...Precautionary Stmt",
+        "DisplayValue" : "See {{Precautionary Position}} Panel for Precautionary Statements and First Aid"
+      }, {
+        ".meta" : {
+          "incrementals" : "C",
+          "selected" : true
+        },
+        "DisplayTypeIndent" : "Location",
+        "DisplayValue" : "...right / left / side / back"
+      } ]
+    } ]
+  } ]
+}

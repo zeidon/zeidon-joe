@@ -1,4 +1,4 @@
-z1000-Zeidon    MLLD     TZZOXODO 04/02/15   08:47:18 1.0a2    
+z1000-Zeidon    MLLD     TZZOXODO 04/03/15   09:40:51 1.0a2    
 eOBJECT    1
 aNAME      mLLD
 aZKey      3
@@ -533,8 +533,6 @@ aCREATE    Y
 aDELETE    Y
 aPDELETE   D
 aUPDATE    Y
-aINCLUDE   Y
-aEXCLUDE   Y
 aINCLSRC   Y
 aMAX_LTH   1424
 
