@@ -201,7 +201,7 @@ public class TestEpamms
 		ExecuteJOE_TestB( View     view )
 		{
          View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefFull.json" ).activateFirst();
-         mSPLDef.logObjectInstance();
+      // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
          EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
@@ -244,7 +244,7 @@ public class TestEpamms
 		ExecuteJOE_TestBB( View     view )
 		{
          View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefFull.json" ).activateFirst();
-         mSPLDef.logObjectInstance();
+      // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
       //EntityCursor ec1 = mSPLDef.getCursor( "LLD_SubBlock" );
@@ -300,6 +300,7 @@ public class TestEpamms
          EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
          ec1.setFirstWithinOi( "ID", ID );
          EntityInstance ei = ec1.getEntityInstance();
+         ei.getAttribute( "Top" ).setValue( "777.0" );
          ei.getAttribute( "wPE" ).setValue( "panel" );
          ei.getAttribute( "wPID" ).setValue( "64" );
          ei.getAttribute( "wE" ).setValue( "block" );
@@ -307,6 +308,7 @@ public class TestEpamms
          EntityCursor ec2 = mSPLDef.getCursor( "LLD_SubBlock" );
          ec2.setFirst( "ID", "813" );
          ei = ec2.getEntityInstance();
+         ei.getAttribute( "Top" ).setValue( "888.0" );
          ei.getAttribute( "wPE" ).setValue( "block" );
          ei.getAttribute( "wPID" ).setValue( "812" );
          ei.getAttribute( "wE" ).setValue( "block" );
@@ -331,10 +333,12 @@ public class TestEpamms
 
          ei = ec1.getEntityInstance();  // this is the entity that we are moving (812 in test)
          String wPID = ec1.getAttribute( "wPID" ).getString();
+         String top = ec1.getAttribute( "Top" ).getString();
          EntityInstance eip = null;
          eip = ei.getParent();
          String IDP = eip.getAttribute( "ID" ).getString();  // get ID of parent
-         Assert.assertEquals( "Parent ID's are not the same", wPID, IDP );
+         Assert.assertEquals( "Permanent attribute 'Top' are not the same", "777.0", top );
+         Assert.assertEquals( "Work attribute Parent ID's are not the same", IDP, wPID );
 
          return 0;
       }
@@ -343,7 +347,7 @@ public class TestEpamms
 		ExecuteJOE_TestAA( View     view )
 		{
          View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefAA.json" ).activateFirst();
-         mSPLDef.logObjectInstance();
+      // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
          EntityCursor ec1 = mSPLDef.getCursor( "LLD_Block" );
@@ -355,7 +359,7 @@ public class TestEpamms
          ec2.setToSubobject();
          ec2 = mSPLDef2.getCursor( "LLD_Block" );
          ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
-         mSPLDef.logObjectInstance();
+      // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
 
          return 0;
@@ -489,14 +493,14 @@ public class TestEpamms
          ec.getAttribute( "Tag" ).setValue( "B1" );
          ec.createEntity( CursorPosition.NEXT );
          ec.getAttribute( "Tag" ).setValue( "B2" );
-         mLLD.logObjectInstance();
+      // mLLD.logObjectInstance();
          ec.setFirst();
 
          View mLLD2 = mLLD.newView();
          mLLD2.getCursor( "LLD_Block" ).setLast();
          mLLD2.getCursor( "LLD_SubBlock" ).setToSubobject();
          mLLD2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
-         mLLD.logObjectInstance();
+      // mLLD.logObjectInstance();
          
          mLLD.resetSubobjectTop();
          mLLD2.resetSubobjectTop();
@@ -508,7 +512,7 @@ public class TestEpamms
          ec.logEntity();
          mLLD.cursor( "LLD_Panel" ).logEntity();
          mLLD.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
-         mLLD.logObjectInstance();
+      // mLLD.logObjectInstance();
          return 0;
       }
 
@@ -656,7 +660,7 @@ public class TestEpamms
 			   RESULT = SetCursorNextEntity( mSPLDef, "LLD_Block", "" );
 			   //:SetViewToSubobject( mSPLDef, "LLD_SubBlock" )
 			   SetViewToSubobject( mSPLDef, "LLD_SubBlock" );
-			   mSPLDef.logObjectInstance();
+			// mSPLDef.logObjectInstance();
 			   //:IF mSPLDef.ContinuationStatement EXISTS
                lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "ContinuationStatement" );
                Assert.assertEquals( "Unexpected RC", CursorResult.UNDEFINED.toInt(),  lTempInteger_0 );
