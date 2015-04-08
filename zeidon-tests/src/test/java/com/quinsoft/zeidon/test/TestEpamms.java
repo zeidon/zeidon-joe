@@ -61,6 +61,17 @@ public class TestEpamms
 	}
 
    @Test
+	public void ExecuteJOE_TestSetCursorWithAttributeContainingBlank()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestSetCursorWithAttributeContainingBlank( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestSetCursorWithAttributeContainingBlank ========");
+	}
+
+   @Test
 	public void ExecuteJOE_TestBBB()
 	{
 	   View         mSPLDef;
@@ -284,6 +295,38 @@ public class TestEpamms
          ID = eip.getAttribute( "ID" ).getString();
          TraceLineS( "Block 600's original parent ID: ", ID );
          Assert.assertEquals( "Block 600's parent ID: ", "598", ID );
+
+         return 0;
+      }
+
+		public int
+		ExecuteJOE_TestSetCursorWithAttributeContainingBlank( View     view )
+		{
+         String ID = "813";
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefMason.json" ).activateFirst();
+      // mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, null, "First Activate" );
+
+      //EntityCursor ec1 = mSPLDef.getCursor( "LLD_SubBlock" );
+         EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
+         ec.setFirstWithinOi( "ID", ID );
+         displaySPLD( mSPLDef, "LLD_Block", "After setFirstWithinOi for LLD_Block: " + ID );
+
+         EntityInstance ei = ec.getEntityInstance();
+         TraceLineS( "Logging LLD_Block: ", ID );
+         ei.logEntity();
+
+         ec = mSPLDef.getCursor( "LLD_SpecialSectionAttribute" );
+         CursorResult cr = ec.setFirst();
+         Assert.assertEquals( "Cursor Result setFirst", CursorResult.SET, cr );
+
+      // SetCursorFirstEntityByString( mSPLDef, "LLD_SpecialSectionAttribute", "Name", szKeywordName, "" );
+         cr = ec.setFirst( "Name", "Hazards Warning", "" );
+         Assert.assertEquals( "Cursor Result looking for Name: Hazards Warning", CursorResult.SET, cr );
+         cr = ec.setFirst( "Name", "Hazards Signal Word", "" );
+         Assert.assertEquals( "Cursor Result looking for Name: Hazards Signal Word", CursorResult.SET, cr );
+         cr = ec.setFirst( "Name", "Hazards Precautionary", "" );
+         Assert.assertEquals( "Cursor Result looking for Name: Hazards Precautionary", CursorResult.SET, cr );
 
          return 0;
       }
