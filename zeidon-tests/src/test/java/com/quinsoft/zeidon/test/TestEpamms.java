@@ -404,6 +404,10 @@ public class TestEpamms
          ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
+         ec1 = mSPLDef.getCursor( "LLD_Block" );
+         ec1.setFirstWithinOi( "ID", "805" );
+         EntityInstance eip = ec1.getParent();
+         Assert.assertEquals( "Parent ID's do not match up", "808", eip.getAttribute( "ID" ) );
 
          return 0;
       }
