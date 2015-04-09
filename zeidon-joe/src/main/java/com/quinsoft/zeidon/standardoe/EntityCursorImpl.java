@@ -32,6 +32,7 @@ import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
@@ -44,7 +45,6 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.OutOfScopeException;
 import com.quinsoft.zeidon.SetMatchingFlags;
-import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -508,10 +508,15 @@ class EntityCursorImpl implements EntityCursor
         // If they are the same entity then we're good.
         EntityDef sourceEntityDef = ei.getEntityDef();
         if ( sourceEntityDef == getEntityDef() )
-            return false;
+        {
+            if ( sourceEntityDef.isRecursive() )
+                return true;
+            else
+                return false;
+        }
 
         // Check to see if ei is a recursive child of this cursor.
-        if ( sourceEntityDef.isRecursive() && sourceEntityDef.getRecursiveParentEntityDef() == getEntityDef() )
+        if ( sourceEntityDef.isRecursive() && sourceEntityDef.getRecursiveParent() == getEntityDef() )
             return true;
 
         // If we get here then Houston we have a problem.
@@ -546,43 +551,74 @@ class EntityCursorImpl implements EntityCursor
         // Default return code to setting the cursor.
         CursorResult cursorResult = CursorResult.SET;
 
-        // If this is a recursive child then we don't need to reset any parent
-        // cursor so reset 'this' and return.
         if ( recursive )
         {
-            resetChildCursors( newInstance );
-            return cursorResult;
+            // If we get here then we're setting a subobject cursor.  We have a couple of situations to handle.
+            // To illustrate, assume the following recursive subobject where A is the recursive parent of B:
+            //   A
+            //   |   -- There could be other entities between A and B.
+            //   B
+
+            EntityDef targetEntityDef = newInstance.getEntityDef();
+            EntityDef recursiveParent = targetEntityDef.getRecursiveParent();
+
+            // We're setting the parent cursor (A) to a subobject child (B).
+            if ( getEntityDef() == recursiveParent )
+            {
+                viewCursor.setRecursiveParent( newInstance, targetEntityDef, null );
+            }
+            else
+            // We're setting the B cursor to some subobject child  of B.
+            {
+                assert getEntityDef() == targetEntityDef;
+
+                EntityInstanceImpl parentInstance = newInstance.findMatchingParent( recursiveParent );
+                if ( parentInstance.getEntityDef() == recursiveParent )
+                {
+                    // If we get here then the parent of targetInstance is the root of the
+                    // subobject so we're just resetting it.
+                    viewCursor.resetSubobjectTop();
+                }
+                else
+                {
+                    viewCursor.setRecursiveParent( parentInstance, recursiveParent, null );
+                }
+            }
         }
 
         // Check to see if we need to set the parent cursors. Find the highest root cursor that
         // needs to be reset.
         EntityCursorImpl searchCursor = this;
-        EntityInstanceImpl searchEi = newInstance;
-        for ( searchEi = newInstance; searchEi.getParent() != null; searchEi = searchEi.getParent() )
+        EntityInstanceImpl topEi = newInstance;
+        for ( topEi = newInstance; topEi.getParent() != null; topEi = topEi.getParent() )
         {
             EntityCursorImpl searchParentCursor = searchCursor.getParentCursor();
             if ( searchParentCursor == null )
                 break;
 
-            if ( searchParentCursor.getEntityInstance() == searchEi.getParent() )
+            if ( searchParentCursor.getEntityInstance() == topEi.getParent() )
                 break;
 
             searchCursor = searchCursor.getParentCursor();
         }
 
-        searchCursor.resetChildCursors( searchEi );
+        searchCursor.resetChildCursors( topEi );
 
-        // If searchEi is different from newInstance that means we've just reset a parent
+        // If topEi is different from newInstance that means we've just reset a parent
         // cursor.  Now loop through again and set all cursors between searchCursor and 'this'.
-        if ( searchEi != newInstance )
+        if ( topEi != newInstance )
         {
             cursorResult = CursorResult.SET_NEWPARENT;
-            searchCursor = this;
-            EntityInstanceImpl ei;
-            for ( ei = newInstance; ei != searchEi; ei = ei.getParent() )
+            EntityCursorImpl tc = this;
+            EntityInstanceImpl ei = newInstance;
+            while ( tc != searchCursor )
             {
-                searchCursor.setEntityInstance( ei );
-                searchCursor = searchCursor.getParentCursor();
+                if ( tc.getEntityDef() != ei.getEntityDef() && tc.getEntityDef() != ei.getEntityDef().getRecursiveParent() )
+                    ei = ei.findMatchingParent( tc.getEntityDef() );
+
+                tc.setEntityInstance( ei );
+                tc = tc.getParentCursor();
+                ei = ei.getParent();
             }
         }
 
@@ -1692,7 +1728,7 @@ class EntityCursorImpl implements EntityCursor
         EntityInstanceImpl ei = getEntityInstance();
         EntityInstanceImpl parentOfSubobject = getParentCursor().getExistingInstance();
 
-        EntityDef recursiveParentEntityDef = getEntityDef().getRecursiveParentEntityDef();
+        EntityDef recursiveParentEntityDef = getEntityDef().getRecursiveParent();
         viewCursor.setRecursiveParent( ei, getEntityDef(), parentOfSubobject );
         viewCursor.getEntityCursor( recursiveParentEntityDef ).resetChildCursors( ei );
     }

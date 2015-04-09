@@ -761,7 +761,7 @@ class IteratorBuilder
                 if ( nextInstance.getEntityDef() != targetEntityDef )
                 {
                     // No?  Last chance--are they recursive parents?
-                    if ( nextInstance.getEntityDef().getRecursiveParentEntityDef() != targetEntityDef )
+                    if ( nextInstance.getEntityDef().getRecursiveParent() != targetEntityDef )
                         return false;  // No match is found.
                 }
             }

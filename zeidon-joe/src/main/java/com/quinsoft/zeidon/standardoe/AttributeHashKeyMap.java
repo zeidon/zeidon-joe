@@ -65,7 +65,7 @@ class AttributeHashKeyMap
 
         // Check to see if the attribute is part of a recursive child.  If it is then
         // we will use the recursive parent attribute to store values in the map.
-        EntityDef recursiveParent = attributeDef.getEntityDef().getRecursiveParentEntityDef();
+        EntityDef recursiveParent = attributeDef.getEntityDef().getRecursiveParent();
         if ( recursiveParent != null )
             attributeDef = recursiveParent.getAttributeByErToken( attributeDef.getErAttributeToken() );
 

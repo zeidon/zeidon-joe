@@ -884,7 +884,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
      *
      * @return
      */
-    public EntityDef getRecursiveParentEntityDef()
+    public EntityDef getRecursiveParent()
     {
         return recursiveParentEntityDef;
     }
@@ -897,8 +897,8 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
      */
     public EntityDef getBaseEntityDef()
     {
-        if ( getRecursiveParentEntityDef() != null )
-            return getRecursiveParentEntityDef();
+        if ( getRecursiveParent() != null )
+            return getRecursiveParent();
 
         return this;
     }

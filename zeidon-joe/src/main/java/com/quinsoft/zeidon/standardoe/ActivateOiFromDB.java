@@ -216,7 +216,7 @@ class ActivateOiFromDB implements Activator
         if ( recursive )
         {
             // Reset parentEntityDef to point to A from the example above.
-            parentEntityDef = parentEntityDef.getRecursiveParentEntityDef();
+            parentEntityDef = parentEntityDef.getRecursiveParent();
         }
 
         // We can't use setNextContinue() because the recursiveness throws off the cursor.

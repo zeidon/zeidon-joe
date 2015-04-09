@@ -38,6 +38,7 @@ import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityConstraintType;
@@ -49,7 +50,6 @@ import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
-import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.TemporalEntityException;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
@@ -704,7 +704,7 @@ class EntityInstanceImpl implements EntityInstance
 
         // If attributeDef points to a recursive child, find the parent attribute.
         // TODO: Do we have to do this for the reciprocal situation as well?
-        if ( attributeDef.getEntityDef() == getEntityDef().getRecursiveParentEntityDef() )
+        if ( attributeDef.getEntityDef() == getEntityDef().getRecursiveParent() )
         {
             // Find the attribute in getEntityDef() that matches attributeDef.
             for ( AttributeDef va : getEntityDef().getAttributes() )
@@ -2524,16 +2524,13 @@ class EntityInstanceImpl implements EntityInstance
         EntityInstanceImpl searchInstance = getParent();
         while ( searchInstance != null && searchInstance.getEntityDef() != parentEntityDef )
         {
-            EntityDef ve = searchInstance.getEntityDef();
+            EntityDef ed = searchInstance.getEntityDef();
 
             // If the parent entity we are looking for is a recursive parent,
             // then it's possible that the entity instance we are looking for
-            // has an lpEntityDef that is the recursive child entity.
-            if ( parentEntityDef.isRecursiveParent() && ve.isRecursive() &&
-                 parentEntityDef.getErEntityToken() == ve.getErEntityToken() )
-            {
+            // has an EntityDef that is the recursive child entity.
+            if ( parentEntityDef.isRecursiveParent() && parentEntityDef.getRecursiveChild() == ed )
                 break;
-            }
 
             searchInstance = searchInstance.getParent();
         }
@@ -3927,7 +3924,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         return incomplete;
     }
-    
+
     boolean isParentOf( EntityInstance child )
     {
         child = child.getEntityInstance(); // In case child is an EntityCursor.
@@ -3935,10 +3932,10 @@ class EntityInstanceImpl implements EntityInstance
         {
             if ( child == this )
                 return true;
-            
+
             child = child.getParent();
         }
-        
+
         return false;
     }
 
@@ -3947,7 +3944,7 @@ class EntityInstanceImpl implements EntityInstance
         EntityInstanceImpl p = (EntityInstanceImpl) parent.getEntityInstance();
         return p.isParentOf( this );
     }
-    
+
     /**
      * This method is called if 'this' entity instance does not have all its children.
      * This can happen if an OI was activated with a RESTRICTING clause or if a child
@@ -4054,7 +4051,7 @@ class EntityInstanceImpl implements EntityInstance
                     throw new ZeidonException( "Attempting to copy a key value to an entity instance that already has a key" )
                                    .appendMessage( "Target instance = %s", this.toString() )
                                    .appendMessage( "Source instance = %s", sourceInstance.toString() );
-                
+
                 continue;
             }
 

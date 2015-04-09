@@ -208,8 +208,8 @@ class ViewCursor
             recursiveLevel = recursiveParent.getDepth();
 
         // Calculate the recursiveDiff.
-        if ( recursiveParentEntityDef.getRecursiveParentEntityDef() != null )
-            recursiveParentEntityDef = recursiveParentEntityDef.getRecursiveParentEntityDef();
+        if ( recursiveParentEntityDef.getRecursiveParent() != null )
+            recursiveParentEntityDef = recursiveParentEntityDef.getRecursiveParent();
         recursiveDiff = recursiveLevel - recursiveParentEntityDef.getDepth();
         if ( recursiveDiff == 0 )
         {
@@ -224,6 +224,9 @@ class ViewCursor
         lastValidCursorIndex = recursiveParentEntityDef.getLastChildHier().getHierIndex();
     }
 
+    /**
+     * Reset the subobjects.
+     */
     void resetSubobjectTop()
     {
         EntityInstanceImpl currentRoot = getRecursiveRoot();
@@ -236,8 +239,8 @@ class ViewCursor
         else
         {
             entityDef = currentRoot.getEntityDef();
-            if ( entityDef.getRecursiveParentEntityDef() != null )
-                entityDef = entityDef.getRecursiveParentEntityDef();
+            if ( entityDef.getRecursiveParent() != null )
+                entityDef = entityDef.getRecursiveParent();
         }
 
         view.cursor( entityDef ).resetChildCursors( null );
@@ -257,7 +260,7 @@ class ViewCursor
         // We need to find the ancestor of currentRoot that has the same ER entity token
         // as current root.
         EntityDef entityDef = currentRoot.getEntityDef();
-        EntityDef recursiveParent = entityDef.getRecursiveParentEntityDef();
+        EntityDef recursiveParent = entityDef.getRecursiveParent();
         EntityInstanceImpl ancestor = currentRoot.findMatchingParent( recursiveParent );
         if ( ancestor == null )
             throw new ZeidonException( "Current subobject root has no valid ancestor" );
