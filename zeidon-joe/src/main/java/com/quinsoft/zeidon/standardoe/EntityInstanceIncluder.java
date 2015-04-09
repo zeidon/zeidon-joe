@@ -251,6 +251,7 @@ class EntityInstanceIncluder
 
         newInstance.linkInternalInstances( sourceInstance );
         newInstance.copyFlags( sourceInstance );
+        newInstance.copyAttributes().setCopyPersistent( false ).from( sourceInstance ); // Copy the work attributes.
 
         // Now loop through source's direct children and see if the need to be
         // copied to the current target.

@@ -75,8 +75,8 @@ private[scala] abstract class AbstractEntity( val jentityDef: com.quinsoft.zeido
      * Copies attributes by name.  Normal invocation is:
      *      tgtView.Entity.copyAttributes.from( srcView.Entity )
      */
-    def copyAttributes() : SetMatchingFlagsBuilder = {
-        return getEntityInstance.setMatchingAttributesByName()
+    def copyAttributes() : CopyAttributesFlagsBuilder = {
+        return getEntityInstance.copyAttributes()
     }
 
     def childrenHier = new EntityInstanceIterator( getEntityInstance.getChildrenHier(false) )

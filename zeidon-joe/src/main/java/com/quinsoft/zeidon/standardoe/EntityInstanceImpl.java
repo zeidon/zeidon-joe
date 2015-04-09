@@ -49,7 +49,7 @@ import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
-import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
+import com.quinsoft.zeidon.CopyAttributesFlagsBuilder;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.TemporalEntityException;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
@@ -2849,9 +2849,9 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public SetMatchingFlagsBuilder setMatchingAttributesByName()
+    public CopyAttributesFlagsBuilder copyAttributes()
     {
-        return new SetMatchingFlagsBuilder().to( this );
+        return new CopyAttributesFlagsBuilder().to( this );
     }
 
     @Override
@@ -4019,5 +4019,80 @@ class EntityInstanceImpl implements EntityInstance
         }
 
         return list;
+    }
+
+    @Override
+    public void copyAttributes( CopyAttributesFlagsBuilder flags )
+    {
+        EntityInstance sourceInstance = flags.getSourceInstance();
+        EntityDef sourceEntityDef = sourceInstance.getEntityDef();
+
+        // Loop through the target attributes and set their value from the source entity.
+        for ( AttributeDef targetAttr : this.getEntityDef().getAttributes() )
+        {
+            if ( targetAttr.isHidden() && ! flags.isCopyHidden() )
+                continue;
+
+            if ( targetAttr.isPersistent() && ! flags.isCopyPersistent() )
+                continue;
+
+            if ( ! targetAttr.isPersistent() && ! flags.isCopyWork() )
+                continue;
+
+            if ( targetAttr.isDerived() )
+                continue;
+
+            if ( ! targetAttr.isUpdate() )
+                continue;
+
+            // If target entity was not created (this means that the entity
+            // has been committed to the database) then the attribute cannot
+            // be updated if it is a key.
+            if ( ! this.isCreated() && targetAttr.isKey() )
+            {
+                if ( flags.isCopyKeys() )
+                    throw new ZeidonException( "Attempting to copy a key value to an entity instance that already has a key" )
+                                   .appendMessage( "Target instance = %s", this.toString() )
+                                   .appendMessage( "Source instance = %s", sourceInstance.toString() );
+                
+                continue;
+            }
+
+            if ( targetAttr.isKey() && ! flags.isCopyKeys() )
+                continue;
+
+            // Check to see if user wants to over-write non-null values.
+            if ( flags.isKeepNonNull() )
+            {
+                // The user does NOT want attributes in the target entity that
+                // already have values (i.e. they are not null) to be over-written
+                // with values from the source entity.  Check the target entity's
+                // value.  If it is not null, then continue looping.
+                if ( ! getInternalAttribute( targetAttr ).isNull( getTask(), targetAttr ) )
+                    continue;
+            }
+
+            AttributeDef sourceAttr = sourceEntityDef.getAttribute( targetAttr.getName(), false );
+            if ( sourceAttr == null )
+                continue;  // No matching attribute by name.
+
+            // Source attr cannot be hidden or derived either.
+            if ( ( sourceAttr.isHidden() && ! flags.isCopyHidden() ) || sourceAttr.isDerived() )
+                continue;
+
+            // Ignore if both are null.
+            if ( getInternalAttribute( targetAttr ).isNull( getTask(), targetAttr ) && sourceInstance.getAttribute( sourceAttr ).isNull() )
+                continue;
+
+            if ( flags.isCopyNulls() )
+            {
+                // User doesn't want NULL source attributes to be copied.
+                if ( sourceInstance.getAttribute( sourceAttr ).isNull() )
+                    continue;
+            }
+
+            Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
+            setAttribute( targetAttr, sourceValue );
+        } // for each target AttributeDef...
     }
 }

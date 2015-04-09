@@ -44,7 +44,7 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.OutOfScopeException;
 import com.quinsoft.zeidon.SetMatchingFlags;
-import com.quinsoft.zeidon.SetMatchingFlagsBuilder;
+import com.quinsoft.zeidon.CopyAttributesFlagsBuilder;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -1777,9 +1777,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public SetMatchingFlagsBuilder setMatchingAttributesByName()
+    public CopyAttributesFlagsBuilder copyAttributes()
     {
-        return getExistingInstance().setMatchingAttributesByName();
+        return getExistingInstance().copyAttributes();
     }
 
     @Override
@@ -3114,5 +3114,11 @@ class EntityCursorImpl implements EntityCursor
     public List<AttributeInstance> getAttributes( boolean includeNullValues )
     {
         return getExistingInstance( true ).getAttributes( includeNullValues );
+    }
+
+    @Override
+    public void copyAttributes( CopyAttributesFlagsBuilder flags )
+    {
+        getExistingInstance( true ).copyAttributes( flags );
     }
 }
