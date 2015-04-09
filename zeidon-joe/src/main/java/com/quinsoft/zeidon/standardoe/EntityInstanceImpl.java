@@ -49,7 +49,7 @@ import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
-import com.quinsoft.zeidon.CopyAttributesFlagsBuilder;
+import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.TemporalEntityException;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
@@ -2849,9 +2849,9 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public CopyAttributesFlagsBuilder copyAttributes()
+    public CopyAttributesBuilder copyAttributes()
     {
-        return new CopyAttributesFlagsBuilder().to( this );
+        return new CopyAttributesBuilder().to( this );
     }
 
     @Override
@@ -4022,7 +4022,7 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
-    public void copyAttributes( CopyAttributesFlagsBuilder flags )
+    public void copyAttributes( CopyAttributesBuilder flags )
     {
         EntityInstance sourceInstance = flags.getSourceInstance();
         EntityDef sourceEntityDef = sourceInstance.getEntityDef();

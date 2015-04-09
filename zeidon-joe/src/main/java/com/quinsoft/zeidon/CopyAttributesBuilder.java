@@ -27,7 +27,7 @@ import java.util.EnumSet;
  * Convenience class to build flags for setMatchingAttributesByName.
  * 
  */
-public class CopyAttributesFlagsBuilder
+public class CopyAttributesBuilder
 {
     private EntityInstance srcEntityInstance;
     private EntityInstance tgtEntityInstance;
@@ -47,7 +47,7 @@ public class CopyAttributesFlagsBuilder
         return copy();
     }
     
-    public CopyAttributesFlagsBuilder to( EntityInstance targetEi )
+    public CopyAttributesBuilder to( EntityInstance targetEi )
     {
         tgtEntityInstance = targetEi;
         return this;
@@ -59,7 +59,7 @@ public class CopyAttributesFlagsBuilder
      * 
      * @return
      */
-    public CopyAttributesFlagsBuilder ignoreNull()
+    public CopyAttributesBuilder ignoreNull()
     {
         flags.add( SetMatchingFlags.fSET_SRCNOTNULL );
         return this;
@@ -71,13 +71,13 @@ public class CopyAttributesFlagsBuilder
      * 
      * @return
      */
-    public CopyAttributesFlagsBuilder overwriteNonNull()
+    public CopyAttributesBuilder overwriteNonNull()
     {
         flags.add( SetMatchingFlags.fSET_NOTNULL );
         return this;
     }
     
-    public CopyAttributesFlagsBuilder copyKeys()
+    public CopyAttributesBuilder copyKeys()
     {
         flags.add( SetMatchingFlags.fSET_KEYS );
         return this;
@@ -100,7 +100,7 @@ public class CopyAttributesFlagsBuilder
      * 
      * @return this 
      */
-    public CopyAttributesFlagsBuilder setCopyKeys( boolean copyKeys )
+    public CopyAttributesBuilder setCopyKeys( boolean copyKeys )
     {
         this.copyKeys = copyKeys;
         return this;
@@ -124,7 +124,7 @@ public class CopyAttributesFlagsBuilder
      * 
      * @return this 
      */
-    public CopyAttributesFlagsBuilder setCopyNulls( boolean copyNulls )
+    public CopyAttributesBuilder setCopyNulls( boolean copyNulls )
     {
         this.copyNulls = copyNulls;
         return this;
@@ -145,7 +145,7 @@ public class CopyAttributesFlagsBuilder
      * 
      * @return this 
      */
-    public CopyAttributesFlagsBuilder setCopyWork( boolean copyWork )
+    public CopyAttributesBuilder setCopyWork( boolean copyWork )
     {
         this.copyWork = copyWork;
         return this;
@@ -193,7 +193,7 @@ public class CopyAttributesFlagsBuilder
      * 
      * @return this
      */
-    public CopyAttributesFlagsBuilder setKeepNonNull( boolean keepNonNull )
+    public CopyAttributesBuilder setKeepNonNull( boolean keepNonNull )
     {
         this.keepNonNull = keepNonNull;
         return this;
@@ -204,7 +204,7 @@ public class CopyAttributesFlagsBuilder
         return copyPersistent;
     }
 
-    public CopyAttributesFlagsBuilder setCopyPersistent( boolean copyPersistent )
+    public CopyAttributesBuilder setCopyPersistent( boolean copyPersistent )
     {
         this.copyPersistent = copyPersistent;
         return this;

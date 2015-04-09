@@ -642,8 +642,8 @@ public interface EntityInstance
      *
      * @return new matcher.
      */
-    CopyAttributesFlagsBuilder copyAttributes();
-    void copyAttributes( CopyAttributesFlagsBuilder flags );
+    CopyAttributesBuilder copyAttributes();
+    void copyAttributes( CopyAttributesBuilder flags );
 
     void logEntity();
     void logEntity( boolean displayChildren );
