@@ -255,20 +255,42 @@ class ViewCursor
     boolean resetSubobjectToParent()
     {
         EntityInstanceImpl currentRoot = getRecursiveRoot();
-        if ( currentRoot == null )
+        if ( currentRoot == null && getRecursiveRootParent() == null )
             return false;
 
-        // We need to find the ancestor of currentRoot that has the same ER entity token
-        // as current root.
-        EntityDef entityDef = currentRoot.getEntityDef();
-        EntityDef recursiveParent = entityDef.getRecursiveParent();
-        EntityInstanceImpl ancestor = currentRoot.findMatchingParent( recursiveParent );
-        if ( ancestor == null )
-            throw new ZeidonException( "Current subobject root has no valid ancestor" );
+        if ( currentRoot != null )
+        {
+            // We need to find the ancestor of currentRoot that has the same ER entity token
+            // as current root.
+            EntityDef entityDef = currentRoot.getEntityDef();
+            EntityDef recursiveParent = entityDef.getRecursiveParent();
+            EntityInstanceImpl ancestor = currentRoot.findMatchingParent( recursiveParent );
+            if ( ancestor == null )
+                throw new ZeidonException( "Current subobject root has no valid ancestor" );
 
-//        setRecursiveParent( ancestor, ancestor.getEntityDef(), null );
-//        view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
-        view.cursor( entityDef ).setCursor( currentRoot );    // Set the cursor for the recursive child.
+    //        setRecursiveParent( ancestor, ancestor.getEntityDef(), null );
+    //        view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
+            view.cursor( entityDef ).setCursor( currentRoot );    // Set the cursor for the recursive child.
+        }
+        else
+        {
+            // currentRoot is null.  This means that recursiveRootParent must not be null and it points to
+            // the parent entityDef of what currentRoot should be.
+            currentRoot = getRecursiveRootParent();
+
+            // Get the recursive parent entityDef.  It's possible that currentRoot does not point to the recursive
+            // parent so we need to find it.
+            EntityDef entityDef = currentRoot.getEntityDef();
+            while ( ! entityDef.isRecursiveParent() )
+                entityDef = entityDef.getParent();
+
+            // Now find the parent EI.
+            EntityInstanceImpl subobjectParent = currentRoot;
+            if ( ! currentRoot.getEntityDef().isRecursive() )
+                subobjectParent = currentRoot.findMatchingParent( entityDef );
+            view.cursor( entityDef ).setCursor( subobjectParent );    // Set the cursor for the recursive child.
+        }
+
         return true;
     }
 
@@ -295,7 +317,7 @@ class ViewCursor
      */
     boolean isCursorInScope( EntityCursor cursor )
     {
-        if ( recursiveRoot == null )
+        if ( recursiveRoot == null && recursiveRootParent == null )
             return true;  // All cursors are in scope if there is no recursive subobject defined.
 
         EntityDef entityDef = cursor.getEntityDef();

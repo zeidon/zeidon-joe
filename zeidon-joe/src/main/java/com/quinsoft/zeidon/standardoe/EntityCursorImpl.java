@@ -2461,7 +2461,7 @@ class EntityCursorImpl implements EntityCursor
         // move a parent under it's child.
         EntityInstanceImpl target = getEntityInstance();
         if ( target == null )
-            target = getParentCursor().getExistingInstance();
+            target = getParentCursor().getEntityInstance();
 
         if ( source.getEntityInstance() == null )
             throw new ZeidonException( "Source EntityCursor is null" );
@@ -2823,7 +2823,6 @@ class EntityCursorImpl implements EntityCursor
             return CursorResult.UNCHANGED;
 
         currentIterator.prev();
-        assert assertParentCursors() : "Parent cursors are out of whack";
         return CursorResult.SET;
     }
 
@@ -2832,7 +2831,11 @@ class EntityCursorImpl implements EntityCursor
         if ( getParentCursor() == null )
             return true;
 
-        return getParentCursor().getEntityInstance() == getEntityInstance().getParent();
+        // Break this out with a 'if' statement to make it easier to set a breakpoint.
+        if ( getParentCursor().getEntityInstance() == getEntityInstance().getParent() )
+            return true;
+        else
+            return false;
     }
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EntityCursor#setPrevWithinOi(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
