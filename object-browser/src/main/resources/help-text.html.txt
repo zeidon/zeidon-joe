@@ -21,6 +21,8 @@
       <li><b>Down</b> - Change selected entity to next hier</li>
       <li><b>Left</b> - Change selected entity to previous sibling</li>
       <li><b>Right</b> - Change selected entity to next sibling</li>
+      <li><b>Ctrl-Up</b> - Move subobject child to root (i.e. setToSuboject)</li>
+      <li><b>Ctrl-Down</b> - Move subobject root down (i.e. resetSubobjectToParent)</li>
     </ul>
 
 <h4>Changing zoom and position:</h4>
