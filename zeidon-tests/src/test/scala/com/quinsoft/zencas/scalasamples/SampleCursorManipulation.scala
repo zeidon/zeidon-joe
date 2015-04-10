@@ -274,6 +274,17 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         println( "\nSort multiple: " )
         mUser.Report.each( println( mUser.Report.Name ) )
     }
+
+    def deleteEntities( mUser: View @basedOn( "mUser") ) = {
+        // To delete a single entity
+        mUser.Staff.delete()
+        
+        // To delete all entities that match a predicate
+        mUser.Staff.deleteAll( _.Status == "A" )
+        
+        // To delete all
+        mUser.Staff.deleteAll()
+    }
 }
 
 object SampleCursorManipulation {
@@ -295,6 +306,7 @@ object SampleCursorManipulation {
 
         sampler.forEachCursor(mUser)
         sampler.sortEntities(mUser)
+        sampler.deleteEntities(mUser.cloneRoot)
 //        mUser.logObjectInstance
     }
 
