@@ -270,7 +270,6 @@ public class TestEpamms
          ec2.setFirstWithinOi( "ID", "52" );
          ec2 = mSPLDef2.getCursor( "LLD_Block" );
          ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
-         displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
 
          ec1 = mSPLDef.getCursor( "LLD_Block" );
          ec1.setFirstWithinOi( "ID", "600" );
@@ -403,11 +402,10 @@ public class TestEpamms
          ec2 = mSPLDef2.getCursor( "LLD_Block" );
          ec2.moveSubobject( CursorPosition.FIRST, ec1, CursorPosition.FIRST );
       // mSPLDef.logObjectInstance();
-         displaySPLD( mSPLDef, "LLD_Page", "After moveSubobject" );
          ec1 = mSPLDef.getCursor( "LLD_Block" );
          ec1.setFirstWithinOi( "ID", "805" );
          EntityInstance eip = ec1.getParent();
-         Assert.assertEquals( "Parent ID's do not match up", "808", eip.getAttribute( "ID" ) );
+         Assert.assertEquals( "Parent ID's do not match up", "808", eip.getAttribute( "ID" ).getString() );
 
          return 0;
       }
@@ -522,13 +520,13 @@ public class TestEpamms
 		public int
 		ExecuteJOE_Test0( View     mLLD )
 		{
-         
+
          //    A             A               A
          //   / \    ==>     |      ==>     / \
          //  B1 B2           B2            B2 B1
          //                  |
-         //                B1Sub 
-         
+         //                B1Sub
+
          EntityCursor ec = mLLD.getCursor( "LLD" );
          ec.createEntity( CursorPosition.FIRST );
          ec = mLLD.getCursor( "LLD_Page" );
@@ -548,10 +546,10 @@ public class TestEpamms
          mLLD2.getCursor( "LLD_SubBlock" ).setToSubobject();
          mLLD2.cursor( "LLD_Block" ).moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
       // mLLD.logObjectInstance();
-         
+
          mLLD.resetSubobjectTop();
          mLLD2.resetSubobjectTop();
-         
+
          ec = mLLD2.getCursor( "LLD_SubBlock" );
          ec.logEntity();
          ec.setToSubobject();
@@ -713,6 +711,13 @@ public class TestEpamms
                Assert.assertEquals( "Unexpected RC", CursorResult.UNDEFINED.toInt(),  lTempInteger_0 );
 			   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "LLD_SubBlock" );
                Assert.assertEquals( "Unexpected RC", CursorResult.NULL.toInt(),  lTempInteger_0 );
+               mSPLDef.cursor( "LLD_Block" ).setNextWithinOi();
+               mSPLDef.cursor( "LLD_Block" ).setPrevWithinOi();
+
+               Integer id = mSPLDef.cursor( "LLD_Block" ).getAttribute( "ID" ).getInteger();
+               mSPLDef.cursor( "LLD_SubBlock" ).setToSubobject();
+               mSPLDef.cursor( "LLD_Block" ).resetSubobjectToParent();
+               Assert.assertEquals( "IDs don't match after resetToParent", mSPLDef.cursor( "LLD_Block" ).getAttribute( "ID" ).getInteger(),  id );
 
 		   return 0;
 		}

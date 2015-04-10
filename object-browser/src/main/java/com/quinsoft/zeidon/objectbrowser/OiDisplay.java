@@ -36,6 +36,7 @@ import java.awt.geom.Line2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -68,13 +69,19 @@ class OiDisplay extends JPanel
     private final DrawingPane  drawingPane;
     private final LodDef       lodDef;
     private final View         view;
+    private final View         originalView;
     private       LodDefLayout lodDefLayout;
     private final Map<EntityDef, EntitySquare> entities;
     private       EntitySquare selectedEntity;
     private final JScrollPane scroller;
     private final EntitySelectedListener entitySelectedListener;
     private       Point mousePoint;
-    
+
+    /**
+     * Used by up/down arrow processing to navigate entities in the display.
+     */
+    final Stack<EntityDef> moveDown = new Stack<>();
+
     /**
      * True if we think the mouse is down.
      */
@@ -88,7 +95,9 @@ class OiDisplay extends JPanel
         super( new BorderLayout() );
         this.env = env;
         this.lodDef = view.getLodDef();
-        this.view = view;
+        originalView = view;
+        this.view = view.newView();
+        view.setInternal( true );  // So the browser doesn't display it.
         this.entitySelectedListener = listener;
 
         entities = new HashMap<EntityDef, EntitySquare>();
@@ -102,11 +111,11 @@ class OiDisplay extends JPanel
         scroller = new JScrollPane(drawingPane);
         add(scroller, BorderLayout.CENTER);
         scroller.setVisible( true );
-        setup( view, parent );
+        setup( parent );
         setVisible( true );
     }
 
-    private void setup( View view, Component parent )
+    private void setup( Component parent )
     {
         EntityDef root = lodDef.getRoot();
         lodDefLayout = env.getOdLayout( lodDef );
@@ -156,6 +165,15 @@ class OiDisplay extends JPanel
         }
 
         return e;
+    }
+
+    /**
+     * This resets the view cursors to match the original view.
+     */
+    void restoreView()
+    {
+        view.copyCursors( originalView );
+        revalidate();
     }
 
     /**
@@ -258,7 +276,7 @@ class OiDisplay extends JPanel
             }
         } );
     }
-    
+
     void repositionScroll( Point p )
     {
         // Make sure we aren't scrolling off the screen
@@ -302,7 +320,7 @@ class OiDisplay extends JPanel
             mousePoint = new Point( e.getX(), e.getY() );
             super.mouseReleased( e );
         }
-        
+
         /* (non-Javadoc)
          * @see java.awt.event.MouseAdapter#mouseReleased(java.awt.event.MouseEvent)
          */

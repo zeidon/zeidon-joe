@@ -45,6 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.EntityCursor;
+import com.quinsoft.zeidon.EntityCursor.CursorStatus;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -111,6 +112,10 @@ public class EntitySquare extends JPanel implements MouseListener
         getInputMap().put( KeyStroke.getKeyStroke( "RIGHT" ),  "moveRight" );
         getActionMap().put("moveRight", new ChangeSelectedEntityDefAction( 4 ) );
 
+        getInputMap().put( KeyStroke.getKeyStroke( "ctrl DOWN" ),  "resetParent" );
+        getActionMap().put("resetParent", new ChangeSelectedEntityDefAction( 5 ) );
+        getInputMap().put( KeyStroke.getKeyStroke( "ctrl UP" ),  "setSubobject" );
+        getActionMap().put("setSubobject", new ChangeSelectedEntityDefAction( 6 ) );
     }
 
     Point getTopAnchor()
@@ -338,6 +343,7 @@ public class EntitySquare extends JPanel implements MouseListener
         if ( prevSelected == this )
             return;
 
+        oiDisplay.moveDown.clear();
         oiDisplay.setSelectedEntity( this );
 
         prevSelected.repaint();
@@ -486,10 +492,27 @@ public class EntitySquare extends JPanel implements MouseListener
             {
                 switch ( direction )
                 {
-                    case 1: entityDef = entityDef.getParent(); break;
-                    case 2: entityDef = entityDef.getNextHier(); break;
-                    case 3:
+                    case 1: // Arrow up.
                     {
+                        if ( entityDef.getParent() != null )
+                        {
+                            oiDisplay.moveDown.push( entityDef );
+                            entityDef = entityDef.getParent();
+                        }
+                        break;
+                    }
+                    case 2: // Arrow down.
+                    {
+                        if ( oiDisplay.moveDown.size() > 0 )
+                            entityDef = oiDisplay.moveDown.pop();
+                        else
+                            entityDef = entityDef.getNextHier();
+
+                        break;
+                    }
+                    case 3: // Arrow left.
+                    {
+                        oiDisplay.moveDown.clear();
                         int level = entityDef.getDepth();
                         entityDef = entityDef.getPrevHier();
                         while ( entityDef != null && entityDef.getDepth() != level )
@@ -497,13 +520,53 @@ public class EntitySquare extends JPanel implements MouseListener
 
                         break;
                     }
-                    case 4:
+                    case 4: // Arrow right.
                     {
+                        oiDisplay.moveDown.clear();
                         int level = entityDef.getDepth();
                         entityDef = entityDef.getNextHier();
                         while ( entityDef != null && entityDef.getDepth() != level )
                             entityDef = entityDef.getNextHier();
 
+                        break;
+                    }
+                    case 5: // Reset parent.
+                    {
+                        // If this entity isn't a recursive parent ignore it.
+                        if ( ! entityDef.isRecursiveParent() )
+                            return;
+
+                        EntityCursor cursor = getView().cursor( entityDef );
+                        EntityInstance ei = cursor.getEntityInstance();
+                        if ( ei != null && ei.getEntityDef() == entityDef )
+                            return; // We're already at the top.
+
+                        oiDisplay.moveDown.clear();
+                        cursor.resetSubobjectToParent();
+                        // Set entitydef to be the recursive child.
+                        entityDef = entityDef.getRecursiveChild();
+                        oiDisplay.repaint();
+                        break;
+                    }
+                    case 6: // Set suboject
+                    {
+                        // If this entity isn't a recursive child ignore it.
+                        if ( ! entityDef.isRecursive() )
+                            return;
+
+                        oiDisplay.moveDown.clear();
+                        EntityCursor cursor = getView().cursor( entityDef );
+                        cursor.setToSubobject();
+
+                        // Set entitydef to be the recursive parent.
+                        entityDef = entityDef.getRecursiveParent();
+                        if ( getView().cursor( entityDef ).isNull() )
+                        {
+                            cursor = getView().cursor( entityDef.getParent() );
+                            CursorStatus status = cursor.getStatus();
+                            EntityInstance ei = cursor.getEntityInstance();
+                        }
+                        oiDisplay.repaint();
                         break;
                     }
 
