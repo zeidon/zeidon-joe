@@ -170,7 +170,7 @@ class ViewCursor
      * Reset the subobject fields to indicate that we are no longer inside
      * a subobject.
      */
-    private void resetRecursiveParent()
+    void resetRecursiveParent()
     {
         recursiveRoot = null;
         recursiveRootParent = null;
@@ -197,7 +197,8 @@ class ViewCursor
     {
         // One of the two EIs had better be non-null.
         assert recursiveParent != null || recursiveGrandParent != null : "Internal error: An EI must be non-null";
-        assert recursiveParent == null || recursiveParent.getEntityDef() == recursiveParentEntityDef;
+        assert recursiveParent == null || recursiveParent.getEntityDef() == recursiveParentEntityDef
+                                       || recursiveParent.getEntityDef().getRecursiveParent() == recursiveParentEntityDef;
 
         this.recursiveRoot = recursiveParent;
         this.recursiveRootParent = recursiveGrandParent;
@@ -265,8 +266,8 @@ class ViewCursor
         if ( ancestor == null )
             throw new ZeidonException( "Current subobject root has no valid ancestor" );
 
-        setRecursiveParent( ancestor, ancestor.getEntityDef(), null );
-        view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
+//        setRecursiveParent( ancestor, ancestor.getEntityDef(), null );
+//        view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
         view.cursor( entityDef ).setCursor( currentRoot );    // Set the cursor for the recursive child.
         return true;
     }

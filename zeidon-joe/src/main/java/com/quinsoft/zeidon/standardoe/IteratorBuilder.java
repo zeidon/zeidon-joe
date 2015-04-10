@@ -851,17 +851,16 @@ class IteratorBuilder
                     break;
 
                 // If we're looking for a specific entity then we can optimize a bit by
-                // skipping past child entities
-                // EXCEPT FOR
+                // skipping past child entities EXCEPT FOR
                 // when the target entities are part of a recursive chain.
-                // TODO: We really need to look to see if *any* parent of targetEntityDef
-                // is recursive.
-                if ( targetEntityDef != null &&
-                     ( ! targetEntityDef.isRecursive() && ! targetEntityDef.isRecursiveParent() ) )
-                {
-                    if ( nextInstance.getDepth() > targetEntityDef.getDepth() )
-                        nextInstance = nextInstance.getLastTwin().getLastChildHier();
-                }
+                // TODO: This needs to check if any parents are recursive.  It's probably not
+                // worth it.
+//                if ( targetEntityDef != null &&
+//                     ( ! targetEntityDef.isRecursive() && ! targetEntityDef.isRecursiveParent() ) )
+//                {
+//                    if ( nextInstance.getDepth() > targetEntityDef.getDepth() )
+//                        nextInstance = nextInstance.getLastTwin().getLastChildHier();
+//                }
             }
         }
 

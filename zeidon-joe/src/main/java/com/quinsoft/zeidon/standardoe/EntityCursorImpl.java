@@ -248,8 +248,15 @@ class EntityCursorImpl implements EntityCursor
 
     private EntityInstanceImpl setEntityInstance( EntityInstanceImpl entityInstance )
     {
-        this.entityInstance = entityInstance;
-        return entityInstance;
+        if ( entityInstance == null ||
+             entityInstance.getEntityDef() == getEntityDef() || 
+             entityInstance.getEntityDef().getRecursiveParent() == getEntityDef() )
+        {
+            this.entityInstance = entityInstance;
+            return entityInstance;
+        }
+        
+        throw new ZeidonException( "Internal error: Attempting to set a cursor to an invalid entity def" );
     }
 
     @Override
@@ -585,6 +592,8 @@ class EntityCursorImpl implements EntityCursor
                 }
             }
         }
+        else
+            viewCursor.resetRecursiveParent();
 
         // Check to see if we need to set the parent cursors. Find the highest root cursor that
         // needs to be reset.
@@ -594,7 +603,12 @@ class EntityCursorImpl implements EntityCursor
         {
             EntityCursorImpl searchParentCursor = searchCursor.getParentCursor();
             if ( searchParentCursor == null )
+            {
+                while ( topEi.getEntityDef() != searchCursor.getEntityDef() )
+                    topEi = topEi.getParent();
+                
                 break;
+            }
 
             if ( searchParentCursor.getEntityInstance() == topEi.getParent() )
                 break;
