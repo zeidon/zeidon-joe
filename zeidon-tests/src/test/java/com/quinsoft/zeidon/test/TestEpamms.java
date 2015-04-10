@@ -711,6 +711,13 @@ public class TestEpamms
                Assert.assertEquals( "Unexpected RC", CursorResult.UNDEFINED.toInt(),  lTempInteger_0 );
 			   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef, "LLD_SubBlock" );
                Assert.assertEquals( "Unexpected RC", CursorResult.NULL.toInt(),  lTempInteger_0 );
+               mSPLDef.cursor( "LLD_Block" ).setNextWithinOi();
+               mSPLDef.cursor( "LLD_Block" ).setPrevWithinOi();
+
+               Integer id = mSPLDef.cursor( "LLD_Block" ).getAttribute( "ID" ).getInteger();
+               mSPLDef.cursor( "LLD_SubBlock" ).setToSubobject();
+               mSPLDef.cursor( "LLD_Block" ).resetSubobjectToParent();
+               Assert.assertEquals( "IDs don't match after resetToParent", mSPLDef.cursor( "LLD_Block" ).getAttribute( "ID" ).getInteger(),  id );
 
 		   return 0;
 		}
