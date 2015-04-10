@@ -246,16 +246,27 @@ class EntityCursorImpl implements EntityCursor
         return getExistingInstance( getView().isAllowHiddenEntities() );
     }
 
-    private EntityInstanceImpl setEntityInstance( EntityInstanceImpl entityInstance )
+    /**
+     * Sets the EntityInstance for this cursor.
+     *
+     * Note:  Most code should call setCursor( ei ) instead of this method.
+     * Other than simple validity checking this code does not perform any
+     * extra processing (like reseting child cursors).  This should only be used by code
+     * that expects to explicitly set all the cursors.
+     *
+     * @param entityInstance
+     * @return
+     */
+    EntityInstanceImpl setEntityInstance( EntityInstanceImpl entityInstance )
     {
         if ( entityInstance == null ||
-             entityInstance.getEntityDef() == getEntityDef() || 
+             entityInstance.getEntityDef() == getEntityDef() ||
              entityInstance.getEntityDef().getRecursiveParent() == getEntityDef() )
         {
             this.entityInstance = entityInstance;
             return entityInstance;
         }
-        
+
         throw new ZeidonException( "Internal error: Attempting to set a cursor to an invalid entity def" );
     }
 
@@ -606,7 +617,7 @@ class EntityCursorImpl implements EntityCursor
             {
                 while ( topEi.getEntityDef() != searchCursor.getEntityDef() )
                     topEi = topEi.getParent();
-                
+
                 break;
             }
 

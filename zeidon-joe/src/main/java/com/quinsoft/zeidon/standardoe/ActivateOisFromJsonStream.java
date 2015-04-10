@@ -37,7 +37,6 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.DeserializeOi;
-import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -88,7 +87,7 @@ class ActivateOisFromJsonStream implements StreamReader
      * Used to keep track of the instances that are flagged as selected in the input
      * stream.  Cursors will be set afterwards.
      */
-    private List<EntityInstance> selectedInstances;
+    private List<EntityInstanceImpl> selectedInstances;
 
     /**
      * If true then mark the OI that is being read as readonly.
@@ -307,10 +306,14 @@ class ActivateOisFromJsonStream implements StreamReader
      */
     private void setCursors()
     {
-        for ( EntityInstance ei : selectedInstances )
+        for ( EntityInstanceImpl ei : selectedInstances )
         {
             EntityDef entityDef = ei.getEntityDef();
-            view.cursor( entityDef ).setCursor( ei );
+            EntityCursorImpl cursor = (EntityCursorImpl) view.cursor( entityDef );
+
+            // Use setEntityInstance() because we are setting all cursors.  This is
+            // faster than using setCursor().
+            cursor.setEntityInstance( ei );
         }
     }
 
