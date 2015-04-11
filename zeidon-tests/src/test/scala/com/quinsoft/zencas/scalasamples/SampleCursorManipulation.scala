@@ -278,10 +278,13 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
     def deleteEntities( mUser: View @basedOn( "mUser") ) = {
         // To delete a single entity
         mUser.Staff.delete()
-        
+
         // To delete all entities that match a predicate
         mUser.Staff.deleteAll( _.Status == "A" )
-        
+
+        // For a more complex predicate use the view in the predicate.
+        mUser.Staff.deleteAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+
         // To delete all
         mUser.Staff.deleteAll()
     }

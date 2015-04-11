@@ -84,14 +84,14 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Drop all entities under the parent that match a predicate.  If no predicate is supplied
      * then all entities will be dropped.
-     * 
+     *
      * Example:  This will drop all Staff entities with a Status = "A"
-     *      
+     *
      *      mUser.Staff.dropAll( _.Status == "A" )
      *
      * Note: the cursor should be considered undefined after this call.
-     *  
-     * @param predicate a boolean predicate used to determine which entities will be dropped. 
+     *
+     * @param predicate a boolean predicate used to determine which entities will be dropped.
      * @return the number of entities dropped.
      */
     def dropAll( predicate : (AbstractEntity) => Boolean = null ): Int = {
@@ -102,10 +102,35 @@ class EntityCursor( private[this]  val view: View,
                 drop( CursorPosition.NONE )
             }
         }
-        
+
         count
     }
-    
+
+    /**
+     * Drop all entities under the parent that match a predicate.  This predicate takes
+     * no arguments.
+     *
+     * Example:  This will drop all Staff entities with a Status = "A" and Type = "B".
+     *
+     *      mUser.Staff.dropAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+     *
+     * Note: the cursor should be considered undefined after this call.
+     *
+     * @param predicate a boolean predicate used to determine which entities will be dropped.
+     * @return the number of entities dropped.
+     */
+    def dropAll( predicate : => Boolean  ): Int = {
+        var count = 0
+        this.each {
+            if ( predicate ) {
+                count += 1
+                drop( CursorPosition.NONE )
+            }
+        }
+
+        count
+    }
+
     /**
      * Deletes the Entity Instance referred to by this cursor.
      */
@@ -114,14 +139,14 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Delete all entities under the parent that match a predicate.  If no predicate is supplied
      * then all entities will be deleted.
-     * 
+     *
      * Example:  This will deleted all Staff entities with a Status = "A"
-     *      
+     *
      *      mUser.Staff.deleteAll( _.Status == "A" )
-     * 
+     *
      * Note: the cursor should be considered undefined after this call.
      *
-     * @param predicate a boolean predicate used to determine which entities will be deleted. 
+     * @param predicate a boolean predicate used to determine which entities will be deleted.
      * @return the number of entities deleted.
      */
     def deleteAll( predicate : (AbstractEntity) => Boolean = null ): Int = {
@@ -132,10 +157,35 @@ class EntityCursor( private[this]  val view: View,
                 delete( CursorPosition.NONE )
             }
         }
-        
+
         count
     }
-    
+
+    /**
+     * Delete all entities under the parent that match a predicate.  This predicate takes no
+     * arguments
+     *
+     * Example:  This will deleted all Staff entities with a Status = "A"
+     *
+     *      mUser.Staff.deleteAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+     *
+     * Note: the cursor should be considered undefined after this call.
+     *
+     * @param predicate a boolean predicate used to determine which entities will be deleted.
+     * @return the number of entities deleted.
+     */
+    def deleteAll( predicate : => Boolean ): Int = {
+        var count = 0
+        this.each {
+            if ( predicate ) {
+                count += 1
+                delete( CursorPosition.NONE )
+            }
+        }
+
+        count
+    }
+
     /**
      * Excludes the Entity Instance refered to by this cursor.
      */
@@ -144,14 +194,14 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Exclude all entities under the parent that match a predicate.  If no predicate is supplied
      * then all entities will be exclude.
-     * 
+     *
      * Example:  This will exclude all Staff entities with a Status = "A"
-     *      
+     *
      *      mUser.Staff.deleteAll( _.Status == "A" )
-     * 
+     *
      * Note: the cursor should be considered undefined after this call.
-     * 
-     * @param predicate a boolean predicate used to determine which entities will be excluded. 
+     *
+     * @param predicate a boolean predicate used to determine which entities will be excluded.
      * @return the number of entities excluded.
      */
     def excludeAll( predicate : (AbstractEntity) => Boolean = null ): Int = {
@@ -162,10 +212,35 @@ class EntityCursor( private[this]  val view: View,
                 exclude( CursorPosition.NONE )
             }
         }
-        
+
         count
     }
-    
+
+    /**
+     * Exclude all entities under the parent that match a predicate.  This predicate takes no
+     * arguments.
+     *
+     * Example:  This will exclude all Staff entities with a Status = "A" and Type = "B"
+     *
+     *      mUser.Staff.deleteAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+     *
+     * Note: the cursor should be considered undefined after this call.
+     *
+     * @param predicate a boolean predicate used to determine which entities will be excluded.
+     * @return the number of entities excluded.
+     */
+    def excludeAll( predicate : => Boolean ): Int = {
+        var count = 0
+        this.each {
+            if ( predicate ) {
+                count += 1
+                exclude( CursorPosition.NONE )
+            }
+        }
+
+        count
+    }
+
     /**
      * Includes the entity source to this entity.  This will also include any child entities and
      * potentially spawn the include to other linked entities.  By default the newly included
@@ -196,7 +271,7 @@ class EntityCursor( private[this]  val view: View,
 
     /**
      * Returns the number of twins that match a predicate.
-     * 
+     *
      * Note: the cursor should be considered undefined after this call.
      */
     def count( predicate : (AbstractEntity) => Boolean ): Int = {
@@ -206,7 +281,23 @@ class EntityCursor( private[this]  val view: View,
                 count += 1
             }
         }
-        
+
+        count
+    }
+
+    /**
+     * Returns the number of twins that match a predicate.
+     *
+     * Note: the cursor should be considered undefined after this call.
+     */
+    def count( predicate : => Boolean ): Int = {
+        var count = 0
+        this.each {
+            if ( predicate ) {
+                count += 1
+            }
+        }
+
         count
     }
 
@@ -263,22 +354,22 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Sets the cursor to point to the first twin.
      */
-    def setFirst = new CursorResult( jentityCursor.setFirst() )
+    def setFirst() = new CursorResult( jentityCursor.setFirst() )
 
     /**
      * Sets the cursor to point to the next twin.
      */
-    def setNext  = new CursorResult( jentityCursor.setNext() )
+    def setNext()  = new CursorResult( jentityCursor.setNext() )
 
     /**
      * Sets the cursor to point to the previous twin.
      */
-    def setPrev = new CursorResult( jentityCursor.setPrev() )
+    def setPrev() = new CursorResult( jentityCursor.setPrev() )
 
     /**
      * Sets the cursor to point to the last twin.
      */
-    def setLast  = new CursorResult( jentityCursor.setLast() )
+    def setLast()  = new CursorResult( jentityCursor.setLast() )
 
     /**
      * Sets the cursor to the first entity instance for which the specified predicate
