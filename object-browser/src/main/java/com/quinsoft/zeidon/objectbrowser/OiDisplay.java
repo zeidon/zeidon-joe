@@ -34,8 +34,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.JPanel;
@@ -76,6 +78,12 @@ class OiDisplay extends JPanel
     private final JScrollPane scroller;
     private final EntitySelectedListener entitySelectedListener;
     private       Point mousePoint;
+
+    /**
+     * Used to keep track of other entity squares that will need to be
+     * repainted when a new entity is selected.
+     */
+    final Set<EntitySquare> repaintSquares = new HashSet<>();
 
     /**
      * Used by up/down arrow processing to navigate entities in the display.
@@ -184,6 +192,19 @@ class OiDisplay extends JPanel
         return selectedEntity;
     }
 
+    void repaintEntities()
+    {
+        for ( EntitySquare square : repaintSquares )
+            square.repaint();
+
+        repaintSquares.clear();
+    }
+
+    void setForRepaint( EntitySquare square )
+    {
+        repaintSquares.add( square );
+    }
+
     void setSelectedEntityFromEntityDef( EntityDef entityDef )
     {
         EntitySquare prevSelected = getSelectedEntity();
@@ -192,6 +213,7 @@ class OiDisplay extends JPanel
         setSelectedEntity( square );
         prevSelected.repaint();
         square.repaint();
+        repaintEntities();
 
         // Check to see if the square is outside the viewable area on the scroll.
         Rectangle sqrec = square.getBounds();
@@ -213,6 +235,7 @@ class OiDisplay extends JPanel
      */
     void setSelectedEntity( EntitySquare selectedEntity )
     {
+        repaintEntities();
         this.selectedEntity = selectedEntity;
         EntityDef entityDef = selectedEntity.getEntityDef();
         EntityCursor cursor = view.cursor( entityDef );
@@ -220,6 +243,22 @@ class OiDisplay extends JPanel
             entitySelectedListener.entitySelected( entityDef, cursor.getEntityInstance() );
         else
             entitySelectedListener.entitySelected( entityDef, null );
+
+        if ( entityDef.getRecursiveChild() != null )
+        {
+            // Indicate that this square will need to be repainted to remove the border
+            // when another entity is selected.
+            EntitySquare square = entities.get( entityDef.getRecursiveChild() );
+            square.repaint();
+        }
+        else
+        if ( entityDef.getRecursiveParent() != null )
+        {
+            // Indicate that this square will need to be repainted to remove the border
+            // when another entity is selected.
+            EntitySquare square = entities.get( entityDef.getRecursiveParent() );
+            square.repaint();
+        }
     }
 
     /**

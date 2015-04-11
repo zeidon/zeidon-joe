@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -70,6 +71,7 @@ public class EntitySquare extends JPanel implements MouseListener
     private static Color NULL_ENTITY    = Color.GRAY;
     private static Color OUT_OF_SCOPE   = Color.BLACK;
     private static Color NOT_LOADED     = Color.LIGHT_GRAY;
+    private static Color RECURSIVE_PAIR = Color.RED;
 
     private final OiDisplay          oiDisplay;
     private final EntityDefLayout    entityDefLayout;
@@ -226,7 +228,22 @@ public class EntitySquare extends JPanel implements MouseListener
         EntityDef entityDef = getEntityDef();
         EntityCursor cursor = getView().cursor( entityDef );
 
-        if ( oiDisplay.getSelectedEntity() == this )
+        Color borderColor = Color.black;
+        BasicStroke stroke = new BasicStroke(1);
+        EntitySquare selectedSquare = oiDisplay.getSelectedEntity();
+        if ( selectedSquare != null )
+        {
+            EntityDef selectedEntityDef = selectedSquare.getEntityDef();
+            if ( selectedEntityDef.getRecursiveChild() == entityDef ||
+                 selectedEntityDef.getRecursiveParent() == entityDef )
+            {
+                borderColor = Color.yellow;
+                stroke = new BasicStroke( 5 );
+                oiDisplay.setForRepaint( this );
+            }
+        }
+
+        if ( selectedSquare == this )
             g.setColor( SELECTED_COLOR );
         else
         {
@@ -253,11 +270,13 @@ public class EntitySquare extends JPanel implements MouseListener
         graphics2.fillRoundRect(0, 0, size.width-1, size.height-1, 20, 20);
 
         // Draw the black outline.
-        g.setColor( Color.black );
+        g.setColor( borderColor );
         RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, size.width-1, size.height-1, 20, 20);
-        graphics2.draw(roundedRectangle);
+        graphics2.setStroke( stroke );
+        graphics2.draw (roundedRectangle);
 
         // Write the entity name
+        g.setColor( Color.black );
         graphics2.setFont( font );
         paintCenteredText( graphics2, env.getPainterScaleFactor(), entityDef.getName(), null );
 
