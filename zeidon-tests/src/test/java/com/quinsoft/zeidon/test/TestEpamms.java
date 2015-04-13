@@ -49,6 +49,19 @@ public class TestEpamms
 		zeidonSystem = oe.getSystemTask();
 	}
 
+   
+           
+   @Test
+	public void ExecuteJOE_TestCreateChildOnSubobject()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestCreateChildOnSubobject( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestCreateChildOnSubobject ========");
+	}
+
    @Test
 	public void ExecuteJOE_TestBB()
 	{
@@ -206,6 +219,50 @@ public class TestEpamms
          ec = t.getCursor( "SPLD_LLD" );
          ec.logEntity( true );
          t.drop();
+      }
+
+      private void CheckAddKeywordEntry( View  mSPLDefBlock, String   szKeywordName )
+      {
+         EntityCursor ec = mSPLDefBlock.getCursor( "LLD_SpecialSectionAttribute");
+         CursorResult cr = ec.setFirst( "Name", szKeywordName );
+         if ( cr != CursorResult.SET ) {
+            ec.createEntity( CursorPosition.LAST );
+            ec.getAttribute( "Name" ).setValue( szKeywordName );
+            ec = mSPLDefBlock.getCursor( "LLD_SpecialSectionAttrBlock" );
+            ec.createEntity( CursorPosition.LAST );
+         }
+      }
+
+		public int
+		ExecuteJOE_TestCreateChildOnSubobject( View view )
+		{
+         CursorResult cr;
+         View    mSPLDefBlock = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefBlock.json" ).activateFirst();
+      // mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDefBlock, "LLD_Page", "First Activate" );
+
+      // EntityCursor ec1 = mSPLDef.getCursor( "LLD_SubBlock" );
+         EntityCursor ec = mSPLDefBlock.getCursor( "LLD_SubBlock" );
+         ec.setFirstWithinOi( "ID", "622" );
+         ec.setToSubobject();
+         ec = mSPLDefBlock.getCursor( "LLD_Block" );
+         TraceLineS( "Logging LLD_Block: ", "622" );
+         ec.logEntity( true );
+         ec = mSPLDefBlock.getCursor( "LLD_SpecialSectionAttribute" );
+      // ec.deleteAll();
+         ec = mSPLDefBlock.getCursor( "LLD_Block" );
+         ec.logEntity( true );
+         
+         CheckAddKeywordEntry( mSPLDefBlock, "Title" );
+         CheckAddKeywordEntry( mSPLDefBlock, "Text" );
+         CheckAddKeywordEntry( mSPLDefBlock, "Column List" );
+         CheckAddKeywordEntry( mSPLDefBlock, "MARKETING Header" );
+         ec.logEntity( true );
+
+         cr = mSPLDefBlock.cursor( "LLD_SpecialSectionAttrBlock" ).checkExistenceOfEntity();
+         Assert.assertEquals( "LLD_SpecialSectionAttrBlock exists but is not found: ", CursorResult.SET, cr );
+
+         return 0;
       }
 
 		public int
