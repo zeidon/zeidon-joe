@@ -31,6 +31,7 @@ import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.apache.commons.lang3.StringUtils;
@@ -221,6 +222,12 @@ public class JConsoleEnvironment extends BrowserEnvironment
     public void restoreEnvironment()
     {
         restore( getContainingJFrame(), BROWSER_SESSION_FILE );
+    }
+
+    @Override
+    public void restoreEnvironment( JComponent component )
+    {
+        restore( component, BROWSER_SESSION_FILE );
     }
 
     @Override

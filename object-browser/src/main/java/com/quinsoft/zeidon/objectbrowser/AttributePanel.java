@@ -225,7 +225,7 @@ public class AttributePanel extends JPanel
                 env.getEntityDisplayAttributes().addAttribute( attributeDef );
             
             env.getEntityDisplayAttributes().printAttributes( attributeDef );
-            env.getOiDisplay().setSelectedEntity( attributeDef.getEntityDef() );
+            env.getOiDisplayPanel().setSelectedEntity( attributeDef.getEntityDef() );
         }
     }
     

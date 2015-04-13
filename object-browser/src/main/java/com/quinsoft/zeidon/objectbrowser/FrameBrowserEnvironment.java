@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import com.quinsoft.zeidon.ObjectEngine;
@@ -61,6 +62,12 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     public void restoreEnvironment()
     {
         restore( objectBrowser.getMainFrame(), BROWSER_SESSION_FILE );
+    }
+
+    @Override
+    public void restoreEnvironment( JComponent component )
+    {
+        restore( component, BROWSER_SESSION_FILE );
     }
 
     @Override

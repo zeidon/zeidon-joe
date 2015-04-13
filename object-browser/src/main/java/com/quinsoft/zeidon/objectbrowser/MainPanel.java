@@ -47,6 +47,7 @@ public class MainPanel extends JPanel
         super( new BorderLayout() );
         this.env = env;
 
+        OiDisplayPanel oiDisplay = env.createOiDisplay( this );
         env.createAttributePanel();
         leftTabbedPane = new JTabbedPane();
         leftTabbedPane.addTab( "Tasks/Views", new ViewChooser( env ) );
@@ -59,7 +60,6 @@ public class MainPanel extends JPanel
         leftTabbedPane.setMnemonicAt(2, KeyEvent.VK_W);
         leftTabbedPane.setMnemonicAt(3, KeyEvent.VK_E);
 
-        OiDisplayPanel oiDisplay = env.createOiDisplay( this );
         JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, oiDisplay );
 
         add( splitPane, BorderLayout.CENTER );

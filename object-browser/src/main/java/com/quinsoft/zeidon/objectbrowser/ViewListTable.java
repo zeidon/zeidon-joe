@@ -30,6 +30,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 import com.quinsoft.zeidon.StreamFormat;
@@ -63,11 +64,17 @@ public class ViewListTable extends JTable
         setModel( model );
 
         addMouseListener(new java.awt.event.MouseAdapter() {
+
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int idx = getSelectedRow();
-                final BrowserView v = env.getCurrentViewList().get( idx );
-                env.viewSelected( v );
+            public void mouseClicked( MouseEvent e )
+            {
+                if ( e.getClickCount() == 2 && !e.isConsumed() )
+                {
+                    e.consume();
+                    // handle double click event.
+                }
+
+                super.mouseClicked( e );
             }
 
             @Override
@@ -97,6 +104,23 @@ public class ViewListTable extends JTable
 
         env.setViewList( this );
         refresh( null );
+    }
+
+    @Override
+    public void valueChanged( ListSelectionEvent e )
+    {
+        System.out.println( "Selecting changed " + e.getValueIsAdjusting() );
+        if ( ! e.getValueIsAdjusting() )
+        {
+            int idx = getSelectedRow();
+            if ( idx < env.getCurrentViewList().size() )
+            {
+                final BrowserView v = env.getCurrentViewList().get( idx );
+                env.viewSelected( v );
+            }
+        }
+
+        super.valueChanged( e );
     }
 
     BrowserView getSelectedView()

@@ -150,6 +150,6 @@ public class EntityListPanel extends JPanel
     {
         String name = (String) selectedNode.getUserObject();
         EntityDef entityDef = view.getLodDef().getEntityDef( name );
-        env.getOiDisplay().setSelectedEntity( entityDef );
+        env.getOiDisplayPanel().setSelectedEntity( entityDef );
     }
 }

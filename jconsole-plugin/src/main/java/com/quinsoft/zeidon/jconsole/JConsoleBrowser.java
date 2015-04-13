@@ -82,7 +82,6 @@ public class JConsoleBrowser extends JPanel
                 env.restoreEnvironment();
             }
         });
-
     }
 
 

@@ -33,6 +33,4 @@ public class BrowserTask
         this.taskId = taskId;
         this.applicationName = applicationName;
     }
-
-
 }

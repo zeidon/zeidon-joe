@@ -600,7 +600,7 @@ public class EntitySquare extends JPanel implements MouseListener
             if ( entityDef == getEntityDef() )
                 return;
 
-            env.getOiDisplay().setSelectedEntity( entityDef ).requestFocus();
+            env.getOiDisplayPanel().setSelectedEntity( entityDef ).requestFocus();
         }
     }
 

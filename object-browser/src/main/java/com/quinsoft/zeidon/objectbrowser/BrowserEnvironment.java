@@ -31,6 +31,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.ToolTipManager;
 
 import com.quinsoft.zeidon.EntityInstance;
@@ -58,7 +63,7 @@ public abstract class BrowserEnvironment
     private boolean showHiddenAttributes = false;
     private boolean showNullAttributes   = true;
     private boolean showUnnamedViews     = true;
-    private OiDisplayPanel oiDisplay;
+    private OiDisplayPanel oiDisplayPanel;
     private TaskList taskList;
     private ViewListTable viewList;
     private AttributePanel attributePanel;
@@ -227,8 +232,8 @@ public abstract class BrowserEnvironment
 
     public OiDisplayPanel createOiDisplay( Container container )
     {
-        oiDisplay = new OiDisplayPanel( this );
-        return oiDisplay;
+        oiDisplayPanel = new OiDisplayPanel( this );
+        return oiDisplayPanel;
     }
 
     public ViewListTable getViewList()
@@ -248,8 +253,9 @@ public abstract class BrowserEnvironment
             @Override
             public void run() {
                 View v = getView( view );
-                oiDisplay.displayView( v );
+                oiDisplayPanel.displayView( v );
                 entityListPanel.setView( v );
+                oiDisplayPanel.setFocusToDisplay();
             }
         });
     }
@@ -273,6 +279,7 @@ public abstract class BrowserEnvironment
     }
 
     public abstract void restoreEnvironment();
+    public abstract void restoreEnvironment( JComponent component );
     public abstract void saveEnvironment();
 
     public List<BrowserView> getCurrentViewList()
@@ -342,9 +349,9 @@ public abstract class BrowserEnvironment
         this.entityListPanel = entityListPanel;
     }
 
-    protected OiDisplayPanel getOiDisplay()
+    protected OiDisplayPanel getOiDisplayPanel()
     {
-        return oiDisplay;
+        return oiDisplayPanel;
     }
 
     public EntityDisplayAttributes getEntityDisplayAttributes()
@@ -352,23 +359,43 @@ public abstract class BrowserEnvironment
         return entityDisplayAttributes;
     }
 
+    /**
+     * Adds a hot-key action that is available from any sub-component.
+     * @param viewChooser
+     *
+     * @param keyStroke Key-stroke string; e.g. "alt 1".
+     * @param action action to call.
+     */
+    void addTopLevelKeyAction( JComponent childComponent, String keyStroke, Action action )
+    {
+        InputMap im = oiDisplayPanel.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+        ActionMap am = oiDisplayPanel.getActionMap();
+        im.put( KeyStroke.getKeyStroke( keyStroke ), action.toString() );
+        am.put( action.toString(), action );
+
+        im = childComponent.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+        am = childComponent.getActionMap();
+        im.put( KeyStroke.getKeyStroke( keyStroke ), action.toString() );
+        am.put( action.toString(), action );
+    }
+
     void setClipboardContents( String aString )
     {
         StringSelection stringSelection = new StringSelection( aString );
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents( stringSelection, oiDisplay );
+        clipboard.setContents( stringSelection, oiDisplayPanel );
     }
 
     CopyAction createCopyAction( String value )
     {
         return new CopyAction( value );
     }
-    
+
     private class CopyAction extends AbstractAction
     {
         private static final long serialVersionUID = 1L;
         private final String value;
-        
+
         public CopyAction(String value)
         {
             super();
