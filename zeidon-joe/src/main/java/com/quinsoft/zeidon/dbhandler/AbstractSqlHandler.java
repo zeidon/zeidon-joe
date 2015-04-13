@@ -2106,8 +2106,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             if ( checkForComma && tables.size() > 0 )
             {
+            	// KJS 04/13/15 - We had put LEFT JOIN in because on a query where "DOES NOT EXIST"
+            	// doesn't work without a left join. But we now realize that we can't ALWAYS use LEFT,
+            	// so taking it out until figure out what to do.
             	if ( activatingWithJoins() )
-                    from.append( " LEFT JOIN\n");
+                    from.append( " JOIN\n");
             	else
                     from.append( ",");
             }
