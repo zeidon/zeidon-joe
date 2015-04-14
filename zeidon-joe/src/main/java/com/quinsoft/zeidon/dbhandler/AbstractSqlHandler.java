@@ -456,7 +456,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 }
 
                 if ( qualEntity.exclude )
-                    throw new ZeidonException( "Entity '%s' has EXCLUDE but has additional qualifcation",
+                    throw new ZeidonException( "Entity '%s' has EXCLUDE but has additional qualification",
                                                qualEntity.entityDef.getName() );
 
                 parenCount += CharSetUtils.count( qualAttrib.oper, "(" );

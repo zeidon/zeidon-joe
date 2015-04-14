@@ -340,7 +340,17 @@ public class QualificationBuilder
      */
     public QualificationBuilder excludeEntity( String entityName )
     {
-        return restricting( entityName ).addAttribQual( "EXCLUDE" );
+        // Save the current entitySpec.  We'll reset current entitySpec to this
+        // after adding the exclude.
+        String currentEntity = qualView.cursor( ENTITYSPEC ).getAttribute( "EntityName" ).getString();
+
+        restricting( entityName ).addAttribQual( "EXCLUDE" );
+
+        // Since there should never be any other qualification for something that is exluded
+        // we'll reset the current entitySpec back to the original.
+        qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", currentEntity );
+
+        return this;
     }
 
     /**
