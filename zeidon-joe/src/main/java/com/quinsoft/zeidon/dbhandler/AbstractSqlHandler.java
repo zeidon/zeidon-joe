@@ -494,7 +494,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     if ( qualAttrib.oper.equals( "EXISTS" ) )
                         qualAttrib.oper = "!=";
                     else
+                    {
                         qualAttrib.oper = "=";
+                        qualEntity.hasDoesNotExist = true;
+                    }
 
                     qualAttrib.attributeDef = qualAttrib.entityDef.getKeys().get( 0 );
                 }
@@ -801,7 +804,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     /**
-     *
+     * Generate the SELECT statement to load entityDef (and, if using joins, its children).
+     * 
      * @param stmt
      * @param view
      * @param entityDef
@@ -828,7 +832,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( qualEntity != null )
                 stmt.appendWhere( "(" );
 
-            // Pass true to indicate that entityDef is the root of this SELECT.
             if ( ! addForeignKeys( stmt, view, entityDef, entityDef ) )
             {
                 task.dblog().trace( "FK was null--skipping load entity for SQL statement:\n%s", stmt.toString() );
@@ -1028,6 +1031,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private void addQualification(SqlStatement stmt, View view, EntityDef entityDef)
     {
         QualEntity qualEntity = qualMap.get( entityDef );
+        
+        /*
+         * If this qualification has a DOES NOT EXIST clause then we need to
+         * use a left join when adding tables.
+         */
+        if ( qualEntity.hasDoesNotExist )
+            stmt.useLeftJoinForQualification = true;
 
         // Go through each of the QualAttrib's looking for tables that are not
         // already part of the select.
@@ -1045,13 +1055,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         if ( stmt.conjunctionNeeded )
-        {
-            stmt.appendWhere( " AND \n" );
-
-            // KJS 09/12/13 - Ran into problems when we had a RESTRICTING with several "OR" operators. The SQL was "... AND xxx OR xxx OR xxx "
-            // as opposed to "... AND (xxx OR xxx OR xxx )".
-            stmt.appendWhere( "(" );
-        }
+            stmt.appendWhere( " AND \n(" );
 
         //===
         //===  At this point, all tables that are needed in the select have
@@ -1119,6 +1123,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
            stmt.appendWhere( ")" );
 
         stmt.conjunctionNeeded = true;
+        stmt.useLeftJoinForQualification = false;
     }
 
     protected abstract int executeLoad(View view, EntityDef entityDef, SqlStatement stmt);
@@ -1708,7 +1713,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         stmt.appendCmd( "DELETE FROM " );
         stmt.appendCmd( relRecord.getRecordName() );
-        //stmt.addTableToFrom( relRecord.getRecordName(), relRecord, false );
         stmt.appendCmd( " WHERE " );
         boolean first = true;
         for ( RelField relField : relRecord.getRelFields() )
@@ -1891,6 +1895,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         private final List<Object> boundValues;
 
+        /**
+         * If true then when adding qualification to the FROM clause use "LEFT JOIN" 
+         * instead of just JOIN.  We use LEFT JOIN for qualification when we have a
+         * "DOES NOT EXIST" statement.
+         */
+        private boolean useLeftJoinForQualification;
+        
         /**
          * List of DataRecords involved in the SQL.  For each DataRecord, the list of DataFields.
          */
@@ -2144,7 +2155,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( checkForComma && tables.size() > 0 )
             {
             	if ( activatingWithJoins() )
-                    from.append( " LEFT JOIN\n");
+            	{
+            	    if ( useLeftJoinForQualification)
+            	        from.append( " LEFT JOIN\n");
+            	    else
+            	        from.append( " JOIN\n");
+            	}
             	else
                     from.append( ",");
             }
@@ -2296,9 +2312,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private boolean                usesChildQualification;
         private boolean                exclude;
         private boolean                childQualIsManyToMany;
+        private boolean                hasDoesNotExist;
         private final Integer          activateLimit;
         private final EntityInstance   qualEntityInstance;
-        private final EntityDef       entityDef;
+        private final EntityDef        entityDef;
         private final List<QualAttrib> qualAttribs;
 
         QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
