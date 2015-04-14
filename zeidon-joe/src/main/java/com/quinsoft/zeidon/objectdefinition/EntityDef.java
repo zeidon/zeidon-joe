@@ -122,7 +122,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private int        persistentAttributeCount;
     private int        workAttributeCount;
     private DataRecord dataRecord;
-    private EntityDef recursiveParentEntityDef = null;
+    private EntityDef  recursiveParentEntityDef = null;
     private int        minCardinality;
     private int        maxcardinality;
     private boolean    hasInitializedAttributes = false;
@@ -131,6 +131,11 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
      * If this entity is a recursive parent then recursiveChild references the child.
      */
     private EntityDef recursiveChild;
+
+    /**
+     * This is true if this EntityDef has a parent that is a Recursive parent.
+     */
+    private boolean recursivePath;
 
     // Flags to help debug OI.
     private boolean    debugIncrementalFlag; // If true, then pop up a message when we change an incremental flag.
@@ -485,6 +490,9 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
             getLazyLoadConfig().setFlag( LazyLoadFlags.HAS_LAZYLOAD_PARENT );
             getLazyLoadConfig().setLazyLoadParent( parentConfig.getLazyLoadParent() );
         }
+
+        if ( parent.derivedPath || parent.isRecursive() || parent.isRecursiveParent() )
+            derivedPath = true;
 
         parent.children.add( this );
     }

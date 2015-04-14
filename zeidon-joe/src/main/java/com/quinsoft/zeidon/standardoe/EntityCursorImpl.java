@@ -604,6 +604,7 @@ class EntityCursorImpl implements EntityCursor
             }
         }
         else
+        if ( ! getEntityDef().isDerivedPath() )
             viewCursor.resetRecursiveParent();
 
         // Check to see if we need to set the parent cursors. Find the highest root cursor that
