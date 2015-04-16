@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>EntityCursor - zeidon-scala 1.2.0-SNAPSHOT API - com.quinsoft.zeidon.scala.EntityCursor</title>
-          <meta name="description" content="EntityCursor - zeidon - scala 1.2.0 - SNAPSHOT API - com.quinsoft.zeidon.scala.EntityCursor" />
-          <meta name="keywords" content="EntityCursor zeidon scala 1.2.0 SNAPSHOT API com.quinsoft.zeidon.scala.EntityCursor" />
+          <title>EntityCursor - zeidon-scala 1.3.0-SNAPSHOT API - com.quinsoft.zeidon.scala.EntityCursor</title>
+          <meta name="description" content="EntityCursor - zeidon - scala 1.3.0 - SNAPSHOT API - com.quinsoft.zeidon.scala.EntityCursor" />
+          <meta name="keywords" content="EntityCursor zeidon scala 1.3.0 SNAPSHOT API com.quinsoft.zeidon.scala.EntityCursor" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,9 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="EntityCursor$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
+        <a href="EntityCursor$.html" title="See companion object"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="com">com</a>.<a href="../../package.html" class="extype" name="com.quinsoft">quinsoft</a>.<a href="../package.html" class="extype" name="com.quinsoft.zeidon">zeidon</a>.<a href="package.html" class="extype" name="com.quinsoft.zeidon.scala">scala</a></p>
-        <h1><a href="EntityCursor$.html" title="Go to companion">EntityCursor</a></h1> <span class="permalink">
+        <h1><a href="EntityCursor$.html" title="See companion object">EntityCursor</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="EntityCursor$.html" title="See companion object">object EntityCursor</a>
+            | <a href="package.html" class="extype" name="com.quinsoft.zeidon.scala">package scala</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -534,18 +538,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Iterable → GenIterable → Traversable → GenTraversable → GenericTraversableTemplate</dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.AbstractEntity#copyAttributes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="copyAttributes():com.quinsoft.zeidon.SetMatchingFlagsBuilder"></a>
-      <a id="copyAttributes():SetMatchingFlagsBuilder"></a>
+      <a id="copyAttributes():com.quinsoft.zeidon.CopyAttributesBuilder"></a>
+      <a id="copyAttributes():CopyAttributesBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">copyAttributes</span><span class="params">()</span><span class="result">: <span class="extype" name="com.quinsoft.zeidon.SetMatchingFlagsBuilder">SetMatchingFlagsBuilder</span></span>
+        <span class="name">copyAttributes</span><span class="params">()</span><span class="result">: <span class="extype" name="com.quinsoft.zeidon.CopyAttributesBuilder">CopyAttributesBuilder</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@copyAttributes():com.quinsoft.zeidon.SetMatchingFlagsBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@copyAttributes():com.quinsoft.zeidon.CopyAttributesBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -641,6 +645,42 @@ then the new child entity will be included from 'source' instead of created.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#count" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="count(predicate:=&gt;Boolean):Int"></a>
+      <a id="count(⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">count</span><span class="params">(<span name="predicate">predicate: ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@count(predicate:=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the number of twins that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of twins that match a predicate.</p><p>Note: the cursor should be considered undefined after this call.
+</p></div></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#count" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="count(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int"></a>
+      <a id="count((AbstractEntity)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">count</span><span class="params">(<span name="predicate">predicate: (<span class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@count(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the number of twins that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of twins that match a predicate.</p><p>Note: the cursor should be considered undefined after this call.
+</p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#count" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="count:Int"></a>
       <a id="count:Int"></a>
@@ -676,42 +716,23 @@ then the new child entity will be included from 'source' instead of created.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="create(position:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.EntityCursor"></a>
-      <a id="create(CursorPosition):EntityCursor"></a>
+      <a id="create(position:com.quinsoft.zeidon.CursorPosition,createFlags:java.util.EnumSet[com.quinsoft.zeidon.CreateEntityFlags]):com.quinsoft.zeidon.scala.EntityCursor"></a>
+      <a id="create(CursorPosition,EnumSet[CreateEntityFlags]):EntityCursor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="params">(<span name="position">position: <span class="extype" name="com.quinsoft.zeidon.CursorPosition">CursorPosition</span> = <span class="symbol"><span class="name"><a href="../../../package.html">CursorPosition.NEXT</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.EntityCursor">EntityCursor</a></span>
+        <span class="name">create</span><span class="params">(<span name="position">position: <span class="extype" name="com.quinsoft.zeidon.CursorPosition">CursorPosition</span> = <span class="symbol"><span class="name"><a href="../../../package.html">CursorPosition.NEXT</a></span></span></span>, <span name="createFlags">createFlags: <span class="extype" name="java.util.EnumSet">EnumSet</span>[<span class="extype" name="com.quinsoft.zeidon.CreateEntityFlags">CreateEntityFlags</span>] = <span class="symbol"><span class="name"><a href="../../../package.html">CreateEntityFlags.DEFAULT</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.EntityCursor">EntityCursor</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@create(position:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.EntityCursor" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@create(position:com.quinsoft.zeidon.CursorPosition,createFlags:java.util.EnumSet[com.quinsoft.zeidon.CreateEntityFlags]):com.quinsoft.zeidon.scala.EntityCursor" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Creates a new entity instance.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new entity instance.</p><p>Creates a new entity instance.  The position of the new instance is determined
 by CursorPosition.
-</p></div></div>
-    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="create:com.quinsoft.zeidon.scala.EntityCursor"></a>
-      <a id="create:EntityCursor"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">create</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.EntityCursor">EntityCursor</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@create:com.quinsoft.zeidon.scala.EntityCursor" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Creates a new entity instance.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new entity instance.</p><p>Creates a new entity instance that is positioned after the currently selected
-entity instance.
 </p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="delete(reposition:com.quinsoft.zeidon.CursorPosition):com.quinsoft.zeidon.scala.CursorResult"></a>
@@ -729,7 +750,47 @@ entity instance.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Deletes the Entity Instance refered to by this cursor.</p>
+      <p class="shortcomment cmt">Deletes the Entity Instance referred to by this cursor.</p>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#deleteAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="deleteAll(predicate:=&gt;Boolean):Int"></a>
+      <a id="deleteAll(⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteAll</span><span class="params">(<span name="predicate">predicate: ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@deleteAll(predicate:=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Delete all entities under the parent that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Delete all entities under the parent that match a predicate.  This predicate takes no
+arguments</p><p>Example:  This will deleted all Staff entities with a Status = &quot;A&quot;</p><p>     mUser.Staff.deleteAll( mUser.Staff.Status == &quot;A&quot; &amp;&amp; mUser.Staff.Type == &quot;B&quot; )</p><p>Note: the cursor should be considered undefined after this call.
+</p></div><dl class="paramcmts block"><dt class="param">predicate</dt><dd class="cmt"><p>a boolean predicate used to determine which entities will be deleted.</p></dd><dt>returns</dt><dd class="cmt"><p>the number of entities deleted.
+</p></dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#deleteAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="deleteAll(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int"></a>
+      <a id="deleteAll((AbstractEntity)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteAll</span><span class="params">(<span name="predicate">predicate: (<span class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@deleteAll(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Delete all entities under the parent that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Delete all entities under the parent that match a predicate.  If no predicate is supplied
+then all entities will be deleted.</p><p>Example:  This will deleted all Staff entities with a Status = &quot;A&quot;</p><p>     mUser.Staff.deleteAll( _.Status == &quot;A&quot; )</p><p>Note: the cursor should be considered undefined after this call.
+</p></div><dl class="paramcmts block"><dt class="param">predicate</dt><dd class="cmt"><p>a boolean predicate used to determine which entities will be deleted.</p></dd><dt>returns</dt><dd class="cmt"><p>the number of entities deleted.
+</p></dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#directChildren" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="directChildren:com.quinsoft.zeidon.scala.EntityInstanceIterator"></a>
       <a id="directChildren:EntityInstanceIterator"></a>
@@ -785,6 +846,46 @@ being deleted.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#dropAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dropAll(predicate:=&gt;Boolean):Int"></a>
+      <a id="dropAll(⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropAll</span><span class="params">(<span name="predicate">predicate: ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@dropAll(predicate:=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Drop all entities under the parent that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Drop all entities under the parent that match a predicate.  This predicate takes
+no arguments.</p><p>Example:  This will drop all Staff entities with a Status = &quot;A&quot; and Type = &quot;B&quot;.</p><p>     mUser.Staff.dropAll( mUser.Staff.Status == &quot;A&quot; &amp;&amp; mUser.Staff.Type == &quot;B&quot; )</p><p>Note: the cursor should be considered undefined after this call.
+</p></div><dl class="paramcmts block"><dt class="param">predicate</dt><dd class="cmt"><p>a boolean predicate used to determine which entities will be dropped.</p></dd><dt>returns</dt><dd class="cmt"><p>the number of entities dropped.
+</p></dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#dropAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dropAll(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int"></a>
+      <a id="dropAll((AbstractEntity)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropAll</span><span class="params">(<span name="predicate">predicate: (<span class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@dropAll(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Drop all entities under the parent that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Drop all entities under the parent that match a predicate.  If no predicate is supplied
+then all entities will be dropped.</p><p>Example:  This will drop all Staff entities with a Status = &quot;A&quot;</p><p>     mUser.Staff.dropAll( _.Status == &quot;A&quot; )</p><p>Note: the cursor should be considered undefined after this call.
+</p></div><dl class="paramcmts block"><dt class="param">predicate</dt><dd class="cmt"><p>a boolean predicate used to determine which entities will be dropped.</p></dd><dt>returns</dt><dd class="cmt"><p>the number of entities dropped.
+</p></dd></dl></div>
     </li><li name="scala.collection.IterableLike#dropRight" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dropRight(n:Int):Repr"></a>
       <a id="dropRight(Int):Iterable[EntityInstance]"></a>
@@ -904,6 +1005,46 @@ being deleted.
       </a>
     </span>
       <p class="shortcomment cmt">Excludes the Entity Instance refered to by this cursor.</p>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#excludeAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="excludeAll(predicate:=&gt;Boolean):Int"></a>
+      <a id="excludeAll(⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">excludeAll</span><span class="params">(<span name="predicate">predicate: ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@excludeAll(predicate:=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Exclude all entities under the parent that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Exclude all entities under the parent that match a predicate.  This predicate takes no
+arguments.</p><p>Example:  This will exclude all Staff entities with a Status = &quot;A&quot; and Type = &quot;B&quot;</p><p>     mUser.Staff.deleteAll( mUser.Staff.Status == &quot;A&quot; &amp;&amp; mUser.Staff.Type == &quot;B&quot; )</p><p>Note: the cursor should be considered undefined after this call.
+</p></div><dl class="paramcmts block"><dt class="param">predicate</dt><dd class="cmt"><p>a boolean predicate used to determine which entities will be excluded.</p></dd><dt>returns</dt><dd class="cmt"><p>the number of entities excluded.
+</p></dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.EntityCursor#excludeAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="excludeAll(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int"></a>
+      <a id="excludeAll((AbstractEntity)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">excludeAll</span><span class="params">(<span name="predicate">predicate: (<span class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@excludeAll(predicate:com.quinsoft.zeidon.scala.AbstractEntity=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Exclude all entities under the parent that match a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Exclude all entities under the parent that match a predicate.  If no predicate is supplied
+then all entities will be exclude.</p><p>Example:  This will exclude all Staff entities with a Status = &quot;A&quot;</p><p>     mUser.Staff.deleteAll( _.Status == &quot;A&quot; )</p><p>Note: the cursor should be considered undefined after this call.
+</p></div><dl class="paramcmts block"><dt class="param">predicate</dt><dd class="cmt"><p>a boolean predicate used to determine which entities will be excluded.</p></dd><dt>returns</dt><dd class="cmt"><p>the number of entities excluded.
+</p></dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exists:Boolean"></a>
       <a id="exists:Boolean"></a>
@@ -2249,38 +2390,38 @@ entity will be after the current entity.
 is true.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the cursor to the first entity instance for which the specified predicate
 is true.</p><p>Following example sets the cursor to point to the first entity with the
 attribute FirstName equal to &quot;Fred&quot;:</p><pre><span class="kw">val</span> result = myView.SomeEntity.setFirst( myView.SomeEntity.FirstName == <span class="lit">"Fred"</span> )</pre><p>The return value can be automatically coerced to a boolean:</p><pre><span class="kw">if</span> ( myView.SomeEntity.setFirst( myView.SomeEntity.FirstName == <span class="lit">"Fred"</span> ) ) {
-<span class="cmt">// Found 'Fred'.  Do something here.</span>
+   <span class="cmt">// Found 'Fred'.  Do something here.</span>
 }</pre></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setFirst" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setFirst:com.quinsoft.zeidon.scala.CursorResult"></a>
-      <a id="setFirst:CursorResult"></a>
+      <a id="setFirst():com.quinsoft.zeidon.scala.CursorResult"></a>
+      <a id="setFirst():CursorResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setFirst</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+        <span class="name">setFirst</span><span class="params">()</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setFirst:com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setFirst():com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets the cursor to point to the first twin.</p>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setLast" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setLast:com.quinsoft.zeidon.scala.CursorResult"></a>
-      <a id="setLast:CursorResult"></a>
+      <a id="setLast():com.quinsoft.zeidon.scala.CursorResult"></a>
+      <a id="setLast():CursorResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setLast</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+        <span class="name">setLast</span><span class="params">()</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setLast:com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setLast():com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -2326,35 +2467,35 @@ If more than one attribute has the same min value then the first attribute is us
 Returns the AttributeInstance.</p><p>Example: sets the cursor to the youngest child:</p><p>     view.Child.setMin( _.Age )
 </p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setNext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setNext:com.quinsoft.zeidon.scala.CursorResult"></a>
-      <a id="setNext:CursorResult"></a>
+      <a id="setNext():com.quinsoft.zeidon.scala.CursorResult"></a>
+      <a id="setNext():CursorResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setNext</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+        <span class="name">setNext</span><span class="params">()</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setNext:com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setNext():com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets the cursor to point to the next twin.</p>
     </li><li name="com.quinsoft.zeidon.scala.EntityCursor#setPrev" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setPrev:com.quinsoft.zeidon.scala.CursorResult"></a>
-      <a id="setPrev:CursorResult"></a>
+      <a id="setPrev():com.quinsoft.zeidon.scala.CursorResult"></a>
+      <a id="setPrev():CursorResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setPrev</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
+        <span class="name">setPrev</span><span class="params">()</span><span class="result">: <a href="CursorResult.html" class="extype" name="com.quinsoft.zeidon.scala.CursorResult">CursorResult</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setPrev:com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.EntityCursor@setPrev():com.quinsoft.zeidon.scala.CursorResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
