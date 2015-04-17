@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
@@ -195,6 +196,10 @@ public class ViewListTable extends JTable
             add( item );
             if ( v.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
                 item.setEnabled( false );
+            
+            item = new JMenuItem( "Open in new window" );
+            item.addActionListener( new OpenInNewWindowAction( v ) );
+            add( item );
         }
     }
 
@@ -243,6 +248,46 @@ public class ViewListTable extends JTable
         {
             env.dropViewName( view );
             refresh( view.task );
+        }
+    }
+
+    private class OpenInNewWindowAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private BrowserView view;
+
+        public OpenInNewWindowAction( BrowserView v )
+        {
+            view = v;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent e )
+        {
+            FrameBrowserEnvironment newEnv = new FrameBrowserEnvironment( env.getOe(), null );
+            final JFrame mainFrame = new JFrame();
+            mainFrame.setTitle( "Zeidon Object Browser" );
+            mainFrame.setName( "Object Browser" );
+            mainFrame.getContentPane().add( new MainPanel( newEnv ) );
+
+            
+//            BrowserEventHandler listener = new BrowserEventHandler();
+//            mainFrame.addWindowStateListener( listener );
+//            mainFrame.addWindowListener( listener );
+            mainFrame.pack();
+
+            env.restoreEnvironment();
+
+            // Display the window.
+            mainFrame.setVisible( true );
+            
+            // Use invokeLater otherwise toFront() won't always work.
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    mainFrame.toFront();
+                }
+            });
         }
     }
 
