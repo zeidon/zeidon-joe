@@ -8660,7 +8660,8 @@ public abstract class VmlOperation
       if ( szFileName != null && szFileName.isEmpty() == false )
       {
          szDir = "./pdf/";
-         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false )
+         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
+        	  szFileName.startsWith( "./" ) == false )
          {
             szFileName = szDir + szFileName;
          }
