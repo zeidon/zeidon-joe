@@ -580,24 +580,41 @@ class EntityCursorImpl implements EntityCursor
         // Default return code to setting the cursor.
         CursorResult cursorResult = CursorResult.SET;
 
-        if ( recursive )
+        if ( recursive || getEntityDef().isRecursivePath() )
         {
             // If we get here then we're setting a subobject cursor.  We have a couple of situations to handle.
-            // To illustrate, assume the following recursive subobject where A is the recursive parent of B:
-            //   A
-            //   |   -- There could be other entities between A and B.
-            //   B
+            // To illustrate, assume the following recursive subobject where A is the recursive parent of A'.
+            //     A
+            //     |   
+            //     B
+            //    / \
+            //   A'  C
+            //   |
+            //   D
 
             EntityDef targetEntityDef = newInstance.getEntityDef();
-            EntityDef recursiveParent = targetEntityDef.getRecursiveParent();
+            EntityDef recursiveParent;
 
-            // We're setting the parent cursor (A) to a subobject child (B).
+            if ( ! recursive )
+            {
+                // If we get here then we're not setting A or A' but one of the other
+                // cursors (B, C or D above).
+                
+                // Find the recursive parent (A).
+                recursiveParent = getEntityDef();
+                while ( recursiveParent.getRecursiveChild() == null )
+                    recursiveParent = recursiveParent.getParent();
+            }
+            else
+                recursiveParent = targetEntityDef.getRecursiveParent();
+
+            // We're setting the parent cursor (A) to a subobject child (A').
             if ( getEntityDef() == recursiveParent )
             {
+                // Set the recursive structure.  We'll set the cursors later on.
                 viewCursor.setRecursiveParent( newInstance, targetEntityDef, null );
             }
             else
-            // We're setting the B cursor to some subobject child  of B.
             {
                 assert getEntityDef() == targetEntityDef;
 
@@ -615,7 +632,6 @@ class EntityCursorImpl implements EntityCursor
             }
         }
         else
-        if ( ! getEntityDef().isRecursivePath() )
             viewCursor.resetRecursiveParent();
 
         // Check to see if we need to set the parent cursors. Find the highest root cursor that
