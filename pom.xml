@@ -7,7 +7,7 @@
     <groupId>com.quinsoft.zeidon</groupId>
     <artifactId>zeidon</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0</version>
 
     <url>https://github.com/DeegC/zeidon-joe</url>
     <licenses>
