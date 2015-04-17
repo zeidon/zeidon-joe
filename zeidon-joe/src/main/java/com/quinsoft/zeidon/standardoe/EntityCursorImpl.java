@@ -541,6 +541,19 @@ class EntityCursorImpl implements EntityCursor
         throw new ZeidonException( "Entity Instance %s is not a valid entity for this cursor.", sourceEntityDef );
     }
 
+    private EntityInstanceImpl findMatchingLinkedInstance( EntityInstanceImpl targetInstance )
+    {
+        // The targetInstance belongs to a different OI.  Let's see if we can find a linked
+        // instance that belongs to the current OI.
+        for ( EntityInstanceImpl ei : targetInstance.getLinkedInstances() )
+        {
+            if ( ei.getObjectInstance() == getObjectInstance() && ei.getEntityDef() == targetInstance.getEntityDef() )
+                return ei;
+        }
+
+        // If we get here we didn't find one.
+        throw new ZeidonException( "Attempting to set a cursor to an Entity Instance that is from a different OI" );
+    }
 
     /**
      * Set the cursor to point to targetInstance and set all child cursors to point to
@@ -553,16 +566,14 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setCursor( EntityInstance targetInstance )
     {
-        /*
-         * We used to have an assert to validate that newInstance can't be null.  Asserts aren't
-         * run in production so I've changed it to a normal check.  The code a few lines beneath
-         * this check would execute some logic if newInstance was null so we had some contradictory
-         * code.  This may need to be reverted.
-         */
         if ( targetInstance == null )
             throw new ZeidonException("Cannot set a cursor to null.");
 
+        // Convert the targetInstance to an EntityInstanceImpl
         EntityInstanceImpl newInstance = (EntityInstanceImpl) targetInstance.getEntityInstance();
+
+        if ( newInstance.getObjectInstance() != getObjectInstance() )
+            newInstance = findMatchingLinkedInstance( newInstance );
 
         boolean recursive = validateEntityForCursor( newInstance );
 
@@ -604,7 +615,7 @@ class EntityCursorImpl implements EntityCursor
             }
         }
         else
-        if ( ! getEntityDef().isDerivedPath() )
+        if ( ! getEntityDef().isRecursivePath() )
             viewCursor.resetRecursiveParent();
 
         // Check to see if we need to set the parent cursors. Find the highest root cursor that
