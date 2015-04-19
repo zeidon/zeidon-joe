@@ -2604,6 +2604,93 @@ public class TestZencas
 	         return 0;
 		}
 
+
+		public int
+		testExcludeIncludeSaveError( View     ViewToWindow )
+		{
+			zVIEW    wConList = new zVIEW( );
+			zVIEW    mClass = new zVIEW( );
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int i=0;
+			int iConListID=0;
+			int RESULT=0;
+
+			// This test tries to insert null values into the db for example:
+			//INSERT INTO MM_PERSON_FOR_CONTACTLIST ( FK_ID_CONTACTLIST, FK_ID_PERSON  ) VALUES ( null, 122337 )
+
+			// Currently this isn't giving an error, I assume I need to add an index to the database but I assume
+			// there should be a value for FK_ID_CONTACTLIST.
+
+		    RESULT = ActivateEmptyObjectInstance( wConList, "wConList", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wConList, "ContactList", zPOS_AFTER );
+
+	         o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, 31967 );
+
+	         RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
+	         DropView( vTempViewVar_0 );
+
+	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zSINGLE );
+	         DropView( vTempViewVar_0 );
+
+	         wConList.cursor("ContactList").setAttribute("ListName", "KellysTest");
+	         wConList.cursor("ContactList").setAttribute("Type", "W");
+	         wConList.cursor("ContactList").setAttribute("Note", "This is a test");
+	         //:INCLUDE wConListT.User FROM mUser.User
+	         RESULT = IncludeSubobjectFromSubobject( wConList, "User", mUser, "User", zPOS_AFTER );
+	         //RESULT = IncludeSubobjectFromSubobject( wConList, "AdministrativeDivision", mUser, "CurrentAdministrativeDivision", zPOS_AFTER );
+
+
+	         RESULT = mClass.cursor( "Enrollment" ).setFirst().toInt();
+	         while ( RESULT > zCURSOR_UNCHANGED )
+	         {
+	            //:IF lPersDrL.Person.wSelectedFlag = "Y"
+	            if ( CheckExistenceOfEntity( mClass, "EnrolledStudentPerson" ) == 0 && i < 10 )
+	            {
+	            	i = i + 1;
+	               //:INCLUDE wConListT.Person FROM lPersDrL.Person
+	               RESULT = IncludeSubobjectFromSubobject( wConList, "Person", mClass, "EnrolledStudentPerson", zPOS_AFTER );
+	            }
+
+	            RESULT = mClass.cursor( "Enrollment" ).setNextContinue().toInt();;
+	         }
+
+//	         RESULT = CommitObjectInstance( wConList );
+	         iConListID = wConList.cursor("ContactList").getIntegerFromAttribute("ID");
+	         //:DropObjectInstance( wConListT )
+	         DropObjectInstance( wConList );
+
+	         // Now delete some of the person entries in contact list.
+	         o_fnLocalBuildwConList( ViewToWindow, vTempViewVar_0, iConListID );
+	         RESULT = ActivateObjectInstance( wConList, "wConList", ViewToWindow, vTempViewVar_0, zSINGLE );
+	         DropView( vTempViewVar_0 );
+
+
+	         RESULT = wConList.cursor( "Person" ).setFirst().toInt();
+	         i = 0;
+	         while ( RESULT > zCURSOR_UNCHANGED )
+	         {
+	            //:IF wConList.Person.wSelectedFlag = "Y"
+	            if ( i < 4 )
+	            {
+	            	i = i + 1;
+	                  RESULT = ExcludeEntity( wConList, "Person", zREPOS_NONE );
+	            }
+
+	            RESULT = wConList.cursor( "Person" ).setNextContinue().toInt();;
+	         }
+	         RESULT = CommitObjectInstance( wConList );
+
+	         // Now delete the contact list.
+	         RESULT = DeleteEntity( wConList, "ContactList", zPOS_NEXT );
+	         RESULT = CommitObjectInstance( wConList );
+
+	         DropObjectInstance( wConList );
+
+	         return 0;
+		}
+		
 		public int
 		testImportPorError( View     ViewToWindow )
 		{
