@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.objectbrowser;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import com.quinsoft.zeidon.ObjectEngine;
@@ -65,7 +65,7 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     }
 
     @Override
-    public void restoreEnvironment( JComponent component )
+    public void restoreEnvironment( Component component )
     {
         restore( component, BROWSER_SESSION_FILE );
     }

@@ -110,11 +110,10 @@ public class ViewListTable extends JTable
     @Override
     public void valueChanged( ListSelectionEvent e )
     {
-        System.out.println( "Selecting changed " + e.getValueIsAdjusting() );
         if ( ! e.getValueIsAdjusting() )
         {
             int idx = getSelectedRow();
-            if ( idx < env.getCurrentViewList().size() )
+            if ( idx >= 0 && idx < env.getCurrentViewList().size() )
             {
                 final BrowserView v = env.getCurrentViewList().get( idx );
                 env.viewSelected( v );
@@ -196,7 +195,7 @@ public class ViewListTable extends JTable
             add( item );
             if ( v.viewName.equals( BrowserEnvironment.UNNAMED_VIEW ) )
                 item.setEnabled( false );
-            
+
             item = new JMenuItem( "Open in new window" );
             item.addActionListener( new OpenInNewWindowAction( v ) );
             add( item );
@@ -270,17 +269,17 @@ public class ViewListTable extends JTable
             mainFrame.setName( "Object Browser" );
             mainFrame.getContentPane().add( new MainPanel( newEnv ) );
 
-            
+
 //            BrowserEventHandler listener = new BrowserEventHandler();
 //            mainFrame.addWindowStateListener( listener );
 //            mainFrame.addWindowListener( listener );
             mainFrame.pack();
 
-            env.restoreEnvironment();
+            env.restoreEnvironment( mainFrame.getContentPane() );
 
             // Display the window.
             mainFrame.setVisible( true );
-            
+
             // Use invokeLater otherwise toFront() won't always work.
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override

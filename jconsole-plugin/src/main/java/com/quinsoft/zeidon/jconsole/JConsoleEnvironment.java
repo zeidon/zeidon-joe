@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.jconsole;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +32,6 @@ import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.apache.commons.lang3.StringUtils;
@@ -225,7 +225,7 @@ public class JConsoleEnvironment extends BrowserEnvironment
     }
 
     @Override
-    public void restoreEnvironment( JComponent component )
+    public void restoreEnvironment( Component component )
     {
         restore( component, BROWSER_SESSION_FILE );
     }

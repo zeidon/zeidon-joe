@@ -279,7 +279,7 @@ public abstract class BrowserEnvironment
     }
 
     public abstract void restoreEnvironment();
-    public abstract void restoreEnvironment( JComponent component );
+    public abstract void restoreEnvironment( Component component );
     public abstract void saveEnvironment();
 
     public List<BrowserView> getCurrentViewList()
