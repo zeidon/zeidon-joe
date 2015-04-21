@@ -2502,41 +2502,8 @@ omSAProf_dBillDaysTerm( View     mSAProf,
       case zDERIVED_GET :
          //:nDays = 0
          nDays = 0;
-         //:IF mSAProf.BillingPeriod EXISTS  
-         lTempInteger_0 = CheckExistenceOfEntity( mSAProf, "BillingPeriod" );
-         if ( lTempInteger_0 == 0 )
-         { 
-            //:IF mSAProf.Student.DateOfDeparture != "" 
-            if ( CompareAttributeToString( mSAProf, "Student", "DateOfDeparture", "" ) != 0 )
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingPeriod", "BeginDate",
-               //:                                 mSAProf, "Student", "DateOfDeparture" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingPeriod", "BeginDate", mSAProf, "Student", "DateOfDeparture" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-               //:ELSE 
-            } 
-            else
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingPeriod", "BeginDate",
-               //:                                 mSAProf, "BillingPeriod", "EndDate" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingPeriod", "BeginDate", mSAProf, "BillingPeriod", "EndDate" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-            } 
 
             //:END
-         } 
 
          //:END
          //:nDays = nDays * -1
@@ -8025,17 +7992,6 @@ omSAProf_ObjectConstraints( View     mSAProf,
 
             //:END
             //:IF lTermLST.CollegeTerm.Semester = "01"
-            if ( CompareAttributeToString( lTermLST, "CollegeTerm", "Semester", "01" ) == 0 )
-            { 
-               //:OrderEntityForView( mSAProf, "Enrolled", "Class.ClassStartDate A" )
-               OrderEntityForView( mSAProf, "Enrolled", "Class.ClassStartDate A" );
-               //:ELSE
-            } 
-            else
-            { 
-               //:OrderEntityForView( mSAProf, "Enrolled", "Class.ClassStartDate D" )
-               OrderEntityForView( mSAProf, "Enrolled", "Class.ClassStartDate D" );
-            } 
 
             //:END
             //:SET CURSOR FIRST mSAProf.Enrolled
