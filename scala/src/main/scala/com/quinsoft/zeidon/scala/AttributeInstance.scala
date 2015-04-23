@@ -165,8 +165,6 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
         case _ => jattributeInstance.compare(other)
     }
 
-    override def equals(other: Any) = compare( other ) == 0
-
     /**
      * Returns the attribute value as a string.  If the context is not specified then
      * the default context will be used.
@@ -215,4 +213,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * Converts the attribute value to a double using domain processing.
      */
     def toDouble: Double = { jattributeInstance.getDouble }
+    
+    override def hashCode() = jattributeInstance.hashCode()
+    override def equals( obj: Any ) = compare( obj ) == 0 //jattributeInstance.equals( obj ) 
 }

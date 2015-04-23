@@ -371,4 +371,19 @@ class AttributeInstanceImpl implements AttributeInstance
     {
         return isNull() || compare( "" ) == 0;
     }
+
+    @Override
+    public int hashCode()
+    {
+        if ( isNull() )
+            return Integer.MIN_VALUE;
+
+        return attributeValue.getInternalValue().hashCode();
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        return compare( obj ) == 0;
+    }
 }
