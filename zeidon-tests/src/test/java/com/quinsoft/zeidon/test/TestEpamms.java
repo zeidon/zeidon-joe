@@ -241,7 +241,7 @@ public class TestEpamms
 
       // RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, 256 /*zMULTIPLE*/ );
          View view = vSubtask.activateEmptyObjectInstance( "KZDBHQUA", task.getSystemTask().getApplication() );
-      //  CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+      // CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
          view.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
       // SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "SubregPhysicalLabelDef" );
          view.cursor( "EntitySpec" ).getAttribute( "EntityName" ).setValue( "SubregPhysicalLabelDef" );
@@ -255,6 +255,7 @@ public class TestEpamms
          view.cursor( "QualAttrib" ).getAttribute( "Value" ).setValue( lTempInteger_0 );
       // SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
          view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( "=" );
+         vQualObject.setView( view );
          return( 0 );
       } 
 
@@ -275,16 +276,17 @@ public class TestEpamms
          o_fnLocalBuildQual_12( view, vTempViewVar_0, lTempInteger_0 );
       // ActivateObjectInstance( mSPLDef, "mSPLDef", view, vTempViewVar_0, zSINGLE );
          View mSPLDef = view.activateObjectInstance( "mSPLDef", vTempViewVar_0.getView(), ActivateFlags.SINGLE );
-         DropView( vTempViewVar_0 );
+      // DropView( vTempViewVar_0 );
          //:NAME VIEW mSPLDef "mSPLDef"
          SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
          mSPLDef.logObjectInstance();
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
          CursorResult cr = ec.setFirstWithinOi( "ID", "622" );
+         Assert.assertEquals( "LLD_Block 622 exists but is not found: ", CursorResult.SET, cr );
          ec = mSPLDef.getCursor( "LLD_SpecialSectionAttrBlock" );
          cr = ec.setFirst();
          Assert.assertEquals( "LLD_SpecialSectionAttrBlock exists but is not found: ", CursorResult.SET, cr );
-      }
+     }
 
       private void CheckAddKeywordEntry( View  mSPLDefBlock, String   szKeywordName )
       {

@@ -17,49 +17,40 @@ aAPP_PACKAGE com.quinsoft.zencas
 
 eAPPLICATION 2
 aAPP_NAME  SWAU
-aAPP_DLL   ./SWAU
-aAPP_ADOBIN ./SWAU
-aAPP_LOCAL ./SWAU
-aAPP_SHARED ./SWAU
-aAPP_QLPLR ./SWAU
-aAPP_SOURCE ./SWAU
+aAPP_DLL   testdata/SWAU
+aAPP_ADOBIN testdata/SWAU
+aAPP_LOCAL testdata/SWAU
+aAPP_SHARED testdata/SWAU
+aAPP_QLPLR testdata/SWAU
+aAPP_SOURCE testdata/SWAU
 aAPP_PACKAGE com.quinsoft.zencas
 
 eAPPLICATION 2
-aAPP_NAME  NOA
-aAPP_DLL   ./NOA
-aAPP_ADOBIN ./NOA
-aAPP_LOCAL ./NOA
-aAPP_SHARED ./NOA
-aAPP_QLPLR ./NOA
-aAPP_SOURCE ./NOA
-
-eAPPLICATION 2
 aAPP_NAME  Cheetah
-aAPP_DLL   ./Cheetah
-aAPP_ADOBIN ./Cheetah
-aAPP_LOCAL ./Cheetah
-aAPP_SHARED ./Cheetah
-aAPP_QLPLR ./Cheetah
-aAPP_SOURCE ./Cheetah
+aAPP_DLL   testdata/Cheetah
+aAPP_ADOBIN testdata/Cheetah
+aAPP_LOCAL testdata/Cheetah
+aAPP_SHARED testdata/Cheetah
+aAPP_QLPLR testdata/Cheetah
+aAPP_SOURCE testdata/Cheetah
 
 eAPPLICATION 2
 aAPP_NAME  ePamms
-aAPP_DLL   ./ePamms
-aAPP_ADOBIN ./ePamms
-aAPP_LOCAL ./ePamms
-aAPP_SHARED ./ePamms
-aAPP_QLPLR ./ePamms
-aAPP_SOURCE ./ePamms
+aAPP_DLL   testdata/ePamms
+aAPP_ADOBIN testdata/ePamms
+aAPP_LOCAL testdata/ePamms
+aAPP_SHARED testdata/ePamms
+aAPP_QLPLR testdata/ePamms
+aAPP_SOURCE testdata/ePamms
 aAPP_PACKAGE com.arksoft.epamms
 
 eAPPLICATION 2
 aAPP_NAME  ePammsDon
-aAPP_DLL   ./ePammsDon
-aAPP_ADOBIN ./ePammsDon
-aAPP_LOCAL ./ePammsDon
-aAPP_SHARED ./ePammsDon
-aAPP_QLPLR ./ePammsDon
-aAPP_SOURCE ./ePammsDon
+aAPP_DLL   testdata/ePammsDon
+aAPP_ADOBIN testdata/ePammsDon
+aAPP_LOCAL testdata/ePammsDon
+aAPP_SHARED testdata/ePammsDon
+aAPP_QLPLR testdata/ePammsDon
+aAPP_SOURCE testdata/ePammsDon
 aAPP_PACKAGE com.quinsoft.epamms
 
