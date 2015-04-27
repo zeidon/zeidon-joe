@@ -164,7 +164,7 @@ public class QualificationBuilder
     public QualificationBuilder loadFromSerializedString( String qualString )
     {
         LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
-        qualView = task.deserializeOi().setLodDef( qualLodDef ).fromString( qualString ).activateFirst();
+        qualView = task.deserializeOi().setLodDef( qualLodDef ).asJson().fromString( qualString ).activateFirst();
         activateOptions.setQualificationObject( qualView );
         return this;
     }

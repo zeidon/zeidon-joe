@@ -20,6 +20,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
@@ -31,8 +32,10 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -118,19 +121,35 @@ public class JoeUtils
             //
             int count = 0;
             ZeidonInputStream stream = null;
+            URL prevUrl = null;
+            String md5hash = null;
             for ( Enumeration<URL> url = classLoader.getResources( resourceName ); url.hasMoreElements(); )
             {
                 URL element = url.nextElement();
                 if ( task != null )
                     task.log().debug( "Found resource at " + element );
                 else
-                    LOG.debug( "Found resource at " + element );
+                    LOG.debug( "--Found resource at " + element );
 
                 count++;
                 if ( count > 1 )
-                    throw new ZeidonException( "Found multiple resources that match resourceName %s", resourceName );
+                {
+                    // We'll allow duplicate resources if they have the same MD5 hash.
+                    if ( md5hash == null )
+                        md5hash = computeHash( prevUrl );
+
+                    if ( ! md5hash.equals( computeHash( element ) ) )
+                        throw new ZeidonException( "Found multiple different resources that match resourceName %s", resourceName );
+
+                    if ( task != null )
+                        task.log().warn( "Multiple, identical resources found of %s.  This usually means your classpath has duplicates", resourceName );
+                    else
+                        LOG.warn( "Multiple, identical resources found of " + resourceName + " This usually means your classpath has duplicates" );
+
+                }
 
                 stream = ZeidonInputStream.create( element );
+                prevUrl = element;
             }
 
             if ( stream != null )
@@ -171,6 +190,19 @@ public class JoeUtils
         catch (Exception e)
         {
             throw ZeidonException.wrapException( e ).prependFilename( resourceName );
+        }
+    }
+
+    private static String computeHash( URL url ) throws Exception
+    {
+        InputStream stream = url.openStream();
+        try
+        {
+            return DigestUtils.md5Hex( stream );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( stream );
         }
     }
 
