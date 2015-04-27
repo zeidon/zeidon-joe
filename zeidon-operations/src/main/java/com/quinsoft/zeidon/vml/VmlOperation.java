@@ -5329,7 +5329,7 @@ public abstract class VmlOperation
       EntityCursor cursor = view.cursor( entityName );
       if ( cursor.isNull() == false && cursor.checkExistenceOfEntity() == CursorResult.SET )
       {
-         cursor.logEntity( false );
+         cursor.logEntity( true );
       }
       else
       {

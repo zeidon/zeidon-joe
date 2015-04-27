@@ -2632,9 +2632,6 @@
           "Left" : "1",
           "Height" : "10.43",
           "Width" : "13.38",
-          "TextColor" : "#ffffff",
-          "BackgroundColor" : "#ffffff",
-          "BorderColor" : "#ffffff",
           "Depth" : "1",
           "LLD_Block" : [ {
             "ID" : "801",
@@ -2652,9 +2649,6 @@
               "Left" : "8.83",
               "Height" : "3.12",
               "Width" : "2.98",
-              "TextColor" : "#ffffff",
-              "BackgroundColor" : "#ffffff",
-              "BorderColor" : "#ffffff",
               "Depth" : "2"
             } ]
           } ]
