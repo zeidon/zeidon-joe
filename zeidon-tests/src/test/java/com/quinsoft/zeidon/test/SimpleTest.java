@@ -8,8 +8,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
@@ -156,14 +154,15 @@ class SimpleTest
         System.out.println( "CWD = " + System.getProperty("user.DIR") );
         System.out.println( "ZEIDON_HOME = " + System.getenv("ZEIDON_HOME") );
 
-        regex();
-        
 //        String fileDbUrl = "file:json:/tmp/filedb";
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
-//        oe.startBrowser();
+        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
+        View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).loadFile( "/tmp/qual.json" ).activate();
+        int count = mUser.cursor( "User" ).getEntityCount();
+        mUser.logObjectInstance();
 
 //        Task cheetah = oe.createTask(  "Cheetah" );
 //        View fPerson = new QualificationBuilder( cheetah )
@@ -224,25 +223,5 @@ class SimpleTest
                             .activate();
 */
     }
-    
-    // "((\\w*)(\\.))?(\\w*)\\s*(\\s*\\(\\s*(\\w*)\\s*\\)\\s*)?\\s*(\\s*\\>(.*))?"
-    private final static String REGEX = "((\\w*)(\\.))?"                  // Optional entity name--word followed by period.
-                                      + "(\\w*)"                          // Required attribute name.
-                                      + "\\s*"                            // Optional whitespace
-                                      + "(\\s*\\(\\s*(\\w*)\\s*\\)\\s*)?" // Optional context name--word inside parens.
-                                      + "\\s*"                            // Optional whitespace
-                                      + "(\\s*\\>(.*))?";                 // Optional default value--all chars after ">".
-    private final static Pattern FIELD_PATTERN = Pattern.compile( REGEX );
-    
-    static public void regex()
-    {
-        Matcher m = FIELD_PATTERN.matcher( "Entity.AttributeValue ( contextName ) >this is a default" );
-        if ( ! m.matches() )
-            throw new ZeidonException( "Doesn't match" );
-        
-        String entityName = m.group( 2 );
-        String attributeName = m.group( 4 );
-        String contextName = m.group( 6 );
-        String defaultValue = m.group( 8 );
-    }
+
 }

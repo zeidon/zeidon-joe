@@ -156,6 +156,19 @@ public class QualificationBuilder
         return this;
     }
 
+    /**
+     * Loads the qualifcation from a serialized JSON string.
+     * @param qualString
+     * @return
+     */
+    public QualificationBuilder loadFromSerializedString( String qualString )
+    {
+        LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
+        qualView = task.deserializeOi().setLodDef( qualLodDef ).fromString( qualString ).activateFirst();
+        activateOptions.setQualificationObject( qualView );
+        return this;
+    }
+
     public QualificationBuilder singleRoot()
     {
         return setFlag( ActivateFlags.fSINGLE );

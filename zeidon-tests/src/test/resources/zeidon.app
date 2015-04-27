@@ -63,13 +63,3 @@ aAPP_QLPLR ./ePammsDon
 aAPP_SOURCE ./ePammsDon
 aAPP_PACKAGE com.quinsoft.epamms
 
-
-eAPPLICATION 2
-aAPP_NAME  GlobalProps
-aAPP_DLL   /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_ADOBIN /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_LOCAL /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_SHARED /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_QLPLR /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_SOURCE /home/dgc/.wine/drive_c/zeidon/zapp/GlobalProps/bin
-aAPP_PACKAGE com.quinsoft.globprops.scala

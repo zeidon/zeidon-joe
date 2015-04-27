@@ -53,6 +53,7 @@ public class SerializeOi
     private EnumSet<WriteOiFlags> flags = EnumSet.noneOf( WriteOiFlags.class );
     private StreamWriter streamWriter;
     private Map<Long,SelectSet> rootSelectSets;
+    private boolean writeDate = false;
 
     public SerializeOi()
     {
@@ -273,6 +274,12 @@ public class SerializeOi
         return this;
     }
 
+    public SerializeOi writeDate()
+    {
+        setWriteDate( true );
+        return this;
+    }
+    
     public SerializeOi addView( View view, View... views )
     {
         viewList.add( view );
@@ -434,5 +441,15 @@ public class SerializeOi
         }
 
         return this;
+    }
+
+    public boolean isWriteDate()
+    {
+        return writeDate;
+    }
+
+    public void setWriteDate( boolean writeDate )
+    {
+        this.writeDate = writeDate;
     }
 }
