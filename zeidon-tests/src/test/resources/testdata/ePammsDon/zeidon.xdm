@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 03/25/15   09:54:24 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 04/24/15   18:19:37 1.0a2    
 eDomainGroup 1
 aName      ePamms
 
@@ -2529,12 +2529,18 @@ aName      HazardPanel
 aDesc      Panel where additional hazard statements are found
 aDomainType T
 aDataType  L
+aMaxStringLth 4
 aContextRestriction N
 
 eContext   3
 aZKey      3898402
 aName      HazardPanel
 aIsDefault Y
+
+eTableEntry 4
+aZKey      3898408
+aExternalValue None
+aInternalValue 0
 
 eTableEntry 4
 aZKey      3898403
@@ -2560,11 +2566,6 @@ eTableEntry 4
 aZKey      3898407
 aExternalValue Location 5
 aInternalValue 5
-
-eTableEntry 4
-aZKey      3898408
-aExternalValue None
-aInternalValue 0
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2713,9 +2714,6 @@ aName      LLD_SectionType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      120180211
-
-eTableEntry 4
 aZKey      69081348
 aExternalValue Ingredients
 aInternalValue Ingredients
@@ -2783,12 +2781,17 @@ aInternalValue EPA_RegAndEstNbr
 eTableEntry 4
 aZKey      4043314
 aExternalValue Product Name
-aInternalValue Product Name
+aInternalValue ProductName
 
 eTableEntry 4
 aZKey      120180210
 aExternalValue Product Description
-aInternalValue Product Description
+aInternalValue ProductDescription
+
+eTableEntry 4
+aZKey      110006004
+aExternalValue Product Specific
+aInternalValue ProductSpecific
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
