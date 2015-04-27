@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>jasper-reports</artifactId>
-    <name>jasper-reports</name>
+    <name>zeidon-jasper-reports</name>
     <description>Use Zeidon Objects in JasperReports</description>
 
     <properties>
@@ -25,98 +25,13 @@
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>${jasperReport.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.quinsoft.zeidon</groupId>
-            <artifactId>zeidon-tests</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-            <version>${project.parent.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>fop</artifactId>
-                    <groupId>org.apache.xmlgraphics</groupId>
+                    <artifactId>olap4j</artifactId>
+                    <groupId>org.olap4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jasperreports-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile-reports</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <dependencies>
-                    <!--note this must be repeated here to pick up correct 
-                        xml validation -->
-                    <dependency>
-                        <groupId>net.sf.jasperreports</groupId>
-                        <artifactId>jasperreports</artifactId>
-                        <version>${jasperReport.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse 
-                    m2e settings only. It has no influence on the Maven build itself. -->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            jasperreports-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.0-beta-2,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>compile-reports</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>

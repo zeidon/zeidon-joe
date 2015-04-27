@@ -106,6 +106,13 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
     @Override
     public Object getFieldValue( JRField field ) throws JRException
     {
+        Object value = get( field );
+        view.log().info( "Get field %s = %s", field.getName(), value.toString() );
+        return value;
+    }
+
+    private Object get( JRField field ) throws JRException
+    {
         String fieldName = field.getName();
         Matcher m = FIELD_PATTERN.matcher( fieldName );
         if ( ! m.matches() )
@@ -147,7 +154,11 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
             return view.cursor( topEntity ).setFirstWithinOi().isSet();
         }
 
-        return view.cursor( topEntity ).setNextContinue().isSet();
+        boolean rc = view.cursor( topEntity ).setNextContinue().isSet();
+        if ( rc )
+            view.log().info( "next() found %s", view.cursor( topEntity ).getEntityInstance() );
+
+        return rc;
     }
 
     public static net.sf.jasperreports.engine.JRDataSource getDataSource()

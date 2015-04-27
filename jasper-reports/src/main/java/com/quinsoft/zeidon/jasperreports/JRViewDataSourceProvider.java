@@ -38,6 +38,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.standardoe.DefaultJavaOeConfiguration;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
@@ -46,13 +47,15 @@ import com.quinsoft.zeidon.utils.QualificationBuilder;
  */
 public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
 {
+    private ObjectEngine objectEngine = null;
+
     public JRViewDataSourceProvider()
     {
     }
 
     /**
      * Gets the View for this datasource provider.
-     * 
+     *
      * @return
      */
     protected View getReportView( JasperReport report )
@@ -61,29 +64,38 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
 
         String appName = getAppName( report );
         String lodName = getLodName( report );
-        
+
         ObjectEngine oe = getObjectEngine();
         Task task = oe.createTask( appName );
         JRQuery query = report.getQuery();
         String qualJson = query.getText();
+        if ( StringUtils.isBlank( qualJson ) )
+            throw new ZeidonException( "JSON query text has not be specified" );
+
         info( "qual json = \n%s", qualJson );
-        
+
         QualificationBuilder qual = new QualificationBuilder( task  );
         View view = qual.setLodDef( lodName )
-                        .addAttribQual( "User", "ID", "<", 50 )
+                        .loadFromSerializedString( qualJson )
                         .activate();
-        
-        qual.getView().serializeOi().withIncremental().toFile( "/tmp/qual.json" );
-        view.logObjectInstance();
-        
+
+//        qual.getView().serializeOi().toFile( "/tmp/qual.json" );
+        view.serializeOi().asJson().toTempDir( "jasper" + lodName );
+//        view.logObjectInstance();
+
         return view;
     }
-    
+
     protected ObjectEngine getObjectEngine()
     {
-        return JavaObjectEngine.getInstance();
+        if ( objectEngine == null )
+//            return JavaObjectEngine.getInstance();
+
+            objectEngine = new JavaObjectEngine( ( new DefaultJavaOeConfiguration() ) );
+
+        return objectEngine;
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.jasperreports.engine.JRDataSourceProvider#supportsGetFieldsOperation()
      */
@@ -104,7 +116,7 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
 
         String appName = getAppName( report );
         String lodName = getLodName( report );
-        
+
         Application app = oe.getApplication( appName );
         LodDef lodDef = app.getLodDef( oe.getSystemTask(), lodName );
         List<JRField> attributes = new ArrayList<>();
@@ -112,14 +124,14 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
         {
             if ( attr.isHidden() )
                 continue;
-            
+
             JRDesignField field = new JRDesignField();
             field.setName( attr.getName() );
             field.setValueClass( String.class );
             field.setDescription( "Entity = " + attr.getEntityDef().getName() );
             attributes.add( field );
         }
-        
+
         info( "Fields = %s", attributes );
         return attributes.toArray(new JRField[ attributes.size() ] );
     }
@@ -128,13 +140,17 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
     {
         getObjectEngine().getSystemTask().log().info( format, args );
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.jasperreports.engine.JRDataSourceProvider#create(net.sf.jasperreports.engine.JasperReport)
      */
     @Override
     public JRDataSource create( JasperReport report ) throws JRException
     {
+        // Report should be null only when executing "Test" button in Data Adapters.
+        if ( report == null )
+            return new JRViewDataSource();
+
         View view = getReportView( report );
         return new JRViewDataSource( view );
     }
@@ -147,24 +163,24 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
     {
         info( "JRViewDataSourceProvider.dispose" );
     }
-    
+
     protected String getLodName( JasperReport report )
     {
         String lodName = report.getProperty( "com.quinsoft.zeidon.lodname" );
         info( "com.quinsoft.zeidon.lodname = %s", lodName );
         if ( StringUtils.isBlank( lodName ) )
             throw new ZeidonException( "LOD name is not specified" );
-        
+
         return lodName;
     }
-    
+
     protected String getAppName( JasperReport report )
     {
         String appName = report.getProperty( "com.quinsoft.zeidon.appname" );
         info( "com.quinsoft.zeidon.appname = %s", appName );
         if ( StringUtils.isBlank( appName ) )
             throw new ZeidonException( "App name is not specified" );
-        
+
         return appName;
     }
 }
