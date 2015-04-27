@@ -3,6 +3,7 @@
  */
 package com.quinsoft.zeidon.test;
 
+import com.quinsoft.zeidon.ActivateFlags;
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -49,8 +50,17 @@ public class TestEpamms
 		zeidonSystem = oe.getSystemTask();
 	}
 
-   
-           
+   @Test
+	public void ExecuteJOE_TestGetRecursiveSubEntities()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestGetRecursiveSubEntities( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestGetRecursiveSubEntities ========");
+	}
+
    @Test
 	public void ExecuteJOE_TestCreateChildOnSubobject()
 	{
@@ -219,6 +229,61 @@ public class TestEpamms
          ec = t.getCursor( "SPLD_LLD" );
          ec.logEntity( true );
          t.drop();
+      }
+
+
+      private int 
+      o_fnLocalBuildQual_12( View     vSubtask,
+                             zVIEW    vQualObject,
+                             int      lTempInteger_0 )
+      {
+         int      RESULT = 0;
+
+      // RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, 256 /*zMULTIPLE*/ );
+         View view = vSubtask.activateEmptyObjectInstance( "KZDBHQUA", task.getSystemTask().getApplication() );
+      //  CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+         view.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "SubregPhysicalLabelDef" );
+         view.cursor( "EntitySpec" ).getAttribute( "EntityName" ).setValue( "SubregPhysicalLabelDef" );
+      // CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+         view.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "SubregPhysicalLabelDef" );
+         view.cursor( "QualAttrib" ).getAttribute( "EntityName" ).setValue( "SubregPhysicalLabelDef" );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+         view.cursor( "QualAttrib" ).getAttribute( "AttributeName" ).setValue( "ID" );
+      // SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+         view.cursor( "QualAttrib" ).getAttribute( "Value" ).setValue( lTempInteger_0 );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+         view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( "=" );
+         return( 0 );
+      } 
+
+      @Test
+      public void ExecuteJOE_TestGetRecursiveSubEntities( View view ) {
+
+         //:VIEW mSPLDef  BASED ON LOD  mSPLDef
+      // zVIEW    mSPLDef = new zVIEW( );
+         int      lTempInteger_0 = 0;
+         zVIEW    vTempViewVar_0 = new zVIEW( );
+
+         //:// Activate the mSPLDef object selected in mSubProd.
+         //:ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID 
+      // {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+      //     GetIntegerFromAttribute( mi_lTempInteger_0, lSPLDLST, "SubregPhysicalLabelDef", "ID" );
+      // lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+         lTempInteger_0 = 5;
+         o_fnLocalBuildQual_12( view, vTempViewVar_0, lTempInteger_0 );
+      // ActivateObjectInstance( mSPLDef, "mSPLDef", view, vTempViewVar_0, zSINGLE );
+         View mSPLDef = view.activateObjectInstance( "mSPLDef", vTempViewVar_0.getView(), ActivateFlags.SINGLE );
+         DropView( vTempViewVar_0 );
+         //:NAME VIEW mSPLDef "mSPLDef"
+         SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
+         mSPLDef.logObjectInstance();
+         EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
+         CursorResult cr = ec.setFirstWithinOi( "ID", "622" );
+         ec = mSPLDef.getCursor( "LLD_SpecialSectionAttrBlock" );
+         cr = ec.setFirst();
+         Assert.assertEquals( "LLD_SpecialSectionAttrBlock exists but is not found: ", CursorResult.SET, cr );
       }
 
       private void CheckAddKeywordEntry( View  mSPLDefBlock, String   szKeywordName )
