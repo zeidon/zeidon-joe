@@ -92,14 +92,14 @@ public class TestSWAU
 			   // This is an object where the entity STUDENT (under the root) has been restricted. STUDENT
 			   // is a 1 to 1 with root, but the commit should not cause an error.
 		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfT.json", zSINGLE );
+		                "target/test-classes/testdata//SWAU/mSAProfT.json", zSINGLE );
 			   RESULT = CommitObjectInstance( mSAProfT );
 			   DropObjectInstance( mSAProfT );
 
 			   // This is an object where the entity STUDENT (under the root) exists.
 			   // Excluding Student and then committing should cause an error.
 		   	   ActivateOI_FromFile( mSAProfT, "mSAProf", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProfTWStud.json", zSINGLE );
+		                "target/test-classes/testdata//SWAU/mSAProfTWStud.json", zSINGLE );
 			   //:EXCLUDE mSAProfT.Student
 			   RESULT = ExcludeEntity( mSAProfT, "Student", zREPOS_AFTER );
 
@@ -128,7 +128,7 @@ public class TestSWAU
 		    // Because PrimaryForPerson is not set as include/exclude in the object, the commit fails on
 		    // this entity. If I change PrimaryForPerson to be inc/exc, then the commit seems to work.
 		    ActivateOI_FromFile( mPerson, "mPerson", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mPersonPrimaryAddress.json", zSINGLE );
+		                "target/test-classes/testdata//SWAU/mPersonPrimaryAddress.json", zSINGLE );
 		   	   SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
 		   	   
 		       RESULT = SetCursorFirstEntity( mPerson, "Address", "" );
@@ -184,12 +184,12 @@ public class TestSWAU
 		   int RESULT=0;
 
 	   	   //ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow,
-		   //             zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProf_testerpl.por", zSINGLE );
+		   //             "target/test-classes/testdata//SWAU/mSAProf_testerpl.por", zSINGLE );
 	   	   ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/mSAProf.por", zSINGLE );
+		                "target/test-classes/testdata//SWAU/mSAProf.por", zSINGLE );
 		   SetNameForView( mSAProf, "mSAProf", null, zLEVEL_TASK );
 	   	   ActivateOI_FromFile( lSAMealPLST, "mSAMealP", ViewToWindow,
-		                zeidonSystem.getObjectEngine().getHomeDirectory() + "/SWAU/lSAMealPLST.por", zSINGLE );
+		                "target/test-classes/testdata//SWAU/lSAMealPLST.por", zSINGLE );
            SetNameForView( lSAMealPLST, "lSAMealPLST", null, zLEVEL_TASK );
 /************************************/
 /*

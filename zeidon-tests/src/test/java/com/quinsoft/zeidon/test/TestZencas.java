@@ -364,7 +364,7 @@ public class TestZencas
     {
         View         testview;
         testview = zencas.deserializeOi()
-                         .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/TestInclude3-mFAProfO.por" )
+                         .fromFile( "target/test-classes/testdata//ZENCAs/TestInclude3-mFAProfO.por" )
                          .setLodDef( "mFAProf" )
                          .activateFirst();
 
@@ -375,7 +375,7 @@ public class TestZencas
         profn.cursor( "Person" ).includeSubobject( testview.cursor( "Person" ), CursorPosition.LAST );
 
         View view = zencas.deserializeOi()
-                .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/AfterPersonInclude.por" )
+                .fromFile( "target/test-classes/testdata//ZENCAs/AfterPersonInclude.por" )
                 .setLodDef( "mFAProf" )
                 .activateFirst();
         Assert.assertTrue( "Views don't match after include", view.equalsOi( profn ) );
@@ -1062,7 +1062,7 @@ public class TestZencas
 		   zVIEW    mSAProf      = new zVIEW( );
 		   int RESULT=0;
 
-	   	   ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mSAProfIncludeErr.por", zSINGLE );
+	   	   ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, "target/test-classes/testdata//ZENCAs/mSAProfIncludeErr.por", zSINGLE );
 		   ActivateEmptyObjectInstance( mSAProfEList, "mSAProfE", ViewToWindow, zMULTIPLE );
 		   //:NAME VIEW mSAProfEList "mSAProfEList"
 		   SetNameForView( mSAProfEList, "mSAProfEList", null, zLEVEL_TASK );
@@ -1080,10 +1080,10 @@ public class TestZencas
 		   int RESULT=0;
 		   double dAmount=0;
 
-		   ActivateOI_FromFile( mFAProf1, "mFAProf", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mFAProfO.por", zSINGLE );
+		   ActivateOI_FromFile( mFAProf1, "mFAProf", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFAProfO.por", zSINGLE );
 		   SetNameForView( mFAProf1, "mFAProf1", null, zLEVEL_TASK );
 		   mFAProf1.cursor("FinAidAward").setFirst().toInt();
-		   ActivateOI_FromFile( mFAProf2, "mFAProf", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mFAProfO.por", zSINGLE );
+		   ActivateOI_FromFile( mFAProf2, "mFAProf", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFAProfO.por", zSINGLE );
 		   SetNameForView( mFAProf2, "mFAProf2", null, zLEVEL_TASK );
 		   mFAProf2.cursor("FinAidAward").setFirst().toInt();
 
@@ -1702,7 +1702,7 @@ public class TestZencas
 			int RESULT=0;
 
 		    SfActivateSysOI_FromFile( vReportDef, "TZRPSRCO", ViewToWindow,
-		    		zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/rAdvTst.xrp", zSINGLE );
+		    		"target/test-classes/testdata/ZENCAs/rAdvTst.xrp", zSINGLE );
 
 		    RESULT = CheckExistenceOfEntity( vReportDef, "DrivingViewObjRef" );
 
@@ -1856,7 +1856,7 @@ public class TestZencas
 	        loader.setPackageAssertionStatus( "com.quinsoft.zeidon", true );
 
 		    SfActivateSysOI_FromFile( vReportDef, "TZRPSRCO", ViewToWindow,
-		    		zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/rAdvTst2.xrp", zSINGLE );
+		    		"target/test-classes/testdata/ZENCAs/rAdvTst2.xrp", zSINGLE );
 
 		    CreateViewFromView( vReportRecurs, vReportDef );
 
@@ -1936,7 +1936,7 @@ public class TestZencas
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
 
 		    mStudent.cursor( "Student" ).setAttribute( "RoommateQuestionaireReceivedDate", "" );
-	        View v = zencas.activateOiFromFile( "mStudent", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudent_ac.por" );
+	        View v = zencas.activateOiFromFile( "mStudent", "target/test-classes/testdata//ZENCAs/mstudent_ac.por" );
 	        boolean c = mStudent.equalsOi( v );
 	        Assert.assertTrue( "OIs differ", c );
 
@@ -2623,8 +2623,8 @@ public class TestZencas
 		    String   strGridEditCtl1 = null;
 			int RESULT=0;
 
-	   		ActivateOI_FromFile( mStudent, "mStudent", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mStudentDerivedDate.por", zSINGLE );
-	   		ActivateOI_FromFile( mStudenC, "mStudenC", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mStudenCDerivedDate.por", zSINGLE );
+	   		ActivateOI_FromFile( mStudent, "mStudent", ViewToWindow, "target/test-classes/testdata//ZENCAs/mStudentDerivedDate.por", zSINGLE );
+	   		ActivateOI_FromFile( mStudenC, "mStudenC", ViewToWindow, "target/test-classes/testdata//ZENCAs/mStudenCDerivedDate.por", zSINGLE );
 			SetNameForView( mStudenC, "mStudenC", null, zLEVEL_TASK );
             // I get an error on the derived attribute dLastAuditDateTime because GetVariableFromAttribute returns the
 			// date in the format "08/19/2011 09:45:20.0 AM" which causes an error in StoreStringInRecord.
@@ -2663,7 +2663,7 @@ public class TestZencas
 
 
 		   //:ActivateOI_FromFile( mFAProf, "mFAProf", ViewToWindow, "c:\temp\mFAProfO.por", zSINGLE )
-		   ActivateOI_FromFile( mFAProf, "mFAProf", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mFAProfO.por", zSINGLE );
+		   ActivateOI_FromFile( mFAProf, "mFAProf", ViewToWindow, "target/test-classes/testdata/ZENCAs/mFAProfO.por", zSINGLE );
 		   //:NAME VIEW mFAProf "mFAProf"
 		   SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
 
@@ -3031,7 +3031,7 @@ public class TestZencas
    			   int RESULT;
    			   int lTempInteger_0;
 
-   			   ActivateOI_FromFile( mFAProf, "mFAProf", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mFAProfT.por", zSINGLE );
+   			   ActivateOI_FromFile( mFAProf, "mFAProf", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFAProfT.por", zSINGLE );
    			   SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
    			   RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
    			   RESULT = CheckExistenceOfEntity( mFAProf, "PerProSATransactionCode" );
@@ -3515,7 +3515,7 @@ public class TestZencas
 			//://ACTIVATE mFAProfO WHERE mFAProfO.FinAidProfile.ID = 24297
 
 			//:ActivateOI_FromFile( mFAProfO, "mFAProf", ViewToWindow, "c:\temp\mFAProf.por", zSINGLE )
-			ActivateOI_FromFile( mFAProfO, "mFAProf", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mFAProf.por", zSINGLE );
+			ActivateOI_FromFile( mFAProfO, "mFAProf", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFAProf.por", zSINGLE );
 
 			//:NAME VIEW mFAProfO "mFAProfO"
 			SetNameForView( mFAProfO, "mFAProfO", null, zLEVEL_TASK );

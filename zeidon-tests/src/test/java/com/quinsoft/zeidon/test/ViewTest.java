@@ -132,7 +132,7 @@ public class ViewTest
     @Test
     public void testSubobject() throws IOException
     {
-        String oldfile = zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD";
+        String oldfile = "target/test-classes/testdata//ZENCAs/mRptStrD.XWD";
         String newfile = zeidonSystem.getTempDirectory() + "testxwd.XWD";
         LodDef xwdOD = zeidonSystem.getApplication( "ZeidonTools" ).getLodDef( zencas, "kzwdlgxo" );
         View xwd;
@@ -174,7 +174,7 @@ public class ViewTest
     public void testVersioning()
     {
         LodDef xwdOD = zeidonSystem.getApplication( "ZeidonTools" ).getLodDef( zencas, "kzwdlgxo" );
-        View xwd = zencas.activateOiFromFile( xwdOD, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD", null );
+        View xwd = zencas.activateOiFromFile( xwdOD, "target/test-classes/testdata//ZENCAs/mRptStrD.XWD", null );
         EntityCursor ctrl = xwd.cursor( "Ctrl" );
         EntityCursor ctrlMap = xwd.cursor( "CtrlMap" );
 
@@ -233,7 +233,7 @@ public class ViewTest
         //
 
         // Link them.
-        xwd = zencas.activateOiFromFile( xwdOD, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD", null );
+        xwd = zencas.activateOiFromFile( xwdOD, "target/test-classes/testdata//ZENCAs/mRptStrD.XWD", null );
         View xwd2 = xwd.newView();
         xwd.cursor( "Ctrl" ).setFirst();
         xwd2.cursor( "Ctrl" ).setFirst();
@@ -309,7 +309,7 @@ public class ViewTest
 
         assertEquals( "setFirst/NextWithinOi didn't find all entities", count, 4 );
 
-        View view = zencas.activateOiFromFile( "mEmploy", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mEmploy2.txt", ActivateFlags.SINGLE );
+        View view = zencas.activateOiFromFile( "mEmploy", "target/test-classes/testdata//ZENCAs/mEmploy2.txt", ActivateFlags.SINGLE );
         CursorResult rc = view.cursor( "HistDeptContractDistribution" ).setFirst( "Employee" );
         String id = view.cursor( "HistDeptContractDistribution" ).getStringFromAttribute( "ID" );
         assertEquals( "setFirst with scoping didn't find first instance.", "101", id );
@@ -597,13 +597,13 @@ public class ViewTest
         view.logObjectInstance();
 
         view = zeidonTools.deserializeOi()
-                          .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mRptStrD.XWD" )
+                          .fromFile( "target/test-classes/testdata//ZENCAs/mRptStrD.XWD" )
                           .setApplication( zeidonTools.getApplication() )
                           .activateFirst();
         view.logObjectInstance();
 
         // Activate a multiple-root object with SINGLE and make sure there's only one root.
-        view = zencas.activateOiFromFile( "mEmploy", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/multipleRoots.txt", ActivateFlags.SINGLE );
+        view = zencas.activateOiFromFile( "mEmploy", "target/test-classes/testdata//ZENCAs/multipleRoots.txt", ActivateFlags.SINGLE );
         assertEquals( view.cursor( "Employee" ).getEntityCount(), 1 );
 
         // Activate a file with unknown entities/attributes.  Shouldn't throw an exception.
@@ -700,7 +700,7 @@ public class ViewTest
         int      lTempInteger_0 = 0;
         CursorResult  RESULT;
 
-        mYearLST = zencas.activateOiFromFile( "mYear", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mYearLST.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
+        mYearLST = zencas.activateOiFromFile( "mYear", "target/test-classes/testdata//ZENCAs/mYearLST.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
         RESULT = mYearLST.cursor( "CollegeYear" ).setFirst( "ID", 38 );
         wXferO.cursor( "StudentScheduleCollegeYear" ).includeSubobject( mYearLST.cursor( "CollegeYear" ), CursorPosition.NEXT );
 
@@ -733,7 +733,7 @@ public class ViewTest
         // For some reason in export of the por file the time only has the date part. 20090808.
         // The second por file doesn't work either.  This time the value is 19000101113000000.
         //mStudenC = zencas.activateOiFromFile( "mStudenC", "./testdata/ZENCAs/mStudenCOI.por", null );
-        mStudenC = zencas.activateOiFromFile( "mStudenC", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mstudencsqlOI.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
+        mStudenC = zencas.activateOiFromFile( "mStudenC", "target/test-classes/testdata//ZENCAs/mstudencsqlOI.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
         mStudenC.cursor( "DisplayAcademicStanding" ).orderEntities( "DisplayAcademicStandingTerm.YearSemester D" );
         RESULT = mStudenC.cursor( "DisplayAcademicStanding" ).setFirst();
         RESULT = mStudenC.cursor( "HS_RequiredGroup" ).setFirst();
@@ -753,7 +753,7 @@ public class ViewTest
         // For some reason in export of the por file the time only has the date part. 20090808.
         // The second por file doesn't work either.  This time the value is 19000101113000000.
         //mStudenC = zencas.activateOiFromFile( "mStudenC", "./testdata/ZENCAs/mStudenCOI.por", null );
-        mStudenC = zencas.activateOiFromFile( "mStudenC", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ZENCAs/mStudenCWithin.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
+        mStudenC = zencas.activateOiFromFile( "mStudenC", "target/test-classes/testdata//ZENCAs/mStudenCWithin.por", ActivateFlags.IGNORE_ATTRIB_ERRORS );
         mStudenC.log( ).info("*** Show mStudenC data ***");
         CursorResult RESULT = mStudenC.cursor( "RegistrationClass" ).setFirst( "Student" );
         //RESULT = mStudenC.cursor( "Registration" ).setFirst().toInt();
@@ -775,8 +775,8 @@ public class ViewTest
     @Test
     public void testLoadingResourceList()
     {
-        String filename = zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/ThisFileDoesntExist|" +
-                          zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/mStudenCWithin.por";
+        String filename = "target/test-classes/testdata/ZENCAs/ThisFileDoesntExist|" +
+                          "target/test-classes/testdata/ZENCAs/mStudenCWithin.por";
         filename = StrSubstitutor.replaceSystemProperties( filename );
         ZeidonInputStream stream = JoeUtils.getInputStream( filename );
         String desc = stream.getDescription();
@@ -813,7 +813,7 @@ public class ViewTest
         try
         {
             View v = new DeserializeOi( mFASrc )
-                                .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
+                                .fromFile( "target/test-classes/testdata/ZENCAs/lStudDpt-dynamictest.json" )
                                 .asJson()
                                 .activateFirst();
 
@@ -825,7 +825,7 @@ public class ViewTest
         }
 
         View v = new DeserializeOi( mFASrc )
-                            .fromFile( zeidonSystem.getObjectEngine().getHomeDirectory() + "ZENCAs/lStudDpt-dynamictest.json" )
+                            .fromFile( "target/test-classes/testdata/ZENCAs/lStudDpt-dynamictest.json" )
                             .allowDynamicAttributesFor( "Student" )
                             .activateFirst();
 

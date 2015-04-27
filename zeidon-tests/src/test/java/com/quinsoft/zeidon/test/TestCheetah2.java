@@ -90,7 +90,7 @@ public class TestCheetah2
 		    int RESULT = 0;
 		    String szSort = "";
 
-  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/Cheetah/mAppDenial.por", zSINGLE );
+  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, "target/test-classes/testdata//Cheetah/mAppDenial.por", zSINGLE );
 	 	    SetNameForView( mApp, "mApp", null, zLEVEL_TASK );
 
 	 	    RESULT = DeleteEntity( mApp, "Denial", zREPOS_NONE ); //zPOS_NEXT
@@ -106,7 +106,7 @@ public class TestCheetah2
 		    int RESULT = 0;
 		    String szSort = "";
 
-  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/Cheetah/mAppDenial.por", zSINGLE );
+  		    RESULT = ActivateOI_FromFile( mApp, "mApp", ViewToWindow, "target/test-classes/testdata//Cheetah/mAppDenial.por", zSINGLE );
 	 	    SetNameForView( mApp, "mApp", null, zLEVEL_TASK );
 
 	 	    RESULT = ExcludeEntity( mApp, "ApplicationType", zPOS_NEXT );

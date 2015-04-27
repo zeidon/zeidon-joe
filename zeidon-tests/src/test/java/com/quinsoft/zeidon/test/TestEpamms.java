@@ -534,7 +534,7 @@ public class TestEpamms
 
       public int
 		ExecuteJOE_Test000( View     view ) {
-         View mSPLDef = ePamms.activateOiFromFile( "mSPLDef", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDefGood.json", null );
+         View mSPLDef = ePamms.activateOiFromFile( "mSPLDef", "target/test-classes/testdata//ePammsDon/mSPLDefGood.json", null );
          displaySPLD( mSPLDef, "SPLD_LLD", "Triple Zero Activate" );
 
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
@@ -557,8 +557,8 @@ public class TestEpamms
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mSPLDef.logObjectInstance();
       */
-//       CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", zASCII );
-//       mSPLDef = ePamms.activateOiFromFile( "mSPLDef", zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDef2.json", null );
+//       CommitOI_ToFile( mSPLDef2, "target/test-classes/testdata//ePammsDon/mSPLDef2.json", zASCII );
+//       mSPLDef = ePamms.activateOiFromFile( "mSPLDef", "target/test-classes/testdata//ePammsDon/mSPLDef2.json", null );
 //       displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
          // Try to move the SubBlock back to a panel.
@@ -618,7 +618,7 @@ public class TestEpamms
          ec2.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.FIRST );
          mSPLDef.logObjectInstance();
       */
-         CommitOI_ToFile( mSPLDef2, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/mSPLDefX.json", zASCII );
+         CommitOI_ToFile( mSPLDef2, "target/test-classes/testdata//ePammsDon/mSPLDefX.json", zASCII );
          mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDef2.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
@@ -820,7 +820,7 @@ public class TestEpamms
 			   //://CommitOI_ToFile( mSPLDef, "c:\temp\SPLD.por", zASCII )
 			   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\SPLD.por", zSINGLE )
 			   // mSPLDefO is the new version of mSPLDef.
-			   ActivateOI_FromFile( mSPLDef, "mSPLDefO", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test3.por", zSINGLE );
+			   ActivateOI_FromFile( mSPLDef, "mSPLDefO", ViewToWindow, "target/test-classes/testdata//ePammsDon/JOE_Test3.por", zSINGLE );
 			   //:NAME VIEW mSPLDef "mSPLDef"
 			   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
 			   //:SET CURSOR NEXT mSPLDef.LLD_Block
@@ -943,7 +943,7 @@ public class TestEpamms
 
 		   //:// Activate the basic object.
 		   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\JOE_Test2.por", zSINGLE )
-		   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test2.por", zSINGLE );
+		   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "target/test-classes/testdata//ePammsDon/JOE_Test2.por", zSINGLE );
 		   //:NAME VIEW mSPLDef "mSPLDef"
 		   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
 
@@ -1009,7 +1009,7 @@ public class TestEpamms
 
 		   //:// Activate the basic object.
 		   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\JOE_Test2.por", zSINGLE )
-		   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, zeidonSystem.getObjectEngine().getHomeDirectory() + "/ePammsDon/JOE_Test2.por", zSINGLE );
+		   ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "target/test-classes/testdata//ePammsDon/JOE_Test2.por", zSINGLE );
 		   //:NAME VIEW mSPLDef "mSPLDef"
 		   SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
 
