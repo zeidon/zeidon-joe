@@ -3,13 +3,13 @@
  */
 package com.quinsoft.zeidon.test;
 
-import com.quinsoft.zeidon.ActivateFlags;
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
@@ -50,7 +50,7 @@ public class TestEpamms
 		zeidonSystem = oe.getSystemTask();
 	}
 
-   @Test
+//   @Test
 	public void ExecuteJOE_TestGetRecursiveSubEntities()
 	{
 	   View         mSPLDef;
@@ -232,7 +232,7 @@ public class TestEpamms
       }
 
 
-      private int 
+      private int
       o_fnLocalBuildQual_12( View     vSubtask,
                              zVIEW    vQualObject,
                              int      lTempInteger_0 )
@@ -257,9 +257,8 @@ public class TestEpamms
          view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( "=" );
          vQualObject.setView( view );
          return( 0 );
-      } 
+      }
 
-      @Test
       public void ExecuteJOE_TestGetRecursiveSubEntities( View view ) {
 
          //:VIEW mSPLDef  BASED ON LOD  mSPLDef
@@ -268,7 +267,7 @@ public class TestEpamms
          zVIEW    vTempViewVar_0 = new zVIEW( );
 
          //:// Activate the mSPLDef object selected in mSubProd.
-         //:ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID 
+         //:ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
       // {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
       //     GetIntegerFromAttribute( mi_lTempInteger_0, lSPLDLST, "SubregPhysicalLabelDef", "ID" );
       // lTempInteger_0 = mi_lTempInteger_0.intValue( );}
@@ -304,7 +303,7 @@ public class TestEpamms
 		ExecuteJOE_TestCreateChildOnSubobject( View view )
 		{
          CursorResult cr;
-         View    mSPLDefBlock = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefBlock.json" ).activateFirst();
+         View    mSPLDefBlock = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefBlock.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDefBlock, "LLD_Page", "First Activate" );
 
@@ -319,7 +318,7 @@ public class TestEpamms
       // ec.deleteAll();
          ec = mSPLDefBlock.getCursor( "LLD_Block" );
          ec.logEntity( true );
-         
+
          CheckAddKeywordEntry( mSPLDefBlock, "Title" );
          CheckAddKeywordEntry( mSPLDefBlock, "Text" );
          CheckAddKeywordEntry( mSPLDefBlock, "Column List" );
@@ -335,7 +334,7 @@ public class TestEpamms
 		public int
 		ExecuteJOE_TestB( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefFull.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefFull.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
@@ -378,7 +377,7 @@ public class TestEpamms
 		public int
 		ExecuteJOE_TestBB( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefFull.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefFull.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
@@ -426,7 +425,7 @@ public class TestEpamms
 		ExecuteJOE_TestSetCursorWithAttributeContainingBlank( View     view )
 		{
          String ID = "813";
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefMason.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefMason.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, null, "First Activate" );
 
@@ -458,7 +457,7 @@ public class TestEpamms
 		ExecuteJOE_TestBBB( View     view )
 		{
          String ID = "812";
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefMason.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir( "mSPLDefMason.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
@@ -512,7 +511,7 @@ public class TestEpamms
 		public int
 		ExecuteJOE_TestAA( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefAA.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefAA.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
@@ -536,7 +535,7 @@ public class TestEpamms
 
       public int
 		ExecuteJOE_Test000( View     view ) {
-         View mSPLDef = ePamms.activateOiFromFile( "mSPLDef", "target/test-classes/testdata//ePammsDon/mSPLDefGood.json", null );
+         View mSPLDef = view.activateOiFromFile( "mSPLDef", "target/test-classes/testdata//ePammsDon/mSPLDefGood.json", null );
          displaySPLD( mSPLDef, "SPLD_LLD", "Triple Zero Activate" );
 
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
@@ -597,7 +596,7 @@ public class TestEpamms
 		public int
 		ExecuteJOE_Test00( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDefGood.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefGood.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "First Activate" );
 
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
@@ -621,7 +620,7 @@ public class TestEpamms
          mSPLDef.logObjectInstance();
       */
          CommitOI_ToFile( mSPLDef2, "target/test-classes/testdata//ePammsDon/mSPLDefX.json", zASCII );
-         mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromZeidonHomeFile( "/ePammsDon/mSPLDef2.json" ).activateFirst();
+         mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef2.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
          // Try to move the SubBlock back to a panel.

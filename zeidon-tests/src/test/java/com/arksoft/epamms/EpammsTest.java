@@ -78,7 +78,7 @@ public class EpammsTest
         task = oe.createTask( "ePamMs" );  // ignore case on app name
     }
 
-    
+
     @Test
     public void testZeidonINI( ) throws IOException
     {
@@ -255,7 +255,7 @@ public class EpammsTest
     @Test
     public void testSetNextContinue( ) throws IOException
     {
-        View view = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+        View view = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
         view.cursor( "M_GeneralSection" ).setNext().toInt();
         view.cursor( "M_GeneralStatement" ).logEntity( false );
         int nRC = view.cursor( "M_GeneralStatement" ).setNextContinue().toInt();;
@@ -266,7 +266,7 @@ public class EpammsTest
     @Test
     public void testSetPrevContinue( ) throws IOException
     {
-        View view = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+        View view = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
         view.logObjectInstance( );
         CursorResult nRC = view.cursor( "M_StorageDisposalStatement" ).setPrevContinue();
         // Cursor should be unchanged because we're trying to setPrev on first entity.
@@ -278,10 +278,10 @@ public class EpammsTest
     {
         View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
 
-        View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+        View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
         mMasLC.setName( "mMasLC" );
 
-        View wWebXfer = task.activateOiFromFile( "wWebXfer", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/wWebXfer.por", null );
+        View wWebXfer = task.activateOiFromFile( "wWebXfer", "testdata/ePamms/OIs/wWebXfer.por", null );
         wWebXfer.setName( "wWebXfer" );
 
         int nRC = wWebXfer.cursor( "Usage" ).setFirst().toInt();
@@ -312,7 +312,7 @@ public class EpammsTest
     @Test
     public void testSetCursorFirstEntityByEntityCsr( ) throws IOException
     {
-      View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+      View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
       mMasLC.setName( "mMasLC" );
       mMasLC.cursor( "MI_UsageList" ).setFirst( "Name", "Hospitals" );
       task.log().info( "MI_UsageList EntityKey: " + mMasLC.cursor( "MI_UsageList" ).getEntityKey( ) );
@@ -333,7 +333,7 @@ public class EpammsTest
     {
       int nRC;
 
-      View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+      View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
       mMasLC.setName( "mMasLC" );
       mMasLC.cursor( "M_GeneralSection" ).setNext().toInt();
       mMasLC.cursor( "M_GeneralSection" ).logEntity( false );
@@ -380,7 +380,7 @@ public class EpammsTest
     {
       int nRC;
 
-      View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+      View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
       mMasLC.setName( "mMasLC" );
       displayFirstThreeEntities( mMasLC, "Initial ... 1.2.3?" );
 
@@ -433,7 +433,7 @@ public class EpammsTest
     @Test
     public void testMoveEntity( ) throws IOException
     {
-      View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+      View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
       mMasLC.setName( "mMasLC" );
     //mMasLC.cursor( "M_GeneralSection" ).setNext().toInt();
       mMasLC.cursor( "M_GeneralSection" ).logEntity( false );
@@ -459,7 +459,7 @@ public class EpammsTest
     @Test
     public void testMoveEntityLoopOnCommit( ) throws IOException
     {
-      View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+      View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
       mMasLC.setName( "mMasLC" );
 
       mMasLC.cursor( "M_HumanHazardSection" ).logEntity( false );
@@ -498,7 +498,7 @@ public class EpammsTest
     @Test
     public void testSetEntityKey( ) throws IOException
     {
-      View mMasLC = task.activateOiFromFile( "mMasLC", task.getObjectEngine().getHomeDirectory() + "/ePamms/OIs/mMasLC.por", null );
+      View mMasLC = task.activateOiFromFile( "mMasLC", "testdata/ePamms/OIs/mMasLC.por", null );
       mMasLC.setName( "mMasLC" );
       mMasLC.cursor( "M_GeneralSection" ).setFirst( "SectionType", "F" );
       mMasLC.cursor( "M_GeneralSection" ).logEntity( true );

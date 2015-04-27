@@ -180,18 +180,38 @@ public class DeserializeOi
 
     /**
      * Convenience method that prepends the Zeidon HOME to the filename.
-     *  
+     *
      * @param filename
      * @return
      */
     public DeserializeOi fromZeidonHomeFile( String filename )
     {
         String tfile = getTask().getObjectEngine().getHomeDirectory();
-        
+
+
         // Append the dir separator if it's not specified.
         if ( ! tfile.endsWith( "\\" ) && ! tfile.endsWith( "/" ) && filename.startsWith( "\\" ) && filename.startsWith( "/" ) )
             tfile += "/";
-        
+
+        tfile += filename;
+        return fromFile( tfile );
+    }
+
+    /**
+     * Convenience method that prepends the Application dir (i.e. the .XOD directory)
+     * to the filename.
+     *
+     * @param filename
+     * @return
+     */
+    public DeserializeOi fromApplicationDir( String filename )
+    {
+        String tfile = getApplication().getObjectDir();
+
+        // Append the dir separator if it's not specified.
+        if ( ! tfile.endsWith( "\\" ) && ! tfile.endsWith( "/" ) )
+            tfile += "/";
+
         tfile += filename;
         return fromFile( tfile );
     }
