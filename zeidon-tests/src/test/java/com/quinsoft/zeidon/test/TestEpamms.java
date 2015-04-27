@@ -50,7 +50,7 @@ public class TestEpamms
 		zeidonSystem = oe.getSystemTask();
 	}
 
-//   @Test
+   @Test
 	public void ExecuteJOE_TestGetRecursiveSubEntities()
 	{
 	   View         mSPLDef;

@@ -649,6 +649,10 @@ class EntityCursorImpl implements EntityCursor
                 break;
             }
 
+            // If the cursor isn't in scope then we won't bother setting it.
+            if ( ! viewCursor.isCursorInScope( searchParentCursor ) )
+                break;
+            
             if ( searchParentCursor.getEntityInstance() == topEi.getParent() )
                 break;
 
