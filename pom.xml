@@ -120,6 +120,7 @@
         <module>scala</module>
         <module>object-browser</module>
 	<module>jconsole-plugin</module>
+	<module>jasper-reports</module>
         <module>zeidon-operations</module>
         <module>restserver</module>
         <module>zruby</module>

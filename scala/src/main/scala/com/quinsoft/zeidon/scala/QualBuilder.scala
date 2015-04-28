@@ -282,7 +282,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 
     def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
-        println( s"method '$attributeName' called with argument ${value}" )
+//        println( s"method '$attributeName' called with argument ${value}" )
         jattributeDef = jentityDef.getAttribute( attributeName )
         if ( value.isInstanceOf[AttributeQualBuilder] ) {
             addQualFromAttributeBuilder( "=", value )
