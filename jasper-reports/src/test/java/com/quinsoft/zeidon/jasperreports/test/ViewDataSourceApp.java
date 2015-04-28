@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
@@ -122,7 +123,8 @@ public class ViewDataSourceApp extends AbstractSampleApp
                           .activateFirst();
 
         ZeidonInputStream is = JoeUtils.getInputStream( "JsonCustomersReport.jasper" );
-        JasperPrint report = JasperFillManager.fillReport( is, params, new JRViewDataSource( stud, "AcademicStanding" ) );
+        JasperReport jasperReport = (JasperReport)JRLoader.loadObject( is );
+        JasperPrint report = JasperFillManager.fillReport( is, params, new JRViewDataSource( stud, jasperReport ) );
 //		JasperFillManager.fillReportToFile("target/classes/JsonCustomersReport.jasper", params);
         JasperExportManager.exportReportToPdfFile( report, "target/classes/JsonCustomersReport.pdf");
 		System.err.println("Filling time : " + (System.currentTimeMillis() - start));
