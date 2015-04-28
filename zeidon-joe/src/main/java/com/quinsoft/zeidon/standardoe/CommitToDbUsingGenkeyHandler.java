@@ -225,6 +225,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.deleteRelationship( view, ei );
             markDuplicateRelationships( ei );
+            ei.dbhExcluded = true;
         }
     }
 
