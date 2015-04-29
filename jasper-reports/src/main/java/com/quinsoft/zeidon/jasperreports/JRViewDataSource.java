@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRRewindableDataSource;
+import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -56,31 +57,28 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
      */
     final private EntityDef topEntity;
 
+    final private JasperReport jasperReport;
+    
     private boolean cursorSet;
 
     /**
-     *
+     * Empty constructor.  Intended to be called from a DataSourceProvider when testing
+     * the provider from Jasper's Report Studio.
      */
     public JRViewDataSource( )
     {
         view = null;
         topEntity = null;
+        jasperReport = null;
     }
 
-    public JRViewDataSource( View view )
-    {
-        this( view, view.getLodDef().getRoot() );
-    }
-
-    public JRViewDataSource( View view, String topEntity )
-    {
-        this( view, view.getLodDef().getEntityDef( topEntity ) );
-    }
-
-    public JRViewDataSource( View view, EntityDef topEntity )
+    public JRViewDataSource( View view, JasperReport jasperReport )
     {
         this.view = view;
-        this.topEntity = topEntity;
+        view.log().debug( "Creating a JRViewDataSource" );
+        this.jasperReport = jasperReport;
+        this.topEntity = getReportRoot();
+        
         try
         {
             moveFirst();
@@ -89,6 +87,16 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
         {
             throw ZeidonException.wrapException( e );
         }
+    }
+
+    protected EntityDef getReportRoot()
+    {
+        String reportRoot = jasperReport.getProperty( "com.quinsoft.zeidon.reportRoot" );
+        view.log().info( "com.quinsoft.zeidon.reportRoot = %s", reportRoot );
+        if ( StringUtils.isBlank( reportRoot ) )
+            return view.getLodDef().getRoot();
+
+        return view.getLodDef().getEntityDef( reportRoot );
     }
 
     /* (non-Javadoc)
@@ -159,10 +167,5 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
             view.log().info( "next() found %s", view.cursor( topEntity ).getEntityInstance() );
 
         return rc;
-    }
-
-    public static net.sf.jasperreports.engine.JRDataSource getDataSource()
-    {
-        return new JRViewDataSource( null );
     }
 }

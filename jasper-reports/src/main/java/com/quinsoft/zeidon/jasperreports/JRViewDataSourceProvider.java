@@ -63,6 +63,7 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
         info( "getReportView" );
 
         String appName = getAppName( report );
+
         String lodName = getLodName( report );
 
         ObjectEngine oe = getObjectEngine();
@@ -77,6 +78,8 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
         QualificationBuilder qual = new QualificationBuilder( task  );
         View view = qual.setLodDef( lodName )
                         .loadFromSerializedString( qualJson )
+                        // Cache the results so we don't activate it again.
+//                        .cachedAs( Integer.toString( lodName.hashCode() ) )
                         .activate();
 
 //        qual.getView().serializeOi().toFile( "/tmp/qual.json" );
@@ -89,8 +92,6 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
     protected ObjectEngine getObjectEngine()
     {
         if ( objectEngine == null )
-//            return JavaObjectEngine.getInstance();
-
             objectEngine = new JavaObjectEngine( ( new DefaultJavaOeConfiguration() ) );
 
         return objectEngine;
@@ -111,6 +112,9 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
     @Override
     public JRField[] getFields( JasperReport report ) throws JRException, UnsupportedOperationException
     {
+        if ( report == null )
+            return new JRField[0];
+        
         ObjectEngine oe = getObjectEngine();
         info( "JRViewDataSourceProvider.getFields" );
 
@@ -152,7 +156,7 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
             return new JRViewDataSource();
 
         View view = getReportView( report );
-        return new JRViewDataSource( view );
+        return new JRViewDataSource( view, report );
     }
 
     /* (non-Javadoc)
@@ -177,10 +181,10 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
     protected String getAppName( JasperReport report )
     {
         String appName = report.getProperty( "com.quinsoft.zeidon.appname" );
-        info( "com.quinsoft.zeidon.appname = %s", appName );
         if ( StringUtils.isBlank( appName ) )
             throw new ZeidonException( "App name is not specified" );
 
+        info( "com.quinsoft.zeidon.appname = %s", appName );
         return appName;
     }
 }
