@@ -484,6 +484,20 @@ public class TestZencas
         System.out.println("===== Finished testDomainCompareIssue ========");
 	}
 
+    @Test
+	public void
+	testExcludeIncludeSaveError( )
+	{
+	    View         testview;
+        // Turn off assertions for zeidon for this test.
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        loader.setPackageAssertionStatus( "com.quinsoft.zeidon", false );
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testExcludeIncludeSaveError( testview );
+        System.out.println("===== Finished testExcludeIncludeSaveError ========");		
+	}
+
 //    @Test
     public void testNavigationTime()
     {
@@ -2599,6 +2613,77 @@ public class TestZencas
 	         RESULT = CommitObjectInstance( wConList );
 
 	         DropObjectInstance( wConList );
+
+	         return 0;
+		}
+
+		public int
+		testExcludeIncludeSaveError( View     ViewToWindow )
+		{
+			zVIEW    wConList = new zVIEW( );
+			zVIEW    mClass = new zVIEW( );
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    vQualObject = new zVIEW( );
+			zVIEW    mSAProf = new zVIEW( );
+			zVIEW    mPlan = new zVIEW( );
+			zVIEW    mSAPPlan = new zVIEW();
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int i=0;
+			int iConListID=0;
+			int RESULT=0;
+			
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", ViewToWindow, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", 16406 );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			
+				
+			   RESULT = ActivateObjectInstance( mSAProf, "mSAProf", ViewToWindow, vQualObject, zSINGLE );
+			   DropView( vQualObject );
+
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", ViewToWindow, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "PaymentPlan" );
+			   RESULT = ActivateObjectInstance( mSAPPlan, "mSAPPlan", ViewToWindow, vQualObject, zMULTIPLE );
+			   
+			   if ( CheckExistenceOfEntity( mSAProf, "PaymentPlan") == 0 )
+		            RESULT = ExcludeEntity( mSAProf, "PaymentPlan", zREPOS_AFTER );
+				   
+		         RESULT = IncludeSubobjectFromSubobject( mSAProf, "PaymentPlan", mSAPPlan, "PaymentPlan", zPOS_AFTER );
+		         RESULT = CommitObjectInstance( mSAProf );
+		         
+		            
+		            RESULT = ExcludeEntity( mSAProf, "PaymentPlan", zREPOS_AFTER );
+		            RESULT = IncludeSubobjectFromSubobject( mSAProf, "PaymentPlan", mSAPPlan, "PaymentPlan", zPOS_AFTER );
+
+		            RESULT = CommitObjectInstance( mSAProf );
+		            RESULT = CommitObjectInstance( mSAProf );
+		            
+		            // After the second commit, although the browser shows a valid PaymentPlan entity, the database FK_ID_PaymentPlan
+		            // has been set to null because the first ExcludedEntity is still set as EX and so the code thinks it needs
+		            // to do an update.
+					   DropView( mSAProf );
+		         
+					   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", ViewToWindow, zMULTIPLE );
+					   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+					   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
+					   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+					   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+					   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+					   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", 16406 );
+					   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+											
+					   RESULT = ActivateObjectInstance( mSAProf, "mSAProf", ViewToWindow, vQualObject, zSINGLE );
+					   DropView( vQualObject );
+					   
+			            // After the second commit, although the browser shows a valid PaymentPlan entity, the database FK_ID_PaymentPlan
+			            // has been set to null because the first ExcludedEntity is still set as EX and so the code thinks it needs
+			            // to do an update.
+					   Assert.assertEquals("No PAYMENTPLAN", 0, CheckExistenceOfEntity( mSAProf, "PaymentPlan"));		            
 
 	         return 0;
 		}
