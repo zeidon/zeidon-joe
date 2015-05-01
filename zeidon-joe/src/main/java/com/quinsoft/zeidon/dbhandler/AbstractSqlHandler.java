@@ -659,7 +659,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // Verify that columnAttributeValue.getViewEntity is a child of qualAttrib.viewEntity or
         // vice-versa.  We could potentially support siblings if they have 1-to-1 relationships
         // with their parents.
-        if ( ! entityDef.isAncestorOf( qualAttrib.entityDef ) && ! qualAttrib.entityDef.isAncestorOf( entityDef ) )
+        if ( entityDef != qualAttrib.entityDef &&
+           ! entityDef.isAncestorOf( qualAttrib.entityDef ) && ! qualAttrib.entityDef.isAncestorOf( entityDef ) )
+        {
             throw new ZeidonException( "When qualifying an attribute with another attribute in the same query, " +
                                        "one attribute must be a descendant of the other (i.e. they may not be " +
                                        "siblings." )
@@ -667,6 +669,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                                                               qualAttrib.attributeDef.getName() )
                                        .appendMessage( "Attribute 2 = %s.%s", entityDef.getName(),
                                                                               attributeDef.getName() );
+        }
     }
 
     @Override
@@ -805,7 +808,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     /**
      * Generate the SELECT statement to load entityDef (and, if using joins, its children).
-     * 
+     *
      * @param stmt
      * @param view
      * @param entityDef
@@ -1031,7 +1034,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private void addQualification(SqlStatement stmt, View view, EntityDef entityDef)
     {
         QualEntity qualEntity = qualMap.get( entityDef );
-        
+
         /*
          * If this qualification has a DOES NOT EXIST clause then we need to
          * use a left join when adding tables.
@@ -1896,12 +1899,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private final List<Object> boundValues;
 
         /**
-         * If true then when adding qualification to the FROM clause use "LEFT JOIN" 
+         * If true then when adding qualification to the FROM clause use "LEFT JOIN"
          * instead of just JOIN.  We use LEFT JOIN for qualification when we have a
          * "DOES NOT EXIST" statement.
          */
         private boolean useLeftJoinForQualification;
-        
+
         /**
          * List of DataRecords involved in the SQL.  For each DataRecord, the list of DataFields.
          */

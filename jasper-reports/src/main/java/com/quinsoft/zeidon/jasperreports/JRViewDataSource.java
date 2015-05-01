@@ -115,7 +115,7 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
     public Object getFieldValue( JRField field ) throws JRException
     {
         Object value = get( field );
-        view.log().info( "Get field %s = %s", field.getName(), value.toString() );
+        view.log().info( "Get field %s ", field.getName() );
         return value;
     }
 

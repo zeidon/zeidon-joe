@@ -25,7 +25,6 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.ObjectEngine;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
@@ -36,6 +35,10 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
+import com.quinsoft.zencas.scalasamples.SampleActivates;
+import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
+import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
+import com.quinsoft.zencas.scalasamples.SampleViewManipulations;
 
 /**
  * @author DG
@@ -831,5 +834,23 @@ public class ViewTest
 
         value = v.cursor( "Student" ).getAttribute( "DynamicAttr" ).getString();
         assertTrue( "Unexpected dynamic attribute value",  "This is a test".equals( value ) );
+    }
+
+    @Test
+    public void testScalaSamples()
+    {
+        com.quinsoft.zeidon.scala.Task szencas = new com.quinsoft.zeidon.scala.Task( zencas, null );
+
+        SampleActivates sampleActivates = new SampleActivates( szencas );
+        com.quinsoft.zeidon.scala.View mUser = sampleActivates.runAll();
+
+        SampleCursorManipulation sampleCursor = new SampleCursorManipulation( szencas );
+        sampleCursor.runAll( mUser );
+
+        SampleViewManipulations sampleView = new SampleViewManipulations( szencas );
+        sampleView.runAll( mUser );
+
+        SampleAttributeCode sampleCode = new SampleAttributeCode( szencas );
+        sampleCode.runAll( mUser );
     }
 }

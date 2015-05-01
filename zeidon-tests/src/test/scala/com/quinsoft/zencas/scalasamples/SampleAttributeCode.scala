@@ -128,6 +128,12 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         attr2 = attr // This re-assigns attr2.
     }
 
+    def runAll( mUser: View ) = {
+        attributeValues( mUser )
+        metaInformation( mUser )
+        compareAttribute( mUser )
+        attributeInstance( mUser )
+    }
 }
 
 object SampleAttributeCode {
@@ -142,10 +148,7 @@ object SampleAttributeCode {
         var mUser = activator.activateSimple
 
         val attributeCode = new SampleAttributeCode(task)
-        attributeCode.attributeValues( mUser )
-        attributeCode.metaInformation( mUser )
-        attributeCode.compareAttribute( mUser )
-        attributeCode.attributeInstance( mUser )
+        attributeCode.runAll( mUser )
 
 //        oe.startBrowser
     }

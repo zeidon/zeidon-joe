@@ -288,6 +288,17 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         // To delete all
         mUser.Staff.deleteAll()
     }
+
+    def runAll( mUser : View ) = {
+        setCursorFirst(mUser)
+        setCursorFirstWhere(mUser)
+        setCursorFirstWithScoping(mUser)
+
+        forEachCursor(mUser)
+        sortEntities(mUser)
+        deleteEntities(mUser.cloneRoot)
+//        mUser.logObjectInstance
+    }
 }
 
 object SampleCursorManipulation {
@@ -303,14 +314,7 @@ object SampleCursorManipulation {
 
 //        oe.startBrowser
         val sampler = new SampleCursorManipulation( task )
-        sampler.setCursorFirst(mUser)
-        sampler.setCursorFirstWhere(mUser)
-        sampler.setCursorFirstWithScoping(mUser)
-
-        sampler.forEachCursor(mUser)
-        sampler.sortEntities(mUser)
-        sampler.deleteEntities(mUser.cloneRoot)
-//        mUser.logObjectInstance
+        sampler.runAll(mUser)
     }
 
 }

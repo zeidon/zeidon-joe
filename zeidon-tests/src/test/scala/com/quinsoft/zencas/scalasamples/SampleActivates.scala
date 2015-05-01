@@ -9,6 +9,10 @@ import com.quinsoft.zeidon.scala.Task
  */
 class SampleActivates( var task: Task ) extends ZeidonOperations {
 
+    def this( jtask: com.quinsoft.zeidon.Task ) = {
+        this( new Task( jtask ) )
+    }
+
     /**
      * This method shows how to execute a simple activate.  The activate uses the
      * "activateWhere" method for activating on a single attribute.
@@ -32,6 +36,14 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
          *   - activateWhere builds the qualification and executes the activation.
          *     See below for a contrasting example.
          */
+
+        /**
+         * To activate all root entities, use .activateAll.
+         */
+        val mFaculty = VIEW basedOn "mFaculty"
+        mFaculty.activateAll
+
+        mUser
     }
 
     /**
@@ -165,12 +177,15 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
          */
 
         /*
-         * Load all Users that were created by the same user that last modified them.
+         * Load all Users that have have been LastModified by the same person who
+         * created the mUser.
+         *
          * Note: the QualBuilder must be explicitly named ('qual' in example below)
          * because it is used twice.  Using "_" would cause a Scala compile error.
          */
         val mUser = VIEW basedOn "mUser"
-        mUser.buildQual( qual => qual.User.LastModifiedBy > qual.User.CreatedBy )
+        mUser.buildQual( qual => qual.User.LastModifiedBy = qual.User.CreatedBy )
+                    .rootOnlyMultiple()
                     .activate
 
         println( "Found = " + mUser.User.count )
@@ -189,6 +204,19 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
         mUser
 
     }
+
+    def runAll = {
+        var mUser = activateSimpleWithOtherComparators
+        mUser = activateWithOr
+        mUser = activateWithGrouping
+        mUser = activateWithRestricting
+        mUser = asynchronousActivate
+        mUser = activateWithColumnQualification
+        mUser = activateSimple
+//        mUser.logObjectInstance
+
+        mUser
+    }
 }
 
 object SampleActivates {
@@ -200,16 +228,6 @@ object SampleActivates {
         val task = oe.createTask("ZENCAs")
 
         val sample = new SampleActivates( task )
-
-        var mUser = sample.activateSimple
-//        mUser = sample.activateSimpleWithOtherComparators
-//        mUser = sample.activateWithOr
-//        mUser = sample.activateWithGrouping
-//        mUser = sample.activateWithRestricting
-//        mUser = sample.asynchronousActivate
-        mUser = sample.activateWithColumnQualification
-
-//        mUser.logObjectInstance
+        sample.runAll
     }
-
 }

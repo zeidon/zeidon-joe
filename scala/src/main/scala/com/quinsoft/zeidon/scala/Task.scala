@@ -11,7 +11,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
  * @author dgc
  *
  */
-case class Task private[zeidon] ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) extends Dynamic {
+case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null ) extends Dynamic {
 
     val objectEngine: ObjectEngine = oe ?: new ObjectEngine( jtask.getObjectEngine() )
 
@@ -32,7 +32,7 @@ case class Task private[zeidon] ( val jtask: com.quinsoft.zeidon.Task, oe: Objec
      * Creates a deserializer for deserializing an input stream.
      */
     def deserializeOi = jtask.deserializeOi()
-    
+
     /**
      * This is called when the compiler doesn't recognize a method name.  This
      * is used to create an empty View based on a LOD name.  This allows user

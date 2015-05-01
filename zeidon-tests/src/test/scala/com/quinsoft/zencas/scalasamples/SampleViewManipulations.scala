@@ -47,6 +47,10 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
         task.deserializeOi.fromFile( filename ).asJson().activateFirst()
     }
 
+    def runAll( view: View ) = {
+        val filename = serializeSingleOiToJsonFile( view )
+        deserializeOiFromFile( filename )
+    }
 }
 
 object SampleViewManipulations {
