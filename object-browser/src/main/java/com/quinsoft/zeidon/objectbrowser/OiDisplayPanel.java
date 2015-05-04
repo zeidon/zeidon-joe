@@ -59,7 +59,6 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     private       EntityDef selectedEntityDef;
     private final BorderLayout borderLayout;
     private       OiDisplay oiDisplay;
-    private       View view;
 
     OiDisplayPanel( BrowserEnvironment env )
     {
@@ -112,7 +111,6 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
 
     void displayView( View view )
     {
-        this.view = view;
         if ( oiDisplay != null )
             remove( oiDisplay );
 
@@ -157,20 +155,20 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
             return;
 
         if ( action.getActionCommand().equals( FIRST_CURSOR ) )
-            view.cursor( selectedEntityDef ).setFirst();
+            oiDisplay.getView().cursor( selectedEntityDef ).setFirst();
         else
         if ( action.getActionCommand().equals( PREV_CURSOR ) )
-            view.cursor( selectedEntityDef ).setPrevWithinOi();
+            oiDisplay.getView().cursor( selectedEntityDef ).setPrevWithinOi();
         else
         if ( action.getActionCommand().equals( NEXT_CURSOR ) )
-            view.cursor( selectedEntityDef ).setNextWithinOi();
+            oiDisplay.getView().cursor( selectedEntityDef ).setNextWithinOi();
         else
         if ( action.getActionCommand().equals( LAST_CURSOR ) )
-            view.cursor( selectedEntityDef ).setLast();
+            oiDisplay.getView().cursor( selectedEntityDef ).setLast();
         else
             throw new ZeidonException( "Internal action error" );
 
-        entitySelected( selectedEntityDef, view.cursor( selectedEntityDef ).getEntityInstance() );
+        entitySelected( selectedEntityDef, oiDisplay.getView().cursor( selectedEntityDef ).getEntityInstance() );
         oiDisplay.repaint();
     }
 
