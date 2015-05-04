@@ -11,9 +11,6 @@ import com.quinsoft.zeidon.scala.Nexts._
 /**
  * A trait that is added to a Scala object to give the object VML-like syntax.
  * Requires a task.
- *
- * @author dgc
- *
  */
 trait ZeidonOperations {
 
@@ -24,6 +21,8 @@ trait ZeidonOperations {
     val zCURSOR_SET = com.quinsoft.zeidon.CursorResult.SET.toInt()
 
     var task: Task
+
+    def REGISTERED = new Register
 
     val ON = View.ON // Used to build "BASED ON LOD" syntax.
 
@@ -113,4 +112,15 @@ trait ZeidonOperations {
         def FROM( source: EntityCursor ) = targetCursor.include( targetCursor )
         def FROM( source: EntityCursor, position: CursorPosition ) = targetCursor.include( targetCursor, position )
     }
+
+    /**
+     * Syntax filler class to handle REGISTERED AS "viewName"
+     */
+    class Register {
+        def AS( viewName: String ) = GETVIEW( viewName )
+    }
+}
+
+object ZeidonOperations {
+    val AS = new VmlSyntaxFiller
 }

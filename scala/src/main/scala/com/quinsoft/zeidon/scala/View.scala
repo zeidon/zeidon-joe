@@ -87,7 +87,7 @@ class View( val task: Task ) extends Dynamic {
     /**
      * Creates a new View that has the same cursor positions as the current view.
      */
-    def duplicate = { validateNonEmpty; new View( jview.newView ) }
+    def duplicate = { validateNonNull; new View( jview.newView ) }
 
     /**
      * Set the cursors from sourceView to 'this'.
@@ -176,7 +176,7 @@ class View( val task: Task ) extends Dynamic {
      * Returns a view to the cloned OI.
      */
     def cloneRoot: View = {
-        validateNonEmpty
+        validateNonNull
         val cloned = jview.activateOiFromOi( ActivateFlags.fSINGLE )
         new View( cloned )
     }
@@ -184,7 +184,7 @@ class View( val task: Task ) extends Dynamic {
     /**
      * Creates a new view, potentially with a different owning task.
      */
-    def newView( task: Task = this.task ) = { validateNonEmpty; new View( task ).from( this ) }
+    def newView( task: Task = this.task ) = { validateNonNull; new View( task ).from( this ) }
 
     /**
      * Sets the name of this view in its owning task.
@@ -199,7 +199,7 @@ class View( val task: Task ) extends Dynamic {
      *
      * This is a synonym for view.name = "..."
      */
-    def name( viewName: String ) = { validateNonEmpty; jview.setName( viewName ) }
+    def name( viewName: String ) = { validateNonNull; jview.setName( viewName ) }
 
     /**
      * Sets the name of the view as an attribute.
@@ -227,12 +227,17 @@ class View( val task: Task ) extends Dynamic {
     /**
      * Returns true if the OI is empty (i.e. has no root entities).
      */
-    def isEmpty = { validateNonEmpty; jview.isEmpty() }
+    def isEmpty = { validateNonNull; jview.isEmpty() }
+
+    /**
+     * Returns true if no OI has been associated with this view.
+     */
+    def isNull = jview == null
 
     /**
      * Writes the entire OI to the log file.
      */
-    def logObjectInstance = { validateNonEmpty; jview.logObjectInstance() }
+    def logObjectInstance = { validateNonNull; jview.logObjectInstance() }
 
     /**
      * Writes the entire OI to the log file.
@@ -242,7 +247,7 @@ class View( val task: Task ) extends Dynamic {
     /**
      * Returns the options that were used to activate this OI.
      */
-    def activateOptions = { validateNonEmpty; jview.getActivateOptions() }
+    def activateOptions = { validateNonNull; jview.getActivateOptions() }
 
     /**
      * Returns a serializer that can be used to serialize this OI.
@@ -257,18 +262,18 @@ class View( val task: Task ) extends Dynamic {
      * val str = myView.serializeOi.asXml.toString
      * }}}
      */
-    def serializeOi = { validateNonEmpty; jview.serializeOi() }
+    def serializeOi = { validateNonNull; jview.serializeOi() }
 
     /**
      * Creates a SelectSet for this View.
      */
-    def createSelectSet() = { validateNonEmpty; jview.createSelectSet() }
+    def createSelectSet() = { validateNonNull; jview.createSelectSet() }
 
     /**
      * Returns an EntityCursor for the entity specified by entityDef.
      */
     def cursor( entityDef: EntityDef ) = {
-        validateNonEmpty
+        validateNonNull
         new EntityCursor( this, jview.cursor( entityDef ) )
     }
 
@@ -276,7 +281,7 @@ class View( val task: Task ) extends Dynamic {
      * Returns an EntityCursor for the entity specified by entityDef.
      */
     def cursor( entityName: String ) = {
-        validateNonEmpty
+        validateNonNull
         new EntityCursor( this, jview.cursor( entityName ) )
     }
 
@@ -292,7 +297,7 @@ class View( val task: Task ) extends Dynamic {
      * }}}
      */
     def root = {
-        validateNonEmpty
+        validateNonNull
         new EntityCursor( this, jview.cursor( jlodDef.getRoot() ) )
     }
 
@@ -303,7 +308,7 @@ class View( val task: Task ) extends Dynamic {
      * Not intended to be called directly by user code.
      */
     def selectDynamic( entityName: String ): EntityCursor = {
-        validateNonEmpty
+        validateNonNull
 
         val jentityDef = jlodDef.getEntityDef( entityName )
         val jcur = jview.cursor( jentityDef )
@@ -317,7 +322,7 @@ class View( val task: Task ) extends Dynamic {
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
-        validateNonEmpty
+        validateNonNull
 
         val oe = task.objectEngine
         val oper = oe.objectOperationMap.getObjectOperation( operationName, jlodDef, args: _* )
@@ -334,7 +339,7 @@ class View( val task: Task ) extends Dynamic {
             throw new ZeidonException( "LOD name not established for this View" )
     }
 
-    private def validateNonEmpty: Unit = {
+    private def validateNonNull: Unit = {
         if ( jview == null )
             throw new ZeidonException( "View does not have a valid OI.  Did you forget to call activateEmpty()?" )
     }
