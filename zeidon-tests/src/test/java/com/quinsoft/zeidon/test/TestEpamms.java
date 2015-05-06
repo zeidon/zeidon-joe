@@ -62,6 +62,17 @@ public class TestEpamms
 	}
 
    @Test
+	public void ExecuteJOE_TestGetRecursiveDelete()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestGetRecursiveDelete( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestGetRecursiveDelete ========");
+	}
+
+   @Test
 	public void ExecuteJOE_TestCreateChildOnSubobject()
 	{
 	   View         mSPLDef;
@@ -287,6 +298,30 @@ public class TestEpamms
          Assert.assertEquals( "LLD_SpecialSectionAttrBlock exists but is not found: ", CursorResult.SET, cr );
      }
 
+      public void ExecuteJOE_TestGetRecursiveDelete( View view ) {
+
+         //:VIEW mSPLDef  BASED ON LOD  mSPLDef
+      // zVIEW    mSPLDef = new zVIEW( );
+         int      lTempInteger_0 = 0;
+         zVIEW    vTempViewVar_0 = new zVIEW( );
+
+         //:// Activate the mSPLDef object selected in mSubProd.
+         //:ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
+      // {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+      //     GetIntegerFromAttribute( mi_lTempInteger_0, lSPLDLST, "SubregPhysicalLabelDef", "ID" );
+      // lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+         lTempInteger_0 = 7;
+         o_fnLocalBuildQual_12( view, vTempViewVar_0, lTempInteger_0 );
+      // ActivateObjectInstance( mSPLDef, "mSPLDef", view, vTempViewVar_0, zSINGLE );
+         View mSPLDef = view.activateObjectInstance( "mSPLDef", vTempViewVar_0.getView(), ActivateFlags.SINGLE );
+      // DropView( vTempViewVar_0 );
+         //:NAME VIEW mSPLDef "mSPLDef"
+         SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
+         EntityCursor ec = mSPLDef.getCursor( "SubregPhysicalLabelDef" );
+         ec.deleteEntity();
+         mSPLDef.commit();
+     }
+
       private void CheckAddKeywordEntry( View  mSPLDefBlock, String   szKeywordName )
       {
          EntityCursor ec = mSPLDefBlock.getCursor( "LLD_SpecialSectionAttribute");
@@ -303,7 +338,8 @@ public class TestEpamms
 		ExecuteJOE_TestCreateChildOnSubobject( View view )
 		{
          CursorResult cr;
-         View    mSPLDefBlock = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefBlock.json" ).activateFirst();
+      // View    mSPLDefBlock = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefBlock.json" ).activateFirst();
+         View    mSPLDefBlock = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef3.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDefBlock, "LLD_Page", "First Activate" );
 
@@ -334,7 +370,8 @@ public class TestEpamms
 		public int
 		ExecuteJOE_TestB( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefFull.json" ).activateFirst();
+      // View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefFull.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef3.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
@@ -377,7 +414,8 @@ public class TestEpamms
 		public int
 		ExecuteJOE_TestBB( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefFull.json" ).activateFirst();
+      // View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefFull.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef3.json" ).activateFirst();
       // mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "First Activate" );
 
@@ -596,7 +634,8 @@ public class TestEpamms
 		public int
 		ExecuteJOE_Test00( View     view )
 		{
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefGood.json" ).activateFirst();
+      // View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefGood.json" ).activateFirst();
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef3.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "First Activate" );
 
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
@@ -620,7 +659,8 @@ public class TestEpamms
          mSPLDef.logObjectInstance();
       */
          CommitOI_ToFile( mSPLDef2, "target/test-classes/testdata//ePammsDon/mSPLDefX.json", zASCII );
-         mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef2.json" ).activateFirst();
+      // mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef2.json" ).activateFirst();
+         mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDef3.json" ).activateFirst();
          displaySPLD( mSPLDef, "SPLD_LLD", "After Activate mSPLDef2" );
 
          // Try to move the SubBlock back to a panel.
