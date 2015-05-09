@@ -19,18 +19,12 @@
 
 package com.quinsoft.zeidon.test;
 
-import com.quinsoft.epammsDon.*;
-import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.vml.VmlObjectOperations;
-import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.vml.zVIEW;
-import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.quinsoft.epamms.ZGlobal1_Operation;
+import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.vml.VmlObjectOperations;
+import com.quinsoft.zeidon.vml.zVIEW;
 
 /**
    @author QuinSoft
@@ -51,7 +45,7 @@ public class mMasLC_Object extends VmlObjectOperations
 //:                 SHORT GetOrSetFlag )
 
 //:   STRING ( 1000 ) szString
-public int 
+public int
 omMasLC_dIngredientName( View     mMasLC,
                          String InternalEntityStructure,
                          String InternalAttribStructure,
@@ -65,14 +59,14 @@ omMasLC_dIngredientName( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:IF mMasLC.M_IngredientsStatement EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "M_IngredientsStatement" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
             //:szString = mMasLC.M_IngredientsStatement.CommonName
             {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
             StringBuilder sb_szString;
@@ -85,7 +79,7 @@ omMasLC_dIngredientName( View     mMasLC,
             szString = sb_szString.toString( );}
             //:IF szString = ""
             if ( ZeidonStringCompare( szString, 1, 0, "", 1, 0, 1001 ) == 0 )
-            { 
+            {
                //:szString = mMasLC.M_IngredientsStatement.ChemicalName
                {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
                StringBuilder sb_szString;
@@ -96,13 +90,13 @@ omMasLC_dIngredientName( View     mMasLC,
                                GetVariableFromAttribute( sb_szString, mi_lTempInteger_2, 'S', 1001, mMasLC, "M_IngredientsStatement", "ChemicalName", "", 0 );
                lTempInteger_2 = mi_lTempInteger_2.intValue( );
                szString = sb_szString.toString( );}
-            } 
+            }
 
             //:END
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szString = ""
              {StringBuilder sb_szString;
             if ( szString == null )
@@ -111,7 +105,7 @@ omMasLC_dIngredientName( View     mMasLC,
                sb_szString = new StringBuilder( szString );
                         ZeidonStringCopy( sb_szString, 1, 0, "", 1, 0, 1001 );
             szString = sb_szString.toString( );}
-         } 
+         }
 
          //:END
 
@@ -127,13 +121,13 @@ omMasLC_dIngredientName( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:DERIVED ATTRIBUTE OPERATION
@@ -143,7 +137,7 @@ omMasLC_dIngredientName( View     mMasLC,
    //:                    SHORT GetOrSetFlag )
 
    //:STRING ( 1000 ) szString
-public int 
+public int
 omMasLC_dMasterProductNameNbr( View     mMasLC,
                                String InternalEntityStructure,
                                String InternalAttribStructure,
@@ -159,14 +153,14 @@ omMasLC_dMasterProductNameNbr( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:IF mMasLC.MasterProduct  EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "MasterProduct" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
             //:szString = mMasLC.MasterProduct.Name + " (" +
             //:        mMasLC.PrimaryRegistrant.EPA_CompanyNumber + "-" +
             //:        mMasLC.MasterProduct.Number + ")"
@@ -231,9 +225,9 @@ omMasLC_dMasterProductNameNbr( View     mMasLC,
                         ZeidonStringConcat( sb_szString, 1, 0, ")", 1, 0, 1001 );
             szString = sb_szString.toString( );}
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szString = ""
              {StringBuilder sb_szString;
             if ( szString == null )
@@ -242,7 +236,7 @@ omMasLC_dMasterProductNameNbr( View     mMasLC,
                sb_szString = new StringBuilder( szString );
                         ZeidonStringCopy( sb_szString, 1, 0, "", 1, 0, 1001 );
             szString = sb_szString.toString( );}
-         } 
+         }
 
          //:END
 
@@ -258,13 +252,13 @@ omMasLC_dMasterProductNameNbr( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:DERIVED ATTRIBUTE OPERATION
@@ -274,7 +268,7 @@ omMasLC_dMasterProductNameNbr( View     mMasLC,
    //:                SHORT GetOrSetFlag )
 
    //:STRING ( 1000 ) szString
-public int 
+public int
 omMasLC_dRegistrantNameID( View     mMasLC,
                            String InternalEntityStructure,
                            String InternalAttribStructure,
@@ -289,14 +283,14 @@ omMasLC_dRegistrantNameID( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:IF mMasLC.Organization  EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "Organization" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
             //:szString = mMasLC.Organization.Name
             {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
             StringBuilder sb_szString;
@@ -309,7 +303,7 @@ omMasLC_dRegistrantNameID( View     mMasLC,
             szString = sb_szString.toString( );}
             //:IF mMasLC.PrimaryRegistrant.EPA_CompanyNumber = ""
             if ( CompareAttributeToString( mMasLC, "PrimaryRegistrant", "EPA_CompanyNumber", "" ) == 0 )
-            { 
+            {
                //:szString = szString + " (Non EPA)"
                 {StringBuilder sb_szString;
                if ( szString == null )
@@ -319,9 +313,9 @@ omMasLC_dRegistrantNameID( View     mMasLC,
                               ZeidonStringConcat( sb_szString, 1, 0, " (Non EPA)", 1, 0, 1001 );
                szString = sb_szString.toString( );}
                //:ELSE
-            } 
+            }
             else
-            { 
+            {
                //:szString = szString + " (" +
                //:     mMasLC.PrimaryRegistrant.EPA_CompanyNumber + ")"
                 {StringBuilder sb_szString;
@@ -354,13 +348,13 @@ omMasLC_dRegistrantNameID( View     mMasLC,
                   sb_szString = new StringBuilder( szString );
                               ZeidonStringConcat( sb_szString, 1, 0, ")", 1, 0, 1001 );
                szString = sb_szString.toString( );}
-            } 
+            }
 
             //:END
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szString = ""
              {StringBuilder sb_szString;
             if ( szString == null )
@@ -369,7 +363,7 @@ omMasLC_dRegistrantNameID( View     mMasLC,
                sb_szString = new StringBuilder( szString );
                         ZeidonStringCopy( sb_szString, 1, 0, "", 1, 0, 1001 );
             szString = sb_szString.toString( );}
-         } 
+         }
 
          //:END
 
@@ -384,13 +378,13 @@ omMasLC_dRegistrantNameID( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:TRANSFORMATION OPERATION
@@ -398,7 +392,7 @@ omMasLC_dRegistrantNameID( View     mMasLC,
    //:                  VIEW PreviousMLC BASED ON LOD mMasLC )
 
    //:STRING ( 10 ) szVersion
-public int 
+public int
 omMasLC_BuildNewMLC_Version( View     NewMLC,
                              View     PreviousMLC )
 {
@@ -442,33 +436,33 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_Usage
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_Usage", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:SET CURSOR FIRST NewMLC.M_Usage WHERE NewMLC.M_Usage.UsageType = PreviousMLC.M_Usage.UsageType
       //:                                  AND NewMLC.M_Usage.Name = PreviousMLC.M_Usage.Name
       RESULT = SetCursorFirstEntity( NewMLC, "M_Usage", "" );
       if ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( NewMLC, "M_Usage", "UsageType", PreviousMLC, "M_Usage", "UsageType" ) != 0 || CompareAttributeToAttribute( NewMLC, "M_Usage", "Name", PreviousMLC, "M_Usage", "Name" ) != 0 ) )
-         { 
+         {
             RESULT = SetCursorNextEntity( NewMLC, "M_Usage", "" );
-         } 
+         }
 
-      } 
+      }
 
       //:IF RESULT < zCURSOR_SET
       if ( RESULT < zCURSOR_SET )
-      { 
+      {
          //:CREATE ENTITY NewMLC.M_Usage
          RESULT = CreateEntity( NewMLC, "M_Usage", zPOS_AFTER );
          //:SetMatchingAttributesByName( NewMLC, "M_Usage", PreviousMLC, "M_Usage", zSET_NULL )
          SetMatchingAttributesByName( NewMLC, "M_Usage", PreviousMLC, "M_Usage", zSET_NULL );
          //:INCLUDE NewMLC.MP_Usage FROM PreviousMLC.M_Usage
          RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_Usage", PreviousMLC, "M_Usage", zPOS_AFTER );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( PreviousMLC, "M_Usage", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -476,7 +470,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_GeneralSection
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_GeneralSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY NewMLC.M_GeneralSection
       RESULT = CreateEntity( NewMLC, "M_GeneralSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( NewMLC, "M_GeneralSection", PreviousMLC, "M_GeneralSection", zSET_NULL )
@@ -486,7 +480,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:FOR EACH PreviousMLC.M_GeneralStatement
       RESULT = SetCursorFirstEntity( PreviousMLC, "M_GeneralStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY NewMLC.M_GeneralStatement
          RESULT = CreateEntity( NewMLC, "M_GeneralStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( NewMLC, "M_GeneralStatement", PreviousMLC, "M_GeneralStatement", zSET_NULL )
@@ -494,11 +488,11 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
          //:INCLUDE NewMLC.MP_GeneralStatement FROM PreviousMLC.M_GeneralStatement
          RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_GeneralStatement", PreviousMLC, "M_GeneralStatement", zPOS_AFTER );
          RESULT = SetCursorNextEntity( PreviousMLC, "M_GeneralStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( PreviousMLC, "M_GeneralSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -506,7 +500,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_IngredientsSection
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_IngredientsSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY NewMLC.M_IngredientsSection
       RESULT = CreateEntity( NewMLC, "M_IngredientsSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( NewMLC, "M_IngredientsSection", PreviousMLC, "M_IngredientsSection", zSET_NULL )
@@ -516,7 +510,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:FOR EACH PreviousMLC.M_IngredientsStatement
       RESULT = SetCursorFirstEntity( PreviousMLC, "M_IngredientsStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY NewMLC.M_IngredientsStatement
          RESULT = CreateEntity( NewMLC, "M_IngredientsStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( NewMLC, "M_IngredientsStatement", PreviousMLC, "M_IngredientsStatement", zSET_NULL )
@@ -524,11 +518,11 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
          //:INCLUDE NewMLC.MP_IngredientsStatement FROM PreviousMLC.M_IngredientsStatement
          RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_IngredientsStatement", PreviousMLC, "M_IngredientsStatement", zPOS_AFTER );
          RESULT = SetCursorNextEntity( PreviousMLC, "M_IngredientsStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( PreviousMLC, "M_IngredientsSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -536,7 +530,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_StorageDisposalSection
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_StorageDisposalSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY NewMLC.M_StorageDisposalSection
       RESULT = CreateEntity( NewMLC, "M_StorageDisposalSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( NewMLC, "M_StorageDisposalSection", PreviousMLC, "M_StorageDisposalSection", zSET_NULL )
@@ -546,7 +540,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:FOR EACH PreviousMLC.M_StorageDisposalStatement
       RESULT = SetCursorFirstEntity( PreviousMLC, "M_StorageDisposalStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY NewMLC.M_StorageDisposalStatement
          RESULT = CreateEntity( NewMLC, "M_StorageDisposalStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( NewMLC, "M_StorageDisposalStatement", PreviousMLC, "M_StorageDisposalStatement", zSET_NULL )
@@ -554,11 +548,11 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
          //:INCLUDE NewMLC.MP_StorageDisposalStatement FROM PreviousMLC.M_StorageDisposalStatement
          RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_StorageDisposalStatement", PreviousMLC, "M_StorageDisposalStatement", zPOS_AFTER );
          RESULT = SetCursorNextEntity( PreviousMLC, "M_StorageDisposalStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( PreviousMLC, "M_StorageDisposalSection", "" );
       //:END
-   } 
+   }
 
    //:END
    //:TraceLineS( "!!! Commit 3", "" )
@@ -570,7 +564,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_DirectionsForUseSection
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_DirectionsForUseSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY NewMLC.M_DirectionsForUseSection
       RESULT = CreateEntity( NewMLC, "M_DirectionsForUseSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( NewMLC, "M_DirectionsForUseSection", PreviousMLC, "M_DirectionsForUseSection", zSET_NULL )
@@ -580,7 +574,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:FOR EACH PreviousMLC.M_DirectionsForUseStatement
       RESULT = SetCursorFirstEntity( PreviousMLC, "M_DirectionsForUseStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY NewMLC.M_DirectionsForUseStatement
          RESULT = CreateEntity( NewMLC, "M_DirectionsForUseStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( NewMLC, "M_DirectionsForUseStatement", PreviousMLC, "M_DirectionsForUseStatement", zSET_NULL )
@@ -588,7 +582,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
          //:INCLUDE NewMLC.MP_DirectionsForUseStatement FROM PreviousMLC.M_DirectionsForUseStatement
          RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_DirectionsForUseStatement", PreviousMLC, "M_DirectionsForUseStatement", zPOS_AFTER );
          RESULT = SetCursorNextEntity( PreviousMLC, "M_DirectionsForUseStatement", "" );
-      } 
+      }
 
       //:END
 
@@ -598,13 +592,13 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:COMMIT NewMLC
       RESULT = CommitObjectInstance( NewMLC );
       RESULT = SetCursorNextEntity( PreviousMLC, "M_DirectionsForUseSection", "" );
-   } 
+   }
 
-   //:   /*FOR EACH PreviousMLC.M_DirectionsUsageOrdering 
+   //:   /*FOR EACH PreviousMLC.M_DirectionsUsageOrdering
    //:      // Check to see if the Usage already exists. This can happen if two Usages have the same name.
    //:      SET CURSOR FIRST NewMLC.M_DirectionsUsage WHERE NewMLC.M_DirectionsUsage.Name                 = PreviousMLC.M_DirectionsUsage.Name
    //:                                                  AND NewMLC.M_DirectionsUsage.UsageType            = PreviousMLC.M_DirectionsUsage.UsageType
-   //:                                                  AND NewMLC.M_DirectionsUsage.ClaimsClassification = PreviousMLC.M_DirectionsUsage.ClaimsClassification 
+   //:                                                  AND NewMLC.M_DirectionsUsage.ClaimsClassification = PreviousMLC.M_DirectionsUsage.ClaimsClassification
    //:      IF RESULT < zCURSOR_SET
    //:         SET CURSOR FIRST NewMLC.M_Usage WHERE NewMLC.M_Usage.Name                 = PreviousMLC.M_DirectionsUsage.Name
    //:                                           AND NewMLC.M_Usage.UsageType            = PreviousMLC.M_DirectionsUsage.UsageType
@@ -627,7 +621,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_MarketingSection
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_MarketingSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY NewMLC.M_MarketingSection
       RESULT = CreateEntity( NewMLC, "M_MarketingSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( NewMLC, "M_MarketingSection", PreviousMLC, "M_MarketingSection", zSET_NULL )
@@ -637,7 +631,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:FOR EACH PreviousMLC.M_MarketingStatement
       RESULT = SetCursorFirstEntity( PreviousMLC, "M_MarketingStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY NewMLC.M_MarketingStatement
          RESULT = CreateEntity( NewMLC, "M_MarketingStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( NewMLC, "M_MarketingStatement", PreviousMLC, "M_MarketingStatement", zSET_NULL )
@@ -645,11 +639,11 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
          //:INCLUDE NewMLC.MP_MarketingStatement FROM PreviousMLC.M_MarketingStatement
          RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_MarketingStatement", PreviousMLC, "M_MarketingStatement", zPOS_AFTER );
          RESULT = SetCursorNextEntity( PreviousMLC, "M_MarketingStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( PreviousMLC, "M_MarketingSection", "" );
       //:END
-   } 
+   }
 
 
    //:    // Include appropriate Usage statements.
@@ -674,7 +668,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    //:FOR EACH PreviousMLC.M_HumanHazardSection
    RESULT = SetCursorFirstEntity( PreviousMLC, "M_HumanHazardSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY NewMLC.M_HumanHazardSection
       RESULT = CreateEntity( NewMLC, "M_HumanHazardSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( NewMLC, "M_HumanHazardSection", PreviousMLC, "M_HumanHazardSection", zSET_NULL )
@@ -682,7 +676,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
       //:INCLUDE NewMLC.MP_HumanHazardSection FROM PreviousMLC.M_HumanHazardSection
       RESULT = IncludeSubobjectFromSubobject( NewMLC, "MP_HumanHazardSection", PreviousMLC, "M_HumanHazardSection", zPOS_AFTER );
       RESULT = SetCursorNextEntity( PreviousMLC, "M_HumanHazardSection", "" );
-   } 
+   }
 
    //:END
    //:TraceLineS( "!!! Commit 8", "" )
@@ -691,7 +685,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
    RESULT = CommitObjectInstance( NewMLC );
    return( 0 );
 // END
-} 
+}
 
 
 //:TRANSFORMATION OPERATION
@@ -699,7 +693,7 @@ omMasLC_BuildNewMLC_Version( View     NewMLC,
 //:                     VIEW SourceMLC BASED ON LOD mMasLC )
 
 //:   VIEW TargetMLC2  BASED ON LOD mMasLC
-public int 
+public int
 omMasLC_CopyMLCToNewProduct( View     TargetMLC,
                              View     SourceMLC )
 {
@@ -721,32 +715,32 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_Usage
    RESULT = SetCursorFirstEntity( SourceMLC, "M_Usage", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:SET CURSOR FIRST TargetMLC.M_Usage WHERE TargetMLC.M_Usage.UsageType = SourceMLC.M_Usage.UsageType
       //:                                     AND TargetMLC.M_Usage.Name = SourceMLC.M_Usage.Name
       RESULT = SetCursorFirstEntity( TargetMLC, "M_Usage", "" );
       if ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( TargetMLC, "M_Usage", "UsageType", SourceMLC, "M_Usage", "UsageType" ) != 0 ||
                  CompareAttributeToAttribute( TargetMLC, "M_Usage", "Name", SourceMLC, "M_Usage", "Name" ) != 0 ) )
-         { 
+         {
             RESULT = SetCursorNextEntity( TargetMLC, "M_Usage", "" );
-         } 
+         }
 
-      } 
+      }
 
       //:IF RESULT < zCURSOR_SET
       if ( RESULT < zCURSOR_SET )
-      { 
+      {
          //:CREATE ENTITY TargetMLC.M_Usage
          RESULT = CreateEntity( TargetMLC, "M_Usage", zPOS_AFTER );
          //:SetMatchingAttributesByName( TargetMLC, "M_Usage", SourceMLC, "M_Usage", zSET_NULL )
          SetMatchingAttributesByName( TargetMLC, "M_Usage", SourceMLC, "M_Usage", zSET_NULL );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_Usage", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -754,7 +748,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_GeneralSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_GeneralSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY TargetMLC.M_GeneralSection
       RESULT = CreateEntity( TargetMLC, "M_GeneralSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( TargetMLC, "M_GeneralSection", SourceMLC, "M_GeneralSection", zSET_NULL )
@@ -762,17 +756,17 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_GeneralStatement
       RESULT = SetCursorFirstEntity( SourceMLC, "M_GeneralStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY TargetMLC.M_GeneralStatement
          RESULT = CreateEntity( TargetMLC, "M_GeneralStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( TargetMLC, "M_GeneralStatement", SourceMLC, "M_GeneralStatement", zSET_NULL )
          SetMatchingAttributesByName( TargetMLC, "M_GeneralStatement", SourceMLC, "M_GeneralStatement", zSET_NULL );
          RESULT = SetCursorNextEntity( SourceMLC, "M_GeneralStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_GeneralSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -780,7 +774,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_IngredientsSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_IngredientsSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY TargetMLC.M_IngredientsSection
       RESULT = CreateEntity( TargetMLC, "M_IngredientsSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( TargetMLC, "M_IngredientsSection", SourceMLC, "M_IngredientsSection", zSET_NULL )
@@ -788,17 +782,17 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_IngredientsStatement
       RESULT = SetCursorFirstEntity( SourceMLC, "M_IngredientsStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY TargetMLC.M_IngredientsStatement
          RESULT = CreateEntity( TargetMLC, "M_IngredientsStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( TargetMLC, "M_IngredientsStatement", SourceMLC, "M_IngredientsStatement", zSET_NULL )
          SetMatchingAttributesByName( TargetMLC, "M_IngredientsStatement", SourceMLC, "M_IngredientsStatement", zSET_NULL );
          RESULT = SetCursorNextEntity( SourceMLC, "M_IngredientsStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_IngredientsSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -806,7 +800,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_StorageDisposalSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_StorageDisposalSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY TargetMLC.M_StorageDisposalSection
       RESULT = CreateEntity( TargetMLC, "M_StorageDisposalSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( TargetMLC, "M_StorageDisposalSection", SourceMLC, "M_StorageDisposalSection", zSET_NULL )
@@ -814,17 +808,17 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_StorageDisposalStatement
       RESULT = SetCursorFirstEntity( SourceMLC, "M_StorageDisposalStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY TargetMLC.M_StorageDisposalStatement
          RESULT = CreateEntity( TargetMLC, "M_StorageDisposalStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( TargetMLC, "M_StorageDisposalStatement", SourceMLC, "M_StorageDisposalStatement", zSET_NULL )
          SetMatchingAttributesByName( TargetMLC, "M_StorageDisposalStatement", SourceMLC, "M_StorageDisposalStatement", zSET_NULL );
          RESULT = SetCursorNextEntity( SourceMLC, "M_StorageDisposalStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_StorageDisposalSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -832,7 +826,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_DirectionsForUseSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_DirectionsForUseSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY TargetMLC.M_DirectionsForUseSection
       RESULT = CreateEntity( TargetMLC, "M_DirectionsForUseSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( TargetMLC, "M_DirectionsForUseSection", SourceMLC, "M_DirectionsForUseSection", zSET_NULL )
@@ -840,17 +834,17 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_DirectionsForUseStatement
       RESULT = SetCursorFirstEntity( SourceMLC, "M_DirectionsForUseStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY TargetMLC.M_DirectionsForUseStatement
          RESULT = CreateEntity( TargetMLC, "M_DirectionsForUseStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( TargetMLC, "M_DirectionsForUseStatement", SourceMLC, "M_DirectionsForUseStatement", zSET_NULL )
          SetMatchingAttributesByName( TargetMLC, "M_DirectionsForUseStatement", SourceMLC, "M_DirectionsForUseStatement", zSET_NULL );
          RESULT = SetCursorNextEntity( SourceMLC, "M_DirectionsForUseStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_DirectionsForUseSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -858,7 +852,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_MarketingSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_MarketingSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY TargetMLC.M_MarketingSection
       RESULT = CreateEntity( TargetMLC, "M_MarketingSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( TargetMLC, "M_MarketingSection", SourceMLC, "M_MarketingSection", zSET_NULL )
@@ -866,17 +860,17 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_MarketingStatement
       RESULT = SetCursorFirstEntity( SourceMLC, "M_MarketingStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CREATE ENTITY TargetMLC.M_MarketingStatement
          RESULT = CreateEntity( TargetMLC, "M_MarketingStatement", zPOS_AFTER );
          //:SetMatchingAttributesByName( TargetMLC, "M_MarketingStatement", SourceMLC, "M_MarketingStatement", zSET_NULL )
          SetMatchingAttributesByName( TargetMLC, "M_MarketingStatement", SourceMLC, "M_MarketingStatement", zSET_NULL );
          RESULT = SetCursorNextEntity( SourceMLC, "M_MarketingStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_MarketingSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -884,13 +878,13 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_HumanHazardSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_HumanHazardSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:CREATE ENTITY TargetMLC.M_HumanHazardSection
       RESULT = CreateEntity( TargetMLC, "M_HumanHazardSection", zPOS_AFTER );
       //:SetMatchingAttributesByName( TargetMLC, "M_HumanHazardSection", SourceMLC, "M_HumanHazardSection", zSET_NULL )
       SetMatchingAttributesByName( TargetMLC, "M_HumanHazardSection", SourceMLC, "M_HumanHazardSection", zSET_NULL );
       RESULT = SetCursorNextEntity( SourceMLC, "M_HumanHazardSection", "" );
-   } 
+   }
 
    //:END
 
@@ -898,7 +892,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_DirectionsForUseSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_DirectionsForUseSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:SET CURSOR FIRST TargetMLC.M_DirectionsForUseSection
       //:           WHERE TargetMLC.M_DirectionsForUseSection.Title = SourceMLC.M_DirectionsForUseSection.Title
       {StringBuilder sb_szTempString_0;
@@ -912,7 +906,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_DirectionsUsage WITHIN SourceMLC.M_DirectionsForUseSection
       RESULT = SetCursorFirstEntity( SourceMLC, "M_DirectionsUsage", "M_DirectionsForUseSection" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CreateViewFromView( TargetMLC2, TargetMLC )
          CreateViewFromView( TargetMLC2, TargetMLC );
          //:SET CURSOR FIRST TargetMLC2.M_DirectionsUsage
@@ -920,37 +914,37 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
          //:             AND TargetMLC2.M_DirectionsUsage.Name = SourceMLC.M_DirectionsUsage.Name
          RESULT = SetCursorFirstEntity( TargetMLC2, "M_DirectionsUsage", "" );
          if ( RESULT > zCURSOR_UNCHANGED )
-         { 
+         {
             while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( TargetMLC2, "M_DirectionsUsage", "UsageType", SourceMLC, "M_DirectionsUsage", "UsageType" ) != 0 ||
                     CompareAttributeToAttribute( TargetMLC2, "M_DirectionsUsage", "Name", SourceMLC, "M_DirectionsUsage", "Name" ) != 0 ) )
-            { 
+            {
                RESULT = SetCursorNextEntity( TargetMLC2, "M_DirectionsUsage", "" );
-            } 
+            }
 
-         } 
+         }
 
          //:IF RESULT < zCURSOR_SET
          if ( RESULT < zCURSOR_SET )
-         { 
+         {
             //:SET CURSOR FIRST TargetMLC.M_Usage WHERE TargetMLC.M_Usage.Name = SourceMLC.M_DirectionsUsage.Name
             //:                                     AND TargetMLC.M_Usage.UsageType = SourceMLC.M_DirectionsUsage.UsageType
             RESULT = SetCursorFirstEntity( TargetMLC, "M_Usage", "" );
             if ( RESULT > zCURSOR_UNCHANGED )
-            { 
+            {
                while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( TargetMLC, "M_Usage", "Name", SourceMLC, "M_DirectionsUsage", "Name" ) != 0 ||
                        CompareAttributeToAttribute( TargetMLC, "M_Usage", "UsageType", SourceMLC, "M_DirectionsUsage", "UsageType" ) != 0 ) )
-               { 
+               {
                   RESULT = SetCursorNextEntity( TargetMLC, "M_Usage", "" );
-               } 
+               }
 
-            } 
+            }
 
             //:IF RESULT < zCURSOR_SET
             if ( RESULT < zCURSOR_SET )
-            { 
+            {
                //:IssueError( TargetMLC, 0, 0, "Programming Error 1" )
                IssueError( TargetMLC, 0, 0, "Programming Error 1" );
-            } 
+            }
 
             //:END
 
@@ -958,17 +952,17 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
             RESULT = CreateEntity( TargetMLC, "M_DirectionsUsageOrdering", zPOS_AFTER );
             //:INCLUDE TargetMLC.M_DirectionsUsage FROM TargetMLC.M_Usage
             RESULT = IncludeSubobjectFromSubobject( TargetMLC, "M_DirectionsUsage", TargetMLC, "M_Usage", zPOS_AFTER );
-         } 
+         }
 
          //:END
          //:DropView( TargetMLC2 )
          DropView( TargetMLC2 );
          RESULT = SetCursorNextEntity( SourceMLC, "M_DirectionsUsage", "M_DirectionsForUseSection" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_DirectionsForUseSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
@@ -976,7 +970,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
    //:FOR EACH SourceMLC.M_MarketingSection
    RESULT = SetCursorFirstEntity( SourceMLC, "M_MarketingSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:SET CURSOR FIRST TargetMLC.M_MarketingSection
       //:           WHERE TargetMLC.M_MarketingSection.Title = SourceMLC.M_MarketingSection.Title
       {StringBuilder sb_szTempString_0;
@@ -990,7 +984,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
       //:FOR EACH SourceMLC.M_MarketingUsage WITHIN SourceMLC.M_MarketingSection
       RESULT = SetCursorFirstEntity( SourceMLC, "M_MarketingUsage", "M_MarketingSection" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
+      {
          //:CreateViewFromView( TargetMLC2, TargetMLC )
          CreateViewFromView( TargetMLC2, TargetMLC );
          //:SET CURSOR FIRST TargetMLC2.M_MarketingUsage
@@ -998,59 +992,59 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
          //:             AND TargetMLC2.M_MarketingUsage.Name = SourceMLC.M_MarketingUsage.Name
          RESULT = SetCursorFirstEntity( TargetMLC2, "M_MarketingUsage", "" );
          if ( RESULT > zCURSOR_UNCHANGED )
-         { 
+         {
             while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( TargetMLC2, "M_MarketingUsage", "UsageType", SourceMLC, "M_MarketingUsage", "UsageType" ) != 0 ||
                     CompareAttributeToAttribute( TargetMLC2, "M_MarketingUsage", "Name", SourceMLC, "M_MarketingUsage", "Name" ) != 0 ) )
-            { 
+            {
                RESULT = SetCursorNextEntity( TargetMLC2, "M_MarketingUsage", "" );
-            } 
+            }
 
-         } 
+         }
 
          //:IF RESULT < zCURSOR_SET
          if ( RESULT < zCURSOR_SET )
-         { 
+         {
             //:SET CURSOR FIRST TargetMLC.M_Usage WHERE TargetMLC.M_Usage.Name = SourceMLC.M_MarketingUsage.Name
             //:                                     AND TargetMLC.M_Usage.UsageType = SourceMLC.M_MarketingUsage.UsageType
             RESULT = SetCursorFirstEntity( TargetMLC, "M_Usage", "" );
             if ( RESULT > zCURSOR_UNCHANGED )
-            { 
+            {
                while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( TargetMLC, "M_Usage", "Name", SourceMLC, "M_MarketingUsage", "Name" ) != 0 ||
                        CompareAttributeToAttribute( TargetMLC, "M_Usage", "UsageType", SourceMLC, "M_MarketingUsage", "UsageType" ) != 0 ) )
-               { 
+               {
                   RESULT = SetCursorNextEntity( TargetMLC, "M_Usage", "" );
-               } 
+               }
 
-            } 
+            }
 
             //:IF RESULT < zCURSOR_SET
             if ( RESULT < zCURSOR_SET )
-            { 
+            {
                //:IssueError( TargetMLC,0,0, "Programming Error 1" )
                IssueError( TargetMLC, 0, 0, "Programming Error 1" );
-            } 
+            }
 
             //:END
             //:CREATE ENTITY TargetMLC.M_MarketingUsageOrdering
             RESULT = CreateEntity( TargetMLC, "M_MarketingUsageOrdering", zPOS_AFTER );
             //:INCLUDE TargetMLC.M_MarketingUsage FROM TargetMLC.M_Usage
             RESULT = IncludeSubobjectFromSubobject( TargetMLC, "M_MarketingUsage", TargetMLC, "M_Usage", zPOS_AFTER );
-         } 
+         }
 
          //:END
          //:DropView( TargetMLC2 )
          DropView( TargetMLC2 );
          RESULT = SetCursorNextEntity( SourceMLC, "M_MarketingUsage", "M_MarketingSection" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( SourceMLC, "M_MarketingSection", "" );
       //:END
-   } 
+   }
 
    //:END
    return( 0 );
 // END
-} 
+}
 
 
 //:OBJECT CONSTRAINT OPERATION
@@ -1059,7 +1053,7 @@ omMasLC_CopyMLCToNewProduct( View     TargetMLC,
 //:                   SHORT State )
 
 //:   STRING ( 100 ) szCompositeLocation
-public int 
+public int
 omMasLC_ObjectConstraints( View     mMasLC,
                            Integer   Event,
                            Integer   State )
@@ -1069,7 +1063,7 @@ omMasLC_ObjectConstraints( View     mMasLC,
 
    //:CASE Event
    switch( Event )
-   { 
+   {
       //:OF   zOCE_ACTIVATE:
       case zOCE_ACTIVATE :
 
@@ -1094,14 +1088,14 @@ omMasLC_ObjectConstraints( View     mMasLC,
       //:OF   zOCE_DROPOI:
       case zOCE_DROPOI :
          break ;
-   } 
+   }
 
 
    //:     /* end zOCE_DROPOI */
    //:END  /* case */
    return( 0 );
 // END
-} 
+}
 
 
 //:DERIVED ATTRIBUTE OPERATION
@@ -1111,7 +1105,7 @@ omMasLC_ObjectConstraints( View     mMasLC,
 //:                      SHORT GetOrSetFlag )
 
 //:   STRING ( 256 ) szString
-public int 
+public int
 omMasLC_dFullHazardStatement( View     mMasLC,
                               String InternalEntityStructure,
                               String InternalAttribStructure,
@@ -1152,14 +1146,14 @@ omMasLC_dFullHazardStatement( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:IF mMasLC.M_HumanHazardSection  EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "M_HumanHazardSection" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
 
             //:szSeparator = mMasLC.M_HumanHazardSection.LocationSeparator
             {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
@@ -1191,7 +1185,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
             nPosStart = zstrlen( szSeparator );
             //:IF nPosStart > 0
             if ( nPosStart > 0 )
-            { 
+            {
                //:zstrncpy( szOpenSeparator, szSeparator, 1 )
                 {StringBuilder sb_szOpenSeparator;
                if ( szOpenSeparator == null )
@@ -1202,7 +1196,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szOpenSeparator = sb_szOpenSeparator.toString( );}
                //:IF nPosStart > 1
                if ( nPosStart > 1 )
-               { 
+               {
                   //:zstrncpyoffset( szCloseSeparator, szSeparator, 1, 1 )
                    {StringBuilder sb_szCloseSeparator;
                   if ( szCloseSeparator == null )
@@ -1211,10 +1205,10 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szCloseSeparator = new StringBuilder( szCloseSeparator );
                                     zstrncpyoffset( sb_szCloseSeparator, szSeparator, 1, 1 );
                   szCloseSeparator = sb_szCloseSeparator.toString( );}
-               } 
+               }
 
                //:END
-            } 
+            }
 
             //:END
 
@@ -1242,7 +1236,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
             nPosStart = zSearchSubString( szString, "{{Precautionary Panel Location}}", "f", 0 );
             //:IF nPosStart >= 0
             if ( nPosStart >= 0 )
-            { 
+            {
 
                //:nPosEnd = nPosStart + 32 // length of "{{Precautionary Panel Location}}"
                nPosEnd = nPosStart + 32;
@@ -1266,10 +1260,10 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:IF szEncloseFirst = "Y" AND szCloseSeparator != ""
                   if ( ZeidonStringCompare( szEncloseFirst, 1, 0, "Y", 1, 0, 2 ) == 0 && ZeidonStringCompare( szCloseSeparator, 1, 0, "", 1, 0, 2 ) != 0 )
-                  { 
+                  {
                      //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                       {StringBuilder sb_szReplaceString;
                      if ( szReplaceString == null )
@@ -1293,9 +1287,9 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                                           ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                      szReplaceString = sb_szReplaceString.toString( );}
                      //:ELSE
-                  } 
+                  }
                   else
-                  { 
+                  {
                      //:szReplaceString = szReplaceString + szLocation
                       {StringBuilder sb_szReplaceString;
                      if ( szReplaceString == null )
@@ -1304,10 +1298,10 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                         sb_szReplaceString = new StringBuilder( szReplaceString );
                                           ZeidonStringConcat( sb_szReplaceString, 1, 0, szLocation, 1, 0, 257 );
                      szReplaceString = sb_szReplaceString.toString( );}
-                  } 
+                  }
 
                   //:END
-               } 
+               }
 
                //:END
 
@@ -1323,7 +1317,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1346,7 +1340,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1362,7 +1356,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1385,7 +1379,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1401,7 +1395,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1424,7 +1418,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1440,7 +1434,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1463,7 +1457,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1475,7 +1469,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                   sb_szString = new StringBuilder( szString );
                                zReplaceSubString( sb_szString, nPosStart, nPosEnd, szReplaceString );
                szString = sb_szString.toString( );}
-            } 
+            }
 
             //:END
 
@@ -1483,7 +1477,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
             nPosStart = zSearchSubString( szString, "{{Precautionary Label Location}}", "f", 0 );
             //:IF nPosStart >= 0
             if ( nPosStart >= 0 )
-            { 
+            {
 
                //:nPosEnd = nPosStart + 32 // length of "{{Precautionary Label Location}}"
                nPosEnd = nPosStart + 32;
@@ -1507,10 +1501,10 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:IF szCloseSeparator != ""
                   if ( ZeidonStringCompare( szCloseSeparator, 1, 0, "", 1, 0, 2 ) != 0 )
-                  { 
+                  {
                      //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                       {StringBuilder sb_szReplaceString;
                      if ( szReplaceString == null )
@@ -1534,9 +1528,9 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                                           ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                      szReplaceString = sb_szReplaceString.toString( );}
                      //:ELSE
-                  } 
+                  }
                   else
-                  { 
+                  {
                      //:szReplaceString = szReplaceString + szLocation
                       {StringBuilder sb_szReplaceString;
                      if ( szReplaceString == null )
@@ -1545,10 +1539,10 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                         sb_szReplaceString = new StringBuilder( szReplaceString );
                                           ZeidonStringConcat( sb_szReplaceString, 1, 0, szLocation, 1, 0, 257 );
                      szReplaceString = sb_szReplaceString.toString( );}
-                  } 
+                  }
 
                   //:END
-               } 
+               }
 
                //:END
 
@@ -1564,7 +1558,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1587,7 +1581,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1603,7 +1597,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1626,7 +1620,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1642,7 +1636,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1665,7 +1659,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1681,7 +1675,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                szLocation = sb_szLocation.toString( );}
                //:IF szLocation != ""
                if ( ZeidonStringCompare( szLocation, 1, 0, "", 1, 0, 257 ) != 0 )
-               { 
+               {
                   //:szReplaceString = szReplaceString + szOpenSeparator + szLocation + szCloseSeparator
                    {StringBuilder sb_szReplaceString;
                   if ( szReplaceString == null )
@@ -1704,7 +1698,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                      sb_szReplaceString = new StringBuilder( szReplaceString );
                                     ZeidonStringConcat( sb_szReplaceString, 1, 0, szCloseSeparator, 1, 0, 257 );
                   szReplaceString = sb_szReplaceString.toString( );}
-               } 
+               }
 
                //:END
 
@@ -1716,14 +1710,14 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                   sb_szString = new StringBuilder( szString );
                                zReplaceSubString( sb_szString, nPosStart, nPosEnd, szReplaceString );
                szString = sb_szString.toString( );}
-            } 
+            }
 
             //:END
 
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szString = ""
              {StringBuilder sb_szString;
             if ( szString == null )
@@ -1732,7 +1726,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
                sb_szString = new StringBuilder( szString );
                         ZeidonStringCopy( sb_szString, 1, 0, "", 1, 0, 257 );
             szString = sb_szString.toString( );}
-         } 
+         }
 
          //:END
 
@@ -1746,13 +1740,13 @@ omMasLC_dFullHazardStatement( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:/* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:DERIVED ATTRIBUTE OPERATION
@@ -1762,7 +1756,7 @@ omMasLC_dFullHazardStatement( View     mMasLC,
    //:                   SHORT GetOrSetFlag )
 
    //:STRING ( 10000 ) szDisplayStatement
-public int 
+public int
 omMasLC_dDisplayDU_Statement( View     mMasLC,
                               String InternalEntityStructure,
                               String InternalAttribStructure,
@@ -1780,14 +1774,14 @@ omMasLC_dDisplayDU_Statement( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:IF mMasLC.M_DirectionsForUseStatement.Title != ""
          if ( CompareAttributeToString( mMasLC, "M_DirectionsForUseStatement", "Title", "" ) != 0 )
-         { 
-            //:szTitle            = mMasLC.M_DirectionsForUseStatement.Title 
+         {
+            //:szTitle            = mMasLC.M_DirectionsForUseStatement.Title
             {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
             StringBuilder sb_szTitle;
             if ( szTitle == null )
@@ -1797,7 +1791,7 @@ omMasLC_dDisplayDU_Statement( View     mMasLC,
                          GetVariableFromAttribute( sb_szTitle, mi_lTempInteger_0, 'S', 257, mMasLC, "M_DirectionsForUseStatement", "Title", "", 0 );
             lTempInteger_0 = mi_lTempInteger_0.intValue( );
             szTitle = sb_szTitle.toString( );}
-            //:szStatementText    = mMasLC.M_DirectionsForUseStatement.Text 
+            //:szStatementText    = mMasLC.M_DirectionsForUseStatement.Text
             {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
             StringBuilder sb_szStatementText;
             if ( szStatementText == null )
@@ -1830,10 +1824,10 @@ omMasLC_dDisplayDU_Statement( View     mMasLC,
                         ZeidonStringConcat( sb_szDisplayStatement, 1, 0, szStatementText, 1, 0, 10001 );
             szDisplayStatement = sb_szDisplayStatement.toString( );}
             //:ELSE
-         } 
+         }
          else
-         { 
-            //:szStatementText    = mMasLC.M_DirectionsForUseStatement.Text 
+         {
+            //:szStatementText    = mMasLC.M_DirectionsForUseStatement.Text
             {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
             StringBuilder sb_szStatementText;
             if ( szStatementText == null )
@@ -1851,7 +1845,7 @@ omMasLC_dDisplayDU_Statement( View     mMasLC,
                sb_szDisplayStatement = new StringBuilder( szDisplayStatement );
                         ZeidonStringCopy( sb_szDisplayStatement, 1, 0, szStatementText, 1, 0, 10001 );
             szDisplayStatement = sb_szDisplayStatement.toString( );}
-         } 
+         }
 
          //:END
 
@@ -1868,13 +1862,13 @@ omMasLC_dDisplayDU_Statement( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:DERIVED ATTRIBUTE OPERATION
@@ -1884,7 +1878,7 @@ omMasLC_dDisplayDU_Statement( View     mMasLC,
    //:                   SHORT GetOrSetFlag )
 
    //:STRING ( 1000 ) szString
-public int 
+public int
 omMasLC_dEPA_RegistrationNbr( View     mMasLC,
                               String InternalEntityStructure,
                               String InternalAttribStructure,
@@ -1899,7 +1893,7 @@ omMasLC_dEPA_RegistrationNbr( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
@@ -1907,7 +1901,7 @@ omMasLC_dEPA_RegistrationNbr( View     mMasLC,
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "PrimaryRegistrant" );
          lTempInteger_1 = CheckExistenceOfEntity( mMasLC, "MasterProduct" );
          if ( lTempInteger_0 == 0 && lTempInteger_1 == 0 )
-         { 
+         {
             //:szString = mMasLC.PrimaryRegistrant.EPA_CompanyNumber + "-" + mMasLC.MasterProduct.Number
             {StringBuilder sb_szString;
             if ( szString == null )
@@ -1940,9 +1934,9 @@ omMasLC_dEPA_RegistrationNbr( View     mMasLC,
                         ZeidonStringConcat( sb_szString, 1, 0, szTempString_0, 1, 0, 1001 );
             szString = sb_szString.toString( );}
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szString = "EPA Registration Number unknown"
              {StringBuilder sb_szString;
             if ( szString == null )
@@ -1951,7 +1945,7 @@ omMasLC_dEPA_RegistrationNbr( View     mMasLC,
                sb_szString = new StringBuilder( szString );
                         ZeidonStringCopy( sb_szString, 1, 0, "EPA Registration Number unknown", 1, 0, 1001 );
             szString = sb_szString.toString( );}
-         } 
+         }
 
          //:END
 
@@ -1968,13 +1962,13 @@ omMasLC_dEPA_RegistrationNbr( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:DERIVED ATTRIBUTE OPERATION
@@ -1984,7 +1978,7 @@ omMasLC_dEPA_RegistrationNbr( View     mMasLC,
    //:         SHORT GetOrSetFlag )
 
    //:STRING ( 1000 ) szString
-public int 
+public int
 omMasLC_dTitleText( View     mMasLC,
                     String InternalEntityStructure,
                     String InternalAttribStructure,
@@ -2001,14 +1995,14 @@ omMasLC_dTitleText( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:IF mMasLC.M_IngredientsStatement EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "M_IngredientsStatement" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
             //:szTitle = mMasLC.M_StorageDisposalStatement.Title
             {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
             StringBuilder sb_szTitle;
@@ -2021,8 +2015,8 @@ omMasLC_dTitleText( View     mMasLC,
             szTitle = sb_szTitle.toString( );}
             //:IF szTitle != ""
             if ( ZeidonStringCompare( szTitle, 1, 0, "", 1, 0, 257 ) != 0 )
-            { 
-               //:szString = "<strong>" + szTitle + ": </strong>" 
+            {
+               //:szString = "<strong>" + szTitle + ": </strong>"
                 {StringBuilder sb_szString;
                if ( szString == null )
                   sb_szString = new StringBuilder( 32 );
@@ -2045,9 +2039,9 @@ omMasLC_dTitleText( View     mMasLC,
                               ZeidonStringConcat( sb_szString, 1, 0, ": </strong>", 1, 0, 1001 );
                szString = sb_szString.toString( );}
                //:ELSE
-            } 
+            }
             else
-            { 
+            {
                //:szString = ""
                 {StringBuilder sb_szString;
                if ( szString == null )
@@ -2056,7 +2050,7 @@ omMasLC_dTitleText( View     mMasLC,
                   sb_szString = new StringBuilder( szString );
                               ZeidonStringCopy( sb_szString, 1, 0, "", 1, 0, 1001 );
                szString = sb_szString.toString( );}
-            } 
+            }
 
             //:END
 
@@ -2078,9 +2072,9 @@ omMasLC_dTitleText( View     mMasLC,
                         ZeidonStringConcat( sb_szString, 1, 0, szTempString_0, 1, 0, 1001 );
             szString = sb_szString.toString( );}
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szString = ""
              {StringBuilder sb_szString;
             if ( szString == null )
@@ -2089,7 +2083,7 @@ omMasLC_dTitleText( View     mMasLC,
                sb_szString = new StringBuilder( szString );
                         ZeidonStringCopy( sb_szString, 1, 0, "", 1, 0, 1001 );
             szString = sb_szString.toString( );}
-         } 
+         }
 
          //:END
 
@@ -2106,13 +2100,13 @@ omMasLC_dTitleText( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:DERIVED ATTRIBUTE OPERATION
@@ -2122,7 +2116,7 @@ omMasLC_dTitleText( View     mMasLC,
    //:                    SHORT GetOrSetFlag )
 
    //:STRING ( 256 ) szCombinedName
-public int 
+public int
 omMasLC_dCombinedContainerVol( View     mMasLC,
                                String InternalEntityStructure,
                                String InternalAttribStructure,
@@ -2136,12 +2130,12 @@ omMasLC_dCombinedContainerVol( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
          //:// Combine each volume name that drives this section.
-         //:szCombinedName = "" 
+         //:szCombinedName = ""
           {StringBuilder sb_szCombinedName;
          if ( szCombinedName == null )
             sb_szCombinedName = new StringBuilder( 32 );
@@ -2149,10 +2143,10 @@ omMasLC_dCombinedContainerVol( View     mMasLC,
             sb_szCombinedName = new StringBuilder( szCombinedName );
                   ZeidonStringCopy( sb_szCombinedName, 1, 0, "", 1, 0, 257 );
          szCombinedName = sb_szCombinedName.toString( );}
-         //:FOR EACH mMasLC.M_StorageDisposalDrivingConVol 
+         //:FOR EACH mMasLC.M_StorageDisposalDrivingConVol
          RESULT = SetCursorFirstEntity( mMasLC, "M_StorageDisposalDrivingConVol", "" );
          while ( RESULT > zCURSOR_UNCHANGED )
-         { 
+         {
             //:GetStringFromAttributeByContext( szContainerVolume, mMasLC, "M_StorageDisposalDrivingConVol", "ContainerVolume", "", 20 )
             {StringBuilder sb_szContainerVolume;
             if ( szContainerVolume == null )
@@ -2163,7 +2157,7 @@ omMasLC_dCombinedContainerVol( View     mMasLC,
             szContainerVolume = sb_szContainerVolume.toString( );}
             //:IF szCombinedName = ""
             if ( ZeidonStringCompare( szCombinedName, 1, 0, "", 1, 0, 257 ) == 0 )
-            { 
+            {
                //:szCombinedName = szContainerVolume
                 {StringBuilder sb_szCombinedName;
                if ( szCombinedName == null )
@@ -2173,9 +2167,9 @@ omMasLC_dCombinedContainerVol( View     mMasLC,
                               ZeidonStringCopy( sb_szCombinedName, 1, 0, szContainerVolume, 1, 0, 257 );
                szCombinedName = sb_szCombinedName.toString( );}
                //:ELSE
-            } 
+            }
             else
-            { 
+            {
                //:szCombinedName = szCombinedName + ", " + szContainerVolume
                 {StringBuilder sb_szCombinedName;
                if ( szCombinedName == null )
@@ -2191,11 +2185,11 @@ omMasLC_dCombinedContainerVol( View     mMasLC,
                   sb_szCombinedName = new StringBuilder( szCombinedName );
                               ZeidonStringConcat( sb_szCombinedName, 1, 0, szContainerVolume, 1, 0, 257 );
                szCombinedName = sb_szCombinedName.toString( );}
-            } 
+            }
 
             RESULT = SetCursorNextEntity( mMasLC, "M_StorageDisposalDrivingConVol", "" );
             //:END
-         } 
+         }
 
          //:END
 
@@ -2212,20 +2206,20 @@ omMasLC_dCombinedContainerVol( View     mMasLC,
          //:OF   zDERIVED_SET:
          case zDERIVED_SET :
             break ;
-      } 
+      }
 
 
       //:  /* end zDERIVED_SET */
       //:END  /* case */
       return( 0 );
-   } 
+   }
 
 
    //:TRANSFORMATION OPERATION
    //:BuildCompositeEntries( VIEW mMasLC BASED ON LOD mMasLC )
 
    //:STRING ( 100 ) szCompositeLocation
-public int 
+public int
 omMasLC_BuildCompositeEntries( View     mMasLC )
 {
    String   szCompositeLocation = null;
@@ -2250,11 +2244,11 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
 
 
    //:// Build Marketing Section and Statement components.
-   //:FOR EACH mMasLC.M_MarketingSection 
+   //:FOR EACH mMasLC.M_MarketingSection
    RESULT = SetCursorFirstEntity( mMasLC, "M_MarketingSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:CREATE ENTITY mMasLC.CompositeComponentList 
+   {
+      //:CREATE ENTITY mMasLC.CompositeComponentList
       RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
       //:mMasLC.CompositeComponentList.Type              = "M_MarketingSection"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_MarketingSection" );
@@ -2262,9 +2256,9 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
       SetAttributeFromInteger( mMasLC, "CompositeComponentList", "SelectLevel", 1 );
       //:mMasLC.CompositeComponentList.DisplayType       = "Marketing"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Marketing" );
-      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingSection.ID 
+      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingSection.ID
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_MarketingSection", "ID" );
-      //:mMasLC.CompositeComponentList.Name              = mMasLC.M_MarketingSection.Name 
+      //:mMasLC.CompositeComponentList.Name              = mMasLC.M_MarketingSection.Name
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Name", mMasLC, "M_MarketingSection", "Name" );
       //:TraceLineS( "BuildComposite Name: ", mMasLC.M_MarketingSection.Name )
       {StringBuilder sb_szTempString_0;
@@ -2277,18 +2271,18 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
       TraceLineS( "BuildComposite Name: ", szTempString_0 );
       //:IF mMasLC.M_MarketingSection.Title != ""
       if ( CompareAttributeToString( mMasLC, "M_MarketingSection", "Title", "" ) != 0 )
-      { 
+      {
          //:IF mMasLC.M_MarketingSection.Name = ""
          if ( CompareAttributeToString( mMasLC, "M_MarketingSection", "Name", "" ) == 0 )
-         { 
+         {
             //:mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Title
             SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_MarketingSection", "Title" );
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Name + " - " +
-            //:                                             mMasLC.M_MarketingSection.Title 
+            //:                                             mMasLC.M_MarketingSection.Title
             {StringBuilder sb_szTempString_1;
             if ( szTempString_1 == null )
                sb_szTempString_1 = new StringBuilder( 32 );
@@ -2320,16 +2314,16 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
                         ZeidonStringConcat( sb_szTempString_1, 1, 0, szTempString_2, 1, 0, 32001 );
             szTempString_1 = sb_szTempString_1.toString( );}
             SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayValue", szTempString_1 );
-         } 
+         }
 
          //:END
          //:ELSE
-      } 
+      }
       else
-      { 
-         //:mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Name 
+      {
+         //:mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Name
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_MarketingSection", "Name" );
-      } 
+      }
 
       //:END
       //:mMasLC.CompositeComponentList.Title             = mMasLC.M_MarketingSection.Title
@@ -2339,11 +2333,11 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
       //:mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayTypeIndent", mMasLC, "CompositeComponentList", "DisplayType" );
 
-      //:FOR EACH mMasLC.M_MarketingStatement 
+      //:FOR EACH mMasLC.M_MarketingStatement
       RESULT = SetCursorFirstEntity( mMasLC, "M_MarketingStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:CREATE ENTITY mMasLC.CompositeComponentList 
+      {
+         //:CREATE ENTITY mMasLC.CompositeComponentList
          RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
          //:mMasLC.CompositeComponentList.Type              = "M_MarketingStatement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_MarketingStatement" );
@@ -2353,14 +2347,14 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Statement" );
          //:mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayTypeIndent", "...Statement" );
-         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingStatement.ID 
+         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingStatement.ID
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_MarketingStatement", "ID" );
          //:mMasLC.CompositeComponentList.Title             = mMasLC.M_MarketingStatement.Title
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_MarketingStatement", "Title" );
          //:mMasLC.CompositeComponentList.Value             = mMasLC.M_MarketingStatement.Text
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Value", mMasLC, "M_MarketingStatement", "Text" );
 
-         //:szOriginalDisplayValue = mMasLC.M_MarketingStatement.Text 
+         //:szOriginalDisplayValue = mMasLC.M_MarketingStatement.Text
          {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
          StringBuilder sb_szOriginalDisplayValue;
          if ( szOriginalDisplayValue == null )
@@ -2376,7 +2370,7 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
          OriginalStringLength = mi_OriginalStringLength.intValue( );}
          //:IF MaxDisplayLength < OriginalStringLength
          if ( MaxDisplayLength < OriginalStringLength )
-         { 
+         {
             //:szDisplayValue = szOriginalDisplayValue + "....."
              {StringBuilder sb_szDisplayValue;
             if ( szDisplayValue == null )
@@ -2393,10 +2387,10 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
                         ZeidonStringConcat( sb_szDisplayValue, 1, 0, ".....", 1, 0, 106 );
             szDisplayValue = sb_szDisplayValue.toString( );}
             //:ELSE
-         } 
+         }
          else
-         { 
-            //:szDisplayValue = szOriginalDisplayValue    
+         {
+            //:szDisplayValue = szOriginalDisplayValue
              {StringBuilder sb_szDisplayValue;
             if ( szDisplayValue == null )
                sb_szDisplayValue = new StringBuilder( 32 );
@@ -2404,304 +2398,304 @@ omMasLC_BuildCompositeEntries( View     mMasLC )
                sb_szDisplayValue = new StringBuilder( szDisplayValue );
                         ZeidonStringCopy( sb_szDisplayValue, 1, 0, szOriginalDisplayValue, 1, 0, 106 );
             szDisplayValue = sb_szDisplayValue.toString( );}
-         } 
+         }
 
          //:END
          //:mMasLC.CompositeComponentList.DisplayValue = szDisplayValue
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayValue", szDisplayValue );
          RESULT = SetCursorNextEntity( mMasLC, "M_MarketingStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_MarketingSection", "" );
       //:END
-   } 
+   }
 
    //:END
    return( 0 );
 //    // Build the flat display of all components subobject.
 //    /*MaxDisplayLength = 100
-//    
+//
 //    // First clear any current entries.
 //    FOR EACH mMasLC.CompositeComponentList
-//       DELETE ENTITY mMasLC.CompositeComponentList NONE 
+//       DELETE ENTITY mMasLC.CompositeComponentList NONE
 //    END
-//    
+//
 //    // General Section and Statements.
-//    FOR EACH mMasLC.M_GeneralSection 
-//       CREATE ENTITY mMasLC.CompositeComponentList 
+//    FOR EACH mMasLC.M_GeneralSection
+//       CREATE ENTITY mMasLC.CompositeComponentList
 //       mMasLC.CompositeComponentList.Type              = "M_GeneralSection"
 //       mMasLC.CompositeComponentList.SelectLevel       = 1
 //       mMasLC.CompositeComponentList.DisplayType       = "General"
-//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralSection.ID 
+//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralSection.ID
 //       mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_GeneralSection.Title
 //       mMasLC.CompositeComponentList.Title             = mMasLC.M_GeneralSection.Title
 //       mMasLC.CompositeComponentList.Value             = mMasLC.CompositeComponentList.DisplayValue
 //       mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
-//       
-//       FOR EACH mMasLC.M_GeneralStatement 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//
+//       FOR EACH mMasLC.M_GeneralStatement
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          mMasLC.CompositeComponentList.Type              = "M_GeneralStatement"
 //          mMasLC.CompositeComponentList.SelectLevel       = 2
 //          mMasLC.CompositeComponentList.DisplayType       = "Statement"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralStatement.ID 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralStatement.ID
 //          mMasLC.CompositeComponentList.Title             = mMasLC.M_GeneralStatement.Title
 //          mMasLC.CompositeComponentList.Value             = mMasLC.M_GeneralStatement.Text
-//          
+//
 //          szOriginalDisplayValue = mMasLC.M_GeneralStatement.Text
 //          GetAttributeLength( OriginalStringLength, mMasLC, "M_GeneralStatement", "Text" )
 //          IF MaxDisplayLength < OriginalStringLength
 //             szDisplayValue = szOriginalDisplayValue + "....."
 //          ELSE
-//             szDisplayValue = szOriginalDisplayValue    
+//             szDisplayValue = szOriginalDisplayValue
 //          END
 //          mMasLC.CompositeComponentList.DisplayValue   = szDisplayValue
 //       END
 //    END
-//    
+//
 //    // Ingredients Section and Statements.
-//    FOR EACH mMasLC.M_IngredientsSection 
-//       CREATE ENTITY mMasLC.CompositeComponentList 
+//    FOR EACH mMasLC.M_IngredientsSection
+//       CREATE ENTITY mMasLC.CompositeComponentList
 //       mMasLC.CompositeComponentList.Type              = "M_IngredientsSection"
 //       mMasLC.CompositeComponentList.SelectLevel       = 1
 //       mMasLC.CompositeComponentList.DisplayType       = "Ingredients"
-//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsSection.ID 
-//       mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsSection.ActiveTitle 
+//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsSection.ID
+//       mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsSection.ActiveTitle
 //       mMasLC.CompositeComponentList.Value             = mMasLC.CompositeComponentList.DisplayValue
 //       mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
-//       
-//       FOR EACH mMasLC.M_IngredientsStatement 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//
+//       FOR EACH mMasLC.M_IngredientsStatement
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          mMasLC.CompositeComponentList.Type              = "M_IngredientsStatement"
 //          mMasLC.CompositeComponentList.SelectLevel       = 2
 //          mMasLC.CompositeComponentList.DisplayType       = "Statement"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsStatement.ID 
-//          mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsStatement.ChemicalName 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsStatement.ID
+//          mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsStatement.ChemicalName
 //          mMasLC.CompositeComponentList.Value             = mMasLC.M_IngredientsStatement.ChemicalName
 //       END
 //    END
-//    
+//
 //    // StorageDisposal Section and Statements.
-//    FOR EACH mMasLC.M_StorageDisposalSection 
-//       CREATE ENTITY mMasLC.CompositeComponentList 
+//    FOR EACH mMasLC.M_StorageDisposalSection
+//       CREATE ENTITY mMasLC.CompositeComponentList
 //       mMasLC.CompositeComponentList.Type              = "M_StorageDisposalSection"
 //       mMasLC.CompositeComponentList.SelectLevel       = 1
 //       mMasLC.CompositeComponentList.DisplayType       = "StorageDisposal"
-//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalSection.ID 
-//       mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_StorageDisposalSection.Title 
+//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalSection.ID
+//       mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_StorageDisposalSection.Title
 //       mMasLC.CompositeComponentList.Title             = mMasLC.M_StorageDisposalSection.Title
 //       mMasLC.CompositeComponentList.Value             = mMasLC.CompositeComponentList.DisplayValue
 //       mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
-//       
-//       FOR EACH mMasLC.M_StorageDisposalStatement 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//
+//       FOR EACH mMasLC.M_StorageDisposalStatement
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          mMasLC.CompositeComponentList.Type              = "M_StorageDisposalStatement"
 //          mMasLC.CompositeComponentList.SelectLevel       = 2
 //          mMasLC.CompositeComponentList.DisplayType       = "Statement"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalStatement.ID 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalStatement.ID
 //          mMasLC.CompositeComponentList.Title             = mMasLC.M_StorageDisposalStatement.Title
 //          mMasLC.CompositeComponentList.Value             = mMasLC.M_StorageDisposalStatement.Text
-//          
+//
 //          szOriginalDisplayValue = mMasLC.M_StorageDisposalStatement.Text
 //          GetAttributeLength( OriginalStringLength, mMasLC, "M_StorageDisposalStatement", "Text" )
 //          IF MaxDisplayLength < OriginalStringLength
 //             szDisplayValue = szOriginalDisplayValue + "....."
 //          ELSE
-//             szDisplayValue = szOriginalDisplayValue    
+//             szDisplayValue = szOriginalDisplayValue
 //          END
 //          mMasLC.CompositeComponentList.DisplayValue   = szDisplayValue
 //       END
 //    END
-//    
+//
 //    // DirectionsForUse Section and Statements.
-//    FOR EACH mMasLC.M_DirectionsForUseSection 
-//       CREATE ENTITY mMasLC.CompositeComponentList 
+//    FOR EACH mMasLC.M_DirectionsForUseSection
+//       CREATE ENTITY mMasLC.CompositeComponentList
 //       mMasLC.CompositeComponentList.Type              = "M_DirectionsForUseSection"
 //       mMasLC.CompositeComponentList.SelectLevel       = 1
 //       mMasLC.CompositeComponentList.DisplayType       = "DirectionsForUse"
-//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseSection.ID 
+//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseSection.ID
 //       IF mMasLC.M_DirectionsForUseSection.Title != ""
 //          IF mMasLC.M_DirectionsForUseSection.Name = ""
 //             mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_DirectionsForUseSection.Title
 //          ELSE
 //             mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_DirectionsForUseSection.Name + " - " +
-//                                                          mMasLC.M_DirectionsForUseSection.Title 
+//                                                          mMasLC.M_DirectionsForUseSection.Title
 //          END
 //       ELSE
-//          mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_DirectionsForUseSection.Name 
+//          mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_DirectionsForUseSection.Name
 //       END
 //       mMasLC.CompositeComponentList.Title             = mMasLC.M_DirectionsForUseSection.Title
 //       mMasLC.CompositeComponentList.Value             = mMasLC.CompositeComponentList.DisplayValue
 //       mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
-//       
-//       FOR EACH mMasLC.M_DirectionsForUseStatement 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//
+//       FOR EACH mMasLC.M_DirectionsForUseStatement
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          mMasLC.CompositeComponentList.Type              = "M_DirectionsForUseStatement"
 //          mMasLC.CompositeComponentList.SelectLevel       = 2
 //          mMasLC.CompositeComponentList.DisplayType       = "Statement"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseStatement.ID 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseStatement.ID
 //          mMasLC.CompositeComponentList.Title             = mMasLC.M_DirectionsForUseStatement.Title
 //          mMasLC.CompositeComponentList.Value             = mMasLC.M_DirectionsForUseStatement.Text
-//          
+//
 //          szOriginalDisplayValue = mMasLC.M_DirectionsForUseStatement.Text
 //          GetAttributeLength( OriginalStringLength, mMasLC, "M_DirectionsForUseStatement", "Text" )
 //          IF MaxDisplayLength < OriginalStringLength
 //             szDisplayValue = szOriginalDisplayValue + "....."
 //          ELSE
-//             szDisplayValue = szOriginalDisplayValue    
+//             szDisplayValue = szOriginalDisplayValue
 //          END
 //          mMasLC.CompositeComponentList.DisplayValue   = szDisplayValue
 //       END
-//       
+//
 //       // Add any Usage entries.
 //       // First sort by Usage Type, but keeping the entries in their original order otherwise.
 //       Count = 0
-//       FOR EACH mMasLC.M_DirectionsUsageOrdering 
+//       FOR EACH mMasLC.M_DirectionsUsageOrdering
 //          Count = Count + 1
 //          mMasLC.M_DirectionsUsageOrdering.wSortOrder = Count
 //       END
 //       OrderEntityForView( mMasLC, "M_DirectionsUsageOrdering", "M_DirectionsUsage.UsageType A wSortOrder A" )
-//       FOR EACH mMasLC.M_DirectionsUsageOrdering 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//       FOR EACH mMasLC.M_DirectionsUsageOrdering
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          GetStringFromAttributeByContext( szUsageType, mMasLC, "M_DirectionsUsage", "UsageType", "FullUsageType", 20 )
 //          mMasLC.CompositeComponentList.Type              = "M_DirectionsUsageOrdering"
 //          mMasLC.CompositeComponentList.SelectLevel       = 3
 //          mMasLC.CompositeComponentList.DisplayType       = "DirUseUsage"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...DU " + szUsageType
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsUsage.ID 
-//          mMasLC.CompositeComponentList.Value             = mMasLC.M_DirectionsUsage.Name 
-//          mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_DirectionsUsage.Name 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsUsage.ID
+//          mMasLC.CompositeComponentList.Value             = mMasLC.M_DirectionsUsage.Name
+//          mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_DirectionsUsage.Name
 //       END
 //    END
-//    
+//
 //    // Marketing Section and Statements.
-//    FOR EACH mMasLC.M_MarketingSection 
-//       CREATE ENTITY mMasLC.CompositeComponentList 
+//    FOR EACH mMasLC.M_MarketingSection
+//       CREATE ENTITY mMasLC.CompositeComponentList
 //       mMasLC.CompositeComponentList.Type              = "M_MarketingSection"
 //       mMasLC.CompositeComponentList.SelectLevel       = 1
 //       mMasLC.CompositeComponentList.DisplayType       = "Marketing"
-//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingSection.ID 
+//       mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingSection.ID
 //       IF mMasLC.M_MarketingSection.Title != ""
 //          IF mMasLC.M_MarketingSection.Name = ""
 //             mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Title
 //          ELSE
 //             mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Name + " - " +
-//                                                          mMasLC.M_MarketingSection.Title 
+//                                                          mMasLC.M_MarketingSection.Title
 //          END
 //       ELSE
-//          mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Name 
+//          mMasLC.CompositeComponentList.DisplayValue = mMasLC.M_MarketingSection.Name
 //       END
 //       mMasLC.CompositeComponentList.Title             = mMasLC.M_MarketingSection.Title
 //       mMasLC.CompositeComponentList.Value             = mMasLC.CompositeComponentList.DisplayValue
 //       mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
-//       
-//       FOR EACH mMasLC.M_MarketingStatement 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//
+//       FOR EACH mMasLC.M_MarketingStatement
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          mMasLC.CompositeComponentList.Type              = "M_MarketingStatement"
 //          mMasLC.CompositeComponentList.SelectLevel       = 2
 //          mMasLC.CompositeComponentList.DisplayType       = "Statement"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingStatement.ID 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingStatement.ID
 //          mMasLC.CompositeComponentList.Title             = mMasLC.M_MarketingStatement.Title
 //          mMasLC.CompositeComponentList.Value             = mMasLC.M_MarketingStatement.Text
-//          
-//          szOriginalDisplayValue = mMasLC.M_MarketingStatement.Text 
+//
+//          szOriginalDisplayValue = mMasLC.M_MarketingStatement.Text
 //          GetAttributeLength( OriginalStringLength, mMasLC, "M_MarketingStatement", "Text" )
 //          IF MaxDisplayLength < OriginalStringLength
 //             szDisplayValue = szOriginalDisplayValue + "....."
 //          ELSE
-//             szDisplayValue = szOriginalDisplayValue    
+//             szDisplayValue = szOriginalDisplayValue
 //          END
 //          mMasLC.CompositeComponentList.DisplayValue = szDisplayValue
 //       END
-//       
+//
 //       // Add any Usage entries.
 //       // First sort by Usage Type, but keeping the entries in their original order otherwise.
 //       Count = 0
-//       FOR EACH mMasLC.M_MarketingUsageOrdering 
+//       FOR EACH mMasLC.M_MarketingUsageOrdering
 //          Count = Count + 1
 //          mMasLC.M_MarketingUsageOrdering.wSortOrder = Count
 //       END
 //       OrderEntityForView( mMasLC, "M_MarketingUsageOrdering", "M_MarketingUsage.UsageType A wSortOrder A" )
-//       FOR EACH mMasLC.M_MarketingUsageOrdering 
-//          CREATE ENTITY mMasLC.CompositeComponentList 
+//       FOR EACH mMasLC.M_MarketingUsageOrdering
+//          CREATE ENTITY mMasLC.CompositeComponentList
 //          GetStringFromAttributeByContext( szUsageType, mMasLC, "M_MarketingUsage", "UsageType", "FullUsageType", 20 )
 //          mMasLC.CompositeComponentList.Type              = "M_MarketingUsageOrdering"
 //          mMasLC.CompositeComponentList.SelectLevel       = 3
 //          mMasLC.CompositeComponentList.DisplayType       = "MarketingUsage"
 //          mMasLC.CompositeComponentList.DisplayTypeIndent = "...Mktg " + szUsageType
-//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingUsage.ID 
-//          mMasLC.CompositeComponentList.Value             = mMasLC.M_MarketingUsage.Name 
-//          mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_MarketingUsage.Name 
+//          mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingUsage.ID
+//          mMasLC.CompositeComponentList.Value             = mMasLC.M_MarketingUsage.Name
+//          mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_MarketingUsage.Name
 //       END
 //    END
-//    
+//
 //    // Hazards Section
-//    CREATE ENTITY mMasLC.CompositeComponentList 
+//    CREATE ENTITY mMasLC.CompositeComponentList
 //    mMasLC.CompositeComponentList.Type              = "M_HumanHazardSection"
 //    mMasLC.CompositeComponentList.SelectLevel       = 1
 //    mMasLC.CompositeComponentList.DisplayTypeIndent = "Hazards"
-//    mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_HumanHazardSection.ID 
+//    mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_HumanHazardSection.ID
 //    mMasLC.CompositeComponentList.DisplayValue      = ""
-//    
-//    CREATE ENTITY mMasLC.CompositeComponentList 
+//
+//    CREATE ENTITY mMasLC.CompositeComponentList
 //    mMasLC.CompositeComponentList.SelectLevel       = 2
 //    mMasLC.CompositeComponentList.DisplayTypeIndent = "...Signal Word"
-//    mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_HumanHazardSection.EPA_SignalWord 
-//    
-//    CREATE ENTITY mMasLC.CompositeComponentList 
+//    mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_HumanHazardSection.EPA_SignalWord
+//
+//    CREATE ENTITY mMasLC.CompositeComponentList
 //    mMasLC.CompositeComponentList.SelectLevel       = 2
 //    mMasLC.CompositeComponentList.DisplayTypeIndent = "...Child Warning"
-//    mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_HumanHazardSection.EPA_ChildHazardWarning 
-//    
-//    CREATE ENTITY mMasLC.CompositeComponentList 
+//    mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_HumanHazardSection.EPA_ChildHazardWarning
+//
+//    CREATE ENTITY mMasLC.CompositeComponentList
 //    mMasLC.CompositeComponentList.SelectLevel       = 2
 //    mMasLC.CompositeComponentList.DisplayTypeIndent = "...Precautionary Stmt"
-//    mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_HumanHazardSection.PrecautionaryStatement 
-//    
-//    CREATE ENTITY mMasLC.CompositeComponentList 
+//    mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_HumanHazardSection.PrecautionaryStatement
+//
+//    CREATE ENTITY mMasLC.CompositeComponentList
 //    mMasLC.CompositeComponentList.DisplayTypeIndent = "Location"
-//    szCompositeLocation = "..." + mMasLC.M_HumanHazardSection.PanelLoc1 
+//    szCompositeLocation = "..." + mMasLC.M_HumanHazardSection.PanelLoc1
 //    IF mMasLC.M_HumanHazardSection.PanelLoc2 != ""
-//       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc2 
+//       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc2
 //    END
 //    IF mMasLC.M_HumanHazardSection.PanelLoc3 != ""
 //       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc3
 //    END
 //    IF mMasLC.M_HumanHazardSection.PanelLoc4 != ""
-//       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc4 
+//       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc4
 //    END
 //    IF mMasLC.M_HumanHazardSection.PanelLoc5 != ""
-//       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc5 
+//       szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc5
 //    END
 //    mMasLC.CompositeComponentList.DisplayValue   = szCompositeLocation*/
-//    
+//
 //    // Usage Section
-//    /*CREATE ENTITY mMasLC.CompositeComponentList 
+//    /*CREATE ENTITY mMasLC.CompositeComponentList
 //    mMasLC.CompositeComponentList.Type           = "UsageSection"
 //    mMasLC.CompositeComponentList.DisplayType    = "Usage"
-//    mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_Usage.ID 
+//    mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_Usage.ID
 //    mMasLC.CompositeComponentList.DisplayValue   = ""
-//    FOR EACH mMasLC.M_Usage 
-//       CREATE ENTITY mMasLC.CompositeComponentList 
+//    FOR EACH mMasLC.M_Usage
+//       CREATE ENTITY mMasLC.CompositeComponentList
 //       mMasLC.CompositeComponentList.Type           = "M_Usage"
 //       GetStringFromAttributeByContext( szUsageType, mMasLC, "M_Usage", "UsageType", "FullUsageType", 20 )
-//       mMasLC.CompositeComponentList.DisplayType    = "..." + szUsageType 
-//       mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_Usage.ID 
-//       mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_Usage.Name 
+//       mMasLC.CompositeComponentList.DisplayType    = "..." + szUsageType
+//       mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_Usage.ID
+//       mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_Usage.Name
 //    END*/
 // END
-} 
+}
 
 
 //:TRANSFORMATION OPERATION
 //:BuildFullCompEntries( VIEW mMasLC BASED ON LOD mMasLC )
-//:   
+//:
 //:   STRING ( 100 ) szCompositeLocation
-public int 
+public int
 omMasLC_BuildFullCompEntries( View     mMasLC )
 {
    String   szCompositeLocation = null;
@@ -2736,26 +2730,26 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
    //:FOR EACH mMasLC.CompositeComponentList
    RESULT = SetCursorFirstEntity( mMasLC, "CompositeComponentList", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:DELETE ENTITY mMasLC.CompositeComponentList NONE 
+   {
+      //:DELETE ENTITY mMasLC.CompositeComponentList NONE
       RESULT = DeleteEntity( mMasLC, "CompositeComponentList", zREPOS_NONE );
       RESULT = SetCursorNextEntity( mMasLC, "CompositeComponentList", "" );
-   } 
+   }
 
    //:END
 
    //:// General Section and Statements.
-   //:FOR EACH mMasLC.M_GeneralSection 
+   //:FOR EACH mMasLC.M_GeneralSection
    RESULT = SetCursorFirstEntity( mMasLC, "M_GeneralSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:CREATE ENTITY mMasLC.CompositeComponentList 
+   {
+      //:CREATE ENTITY mMasLC.CompositeComponentList
       RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
       //:mMasLC.CompositeComponentList.Type              = "M_GeneralSection"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_GeneralSection" );
       //:mMasLC.CompositeComponentList.DisplayType       = "General"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "General" );
-      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralSection.ID 
+      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralSection.ID
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_GeneralSection", "ID" );
       //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_GeneralSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_GeneralSection", "Title" );
@@ -2766,11 +2760,11 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
       //:mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayTypeIndent", mMasLC, "CompositeComponentList", "DisplayType" );
 
-      //:FOR EACH mMasLC.M_GeneralStatement 
+      //:FOR EACH mMasLC.M_GeneralStatement
       RESULT = SetCursorFirstEntity( mMasLC, "M_GeneralStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:CREATE ENTITY mMasLC.CompositeComponentList 
+      {
+         //:CREATE ENTITY mMasLC.CompositeComponentList
          RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
          //:mMasLC.CompositeComponentList.Type              = "M_GeneralStatement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_GeneralStatement" );
@@ -2778,7 +2772,7 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Statement" );
          //:mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayTypeIndent", "...Statement" );
-         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralStatement.ID 
+         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_GeneralStatement.ID
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_GeneralStatement", "ID" );
          //:mMasLC.CompositeComponentList.Title             = mMasLC.M_GeneralStatement.Title
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_GeneralStatement", "Title" );
@@ -2787,39 +2781,39 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.CompositeComponentList.Value
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "CompositeComponentList", "Value" );
          RESULT = SetCursorNextEntity( mMasLC, "M_GeneralStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_GeneralSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
    //:// Ingredients Section and Statements.
-   //:FOR EACH mMasLC.M_IngredientsSection 
+   //:FOR EACH mMasLC.M_IngredientsSection
    RESULT = SetCursorFirstEntity( mMasLC, "M_IngredientsSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:CREATE ENTITY mMasLC.CompositeComponentList 
+   {
+      //:CREATE ENTITY mMasLC.CompositeComponentList
       RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
       //:mMasLC.CompositeComponentList.Type              = "M_IngredientsSection"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_IngredientsSection" );
       //:mMasLC.CompositeComponentList.DisplayType       = "Ingredients"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Ingredients" );
-      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsSection.ID 
+      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsSection.ID
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_IngredientsSection", "ID" );
-      //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsSection.ActiveTitle 
+      //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsSection.ActiveTitle
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_IngredientsSection", "ActiveTitle" );
       //:mMasLC.CompositeComponentList.Value             = mMasLC.CompositeComponentList.DisplayValue
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Value", mMasLC, "CompositeComponentList", "DisplayValue" );
       //:mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayTypeIndent", mMasLC, "CompositeComponentList", "DisplayType" );
 
-      //:FOR EACH mMasLC.M_IngredientsStatement 
+      //:FOR EACH mMasLC.M_IngredientsStatement
       RESULT = SetCursorFirstEntity( mMasLC, "M_IngredientsStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:CREATE ENTITY mMasLC.CompositeComponentList 
+      {
+         //:CREATE ENTITY mMasLC.CompositeComponentList
          RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
          //:mMasLC.CompositeComponentList.Type              = "M_IngredientsStatement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_IngredientsStatement" );
@@ -2827,35 +2821,35 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Statement" );
          //:mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayTypeIndent", "...Statement" );
-         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsStatement.ID 
+         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_IngredientsStatement.ID
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_IngredientsStatement", "ID" );
-         //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsStatement.ChemicalName 
+         //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_IngredientsStatement.ChemicalName
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_IngredientsStatement", "ChemicalName" );
          //:mMasLC.CompositeComponentList.Value             = mMasLC.M_IngredientsStatement.ChemicalName
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Value", mMasLC, "M_IngredientsStatement", "ChemicalName" );
          RESULT = SetCursorNextEntity( mMasLC, "M_IngredientsStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_IngredientsSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
    //:// StorageDisposal Section and Statements.
-   //:FOR EACH mMasLC.M_StorageDisposalSection 
+   //:FOR EACH mMasLC.M_StorageDisposalSection
    RESULT = SetCursorFirstEntity( mMasLC, "M_StorageDisposalSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:CREATE ENTITY mMasLC.CompositeComponentList 
+   {
+      //:CREATE ENTITY mMasLC.CompositeComponentList
       RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
       //:mMasLC.CompositeComponentList.Type              = "M_StorageDisposalSection"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_StorageDisposalSection" );
       //:mMasLC.CompositeComponentList.DisplayType       = "StorageDisposal"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "StorageDisposal" );
-      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalSection.ID 
+      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalSection.ID
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_StorageDisposalSection", "ID" );
-      //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_StorageDisposalSection.Title 
+      //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_StorageDisposalSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_StorageDisposalSection", "Title" );
       //:mMasLC.CompositeComponentList.Title             = mMasLC.M_StorageDisposalSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_StorageDisposalSection", "Title" );
@@ -2864,11 +2858,11 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
       //:mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayTypeIndent", mMasLC, "CompositeComponentList", "DisplayType" );
 
-      //:FOR EACH mMasLC.M_StorageDisposalStatement 
+      //:FOR EACH mMasLC.M_StorageDisposalStatement
       RESULT = SetCursorFirstEntity( mMasLC, "M_StorageDisposalStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:CREATE ENTITY mMasLC.CompositeComponentList 
+      {
+         //:CREATE ENTITY mMasLC.CompositeComponentList
          RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
          //:mMasLC.CompositeComponentList.Type              = "M_StorageDisposalStatement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_StorageDisposalStatement" );
@@ -2876,7 +2870,7 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Statement" );
          //:mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayTypeIndent", "...Statement" );
-         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalStatement.ID 
+         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_StorageDisposalStatement.ID
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_StorageDisposalStatement", "ID" );
          //:mMasLC.CompositeComponentList.Title             = mMasLC.M_StorageDisposalStatement.Title
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_StorageDisposalStatement", "Title" );
@@ -2885,28 +2879,28 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.CompositeComponentList.Value
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "CompositeComponentList", "Value" );
          RESULT = SetCursorNextEntity( mMasLC, "M_StorageDisposalStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_StorageDisposalSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
    //:// DirectionsForUse Section and Statements.
-   //:FOR EACH mMasLC.M_DirectionsForUseSection 
+   //:FOR EACH mMasLC.M_DirectionsForUseSection
    RESULT = SetCursorFirstEntity( mMasLC, "M_DirectionsForUseSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:CREATE ENTITY mMasLC.CompositeComponentList 
+   {
+      //:CREATE ENTITY mMasLC.CompositeComponentList
       RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
       //:mMasLC.CompositeComponentList.Type              = "M_DirectionsForUseSection"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_DirectionsForUseSection" );
       //:mMasLC.CompositeComponentList.DisplayType       = "DirectionsForUse"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "DirectionsForUse" );
-      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseSection.ID 
+      //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseSection.ID
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_DirectionsForUseSection", "ID" );
-      //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_DirectionsForUseSection.Title 
+      //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.M_DirectionsForUseSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_DirectionsForUseSection", "Title" );
       //:mMasLC.CompositeComponentList.Title             = mMasLC.M_DirectionsForUseSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_DirectionsForUseSection", "Title" );
@@ -2915,11 +2909,11 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
       //:mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayTypeIndent", mMasLC, "CompositeComponentList", "DisplayType" );
 
-      //:FOR EACH mMasLC.M_DirectionsForUseStatement 
+      //:FOR EACH mMasLC.M_DirectionsForUseStatement
       RESULT = SetCursorFirstEntity( mMasLC, "M_DirectionsForUseStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:CREATE ENTITY mMasLC.CompositeComponentList 
+      {
+         //:CREATE ENTITY mMasLC.CompositeComponentList
          RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
          //:mMasLC.CompositeComponentList.Type              = "M_DirectionsForUseStatement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_DirectionsForUseStatement" );
@@ -2927,7 +2921,7 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Statement" );
          //:mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayTypeIndent", "...Statement" );
-         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseStatement.ID 
+         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_DirectionsForUseStatement.ID
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_DirectionsForUseStatement", "ID" );
          //:mMasLC.CompositeComponentList.Title             = mMasLC.M_DirectionsForUseStatement.Title
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_DirectionsForUseStatement", "Title" );
@@ -2936,28 +2930,28 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.CompositeComponentList.Value
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "CompositeComponentList", "Value" );
          RESULT = SetCursorNextEntity( mMasLC, "M_DirectionsForUseStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_DirectionsForUseSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
    //:// Marketing Section and Statements.
-   //:FOR EACH mMasLC.M_MarketingSection 
+   //:FOR EACH mMasLC.M_MarketingSection
    RESULT = SetCursorFirstEntity( mMasLC, "M_MarketingSection", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      //:CREATE ENTITY mMasLC.CompositeComponentList 
+   {
+      //:CREATE ENTITY mMasLC.CompositeComponentList
       RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
       //:mMasLC.CompositeComponentList.Type           = "M_MarketingSection"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_MarketingSection" );
       //:mMasLC.CompositeComponentList.DisplayType    = "Marketing"
       SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Marketing" );
-      //:mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_MarketingSection.ID 
+      //:mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_MarketingSection.ID
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_MarketingSection", "ID" );
-      //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_MarketingSection.Title 
+      //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_MarketingSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_MarketingSection", "Title" );
       //:mMasLC.CompositeComponentList.Title             = mMasLC.M_MarketingSection.Title
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_MarketingSection", "Title" );
@@ -2966,11 +2960,11 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
       //:mMasLC.CompositeComponentList.DisplayTypeIndent = mMasLC.CompositeComponentList.DisplayType
       SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayTypeIndent", mMasLC, "CompositeComponentList", "DisplayType" );
 
-      //:FOR EACH mMasLC.M_MarketingStatement 
+      //:FOR EACH mMasLC.M_MarketingStatement
       RESULT = SetCursorFirstEntity( mMasLC, "M_MarketingStatement", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:CREATE ENTITY mMasLC.CompositeComponentList 
+      {
+         //:CREATE ENTITY mMasLC.CompositeComponentList
          RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
          //:mMasLC.CompositeComponentList.Type              = "M_MarketingStatement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_MarketingStatement" );
@@ -2978,7 +2972,7 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Statement" );
          //:mMasLC.CompositeComponentList.DisplayTypeIndent = "...Statement"
          SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayTypeIndent", "...Statement" );
-         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingStatement.ID 
+         //:mMasLC.CompositeComponentList.OriginalTypeID    = mMasLC.M_MarketingStatement.ID
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_MarketingStatement", "ID" );
          //:mMasLC.CompositeComponentList.Title             = mMasLC.M_MarketingStatement.Title
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "Title", mMasLC, "M_MarketingStatement", "Title" );
@@ -2987,52 +2981,52 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          //:mMasLC.CompositeComponentList.DisplayValue      = mMasLC.CompositeComponentList.Value
          SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "CompositeComponentList", "Value" );
          RESULT = SetCursorNextEntity( mMasLC, "M_MarketingStatement", "" );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_MarketingSection", "" );
       //:END
-   } 
+   }
 
    //:END
 
    //:// Hazards Section
-   //:CREATE ENTITY mMasLC.CompositeComponentList 
+   //:CREATE ENTITY mMasLC.CompositeComponentList
    RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
    //:mMasLC.CompositeComponentList.Type           = "M_HumanHazardSection"
    SetAttributeFromString( mMasLC, "CompositeComponentList", "Type", "M_HumanHazardSection" );
    //:mMasLC.CompositeComponentList.DisplayType    = "Hazards"
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Hazards" );
-   //:mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_HumanHazardSection.ID 
+   //:mMasLC.CompositeComponentList.OriginalTypeID = mMasLC.M_HumanHazardSection.ID
    SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mMasLC, "M_HumanHazardSection", "ID" );
    //:mMasLC.CompositeComponentList.DisplayValue   = ""
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayValue", "" );
 
-   //:CREATE ENTITY mMasLC.CompositeComponentList 
+   //:CREATE ENTITY mMasLC.CompositeComponentList
    RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
    //:mMasLC.CompositeComponentList.DisplayType    = "...Signal Word"
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "...Signal Word" );
-   //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_HumanHazardSection.EPA_SignalWord 
+   //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_HumanHazardSection.EPA_SignalWord
    SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_HumanHazardSection", "EPA_SignalWord" );
 
-   //:CREATE ENTITY mMasLC.CompositeComponentList 
+   //:CREATE ENTITY mMasLC.CompositeComponentList
    RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
    //:mMasLC.CompositeComponentList.DisplayType    = "...Child Warning"
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "...Child Warning" );
-   //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_HumanHazardSection.EPA_ChildHazardWarning 
+   //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_HumanHazardSection.EPA_ChildHazardWarning
    SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_HumanHazardSection", "EPA_ChildHazardWarning" );
 
-   //:CREATE ENTITY mMasLC.CompositeComponentList 
+   //:CREATE ENTITY mMasLC.CompositeComponentList
    RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
    //:mMasLC.CompositeComponentList.DisplayType    = "...Precautionary Stmt"
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "...Precautionary Stmt" );
-   //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_HumanHazardSection.PrecautionaryStatement 
+   //:mMasLC.CompositeComponentList.DisplayValue   = mMasLC.M_HumanHazardSection.PrecautionaryStatement
    SetAttributeFromAttribute( mMasLC, "CompositeComponentList", "DisplayValue", mMasLC, "M_HumanHazardSection", "PrecautionaryStatement" );
 
-   //:CREATE ENTITY mMasLC.CompositeComponentList 
+   //:CREATE ENTITY mMasLC.CompositeComponentList
    RESULT = CreateEntity( mMasLC, "CompositeComponentList", zPOS_AFTER );
    //:mMasLC.CompositeComponentList.DisplayType    = "Location"
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayType", "Location" );
-   //:szCompositeLocation = "..." + mMasLC.M_HumanHazardSection.PanelLoc1 
+   //:szCompositeLocation = "..." + mMasLC.M_HumanHazardSection.PanelLoc1
    {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
    StringBuilder sb_szTempString_0;
    if ( szTempString_0 == null )
@@ -3058,8 +3052,8 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
    szCompositeLocation = sb_szCompositeLocation.toString( );}
    //:IF mMasLC.M_HumanHazardSection.PanelLoc2 != ""
    if ( CompareAttributeToString( mMasLC, "M_HumanHazardSection", "PanelLoc2", "" ) != 0 )
-   { 
-      //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc2 
+   {
+      //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc2
        {StringBuilder sb_szCompositeLocation;
       if ( szCompositeLocation == null )
          sb_szCompositeLocation = new StringBuilder( 32 );
@@ -3083,12 +3077,12 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          sb_szCompositeLocation = new StringBuilder( szCompositeLocation );
             ZeidonStringConcat( sb_szCompositeLocation, 1, 0, szTempString_1, 1, 0, 101 );
       szCompositeLocation = sb_szCompositeLocation.toString( );}
-   } 
+   }
 
    //:END
    //:IF mMasLC.M_HumanHazardSection.PanelLoc3 != ""
    if ( CompareAttributeToString( mMasLC, "M_HumanHazardSection", "PanelLoc3", "" ) != 0 )
-   { 
+   {
       //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc3
        {StringBuilder sb_szCompositeLocation;
       if ( szCompositeLocation == null )
@@ -3113,13 +3107,13 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          sb_szCompositeLocation = new StringBuilder( szCompositeLocation );
             ZeidonStringConcat( sb_szCompositeLocation, 1, 0, szTempString_2, 1, 0, 101 );
       szCompositeLocation = sb_szCompositeLocation.toString( );}
-   } 
+   }
 
    //:END
    //:IF mMasLC.M_HumanHazardSection.PanelLoc4 != ""
    if ( CompareAttributeToString( mMasLC, "M_HumanHazardSection", "PanelLoc4", "" ) != 0 )
-   { 
-      //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc4 
+   {
+      //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc4
        {StringBuilder sb_szCompositeLocation;
       if ( szCompositeLocation == null )
          sb_szCompositeLocation = new StringBuilder( 32 );
@@ -3143,13 +3137,13 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          sb_szCompositeLocation = new StringBuilder( szCompositeLocation );
             ZeidonStringConcat( sb_szCompositeLocation, 1, 0, szTempString_3, 1, 0, 101 );
       szCompositeLocation = sb_szCompositeLocation.toString( );}
-   } 
+   }
 
    //:END
    //:IF mMasLC.M_HumanHazardSection.PanelLoc5 != ""
    if ( CompareAttributeToString( mMasLC, "M_HumanHazardSection", "PanelLoc5", "" ) != 0 )
-   { 
-      //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc5 
+   {
+      //:szCompositeLocation = szCompositeLocation + " / " + mMasLC.M_HumanHazardSection.PanelLoc5
        {StringBuilder sb_szCompositeLocation;
       if ( szCompositeLocation == null )
          sb_szCompositeLocation = new StringBuilder( 32 );
@@ -3173,18 +3167,18 @@ omMasLC_BuildFullCompEntries( View     mMasLC )
          sb_szCompositeLocation = new StringBuilder( szCompositeLocation );
             ZeidonStringConcat( sb_szCompositeLocation, 1, 0, szTempString_4, 1, 0, 101 );
       szCompositeLocation = sb_szCompositeLocation.toString( );}
-   } 
+   }
 
    //:END
    //:mMasLC.CompositeComponentList.DisplayValue   = szCompositeLocation
    SetAttributeFromString( mMasLC, "CompositeComponentList", "DisplayValue", szCompositeLocation );
    return( 0 );
 // END
-} 
+}
 
 
 //:TRANSFORMATION OPERATION
-public int 
+public int
 omMasLC_BuildCompEntsWO_Usage( View     mMasLC )
 {
    int      RESULT = 0;
@@ -3198,32 +3192,32 @@ omMasLC_BuildCompEntsWO_Usage( View     mMasLC )
    omMasLC_BuildFullCompEntries( mMasLC );
 
    //:// Remove Usage entries.
-   //:FOR EACH mMasLC.CompositeComponentList 
+   //:FOR EACH mMasLC.CompositeComponentList
    RESULT = SetCursorFirstEntity( mMasLC, "CompositeComponentList", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:IF mMasLC.CompositeComponentList.DisplayType = "MarketingUsage" OR mMasLC.CompositeComponentList.DisplayType = "DirUseUsage"
       if ( CompareAttributeToString( mMasLC, "CompositeComponentList", "DisplayType", "MarketingUsage" ) == 0 || CompareAttributeToString( mMasLC, "CompositeComponentList", "DisplayType", "DirUseUsage" ) == 0 )
-      { 
-         //:DELETE ENTITY mMasLC.CompositeComponentList NONE 
+      {
+         //:DELETE ENTITY mMasLC.CompositeComponentList NONE
          RESULT = DeleteEntity( mMasLC, "CompositeComponentList", zREPOS_NONE );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "CompositeComponentList", "" );
       //:END
-   } 
+   }
 
    //:END
    return( 0 );
 // END
-} 
+}
 
 
 //:TRANSFORMATION OPERATION
 //:BuildUsageSelectEnts( VIEW mMasLC BASED ON LOD mMasLC )
 
 //:   STRING ( 32 ) szOrderingEntityName
-public int 
+public int
 omMasLC_BuildUsageSelectEnts( View     mMasLC )
 {
    String   szOrderingEntityName = null;
@@ -3248,7 +3242,7 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
 
    //:// Use the source and target information defined in the UsageSelection entity to include the proper
    //:// M_UsageSelectTarget and M_UsageSelectSource entities for setting up the selection of Usage entries.
-   //:szOrderingEntityName           = mMasLC.UsageSelection.TargetOrderingEntityName 
+   //:szOrderingEntityName           = mMasLC.UsageSelection.TargetOrderingEntityName
    {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
    StringBuilder sb_szOrderingEntityName;
    if ( szOrderingEntityName == null )
@@ -3258,7 +3252,7 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
        GetVariableFromAttribute( sb_szOrderingEntityName, mi_lTempInteger_0, 'S', 33, mMasLC, "UsageSelection", "TargetOrderingEntityName", "", 0 );
    lTempInteger_0 = mi_lTempInteger_0.intValue( );
    szOrderingEntityName = sb_szOrderingEntityName.toString( );}
-   //:szUsageEntityName              = mMasLC.UsageSelection.TargetUsageEntityName 
+   //:szUsageEntityName              = mMasLC.UsageSelection.TargetUsageEntityName
    {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
    StringBuilder sb_szUsageEntityName;
    if ( szUsageEntityName == null )
@@ -3268,7 +3262,7 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
        GetVariableFromAttribute( sb_szUsageEntityName, mi_lTempInteger_1, 'S', 33, mMasLC, "UsageSelection", "TargetUsageEntityName", "", 0 );
    lTempInteger_1 = mi_lTempInteger_1.intValue( );
    szUsageEntityName = sb_szUsageEntityName.toString( );}
-   //:szSelectedUsageType            = mMasLC.UsageSelection.UsageType 
+   //:szSelectedUsageType            = mMasLC.UsageSelection.UsageType
    {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
    StringBuilder sb_szSelectedUsageType;
    if ( szSelectedUsageType == null )
@@ -3278,7 +3272,7 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
        GetVariableFromAttribute( sb_szSelectedUsageType, mi_lTempInteger_2, 'S', 21, mMasLC, "UsageSelection", "UsageType", "", 0 );
    lTempInteger_2 = mi_lTempInteger_2.intValue( );
    szSelectedUsageType = sb_szSelectedUsageType.toString( );}
-   //:szSelectedClaimsClassification = mMasLC.UsageSelection.ClaimsClassification 
+   //:szSelectedClaimsClassification = mMasLC.UsageSelection.ClaimsClassification
    {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
    StringBuilder sb_szSelectedClaimsClassification;
    if ( szSelectedClaimsClassification == null )
@@ -3295,7 +3289,7 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
    nRC = SetCursorFirstEntity( mMasLC, szOrderingEntityName, "" );
    //:LOOP WHILE nRC >= zCURSOR_SET
    while ( nRC >= zCURSOR_SET )
-   { 
+   {
       //:GetStringFromAttribute( szUsageType, mMasLC, szUsageEntityName, "UsageType" )
       {StringBuilder sb_szUsageType;
       if ( szUsageType == null )
@@ -3314,39 +3308,39 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
       szClaimsClassification = sb_szClaimsClassification.toString( );}
       //:IF szUsageType = szSelectedUsageType AND szClaimsClassification = szSelectedClaimsClassification
       if ( ZeidonStringCompare( szUsageType, 1, 0, szSelectedUsageType, 1, 0, 21 ) == 0 && ZeidonStringCompare( szClaimsClassification, 1, 0, szSelectedClaimsClassification, 1, 0, 21 ) == 0 )
-      { 
+      {
          //:IncludeSubobjectFromSubobject( mMasLC, "M_UsageSelectTarget", mMasLC, szUsageEntityName, zPOS_AFTER )
          IncludeSubobjectFromSubobject( mMasLC, "M_UsageSelectTarget", mMasLC, szUsageEntityName, zPOS_AFTER );
-      } 
+      }
 
       //:END
 
       //:nRC = SetCursorNextEntity( mMasLC, szOrderingEntityName, "" )
       nRC = SetCursorNextEntity( mMasLC, szOrderingEntityName, "" );
-   } 
+   }
 
    //:END
 
    //:// Next build the Source entries from each M_Usage entry of the requested type.
-   //:FOR EACH mMasLC.M_Usage 
+   //:FOR EACH mMasLC.M_Usage
    RESULT = SetCursorFirstEntity( mMasLC, "M_Usage", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:IF mMasLC.M_Usage.UsageType = szSelectedUsageType AND mMasLC.M_Usage.ClaimsClassification = szSelectedClaimsClassification
       if ( CompareAttributeToString( mMasLC, "M_Usage", "UsageType", szSelectedUsageType ) == 0 && CompareAttributeToString( mMasLC, "M_Usage", "ClaimsClassification", szSelectedClaimsClassification ) == 0 )
-      { 
-         //:INCLUDE mMasLC.M_UsageSelectSource FROM mMasLC.M_Usage 
+      {
+         //:INCLUDE mMasLC.M_UsageSelectSource FROM mMasLC.M_Usage
          RESULT = IncludeSubobjectFromSubobject( mMasLC, "M_UsageSelectSource", mMasLC, "M_Usage", zPOS_AFTER );
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "M_Usage", "" );
       //:END
-   } 
+   }
 
    //:END
    return( 0 );
 // END
-} 
+}
 
 
 //:TRANSFORMATION OPERATION
@@ -3354,7 +3348,7 @@ omMasLC_BuildUsageSelectEnts( View     mMasLC )
 //:                    STRING ( 1 ) szDirUseOrMarketingType )
 
 //:   STRING ( 32 )  szWorkEntityName
-public int 
+public int
 omMasLC_BuildUsageWorkEnts( View     mMasLC,
                             String   szDirUseOrMarketingType )
 {
@@ -3367,27 +3361,27 @@ omMasLC_BuildUsageWorkEnts( View     mMasLC,
    return( 0 );
 //    // Build the work entities of the form, "DirectionsAppType" for each M_DirectionsUsage or M_MarketingUsage,
 //    // depending on whether the szDirUseOrMarketingType value is "D" or "M".
-//    
+//
 //    /*IF szDirUseOrMarketingType = "D"
 //       // Directions for Use work entities.
-//       FOR EACH mMasLC.M_DirectionsUsageOrdering 
-//          szUsageType = mMasLC.M_DirectionsUsage.UsageType 
+//       FOR EACH mMasLC.M_DirectionsUsageOrdering
+//          szUsageType = mMasLC.M_DirectionsUsage.UsageType
 //          IF szUsageType = "C"
 //             // For Claim type, we need to determine ClaimsClassification.
-//             szClaimsClassification = mMasLC.M_DirectionsUsage.ClaimsClassification 
+//             szClaimsClassification = mMasLC.M_DirectionsUsage.ClaimsClassification
 //             IF szClaimsClassification = "Fungi"
 //                IF mMasLC.DirectionsFungi DOES NOT EXIST
-//                   CREATE ENTITY mMasLC.DirectionsFungi 
+//                   CREATE ENTITY mMasLC.DirectionsFungi
 //                END
-//             ELSE 
+//             ELSE
 //                IF szClaimsClassification = "Bacteria"
 //                   IF mMasLC.DirectionsBacteria DOES NOT EXIST
-//                      CREATE ENTITY mMasLC.DirectionsBacteria 
+//                      CREATE ENTITY mMasLC.DirectionsBacteria
 //                   END
 //                ELSE
 //                   IF szClaimsClassification = "Viruses"
 //                      IF mMasLC.DirectionsViruses DOES NOT EXIST
-//                         CREATE ENTITY mMasLC.DirectionsViruses 
+//                         CREATE ENTITY mMasLC.DirectionsViruses
 //                      END
 //                   ELSE
 //                      // Protazoa (nothing is currently done for this.
@@ -3398,18 +3392,18 @@ omMasLC_BuildUsageWorkEnts( View     mMasLC,
 //             IF szUsageType = "S"
 //                // Surface
 //                IF mMasLC.DirectionsSurface DOES NOT EXIST
-//                   CREATE ENTITY mMasLC.DirectionsSurface 
+//                   CREATE ENTITY mMasLC.DirectionsSurface
 //                END
 //             ELSE
 //                IF szUsageType = "U"
-//                   // Area of Use 
+//                   // Area of Use
 //                   IF mMasLC.DirectionsAreasOfUse DOES NOT EXIST
-//                      CREATE ENTITY mMasLC.DirectionsAreasOfUse 
+//                      CREATE ENTITY mMasLC.DirectionsAreasOfUse
 //                   END
 //                ELSE
 //                   // Application Type
 //                   IF mMasLC.DirectionsAppType DOES NOT EXIST
-//                      CREATE ENTITY mMasLC.DirectionsAppType 
+//                      CREATE ENTITY mMasLC.DirectionsAppType
 //                   END
 //                END
 //             END
@@ -3417,24 +3411,24 @@ omMasLC_BuildUsageWorkEnts( View     mMasLC,
 //       END
 //    ELSE
 //       // Marketing work entities.
-//       FOR EACH mMasLC.M_MarketingUsageOrdering 
-//          szUsageType = mMasLC.M_MarketingUsage.UsageType 
+//       FOR EACH mMasLC.M_MarketingUsageOrdering
+//          szUsageType = mMasLC.M_MarketingUsage.UsageType
 //          IF szUsageType = "C"
 //             // For Claim type, we need to determine ClaimsClassification.
-//             szClaimsClassification = mMasLC.M_MarketingUsage.ClaimsClassification 
+//             szClaimsClassification = mMasLC.M_MarketingUsage.ClaimsClassification
 //             IF szClaimsClassification = "Fungi"
 //                IF mMasLC.MarketingFungi DOES NOT EXIST
-//                   CREATE ENTITY mMasLC.MarketingFungi 
+//                   CREATE ENTITY mMasLC.MarketingFungi
 //                END
-//             ELSE 
+//             ELSE
 //                IF szClaimsClassification = "Bacteria"
 //                   IF mMasLC.MarketingBacteria DOES NOT EXIST
-//                      CREATE ENTITY mMasLC.MarketingBacteria 
+//                      CREATE ENTITY mMasLC.MarketingBacteria
 //                   END
 //                ELSE
 //                   IF szClaimsClassification = "Viruses"
 //                      IF mMasLC.MarketingViruses DOES NOT EXIST
-//                         CREATE ENTITY mMasLC.MarketingViruses 
+//                         CREATE ENTITY mMasLC.MarketingViruses
 //                      END
 //                   ELSE
 //                      // Protazoa (nothing is currently done for this.
@@ -3445,18 +3439,18 @@ omMasLC_BuildUsageWorkEnts( View     mMasLC,
 //             IF szUsageType = "S"
 //                // Surface
 //                IF mMasLC.MarketingSurface DOES NOT EXIST
-//                   CREATE ENTITY mMasLC.MarketingSurface 
+//                   CREATE ENTITY mMasLC.MarketingSurface
 //                END
 //             ELSE
 //                IF szUsageType = "U"
-//                   // Area of Use 
+//                   // Area of Use
 //                   IF mMasLC.MarketingAreasOfUse DOES NOT EXIST
-//                      CREATE ENTITY mMasLC.MarketingAreasOfUse 
+//                      CREATE ENTITY mMasLC.MarketingAreasOfUse
 //                   END
 //                ELSE
 //                   // Application Type
 //                   IF mMasLC.MarketingAppType DOES NOT EXIST
-//                      CREATE ENTITY mMasLC.MarketingAppType 
+//                      CREATE ENTITY mMasLC.MarketingAppType
 //                   END
 //                END
 //             END
@@ -3464,11 +3458,11 @@ omMasLC_BuildUsageWorkEnts( View     mMasLC,
 //       END
 //    END*/
 // END
-} 
+}
 
 
 //:TRANSFORMATION OPERATION
-public int 
+public int
 omMasLC_SetMLC_SelectedFlags( View     mMasLC,
                               View     mSubLC )
 {
@@ -3480,82 +3474,82 @@ omMasLC_SetMLC_SelectedFlags( View     mMasLC,
    //:// Select mMLC Component entries from Components currently in the mSLC.
 
    //:// First, initialize mMLC flags to null.
-   //:FOR EACH mMasLC.CompositeComponentList 
+   //:FOR EACH mMasLC.CompositeComponentList
    RESULT = SetCursorFirstEntity( mMasLC, "CompositeComponentList", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:mMasLC.CompositeComponentList.Selected = ""
       SetAttributeFromString( mMasLC, "CompositeComponentList", "Selected", "" );
       RESULT = SetCursorNextEntity( mMasLC, "CompositeComponentList", "" );
-   } 
+   }
 
    //:END
 
    //:// Then set those from mSLC.
-   //:FOR EACH mSubLC.CompositeComponentList 
+   //:FOR EACH mSubLC.CompositeComponentList
    RESULT = SetCursorFirstEntity( mSubLC, "CompositeComponentList", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:IF mSubLC.CompositeComponentList.OriginalTypeID != ""
       if ( CompareAttributeToString( mSubLC, "CompositeComponentList", "OriginalTypeID", "" ) != 0 )
-      { 
-         //:SET CURSOR FIRST mMasLC.CompositeComponentList 
+      {
+         //:SET CURSOR FIRST mMasLC.CompositeComponentList
          //:           WHERE mMasLC.CompositeComponentList.OriginalTypeID = mSubLC.CompositeComponentList.OriginalTypeID
-         //:             AND mMasLC.CompositeComponentList.DisplayType    = mSubLC.CompositeComponentList.DisplayType 
+         //:             AND mMasLC.CompositeComponentList.DisplayType    = mSubLC.CompositeComponentList.DisplayType
          RESULT = SetCursorFirstEntity( mMasLC, "CompositeComponentList", "" );
          if ( RESULT > zCURSOR_UNCHANGED )
-         { 
+         {
             while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToAttribute( mMasLC, "CompositeComponentList", "OriginalTypeID", mSubLC, "CompositeComponentList", "OriginalTypeID" ) != 0 ||
                     CompareAttributeToAttribute( mMasLC, "CompositeComponentList", "DisplayType", mSubLC, "CompositeComponentList", "DisplayType" ) != 0 ) )
-            { 
+            {
                RESULT = SetCursorNextEntity( mMasLC, "CompositeComponentList", "" );
-            } 
+            }
 
-         } 
+         }
 
          //:IF RESULT >= zCURSOR_SET
          if ( RESULT >= zCURSOR_SET )
-         { 
+         {
             //:mMasLC.CompositeComponentList.Selected = "Y"
             SetAttributeFromString( mMasLC, "CompositeComponentList", "Selected", "Y" );
-         } 
+         }
 
          //:END
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mSubLC, "CompositeComponentList", "" );
       //:END
-   } 
+   }
 
    //:END
 
-   //:// Finally, set any remaining components with null Type to selected. (This only effects display and not the inclusion of 
+   //:// Finally, set any remaining components with null Type to selected. (This only effects display and not the inclusion of
    //:// MLC components in the SLC, as components with null Type are not processed.
-   //:FOR EACH mMasLC.CompositeComponentList 
+   //:FOR EACH mMasLC.CompositeComponentList
    RESULT = SetCursorFirstEntity( mMasLC, "CompositeComponentList", "" );
    while ( RESULT > zCURSOR_UNCHANGED )
-   { 
+   {
       //:IF mMasLC.CompositeComponentList.Selected = ""
       if ( CompareAttributeToString( mMasLC, "CompositeComponentList", "Selected", "" ) == 0 )
-      { 
+      {
          //:IF mMasLC.CompositeComponentList.Type = ""
          if ( CompareAttributeToString( mMasLC, "CompositeComponentList", "Type", "" ) == 0 )
-         { 
+         {
             //:mMasLC.CompositeComponentList.Selected = "Y"
             SetAttributeFromString( mMasLC, "CompositeComponentList", "Selected", "Y" );
-         } 
+         }
 
          //:END
-      } 
+      }
 
       RESULT = SetCursorNextEntity( mMasLC, "CompositeComponentList", "" );
       //:END
-   } 
+   }
 
    //:END
    return( 0 );
 // END
-} 
+}
 
 
 //:DERIVED ATTRIBUTE OPERATION
@@ -3565,7 +3559,7 @@ omMasLC_SetMLC_SelectedFlags( View     mMasLC,
 //:                   SHORT GetOrSetFlag )
 
 //:   VIEW mMasLC2 BASED ON LOD mMasLC
-public int 
+public int
 omMasLC_dDisplayUsageName( View     mMasLC,
                            String InternalEntityStructure,
                            String InternalAttribStructure,
@@ -3594,7 +3588,7 @@ omMasLC_dDisplayUsageName( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
@@ -3638,7 +3632,7 @@ omMasLC_dDisplayUsageName( View     mMasLC,
          szName = sb_szName.toString( );}
          //:IF szUsageType = "C"
          if ( ZeidonStringCompare( szUsageType, 1, 0, "C", 1, 0, 101 ) == 0 )
-         { 
+         {
             //:szCombinedName = szClassification + " - " + szName
              {StringBuilder sb_szCombinedName;
             if ( szCombinedName == null )
@@ -3662,9 +3656,9 @@ omMasLC_dDisplayUsageName( View     mMasLC,
                         ZeidonStringConcat( sb_szCombinedName, 1, 0, szName, 1, 0, 101 );
             szCombinedName = sb_szCombinedName.toString( );}
             //:ELSE
-         } 
+         }
          else
-         { 
+         {
             //:szCombinedName = szName
              {StringBuilder sb_szCombinedName;
             if ( szCombinedName == null )
@@ -3673,7 +3667,7 @@ omMasLC_dDisplayUsageName( View     mMasLC,
                sb_szCombinedName = new StringBuilder( szCombinedName );
                         ZeidonStringCopy( sb_szCombinedName, 1, 0, szName, 1, 0, 101 );
             szCombinedName = sb_szCombinedName.toString( );}
-         } 
+         }
 
          //:END
 
@@ -3681,41 +3675,41 @@ omMasLC_dDisplayUsageName( View     mMasLC,
          //:IF mMasLC.M_UsageFootnoteUsed EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "M_UsageFootnoteUsed" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
             //:IF mMasLC.M_UsageFootnoteUsed.ID != ""
             if ( CompareAttributeToString( mMasLC, "M_UsageFootnoteUsed", "ID", "" ) != 0 )
-            { 
-               //:SET CURSOR FIRST mMasLC.M_UsageFootnote WHERE mMasLC.M_UsageFootnote.ID = mMasLC.M_UsageFootnoteUsed.ID 
+            {
+               //:SET CURSOR FIRST mMasLC.M_UsageFootnote WHERE mMasLC.M_UsageFootnote.ID = mMasLC.M_UsageFootnoteUsed.ID
                {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
                                GetIntegerFromAttribute( mi_lTempInteger_1, mMasLC, "M_UsageFootnoteUsed", "ID" );
                lTempInteger_1 = mi_lTempInteger_1.intValue( );}
                RESULT = SetCursorFirstEntityByInteger( mMasLC, "M_UsageFootnote", "ID", lTempInteger_1, "" );
                //:IF mMasLC.M_UsageFootnote.wFootNoteRelativeNumber = ""
                if ( CompareAttributeToString( mMasLC, "M_UsageFootnote", "wFootNoteRelativeNumber", "" ) == 0 )
-               { 
+               {
                   //:// Relative numbers haven't be set, so set them here.
                   //:CreateViewFromView( mMasLC2, mMasLC )
                   CreateViewFromView( mMasLC2, mMasLC );
                   //:Count = 0
                   Count = 0;
-                  //:FOR EACH mMasLC2.M_UsageFootnote 
+                  //:FOR EACH mMasLC2.M_UsageFootnote
                   RESULT = SetCursorFirstEntity( mMasLC2, "M_UsageFootnote", "" );
                   while ( RESULT > zCURSOR_UNCHANGED )
-                  { 
+                  {
                      //:Count = Count + 1
                      Count = Count + 1;
                      //:mMasLC2.M_UsageFootnote.wFootNoteRelativeNumber = Count
                      SetAttributeFromInteger( mMasLC2, "M_UsageFootnote", "wFootNoteRelativeNumber", Count );
                      RESULT = SetCursorNextEntity( mMasLC2, "M_UsageFootnote", "" );
-                  } 
+                  }
 
                   //:END
                   //:DropView( mMasLC2 )
                   DropView( mMasLC2 );
-               } 
+               }
 
-               //:END 
-               //:szFootnoteNumber = mMasLC.M_UsageFootnote.wFootNoteRelativeNumber 
+               //:END
+               //:szFootnoteNumber = mMasLC.M_UsageFootnote.wFootNoteRelativeNumber
                {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
                StringBuilder sb_szFootnoteNumber;
                if ( szFootnoteNumber == null )
@@ -3747,10 +3741,10 @@ omMasLC_dDisplayUsageName( View     mMasLC,
                   sb_szCombinedName = new StringBuilder( szCombinedName );
                               ZeidonStringConcat( sb_szCombinedName, 1, 0, "</sup>", 1, 0, 101 );
                szCombinedName = sb_szCombinedName.toString( );}
-            } 
+            }
 
             //:END
-         } 
+         }
 
          //:END
 
@@ -3765,14 +3759,14 @@ omMasLC_dDisplayUsageName( View     mMasLC,
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
-   } 
+   }
 
 
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
 // END
-} 
+}
 
 
 //:DERIVED ATTRIBUTE OPERATION
@@ -3782,7 +3776,7 @@ omMasLC_dDisplayUsageName( View     mMasLC,
 //:                      SHORT GetOrSetFlag )
 
 //:   VIEW mMasLC2 BASED ON LOD mMasLC
-public int 
+public int
 omMasLC_dDisplayPathogenName( View     mMasLC,
                               String InternalEntityStructure,
                               String InternalAttribStructure,
@@ -3809,7 +3803,7 @@ omMasLC_dDisplayPathogenName( View     mMasLC,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
@@ -3855,41 +3849,41 @@ omMasLC_dDisplayPathogenName( View     mMasLC,
          //:IF mMasLC.M_UsageFootnoteUsed EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mMasLC, "M_UsageFootnoteUsed" );
          if ( lTempInteger_0 == 0 )
-         { 
+         {
             //:IF mMasLC.M_UsageFootnoteUsed.ID != ""
             if ( CompareAttributeToString( mMasLC, "M_UsageFootnoteUsed", "ID", "" ) != 0 )
-            { 
-               //:SET CURSOR FIRST mMasLC.M_UsageFootnote WHERE mMasLC.M_UsageFootnote.ID = mMasLC.M_UsageFootnoteUsed.ID 
+            {
+               //:SET CURSOR FIRST mMasLC.M_UsageFootnote WHERE mMasLC.M_UsageFootnote.ID = mMasLC.M_UsageFootnoteUsed.ID
                {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
                                GetIntegerFromAttribute( mi_lTempInteger_1, mMasLC, "M_UsageFootnoteUsed", "ID" );
                lTempInteger_1 = mi_lTempInteger_1.intValue( );}
                RESULT = SetCursorFirstEntityByInteger( mMasLC, "M_UsageFootnote", "ID", lTempInteger_1, "" );
                //:IF mMasLC.M_UsageFootnote.wFootNoteRelativeNumber = ""
                if ( CompareAttributeToString( mMasLC, "M_UsageFootnote", "wFootNoteRelativeNumber", "" ) == 0 )
-               { 
+               {
                   //:// Relative numbers haven't be set, so set them here.
                   //:CreateViewFromView( mMasLC2, mMasLC )
                   CreateViewFromView( mMasLC2, mMasLC );
                   //:Count = 0
                   Count = 0;
-                  //:FOR EACH mMasLC2.M_UsageFootnote 
+                  //:FOR EACH mMasLC2.M_UsageFootnote
                   RESULT = SetCursorFirstEntity( mMasLC2, "M_UsageFootnote", "" );
                   while ( RESULT > zCURSOR_UNCHANGED )
-                  { 
+                  {
                      //:Count = Count + 1
                      Count = Count + 1;
                      //:mMasLC2.M_UsageFootnote.wFootNoteRelativeNumber = Count
                      SetAttributeFromInteger( mMasLC2, "M_UsageFootnote", "wFootNoteRelativeNumber", Count );
                      RESULT = SetCursorNextEntity( mMasLC2, "M_UsageFootnote", "" );
-                  } 
+                  }
 
                   //:END
                   //:DropView( mMasLC2 )
                   DropView( mMasLC2 );
-               } 
+               }
 
-               //:END 
-               //:szFootnoteNumber = mMasLC.M_UsageFootnote.wFootNoteRelativeNumber 
+               //:END
+               //:szFootnoteNumber = mMasLC.M_UsageFootnote.wFootNoteRelativeNumber
                {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
                StringBuilder sb_szFootnoteNumber;
                if ( szFootnoteNumber == null )
@@ -3921,10 +3915,10 @@ omMasLC_dDisplayPathogenName( View     mMasLC,
                   sb_szCombinedName = new StringBuilder( szCombinedName );
                               ZeidonStringConcat( sb_szCombinedName, 1, 0, "</sup>", 1, 0, 101 );
                szCombinedName = sb_szCombinedName.toString( );}
-            } 
+            }
 
             //:END
-         } 
+         }
 
          //:END
 
@@ -3939,14 +3933,14 @@ omMasLC_dDisplayPathogenName( View     mMasLC,
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
-   } 
+   }
 
 
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
 // END
-} 
+}
 
 
 
