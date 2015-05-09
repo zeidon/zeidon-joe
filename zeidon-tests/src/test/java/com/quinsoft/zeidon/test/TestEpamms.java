@@ -44,8 +44,8 @@ public class TestEpamms
 	@Before
 	public void setUp() throws Exception
 	{
-        oe = JavaObjectEngine.getInstance();
-        ePamms = oe.createTask( "ePammsDon" );
+      oe = JavaObjectEngine.getInstance();
+      ePamms = oe.createTask( "ePammsDon" );
 
 		zeidonSystem = oe.getSystemTask();
 	}
@@ -53,12 +53,23 @@ public class TestEpamms
    @Test
 	public void ExecuteJOE_TestGetRecursiveSubEntities()
 	{
-	   View         mSPLDef;
+	   View      mSPLDef;
 
 		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( mSPLDef );
 		tester.ExecuteJOE_TestGetRecursiveSubEntities( mSPLDef );
       System.out.println("===== Finished ExecuteJOE_TestGetRecursiveSubEntities ========");
+	}
+
+   @Test
+	public void ExecuteJOE_TestMismatch()
+	{
+	   View         mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestMismatch( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestMismatch ========");
 	}
 
    @Test
@@ -1084,5 +1095,167 @@ public class TestEpamms
 
            return( 0 );
  		}
+
+      private int
+      o_fnLocalBuildQual_6( View     vSubtask,
+                            zVIEW    vQualObject,
+                            int      lTempInteger_0 )
+      {
+
+      // RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, 256 /*zMULTIPLE*/ );
+         View view = vSubtask.activateEmptyObjectInstance( "KZDBHQUA", task.getSystemTask().getApplication() );
+      // CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+         view.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Subregistrant" );
+         view.cursor( "EntitySpec" ).getAttribute( "EntityName" ).setValue( "Subregistrant" );
+      // CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+         view.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Subregistrant" );
+         view.cursor( "QualAttrib" ).getAttribute( "EntityName" ).setValue( "Subregistrant" );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+         view.cursor( "QualAttrib" ).getAttribute( "AttributeName" ).setValue( "ID" );
+      // SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+         view.cursor( "QualAttrib" ).getAttribute( "Value" ).setValue( lTempInteger_0 );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+         view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( "=" );
+         vQualObject.setView( view );
+         return( 0 );
+      }
+
+      private int
+      o_fnLocalBuildQual_1( View     vSubtask,
+                            zVIEW    vQualObject,
+                            int      lTempInteger_0 )
+      {
+
+      // RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, 256 /*zMULTIPLE*/ );
+         View view = vSubtask.activateEmptyObjectInstance( "KZDBHQUA", task.getSystemTask().getApplication() );
+      // CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+         view.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "SubregProduct" );
+         view.cursor( "EntitySpec" ).getAttribute( "EntityName" ).setValue( "SubregProduct" );
+      // CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+         view.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "SubregProduct" );
+         view.cursor( "QualAttrib" ).getAttribute( "EntityName" ).setValue( "SubregProduct" );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+         view.cursor( "QualAttrib" ).getAttribute( "AttributeName" ).setValue( "ID" );
+      // SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+         view.cursor( "QualAttrib" ).getAttribute( "Value" ).setValue( lTempInteger_0 );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+         view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( "=" );
+         vQualObject.setView( view );
+         return( 0 );
+      }
+
+
+      private int
+      o_fnLocalBuildQual_8( View     vSubtask,
+                            zVIEW    vQualObject,
+                            int      lTempInteger_0 )
+      {
+
+      // RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, 256 /*zMULTIPLE*/ );
+         View view = vSubtask.activateEmptyObjectInstance( "KZDBHQUA", task.getSystemTask().getApplication() );
+      // CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+         view.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "MasterLabelContent" );
+         view.cursor( "EntitySpec" ).getAttribute( "EntityName" ).setValue( "MasterLabelContent" );
+      // CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+         view.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "MasterLabelContent" );
+         view.cursor( "QualAttrib" ).getAttribute( "EntityName" ).setValue( "MasterLabelContent" );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+         view.cursor( "QualAttrib" ).getAttribute( "AttributeName" ).setValue( "ID" );
+      // SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+         view.cursor( "QualAttrib" ).getAttribute( "Value" ).setValue( lTempInteger_0 );
+      // SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+         view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( "=" );
+         vQualObject.setView( view );
+         return( 0 );
+      }
+
+      public void ExecuteJOE_TestMismatch( View view ) {
+         zVIEW    mSubreg = new zVIEW( );
+         zVIEW    mSubProd = new zVIEW( );
+         zVIEW    mSubLC = new zVIEW( );
+         zVIEW    mMasLC = new zVIEW( );
+         zVIEW    vTempViewVar_0 = new zVIEW( );
+
+         o_fnLocalBuildQual_6( view, vTempViewVar_0, 1 /*lTempInteger_2*/ );
+         ActivateObjectInstance( mSubreg, "mSubreg", view, vTempViewVar_0, zSINGLE );
+         DropView( vTempViewVar_0 );
+         SetNameForView( mSubreg, "mSubreg", null, zLEVEL_TASK );
+
+         o_fnLocalBuildQual_1( view, vTempViewVar_0, 10 /*lTempInteger_0*/ );
+         ActivateObjectInstance( mSubProd, "mSubProd", view, vTempViewVar_0, zSINGLE );
+         DropView( vTempViewVar_0 );
+         SetNameForView( mSubProd, "mSubProd", null, zLEVEL_TASK );
+
+         ActivateEmptyObjectInstance( mSubLC, "mSubLC", view, zSINGLE );
+         SetNameForView( mSubLC, "mSubLC", null, zLEVEL_TASK );
+         CreateEntity( mSubLC, "SubregLabelContent", zPOS_AFTER );
+         IncludeSubobjectFromSubobject( mSubLC, "SubregProduct", mSubProd, "SubregProduct", zPOS_AFTER );
+
+         o_fnLocalBuildQual_8( view, vTempViewVar_0, 10 /*lTempInteger_0*/ );
+         ActivateObjectInstance( mMasLC, "mMasLC", view, vTempViewVar_0, zSINGLE );
+         DropView( vTempViewVar_0 );
+         SetNameForView( mMasLC, "mMasLC", null, zLEVEL_TASK );
+         IncludeSubobjectFromSubobject( mSubLC, "MasterLabelContent", mMasLC, "MasterLabelContent", zPOS_AFTER );
+
+         {
+            mMasLC_Object m_mMasLC_Object = new mMasLC_Object( mMasLC );
+            m_mMasLC_Object.omMasLC_BuildCompositeEntries( mMasLC );
+         }
+
+         //:// Initialize the data in the SLC from the MLC.
+         {
+            mSubLC_Object m_mSubLC_Object = new mSubLC_Object( mSubLC );
+            m_mSubLC_Object.omSubLC_BuildSLC_FromMLC( mSubLC, mMasLC );
+         }
+
+         //:// Build SLC Components subobject.
+         {
+            mSubLC_Object m_mSubLC_Object = new mSubLC_Object( mSubLC );
+            m_mSubLC_Object.omSubLC_BuildCompositeEntries( mSubLC );
+         }
+
+         int RESULT = SetCursorFirstEntity( mSubLC, "S_Usage", "" );
+         while ( RESULT > zCURSOR_UNCHANGED )
+         { 
+            //:IF mSubLC.M_Usage DOES NOT EXIST
+            RESULT = CheckExistenceOfEntity( mSubLC, "M_Usage" );
+            if ( RESULT != 0 )
+            { 
+               //:DELETE ENTITY mSubLC.S_Usage NONE 
+               DeleteEntity( mSubLC, "S_Usage", zREPOS_NONE );
+            } 
+
+            RESULT = SetCursorNextEntity( mSubLC, "S_Usage", "" );
+         } 
+
+         //:// Go to select any mMLC entries that are already in the mSLC.
+         //:SetMLC_SelectedFlags( mMasLC, mSubLC )
+         {
+            mMasLC_Object m_mMasLC_Object = new mMasLC_Object( mMasLC );
+            m_mMasLC_Object.omMasLC_SetMLC_SelectedFlags( mMasLC, mSubLC );
+          // m_mMasLC_Object = null;  // permit gc  (unnecessary)
+         }
+
+
+      // if ( CompareAttributeToString( mSubLC, "SubregLabelContent", "Description", "" ) == 0 || CompareAttributeToString( mSubLC, "SubregLabelContent", "Version", "" ) == 0 )
+
+
+
+         CommitObjectInstance( mSubLC );   
+
+         View vmSubProd = task.getViewByName( "mSubProd" );
+         if ( getView( vmSubProd ) != null )
+         {
+            View vGridSubregProducts2 = vmSubProd.newView( );
+            CursorResult csrRC = vGridSubregProducts2.cursor( "SubregLabelContent" ).setFirst(  );
+         }
+
+      }
    }
 }
