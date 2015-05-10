@@ -1244,8 +1244,8 @@ public class TestEpamms
 
 
       // if ( CompareAttributeToString( mSubLC, "SubregLabelContent", "Description", "" ) == 0 || CompareAttributeToString( mSubLC, "SubregLabelContent", "Version", "" ) == 0 )
-
-
+         SetAttributeFromString( mSubLC, "SubregLabelContent", "Description", "DeleteThisOne" );
+         SetAttributeFromString( mSubLC, "SubregLabelContent", "Version", "0.1" );
 
          CommitObjectInstance( mSubLC );   
 
@@ -1254,6 +1254,7 @@ public class TestEpamms
          {
             View vGridSubregProducts2 = vmSubProd.newView( );
             CursorResult csrRC = vGridSubregProducts2.cursor( "SubregLabelContent" ).setFirst(  );
+            Assert.assertEquals( "Unexpected RC", CursorResult.SET,  csrRC );
          }
 
       }
