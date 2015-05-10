@@ -265,7 +265,7 @@ class ObjectInstance implements Lockable
             if ( scan.getObjectInstance() != this )
             {
                 writeValidateError( scan, scan, "EI has mis-matching OI" );
-                return true;
+                return false;
             }
 
             if ( scan.getPrevHier() != null )
