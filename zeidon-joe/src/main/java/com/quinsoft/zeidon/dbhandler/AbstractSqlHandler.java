@@ -801,6 +801,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( qualEntity != null )
             return false;
 
+        // We can't join a child to its parent if there is an activate limit on the
+        // parent AND if the child has a x-to-many relationship.  Joining the parent
+        // and child could result in a result-set that has more rows than expected.
+        if ( entityDef.getParent() != null && entityDef.getMaxCardinality() > 1 )
+        {
+            QualEntity parentQualEntity = qualMap.get( entityDef );
+            if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
+                return false;
+        }
+
         //TODO: Add check to see if child is qualified.  If it is then it's not joinable.
 
         return getEntityDefData( entityDef ).isJoinable( entityDef );
@@ -1888,6 +1898,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         final SqlCommand commandType; // Insert, select, etc.
         int componentCount;     // Number of components in statement.
         int subLevel;           // Number of sub-levels in statement; usually 0.
+        int activateLimit = 0;  // Max number of entities to activate.  If 0 then activate all.
         private final StringBuilder sqlCmd;   // The final results.
         private final StringBuilder from;     // Holds FROM clause.
         private final StringBuilder where;    // Holds WHERE clause.
@@ -2496,19 +2507,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return joinedChildren;
         }
 
-        private boolean isJoinable( EntityDef ve )
+        private boolean isJoinable( EntityDef def )
         {
-            if ( ve.getParent() == null )
+            if ( def.getParent() == null )
                 return false;
 
             //TODO: We can't handle recursive records yet.
-            if ( ve.isRecursive() )
+            if ( def.isRecursive() )
                 return false;
 
-            if ( ve.getLazyLoadConfig().isLazyLoad() )
+            // If there is an activate limit for this entity then we can't join it
+            // with it's parent because we have to set the limit in the SQL call.
+            if ( def.getActivateLimit() != null )
+                return false;
+            
+            if ( def.getLazyLoadConfig().isLazyLoad() )
                 return false;
 
-            DataRecord dataRecord = ve.getDataRecord();
+            DataRecord dataRecord = def.getDataRecord();
             if ( dataRecord == null )
                 return false;
 

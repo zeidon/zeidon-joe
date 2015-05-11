@@ -80,11 +80,4 @@ public class MysqlJdbcHandler extends JdbcHandler
         // If we get here then we didn't acquire the lock.
         throw new GenkeyLockException("Unable to UNLOCK GENKEY lock.  See logs for possible explanation.");
     }
-
-    @Override
-    protected void addActivateLimit( int limit, SqlStatement stmt )
-    {
-        stmt.appendSuffix( "LIMIT " );
-        stmt.appendSuffix( limit );
-    }
 }
