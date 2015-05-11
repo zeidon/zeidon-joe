@@ -288,10 +288,7 @@ public class JdbcHandler extends AbstractSqlHandler
     @Override
     protected void addActivateLimit( int limit, SqlStatement stmt )
     {
-        // Default is to do nothing.  Why?  Limits are DB-specific and anything we put here
-        // could cause a generate problem.  We'll spit out a warning.
-        getTask().log().warn( "Activate Limits are not supported by the generic JDBC DB Handler.  " +
-                              "Please specify a specific DBHandler in Zeidon config." );
+        stmt.activateLimit = limit;
     }
 
     @Override
@@ -661,6 +658,13 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 ps = useDbGenerateKeys() ? connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS ) :
                                            connection.prepareStatement( sql );
+
+                if ( stmt.activateLimit > 0 )
+                {
+                    task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );
+                    ps.setMaxRows( stmt.activateLimit );
+                }
+                
                 value = new PreparedStatementCacheValue( ps, sql );
                 cachedStatements.put( key.getKey(), value );
             }
@@ -679,6 +683,12 @@ public class JdbcHandler extends AbstractSqlHandler
                 ps = connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS );
             else
                 ps = connection.prepareStatement( sql );
+            
+            if ( stmt.activateLimit > 0 )
+            {
+                task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );
+                ps.setMaxRows( stmt.activateLimit );
+            }
         }
 
 
