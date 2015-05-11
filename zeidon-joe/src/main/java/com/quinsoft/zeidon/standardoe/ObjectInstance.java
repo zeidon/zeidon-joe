@@ -262,6 +262,12 @@ class ObjectInstance implements Lockable
         root = root.getLatestVersion();
         for ( EntityInstanceImpl scan = root; scan != null; scan = scan.getNextHier() )
         {
+            if ( scan.getObjectInstance() != this )
+            {
+                writeValidateError( scan, scan, "EI has mis-matching OI" );
+                return false;
+            }
+
             if ( scan.getPrevHier() != null )
             {
                 if ( scan.getPrevHier().getNextHier() != scan )
@@ -399,7 +405,7 @@ class ObjectInstance implements Lockable
 
         return view;
     }
-    
+
     int getEntityCount( boolean includeHidden )
     {
         int count = 0;
@@ -408,7 +414,7 @@ class ObjectInstance implements Lockable
             if ( includeHidden || ! ei.isHidden() )
                 count++;
         }
-        
+
         return count;
     }
 }

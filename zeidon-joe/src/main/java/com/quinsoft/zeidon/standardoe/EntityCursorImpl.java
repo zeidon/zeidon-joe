@@ -585,7 +585,7 @@ class EntityCursorImpl implements EntityCursor
             // If we get here then we're setting a subobject cursor.  We have a couple of situations to handle.
             // To illustrate, assume the following recursive subobject where A is the recursive parent of A'.
             //     A
-            //     |   
+            //     |
             //     B
             //    / \
             //   A'  C
@@ -599,7 +599,7 @@ class EntityCursorImpl implements EntityCursor
             {
                 // If we get here then we're not setting A or A' but one of the other
                 // cursors (B, C or D above).
-                
+
                 // Find the recursive parent (A).
                 recursiveParent = getEntityDef();
                 while ( recursiveParent.getRecursiveChild() == null )
@@ -652,8 +652,10 @@ class EntityCursorImpl implements EntityCursor
             // If the cursor isn't in scope then we won't bother setting it.
             if ( ! viewCursor.isCursorInScope( searchParentCursor ) )
                 break;
-            
-            if ( searchParentCursor.getEntityInstance() == topEi.getParent() )
+
+            // Don't use getEntityInstance() because it will potentially try to set
+            // the parent cursors if entityInstance is null.
+            if ( searchParentCursor.entityInstance == topEi.getParent() )
                 break;
 
             searchCursor = searchCursor.getParentCursor();

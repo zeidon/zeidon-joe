@@ -921,11 +921,11 @@ public abstract class VmlOperation
       if ( session != null )
       {
          session.setAttribute( "ZeidonAction", strActionToProcess );
-         task.log().debug( "ZeidonAction: " + strCallingJSP + "." + strActionToProcess ); // remove for deployment
+         task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment
       }
       else
       {
-         task.log().debug( "ZeidonOperation: " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment
+         task.log().debug( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment
       }
    } // set breakpoint here
 

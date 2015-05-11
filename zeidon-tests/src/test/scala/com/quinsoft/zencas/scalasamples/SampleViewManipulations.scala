@@ -29,6 +29,46 @@ import com.quinsoft.zeidon.scala.View
  */
 class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
 
+    def creatingViews = {
+        /*
+         * Creating a new view.
+         *
+         * VML: VIEW mUser BASED ON LOD mUser
+         */
+
+        // VML-like syntax:
+        val mUser = VIEW BASED ON LOD "mUser"
+
+        // Scala syntax
+        val mUser2 = new View( task ) basedOn "mUser"
+
+        // These views have no OI attached to them.
+        println( mUser.isNull ) // Prints "true"
+
+        // Instantiate an empty OI.
+        mUser activateEmpty()
+        println( mUser.isNull )  // Prints "false"
+        println( mUser.isEmpty ) // Prints "true"
+
+        mUser.User create()
+        println( mUser.isEmpty ) // Prints "false"
+    }
+
+    def gettingViewsByName = {
+        /*
+         * Creating a new view.
+         *
+         * VML: VIEW mUser REGISTERED AS mUser
+         */
+
+        // VML-like syntax:
+        val mUser = REGISTERED AS "mUser"
+
+        // Scala syntax
+        val mUser2 = task.getView( "mUser" )
+
+    }
+
     /**
      * Serialize an OI to a temporary file.  This writes the incremental values
      * to preserve the OI's meta information.
@@ -48,6 +88,7 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
     }
 
     def runAll( view: View ) = {
+        creatingViews
         val filename = serializeSingleOiToJsonFile( view )
         deserializeOiFromFile( filename )
     }
@@ -64,6 +105,7 @@ object SampleViewManipulations {
         // Activate an mUser that we can use for samples.
         val sample = new SampleActivates( task )
         var mUser = sample.activateSimple
+        sample.runAll( mUser )
     }
 
 }

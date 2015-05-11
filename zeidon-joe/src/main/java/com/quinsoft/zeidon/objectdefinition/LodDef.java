@@ -397,6 +397,20 @@ public class LodDef implements PortableFileAttributeHandler
                 return rc;
             }
         }
+        catch ( InvocationTargetException e )
+        {
+            Throwable target = e.getTargetException();
+            if ( target instanceof ZeidonException )
+                throw (ZeidonException) target;
+
+            target = e.getCause();
+            if ( target instanceof ZeidonException )
+                throw (ZeidonException) target;
+
+            throw ZeidonException.wrapException( e )
+                                 .appendMessage( "Class = %s", object.getClass().getCanonicalName() )
+                                 .appendMessage( "Method name = %s", getConstraintOper() );
+        }
         catch ( Exception e )
         {
             throw ZeidonException.wrapException( e )
@@ -672,7 +686,7 @@ public class LodDef implements PortableFileAttributeHandler
 
     /**
      * Returns true if this LOD has entities that are lazy-loaded.
-     * 
+     *
      * @return
      */
     public boolean hasLazyLoadEntities()

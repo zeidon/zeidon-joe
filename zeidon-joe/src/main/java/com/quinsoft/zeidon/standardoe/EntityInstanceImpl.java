@@ -275,6 +275,7 @@ class EntityInstanceImpl implements EntityInstance
                        EntityDef             entityDef,
                        EntityInstanceImpl    parentInstance )
     {
+        assert objectInstance.getLodDef() == entityDef.getLodDef();
         this.objectInstance = objectInstance;
         this.entityDef = entityDef;
         if ( entityDef.hasAttributeHaskKeys() )
