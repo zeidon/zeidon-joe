@@ -241,6 +241,10 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         return addQual( "<=", value )
     }
 
+    def like ( value: String ): QualBuilder = {
+        return addQual( "LIKE", value )
+    }
+
     def exists: QualBuilder = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
        return qualBuilder
