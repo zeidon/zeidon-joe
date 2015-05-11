@@ -684,7 +684,7 @@ public class JdbcHandler extends AbstractSqlHandler
             else
                 ps = connection.prepareStatement( sql );
             
-            if ( stmt.activateLimit > 0 )
+            if ( stmt != null && stmt.activateLimit > 0 )
             {
                 task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );
                 ps.setMaxRows( stmt.activateLimit );
