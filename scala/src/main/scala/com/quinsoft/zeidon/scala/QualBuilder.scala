@@ -27,7 +27,20 @@ class QualBuilder( val view: View,
     val entityQualBuilder = new EntityQualBuilder( this )
 
     /**
-     * Add qualification as 'and'.
+     * Add qualification after adding an 'AND' conjunction to the existing qualification.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID > 400 )
+     *                 .and( _.User.ID < 500 )
+     *                 .activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE USER.ID > 400 AND USER.ID < 500;
+     * }}}
      */
     def and( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
         jqual.addAttribQual( "AND" )
@@ -35,6 +48,28 @@ class QualBuilder( val view: View,
         this
     }
 
+    /**
+     * Initialize qualification with a series of OR predicates WITHOUT adding a
+     * conjunction to the existing qualification.  This
+     * is intended to be used when building qualification over a series of steps.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      val qual = mUser.buildQual()
+     *      if ( <true> )
+     *          qual.any( _.User.ID = 100, _.User.ID = 200 )
+     *      else
+     *          qual.any( _.User.ID = 400, _.User.ID = 500 )
+     *
+     *      qual.activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE ( z_USER.ID = 100 OR z_USER.ID = 200 )
+     * }}}
+     */
     def any( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
@@ -49,6 +84,25 @@ class QualBuilder( val view: View,
         return this
     }
 
+    /**
+     * EXPERIMENTAL
+     *
+     * Add qualification if a predicate evaluates to true.
+     *
+     * {{{
+     *  val id = 10
+        mUser.buildQual( _.User.ID > 0 )
+             .conditional(id != 0, _.and(  _.User.ID < id ) )
+             .activate()
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE z_USER.ID > 0 AND z_USER.ID < 10;
+     * }}}
+     */
     def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
         if ( predicate )
             addQual( this )
@@ -62,9 +116,16 @@ class QualBuilder( val view: View,
      *
      * {{{
      *      val mUser = VIEW basedOn "mUser"
-     *      mUser.buildQual( _.User.LastName = "Smith" )
-     *              .andAny( _.User.FirstName = "Tom", _.User.FirstName = "Harry" )
+     *      mUser.buildQual( _.User.UserName = "Smith" )
+     *              .andAny( _.User.eMailUserName = "Tom", _.User.eMailUserName = "Harry" )
      *              .activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * z_USER.USERNAME = 'Smith' AND ( z_USER.EMAILUSERNAME = 'Tom' OR z_USER.EMAILUSERNAME = 'Harry' ) ;
      * }}}
      *
      */
@@ -83,6 +144,22 @@ class QualBuilder( val view: View,
         return this
     }
 
+    /**
+     * Add qualification after adding an 'OR' conjunction to the existing qualification.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID = 400 )
+     *                 .or( _.User.ID = 500 )
+     *                 .activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE ( USER.ID = 400 OR USER.ID = 500 );
+     * }}}
+     */
     def or( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         addQual( entityQualBuilder )
@@ -239,6 +316,10 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
 
     def <= ( value: Any ): QualBuilder = {
         return addQual( "<=", value )
+    }
+
+    def like ( value: String ): QualBuilder = {
+        return addQual( "LIKE", value )
     }
 
     def exists: QualBuilder = {

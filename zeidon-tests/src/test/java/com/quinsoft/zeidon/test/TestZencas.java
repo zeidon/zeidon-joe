@@ -484,7 +484,7 @@ public class TestZencas
         System.out.println("===== Finished testDomainCompareIssue ========");
 	}
 
-    @Test
+//    @Test
 	public void
 	testExcludeIncludeSaveError( )
 	{
@@ -495,7 +495,7 @@ public class TestZencas
 		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
 		VmlTester tester = new VmlTester( testview );
 		tester.testExcludeIncludeSaveError( testview );
-        System.out.println("===== Finished testExcludeIncludeSaveError ========");		
+        System.out.println("===== Finished testExcludeIncludeSaveError ========");
 	}
 
 //    @Test
@@ -2642,7 +2642,7 @@ public class TestZencas
 			int i=0;
 			int iConListID=0;
 			int RESULT=0;
-			
+
 			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", ViewToWindow, zMULTIPLE );
 			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -2651,8 +2651,8 @@ public class TestZencas
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 			   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", 16406 );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			
-				
+
+
 			   RESULT = ActivateObjectInstance( mSAProf, "mSAProf", ViewToWindow, vQualObject, zSINGLE );
 			   DropView( vQualObject );
 
@@ -2660,25 +2660,25 @@ public class TestZencas
 			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "PaymentPlan" );
 			   RESULT = ActivateObjectInstance( mSAPPlan, "mSAPPlan", ViewToWindow, vQualObject, zMULTIPLE );
-			   
+
 			   if ( CheckExistenceOfEntity( mSAProf, "PaymentPlan") == 0 )
 		            RESULT = ExcludeEntity( mSAProf, "PaymentPlan", zREPOS_AFTER );
-				   
+
 		         RESULT = IncludeSubobjectFromSubobject( mSAProf, "PaymentPlan", mSAPPlan, "PaymentPlan", zPOS_AFTER );
 		         RESULT = CommitObjectInstance( mSAProf );
-		         
-		            
+
+
 		            RESULT = ExcludeEntity( mSAProf, "PaymentPlan", zREPOS_AFTER );
 		            RESULT = IncludeSubobjectFromSubobject( mSAProf, "PaymentPlan", mSAPPlan, "PaymentPlan", zPOS_AFTER );
 
 		            RESULT = CommitObjectInstance( mSAProf );
 		            RESULT = CommitObjectInstance( mSAProf );
-		            
+
 		            // After the second commit, although the browser shows a valid PaymentPlan entity, the database FK_ID_PaymentPlan
 		            // has been set to null because the first ExcludedEntity is still set as EX and so the code thinks it needs
 		            // to do an update.
 					   DropView( mSAProf );
-		         
+
 					   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", ViewToWindow, zMULTIPLE );
 					   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 					   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -2687,14 +2687,14 @@ public class TestZencas
 					   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 					   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", 16406 );
 					   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-											
+
 					   RESULT = ActivateObjectInstance( mSAProf, "mSAProf", ViewToWindow, vQualObject, zSINGLE );
 					   DropView( vQualObject );
-					   
+
 			            // After the second commit, although the browser shows a valid PaymentPlan entity, the database FK_ID_PaymentPlan
 			            // has been set to null because the first ExcludedEntity is still set as EX and so the code thinks it needs
 			            // to do an update.
-					   Assert.assertEquals("No PAYMENTPLAN", 0, CheckExistenceOfEntity( mSAProf, "PaymentPlan"));		            
+					   Assert.assertEquals("No PAYMENTPLAN", 0, CheckExistenceOfEntity( mSAProf, "PaymentPlan"));
 
 	         return 0;
 		}

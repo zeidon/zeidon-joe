@@ -47,13 +47,6 @@ public class SqliteJdbcHandler extends JdbcHandler
         return true;
     }
 
-    @Override
-    protected void addActivateLimit( int limit, SqlStatement stmt )
-    {
-        stmt.appendSuffix( "LIMIT " );
-        stmt.appendSuffix( limit );
-    }
-
     /**
      * Default insert count to 1 if it isn't specified.
      */

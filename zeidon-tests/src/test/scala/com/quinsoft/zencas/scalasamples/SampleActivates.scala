@@ -205,14 +205,28 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
 
     }
 
+    def miscActivates = {
+        /*
+         * Activate using LIKE
+         */
+        val mUser = VIEW basedOn "mUser"
+        mUser.activateWhere( _.User.UserName like "Jos%" )
+
+        mUser.buildQual( _.User.ID > 0 )
+             .conditional(true, _.and(  _.User.ID < 10 ) )
+             .rootOnlyMultiple()
+             .activate()
+    }
+
     def runAll = {
-        var mUser = activateSimpleWithOtherComparators
-        mUser = activateWithOr
-        mUser = activateWithGrouping
-        mUser = activateWithRestricting
-        mUser = asynchronousActivate
-        mUser = activateWithColumnQualification
-        mUser = activateSimple
+//        activateSimpleWithOtherComparators
+//        activateWithOr
+//        activateWithGrouping
+//        activateWithRestricting
+//        asynchronousActivate
+//        activateWithColumnQualification
+        miscActivates
+        var mUser = activateSimple
 //        mUser.logObjectInstance
 
         mUser
