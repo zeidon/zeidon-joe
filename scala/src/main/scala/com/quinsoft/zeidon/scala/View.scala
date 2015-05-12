@@ -199,7 +199,11 @@ class View( val task: Task ) extends Dynamic {
      *
      * This is a synonym for view.name = "..."
      */
-    def name( viewName: String ) = { validateNonNull; jview.setName( viewName ) }
+    def name( viewName: String ): View = {
+        validateNonNull;
+        jview.setName( viewName );
+        this
+    }
 
     /**
      * Sets the name of the view as an attribute.
@@ -329,7 +333,15 @@ class View( val task: Task ) extends Dynamic {
         return oper.invokeOperation( this, args: _* )
     }
 
-    override def toString = if ( jview != null ) jview.toString() else "*undefined*"
+    override def toString = {
+       if ( jview != null )
+           jview.toString()
+       else
+       if ( jlodDef != null )
+           "null " + jlodDef.getName()
+       else
+           "*undefined*"
+    }
 
     /**
      * Validates that the LodDef is specified.
