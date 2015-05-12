@@ -895,8 +895,8 @@ public class ZGLOBAL1_Operation extends VmlOperation
 
        stringMultiLineAddress = "";
        stringCompanyName = "";
-       if ( IsValidAttribute ( "CompanyName", stringInternalEntityStructure ) == 0 )
-          stringCompanyName = GetStringFromAttribute( stringCompanyName, vAnyObject, entityName, "CompanyName" );
+       //if ( IsValidAttribute ( "CompanyName", stringInternalEntityStructure ) == 0 )
+       //   stringCompanyName = GetStringFromAttribute( stringCompanyName, vAnyObject, entityName, "CompanyName" );
 
        if ( stringCompanyName.length( ) != 0 )
           stringMultiLineAddress = zsprintf( stringMultiLineAddress, "%s\r\n", stringCompanyName );
