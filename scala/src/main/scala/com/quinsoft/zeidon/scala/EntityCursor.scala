@@ -63,7 +63,9 @@ class EntityCursor( private[this]  val view: View,
     /**
       *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
       */
-    def exists = jentityCursor.hasAny()
+    def exists = jentityCursor.hasAny()   
+    
+    def notExists = ! exists
 
     /**
      * Returns true if this cursor points to a non-hidden entity instance.

@@ -223,4 +223,9 @@ public class StringDomain extends AbstractDomain
         int lth = RANDOM.nextInt( attributeDef.getLength() );
         return RandomStringUtils.randomAlphanumeric( lth );
     }
+
+    public int getMaxLth()
+    {
+        return maxLth;
+    }
 }

@@ -221,6 +221,23 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID = 400 OR ( USER.ID = 500 AND USER.USERNAME = 'Smith' ) );
      * }}}
      */
+    
+    def andAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+        jqual.addAttribQual( "AND" )
+        jqual.addAttribQual( "(" )
+
+        val iter = addQual.iterator
+        while ( iter.hasNext ) {
+            iter.next()( entityQualBuilder )
+            if ( iter.hasNext )
+                jqual.addAttribQual( "AND" )
+        }
+
+        jqual.addAttribQual( ")" )
+        return this
+    }
+    
+    
     def orAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         jqual.addAttribQual( "(" )
@@ -495,6 +512,55 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     def exists: QualBuilder = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
        return qualBuilder
+    }
+    
+    /*
+     * Between: greater than value a, less than value b
+     */
+    def >< (values: Tuple2[Any,Any]): QualBuilder = {
+        jqual.addAttribQual( "(" )
+        addQual(">", values._1)
+        jqual.addAttribQual( "AND" )
+        addQual("<", values._2)
+        jqual.addAttribQual( ")" )
+        return qualBuilder
+    }
+    
+    /*
+     * Between: greater than or equal to value a, less than value b
+     */
+    def >=< (values: Tuple2[Any,Any]): QualBuilder = {
+        jqual.addAttribQual( "(" )
+        addQual(">=", values._1)
+        jqual.addAttribQual( "AND" )
+        addQual("<", values._2)
+        jqual.addAttribQual( ")" )
+        return qualBuilder
+    }
+    
+    /*
+     * Between: greater than or equal to value a, lesss than or equal to value b
+     */
+    def >=<= (values: Tuple2[Any,Any]): QualBuilder = {
+        jqual.addAttribQual( "(" )
+        addQual(">=", values._1)
+        jqual.addAttribQual( "AND" )
+        addQual("<=", values._2)
+        jqual.addAttribQual( ")" )
+        return qualBuilder
+    }
+    
+    /*
+     * Between: greater than value a, less than or equal to value b
+     */
+    
+    def ><= (values: Tuple2[Any,Any]): QualBuilder = {
+        jqual.addAttribQual( "(" )
+        addQual(">", values._1)
+        jqual.addAttribQual( "AND" )
+        addQual("<=", values._2)
+        jqual.addAttribQual( ")" )
+        return qualBuilder
     }
 
     /**
