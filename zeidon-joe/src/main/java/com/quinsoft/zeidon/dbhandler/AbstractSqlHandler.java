@@ -580,20 +580,25 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 //
                 // Verify KeyList
                 //
-                StringBuilder keyList = null;
-
                 for ( EntityInstance kl : qualAttribInstance.getChildren( "KeyList" ) )
                 {
-                    if ( keyList == null )
-                        keyList = new StringBuilder();
-                    else
-                        keyList.append( ", " );
+                    if ( qualAttrib.valueList == null )
+                        qualAttrib.valueList = new ArrayList<>();
 
-                    keyList.append( kl.getAttribute( "IntegerValue" ).getString() );
+                    if ( ! kl.getAttribute( "StringValue" ).isNull() )
+                        qualAttrib.valueList.add( kl.getAttribute( "StringValue" ).getString() );
+                    else
+                    if ( ! kl.getAttribute( "IntegerValue" ).isNull() )
+                        qualAttrib.valueList.add( kl.getAttribute( "IntegerValue" ).getString() );
+                    else
+                        throw new ZeidonException( "KeyList entity doesn't have IntegerValue or StringValue" );
                 }
 
-                if ( keyList != null && ! StringUtils.isBlank( keyList.toString() ) )
-                    qualAttrib.keyList = keyList.toString();
+                if ( qualAttrib.valueList != null )
+                {
+                    if ( qualAttrib.value != null )
+                        throw new ZeidonException( "KeyList is specified for a QualAttrib that also has a value attribute" );
+                }
 
                 //
                 // Verify SourceViewName
@@ -1096,9 +1101,22 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             String col = dataField.getName();
             stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " " );
 
-            if ( qualAttrib.keyList != null )
+            if ( qualAttrib.valueList != null )
             {
-                stmt.appendWhere( " IN ( ", qualAttrib.keyList, " ) " );
+                Domain domain = dataField.getAttributeDef().getDomain();
+                stmt.appendWhere( qualAttrib.oper, " ( " );
+                int count = 0;
+                for ( Object value : qualAttrib.valueList )
+                {
+                    if ( count++ > 0 )
+                        stmt.appendWhere( ", " );
+
+                    StringBuilder buffer = new StringBuilder();
+                    getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, value );
+                    stmt.appendWhere( buffer.toString() );
+                }
+
+                stmt.appendWhere( " ) " );
                 continue;
             }
 
@@ -2416,8 +2434,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         public Object value;
         String        oper;
         EntityDef     entityDef;
-        String        keyList;
         AttributeDef  attributeDef;
+
+        /**
+         * If non-null then this specifies a list of value that should be used
+         * as part of an "IN" clause.
+         */
+        List<Object>  valueList;
 
         /**
          * If non-null this value specifies an attribute in the target LOD that will
@@ -2520,7 +2543,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // with it's parent because we have to set the limit in the SQL call.
             if ( def.getActivateLimit() != null )
                 return false;
-            
+
             if ( def.getLazyLoadConfig().isLazyLoad() )
                 return false;
 

@@ -419,6 +419,13 @@ public class QualificationBuilder
         return this;
     }
 
+    public QualificationBuilder newEntityKey( String key )
+    {
+        qualView.cursor( KEYLIST ).createEntity()
+                                  .setAttribute( "StringValue", key );
+        return this;
+    }
+
     /**
      * @deprecated  Use addAttribQual() instead.
      */
