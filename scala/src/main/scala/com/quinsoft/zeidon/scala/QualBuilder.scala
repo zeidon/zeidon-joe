@@ -492,6 +492,24 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         return addQual( "LIKE", value )
     }
 
+    def in ( values: List[Any] ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
+    def in ( values: Any* ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
+    def notIn ( values: Any* ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
     def exists: QualBuilder = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
        return qualBuilder
