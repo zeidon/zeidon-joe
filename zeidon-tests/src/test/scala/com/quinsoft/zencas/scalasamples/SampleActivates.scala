@@ -221,7 +221,7 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
              .activate()
 
         mUser.buildQual( _.User.ID in (1,2,3,4) ).rootOnly().activate()
-        mUser.buildQual( _.User.ID notIn (1,2,3,4) ).and( _.User.ID < 10 ).rootOnly().activate()
+        mUser.buildQual( _.User.ID not() in (1,2,3,4) ).and( _.User.ID < 10 ).rootOnly().activate()
         mUser.buildQual( _.User.UserName in ( "ABC", "xyz") ).rootOnly().activate()
     }
 

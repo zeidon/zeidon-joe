@@ -485,102 +485,11 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
     val jqual = qualBuilder.jqual
 
-    def > ( value: Any ): QualBuilder = {
-        return addQual( ">", value )
-    }
-
-    def <> ( value: Any ): QualBuilder = {
-        return addQual( "!=", value )
-    }
-
-    def >= ( value: Any ): QualBuilder = {
-        return addQual( ">=", value )
-    }
-
-    def < ( value: Any ): QualBuilder = {
-        return addQual( "<", value )
-    }
-
-    def <= ( value: Any ): QualBuilder = {
-        return addQual( "<=", value )
-    }
-
-    def like ( value: String ): QualBuilder = {
-        return addQual( "LIKE", value )
-    }
-
-    def in ( values: List[Any] ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
-        return qualBuilder
-    }
-
-    def in ( values: Any* ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
-        return qualBuilder
-    }
-
-    def notIn ( values: Any* ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
-        return qualBuilder
-    }
-
     def exists: QualBuilder = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
        return qualBuilder
     }
     
-    /*
-     * Between: greater than value a, less than value b
-     */
-    def >< (values: Tuple2[Any,Any]): QualBuilder = {
-        jqual.addAttribQual( "(" )
-        addQual(">", values._1)
-        jqual.addAttribQual( "AND" )
-        addQual("<", values._2)
-        jqual.addAttribQual( ")" )
-        return qualBuilder
-    }
-    
-    /*
-     * Between: greater than or equal to value a, less than value b
-     */
-    def >=< (values: Tuple2[Any,Any]): QualBuilder = {
-        jqual.addAttribQual( "(" )
-        addQual(">=", values._1)
-        jqual.addAttribQual( "AND" )
-        addQual("<", values._2)
-        jqual.addAttribQual( ")" )
-        return qualBuilder
-    }
-    
-    /*
-     * Between: greater than or equal to value a, lesss than or equal to value b
-     */
-    def >=<= (values: Tuple2[Any,Any]): QualBuilder = {
-        jqual.addAttribQual( "(" )
-        addQual(">=", values._1)
-        jqual.addAttribQual( "AND" )
-        addQual("<=", values._2)
-        jqual.addAttribQual( ")" )
-        return qualBuilder
-    }
-    
-    /*
-     * Between: greater than value a, less than or equal to value b
-     */
-    
-    def ><= (values: Tuple2[Any,Any]): QualBuilder = {
-        jqual.addAttribQual( "(" )
-        addQual(">", values._1)
-        jqual.addAttribQual( "AND" )
-        addQual("<=", values._2)
-        jqual.addAttribQual( ")" )
-        return qualBuilder
-    }
-
     /**
      * This adds qualification on an attribute using another attribute from the same
      * query.  In SQL terms this qualifies a column on using a different column from
@@ -596,18 +505,9 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         return qualBuilder
     }
 
-    private def addQual( oper: String, value: Any ): QualBuilder = {
-        if ( value.isInstanceOf[AttributeQualBuilder] ) {
-            addQualFromAttributeBuilder( oper, value )
-        } else {
-            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, value )
-        }
-        return qualBuilder
-    }
-
-    def selectDynamic( attributeName: String): AttributeQualBuilder = {
+    def selectDynamic( attributeName: String): AttributeQualOperators = {
         jattributeDef = jentityDef.getAttribute( attributeName )
-        return this
+        return new AttributeQualOperators( this )
     }
 
     def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
@@ -623,6 +523,169 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
             addQualFromAttributeBuilder( "=", value )
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
+        }
+        return qualBuilder
+    }
+}
+
+class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
+    val jqual = attrQualBuilder.jqual
+    val qualBuilder = attrQualBuilder.qualBuilder
+    val jentityDef = attrQualBuilder.jentityDef
+    val jattributeDef = attrQualBuilder.jattributeDef
+    
+    var _not = false;
+    
+    def not(): AttributeQualOperators = {
+         _not != _not
+         this
+    }
+    
+    /**
+     * Returns the current value of _not but sets it to false.
+     */
+    private def checkNot = { 
+        if ( _not ) {
+            _not = false
+            true
+        }
+        else
+            false
+    }
+    
+    def > ( value: Any ): QualBuilder = {
+        if ( checkNot )
+            return addQual( "<=", value )
+        else
+            return addQual( ">", value )
+    }
+
+    def <> ( value: Any ): QualBuilder = {
+        if ( checkNot )
+            return addQual( "=", value )
+        else
+            return addQual( "!=", value )
+    }
+
+    def >= ( value: Any ): QualBuilder = {
+        if ( checkNot )
+            return addQual( "<", value )
+        else
+            return addQual( ">=", value )
+    }
+
+    def < ( value: Any ): QualBuilder = {
+        if ( checkNot )
+            return addQual( ">=", value )
+        else
+            return addQual( "<", value )
+    }
+
+    def <= ( value: Any ): QualBuilder = {
+        if ( checkNot )
+            return addQual( ">", value )
+        else
+            return addQual( "<=", value )
+    }
+
+    def like ( value: String ): QualBuilder = {
+        if ( checkNot )
+            return addQual( "NOT LIKE", value )
+        else
+            return addQual( "LIKE", value )
+    }
+
+    def in ( values: List[Any] ): QualBuilder = {
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
+    def in ( values: Any* ): QualBuilder = {
+        if ( checkNot )
+            return notIn( values )
+ 
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
+    def notIn ( values: Any* ): QualBuilder = {
+        if ( checkNot )
+            return in( values )
+        
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
+    def notIn ( values: List[Any] ): QualBuilder = {
+        if ( checkNot )
+            return in( values )
+        
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
+        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        return qualBuilder
+    }
+
+    private def between( values: Tuple2[Any,Any], 
+                         leftOper: String, 
+                         rightOper: String,
+                         conjunction: String = "AND" ) = {
+        jqual.addAttribQual( "(" )
+        addQual( leftOper, values._1)
+        jqual.addAttribQual( conjunction )
+        addQual( rightOper, values._2)
+        jqual.addAttribQual( ")" )
+        qualBuilder
+    }
+    
+     /*
+     * Between: greater than value a, less than value b
+     */
+    def >< (values: Tuple2[Any,Any]): QualBuilder = {
+        if ( checkNot )
+            return between( values, "<=", ">=", "OR" )
+        else
+            return between( values, ">", "<" )
+    }
+    
+    /*
+     * Between: greater than or equal to value a, less than value b
+     */
+    def >=< (values: Tuple2[Any,Any]): QualBuilder = {
+        if ( checkNot )
+            return between( values, "<", ">=", "OR" )
+        else
+            return between( values, ">=", "<" )
+    }
+
+    /*
+     * Between: greater than or equal to value a, lesss than or equal to value b
+     */
+    def >=<= (values: Tuple2[Any,Any]): QualBuilder = {
+        if ( checkNot )
+            return between( values, "<", ">", "OR" )
+        else
+            return between( values, ">=", "<=" )
+    }
+    
+    /*
+     * Between: greater than value a, less than or equal to value b
+     */
+    
+    def ><= (values: Tuple2[Any,Any]): QualBuilder = {
+        if ( checkNot )
+            return between( values, "<=", ">", "OR" )
+        else
+            return between( values, ">", "<=" )
+    }
+
+    private[scala] def addQual( oper: String, value: Any ): QualBuilder = {
+        if ( value.isInstanceOf[AttributeQualBuilder] ) {
+            attrQualBuilder.addQualFromAttributeBuilder( oper, value )
+        } else {
+            jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, value )
         }
         return qualBuilder
     }
