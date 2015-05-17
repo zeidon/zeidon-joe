@@ -226,11 +226,11 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
     }
 
     def runAll = {
-        activateSimpleWithOtherComparators
-        activateWithOr
-        activateWithGrouping
-        activateWithRestricting
-        asynchronousActivate
+//        activateSimpleWithOtherComparators
+//        activateWithOr
+//        activateWithGrouping
+//        activateWithRestricting
+//        asynchronousActivate
         activateWithColumnQualification
         miscActivates
         var mUser = activateSimple

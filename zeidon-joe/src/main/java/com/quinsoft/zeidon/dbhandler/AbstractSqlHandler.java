@@ -562,12 +562,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                         qualAttrib.value = value;
                     }
                     else
-                    // TODO: The '@' is a hack until we can update the qual XOD.
-                    if ( value.startsWith( "@" ) )
-                    {
-                        loadQualAttributeColumn( lodDef, qualAttribInstance, qualAttrib );
-                    }
-                    else
                     {
                         // Get the string value from the qualification object, convert it to the
                         // domain's internal value, and then to an a string representation of the
@@ -613,10 +607,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // Verify SourceEntityName
                 //
                 if ( ! qualAttribInstance.getAttribute( "SourceEntityName"  ).isNull() )
-                    throw new ZeidonException( "SourceEntityName is currently unsupported for Activate Qualification" );
+                {
+                    if ( qualAttribInstance.getAttribute( "SourceAttributeName"  ).isNull() )
+                        throw new ZeidonException( "SourceEntityName is specified but SourceAttributeName is not." );
 
-                if ( ! qualAttribInstance.getAttribute( "SourceAttributeName"  ).isNull() )
-                    throw new ZeidonException( "SourceAttributeName is currently unsupported for Activate Qualification" );
+                    loadQualAttributeColumn( lodDef, qualAttribInstance, qualAttrib );
+                }
+
 
                 // =================================================================
                 // ===
@@ -644,12 +641,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private void loadQualAttributeColumn( LodDef lodDef, EntityInstance qualAttribInstance, QualAttrib qualAttrib )
     {
-        // TODO: Get entity/attrib names directly from Qual once we update the XOD.
-        String value = qualAttribInstance.getAttribute( "Value" ).getString();
-        value = value.substring( 1 ); // Remove '@' prefix.
-        String[] str = value.split( "\\." );
-        String srcEntityName = str[0];
-        String srcAttributeName = str[1];
+        String srcEntityName = qualAttribInstance.getAttribute( "SourceEntityName" ).getString();
+        String srcAttributeName = qualAttribInstance.getAttribute( "SourceAttributeName" ).getString();
 
         EntityDef entityDef = lodDef.getEntityDef( srcEntityName, false );
         if ( entityDef == null )

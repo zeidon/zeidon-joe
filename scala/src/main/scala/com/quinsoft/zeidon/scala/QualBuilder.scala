@@ -221,7 +221,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID = 400 OR ( USER.ID = 500 AND USER.USERNAME = 'Smith' ) );
      * }}}
      */
-    
+
     def andAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "AND" )
         jqual.addAttribQual( "(" )
@@ -236,8 +236,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.addAttribQual( ")" )
         return this
     }
-    
-    
+
+
     def orAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         jqual.addAttribQual( "(" )
@@ -489,37 +489,45 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         jqual.addAttribQualEntityExists( jentityDef.getName() )
        return qualBuilder
     }
-    
+
     /**
      * This adds qualification on an attribute using another attribute from the same
      * query.  In SQL terms this qualifies a column on using a different column from
      * the same SELECT statement.
      */
-    private def addQualFromAttributeBuilder( oper: String, any: Any ): QualBuilder = {
-        val attr = any.asInstanceOf[AttributeQualBuilder]
-        //TODO: We are using a short-term hack of prepending the entity.attr name with a '@'.
-        // Once KZDBHQUA.XOD is updated to have a separate attribute for this value this
-        // needs to change.
-        val colName = "@" + attr.jattributeDef.getEntityDef().getName() + "." + attr.jattributeDef.getName();
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, colName )
+    private[scala] def addQualFromAttributeBuilder( oper: String, any: Any ): QualBuilder = {
+        val attr = any.asInstanceOf[AttributeQualOperators]
+        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, null)
+        jqual.setSourceAttribute( attr.jattributeDef )
+
         return qualBuilder
     }
 
+    /**
+     * Adds dynamic support for qualifying on an attribute.
+     */
     def selectDynamic( attributeName: String): AttributeQualOperators = {
         jattributeDef = jentityDef.getAttribute( attributeName )
         return new AttributeQualOperators( this )
     }
 
-    def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
-        //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
-        jattributeDef = jentityDef.getAttribute( attributeName )
-        return qualBuilder
-    }
-
+//    def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
+//        //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
+//        jattributeDef = jentityDef.getAttribute( attributeName )
+//        return qualBuilder
+//    }
+//
+    /**
+     * Adds support for qualifying an attribute using '=':
+    * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID = 20 )
+     * }}}
+      */
     def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
 //        println( s"method '$attributeName' called with argument ${value}" )
         jattributeDef = jentityDef.getAttribute( attributeName )
-        if ( value.isInstanceOf[AttributeQualBuilder] ) {
+        if ( value.isInstanceOf[AttributeQualOperators] ) {
             addQualFromAttributeBuilder( "=", value )
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
@@ -528,23 +536,37 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 }
 
+/**
+ * Used to qualify on an attribute using an operator like '<>' or 'in'.
+ */
 class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
     val jqual = attrQualBuilder.jqual
     val qualBuilder = attrQualBuilder.qualBuilder
     val jentityDef = attrQualBuilder.jentityDef
     val jattributeDef = attrQualBuilder.jattributeDef
-    
+
     var _not = false;
-    
+
+    /**
+     * Negates the operator that follows.  Can be used with any
+     * attribute qualification.
+     *
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID not() in (490, 491) )
+     *
+     *      mUser.activateWhere( _.User.ID not() > 490 )
+     * }}}
+     */
     def not(): AttributeQualOperators = {
          _not != _not
          this
     }
-    
+
     /**
      * Returns the current value of _not but sets it to false.
      */
-    private def checkNot = { 
+    private def checkNot = {
         if ( _not ) {
             _not = false
             true
@@ -552,7 +574,17 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
         else
             false
     }
-    
+
+    /**
+     * Activates entities with attributes that are > than the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID > 490 )
+     * }}}
+     */
     def > ( value: Any ): QualBuilder = {
         if ( checkNot )
             return addQual( "<=", value )
@@ -560,6 +592,16 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return addQual( ">", value )
     }
 
+    /**
+     * Activates entities with attributes that are not equal than the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID <> 490 )
+     * }}}
+     */
     def <> ( value: Any ): QualBuilder = {
         if ( checkNot )
             return addQual( "=", value )
@@ -567,6 +609,16 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return addQual( "!=", value )
     }
 
+    /**
+     * Activates entities with attributes that are >= than the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID >= 490 )
+     * }}}
+     */
     def >= ( value: Any ): QualBuilder = {
         if ( checkNot )
             return addQual( "<", value )
@@ -574,6 +626,16 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return addQual( ">=", value )
     }
 
+    /**
+     * Activates entities with attributes that are < than the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID < 490 )
+     * }}}
+     */
     def < ( value: Any ): QualBuilder = {
         if ( checkNot )
             return addQual( ">=", value )
@@ -581,6 +643,16 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return addQual( "<", value )
     }
 
+    /**
+     * Activates entities with attributes that are <= than the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID <= 490 )
+     * }}}
+     */
     def <= ( value: Any ): QualBuilder = {
         if ( checkNot )
             return addQual( ">", value )
@@ -588,6 +660,16 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return addQual( "<=", value )
     }
 
+    /**
+     * Uses SQL like to qualify activation.
+     *
+     * Note: The value is NOT converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.UserName like 'John%' )
+     * }}}
+     */
     def like ( value: String ): QualBuilder = {
         if ( checkNot )
             return addQual( "NOT LIKE", value )
@@ -595,41 +677,87 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return addQual( "LIKE", value )
     }
 
+    /**
+     * Activates entities with attributes that are in than the list of
+     * specified values.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val ids = List(123, 456, 789)
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID in ids )
+     * }}}
+     */
     def in ( values: List[Any] ): QualBuilder = {
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
         values.foreach( value => jqual.newEntityKey( value.toString() ) )
         return qualBuilder
     }
 
+    /**
+     * Activates entities with attributes that are in than the list of
+     * specified values.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID in (123, 456, 789) )
+     * }}}
+     */
     def in ( values: Any* ): QualBuilder = {
         if ( checkNot )
             return notIn( values )
- 
+
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
         values.foreach( value => jqual.newEntityKey( value.toString() ) )
         return qualBuilder
     }
 
+    /**
+     * Activates entities with attributes that are not in than the list of
+     * specified values.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID notIn (123, 456, 789) )
+     * }}}
+     */
     def notIn ( values: Any* ): QualBuilder = {
         if ( checkNot )
             return in( values )
-        
+
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
         values.foreach( value => jqual.newEntityKey( value.toString() ) )
         return qualBuilder
     }
 
+    /**
+     * Activates entities with attributes that are not in than the list of
+     * specified values.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val ids = List(123, 456, 789)
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID notIn ids )
+     * }}}
+     */
     def notIn ( values: List[Any] ): QualBuilder = {
         if ( checkNot )
             return in( values )
-        
+
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
         values.foreach( value => jqual.newEntityKey( value.toString() ) )
         return qualBuilder
     }
 
-    private def between( values: Tuple2[Any,Any], 
-                         leftOper: String, 
+    private def between( values: Tuple2[Any,Any],
+                         leftOper: String,
                          rightOper: String,
                          conjunction: String = "AND" ) = {
         jqual.addAttribQual( "(" )
@@ -639,9 +767,24 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
         jqual.addAttribQual( ")" )
         qualBuilder
     }
-    
-     /*
-     * Between: greater than value a, less than value b
+
+    /**
+     * Activates entities with attributes that are between the two values
+     * specified in the tuple.  The attribute must be a < attribute < b
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID >< (10, 20) )
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE USER.ID > 10 AND USER.ID < 20;
+     * }}}
      */
     def >< (values: Tuple2[Any,Any]): QualBuilder = {
         if ( checkNot )
@@ -649,19 +792,49 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
         else
             return between( values, ">", "<" )
     }
-    
-    /*
-     * Between: greater than or equal to value a, less than value b
+
+    /**
+     * Activates entities with attributes that are between the two values
+     * specified in the tuple.  The attribute must be a <= attribute < b
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID >=< (10, 20) )
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE USER.ID >= 10 AND USER.ID < 20;
+     * }}}
      */
-    def >=< (values: Tuple2[Any,Any]): QualBuilder = {
+    def <=< (values: Tuple2[Any,Any]): QualBuilder = {
         if ( checkNot )
             return between( values, "<", ">=", "OR" )
         else
             return between( values, ">=", "<" )
     }
 
-    /*
-     * Between: greater than or equal to value a, lesss than or equal to value b
+    /**
+     * Activates entities with attributes that are between the two values
+     * specified in the tuple.  The attribute must be a <= attribute <= b
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID >=<= (10, 20) )
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE USER.ID >= 10 AND USER.ID <= 20;
+     * }}}
      */
     def >=<= (values: Tuple2[Any,Any]): QualBuilder = {
         if ( checkNot )
@@ -669,11 +842,25 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
         else
             return between( values, ">=", "<=" )
     }
-    
-    /*
-     * Between: greater than value a, less than or equal to value b
+
+    /**
+     * Activates entities with attributes that are between the two values
+     * specified in the tuple.  The attribute must be a < attribute <= b
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID ><= (10, 20) )
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE USER.ID > 10 AND USER.ID <= 20;
+     * }}}
      */
-    
     def ><= (values: Tuple2[Any,Any]): QualBuilder = {
         if ( checkNot )
             return between( values, "<=", ">", "OR" )

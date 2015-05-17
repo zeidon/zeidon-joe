@@ -239,6 +239,23 @@ public class QualificationBuilder
         return this;
     }
 
+    /**
+     * Sets the SourceEntityName and SourceAttributeName values.  This is used
+     * to qualify an attribute on another attribute in the same OI.
+     *
+     * @param entityName
+     * @param attributeName
+     * @return
+     */
+    public QualificationBuilder setSourceAttribute( AttributeDef attributeDef )
+    {
+        qualView.cursor( QUALATTRIB )
+                .getAttribute( "SourceEntityName" ).setValue( attributeDef.getEntityDef().getName() )
+                .getAttribute( "SourceAttributeName" ).setValue( attributeDef.getName() );
+
+        return this;
+    }
+
     public QualificationBuilder setOiSourceUrl( String url )
     {
         activateOptions.setOiSourceUrl( url );
