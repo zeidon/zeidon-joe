@@ -14,15 +14,10 @@ The abstraction also helps engineers manage the complexity of applications with 
 For more details see [What Is Zeidon?](WhatIsZeidon.html)
 
 ### Additional Documentation
-JOE 1.2  
+JOE 1.3
 
-* [JOE Javadoc](http://deegc.github.io/zeidon-joe/javadoc/1.2/joe/)
+* [JOE Javadoc](http://deegc.github.io/zeidon-joe/javadoc/1.3/joe/)
 * [JOE for Android Javadoc](javadoc/1.2/android/)
-* [JOE Scaladoc](http://deegc.github.io/zeidon-joe/javadoc/1.2/scala/)
+* [JOE Scaladoc](http://deegc.github.io/zeidon-joe/javadoc/1.3/scala/)
 
-### Authors and Contributors
-You can @mention a GitHub username to generate a link to their profile. The resulting `<a>` element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (@defunkt), PJ Hyett (@pjhyett), and Tom Preston-Werner (@mojombo) founded GitHub.
-
-### Support or Contact
-Having trouble with Pages? Check out the documentation at https://help.github.com/pages or contact support@github.com and we’ll help you sort it out.
 
