@@ -1490,7 +1490,7 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( sourceOk == null ) // If it's null we've never checked this one.
         {
-            missingAttributeDef = checkForAllPersistentAttributes( target, source );
+            missingAttributeDef = checkForAllPersistentAttributes( source, target );
             sourceOk = missingAttributeDef == null;
             sourceInfo.mayBeLinked.putIfAbsent( target, sourceOk );
             if ( sourceOk == Boolean.TRUE )
