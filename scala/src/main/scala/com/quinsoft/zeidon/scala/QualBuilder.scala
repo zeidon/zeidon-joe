@@ -684,24 +684,6 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      * The values are converted by domain processing before being added
      * to the SQL.
      * {{{
-     *      val ids = List(123, 456, 789)
-     *      val mUser = VIEW basedOn "mUser"
-     *      mUser.activateWhere( _.User.ID in ids )
-     * }}}
-     */
-    def in ( values: List[Any] ): QualBuilder = {
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
-        return qualBuilder
-    }
-
-    /**
-     * Activates entities with attributes that are in than the list of
-     * specified values.
-     *
-     * The values are converted by domain processing before being added
-     * to the SQL.
-     * {{{
      *      val mUser = VIEW basedOn "mUser"
      *      mUser.activateWhere( _.User.ID in (123, 456, 789) )
      * }}}
@@ -711,7 +693,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return notIn( values )
 
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        addValues( values )
         return qualBuilder
     }
 
@@ -731,31 +713,25 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return in( values )
 
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
+        addValues( values )
         return qualBuilder
     }
+
 
     /**
-     * Activates entities with attributes that are not in than the list of
-     * specified values.
-     *
-     * The values are converted by domain processing before being added
-     * to the SQL.
-     * {{{
-     *      val ids = List(123, 456, 789)
-     *      val mUser = VIEW basedOn "mUser"
-     *      mUser.activateWhere( _.User.ID notIn ids )
-     * }}}
+     * Add the values in Seq[Any] to the IN/NOT IN clause.  If any of the values in the
+     * Seq are also a SEQ we'll run through those individually as well (i.e. we'll
+     * flatten 'values')
      */
-    def notIn ( values: List[Any] ): QualBuilder = {
-        if ( checkNot )
-            return in( values )
-
-        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
-        values.foreach( value => jqual.newEntityKey( value.toString() ) )
-        return qualBuilder
+    private def addValues(values: Seq[Any]): Unit = {
+        values.foreach { value => 
+            if ( value.isInstanceOf[Seq[_]] )
+                addValues( value.asInstanceOf[Seq[_]] )
+            else
+                jqual.newEntityKey( value.toString() ) 
+        }
     }
-
+    
     private def between( values: Tuple2[Any,Any],
                          leftOper: String,
                          rightOper: String,
