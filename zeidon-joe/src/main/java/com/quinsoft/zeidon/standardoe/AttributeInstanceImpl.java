@@ -376,7 +376,7 @@ class AttributeInstanceImpl implements AttributeInstance
     public int hashCode()
     {
         if ( isNull() )
-            return Integer.MIN_VALUE;
+            return -1;
 
         return attributeValue.getInternalValue().hashCode();
     }
