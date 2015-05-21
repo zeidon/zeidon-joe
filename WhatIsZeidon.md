@@ -46,4 +46,10 @@ This is a LOD created to edit information about a professor:  The colors mean so
 
 ![SampleERD](images/prof-lod-full.png?raw=true)
 
+To load the information for a Professor, use Scala to perform a Zeidon activate:
 
+    val prof = new View( task ) basedOn "Professor"
+    prof.activateWhere( _.Professor.Id = 10 )
+
+Zeidon will generate the SQL required to load professor 10 from the DB and all the child
+data that is associated with professor 10.
