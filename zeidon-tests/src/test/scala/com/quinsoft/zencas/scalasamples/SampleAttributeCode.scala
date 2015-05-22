@@ -63,6 +63,9 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         if ( mUser.User.ID > 10 )
             println( "Greater than 10" )
 
+        if ( mUser.User.ID < "10" )
+            println( "Less than 10" )
+
         // Compare an attribute to a value.  This code will convert the attribute
         // to an integer and then compare.  This will throw a NullAttributeValueException
         // if the attribute is null.

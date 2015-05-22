@@ -125,10 +125,10 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      */
     def @==( other: Any ) = compare( other ) == 0
 
-    def <( other: AttributeInstance ) = compare( other ) < 0
-    def >( other: AttributeInstance ) = compare( other ) > 0
-    def >=( other: AttributeInstance ) = compare( other ) >= 0
-    def <=( other: AttributeInstance ) = compare( other ) <= 0
+    def <( other: Any ) = compare( other ) < 0
+    def >( other: Any ) = compare( other ) > 0
+    def >=( other: Any ) = compare( other ) >= 0
+    def <=( other: Any ) = compare( other ) <= 0
     def !=( other: AttributeInstance ) = compare( other ) != 0
 
     def +( x: Int ) = toInt + x
