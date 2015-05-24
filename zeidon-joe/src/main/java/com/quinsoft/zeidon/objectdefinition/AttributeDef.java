@@ -18,6 +18,7 @@ package com.quinsoft.zeidon.objectdefinition;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.StringUtils;
@@ -554,6 +555,19 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
                 Object oper = constructor.newInstance( view );
                 Object[] argList = new Object[] { view, getEntityDef().getName(), getName(), DERIVED_GET };
                 method.invoke( oper, argList );
+            }
+            catch ( InvocationTargetException e )
+            {
+                Throwable target = e.getTargetException();
+                if ( target instanceof ZeidonException )
+                    throw (ZeidonException) target;
+
+                target = e.getCause();
+                if ( target instanceof ZeidonException )
+                    throw (ZeidonException) target;
+
+                throw ZeidonException.prependMessage( target, "Oper: %s", this )
+                                     .prependAttributeDef( AttributeDef.this  );
             }
             catch ( Throwable e )
             {

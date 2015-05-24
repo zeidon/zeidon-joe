@@ -1050,16 +1050,16 @@ public class TestZencas
 		   zVIEW    vTempViewVar_0 = new zVIEW( );
 		   int RESULT=0;
            StringBuilder sb_Country = new StringBuilder( );
-		   
+
            /*
 		   // KJS 05/0815 - Just wanting to look at domain context... this is not part of this test.
 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 		   DropView( vTempViewVar_0 );
-		   
+
            GetStringFromAttributeByContext( sb_Country, mPerson, "Address", "Country", "OnlineAppCountry", 50 );
 		   */
-		  		   
+
 
 		   // Activating mPerson as ROOTONLY, does eliminate some child entities like FinAidProfile, but there are several entities
 		   // that were not eliminated.
@@ -2982,6 +2982,7 @@ public class TestZencas
 
 		   //:IF mFAProf.FinAidAward.ID != 44965
            Assert.assertEquals("Invalid Set Cursor on Previous <=", CompareAttributeToInteger( mFAProf, "FinAidAward", "ID", 44965 ), 0);
+           Assert.assertEquals("Invalid Set Cursor on Previous <=", CompareAttributeToInteger( mFAProf, "FinAidAward", "Amount", 7000 ), 0);
 //		   if ( CompareAttributeToInteger( mFAProf, "FinAidAward", "ID", 44965 ) != 0 )
 //		   {
 //		      //:IssueError( ViewToWindow,0,0, "Invalid Set Cursor on Previous <=" )

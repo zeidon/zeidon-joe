@@ -68,6 +68,11 @@ class EntityCursorImpl implements EntityCursor
     private EntityIterator<EntityInstanceImpl> currentIterator;
 
     /**
+     * Used to keep track of most recent setFirst/setLast.
+     */
+    private boolean forwardDirection = true;
+
+    /**
      * This points to the cursor's current entity instance.  It's a weak reference so
      * that if the entity is dropped then this cursor will release it.
      */
@@ -985,15 +990,24 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setFirst()
     {
-        currentIterator = new IteratorBuilder(getObjectInstance())
-                                    .forTwinsOf( getEntityInstance() )
-                                    .forEntityDef( getEntityDef() )
-                                    .setCursor( this )
-                                    .build();
-        if ( ! currentIterator.hasNext() )
+        // For performance reasons we won't create an iterator;
+        // we'll just manipulate the cursor directly.
+        currentIterator = null;
+        forwardDirection = true;
+
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
             return CursorResult.NULL;
 
-        currentIterator.next();
+        // Find the first twin.
+        ei = ei.getFirstTwin();
+        while ( ei != null && ei.isHidden() )
+            ei = ei.getNextTwin();
+
+        if ( ei == null || ei.isHidden() )
+            return CursorResult.NULL;
+
+        setCursor( ei );
         return CursorResult.SET;
     }
 
@@ -1011,6 +1025,9 @@ class EntityCursorImpl implements EntityCursor
     public CursorResult setFirst(EntityDef scopingEntity)
     {
         if ( scopingEntity == null )
+            return setFirst();
+
+        if ( scopingEntity == getEntityDef().getParent() )
             return setFirst();
 
         currentIterator = new IteratorBuilder(getObjectInstance())
@@ -1088,7 +1105,12 @@ class EntityCursorImpl implements EntityCursor
     public CursorResult setNextContinue()
     {
     	if ( currentIterator == null )
-    		setFirst();
+    	{
+    	    if ( forwardDirection)
+    	        return setNext();
+    	    else
+    	        return setPrev();
+    	}
 
         if ( ! currentIterator.hasNext() )
             return CursorResult.UNCHANGED;
@@ -1100,15 +1122,22 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setNext()
     {
-        currentIterator = new IteratorBuilder(getObjectInstance())
-                                    .forEntityDef( getEntityDef() )
-                                    .setCursor( this )
-                                    .currentInstance( getEntityInstance() )
-                                    .build();
-        if ( ! currentIterator.hasNext() )
+        // For performance reasons we won't create an iterator;
+        // we'll just manipulate the cursor directly.
+        currentIterator = null;
+
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return CursorResult.NULL;
+
+        ei = ei.getNextTwin();
+        while ( ei != null && ei.isHidden() )
+            ei = ei.getNextTwin();
+
+        if ( ei == null || ei.isHidden() )
             return CursorResult.UNCHANGED;
 
-        currentIterator.next();
+        setCursor( ei );
         return CursorResult.SET;
     }
 
@@ -1125,6 +1154,12 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setNext(EntityDef scopingEntity)
     {
+        if ( scopingEntity == null )
+            return setNext();
+
+        if ( scopingEntity == getEntityDef().getParent() )
+            return setNext();
+
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .withScoping( getScopingEntityInstance( scopingEntity ) )
                                     .forEntityDef( getEntityDef() )
@@ -1192,28 +1227,36 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setLast()
     {
-        currentIterator = new IteratorBuilder(getObjectInstance())
-                                    .forTwinsOf( getEntityInstance() )
-                                    .setLast()
-                                    .forEntityDef( getEntityDef() )
-                                    .setCursor( this )
-                                    .build();
+        // For performance reasons we won't create an iterator;
+        // we'll just manipulate the cursor directly.
+        currentIterator = null;
+        forwardDirection = false;
 
-        if ( ! currentIterator.hasPrev() )  // Is there a last entity?
-            return CursorResult.UNCHANGED;
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return CursorResult.NULL;
 
-        currentIterator.prev();
+        ei = ei.getLastTwin();
+        while ( ei != null && ei.isHidden() )
+            ei = ei.getPrevTwin();
+
+        if ( ei == null || ei.isHidden() )
+            return CursorResult.NULL;
+
+        setCursor( ei );
         return CursorResult.SET;
     }
 
     @Override
     public CursorResult setPrevContinue()
     {
-    	if ( currentIterator == null )
-    	{
-    	    setFirst();
-            return CursorResult.UNCHANGED;
-    	}
+        if ( currentIterator == null )
+        {
+            if ( forwardDirection)
+                return setNext();
+            else
+                return setPrev();
+        }
 
         if ( ! currentIterator.hasPrev() )
             return CursorResult.UNCHANGED;
@@ -2224,6 +2267,12 @@ class EntityCursorImpl implements EntityCursor
 	@Override
 	public CursorResult setLast(EntityDef scopingEntity)
 	{
+        if ( scopingEntity == null )
+            return setLast();
+
+        if ( scopingEntity == getEntityDef().getParent() )
+            return setLast();
+
         currentIterator = new IteratorBuilder(getObjectInstance())
                                     .withScoping( getScopingEntityInstance( scopingEntity ) )
                                     .forEntityDef( getEntityDef() )
@@ -2277,20 +2326,25 @@ class EntityCursorImpl implements EntityCursor
         throw new UnsupportedOperationException( "Not written yet" );
     }
 
-    @Override
+	@Override
     public CursorResult setPrev()
     {
-        currentIterator = new IteratorBuilder(getObjectInstance())
-                                .forEntityDef( getEntityDef() )
-                                .setCursor( this )
-                                .currentInstance( getEntityInstance() )
-                                .setLast()
-                                .build();
+        // For performance reasons we won't create an iterator;
+        // we'll just manipulate the cursor directly.
+        currentIterator = null;
 
-        if ( ! currentIterator.hasPrev() )
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return CursorResult.NULL;
+
+        ei = ei.getPrevTwin();
+        while ( ei != null && ei.isHidden() )
+            ei = ei.getPrevTwin();
+
+        if ( ei == null || ei.isHidden() )
             return CursorResult.UNCHANGED;
 
-        currentIterator.prev();
+        setCursor( ei );
         return CursorResult.SET;
     }
 
