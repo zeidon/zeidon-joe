@@ -25,7 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,6 @@ import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -65,13 +63,6 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  */
 public class JdbcHandler extends AbstractSqlHandler
 {
-    private static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
-                                                                               CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
-                                                                               CreateEntityFlags.fDONT_UPDATE_OI,
-                                                                               CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
-                                                                               CreateEntityFlags.fDBHANDLER,
-                                                                               CreateEntityFlags.fIGNORE_PERMISSIONS );
-
     private final Map<String, PreparedStatementCacheValue> cachedStatements;
     private       JdbcConnectionPool connectionPool;
 
@@ -664,7 +655,7 @@ public class JdbcHandler extends AbstractSqlHandler
                     task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );
                     ps.setMaxRows( stmt.activateLimit );
                 }
-                
+
                 value = new PreparedStatementCacheValue( ps, sql );
                 cachedStatements.put( key.getKey(), value );
             }
@@ -683,7 +674,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 ps = connection.prepareStatement( sql, Statement.RETURN_GENERATED_KEYS );
             else
                 ps = connection.prepareStatement( sql );
-            
+
             if ( stmt != null && stmt.activateLimit > 0 )
             {
                 task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );

@@ -190,9 +190,6 @@ class EntityCursorImpl implements EntityCursor
                 int level = entityDef.getDepth() + viewCursor.getRecursiveDiff();
                 for ( ; searchInstance != null; searchInstance = searchInstance.getNextHier() )
                 {
-                    // TODO: Since we're running through all the entities
-                    // we might as well set whatever cursors we can.
-
                     // If the searchInstance level is less than the parent then there is no
                     // entity that matches what we want.
                     if ( searchInstance.getDepth() <= parentInstance.getDepth() )
@@ -1291,27 +1288,31 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public CursorResult setPosition(int position)
     {
-        // TODO: This should be cleaned up.  We probably don't need to build
-        // an iterator.
         if ( position < 0 )
             return CursorResult.NULL;
 
-        EntityIterator<EntityInstanceImpl> iter = new IteratorBuilder(getObjectInstance())
-                                            .forTwinsOf( getEntityInstance() )
-                                            .forEntityDef( getEntityDef() )
-                                            .build();
+        EntityInstanceImpl ei = getEntityInstance();
+        if ( ei == null )
+            return CursorResult.NULL;
 
-        EntityInstanceImpl ei = null;
-        for ( int i = 0; i <= position; i++ )
+        ei = ei.getFirstTwin();
+        while ( true )
         {
-            if ( ! iter.hasNext() )
+            while ( ei != null && ei.isHidden() )
+                ei = ei.getNextTwin();
+
+            if ( ei == null )
                 return CursorResult.NULL;
 
-            ei = iter.next();
-        }
+            if ( position == 0 )
+            {
+                setCursor( ei );
+                return CursorResult.SET;
+            }
 
-        setCursor( ei );
-        return CursorResult.SET;
+            ei = ei.getNextTwin();
+            position--;
+        }
     }
 
     @Override
@@ -1824,8 +1825,6 @@ class EntityCursorImpl implements EntityCursor
 
         if ( ! entityDef.isRecursive() )
             throw new ZeidonException("Entity %s is not recursive", entityDef );
-
-        // TODO: Check to see if subobject entity is already the parent?
 
         EntityInstanceImpl ei = getEntityInstance();
         EntityInstanceImpl parentOfSubobject = getParentCursor().getExistingInstance();
@@ -2569,7 +2568,7 @@ class EntityCursorImpl implements EntityCursor
 
         // Verify that the EntityDefs are the same for source and target -or- one is a recursive
         // child of the other.
-        // TODO: The COE requires them to be the same EntityDef but is that really necessary?
+        // The COE requires them to be the same EntityDef but is that really necessary?
         if ( getEntityDef() == source.getEntityDef() )
             return;
 

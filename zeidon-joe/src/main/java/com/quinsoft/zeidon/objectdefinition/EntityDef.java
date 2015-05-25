@@ -119,6 +119,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private boolean    derivedPath = false;
     private boolean    recursive = false;
     private boolean    duplicateEntity = false;
+    private boolean    autoloadFromParent;
     private int        persistentAttributeCount;
     private int        workAttributeCount;
     private DataRecord dataRecord;
@@ -176,6 +177,11 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 if ( reader.getAttributeName().equals( "ACT_LIMIT" ))
                 {
                     activateLimit = Integer.parseInt( reader.getAttributeValue() );
+                }
+                else
+                if ( reader.getAttributeName().equals( "AUTOLOADFROMPARENT" ))
+                {
+                    autoloadFromParent = reader.getAttributeValue().startsWith( "Y" );
                 }
                 break;
 
@@ -1236,5 +1242,17 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
             else
                 throw ZeidonException.wrapException( e );
         }
+    }
+
+    /**
+     * Returns true if this entity can activating by getting the attribute data
+     * from the parent instead of going to the DB.   This occurs when the entity
+     * has only keys and the foreign keys are in the parent.
+     *
+     * @return true if this entity can be autoloaded from parent.
+     */
+    public boolean isAutoloadFromParent()
+    {
+        return autoloadFromParent;
     }
 }

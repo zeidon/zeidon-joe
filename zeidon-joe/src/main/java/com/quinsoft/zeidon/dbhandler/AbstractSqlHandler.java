@@ -38,6 +38,8 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.CreateEntityFlags;
+import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -61,6 +63,16 @@ import com.quinsoft.zeidon.standardoe.OiRelinker;
  */
 public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 {
+    /**
+     * These are the flags to use when creating an entity.  It prevents some
+     * normal processing for occuring that we don't need when activating.
+     */
+    protected static final EnumSet<CreateEntityFlags> CREATE_FLAGS = EnumSet.of( CreateEntityFlags.fNO_SPAWNING,
+                                                                                 CreateEntityFlags.fIGNORE_MAX_CARDINALITY,
+                                                                                 CreateEntityFlags.fDONT_UPDATE_OI,
+                                                                                 CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
+                                                                                 CreateEntityFlags.fDBHANDLER,
+                                                                                 CreateEntityFlags.fIGNORE_PERMISSIONS );
     private static final long COL_KEYS_ONLY = 0x00000001;
     private static final long COL_NO_HIDDEN = 0x00000002;
     private static final long COL_FULL_QUAL = 0x00000004;
@@ -971,7 +983,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         loadedViewEntities.add( entityDef );
 
-        // TODO: Implement autoload from parent.
+        if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
+            return DbHandler.LOAD_DONE;
+
         // TODO: We can't handle cached recursive statements because the cached statement is
         //       caching the value of the parent instead of the DataField of the parent.
 
@@ -1008,6 +1022,34 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         assert assertNotNullKey( view, entityDef ) : "Activated entity has null key";
 
         return DbHandler.LOAD_DONE;
+    }
+
+    /**
+     * The only attribute(s) in entityDef are keys and this entity can be
+     * loaded by retrieving the key from the parent.
+     */
+    private boolean autoloadFromParent( View view, EntityDef entityDef )
+    {
+        assert entityDef.getParent() != null;
+        DataRecord dataRecord = entityDef.getDataRecord();
+        RelRecord  relRecord  = dataRecord.getRelRecord();
+
+        // Autoload is only valid if the key is contained in the parent.
+        // TODO: We only handle many-to-one relationships.  We could also handle
+        // m-to-m relationships by loading just the correspondence table.
+        if ( ! relRecord.getRelationshipType().isManyToOne() )
+            return false;
+
+        EntityInstance entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+        EntityCursor parent = view.cursor( entityDef.getParent() );
+        for ( RelField relField : relRecord.getRelFields() )
+        {
+            AttributeInstance sourceAttr = parent.getAttribute( relField.getRelDataField().getAttributeDef() );
+            entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
+        }
+
+        getTask().dblog().debug( "Auto Loaded %s from parent keys", entityDef.getName() );
+        return true;
     }
 
     @Override
@@ -2543,6 +2585,17 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             DataRecord dataRecord = def.getDataRecord();
             if ( dataRecord == null )
                 return false;
+
+            if ( def.isAutoloadFromParent() )
+            {
+                RelRecord relRecord = dataRecord.getRelRecord();
+
+                // If the entity is flagged as AUTOLOAD FROM PARENT and the relationship
+                // is many-to-one then we can load this entity by using the values from
+                // its parent.  In that situation we don't want to join this entity.
+                if ( relRecord.getRelationshipType().isManyToOne() )
+                    return false;
+            }
 
             return dataRecord.isJoinable();
         }
