@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.ScalaHelper;
 
 
@@ -211,4 +212,21 @@ public interface Task extends TaskQualification, CacheMap
      * @return a task-specific Scala helper.
      */
     ScalaHelper getScalaHelper();
+
+    /**
+     * Gets an entity cache for this task.  If one doesn't exist for this
+     * task the system task will be checked.
+     *
+     * @param entityDef
+     * @return
+     */
+    EntityCache getEntityCache( EntityDef entityDef );
+
+    /**
+     * Sets (or replaces) the EntityCache for an entity.
+     *
+     * @param entityCache
+     * @return true if there was already an EntityCache for the entity.
+     */
+    boolean setEntityCache( EntityCache entityCache);
 }

@@ -290,7 +290,7 @@ class OiDisplay extends JPanel
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setPaint(Color.black);
 
-            for ( EntityDef entityDef : lodDef.getViewEntitiesHier() )
+            for ( EntityDef entityDef : lodDef.getEntityDefs() )
             {
                 EntityDef parent = entityDef.getParent();
                 if ( parent == null )  // If this entity is the root we don't need to draw a line.

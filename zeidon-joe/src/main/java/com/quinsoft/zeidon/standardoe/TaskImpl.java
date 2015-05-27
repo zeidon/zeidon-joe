@@ -37,6 +37,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SerializeOi;
@@ -45,6 +46,7 @@ import com.quinsoft.zeidon.TaskLogger;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.LazyLoadLock;
 
 /**
@@ -82,7 +84,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
      **/
     private final AtomicLong versionCounter = new AtomicLong();
     private ScalaHelper scalaHelper;
-    
+
     /**
      * Keep track of entity caches for this task.
      */
@@ -94,7 +96,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         isValid = true;
         this.taskId = taskId.intern();
         this.objectEngine = objectEngine;
-        
+
         // Check to see if this is the system task.  It's ok to use '=' instead of '=='
         // because we control the creation of the system task.
         isSystemTask = ( taskId == ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
@@ -577,19 +579,31 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
 
         return scalaHelper;
     }
-    
-    synchronized EntityCache getCacheForEntity( Integer erEntityToken )
+
+    @Override
+    public synchronized EntityCache getEntityCache( EntityDef entityDef )
     {
         if ( entityCacheMap != null )
         {
-            EntityCache entityCache = entityCacheMap.get( erEntityToken );
+            EntityCache entityCache = entityCacheMap.get( entityDef.getErEntityToken() );
             if ( entityCache != null )
                 return entityCache;
         }
-        
+
         if ( isSystemTask )
             return null;
-        
-        return getSystemTask().getCacheForEntity( erEntityToken );
+
+        return getSystemTask().getEntityCache( entityDef );
+    }
+
+    @Override
+    public synchronized boolean setEntityCache( EntityCache entityCache )
+    {
+        if ( entityCacheMap == null )
+            entityCacheMap = new HashMap<>();
+
+        boolean b = entityCacheMap.containsKey( entityCache.getErEntityToken() );
+        entityCacheMap.put( entityCache.getErEntityToken(), entityCache );
+        return b;
     }
 }

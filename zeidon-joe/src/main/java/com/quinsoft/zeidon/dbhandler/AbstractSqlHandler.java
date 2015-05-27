@@ -41,6 +41,7 @@ import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
@@ -708,7 +709,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         loadedInstances = new HashMap<EntityDef, Map<Object,EntityInstance>>();
         loadInOneSelect = new HashSet<>();
 
-        for ( EntityDef entityDef : view.getLodDef().getViewEntitiesHier() )
+        for ( EntityDef entityDef : view.getLodDef().getEntityDefs() )
         {
             if ( entityCanBeLoadedWithSingleSelect( entityDef ) )
             {
@@ -796,6 +797,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return jc;
     }
 
+    private EntityCache getEntityCache( EntityDef entityDef )
+    {
+        if ( entityDef.getParent() != null )
+            return null;
+
+        EntityCache entityCache = task.getEntityCache( entityDef );
+        if ( entityCache == null )
+            return null;
+
+        // Currently we can only handle many-to-1 relationships.
+        DataRecord dataRecord = entityDef.getDataRecord();
+        if ( dataRecord == null )
+            return null;
+
+        // Currently we only handle many-to-one relationships.
+        RelRecord relRecord = dataRecord.getRelRecord();
+        if ( ! relRecord.getRelationshipType().isManyToOne() )
+            return null;
+
+        return entityCache;
+    }
     /**
      * Returns true if entityDef can be loaded by joining with its parent.
      *
@@ -807,8 +829,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( ! activatingWithJoins() )
             return false;
 
+        // We can't join an entity if it has qualification because it
+        // could throw off the results.
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null )
+            return false;
+
+        // If this entity can be loaded from a cache then we don't need to
+        // join it.
+        if ( getEntityCache( entityDef ) != null )
             return false;
 
         // We can't join a child to its parent if there is an activate limit on the
@@ -976,6 +1005,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return DbHandler.LOAD_DONE;
         }
 
+        EntityCache entityCache = getEntityCache( entityDef );
+        if ( entityCache != null )
+            return loadFromEntityCache( view, entityDef, entityCache );
+
         // If we've already loaded this entity and the entity can be loaded all at once then
         // we've loaded all the instances and we're done.
         if ( loadedViewEntities.contains( entityDef ) && selectAllInstances( entityDef ) )
@@ -1022,6 +1055,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         assert assertNotNullKey( view, entityDef ) : "Activated entity has null key";
 
         return DbHandler.LOAD_DONE;
+    }
+
+    private int loadFromEntityCache( View view, EntityDef entityDef, EntityCache entityCache )
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     /**

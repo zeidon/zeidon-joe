@@ -25,6 +25,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Task;
@@ -78,6 +79,7 @@ public class QualificationBuilder
      * If non-null, then attempt to relink this instance with the root after the activate.
      */
     private EntityInstance sourceEntityInstance;
+    private boolean isEntityCache;
 
     /**
      * Creates an empty qualification object.
@@ -89,6 +91,23 @@ public class QualificationBuilder
         cacheTask = task;
         application = task.getApplication();
         qualView = task.activateEmptyObjectInstance( QUAL_XOD_NAME, task.getSystemTask().getApplication() );
+        activateOptions = new ActivateOptions( taskQual.getTask() );
+        activateOptions.setQualificationObject( qualView );
+        entitySpecCount = 0;
+        synch = this;
+    }
+
+    /**
+     * Creates a QualificationBuilder from a pre-existing qualification object.
+     *
+     * @param task
+     */
+    public QualificationBuilder( TaskQualification taskQual, View qual )
+    {
+        this.task = taskQual.getTask();
+        cacheTask = task;
+        application = task.getApplication();
+        qualView = qual;
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
         entitySpecCount = 0;
@@ -545,6 +564,15 @@ public class QualificationBuilder
         return qualView;
     }
 
+    public QualificationBuilder setAsEntityCache()
+    {
+        if ( StringUtils.isBlank( cacheViewName ) )
+            throw new ZeidonException( "Cache Name must be set when using View as Entity Cache" );
+
+        isEntityCache = true;
+        return this;
+    }
+
     public View activate()
     {
         View view = null;
@@ -586,9 +614,15 @@ public class QualificationBuilder
                 sourceEntityInstance = null;
             }
 
-            qualView.setInternal( true ); // So it doesn't show up in the browser.
+            if ( isEntityCache )
+            {
+                EntityCache entityCache = new EntityCache( view, qualView, cacheViewName );
+                cacheTask.setEntityCache( entityCache );
+            }
+
+            qualView.setInternal( true ); // So it doesn't show up in the browser any more.
             return view;
-        }
+        } // synchronized ( synch )...
     }
 
     /**
