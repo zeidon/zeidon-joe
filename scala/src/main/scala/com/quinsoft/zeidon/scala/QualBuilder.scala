@@ -18,13 +18,14 @@ import com.quinsoft.zeidon._
  * }}}
  *
  */
-class QualBuilder( val view: View,
-                   val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
+class QualBuilder private [scala] ( private [this]  val view: View,
+                                    private [scala] val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
 
-    val jtask = view.task.jtask
-    val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
+    private [this]  val jtask = view.task.jtask
+    private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
-    val entityQualBuilder = new EntityQualBuilder( this )
+
+    private [scala]  val entityQualBuilder = new EntityQualBuilder( this )
 
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
@@ -67,7 +68,7 @@ class QualBuilder( val view: View,
      * {{{
      * SELECT ID...
      * FROM  USER
-     * WHERE ( z_USER.ID = 100 OR z_USER.ID = 200 )
+     * WHERE ( USER.ID = 100 OR USER.ID = 200 )
      * }}}
      */
     def any( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
@@ -91,16 +92,17 @@ class QualBuilder( val view: View,
      *
      * {{{
      *  val id = 10
-        mUser.buildQual( _.User.ID > 0 )
-             .conditional(id != 0, _.and(  _.User.ID < id ) )
-             .activate()
+     *  val mUser = VIEW basedOn "mUser"
+     *  mUser.buildQual( _.User.ID > 0 )
+     *       .conditional(id != 0, _.and( _.User.ID < id ) )
+     *       .activate()
      * }}}
      *
      * Generates the following SQL:
      * {{{
      * SELECT ID...
      * FROM  USER
-     * WHERE z_USER.ID > 0 AND z_USER.ID < 10;
+     * WHERE USER.ID > 0 AND USER.ID < 10;
      * }}}
      */
     def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
@@ -125,7 +127,7 @@ class QualBuilder( val view: View,
      * {{{
      * SELECT ID...
      * FROM  USER
-     * z_USER.USERNAME = 'Smith' AND ( z_USER.EMAILUSERNAME = 'Tom' OR z_USER.EMAILUSERNAME = 'Harry' ) ;
+     * USER.USERNAME = 'Smith' AND ( USER.EMAILUSERNAME = 'Tom' OR USER.EMAILUSERNAME = 'Harry' ) ;
      * }}}
      *
      */
@@ -166,6 +168,28 @@ class QualBuilder( val view: View,
         this
     }
 
+    /**
+     * Initialize qualification with a series of AND predicates WITHOUT adding a
+     * conjunction to the existing qualification.  This
+     * is intended to be used when building qualification over a series of steps.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      val qual = mUser.buildQual()
+     *      if ( <true> )
+     *          qual.all( _.User.ID > 100, _.User.ID < 200 )
+     *      else
+     *          qual.all( _.User.ID > 400, _.User.ID < 500 )
+     *
+     *      qual.activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE ( USER.ID > 100 AND USER.ID < 200 )
+     * }}}
+     */
     def all( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
@@ -180,6 +204,23 @@ class QualBuilder( val view: View,
         return this
     }
 
+    /**
+     * Add a group of qualifications separated by 'AND' after adding an 'OR'
+     * conjunction to the existing qualification.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID = 400 )
+     *                 .orAll( _.User.ID = 500, _.User.UserName = "Smith" )
+     *                 .activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE ( USER.ID = 400 OR ( USER.ID = 500 AND USER.USERNAME = 'Smith' ) );
+     * }}}
+     */
     def orAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         jqual.addAttribQual( "(" )
@@ -195,53 +236,166 @@ class QualBuilder( val view: View,
         return this
     }
 
+    /**
+     * Activate only the root entities and ignore all children.  Entities loaded this
+     * way usually can not be deleted because it will violate referential integrity.
+     */
     def rootOnlyMultiple(): QualBuilder = {
         jqual.rootOnly().multipleRoots()
         this
     }
 
+    /**
+     * Activate only a single root entity (the first one in the result set) and
+     * ignore all children.  Entities loaded this way usually can not be deleted
+     * because it will violate referential integrity.
+     */
     def rootOnly(): QualBuilder = {
         jqual.rootOnly()
         this
     }
 
+    /**
+     * Activate all roots that match the qualification (and their children).
+     */
     def multiple(): QualBuilder = {
         jqual.multipleRoots()
         this
     }
 
+    /**
+     * Limit the number of entities that are loaded.  If this is part of a restrict()
+     * qualification clause then this will limit the number of child entities loaded
+     * under its parent.  I.e. this qualification
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID = 400 )
+     *                  .or( _.User.ID = 500 )
+     *                  .restrict( _.UserGroup )
+     *                      .limitCountTo( 5 )
+     *                 .activate
+     * }}}
+     *
+     * Could activate a total of 10 UserGroup entities, 5 for each parent.
+     */
     def limitCountTo( limit: Integer ): QualBuilder = {
         jqual.limitCountTo(limit)
         this
     }
 
+    /**
+     * Activate all entites that are normally lazy loaded.
+     */
     def includeLazy(): QualBuilder = {
         jqual.setFlag( ActivateFlags.fINCLUDE_LAZYLOAD )
         this
     }
 
+    /**
+     * Activates children that match the qualification; i.e. this restricts what
+     * children are loaded.
+     *
+     * For example, this qualifcation:
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID = 400 )
+     *                  .restrict( _.UserGroup )
+     *                      .to( _.UserGroup.GroupName like "P%" )
+     *                 .activate
+     * }}}
+     *
+     * Generates the following SQL:
+     * {{{
+     * SELECT ID...
+     * FROM  USER
+     * WHERE ( USER.ID = 400  );
+     * ...
+     * SELECT USERGROUP.ID...
+     * FROM  MM_USERGROUP_CONTANSMMBR_USER JOIN
+     *       USERGROUP ON USERGROUP.ID = MM_USERGROUP_CONTANSMMBR_USER.FK_ID_USERGROUP
+     * WHERE (MM_USERGROUP_CONTANSMMBR_USER.FK_ID_USER = 10 AND
+     *       (USERGROUP.GROUPNAME LIKE 'P%') );
+     * }}}
+     *
+     * Note: depending on how the LOD is defined this could prevent child entities
+     * from being deleted because that would violate referential integrity.
+     */
     def restrict( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ) = restricting( restrictTo )
+
+    /**
+     * Synonym for restrict( ... ) method.
+     */
     def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
         val jentityDef = restrictTo( new EntitySelector )
         jqual.restricting( jentityDef.getName() )
         this
     }
 
+    /**
+     * Exclude the specified entity from the activate.
+     *
+     * Note: depending on how the LOD is defined this could prevent child entities
+     * from being deleted because that would violate referential integrity.
+     */
     def exclude( excludeEntity: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
         val jentityDef = excludeEntity( new EntitySelector )
         jqual.excludeEntity( jentityDef.getName() )
         this
     }
 
+    /**
+     * Used with the restrict() method for adding qualification on child entities.
+     *
+     * See restrict() for more information.
+     */
     def to( addQual: (EntityQualBuilder) => QualBuilder ): QualBuilder = {
         addQual( entityQualBuilder )
     }
 
+    /**
+     * Caches the resulting view in the specified task.  The next time a view is
+     * activated using this cache name the cached view will be returned and there is
+     * no DB activity.
+     * {{{
+     *      val id = 10
+     *      val mUser = VIEW basedOn "mUser"
+     *
+     *      // This call loads the User from the DB.
+     *      mUser.buildQual( _.User.ID = id ).cachedAs( "mUser" + id ).activate
+     *
+     *      // This call loads the User from the cache and doesn't access the DB.
+     *      mUser.buildQual( _.User.ID = id ).cachedAs( "mUser" + id ).activate
+     * }}}
+     *
+     * The view is cached by using the cache name to name the view in the task.
+     * To clear the view simply drop the view name.
+     *
+     * Note that the cached view is dropped if its owning task is dropped.
+     */
     def cachedAs( cacheName: String, qualtask: com.quinsoft.zeidon.Task = jtask ): QualBuilder = {
         jqual.cachedAs( cacheName, qualtask )
         this
     }
 
+    /**
+     * Caches the resulting view in the SYSTEM task.  The next time a view is
+     * activated using this cache name the cached view will be returned and there is
+     * no DB activity.  Caching at the system level means the cached view will never
+     * be dropped (unless it's done explicitly).
+     * {{{
+     *      val id = 10
+     *      val mUser = VIEW basedOn "mUser"
+     *
+     *      // This call loads the User from the DB.
+     *      mUser.buildQual( _.User.ID = id ).systemCachedAs( "mUser" + id ).activate
+     *
+     *      // This call loads the User from the cache and doesn't access the DB.
+     *      mUser.buildQual( _.User.ID = id ).systemCachedAs( "mUser" + id ).activate
+     * }}}
+     *
+     * The view is cached by using the cache name to name the view in the system task.
+     * To clear the view simply drop the view name.
+     */
     def systemCachedAs( cacheName: String ): QualBuilder = {
         jqual.cachedAs( cacheName, jtask.getSystemTask() )
         this
@@ -257,6 +411,22 @@ class QualBuilder( val view: View,
 
     /**
      * Indicates this activate should be done asynchronously.
+     *
+     * An asynchronous activate will create a view that will block the first
+     * time it is used until the activate finishes.  The following will
+     * activate two views at the same time.
+     * {{{
+     *      // Starts an activate on mUser but returns immediately.
+     *      val mUser1 = VIEW basedOn "mUser"
+     *      mUser1.buildQual( _.User.ID = 1 ).asynchronous.activate
+     *
+     *      // Starts another activate on mUser but returns immediately.
+     *      val mUser2 = VIEW basedOn "mUser"
+     *      mUser2.buildQual( _.User.ID = 2 ).asynchronous.activate
+     *
+     *      // Following blocks until mUser1 finishes activating.
+     *      println( "mUser1.User.ID = " + mUser1.User.ID.toString )
+     * }}}
      */
     def asynchronous = {
         jqual.asynchronous()
