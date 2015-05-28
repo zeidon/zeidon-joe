@@ -130,6 +130,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * If a entityDef is in this set it can be loaded in a single select.
      */
     private Set<EntityDef> loadInOneSelect;
+    private HashMap<EntityCache, View> entityCacheViewMap;
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
@@ -799,23 +800,23 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     private EntityCache getEntityCache( EntityDef entityDef )
     {
+        // We can't load a root from cache because we don't know which ones to load.
         if ( entityDef.getParent() != null )
             return null;
 
-        EntityCache entityCache = task.getEntityCache( entityDef );
-        if ( entityCache == null )
-            return null;
-
-        // Currently we can only handle many-to-1 relationships.
         DataRecord dataRecord = entityDef.getDataRecord();
         if ( dataRecord == null )
             return null;
 
         // Currently we only handle many-to-one relationships.
+        // TODO: It would be nice to handle m-to-m relationships.  That is more complex
+        // because it requires the correspondence table being loaded.
         RelRecord relRecord = dataRecord.getRelRecord();
         if ( ! relRecord.getRelationshipType().isManyToOne() )
             return null;
 
+        // Check to see if there is an entity cache for this entity.
+        EntityCache entityCache = task.getEntityCache( entityDef );
         return entityCache;
     }
     /**
@@ -1057,10 +1058,38 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return DbHandler.LOAD_DONE;
     }
 
+    /**
+     * Loads the entityDef from the cache specified in entityCache.
+     * Uses include processing.
+     * @return
+     */
     private int loadFromEntityCache( View view, EntityDef entityDef, EntityCache entityCache )
     {
-        // TODO Auto-generated method stub
-        return 0;
+        if ( entityCacheViewMap == null )
+            entityCacheViewMap = new HashMap<>();
+
+        // entityCacheViewMap keeps track of the views we've created for loading from
+        // the cache.  This prevents us from creating lots of views for the same OI.
+        View cacheView = entityCacheViewMap.get( entityCache );
+        if ( cacheView == null )
+        {
+            cacheView = entityCache.getEntityCacheView(); // Creates a new view.
+            entityCacheViewMap.put( entityCache, cacheView );
+        }
+
+        EntityDef parent = entityDef.getParent();
+        RelRecord relRecord = entityDef.getDataRecord().getRelRecord();
+        AttributeDef fk = relRecord.getParentRelField().getRelDataField().getAttributeDef();
+
+        assert relRecord.getRelationshipType().isManyToOne();
+        assert entityDef.getKeys().size() == 1;
+
+        Object keyValue = view.cursor( parent ).getAttribute( fk ).getValue();
+        entityCache.setCursor( cacheView, keyValue );
+
+
+
+        return DbHandler.LOAD_DONE;
     }
 
     /**

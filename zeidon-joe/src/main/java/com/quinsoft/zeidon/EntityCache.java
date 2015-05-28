@@ -6,6 +6,7 @@ package com.quinsoft.zeidon;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -18,17 +19,21 @@ import com.quinsoft.zeidon.utils.QualificationBuilder;
  */
 public class EntityCache
 {
-    private final LodDef  lodDef;
-    private final View    qualOi;
-    private final String  cacheName;
-    private final Task    task;
-    private final Integer erEntityToken;
+    private final LodDef    lodDef;
+    private final EntityDef root;
+    private final AttributeDef key;
+    private final View      qualOi;
+    private final String    cacheName;
+    private final Task      task;
+    private final Integer   erEntityToken;
     private final Set<Integer> relationships = new HashSet<>();
 
     public EntityCache( View cacheView, View qualOi, String cacheName )
     {
         super();
         this.lodDef = cacheView.getLodDef();
+        root = lodDef.getRoot();
+        key = root.getKeys().get( 0 );
         this.qualOi = qualOi;
         this.cacheName = cacheName;
         this.task = cacheView.getTask();
@@ -41,6 +46,28 @@ public class EntityCache
 
             relationships.add( ed.getErRelToken() );
         }
+
+        // For now we only support entities with a single key.
+        if ( root.getKeys().size() != 1 )
+            throw new ZeidonException( "Root entity in an EntityCach LOD may only have a single key." );
+
+        // Make sure the root entity has hashkey.
+        verifyKeyHash();
+    }
+
+    private void verifyKeyHash()
+    {
+        if ( root.hasAttributeHaskKeys() )
+        {
+            for ( AttributeDef attr : root.getHashKeyAttributes() )
+            {
+                if ( attr.isKey() )
+                    return;  // We found a hashkey that is the root key.  We're good to go.
+            }
+        }
+
+        throw new ZeidonException( "When using a LOD as an EntityCache the root entity must have an attribute hashkey "
+                                 + "specfied on the key ");
     }
 
     public Integer getErEntityToken()
@@ -52,7 +79,7 @@ public class EntityCache
      * Returns the view for the cached OI.  It does this by looking for the view by
      * name in the task.  If it is not found it is assumed that it needs to be reloaded.
      *
-     * @return entity cache view.
+     * @return a COPY of the entity cache view.
      */
     public synchronized View getEntityCacheView()
     {
@@ -77,5 +104,19 @@ public class EntityCache
     public Set<Integer> getRelationships()
     {
         return relationships;
+    }
+
+    /**
+     * Sets the cursor to the root entity with key = keyValue.  Throws an exception
+     * if the entity isn't set.
+     *
+     * @param cacheView
+     * @param keyValue
+     */
+    public void setCursor( View cacheView, Object keyValue )
+    {
+        if ( ! cacheView.cursor( root ).setFirst( key, keyValue ).isSet() )
+            throw new ZeidonException( "EntityCache OI does not have an entity with key = %s", keyValue )
+                            .appendMessage( "Cache view = %s", cacheView.toString() );
     }
 }
