@@ -132,6 +132,17 @@ public class TestZencas
         System.out.println("===== Finished testAttributeUpdated ========");
 	}
 
+
+	@Test
+	public void testDerivedAttrCompare()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDerivedAttrCompare( testview );
+        System.out.println("===== Finished testDerivedAttrCompare ========");
+	}
+
 	/**
 	 * Test password encryption.
 	 */
@@ -2536,6 +2547,38 @@ public class TestZencas
 	         return ( 0 );
 		}
 
+		public int
+		testDerivedAttrCompare( View     ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mUser2 = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			String szRoles;
+			int RESULT=0;
+
+			 o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zSINGLE );
+	         DropView( vTempViewVar_0 );
+	         
+	         CreateViewFromView( mUser2, mUser );
+	         	         
+	         EntityCursor cursor = mUser.cursor( "Person" );	  
+	         //AttributeInstance attrib = cursor.getAttribute( "dPersonRoles" );
+	         //szRoles = attrib.getString();
+	         
+	         //RESULT = CompareAttributeToAttribute(mUser2, "Person", "dPersonRoles", mUser, "Person", "dPersonRoles");	         
+	         
+	         // When we call getAttribute(), executeDerivedOperation is not being executed. 
+	         // When we do the attrib.getString() below, then it calls the derived attribute and the compare will work.
+	         Assert.assertTrue( "Error comparing Derived Attribute, executeDerivedOperation not being executed.", cursor.getAttribute( "dPersonRoles" ).compare( "Instructor, Donor, Alumni, Employee" ) == 0 );
+	         AttributeInstance attrib2 = cursor.getAttribute( "dPersonRoles" );
+	         szRoles = attrib2.getString();
+	         
+	         Assert.assertTrue( "Error comparing Derived Attribute, executeDerivedOperation not being executed.", cursor.getAttribute( "dPersonRoles" ).compare( "Instructor, Donor, Alumni, Employee" ) == 0 );
+	         
+	         return 0;
+		}
+		
 		public int
 		testSavingNewObject( View     ViewToWindow )
 		{

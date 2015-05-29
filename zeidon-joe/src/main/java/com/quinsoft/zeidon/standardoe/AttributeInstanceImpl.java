@@ -337,6 +337,7 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public int compare( Object value )
     {
+    	executeDerivedOper( );
         return attributeValue.compare( getTask(), this, attributeDef, value );
     }
 
