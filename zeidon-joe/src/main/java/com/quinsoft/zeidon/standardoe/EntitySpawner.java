@@ -20,6 +20,7 @@
 package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -331,7 +332,7 @@ class EntitySpawner
                                                          searchInstance,
                                                          searchInstance.getObjectInstance(),
                                                          startParentSearchInstance,
-                                                         CursorPosition.LAST, false );
+                                                         CursorPosition.LAST, false, IncludeFlags.EMPTY );
 
                 assert rootInstance.getObjectInstance().validateChains() : "OI validation error; see logs for more";
                 assert searchInstance.getObjectInstance().validateChains() : "OI validation error; see logs for more";

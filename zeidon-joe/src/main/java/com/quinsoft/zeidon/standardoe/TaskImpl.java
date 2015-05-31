@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
@@ -35,13 +37,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.Lockable;
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskLogger;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.utils.LazyLoadLock;
 
 /**
@@ -61,6 +66,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     private boolean                    isValid;
     private final LazyLoadLock         lock;
     private final NamedLockableList    lockList = new NamedLockableList();
+    private final boolean              isSystemTask;
 
     /**
      * List of views that have pessimistic locks.
@@ -79,12 +85,21 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     private final AtomicLong versionCounter = new AtomicLong();
     private ScalaHelper scalaHelper;
 
+    /**
+     * Keep track of entity caches for this task.
+     */
+    private Map<Integer, EntityCache> entityCacheMap;
+
     TaskImpl(JavaObjectEngine objectEngine, Application app, String taskId)
     {
         super(app);
         isValid = true;
         this.taskId = taskId.intern();
         this.objectEngine = objectEngine;
+
+        // Check to see if this is the system task.  It's ok to use '=' instead of '=='
+        // because we control the creation of the system task.
+        isSystemTask = ( taskId == ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
 
         // viewList is a weak map.  This way we can get a list of views if necessary
         // (the browser needs this) but it won't hold onto views once they are no longer
@@ -114,6 +129,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         logger = new TaskLogger( " [bootstrap] " );
         dblogger = new TaskLogger( " [bootstrap] " );
         lock = null;
+        isSystemTask = false;
     }
 
     @Override
@@ -562,5 +578,32 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         }
 
         return scalaHelper;
+    }
+
+    @Override
+    public synchronized EntityCache getEntityCache( EntityDef entityDef )
+    {
+        if ( entityCacheMap != null )
+        {
+            EntityCache entityCache = entityCacheMap.get( entityDef.getErEntityToken() );
+            if ( entityCache != null )
+                return entityCache;
+        }
+
+        if ( isSystemTask )
+            return null;
+
+        return getSystemTask().getEntityCache( entityDef );
+    }
+
+    @Override
+    public synchronized boolean setEntityCache( EntityCache entityCache )
+    {
+        if ( entityCacheMap == null )
+            entityCacheMap = new HashMap<>();
+
+        boolean b = entityCacheMap.containsKey( entityCache.getErEntityToken() );
+        entityCacheMap.put( entityCache.getErEntityToken(), entityCache );
+        return b;
     }
 }

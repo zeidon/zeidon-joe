@@ -191,6 +191,7 @@ public interface EntityCursor extends EntityInstance
      */
     CursorResult   excludeEntity( CursorPosition position );
 
+    void includeSubobject( EntityInstance source, CursorPosition position, EnumSet<IncludeFlags> options );
 
     void includeSubobject( EntityInstance source, CursorPosition position );
     void includeSubobject( EntityInstance source );

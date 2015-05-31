@@ -246,7 +246,12 @@ public class LodDef implements PortableFileAttributeHandler
         }
     }
 
-    public List<EntityDef> getViewEntitiesHier()
+    /**
+     * Returns the list of EntityDefs in hierarchical order.
+     *
+     * @return
+     */
+    public List<EntityDef> getEntityDefs()
     {
         return entityList;
     }
@@ -284,7 +289,7 @@ public class LodDef implements PortableFileAttributeHandler
     public void displayLodDef( TaskQualification task )
     {
         task.log().info( "Displaying LodDef for %s", getName() );
-        for ( EntityDef entityDef : getViewEntitiesHier() )
+        for ( EntityDef entityDef : getEntityDefs() )
         {
             task.log().info( "%s %d, count = %d", entityDef.getName(),
                               entityDef.getDepth(), entityDef.getChildCount() );

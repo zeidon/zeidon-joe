@@ -218,7 +218,7 @@ class View( val task: Task ) extends Dynamic {
      *
      * This is a synonym for view.name( "..." )
      */
-    def name_=( viewName: String ) = name( viewName )
+    def name_= ( viewName: String ):Unit = name( viewName )
 
     def assert = new AssertView( this )
 

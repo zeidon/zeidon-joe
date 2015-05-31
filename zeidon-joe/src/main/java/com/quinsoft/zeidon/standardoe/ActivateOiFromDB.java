@@ -345,6 +345,7 @@ class ActivateOiFromDB implements Activator
                     assert ei.dbhLoaded == true;
                     ei.setCreated( false );
                     ei.setUpdated( false );
+                    ei.setIncluded( false );
                     ei.dbhLoaded = false;
                 }
             }

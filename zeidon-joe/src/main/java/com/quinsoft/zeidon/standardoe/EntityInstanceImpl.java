@@ -3921,7 +3921,8 @@ class EntityInstanceImpl implements EntityInstance
      * This can happen if an OI was activated with a RESTRICTING clause or if a child
      * was dropped via dropEntity().  An incomplete EI cannot be deleted.
      */
-    boolean isIncomplete()
+    @Override
+    public boolean isIncomplete()
     {
         return incomplete;
     }

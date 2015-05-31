@@ -41,9 +41,11 @@ import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
+import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -73,6 +75,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                                                                  CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                  CreateEntityFlags.fDBHANDLER,
                                                                                  CreateEntityFlags.fIGNORE_PERMISSIONS );
+
+    protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
+
     private static final long COL_KEYS_ONLY = 0x00000001;
     private static final long COL_NO_HIDDEN = 0x00000002;
     private static final long COL_FULL_QUAL = 0x00000004;
@@ -129,6 +134,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * If a entityDef is in this set it can be loaded in a single select.
      */
     private Set<EntityDef> loadInOneSelect;
+    private HashMap<EntityCache, View> entityCacheViewMap;
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
@@ -708,7 +714,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         loadedInstances = new HashMap<EntityDef, Map<Object,EntityInstance>>();
         loadInOneSelect = new HashSet<>();
 
-        for ( EntityDef entityDef : view.getLodDef().getViewEntitiesHier() )
+        for ( EntityDef entityDef : view.getLodDef().getEntityDefs() )
         {
             if ( entityCanBeLoadedWithSingleSelect( entityDef ) )
             {
@@ -796,6 +802,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return jc;
     }
 
+    private EntityCache getEntityCache( EntityDef entityDef )
+    {
+        // We can't load a root from cache because we don't know which ones to load.
+        if ( entityDef.getParent() == null )
+            return null;
+
+        DataRecord dataRecord = entityDef.getDataRecord();
+        if ( dataRecord == null )
+            return null;
+
+        // Currently we only handle many-to-one relationships.
+        // TODO: It would be nice to handle m-to-m relationships.  That is more complex
+        // because it requires the correspondence table being loaded.
+        RelRecord relRecord = dataRecord.getRelRecord();
+        if ( ! relRecord.getRelationshipType().isManyToOne() )
+            return null;
+
+        // Check to see if there is an entity cache for this entity.
+        EntityCache entityCache = task.getEntityCache( entityDef );
+        return entityCache;
+    }
     /**
      * Returns true if entityDef can be loaded by joining with its parent.
      *
@@ -807,8 +834,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( ! activatingWithJoins() )
             return false;
 
+        // We can't join an entity if it has qualification because it
+        // could throw off the results.
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null )
+            return false;
+
+        // If this entity can be loaded from a cache then we don't need to
+        // join it.
+        if ( getEntityCache( entityDef ) != null )
             return false;
 
         // We can't join a child to its parent if there is an activate limit on the
@@ -976,12 +1010,17 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return DbHandler.LOAD_DONE;
         }
 
+        EntityCache entityCache = getEntityCache( entityDef );
+        if ( entityCache != null )
+            return loadFromEntityCache( view, entityDef, entityCache );
+
         // If we've already loaded this entity and the entity can be loaded all at once then
         // we've loaded all the instances and we're done.
-        if ( loadedViewEntities.contains( entityDef ) && selectAllInstances( entityDef ) )
+        if ( loadedViewEntities.contains( entityDef ) )
             return DbHandler.LOAD_DONE;
 
-        loadedViewEntities.add( entityDef );
+        if ( selectAllInstances( entityDef ) )
+            loadedViewEntities.add( entityDef );
 
         if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
             return DbHandler.LOAD_DONE;
@@ -1020,6 +1059,56 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             view.cursor( parent ).setCursor( parentEi );
 
         assert assertNotNullKey( view, entityDef ) : "Activated entity has null key";
+
+        return DbHandler.LOAD_DONE;
+    }
+
+    /**
+     * Loads the entityDef from the cache specified in entityCache.
+     * Uses include processing.
+     * @return
+     */
+    private int loadFromEntityCache( View view, EntityDef entityDef, EntityCache entityCache )
+    {
+        if ( entityCacheViewMap == null )
+            entityCacheViewMap = new HashMap<>();
+
+        // entityCacheViewMap keeps track of the views we've created for loading from
+        // the cache.  This prevents us from creating lots of views for the same OI.
+        View cacheView = entityCacheViewMap.get( entityCache );
+        if ( cacheView == null )
+        {
+            cacheView = entityCache.getEntityCacheView(); // Creates a new view.
+            entityCacheViewMap.put( entityCache, cacheView );
+
+            // We will include the EntityCache into the target OI, which will also
+            // include the children.  Go through the children if entityDef; if their
+            // relationships are part of the EntityCache then we will assume they
+            // are also being loaded.
+            for ( EntityDef child : entityDef.getChildrenHier() )
+            {
+                if ( entityCache.getRelationships().contains( child.getErRelToken() ) )
+                    loadedViewEntities.add( child );
+
+            }
+        }
+
+        RelRecord relRecord = entityDef.getDataRecord().getRelRecord();
+        assert relRecord.getRelFields().size() == 1; // We currently only handle 1 key.
+        assert relRecord.getRelationshipType().isManyToOne();
+        assert entityDef.getKeys().size() == 1;
+
+        AttributeDef fk = relRecord.getRelFields().get( 0 ).getRelDataField().getAttributeDef();
+
+        // Get the value of the FK from the parent.
+        EntityDef parent = entityDef.getParent();
+        Object keyValue = view.cursor( parent ).getAttribute( fk ).getValue();
+
+        // Now set the cursor in the entity cache.
+        entityCache.setCursor( cacheView, keyValue );
+
+        view.cursor( entityDef ).includeSubobject( cacheView.cursor( entityCache.getRoot() ),
+                                                   CursorPosition.LAST, INCLUDE_FLAGS );
 
         return DbHandler.LOAD_DONE;
     }

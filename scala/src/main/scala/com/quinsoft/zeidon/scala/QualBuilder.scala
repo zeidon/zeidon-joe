@@ -450,6 +450,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def setAsEntityCache() = {
+        jqual.setAsEntityCache()
+        this
+    }
+
     /**
      * Performs the activate on the view using the specified qualification.
      *
@@ -724,14 +729,14 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      * flatten 'values')
      */
     private def addValues(values: Seq[Any]): Unit = {
-        values.foreach { value => 
+        values.foreach { value =>
             if ( value.isInstanceOf[Seq[_]] )
                 addValues( value.asInstanceOf[Seq[_]] )
             else
-                jqual.newEntityKey( value.toString() ) 
+                jqual.newEntityKey( value.toString() )
         }
     }
-    
+
     private def between( values: Tuple2[Any,Any],
                          leftOper: String,
                          rightOper: String,

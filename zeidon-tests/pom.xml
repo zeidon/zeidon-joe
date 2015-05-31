@@ -150,6 +150,12 @@
             <artifactId>scala-reflect</artifactId>
             <version>${scala.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.11</artifactId>
+            <version>2.2.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <!-- We can only run Zencas tests if we have the Sqlite test DB on the local system. We'll default 

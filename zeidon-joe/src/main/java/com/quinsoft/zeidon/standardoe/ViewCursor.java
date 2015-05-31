@@ -83,7 +83,7 @@ class ViewCursor
         this.lodDef = lodDef;
         this.view = view;
         cursorList = new EntityCursorImpl[ lodDef.getEntityCount() ];
-        for ( EntityDef entityDef : lodDef.getViewEntitiesHier() )
+        for ( EntityDef entityDef : lodDef.getEntityDefs() )
         {
             int idx = entityDef.getHierIndex();
 
