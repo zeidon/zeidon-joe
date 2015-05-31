@@ -45,6 +45,7 @@ import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
+import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -74,6 +75,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                                                                  CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                  CreateEntityFlags.fDBHANDLER,
                                                                                  CreateEntityFlags.fIGNORE_PERMISSIONS );
+
+    protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
+
     private static final long COL_KEYS_ONLY = 0x00000001;
     private static final long COL_NO_HIDDEN = 0x00000002;
     private static final long COL_FULL_QUAL = 0x00000004;
@@ -801,7 +805,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private EntityCache getEntityCache( EntityDef entityDef )
     {
         // We can't load a root from cache because we don't know which ones to load.
-        if ( entityDef.getParent() != null )
+        if ( entityDef.getParent() == null )
             return null;
 
         DataRecord dataRecord = entityDef.getDataRecord();
@@ -1012,10 +1016,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         // If we've already loaded this entity and the entity can be loaded all at once then
         // we've loaded all the instances and we're done.
-        if ( loadedViewEntities.contains( entityDef ) && selectAllInstances( entityDef ) )
+        if ( loadedViewEntities.contains( entityDef ) )
             return DbHandler.LOAD_DONE;
 
-        loadedViewEntities.add( entityDef );
+        if ( selectAllInstances( entityDef ) )
+            loadedViewEntities.add( entityDef );
 
         if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
             return DbHandler.LOAD_DONE;
@@ -1075,19 +1080,35 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             cacheView = entityCache.getEntityCacheView(); // Creates a new view.
             entityCacheViewMap.put( entityCache, cacheView );
+
+            // We will include the EntityCache into the target OI, which will also
+            // include the children.  Go through the children if entityDef; if their
+            // relationships are part of the EntityCache then we will assume they
+            // are also being loaded.
+            for ( EntityDef child : entityDef.getChildrenHier() )
+            {
+                if ( entityCache.getRelationships().contains( child.getErRelToken() ) )
+                    loadedViewEntities.add( child );
+
+            }
         }
 
-        EntityDef parent = entityDef.getParent();
         RelRecord relRecord = entityDef.getDataRecord().getRelRecord();
-        AttributeDef fk = relRecord.getParentRelField().getRelDataField().getAttributeDef();
-
+        assert relRecord.getRelFields().size() == 1; // We currently only handle 1 key.
         assert relRecord.getRelationshipType().isManyToOne();
         assert entityDef.getKeys().size() == 1;
 
+        AttributeDef fk = relRecord.getRelFields().get( 0 ).getRelDataField().getAttributeDef();
+
+        // Get the value of the FK from the parent.
+        EntityDef parent = entityDef.getParent();
         Object keyValue = view.cursor( parent ).getAttribute( fk ).getValue();
+
+        // Now set the cursor in the entity cache.
         entityCache.setCursor( cacheView, keyValue );
 
-
+        view.cursor( entityDef ).includeSubobject( cacheView.cursor( entityCache.getRoot() ),
+                                                   CursorPosition.LAST, INCLUDE_FLAGS );
 
         return DbHandler.LOAD_DONE;
     }

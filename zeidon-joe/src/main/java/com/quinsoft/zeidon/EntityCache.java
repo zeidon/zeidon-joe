@@ -44,12 +44,18 @@ public class EntityCache
             if ( ed.getParent() == null )
                 continue;  // Skip the root.
 
+            if ( ed.isDerivedPath() )
+                continue;
+
             relationships.add( ed.getErRelToken() );
         }
 
         // For now we only support entities with a single key.
         if ( root.getKeys().size() != 1 )
             throw new ZeidonException( "Root entity in an EntityCach LOD may only have a single key." );
+
+        if ( cacheView.cursor( root ).isIncomplete() )
+            throw new ZeidonException( "EntityCache OI was activated with RESTRICTING or ROOT-ONLY.  EntityCaches must be complete." );
 
         // Make sure the root entity has hashkey.
         verifyKeyHash();
@@ -118,5 +124,10 @@ public class EntityCache
         if ( ! cacheView.cursor( root ).setFirst( key, keyValue ).isSet() )
             throw new ZeidonException( "EntityCache OI does not have an entity with key = %s", keyValue )
                             .appendMessage( "Cache view = %s", cacheView.toString() );
+    }
+
+    public EntityDef getRoot()
+    {
+        return root;
     }
 }

@@ -41,6 +41,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.HiddenCursorException;
+import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.OutOfScopeException;
@@ -850,13 +851,23 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public void includeSubobject(EntityInstance sourceEi, CursorPosition position) throws NullCursorException
     {
-        // Include constraints take some work.  Since nobody appears to use them let's not
-        // worry about implementing them for now.
-        if ( entityDef.hasIncludeConstraint() )
-            throw new UnsupportedOperationException( "Include constraints not supported yet." );
+        includeSubobject( sourceEi, position, IncludeFlags.EMPTY );
+    }
 
-        validateMaxCardinality();
-        validateOiUpdate();
+    @Override
+    public void includeSubobject(EntityInstance sourceEi, CursorPosition position, EnumSet<IncludeFlags> options ) throws NullCursorException
+    {
+        if ( ! options.contains( IncludeFlags.FROM_ACTIVATE ) )
+        {
+            // Include constraints take some work.  Since nobody appears to use them let's not
+            // worry about implementing them for now.
+            if ( entityDef.hasIncludeConstraint() )
+                throw new UnsupportedOperationException( "Include constraints not supported yet." );
+
+            validateMaxCardinality();
+            validateOiUpdate();
+        }
+
         EntityInstanceImpl source = (EntityInstanceImpl) sourceEi.getEntityInstance();
         EntityInstanceImpl parent = getParent();
         ObjectInstance oi = getObjectInstance();
@@ -864,7 +875,7 @@ class EntityCursorImpl implements EntityCursor
         // Create a new instance and initialize the attributes.
         EntityInstanceImpl rootInstance =
                 EntityInstanceIncluder.includeSubobject( getEntityInstance(), getEntityDef(), parent,
-                                                         oi, source, position, true );
+                                                         oi, source, position, true, options );
 
         if ( getEntityDef().getHashKeyAttributes() != null )
             rootInstance.addAllHashKeyAttributes();
@@ -3271,5 +3282,11 @@ class EntityCursorImpl implements EntityCursor
     public void copyAttributes( CopyAttributesBuilder flags )
     {
         getExistingInstance( true ).copyAttributes( flags );
+    }
+
+    @Override
+    public boolean isIncomplete()
+    {
+        return getExistingInstance().isIncomplete();
     }
 }

@@ -19,7 +19,10 @@
 
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.EnumSet;
+
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -51,6 +54,7 @@ class EntityInstanceIncluder
      * @param source The source of the include.  The new EI is linked to source.
      * @param position Specifies where the new instance is inserted relative to targetInstance.
      * @param rootOfInclude if true, then this is the root of the subobject being included.
+     * @param options
      * @return Root of new entity instance.
      */
     static EntityInstanceImpl includeSubobject( EntityInstanceImpl targetInstance,
@@ -59,7 +63,7 @@ class EntityInstanceIncluder
                                                 ObjectInstance     targetOi,
                                                 EntityInstanceImpl source,
                                                 CursorPosition     position,
-                                                boolean            rootOfInclude )
+                                                boolean            rootOfInclude, EnumSet<IncludeFlags> options )
     {
         // If targetInstance is specified then targetParent better be its parent.
         assert targetInstance == null || targetInstance.getParent() == targetParent;
@@ -72,8 +76,9 @@ class EntityInstanceIncluder
         EntityInstanceIncluder includer =
                 new EntityInstanceIncluder( source, position, targetEntityDef, targetParent, targetInstance, targetOi );
 
-        // If this is the root validate that the includes is allowed.
-        if ( rootOfInclude )
+        // If this is the root validate that the includes is allowed.  If the include is
+        // happenening as part of an activate we won't check permissions.
+        if ( rootOfInclude && ! options.contains( IncludeFlags.FROM_ACTIVATE ) )
             includer.performValidation();
 
         EntityInstanceImpl newInstance = includer.performInclude();
@@ -84,14 +89,24 @@ class EntityInstanceIncluder
             // as lazy load then tell the parent EI that this entityDef has already
             // been loaded.
             if ( targetEntityDef.getLazyLoadConfig().isLazyLoad() )
-            {
                 targetParent.getEntitiesLoadedLazily().add( targetEntityDef );
-            }
         }
 
-        EntitySpawner spawner = new EntitySpawner( newInstance );
-        spawner.spawnInclude();
-        includer.markRootIncluded();
+        // Don't bother spawning if we're performing an activate.
+        if ( options.contains( IncludeFlags.FROM_ACTIVATE ) )
+        {
+            // Set the flag to indicate the new included entities have been
+            // loaded as part of an activate.
+            for ( EntityInstanceImpl ei : newInstance.getChildrenHier( true ) )
+                ei.dbhLoaded = true;
+        }
+        else
+        {
+            EntitySpawner spawner = new EntitySpawner( newInstance );
+            spawner.spawnInclude();
+            includer.markRootIncluded();
+        }
+
         return newInstance;
     }
 

@@ -101,6 +101,13 @@ public interface EntityInstance
     boolean isVersioned();
 
     /**
+     * @returns true if 'this' entity instance does not have all its children loaded.
+     * This can happen if an OI was activated with a RESTRICTING clause or if a child
+     * was dropped via dropEntity().  An incomplete EI cannot be deleted.
+     */
+    boolean isIncomplete();
+
+    /**
      * Returns the entity definition for this entity instance.
      *
      * @return the entity's definition.
