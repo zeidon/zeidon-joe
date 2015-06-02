@@ -63,7 +63,7 @@ public class EntityCache
 
     private void verifyKeyHash()
     {
-        if ( root.hasAttributeHaskKeys() )
+        if ( root.hasAttributeHashKeys() )
         {
             for ( AttributeDef attr : root.getHashKeyAttributes() )
             {

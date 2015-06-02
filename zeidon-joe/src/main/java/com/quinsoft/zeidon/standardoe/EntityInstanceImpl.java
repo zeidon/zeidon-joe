@@ -127,7 +127,7 @@ class EntityInstanceImpl implements EntityInstance
      * This keeps track of attribute hash keys that are under this EI.  Intended for use
      * by cursor.setFirst() processing.
      */
-    private final AttributeHashKeyMap attributeHashkeyMap;
+    private AttributeHashKeyMap attributeHashkeyMap;
 
     /**
      * Temporal subobject information.
@@ -241,7 +241,6 @@ class EntityInstanceImpl implements EntityInstance
         objectInstance = null;
         entityKey = NumberUtils.LONG_ZERO;
         depth = -1;
-        this.attributeHashkeyMap = null;
     }
 
     /**
@@ -278,10 +277,6 @@ class EntityInstanceImpl implements EntityInstance
         assert objectInstance.getLodDef() == entityDef.getLodDef();
         this.objectInstance = objectInstance;
         this.entityDef = entityDef;
-        if ( entityDef.hasAttributeHaskKeys() )
-            this.attributeHashkeyMap = new AttributeHashKeyMap( objectInstance );
-        else
-            this.attributeHashkeyMap = null;
 
         // Set a unique identifier for this entity.  We use a number that's unique across
         // all tasks in case the entity is included into another task.
@@ -3095,6 +3090,9 @@ class EntityInstanceImpl implements EntityInstance
 
     AttributeHashKeyMap getAttributeHashkeyMap()
     {
+        if ( attributeHashkeyMap == null )
+            attributeHashkeyMap = new AttributeHashKeyMap( objectInstance );
+
         return attributeHashkeyMap;
     }
 

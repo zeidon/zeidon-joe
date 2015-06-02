@@ -1041,7 +1041,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * @return true if this EntityDef has hashkey attributes.
      */
-    public boolean hasAttributeHaskKeys()
+    public boolean hasAttributeHashKeys()
     {
         return hashKeyAttributes != null;
     }
