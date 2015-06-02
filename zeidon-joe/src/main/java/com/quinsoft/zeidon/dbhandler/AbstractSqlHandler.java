@@ -768,22 +768,28 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( ! activatingWithJoins() )
             return Collections.emptyList();
 
+        // Have we already determined who can be joined?
         List<EntityDef> jc = joinableChildren.get( entityDef );
         if ( jc != null )
-            return jc;
+            return jc; // It's already been calculated.  Return it.
 
-        // We need to keep the set of
+        // We need to keep the set of children joinable with entityDef.
         jc = new ArrayList<EntityDef>();
 
         // Keep track of entityDefs that are not joinable.  None of their
         // children are joinable either.
-        ArrayList<EntityDef> notJoinable = new ArrayList<EntityDef>();
+        Set<EntityDef> notJoinable = new HashSet<EntityDef>();
+
+        Set<QualEntity> quals = new HashSet<>();
+        QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity != null )
+            quals.add( qualEntity );
 
         // Get the list of all children that can be joinable.
         for ( EntityDef child : getEntityDefData( entityDef ).getJoinedChildren() )
         {
             boolean ignoreBecauseOfParent = false;
-            for ( EntityDef parent = child.getParent(); parent != null; parent = parent.getParent() )
+            for ( EntityDef parent = child.getParent(); parent != entityDef; parent = parent.getParent() )
             {
                 if ( notJoinable.contains( parent ) )
                 {
@@ -792,10 +798,39 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 }
             }
 
-            if ( ignoreBecauseOfParent == false && isJoinable( child ) )
-                jc.add( child );
-            else
+            if ( ignoreBecauseOfParent || ! isJoinable( child ) ) 
+            {
                 notJoinable.add( child );
+                continue;
+            }
+
+            // If the child has qualification on one of its children then it can't
+            // be joined.
+            QualEntity childQualEntity = qualMap.get( child );
+            if ( childQualEntity != null && childQualEntity.usesChildQualification )
+            {
+                notJoinable.add( child );
+                continue;
+            }
+
+            // We can't join a child if that child is used to qualify an entityDef
+            // that is part of this join.
+            for ( QualEntity qual : quals )
+            {
+                if ( qual.usesEntityDefs.contains( child ) )
+                {
+                    notJoinable.add( child );
+                    break;
+                }
+            }
+
+            // If child isn't in the notJoinable set then it must be ok to join.
+            if ( ! notJoinable.contains( child ) )
+            {
+                jc.add( child );
+                if ( childQualEntity != null )
+                    quals.add( childQualEntity );
+            }
         }
 
         joinableChildren.put( entityDef, Collections.unmodifiableList( jc ) );
@@ -831,15 +866,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     protected boolean isJoinable( EntityDef entityDef )
     {
-        if ( ! activatingWithJoins() )
-            return false;
-
-        // We can't join an entity if it has qualification because it
-        // could throw off the results.
-        QualEntity qualEntity = qualMap.get( entityDef );
-        if ( qualEntity != null )
-            return false;
-
         // If this entity can be loaded from a cache then we don't need to
         // join it.
         if ( getEntityCache( entityDef ) != null )
@@ -854,8 +880,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
                 return false;
         }
-
-        //TODO: Add check to see if child is qualified.  If it is then it's not joinable.
 
         return getEntityDefData( entityDef ).isJoinable( entityDef );
     }
@@ -920,7 +944,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( qualEntity != null )
         {
             addQualification( stmt, view, entityDef );
-
+            
             // If the parent is non-null then we added foreign keys above.  Add
             // the closing paren.
             if ( entityDef.getParent() != null )
@@ -939,6 +963,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( entityDef.getActivateLimit() != null )
             addActivateLimit( entityDef.getActivateLimit(), stmt );
 
+        // Add all the children that will be joined to the loaded set.  This
+        // indicates that the joined children will be loaded as part of the
+        // parent load and will not need to be loaded separately.
+        loadedViewEntities.addAll( joinedChildren );
         return null;
     }
 
@@ -1002,22 +1030,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         DataRecord dataRecord = entityDef.getDataRecord();
         task.dblog().trace( "Selecting entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
-        // If this entity was already loaded through a join with its parent then there's nothing to do.
-        if ( isJoinable( entityDef ) )
-        {
-            assert assertNotNullKey( view, entityDef ) : "Activated entity has null key";
-            task.dblog().trace( "Loaded via parent join" );
+        // Check to see if we've loaded this entityDef already.  This can happen if
+        // this entity def was loaded via join or all instances were loaded at once.
+        if ( loadedViewEntities.contains( entityDef ) )
             return DbHandler.LOAD_DONE;
-        }
 
         EntityCache entityCache = getEntityCache( entityDef );
         if ( entityCache != null )
             return loadFromEntityCache( view, entityDef, entityCache );
-
-        // If we've already loaded this entity and the entity can be loaded all at once then
-        // we've loaded all the instances and we're done.
-        if ( loadedViewEntities.contains( entityDef ) )
-            return DbHandler.LOAD_DONE;
 
         if ( selectAllInstances( entityDef ) )
             loadedViewEntities.add( entityDef );
@@ -1170,6 +1190,96 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return view.cursor( entityDef ).getKeyString();
     }
 
+    private StringBuilder buildQualString(SqlStatement stmt, View view, EntityDef entityDef, boolean conjunctionNeeded )
+    {
+        QualEntity qualEntity = qualMap.get( entityDef );
+        StringBuilder qualString = new StringBuilder();
+
+        if ( conjunctionNeeded )
+            qualString.append( " AND \n(" );
+
+        //===
+        //===  At this point, all tables that are needed in the select have
+        //===  been included in the SELECT.  All that remains to do is to
+        //===  add the QualAttrib expressions to the SELECT statement.
+        //===
+        for ( QualAttrib qualAttrib : qualEntity.qualAttribs )
+        {
+            // If there is no entity name for QualAttrib then the QualAttrib
+            // has just an Oper.  Tack it on to the end of the WHERE clause.
+            if ( qualAttrib.entityDef == null )
+            {
+                qualString.append( " " ).append( qualAttrib.oper ).append( " " );
+                continue;
+            }
+
+            // QualAttrib has an entity name, so this is an expression.  Add
+            // the expression to the WHERE clause.
+
+            // TODO : add code for subselect commands (like "EXISTS")
+
+            DataRecord dataRecord = qualAttrib.entityDef.getDataRecord();
+            DataField  dataField = dataRecord.getDataField( qualAttrib.attributeDef );
+
+            String col = dataField.getName();
+            qualString.append( stmt.getTableName( dataRecord ) ).append( "." ).append( col ).append( " " );
+
+            if ( qualAttrib.valueList != null )
+            {
+                Domain domain = dataField.getAttributeDef().getDomain();
+                qualString.append( qualAttrib.oper ).append( " ( " );
+                int count = 0;
+                for ( Object value : qualAttrib.valueList )
+                {
+                    if ( count++ > 0 )
+                        qualString.append( ", " );
+
+                    StringBuilder buffer = new StringBuilder();
+                    getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, value );
+                    qualString.append( buffer.toString() );
+                }
+
+                qualString.append( " ) " );
+                continue;
+            }
+
+            if ( qualAttrib.columnAttributeValue != null )
+            {
+                DataRecord srcDataRecord = qualAttrib.columnAttributeValue.getEntityDef().getDataRecord();
+                String table = stmt.getTableName( srcDataRecord );
+                DataField srcDataField = srcDataRecord.getDataField( qualAttrib.columnAttributeValue );
+                qualString.append( qualAttrib.oper ).append( " " ).append( table ).append( "." ).append( srcDataField.getName() );
+                continue;
+            }
+
+            boolean isNull = false;
+            if ( qualAttrib.value == null || StringUtils.isBlank( qualAttrib.value.toString() ) )
+                isNull = true;
+
+            if ( isNull )
+            {
+                // Value is NULL.  Create appropriate SQL.
+                if ( qualAttrib.oper.equals( "<>" ) || qualAttrib.oper.equals( "!=" ) )
+                    qualString.append( " IS NOT NULL " );
+                else
+                    qualString.append( " IS NULL " );
+            }
+            else
+            {
+                Domain domain = dataField.getAttributeDef().getDomain();
+                StringBuilder buffer = new StringBuilder();
+                getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, qualAttrib.value );
+                qualString.append( qualAttrib.oper ).append( " " ).append( buffer.toString() );
+            }
+        }
+        
+
+        if ( conjunctionNeeded )
+            qualString.append( ")" );
+
+        return qualString;
+    }
+    
     private void addQualification(SqlStatement stmt, View view, EntityDef entityDef)
     {
         QualEntity qualEntity = qualMap.get( entityDef );
@@ -1196,88 +1306,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 addForeignKeys( stmt, view, qualAttrib.columnAttributeValue.getEntityDef(), entityDef );
         }
 
-        if ( stmt.conjunctionNeeded )
-            stmt.appendWhere( " AND \n(" );
-
-        //===
-        //===  At this point, all tables that are needed in the select have
-        //===  been included in the SELECT.  All that remains to do is to
-        //===  add the QualAttrib expressions to the SELECT statement.
-        //===
-        for ( QualAttrib qualAttrib : qualEntity.qualAttribs )
-        {
-            // If there is no entity name for QualAttrib then the QualAttrib
-            // has just an Oper.  Tack it on to the end of the WHERE clause.
-            if ( qualAttrib.entityDef == null )
-            {
-                stmt.appendWhere( " ", qualAttrib.oper, " " );
-                continue;
-            }
-
-            // QualAttrib has an entity name, so this is an expression.  Add
-            // the expression to the WHERE clause.
-
-            // TODO : add code for subselect commands (like "EXISTS")
-
-            DataRecord dataRecord = qualAttrib.entityDef.getDataRecord();
-            DataField  dataField = dataRecord.getDataField( qualAttrib.attributeDef );
-
-            String col = dataField.getName();
-            stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " " );
-
-            if ( qualAttrib.valueList != null )
-            {
-                Domain domain = dataField.getAttributeDef().getDomain();
-                stmt.appendWhere( qualAttrib.oper, " ( " );
-                int count = 0;
-                for ( Object value : qualAttrib.valueList )
-                {
-                    if ( count++ > 0 )
-                        stmt.appendWhere( ", " );
-
-                    StringBuilder buffer = new StringBuilder();
-                    getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, value );
-                    stmt.appendWhere( buffer.toString() );
-                }
-
-                stmt.appendWhere( " ) " );
-                continue;
-            }
-
-            if ( qualAttrib.columnAttributeValue != null )
-            {
-                DataRecord srcDataRecord = qualAttrib.columnAttributeValue.getEntityDef().getDataRecord();
-                String table = stmt.getTableName( srcDataRecord );
-                DataField srcDataField = srcDataRecord.getDataField( qualAttrib.columnAttributeValue );
-                stmt.appendWhere( qualAttrib.oper, " ", table, ".", srcDataField.getName() );
-                continue;
-            }
-
-            boolean isNull = false;
-            if ( qualAttrib.value == null || StringUtils.isBlank( qualAttrib.value.toString() ) )
-                isNull = true;
-
-            if ( isNull )
-            {
-                // Value is NULL.  Create appropriate SQL.
-                if ( qualAttrib.oper.equals( "<>" ) || qualAttrib.oper.equals( "!=" ) )
-                    stmt.appendWhere( " IS NOT NULL " );
-                else
-                    stmt.appendWhere( " IS NULL " );
-            }
-            else
-            {
-                Domain domain = dataField.getAttributeDef().getDomain();
-                StringBuilder buffer = new StringBuilder();
-                getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, qualAttrib.value );
-                stmt.appendWhere( qualAttrib.oper, " ", buffer.toString() );
-            }
-        }
-
-        if ( stmt.conjunctionNeeded )
-           stmt.appendWhere( ")" );
-
-        stmt.conjunctionNeeded = true;
+        stmt.appendWhere( buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString() );
         stmt.useLeftJoinForQualification = false;
     }
 
@@ -1563,6 +1592,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                      .append(  srcDataField.getName() );
         }
 
+        
+        QualEntity childQualEntity = qualMap.get( entityDef );
+        if ( childQualEntity != null )
+        {
+            StringBuilder sb = buildQualString( stmt, view, entityDef, true );
+            stmt.from.append( sb );
+        }
+        
         if ( entityDef.getAutoSeq() != null )
             stmt.appendOrdering( entityDef.getAutoSeq() );
 
@@ -2467,12 +2504,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         private boolean                usesChildQualification;
         private boolean                exclude;
-        private boolean                childQualIsManyToMany;
         private boolean                hasDoesNotExist;
         private final Integer          activateLimit;
         private final EntityInstance   qualEntityInstance;
         private final EntityDef        entityDef;
         private final List<QualAttrib> qualAttribs;
+
+        /**
+         * Keeps track of the EntityDefs that are used as part of this qualification.
+         */
+        private final Set<EntityDef>   usesEntityDefs = new HashSet<>();
 
         QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
         {
@@ -2493,49 +2534,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             if ( qualAttrib.entityDef != null && qualAttrib.entityDef != entityDef )
             {
+                usesEntityDefs.add( qualAttrib.entityDef );
                 usesChildQualification = true;
-
-                // Check to see if there is a one-to-many or m-to-m relationship because if there
-                // is we'll need to use "distinct" as part of the SQL.
-                for ( EntityDef search = qualAttrib.entityDef; search != entityDef; search = search.getParent() )
-                {
-                    DataRecord dataRecord = search.getDataRecord();
-                    if ( dataRecord == null )
-                        throw new ZeidonException( "Trying to qualify %s by using the derived entity %s", entityDef, qualAttrib.entityDef );
-
-                    RelRecord relRecord = dataRecord.getRelRecord();
-                    if ( relRecord.getRelationshipType() != RelRecord.CHILD_IS_SOURCE )
-                    {
-                        // The child qual is either many-to-many or one-to-many.
-                        childQualIsManyToMany = true;
-                        break;
-                    }
-                }
             }
-
+            else
             if ( qualAttrib.columnAttributeValue != null &&
                  qualAttrib.columnAttributeValue.getEntityDef() != entityDef )
             {
                 usesChildQualification = true;
-
-                // Check to see if there is a one-to-many or m-to-m relationship because if there
-                // is we'll need to use "distinct" as part of the SQL.
-                for ( EntityDef search = qualAttrib.columnAttributeValue.getEntityDef();
-                                search != entityDef;
-                                search = search.getParent() )
-                {
-                    DataRecord dataRecord = search.getDataRecord();
-                    if ( dataRecord == null )
-                        throw new ZeidonException( "Trying to qualify %s by using the derived entity %s", entityDef, qualAttrib.entityDef );
-
-                    RelRecord relRecord = dataRecord.getRelRecord();
-                    if ( relRecord.getRelationshipType() != RelRecord.CHILD_IS_SOURCE )
-                    {
-                        // The child qual is either many-to-many or one-to-many.
-                        childQualIsManyToMany = true;
-                        break;
-                    }
-                }
+                usesEntityDefs.add( qualAttrib.entityDef );
             }
         }
 
