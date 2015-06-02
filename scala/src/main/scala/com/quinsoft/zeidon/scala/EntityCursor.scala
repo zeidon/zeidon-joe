@@ -143,9 +143,13 @@ class EntityCursor( private[this]  val view: View,
      * then all entities will be deleted.
      *
      * Example:  This will deleted all Staff entities with a Status = "A"
-     *
+     * {{{
      *      mUser.Staff.deleteAll( _.Status == "A" )
-     *
+     * }}}
+     * or
+     * {{{
+     *      mUser.Staff.deleteAll( ei => { ei.Status == "A" || ei.Status == "B" } )
+     * }}}
      * Note: the cursor should be considered undefined after this call.
      *
      * @param predicate a boolean predicate used to determine which entities will be deleted.

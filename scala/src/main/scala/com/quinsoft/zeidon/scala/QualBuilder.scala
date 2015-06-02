@@ -301,7 +301,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     /**
-     * Activate all entites that are normally lazy loaded.
+     * Activate all entities that are normally lazy loaded.
      */
     def includeLazy(): QualBuilder = {
         jqual.setFlag( ActivateFlags.fINCLUDE_LAZYLOAD )
@@ -312,7 +312,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Activates children that match the qualification; i.e. this restricts what
      * children are loaded.
      *
-     * For example, this qualifcation:
+     * For example, this qualification:
      * {{{
      *      val mUser = VIEW basedOn "mUser"
      *      mUser.buildQual( _.User.ID = 400 )
@@ -348,6 +348,16 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    /**
+     * Specifies which entity the following qualification is for.  Used to build
+     * qualification programatically.
+     */
+    def forEntity( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
+        val jentityDef = restrictTo( new EntitySelector )
+        jqual.forEntity( jentityDef.getName() )
+        this
+    }
+    
     /**
      * Exclude the specified entity from the activate.
      *

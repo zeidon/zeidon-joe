@@ -7,17 +7,8 @@ import scala.util.matching.Regex
 import com.quinsoft.zeidon.ZeidonException
 
 /**
- * @author dgc
- *
+ * Object that represents an attribute value in an entity instance.
  */
-object AttributeInstance {
-    implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString
-    implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.toInt
-    implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.toDouble
-    implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.toBoolean
-    implicit def attributeInstance2JAI( attr: AttributeInstance ) = attr.jattributeInstance
-}
-
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
 
     /**
@@ -151,7 +142,8 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def -=( x: Double ) = jattributeInstance.add( -x )
 
     def compare(other: Any): Int = other match {
-        // If 'other' is an AttributeInstance, get its value before calling compare.
+        // If 'other' is a Scala AttributeInstance, get its value before calling compare.
+        // We have to do this here because the JOE doesn't know anything about Scala objects.
         case attr: AttributeInstance => jattributeInstance.compare( attr.jattributeInstance )
 
         // If 'other' is a regex then see if the attribute value matches the regex.
@@ -200,20 +192,34 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def isTruthy: Boolean = { ! isNull && toBoolean }
 
     /**
-     * Converts the attribute value to a boolean using domain processing.
+     * Converts the attribute value to a boolean using default domain processing.
      */
     def toBoolean: Boolean = { jattributeInstance.getBoolean() }
 
     /**
-     * Converts the attribute value to an integer using domain processing.
+     * Converts the attribute value to an integer using default domain processing.
      */
     def toInt: Int = { jattributeInstance.getInteger() }
 
     /**
-     * Converts the attribute value to a double using domain processing.
+     * Converts the attribute value to a double using default domain processing.
      */
     def toDouble: Double = { jattributeInstance.getDouble }
     
+    /**
+     * Converts the attribute value to a double using domain processing with 
+     * the specified context.
+     */
+    def toDouble( contextName: String ): Double = { jattributeInstance.getDouble( contextName ) }
+    
     override def hashCode() = jattributeInstance.hashCode()
     override def equals( obj: Any ) = compare( obj ) == 0 //jattributeInstance.equals( obj ) 
+}
+
+object AttributeInstance {
+    implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString
+    implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.toInt
+    implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.toDouble
+    implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.toBoolean
+    implicit def attributeInstance2JAI( attr: AttributeInstance ) = attr.jattributeInstance
 }
