@@ -268,7 +268,7 @@ class ActivateOiFromDB implements Activator
      */
     private boolean isLazyLoad( EntityDef entityDef )
     {
-        return entityDef.getLazyLoadConfig().isLazyLoad() && ! control.contains(  ActivateFlags.fINCLUDE_LAZYLOAD );
+        return entityDef.getLazyLoadConfig().isLazyLoad() && ! control.contains( ActivateFlags.fINCLUDE_LAZYLOAD );
     }
 
     /**
