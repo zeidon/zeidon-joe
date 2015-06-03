@@ -1196,7 +1196,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         StringBuilder qualString = new StringBuilder();
 
         if ( conjunctionNeeded )
-            qualString.append( " AND \n(" );
+            qualString.append( " AND ( " );
 
         //===
         //===  At this point, all tables that are needed in the select have
