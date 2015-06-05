@@ -597,13 +597,19 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     if ( qualAttrib.valueList == null )
                         qualAttrib.valueList = new ArrayList<>();
 
+                    String value = null;
                     if ( ! kl.getAttribute( "StringValue" ).isNull() )
-                        qualAttrib.valueList.add( kl.getAttribute( "StringValue" ).getString() );
+                        value = kl.getAttribute( "StringValue" ).getString();
                     else
                     if ( ! kl.getAttribute( "IntegerValue" ).isNull() )
-                        qualAttrib.valueList.add( kl.getAttribute( "IntegerValue" ).getString() );
+                        value = kl.getAttribute( "IntegerValue" ).getString();
                     else
                         throw new ZeidonException( "KeyList entity doesn't have IntegerValue or StringValue" );
+
+                    Domain domain = qualAttrib.attributeDef.getDomain();
+                    Object objectValue = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
+
+                    qualAttrib.valueList.add( objectValue );
                 }
 
                 if ( qualAttrib.valueList != null )
@@ -798,7 +804,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 }
             }
 
-            if ( ignoreBecauseOfParent || ! isJoinable( child ) ) 
+            if ( ignoreBecauseOfParent || ! isJoinable( child ) )
             {
                 notJoinable.add( child );
                 continue;
@@ -944,7 +950,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( qualEntity != null )
         {
             addQualification( stmt, view, entityDef );
-            
+
             // If the parent is non-null then we added foreign keys above.  Add
             // the closing paren.
             if ( entityDef.getParent() != null )
@@ -1272,14 +1278,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 qualString.append( qualAttrib.oper ).append( " " ).append( buffer.toString() );
             }
         }
-        
+
 
         if ( conjunctionNeeded )
             qualString.append( ")" );
 
         return qualString;
     }
-    
+
     private void addQualification(SqlStatement stmt, View view, EntityDef entityDef)
     {
         QualEntity qualEntity = qualMap.get( entityDef );
@@ -1592,14 +1598,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                      .append(  srcDataField.getName() );
         }
 
-        
+
         QualEntity childQualEntity = qualMap.get( entityDef );
         if ( childQualEntity != null )
         {
             StringBuilder sb = buildQualString( stmt, view, entityDef, true );
             stmt.from.append( sb );
         }
-        
+
         if ( entityDef.getAutoSeq() != null )
             stmt.appendOrdering( entityDef.getAutoSeq() );
 
