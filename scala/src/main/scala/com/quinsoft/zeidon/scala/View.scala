@@ -324,13 +324,14 @@ class View( val task: Task ) extends Dynamic {
      *
      * Not intended to be called directly by user code.
      */
-    def applyDynamic( operationName: String )( args: AnyRef* ): AnyRef = {
+    def applyDynamic( operationName: String )( args: AnyRef* ): ObjectOperationResult = {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
         validateNonNull
 
         val oe = task.objectEngine
         val oper = oe.objectOperationMap.getObjectOperation( operationName, jlodDef, args: _* )
-        return oper.invokeOperation( this, args: _* )
+        val value = oper.invokeOperation( this, args: _* )
+        ObjectOperationResult( value )
     }
 
     override def toString = {
