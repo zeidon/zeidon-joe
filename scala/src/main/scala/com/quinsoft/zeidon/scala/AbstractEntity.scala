@@ -12,7 +12,7 @@ import com.quinsoft.zeidon.objectdefinition._
  * This class implements methods that are common to both EntityCursor and EntityInstance.  This
  * is where the dynamic methods are implemented for finding cursor/entity and attribute instances.
  */
-private[scala] abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
+abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
                         extends Dynamic {
 
     /**
@@ -24,7 +24,6 @@ private[scala] abstract class AbstractEntity( val jentityDef: com.quinsoft.zeido
      * Returns the name of this entity instance from the LOD.
      */
     def name = jentityDef.getName()
-    
     
     /**
      * Returns the position of this entity amongst its twins (i.e. its index).  First twin = 0;
