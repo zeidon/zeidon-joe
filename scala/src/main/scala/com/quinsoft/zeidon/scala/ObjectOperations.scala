@@ -62,13 +62,20 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
                                    Int.box( method.getParameterTypes().length ), Int.box( argLength ) )
 
     def invokeOperation( view: View, args: AnyRef*): AnyRef = {
-        if ( args.length != argLength )
-            throw new ZeidonException( "Unexpected number of arguments.  Expected %d, got %d",
-                                       Int.box( argLength ), Int.box( args.length ) )
+        try {
+            if ( args.length != argLength )
+                throw new ZeidonException( "Unexpected number of arguments.  Expected %d, got %d",
+                                           Int.box( argLength ), Int.box( args.length ) )
 
-        val instance = constructor.newInstance( view )
-        view.task.log.debug( "Invoking %s.%s", className, operationName )
-        method.invoke(instance, args:_*)
+            val instance = constructor.newInstance( view )
+            view.task.log.debug( "Invoking %s.%s", className, operationName )
+            method.invoke(instance, args:_*)
+        }
+        catch {
+            case e: Throwable => throw ZeidonException.wrapException(e)
+                                          .appendMessage("Operation class = %s", className )
+                                          .appendMessage("operationName = %s", operationName )
+        }
     }
 }
 

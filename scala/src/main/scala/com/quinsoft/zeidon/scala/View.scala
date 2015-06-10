@@ -206,6 +206,24 @@ class View( val task: Task ) extends Dynamic {
     }
 
     /**
+     * Drops the specified name for this view.
+     */
+    def dropName( viewName: String ) = {
+        validateNonNull
+        jview.dropNameForView( viewName )
+        this
+    }
+
+    /**
+     * Drops the view and all its names.
+     */
+    def drop() = {
+        validateNonNull
+        jview.drop
+        this
+    }
+
+    /**
      * Sets the name of the view as an attribute.
      * Note: this will NOT drop other names this view might have.  I.e. a view
      * can have multiple names.

@@ -17,7 +17,7 @@
     Copyright 2009-2015 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.standardoe;
 
@@ -35,7 +35,7 @@ import com.quinsoft.zeidon.ZeidonException;
 
 /**
  * This keeps a mapping of view names and views.  Adding/removing names is thread-safe.
- * 
+ *
  * @author DG
  *
  */
@@ -51,21 +51,21 @@ class ViewNameList
     synchronized void dropNameForView( String viewName, View view )
     {
         View v = viewNameList.get( viewName );
-        
+
         // If the name doesn't exist, just return.  We won't throw an error.
         if ( v == null )
             return;
-        
-        if ( v != view )
+
+        if ( v != null && v != view )
             throw new ZeidonException("Attempting to drop a view name '%s' that is tied to another view %s",
                                       viewName, v.toString() );
-        
+
         viewNameList.remove( viewName );
     }
 
     /**
      * Returns all the names for this view.
-     * 
+     *
      * @param view
      * @return
      */
@@ -77,7 +77,7 @@ class ViewNameList
             if ( viewNameList.get( n ) == view )
                 names.add( n );
         }
-        
+
         Collections.sort( names );
         return names;
     }
@@ -91,12 +91,12 @@ class ViewNameList
     {
         return new HashSet<View>( viewNameList.values() );
     }
-    
+
     synchronized View getViewByName(String name)
     {
         return viewNameList.get( name );
     }
-    
+
     synchronized void dropView( View view )
     {
         Iterator<View> iter = viewNameList.values().iterator();
@@ -122,7 +122,7 @@ class ViewNameList
                 v.drop();
         }
     }
-    
+
     synchronized void loopThruViews( )
     {
     	String s = null;
