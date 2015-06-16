@@ -29,6 +29,7 @@ case class ObjectOperationResult( val value: AnyRef ) {
 
 object ObjectOperationResult {
    implicit def result2String( result: ObjectOperationResult) = result.value.toString
+   implicit def result2View( result: ObjectOperationResult) = result.value.asInstanceOf[View]
    
    implicit def result2Int( result: ObjectOperationResult): Int = result.value match {
        case a: AttributeInstance => a.toInt
