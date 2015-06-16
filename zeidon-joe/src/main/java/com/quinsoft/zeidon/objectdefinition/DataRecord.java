@@ -61,15 +61,18 @@ public class DataRecord implements PortableFileAttributeHandler
             case "JOIN":        joinable = reader.valueStartsWith( "Y" ); break;
             case "ACTIVATEONE":
                 activateWithSingleSelect = reader.valueStartsWith( "Y" );
-                // Make sure all parents have activateWithSingleSelect turned on.
-                for ( EntityDef def = entityDef; def.getParent() != null; def = def.getParent() )
+                if ( activateWithSingleSelect )
                 {
-                    DataRecord dataRecord = def.getDataRecord();
-                    if ( ! dataRecord.isActivateWithSingleSelect() && ! dataRecord.isJoinable() )
+                    // Make sure all parents have activateWithSingleSelect turned on.
+                    for ( EntityDef def = entityDef; def.getParent() != null; def = def.getParent() )
                     {
-                        reader.getLogger().error( "Child DataRecord = %s\nParent DataRecord = %s",
-                                                  this.toString(), dataRecord.toString() );
-                        throw new ZeidonException( "Internal error.  Parent isn't set to ACTIVATESINGLE.  See logs for more" );
+                        DataRecord dataRecord = def.getDataRecord();
+                        if ( ! dataRecord.isActivateWithSingleSelect() && ! dataRecord.isJoinable() )
+                        {
+                            reader.getLogger().error( "Child DataRecord = %s\nParent DataRecord = %s",
+                                                      this.toString(), dataRecord.toString() );
+                            throw new ZeidonException( "Internal error.  Parent isn't set to ACTIVATESINGLE.  See logs for more" );
+                        }
                     }
                 }
                 break;

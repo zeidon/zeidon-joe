@@ -34,6 +34,18 @@ case class Task ( val jtask: com.quinsoft.zeidon.Task, oe: ObjectEngine = null )
     def deserializeOi = jtask.deserializeOi()
 
     /**
+     * Drops the name for a view.
+     *
+     * This does not automatically drop the view; the view may have another name.
+     * If a view is specified then an exception will be thrown if the view is
+     * different from the one that is named.
+     */
+    def dropViewName( viewName: String, view: View = null ) = {
+        jtask.dropNameForView( viewName, view )
+        this
+    }
+
+    /**
      * This is called when the compiler doesn't recognize a method name.  This
      * is used to create an empty View based on a LOD name.  This allows user
      * code to do:
