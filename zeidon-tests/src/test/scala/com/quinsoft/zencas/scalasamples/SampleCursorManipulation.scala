@@ -24,6 +24,9 @@ import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.VmlCursorResult
 import com.quinsoft.zeidon.scala.basedOn
+import com.quinsoft.zeidon.scala.AbstractEntity
+import com.quinsoft.zeidon.scala.EntityCursor
+import com.quinsoft.zeidon.scala.EntityInstance
 
 /**
  *  This gives examples of how to manipulate cursors.  Usually there are two
@@ -288,8 +291,16 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         // To delete all
         mUser.Staff.deleteAll()
     }
+    
+    def countEntities( mUser: View ) = {
+        val count = mUser.Report.count
+        val count2 = mUser.Report.count( _.ID >< (338, 400) )
+        val count3 = mUser.Report.count( (e: EntityInstance) => { print( e.ID + " " ); e.ID < 10 } )
+        print( count3 )
+    }
 
     def runAll( mUser : View ) = {
+        countEntities(mUser)
         setCursorFirst(mUser)
         setCursorFirstWhere(mUser)
         setCursorFirstWithScoping(mUser)

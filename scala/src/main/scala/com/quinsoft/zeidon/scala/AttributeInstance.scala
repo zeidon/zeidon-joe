@@ -141,6 +141,14 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def -=( x: Float ) = jattributeInstance.add( -x )
     def -=( x: Double ) = jattributeInstance.add( -x )
 
+    /**
+     * Returns true if attribute is between values in tuple, exclusively.
+     */
+    def >< (values: Tuple2[Any,Any]) = (this > values._1) && (this < values._2)
+    def >=< (values: Tuple2[Any,Any]) = (this >= values._1) && (this < values._2)
+    def ><= (values: Tuple2[Any,Any]) = (this > values._1) && (this <= values._2)
+    def >=<= (values: Tuple2[Any,Any]) = (this >= values._1) && (this <= values._2)
+
     def compare(other: Any): Int = other match {
         // If 'other' is a Scala AttributeInstance, get its value before calling compare.
         // We have to do this here because the JOE doesn't know anything about Scala objects.

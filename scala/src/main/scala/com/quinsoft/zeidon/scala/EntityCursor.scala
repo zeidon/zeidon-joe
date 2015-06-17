@@ -280,10 +280,10 @@ class EntityCursor( private[this]  val view: View,
      *
      * Note: the cursor should be considered undefined after this call.
      */
-    def count( predicate : (EntityCursor) => Boolean ): Int = {
+    override def count( predicate : (EntityInstance) => Boolean ): Int = {
         var count = 0
         this.each {
-            if ( predicate == null || predicate( this ) ) {
+            if ( predicate == null || predicate( new EntityInstance( getEntityInstance() ) ) ) {
                 count += 1
             }
         }
