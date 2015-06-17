@@ -24,22 +24,23 @@ import java.util.HashSet;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.View;
 
 /**
  * @author DG
  *
  */
-class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
+public class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
 {
     private static final long serialVersionUID = 1L;
     private final ViewImpl view;
 
-    SelectSetImpl( ViewImpl view )
+    protected SelectSetImpl( View view )
     {
-        this.view = view;
+        this.view = ((InternalView) view).getViewImpl();
     }
 
-    SelectSetImpl( ViewImpl view, SelectSetImpl sourceSelectSet )
+    protected SelectSetImpl( View view, SelectSetImpl sourceSelectSet )
     {
         this( view );
         addAll( sourceSelectSet );
