@@ -22,6 +22,7 @@ import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.scala.View._
 
 /**
  * Examples of how to make miscellaneous View calls. For sample Cursor manipulations
@@ -85,6 +86,12 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
      */
     def deserializeOiFromFile( filename: String ) : View = {
         task.deserializeOi.fromFile( filename ).asJson().activateFirst()
+    }
+
+    def selectSets( mUser: View ) = {
+        val set = mUser.getSelectSet()
+        set.select( mUser.root )
+        set.selectAll( for ( e <- mUser.Report.under( mUser.root ) if e.ID > 300 ) yield e )
     }
 
     def runAll( view: View ) = {

@@ -271,6 +271,13 @@ class View( val task: Task ) extends Dynamic {
      */
     def activateOptions = { validateNonNull; jview.getActivateOptions() }
 
+    def getSelectSet( name: String = null ) = {
+        if ( name == null )
+            jview.createSelectSet()
+        else
+            jview.getSelectSet( name )
+    }
+
     /**
      * Returns a serializer that can be used to serialize this OI.
      *
@@ -394,4 +401,11 @@ object View {
     implicit def view2jview( view: com.quinsoft.zeidon.scala.View ) = view.jview
 
     val ON = new VmlSyntaxFiller
+
+    implicit class ScalaSelectSet( val selectSet : com.quinsoft.zeidon.SelectSet ) {
+        def select( ei: AbstractEntity ) = selectSet.select( ei.getEntityInstance )
+        def selectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
+            list.foreach( selectSet.select( _ ) )
+        }
+    }
 }

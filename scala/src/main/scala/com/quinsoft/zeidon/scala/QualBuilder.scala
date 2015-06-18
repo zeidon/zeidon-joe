@@ -357,7 +357,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.forEntity( jentityDef.getName() )
         this
     }
-    
+
     /**
      * Exclude the specified entity from the activate.
      *
@@ -561,6 +561,12 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
     val jattributeDef = attrQualBuilder.jattributeDef
 
     var _not = false;
+
+    override def equals(value: Any) = {
+        throw new ZeidonException("Operators '==' and '!=' are invalid when building qualification.  Use '=' and '<>' instead" )
+//        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
+//        true
+    }
 
     /**
      * Negates the operator that follows.  Can be used with any

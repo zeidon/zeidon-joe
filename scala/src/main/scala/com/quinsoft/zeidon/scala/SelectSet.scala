@@ -25,4 +25,11 @@ import com.quinsoft.zeidon.standardoe.SelectSetImpl
  *
  */
 class SelectSet( val view: View ) extends SelectSetImpl( view ) {
+
+    def select( predicate : (EntityInstance) => Boolean ): Int = {
+        var count = 0
+
+        count
+    }
+
 }
