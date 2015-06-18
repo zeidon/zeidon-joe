@@ -483,7 +483,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 }
 
-class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
+class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {
     def selectDynamic(entityName: String): AttributeQualBuilder = {
         val jentityDef = qualBuilder.jlodDef.getEntityDef(entityName)
         new AttributeQualBuilder( qualBuilder, jentityDef )
@@ -493,8 +493,8 @@ class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
 /**
  * Builder for setting attribute values for an entity.
  */
-class AttributeQualBuilder( val qualBuilder: QualBuilder,
-                            val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
+class AttributeQualBuilder private[scala] ( val qualBuilder: QualBuilder,
+                                            val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
         extends Dynamic {
 
     var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
@@ -554,7 +554,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
 /**
  * Used to qualify on an attribute using an operator like '<>' or 'in'.
  */
-class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
+class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQualBuilder ) {
     val jqual = attrQualBuilder.jqual
     val qualBuilder = attrQualBuilder.qualBuilder
     val jentityDef = attrQualBuilder.jentityDef
