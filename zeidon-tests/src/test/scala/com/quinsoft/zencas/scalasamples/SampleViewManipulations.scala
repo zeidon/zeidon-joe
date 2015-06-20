@@ -18,11 +18,12 @@
  */
 package com.quinsoft.zencas.scalasamples
 
-import com.quinsoft.zeidon.scala.ZeidonOperations
-import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.ObjectEngine
+import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.View._
+import com.quinsoft.zeidon.scala.ZeidonOperations
+import com.quinsoft.zeidon.scala.EntitySelector
 
 /**
  * Examples of how to make miscellaneous View calls. For sample Cursor manipulations
@@ -92,12 +93,20 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
         val set = mUser.getSelectSet()
         set.select( mUser.root )
         set.selectAll( for ( e <- mUser.Report.under( mUser.root ) if e.ID > 300 ) yield e )
+
+        set.selectWhere( _.User.ID = 490 )
+        set.selectWhere( _.UserGroup.ID < 1 )
+        set.selectWhere( _.UserGroup.ID > 1 )
+        set.selectWhere( _.UserGroup.ID <> 1 )
+        set.selectWhere( _.Report.under( "User" ).ID > 400 )
+        set.selectWhere( _.Report.under( _.User ).ID > 400 )
     }
 
     def runAll( view: View ) = {
         creatingViews
         val filename = serializeSingleOiToJsonFile( view )
         deserializeOiFromFile( filename )
+        selectSets( view )
     }
 }
 
@@ -110,9 +119,12 @@ object SampleViewManipulations {
         val task = oe.createTask("ZENCAs")
 
         // Activate an mUser that we can use for samples.
-        val sample = new SampleActivates( task )
-        var mUser = sample.activateSimple
-        sample.runAll( mUser )
+        val sampleActivates = new SampleActivates( task )
+        val mUser = sampleActivates.activateSimple
+
+        val sample = new SampleViewManipulations( task )
+        sample.selectSets( mUser )
+//        sample.runAll( mUser )
     }
 
 }

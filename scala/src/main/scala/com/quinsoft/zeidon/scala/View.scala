@@ -4,11 +4,11 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-
 import com.quinsoft.zeidon.ActivateFlags
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
+import com.quinsoft.zeidon.SelectSet
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -402,10 +402,17 @@ object View {
 
     val ON = new VmlSyntaxFiller
 
-    implicit class ScalaSelectSet( val selectSet : com.quinsoft.zeidon.SelectSet ) {
-        def select( ei: AbstractEntity ) = selectSet.select( ei.getEntityInstance )
+    implicit class ScalaSelectSet( val selectSet : SelectSet ) {
         def selectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
             list.foreach( selectSet.select( _ ) )
+        }
+
+        def deselectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
+            list.foreach( selectSet.deselect( _ ) )
+        }
+
+        def selectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
+            qual( new SelectQualification( selectSet ) )
         }
     }
 }

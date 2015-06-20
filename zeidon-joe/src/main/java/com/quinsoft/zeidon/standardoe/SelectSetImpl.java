@@ -115,4 +115,10 @@ public class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
                         .setView( view )
                         .build();
     }
+
+    @Override
+    public View getView()
+    {
+        return view;
+    }
 }

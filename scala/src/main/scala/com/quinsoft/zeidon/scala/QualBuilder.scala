@@ -4,7 +4,9 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
+
 import com.quinsoft.zeidon._
+import com.quinsoft.zeidon.objectdefinition.EntityDef
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -337,13 +339,13 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Note: depending on how the LOD is defined this could prevent child entities
      * from being deleted because that would violate referential integrity.
      */
-    def restrict( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ) = restricting( restrictTo )
+    def restrict( restrictTo: (EntitySelector) => EntityDef ) = restricting( restrictTo )
 
     /**
      * Synonym for restrict( ... ) method.
      */
-    def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
-        val jentityDef = restrictTo( new EntitySelector )
+    def restricting( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
+        val jentityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.restricting( jentityDef.getName() )
         this
     }
@@ -352,8 +354,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Specifies which entity the following qualification is for.  Used to build
      * qualification programatically.
      */
-    def forEntity( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
-        val jentityDef = restrictTo( new EntitySelector )
+    def forEntity( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
+        val jentityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.forEntity( jentityDef.getName() )
         this
     }
@@ -364,8 +366,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Note: depending on how the LOD is defined this could prevent child entities
      * from being deleted because that would violate referential integrity.
      */
-    def exclude( excludeEntity: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
-        val jentityDef = excludeEntity( new EntitySelector )
+    def exclude( excludeEntity: (EntitySelector) => EntityDef ): QualBuilder = {
+        val jentityDef = excludeEntity( new EntitySelector( jlodDef ) )
         jqual.excludeEntity( jentityDef.getName() )
         this
     }
@@ -476,11 +478,6 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
 
-    class EntitySelector() extends Dynamic {
-        def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.EntityDef = {
-            jlodDef.getEntityDef( entityName )
-        }
-    }
 }
 
 class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
@@ -494,7 +491,7 @@ class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
  * Builder for setting attribute values for an entity.
  */
 class AttributeQualBuilder( val qualBuilder: QualBuilder,
-                            val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
+                            val jentityDef: EntityDef )
         extends Dynamic {
 
     var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
@@ -564,8 +561,6 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
 
     override def equals(value: Any) = {
         throw new ZeidonException("Operators '==' and '!=' are invalid when building qualification.  Use '=' and '<>' instead" )
-//        jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
-//        true
     }
 
     /**

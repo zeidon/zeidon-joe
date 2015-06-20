@@ -30,6 +30,13 @@ import java.util.Set;
 public interface SelectSet extends Set<EntityInstance>
 {
     /**
+     * Returns the View associated with this SelectSet
+     *
+     * @return view for the SelectSet
+     */
+    View getView();
+
+    /**
      * Returns true if the entity is selected in this set.
      *
      * @param ei

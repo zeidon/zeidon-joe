@@ -18,18 +18,16 @@
  */
 package com.quinsoft.zeidon.scala
 
-import com.quinsoft.zeidon.standardoe.SelectSetImpl
+import scala.language.dynamics
+import com.quinsoft.zeidon.objectdefinition.LodDef
+import com.quinsoft.zeidon.objectdefinition.EntityDef
 
 /**
  * @author dgc
  *
  */
-class SelectSet( val view: View ) extends SelectSetImpl( view ) {
-
-    def select( predicate : (EntityInstance) => Boolean ): Int = {
-        var count = 0
-
-        count
+class EntitySelector( val lodDef: LodDef ) extends Dynamic {
+    def selectDynamic( entityName: String ): EntityDef = {
+        lodDef.getEntityDef( entityName )
     }
-
 }
