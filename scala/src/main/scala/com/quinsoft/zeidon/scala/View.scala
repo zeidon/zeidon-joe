@@ -414,5 +414,8 @@ object View {
         def selectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
             qual( new SelectQualification( selectSet ) )
         }
+
+        def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
+        def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
     }
 }

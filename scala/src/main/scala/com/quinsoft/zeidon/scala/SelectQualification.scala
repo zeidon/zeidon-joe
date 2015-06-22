@@ -29,7 +29,9 @@ import com.quinsoft.zeidon.ZeidonException
  * SelectSet.
  *
  */
-class SelectQualification  private[scala] ( val selectSet: SelectSet ) extends Dynamic {
+class SelectQualification  private[scala] ( val selectSet: SelectSet,
+                                            val select: Boolean = true,
+                                            val selectSubobject: Boolean = false ) extends Dynamic {
 
     val jview = selectSet.getView()
     val lodDef = jview.getLodDef()
@@ -84,7 +86,11 @@ class SelectQualification  private[scala] ( val selectSet: SelectSet ) extends D
                     val attrib = new AttributeInstance( jattrib )
                     val b = predicate( attrib )
                     if ( b ) {
-                        selectSet.select( jcursor )
+                        if ( select )
+                            selectSet.select( jcursor, selectSubobject )
+                        else
+                            selectSet.deselect( jcursor, selectSubobject )
+
                         println( jattrib + " is selected" )
                     }
                     else {

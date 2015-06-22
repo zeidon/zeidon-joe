@@ -65,14 +65,14 @@ public class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
     }
 
     @Override
-    public void select(EntityInstance ei, boolean includeChildren )
+    public void select(EntityInstance entityInstance, boolean includeChildren )
     {
-        EntityInstanceImpl eii = (EntityInstanceImpl) ei.getEntityInstance();
-        add( eii );
+        EntityInstanceImpl ei = (EntityInstanceImpl) entityInstance.getEntityInstance();
+        add( ei );
         if ( includeChildren )
         {
             // Add all the children.  Force a lazy load so that they get selected.
-            for ( EntityInstanceImpl child : eii.getChildrenHier( false, false, true ) )
+            for ( EntityInstanceImpl child : ei.getChildrenHier( false, false, true ) )
                 add( child );
         }
     }
@@ -90,15 +90,15 @@ public class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
      * @see com.quinsoft.zeidon.SelectSet#deselect(com.quinsoft.zeidon.EntityInstance)
      */
     @Override
-    public void deselect( EntityInstance ei, boolean removeChildren )
+    public void deselect( EntityInstance entityInstance, boolean removeChildren )
     {
-        EntityInstanceImpl eii = (EntityInstanceImpl) ei.getEntityInstance();
-        remove( eii );
+        EntityInstanceImpl ei = (EntityInstanceImpl) entityInstance.getEntityInstance();
+        remove( ei );
         if ( removeChildren )
         {
             // Loop through all the children.  We don't need to force lazy load because
             // if the EI is in the select set it must have already been loaded.
-            for ( EntityInstanceImpl child : eii.getChildrenHier( false, false, false ) )
+            for ( EntityInstanceImpl child : ei.getChildrenHier( false, false, false ) )
             {
                 if ( contains( child ) )
                     remove( child );
