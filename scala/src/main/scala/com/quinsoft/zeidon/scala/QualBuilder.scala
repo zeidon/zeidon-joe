@@ -45,7 +45,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE USER.ID > 400 AND USER.ID < 500;
      * }}}
      */
-    def and( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
+    def and( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
         jqual.addAttribQual( "AND" )
         addQual( entityQualBuilder )
         this
@@ -73,7 +73,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID = 100 OR USER.ID = 200 )
      * }}}
      */
-    def any( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def any( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -107,7 +107,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE USER.ID > 0 AND USER.ID < 10;
      * }}}
      */
-    def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
+    def conditional( predicate: Boolean, addQual: (QualBuilder) => QualBuilder ): QualBuilder = {
         if ( predicate )
             addQual( this )
 
@@ -133,7 +133,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      *
      */
-    def andAny( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def andAny( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "AND" )
         jqual.addAttribQual( "(" )
 
@@ -164,7 +164,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID = 400 OR USER.ID = 500 );
      * }}}
      */
-    def or( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
+    def or( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         addQual( entityQualBuilder )
         this
@@ -192,7 +192,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID > 100 AND USER.ID < 200 )
      * }}}
      */
-    def all( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def all( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -224,7 +224,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      */
 
-    def andAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def andAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "AND" )
         jqual.addAttribQual( "(" )
 
@@ -240,7 +240,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
 
-    def orAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def orAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "OR" )
         jqual.addAttribQual( "(" )
 
@@ -377,8 +377,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      *
      * See restrict() for more information.
      */
-    def to( addQual: (EntityQualBuilder) => QualBuilder ): QualBuilder = {
+    def to( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
         addQual( entityQualBuilder )
+        this
     }
 
     /**
@@ -536,7 +537,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
      *      mUser.activateWhere( _.User.ID = 20 )
      * }}}
       */
-    def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
+    def updateDynamic( attributeName: String)(value: Any): QualificationTerminator = {
 //        println( s"method '$attributeName' called with argument ${value}" )
         jattributeDef = jentityDef.getAttribute( attributeName )
         if ( value.isInstanceOf[AttributeQualOperators] ) {
@@ -544,7 +545,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
         }
-        return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 }
 
@@ -601,7 +602,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID > 490 )
      * }}}
      */
-    def > ( value: Any ): QualBuilder = {
+    def > ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "<=", value )
         else
@@ -618,7 +619,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID <> 490 )
      * }}}
      */
-    def <> ( value: Any ): QualBuilder = {
+    def <> ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "=", value )
         else
@@ -635,7 +636,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID >= 490 )
      * }}}
      */
-    def >= ( value: Any ): QualBuilder = {
+    def >= ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "<", value )
         else
@@ -652,7 +653,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID < 490 )
      * }}}
      */
-    def < ( value: Any ): QualBuilder = {
+    def < ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( ">=", value )
         else
@@ -669,7 +670,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID <= 490 )
      * }}}
      */
-    def <= ( value: Any ): QualBuilder = {
+    def <= ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( ">", value )
         else
@@ -686,7 +687,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.UserName like 'John%' )
      * }}}
      */
-    def like ( value: String ): QualBuilder = {
+    def like ( value: String ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "NOT LIKE", value )
         else
@@ -704,13 +705,13 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID in (123, 456, 789) )
      * }}}
      */
-    def in ( values: Any* ): QualBuilder = {
+    def in ( values: Any* ): QualificationTerminator = {
         if ( checkNot )
             return notIn( values )
 
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
         addValues( values )
-        return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 
     /**
@@ -724,13 +725,13 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
      *      mUser.activateWhere( _.User.ID notIn (123, 456, 789) )
      * }}}
      */
-    def notIn ( values: Any* ): QualBuilder = {
+    def notIn ( values: Any* ): QualificationTerminator = {
         if ( checkNot )
             return in( values )
 
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
         addValues( values )
-        return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 
 
@@ -860,12 +861,24 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
             return between( values, ">", "<=" )
     }
 
-    private[scala] def addQual( oper: String, value: Any ): QualBuilder = {
+    private[scala] def addQual( oper: String, value: Any ): QualificationTerminator = {
         if ( value.isInstanceOf[AttributeQualBuilder] ) {
             attrQualBuilder.addQualFromAttributeBuilder( oper, value )
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, value )
         }
-        return qualBuilder
+        
+        return QualBuilder.TERMINATOR
     }
+}
+
+/**
+ * A class to indicate that qualification has been correctly specified.
+ */
+class QualificationTerminator {
+    
+}
+
+object QualBuilder {
+    val TERMINATOR = new QualificationTerminator
 }

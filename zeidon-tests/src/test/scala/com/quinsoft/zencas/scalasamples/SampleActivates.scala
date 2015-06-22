@@ -216,7 +216,7 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
         // is true.
         val id = 10
         mUser.buildQual( _.User.ID > 0 )
-             .conditional( id > 0, _.and(  _.User.ID < id ) )
+             .conditional( id > 0, _.and( _.User.ID < id ) )
              .rootOnlyMultiple()
              .activate()
 
