@@ -800,6 +800,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return oldKey;
     }
 
+    @Override
+    public void deleteSelectSet( Object index )
+    {
+        if ( selectSets != null && selectSets.containsKey( index ) )
+            selectSets.remove( index );
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getEntityByHierPosition(long)
      */

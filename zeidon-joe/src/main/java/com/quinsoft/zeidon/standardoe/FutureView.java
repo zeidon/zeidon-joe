@@ -34,8 +34,6 @@ import com.quinsoft.zeidon.ZeidonException;
  * a future view.  Any operations that require the OI are blocked until the activate
  * finishes.
  *
- * @author DG
- *
  */
 class FutureView extends InternalViewForwarder implements Future<View>
 {

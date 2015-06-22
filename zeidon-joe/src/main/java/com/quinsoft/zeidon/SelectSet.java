@@ -76,6 +76,12 @@ public interface SelectSet extends Set<EntityInstance>
 
     /**
      * Iterates over each of the entities in the set in hierarchical order.
+     * 
+     * Note that for large OIs this may be slow because this will loop through
+     * all the entities looking for ones that are in the set.  To loop through
+     * just the entities (without changing the underlying View) then use
+     * the standard Set iterator; however this is not guaranteed to loop in
+     * hierarchical order.
      */
     EntityIterator<? extends EntityInstance> eachEntity();
 }

@@ -292,10 +292,14 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         mUser.Staff.deleteAll()
     }
     
+    def usingFilter( mUser: View ) = {
+        val list = mUser.Report.filter { _.ID > 0 }.foreach( e => println( e ) )
+    }
+    
     def countEntities( mUser: View ) = {
         val count = mUser.Report.count
         val count2 = mUser.Report.count( _.ID >< (338, 400) )
-        val count3 = mUser.Report.count( (e: EntityInstance) => { print( e.ID + " " ); e.ID < 10 } )
+        val count3 = mUser.Report.count( ei => { print( ei.ID + " " ); ei.ID < 10 } )
         print( count3 )
     }
 
@@ -308,6 +312,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         forEachCursor(mUser)
         sortEntities(mUser)
         deleteEntities(mUser.cloneRoot)
+        usingFilter( mUser )
 //        mUser.logObjectInstance
     }
 }

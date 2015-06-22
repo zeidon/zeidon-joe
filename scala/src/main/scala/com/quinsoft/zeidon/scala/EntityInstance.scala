@@ -31,3 +31,9 @@ class EntityInstance( private[this] val jentityInstance: com.quinsoft.zeidon.Ent
      */
     def drop: CursorResult = jentityInstance.dropEntity()
 }
+
+object EntityInstance {
+
+    implicit def jei2ei( jei: com.quinsoft.zeidon.EntityInstance ) = new EntityInstance( jei )
+    
+}

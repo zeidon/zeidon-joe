@@ -174,5 +174,4 @@ object AbstractEntity {
      * Automatically converts a Scala EntityInstance to a Java EntityInstance
      */
     implicit def ei2jei( ei: AbstractEntity ) = ei.getEntityInstance
-
 }

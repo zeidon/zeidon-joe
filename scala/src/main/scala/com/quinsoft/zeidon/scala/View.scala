@@ -415,7 +415,21 @@ object View {
             qual( new SelectQualification( selectSet ) )
         }
 
+        def selectSubobjectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
+            qual( new SelectQualification( selectSet, true, true ) )
+        }
+
         def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
         def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
+        
+        def each( looper: => Unit ) = {
+            val iter = new EntityInstanceIterator( selectSet.eachEntity )
+            iter.each( looper )
+        }
+
+        def foreach( looper: (EntityInstance ) => Unit ) = {
+            val iter = new EntityInstanceIterator( selectSet.eachEntity )
+            iter.foreach( ei => looper( ei ) )
+        }
     }
 }

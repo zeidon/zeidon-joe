@@ -226,7 +226,8 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
 
 object AttributeInstance {
     implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString
-    implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.toInt
+    implicit def attributeInstance2Integer( attr: AttributeInstance ): Integer = attr.toInt
+    implicit def attributeInstance2Int( attr: AttributeInstance ): Int = attr.toInt
     implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.toDouble
     implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.toBoolean
     implicit def attributeInstance2JAI( attr: AttributeInstance ) = attr.jattributeInstance

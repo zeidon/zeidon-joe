@@ -163,6 +163,14 @@ public interface View extends TaskQualification, CacheMap
     SelectSet createSelectSet();
 
     /**
+     * Deletes the SelectSet with the specified index.  If one isn't found then
+     * it is ignored.
+     * 
+     * @param index of the SelectSet created via getSelectSet( idx )
+     */
+    void deleteSelectSet( Object index );
+    
+    /**
      * Set the default select set, i.e. the select set that will be returned
      * by getSelectSet().
      *
