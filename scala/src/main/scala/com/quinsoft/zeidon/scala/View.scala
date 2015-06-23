@@ -123,7 +123,7 @@ class View( val task: Task ) extends Dynamic {
      *      mUser.activateWhere( _.User.ID = 490 )
      * }}}
      */
-    def activateWhere( addQual: ( EntityQualBuilder ) => Unit ): View = {
+    def activateWhere( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
         addQual( builder.entityQualBuilder )
@@ -155,7 +155,7 @@ class View( val task: Task ) extends Dynamic {
      *                  .activate
      * }}}
      */
-    def buildQual( initialQual: ( EntityQualBuilder ) => Unit ): QualBuilder = {
+    def buildQual( initialQual: ( EntityQualBuilder ) => QualificationTerminator ): QualBuilder = {
         val builder = buildQual()
         initialQual( builder.entityQualBuilder ) // Add the qualifcation.
         builder
@@ -166,7 +166,7 @@ class View( val task: Task ) extends Dynamic {
      */
     def buildQual(): QualBuilder = {
         validateLodDef
-        val builder = new QualBuilder( this, jlodDef )
+        val builder = new OtherwiseQualification( this, jlodDef )
         return builder
     }
 

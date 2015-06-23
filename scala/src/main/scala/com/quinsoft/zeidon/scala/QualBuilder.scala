@@ -4,9 +4,9 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition.EntityDef
+import com.quinsoft.zeidon.objectdefinition.LodDef
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -27,7 +27,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
 
-    private [scala]  val entityQualBuilder = new EntityQualBuilder( this )
+    private [scala] val entityQualBuilder = new EntityQualBuilder( this )
+    private [scala] var whenPredicate = false
 
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
@@ -114,6 +115,10 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def when( predicate: Boolean ) = {
+        new WhenQualification( this, predicate )
+    }
+    
     /**
      * Adds multiple attribute qualifications as a single group
      * of OR statements.
@@ -877,6 +882,26 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
  */
 class QualificationTerminator {
     
+}
+
+class WhenQualification( val qualBuilder: QualBuilder, val predicate: Boolean ) {
+    def add ( qual: (QualBuilder) => QualBuilder ) = {
+        qualBuilder.whenPredicate = predicate
+        if ( predicate )
+            qual( qualBuilder )
+            
+        qualBuilder.asInstanceOf[OtherwiseQualification]
+    }
+}
+
+class OtherwiseQualification private [scala] ( view: View,
+                                               jlodDef: LodDef ) extends QualBuilder( view, jlodDef ) {
+    def otherwise( qual: (QualBuilder) => QualBuilder ) = {
+        if ( ! whenPredicate )
+            qual( this )
+            
+        this.asInstanceOf[QualBuilder]
+    }
 }
 
 object QualBuilder {
