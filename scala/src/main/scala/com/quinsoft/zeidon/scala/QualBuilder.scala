@@ -7,6 +7,7 @@ import scala.language.dynamics
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -29,7 +30,14 @@ class QualBuilder private [scala] ( private [this]  val view: View,
 
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
     private [scala] var whenPredicate = false
+    private var firstOperator = true
 
+    private [scala] def callAddQual( addQual: (EntityQualBuilder) => QualificationTerminator ) = {
+        firstOperator = false
+        addQual( entityQualBuilder )
+        this
+    }
+    
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
@@ -47,9 +55,10 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      */
     def and( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
-        jqual.addAttribQual( "AND" )
-        addQual( entityQualBuilder )
-        this
+        if ( ! firstOperator )
+            jqual.addAttribQual( "AND" )
+            
+        callAddQual( addQual )
     }
 
     /**
@@ -75,6 +84,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      */
     def any( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
+        firstOperator = false
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -115,8 +125,26 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
-    def when( predicate: Boolean ) = {
+    def when( predicate: Boolean ): WhenQualification = {
         new WhenQualification( this, predicate )
+    }
+    
+    def whenNotNull( value: AnyRef ): WhenQualification = {
+        val b = value match {
+            case ei: EntityCursor => ! ei.isNull 
+            case ei: com.quinsoft.zeidon.EntityCursor  => ! ei.isNull 
+            case attr: AttributeInstance => ! attr.isNull
+            case attr: com.quinsoft.zeidon.AttributeInstance => ! attr.isNull
+            case str: String => ! StringUtils.isEmpty( str )
+            case _ => value != null
+        }
+        
+        new WhenQualification( this, b )
+    }
+    
+    def whenNotBlank( value: String ): WhenQualification = {
+        val b = ! StringUtils.isBlank( value )
+        new WhenQualification( this, b )
     }
     
     /**
@@ -139,7 +167,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      *
      */
     def andAny( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
-        jqual.addAttribQual( "AND" )
+        if ( firstOperator )
+            firstOperator = false
+        else    
+            jqual.addAttribQual( "AND" )
+            
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -170,9 +202,10 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      */
     def or( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
-        jqual.addAttribQual( "OR" )
-        addQual( entityQualBuilder )
-        this
+        if ( ! firstOperator )
+            jqual.addAttribQual( "OR" )
+            
+        callAddQual( addQual )
     }
 
     /**
@@ -198,6 +231,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      */
     def all( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
+        firstOperator = false
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -230,7 +264,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      */
 
     def andAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
-        jqual.addAttribQual( "AND" )
+        if ( firstOperator )
+            firstOperator = false
+        else    
+            jqual.addAttribQual( "AND" )
+            
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -246,7 +284,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
 
 
     def orAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
-        jqual.addAttribQual( "OR" )
+        if ( firstOperator )
+            firstOperator = false
+        else    
+            jqual.addAttribQual( "OR" )
+            
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -350,6 +392,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Synonym for restrict( ... ) method.
      */
     def restricting( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
+        firstOperator = true
         val jentityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.restricting( jentityDef.getName() )
         this
@@ -362,6 +405,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def forEntity( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
         val jentityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.forEntity( jentityDef.getName() )
+        firstOperator = jqual.qualAttribCount() == 0
         this
     }
 
@@ -383,6 +427,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * See restrict() for more information.
      */
     def to( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
+        firstOperator = false
         addQual( entityQualBuilder )
         this
     }
@@ -482,8 +527,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         view.jview = jqual.activate()
         return view
     }
-
-
+    
 }
 
 class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
@@ -885,7 +929,8 @@ class QualificationTerminator {
 }
 
 class WhenQualification( val qualBuilder: QualBuilder, val predicate: Boolean ) {
-    def add ( qual: (QualBuilder) => QualBuilder ) = {
+    
+    def addQual ( qual: (QualBuilder) => QualBuilder ): QualBuilder with OtherwiseQualification = {
         qualBuilder.whenPredicate = predicate
         if ( predicate )
             qual( qualBuilder )
@@ -894,8 +939,10 @@ class WhenQualification( val qualBuilder: QualBuilder, val predicate: Boolean ) 
     }
 }
 
-class OtherwiseQualification private [scala] ( view: View,
-                                               jlodDef: LodDef ) extends QualBuilder( view, jlodDef ) {
+trait OtherwiseQualification extends QualBuilder {
+    
+    private [scala] var whenPredicate: Boolean
+   
     def otherwise( qual: (QualBuilder) => QualBuilder ) = {
         if ( ! whenPredicate )
             qual( this )

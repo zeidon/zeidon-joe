@@ -275,6 +275,11 @@ public class QualificationBuilder
         return this;
     }
 
+    public int qualAttribCount()
+    {
+        return qualView.cursor( QUALATTRIB ).getEntityCount();
+    }
+    
     public QualificationBuilder setOiSourceUrl( String url )
     {
         activateOptions.setOiSourceUrl( url );

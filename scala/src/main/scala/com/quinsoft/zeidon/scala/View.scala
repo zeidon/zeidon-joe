@@ -157,8 +157,7 @@ class View( val task: Task ) extends Dynamic {
      */
     def buildQual( initialQual: ( EntityQualBuilder ) => QualificationTerminator ): QualBuilder = {
         val builder = buildQual()
-        initialQual( builder.entityQualBuilder ) // Add the qualifcation.
-        builder
+        builder.callAddQual( initialQual )
     }
 
     /**
@@ -166,7 +165,7 @@ class View( val task: Task ) extends Dynamic {
      */
     def buildQual(): QualBuilder = {
         validateLodDef
-        val builder = new OtherwiseQualification( this, jlodDef )
+        val builder = new QualBuilder( this, jlodDef ) with OtherwiseQualification
         return builder
     }
 

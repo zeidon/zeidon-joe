@@ -221,7 +221,7 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
              .activate()
 
         mUser.buildQual( _.User.ID > 0 )
-             .when( id > 0 ).add( _.and( _.User.ID < id ) )
+             .when( id > 0 ).addQual  ( _.and( _.User.ID < id ) )
                             .otherwise( _.and( _.User.ID > id ) )
              .rootOnlyMultiple()
              .activate()
@@ -232,12 +232,12 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
     }
 
     def runAll = {
-//        activateSimpleWithOtherComparators
-//        activateWithOr
-//        activateWithGrouping
-//        activateWithRestricting
-//        asynchronousActivate
-//        activateWithColumnQualification
+        activateSimpleWithOtherComparators
+        activateWithOr
+        activateWithGrouping
+        activateWithRestricting
+        asynchronousActivate
+        activateWithColumnQualification
         miscActivates
         var mUser = activateSimple
 //        mUser.logObjectInstance
