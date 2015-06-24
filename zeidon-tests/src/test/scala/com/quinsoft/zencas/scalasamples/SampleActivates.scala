@@ -212,17 +212,18 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
         val mUser = VIEW basedOn "mUser"
         mUser.activateWhere( _.User.UserName like "Jos%" )
 
-        // Conditional qualification--only adds a qualificaiton if a predicate
+        // Conditional qualification--only adds a qualification if a predicate
         // is true.
         val id = 10
+             
         mUser.buildQual( _.User.ID > 0 )
-             .conditional( id > 0, _.and( _.User.ID < id ) )
+             .when( id > 0, _.and( _.User.ID < id ), 
+                            _.and( _.User.ID > id ) )
              .rootOnlyMultiple()
              .activate()
-
+             
         mUser.buildQual( _.User.ID > 0 )
-             .when( id > 0 ).addQual  ( _.and( _.User.ID < id ) )
-                            .otherwise( _.and( _.User.ID > id ) )
+             .when( id > 0, _.and( _.User.ID < id ) ) 
              .rootOnlyMultiple()
              .activate()
              
