@@ -180,7 +180,7 @@ class View( val task: Task ) extends Dynamic {
      */
     def buildQual(): QualBuilder = {
         validateLodDef
-        val builder = new QualBuilder( this, jlodDef ) with OtherwiseQualification
+        val builder = new QualBuilder( this, jlodDef )
         return builder
     }
 
