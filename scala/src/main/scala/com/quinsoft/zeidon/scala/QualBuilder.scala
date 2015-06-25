@@ -1,5 +1,20 @@
 /**
- *
+    This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+
+    Zeidon JOE is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Zeidon JOE is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2009-2015 QuinSoft
  */
 package com.quinsoft.zeidon.scala
 
@@ -37,7 +52,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         addQual( entityQualBuilder )
         this
     }
-    
+
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
@@ -57,7 +72,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def and( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
         if ( ! firstOperator )
             jqual.addAttribQual( "AND" )
-            
+
         callAddQual( addQual )
     }
 
@@ -128,25 +143,25 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def when( predicate: Boolean ): WhenQualification = {
         new WhenQualification( this, predicate )
     }
-    
+
     def whenNotNull( value: AnyRef ): WhenQualification = {
         val b = value match {
-            case ei: EntityCursor => ! ei.isNull 
-            case ei: com.quinsoft.zeidon.EntityCursor  => ! ei.isNull 
+            case ei: EntityCursor => ! ei.isNull
+            case ei: com.quinsoft.zeidon.EntityCursor  => ! ei.isNull
             case attr: AttributeInstance => ! attr.isNull
             case attr: com.quinsoft.zeidon.AttributeInstance => ! attr.isNull
             case str: String => ! StringUtils.isEmpty( str )
             case _ => value != null
         }
-        
+
         new WhenQualification( this, b )
     }
-    
+
     def whenNotBlank( value: String ): WhenQualification = {
         val b = ! StringUtils.isBlank( value )
         new WhenQualification( this, b )
     }
-    
+
     /**
      * Adds multiple attribute qualifications as a single group
      * of OR statements.
@@ -169,9 +184,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def andAny( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         if ( firstOperator )
             firstOperator = false
-        else    
+        else
             jqual.addAttribQual( "AND" )
-            
+
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -204,7 +219,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def or( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
         if ( ! firstOperator )
             jqual.addAttribQual( "OR" )
-            
+
         callAddQual( addQual )
     }
 
@@ -266,9 +281,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def andAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         if ( firstOperator )
             firstOperator = false
-        else    
+        else
             jqual.addAttribQual( "AND" )
-            
+
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -286,9 +301,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def orAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         if ( firstOperator )
             firstOperator = false
-        else    
+        else
             jqual.addAttribQual( "OR" )
-            
+
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
@@ -527,7 +542,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         view.jview = jqual.activate()
         return view
     }
-    
+
 }
 
 class EntityQualBuilder( val qualBuilder: QualBuilder ) extends Dynamic {
@@ -916,7 +931,7 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, value )
         }
-        
+
         return QualBuilder.TERMINATOR
     }
 }
@@ -925,28 +940,28 @@ class AttributeQualOperators( val attrQualBuilder: AttributeQualBuilder ) {
  * A class to indicate that qualification has been correctly specified.
  */
 class QualificationTerminator {
-    
+
 }
 
 class WhenQualification( val qualBuilder: QualBuilder, val predicate: Boolean ) {
-    
+
     def addQual ( qual: (QualBuilder) => QualBuilder ): QualBuilder with OtherwiseQualification = {
         qualBuilder.whenPredicate = predicate
         if ( predicate )
             qual( qualBuilder )
-            
+
         qualBuilder.asInstanceOf[OtherwiseQualification]
     }
 }
 
 trait OtherwiseQualification extends QualBuilder {
-    
+
     private [scala] var whenPredicate: Boolean
-   
+
     def otherwise( qual: (QualBuilder) => QualBuilder ) = {
         if ( ! whenPredicate )
             qual( this )
-            
+
         this.asInstanceOf[QualBuilder]
     }
 }
