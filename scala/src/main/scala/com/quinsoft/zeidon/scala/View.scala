@@ -1,14 +1,29 @@
 /**
- *
- */
+  * This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+  *
+  * Zeidon JOE is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU Lesser General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * Zeidon JOE is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU Lesser General Public License for more details.
+  *
+  * You should have received a copy of the GNU Lesser General Public License
+  * along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
+  *
+  * Copyright 2009-2015 QuinSoft
+  */
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-
 import com.quinsoft.zeidon.ActivateFlags
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
+import com.quinsoft.zeidon.SelectSet
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -123,7 +138,7 @@ class View( val task: Task ) extends Dynamic {
      *      mUser.activateWhere( _.User.ID = 490 )
      * }}}
      */
-    def activateWhere( addQual: ( EntityQualBuilder ) => Unit ): View = {
+    def activateWhere( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
         addQual( builder.entityQualBuilder )
@@ -155,10 +170,9 @@ class View( val task: Task ) extends Dynamic {
      *                  .activate
      * }}}
      */
-    def buildQual( initialQual: ( EntityQualBuilder ) => Unit ): QualBuilder = {
+    def buildQual( initialQual: ( EntityQualBuilder ) => QualificationTerminator ): QualBuilder = {
         val builder = buildQual()
-        initialQual( builder.entityQualBuilder ) // Add the qualifcation.
-        builder
+        builder.callAddQual( initialQual )
     }
 
     /**
@@ -270,6 +284,13 @@ class View( val task: Task ) extends Dynamic {
      * Returns the options that were used to activate this OI.
      */
     def activateOptions = { validateNonNull; jview.getActivateOptions() }
+
+    def getSelectSet( name: String = null ) = {
+        if ( name == null )
+            jview.createSelectSet()
+        else
+            jview.getSelectSet( name )
+    }
 
     /**
      * Returns a serializer that can be used to serialize this OI.
@@ -394,4 +415,35 @@ object View {
     implicit def view2jview( view: com.quinsoft.zeidon.scala.View ) = view.jview
 
     val ON = new VmlSyntaxFiller
+
+    implicit class ScalaSelectSet( val selectSet : SelectSet ) {
+        def selectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
+            list.foreach( selectSet.select( _ ) )
+        }
+
+        def deselectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
+            list.foreach( selectSet.deselect( _ ) )
+        }
+
+        def selectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
+            qual( new SelectQualification( selectSet ) )
+        }
+
+        def selectSubobjectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
+            qual( new SelectQualification( selectSet, true, true ) )
+        }
+
+        def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
+        def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
+        
+        def each( looper: => Unit ) = {
+            val iter = new EntityInstanceIterator( selectSet.eachEntity )
+            iter.each( looper )
+        }
+
+        def foreach( looper: (EntityInstance ) => Unit ) = {
+            val iter = new EntityInstanceIterator( selectSet.eachEntity )
+            iter.foreach( ei => looper( ei ) )
+        }
+    }
 }

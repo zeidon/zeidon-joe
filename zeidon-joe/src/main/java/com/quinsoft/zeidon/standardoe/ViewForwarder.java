@@ -191,6 +191,16 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         return getView().createSelectSet();
     }
 
+    
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#deleteSelectSet(java.lang.Object)
+     */
+    @Override
+    public void deleteSelectSet( Object index )
+    {
+        getView().deleteSelectSet( index );
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet()
      */

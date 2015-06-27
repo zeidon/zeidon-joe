@@ -1,6 +1,21 @@
 /**
- *
- */
+  * This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+  *
+  * Zeidon JOE is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU Lesser General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * Zeidon JOE is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU Lesser General Public License for more details.
+  *
+  * You should have received a copy of the GNU Lesser General Public License
+  * along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
+  *
+  * Copyright 2009-2015 QuinSoft
+  */
 package com.quinsoft.zeidon.scala
 
 import scala.util.matching.Regex
@@ -226,7 +241,8 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
 
 object AttributeInstance {
     implicit def attributeInstance2String( attr: AttributeInstance ) = attr.jattributeInstance.getString
-    implicit def attributeInstance2Int( attr: AttributeInstance ): Integer = attr.toInt
+    implicit def attributeInstance2Integer( attr: AttributeInstance ): Integer = attr.toInt
+    implicit def attributeInstance2Int( attr: AttributeInstance ): Int = attr.toInt
     implicit def attributeInstance2Double( attr: AttributeInstance ): Double = attr.toDouble
     implicit def attributeInstance2Boolean( attr: AttributeInstance ): Boolean = attr.toBoolean
     implicit def attributeInstance2JAI( attr: AttributeInstance ) = attr.jattributeInstance

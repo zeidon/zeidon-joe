@@ -465,6 +465,15 @@ public class zVIEW extends VmlOperation implements View
     }
 
     /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#deleteSelectSet(java.lang.Object)
+     */
+    @Override
+    public void deleteSelectSet( Object index )
+    {
+        getView().deleteSelectSet( index );
+    }
+
+    /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet()
      */
     @Override

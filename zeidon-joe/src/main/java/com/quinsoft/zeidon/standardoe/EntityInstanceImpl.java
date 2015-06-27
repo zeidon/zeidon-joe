@@ -1919,7 +1919,7 @@ class EntityInstanceImpl implements EntityInstance
         // First make sure that all the required attributes have non-null values
         // if this entity has been changed in any way.
         //
-        if ( isCreated() || isChanged() || isIncluded() )
+        if ( isCreated() || isUpdated() || isIncluded() )
         {
             for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
             {
