@@ -34,32 +34,32 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
      * Subclasses implement this method to get the Java EntityInstance.
      */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance
-    
+
     /**
      * Returns the name of this entity instance from the LOD.
      */
     def name = jentityDef.getName()
-    
+
     /**
      * Returns the position of this entity amongst its twins (i.e. its index).  First twin = 0;
      */
     def position = getEntityInstance.getPosition()
-    
+
     /**
-     * Returns the max cardinality of this entity. 
+     * Returns the max cardinality of this entity.
      */
     def maxCardinality = jentityDef.getMaxCardinality()
-    
+
     /**
      * Write the instance data to the log.
      */
     def logEntity( displayChildren: Boolean = false ) = getEntityInstance.logEntity( displayChildren )
-    
+
     /**
      * Returns the EntityDef for this instance.  Used for reflection.
      */
     def entityDef = jentityDef
-    
+
     /**
      * Returns true if this entity has been updated since it was loaded from the DB.
      */
@@ -69,7 +69,7 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
      * Returns true if this entity has been included since the OI was loaded from the DB.
      */
     def isIncluded = getEntityInstance.isIncluded()
-    
+
     /**
      * Returns true if this entity has been created since the OI was loaded from the DB.
      */
@@ -85,10 +85,10 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
 
     /**
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.
-     * 
+     *
      * This allows the dynamic use of an attribute name as a method.  E.g.
      * {{{
-     * val attr = myView.MyEntity.MyAttribute 
+     * val attr = myView.MyEntity.MyAttribute
      * }}}
      */
     def selectDynamic( attributeName: String): AttributeInstance = {
@@ -98,7 +98,7 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
 
     /**
      * Called dynamically to set an attribute value.
-     * 
+     *
      * This allows the dynamic use of an attribute name as a method.  E.g.
      * {{{
      * myView.MyEntity.MyAttribute = "New Value"
@@ -131,9 +131,15 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
     }
 
     /**
-     * Returns an iterator that will iterate through all the attributes of this entity instance.
+     * Returns an iterator that will iterate through all the non-hdden attributes of this entity instance.
      */
-    def attributes = new AttributeIterator( getEntityInstance )
+    def attributes = new AttributeIterator( getEntityInstance, true )
+
+    /**
+     * Returns an iterator that will iterate through all the attributes of this entity instance,
+     * possibly including hidden attributes.
+     */
+    def attributes( includeHidden: Boolean ) = new AttributeIterator( getEntityInstance, ! includeHidden )
 
     /**
      * Copies attributes by name.  Normal invocation is:

@@ -22,12 +22,12 @@ package com.quinsoft.zeidon.scala
  * @author dgc
  *
  */
-class AttributeIterator( val jentityInstance: com.quinsoft.zeidon.EntityInstance ) extends Iterable[AttributeInstance] {
+class AttributeIterator( val jentityInstance: com.quinsoft.zeidon.EntityInstance, val excludeHidden: Boolean ) extends Iterable[AttributeInstance] {
 
     def iterator = {
         val entityInstance = new EntityInstance( jentityInstance )
         new Iterator[AttributeInstance] {
-            var jattributeDef = entityInstance.getEntityInstance.getEntityDef().getAttributes().get(0)
+            var jattributeDef = entityInstance.getEntityInstance.getEntityDef().getAttributes( excludeHidden ).get(0)
 
             def hasNext = jattributeDef != null
             def next = {

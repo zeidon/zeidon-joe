@@ -72,10 +72,16 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private EventListener eventListener;
     private ArrayList<AttributeDef> activateOrdering;
     private Integer    activateLimit;
+
     /**
      * List of the attributes in the order they are defined in the XOD file.
      */
     private final List<AttributeDef> attributes = Collections.synchronizedList( new ArrayList<AttributeDef>() );
+
+    /**
+     * List of the non-hidden attributes in the order they are defined in the XOD file.
+     */
+    private volatile List<AttributeDef> nonHiddenAttributes = Collections.synchronizedList( new ArrayList<AttributeDef>() );;
 
     /**
      * Map of attributes by attribute name.  This is a concurrent map because this can be increased
@@ -544,6 +550,8 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     void addAttributeDef( AttributeDef attributeDef )
     {
         attributes.add( attributeDef );
+        if ( ! attributeDef.isHidden() )
+            nonHiddenAttributes.add( attributeDef );
         attributeMap.put( attributeDef.getName(), attributeDef );
 
         if ( attributeDef.isDynamicAttribute() )
@@ -589,13 +597,13 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return attrib;
     }
 
-    public AttributeDef getAttribute( int attributeNumber )
+    public AttributeDef getAttribute( int index )
     {
-        if ( attributeNumber >= attributes.size() )
+        if ( index >= attributes.size() )
             throw new ZeidonException("Attribute index %d out of range for %s.",
-                                      attributeNumber, lodDef.getName() );
+                                      index, lodDef.getName() );
 
-        return attributes.get( attributeNumber );
+        return attributes.get( index );
     }
 
     public AttributeDef getAttributeByErToken( long erToken )
@@ -606,6 +614,14 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     public List<AttributeDef> getAttributes()
     {
         return Collections.unmodifiableList( attributes );
+    }
+
+    public List<AttributeDef> getAttributes( boolean excludeHidden )
+    {
+        if ( ! excludeHidden )
+            return getAttributes();
+
+        return Collections.unmodifiableList( nonHiddenAttributes );
     }
 
     public int getHierIndex()
