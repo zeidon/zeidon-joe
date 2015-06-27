@@ -134,19 +134,10 @@ public class IntegerDomain extends AbstractNumericDomain
         return intContext;
     }
 
-    @Override
-    public void addContext(Task task, DomainContext context)
-    {
-        if ( StringUtils.equalsIgnoreCase( context.getName(), "Hex" ) )
-            context = new HexContext( (IntegerContext) context );
-        
-        super.addContext( task, context );
-    }
-
     private class IntegerContext extends BaseDomainContext
     {
         private String format;
-        
+
         public IntegerContext( Domain domain )
         {
             super( domain );
@@ -160,33 +151,13 @@ public class IntegerDomain extends AbstractNumericDomain
 
             if ( format != null )
                 return String.format( format, internalValue );
-            
+
             return internalValue.toString();
         }
-        
+
         private void setFormat( String format )
         {
             this.format = format;
-        }
-    }
-    
-    private class HexContext extends IntegerContext
-    {
-        public HexContext( IntegerContext context )
-        {
-            super( context.getDomain() );
-            assert context.getName().equals( "Hex" );
-            setName( "Hex" );
-            setIsDefault( context.isDefault() );
-        }
-
-        @Override
-        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
-        {
-            if ( internalValue == null )
-                return null;
-
-            return Integer.toHexString( (Integer) internalValue );
         }
     }
 }
