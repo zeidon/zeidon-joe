@@ -28,6 +28,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
@@ -106,13 +107,57 @@ public class IntegerDomain extends AbstractNumericDomain
         return value * num;
     }
 
+    @Override
+    public IntegerContext newContext(Task task)
+    {
+        return new IntegerContext( this );
+    }
 
     @Override
-    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+    public DomainContext getContext(Task task, String contextName)
     {
-     	if ( internalValue == null )
-    		return null;
+        DomainContext context = getContext( contextName );
+        if ( context != null )
+            return context;  // We found one by name.
 
-     	return internalValue.toString();
+        if ( StringUtils.isBlank( contextName ) )
+            throw new ZeidonException("Domain '%s' does not have a default context defined.", getName() );
+
+        // Does the context name contain formatting chars?
+        if ( ! contextName.contains( "%" ) )
+            throw new ZeidonException("Unknown context '%s' for domain '%s' ", contextName, getName() );
+
+        // Create a temporary new one and set its edit string to the context name.
+        IntegerContext intContext = new IntegerContext( this );
+        intContext.setName( contextName );
+        intContext.setFormat( contextName );
+        return intContext;
+    }
+
+    private class IntegerContext extends BaseDomainContext
+    {
+        private String format;
+
+        public IntegerContext( Domain domain )
+        {
+            super( domain );
+        }
+
+        @Override
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+        {
+            if ( internalValue == null )
+                return null;
+
+            if ( format != null )
+                return String.format( format, internalValue );
+
+            return internalValue.toString();
+        }
+
+        private void setFormat( String format )
+        {
+            this.format = format;
+        }
     }
 }

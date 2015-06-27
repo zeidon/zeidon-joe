@@ -158,7 +158,6 @@ public class DateDomain extends AbstractDomain
         return new DateContext( this );
     }
 
-
     /**
      * Generate a random test value for this domain.  This is used by test code to create random
      * test data.

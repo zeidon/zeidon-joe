@@ -50,6 +50,11 @@ public class BaseDomainContext implements DomainContext
     {
         this.name = name;
     }
+    
+    protected void setIsDefault( boolean isDefault )
+    {
+        this.isDefault = isDefault;
+    }
 
     @Override
     public String getName()
@@ -132,7 +137,6 @@ public class BaseDomainContext implements DomainContext
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
     	return internalValue.toString();
-        //throw new UnsupportedOperationException();
     }
 
     @Override
