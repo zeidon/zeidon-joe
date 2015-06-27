@@ -72,6 +72,9 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         if ( mUser.User.ID == 10 )
             println( "Equal to 10" )
 
+        if ( mUser.User.ID in (10, 21, 32 ) )
+            println( "ID is 10, 21, or 32" )
+            
         // This will compare the attribute using Zeidon domain processing.  If the domain
         // comparison handles nulls then this line will not throw an exception.
         if ( mUser.User.Active @== "Y" )
@@ -131,11 +134,16 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         attr2 = attr // This re-assigns attr2.
     }
 
+    def attributeLists( mUser : View @basedOn( "mUser" ) ) {
+        mUser.User.attributes.filter { _.attributeDef.isKey() }.foreach { attr => println( attr ) }
+    }
+    
     def runAll( mUser: View ) = {
         attributeValues( mUser )
         metaInformation( mUser )
         compareAttribute( mUser )
         attributeInstance( mUser )
+        attributeLists( mUser )
     }
 }
 
