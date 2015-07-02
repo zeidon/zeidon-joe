@@ -27,7 +27,6 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
-import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
  * @author DG
@@ -67,7 +66,6 @@ public class RegularExpressionDomain extends StringDomain
 
     private class RegexContext extends BaseDomainContext
     {
-        private String  regex;
         private Pattern pattern;
 
 		public RegexContext(Domain domain)
@@ -81,20 +79,14 @@ public class RegularExpressionDomain extends StringDomain
 	        String string = checkNullString( value );
 	        Matcher m = pattern.matcher( string );
 	        if ( ! m.matches() )
-	            throw new InvalidAttributeValueException( attributeDef, value, "Input value does not match regular expression %s", regex );
+	            throw new InvalidAttributeValueException( attributeDef, value, "Input value does not match regular expression %s", getEditString() );
 	    }
 
-	    @Override
-	    public void setAttribute(PortableFileReader reader)
-	    {
-	        if ( reader.getAttributeName().equals( "RegEx" ) ||
-	             reader.getAttributeName().equals( "JavaEditString" ) )
-	        {
-	            regex = reader.getAttributeValue();
-	            pattern = Pattern.compile( regex );
-	        }
-	        else
-	            super.setAttribute( reader );
-	    }
+        @Override
+        protected void setEditString( String editString )
+        {
+            super.setEditString( editString );
+            pattern = Pattern.compile( editString );
+        }
     }
 }

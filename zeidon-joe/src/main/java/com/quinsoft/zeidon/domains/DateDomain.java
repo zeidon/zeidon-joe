@@ -187,7 +187,6 @@ public class DateDomain extends AbstractDomain
             super( domain );
         }
 
-        private String            editString;
         private DateTimeFormatter formatter;
 
         @Override
@@ -239,25 +238,17 @@ public class DateDomain extends AbstractDomain
         	catch ( Exception e )
         	{
         	    throw new InvalidAttributeValueException( attributeDef, s, e.getMessage() )
-        	                         .appendMessage( "Format string = %s", editString )
+        	                         .appendMessage( "Format string = %s", getEditString() )
         	                         .appendMessage( "See %s for help on Java Date formatting", JAVA_DATE_FORMATTING_URL )
         	                         .setCause( e );
         	}
         }
 
-        private void setEditString( String editString )
-        {
-            this.editString = editString;
-            formatter = JoeUtils.createDateFormatterFromEditString( editString );
-        }
-
         @Override
-        public void setAttribute(PortableFileReader reader)
+        protected void setEditString( String editString )
         {
-            if ( reader.getAttributeName().equals( "JavaEditString" ) )
-                setEditString( reader.getAttributeValue() );
-            else
-                super.setAttribute( reader );
+            super.setEditString( editString );
+            formatter = JoeUtils.createDateFormatterFromEditString( editString );
         }
     }
 }

@@ -32,7 +32,6 @@ import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
-import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
  * @author DKS
@@ -167,8 +166,6 @@ public class SSNDomain extends StringDomain
             super( domain );
         }
 
-        private String            editString;
-
         @Override
         public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
@@ -176,24 +173,24 @@ public class SSNDomain extends StringDomain
         		return StringDomain.checkNullString(task.getApplication(), null);
 
         	// If the user has not entered a Java Format string, just return the internal value.
-        	if ( editString == null )
-        	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
+        	if ( getEditString() == null )
+        	    throw new ZeidonException( "JavagetEditString() is not set for context %s", this.toString() );
 
-        	int formatLength = editString.length();
+        	int formatLength = getEditString().length();
         	String internalString = internalValue.toString();
             int j = 0;
             char[] tempCharArray = new char[formatLength];
 
             // KJS 01/18/13 - New ssn security display, that shows only last four digits along
             // with *****.
-            if ( editString.equals("*****9999"))
+            if ( getEditString().equals("*****9999"))
             {
                for (int i = 0; i < formatLength; i++ )
                {
             	   if ( i < 5 )
             	   {
 	                    tempCharArray[i] =
-		                        editString.charAt(i);
+		                        getEditString().charAt(i);
             	   }
             	   else
             	   {
@@ -204,15 +201,15 @@ public class SSNDomain extends StringDomain
             }
             else
             {
-	            // Look at the JavaEditString (editString) and wherever there is a '9', replace it with
+	            // Look at the JavagetEditString() (getEditString()) and wherever there is a '9', replace it with
 	            // the correct value from the internalValue.  Otherwise, use whatever format character is
 	            // given.
 	            for (int i = 0; i < formatLength; i++)
 	            {
-	            	if ( editString.charAt(i) != '9' )
+	            	if ( getEditString().charAt(i) != '9' )
 	            	{
 	                    tempCharArray[i] =
-	                        editString.charAt(i);
+	                        getEditString().charAt(i);
 	            	}
 	            	else
 	            	{
@@ -243,17 +240,6 @@ public class SSNDomain extends StringDomain
         		return null;
 
         	return (s);
-        }
-
-        @Override
-        public void setAttribute(PortableFileReader reader)
-        {
-            if ( reader.getAttributeName().equals( "JavaEditString" ) )
-            {
-                editString = reader.getAttributeValue();
-            }
-            else
-                super.setAttribute( reader );
         }
     }
 }

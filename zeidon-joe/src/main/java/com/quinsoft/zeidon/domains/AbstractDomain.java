@@ -56,6 +56,7 @@ public abstract class AbstractDomain implements Domain
     private final DomainType    domainType;
     private final InternalType  dataType;
     private final String        description;
+    private final String        configString;
 
     public AbstractDomain( Application app, Map<String, Object> domainProperties, Task task )
     {
@@ -64,6 +65,7 @@ public abstract class AbstractDomain implements Domain
         domainType = DomainType.mapCode( ((String) domainProperties.get( "DomainType" )).charAt( 0 ) );
         dataType = InternalType.mapCode( (String) domainProperties.get( "DataType" ) );
         description = (String) domainProperties.get( "Desc" );
+        configString = (String) domainProperties.get( "ConfigString" );
     }
 
     /* (non-Javadoc)
@@ -431,5 +433,10 @@ public abstract class AbstractDomain implements Domain
     public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
     {
         throw new ZeidonException( "Must be implemented for this domain" ).appendMessage( "Domain = %s", getName() );
+    }
+
+    public String getConfigString()
+    {
+        return configString;
     }
 }

@@ -20,6 +20,8 @@
 package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,11 +39,64 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  */
 public class IntegerDomain extends AbstractNumericDomain
 {
+    static final private Pattern BETWEEN = Pattern.compile( "\\((\\d+)(<|<=)x(<|<=)(\\d+)\\)" );
+    static final private Pattern RANGE   = Pattern.compile( "\\((\\d+)\\.\\.(\\d+)\\)" );
+    
+    private final IntChecker intChecker; 
+
     public IntegerDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
+        intChecker = configure( domainProperties );
     }
 
+    private IntChecker configure( Map<String,Object> domainProperties )
+    {
+        if ( StringUtils.isBlank( getConfigString() ) )
+            return null;
+
+        String config = getConfigString();
+        
+        // Check for BETWEEN config
+        Matcher m = BETWEEN.matcher( config );
+        if ( m.matches() )
+        {
+            int lowerBound = Integer.parseInt( m.group( 1 ) );
+            int upperBound = Integer.parseInt( m.group( 4 ) );
+            String lowerCompare = m.group( 2 );
+            String upperCompare = m.group( 3 );
+            switch ( lowerCompare )
+            {
+                case "<": 
+                    if ( upperCompare.equals( "<" ) )
+                        return new BetweenLL( lowerBound, upperBound );
+                    else
+                        return new BetweenLLe( lowerBound, upperBound );
+                case "<=": 
+                    if ( upperCompare.equals( "<" ) )
+                        return new BetweenLeL( lowerBound, upperBound );
+                    else
+                        return new BetweenLeLe( lowerBound, upperBound );
+            }
+        }
+
+        m = RANGE.matcher( config );
+        if ( m.matches() )
+        {
+            return new Range( m.group( 1 ), m.group( 2 ) );
+        }
+        
+        throw new ZeidonException("Unknown config string '%s' for IntegerDomain", config );
+    }
+
+    private Integer check( AttributeDef attributeDef, int value )
+    {
+        if ( intChecker != null )
+            intChecker.checkValue( attributeDef, value );
+        
+        return value;
+    }
+    
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
@@ -53,10 +108,10 @@ public class IntegerDomain extends AbstractNumericDomain
             return null;
 
         if ( externalValue instanceof Long )
-            return Ints.checkedCast( (Long) externalValue );
+            return check( attributeDef, Ints.checkedCast( (Long) externalValue ) );
 
         if ( externalValue instanceof Number )
-            return ((Number) externalValue).intValue();
+            return check( attributeDef, ((Number) externalValue).intValue() );
 
         if ( externalValue instanceof CharSequence )
         {
@@ -74,7 +129,8 @@ public class IntegerDomain extends AbstractNumericDomain
                 throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
                         externalValue.getClass().getName() );
         	}
-            return num;
+        	
+            return check( attributeDef, num );
         }
 
         throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
@@ -160,4 +216,129 @@ public class IntegerDomain extends AbstractNumericDomain
             this.format = format;
         }
     }
+    
+    private interface IntChecker
+    {
+        void checkValue( AttributeDef attributeDef, int value );
+    }
+    
+    private class BetweenLL implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+        
+        public BetweenLL( int lowerBound, int upperBound ) // 0 < x < 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value <= lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is less than lower bound %d", lowerBound ); 
+            if ( value >= upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is greater than upper bound %d", lowerBound ); 
+        }
+    }
+    
+    private class BetweenLeL implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+        
+        public BetweenLeL( int lowerBound, int upperBound ) // 0 <= x < 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value < lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is less than lower bound %d", lowerBound ); 
+            if ( value >= upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is greater than upper bound %d", lowerBound ); 
+        }
+    }
+    
+    private class BetweenLeLe implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+        
+        public BetweenLeLe( int lowerBound, int upperBound ) // 0 <= x <= 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value < lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is less than lower bound %d", lowerBound ); 
+            if ( value > upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is greater than upper bound %d", lowerBound ); 
+        }
+    }
+    
+    private class BetweenLLe implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+        
+        public BetweenLLe( int lowerBound, int upperBound ) // 0 < x <= 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value <= lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is less than lower bound %d", lowerBound ); 
+            if ( value > upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is greater than upper bound %d", lowerBound ); 
+        }
+    }
+    
+    private class Range implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+        
+        public Range( String lowerBound, String upperBound ) // 0 <= x <= 100
+        {
+            super();
+            this.lowerBound = Integer.parseInt( lowerBound );
+            this.upperBound = Integer.parseInt( upperBound );
+        }
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value < lowerBound || value > upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value, 
+                                                          "Value is outside of range %s", getConfigString() ); 
+        }
+    }
+    
 }
