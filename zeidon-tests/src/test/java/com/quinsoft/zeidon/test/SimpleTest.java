@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -158,11 +159,8 @@ class SimpleTest
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
-        oe.startBrowser();
+//        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
-        View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).loadFile( "/tmp/qual.json" ).activate();
-        int count = mUser.cursor( "User" ).getEntityCount();
-        mUser.logObjectInstance();
 
 //        Task cheetah = oe.createTask(  "Cheetah" );
 //        View fPerson = new QualificationBuilder( cheetah )
@@ -177,8 +175,6 @@ class SimpleTest
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
-                            .addAttribQual( "Status", "@Student.eMailAddress" )
-                            .addAttribQual( "AND" )
                             .addAttribQual( "MajorDepartment", "ID", "=", 3 )
                             .activate();
 
@@ -188,6 +184,11 @@ class SimpleTest
 //        stud.cursor(  "StudentMajorDegreeTrack" ).setPrevWithinOi();
         stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
         String jsonFile = stud.serializeOi().withIncremental().toFile( "/tmp/stud2.json" );
+
+        AttributeInstance attr = stud.cursor( "Student" ).getAttribute( "ID" );
+        System.out.println( "US = " + attr.getString("en_US") );
+        System.out.println( "FR = " + attr.getString("fr") );
+        System.out.println( "DE = " + attr.getString("de") );
 
         View stud2 = zencas.deserializeOi()
                             .fromResource( jsonFile )
