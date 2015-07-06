@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
@@ -34,9 +36,15 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  */
 public class RegularExpressionDomain extends StringDomain
 {
+    private final Pattern domainPattern;
+
     public RegularExpressionDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
+        if ( StringUtils.isBlank( getConstraintRule() ) )
+            domainPattern = null;
+        else
+            domainPattern = Pattern.compile( getConstraintRule() );
     }
 
     @Override
@@ -47,8 +55,17 @@ public class RegularExpressionDomain extends StringDomain
         // Validate string length
         super.validateInternalValue( task, attributeDef, string );
 
-        DomainContext context = getContext( task, null );
-        context.validateInternalValue( task, attributeDef, string ); // Validate the regex.
+        if ( domainPattern != null )
+        {
+            Matcher m = domainPattern.matcher( string );
+            if ( ! m.matches() )
+                throw new InvalidAttributeValueException( attributeDef, string, "Input value does not match regular expression %s", getConstraintRule() );
+        }
+        else
+        {
+            DomainContext context = getContext( task, null );
+            context.validateInternalValue( task, attributeDef, string ); // Validate the regex.
+        }
     }
 
     @Override

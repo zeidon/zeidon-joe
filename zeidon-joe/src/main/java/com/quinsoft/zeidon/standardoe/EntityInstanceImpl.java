@@ -60,7 +60,6 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -3061,9 +3060,9 @@ class EntityInstanceImpl implements EntityInstance
         Object source;
         // If the target is a string, we'll ask the source to convert its value to a
         // string.  This is necessary for copying Dates to strings. Should we do this with other data types?
-        if ( tgtDomain.getDataType() == InternalType.STRING )
-            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getString();
-        else
+//        if ( tgtDomain.getDataType() == InternalType.STRING )
+//            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getString();
+//        else
             source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getValue();
 
         return setAttribute( tgtAttributeDef, source );

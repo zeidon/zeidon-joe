@@ -52,10 +52,10 @@ public class IntegerDomain extends AbstractNumericDomain
 
     private IntChecker configure( Task task, Map<String,Object> domainProperties )
     {
-        if ( StringUtils.isBlank( getConfigString() ) )
+        if ( StringUtils.isBlank( getConstraintRule() ) )
             return null;
 
-        String config = getConfigString();
+        String config = getConstraintRule().replaceAll( "\\s", "" ); // Remove all whitespace.
 
         // Check for BETWEEN config
         Matcher m = BETWEEN.matcher( config );
@@ -319,7 +319,7 @@ public class IntegerDomain extends AbstractNumericDomain
         {
             if ( value < lowerBound || value > upperBound )
                 throw new InvalidAttributeValueException( attributeDef, value,
-                                                          "Value is outside of range %s", getConfigString() );
+                                                          "Value is outside of range %s", getConstraintRule() );
         }
     }
 
