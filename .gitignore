@@ -8,4 +8,3 @@ tmp/
 .settings
 .project
 .classpath
-zeidon-tests/src/test/resources/zeidon.app
