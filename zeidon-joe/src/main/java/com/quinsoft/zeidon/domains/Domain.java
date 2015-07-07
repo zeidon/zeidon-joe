@@ -148,6 +148,18 @@ public interface Domain
     Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance );
 
     /**
+     * Returns true if this domain has an initial value for the specified attribute.  Will
+     * only be called if the attribute does not have its own initial value.
+     *
+     * @param task
+     * @param attributeDef
+     * @return
+     */
+    boolean hasInitialValue( Task task, AttributeDef attributeDef );
+
+    void setInitialValue( AttributeInstance attributeInstance  );
+
+    /**
      * Creates an empty context which will then be initialized from values in zeidon.xdm.  Used when
      * loading domains from zeidon.xdm.
      * @param task TODO

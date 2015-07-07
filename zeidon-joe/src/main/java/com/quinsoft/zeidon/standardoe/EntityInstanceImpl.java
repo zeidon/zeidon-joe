@@ -308,14 +308,15 @@ class EntityInstanceImpl implements EntityInstance
 
     void initializeDefaultAttributes()
     {
-        if ( getEntityDef().hasInitializedAttributes() )
+        for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
         {
-            for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
-            {
-                if ( StringUtils.isBlank( attributeDef.getInitialValue() ) )
-                    continue;
-
+            if ( ! StringUtils.isBlank( attributeDef.getInitialValue() ) )
                 setAttribute( attributeDef, attributeDef.getInitialValue(), null, true );
+            else
+            {
+                Domain domain = attributeDef.getDomain();
+                if ( domain.hasInitialValue( getTask(), attributeDef ) )
+                    domain.setInitialValue( getAttribute( attributeDef ) );
             }
         }
     }

@@ -29,7 +29,7 @@ import com.quinsoft.zeidon.SelectSet
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
  */
-class View( val task: Task ) extends Dynamic {
+case class View( val task: Task ) extends Dynamic {
 
     /**
      * The underlying EntityDef for this View.  May be null.

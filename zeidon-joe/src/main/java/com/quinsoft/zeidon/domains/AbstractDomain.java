@@ -439,4 +439,16 @@ public abstract class AbstractDomain implements Domain
     {
         return constraintRule;
     }
+
+    @Override
+    public boolean hasInitialValue( Task task, AttributeDef attributeDef )
+    {
+        return false;
+    }
+
+    @Override
+    public void setInitialValue( AttributeInstance attributeInstance  )
+    {
+        throw new ZeidonException( "setInitialValue not implemented for domain %s", getName() );
+    }
 }

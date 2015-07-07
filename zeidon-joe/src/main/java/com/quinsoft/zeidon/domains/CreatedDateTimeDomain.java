@@ -16,38 +16,41 @@
 
     Copyright 2009-2015 QuinSoft
  */
-
 package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
- * This domain handles any differences needed to deal with dates+time.
+ * A version of DateTimeDoman that will initialize an attribute to the
+ * current time.
+ *
  */
-public class DateTimeDomain extends DateDomain
+public class CreatedDateTimeDomain extends DateTimeDomain
 {
-    protected DateTimeFormatter defaultDateTimeFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT + "HHmmss");
-
-    public DateTimeDomain(Application application, Map<String, Object> domainProperties, Task task )
+    /**
+     * @param application
+     * @param domainProperties
+     * @param task
+     */
+    public CreatedDateTimeDomain( Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
     }
 
     @Override
-    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+    public boolean hasInitialValue( Task task, AttributeDef attributeDef )
     {
-        if ( internalValue == null )
-            return super.convertToString( task, attributeDef, internalValue );
+        return true;
+    }
 
-        return defaultDateTimeFormatter.print( (DateTime) internalValue );
+    @Override
+    public void setInitialValue( AttributeInstance attributeInstance  )
+    {
+        attributeInstance.setValue( "NOW" );
     }
 }
