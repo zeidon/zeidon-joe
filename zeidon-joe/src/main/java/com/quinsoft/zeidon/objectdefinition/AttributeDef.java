@@ -80,7 +80,6 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private boolean      required;
     private boolean      debugChange;
     private Domain       domain;
-    private String       domainName;
     private EntityDef    hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
 
@@ -313,7 +312,6 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     AttributeDef setDomain( String domainName )
     {
         Application app = entityDef.getLodDef().getApplication();
-        this.domainName = domainName;
         domain = app.getDomain( domainName );
         return this;
     }
