@@ -655,7 +655,7 @@ aWidth     4.59
 aTextColor #ffffff
 aBackgroundColor #ffffff
 aBorderColor #ffffff
-aFontSize  16pt
+aFontSize  16
 aTextAlign center
 aDepth     3
 aFK_ID_LLD_BLOCK 598
@@ -976,7 +976,7 @@ aPF2ID_LLD_BLOCK 627
 
 eLLD_SpecialSectionAttrBlock 7
 aID        627
-aFontSize  8pt
+aFontSize  8
 aMarginTop 0.05
 
 eLLD_SpecialSectionAttribute 6
@@ -987,7 +987,7 @@ aPF2ID_LLD_BLOCK 628
 
 eLLD_SpecialSectionAttrBlock 7
 aID        628
-aFontSize  8pt
+aFontSize  8
 aMarginTop 0.05
 
 eLLD_Page  3

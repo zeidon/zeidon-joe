@@ -8562,7 +8562,7 @@
                     "selected" : true
                   },
                   "ID" : "627",
-                  "FontSize" : "8pt",
+                  "FontSize" : "8",
                   "MarginTop" : "0.05"
                 } ]
               }, {
@@ -8572,7 +8572,7 @@
                 "PF2ID_LLD_BLOCK" : "628",
                 "LLD_SpecialSectionAttrBlock" : [ {
                   "ID" : "628",
-                  "FontSize" : "8pt",
+                  "FontSize" : "8",
                   "MarginTop" : "0.05"
                 } ]
               }, {
@@ -8649,7 +8649,7 @@
                     "ID" : "657",
                     "TextColor" : "Red",
                     "FontFamily" : "serif",
-                    "FontSize" : "26pt",
+                    "FontSize" : "26",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
                   } ]
@@ -8675,7 +8675,7 @@
                     "ID" : "658",
                     "TextColor" : "Red",
                     "FontFamily" : "serif",
-                    "FontSize" : "20pt",
+                    "FontSize" : "20",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
                   } ]
@@ -8741,7 +8741,7 @@
                     "BorderStyle" : "dotted",
                     "BorderWidth" : "7.0",
                     "FontFamily" : "verdana",
-                    "FontSize" : "5pt",
+                    "FontSize" : "5",
                     "FontWeight" : "bold",
                     "MarginTop" : "1.0",
                     "MarginLeft" : "3.0",
@@ -8880,7 +8880,7 @@
                 "Left" : "0.05",
                 "Height" : "0.85",
                 "Width" : "4.59",
-                "FontSize" : "16pt",
+                "FontSize" : "16",
                 "TextAlign" : "center",
                 "Depth" : "3",
                 "wComputedTopPosition" : "0.93",
@@ -8892,7 +8892,7 @@
                   "PF2ID_LLD_BLOCK" : "652",
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "652",
-                    "FontSize" : "16pt",
+                    "FontSize" : "16",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
                   } ]
@@ -8903,7 +8903,7 @@
                   "PF2ID_LLD_BLOCK" : "653",
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "653",
-                    "FontSize" : "20pt",
+                    "FontSize" : "20",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
                   } ]
@@ -8914,7 +8914,7 @@
                   "PF2ID_LLD_BLOCK" : "654",
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "654",
-                    "FontSize" : "10pt",
+                    "FontSize" : "10",
                     "TextAlign" : "center"
                   } ]
                 } ]
@@ -9087,7 +9087,7 @@
                   "PF2ID_LLD_BLOCK" : "662",
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "662",
-                    "FontSize" : "9pt",
+                    "FontSize" : "9",
                     "MarginTop" : "0.01"
                   } ]
                 } ]

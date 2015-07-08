@@ -21,6 +21,9 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import java.util.ArrayList;
 
 // Just for temporary testing...
 //import com.jacob.com.*;
@@ -59,6 +62,17 @@ public class TestEpamms
 		VmlTester tester = new VmlTester( mSPLDef );
 		tester.ExecuteJOE_TestGetRecursiveSubEntities( mSPLDef );
       System.out.println("===== Finished ExecuteJOE_TestGetRecursiveSubEntities ========");
+	}
+
+   @Test
+	public void ExecuteJOE_TestCommitRecursiveSubEntities()
+	{
+	   View      mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteJOE_TestCommitRecursiveSubEntities( mSPLDef );
+      System.out.println("===== Finished ExecuteJOE_TestCommitRecursiveSubEntities ========");
 	}
 
    @Test
@@ -231,6 +245,17 @@ public class TestEpamms
       System.out.println("===== Finished ExecuteJOE_TestSubobjectCheckExistence ========");
 	}
 
+   @Test
+	public void ExecuteTestInsert()
+	{
+	   View      mSPLDef;
+
+		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( mSPLDef );
+		tester.ExecuteTestInsert( mSPLDef );
+      System.out.println("===== Finished ExecuteTestInsert ========");
+	}
+
 
 	private class VmlTester extends VmlObjectOperations
 	{
@@ -307,7 +332,43 @@ public class TestEpamms
          ec = mSPLDef.getCursor( "LLD_SpecialSectionAttrBlock" );
          cr = ec.setFirst();
          Assert.assertEquals( "LLD_SpecialSectionAttrBlock exists but is not found: ", CursorResult.SET, cr );
-     }
+      }
+
+      public void ExecuteJOE_TestCommitRecursiveSubEntities( View view ) {
+         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefScratch.json" ).activateFirst();
+      // mSPLDef.logObjectInstance();
+         displaySPLD( mSPLDef, "LLD_Page", "Activate from json file" );
+         mSPLDef.commit();
+
+         //:VIEW mSPLDef  BASED ON LOD  mSPLDef
+      // zVIEW    mSPLDef = new zVIEW( );
+         int      lTempInteger_0 = 0;
+         zVIEW    vTempViewVar_0 = new zVIEW( );
+
+         //:// Activate the mSPLDef object selected in mSubProd.
+         //:ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
+      // {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+      //     GetIntegerFromAttribute( mi_lTempInteger_0, lSPLDLST, "SubregPhysicalLabelDef", "ID" );
+      // lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+         lTempInteger_0 = 13;
+         o_fnLocalBuildQual_12( view, vTempViewVar_0, lTempInteger_0 );
+      // ActivateObjectInstance( mSPLDef, "mSPLDef", view, vTempViewVar_0, zSINGLE );
+         mSPLDef = view.activateObjectInstance( "mSPLDef", vTempViewVar_0.getView(), ActivateFlags.SINGLE );
+      // DropView( vTempViewVar_0 );
+         //:NAME VIEW mSPLDef "mSPLDef"
+         SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
+         displaySPLD( mSPLDef, "LLD_Page", "Activate from DB" );
+         EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
+         CursorResult cr = ec.setFirstWithinOi( "Tag", "t_107" );
+         Assert.assertEquals( "LLD_Block t_107 exists but is not found: ", CursorResult.SET, cr );
+         EntityInstance ei = ec.getEntityInstance();
+         EntityInstance eip = ei.getParent();
+         String tag = eip.getAttribute( "Tag" ).getString();
+         TraceLineS( "Block t_107's parent tag: ", tag );
+         Assert.assertEquals( "Block t_107's parent tag: ", "t_106", tag );
+         cr = ec.setFirstWithinOi( "Tag", "t_106" );
+         ec.deleteEntity();
+      }
 
       public void ExecuteJOE_TestGetRecursiveDelete( View view ) {
 
@@ -1258,5 +1319,52 @@ public class TestEpamms
          }
 
       }
+
+      public int
+      ExecuteTestInsert( View ViewToWindow ) {
+         ArrayList<String> listTags = new ArrayList<>();
+         insert( listTags, "a" );
+         insert( listTags, "b" );
+         insert( listTags, "d" );
+         insert( listTags, "f" );
+         insert( listTags, "d" );
+         insert( listTags, "d" );
+         insert( listTags, "e" );
+         int pos = insert( listTags, "c" );
+         Assert.assertEquals( "Unexpected position: ", 2,  pos );
+         return 0;
+      }
+
+      private int insert( ArrayList <String>tagList, String tag ) {
+         String newTag = tag;
+         int lower = 0;
+         int upper = tagList.size();
+         int mid = 0;
+         int k = 0;
+         int rc;
+         while ( lower <= upper ) {
+            mid = (lower + upper) / 2;
+            if ( mid < 0 || mid >= tagList.size() ) {
+               break;
+            }
+            rc = newTag.compareTo( tagList.get( mid ) );
+            if ( rc > 0 ) {
+               lower = mid + 1;
+            } else if ( rc < 0 ) {
+               upper = mid - 1;
+            } else {
+               // found a dup ... add an integer suffix until it is no longer a dup
+               k++;
+               newTag = tag + k;
+               lower = -1;
+               upper = tagList.size();
+            }
+         }
+         mid = min( max( 0, lower ), tagList.size() );
+         tagList.add( mid, newTag );
+         return mid;
+      }
+
    }
+
 }

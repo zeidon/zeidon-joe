@@ -330,10 +330,24 @@ public class ZDRVROPR extends VmlOperation
       return 0;
    }
 
-   public int ConvertXML_ToPDF( String directory, String application, String label )
+/*
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
+*/
+/*..*/
+/*
+DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
+Configuration cfg = cfgBuilder.buildFromFile(new File("C:/Temp/mycfg.xml"));
+fopFactory.setUserConfig(cfg);
+*/
+/* ..or.. */
+/*
+fopFactory.setUserConfig(new File("C:/Temp/mycfg.xml"));
+*/
+
+   public int ConvertXML_ToPDF( String directory, String application, String label, String fopConfig )
    {
-      // Examples can be found...
-      //http://xmlgraphics.apache.org/fop/1.0/embedding.html#examples
+      label = RemoveInvalidCharsFromFilename( label );
       String pdf = label + ".pdf";
       String root = directory + application;
       String xml = root + "xml/";
@@ -352,7 +366,11 @@ public class ZDRVROPR extends VmlOperation
          // Step 1: Construct a FopFactory
          // (reuse if you plan to render multiple documents!)
          FopFactory fopFactory = FopFactory.newInstance();
-
+         if ( fopConfig != null && fopConfig.equals( "" ) == false )
+         {
+         // fopFactory.setUserConfig( new File( "C:/lplr/epamms/fop/conf/fop.xconf" ) );
+            fopFactory.setUserConfig( new File( fopConfig ) );
+         }
          // Step 2: Set up output stream.
          // Note: Using BufferedOutputStream for performance reasons (helpful with FileOutputStreams).
          //OutputStream out = new BufferedOutputStream(new FileOutputStream(new File("C:/temp/name.pdf")));
