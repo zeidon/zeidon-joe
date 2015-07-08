@@ -1134,7 +1134,15 @@ public abstract class VmlOperation
     */
    public static final void SysMessageBox( View view, String msgTitle, String msgText, int beep )
    {
-      JoeUtils.sysMessageBox( msgTitle, msgText );
+      String inServer = "";
+      if ( isValid( view ) ) {
+         inServer = view.readZeidonConfig( view.getApplication().getName(), "InServer" );
+      }
+      if ( inServer.equals( "Y" ) ) {
+         view.log( ).info( msgTitle + " " + msgText );
+      } else {
+         JoeUtils.sysMessageBox( msgTitle, msgText );
+      }
    }
 
    public static final void SysMessageBox( String msgTitle, String msgText )

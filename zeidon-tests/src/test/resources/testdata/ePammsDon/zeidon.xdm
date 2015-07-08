@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 04/24/15   18:19:37 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 05/20/15   12:47:37 1.0a2    
 eDomainGroup 1
 aName      ePamms
 
@@ -419,6 +419,95 @@ eTableEntry 4
 aZKey      1670199
 aExternalValue Unknown
 aInternalValue U
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110006612
+aName      CompositeSectionType
+aDesc      Precautionary, Environmental/Physical Hazard, First Aid, Ingredients, Storage/Disposal, Directions For Use, Marketing (P,E,F,I,S,D,M)
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110006613
+aName      CompositeSectionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110006615
+aExternalValue P
+aInternalValue P
+
+eTableEntry 4
+aZKey      110006614
+aExternalValue E
+aInternalValue E
+
+eTableEntry 4
+aZKey      110006616
+aExternalValue F
+aInternalValue F
+
+eTableEntry 4
+aZKey      110006625
+aExternalValue I
+aInternalValue I
+
+eTableEntry 4
+aZKey      110006626
+aExternalValue S
+aInternalValue S
+
+eTableEntry 4
+aZKey      110006627
+aExternalValue D
+aInternalValue D
+
+eTableEntry 4
+aZKey      110006628
+aExternalValue M
+aInternalValue M
+
+eContext   3
+aZKey      110006617
+aName      FullType
+
+eTableEntry 4
+aZKey      110006618
+aExternalValue Precautionary
+aInternalValue P
+
+eTableEntry 4
+aZKey      110006619
+aExternalValue Environmental
+aInternalValue E
+
+eTableEntry 4
+aZKey      110006620
+aExternalValue First Aid
+aInternalValue F
+
+eTableEntry 4
+aZKey      110006621
+aExternalValue Ingredients
+aInternalValue I
+
+eTableEntry 4
+aZKey      110006622
+aExternalValue Storage/Disposal
+aInternalValue S
+
+eTableEntry 4
+aZKey      110006623
+aExternalValue Directions For Use
+aInternalValue D
+
+eTableEntry 4
+aZKey      110006624
+aExternalValue Marketing
+aInternalValue M
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2241,97 +2330,194 @@ aName      FontSize
 aIsDefault Y
 
 eTableEntry 4
-aZKey      120178057
-
-eTableEntry 4
 aZKey      4322658
-aExternalValue 3pt
-aInternalValue 3pt
+aExternalValue 3
+aInternalValue 3
 
 eTableEntry 4
 aZKey      4322659
-aExternalValue 4pt
-aInternalValue 4pt
+aExternalValue 4
+aInternalValue 4
 
 eTableEntry 4
 aZKey      4322660
-aExternalValue 5pt
-aInternalValue 5pt
+aExternalValue 5
+aInternalValue 5
 
 eTableEntry 4
 aZKey      4322661
-aExternalValue 6pt
-aInternalValue 6pt
+aExternalValue 6
+aInternalValue 6
 
 eTableEntry 4
 aZKey      4322662
-aExternalValue 7pt
-aInternalValue 7pt
+aExternalValue 7
+aInternalValue 7
 
 eTableEntry 4
 aZKey      4322663
-aExternalValue 8pt
-aInternalValue 8pt
+aExternalValue 8
+aInternalValue 8
 
 eTableEntry 4
 aZKey      4322664
-aExternalValue 9pt
-aInternalValue 9pt
+aExternalValue 9
+aInternalValue 9
 
 eTableEntry 4
 aZKey      4322665
-aExternalValue 10pt
-aInternalValue 10pt
+aExternalValue 10
+aInternalValue 10
 
 eTableEntry 4
 aZKey      4322666
-aExternalValue 11pt
-aInternalValue 11pt
+aExternalValue 11
+aInternalValue 11
 
 eTableEntry 4
 aZKey      4322667
-aExternalValue 12pt
-aInternalValue 12pt
+aExternalValue 12
+aInternalValue 12
 
 eTableEntry 4
 aZKey      4322668
-aExternalValue 13pt
-aInternalValue 13pt
+aExternalValue 13
+aInternalValue 13
 
 eTableEntry 4
 aZKey      4322669
-aExternalValue 14pt
-aInternalValue 14pt
+aExternalValue 14
+aInternalValue 14
+
+eTableEntry 4
+aZKey      110006279
+aExternalValue 15
+aInternalValue 15
 
 eTableEntry 4
 aZKey      4322670
-aExternalValue 16pt
-aInternalValue 16pt
+aExternalValue 16
+aInternalValue 16
+
+eTableEntry 4
+aZKey      110006280
+aExternalValue 17
+aInternalValue 17
 
 eTableEntry 4
 aZKey      120178052
-aExternalValue 18pt
-aInternalValue 18pt
+aExternalValue 18
+aInternalValue 18
+
+eTableEntry 4
+aZKey      110006281
+aExternalValue 19
+aInternalValue 19
 
 eTableEntry 4
 aZKey      120178053
-aExternalValue 20pt
-aInternalValue 20pt
+aExternalValue 20
+aInternalValue 20
+
+eTableEntry 4
+aZKey      110006282
+aExternalValue 21
+aInternalValue 21
 
 eTableEntry 4
 aZKey      120178054
-aExternalValue 22pt
-aInternalValue 22pt
+aExternalValue 22
+aInternalValue 22
+
+eTableEntry 4
+aZKey      110006283
+aExternalValue 23
+aInternalValue 23
 
 eTableEntry 4
 aZKey      120178055
-aExternalValue 24pt
-aInternalValue 24pt
+aExternalValue 24
+aInternalValue 24
+
+eTableEntry 4
+aZKey      110006284
+aExternalValue 25
+aInternalValue 25
 
 eTableEntry 4
 aZKey      120178056
-aExternalValue 26pt
-aInternalValue 26pt
+aExternalValue 26
+aInternalValue 26
+
+eTableEntry 4
+aZKey      110006264
+aExternalValue 27
+aInternalValue 27
+
+eTableEntry 4
+aZKey      110006265
+aExternalValue 28
+aInternalValue 28
+
+eTableEntry 4
+aZKey      110006267
+aExternalValue 29
+aInternalValue 29
+
+eTableEntry 4
+aZKey      110006268
+aExternalValue 30
+aInternalValue 30
+
+eTableEntry 4
+aZKey      110006269
+aExternalValue 31
+aInternalValue 31
+
+eTableEntry 4
+aZKey      110006270
+aExternalValue 32
+aInternalValue 32
+
+eTableEntry 4
+aZKey      110006271
+aExternalValue 33
+aInternalValue 33
+
+eTableEntry 4
+aZKey      110006272
+aExternalValue 34
+aInternalValue 34
+
+eTableEntry 4
+aZKey      110006273
+aExternalValue 35
+aInternalValue 35
+
+eTableEntry 4
+aZKey      110006274
+aExternalValue 36
+aInternalValue 36
+
+eTableEntry 4
+aZKey      110006275
+aExternalValue 37
+aInternalValue 37
+
+eTableEntry 4
+aZKey      110006276
+aExternalValue 38
+aInternalValue 38
+
+eTableEntry 4
+aZKey      110006277
+aExternalValue 39
+aInternalValue 39
+
+eTableEntry 4
+aZKey      110006278
+aExternalValue 40
+aInternalValue 40
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2427,9 +2613,6 @@ aZKey      4321560
 aName      FullGeneralSectionType
 
 eTableEntry 4
-aZKey      4321564
-
-eTableEntry 4
 aZKey      4321561
 aExternalValue Precautionary
 aInternalValue P
@@ -2448,9 +2631,6 @@ eContext   3
 aZKey      69055598
 aName      GeneralSectionType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      4321565
 
 eTableEntry 4
 aZKey      69055599
@@ -2705,7 +2885,7 @@ aName      LLD_SectionType
 aDesc      Template Section Types are usually the same as regular Section Types.
 aDomainType T
 aDataType  S
-aMaxStringLth 20
+aMaxStringLth 32
 aContextRestriction N
 
 eContext   3
@@ -2792,6 +2972,51 @@ eTableEntry 4
 aZKey      110006004
 aExternalValue Product Specific
 aInternalValue ProductSpecific
+
+eTableEntry 4
+aZKey      110006307
+aExternalValue General
+aInternalValue General
+
+eTableEntry 4
+aZKey      110006308
+aExternalValue Statement
+aInternalValue Statement
+
+eTableEntry 4
+aZKey      110006309
+aExternalValue Title
+aInternalValue Title
+
+eTableEntry 4
+aZKey      110006310
+aExternalValue MarketingUsage
+aInternalValue MarketingUsage
+
+eTableEntry 4
+aZKey      110006311
+aExternalValue Signal Word
+aInternalValue Signal Word
+
+eTableEntry 4
+aZKey      110006312
+aExternalValue Child Warning
+aInternalValue Child Warning
+
+eTableEntry 4
+aZKey      110006313
+aExternalValue Precautionary Stmt
+aInternalValue Precautionary Stmt
+
+eTableEntry 4
+aZKey      110006314
+aExternalValue Location
+aInternalValue Location
+
+eTableEntry 4
+aZKey      110006587
+aExternalValue Section
+aInternalValue Section
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
