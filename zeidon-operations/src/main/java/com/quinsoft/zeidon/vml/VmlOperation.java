@@ -921,11 +921,11 @@ public abstract class VmlOperation
       if ( session != null )
       {
          session.setAttribute( "ZeidonAction", strActionToProcess );
-         task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment
+         task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment?
       }
       else
       {
-         task.log().debug( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment
+         task.log().debug( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment?
       }
    } // set breakpoint here
 
@@ -2056,7 +2056,6 @@ public abstract class VmlOperation
       return sb.length( );
    }
 
-   
    protected static final  String zstrncpyoffset( String s, String s2, int nLth, int nOffset )
    {
       if ( s2.length() < nOffset + nLth )
@@ -8589,6 +8588,31 @@ public abstract class VmlOperation
          // done with pParseHTML
          return strPage;
       }
+   }
+
+   // Valid characters: Letters (a-z A-Z)  Digits (0-9)  Underscore (_)   Hyphen (-)   Space   Dot (.)
+   public String
+   RemoveInvalidCharsFromFilename( String in ) {
+      StringBuilder sbFileName = new StringBuilder( in );
+      RemoveInvalidCharsFromFilename( sbFileName );
+      return sbFileName.toString();
+   }
+
+   // Valid characters: Letters (a-z A-Z)  Digits (0-9)  Underscore (_)   Hyphen (-)   Space   Dot (.)
+   public int
+   RemoveInvalidCharsFromFilename( StringBuilder sbFileName ) {
+      String in = sbFileName.toString();
+      char ch;
+      int k;
+      int pos = 0;
+      for ( k = 0; k < in.length(); k++ ) {
+         ch = in.charAt( k );
+         if ( (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_' || ch == '-' || ch == '.' || ch == ' ' ) {
+            sbFileName.setCharAt( pos++, ch );
+         }
+      }
+      sbFileName.setLength( pos );
+      return sbFileName.length();
    }
 
    public int
