@@ -82,7 +82,7 @@ public class TestEpamms
 
 		mSPLDef = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( mSPLDef );
-		tester.ExecuteJOE_TestMismatch( mSPLDef );
+	   tester.ExecuteJOE_TestMismatch( mSPLDef );
       System.out.println("===== Finished ExecuteJOE_TestMismatch ========");
 	}
 
@@ -232,7 +232,7 @@ public class TestEpamms
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_TemporalDeleteError( testview );
-       System.out.println("===== Finished ExecuteJOE_TemporalDeleteError ========");
+      System.out.println("===== Finished ExecuteJOE_TemporalDeleteError ========");
 	}
 
 	@Test
@@ -241,7 +241,7 @@ public class TestEpamms
 	   View         testview;
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
-		tester.ExecuteJOE_TestSubobjectCheckExistence( testview );
+	   tester.ExecuteJOE_TestSubobjectCheckExistence( testview );
       System.out.println("===== Finished ExecuteJOE_TestSubobjectCheckExistence ========");
 	}
 
@@ -335,39 +335,37 @@ public class TestEpamms
       }
 
       public void ExecuteJOE_TestCommitRecursiveSubEntities( View view ) {
-         View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefScratch.json" ).activateFirst();
-      // mSPLDef.logObjectInstance();
+      /* View    mSPLDef = view.deserializeOi().setLodDef( "mSPLDef" ).fromApplicationDir(  "mSPLDefScratch.json" ).activateFirst();
+         mSPLDef.logObjectInstance();
          displaySPLD( mSPLDef, "LLD_Page", "Activate from json file" );
          mSPLDef.commit();
+      */
 
-         //:VIEW mSPLDef  BASED ON LOD  mSPLDef
-      // zVIEW    mSPLDef = new zVIEW( );
          int      lTempInteger_0 = 0;
          zVIEW    vTempViewVar_0 = new zVIEW( );
-
          //:// Activate the mSPLDef object selected in mSubProd.
          //:ACTIVATE mSPLDef WHERE mSPLDef.SubregPhysicalLabelDef.ID = lSPLDLST.SubregPhysicalLabelDef.ID
       // {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
       //     GetIntegerFromAttribute( mi_lTempInteger_0, lSPLDLST, "SubregPhysicalLabelDef", "ID" );
       // lTempInteger_0 = mi_lTempInteger_0.intValue( );}
-         lTempInteger_0 = 13;
+         lTempInteger_0 = 5;
          o_fnLocalBuildQual_12( view, vTempViewVar_0, lTempInteger_0 );
       // ActivateObjectInstance( mSPLDef, "mSPLDef", view, vTempViewVar_0, zSINGLE );
-         mSPLDef = view.activateObjectInstance( "mSPLDef", vTempViewVar_0.getView(), ActivateFlags.SINGLE );
+         View mSPLDef = view.activateObjectInstance( "mSPLDef", vTempViewVar_0.getView(), ActivateFlags.SINGLE );
       // DropView( vTempViewVar_0 );
          //:NAME VIEW mSPLDef "mSPLDef"
          SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
          displaySPLD( mSPLDef, "LLD_Page", "Activate from DB" );
          EntityCursor ec = mSPLDef.getCursor( "LLD_Block" );
-         CursorResult cr = ec.setFirstWithinOi( "Tag", "t_107" );
-         Assert.assertEquals( "LLD_Block t_107 exists but is not found: ", CursorResult.SET, cr );
+         CursorResult cr = ec.setFirstWithinOi( "Tag", "Tag600" );
+         Assert.assertEquals( "LLD_Block Tag600 exists but is not found: ", CursorResult.SET, cr );
          EntityInstance ei = ec.getEntityInstance();
          EntityInstance eip = ei.getParent();
          String tag = eip.getAttribute( "Tag" ).getString();
-         TraceLineS( "Block t_107's parent tag: ", tag );
-         Assert.assertEquals( "Block t_107's parent tag: ", "t_106", tag );
-         cr = ec.setFirstWithinOi( "Tag", "t_106" );
-         ec.deleteEntity();
+         TraceLineS( "Block Tag600's parent tag: ", tag );
+         Assert.assertEquals( "Block Tag600's parent tag: ", "Tag598", tag );
+         cr = ec.setFirstWithinOi( "Tag", "Tag598" );
+      // ec.deleteEntity();
       }
 
       public void ExecuteJOE_TestGetRecursiveDelete( View view ) {
@@ -390,7 +388,7 @@ public class TestEpamms
          //:NAME VIEW mSPLDef "mSPLDef"
          SetNameForView( mSPLDef, "mSPLDef", null, zLEVEL_TASK );
          EntityCursor ec = mSPLDef.getCursor( "SubregPhysicalLabelDef" );
-         ec.deleteEntity();
+      // ec.deleteEntity();
          mSPLDef.commit();
      }
 
@@ -919,7 +917,6 @@ public class TestEpamms
 		// END
 		}
 
-
 		public int
 		ExecuteJOE_TestSubobjectCheckExistence( View     ViewToWindow )
 		{
@@ -927,8 +924,7 @@ public class TestEpamms
 			   int      RESULT = 0;
 			   int      lTempInteger_0 = 0;
 
-
-			   //://ACTIVATE mSPLDef SingleForUpdate WHERE mSPLDef.SubregPhysicalLabelDef.ID = 5
+            //://ACTIVATE mSPLDef SingleForUpdate WHERE mSPLDef.SubregPhysicalLabelDef.ID = 5
 			   //://NAME VIEW mSPLDef "mSPLDef"
 			   //://CommitOI_ToFile( mSPLDef, "c:\temp\SPLD.por", zASCII )
 			   //:ActivateOI_FromFile( mSPLDef, "mSPLDef", ViewToWindow, "c:\temp\SPLD.por", zSINGLE )
@@ -956,7 +952,6 @@ public class TestEpamms
 
 		   return 0;
 		}
-
 
 		public int
 		ExecuteJOE_TestSubobjectCreateView( View     ViewToWindow )
@@ -1248,7 +1243,7 @@ public class TestEpamms
          DropView( vTempViewVar_0 );
          SetNameForView( mSubreg, "mSubreg", null, zLEVEL_TASK );
 
-         o_fnLocalBuildQual_1( view, vTempViewVar_0, 10 /*lTempInteger_0*/ );
+         o_fnLocalBuildQual_1( view, vTempViewVar_0, 2 /*lTempInteger_0*/ );
          ActivateObjectInstance( mSubProd, "mSubProd", view, vTempViewVar_0, zSINGLE );
          DropView( vTempViewVar_0 );
          SetNameForView( mSubProd, "mSubProd", null, zLEVEL_TASK );
@@ -1263,46 +1258,35 @@ public class TestEpamms
          DropView( vTempViewVar_0 );
          SetNameForView( mMasLC, "mMasLC", null, zLEVEL_TASK );
          IncludeSubobjectFromSubobject( mSubLC, "MasterLabelContent", mMasLC, "MasterLabelContent", zPOS_AFTER );
-
          {
             mMasLC_Object m_mMasLC_Object = new mMasLC_Object( mMasLC );
+            mSubLC_Object m_mSubLC_Object = new mSubLC_Object( mSubLC );
             m_mMasLC_Object.omMasLC_BuildCompositeEntries( mMasLC );
-         }
 
-         //:// Initialize the data in the SLC from the MLC.
-         {
-            mSubLC_Object m_mSubLC_Object = new mSubLC_Object( mSubLC );
+            //:// Initialize the data in the SLC from the MLC.
             m_mSubLC_Object.omSubLC_BuildSLC_FromMLC( mSubLC, mMasLC );
-         }
 
-         //:// Build SLC Components subobject.
-         {
-            mSubLC_Object m_mSubLC_Object = new mSubLC_Object( mSubLC );
+            //:// Build SLC Components subobject.
             m_mSubLC_Object.omSubLC_BuildCompositeEntries( mSubLC );
-         }
 
-         int RESULT = SetCursorFirstEntity( mSubLC, "S_Usage", "" );
-         while ( RESULT > zCURSOR_UNCHANGED )
-         { 
-            //:IF mSubLC.M_Usage DOES NOT EXIST
-            RESULT = CheckExistenceOfEntity( mSubLC, "M_Usage" );
-            if ( RESULT != 0 )
-            { 
-               //:DELETE ENTITY mSubLC.S_Usage NONE 
-               DeleteEntity( mSubLC, "S_Usage", zREPOS_NONE );
-            } 
+            int RESULT = SetCursorFirstEntity( mSubLC, "S_Usage", "" );
+            while ( RESULT > zCURSOR_UNCHANGED )
+            {
+               //:IF mSubLC.M_Usage DOES NOT EXIST
+               RESULT = CheckExistenceOfEntity( mSubLC, "M_Usage" );
+               if ( RESULT != 0 )
+               { 
+                  //:DELETE ENTITY mSubLC.S_Usage NONE 
+                  DeleteEntity( mSubLC, "S_Usage", zREPOS_NONE );
+               } 
+               RESULT = SetCursorNextEntity( mSubLC, "S_Usage", "" );
+            }
 
-            RESULT = SetCursorNextEntity( mSubLC, "S_Usage", "" );
-         } 
-
-         //:// Go to select any mMLC entries that are already in the mSLC.
-         //:SetMLC_SelectedFlags( mMasLC, mSubLC )
-         {
-            mMasLC_Object m_mMasLC_Object = new mMasLC_Object( mMasLC );
+            //:// Go to select any mMLC entries that are already in the mSLC.
+            //:SetMLC_SelectedFlags( mMasLC, mSubLC )
             m_mMasLC_Object.omMasLC_SetMLC_SelectedFlags( mMasLC, mSubLC );
           // m_mMasLC_Object = null;  // permit gc  (unnecessary)
          }
-
 
       // if ( CompareAttributeToString( mSubLC, "SubregLabelContent", "Description", "" ) == 0 || CompareAttributeToString( mSubLC, "SubregLabelContent", "Version", "" ) == 0 )
          SetAttributeFromString( mSubLC, "SubregLabelContent", "Description", "DeleteThisOne" );
@@ -1317,7 +1301,6 @@ public class TestEpamms
             CursorResult csrRC = vGridSubregProducts2.cursor( "SubregLabelContent" ).setFirst(  );
             Assert.assertEquals( "Unexpected RC", CursorResult.SET,  csrRC );
          }
-
       }
 
       public int
