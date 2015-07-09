@@ -313,6 +313,7 @@ class EntityInstanceImpl implements EntityInstance
             if ( ! StringUtils.isBlank( attributeDef.getInitialValue() ) )
                 setAttribute( attributeDef, attributeDef.getInitialValue(), null, true );
             else
+            if ( ! attributeDef.isHidden() )
             {
                 Domain domain = attributeDef.getDomain();
                 if ( domain.hasInitialValue( getTask(), attributeDef ) )

@@ -37,7 +37,7 @@ class EntityCursor( private[this]  val view: View,
             with Iterable[EntityInstance]
 {
     /**
-      * Returns the underlying Java EntityCursor.
+      * Returns the underlying Java EntityInstance.
       */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
         val instance = jentityCursor.getEntityInstance()
@@ -47,6 +47,11 @@ class EntityCursor( private[this]  val view: View,
         instance
     }
 
+    /**
+     * Returns the Scala entity instance for the current cursor.
+     */
+    def instance = new EntityInstance( getEntityInstance() )
+    
     /** Creates a new entity instance.
       *
       * Creates a new entity instance.  The position of the new instance is determined
@@ -60,6 +65,24 @@ class EntityCursor( private[this]  val view: View,
         this
     }
 
+    def createTemporalEntity( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
+        jentityCursor.createTemporalEntity( position )
+        this
+    }
+    
+    /**
+     * Accept either a temporal entity or a temporal subobject.
+     */
+    def accept() : EntityCursor = {
+        jentityCursor.acceptSubobject()
+        this
+    }
+    
+    def cancel() : EntityCursor = {
+        jentityCursor.cancelSubobject()
+        this
+    }
+    
     /**
       *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
       */
@@ -522,6 +545,11 @@ class EntityCursor( private[this]  val view: View,
         new EntityInstanceIterator( jentityCursor.eachEntity( scopingEntity.entityDef ) ).setCursor( this )
     }
 
+    def under( entitySelector: (EntitySelector) => EntityDef ) = {
+        val scopingEntity = entitySelector( new EntitySelector( view.lodDef ) )
+        new EntityInstanceIterator( jentityCursor.eachEntity( scopingEntity ) ).setCursor( this )
+    }
+
     /**
      * Returns an iterator that will iterate through all the descendants of the current entity.
      */
@@ -610,6 +638,6 @@ object EntityCursor {
     /**
      * Convert a Scala EntityCursor to a Scala EntityInstance.
      */
-    implicit def cursor2instance( cursor: EntityCursor ) = new EntityInstance( cursor.getEntityInstance )
+    implicit def cursor2instance( cursor: EntityCursor ) = cursor.instance
     implicit def cursorResult2boolean( result: CursorResult ) = result.jcursorResult.isSet()
 }

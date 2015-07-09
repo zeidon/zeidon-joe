@@ -139,15 +139,16 @@ public class IntegerDomain extends AbstractNumericDomain
         	}
         	catch( Exception e )
         	{
-                throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
-                        externalValue.getClass().getName() );
+                throw new InvalidAttributeValueException( attributeDef, externalValue,
+                                                          "Can't convert '%s' (class: %s) to Integer",
+                                                          externalValue, externalValue.getClass().getName() );
         	}
 
             return check( attributeDef, num );
         }
 
-        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
-                                                  externalValue.getClass().getName() );
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' (class: %s) to Integer",
+                                                  externalValue, externalValue.getClass().getName() );
     }
 
     @Override
