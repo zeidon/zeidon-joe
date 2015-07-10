@@ -161,7 +161,7 @@
     <!-- We can only run Zencas tests if we have the Sqlite test DB on the local system. We'll default 
         to excluding them. Later we'll run them if we have the DB. -->
     <properties>
-        <exclude.zencas.tests>%regex[(.*TestZencas.*)|(.*ViewTest.*)]</exclude.zencas.tests>
+        <exclude.zencas.tests>%regex[(.*TestZencas.*)|(.*ViewTest.*)|(.*TestSWAU.*)|(.*TestLazyLoad.*)]</exclude.zencas.tests>
     </properties>
 
     <profiles>

@@ -8648,7 +8648,7 @@
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "657",
                     "TextColor" : "Red",
-                    "FontFamily" : "serif",
+                    "FontFamily" : "Serif",
                     "FontSize" : "26",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
@@ -8674,7 +8674,7 @@
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "658",
                     "TextColor" : "Red",
-                    "FontFamily" : "serif",
+                    "FontFamily" : "Serif",
                     "FontSize" : "20",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
@@ -8739,9 +8739,9 @@
                     "TextColor" : "Red",
                     "BorderColor" : "Blue",
                     "BorderStyle" : "dotted",
-                    "BorderWidth" : "7.0",
-                    "FontFamily" : "verdana",
-                    "FontSize" : "5",
+                    "BorderWidth" : "7",
+                    "FontFamily" : "Verdana",
+                    "FontSize" : "6",
                     "FontWeight" : "bold",
                     "MarginTop" : "1.0",
                     "MarginLeft" : "3.0",
@@ -8779,7 +8779,7 @@
                   "ID" : "624",
                   "BorderColor" : "Red",
                   "BorderStyle" : "solid",
-                  "BorderWidth" : "2.0"
+                  "BorderWidth" : "2"
                 } ]
               }, {
                 "ID" : "249",
@@ -9003,7 +9003,7 @@
                 "LLD_SpecialSectionAttrBlock" : [ {
                   "ID" : "603",
                   "BorderStyle" : "solid",
-                  "BorderWidth" : "1.0"
+                  "BorderWidth" : "1"
                 } ]
               }, {
                 "ID" : "252",

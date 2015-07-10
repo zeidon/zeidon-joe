@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 05/20/15   12:47:37 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 06/09/15   11:01:22 1.0a2    
 eDomainGroup 1
 aName      ePamms
 
@@ -109,6 +109,35 @@ eContext   3
 aZKey      68567481
 aName      BLOB
 aIsDefault Y
+
+eDomain    2
+aZKey      110226099
+aName      InsertTextKeywordType
+aDomainType T
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110226100
+aName      InsertTextKeywordType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110226101
+aExternalValue All Optional
+aInternalValue A
+
+eTableEntry 4
+aZKey      110226102
+aExternalValue Only One Allowed
+aInternalValue O
+
+eTableEntry 4
+aZKey      110226103
+aExternalValue At Least One Req'd
+aInternalValue R
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -441,14 +470,19 @@ aExternalValue P
 aInternalValue P
 
 eTableEntry 4
+aZKey      110006616
+aExternalValue F
+aInternalValue F
+
+eTableEntry 4
 aZKey      110006614
 aExternalValue E
 aInternalValue E
 
 eTableEntry 4
-aZKey      110006616
-aExternalValue F
-aInternalValue F
+aZKey      110006781
+aExternalValue C
+aInternalValue C
 
 eTableEntry 4
 aZKey      110006625
@@ -480,14 +514,19 @@ aExternalValue Precautionary
 aInternalValue P
 
 eTableEntry 4
+aZKey      110006620
+aExternalValue First Aid
+aInternalValue F
+
+eTableEntry 4
 aZKey      110006619
 aExternalValue Environmental
 aInternalValue E
 
 eTableEntry 4
-aZKey      110006620
-aExternalValue First Aid
-aInternalValue F
+aZKey      110006782
+aExternalValue Physical/Chemical
+aInternalValue C
 
 eTableEntry 4
 aZKey      110006621
@@ -511,45 +550,53 @@ aInternalValue M
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      2838041
-aName      ContainerVolume
+aZKey      110059061
+aName      ContainerVolumeEnvironmentHazard
+aDesc      Environmental split <5 or >=5
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110059062
+aName      ContainerVolumeEnvironmentHazard
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110059063
+aExternalValue < 5 gallon
+aInternalValue <5
+
+eTableEntry 4
+aZKey      110059064
+aExternalValue >= 5 gallon
+aInternalValue >=5
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110059057
+aName      ContainerVolumeStorageDisposal
+aDesc      Storage/Disposal split <=1 or >1
 aDomainType T
 aDataType  S
 aMaxStringLth 3
 aContextRestriction N
 
 eContext   3
-aZKey      2838042
-aName      ContainerVolume
+aZKey      110059058
+aName      ContainerVolumeStorageDisposal
 aIsDefault Y
 
 eTableEntry 4
-aZKey      120260123
+aZKey      110059059
+aExternalValue <= 1 gallon
+aInternalValue <=1
 
 eTableEntry 4
-aZKey      2844697
-aExternalValue 1 gallon
-aInternalValue 1
-
-eTableEntry 4
-aZKey      120260120
-aExternalValue 2 gallon
-aInternalValue 2
-
-eTableEntry 4
-aZKey      2844698
-aExternalValue 5 gallon
-aInternalValue 5
-
-eTableEntry 4
-aZKey      120260121
-aExternalValue 10 gallon
-aInternalValue 10
-
-eTableEntry 4
-aZKey      120260122
-aExternalValue 15 gallon
-aInternalValue 15
+aZKey      110059060
+aExternalValue > 1 gallon
+aInternalValue >1
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2303,17 +2350,22 @@ aIsDefault Y
 eTableEntry 4
 aZKey      4322646
 aExternalValue Arial
-aInternalValue arial
+aInternalValue Arial
+
+eTableEntry 4
+aZKey      110006764
+aExternalValue Comic Sans MS Bold
+aInternalValue Comic Sans MS Bold
 
 eTableEntry 4
 aZKey      4322647
 aExternalValue Verdana
-aInternalValue verdana
+aInternalValue Verdana
 
 eTableEntry 4
 aZKey      4322648
 aExternalValue Serif
-aInternalValue serif
+aInternalValue Serif
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2328,21 +2380,6 @@ eContext   3
 aZKey      4322657
 aName      FontSize
 aIsDefault Y
-
-eTableEntry 4
-aZKey      4322658
-aExternalValue 3
-aInternalValue 3
-
-eTableEntry 4
-aZKey      4322659
-aExternalValue 4
-aInternalValue 4
-
-eTableEntry 4
-aZKey      4322660
-aExternalValue 5
-aInternalValue 5
 
 eTableEntry 4
 aZKey      4322661
@@ -2618,14 +2655,19 @@ aExternalValue Precautionary
 aInternalValue P
 
 eTableEntry 4
-aZKey      4321562
-aExternalValue Physical Hazard
-aInternalValue E
-
-eTableEntry 4
 aZKey      4321563
 aExternalValue FirstAid
 aInternalValue F
+
+eTableEntry 4
+aZKey      4321562
+aExternalValue Environmental Hazard
+aInternalValue E
+
+eTableEntry 4
+aZKey      110030907
+aExternalValue Physical/Chemical Hazard
+aInternalValue C
 
 eContext   3
 aZKey      69055598
@@ -2638,14 +2680,19 @@ aExternalValue P
 aInternalValue P
 
 eTableEntry 4
+aZKey      69055601
+aExternalValue F
+aInternalValue F
+
+eTableEntry 4
 aZKey      69055600
 aExternalValue E
 aInternalValue E
 
 eTableEntry 4
-aZKey      69055601
-aExternalValue F
-aInternalValue F
+aZKey      110030906
+aExternalValue C
+aInternalValue C
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2904,8 +2951,13 @@ aExternalValue First Aid
 aInternalValue FirstAid
 
 eTableEntry 4
+aZKey      69081355
+aExternalValue Human Hazard
+aInternalValue HumanHazard
+
+eTableEntry 4
 aZKey      69085283
-aExternalValue Hazards
+aExternalValue Environmental Hazard
 aInternalValue Hazards
 
 eTableEntry 4
@@ -2937,11 +2989,6 @@ eTableEntry 4
 aZKey      69081354
 aExternalValue Marketing
 aInternalValue Marketing
-
-eTableEntry 4
-aZKey      69081355
-aExternalValue Human Hazard
-aInternalValue HumanHazard
 
 eTableEntry 4
 aZKey      69765626
@@ -4058,6 +4105,11 @@ eTableEntry 4
 aZKey      120161760
 aExternalValue Center
 aInternalValue center
+
+eTableEntry 4
+aZKey      110006665
+aExternalValue Justify
+aInternalValue justify
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DateDomain

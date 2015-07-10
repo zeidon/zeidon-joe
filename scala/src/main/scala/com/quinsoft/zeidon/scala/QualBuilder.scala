@@ -19,10 +19,13 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
+import scala.collection.JavaConversions.asScalaIterator
+
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import org.apache.commons.lang3.StringUtils
+
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -774,7 +777,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
     }
 
     /**
-     * Activates entities with attributes that are in than the list of
+     * Activates entities with attributes that are in the list of
      * specified values.
      *
      * The values are converted by domain processing before being added
@@ -791,6 +794,39 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
         addValues( values )
         return QualBuilder.TERMINATOR
+    }
+
+    /**
+     * Activates entities with attributes that are in all the entities
+     * in the specified cursor.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUserList = VIEW basedOn "mUser"...
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID in mUserList.User )
+     * }}}
+     */
+    def in ( valueCursor: EntityCursor ): QualificationTerminator = {
+        if ( checkNot )
+            return notIn( valueCursor )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        return in( attrs )
+    }
+
+    def in ( selectSet: SelectSet ): QualificationTerminator = {
+        if ( checkNot )
+            return notIn( selectSet )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = for ( e <- selectSet.iterator() ) yield e.getAttribute( jattributeDef.getName() )
+
+        return in( attrs )
     }
 
     /**
@@ -813,6 +849,37 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
         return QualBuilder.TERMINATOR
     }
 
+    /**
+     * Activates entities with attributes that are in all the entities
+     * in the specified cursor.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUserList = VIEW basedOn "mUser"...
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID notIn mUserList.User )
+     * }}}
+     */
+    def notIn ( valueCursor: EntityCursor ): QualificationTerminator = {
+        if ( checkNot )
+            return in( valueCursor )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        return notIn( attrs )
+    }
+
+    def notIn ( selectSet: SelectSet ): QualificationTerminator = {
+        if ( checkNot )
+            return in( selectSet )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = for ( e <- selectSet.iterator() ) yield e.getAttribute( jattributeDef.getName() )
+        return notIn( attrs )
+    }
 
     /**
      * Add the values in Seq[Any] to the IN/NOT IN clause.  If any of the values in the

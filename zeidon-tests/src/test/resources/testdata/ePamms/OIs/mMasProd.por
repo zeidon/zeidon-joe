@@ -16,7 +16,7 @@ aVersion,1 1.1
 aRevisionDate,1 20110825
 aCreatedDateTime,1 20110825
 aFinalized,1 N
-aFK_ID_MASTERPRODUC,1 1
+aFK_ID_MASTERPRODUCT,1 1
 
 ePrimaryRegistrant 2,0
 aID,1      2
