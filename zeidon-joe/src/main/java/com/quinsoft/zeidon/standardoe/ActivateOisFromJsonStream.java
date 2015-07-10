@@ -491,18 +491,21 @@ class ActivateOisFromJsonStream implements StreamReader
                 am.apply( ei );
 
             // Now that we've updated everything, set the flags.
-            ei.setCreated( entityMeta.created );
-            ei.setUpdated( entityMeta.updated );
-            ei.setDeleted( entityMeta.deleted );
-            ei.setIncluded( entityMeta.included );
-            ei.setExcluded( entityMeta.excluded );
-            if ( entityMeta.incomplete )
-                ei.setIncomplete( null );
-            if ( entityMeta.lazyLoaded != null )
+            if ( incremental )
             {
-                String[] names = entityMeta.lazyLoaded.split( "," );
-                for ( String name: names )
-                    ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name ) );
+                ei.setCreated( entityMeta.created );
+                ei.setUpdated( entityMeta.updated );
+                ei.setDeleted( entityMeta.deleted );
+                ei.setIncluded( entityMeta.included );
+                ei.setExcluded( entityMeta.excluded );
+                if ( entityMeta.incomplete )
+                    ei.setIncomplete( null );
+                if ( entityMeta.lazyLoaded != null )
+                {
+                    String[] names = entityMeta.lazyLoaded.split( "," );
+                    for ( String name: names )
+                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name ) );
+                }
             }
 
             // If the entity list didn't start with a [ then there is only one entity
@@ -635,7 +638,7 @@ class ActivateOisFromJsonStream implements StreamReader
         private String entityKey;
         private boolean isLinkedSource;
         private boolean updated  = false;
-        private boolean created  = true;
+        private boolean created  = false;
         private boolean deleted  = false;
         private boolean included = false;
         private boolean excluded = false;
