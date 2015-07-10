@@ -24,6 +24,7 @@ import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.SelectSet
+import com.quinsoft.zeidon.SubobjectValidationException
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -115,6 +116,17 @@ case class View( val task: Task ) extends Dynamic {
         this
     }
 
+    /**
+     * Validates the OI by running accept() on all the entity instances.
+     */
+    def validate( throwException: Boolean = true ) = {
+        val validateExceptions = jview.validateOi()
+        if ( validateExceptions != null && throwException )
+            throw new SubobjectValidationException( validateExceptions )
+        
+        validateExceptions
+    }
+    
     /**
      * Creates an empty OI for this view.  The LOD must have been previously
      * specified with basedOn.

@@ -17,7 +17,7 @@
     Copyright 2009-2015 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon;
 
@@ -34,14 +34,19 @@ public class SubobjectValidationException extends ZeidonException
     private static final long serialVersionUID = 1L;
 
     private final List<ZeidonException> exceptions = new ArrayList<ZeidonException>();
-    
+
     /**
      * @param format
      * @param strings
      */
     public SubobjectValidationException( Collection<ZeidonException> list )
     {
-        super( "Subobject Validation exception.  See child exceptions for more." );
+        this( "Subobject Validation exception.  See child exceptions for more.", list );
+    }
+
+    public SubobjectValidationException( String message, Collection<ZeidonException> list )
+    {
+        super( message );
         addChildExceptions( list );
     }
 
@@ -52,14 +57,14 @@ public class SubobjectValidationException extends ZeidonException
 
         return this;
     }
-    
+
     public SubobjectValidationException addChildException( ZeidonException exception )
     {
         exceptions.add( exception );
         appendMessage( "%d) %s", exceptions.size(), exception.toString() );
         return this;
     }
-    
+
     /**
      * @return the exceptions
      */

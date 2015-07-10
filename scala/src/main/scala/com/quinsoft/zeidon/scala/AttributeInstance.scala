@@ -59,7 +59,10 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * Domain processing will be used to potentially convert the value from the
      * source object to the internal value.
      */
-    def setValue( any: Any, contextName: String = null ) = jattributeInstance.setValue( any, contextName )
+    def setValue( any: Any, contextName: String = null ) = any match {
+        case a : AttributeInstance => jattributeInstance.setValue( a.jattributeInstance, contextName )
+        case _ => jattributeInstance.setValue( any, contextName )
+    }
 
     /**
      * Sets the value of a derived attribute.
@@ -67,8 +70,11 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * This does not set the Updated flag for the containing entity instance.
      * This is intended to be used from inside derived domain code.
      */
-    def setDerivedValue( any: Any ) = jattributeInstance.setDerivedValue( any )
-
+    def setDerivedValue( any: Any ) = any match {
+        case a : AttributeInstance => jattributeInstance.setDerivedValue( a.jattributeInstance )
+        case _ => jattributeInstance.setDerivedValue( any )
+    } 
+        
     /**
      * Returns the internal value of the attribute.
      */
@@ -225,7 +231,15 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     /**
      * Converts the attribute value to a boolean using default domain processing.
      */
-    def toBoolean: Boolean = { jattributeInstance.getBoolean() }
+    def toBoolean: Boolean = { 
+        val b = jattributeInstance.getBoolean()
+        if ( b == null )
+            throw new ZeidonException( "Attribute value is null and can't be converted to a Boolean.  " + 
+                                       "Use isTruthy to handle null boolean attributes." )
+                                       .prependAttributeDef( jattributeInstance.getAttributeDef )
+        
+        b
+    }
 
     /**
      * Converts the attribute value to an integer using default domain processing.

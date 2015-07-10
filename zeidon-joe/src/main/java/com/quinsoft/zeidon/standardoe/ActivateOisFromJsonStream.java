@@ -635,7 +635,7 @@ class ActivateOisFromJsonStream implements StreamReader
         private String entityKey;
         private boolean isLinkedSource;
         private boolean updated  = false;
-        private boolean created  = false;
+        private boolean created  = true;
         private boolean deleted  = false;
         private boolean included = false;
         private boolean excluded = false;
