@@ -291,7 +291,7 @@
           "selected" : true
         },
         "ID" : "76",
-        "ContainerVolume" : "5",
+        "ContainerVolumeEnvironmentHazard" : "5",
         "SDSectionType" : "StorageDisposal1",
         "Title" : "STORAGE AND DISPOSAL",
         "BoldItalic" : "R",
@@ -1311,7 +1311,7 @@
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "657",
                     "TextColor" : "red",
-                    "FontFamily" : "serif",
+                    "FontFamily" : "Serif",
                     "FontSize" : "26",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
@@ -1337,7 +1337,7 @@
                   "LLD_SpecialSectionAttrBlock" : [ {
                     "ID" : "658",
                     "TextColor" : "red",
-                    "FontFamily" : "serif",
+                    "FontFamily" : "Serif",
                     "FontSize" : "20",
                     "FontWeight" : "bold",
                     "TextAlign" : "center"
@@ -1467,7 +1467,7 @@
                   "ID" : "624",
                   "BorderStyle" : "solid",
                   "BorderColor" : "red",
-                  "BorderWidth" : "2.0"
+                  "BorderWidth" : "2"
                 } ]
               } ]
             }, {

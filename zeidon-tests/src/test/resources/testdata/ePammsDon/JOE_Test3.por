@@ -251,7 +251,6 @@ aFK_ID_M_INGREDIENTSSECTION 9
 
 eSPLD_StorageDisposalSection 2
 aID        60
-aContainerVolume 5
 aSDSectionType StorageDisposal1
 aTitle     STORAGE AND DISPOSAL
 aBoldItalic R
