@@ -187,6 +187,21 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
         case _ => false
     }
 
+    /**
+     * Returns true if all the attributes in this entity match the values in otherEntity.
+     *
+     * For additional options on how to compare see compareEntity
+     */
+    def === ( otherEntity : AbstractEntity ) = compareEntity( otherEntity )
+
+    /**
+     * Returns true if all the attributes in this entity match the values in otherEntity.
+     */
+    def compareEntity( otherEntity : AbstractEntity,
+                       options : CompareEntityOptions = CompareEntityOptions.DEFAULT_OPTIONS ) = {
+        getEntityInstance.compareEntity( otherEntity.getEntityInstance, options )
+    }
+
     override def hashCode = getEntityInstance.hashCode()
 }
 

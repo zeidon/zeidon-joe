@@ -36,7 +36,6 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
  * @author DG
@@ -54,15 +53,15 @@ public class DateDomain extends AbstractDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
     	// KJS - Added 01/27/11 because of line 2836 in lTrnscpt_Object.java
     	// OrderEntityForView( lTrnscpt, "StudentMajorDegreeTrack", "wPrimarySortOrder A GraduationDate A" );
     	// value = null so we are getting to the exception.  Will try returning null, see what happens.
     	if ( externalValue == null )
     		return null;
-
-        // If external value is an AttributeInstance then get *its* internal value.
-        if ( externalValue instanceof AttributeInstance )
-            externalValue = ((AttributeInstance) externalValue).getValue();
 
         if ( externalValue instanceof DateTime )
             return externalValue;

@@ -38,6 +38,7 @@ import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
@@ -4092,5 +4093,63 @@ class EntityInstanceImpl implements EntityInstance
             Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
             setAttribute( targetAttr, sourceValue );
         } // for each target AttributeDef...
+    }
+
+    @Override
+    public boolean compareEntity(EntityInstance sourceInstance)
+    {
+        return compareEntity( sourceInstance, CompareEntityOptions.DEFAULT_OPTIONS );
+    }
+
+    @Override
+    public boolean compareEntity( EntityInstance sourceInstance, CompareEntityOptions options )
+    {
+        EntityInstance sourceEi = sourceInstance.getEntityInstance();
+        if ( isLinked( sourceEi ) )
+            return true;  // If the EIs are linked then they are the same.
+
+        List<AttributeDef> attribs = this.getEntityDef().getAttributes( true );
+        EntityDef rightDef = sourceEi.getEntityDef();
+        for ( AttributeDef attrib : attribs )
+        {
+            if ( attrib.isDerived() )  // Skip derived attributes?
+            {
+                if ( ! options.isCompareDeriviedAttributes() )
+                    continue;
+            }
+            else
+            if ( ! attrib.isPersistent() ) // Skip work attributes?
+            {
+                if ( ! options.isCompareWorkAttributes() )
+                    continue;
+            }
+
+            AttributeInstance lai = this.getAttribute( attrib );
+            if ( lai.isNull() && options.isIgnoreNullAttributes() )
+                continue;
+
+            AttributeDef rightAttrib = rightDef.getAttribute( attrib.getName(), false );
+            if ( rightAttrib == null || rightAttrib.isHidden() )
+            {
+                if ( ! options.isCommonAttributesOnly() )
+                {
+                    getTask().log().trace( "CompareEntity: Attribute missing = %s", attrib.getName() );
+                    return false;
+                }
+
+                continue;
+            }
+
+            AttributeInstance rai = sourceEi.getAttribute( rightAttrib );
+            if ( lai.compare( rai ) != 0 )
+            {
+                getTask().log().trace( "CompareEntity: Attribute is different = %s", attrib.getName() );
+                lai.compare( rai );
+                return false;
+            }
+        } // each attrib.
+
+        // If we get here then we didn't find any differences.
+        return true;
     }
 }

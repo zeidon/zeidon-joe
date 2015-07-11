@@ -32,6 +32,7 @@ import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
@@ -3288,5 +3289,17 @@ class EntityCursorImpl implements EntityCursor
     public boolean isIncomplete()
     {
         return getExistingInstance().isIncomplete();
+    }
+
+    @Override
+    public boolean compareEntity( EntityInstance sourceInstance )
+    {
+        return compareEntity( sourceInstance, CompareEntityOptions.DEFAULT_OPTIONS );
+    }
+
+    @Override
+    public boolean compareEntity( EntityInstance sourceInstance, CompareEntityOptions options )
+    {
+        return getExistingInstance().compareEntity( sourceInstance, options );
     }
 }

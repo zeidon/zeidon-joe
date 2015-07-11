@@ -732,4 +732,8 @@ public interface EntityInstance
      * @return false if they are already linked.
      */
     boolean linkInstances( EntityInstance ei );
+
+    boolean compareEntity( EntityInstance sourceInstance );
+
+    boolean compareEntity( EntityInstance sourceInstance, CompareEntityOptions options );
 }
