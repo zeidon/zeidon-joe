@@ -27,6 +27,28 @@ import com.quinsoft.zeidon.ZeidonException
  */
 case class ObjectOperationResult( val value: AnyRef ) {
 
+    /**
+     * Attempts to convert the ObjectOperationResult to an AttributeInstance.  Will
+     * throw an exception if the underlying value is not an AttributeInstance.
+     * 
+     * This method is necessary because having an implicit conversion to an AttributeInstance
+     * will create an ambiguity when using ObjectOperationResult in an expression.  For example,
+     * this line will fail to compile:
+     * {{{
+     *  if ( myView.myObjectOperationCall < 10 ) {
+     *  }
+     * }}}
+     * because the compiler doesn't know whether to convert the result to an int or an
+     * attribute instance (which has a '<' method).
+     */
+    def toAttrib : AttributeInstance = value match {
+        case null => null
+        case a: AttributeInstance => a
+        case a: com.quinsoft.zeidon.AttributeInstance => new AttributeInstance( a )
+        case _ => throw new ZeidonException( "Can't convert class %s to AttributeInstance", value.getClass().getName() )
+    }
+
+
 }
 
 object ObjectOperationResult {
@@ -51,13 +73,6 @@ object ObjectOperationResult {
         case null => null
         case v: View => v
         case v: com.quinsoft.zeidon.View => new View( v )
-        case _ => throw new ZeidonException( "Can't convert class %s to AttributeInstance", result.value.getClass().getName() )
-    }
-
-    implicit def result2Ai( result: ObjectOperationResult ) : AttributeInstance = result.value match {
-        case null => null
-        case a: AttributeInstance => a
-        case a: com.quinsoft.zeidon.AttributeInstance => new AttributeInstance( a )
         case _ => throw new ZeidonException( "Can't convert class %s to AttributeInstance", result.value.getClass().getName() )
     }
 

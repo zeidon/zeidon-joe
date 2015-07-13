@@ -246,6 +246,13 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      */
     def toInt: Int = { jattributeInstance.getInteger() }
 
+    def toInt( default: Int ): Int = { 
+        if ( jattributeInstance.isNull() )
+            default
+        else
+            jattributeInstance.getInteger()
+    }
+    
     /**
      * Converts the attribute value to a double using default domain processing.
      */
