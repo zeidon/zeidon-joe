@@ -18,6 +18,8 @@
  */
 package com.quinsoft.zeidon.scala
 
+import org.apache.commons.digester3.annotations.rules.ObjectCreate.List
+
 /**
  * @author dgc
  *
@@ -27,12 +29,13 @@ class AttributeIterator( val jentityInstance: com.quinsoft.zeidon.EntityInstance
     def iterator = {
         val entityInstance = new EntityInstance( jentityInstance )
         new Iterator[AttributeInstance] {
-            var jattributeDef = entityInstance.getEntityInstance.getEntityDef().getAttributes( excludeHidden ).get(0)
+            val attribList = entityInstance.getEntityInstance.getEntityDef().getAttributes( excludeHidden )
+            var idx = 0
 
-            def hasNext = jattributeDef != null
+            def hasNext = attribList.size() > idx
             def next = {
-                val nextAttr = jattributeDef
-                jattributeDef = jattributeDef.getNextAttributeDef()
+                val nextAttr = attribList.get(idx)
+                idx += 1
                 entityInstance.getAttribute(nextAttr)
             }
         }
