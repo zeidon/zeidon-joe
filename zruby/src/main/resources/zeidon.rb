@@ -159,7 +159,7 @@ module Zeidon
       @jqual.setLodDef( view_od_name )
       @entities = {}
       jloddef = @jqual.getLodDef
-      jloddef.getViewEntitiesHier.each do |ve|
+      jloddef.getEntityDefs.each do |ve|
         name = ve.getName.to_s
         @entities[ name ] = QualEntity.new( @jqual, ve )
       end
