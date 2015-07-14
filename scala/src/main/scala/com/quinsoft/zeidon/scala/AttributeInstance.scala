@@ -85,6 +85,8 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      */
     def name = jattributeInstance .getAttributeDef().getName()
 
+    def isKey = jattributeInstance .getAttributeDef().isKey()
+    
     /**
      * Returns the AttributeDef for this attribute.
      */
