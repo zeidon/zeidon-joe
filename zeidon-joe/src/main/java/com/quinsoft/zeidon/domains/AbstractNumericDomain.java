@@ -45,7 +45,7 @@ public abstract class AbstractNumericDomain extends AbstractDomain
     private final Double max;
     @SuppressWarnings("unused")
     private final String editString;
-    private final Random random = new Random();
+    protected final Random random = new Random();
 
     public AbstractNumericDomain(Application application, Map<String, Object> domainProperties, Task task )
     {

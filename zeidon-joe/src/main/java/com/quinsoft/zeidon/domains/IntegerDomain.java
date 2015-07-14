@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.primitives.Ints;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
@@ -200,9 +201,19 @@ public class IntegerDomain extends AbstractNumericDomain
         return intContext;
     }
 
+    @Override
+    public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
+    {
+        if ( intChecker == null )
+            return super.generateRandomTestValue( task, attributeDef, entityInstance );
+
+        return intChecker.generateRandomTestValue( task, attributeDef, entityInstance );
+    }
+
     private interface IntChecker
     {
         void checkValue( AttributeDef attributeDef, int value );
+        Integer generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance );
     }
 
     private class BetweenLL implements IntChecker
@@ -228,6 +239,13 @@ public class IntegerDomain extends AbstractNumericDomain
                 throw new InvalidAttributeValueException( attributeDef, value,
                                                           "Value is greater than upper bound %d", lowerBound );
         }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
     }
 
     private class BetweenLeL implements IntChecker
@@ -252,6 +270,13 @@ public class IntegerDomain extends AbstractNumericDomain
                 throw new InvalidAttributeValueException( attributeDef, value,
                                                           "Value is greater than upper bound %d", lowerBound );
         }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
     }
 
     private class BetweenLeLe implements IntChecker
@@ -275,6 +300,13 @@ public class IntegerDomain extends AbstractNumericDomain
             if ( value > upperBound )
                 throw new InvalidAttributeValueException( attributeDef, value,
                                                           "Value is greater than upper bound %d", lowerBound );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
         }
     }
 
@@ -301,6 +333,13 @@ public class IntegerDomain extends AbstractNumericDomain
                 throw new InvalidAttributeValueException( attributeDef, value,
                                                           "Value is greater than upper bound %d", lowerBound );
         }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
     }
 
     private class Range implements IntChecker
@@ -321,6 +360,13 @@ public class IntegerDomain extends AbstractNumericDomain
             if ( value < lowerBound || value > upperBound )
                 throw new InvalidAttributeValueException( attributeDef, value,
                                                           "Value is outside of range %s", getConstraintRule() );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
         }
     }
 
