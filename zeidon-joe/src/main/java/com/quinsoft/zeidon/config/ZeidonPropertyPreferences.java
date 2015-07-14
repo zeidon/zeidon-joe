@@ -48,7 +48,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
     private final String     filename;
     private       Properties properties;
     private       String sourceDescription;
-    
+
     /**
      * Used to translate environment variables in property values.
      */
@@ -80,7 +80,7 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
             stream = JoeUtils.getInputStream( null, filename, this.getClass().getClassLoader() );
             if ( stream == null )
                 throw new ZeidonException( "Couldn't find property file" );
-            
+
             LOG.info( "Opening properties from: " + stream.getDescription() );
             properties.load( stream );
             sourceDescription = stream.getDescription();
@@ -109,5 +109,13 @@ public class ZeidonPropertyPreferences implements ZeidonPreferences
     public String getSourceDescription()
     {
         return sourceDescription;
+    }
+
+    @Override
+    public ZeidonPreferences set( String groupName, String key, String value )
+    {
+        String fullKey = groupName + "." + key;
+        properties.setProperty( fullKey, value );
+        return this;
     }
 }

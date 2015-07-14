@@ -149,4 +149,12 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     {
         return iniFileDesc;
     }
+
+    @Override
+    public ZeidonPreferences set( String groupName, String key, String value )
+    {
+        Preferences node = preferences.node( groupName );
+        node.put( key, value );
+        return this;
+    }
 }

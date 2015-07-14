@@ -27,6 +27,7 @@ package com.quinsoft.zeidon.config;
 public interface ZeidonPreferences
 {
     public String get( String groupName, String key, String defaultValue );
+    public ZeidonPreferences set( String groupName, String key, String value );
     public void reload();
 
     /**
@@ -36,10 +37,10 @@ public interface ZeidonPreferences
      * @return
      */
     public String getAllProperties();
-    
+
     /**
      * Returns a description of where the ZeidonPreferences are stored.
-     * 
+     *
      * @return
      */
     public String getSourceDescription();
