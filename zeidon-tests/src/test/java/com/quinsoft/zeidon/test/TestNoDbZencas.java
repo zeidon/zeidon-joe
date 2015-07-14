@@ -15,6 +15,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.config.ZeidonPreferences;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 
 // Just for temporary testing...
@@ -41,6 +42,8 @@ public class TestNoDbZencas
 	{
         oe = JavaObjectEngine.getInstance();
         zencas = oe.createTask( "ZENCAs" );
+        ZeidonPreferences pref = oe.getZeidonPreferences( zencas.getApplication() );
+        pref.set( "ZENCAs", "oiSourceUrl", "jdbc:sqlite:target/test-classes/zencasa-domains.sqlite" );
 		zeidonSystem = oe.getSystemTask();
 	}
 
