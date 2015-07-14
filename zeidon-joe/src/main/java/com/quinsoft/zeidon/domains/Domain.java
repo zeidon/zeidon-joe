@@ -44,6 +44,7 @@ public interface Domain
     DomainType getDomainType();
     InternalType getDataType();
     DomainContext getContext(Task task, String contextName);
+    DomainContext getContext(Task task, String contextName, boolean required );
     String getName();
 
     /**

@@ -294,8 +294,14 @@ public abstract class AbstractDomain implements Domain
     @Override
     public DomainContext getContext(Task task, String contextName)
     {
+        return getContext( task, contextName, true );
+    }
+
+    @Override
+    public DomainContext getContext(Task task, String contextName, boolean required )
+    {
         DomainContext context = getContext( contextName );
-        if ( context == null )
+        if ( context == null && required )
         {
             if ( StringUtils.isBlank( contextName ) )
                 throw new ZeidonException("Domain '%s' does not have a default context defined.", getName() );
