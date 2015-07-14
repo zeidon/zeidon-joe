@@ -279,7 +279,7 @@ public class QualificationBuilder
     {
         return qualView.cursor( QUALATTRIB ).getEntityCount();
     }
-    
+
     public QualificationBuilder setOiSourceUrl( String url )
     {
         activateOptions.setOiSourceUrl( url );
@@ -594,8 +594,23 @@ public class QualificationBuilder
                 // No.  Make sure cacheTask and task are the same.
                 assert cacheTask == task : "Unequal tasks for non-cached activate";
             else
-                // Yes.  Attempt to get the view by name in the cacheTask.
-                view = cacheTask.getViewByName( cacheViewName );
+            {
+                // Yes.  See if we've already loaded it.  First try the local cache.
+                view = task.getViewByName( cacheViewName );
+
+                // If we didn't find it in the local task, see if it exists for the
+                // global cache (assuming its different)
+                if ( view == null && cacheTask != task )
+                {
+                    view = cacheTask.getViewByName( cacheViewName );
+                    if ( view != null )
+                    {
+                        // Create a local copy of the view.
+                        view = view.newView( task );
+                        task.setNameForView( cacheViewName, view );
+                    }
+                }
+            }
 
             if ( view == null )
             {
@@ -603,8 +618,16 @@ public class QualificationBuilder
 
                 // Are we dealing with a cached view?
                 if ( ! StringUtils.isBlank( cacheViewName ) )
+                {
                     // Yes.  Name the view for later.
                     cacheTask.setNameForView( cacheViewName, view );
+                    if ( cacheTask != task )
+                    {
+                        // Create a local copy of the view.
+                        view = view.newView( task );
+                        task.setNameForView( cacheViewName, view ); // Set in local task as well.
+                    }
+                }
             }
 
             // If the source instance is specified and is the same type as the root, then relink.
