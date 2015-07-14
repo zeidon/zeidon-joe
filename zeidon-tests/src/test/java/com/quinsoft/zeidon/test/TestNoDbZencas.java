@@ -5,6 +5,7 @@ package com.quinsoft.zeidon.test;
 
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,7 @@ public class TestNoDbZencas
 	View         mFASrc;
 	View         subtaskView;
 	ObjectEngine oe;
+    private String oldOiSourceUrl;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -43,8 +45,16 @@ public class TestNoDbZencas
         oe = JavaObjectEngine.getInstance();
         zencas = oe.createTask( "ZENCAs" );
         ZeidonPreferences pref = oe.getZeidonPreferences( zencas.getApplication() );
+        oldOiSourceUrl = pref.get( "ZENCAs", "oiSourceUrl", "" );
         pref.set( "ZENCAs", "oiSourceUrl", "jdbc:sqlite:target/test-classes/zencasa-domains.sqlite" );
 		zeidonSystem = oe.getSystemTask();
+	}
+	
+	@After
+	public void after()
+	{
+        ZeidonPreferences pref = oe.getZeidonPreferences( zencas.getApplication() );
+        pref.set( "ZENCAs", "oiSourceUrl", oldOiSourceUrl );
 	}
 
 	@Test
