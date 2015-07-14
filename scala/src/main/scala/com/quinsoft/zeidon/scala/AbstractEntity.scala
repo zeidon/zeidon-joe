@@ -192,13 +192,13 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
      *
      * For additional options on how to compare see compareEntity
      */
-    def === ( otherEntity : AbstractEntity ) = compareEntity( otherEntity )
+    def === ( otherEntity : AbstractEntity ): Boolean = compareEntity( otherEntity )
 
     /**
      * Returns true if all the attributes in this entity match the values in otherEntity.
      */
     def compareEntity( otherEntity : AbstractEntity,
-                       options : CompareEntityOptions = CompareEntityOptions.DEFAULT_OPTIONS ) = {
+                       options : CompareEntityOptions = CompareEntityOptions.DEFAULT_OPTIONS ): Boolean = {
         getEntityInstance.compareEntity( otherEntity.getEntityInstance, options )
     }
 
