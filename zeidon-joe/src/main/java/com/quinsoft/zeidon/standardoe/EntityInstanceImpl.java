@@ -199,12 +199,6 @@ class EntityInstanceImpl implements EntityInstance
     boolean dbhLoaded;  // True if this EI was just loaded by the DBHandler.
 
     /**
-     * AttributeInstances cannot be be shared by multiple entities because the AttributeInstance
-     * must be able to refer to its entity instance.
-     */
-    private Map<AttributeDef, AttributeInstanceImpl> attributeInstanceMap;
-
-    /**
      * This keeps track of child entity instances that have been loaded lazily.
      */
     private Set<EntityDef> entitiesLoadedLazily;
@@ -1555,7 +1549,6 @@ class EntityInstanceImpl implements EntityInstance
                     linkedInstances = newInstance.linkedInstances;
                     linkedInstances.putIfAbsent( this, Boolean.TRUE );
                     persistentAttributes = newInstance.persistentAttributes;
-                    attributeInstanceMap = null;
                     return;
                 }
 
@@ -1574,7 +1567,6 @@ class EntityInstanceImpl implements EntityInstance
             linkedInstances.putIfAbsent( newInstance, Boolean.TRUE );
             newInstance.linkedInstances = linkedInstances;
             newInstance.persistentAttributes = persistentAttributes;
-            newInstance.attributeInstanceMap = null;
 
             assert assertLinkedInstances() : "Error with linked instances";
         }
@@ -1843,7 +1835,6 @@ class EntityInstanceImpl implements EntityInstance
                     // attribute list.
                     linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
                     linked.persistentAttributes = persistentAttributes;
-                    linked.attributeInstanceMap = null;
                     linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
 
                     // The spawn logic should have correctly set most of the flags.  The only one we have to
@@ -3215,8 +3206,6 @@ class EntityInstanceImpl implements EntityInstance
             // Copy just work attributes.
             copyAttributes( sourceInstance, false, true );
         }
-
-        attributeInstanceMap = null;
     }
 
     /* (non-Javadoc)
@@ -3463,25 +3452,15 @@ class EntityInstanceImpl implements EntityInstance
         return getAttribute( null, attributeDef );
     }
 
-    synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
+    AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
     {
-        if ( attributeInstanceMap == null )
-            attributeInstanceMap = new HashMap<AttributeDef, AttributeInstanceImpl>();
+        AttributeInstanceImpl attributeInstance =
+                new AttributeInstanceImpl( attributeDef,
+                                           getInternalAttribute( attributeDef ),
+                                           view,
+                                           this );
 
-        if ( ! attributeInstanceMap.containsKey( attributeDef ) )
-        {
-            AttributeInstanceImpl attributeInstance =
-                    new AttributeInstanceImpl( attributeDef,
-                                               getInternalAttribute( attributeDef ),
-                                               this );
-            attributeInstanceMap.put( attributeDef, attributeInstance );
-        }
-
-        AttributeInstanceImpl attrInstance = attributeInstanceMap.get( attributeDef );
-        if ( view != null )
-            attrInstance.setView( view );
-
-        return attrInstance;
+        return attributeInstance;
     }
 
     @Override

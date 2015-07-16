@@ -44,20 +44,16 @@ class AttributeInstanceImpl implements AttributeInstance
     private final EntityInstanceImpl entityInstance;
 
 
-    AttributeInstanceImpl( AttributeDef attributeDef,
-                           AttributeValue attributeValue,
+    AttributeInstanceImpl( AttributeDef       attributeDef,
+                           AttributeValue     attributeValue,
+                           View               view,
                            EntityInstanceImpl entityInstance )
     {
         super();
         this.attributeDef = attributeDef;
         this.attributeValue = attributeValue;
-        this.entityInstance = entityInstance;
-    }
-
-    AttributeInstanceImpl setView( View view )
-    {
         this.view = view;
-        return this;
+        this.entityInstance = entityInstance;
     }
 
     /* (non-Javadoc)
