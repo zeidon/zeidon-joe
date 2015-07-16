@@ -23,8 +23,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
-
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -264,12 +262,6 @@ public interface EntityInstance
     AttributeInstance getAttribute( AttributeDef attributeDef );
 
     /**
-     * @deprecated use getAttributes( includeNullValues ) instead.
-     */
-    @Deprecated
-    List<AttributeInstance> attributeList( boolean includeNullValues );
-
-    /**
      * Returns a list of AttributeInstances for this entity instance, including
      * hidden and null attributes.
      *
@@ -300,60 +292,6 @@ public interface EntityInstance
     AttributeInstance createDynamicAttributeDef( DynamicAttributeDefConfiguration config );
 
     /**
-     * @deprecated use getAttribute( attributeName ).isNull() instead.
-     */
-    @Deprecated
-    boolean isAttributeNull( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeDef ).isNull() instead.
-     */
-    @Deprecated
-    boolean isAttributeNull( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeDef ).isUpdated() instead.
-     */
-    @Deprecated
-    boolean isAttributeUpdated( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
-     */
-    @Deprecated
-    EntityInstance setAttribute( String attributeName, Object value ) throws InvalidAttributeValueException;
-
-    /**
-     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
-     */
-    @Deprecated
-    EntityInstance setAttribute( String attributeName, Object value, String contextName ) throws InvalidAttributeValueException;
-
-    /**
-     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
-     */
-    @Deprecated
-    EntityInstance setAttribute( AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException;
-
-    /**
-     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
-     */
-    @Deprecated
-    EntityInstance setAttribute( AttributeDef attributeDef, Object value, String contextName ) throws InvalidAttributeValueException;
-
-    /**
-     * @deprecated use getAttribute( attributeName ).setValue(...) instead.
-     */
-    @Deprecated
-    EntityInstance setAttributeFromAttribute( String tgtAttributeName, View srcView, String srcEntityName, String srcAttributeName ) throws InvalidAttributeValueException;
-
-    /**
-     * @deprecated use getAttribute( attributeName ).setInternalValue(...) instead.
-     */
-    @Deprecated
-    EntityInstance setInternalAttributeValue( AttributeDef attributeDef, Object value, boolean setIncremental ) throws InvalidAttributeValueException;
-
-    /**
      * Sets the incremental update flags for this entity.  Does not set OI flags.
      *
      * @param flags flags to set
@@ -371,125 +309,6 @@ public interface EntityInstance
      */
     EntityInstance setIncrementalFlags( IncrementalEntityFlags flag );
 
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Object getInternalAttributeValue( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Object getInternalAttributeValue( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    String getStringFromAttribute( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    String getStringFromAttribute( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    String getStringFromAttribute( AttributeDef attributeDef, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    String getStringFromAttribute( String attributeName, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Integer getIntegerFromAttribute( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Integer getIntegerFromAttribute( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Integer getIntegerFromAttribute( AttributeDef attributeDef, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Integer getIntegerFromAttribute( String attributeName, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Double getDoubleFromAttribute( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Double getDoubleFromAttribute( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Double getDoubleFromAttribute( AttributeDef attributeDef, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Double getDoubleFromAttribute( String attributeName, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    DateTime getDateTimeFromAttribute( AttributeDef attributeDef );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    DateTime getDateTimeFromAttribute( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    DateTime getDateTimeFromAttribute( AttributeDef attributeDef, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    DateTime getDateTimeFromAttribute( String attributeName, String contextName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Blob getBlobFromAttribute( String attributeName );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).getXxxx(...) instead.
-     */
-    @Deprecated
-    Blob getBlobFromAttribute( AttributeDef attributeDef );
 
     /**
      * Returns a string representation of the key values of this entity.  If all keys are
@@ -498,54 +317,6 @@ public interface EntityInstance
      * @return string representing all key attributes or null
      */
     String getKeyString();
-
-    /**
-     * @deprecated use getAttribute( attributeName ).add(...) instead.
-     */
-    @Deprecated
-    Object addToAttribute( String attributeName, Object value );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).add(...) instead.
-     */
-    @Deprecated
-    Object addToAttribute( AttributeDef attributeDef, Object value );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).multiply(...) instead.
-     */
-    @Deprecated
-    Object multiplyAttribute( String attributeName, Object value );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).multiply(...) instead.
-     */
-    @Deprecated
-    Object multiplyAttribute( AttributeDef attributeDef, Object value );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).compare(...) instead.
-     */
-    @Deprecated
-    int compareAttribute( String attributeName, Object value );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).compare(...) instead.
-     */
-    @Deprecated
-    int compareAttribute( AttributeDef attributeDef, Object value );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).compare(...) instead.
-     */
-    @Deprecated
-    int compareAttribute( String attributeName, EntityInstance entityInstance, String attributeName2 );
-
-    /**
-     * @deprecated use getAttribute( attributeName ).compare(...) instead.
-     */
-    @Deprecated
-    int compareAttribute( AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 );
 
     /**
      * Iterates through all the child entities that match childEntityDef.

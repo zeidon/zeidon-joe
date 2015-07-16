@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.TemporalEntityException;
 import com.quinsoft.zeidon.UnknownAttributeDefException;
@@ -320,6 +321,13 @@ class AttributeInstanceImpl implements AttributeInstance
     }
 
     @Override
+    public EntityInstance setIsUpdated( boolean isUpdated )
+    {
+        attributeValue.setUpdated( isUpdated );
+        return entityInstance;
+    }
+
+    @Override
     public View getView()
     {
         if ( view == null )
@@ -386,5 +394,12 @@ class AttributeInstanceImpl implements AttributeInstance
     public boolean equals( Object obj )
     {
         return compare( obj ) == 0;
+    }
+
+    @Override
+    public Blob getBlob()
+    {
+        executeDerivedOper();
+        return attributeValue.getBlob( getTask(), attributeDef );
     }
 }

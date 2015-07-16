@@ -32,12 +32,10 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.joda.time.DateTime;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CursorPosition;
@@ -46,14 +44,12 @@ import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.EventNotification;
-import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.TemporalEntityException;
-import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
@@ -312,7 +308,7 @@ class EntityInstanceImpl implements EntityInstance
         for ( AttributeDef attributeDef : getEntityDef().getAttributes( true ) )
         {
             if ( ! StringUtils.isBlank( attributeDef.getInitialValue() ) )
-                setAttribute( attributeDef, attributeDef.getInitialValue(), null, true );
+                getAttribute( attributeDef).setValue( attributeDef.getInitialValue() );
             else
             if ( ! attributeDef.isHidden() )
             {
@@ -1936,7 +1932,7 @@ class EntityInstanceImpl implements EntityInstance
                 if ( ! attributeDef.isRequired() )
                     continue;
 
-                if ( ! isAttributeNull( attributeDef ) )
+                if ( ! getAttribute( attributeDef) .isNull() )
                     continue;
 
                 list.add( new RequiredAttributeException( attributeDef ) );
@@ -2914,7 +2910,7 @@ class EntityInstanceImpl implements EntityInstance
             }
 
             Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
-            setAttribute( targetAttr, sourceValue );
+            getAttribute( targetAttr ).setValue( sourceValue );
         } // for each target AttributeDef...
 
         return 0;
@@ -2992,104 +2988,6 @@ class EntityInstanceImpl implements EntityInstance
         return domain.getContext( getTask(), contextName ).getName();
     }
 
-    @Override
-    public EntityInstance setAttribute(String attributeName, Object value, String contextName) throws InvalidAttributeValueException
-    {
-        return setAttribute( getEntityDef().getAttribute( attributeName ), value, contextName );
-    }
-
-    /**
-     * Validates that setting this attribute is authorized and then calls attrib.set()
-     * to perform the set.
-     */
-    @Override
-    public EntityInstance setAttribute(AttributeDef attributeDef, Object value, String contextName) throws InvalidAttributeValueException
-    {
-        return setAttribute( attributeDef, value, contextName, false );
-    }
-
-    EntityInstance setAttribute( AttributeDef attributeDef,
-                                 Object value,
-                                 String contextName,
-                                 boolean beingInitialized ) throws InvalidAttributeValueException
-    {
-        if ( attributeDef.isHidden() )
-            throw new UnknownAttributeDefException( getEntityDef(), attributeDef.getName() );
-
-        contextName = checkContextName( attributeDef, contextName );
-
-        try
-        {
-            AttributeInstanceImpl attrib = getAttribute( attributeDef );
-            if ( beingInitialized )
-                attrib.setInternalValue( value, false ); // This bypasses some validation.
-            else
-                attrib.setValue( value, contextName );
-        }
-        catch( Throwable t )
-        {
-            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
-        }
-
-        return this;
-    }
-
-    void setAttributeUpdated( AttributeDef attributeDef, boolean updated )
-    {
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        attrib.setUpdated( updated );
-    }
-
-    @Override
-    public EntityInstance setAttribute( AttributeDef attributeDef, Object value)
-    {
-        return setAttribute( attributeDef, value, null );
-    }
-
-    @Override
-    public EntityInstance setAttribute(String attributeName, Object value)
-    {
-        return setAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public EntityInstance setAttributeFromAttribute( String tgtAttributeName,
-                                                     View srcView,
-                                                     String srcEntityName,
-                                                     String srcAttributeName )
-    {
-        AttributeDef tgtAttributeDef = getEntityDef().getAttribute( tgtAttributeName );
-        Domain tgtDomain = tgtAttributeDef.getDomain();
-        Object source;
-        // If the target is a string, we'll ask the source to convert its value to a
-        // string.  This is necessary for copying Dates to strings. Should we do this with other data types?
-//        if ( tgtDomain.getDataType() == InternalType.STRING )
-//            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getString();
-//        else
-            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getValue();
-
-        return setAttribute( tgtAttributeDef, source );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityInstance#setInternalAttributeValue(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
-     */
-    @Override
-    public EntityInstance setInternalAttributeValue(AttributeDef attributeDef, Object value, boolean setIncremental) throws InvalidAttributeValueException
-    {
-        try
-        {
-            AttributeInstanceImpl attrib = getAttribute( attributeDef );
-            attrib.setInternalValue( value, setIncremental );
-        }
-        catch( Throwable t )
-        {
-            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
-        }
-
-        return this;
-    }
-
     AttributeHashKeyMap getAttributeHashkeyMap()
     {
         if ( attributeHashkeyMap == null )
@@ -3164,308 +3062,6 @@ class EntityInstanceImpl implements EntityInstance
 
         for ( AttributeDef attributeDef : getEntityDef().getHashKeyAttributes() )
             addHashKeyAttributeToMap( attributeDef );
-    }
-
-    String getStringFromAttribute( View view, AttributeDef attributeDef )
-    {
-        return getAttribute( view, attributeDef ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute( AttributeDef attributeDef )
-    {
-        return getAttribute( null, attributeDef ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute(String attributeName)
-    {
-        return getAttribute( attributeName ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute( AttributeDef attributeDef, String contextName )
-    {
-        try
-        {
-            return getAttribute( attributeDef ).getString( contextName );
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef )
-                                                    .appendMessage( "ContextName: %s", contextName );
-        }
-    }
-
-    String getStringFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        return getAttribute( view, attributeDef ).getString( contextName );
-    }
-
-    @Override
-    public String getStringFromAttribute(String attributeName, String contextName)
-    {
-        return getAttribute( attributeName ).getString( contextName );
-    }
-
-    Integer getIntegerFromAttribute( View view, AttributeDef attributeDef)
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getInteger( getTask(), attributeDef );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(AttributeDef attributeDef)
-    {
-        return getIntegerFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(String attributeName)
-    {
-        return getIntegerFromAttribute( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    Integer getIntegerFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        contextName = checkContextName( attributeDef, contextName );
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getInteger( getTask(), attributeDef, contextName );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getIntegerFromAttribute( null, attributeDef, contextName );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(String attributeName, String contextName )
-    {
-        return getIntegerFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    Double getDoubleFromAttribute( View view, AttributeDef attributeDef)
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDouble( getTask(), attributeDef );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(AttributeDef attributeDef)
-    {
-        return getDoubleFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(String attributeName)
-    {
-        return getDoubleFromAttribute( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    Double getDoubleFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        contextName = checkContextName( attributeDef, contextName );
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDouble( getTask(), attributeDef, contextName );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getDoubleFromAttribute( null, attributeDef, contextName );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(String attributeName, String contextName )
-    {
-        return getDoubleFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    DateTime getDateTimeFromAttribute( View view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDateTime( getTask(), attributeDef );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(AttributeDef attributeDef)
-    {
-        return getDateTimeFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(String attributeName)
-    {
-        return getDateTimeFromAttribute( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    DateTime getDateTimeFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        contextName = checkContextName( attributeDef, contextName );
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDateTime( getTask(), attributeDef, contextName );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getDateTimeFromAttribute( null, attributeDef, contextName );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(String attributeName, String contextName )
-    {
-        return getDateTimeFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    Blob getBlobFromAttribute( View view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getBlob( getTask(), attributeDef );
-    }
-
-    @Override
-    public Blob getBlobFromAttribute(String attributeName)
-    {
-        AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
-        return getBlobFromAttribute( attributeDef );
-    }
-
-    @Override
-    public Blob getBlobFromAttribute( AttributeDef attributeDef )
-    {
-        return getBlobFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public boolean isAttributeNull(String attributeName)
-    {
-        return isAttributeNull( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    boolean isAttributeNull( View view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.isNull( getTask(), attributeDef  );
-    }
-
-    @Override
-    public boolean isAttributeNull(AttributeDef attributeDef )
-    {
-        return isAttributeNull( null, attributeDef );
-    }
-
-    @Override
-    public boolean isAttributeUpdated(AttributeDef attributeDef )
-    {
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.isUpdated();
-    }
-
-    @Override
-    public Object getInternalAttributeValue( AttributeDef attributeDef )
-    {
-        return getInternalAttributeValue( null, attributeDef );
-    }
-
-    Object getInternalAttributeValue( ViewImpl view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        return getInternalAttribute( attributeDef ).getInternalValue( );
-    }
-
-    @Override
-    public Object getInternalAttributeValue(String attributeName)
-    {
-        return  getInternalAttributeValue( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    int compareAttribute( View view, AttributeDef attributeDef, Object value)
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeInstanceImpl attrib = getAttribute( attributeDef );
-        return getInternalAttribute( attributeDef ).compare( getTask(), attrib, attributeDef, value );
-    }
-
-    @Override
-    public int compareAttribute(String attributeName, Object value)
-    {
-        return compareAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public int compareAttribute(AttributeDef attributeDef, Object value)
-    {
-        return compareAttribute( null, attributeDef, value );
-    }
-
-    @Override
-    public int compareAttribute(String attributeName, EntityInstance entityInstance, String attributeName2)
-    {
-        return compareAttribute( getEntityDef().getAttribute( attributeName ),
-                                 entityInstance, entityInstance.getEntityDef().getAttribute( attributeName2 ) );
-    }
-
-    int compareAttribute( View view, AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 )
-    {
-        executeDerivedOper( view, attributeDef );
-        Object value = entityInstance.getAttribute( attributeDef2 ).getValue();
-        return compareAttribute( attributeDef, value );
-    }
-
-    @Override
-    public int compareAttribute(AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 )
-    {
-        return compareAttribute( null, attributeDef, entityInstance, attributeDef2 );
-    }
-
-    Object addToAttribute( View view, AttributeDef attributeDef, Object value )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeInstanceImpl attrib = getAttribute( attributeDef );
-        attrib.add( value );
-        return attrib.getValue();
-    }
-
-    @Override
-    public Object addToAttribute( String attributeName, Object value )
-    {
-        return addToAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public Object addToAttribute( AttributeDef attributeDef, Object value )
-    {
-        return addToAttribute( null, attributeDef, value );
-    }
-
-    Object multiplyAttribute( View view, AttributeDef attributeDef, Object value )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeInstanceImpl attrib = getAttribute( attributeDef );
-        attrib.multiply( value );
-        return attrib.getValue();
-    }
-
-    @Override
-    public Object multiplyAttribute( String attributeName, Object value )
-    {
-        return multiplyAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public Object multiplyAttribute( AttributeDef attributeDef, Object value )
-    {
-        return multiplyAttribute( null, attributeDef, value );
     }
 
     /**
@@ -3867,16 +3463,6 @@ class EntityInstanceImpl implements EntityInstance
         return getAttribute( null, attributeDef );
     }
 
-    /**
-     * @deprecated use getAttributes( includeNullValues ) instead.
-     */
-    @Deprecated
-    @Override
-    public List<AttributeInstance> attributeList( boolean includeNullValues )
-    {
-        return getAttributes( includeNullValues );
-    }
-
     synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
     {
         if ( attributeInstanceMap == null )
@@ -4091,7 +3677,7 @@ class EntityInstanceImpl implements EntityInstance
             }
 
             Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
-            setAttribute( targetAttr, sourceValue );
+            getAttribute( targetAttr ).setValue( sourceValue );
         } // for each target AttributeDef...
     }
 

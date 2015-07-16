@@ -218,7 +218,7 @@ public class DataCorD_Dialog extends VmlDialog
         
 //       nZRetCode = SetAttributeFromString( *vQualObject, "EntitySpec",
 //          "EntityName", "GLJournalEntryDetail" );
-        vQualObject.cursor( "EntitySpec" ).setAttribute( "EntityName", "GLJournalEntryDetail" );
+        vQualObject.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "GLJournalEntryDetail" ) ;
         
 //       nZRetCode = CreateEntity( *vQualObject, "QualAttrib", zPOS_AFTER );
         vQualObject.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );

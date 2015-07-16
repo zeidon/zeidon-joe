@@ -70,7 +70,7 @@ public class KZWDLGXO_Object extends VmlObjectOperations
             }
             else
             {
-               lNLS = cursor.getIntegerFromAttribute( "NLS" );
+               lNLS = cursor.getAttribute( "NLS" ).getInteger();
                if ( lNLS == null )
                   lNLS = 0;
 
@@ -142,7 +142,7 @@ public class KZWDLGXO_Object extends VmlObjectOperations
             }
             else
             {
-               lNLS = cursor.getIntegerFromAttribute( "NLS" );
+               lNLS = cursor.getAttribute( "NLS" ).getInteger();
                nRC = 0;
             }
 
@@ -211,7 +211,7 @@ public class KZWDLGXO_Object extends VmlObjectOperations
             }
             else
             {
-               lNLS = cursor.getIntegerFromAttribute( "NLS" );
+               lNLS = cursor.getAttribute( "NLS" ).getInteger();
                nRC = 0;
             }
 

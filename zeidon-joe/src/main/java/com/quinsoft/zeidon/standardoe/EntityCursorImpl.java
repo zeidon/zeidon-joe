@@ -28,10 +28,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CreateEntityFlags;
@@ -43,11 +41,9 @@ import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.HiddenCursorException;
 import com.quinsoft.zeidon.IncludeFlags;
-import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.OutOfScopeException;
 import com.quinsoft.zeidon.SetMatchingFlags;
-import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
@@ -1600,7 +1596,7 @@ class EntityCursorImpl implements EntityCursor
                 }
                 else
                 {
-                	cmp = cei1.compareAttribute( key.attributeDef, cei2, key.attributeDef );
+                	cmp = cei1.getAttribute( key.attributeDef ).compare( cei2.getAttribute( key.attributeDef ).getValue() );
                 }
                 if ( ! key.ascending )
                     cmp = -cmp;
@@ -2022,216 +2018,9 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
-    public EntityInstance setAttribute(AttributeDef attributeDef, Object value)
-    {
-        return getExistingInstance().setAttribute( attributeDef, value );
-    }
-
-    @Override
-    public EntityInstance setAttribute(String attributeName, Object value)
-    {
-        return getExistingInstance().setAttribute( attributeName, value );
-    }
-
-    @Override
-    public String getStringFromAttribute(String attributeName)
-    {
-        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute(String attributeName, String contextName )
-    {
-        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getString( contextName );
-    }
-
-    @Override
-    public EntityInstance setAttribute(String attributeName, Object value, String contextName) throws InvalidAttributeValueException
-    {
-        return getExistingInstance().setAttribute( attributeName, value, contextName );
-    }
-
-    @Override
-    public EntityInstance setAttribute(AttributeDef attributeDef, Object value, String contextName) throws InvalidAttributeValueException
-    {
-        return getExistingInstance().setAttribute( attributeDef, value, contextName );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityInstance#setInternalAttributeValue(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
-     */
-    @Override
-    public EntityInstance setInternalAttributeValue(AttributeDef attributeDef, Object value, boolean setIncremental) throws InvalidAttributeValueException
-    {
-        return getExistingInstance().setInternalAttributeValue( attributeDef, value, setIncremental );
-    }
-
-    @Override
     public ViewImpl getView()
     {
         return viewCursor.getView();
-    }
-
-    @Override
-    public Object getInternalAttributeValue(String attributeName)
-    {
-        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getValue();
-    }
-
-    @Override
-    public Object getInternalAttributeValue( AttributeDef attributeDef )
-    {
-        return getExistingInstance( true ).getAttribute( getView(), attributeDef ).getValue();
-    }
-
-    @Override
-    public String getStringFromAttribute(AttributeDef attributeDef)
-    {
-        return getExistingInstance().getAttribute( getView(), attributeDef ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getExistingInstance().getAttribute( getView(), attributeDef ).getString( contextName );
-    }
-
-    @Override
-    public boolean isAttributeNull(String attributeName)
-    {
-        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).isNull();
-    }
-
-    @Override
-    public boolean isAttributeNull(AttributeDef attributeDef)
-    {
-        return getExistingInstance().getAttribute( getView(), attributeDef ).isNull();
-    }
-
-    @Override
-    public boolean isAttributeUpdated(AttributeDef attributeDef)
-    {
-        return getExistingInstance().getAttribute( attributeDef ).isUpdated();
-    }
-
-    @Override
-    public EntityInstance setAttributeFromAttribute(String tgtAttributeName,
-                                                    View srcView, String srcEntityName, String srcAttributeName)
-    {
-        return getExistingInstance().setAttributeFromAttribute( tgtAttributeName,
-                                                                srcView,
-                                                                srcEntityName,
-                                                                srcAttributeName );
-    }
-
-    @Override
-    public int compareAttribute(String attributeName, Object value)
-    {
-        return getExistingInstance().compareAttribute( getView(), getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public int compareAttribute(AttributeDef attributeDef, Object value)
-    {
-        return getExistingInstance().compareAttribute( getView(), attributeDef, value );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(String attributeName)
-    {
-        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getInteger();
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute( AttributeDef attributeDef )
-    {
-        return getExistingInstance().getAttribute( getView(), attributeDef ).getInteger();
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(String attributeName, String contextName )
-    {
-        return getExistingInstance().getAttribute( getView(), getEntityDef().getAttribute( attributeName ) ).getInteger( contextName );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute( AttributeDef attributeDef, String contextName )
-    {
-        return getExistingInstance().getAttribute( getView(), attributeDef ).getInteger( contextName );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(String attributeName)
-    {
-        return getExistingInstance().getDoubleFromAttribute( getView(), getEntityDef().getAttribute( attributeName ) );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute( AttributeDef attributeDef )
-    {
-        return getExistingInstance().getDoubleFromAttribute( getView(), attributeDef );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(String attributeName, String contextName )
-    {
-        return getExistingInstance().getDoubleFromAttribute( getView(), getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute( AttributeDef attributeDef, String contextName )
-    {
-        return getExistingInstance().getDoubleFromAttribute( getView(), attributeDef, contextName );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(String attributeName)
-    {
-        return getExistingInstance().getDateTimeFromAttribute( getView(), getEntityDef().getAttribute( attributeName ) );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute( AttributeDef attributeDef )
-    {
-        return getExistingInstance().getDateTimeFromAttribute( getView(), attributeDef );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(String attributeName, String contextName )
-    {
-        return getExistingInstance().getDateTimeFromAttribute( getView(), getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute( AttributeDef attributeDef, String contextName )
-    {
-        return getExistingInstance().getDateTimeFromAttribute( getView(), attributeDef, contextName );
-    }
-
-    @Override
-    public Blob getBlobFromAttribute(String attributeName)
-    {
-        return getExistingInstance().getBlobFromAttribute( getView(), getEntityDef().getAttribute( attributeName ) );
-    }
-
-    @Override
-    public Blob getBlobFromAttribute(AttributeDef attributeDef)
-    {
-        return getExistingInstance().getBlobFromAttribute( getView(), attributeDef );
-    }
-
-    @Override
-    public int compareAttribute(String attributeName, EntityInstance entityInstance, String attributeName2)
-    {
-        AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
-        AttributeDef attributeDef2 = entityInstance.getEntityDef().getAttribute( attributeName2 );
-        return getExistingInstance().compareAttribute( getView(), attributeDef, entityInstance, attributeDef2 );
-    }
-
-    @Override
-    public int compareAttribute(AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2)
-    {
-        return getExistingInstance().compareAttribute( getView(), attributeDef, entityInstance, attributeDef2 );
     }
 
     @Override
@@ -2436,30 +2225,6 @@ class EntityCursorImpl implements EntityCursor
 
         currentIterator.prev();
         return CursorResult.SET;
-    }
-
-    @Override
-    public Object addToAttribute( String attributeName, Object value )
-    {
-        return getExistingInstance().addToAttribute( getView(), getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public Object addToAttribute( AttributeDef attributeDef, Object value )
-    {
-        return getExistingInstance().addToAttribute( getView(), attributeDef, value );
-    }
-
-    @Override
-    public Object multiplyAttribute( String attributeName, Object value )
-    {
-        return getExistingInstance().multiplyAttribute( getView(), getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public Object multiplyAttribute( AttributeDef attributeDef, Object value )
-    {
-        return getExistingInstance().multiplyAttribute( getView(), attributeDef, value );
     }
 
     /* (non-Javadoc)
@@ -3209,16 +2974,6 @@ class EntityCursorImpl implements EntityCursor
     public AttributeInstance getAttribute( AttributeDef attributeDef )
     {
         return getExistingInstance().getAttribute( getView(), attributeDef );
-    }
-
-    /**
-     * @deprecated use getAttributes( includeNullValues ) instead.
-     */
-    @Deprecated
-    @Override
-    public List<AttributeInstance> attributeList( boolean includeNullValues )
-    {
-        return getExistingInstance( true ).attributeList( includeNullValues );
     }
 
     @Override

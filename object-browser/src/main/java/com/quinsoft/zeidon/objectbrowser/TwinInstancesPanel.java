@@ -81,7 +81,7 @@ class TwinInstancesPanel extends JPanel
 
             sb.append( attributeDef.getName() )
               .append( ": " )
-              .append( ei.getStringFromAttribute( attributeDef ) )
+              .append( ei.getAttribute( attributeDef ).getString() )
               .append( "; " );
 
             if ( ++count > 5 )

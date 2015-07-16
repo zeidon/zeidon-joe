@@ -159,6 +159,8 @@ public interface AttributeInstance
 
     Boolean getBoolean( String contextName );
 
+    Blob getBlob();
+
     /**
      * @deprecated Use getValue() instead.
      */
@@ -281,6 +283,8 @@ public interface AttributeInstance
      * @return true if attribute has been updated.
      */
     boolean isUpdated();
+
+    EntityInstance setIsUpdated( boolean isUpdated );
 
     /**
      * Returns a view associated with this attribute instance.  Note that this may cause

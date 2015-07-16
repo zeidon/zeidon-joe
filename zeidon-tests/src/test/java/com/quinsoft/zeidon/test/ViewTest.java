@@ -73,13 +73,13 @@ public class ViewTest
         {
             mFASrc.cursor( "Scholarship" ).createEntity(CursorPosition.NEXT,
                                                         EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS) );
-            mFASrc.cursor( "Scholarship" ).setAttribute( "ID" ,  i  );
-            mFASrc.cursor( "Scholarship" ).setAttribute( "Name" ,  "ScholarshipName" + i  );
+            mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).setValue(  i  ) ;
+            mFASrc.cursor( "Scholarship" ).getAttribute( "Name" ).setValue(  "ScholarshipName" + i  ) ;
             for ( int j = 1; j < 3; j++ )
             {
                 mFASrc.cursor( "Fund" ).createEntity( CursorPosition.NEXT, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS ) )
-                                       .setAttribute( "Name" ,  "Fund" + Integer.toString( j  ) )
-                                       .setAttribute( "ID" ,  (100 * j) + i  );
+                                       .getAttribute( "Name" ).setValue(  "Fund" + Integer.toString( j  ) )
+                                       .getAttribute( "ID" ).setValue(  (100 * j) + i  ) ;
             }
         }
         return mFASrc;
@@ -98,13 +98,13 @@ public class ViewTest
         for ( int i = 0; i < 10; i++ )
         {
             mFASrc.cursor( "Scholarship" ).createEntity(CursorPosition.NEXT, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS) );
-            mFASrc.cursor( "Scholarship" ).setAttribute( "ID" ,  i  );
-            mFASrc.cursor( "Scholarship" ).setAttribute( "Name" ,  "ScholarshipName" + i  );
+            mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).setValue(  i  ) ;
+            mFASrc.cursor( "Scholarship" ).getAttribute( "Name" ).setValue(  "ScholarshipName" + i  ) ;
             for ( int j = 1; j < 4; j++ )
             {
                 mFASrc.cursor( "Fund" ).createEntity(CursorPosition.NEXT, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS ) )
-                                       .setAttribute( "Name" ,  "Fund" + Integer.toString( j  ) )
-                                       .setAttribute( "ID" ,  (100 * j) + i  );
+                                       .getAttribute( "Name" ).setValue(  "Fund" + Integer.toString( j  ) )
+                                       .getAttribute( "ID" ).setValue(  (100 * j) + i  ) ;
             }
         }
         return mFASrc;
@@ -116,7 +116,7 @@ public class ViewTest
 //        View student = zencas.activateEmptyObjectInstance( "mPerson" );
 //        student.cursor( "Person" ).createEntity();
 //        student.cursor( "Prospect" ).createEntity()
-//                                    .setAttribute( "AcceptanceStatus", "xx" );
+//                                    .getAttribute( "AcceptanceStatus").setValue( "xx" ) ;
 //    }
 
     @Test
@@ -125,10 +125,10 @@ public class ViewTest
         createTestOI();
         String filename = mFASrc.getTempDirectory() + "mfasrc.por";
         String attrvalue = "This is line 1\r\nThis is line2";
-        mFASrc.cursor( "FinAidSource" ).setAttribute( "SourceFootnote", attrvalue );
+        mFASrc.cursor( "FinAidSource" ).getAttribute( "SourceFootnote").setValue( attrvalue ) ;
         mFASrc.writeOiToFile( filename, EnumSet.of( WriteOiFlags.INCREMENTAL ) );
         View v2 = zencas.activateOiFromFile( "mFASrc", filename );
-        String str = v2.cursor( "FinAidSource" ).getStringFromAttribute( "SourceFootnote" );
+        String str = v2.cursor( "FinAidSource" ).getAttribute( "SourceFootnote" ).getString();
         assertEquals( "Multi-line attribute value fails comparison", attrvalue, str );
     }
 
@@ -143,23 +143,23 @@ public class ViewTest
         xwd = zeidonSystem.activateEmptyObjectInstance( xwdOD );
         xwd.cursor( "Dlg" ).createEntity();
         xwd.cursor( "Wnd" ).createEntity();
-        xwd.cursor( "Ctrl" ).createEntity().setAttribute( "Tag", "Ctrl1" );
+        xwd.cursor( "Ctrl" ).createEntity().getAttribute( "Tag").setValue( "Ctrl1" ) ;
         EntityCursor ctrl  = xwd.cursor("Ctrl" );
         EntityCursor cctrl = xwd.cursor("CtrlCtrl" );
-        cctrl.createEntity().setAttribute( "Tag", "Ctrl2" );
+        cctrl.createEntity().getAttribute( "Tag").setValue( "Ctrl2" ) ;
         cctrl.setToSubobject();
-        cctrl.createEntity().setAttribute( "Tag", "Ctrl3" );
+        cctrl.createEntity().getAttribute( "Tag").setValue( "Ctrl3" ) ;
         cctrl.setToSubobject();
-        cctrl.createEntity().setAttribute( "Tag", "Ctrl4" );
-        assertEquals( "Subobject Ctrl has wrong value ",     ctrl.getStringFromAttribute( "Tag" ), "Ctrl3" );
-        assertEquals( "Subobject CtrlCtrl has wrong value ", cctrl.getStringFromAttribute( "Tag" ), "Ctrl4" );
+        cctrl.createEntity().getAttribute( "Tag").setValue( "Ctrl4" ) ;
+        assertEquals( "Subobject Ctrl has wrong value ",     ctrl.getAttribute( "Tag" ).getString(), "Ctrl3" );
+        assertEquals( "Subobject CtrlCtrl has wrong value ", cctrl.getAttribute( "Tag" ).getString(), "Ctrl4" );
         xwd.logObjectInstance();
         xwd.cursor( "CtrlCtrl" ).resetSubobjectToParent();
-        assertEquals( "Subobject Ctrl has wrong value ",     ctrl.getStringFromAttribute( "Tag" ), "Ctrl2" );
-        assertEquals( "Subobject CtrlCtrl has wrong value ", cctrl.getStringFromAttribute( "Tag" ), "Ctrl3" );
+        assertEquals( "Subobject Ctrl has wrong value ",     ctrl.getAttribute( "Tag" ).getString(), "Ctrl2" );
+        assertEquals( "Subobject CtrlCtrl has wrong value ", cctrl.getAttribute( "Tag" ).getString(), "Ctrl3" );
         xwd.cursor( "CtrlCtrl" ).resetSubobjectToParent();
-        assertEquals( "Subobject Ctrl has wrong value ",     ctrl.getStringFromAttribute( "Tag" ), "Ctrl1" );
-        assertEquals( "Subobject CtrlCtrl has wrong value ", cctrl.getStringFromAttribute( "Tag" ), "Ctrl2" );
+        assertEquals( "Subobject Ctrl has wrong value ",     ctrl.getAttribute( "Tag" ).getString(), "Ctrl1" );
+        assertEquals( "Subobject CtrlCtrl has wrong value ", cctrl.getAttribute( "Tag" ).getString(), "Ctrl2" );
 
         xwd = zencas.activateOiFromFile( xwdOD, oldfile, null );
         xwd.logObjectInstance();
@@ -182,7 +182,7 @@ public class ViewTest
         EntityCursor ctrlMap = xwd.cursor( "CtrlMap" );
 
         // Get current value.
-        Integer originalY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        Integer originalY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
 
         //
         // Create and cancel
@@ -190,23 +190,23 @@ public class ViewTest
 
         // Create temporal subobject and verify that the attr values is still the same.
         ctrl.createTemporalSubobjectVersion();
-        Integer newY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        Integer newY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals( "CreateTemporal isn't working", newY, originalY );
-        asserhttp://www.google.com/tTrue( "Tag should still be null", ctrlMap.isAttributeNull( "Tag" ) );
+        asserhttp://www.google.com/tTrue( "Tag should still be null", ctrlMap.getAttribute( "Tag" ).isNull() );
 
         // Add one to the value and verify that it got set correctly.
-        ctrl.setAttribute( "PSDLG_Y", originalY + 1 );
-        newY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        ctrl.getAttribute( "PSDLG_Y").setValue( originalY + 1 ) ;
+        newY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals( "Versioned instance values aren't working", (Integer) ( newY - 1 ), originalY );
 
-        ctrlMap.setAttribute( "Tag", "TestTag" );
-        assertEquals( "CtrlMap.Tag wasn't set correctly", ctrlMap.getStringFromAttribute( "Tag" ), "TestTag" );
+        ctrlMap.getAttribute( "Tag").setValue( "TestTag" ) ;
+        assertEquals( "CtrlMap.Tag wasn't set correctly", ctrlMap.getAttribute( "Tag" ).getString(), "TestTag" );
 
         // Cancel the subobject and verify that we have the old value.
         ctrl.cancelSubobject();
-        newY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        newY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals( "Cancel version isn't working", newY, originalY );
-        assertTrue( "Tag should still be null", ctrlMap.isAttributeNull( "Tag" ) );
+        assertTrue( "Tag should still be null", ctrlMap.getAttribute( "Tag" ).isNull() );
 
         //
         // Create and accept
@@ -214,22 +214,22 @@ public class ViewTest
 
         // Create temporal subobject (again) and verify that the attr values is still the same.
         ctrl.createTemporalSubobjectVersion();
-        newY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        newY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals( "Create Temporal isn't working", newY, originalY );
-        assertTrue( "Tag should still be null", ctrlMap.isAttributeNull( "Tag" ) );
+        assertTrue( "Tag should still be null", ctrlMap.getAttribute( "Tag" ).isNull() );
 
         // Add one to the value and verify that it got set correctly.
-        ctrl.setAttribute( "PSDLG_Y", originalY + 1 );
-        newY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        ctrl.getAttribute( "PSDLG_Y").setValue( originalY + 1 ) ;
+        newY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals( "Versioned instance values aren't working", (Integer) ( newY - 1 ), originalY );
 
-        ctrlMap.setAttribute( "Tag", "TestTag2" );
-        assertEquals( "CtrlMap.Tag wasn't set correctly", ctrlMap.getStringFromAttribute( "Tag" ), "TestTag2" );
+        ctrlMap.getAttribute( "Tag").setValue( "TestTag2" ) ;
+        assertEquals( "CtrlMap.Tag wasn't set correctly", ctrlMap.getAttribute( "Tag" ).getString(), "TestTag2" );
 
         ctrl.acceptSubobject();
-        newY = ctrl.getIntegerFromAttribute( "PSDLG_Y" );
+        newY = ctrl.getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals( "Versioned instance values aren't working", (Integer) ( newY - 1 ), originalY );
-        assertEquals( "CtrlMap.Tag wasn't set correctly", ctrlMap.getStringFromAttribute( "Tag" ), "TestTag2" );
+        assertEquals( "CtrlMap.Tag wasn't set correctly", ctrlMap.getAttribute( "Tag" ).getString(), "TestTag2" );
 
         //
         // Test with linked entities.
@@ -241,38 +241,38 @@ public class ViewTest
         xwd.cursor( "Ctrl" ).setFirst();
         xwd2.cursor( "Ctrl" ).setFirst();
         xwd2.cursor( "Ctrl" ).setNext();
-        xwd2.cursor( "Ctrl" ).setAttributeFromAttribute( "Tag", xwd, "Ctrl", "Tag" );
+        xwd2.cursor( "Ctrl" ).getAttribute( "Tag").setValue( xwd.cursor(  "Ctrl" ).getAttribute(  "Tag" ).getValue() )  ;
         xwd2.cursor( "Ctrl" ).linkInstances( xwd.cursor( "Ctrl" ) );
 
         // Verify they have the same attribute value.
-        Integer y  = xwd.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
-        Integer y2 = xwd2.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
+        Integer y  = xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
+        Integer y2 = xwd2.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals("linkInstances didn't appear to work", y, y2 );
 
         // Change the value for one entity and make sure they're still the same.
-        xwd.cursor( "Ctrl" ).setAttribute( "PSDLG_Y", y + 1 );
-        y  = xwd.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
-        y2 = xwd2.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
+        xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y").setValue( y + 1 ) ;
+        y  = xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
+        y2 = xwd2.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals("linkInstances didn't appear to work", y, y2 );
 
         // Create temporal for one of the linked instances.  Make sure both don't get changed.
         xwd.cursor( "Ctrl" ).createTemporalSubobjectVersion();
-        xwd.cursor( "Ctrl" ).setAttribute( "PSDLG_Y", y + 1 );
-        y  = xwd.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
-        y2 = xwd2.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
+        xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y").setValue( y + 1 ) ;
+        y  = xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
+        y2 = xwd2.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
         assertTrue("Changing a temporal value changes linked values.", y != y2 );
 
         // Accept the subobject and make sure the attributes are now the same.
         xwd.cursor( "Ctrl" ).acceptSubobject();
-        y2 = xwd2.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
+        y2 = xwd2.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals("linkInstances didn't appear to work", y, y2 );
-        newY  = xwd.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
+        newY  = xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals("AcceptSubobject changed a value", y, newY );
 
         // Change the value one last time and make sure they're still the same.
-        xwd.cursor( "Ctrl" ).setAttribute( "PSDLG_Y", newY + 1 );
-        y  = xwd.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
-        y2 = xwd2.cursor( "Ctrl" ).getIntegerFromAttribute( "PSDLG_Y" );
+        xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y").setValue( newY + 1 ) ;
+        y  = xwd.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
+        y2 = xwd2.cursor( "Ctrl" ).getAttribute( "PSDLG_Y" ).getInteger();
         assertEquals("Linked, accepted instances don't appear to be linked.", y, y2 );
 
         //
@@ -280,11 +280,11 @@ public class ViewTest
         //
         EntityCursor wnd = xwd.cursor( "Wnd" );
         wnd.createTemporalEntity( CursorPosition.LAST );
-        wnd.setAttribute( "Caption", "testvalue" );
+        wnd.getAttribute( "Caption").setValue( "testvalue" ) ;
         wnd.cancelTemporalEntity();
 
         wnd.createTemporalEntity( CursorPosition.LAST );
-        wnd.setAttribute( "Caption", "testvalue" );
+        wnd.getAttribute( "Caption").setValue( "testvalue" ) ;
         wnd.acceptTemporalEntity();
     }
 
@@ -314,7 +314,7 @@ public class ViewTest
 
         View view = zencas.activateOiFromFile( "mEmploy", "target/test-classes/testdata//ZENCAs/mEmploy2.txt", ActivateFlags.SINGLE );
         CursorResult rc = view.cursor( "HistDeptContractDistribution" ).setFirst( "Employee" );
-        String id = view.cursor( "HistDeptContractDistribution" ).getStringFromAttribute( "ID" );
+        String id = view.cursor( "HistDeptContractDistribution" ).getAttribute( "ID" ).getString();
         assertEquals( "setFirst with scoping didn't find first instance.", "101", id );
         rc = view.cursor( "HistDeptContractDistribution" ).setFirstWithinOi();
         assertEquals( "setFirstWithinOi didn't find first instance.", CursorResult.SET, rc );
@@ -345,7 +345,7 @@ public class ViewTest
 
         // Create a third entity at the end
         schol.setLast();
-        schol.createEntity( CursorPosition.LAST, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS )).setAttribute( "ID" ,  2  );
+        schol.createEntity( CursorPosition.LAST, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS )).getAttribute( "ID" ).setValue(  2  ) ;
 
         // Position on the second entity and delete it.
         schol.setFirst();
@@ -354,12 +354,12 @@ public class ViewTest
         assertEquals( "Delete returned wrong return code", rc, CursorResult.UNCHANGED );
         rc = schol.setNext();
         assertEquals( "Delete didn't set cursor correctly", rc, CursorResult.SET );
-        String id = schol.getStringFromAttribute( "ID" );
+        String id = schol.getAttribute( "ID" ).getString();
         assertEquals( "Delete didn't set cursor correctly", id, "2" );
 
         rc = schol.setNext();
         assertTrue( ! rc.isSet() );
-        Integer i = schol.getIntegerFromAttribute( "ID" );
+        Integer i = schol.getAttribute( "ID" ).getInteger();
         assertEquals("Delete with repos none didn't work.", i, (Integer) 2 );
 
         rc = mFASrc.cursor( "FinAidSource" ).deleteEntity();
@@ -378,7 +378,7 @@ public class ViewTest
         schol = mFASrc.cursor( "Scholarship" );
         rc = schol.setLast();
         rc = schol.deleteEntity( CursorPosition.LAST );
-        id = schol.getStringFromAttribute( "ID" );
+        id = schol.getAttribute( "ID" ).getString();
         assertEquals( rc, CursorResult.SET );
         rc = schol.deleteEntity( CursorPosition.LAST );
         assertEquals( rc, CursorResult.UNCHANGED );
@@ -428,7 +428,7 @@ public class ViewTest
                   result = mFASrc.cursor( "Scholarship" ).setNext() )
             {
                 entityCount++;
-                mFASrc.log().debug( "Attribute value = %s", mFASrc.cursor( "Scholarship" ).getStringFromAttribute( "ID" ) );
+                mFASrc.log().debug( "Attribute value = %s", mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).getString() );
                 for ( result = mFASrc.cursor( "Fund" ).setFirst();
                       result.isSet();
                       result = mFASrc.cursor( "Fund" ).setNext() )
@@ -445,7 +445,7 @@ public class ViewTest
               result = mFASrc.cursor( "Scholarship" ).setNext( "FinAidSource" ) )
         {
             entityCount++;
-            mFASrc.log().debug( "Attribute value = %s", mFASrc.cursor( "Scholarship" ).getStringFromAttribute( "ID" ) );
+            mFASrc.log().debug( "Attribute value = %s", mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).getString() );
             for ( result = mFASrc.cursor( "Fund" ).setFirst();
                   result.isSet();
                   result = mFASrc.cursor( "Fund" ).setNext() )
@@ -458,19 +458,19 @@ public class ViewTest
         // Verify that setFirst with arguments works.
         mFASrc.cursor( "FinAidSource" ).setFirst();
         assertEquals("Error in setFirst", mFASrc.cursor( "Scholarship" ).setFirst("ID", 1), CursorResult.SET);
-        assertEquals("Error in setFirst", mFASrc.cursor( "Scholarship" ).getIntegerFromAttribute("ID"), (Integer) 1);
+        assertEquals("Error in setFirst", mFASrc.cursor( "Scholarship" ).getAttribute("ID").getInteger(), (Integer) 1);
         assertEquals("Error in setFirst", mFASrc.cursor( "Fund" ).setFirst("Name", "Fund1"), CursorResult.SET);
-        assertEquals("Error in setFirst", mFASrc.cursor( "Fund" ).getStringFromAttribute("Name"), "Fund1");
+        assertEquals("Error in setFirst", mFASrc.cursor( "Fund" ).getAttribute("Name").getString(), "Fund1");
 
         for ( EntityInstance finAid : mFASrc.cursor( "FinAidSource" ).eachEntity() )
         {
             assert finAid != null;
             for ( EntityInstance scholarship : mFASrc.cursor( "Scholarship" ).eachEntity() )
             {
-                mFASrc.log().debug( "Attribute value = %s", scholarship.getStringFromAttribute( "ID" ) );
+                mFASrc.log().debug( "Attribute value = %s", scholarship.getAttribute( "ID" ).getString() );
                 for ( EntityInstance fund : mFASrc.cursor( "Fund" ).eachEntity() )
                 {
-                    mFASrc.log().debug( fund.getStringFromAttribute( "Name" ) );
+                    mFASrc.log().debug( fund.getAttribute( "Name" ).getString() );
                 }
             }
         }
@@ -478,7 +478,7 @@ public class ViewTest
         mFASrc.logObjectInstance();
 
         View view2 = zencas.activateEmptyObjectInstance( "mFASrc" );
-        view2.cursor( "FinAidSource" ).createEntity().setAttribute( "ID" ,  99  );
+        view2.cursor( "FinAidSource" ).createEntity().getAttribute( "ID" ).setValue(  99  ) ;
         view2.cursor( "Scholarship" ).includeSubobject( mFASrc.cursor( "Scholarship" ), CursorPosition.FIRST );
         view2.logObjectInstance();
     }
@@ -489,28 +489,28 @@ public class ViewTest
         createTestOI();
 
         // Date domain
-        mFASrc.cursor( "Fund" ).setAttribute( "FullyEndowedDate", "03/11/2020" );
-        String dateString = mFASrc.cursor( "Fund" ).getStringFromAttribute( "FullyEndowedDate", null );
+        mFASrc.cursor( "Fund" ).getAttribute( "FullyEndowedDate").setValue( "03/11/2020" ) ;
+        String dateString = mFASrc.cursor( "Fund" ).getAttribute( "FullyEndowedDate" ).getString(null);
         assertTrue( "Date domain mismatch", dateString.equals( "03/11/2020" ) );
 
         // Static table domain.
-        mFASrc.cursor( "FinAidSource" ).setAttribute( "AidType", "G" );
-        String value = mFASrc.cursor( "FinAidSource" ).getStringFromAttribute( "AidType" );
+        mFASrc.cursor( "FinAidSource" ).getAttribute( "AidType").setValue( "G" ) ;
+        String value = mFASrc.cursor( "FinAidSource" ).getAttribute( "AidType" ).getString();
         assertEquals( "Table domain value failed", value, "G" );
-        value = mFASrc.cursor( "FinAidSource" ).getStringFromAttribute( "AidType", "" );
+        value = mFASrc.cursor( "FinAidSource" ).getAttribute( "AidType" ).getString( "" );
         assertEquals( "Table domain value failed", value, "Gift Aid" );
 
         // Email domain
         String email = "test@testing.com";
-        mFASrc.cursor( "EmailPerson" ).createEntity().setAttribute( "eMailAddress", email );
-        String email2 = mFASrc.cursor( "EmailPerson" ).getStringFromAttribute( "eMailAddress" );
+        mFASrc.cursor( "EmailPerson" ).createEntity().getAttribute( "eMailAddress").setValue( email ) ;
+        String email2 = mFASrc.cursor( "EmailPerson" ).getAttribute( "eMailAddress" ).getString();
         assertEquals( email, email2 );
 
         // DoubleDomain
-        mFASrc.cursor( "FinAidSource" ).setAttribute( "wTotalNotAcceptedActiveStudents", "12.0" );
+        mFASrc.cursor( "FinAidSource" ).getAttribute( "wTotalNotAcceptedActiveStudents").setValue( "12.0" ) ;
         try
         {
-            mFASrc.cursor( "FinAidSource" ).setAttribute( "wTotalNotAcceptedActiveStudents", "12%" );
+            mFASrc.cursor( "FinAidSource" ).getAttribute( "wTotalNotAcceptedActiveStudents").setValue( "12%" ) ;
             fail( "Didn't get expected Invalid attribute exception" );
         }
         catch ( InvalidAttributeValueException e )
@@ -545,7 +545,7 @@ public class ViewTest
         mFASrc.cursor( "Fund" ).setLast();
 
         // Get Fund.ID
-        Integer id1 = mFASrc.cursor( "Fund" ).getIntegerFromAttribute( "ID" );
+        Integer id1 = mFASrc.cursor( "Fund" ).getAttribute( "ID" ).getInteger();
         long key = mFASrc.cursor( "Fund" ).getEntityKey();
 
         // Set cursor to be a new Fund.
@@ -554,14 +554,14 @@ public class ViewTest
         CursorResult rc = mFASrc.cursor( "Fund" ).setByEntityKey( key );
         assertEquals( "Setting cursor by entity key didn't change the parent.",
                        rc, CursorResult.SET );
-        Integer id2 = mFASrc.cursor( "Fund" ).getIntegerFromAttribute( "ID" );
+        Integer id2 = mFASrc.cursor( "Fund" ).getAttribute( "ID" ).getInteger();
         assertEquals( "Setting cursor by entity key didn't change the cursor.", id1, id2 );
 
         rc = mFASrc.cursor( "Scholarship" ).setPosition( 1 );
         assertEquals( "setPosition didn't return correct value", rc, CursorResult.SET );
-        assertEquals( "Set position didn't work", mFASrc.cursor( "Scholarship" ).getIntegerFromAttribute( "ID" ), (Object) 1 );
+        assertEquals( "Set position didn't work", mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).getInteger(), (Object) 1 );
         mFASrc.cursor( "Scholarship" ).setPosition( 0 );
-        assertEquals( "Set position didn't work", mFASrc.cursor( "Scholarship" ).getIntegerFromAttribute( "ID" ), (Object) 0 );
+        assertEquals( "Set position didn't work", mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).getInteger(), (Object) 0 );
         assertEquals( "Set position didn't return null", mFASrc.cursor( "Scholarship" ).setPosition( 999 ), CursorResult.NULL );
     }
 
@@ -587,10 +587,10 @@ public class ViewTest
 
         mFASrc.cursor( "Scholarship" ).setFirst();
         View newView = mFASrc.newView();
-        String id = mFASrc.cursor( "Scholarship" ).getStringFromAttribute( "ID" );
+        String id = mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).getString();
         mFASrc.cursor( "Scholarship" ).setNext();
         newView.copyCursors( mFASrc );
-        assertTrue( "copyCursors() didn't set cursors correctly", mFASrc.cursor( "Scholarship" ).compareAttribute( "ID", id ) != 0 );
+        assertTrue( "copyCursors() didn't set cursors correctly", mFASrc.cursor( "Scholarship" ).getAttribute( "ID").compare( id )  != 0 );
     }
 
     @Test
@@ -626,7 +626,7 @@ public class ViewTest
         EntityInstance e1 = cursor.getEntityInstance();
         cursor.setNext();
         EntityInstance e2 = cursor.getEntityInstance();
-        assertTrue("Entity ordering failed", e2.compareAttribute( "ID", e1, "ID" ) == -1 );
+        assertTrue("Entity ordering failed", e2.getAttribute( "ID").compare( e1.getAttribute( "ID" ).getValue() ) == -1 );
 
         // Now reverse the order.
         cursor.orderEntities( "ID A" );
@@ -637,7 +637,7 @@ public class ViewTest
         e1 = cursor.getEntityInstance();
         cursor.setNext();
         e2 = cursor.getEntityInstance();
-        assertTrue("Entity ordering failed", e2.compareAttribute( "ID", e1, "ID" ) == 1 );
+        assertTrue("Entity ordering failed", e2.getAttribute( "ID").compare( e1.getAttribute( "ID" ).getValue() ) == 1 );
     }
 
     @Test
@@ -646,15 +646,15 @@ public class ViewTest
         createTestOI();
         EntityCursor finAid = mFASrc.cursor( "FinAidSource" );
 
-        finAid.setAttribute( "wTotalNotAcceptedActiveStudents", "1231234.56789" );
-        String str = finAid.getStringFromAttribute( "wTotalNotAcceptedActiveStudents", null );
+        finAid.getAttribute( "wTotalNotAcceptedActiveStudents").setValue( "1231234.56789" ) ;
+        String str = finAid.getAttribute( "wTotalNotAcceptedActiveStudents" ).getString( null );
         assertEquals( "Default decimal context failed", str, "1,231,234.57" ); // Gets rounded up.
-        str = finAid.getStringFromAttribute( "wTotalNotAcceptedActiveStudents" );
+        str = finAid.getAttribute( "wTotalNotAcceptedActiveStudents" ).getString();
         assertEquals( "Default decimal context failed", str, "1231234.56789" );
 
         try
         {
-            finAid.setAttribute( "wTotalNotAcceptedActiveStudents", "123a.00" );
+            finAid.getAttribute( "wTotalNotAcceptedActiveStudents").setValue( "123a.00" ) ;
             fail( "Didn't get expected Invalid attribute exception" );
         }
         catch ( InvalidAttributeValueException e )
@@ -674,15 +674,15 @@ public class ViewTest
         EntityCursor sch  = view.cursor( "Scholarship" );
         EntityCursor sch2 = v2.cursor( "Scholarship" );
         sch.setPosition( 4 );
-//        String s4 = sch.getStringFromAttribute( "ID" );
+//        String s4 = sch.getAttribute( "ID" ).getString();
         sch2.setPosition( 6 );
-        String s6 = sch2.getStringFromAttribute( "ID" );
+        String s6 = sch2.getAttribute( "ID" ).getString();
         sch.moveSubobject( CursorPosition.NEXT, sch2, CursorPosition.NEXT );
 
         sch.setPosition( 4 );
-//        String s4_2 = sch.getStringFromAttribute( "ID" );
+//        String s4_2 = sch.getAttribute( "ID" ).getString();
         sch.setNext();
-        String s5 = sch.getStringFromAttribute( "ID" );
+        String s5 = sch.getAttribute( "ID" ).getString();
         assertEquals( "Move entity didn't move source", s6, s5 );
     }
 
@@ -695,7 +695,7 @@ public class ViewTest
         //View view = zencas.activateEmptyObjectInstance( "wXferO" );
 
 //        view = zencas.activateEmptyObjectInstance( "KZXMLPGO", ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
-//        view.cursor( "Session" ).createEntity().setAttribute( "UserID", "Test user id" );
+//        view.cursor( "Session" ).createEntity().getAttribute( "UserID").setValue( "Test user id" ) ;
         View wXferO = zencas.activateEmptyObjectInstance( "wXferO" );
         wXferO.cursor( "Root" ).createEntity();
         View mYearLST = zencas.activateEmptyObjectInstance( "mYear" );
@@ -762,9 +762,9 @@ public class ViewTest
         //RESULT = mStudenC.cursor( "Registration" ).setFirst().toInt();
         while ( RESULT.isSet() )
         {
-     	   //mStudenC.log( ).info(mStudenC.cursor( "Registration" ).getStringFromAttribute( "ID" ));
-           System.out.println( mStudenC.cursor( "Registration" ).getStringFromAttribute( "ID" )  );
-           System.out.println( mStudenC.cursor( "RegistrationClass" ).getStringFromAttribute( "ID" )  );
+     	   //mStudenC.log( ).info(mStudenC.cursor( "Registration" ).getAttribute( "ID" ).getString());
+           System.out.println( mStudenC.cursor( "Registration" ).getAttribute( "ID" ).getString()  );
+           System.out.println( mStudenC.cursor( "RegistrationClass" ).getAttribute( "ID" ).getString()  );
 
            RESULT = mStudenC.cursor( "RegistrationClass" ).setNextContinue();
         }

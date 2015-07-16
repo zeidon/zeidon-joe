@@ -117,11 +117,11 @@ public class EpammsTest
        View vKZXMLPGO = JspWebUtils.createWebSession( null, task, "testUserId" );
        vKZXMLPGO.cursor( "Session" ).createEntity( CursorPosition.NEXT );
        vKZXMLPGO.cursor( "DialogWindowList" ).createEntity( CursorPosition.NEXT );
-       vKZXMLPGO.cursor( "DialogWindowList" ).setAttribute( "DialogName", "TestDlg1" );
-       vKZXMLPGO.cursor( "DialogWindowList" ).setAttribute( "WindowName", "TestWnd1" );
+       vKZXMLPGO.cursor( "DialogWindowList" ).getAttribute( "DialogName").setValue( "TestDlg1" ) ;
+       vKZXMLPGO.cursor( "DialogWindowList" ).getAttribute( "WindowName").setValue( "TestWnd1" ) ;
        vKZXMLPGO.cursor( "DialogWindowList" ).createEntity( CursorPosition.NEXT );
-       vKZXMLPGO.cursor( "DialogWindowList" ).setAttribute( "DialogName", "TestDlg2" );
-       vKZXMLPGO.cursor( "DialogWindowList" ).setAttribute( "WindowName", "TestWnd2" );
+       vKZXMLPGO.cursor( "DialogWindowList" ).getAttribute( "DialogName").setValue( "TestDlg2" ) ;
+       vKZXMLPGO.cursor( "DialogWindowList" ).getAttribute( "WindowName").setValue( "TestWnd2" ) ;
        vKZXMLPGO.cursor( "DialogWindowList" ).deleteEntity( CursorPosition.NONE );
        CursorResult nRC = vKZXMLPGO.cursor( "DialogWindowList" ).checkExistenceOfEntity();
        assertEquals( "testCheckExistenceOfEntity valid", CursorResult.UNDEFINED, nRC );
@@ -289,7 +289,7 @@ public class EpammsTest
         {
            mMasLC.cursor( "M_Usage" ).createEntity( CursorPosition.NEXT );
            mMasLC.cursor( "M_Usage" ).setMatchingAttributesByName( wWebXfer.cursor( "Usage" ), SetMatchingFlags.DEFAULT );
-           mMasLC.cursor( "M_Usage" ).setAttribute( "UsageType", "U" );
+           mMasLC.cursor( "M_Usage" ).getAttribute( "UsageType").setValue( "U" ) ;
            nRC = wWebXfer.cursor( "Usage" ).setNextContinue().toInt();;
         }
 
@@ -320,7 +320,7 @@ public class EpammsTest
       VmlTestOperation oper = new VmlTestOperation( task );
       int nRC = oper.SetCursorFirstEntityByEntityCsr( mMasLC, "M_Usage", mMasLC, "MI_UsageList", "" );
       mMasLC.cursor( "M_Usage" ).logEntity( );
-      String strName = mMasLC.cursor( "M_Usage" ).getStringFromAttribute( "Name" );
+      String strName = mMasLC.cursor( "M_Usage" ).getAttribute( "Name" ).getString();
       task.log( ).info( "testSetCursorFirstEntityByEntityCsr RC: " + nRC );
       task.log( ).info( "testSetCursorFirstEntityByEntityCsr Name: " + strName + "  Original Name: " + "Hospitals" );
 
@@ -508,7 +508,7 @@ public class EpammsTest
 
       mTempLC.cursor( "M_GeneralStatement" ).setLast().toInt();;
       long lEKey = mTempLC.cursor( "M_GeneralStatement" ).getEntityKey( );
-      int nLastID = mTempLC.cursor( "M_GeneralStatement" ).getIntegerFromAttribute( "ID" );
+      int nLastID = mTempLC.cursor( "M_GeneralStatement" ).getAttribute( "ID" ).getInteger();
 
       mMasLC.cursor( "M_GeneralStatement" ).logEntity( false );
       int nRC = mMasLC.cursor( "M_GeneralStatement" ).setByEntityKey( lEKey ).toInt();
@@ -525,7 +525,7 @@ public class EpammsTest
       tgtCursor.logEntity( false );
       tgtCursor.moveSubobject( CursorPosition.PREV, srcCursor, CursorPosition.PREV );
       mMasLC.cursor( "M_GeneralStatement" ).setLast().toInt();;
-      int nNewLastID = mMasLC.cursor( "M_GeneralStatement" ).getIntegerFromAttribute( "ID" );
+      int nNewLastID = mMasLC.cursor( "M_GeneralStatement" ).getAttribute( "ID" ).getInteger();
       mTempLC.drop( );
 
       task.log( ).info( "Display mMasLC M_GeneralSection with children" );
@@ -535,7 +535,7 @@ public class EpammsTest
       task.log( ).info( "testMoveEntity LastID: " + nLastID + "  NewLastID: " + nNewLastID );
       assertNotSame( "SetEntityKey moveSubobject failed", nNewLastID, nLastID );
       mMasLC.cursor( "M_GeneralStatement" ).setPrev( );
-      nNewLastID = mMasLC.cursor( "M_GeneralStatement" ).getIntegerFromAttribute( "ID" );
+      nNewLastID = mMasLC.cursor( "M_GeneralStatement" ).getAttribute( "ID" ).getInteger();
       assertEquals( "SetEntityKey setPrevContinue position failed", 1, nNewLastID  );
       assertEquals( "SetEntityKey setPrevContinue failed", nRC, 0 );
     }
@@ -570,34 +570,34 @@ public class EpammsTest
 
    public int loadCtrlEntityStructure( EntityCursor cursor )
    {
-      Tag = cursor.getStringFromAttribute( "Tag" );  if ( Tag == null ) Tag = "";
+      Tag = cursor.getAttribute( "Tag" ).getString();  if ( Tag == null ) Tag = "";
       System.out.println( "Ctrl tag: " + Tag );
-      Text = cursor.getStringFromAttribute( "Text" );  if ( Text == null ) Text = "";
-      Type = cursor.getIntegerFromAttribute( "Type" );  if ( Type == null ) Type = 0;
-      Subtype = cursor.getIntegerFromAttribute( "Subtype" );  if ( Subtype == null ) Subtype = 0;
-      StyleX = cursor.getIntegerFromAttribute( "StyleX" );  if ( StyleX == null ) StyleX = 0;
-      OptionFlags = cursor.getIntegerFromAttribute( "OptionFlags" );  if ( OptionFlags == null ) OptionFlags = 0;
-      IdNbr = cursor.getIntegerFromAttribute( "IdNbr" );  if ( IdNbr == null ) IdNbr = 0;
-      PSDLG_X = cursor.getIntegerFromAttribute( "PSDLG_X" );  if ( PSDLG_X == null ) PSDLG_X = 0;
-      PSDLG_Y = cursor.getIntegerFromAttribute( "PSDLG_Y" );  if ( PSDLG_Y == null ) PSDLG_Y = 0;
-      SZDLG_X = cursor.getIntegerFromAttribute( "SZDLG_X" );  if ( SZDLG_X == null ) SZDLG_X = 0;
-      SZDLG_Y = cursor.getIntegerFromAttribute( "SZDLG_Y" );  if ( SZDLG_Y == null ) SZDLG_Y = 0;
-      RELCNT_X = cursor.getIntegerFromAttribute( "RELCNT_X" );  if ( RELCNT_X == null ) RELCNT_X = 0;
-      RELCNT_Y = cursor.getIntegerFromAttribute( "RELCNT_Y" );  if ( RELCNT_Y == null ) RELCNT_Y = 0;
-      CtrlBOI = cursor.getBlobFromAttribute( "CtrlBOI" );
-      ColorFg = cursor.getIntegerFromAttribute( "ColorFg" );  if ( ColorFg == null ) ColorFg = 0;
-      ColorBk = cursor.getIntegerFromAttribute( "ColorBk" );  if ( ColorBk == null ) ColorBk = 0;
-      DIL = cursor.getIntegerFromAttribute( "DIL" );  if ( DIL == null ) DIL = 0;
-      EventAct = cursor.getBlobFromAttribute( "EventAct" );
-      DD_BOI = cursor.getBlobFromAttribute( "DD_BOI" );
-   // D_Text = cursor.getStringFromAttribute( "D_Text" );  if ( D_Text == null ) D_Text = "";
-      NLS = cursor.getIntegerFromAttribute( "NLS" );  if ( NLS == null ) NLS = 0;
-      TagPE = cursor.getStringFromAttribute( "TagPE" );  if ( TagPE == null ) TagPE = "";
-      GUID = cursor.getStringFromAttribute( "GUID" );  if ( GUID == null ) GUID = "";
-      Properties = cursor.getBlobFromAttribute( "Properties" );
-      LKey = cursor.getBlobFromAttribute( "LKey" );
-      Script = cursor.getStringFromAttribute( "Script" );  if ( Script == null ) Script = "";
-      ScriptDLL = cursor.getStringFromAttribute( "ScriptDLL" );  if ( ScriptDLL == null ) ScriptDLL = "";
+      Text = cursor.getAttribute( "Text" ).getString();  if ( Text == null ) Text = "";
+      Type = cursor.getAttribute( "Type" ).getInteger();  if ( Type == null ) Type = 0;
+      Subtype = cursor.getAttribute( "Subtype" ).getInteger();  if ( Subtype == null ) Subtype = 0;
+      StyleX = cursor.getAttribute( "StyleX" ).getInteger();  if ( StyleX == null ) StyleX = 0;
+      OptionFlags = cursor.getAttribute( "OptionFlags" ).getInteger();  if ( OptionFlags == null ) OptionFlags = 0;
+      IdNbr = cursor.getAttribute( "IdNbr" ).getInteger();  if ( IdNbr == null ) IdNbr = 0;
+      PSDLG_X = cursor.getAttribute( "PSDLG_X" ).getInteger();  if ( PSDLG_X == null ) PSDLG_X = 0;
+      PSDLG_Y = cursor.getAttribute( "PSDLG_Y" ).getInteger();  if ( PSDLG_Y == null ) PSDLG_Y = 0;
+      SZDLG_X = cursor.getAttribute( "SZDLG_X" ).getInteger();  if ( SZDLG_X == null ) SZDLG_X = 0;
+      SZDLG_Y = cursor.getAttribute( "SZDLG_Y" ).getInteger();  if ( SZDLG_Y == null ) SZDLG_Y = 0;
+      RELCNT_X = cursor.getAttribute( "RELCNT_X" ).getInteger();  if ( RELCNT_X == null ) RELCNT_X = 0;
+      RELCNT_Y = cursor.getAttribute( "RELCNT_Y" ).getInteger();  if ( RELCNT_Y == null ) RELCNT_Y = 0;
+      CtrlBOI = cursor.getAttribute( "CtrlBOI" ).getBlob();
+      ColorFg = cursor.getAttribute( "ColorFg" ).getInteger();  if ( ColorFg == null ) ColorFg = 0;
+      ColorBk = cursor.getAttribute( "ColorBk" ).getInteger();  if ( ColorBk == null ) ColorBk = 0;
+      DIL = cursor.getAttribute( "DIL" ).getInteger();  if ( DIL == null ) DIL = 0;
+      EventAct = cursor.getAttribute( "EventAct" ).getBlob();
+      DD_BOI = cursor.getAttribute( "DD_BOI" ).getBlob();
+   // D_Text = cursor.getAttribute( "D_Text" ).getString();  if ( D_Text == null ) D_Text = "";
+      NLS = cursor.getAttribute( "NLS" ).getInteger();  if ( NLS == null ) NLS = 0;
+      TagPE = cursor.getAttribute( "TagPE" ).getString();  if ( TagPE == null ) TagPE = "";
+      GUID = cursor.getAttribute( "GUID" ).getString();  if ( GUID == null ) GUID = "";
+      Properties = cursor.getAttribute( "Properties" ).getBlob();
+      LKey = cursor.getAttribute( "LKey" ).getBlob();
+      Script = cursor.getAttribute( "Script" ).getString();  if ( Script == null ) Script = "";
+      ScriptDLL = cursor.getAttribute( "ScriptDLL" ).getString();  if ( ScriptDLL == null ) ScriptDLL = "";
       return 0;
     }
 

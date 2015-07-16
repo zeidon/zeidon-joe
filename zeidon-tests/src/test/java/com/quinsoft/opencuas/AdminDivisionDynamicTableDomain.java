@@ -122,10 +122,10 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
             {
 	            // If CurrentAdministrativeDivision doesn't exist, then use Main Campus (id = 1)
 	            if ( mUser.cursor("CurrentAdministrativeDivision").checkExistenceOfEntity() == CursorResult.SET)
-	            	id = mUser.cursor( "CurrentAdministrativeDivision" ).getIntegerFromAttribute( "ID" );
+	            	id = mUser.cursor( "CurrentAdministrativeDivision" ).getAttribute( "ID" ).getInteger();
 	            else
 	            	if ( mUser.cursor("PreferedAdministrativeDivision").checkExistenceOfEntity() == CursorResult.SET)
-		            	id = mUser.cursor( "PreferedAdministrativeDivision" ).getIntegerFromAttribute( "ID" );
+		            	id = mUser.cursor( "PreferedAdministrativeDivision" ).getAttribute( "ID" ).getInteger();
 	            if ( id.equals(0))
 	            	id = 1;
            }
@@ -133,7 +133,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
             // Drop admin div domain for the admin div that is not being used.
             for ( @SuppressWarnings("unused") EntityInstance domain : domainView.cursor( "Domain" ).eachEntity() )
             {
-            	if ( ! domainView.cursor("AdministrativeDivision").getIntegerFromAttribute("ID").equals(id) )
+            	if ( ! domainView.cursor("AdministrativeDivision").getAttribute("ID").getInteger().equals(id) )
             		domainView.cursor("Domain").dropEntity( CursorPosition.NONE );        		
             }
             domainView.cursor("Domain").setFirst();

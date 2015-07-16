@@ -290,13 +290,13 @@ class ActivateOisFromXmlStream implements StreamReader
                 else
                 {
                     EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
-                    ei.setInternalAttributeValue( attributeDef, characterBuffer.toString(), false );
+                    ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), false ) ;
                     characterBuffer = null; // Indicates we've read the attribute.
 
                     if ( incremental )
                     {
                         Attributes attributes = attributeAttributes.pop();
-                        ei.setAttributeUpdated( attributeDef, isYes( attributes.getValue( "updated" ) ) );
+                        ei.getAttribute( attributeDef ).setIsUpdated( isYes( attributes.getValue( "updated" ) ) );
                     }
 
                     return;

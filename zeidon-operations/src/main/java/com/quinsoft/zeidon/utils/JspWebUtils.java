@@ -58,8 +58,8 @@ public class JspWebUtils
             view.setName( WEB_SESSION_VIEW_NAME );
             if ( ! view.cursor( "Session" ).setFirst( "TaskID", task.toString() ).isSet() )
             {
-               view.cursor( "Session" ).createEntity().setAttribute( "TaskID", task.toString() )
-                                       .setAttribute( "UserID", userId ); // initialize UserID (even if blank)
+               view.cursor( "Session" ).createEntity().getAttribute( "TaskID").setValue( task.toString() ) 
+                                       .getAttribute( "UserID").setValue( userId ) ; // initialize UserID (even if blank)
             }
          }
       }
@@ -67,7 +67,7 @@ public class JspWebUtils
       if ( StringUtils.isBlank( userId ) == false ) // always reset the UserID (if not blank)
       {
          if ( view != null )
-            view.cursor( "Session" ).setAttribute( "UserID", userId );
+            view.cursor( "Session" ).getAttribute( "UserID").setValue( userId ) ;
       }
 
       return view;
@@ -86,7 +86,7 @@ public class JspWebUtils
          Task task = qual.getTask();
          View view = task.getViewByName( WEB_SESSION_VIEW_NAME );
          if ( view != null && view.cursor( "Session" ).setFirst( "TaskID", task ).isSet() )
-            userId = view.cursor( "Session" ).getStringFromAttribute( "UserID" );
+            userId = view.cursor( "Session" ).getAttribute( "UserID" ).getString();
       }
 
       return userId;

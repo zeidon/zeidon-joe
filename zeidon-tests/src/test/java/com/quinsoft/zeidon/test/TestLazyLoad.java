@@ -52,7 +52,7 @@ public class TestLazyLoad
         CursorStatus status = view.cursor( lazyLoadEntity ).getStatus();
         assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
 
-        String id = view.cursor( lazyLoadEntity ).getStringFromAttribute( "ID" );
+        String id = view.cursor( lazyLoadEntity ).getAttribute( "ID" ).getString();
         status = view.cursor( lazyLoadEntity ).getStatus();
         assertEquals("'Category' status is not SET.", CursorStatus.SET, status );
         assertTrue( "ID is null after lazy load", ! StringUtils.isBlank( id ) );
@@ -78,7 +78,7 @@ public class TestLazyLoad
 
         status = view.cursor( lazyLoadChild ).getStatus();
         assertEquals( lazyLoadChild + " status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
-        id = view.cursor( lazyLoadChild ).getStringFromAttribute( "ID" );
+        id = view.cursor( lazyLoadChild ).getAttribute( "ID" ).getString();
         assertTrue( "ID is null after lazy load", ! StringUtils.isBlank( id ) );
 
         // Try again.  This time we'll turn off lazy loading.
@@ -93,7 +93,7 @@ public class TestLazyLoad
         assertEquals("'Category' status is not NOT_LOADED.", CursorStatus.NOT_LOADED, status );
         try
         {
-            id = view.cursor( lazyLoadEntity ).getStringFromAttribute( "ID" );
+            id = view.cursor( lazyLoadEntity ).getAttribute( "ID" ).getString();
             assertTrue( "Cursor was apparently set", false );
         }
         catch ( NullCursorException e )

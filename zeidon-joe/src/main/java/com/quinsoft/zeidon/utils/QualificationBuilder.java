@@ -420,15 +420,15 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .setAttribute( ENTITYNAME, entityName )
-                                     .setAttribute( OPER, "EXISTS" );
+                                     .getAttribute( ENTITYNAME).setValue( entityName ) 
+                                     .getAttribute( OPER).setValue( "EXISTS" ) ;
         return this;
     }
 
     public QualificationBuilder addAttribQual( String oper )
     {
         validateEntity();
-        qualView.cursor( QUALATTRIB ).createEntity().setAttribute( OPER, oper );
+        qualView.cursor( QUALATTRIB ).createEntity().getAttribute( OPER).setValue( oper ) ;
         return this;
     }
 
@@ -456,14 +456,14 @@ public class QualificationBuilder
     public QualificationBuilder newEntityKey( Integer key )
     {
         qualView.cursor( KEYLIST ).createEntity()
-                                  .setAttribute( "IntegerValue", key );
+                                  .getAttribute( "IntegerValue").setValue( key ) ;
         return this;
     }
 
     public QualificationBuilder newEntityKey( String key )
     {
         qualView.cursor( KEYLIST ).createEntity()
-                                  .setAttribute( "StringValue", key );
+                                  .getAttribute( "StringValue").setValue( key ) ;
         return this;
     }
 
@@ -480,10 +480,10 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .setAttribute( ENTITYNAME, entityName )
-                                     .setAttribute( ATTRIBUTENAME, attribName )
-                                     .setAttribute( OPER, oper )
-                                     .setAttribute( VALUE, attribValue == null ? null : attribValue.toString() );
+                                     .getAttribute( ENTITYNAME).setValue( entityName ) 
+                                     .getAttribute( ATTRIBUTENAME).setValue( attribName ) 
+                                     .getAttribute( OPER).setValue( oper ) 
+                                     .getAttribute( VALUE).setValue( attribValue == null ? null : attribValue.toString() ) ;
 
         return this;
     }

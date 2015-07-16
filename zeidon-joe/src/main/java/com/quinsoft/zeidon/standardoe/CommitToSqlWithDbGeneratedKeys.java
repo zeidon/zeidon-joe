@@ -633,7 +633,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                     if ( twin.isHidden() )
                         continue;
 
-                    twin.setInternalAttributeValue( autoSeq, seq++, true );
+                    twin.getAttribute( autoSeq).setInternalValue( seq++, true ) ;
 
                     // Turn off the bDBHUpdated flag (if it's on) so that we
                     // make sure the entity is updated.  If the entity instance

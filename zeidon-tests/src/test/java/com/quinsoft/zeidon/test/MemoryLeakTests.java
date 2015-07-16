@@ -74,18 +74,18 @@ public class MemoryLeakTests
     private View createTestOI()
     {
         mFASrc = zencas.activateEmptyObjectInstance( "mFASrc" );
-        mFASrc.cursor( "FinAidSource" ).createEntity().setAttribute( "SourceFootnote", newBigString() );
+        mFASrc.cursor( "FinAidSource" ).createEntity().getAttribute( "SourceFootnote").setValue( newBigString() ) ;
         for ( int i = 0; i < 2; i++ )
         {
             mFASrc.cursor( "Scholarship" ).createEntity();
-            mFASrc.cursor( "Scholarship" ).setAttribute( "ID" ,  i  );
-            mFASrc.cursor( "Scholarship" ).setAttribute( "Name" ,  "ScholarshipName" + i  );
-            mFASrc.cursor( "Scholarship" ).setAttribute( "Description" , newBigString() );
+            mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).setValue(  i  ) ;
+            mFASrc.cursor( "Scholarship" ).getAttribute( "Name" ).setValue(  "ScholarshipName" + i  ) ;
+            mFASrc.cursor( "Scholarship" ).getAttribute( "Description" ).setValue( newBigString() ) ;
             for ( int j = 1; j < 3; j++ )
             {
-                mFASrc.cursor( "Fund" ).createEntity().setAttribute( "Name" ,  "Fund" + Integer.toString( j  ) )
-                                                      .setAttribute( "ID" ,  (100 * j) + i  )
-                                                      .setAttribute( "Description", newBigString() );
+                mFASrc.cursor( "Fund" ).createEntity().getAttribute( "Name" ).setValue(  "Fund" + Integer.toString( j  ) ) 
+                                                      .getAttribute( "ID" ).setValue(  (100 * j) + i  ) 
+                                                      .getAttribute( "Description").setValue( newBigString() ) ;
             }
         }
         
@@ -126,8 +126,8 @@ public class MemoryLeakTests
             }
             
             schol.createTemporalSubobjectVersion();
-            schol.setAttribute( "Description" , newBigString() );
-            fund.setAttribute( "Description" , newBigString() );
+            schol.getAttribute( "Description" ).setValue( newBigString() ) ;
+            fund.getAttribute( "Description" ).setValue( newBigString() ) ;
             if ( accept )
                 schol.acceptSubobject();
             else

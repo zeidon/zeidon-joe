@@ -67,7 +67,7 @@ class SimpleTest
                 view.log().debug( "Creating %s %d", rootEntity, i );
 
             entityCount = createChildEntities( entityCount, view, rootEntity );
-            view.cursor( rootEntity.getName() ).setAttribute( "Tag", i );
+            view.cursor( rootEntity.getName() ).getAttribute( "Tag").setValue( i ) ;
         }
 
         view.log().debug( "Created %d entities", entityCount );
@@ -81,7 +81,7 @@ class SimpleTest
                   rc.isSet();
                   rc = view.cursor( "Dlg" ).setNext() )
             {
-                if ( view.cursor( "Dlg" ).compareAttribute( "Tag", tag ) == 0 )
+                if ( view.cursor( "Dlg" ).getAttribute( "Tag").compare( tag )  == 0 )
                     break;
             }
         }
@@ -94,7 +94,7 @@ class SimpleTest
                   rc.isSet();
                   rc = view.cursor( "Dlg" ).setNext() )
             {
-                if ( view.cursor( "Dlg" ).compareAttribute( "Tag", 1500 ) == 0 )
+                if ( view.cursor( "Dlg" ).getAttribute( "Tag").compare( 1500 )  == 0 )
                     break;
             }
         }
@@ -108,7 +108,7 @@ class SimpleTest
                   rc.isSet();
                   rc = cursor.setNext() )
             {
-                if ( cursor.compareAttribute( "Tag", 1500 ) == 0 )
+                if ( cursor.getAttribute( "Tag").compare( 1500 )  == 0 )
                     break;
             }
         }
@@ -121,7 +121,7 @@ class SimpleTest
                   rc.isSet();
                   rc = cursor.setNext() )
             {
-                if ( cursor.compareAttribute( "Tag", tag ) == 0 )
+                if ( cursor.getAttribute( "Tag").compare( tag )  == 0 )
                     break;
             }
         }
@@ -138,7 +138,7 @@ class SimpleTest
     private static void test( Task zencas )
     {
         View v = zencas.activateOiFromFile( "mStudent", "testdata/ZENCAs/mstudent_ac.por" );
-        v.cursor("Student").setAttributeFromAttribute( "GeneralNote", v, "Student", "StudentLifeClearedDate" );
+        v.cursor("Student").getAttribute( "GeneralNote").setValue( v.cursor(  "Student" ).getAttribute(  "StudentLifeClearedDate" ).getValue() )  ;
         System.out.println( "done " + v.cursor( "Student" ).getAttribute( "GeneralNote" ).getString() );
     }
 

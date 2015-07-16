@@ -476,7 +476,7 @@ class ActivateOisFromJsonStream implements StreamReader
                     attributeDef = entityDef.createDynamicAttributeDef( config );
                 }
 
-                ei.setInternalAttributeValue( attributeDef, jp.getText(), false );
+                ei.getAttribute( attributeDef).setInternalValue( jp.getText(), false ) ;
                 if ( incremental )
                 {
                     // Since incremental flags are set, assume the attribute hasn't been

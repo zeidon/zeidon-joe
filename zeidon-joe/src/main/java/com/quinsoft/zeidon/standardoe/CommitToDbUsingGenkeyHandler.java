@@ -542,7 +542,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     if ( twin.isHidden() )
                         continue;
 
-                    twin.setInternalAttributeValue( autoSeq, seq++, true );
+                    twin.getAttribute( autoSeq).setInternalValue( seq++, true ) ;
 
                     // Turn off the bDBHUpdated flag (if it's on) so that we
                     // make sure the entity is updated.  If the entity instance
@@ -682,7 +682,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     return true;
                 }
 
-                relInstance.setInternalAttributeValue( relAttributeDef, srcInstance.getInternalAttribute( srcAttributeDef ).getInternalValue(), true );
+                relInstance.getAttribute( relAttributeDef).setInternalValue( srcInstance.getInternalAttribute( srcAttributeDef ).getInternalValue(), true ) ;
                 relInstance.dbhNeedsCommit = true;
             }
             else
@@ -701,7 +701,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // would have thrown a validation exception.
                 if ( entityDef.getMinCardinality() == 0)
                 {
-                    relInstance.setInternalAttributeValue( relAttributeDef, null, true );
+                    relInstance.getAttribute( relAttributeDef).setInternalValue( null, true ) ;
                     relInstance.dbhNeedsCommit = true;
                 }
             }
@@ -801,17 +801,17 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     if ( ! genKeyCursor.setFirst( "EntityID", entityDef.getErEntityToken() ).isSet() )
                     {
                         DataRecord dataRecord = entityDef.getDataRecord();
-                        genKeyCursor.createEntity().setAttribute( "EntityID", entityDef.getErEntityToken() )
-                                                   .setAttribute( "EntityCount", 0 )
-                                                   .setAttribute( "TableName", dataRecord.getRecordName() )
-                                                   .setAttribute( "EntityName", entityDef.getName() );
+                        genKeyCursor.createEntity().getAttribute( "EntityID").setValue( entityDef.getErEntityToken() ) 
+                                                   .getAttribute( "EntityCount").setValue( 0 ) 
+                                                   .getAttribute( "TableName").setValue( dataRecord.getRecordName() ) 
+                                                   .getAttribute( "EntityName").setValue( entityDef.getName() ) ;
                     }
                     currentGenKeyEntity = entityDef;
                 }
 
                 Integer count = genKeyCursor.getAttribute( "EntityCount" ).getInteger();
                 count = ( count == null ) ? 1 : count + 1;
-                genKeyCursor.setAttribute( "EntityCount", count );
+                genKeyCursor.getAttribute( "EntityCount").setValue( count ) ;
                 oi.dbhNeedsGenKeys = true;
                 ei.dbhGenKeyNeeded = true;
 
@@ -849,7 +849,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 final Integer genkey = genkeys.get( entityDef.getErEntityToken() );
                 assert genkey != null;
 
-                ei.setInternalAttributeValue( genkeyAttr, genkey, true );
+                ei.getAttribute( genkeyAttr).setInternalValue( genkey, true ) ;
 
                 // Increment the genkey value in the genkey map.
                 genkeys.put( entityDef.getErEntityToken(), genkey + 1 );

@@ -160,7 +160,7 @@ public class AttributePanel extends JPanel
                     if ( attributeDef.isHidden() && ! env.isShowHiddenAttributes() )
                         continue;
 
-                    if ( ei.isAttributeNull( attributeDef ) && ! env.isShowNullAttributes() )
+                    if ( ei.getAttribute( attributeDef ).isNull() && ! env.isShowNullAttributes() )
                         continue;
                 }
 

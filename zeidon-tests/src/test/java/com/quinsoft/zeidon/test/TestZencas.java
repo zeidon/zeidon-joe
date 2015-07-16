@@ -1459,7 +1459,7 @@ public class TestZencas
 
 			   RESULT = mCRStdPLST.cursor( "ClassRoomStandardSchedule" ).setFirst().toInt();
 			   szTime = mCRStdPLST.cursor("ClassRoomSession").getAttribute("StartTime").getString();
-			   szTime = mCRStdPLST.cursor("ClassRoomSession").getAttribute("StartTime","HH:MM:SS.S").getString();
+			   szTime = mCRStdPLST.cursor("ClassRoomSession").getAttribute("StartTime").getString("HH:MM:SS.S");
 
 		       RESULT = mCRStdPLST.cursor( "ClassRoomStandardSchedule" ).setFirst( "ID","381").toInt();
 		       RESULT = mCRStdPLST.cursor( "ClassRoomSession" ).setFirst( "ID","1021","ClassRoomStandardSchedule").toInt();
@@ -2487,7 +2487,7 @@ public class TestZencas
 		    // setAttributeFromAttribute doesn't call it.  Following should be calling
 		    // wXferO_Object.owXferO_dCurrentDate
 		    //So AddMonthsToDate fails.
-		    wWebXfer.cursor("Work").setAttributeFromAttribute( "FromDate", wXferO, "Root", "dCurrentDate" );
+		    wWebXfer.cursor("Work").getAttribute( "FromDate").setValue( wXferO.cursor(  "Root" ).getAttribute(  "dCurrentDate" ).getValue() )  ;
 
 		    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wWebXfer );
 		    m_ZGLOBAL1_Operation.AddMonthsToDate( wWebXfer, "Work", "FromDate", -6 );
@@ -2559,26 +2559,26 @@ public class TestZencas
 			 o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
 	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zSINGLE );
 	         DropView( vTempViewVar_0 );
-	         
+
 	         CreateViewFromView( mUser2, mUser );
-	         	         
-	         EntityCursor cursor = mUser.cursor( "Person" );	  
+
+	         EntityCursor cursor = mUser.cursor( "Person" );
 	         //AttributeInstance attrib = cursor.getAttribute( "dPersonRoles" );
 	         //szRoles = attrib.getString();
-	         
-	         //RESULT = CompareAttributeToAttribute(mUser2, "Person", "dPersonRoles", mUser, "Person", "dPersonRoles");	         
-	         
-	         // When we call getAttribute(), executeDerivedOperation is not being executed. 
+
+	         //RESULT = CompareAttributeToAttribute(mUser2, "Person", "dPersonRoles", mUser, "Person", "dPersonRoles");
+
+	         // When we call getAttribute(), executeDerivedOperation is not being executed.
 	         // When we do the attrib.getString() below, then it calls the derived attribute and the compare will work.
 	         Assert.assertTrue( "Error comparing Derived Attribute, executeDerivedOperation not being executed.", cursor.getAttribute( "dPersonRoles" ).compare( "Instructor, Donor, Alumni, Employee" ) == 0 );
 	         AttributeInstance attrib2 = cursor.getAttribute( "dPersonRoles" );
 	         szRoles = attrib2.getString();
-	         
+
 	         Assert.assertTrue( "Error comparing Derived Attribute, executeDerivedOperation not being executed.", cursor.getAttribute( "dPersonRoles" ).compare( "Instructor, Donor, Alumni, Employee" ) == 0 );
-	         
+
 	         return 0;
 		}
-		
+
 		public int
 		testSavingNewObject( View     ViewToWindow )
 		{
@@ -2769,7 +2769,7 @@ public class TestZencas
 			// date in the format "08/19/2011 09:45:20.0 AM" which causes an error in StoreStringInRecord.
 			// If I add the context "YYYYMMDDHHMMSSS" it works fine.
 			//GetVariableFromAttribute( sb_szDate, mi_lTempInteger_2, 'S', 101, mStudenC, "SavedDegreeAudit", "CreatedDateTime", "", 0 );			//com.quinsoft.zeidon.InvalidAttributeValueException: Invalid value for attribute
-	        strGridEditCtl1 = mStudent.cursor( "MajorDegreeTrack" ).getAttribute( "dLastAuditDateTime", "" ).getString();
+	        strGridEditCtl1 = mStudent.cursor( "MajorDegreeTrack" ).getAttribute( "dLastAuditDateTime" ).getString("");
  	        System.out.println(strGridEditCtl1);
 	         DropObjectInstance( mStudent );
 	         DropObjectInstance( mStudenC );
@@ -3201,7 +3201,7 @@ public class TestZencas
  		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
  		   DropView( vTempViewVar_0 );
  		   mPerson.cursor("Person").getAttribute("Gender").setValue( "F", "") ;
-	       strText = mPerson.cursor( "Person" ).getAttribute( "HomePhone", "" ).getString();
+	       strText = mPerson.cursor( "Person" ).getAttribute( "HomePhone" ).getString( "" );
 
   		   //SetAttributeFromString( wXferO, "Root", "ActionFlag", "Yes" );
   		   SetAttributeFromString( wXferO, "Root", "ActionFlag", "Y" );
@@ -4068,8 +4068,8 @@ public class TestZencas
 			{
 				if ( lClsLstC.cursor("Class").getAttribute( "wCourseID").compare( "" )  == 0 )
 				{
-					lClsLstC.cursor("Class").setAttributeFromAttribute("wCourseID", lClsLstC, "Course", "ID" );
-					lClsLstC.cursor("Class").setAttributeFromAttribute("wCourseNumber", lClsLstC, "Course", "Number" );
+					lClsLstC.cursor("Class").getAttribute("wCourseID").setValue( lClsLstC.cursor(  "Course" ).getAttribute(  "ID" ).getValue() )  ;
+					lClsLstC.cursor("Class").getAttribute("wCourseNumber").setValue( lClsLstC.cursor(  "Course" ).getAttribute(  "Number" ).getValue() )  ;
 				}
 
 				if ( lClsLstC.cursor("Class").getAttribute( "wCrossListedFlag").compare( "Y" )  != 0 )
@@ -4082,7 +4082,8 @@ public class TestZencas
 						{
 							// !!! compareAttribute will give an error when one of the entities is null so I wasn't
 							// able to use this when I ran this test on MyENC.  I had to use the CompareAttributeToA...
-							while ( RESULT > CursorResult.UNCHANGED.toInt() && ( lClsLstC.cursor("Course").getAttribute( "ID").compare( lClsLstCT.cursor("CrossListedCourse"), "ID" )  != 0 ) )
+							while ( RESULT > CursorResult.UNCHANGED.toInt() &&
+							        ( lClsLstC.cursor("Course").getAttribute( "ID").compare( lClsLstCT.cursor("CrossListedCourse").getAttribute( "ID" ).getValue() )  != 0 ) )
 								while ( RESULT > CursorResult.UNCHANGED.toInt() && ( CompareAttributeToAttribute( lClsLstCT, "Course", "ID", lClsLstC, "CrossListedCourse", "ID" ) != 0 ) )
 								{
 									RESULT = lClsLstCT.cursor( "Class" ).setNext().toInt();
@@ -4098,8 +4099,8 @@ public class TestZencas
 							lClsLstCT.cursor("Class").getAttribute("wClassNumberTopicSection").setValue( szTempString_0) ;
 							lClsLstCT.cursor("Class").getAttribute("wCrossListedFlag").setValue( "Y") ;
 							lClsLstCT.cursor( "CorrespondingCrossListedCourse" ).includeSubobject( lClsLstC.cursor( "CrossListedCourse" ), CursorPosition.NEXT );
-							lClsLstCT.cursor("Class").setAttributeFromAttribute("wCourseID", lClsLstC, "CrossListedCourse", "ID" );
-							lClsLstCT.cursor("Class").setAttributeFromAttribute("wCourseNumber", lClsLstC, "CrossListedCourse", "Number" );
+							lClsLstCT.cursor("Class").getAttribute("wCourseID").setValue( lClsLstC.cursor(  "CrossListedCourse" ).getAttribute(  "ID" ).getValue() )  ;
+							lClsLstCT.cursor("Class").getAttribute("wCourseNumber").setValue( lClsLstC.cursor(  "CrossListedCourse" ).getAttribute(  "Number" ).getValue() )  ;
 						}
 
 						RESULT = lClsLstC.cursor( "CrossListedCourse" ).setNext().toInt();
@@ -4119,8 +4120,8 @@ public class TestZencas
 				nCnt = nCnt + 1;
 				//RESULT = IncludeSubobjectFromSubobject( TermslClsLstC, "Class", lClsLstC, "Class", zPOS_AFTER );
 				TermslClsLstC.cursor( "Class" ).includeSubobject( lClsLstC.cursor( "Class" ), CursorPosition.NEXT );
-				TermslClsLstC.cursor("Class").setAttributeFromAttribute( "wClassNumberTopicSection", lClsLstC, "Class", "wClassNumberTopicSection" );
-				TermslClsLstC.cursor("Class").setAttributeFromAttribute( "wCrossListedFlag", lClsLstC, "Class", "wCrossListedFlag" );
+				TermslClsLstC.cursor("Class").getAttribute( "wClassNumberTopicSection").setValue( lClsLstC.cursor(  "Class" ).getAttribute(  "wClassNumberTopicSection" ).getValue() )  ;
+				TermslClsLstC.cursor("Class").getAttribute( "wCrossListedFlag").setValue( lClsLstC.cursor(  "Class" ).getAttribute(  "wCrossListedFlag" ).getValue() )  ;
 				//SetAttributeFromAttribute( TermslClsLstC, "Class", "wClassNumberTopicSection", lClsLstC, "Class", "wClassNumberTopicSection" );
 				//SetAttributeFromAttribute( TermslClsLstC, "Class", "wCrossListedFlag", lClsLstC, "Class", "wCrossListedFlag" );
 				//lTempInteger_4 = CheckExistenceOfEntity( lClsLstC, "CorrespondingCrossListedCourse" );

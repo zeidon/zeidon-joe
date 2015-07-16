@@ -920,7 +920,7 @@ public abstract class VmlOperation
       Task task = qual.getTask();
       if ( session != null )
       {
-         session.setAttribute( "ZeidonAction", strActionToProcess );
+         session.setAttribute( "ZeidonAction", strActionToProcess ) ;
          task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment?
       }
       else
@@ -3180,7 +3180,7 @@ public abstract class VmlOperation
       }
       else
       {
-         String value = srcView.cursor( srcEntity ).getStringFromAttribute( srcAttribute );
+         String value = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
          nRC = cursor.setFirst( tgtAttribute, value, scopingEntity ).toInt();
       }
 
@@ -3204,7 +3204,7 @@ public abstract class VmlOperation
       }
       else
       {
-         String value = srcView.cursor( srcEntity ).getStringFromAttribute( srcAttribute );
+         String value = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
       // nRC = cursor.setFirst( tgtAttribute, value, scopingEntity ).toInt();
          nRC = cursor.setFirst( scopingEntity ).toInt();
       }
@@ -3838,7 +3838,7 @@ public abstract class VmlOperation
       }
       else
       {
-         //k = cursor.getIntegerFromAttribute( attributeName );
+         //k = cursor.getAttribute( attributeName ).getInteger();
          AttributeInstance attrib = cursor.getAttribute( attributeName );
          k = attrib.getInteger();
          if ( k == null )
@@ -3862,7 +3862,7 @@ public abstract class VmlOperation
       }
       else
       {
-         //k = cursor.getIntegerFromAttribute( attributeName );
+         //k = cursor.getAttribute( attributeName ).getInteger();
          AttributeInstance attrib = cursor.getAttribute( attributeName );
          k = attrib.getInteger();
          if ( k == null )
@@ -3980,7 +3980,7 @@ public abstract class VmlOperation
       }
       else
       {
-         s = cursor.getStringFromAttribute( attributeName, context );
+         s = cursor.getAttribute( attributeName ).getString( context );
 
          // Because in our vml code we compare a null to "", we should return a "" instead of null.
          if ( s == null )
@@ -4005,7 +4005,7 @@ public abstract class VmlOperation
       }
       else
       {
-         String s = cursor.getStringFromAttribute( attributeName, context );
+         String s = cursor.getAttribute( attributeName ).getString( context );
          if ( s == null )
          {
             s = "";
@@ -4066,7 +4066,7 @@ public abstract class VmlOperation
       }
       else
       {
-         decimalValue = cursor.getDoubleFromAttribute( attributeName );
+         decimalValue = cursor.getAttribute( attributeName ).getDouble();
       }
 
       // KJS 05/26/10 - Having a problem in my derived attribute when this returns a null.
@@ -4115,7 +4115,7 @@ public abstract class VmlOperation
       }
       else
       {
-         Double d1 = cursor.getDoubleFromAttribute( attributeName );
+         Double d1 = cursor.getAttribute( attributeName ).getDouble();
          if ( d1 == null )
          {
             d1 = 0.0;
@@ -4177,11 +4177,11 @@ public abstract class VmlOperation
          String s;
          if ( StringUtils.isBlank( context ) && control != zUSE_DEFAULT_CONTEXT )
          {
-             s = cursor.getStringFromAttribute( attributeName );
+             s = cursor.getAttribute( attributeName ).getString();
          }
          else
          {
-             s = cursor.getStringFromAttribute( attributeName, context );
+             s = cursor.getAttribute( attributeName ).getString( context );
          }
 
          if ( s == null )
@@ -4253,11 +4253,11 @@ public abstract class VmlOperation
       {
          if ( StringUtils.isBlank( context ) )
          {
-             i = cursor.getIntegerFromAttribute( attributeName );
+             i = cursor.getAttribute( attributeName ).getInteger();
          }
          else
          {
-             i = cursor.getIntegerFromAttribute( attributeName, context );
+             i = cursor.getAttribute( attributeName ).getInteger( context );
          }
 
          nRC = 0;
@@ -4624,7 +4624,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         tgtCursor.setAttributeFromAttribute( tgtAttribute, srcView, srcEntity, srcAttribute );
+         tgtCursor.getAttribute( tgtAttribute).setValue( srcView.cursor(  srcEntity ).getAttribute(  srcAttribute ).getValue() )  ;
       }
 
       return nRC;
@@ -4976,7 +4976,7 @@ public abstract class VmlOperation
       }
 
       Application application = qualView.getApplication();
-      Blob blob = srcView.cursor( srcEntity ).getBlobFromAttribute( srcAttribute );
+      Blob blob = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getBlob();
       if ( blob == null )
       {
          return -1;
@@ -7439,7 +7439,7 @@ public abstract class VmlOperation
 
 	  AttributeDef attributeDef = view.getLodDef().getEntityDef( entityName ).getAttribute( attributeName );
 
-	  if ( entityInstance.isAttributeUpdated(attributeDef) )
+	  if ( entityInstance.getAttribute(attributeDef).isUpdated() )
 	     return 1;
 	  else
 		 return 0;
@@ -8668,7 +8668,7 @@ public abstract class VmlOperation
 
       File file = new File( directory );
       boolean exists;
- 
+
       if ( file.exists() )
       {
          if ( (bDirectory != 0 && file.isDirectory()) || (bDirectory == 0 && file.isFile()) )
