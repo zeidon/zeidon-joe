@@ -530,7 +530,7 @@ public class TestZencas
               rc.isSet();
               rc = view.cursor( "GLJournalEntry" ).setNext() )
         {
-            if ( view.cursor( "GLJournalEntry" ).compareAttribute( "TransactionDate", "20110101" ) >= 0 )
+            if ( view.cursor( "GLJournalEntry" ).getAttribute( "TransactionDate").compare( "20110101" )  >= 0 )
                 count++;
         }
 
@@ -542,7 +542,7 @@ public class TestZencas
               rc.isSet();
               rc = view.cursor( "GLJournalEntry" ).setNext() )
         {
-            if ( view.cursor( "GLJournalEntry" ).compareAttribute( "TransactionDate", "20110101" ) >= 0 )
+            if ( view.cursor( "GLJournalEntry" ).getAttribute( "TransactionDate").compare( "20110101" )  >= 0 )
                 count++;
         }
 
@@ -553,7 +553,7 @@ public class TestZencas
         EntityCursor cursor = view.cursor( "GLJournalEntry" );
         for ( EntityInstance ei : cursor.eachEntity() )
         {
-            if ( ei.compareAttribute( "TransactionDate", "20110101" ) >= 0 )
+            if ( ei.getAttribute( "TransactionDate").compare( "20110101" )  >= 0 )
                 count++;
         }
         zencas.log().info( "Count3 = %d, time = %s", count, timer );
@@ -564,7 +564,7 @@ public class TestZencas
               rc >= 0;
               rc = view.cursor( "GLJournalEntry" ).setNext().toInt() )
         {
-            if ( view.cursor( "GLJournalEntry" ).compareAttribute( "TransactionDate", "20110101" ) >= 0 )
+            if ( view.cursor( "GLJournalEntry" ).getAttribute( "TransactionDate").compare( "20110101" )  >= 0 )
             {
                 view.cursor( "GLJournalEntry" ).dropEntity( CursorPosition.NONE );
                 count++;
@@ -584,7 +584,7 @@ public class TestZencas
               rc >= 0;
               rc = view.cursor( "GLJournalEntry" ).setNext().toInt() )
         {
-            if ( view.cursor( "GLJournalEntry" ).compareAttribute( "TransactionDate", "20110101" ) >= 0 )
+            if ( view.cursor( "GLJournalEntry" ).getAttribute( "TransactionDate").compare( "20110101" )  >= 0 )
             {
                 view.cursor( "GLJournalEntry" ).deleteEntity( CursorPosition.NONE );
                 count++;
@@ -1126,14 +1126,14 @@ public class TestZencas
 		   RelinkInstanceToInstance( mFAProf1, "FinAidAward", mFAProf2, "FinAidAward");
 
 	       mFAProf1.cursor("FinAidAwardDisbursement").createEntity();
-	       mFAProf1.cursor("FinAidAwardDisbursement").setAttribute("Amount", 123);
-	       mFAProf1.cursor("FinAidAwardDisbursement").setAttribute("AmountExpected", 321);
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 123) ;
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 321) ;
 
 	       // Check spawning after createEntity
 	       RESULT= mFAProf2.cursor("FinAidAwardDisbursement").setFirst( "Amount", 123 ).toInt();
- 		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getDoubleFromAttribute("Amount");
+ 		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getAttribute("Amount").getDouble();
  		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 123.0, dAmount, 0.1);
- 		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getDoubleFromAttribute("AmountExpected");
+ 		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").getDouble();
  		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 321.0, dAmount, 0.1);
 
 		   RESULT = IncludeSubobjectFromSubobject( mFAProf1, "FinAidAwardPeriod", mFAProf1, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
@@ -1142,13 +1142,13 @@ public class TestZencas
  		   Assert.assertEquals("mFAProf2.FinAidAwardPeriod not correctly spawned after include.", 0, RESULT );
 
  		   mFAProf1.cursor("FinAidAwardDisbursement").createTemporalEntity();
-	       mFAProf1.cursor("FinAidAwardDisbursement").setAttribute("Amount", 234);
-	       mFAProf1.cursor("FinAidAwardDisbursement").setAttribute("AmountExpected", 432);
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 234) ;
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 432) ;
 	       mFAProf1.cursor("FinAidAwardDisbursement").acceptTemporalEntity();
 
 	       // Check spawning after createTemporalEntity and acceptTemporalEntity
            RESULT= mFAProf2.cursor("FinAidAwardDisbursement").setCursor( mFAProf1.cursor("FinAidAwardDisbursement") ).toInt();
- 		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getDoubleFromAttribute("Amount");
+ 		   dAmount = mFAProf2.cursor("FinAidAwardDisbursement").getAttribute("Amount").getDouble();
  		   Assert.assertEquals("mFAProf2.FinAidAwardDisbursement not correctly spawned after createEntity.", 234.0, dAmount, 0.1);
  		   // I am assuming in above assert that when we create an entity and accept in mFAProf1 we would be on
  		   // positioned on that entity in mFAProf2.  In case that wouldn't be the case, I have the below code that
@@ -1392,7 +1392,7 @@ public class TestZencas
 		      */
 		      // END NEW TEST
               RESULT = mFAProf.cursor( "PerProfileFinAidAwardPeriod" ).setFirst().toInt();
-              szYearSemester = mFAProf.cursor( "CollegeTerm" ).getStringFromAttribute("YearSemester");
+              szYearSemester = mFAProf.cursor( "CollegeTerm" ).getAttribute("YearSemester").getString();
 	   		  Assert.assertEquals("CollegeTerm 160 has some missing attributes like YearSemester ", "2009-2010 Fall", szYearSemester);
 		      DropView( vTempViewVar_0 );
 			return 0;
@@ -1414,7 +1414,7 @@ public class TestZencas
 			  RESULT = ActivateObjectInstance( lTrnscpt, "lTrnscpt", ViewToWindow, vTempViewVar_0, zSINGLE );
 			  DropView( vTempViewVar_0 );
               RESULT = lTrnscpt.cursor( "StudentMajorDegreeTrack" ).setFirst().toInt();
-              szType = lTrnscpt.cursor( "MajorCollege" ).getStringFromAttribute("Type");
+              szType = lTrnscpt.cursor( "MajorCollege" ).getAttribute("Type").getString();
 	   		  Assert.assertEquals("MajorCollege 1 has missing attribute Type ", "U", szType);
 			return 0;
 		}
@@ -1458,8 +1458,8 @@ public class TestZencas
 			   SetNameForView( mCRStdPLST2, "mCRStdPLST2", null, zLEVEL_TASK );
 
 			   RESULT = mCRStdPLST.cursor( "ClassRoomStandardSchedule" ).setFirst().toInt();
-			   szTime = mCRStdPLST.cursor("ClassRoomSession").getStringFromAttribute("StartTime");
-			   szTime = mCRStdPLST.cursor("ClassRoomSession").getStringFromAttribute("StartTime","HH:MM:SS.S");
+			   szTime = mCRStdPLST.cursor("ClassRoomSession").getAttribute("StartTime").getString();
+			   szTime = mCRStdPLST.cursor("ClassRoomSession").getAttribute("StartTime","HH:MM:SS.S").getString();
 
 		       RESULT = mCRStdPLST.cursor( "ClassRoomStandardSchedule" ).setFirst( "ID","381").toInt();
 		       RESULT = mCRStdPLST.cursor( "ClassRoomSession" ).setFirst( "ID","1021","ClassRoomStandardSchedule").toInt();
@@ -1971,7 +1971,7 @@ public class TestZencas
 		    o_fnLocalBuildmStudent( ViewToWindow, vTempViewVar_0, 16406 );
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zSINGLE );
 
-		    mStudent.cursor( "Student" ).setAttribute( "RoommateQuestionaireReceivedDate", "" );
+		    mStudent.cursor( "Student" ).getAttribute( "RoommateQuestionaireReceivedDate").setValue( "" ) ;
 	        View v = zencas.activateOiFromFile( "mStudent", "target/test-classes/testdata//ZENCAs/mstudent_ac.por" );
 	        boolean c = mStudent.equalsOi( v );
 	        Assert.assertTrue( "OIs differ", c );
@@ -2083,7 +2083,7 @@ public class TestZencas
 			RESULT = AttributeUpdated( mStudent, "Student", "Status");
  			Assert.assertEquals("AttributeUpdated returns true when it should be false. ", 0, RESULT);
 
-		    if ( mStudent.cursor("Student").getStringFromAttribute("Status").equals("I") )
+		    if ( mStudent.cursor("Student").getAttribute("Status").getString().equals("I") )
 		    {
 				SetAttributeFromString( mStudent, "Student", "Status", "I");
 				RESULT = AttributeUpdated( mStudent, "Student", "Status");
@@ -2204,7 +2204,7 @@ public class TestZencas
 		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
 		    //:NAME VIEW wXferO "wXferO"
 		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
-		    String dateStr = wXferO.cursor("Root").getStringFromAttribute("dCurrentDate");
+		    String dateStr = wXferO.cursor("Root").getAttribute("dCurrentDate").getString();
 			DropView( wXferO );
 			return 0;
 		}
@@ -2325,7 +2325,7 @@ public class TestZencas
 
 	        RESULT = mStudenC.cursor("RegistrationClassCollegeYear").checkExistenceOfEntity().toInt();
    		    Assert.assertEquals("RegistrationClassCollegeYear does not exists but it should...", 0, RESULT);
-	        szYear = mStudenC.cursor("RegistrationClassCollegeYear").getStringFromAttribute("Year");
+	        szYear = mStudenC.cursor("RegistrationClassCollegeYear").getAttribute("Year").getString();
    		    Assert.assertEquals("Attributes in RegistrationClassCollegeYear are blank.", "2007-2008", szYear);
 			DropView( mStudenC );
 			DropView( lTermLST );
@@ -2425,7 +2425,7 @@ public class TestZencas
 		      DropView( vTempViewVar_0 );
 		      //:FOR EACH mMinorTrack.DegreeTrackRequiredGroup
 		      RESULT = mMinorTrack.cursor( "DegreeTrackRequiredGroup" ).setFirst().toInt();
-		      iRequiredGroup = mMinorTrack.cursor( "RequiredGroup" ).getIntegerFromAttribute("ID");
+		      iRequiredGroup = mMinorTrack.cursor( "RequiredGroup" ).getAttribute("ID").getInteger();
 				DropView( mMinorTrack );
 
 	         return 0;
@@ -2462,7 +2462,7 @@ public class TestZencas
 
 		      // When there was only one "Class", the entity "Course" was missing.  If there was
 		      // more than one "Class", then "Course was there.
-		      iRequiredGroup = lClsLstC.cursor( "Course" ).getIntegerFromAttribute("ID");
+		      iRequiredGroup = lClsLstC.cursor( "Course" ).getAttribute("ID").getInteger();
 				DropView( lClsLstC );
 
 	         return 0;
@@ -2491,7 +2491,7 @@ public class TestZencas
 
 		    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wWebXfer );
 		    m_ZGLOBAL1_Operation.AddMonthsToDate( wWebXfer, "Work", "FromDate", -6 );
-		     //iRequiredGroup = lClsLstC.cursor( "Course" ).getIntegerFromAttribute("ID");
+		     //iRequiredGroup = lClsLstC.cursor( "Course" ).getAttribute("ID").getInteger();
 			DropView( wXferO );
 			DropView( wWebXfer );
 
@@ -2537,8 +2537,8 @@ public class TestZencas
 	         SetAttributeFromString( mUser, "User", "LastLoginDateTime", szDate );
 	         SetAttributeFromString( mUser, "User", "OnlineProspectInitialCreatedDate", szDate );
 
-	         szDate = mUser.cursor("User").getStringFromAttribute("LastLoginDateTime");
-	         szDate = mUser.cursor("User").getStringFromAttribute("OnlineProspectInitialCreatedDate");
+	         szDate = mUser.cursor("User").getAttribute("LastLoginDateTime").getString();
+	         szDate = mUser.cursor("User").getAttribute("OnlineProspectInitialCreatedDate").getString();
 
 	         //:COMMIT mUser
 	         //RESULT = CommitObjectInstance( mUser );
@@ -2608,9 +2608,9 @@ public class TestZencas
 	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zSINGLE );
 	         DropView( vTempViewVar_0 );
 
-	         wConList.cursor("ContactList").setAttribute("ListName", "KellysTest");
-	         wConList.cursor("ContactList").setAttribute("Type", "W");
-	         wConList.cursor("ContactList").setAttribute("Note", "This is a test");
+	         wConList.cursor("ContactList").getAttribute("ListName").setValue( "KellysTest") ;
+	         wConList.cursor("ContactList").getAttribute("Type").setValue( "W") ;
+	         wConList.cursor("ContactList").getAttribute("Note").setValue( "This is a test") ;
 	         //:INCLUDE wConListT.User FROM mUser.User
 	         RESULT = IncludeSubobjectFromSubobject( wConList, "User", mUser, "User", zPOS_AFTER );
 	         //RESULT = IncludeSubobjectFromSubobject( wConList, "AdministrativeDivision", mUser, "CurrentAdministrativeDivision", zPOS_AFTER );
@@ -2637,7 +2637,7 @@ public class TestZencas
 	         DropViewCluster( viewCluster );
 
 //	         RESULT = CommitObjectInstance( wConList );
-	         iConListID = wConList.cursor("ContactList").getIntegerFromAttribute("ID");
+	         iConListID = wConList.cursor("ContactList").getAttribute("ID").getInteger();
 	         //:DropObjectInstance( wConListT )
 	         DropObjectInstance( wConList );
 
@@ -2769,7 +2769,7 @@ public class TestZencas
 			// date in the format "08/19/2011 09:45:20.0 AM" which causes an error in StoreStringInRecord.
 			// If I add the context "YYYYMMDDHHMMSSS" it works fine.
 			//GetVariableFromAttribute( sb_szDate, mi_lTempInteger_2, 'S', 101, mStudenC, "SavedDegreeAudit", "CreatedDateTime", "", 0 );			//com.quinsoft.zeidon.InvalidAttributeValueException: Invalid value for attribute
-	        strGridEditCtl1 = mStudent.cursor( "MajorDegreeTrack" ).getStringFromAttribute( "dLastAuditDateTime", "" );
+	        strGridEditCtl1 = mStudent.cursor( "MajorDegreeTrack" ).getAttribute( "dLastAuditDateTime", "" ).getString();
  	        System.out.println(strGridEditCtl1);
 	         DropObjectInstance( mStudent );
 	         DropObjectInstance( mStudenC );
@@ -3200,8 +3200,8 @@ public class TestZencas
  		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
  		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
  		   DropView( vTempViewVar_0 );
- 		   mPerson.cursor("Person").setAttribute("Gender", "F", "");
-	       strText = mPerson.cursor( "Person" ).getStringFromAttribute( "HomePhone", "" );
+ 		   mPerson.cursor("Person").getAttribute("Gender").setValue( "F", "") ;
+	       strText = mPerson.cursor( "Person" ).getAttribute( "HomePhone", "" ).getString();
 
   		   //SetAttributeFromString( wXferO, "Root", "ActionFlag", "Yes" );
   		   SetAttributeFromString( wXferO, "Root", "ActionFlag", "Y" );
@@ -4066,13 +4066,13 @@ public class TestZencas
 			RESULT = lClsLstC.cursor( "Class" ).setFirst().toInt();
 			while ( RESULT > CursorResult.UNCHANGED.toInt() )
 			{
-				if ( lClsLstC.cursor("Class").compareAttribute( "wCourseID", "" ) == 0 )
+				if ( lClsLstC.cursor("Class").getAttribute( "wCourseID").compare( "" )  == 0 )
 				{
 					lClsLstC.cursor("Class").setAttributeFromAttribute("wCourseID", lClsLstC, "Course", "ID" );
 					lClsLstC.cursor("Class").setAttributeFromAttribute("wCourseNumber", lClsLstC, "Course", "Number" );
 				}
 
-				if ( lClsLstC.cursor("Class").compareAttribute( "wCrossListedFlag", "Y" ) != 0 )
+				if ( lClsLstC.cursor("Class").getAttribute( "wCrossListedFlag").compare( "Y" )  != 0 )
 				{
 					RESULT = lClsLstC.cursor( "CrossListedCourse" ).setFirst().toInt();
 					while ( RESULT > CursorResult.UNCHANGED.toInt() )
@@ -4082,7 +4082,7 @@ public class TestZencas
 						{
 							// !!! compareAttribute will give an error when one of the entities is null so I wasn't
 							// able to use this when I ran this test on MyENC.  I had to use the CompareAttributeToA...
-							while ( RESULT > CursorResult.UNCHANGED.toInt() && ( lClsLstC.cursor("Course").compareAttribute( "ID", lClsLstCT.cursor("CrossListedCourse"), "ID" ) != 0 ) )
+							while ( RESULT > CursorResult.UNCHANGED.toInt() && ( lClsLstC.cursor("Course").getAttribute( "ID").compare( lClsLstCT.cursor("CrossListedCourse"), "ID" )  != 0 ) )
 								while ( RESULT > CursorResult.UNCHANGED.toInt() && ( CompareAttributeToAttribute( lClsLstCT, "Course", "ID", lClsLstC, "CrossListedCourse", "ID" ) != 0 ) )
 								{
 									RESULT = lClsLstCT.cursor( "Class" ).setNext().toInt();
@@ -4092,11 +4092,11 @@ public class TestZencas
 						if ( RESULT < CursorResult.UNCHANGED.toInt() )
 						{
 							lClsLstCT.cursor( "Class" ).includeSubobject( lClsLstC.cursor( "Class" ), CursorPosition.NEXT );
-							szTempString_0 = lClsLstC.cursor( "CrossListedCourse" ).getStringFromAttribute( "Number" );
-							szTempString_0 = lClsLstCT.cursor( "Class" ).getStringFromAttribute( "Section" );
+							szTempString_0 = lClsLstC.cursor( "CrossListedCourse" ).getAttribute( "Number" ).getString();
+							szTempString_0 = lClsLstCT.cursor( "Class" ).getAttribute( "Section" ).getString();
 							szTempString_0 = szTempString_0 + szTempString_1;
-							lClsLstCT.cursor("Class").setAttribute("wClassNumberTopicSection", szTempString_0);
-							lClsLstCT.cursor("Class").setAttribute("wCrossListedFlag", "Y");
+							lClsLstCT.cursor("Class").getAttribute("wClassNumberTopicSection").setValue( szTempString_0) ;
+							lClsLstCT.cursor("Class").getAttribute("wCrossListedFlag").setValue( "Y") ;
 							lClsLstCT.cursor( "CorrespondingCrossListedCourse" ).includeSubobject( lClsLstC.cursor( "CrossListedCourse" ), CursorPosition.NEXT );
 							lClsLstCT.cursor("Class").setAttributeFromAttribute("wCourseID", lClsLstC, "CrossListedCourse", "ID" );
 							lClsLstCT.cursor("Class").setAttributeFromAttribute("wCourseNumber", lClsLstC, "CrossListedCourse", "Number" );
