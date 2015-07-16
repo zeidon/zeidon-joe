@@ -129,7 +129,7 @@ class SimpleTest
 
 //        for ( EntityInstance dlg : view.getEntityListUnderParent( "Dlg" ) )
 //        {
-//            zeidonSystem.log().debug( "Dlg %s", dlg.getStringFromAttribute( "Tag" ) );
+//            zeidonSystem.log().debug( "Dlg %s", dlg.getAttribute( "Tag" ).getString() );
 //            view.cursor( "Wnd" ).deleteEntity();
 //        }
 //        zeidonSystem.log().debug( "Done cursor test" );
@@ -139,7 +139,7 @@ class SimpleTest
     {
         View v = zencas.activateOiFromFile( "mStudent", "testdata/ZENCAs/mstudent_ac.por" );
         v.cursor("Student").setAttributeFromAttribute( "GeneralNote", v, "Student", "StudentLifeClearedDate" );
-        System.out.println( "done " + v.cursor( "Student" ).getStringFromAttribute( "GeneralNote" ) );
+        System.out.println( "done " + v.cursor( "Student" ).getAttribute( "GeneralNote" ).getString() );
     }
 
     /**
