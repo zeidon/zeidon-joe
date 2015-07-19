@@ -72,6 +72,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private final int    attributeNumber;
     private boolean      hidden;
     private boolean      persistent;
+    private boolean      activate;
     private boolean      key;
     private boolean      foreignKey;
     private boolean      autoSeq;
@@ -304,6 +305,16 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         }
     }
 
+    /**
+     * Perform any final initializing that can only be done after the attribute
+     * has been loaded.
+     */
+    void finishAttributeLoading()
+    {
+        // Persistent, non-hidden attributes should always be activated.
+        activate = persistent && ( ! hidden || isKey() || isForeignKey() || isAutoSeq() );
+    }
+
     private Application getApplication()
     {
         return getEntityDef().getLodDef().getApplication();
@@ -376,6 +387,26 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     public boolean isPersistent()
     {
         return persistent;
+    }
+
+    /**
+     * Return true if this attribute should be loaded from the DB.  This should
+     * be true for all persistent, non-hidden attributes.  It may also be true
+     * for hidden attributes if this entity is expected to be linked to other
+     * instances.  This allows the DB handler to load attributes that might
+     * be hidden in this entity but non-hidden in the linked instance.
+     *
+     * @return
+     */
+    public boolean isActivate()
+    {
+        return activate;
+    }
+
+    void setActivate( boolean act )
+    {
+        assert persistent : "Internal error: attributes with activate flag must be persistent.";
+        activate = act;
     }
 
     public boolean isRequired()

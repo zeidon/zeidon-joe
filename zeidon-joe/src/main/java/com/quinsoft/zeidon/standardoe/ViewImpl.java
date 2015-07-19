@@ -22,6 +22,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,13 +92,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * True if this view is read only.
      */
     private boolean isReadOnly = false;
-    
+
     /**
      * True if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user. 
+     * to be used by the browser to ignore views that weren't created by the user.
      */
     private boolean isInternal = false;
-    
+
     private boolean allowHiddenEntities = false;
 
     ViewImpl( TaskImpl task, LodDef lodDef )
@@ -437,7 +438,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         newView.setInternal( true );
         return newView;
     }
-    
+
     @Override
     public View getViewByName(String name)
     {
@@ -759,7 +760,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * @see com.quinsoft.zeidon.View#createSelectSet()
      */
     @Override
-    public SelectSet createSelectSet()
+    public SelectSetImpl createSelectSet()
     {
         return new SelectSetImpl( this );
     }
@@ -773,6 +774,16 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return getSelectSet( defaultSelectSet );
     }
 
+
+    @Override
+    public Set<Object> getSelectSetNames()
+    {
+        if ( selectSets == null )
+            return Collections.emptySet();
+
+        return selectSets.keySet();
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet(int)
      */
@@ -783,13 +794,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             selectSets = new HashMap<Object,SelectSet>();
 
         SelectSet set = selectSets.get( index );
-        if ( set == null )
-        {
-            set = createSelectSet();
-            selectSets.put( index, set );
-        }
+        if ( set != null )
+            return set;
 
-        return set;
+        SelectSetImpl newSet = createSelectSet();
+        newSet.setName( index );
+        selectSets.put( index, newSet );
+        return newSet;
     }
 
     @Override
@@ -801,7 +812,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public void deleteSelectSet( Object index )
+    public void dropSelectSet( Object index )
     {
         if ( selectSets != null && selectSets.containsKey( index ) )
             selectSets.remove( index );
@@ -1066,8 +1077,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
 
     /**
      * Returns true if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user.  
-     * 
+     * to be used by the browser to ignore views that weren't created by the user.
+     *
      * @return Returns true if this view was created by internal JOE processing.
      */
     @Override

@@ -20,7 +20,6 @@
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -58,13 +57,14 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     private final BrowserEnvironment env;
     private       EntityDef selectedEntityDef;
     private final BorderLayout borderLayout;
-    private       OiDisplay oiDisplay;
+    protected     OiDisplay oiDisplay;
+    private       View currentView;
 
     OiDisplayPanel( BrowserEnvironment env )
     {
         super( );
         this.env = env;
-        setSize( new Dimension( 1000, 200 ) );
+//        setSize( new Dimension( 1000, 200 ) );
         borderLayout = new BorderLayout();
         setLayout( borderLayout );
 
@@ -114,10 +114,16 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         if ( oiDisplay != null )
             remove( oiDisplay );
 
+        currentView = view;
         oiDisplay = new OiDisplay( env, view, this, this );
 
         add( oiDisplay, BorderLayout.CENTER );
         oiDisplay.revalidate();
+    }
+
+    View getDisplayedView()
+    {
+        return currentView;
     }
 
     void setFocusToDisplay()

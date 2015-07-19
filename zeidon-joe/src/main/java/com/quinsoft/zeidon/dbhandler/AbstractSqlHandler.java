@@ -79,7 +79,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
 
     private static final long COL_KEYS_ONLY = 0x00000001;
-    private static final long COL_NO_HIDDEN = 0x00000002;
     private static final long COL_FULL_QUAL = 0x00000004;
 
     protected enum SqlCommand
@@ -342,17 +341,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ( control & COL_KEYS_ONLY ) != 0 && attributeDef.isKey() )
                 continue;
 
-            // If nControl indicates that we don't want hidden attributes, then
-            // don't use hidden attributes UNLESS THEY ARE KEYS.  Keys, even if
-            // they are hidden, should be included.  Same thing with auto sequencing
-            // attributes.
-            if ( ( control & COL_NO_HIDDEN ) == 0 &&
-                 ( attributeDef.isHidden() && ! attributeDef.isKey() &&
-                                            ! attributeDef.isForeignKey() &&
-                                            ! attributeDef.isAutoSeq() ))
-            {
+            if ( ! attributeDef.isActivate() )
                 continue;
-            }
 
             // If the attribute is an Auto Seq attribute and the relationship
             // is many-to-many then the attribute is stored in the corresponding

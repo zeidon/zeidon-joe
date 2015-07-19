@@ -25,7 +25,6 @@ import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.TemporalEntityException;
-import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
@@ -266,9 +265,6 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public EntityInstance setValue( Object value, String contextName )
     {
-        if ( attributeDef.isHidden() )
-            throw new UnknownAttributeDefException( getEntityDef(), attributeDef.getName() );
-
         validateUpdateAttribute();
         contextName = checkContextName( contextName );
         Object oldValue = attributeValue.getInternalValue();

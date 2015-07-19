@@ -155,6 +155,13 @@ public interface View extends TaskQualification, CacheMap
     SelectSet getSelectSet( Object index );
 
     /**
+     * Returns a list of current select set names for this view.
+     *
+     * @return
+     */
+    Set<Object> getSelectSetNames();
+
+    /**
      * Creates a new SelectSet.  This is *not* stored in the internal SelectSet hash and
      * can not be retrieved through getSelectSet.
      *
@@ -165,11 +172,11 @@ public interface View extends TaskQualification, CacheMap
     /**
      * Deletes the SelectSet with the specified index.  If one isn't found then
      * it is ignored.
-     * 
+     *
      * @param index of the SelectSet created via getSelectSet( idx )
      */
-    void deleteSelectSet( Object index );
-    
+    void dropSelectSet( Object index );
+
     /**
      * Set the default select set, i.e. the select set that will be returned
      * by getSelectSet().
@@ -581,20 +588,20 @@ public interface View extends TaskQualification, CacheMap
 
     /**
      * Returns true if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user.  
-     * 
+     * to be used by the browser to ignore views that weren't created by the user.
+     *
      * @return Returns true if this view was created by internal JOE processing.
      */
     boolean isInternal();
-    
+
     /**
      * Sets the 'internal' flag.
-     * 
+     *
      * @param internal
      * @return
      */
     View setInternal( boolean internal );
-    
+
     /**
      * Return the number of entities in the OI.
      *
