@@ -33,31 +33,4 @@
             </exclusions>
         </dependency>
     </dependencies>
-
-    <profiles>
-      <profile>
-	<repositories>
-	<repository>
-	  <id>jasper</id>
-	  <url>http://jasperreports.sourceforge.net/maven2/</url>
-	  <releases>
-	    <enabled>true</enabled>
-	  </releases>
-	  <snapshots>
-	    <enabled>false</enabled>
-	  </snapshots>
-	</repository>     
-	<repository>
-	  <id>jasper1</id>
-	  <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo/</url>
-	  <releases>
-	    <enabled>true</enabled>
-	  </releases>
-	  <snapshots>
-	    <enabled>false</enabled>
-	  </snapshots>
-	</repository> 
-	</repositories>
-      </profile>
-    </profiles>
 </project>
