@@ -123,10 +123,10 @@ case class View( val task: Task ) extends Dynamic {
         val validateExceptions = jview.validateOi()
         if ( validateExceptions != null && throwException )
             throw new SubobjectValidationException( validateExceptions )
-        
+
         validateExceptions
     }
-    
+
     /**
      * Creates an empty OI for this view.  The LOD must have been previously
      * specified with basedOn.
@@ -447,10 +447,15 @@ object View {
 
         def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
         def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
-        
+
         def each( looper: => Unit ) = {
             val iter = new EntityInstanceIterator( selectSet.eachEntity )
             iter.each( looper )
+        }
+
+        def each( looper: (AbstractEntity) => Unit ) = {
+            val iter = new EntityInstanceIterator( selectSet.eachEntity )
+            iter.foreach( looper( _ ) )
         }
 
         def foreach( looper: (EntityInstance ) => Unit ) = {
