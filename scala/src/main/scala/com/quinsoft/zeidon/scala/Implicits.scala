@@ -2,6 +2,7 @@ package com.quinsoft.zeidon.scala
 
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.ObjectEngine
 
 /**
  * @author dgc
@@ -47,5 +48,4 @@ object Implicits {
     implicit class ScalaTask( val task : Task ) {
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
     }
-  
 }

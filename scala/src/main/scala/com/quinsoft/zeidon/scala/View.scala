@@ -382,7 +382,9 @@ case class View( val task: Task ) extends Dynamic {
         validateNonNull
 
         val oe = task.getObjectEngine
-        val operMap = oe.getCacheMap( classOf[ObjectOperationMap] )
+        var operMap = oe.getCacheMap( classOf[ObjectOperationMap] )
+        if ( operMap == null )
+            operMap = oe.putCacheMap(classOf[ObjectOperationMap], new ObjectOperationMap )
         val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
         val value = oper.invokeOperation( this, args: _* )
         ObjectOperationResult( value )

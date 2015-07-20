@@ -272,6 +272,12 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     }
 
     @Override
+    public void overrideZeidonConfig( String appName, String group, String key, String value )
+    {
+        overrideZeidonConfig( getApplication( appName ), group, key, value );
+    }
+
+    @Override
     public String getTempDirectory()
     {
         return getTask().getTempDirectory();

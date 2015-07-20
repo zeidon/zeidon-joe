@@ -250,6 +250,7 @@ public interface TaskQualification extends Lockable
     String readZeidonConfig( Application application, String group, String key, String defaultValue );
 
     void overrideZeidonConfig( Application application, String group, String key, String value );
+    void overrideZeidonConfig( String appName, String group, String key, String value );
 
     /**
      * Get the Object Engine that contains this task.

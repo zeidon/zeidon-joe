@@ -753,4 +753,10 @@ public class zVIEW extends VmlOperation implements View
     {
         getView().overrideZeidonConfig( application, group, key, value );
     }
+
+    @Override
+    public void overrideZeidonConfig( String appName, String group, String key, String value )
+    {
+        getView().overrideZeidonConfig( appName, group, key, value );
+    }
 }
