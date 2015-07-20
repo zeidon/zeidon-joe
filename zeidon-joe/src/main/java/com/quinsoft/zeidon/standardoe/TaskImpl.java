@@ -90,6 +90,8 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
      */
     private Map<Integer, EntityCache> entityCacheMap;
 
+    private Map<Application, Map<String, Map<String, String>>> configOverrideMap;
+
     TaskImpl(JavaObjectEngine objectEngine, Application app, String taskId)
     {
         super(app);
@@ -605,5 +607,56 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         boolean b = entityCacheMap.containsKey( entityCache.getErEntityToken() );
         entityCacheMap.put( entityCache.getErEntityToken(), entityCache );
         return b;
+    }
+
+    @Override
+    public synchronized String readZeidonConfig(Application application, String group, String key, String defaultValue)
+    {
+        String g = normalizeGroup( group );
+
+        // Check to see if the value has been overridden for this task.
+        if ( configOverrideMap != null )
+        {
+            Map<String, Map<String, String>> appMap = configOverrideMap.get( application );
+            if ( appMap != null )
+            {
+                Map<String, String> groupMap = appMap.get( group );
+                if ( groupMap != null )
+                {
+                    if ( groupMap.containsKey( key ) )
+                        return groupMap.get( key ); // If we get here then the value has been overridden.
+                }
+            }
+        }
+
+        return getObjectEngine().getZeidonPreferences( application ).get( g, key, defaultValue );
+    }
+
+    /**
+     * Synchronized so it can be used for the system task.
+     */
+    @Override
+    public synchronized void overrideZeidonConfig( Application application, String group, String key, String value )
+    {
+        group = normalizeGroup( group );
+
+        if ( configOverrideMap == null )
+            configOverrideMap = new HashMap<>();
+
+        Map<String, Map<String, String>> appMap = configOverrideMap.get( application );
+        if ( appMap == null )
+        {
+            appMap = new HashMap<>();
+            configOverrideMap.put( application, appMap );
+        }
+
+        Map<String, String> groupMap = appMap.get( group );
+        if ( groupMap == null )
+        {
+            groupMap = new HashMap<>();
+            appMap.put( group, groupMap );
+        }
+
+        groupMap.put( key, value );
     }
 }

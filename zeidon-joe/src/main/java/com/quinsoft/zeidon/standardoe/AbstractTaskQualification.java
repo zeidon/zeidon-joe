@@ -233,7 +233,7 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
      * @param group
      * @return
      */
-    private String normalizeGroup( String group )
+    protected String normalizeGroup( String group )
     {
         if ( group.startsWith( "[" ) )
             group = group.substring( 1, group.length() - 1 ); // Remove [ and ]
@@ -250,22 +250,25 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
     @Override
     public String readZeidonConfig(String group, String key, String defaultValue)
     {
-        String g = normalizeGroup( group );
-        return getObjectEngine().getZeidonPreferences( getApplication() ).get( g, key, defaultValue );
+        return readZeidonConfig( getApplication(), group, key, defaultValue );
     }
 
     @Override
     public String readZeidonConfig(Application application, String group, String key, String defaultValue)
     {
-        String g = normalizeGroup( group );
-        return getObjectEngine().getZeidonPreferences( application ).get( g, key, defaultValue );
+        return getTask().readZeidonConfig( application, group, key, defaultValue );
     }
 
     @Override
     public String readZeidonConfig( String application, String group, String key, String defaultValue)
     {
-        String g = normalizeGroup( group );
-        return getObjectEngine().getZeidonPreferences( getApplication( application ) ).get( g, key, defaultValue );
+        return readZeidonConfig( getApplication( application ), group, key, defaultValue );
+    }
+
+    @Override
+    public synchronized void overrideZeidonConfig( Application application, String group, String key, String value )
+    {
+        getTask().overrideZeidonConfig( application, group, key, value );
     }
 
     @Override
