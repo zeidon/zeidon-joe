@@ -25,6 +25,9 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.SubobjectValidationException
+import com.quinsoft.zeidon.Task
+import scala.collection.concurrent.TrieMap
+import org.apache.commons.lang3.StringUtils
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -43,12 +46,11 @@ case class View( val task: Task ) extends Dynamic {
     var jview: com.quinsoft.zeidon.View = null
 
     def this( jv: com.quinsoft.zeidon.View ) = {
-        this( new Task( jv.getTask() ) )
+        this( jv.getTask() )
         jlodDef = jv.getLodDef()
         jview = jv
     }
 
-    def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
     def this( task: com.quinsoft.zeidon.TaskQualification ) = this( task.getTask() )
 
@@ -75,9 +77,9 @@ case class View( val task: Task ) extends Dynamic {
 
     private def setLod( lodName: String, appName: String = null ): View = {
         if ( appName == null )
-            jlodDef = task.jtask.getApplication().getLodDef( task.jtask, lodName )
+            jlodDef = task.getApplication().getLodDef( task, lodName )
         else
-            jlodDef = task.jtask.getApplication( appName ).getLodDef( task.jtask, lodName )
+            jlodDef = task.getApplication( appName ).getLodDef( task, lodName )
 
         if ( jview != null && jview.getLodDef() != jlodDef )
             throw new ZeidonException( "LodDef set by basedOnLod doesn't match view." )
@@ -137,7 +139,7 @@ case class View( val task: Task ) extends Dynamic {
      */
     def activateEmpty() = {
         validateLodDef
-        jview = task.jtask.activateEmptyObjectInstance( jlodDef )
+        jview = task.activateEmptyObjectInstance( jlodDef )
         this
     }
 
@@ -379,8 +381,9 @@ case class View( val task: Task ) extends Dynamic {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
         validateNonNull
 
-        val oe = task.objectEngine
-        val oper = oe.objectOperationMap.getObjectOperation( operationName, jlodDef, args: _* )
+        val oe = task.getObjectEngine
+        val operMap = oe.getCacheMap( classOf[ObjectOperationMap] )
+        val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
         val value = oper.invokeOperation( this, args: _* )
         ObjectOperationResult( value )
     }
@@ -427,40 +430,4 @@ object View {
     implicit def view2jview( view: com.quinsoft.zeidon.scala.View ) = view.jview
 
     val ON = new VmlSyntaxFiller
-
-    implicit class ScalaSelectSet( val selectSet : SelectSet ) {
-        def selectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
-            list.foreach( selectSet.select( _ ) )
-        }
-
-        def deselectAll( list: Iterable[com.quinsoft.zeidon.scala.EntityInstance] ) = {
-            list.foreach( selectSet.deselect( _ ) )
-        }
-
-        def selectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
-            qual( new SelectQualification( selectSet ) )
-        }
-
-        def selectSubobjectWhere( qual : (SelectQualification) => SelectQualTerminator ) = {
-            qual( new SelectQualification( selectSet, true, true ) )
-        }
-
-        def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
-        def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
-
-        def each( looper: => Unit ) = {
-            val iter = new EntityInstanceIterator( selectSet.eachEntity )
-            iter.each( looper )
-        }
-
-        def each( looper: (AbstractEntity) => Unit ) = {
-            val iter = new EntityInstanceIterator( selectSet.eachEntity )
-            iter.foreach( looper( _ ) )
-        }
-
-        def foreach( looper: (EntityInstance ) => Unit ) = {
-            val iter = new EntityInstanceIterator( selectSet.eachEntity )
-            iter.foreach( ei => looper( ei ) )
-        }
-    }
 }

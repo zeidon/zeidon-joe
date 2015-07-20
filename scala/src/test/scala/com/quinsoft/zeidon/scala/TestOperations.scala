@@ -27,10 +27,6 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
  *
  */
 class TestOperations ( var task: Task ) extends ZeidonOperations{
-   /**
-    * Following constructor allows this to be called from Zeidon JOE.
-    */
-    def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
 
     def CompileOper() {
         val view = VIEW basedOnLod "mPerson"
@@ -155,8 +151,7 @@ object TestOperations {
     def main(args: Array[String]): Unit = {
         val oe = JavaObjectEngine.getInstance()
         val task = oe.createTask("ZENCAs")
-        val stask = Task(task)
-        val to = new TestOperations( stask )
+        val to = new TestOperations( task )
         to.TestOper
     }
 }

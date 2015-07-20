@@ -1,17 +1,14 @@
 package com.quinsoft.zencas.scalasamples
 
-import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.ZeidonOperations
-import com.quinsoft.zeidon.scala.Task
+import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
  * Examples of how to execute Zeidon activates using Scala.
  */
 class SampleActivates( var task: Task ) extends ZeidonOperations {
-
-    def this( jtask: com.quinsoft.zeidon.Task ) = {
-        this( new Task( jtask ) )
-    }
 
     /**
      * This method shows how to execute a simple activate.  The activate uses the
@@ -252,7 +249,7 @@ object SampleActivates {
     def main(args: Array[String]): Unit = {
 
         // Load the object engine and create a task.
-        val oe = ObjectEngine.getInstance
+        val oe = JavaObjectEngine.getInstance()
         val task = oe.createTask("ZENCAs")
 
         val sample = new SampleActivates( task )

@@ -3,14 +3,14 @@ package com.quinsoft.zencas.scala
 import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._
 import org.junit.Before
-import com.quinsoft.zeidon.scala.ObjectEngine
 import org.junit.Test
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
-    val oe = ObjectEngine.getInstance
+    val oe = JavaObjectEngine.getInstance()
     var task = oe.createTask("ZENCAs")
 
     @Before

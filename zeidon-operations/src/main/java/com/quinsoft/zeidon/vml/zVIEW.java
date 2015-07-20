@@ -747,4 +747,10 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().getSelectSetNames();
     }
+
+    @Override
+    public void overrideZeidonConfig( Application application, String group, String key, String value )
+    {
+        getView().overrideZeidonConfig( application, group, key, value );
+    }
 }

@@ -21,7 +21,6 @@ package com.quinsoft.zencas.scalasamples
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.basedOn
 import com.quinsoft.zeidon.scala.ObjectOperations
-import com.quinsoft.zeidon.scala.ObjectEngine
 
 /**
  * This file list examples of how to use Scala instead of VML.

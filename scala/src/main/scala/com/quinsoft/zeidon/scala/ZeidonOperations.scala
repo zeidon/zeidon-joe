@@ -44,7 +44,7 @@ trait ZeidonOperations {
 
     def VIEW: View = new View( task )
 
-    def GETVIEW( viewName: String ) = task.jtask.getViewByName( viewName )
+    def GETVIEW( viewName: String ) = task.getViewByName( viewName )
 
     def FOREACH( cursor: EntityCursor ) = {
         val iterator = new EntityIterator( cursor )
@@ -83,7 +83,7 @@ trait ZeidonOperations {
      */
     def break() = util.control.Breaks.break()
 
-    def log = task.jtask.log()
+    def log = task.log()
 
     class EntityIterator( val cursor: EntityCursor ) {
 

@@ -18,14 +18,16 @@
  */
 package com.quinsoft.zencas.scalasamples
 
+import scala.collection.JavaConversions._
+
+import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.scala.EntityInstance
-import com.quinsoft.zeidon.scala.ObjectEngine
-import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.View
-import com.quinsoft.zeidon.scala.View.ScalaSelectSet
+import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.scala.View.jview2view
 import com.quinsoft.zeidon.scala.ZeidonOperations
-import scala.collection.JavaConversions._
+import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
  * Examples of how to make miscellaneous View calls. For sample Cursor manipulations
@@ -191,7 +193,7 @@ object SampleViewManipulations {
     def main(args: Array[String]): Unit = {
 
         // Load the object engine and create a task.
-        val oe = ObjectEngine.getInstance
+        val oe = JavaObjectEngine.getInstance()
         val task = oe.createTask("ZENCAs")
 
         // Activate an mUser that we can use for samples.

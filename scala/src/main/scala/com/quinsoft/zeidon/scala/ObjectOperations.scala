@@ -18,13 +18,13 @@
   */
 package com.quinsoft.zeidon.scala
 
-import java.lang.reflect.Constructor
-import java.lang.reflect.Method
+import scala.collection.concurrent.TrieMap
+
+import org.apache.commons.lang3.StringUtils
+
+import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.LodDef
-import scala.collection.concurrent.TrieMap
-import scala.collection.mutable.WrappedArray
-import org.apache.commons.lang3.StringUtils
 
 /**
  * A trait to give Scala objects access to VML-like syntax.  This is similar to

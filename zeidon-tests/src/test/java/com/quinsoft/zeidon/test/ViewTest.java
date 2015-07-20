@@ -839,18 +839,16 @@ public class ViewTest
     @Test
     public void testScalaSamples()
     {
-        com.quinsoft.zeidon.scala.Task szencas = new com.quinsoft.zeidon.scala.Task( zencas, null );
-
-        SampleActivates sampleActivates = new SampleActivates( szencas );
+        SampleActivates sampleActivates = new SampleActivates( zencas );
         com.quinsoft.zeidon.scala.View mUser = sampleActivates.runAll();
 
-        SampleCursorManipulation sampleCursor = new SampleCursorManipulation( szencas );
+        SampleCursorManipulation sampleCursor = new SampleCursorManipulation( zencas );
         sampleCursor.runAll( mUser );
 
-        SampleViewManipulations sampleView = new SampleViewManipulations( szencas );
+        SampleViewManipulations sampleView = new SampleViewManipulations( zencas );
         sampleView.runAll( mUser );
 
-        SampleAttributeCode sampleCode = new SampleAttributeCode( szencas );
+        SampleAttributeCode sampleCode = new SampleAttributeCode( zencas );
         sampleCode.runAll( mUser );
     }
 }

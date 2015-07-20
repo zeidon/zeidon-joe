@@ -42,7 +42,7 @@ import org.apache.commons.lang3.StringUtils
 class QualBuilder private [scala] ( private [this]  val view: View,
                                     private [scala] val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
 
-    private [this]  val jtask = view.task.jtask
+    private [this]  val jtask = view.task
     private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
 
