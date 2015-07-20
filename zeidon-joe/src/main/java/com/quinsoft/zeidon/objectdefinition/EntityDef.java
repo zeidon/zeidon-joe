@@ -93,7 +93,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * Map of attributes by ER attribute token.
      */
-    private final Map<Long, AttributeDef> erAttributeMap = new HashMap<Long, AttributeDef>();
+    private final Map<Integer, AttributeDef> erAttributeMap = new HashMap<>();
 
     /**
      * This map keeps track of entities that have been checked to see if 'this' entity
@@ -235,6 +235,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 if ( reader.getAttributeName().equals( "DUPENTIN" ))
                 {
                     duplicateEntity = true;
+                    lodDef.setHasDuplicateInstances( true );
                 }
 
                 break;
@@ -559,7 +560,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
             assert attributeDef.getErAttributeToken() < 0;
         else
         {
-            assert attributeDef.getErAttributeToken() != null;
+            assert attributeDef.getErAttributeToken() != 0;
             erAttributeMap.put( attributeDef.getErAttributeToken(), attributeDef );
         }
     }
@@ -607,11 +608,14 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return attributes.get( index );
     }
 
-    public AttributeDef getAttributeByErToken( long erToken )
+    public AttributeDef getAttributeByErToken( int erToken )
     {
         return erAttributeMap.get( erToken );
     }
 
+    /**
+     * @return all the attributes, including non-hidden ones.
+     */
     public List<AttributeDef> getAttributes()
     {
         return Collections.unmodifiableList( attributes );

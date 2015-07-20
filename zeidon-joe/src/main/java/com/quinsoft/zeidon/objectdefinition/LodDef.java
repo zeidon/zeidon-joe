@@ -23,8 +23,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,6 +70,7 @@ public class LodDef implements PortableFileAttributeHandler
     private SourceFileType sourceFileType = SourceFileType.VML;
     private String         sourceFileName;
     private boolean      hasLazyLoadEntities;
+    private boolean      hasDuplicateInstances;
 
     /**
      * True if any entities in this LOD have DataRecords.
@@ -620,14 +623,14 @@ public class LodDef implements PortableFileAttributeHandler
             Map<Integer, AttributeDef> attribMap = new HashMap<Integer, AttributeDef>();
 
             // Find the AttributeDef for each of the DataFields.
-            for ( EntityDef ve : entityList )
+            for ( EntityDef entityDef : entityList )
             {
-                for ( AttributeDef AttributeDef : ve.getAttributes() )
+                for ( AttributeDef AttributeDef : entityDef.getAttributes() )
                 {
                     attribMap.put( AttributeDef.getXvaAttrToken(), AttributeDef );
                 }
 
-                DataRecord dataRecord = ve.getDataRecord();
+                DataRecord dataRecord = entityDef.getDataRecord();
                 if ( dataRecord != null )
                 {
                     for ( DataField dataField : dataRecord.dataFields() )
@@ -636,11 +639,63 @@ public class LodDef implements PortableFileAttributeHandler
                         assert AttributeDef != null : "Can't find matching XVA Token for DataField";
                         dataField.setAttributeDef( AttributeDef );
                     }
-                    dataRecord.setFields( ve );
+                    dataRecord.setFields( entityDef );
                 }
             }
+
+            if ( hasDuplicateInstances() )
+                computeDuplicateInstances();
         }
     } // class LodDefHandler
+
+    /**
+     * This LodDef has entities flagged as duplicate instances.  Find all the entityDefs
+     * flagged as duplicate instances, then make sure they all activate the total sum
+     * of attributes.
+     */
+    private void computeDuplicateInstances()
+    {
+        Map<Integer, List<EntityDef>> duplicateMap = new HashMap<>();
+
+        for ( EntityDef entityDef : entityList )
+        {
+            if ( ! entityDef.isDuplicateEntity() )
+                continue;
+
+            List<EntityDef> list = duplicateMap.get( entityDef.getErEntityToken() );
+            if ( list == null )
+            {
+                list = new ArrayList<>();
+                duplicateMap.put( entityDef.getErEntityToken(), list );
+            }
+
+            list.add( entityDef );
+        }
+
+        assert duplicateMap.size() > 0;
+
+        for ( List<EntityDef> list : duplicateMap.values() )
+        {
+            // Get the set of attributes that are to be activated by any entity.
+            Set<Integer> activatedAttributes = new HashSet<>();
+            for ( EntityDef entityDef : list )
+            {
+                for ( AttributeDef attributeDef : entityDef.getAttributes() )
+                {
+                    if ( attributeDef.isActivate() )
+                        activatedAttributes.add( attributeDef.getErAttributeToken() );
+                }
+            }
+
+            // Now go through and make sure all the attributes have the activate
+            // flag set for all entities.
+            for ( EntityDef entityDef : list )
+            {
+                for ( Integer erAttributetoken : activatedAttributes )
+                    entityDef.getAttributeByErToken( erAttributetoken ).setActivate( true );
+            }
+        }
+    }
 
     public int getHeight()
     {
@@ -703,5 +758,15 @@ public class LodDef implements PortableFileAttributeHandler
     void setHasLazyLoadEntities( boolean hasLazyLoadEntities )
     {
         this.hasLazyLoadEntities = hasLazyLoadEntities;
+    }
+
+    boolean hasDuplicateInstances()
+    {
+        return hasDuplicateInstances;
+    }
+
+    void setHasDuplicateInstances( boolean hasDuplicateInstances )
+    {
+        this.hasDuplicateInstances = hasDuplicateInstances;
     }
 }

@@ -153,6 +153,7 @@ public class DataRecord implements PortableFileAttributeHandler
         {
             if ( relField.getRelToken() != 0 )
                 relField.setRelDataField( map.get( relField.getRelToken() ) );
+
             if ( relField.getSrcToken() != 0 )
                 relField.setSrcDataField( map.get( relField.getSrcToken() ) );
 

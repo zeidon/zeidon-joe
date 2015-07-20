@@ -76,6 +76,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                                                                  CreateEntityFlags.fDBHANDLER,
                                                                                  CreateEntityFlags.fIGNORE_PERMISSIONS );
 
+    /**
+     * Flags that are used to create EIs in the new OI from a cache of EIs.
+     */
     protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
 
     private static final long COL_KEYS_ONLY = 0x00000001;
@@ -538,17 +541,18 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                             relRecord != null &&
                             relRecord.getRelationshipType() == RelRecord.CHILD_IS_SOURCE )
                     {
-                        // Find the rel field for the qualifying attribute.
-                        for ( RelField relField : relRecord.getRelFields() )
-                        {
-                            // Change the column we are qualifying on.
-                            DataField dataField = relField.getRelDataField();
-                            qualAttrib.attributeDef = dataField.getAttributeDef();
-                            qualAttrib.entityDef = qualAttrib.attributeDef.getEntityDef();
+                        assert relRecord.getRelFields().size() == 1;
 
-                            dataRecord = qualAttrib.entityDef.getDataRecord();
-                            relRecord = dataRecord.getRelRecord();
-                        }
+                        // Find the rel field for the qualifying attribute.
+                        RelField relField = relRecord.getRelFields().get( 0 );
+
+                        // Change the column we are qualifying on.
+                        DataField dataField = relField.getRelDataField();
+                        qualAttrib.attributeDef = dataField.getAttributeDef();
+                        qualAttrib.entityDef = qualAttrib.attributeDef.getEntityDef();
+
+                        dataRecord = qualAttrib.entityDef.getDataRecord();
+                        relRecord = dataRecord.getRelRecord();
                     }
                 }
 
@@ -1041,6 +1045,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
             return DbHandler.LOAD_DONE;
 
+        if ( entityDef.isDuplicateEntity() && loadFromDuplicateCache( view, entityDef ) )
+            return DbHandler.LOAD_DONE;
+
         // TODO: We can't handle cached recursive statements because the cached statement is
         //       caching the value of the parent instead of the DataField of the parent.
 
@@ -1154,6 +1161,49 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         getTask().dblog().debug( "Auto Loaded %s from parent keys", entityDef.getName() );
+        return true;
+    }
+
+    /**
+     * See if we can load entityDef from the the duplicate-entity cache, which is
+     * kept in the entityLinker.  We can load an EI from the cache if the relationship
+     * is many-to-one (which means the FK is in the parent and has been loaded).  We'll
+     * check to see if that key has already been loaded.
+     *
+     * @param view
+     * @param entityDef
+     * @return
+     */
+    private boolean loadFromDuplicateCache( View view, EntityDef entityDef )
+    {
+        if ( entityDef.getParent() == null )
+            return false;
+
+        DataRecord dataRecord = entityDef.getDataRecord();
+        RelRecord relRecord = dataRecord.getRelRecord();
+        if ( ! relRecord.getRelationshipType().isManyToOne() )
+            return false;  // Can only do it if it's many-to-one.
+
+        // For now we can only handle entities with a single key.
+        if ( entityDef.getKeys().size() > 1 )
+            return false;
+
+        assert relRecord.getRelFields().size() == 1;
+
+        // Get the FK that's in the parent.
+        AttributeDef parentAttributeFk = relRecord.getRelFields().get( 0 ).getRelDataField().getAttributeDef();
+
+        // Create the key string.  We need to match what entityInstance.getKeyString().
+        String keyString = view.cursor( entityDef.getParent() ).getAttribute( parentAttributeFk ).getValue().toString();
+
+        // Has it been loaded?
+        EntityInstance cachedEi = entityLinker.getInstance( entityDef, keyString );
+        if ( cachedEi == null )
+            return false; // No.
+
+        view.cursor( entityDef ).includeSubobject( cachedEi, CursorPosition.LAST, INCLUDE_FLAGS );
+
+        getTask().dblog().debug( "Auto Loaded %s from duplicate cache", entityDef.getName() );
         return true;
     }
 

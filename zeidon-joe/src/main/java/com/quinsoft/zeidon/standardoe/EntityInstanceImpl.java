@@ -104,14 +104,14 @@ class EntityInstanceImpl implements EntityInstance
      * persistentAttributes.
      *      Key = ER Attribute token
      */
-    private Map<Long, AttributeValue> persistentAttributes;
+    private Map<Integer, AttributeValue> persistentAttributes;
 
     /**
      * Map of work attributes. Every entity, even linked ones, will have their
      * own set of workAttributes.
      *      Key = ER Attribute token
      */
-    private Map<Long, AttributeValue> workAttributes;
+    private Map<Integer, AttributeValue> workAttributes;
 
     /**
      * List of instances linked with this one. This is a set of weak references;
@@ -214,8 +214,8 @@ class EntityInstanceImpl implements EntityInstance
         EntityInstanceImpl newInstance =
             new EntityInstanceImpl( oi, entityDef, parent, relativeEntity, position );
         newInstance.setCreated( true );
-        newInstance.workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
-        newInstance.persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
+        newInstance.workAttributes = new HashMap<>( entityDef.getWorkAttributeCount() );
+        newInstance.persistentAttributes = new HashMap<>( entityDef.getPersistentAttributeCount() );
         newInstance.linkedInstances = null;
 
         return newInstance;
@@ -295,7 +295,7 @@ class EntityInstanceImpl implements EntityInstance
             this.depth = 1;
         }
 
-        workAttributes = new HashMap<Long, AttributeValue>( getEntityDef().getWorkAttributeCount() );
+        workAttributes = new HashMap<>( getEntityDef().getWorkAttributeCount() );
     }
 
     void initializeDefaultAttributes()
@@ -665,14 +665,14 @@ class EntityInstanceImpl implements EntityInstance
     {
         AttributeDef va = validateMatchingEntities( attributeDef );
 
-        Map<Long, AttributeValue> attributes = getInstanceMap( va );
+        Map<Integer, AttributeValue> attributes = getInstanceMap( va );
         if ( ! attributes.containsKey( va.getErAttributeToken() ) )
             attributes.put( va.getErAttributeToken(), new AttributeValue( va ) );
 
         return attributes.get( va.getErAttributeToken() );
     }
 
-    private Map<Long, AttributeValue> getInstanceMap( AttributeDef attributeDef )
+    private Map<Integer, AttributeValue> getInstanceMap( AttributeDef attributeDef )
     {
         if ( attributeDef.isPersistent() )
             return persistentAttributes;
@@ -698,22 +698,13 @@ class EntityInstanceImpl implements EntityInstance
             // Find the attribute in getEntityDef() that matches attributeDef.
             for ( AttributeDef va : getEntityDef().getAttributes() )
             {
-                if ( va.getErAttributeToken().equals( attributeDef.getErAttributeToken() ) )
+                if ( va.getErAttributeToken() == attributeDef.getErAttributeToken() )
                     return va;
             }
         }
 
         throw new ZeidonException( "Mismatching entities.  AttributeDefEntity: %s, EntityDef: %s",
                                     attributeDef.getEntityDef(), getEntityDef() );
-    }
-
-    private void executeDerivedOper( View view, AttributeDef attributeDef )
-    {
-        if ( ! attributeDef.isDerived() )
-            return;
-
-        AttributeInstanceImpl instance = getAttribute( view, attributeDef );
-        attributeDef.executeDerivedAttributeForGet( instance );
     }
 
     @Override
@@ -2696,13 +2687,19 @@ class EntityInstanceImpl implements EntityInstance
     {
         boolean nonnull = false;  // We'll assume all keys are null until we find one that isn't.
         StringBuilder builder = new StringBuilder();
+        boolean first = true;
 
         for ( AttributeDef key : getEntityDef().getKeys() )
         {
             AttributeValue attr = getInternalAttribute( key );
             if ( ! attr.isNull( getTask(), key ) )
                 nonnull = true;
-            builder.append( attr.toString() ).append( "|" );
+            builder.append( attr.toString() );
+
+            if ( first )
+                first = false;
+            else
+                builder.append( "|" );
         }
 
         if ( ! nonnull )
@@ -3098,11 +3095,11 @@ class EntityInstanceImpl implements EntityInstance
     void newTemporalAttributeList( EntityInstanceImpl sourceInstance,
                                    EntityInstanceImpl linkedSourceInstance )
     {
-        workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
+        workAttributes = new HashMap<>( entityDef.getWorkAttributeCount() );
 
         if ( linkedSourceInstance == null )
         {
-            persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
+            persistentAttributes = new HashMap<>( entityDef.getPersistentAttributeCount() );
 
             // Copy work and persistent attributes.
             copyAttributes( sourceInstance, true, true );

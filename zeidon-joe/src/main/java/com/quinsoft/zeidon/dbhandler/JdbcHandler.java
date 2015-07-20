@@ -262,6 +262,7 @@ public class JdbcHandler extends AbstractSqlHandler
         DataRecord dataRecord = entityDef.getDataRecord();
         assert dataRecord != null;
 
+        boolean first = true;
         List<AttributeDef> keys = entityDef.getKeys();
         for ( AttributeDef key : keys )
         {
@@ -270,7 +271,12 @@ public class JdbcHandler extends AbstractSqlHandler
             assert columnIdx != null;
             Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
             String str = value.toString();
-            builder.append( str ).append( "|" );
+            builder.append( str );
+
+            if ( first )
+                first = false;
+            else
+                builder.append( "|" );
         }
 
         return builder.toString();
@@ -476,11 +482,11 @@ public class JdbcHandler extends AbstractSqlHandler
                         if ( entityDef.isRecursive() )
                             checkForInfiniteRecursiveLoop( view, entityDef, entityKeyString );
 
-                        // TODO: We need to work out some problems if we're going to automatically relink.
-                        // 1: Entities load different sets of attributes and if one entity doesn't load all the
-                        //    necessary attributes then the linked instance appears to have missing attributes.
-//                        if ( entityLinker.addEntity( entityInstance, entityKeyString ) )
-//                            break;  // This entity was relinked with another entity so we can stop loading it.
+                        if ( entityDef.isDuplicateEntity() )
+                        {
+                            if ( entityLinker.addEntity( entityInstance, entityKeyString ) )
+                                break;  // This entity was relinked with another entity so we can stop loading it.
+                        }
                     }
 
                     AttributeDef AttributeDef = dataField.getAttributeDef();

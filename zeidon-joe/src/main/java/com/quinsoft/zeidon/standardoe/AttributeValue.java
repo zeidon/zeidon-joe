@@ -145,7 +145,7 @@ class AttributeValue
      */
     boolean setInternalValue( TaskImpl task, AttributeDef attributeDef, Object newValue, boolean setIncremental )
     {
-        assert createAttribute.getErAttributeToken().equals( attributeDef.getErAttributeToken() );
+        assert createAttribute.getErAttributeToken() == attributeDef.getErAttributeToken();
 
         if ( areEqual( task, attributeDef, newValue ) )
             return false;
