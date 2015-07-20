@@ -142,7 +142,7 @@ class EntityInstanceIncluder
     private void performValidation()
     {
         // Make sure entities are link compatible..
-        EntityInstanceImpl.validateLinking( rootTargetEntityDef, rootSource.getEntityDef() );
+        rootTargetEntityDef.validateLinking( rootSource.getEntityDef() );
 
         if ( ! rootTargetEntityDef.isInclude() && rootTargetEntityDef.getParent() != null )
             throw new ZeidonException( "Target Entity does not allow include." ).prependEntityDef( rootTargetEntityDef );

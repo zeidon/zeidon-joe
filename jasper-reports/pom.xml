@@ -12,7 +12,7 @@
     <description>Use Zeidon Objects in JasperReports</description>
 
     <properties>
-        <jasperReport.version>6.0.4</jasperReport.version>
+        <jasperReport.version>6.1.0</jasperReport.version>
     </properties>
 
     <dependencies>
@@ -33,5 +33,4 @@
             </exclusions>
         </dependency>
     </dependencies>
-
 </project>

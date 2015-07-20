@@ -598,6 +598,7 @@ public class LodDef implements PortableFileAttributeHandler
             if ( handler instanceof AttributeDef )
             {
                 AttributeDef attrib = (AttributeDef) handler;
+                attrib.finishAttributeLoading();
                 currentEntityDef.addAttributeDef( attrib );
             }
             else

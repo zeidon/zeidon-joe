@@ -34,6 +34,7 @@ public class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
 {
     private static final long serialVersionUID = 1L;
     private final ViewImpl view;
+    private Object name;
 
     protected SelectSetImpl( View view )
     {
@@ -120,5 +121,22 @@ public class SelectSetImpl extends HashSet<EntityInstance> implements SelectSet
     public View getView()
     {
         return view;
+    }
+
+    @Override
+    public void drop()
+    {
+        if ( name != null )
+            getView().dropSelectSet( name );
+    }
+
+    public Object getName()
+    {
+        return name;
+    }
+
+    public void setName( Object name )
+    {
+        this.name = name;
     }
 }

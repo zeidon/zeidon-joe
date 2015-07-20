@@ -57,6 +57,7 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.EntityDef.LinkValidation;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -1405,34 +1406,6 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
-     * Checks to see if all the attributes in targetEi as sourceEi.
-     *
-     * @return null if all attributes exist otherwise AttributeDef of first missing attribute found.
-     */
-    static private AttributeDef checkForAllPersistentAttributes( EntityDef source, EntityDef target )
-    {
-        for ( AttributeDef attr : target.getAttributes() )
-        {
-            if ( ! attr.isPersistent() )
-                continue;
-
-            // It's ok if autoseq is missing because it's maintained by the relationship.
-            if ( attr.isAutoSeq() )
-                continue;
-
-            if ( source.getAttribute( attr.getName(), false ) == null )
-                return attr;
-        }
-
-        return null;
-    }
-
-    enum LinkValidation
-    {
-        SOURCE_OK;
-    }
-
-    /**
      * Validate that the source and target entities are OK to link.  The error we're checking
      * for is that the source entity doesn't define all the attributes that the target has.  If
      * that happens the attributes in target will be lost when it is linked to source.
@@ -1446,70 +1419,6 @@ class EntityInstanceImpl implements EntityInstance
      * @param source
      * @return
      */
-    static LinkValidation validateLinking( EntityDef target, EntityDef source )
-    {
-        if ( target == source )
-            return LinkValidation.SOURCE_OK;
-
-        AttributeDef missingAttributeDef = null;
-
-        // If they have the same ER date we'll assume all is good.
-        if ( source.getLodDef().getErDate().equals( target.getLodDef().getErDate() ) )
-            return LinkValidation.SOURCE_OK;
-
-        // Check to see if it's ok for target to be linked to source.
-        EntityDefLinkInfo sourceInfo = getEntityDefLinkInfo( source );
-        Boolean sourceOk = sourceInfo.mayBeLinked.get( target );
-        if ( sourceOk == Boolean.TRUE )
-            return LinkValidation.SOURCE_OK;
-
-        /*  This leads to a NPE.  Some day we may try to fix it.
-        // Check to see if source can be linked to 'this'.
-        EntityDefLinkInfo targetInfo = getEntityDefLinkInfo( entityDef );
-        Boolean targetOk = targetInfo.mayBeLinked.get( entityDef );
-        if ( targetOk == Boolean.TRUE )
-        {
-            source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
-                                                                                 this, this.attributeList );
-            return;
-        }
-        */
-
-        if ( sourceOk == null ) // If it's null we've never checked this one.
-        {
-            missingAttributeDef = checkForAllPersistentAttributes( source, target );
-            sourceOk = missingAttributeDef == null;
-            sourceInfo.mayBeLinked.putIfAbsent( target, sourceOk );
-            if ( sourceOk == Boolean.TRUE )
-                return LinkValidation.SOURCE_OK;
-        }
-
-        /*  This leads to a NPE.  Some day we may try to fix it.
-        if ( targetOk == null ) // If it's null we've never checked this one.
-        {
-            missingAttributeDef = checkForAllPersistentAttributes( source, this );
-            targetOk = missingAttributeDef == null;
-            targetInfo.mayBeLinked.putIfAbsent( sourceEntityDef, targetOk );
-            if ( targetOk == Boolean.TRUE )
-            {
-                source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
-                                                                                     this, this.attributeList );
-                return;
-            }
-        }
-        */
-
-        ZeidonException ex = new ZeidonException( "Attempting to link instances that don't have matching attributes.  "
-                                                + "You probably need to re-save the target LOD." );
-        ex.appendMessage( "Source instance = %s", source );
-        ex.appendMessage( "Target instance type = %s", target );
-        ex.appendMessage( "Missing attribute = %s.%s.%s",
-                          missingAttributeDef.getEntityDef().getLodDef().getName(),
-                          missingAttributeDef.getEntityDef().getName(),
-                          missingAttributeDef.getName() );
-
-        throw ex;
-    }
 
     /**
      * Link this entity instance with 'source'.
@@ -1522,7 +1431,7 @@ class EntityInstanceImpl implements EntityInstance
         assert sourceInstance != this;
         assert entityDef.getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken();
 
-        LinkValidation valid = validateLinking( getEntityDef(), sourceInstance.getEntityDef() );
+        LinkValidation valid = getEntityDef().validateLinking( sourceInstance.getEntityDef() );
         if ( valid != LinkValidation.SOURCE_OK )
         {
             // We should never get here because validateLinking() should throw an exception if
@@ -3470,17 +3379,6 @@ class EntityInstanceImpl implements EntityInstance
         return getAttribute( attributeDef );
     }
 
-    static private synchronized EntityDefLinkInfo getEntityDefLinkInfo( EntityDef entityDef )
-    {
-        EntityDefLinkInfo info = entityDef.getCacheMap( EntityDefLinkInfo.class );
-        if ( info != null )
-            return info;
-
-        info = new EntityDefLinkInfo();
-        entityDef.putCacheMap( EntityDefLinkInfo.class, info );
-        return info;
-    }
-
     /**
      * @returns true if 'this' entity instance does not have all its children loaded.
      * This can happen if an OI was activated with a RESTRICTING clause or if a child
@@ -3551,14 +3449,6 @@ class EntityInstanceImpl implements EntityInstance
         // If there is a parent entity then we'll set its incomplete flag.
         if ( getParent() != null )
             getParent().setIncomplete( getEntityDef() );
-    }
-
-    /**
-     * This keeps track of whether two view entities can be validly linked together.
-     */
-    private static class EntityDefLinkInfo
-    {
-        private final ConcurrentMap<EntityDef, Boolean> mayBeLinked = new MapMaker().concurrencyLevel( 4 ).makeMap();
     }
 
     @Override
