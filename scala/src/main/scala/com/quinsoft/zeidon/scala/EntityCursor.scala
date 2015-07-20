@@ -535,6 +535,8 @@ class EntityCursor( private[this]  val view: View,
         iter.each( looper )
     }
 
+    def all() = new EntityInstanceIterator( jentityCursor.allEntities() ).setCursor( this )
+
     def iterator = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this ).iterator
 
     def under( scopingEntity: String ) = {
