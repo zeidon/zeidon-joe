@@ -53,7 +53,7 @@ public class OiRelinker
     public OiRelinker( TaskQualification taskQual )
     {
         task = taskQual;
-        entityTokens = new HashMap<Integer, Map<String,EntityInstance>>( 100 );
+        entityTokens = new HashMap<Integer, Map<String,EntityInstance>>( 10 );
     }
 
     OiRelinker add( ObjectInstance oi )
@@ -82,7 +82,7 @@ public class OiRelinker
         Map<String, EntityInstance> tokenMap = entityTokens.get( token );
         if ( tokenMap == null )
         {
-            tokenMap = new HashMap<String, EntityInstance>( 1000 );
+            tokenMap = new HashMap<>( 20 );
             entityTokens.put( token, tokenMap );
         }
 

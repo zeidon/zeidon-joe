@@ -68,7 +68,7 @@ public class GeneratedKeyDomain extends AbstractDomain
 
         if ( externalValue instanceof GeneratedKey )
             return externalValue;
-        
+
         return new GeneratedKeyImpl( externalValue.toString() );
     }
 
@@ -91,6 +91,15 @@ public class GeneratedKeyDomain extends AbstractDomain
         return ((GeneratedKey) value).isNull();
     }
 
+
+    @Override
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+    {
+        if ( isNull( task, attributeDef, internalValue ) )
+            return null;
+
+        return ((GeneratedKey) internalValue).getString();
+    }
 
     @Override
     public String convertToString( Task task, AttributeDef attributeDef, Object internalValue, String contextName )

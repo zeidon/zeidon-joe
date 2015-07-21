@@ -1194,7 +1194,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         AttributeDef parentAttributeFk = relRecord.getRelFields().get( 0 ).getRelDataField().getAttributeDef();
 
         // Create the key string.  We need to match what entityInstance.getKeyString().
-        String keyString = view.cursor( entityDef.getParent() ).getAttribute( parentAttributeFk ).getValue().toString();
+        String keyString = view.cursor( entityDef.getParent() ).getAttribute( parentAttributeFk ).getString();
 
         // Has it been loaded?
         EntityInstance cachedEi = entityLinker.getInstance( entityDef, keyString );
