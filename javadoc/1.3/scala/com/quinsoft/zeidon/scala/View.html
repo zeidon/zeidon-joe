@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>View - zeidon-scala 1.3.0-SNAPSHOT API - com.quinsoft.zeidon.scala.View</title>
-          <meta name="description" content="View - zeidon - scala 1.3.0 - SNAPSHOT API - com.quinsoft.zeidon.scala.View" />
-          <meta name="keywords" content="View zeidon scala 1.3.0 SNAPSHOT API com.quinsoft.zeidon.scala.View" />
+          <title>View - zeidon-scala 1.3.4-SNAPSHOT API - com.quinsoft.zeidon.scala.View</title>
+          <meta name="description" content="View - zeidon - scala 1.3.4 - SNAPSHOT API - com.quinsoft.zeidon.scala.View" />
+          <meta name="keywords" content="View zeidon scala 1.3.4 SNAPSHOT API com.quinsoft.zeidon.scala.View" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -44,10 +44,10 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">View</span><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
+        <span class="name">View</span><span class="params">(<span name="task">task: <span class="extype" name="com.quinsoft.zeidon.Task">Task</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -55,7 +55,7 @@
 users to write code using VML-like view.entity.attribute syntax.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Dynamic">Dynamic</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.Dynamic">Dynamic</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -73,7 +73,7 @@ users to write code using VML-like view.entity.attribute syntax.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.quinsoft.zeidon.scala.View"><span>View</span></li><li class="in" name="scala.Dynamic"><span>Dynamic</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.quinsoft.zeidon.scala.View"><span>View</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.Dynamic"><span>Dynamic</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -128,23 +128,6 @@ users to write code using VML-like view.entity.attribute syntax.
     </span>
       
     </li><li name="com.quinsoft.zeidon.scala.View#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(jtask:com.quinsoft.zeidon.Task):com.quinsoft.zeidon.scala.View"></a>
-      <a id="&lt;init&gt;:View"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">View</span><span class="params">(<span name="jtask">jtask: <span class="extype" name="com.quinsoft.zeidon.Task">zeidon.Task</span></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@&lt;init&gt;(jtask:com.quinsoft.zeidon.Task):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.quinsoft.zeidon.scala.View#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="&lt;init&gt;(jv:com.quinsoft.zeidon.View):com.quinsoft.zeidon.scala.View"></a>
       <a id="&lt;init&gt;:View"></a>
       <h4 class="signature">
@@ -162,7 +145,7 @@ users to write code using VML-like view.entity.attribute syntax.
     </span>
       
     </li><li name="com.quinsoft.zeidon.scala.View#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(task:com.quinsoft.zeidon.scala.Task):com.quinsoft.zeidon.scala.View"></a>
+      <a id="&lt;init&gt;(task:com.quinsoft.zeidon.Task):com.quinsoft.zeidon.scala.View"></a>
       <a id="&lt;init&gt;:View"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,10 +153,10 @@ users to write code using VML-like view.entity.attribute syntax.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">View</span><span class="params">(<span name="task">task: <a href="Task.html" class="extype" name="com.quinsoft.zeidon.scala.Task">Task</a></span>)</span>
+        <span class="name">View</span><span class="params">(<span name="task">task: <span class="extype" name="com.quinsoft.zeidon.Task">Task</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@&lt;init&gt;(task:com.quinsoft.zeidon.scala.Task):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@&lt;init&gt;(task:com.quinsoft.zeidon.Task):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -346,18 +329,18 @@ mUser activateEmpty()</pre></div></div>
     </span>
       <p class="shortcomment cmt">Returns the options that were used to activate this OI.</p>
     </li><li name="com.quinsoft.zeidon.scala.View#activateWhere" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="activateWhere(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.View"></a>
-      <a id="activateWhere((EntityQualBuilder)⇒Unit):View"></a>
+      <a id="activateWhere(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;com.quinsoft.zeidon.scala.QualificationTerminator):com.quinsoft.zeidon.scala.View"></a>
+      <a id="activateWhere((EntityQualBuilder)⇒QualificationTerminator):View"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">activateWhere</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
+        <span class="name">activateWhere</span><span class="params">(<span name="addQual">addQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <a href="QualificationTerminator.html" class="extype" name="com.quinsoft.zeidon.scala.QualificationTerminator">QualificationTerminator</a></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@activateWhere(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@activateWhere(addQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;com.quinsoft.zeidon.scala.QualificationTerminator):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -365,18 +348,18 @@ mUser activateEmpty()</pre></div></div>
 Returns 'this' for convenience.</p><pre><span class="kw">val</span> mUser = VIEW basedOn <span class="lit">"mUser"</span>
 mUser.activateWhere( _.User.ID = <span class="num">490</span> )</pre></div></div>
     </li><li name="com.quinsoft.zeidon.scala.View#applyDynamic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="applyDynamic(operationName:String)(args:AnyRef*):AnyRef"></a>
-      <a id="applyDynamic(String)(AnyRef*):AnyRef"></a>
+      <a id="applyDynamic(operationName:String)(args:AnyRef*):com.quinsoft.zeidon.scala.ObjectOperationResult"></a>
+      <a id="applyDynamic(String)(AnyRef*):ObjectOperationResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">applyDynamic</span><span class="params">(<span name="operationName">operationName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="args">args: <span class="extype" name="scala.AnyRef">AnyRef</span>*</span>)</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">applyDynamic</span><span class="params">(<span name="operationName">operationName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="args">args: <span class="extype" name="scala.AnyRef">AnyRef</span>*</span>)</span><span class="result">: <a href="ObjectOperationResult.html" class="extype" name="com.quinsoft.zeidon.scala.ObjectOperationResult">ObjectOperationResult</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@applyDynamic(operationName:String)(args:AnyRef*):AnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@applyDynamic(operationName:String)(args:AnyRef*):com.quinsoft.zeidon.scala.ObjectOperationResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -485,18 +468,18 @@ mUser.activateWhere( _.User.ID = <span class="num">490</span> )</pre></div></div
     </span>
       <p class="shortcomment cmt">Creates a QualBuilder for creating activate qualification.</p>
     </li><li name="com.quinsoft.zeidon.scala.View#buildQual" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="buildQual(initialQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder"></a>
-      <a id="buildQual((EntityQualBuilder)⇒Unit):QualBuilder"></a>
+      <a id="buildQual(initialQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;com.quinsoft.zeidon.scala.QualificationTerminator):com.quinsoft.zeidon.scala.QualBuilder"></a>
+      <a id="buildQual((EntityQualBuilder)⇒QualificationTerminator):QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildQual</span><span class="params">(<span name="initialQual">initialQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <a href="QualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
+        <span class="name">buildQual</span><span class="params">(<span name="initialQual">initialQual: (<a href="EntityQualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.EntityQualBuilder">EntityQualBuilder</a>) ⇒ <a href="QualificationTerminator.html" class="extype" name="com.quinsoft.zeidon.scala.QualificationTerminator">QualificationTerminator</a></span>)</span><span class="result">: <a href="QualBuilder.html" class="extype" name="com.quinsoft.zeidon.scala.QualBuilder">QualBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@buildQual(initialQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;Unit):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@buildQual(initialQual:com.quinsoft.zeidon.scala.EntityQualBuilder=&gt;com.quinsoft.zeidon.scala.QualificationTerminator):com.quinsoft.zeidon.scala.QualBuilder" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -617,6 +600,40 @@ Returns a view to the cloned OI.
       </a>
     </span>
       <p class="shortcomment cmt">Returns an EntityCursor for the entity specified by entityDef.</p>
+    </li><li name="com.quinsoft.zeidon.scala.View#drop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="drop():com.quinsoft.zeidon.scala.View"></a>
+      <a id="drop():View"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drop</span><span class="params">()</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@drop():com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Drops the view and all its names.</p>
+    </li><li name="com.quinsoft.zeidon.scala.View#dropName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dropName(viewName:String):com.quinsoft.zeidon.scala.View"></a>
+      <a id="dropName(String):View"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropName</span><span class="params">(<span name="viewName">viewName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@dropName(viewName:String):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Drops the specified name for this view.</p>
     </li><li name="com.quinsoft.zeidon.scala.View#duplicate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="duplicate:com.quinsoft.zeidon.scala.View"></a>
       <a id="duplicate:View"></a>
@@ -651,23 +668,6 @@ Returns a view to the cloned OI.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -708,23 +708,23 @@ Returns a view to the cloned OI.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
+    </li><li name="com.quinsoft.zeidon.scala.View#getSelectSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getSelectSet(name:String):com.quinsoft.zeidon.SelectSet"></a>
+      <a id="getSelectSet(String):SelectSet"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">getSelectSet</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="com.quinsoft.zeidon.SelectSet">SelectSet</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@getSelectSet(name:String):com.quinsoft.zeidon.SelectSet" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      
     </li><li name="com.quinsoft.zeidon.scala.View#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
@@ -889,18 +889,18 @@ myView.activateEmpty
 myView.name( <span class="lit">"This Is a Name"</span> )</pre><p>This is a synonym for view.name = &quot;...&quot;
 </p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.View#name_=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="name_=(viewName:String):com.quinsoft.zeidon.scala.View"></a>
-      <a id="name_=(String):View"></a>
+      <a id="name_=(viewName:String):Unit"></a>
+      <a id="name_=(String):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: name_$eq" class="name">name_=</span><span class="params">(<span name="viewName">viewName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
+        <span title="gt4s: name_$eq" class="name">name_=</span><span class="params">(<span name="viewName">viewName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@name_=(viewName:String):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@name_=(viewName:String):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -928,7 +928,7 @@ myView.name = <span class="lit">"This Is a Name"</span></pre><p>This is a synony
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.View#newView" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="newView(task:com.quinsoft.zeidon.scala.Task):com.quinsoft.zeidon.scala.View"></a>
+      <a id="newView(task:com.quinsoft.zeidon.Task):com.quinsoft.zeidon.scala.View"></a>
       <a id="newView(Task):View"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -936,10 +936,10 @@ myView.name = <span class="lit">"This Is a Name"</span></pre><p>This is a synony
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newView</span><span class="params">(<span name="task">task: <a href="Task.html" class="extype" name="com.quinsoft.zeidon.scala.Task">Task</a> = <span class="symbol"><span class="name"><a href="#task:com.quinsoft.zeidon.scala.Task">this.task</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
+        <span class="name">newView</span><span class="params">(<span name="task">task: <span class="extype" name="com.quinsoft.zeidon.Task">Task</span> = <span class="symbol"><span class="name"><a href="#task:com.quinsoft.zeidon.Task">this.task</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@newView(task:com.quinsoft.zeidon.scala.Task):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@newView(task:com.quinsoft.zeidon.Task):com.quinsoft.zeidon.scala.View" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -1051,7 +1051,7 @@ is used to find the entity cursor for a view.</p><p>Not intended to be called di
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.quinsoft.zeidon.scala.View#task" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="task:com.quinsoft.zeidon.scala.Task"></a>
+      <a id="task:com.quinsoft.zeidon.Task"></a>
       <a id="task:Task"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1059,10 +1059,10 @@ is used to find the entity cursor for a view.</p><p>Not intended to be called di
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">task</span><span class="result">: <a href="Task.html" class="extype" name="com.quinsoft.zeidon.scala.Task">Task</a></span>
+        <span class="name">task</span><span class="result">: <span class="extype" name="com.quinsoft.zeidon.Task">Task</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@task:com.quinsoft.zeidon.scala.Task" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@task:com.quinsoft.zeidon.Task" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -1084,6 +1084,23 @@ is used to find the entity cursor for a view.</p><p>Not intended to be called di
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.quinsoft.zeidon.scala.View">View</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="com.quinsoft.zeidon.scala.View#validate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validate(throwException:Boolean):java.util.Collection[com.quinsoft.zeidon.ZeidonException]"></a>
+      <a id="validate(Boolean):Collection[ZeidonException]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="params">(<span name="throwException">throwException: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="java.util.Collection">Collection</span>[<span class="extype" name="com.quinsoft.zeidon.ZeidonException">ZeidonException</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.View@validate(throwException:Boolean):java.util.Collection[com.quinsoft.zeidon.ZeidonException]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Validates the OI by running accept() on all the entity instances.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -1185,7 +1202,15 @@ is used to find the entity cursor for a view.</p><p>Not intended to be called di
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Dynamic">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.Dynamic">
               <h3>Inherited from <span class="extype" name="scala.Dynamic">Dynamic</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>

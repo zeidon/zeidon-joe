@@ -1,22 +1,13 @@
 #!/bin/bash
 
-version=1.3
-echo "Creating javadoc for $version"
-
 pushd ../zeidon-dev
+
+version=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate     -Dexpression=project.version |grep -Ev '(^\[|Download\w+:)' | egrep -o "[0-9]+\.[0-9]+"`
+echo "Creating javadoc for $version"
 
 rm -rf zeidon-joe/target/site/apidocs > /dev/null
 rm -rf android/target/site/apidocs > /dev/null
 rm -rf scala/target/site/scaladocs > /dev/null
-
-# Make sure we're matching the git branch version
-git_ver=`git rev-parse --abbrev-ref HEAD`
-if [[ $git_ver == ${version}.* ]]; then
-    echo ""
-else
-    echo "Mismatching versions"
-    exit
-fi
 
 mvn javadoc:javadoc
 

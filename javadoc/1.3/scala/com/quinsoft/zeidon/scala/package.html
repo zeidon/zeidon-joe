@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>scala - zeidon-scala 1.3.0-SNAPSHOT API - com.quinsoft.zeidon.scala</title>
-          <meta name="description" content="scala - zeidon - scala 1.3.0 - SNAPSHOT API - com.quinsoft.zeidon.scala" />
-          <meta name="keywords" content="scala zeidon scala 1.3.0 SNAPSHOT API com.quinsoft.zeidon.scala" />
+          <title>scala - zeidon-scala 1.3.4-SNAPSHOT API - com.quinsoft.zeidon.scala</title>
+          <meta name="description" content="scala - zeidon - scala 1.3.4 - SNAPSHOT API - com.quinsoft.zeidon.scala" />
+          <meta name="keywords" content="scala zeidon scala 1.3.4 SNAPSHOT API com.quinsoft.zeidon.scala" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -66,7 +66,26 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.quinsoft.zeidon.scala.AssertView" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.quinsoft.zeidon.scala.AbstractEntity" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AbstractEntityextendsDynamic"></a>
+      <a id="AbstractEntity:AbstractEntity"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AbstractEntity.html"><span class="name">AbstractEntity</span></a><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@AbstractEntityextendsDynamic" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class implements methods that are common to both EntityCursor and EntityInstance.</p><div class="fullcomment"><div class="comment cmt"><p>This class implements methods that are common to both EntityCursor and EntityInstance.  This
+is where the dynamic methods are implemented for finding cursor/entity and attribute instances.
+</p></div></div>
+    </li><li name="com.quinsoft.zeidon.scala.AssertView" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AssertViewextendsAnyRef"></a>
       <a id="AssertView:AssertView"></a>
       <h4 class="signature">
@@ -99,7 +118,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Object that represents an attribute value in an entity instance.</p>
     </li><li name="com.quinsoft.zeidon.scala.AttributeIterator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AttributeIteratorextendsIterable[com.quinsoft.zeidon.scala.AttributeInstance]"></a>
       <a id="AttributeIterator:AttributeIterator"></a>
@@ -134,6 +153,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">Builder for setting attribute values for an entity.</p>
+    </li><li name="com.quinsoft.zeidon.scala.AttributeQualOperators" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AttributeQualOperatorsextendsAnyRef"></a>
+      <a id="AttributeQualOperators:AttributeQualOperators"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AttributeQualOperators.html"><span class="name">AttributeQualOperators</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@AttributeQualOperatorsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Used to qualify on an attribute using an operator like '&lt;&gt;' or 'in'.</p>
     </li><li name="com.quinsoft.zeidon.scala.CursorResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CursorResultextendsProductwithSerializable"></a>
       <a id="CursorResult:CursorResult"></a>
@@ -160,7 +196,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="EntityCursor.html"><span class="name">EntityCursor</span></a><span class="result"> extends <span class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</span> with <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="EntityInstance.html" class="extype" name="com.quinsoft.zeidon.scala.EntityInstance">EntityInstance</a>]</span>
+        <a href="EntityCursor.html"><span class="name">EntityCursor</span></a><span class="result"> extends <a href="AbstractEntity.html" class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</a> with <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="EntityInstance.html" class="extype" name="com.quinsoft.zeidon.scala.EntityInstance">EntityInstance</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@EntityCursorextendsAbstractEntitywithIterable[com.quinsoft.zeidon.scala.EntityInstance]" title="Permalink" target="_top">
@@ -177,14 +213,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="EntityInstance.html"><span class="name">EntityInstance</span></a><span class="result"> extends <span class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</span></span>
+        <a href="EntityInstance.html"><span class="name">EntityInstance</span></a><span class="result"> extends <a href="AbstractEntity.html" class="extype" name="com.quinsoft.zeidon.scala.AbstractEntity">AbstractEntity</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@EntityInstanceextendsAbstractEntity" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p>
+      <p class="shortcomment cmt">An instance of an Entity in an OI.</p>
     </li><li name="com.quinsoft.zeidon.scala.EntityInstanceIterator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="EntityInstanceIteratorextendsIterable[com.quinsoft.zeidon.scala.EntityInstance]"></a>
       <a id="EntityInstanceIterator:EntityInstanceIterator"></a>
@@ -219,6 +255,23 @@
       </a>
     </span>
       
+    </li><li name="com.quinsoft.zeidon.scala.EntitySelector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EntitySelectorextendsDynamic"></a>
+      <a id="EntitySelector:EntitySelector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EntitySelector.html"><span class="name">EntitySelector</span></a><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@EntitySelectorextendsDynamic" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="com.quinsoft.zeidon.scala.Nexts" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NextsextendsAnyRef"></a>
       <a id="Nexts:Nexts"></a>
@@ -239,26 +292,24 @@
 loop constructs the ability to execute &quot;next()&quot; to move to the next entity in a
 cursor loop.  This is largely cribbed from Breaks.scala.
 </p></div></div>
-    </li><li name="com.quinsoft.zeidon.scala.ObjectEngine" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ObjectEngineextendsAnyRef"></a>
-      <a id="ObjectEngine:ObjectEngine"></a>
+    </li><li name="com.quinsoft.zeidon.scala.ObjectOperationResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ObjectOperationResultextendsProductwithSerializable"></a>
+      <a id="ObjectOperationResult:ObjectOperationResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ObjectEngine.html"><span class="name">ObjectEngine</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ObjectOperationResult.html"><span class="name">ObjectOperationResult</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@ObjectEngineextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@ObjectOperationResultextendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The main class for creating Zeidon tasks in Scala.</p><div class="fullcomment"><div class="comment cmt"><p>The main class for creating Zeidon tasks in Scala.</p><p>This object is a simple wrapper around the JOE ObjectEngine.  It is typically
-created by first creating a Java ObjectEngine and then wrapping it with the
-Scala Object Engine
-</p></div></div>
+      <p class="shortcomment cmt">A wrapper class around the AnyRef returned by an Zeidon Object Operation.</p><div class="fullcomment"><div class="comment cmt"><p>A wrapper class around the AnyRef returned by an Zeidon Object Operation.
+This will automatically convert the value to standard Scala types.</p></div></div>
     </li><li name="com.quinsoft.zeidon.scala.ObjectOperations" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ObjectOperationsextendsZeidonOperations"></a>
       <a id="ObjectOperations:ObjectOperations"></a>
@@ -302,6 +353,23 @@ mUser.buildQual( _.User.ID = <span class="num">490</span> )
             .or( _.User.ID = <span class="num">491</span> )
             .asynchronous
             .activate</pre></div></div>
+    </li><li name="com.quinsoft.zeidon.scala.QualificationTerminator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QualificationTerminatorextendsAnyRef"></a>
+      <a id="QualificationTerminator:QualificationTerminator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="QualificationTerminator.html"><span class="name">QualificationTerminator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@QualificationTerminatorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A class to indicate that qualification has been correctly specified.</p>
     </li><li name="com.quinsoft.zeidon.scala.ScalaHelperImpl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ScalaHelperImplextendsScalaHelper"></a>
       <a id="ScalaHelperImpl:ScalaHelperImpl"></a>
@@ -320,36 +388,54 @@ mUser.buildQual( _.User.ID = <span class="num">490</span> )
     </span>
       <p class="shortcomment cmt">This class has a number of glue methods that help the JOE call Zeidon
 operations written in scala.</p>
-    </li><li name="com.quinsoft.zeidon.scala.Task" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TaskextendsDynamicwithProductwithSerializable"></a>
-      <a id="Task:Task"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Task.html"><span class="name">Task</span></a><span class="params">(<span name="jtask">jtask: <span class="extype" name="com.quinsoft.zeidon.Task">zeidon.Task</span></span>, <span name="oe">oe: <a href="ObjectEngine.html" class="extype" name="com.quinsoft.zeidon.scala.ObjectEngine">ObjectEngine</a> = <span class="symbol">null</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@TaskextendsDynamicwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"></p>
-    </li><li name="com.quinsoft.zeidon.scala.View" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ViewextendsDynamic"></a>
-      <a id="View:View"></a>
+    </li><li name="com.quinsoft.zeidon.scala.SelectQualTerminator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SelectQualTerminatorextendsAnyRef"></a>
+      <a id="SelectQualTerminator:SelectQualTerminator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="View.html"><span class="name">View</span></a><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
+        <a href="SelectQualTerminator.html"><span class="name">SelectQualTerminator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@ViewextendsDynamic" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@SelectQualTerminatorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class is used to terminate qualification for a SelectSet.</p>
+    </li><li name="com.quinsoft.zeidon.scala.SelectQualification" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SelectQualificationextendsDynamic"></a>
+      <a id="SelectQualification:SelectQualification"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SelectQualification.html"><span class="name">SelectQualification</span></a><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@SelectQualificationextendsDynamic" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Specifies a series of objects that make it easier to select entities in a
+SelectSet.</p>
+    </li><li name="com.quinsoft.zeidon.scala.View" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ViewextendsDynamicwithProductwithSerializable"></a>
+      <a id="View:View"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="View.html"><span class="name">View</span></a><span class="params">(<span name="task">task: <span class="extype" name="com.quinsoft.zeidon.Task">Task</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Dynamic">Dynamic</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@ViewextendsDynamicwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -488,7 +574,7 @@ Requires a task.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p>
+      
     </li><li name="com.quinsoft.zeidon.scala.CursorResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CursorResult"></a>
       <a id="CursorResult:CursorResult"></a>
@@ -523,6 +609,40 @@ Requires a task.
       </a>
     </span>
       
+    </li><li name="com.quinsoft.zeidon.scala.EntityInstance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EntityInstance"></a>
+      <a id="EntityInstance:EntityInstance"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EntityInstance$.html"><span class="name">EntityInstance</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@EntityInstance" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.quinsoft.zeidon.scala.Implicits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Implicits"></a>
+      <a id="Implicits:Implicits"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Implicits$.html"><span class="name">Implicits</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@Implicits" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p>
     </li><li name="com.quinsoft.zeidon.scala.Nexts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Nexts"></a>
       <a id="Nexts:Nexts"></a>
@@ -540,36 +660,53 @@ Requires a task.
       </a>
     </span>
       
-    </li><li name="com.quinsoft.zeidon.scala.ObjectEngine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ObjectEngine"></a>
-      <a id="ObjectEngine:ObjectEngine"></a>
+    </li><li name="com.quinsoft.zeidon.scala.ObjectOperationResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ObjectOperationResult"></a>
+      <a id="ObjectOperationResult:ObjectOperationResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="ObjectEngine$.html"><span class="name">ObjectEngine</span></a>
+        <a href="ObjectOperationResult$.html"><span class="name">ObjectOperationResult</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@ObjectEngine" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@ObjectOperationResult" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="com.quinsoft.zeidon.scala.Task" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Task"></a>
-      <a id="Task:Task"></a>
+    </li><li name="com.quinsoft.zeidon.scala.QualBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QualBuilder"></a>
+      <a id="QualBuilder:QualBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Task$.html"><span class="name">Task</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="QualBuilder$.html"><span class="name">QualBuilder</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@Task" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@QualBuilder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.quinsoft.zeidon.scala.SelectQualification" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SelectQualification"></a>
+      <a id="SelectQualification:SelectQualification"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SelectQualification$.html"><span class="name">SelectQualification</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@SelectQualification" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -603,7 +740,7 @@ import:
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="View$.html"><span class="name">View</span></a>
+        <a href="View$.html"><span class="name">View</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.quinsoft.zeidon.scala.package@View" title="Permalink" target="_top">
