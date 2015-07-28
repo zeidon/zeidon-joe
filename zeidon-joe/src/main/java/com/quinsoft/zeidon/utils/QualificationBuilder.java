@@ -420,7 +420,7 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .getAttribute( ENTITYNAME).setValue( entityName ) 
+                                     .getAttribute( ENTITYNAME).setValue( entityName )
                                      .getAttribute( OPER).setValue( "EXISTS" ) ;
         return this;
     }
@@ -480,9 +480,9 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .getAttribute( ENTITYNAME).setValue( entityName ) 
-                                     .getAttribute( ATTRIBUTENAME).setValue( attribName ) 
-                                     .getAttribute( OPER).setValue( oper ) 
+                                     .getAttribute( ENTITYNAME).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME).setValue( attribName )
+                                     .getAttribute( OPER).setValue( oper )
                                      .getAttribute( VALUE).setValue( attribValue == null ? null : attribValue.toString() ) ;
 
         return this;
@@ -595,20 +595,22 @@ public class QualificationBuilder
                 assert cacheTask == task : "Unequal tasks for non-cached activate";
             else
             {
-                // Yes.  See if we've already loaded it.  First try the local cache.
-                view = task.getViewByName( cacheViewName );
+                // Yes.  See if we've already loaded it.
+                view = cacheTask.getViewByName( cacheViewName );
 
-                // If we didn't find it in the local task, see if it exists for the
-                // global cache (assuming its different)
-                if ( view == null && cacheTask != task )
+                // We found it in the global cache.  If it's not in the local cache then
+                // create it and return it.
+                if ( view != null && cacheTask != task )
                 {
-                    view = cacheTask.getViewByName( cacheViewName );
-                    if ( view != null )
+                    View localView = task.getViewByName( cacheViewName );
+                    if ( localView == null )
                     {
                         // Create a local copy of the view.
                         view = view.newView( task );
                         task.setNameForView( cacheViewName, view );
                     }
+                    else
+                        view = localView; // Return the local one.
                 }
             }
 
