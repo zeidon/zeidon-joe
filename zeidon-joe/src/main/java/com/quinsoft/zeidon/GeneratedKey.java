@@ -41,4 +41,9 @@ public interface GeneratedKey
      * @return true if key is null.
      */
     boolean isNull();
+
+    /**
+     * @return the native value of the key; e.g. Integer for MySql.
+     */
+    Object getNativeValue();
 }

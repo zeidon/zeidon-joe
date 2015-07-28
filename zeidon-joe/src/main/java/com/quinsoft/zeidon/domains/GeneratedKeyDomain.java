@@ -69,7 +69,7 @@ public class GeneratedKeyDomain extends AbstractDomain
         if ( externalValue instanceof GeneratedKey )
             return externalValue;
 
-        return new GeneratedKeyImpl( externalValue.toString() );
+        return new GeneratedKeyImpl( externalValue );
     }
 
     @Override

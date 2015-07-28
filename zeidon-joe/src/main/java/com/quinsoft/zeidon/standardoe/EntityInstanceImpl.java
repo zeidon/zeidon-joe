@@ -302,12 +302,19 @@ class EntityInstanceImpl implements EntityInstance
     {
         for ( AttributeDef attributeDef : getEntityDef().getAttributes( true ) )
         {
+            Domain domain = attributeDef.getDomain();
             if ( ! StringUtils.isBlank( attributeDef.getInitialValue() ) )
-                getAttribute( attributeDef).setValue( attributeDef.getInitialValue() );
+            {
+                // Use the domain to convert the string to an internal value.  Then
+                // set the value using setInternalValue.  This bypasses the restriction
+                // on read-only attributes.
+                Object internalValue = domain.convertExternalValue( getTask(), null, attributeDef, null,
+                                                                    attributeDef.getInitialValue() );
+                getAttribute( attributeDef).setInternalValue( internalValue, false );
+            }
             else
             if ( ! attributeDef.isHidden() )
             {
-                Domain domain = attributeDef.getDomain();
                 if ( domain.hasInitialValue( getTask(), attributeDef ) )
                     domain.setInitialValue( getAttribute( attributeDef ) );
             }
