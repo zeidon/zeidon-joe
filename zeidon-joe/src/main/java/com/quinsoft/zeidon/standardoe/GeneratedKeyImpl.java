@@ -26,16 +26,12 @@ import com.quinsoft.zeidon.ZeidonException;
  */
 public class GeneratedKeyImpl implements GeneratedKey
 {
-    private final Object nativeValue;
-    private final String stringValue;
+    private final    Object nativeValue;
+    private volatile String stringValue;
 
     public GeneratedKeyImpl( Object value )
     {
         nativeValue = value;
-        if ( value == null )
-            stringValue = null;
-        else
-            stringValue = nativeValue.toString();
     }
 
     /* (non-Javadoc)
@@ -53,6 +49,9 @@ public class GeneratedKeyImpl implements GeneratedKey
         if ( isNull() )
             throw new ZeidonException( "Attempting to convert null GeneratedKey to a string" );
 
+        if ( stringValue == null )
+            stringValue = nativeValue.toString();
+
         return stringValue;
     }
 
@@ -61,6 +60,9 @@ public class GeneratedKeyImpl implements GeneratedKey
     {
         if ( isNull() )
             return "Key: (null)";
+
+        if ( stringValue == null )
+            stringValue = nativeValue.toString();
 
         return "Key: " + stringValue;
     }
