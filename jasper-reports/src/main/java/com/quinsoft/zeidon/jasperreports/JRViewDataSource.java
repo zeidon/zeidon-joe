@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRRewindableDataSource;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JsonData;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,7 +40,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
  * A wrapper to allow a Zeidon View to be used as a JasperReports DataSource.
  *
  */
-public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
+public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, JsonData
 {
     // "((\\w*)(\\.))?(\\w*)\\s*(\\s*\\(\\s*(\\w*)\\s*\\)\\s*)?\\s*(\\s*\\>(.*))?"
     private final static String REGEX = "((\\w*)(\\.))?"                  // Optional entity name--word followed by period.
@@ -50,16 +51,15 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
                                       + "(\\s*\\>(.*))?";                 // Optional default value--all chars after ">".
     private final static Pattern FIELD_PATTERN = Pattern.compile( REGEX );
 
-    final private View      view;
+    final protected View view;
 
     /**
      * This entity is the entity that we loop on.
      */
-    final private EntityDef topEntity;
+    final protected EntityDef loopEntity;
+    final protected EntityDef scopingEntity;
 
-    final private JasperReport jasperReport;
-    
-    private boolean cursorSet;
+    protected boolean cursorSet;
 
     /**
      * Empty constructor.  Intended to be called from a DataSourceProvider when testing
@@ -68,17 +68,17 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
     public JRViewDataSource( )
     {
         view = null;
-        topEntity = null;
-        jasperReport = null;
+        loopEntity = null;
+        scopingEntity = null;
     }
 
     public JRViewDataSource( View view, JasperReport jasperReport )
     {
         this.view = view;
         view.log().debug( "Creating a JRViewDataSource" );
-        this.jasperReport = jasperReport;
-        this.topEntity = getReportRoot();
-        
+        this.loopEntity = getReportRoot( jasperReport );
+        scopingEntity = null;
+
         try
         {
             moveFirst();
@@ -89,7 +89,15 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
         }
     }
 
-    protected EntityDef getReportRoot()
+
+    protected JRViewDataSource( View view, EntityDef loopEntity, EntityDef scopingEntity )
+    {
+        this.view = view;
+        this.loopEntity = loopEntity;
+        this.scopingEntity = scopingEntity;
+    }
+
+    protected EntityDef getReportRoot( JasperReport jasperReport )
     {
         String reportRoot = jasperReport.getProperty( "com.quinsoft.zeidon.reportRoot" );
         view.log().info( "com.quinsoft.zeidon.reportRoot = %s", reportRoot );
@@ -129,7 +137,7 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
                       .appendMessage( "FieldName = %s", fieldName );
 
         String entityName = m.group( 2 );
-        EntityDef entityDef = topEntity;
+        EntityDef entityDef = loopEntity;
         if ( ! StringUtils.isBlank( entityName ) )
             entityDef = view.getLodDef().getEntityDef( entityName );
         EntityCursor cursor = view.cursor( entityDef );
@@ -159,13 +167,69 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource
         if ( ! cursorSet )
         {
             cursorSet = true;
-            return view.cursor( topEntity ).setFirstWithinOi().isSet();
+            return view.cursor( loopEntity ).setFirstWithinOi().isSet();
         }
 
-        boolean rc = view.cursor( topEntity ).setNextContinue().isSet();
+        boolean rc = view.cursor( loopEntity ).setNextContinue().isSet();
         if ( rc )
-            view.log().info( "next() found %s", view.cursor( topEntity ).getEntityInstance() );
+            view.log().info( "next() found %s", view.cursor( loopEntity ).getEntityInstance() );
 
         return rc;
+    }
+
+    @Override
+    public JRViewSubDataSource subDataSource( )
+    {
+        throw new ZeidonException( "entitySelection for subDataSource is not supplied" );
+    }
+
+    @Override
+    public JRViewSubDataSource subDataSource( String entitySelection )
+    {
+        if ( StringUtils.isBlank( entitySelection ) )
+            throw new ZeidonException( "entitySelection for subDataSource is not supplied" );
+
+        String[] strings = entitySelection.split( "/" );
+
+        EntityDef scopingEntity = null;
+        if ( strings.length > 1 )
+            scopingEntity = view.getLodDef().getEntityDef( strings[1] );
+
+        EntityDef loopEntity = view.getLodDef().getEntityDef( strings[0] );
+
+        return new JRViewSubDataSource( view, loopEntity, scopingEntity );
+    }
+
+    /**
+     * Same as the main datasource except that it uses a scoping entity.
+     *
+     * @author dgc
+     *
+     */
+    private static class JRViewSubDataSource extends JRViewDataSource
+    {
+        public JRViewSubDataSource( View view, EntityDef loopEntity, EntityDef scopingEntity )
+        {
+            super( view, loopEntity, scopingEntity );
+        }
+
+        /* (non-Javadoc)
+         * @see net.sf.jasperreports.engine.JRDataSource#next()
+         */
+        @Override
+        public boolean next() throws JRException
+        {
+            if ( ! cursorSet )
+            {
+                cursorSet = true;
+                return view.cursor( loopEntity).setFirst( scopingEntity ).isSet();
+            }
+
+            boolean rc = view.cursor( loopEntity ).setNextContinue().isSet();
+            if ( rc )
+                view.log().info( "next() found %s", view.cursor( loopEntity ).getEntityInstance() );
+
+            return rc;
+        }
     }
 }

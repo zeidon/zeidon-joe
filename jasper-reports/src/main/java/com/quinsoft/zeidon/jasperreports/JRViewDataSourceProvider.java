@@ -32,13 +32,12 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.DefaultJavaOeConfiguration;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
@@ -108,6 +107,20 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
         return true;
     }
 
+    private void addfields( List<JRField> attributes, EntityDef entityDef )
+    {
+        String name = entityDef.getName() + ".";
+
+        for ( AttributeDef attr : entityDef.getAttributes( true ) )
+        {
+            JRDesignField field = new JRDesignField();
+            field.setName( name + attr.getName() );
+            field.setValueClass( String.class );
+            field.setDescription( "Entity = " + attr.getEntityDef().getName() );
+            attributes.add( field );
+        }
+    }
+
     /* (non-Javadoc)
      * @see net.sf.jasperreports.engine.JRDataSourceProvider#getFields(net.sf.jasperreports.engine.JasperReport)
      */
@@ -116,7 +129,7 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
     {
         if ( report == null )
             return new JRField[0];
-        
+
         ObjectEngine oe = getObjectEngine();
         info( "JRViewDataSourceProvider.getFields" );
 
@@ -125,18 +138,11 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
 
         Application app = oe.getApplication( appName );
         LodDef lodDef = app.getLodDef( oe.getSystemTask(), lodName );
-        List<JRField> attributes = new ArrayList<>();
-        for ( AttributeDef attr : lodDef.getRoot().getAttributes() )
-        {
-            if ( attr.isHidden() )
-                continue;
 
-            JRDesignField field = new JRDesignField();
-            field.setName( attr.getName() );
-            field.setValueClass( String.class );
-            field.setDescription( "Entity = " + attr.getEntityDef().getName() );
-            attributes.add( field );
-        }
+        List<JRField> attributes = new ArrayList<>();
+        addfields( attributes, lodDef.getRoot() );
+        for ( EntityDef entityDef : lodDef.getRoot().getChildrenHier() )
+            addfields( attributes, entityDef );
 
         info( "Fields = %s", attributes );
         return attributes.toArray(new JRField[ attributes.size() ] );
