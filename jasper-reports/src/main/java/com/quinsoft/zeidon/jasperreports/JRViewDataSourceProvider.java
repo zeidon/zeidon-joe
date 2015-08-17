@@ -30,12 +30,18 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.BooleanDomain;
+import com.quinsoft.zeidon.domains.DateTimeDomain;
+import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DoubleDomain;
+import com.quinsoft.zeidon.domains.IntegerDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
@@ -113,10 +119,26 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
 
         for ( AttributeDef attr : entityDef.getAttributes( true ) )
         {
+            Domain domain = attr.getDomain();
+
             JRDesignField field = new JRDesignField();
             field.setName( name + attr.getName() );
-            field.setValueClass( String.class );
             field.setDescription( "Entity = " + attr.getEntityDef().getName() );
+
+            if ( domain instanceof IntegerDomain )
+                field.setValueClass( Integer.class );
+            else
+            if ( domain instanceof DoubleDomain )
+                field.setValueClass( Double.class );
+            else
+            if ( domain instanceof DateTimeDomain )
+                field.setValueClass( DateTime.class );
+            else
+            if ( domain instanceof BooleanDomain )
+                field.setValueClass( Boolean.class );
+            else
+                field.setValueClass( String.class );
+
             attributes.add( field );
         }
     }

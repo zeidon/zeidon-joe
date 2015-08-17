@@ -201,9 +201,8 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
     }
 
     /**
-     * Same as the main datasource except that it uses a scoping entity.
-     *
-     * @author dgc
+     * Same as the main datasource except that it uses a scoping entity and only
+     * loops through a sub-object.
      *
      */
     private static class JRViewSubDataSource extends JRViewDataSource
