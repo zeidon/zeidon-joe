@@ -27,6 +27,13 @@ import com.quinsoft.zeidon.ZeidonException
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
 
     /**
+     * Returns the Scala EntityInstance for this AttributeInstance.
+     */
+    def getEntityInstance = new EntityInstance( jattributeInstance.getEntityInstance )
+    
+    def getView = new View( jattributeInstance.getView )
+    
+    /**
      * Returns true if the attribute is null.
      */
     def isNull = jattributeInstance.isNull()

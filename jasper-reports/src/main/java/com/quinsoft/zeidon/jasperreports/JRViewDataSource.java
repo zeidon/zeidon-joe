@@ -144,7 +144,7 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
 
         String defaultValue = m.group( 8 );
         if ( defaultValue == null )
-            defaultValue = "";
+            defaultValue = null;
 
         if ( cursor.isNull() )
             return defaultValue;
@@ -155,7 +155,13 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
             return defaultValue;
 
         String contextName = m.group( 6 );
-        return attribute.getString( contextName );
+        if ( ! StringUtils.isBlank( contextName ) )
+            return attribute.getString( contextName );
+
+        if ( field.getValueClass().equals( "java.lang.String" ) )
+            return attribute.getString();
+
+        return attribute.getValue();
     }
 
     /* (non-Javadoc)
@@ -197,7 +203,7 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
 
         EntityDef loopEntity = view.getLodDef().getEntityDef( strings[0] );
 
-        return new JRViewSubDataSource( view, loopEntity, scopingEntity );
+        return new JRViewSubDataSource( view.newView(), loopEntity, scopingEntity );
     }
 
     /**
