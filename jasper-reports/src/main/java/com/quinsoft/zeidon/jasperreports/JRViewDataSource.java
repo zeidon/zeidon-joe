@@ -37,7 +37,8 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * A wrapper to allow a Zeidon View to be used as a JasperReports DataSource.
+ * A wrapper to allow a Zeidon View to be used as a JasperReports DataSource.  This
+ * class implements JsonData to allow SubReports to easily use subobjects.
  *
  */
 public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, JsonData
@@ -75,9 +76,8 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
     public JRViewDataSource( View view, JasperReport jasperReport )
     {
         this.view = view;
-        view.log().debug( "Creating a JRViewDataSource" );
         this.loopEntity = getReportRoot( jasperReport );
-        scopingEntity = null;
+        scopingEntity = getReportScoping( jasperReport );
 
         try
         {
@@ -99,12 +99,22 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
 
     protected EntityDef getReportRoot( JasperReport jasperReport )
     {
-        String reportRoot = jasperReport.getProperty( "com.quinsoft.zeidon.reportRoot" );
-        view.log().info( "com.quinsoft.zeidon.reportRoot = %s", reportRoot );
-        if ( StringUtils.isBlank( reportRoot ) )
+        String reportRootStr = jasperReport.getProperty( "com.quinsoft.zeidon.reportRoot" );
+        view.log().debug( "com.quinsoft.zeidon.reportRoot = %s", reportRootStr );
+        if ( StringUtils.isBlank( reportRootStr ) )
             return view.getLodDef().getRoot();
 
-        return view.getLodDef().getEntityDef( reportRoot );
+        return view.getLodDef().getEntityDef( reportRootStr );
+    }
+
+    protected EntityDef getReportScoping( JasperReport jasperReport )
+    {
+        String scopingEntityStr = jasperReport.getProperty( "com.quinsoft.zeidon.scopingEntity" );
+        view.log().debug( "com.quinsoft.zeidon.scopingEntity = %s", scopingEntityStr );
+        if ( StringUtils.isBlank( scopingEntityStr ) )
+            return null;
+
+        return view.getLodDef().getEntityDef( scopingEntityStr );
     }
 
     /* (non-Javadoc)
@@ -173,7 +183,7 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
         if ( ! cursorSet )
         {
             cursorSet = true;
-            return view.cursor( loopEntity ).setFirstWithinOi().isSet();
+            return view.cursor( loopEntity).setFirst( scopingEntity ).isSet();
         }
 
         boolean rc = view.cursor( loopEntity ).setNextContinue().isSet();
@@ -184,13 +194,27 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
     }
 
     @Override
-    public JRViewSubDataSource subDataSource( )
+    public JRViewDataSource subDataSource( )
     {
         throw new ZeidonException( "entitySelection for subDataSource is not supplied" );
     }
 
+    /**
+     * Return a data source that references a subobject for the current view.
+     * EntitySelection is: "LOOPING-ENTITY[/SCOPING-ENTITY]".
+     *
+     * For example, given the following simple LOD structure:
+     *   A
+     *   |
+     *   B
+     *   |
+     *   C
+     *
+     * If entitySelection is "C" then only C's under the current B will be
+     * iterated.  For "C/A" then all C's under the current A will be iterated.
+     */
     @Override
-    public JRViewSubDataSource subDataSource( String entitySelection )
+    public JRViewDataSource subDataSource( String entitySelection )
     {
         if ( StringUtils.isBlank( entitySelection ) )
             throw new ZeidonException( "entitySelection for subDataSource is not supplied" );
@@ -203,38 +227,6 @@ public class JRViewDataSource implements JRDataSource, JRRewindableDataSource, J
 
         EntityDef loopEntity = view.getLodDef().getEntityDef( strings[0] );
 
-        return new JRViewSubDataSource( view.newView(), loopEntity, scopingEntity );
-    }
-
-    /**
-     * Same as the main datasource except that it uses a scoping entity and only
-     * loops through a sub-object.
-     *
-     */
-    private static class JRViewSubDataSource extends JRViewDataSource
-    {
-        public JRViewSubDataSource( View view, EntityDef loopEntity, EntityDef scopingEntity )
-        {
-            super( view, loopEntity, scopingEntity );
-        }
-
-        /* (non-Javadoc)
-         * @see net.sf.jasperreports.engine.JRDataSource#next()
-         */
-        @Override
-        public boolean next() throws JRException
-        {
-            if ( ! cursorSet )
-            {
-                cursorSet = true;
-                return view.cursor( loopEntity).setFirst( scopingEntity ).isSet();
-            }
-
-            boolean rc = view.cursor( loopEntity ).setNextContinue().isSet();
-            if ( rc )
-                view.log().info( "next() found %s", view.cursor( loopEntity ).getEntityInstance() );
-
-            return rc;
-        }
+        return new JRViewDataSource( view.newView(), loopEntity, scopingEntity );
     }
 }
