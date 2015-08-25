@@ -347,12 +347,11 @@ fopFactory.setUserConfig(new File("C:/Temp/mycfg.xml"));
 
    public int ConvertXML_ToPDF( String directory, String application, String label, String fopConfig )
    {
-      label = RemoveInvalidCharsFromFilename( label );
       String pdf = label + ".pdf";
       String root = directory + application;
-      String xml = root + "xml/";
-      String xsl = root + "xsl/";
-      String copyPdf = root + "pdf/";
+      String xml = root + "/xml/";
+      String xsl = root + "/xsl/";
+      String copyPdf = root + "/pdf/";
       SysValidDirOrFile( xml, 1, 1, 256 );
       SysValidDirOrFile( xsl, 1, 1, 256 );
       SysValidDirOrFile( copyPdf, 1, 1, 256 );
@@ -407,8 +406,8 @@ fopFactory.setUserConfig(new File("C:/Temp/mycfg.xml"));
             // we can retrieve this name in FindOpenFile (kzoejava.c) when trying to
             // open the file in the jsp files.
             View vKZXMLPGO = task.getViewByName( "_KZXMLPGO" );
-            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( application + "pdf/" + pdf );
-            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( application + "pdf/" + pdf );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( "/" + application + "/pdf/" + pdf );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( "" );
          }
          catch (Exception e)
          {

@@ -8610,6 +8610,7 @@ public abstract class VmlOperation
    public int
    RemoveInvalidCharsFromFilename( StringBuilder sbFileName ) {
       String in = sbFileName.toString();
+      TraceLineS( "RemoveInvalidCharsFromFilename original: ", in );
       char ch;
       int k;
       int pos = 0;
@@ -8620,6 +8621,7 @@ public abstract class VmlOperation
          }
       }
       sbFileName.setLength( pos );
+      TraceLineS( "RemoveInvalidCharsFromFilename validated: ", sbFileName.toString() );
       return sbFileName.length();
    }
 
@@ -8719,11 +8721,6 @@ public abstract class VmlOperation
       if ( szFileName != null && szFileName.isEmpty() == false )
       {
          szDir = "./pdf/";
-         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
-        	  szFileName.startsWith( "./" ) == false )
-         {
-            szFileName = szDir + szFileName;
-         }
          if ( szFileName.contains(".") == false )
          {
             szFileName = szFileName + ".";
@@ -8736,6 +8733,11 @@ public abstract class VmlOperation
             {
                szFileName = szFileName + "html";
             }
+         }
+         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
+        	     szFileName.startsWith( "./" ) == false )
+         {
+            szFileName = szDir + szFileName;
          }
       }
       else
