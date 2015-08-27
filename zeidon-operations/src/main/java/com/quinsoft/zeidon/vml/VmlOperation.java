@@ -4976,21 +4976,44 @@ public abstract class VmlOperation
       }
 
       Application application = qualView.getApplication();
-      Blob blob = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getBlob();
-      if ( blob == null )
+      //Blob blob = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getBlob();
+      String strTmp = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
+      if ( strTmp == null )
       {
          return -1;
       }
+      
+  	// There can be more than one view but we are assuming there is only one.
+  	List<View> viewList = new DeserializeOi( qualView )
+      .asJson()
+      .fromString( strTmp )
+      .activate();
+  	
+      for ( View v : viewList )
+      {
+          v.logObjectInstance();
+          returnView.setView( v );
+          sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
+          sbLodDefName.append( v.getLodDef().getName() );
+      }
+      
+      /*
 
       View v = qualView.deserializeOi()
-                       .fromInputStream( new ByteArrayInputStream( blob.getBytes() ) )
-                       .setFlags( ACTIVATE_CONTROL.get(control) )
-                       .setApplication( application )
-                       .activateFirst();
-
+              .fromResource( strTmp )
+              .setFlags( ACTIVATE_CONTROL.get(control) )
+              .setApplication( application )
+              .activateFirst();
+      View v = qualView.deserializeOi()
+              .fromInputStream( new ByteArrayInputStream( blob.getBytes() ) )
+              .setFlags( ACTIVATE_CONTROL.get(control) )
+              .setApplication( application )
+              .activateFirst();
       returnView.setView( v );
       sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbLodDefName.append( v.getLodDef().getName() );
+      */
+
       return 0;
    }
 
@@ -8610,6 +8633,7 @@ public abstract class VmlOperation
    public int
    RemoveInvalidCharsFromFilename( StringBuilder sbFileName ) {
       String in = sbFileName.toString();
+      TraceLineS( "RemoveInvalidCharsFromFilename original: ", in );
       char ch;
       int k;
       int pos = 0;
@@ -8620,6 +8644,7 @@ public abstract class VmlOperation
          }
       }
       sbFileName.setLength( pos );
+      TraceLineS( "RemoveInvalidCharsFromFilename validated: ", sbFileName.toString() );
       return sbFileName.length();
    }
 
@@ -8719,11 +8744,6 @@ public abstract class VmlOperation
       if ( szFileName != null && szFileName.isEmpty() == false )
       {
          szDir = "./pdf/";
-         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
-        	  szFileName.startsWith( "./" ) == false )
-         {
-            szFileName = szDir + szFileName;
-         }
          if ( szFileName.contains(".") == false )
          {
             szFileName = szFileName + ".";
@@ -8736,6 +8756,11 @@ public abstract class VmlOperation
             {
                szFileName = szFileName + "html";
             }
+         }
+         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
+        	     szFileName.startsWith( "./" ) == false )
+         {
+            szFileName = szDir + szFileName;
          }
       }
       else
