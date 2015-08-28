@@ -112,14 +112,22 @@ class TwinInstancesPanel extends JPanel
             if ( attributeDef.isHidden() )
                 continue;
 
-            sb.append( attributeDef.getName() )
-              .append( ": " )
-              .append( ei.getAttribute( attributeDef ).getString() )
-              .append( "; " );
-
-            if ( ++count > 5 )
-                break;
+            try
+            {
+                sb.append( attributeDef.getName() )
+                  .append( ": " )
+                  .append( ei.getAttribute( attributeDef ).getString() )
+                  .append( "; " );
+    
+                if ( ++count > 5 )
+                    break;
+            }
+            catch ( Exception e )
+            {
+                sb.append( "*error*; " );
+            }
         }
+        
         return sb.toString();
     }
 

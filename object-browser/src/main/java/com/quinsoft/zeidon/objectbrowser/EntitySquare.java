@@ -333,11 +333,20 @@ public class EntitySquare extends JPanel implements MouseListener
                 if ( attributeDef.isHidden() )
                     continue;
 
-                if ( ei.getAttribute( attributeDef ).isNull() )
-                    continue;
-
-                String value = ei.getAttribute( attributeDef ).getString();
-
+                String value = "*error*";
+                
+                try
+                {
+                    if ( ei.getAttribute( attributeDef ).isNull() )
+                        continue;
+    
+                    value = ei.getAttribute( attributeDef ).getString();
+                }
+                catch ( Exception e )
+                {
+                    getView().log().error( e );
+                }
+    
                 // Skip null attributes.
                 if ( StringUtils.isBlank( value ) )
                     continue;
