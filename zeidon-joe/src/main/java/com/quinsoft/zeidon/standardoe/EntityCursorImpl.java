@@ -39,6 +39,7 @@ import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
+import com.quinsoft.zeidon.HiddenAttributeException;
 import com.quinsoft.zeidon.HiddenCursorException;
 import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.NullCursorException;
@@ -2967,6 +2968,9 @@ class EntityCursorImpl implements EntityCursor
     public AttributeInstance getAttribute( String attributeName )
     {
         AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
+        if ( attributeDef.isHidden() )
+            throw new HiddenAttributeException( attributeDef );
+
         return getAttribute( attributeDef );
     }
 

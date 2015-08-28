@@ -44,6 +44,7 @@ import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.EventNotification;
+import com.quinsoft.zeidon.HiddenAttributeException;
 import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
@@ -3356,6 +3357,9 @@ class EntityInstanceImpl implements EntityInstance
     public AttributeInstance getAttribute( String attributeName )
     {
         AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
+        if ( attributeDef.isHidden() )
+            throw new HiddenAttributeException( attributeDef );
+
         return getAttribute( null, attributeDef );
     }
 

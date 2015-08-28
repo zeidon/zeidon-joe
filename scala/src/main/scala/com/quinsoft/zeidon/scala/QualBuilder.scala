@@ -603,6 +603,9 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
      */
     def selectDynamic( attributeName: String): AttributeQualOperators = {
         jattributeDef = jentityDef.getAttribute( attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+        
         return new AttributeQualOperators( this )
     }
 
@@ -622,6 +625,9 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     def updateDynamic( attributeName: String)(value: Any): QualificationTerminator = {
 //        println( s"method '$attributeName' called with argument ${value}" )
         jattributeDef = jentityDef.getAttribute( attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+
         if ( value.isInstanceOf[AttributeQualOperators] ) {
             addQualFromAttributeBuilder( "=", value )
         } else {
