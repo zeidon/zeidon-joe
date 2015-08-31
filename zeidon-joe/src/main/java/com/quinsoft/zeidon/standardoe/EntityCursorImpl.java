@@ -1363,7 +1363,7 @@ class EntityCursorImpl implements EntityCursor
     {
         try
         {
-            EntityInstanceImpl ei = getExistingInstance().acceptSubobject();
+            EntityInstanceImpl ei = getExistingInstance().acceptSubobject( getView() );
             setEntityInstance( ei );
 
             // The child cursors still point to the old version.  Reset them all to point
@@ -1401,7 +1401,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public void acceptTemporalEntity()
     {
-        getExistingInstance().acceptTemporalEntity();
+        getExistingInstance().acceptTemporalEntity( getView() );
         assert validateChains() : "Something is wrong with the chain pointers";
     }
 
@@ -2951,12 +2951,6 @@ class EntityCursorImpl implements EntityCursor
     public EntityInstance setIncrementalFlags( IncrementalEntityFlags flag )
     {
         return getExistingInstance( true ).setIncrementalFlags( flag );
-    }
-
-    @Override
-    public Collection<ZeidonException> validateSubobject()
-    {
-        return getExistingInstance().validateSubobject();
     }
 
     private ViewCursor getViewCursor()

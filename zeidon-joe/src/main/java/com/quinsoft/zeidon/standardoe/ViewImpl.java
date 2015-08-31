@@ -909,7 +909,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             if ( ei.isHidden() ) // Only validate non-hidden entities.
                 continue;
 
-            ei.validateSubobject( list );
+            ei.validateSubobject( this, list );
         }
 
         if ( list.size() == 0 )

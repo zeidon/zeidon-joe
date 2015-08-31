@@ -181,7 +181,14 @@ public interface EntityInstance
 
     /**
      * Accepts the changes made to the temporal subobject and are copied to the object instance.  Accept can
-     * only be called on the root of the temporal suboject.
+     * only be called on the root of the temporal suboject.  Also performs validation on the entity and all
+     * children:
+     *
+     *  1) Calls Accept constraint on the entity.
+     *  2) Checks for required attributes.
+     *  3) Validates min/max cardinality.
+     *
+     *  @returns a list of exceptions found.  If no exceptions found returns null.
      *
      * @return the root of the accepted subobject.
      */
@@ -205,15 +212,6 @@ public interface EntityInstance
      * @return If this is called via a cursor, it returns the cursor positioning.  Otherwise returns CursorResult.SET.
      */
     CursorResult cancelTemporalEntity();
-
-    /**
-     * Performs validation on this entity and all child subobjects:
-     *  1) Checks for required attributes.
-     *  2) Validates min/max cardinality.
-     *
-     *  @returns a list of exceptions found.  If no exceptions found returns null.
-     */
-    Collection<ZeidonException> validateSubobject();
 
     /**
      * Deletes the entity.  If this object instance is committed to the DB it will be removed

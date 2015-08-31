@@ -1808,12 +1808,25 @@ class EntityInstanceImpl implements EntityInstance
         assert assertLinkedInstances() : "Error with linked instances";
     }
 
-    void validateSubobject( Collection<ZeidonException> list )
+    void validateSubobject( View view, Collection<ZeidonException> list )
     {
         assert isHidden() == false : "Attempting to validate a hidden instance.";
 
+        if ( getEntityDef().hasAcceptConstraint() )
+        {
+            try
+            {
+                getEntityDef().executeEntityConstraint( view, EntityConstraintType.ACCEPT );
+            }
+            catch ( Exception e )
+            {
+                list.add( ZeidonException.wrapException( e ) );
+                return;
+            }
+        }
+
         //
-        // First make sure that all the required attributes have non-null values
+        // Make sure that all the required attributes have non-null values
         // if this entity has been changed in any way.
         //
         if ( isCreated() || isUpdated() || isIncluded() )
@@ -1887,17 +1900,16 @@ class EntityInstanceImpl implements EntityInstance
 
         // Now run this on all direct children.
         for ( EntityInstanceImpl childInstance : getDirectChildren( false, false ) )
-            childInstance.validateSubobject( list );
+            childInstance.validateSubobject( view, list );
     }
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EntityInstance#validateSubobject()
      */
-    @Override
-    public Collection<ZeidonException> validateSubobject()
+    Collection<ZeidonException> validateSubobject( View view )
     {
         Collection<ZeidonException> list = new ArrayList<ZeidonException>();
-        validateSubobject( list );
+        validateSubobject( view, list );
 
         if ( list.size() == 0 )
             return null;
@@ -1911,9 +1923,9 @@ class EntityInstanceImpl implements EntityInstance
      *
      * @throws SubobjectValidationException
      */
-    void validateSubobjectThrowException()
+    void validateSubobjectThrowException( View view )
     {
-        Collection<ZeidonException> list = validateSubobject();
+        Collection<ZeidonException> list = validateSubobject( view );
         if ( list == null || list.size() == 0 )
             return;
 
@@ -1922,6 +1934,11 @@ class EntityInstanceImpl implements EntityInstance
 
     @Override
     public EntityInstanceImpl acceptSubobject()
+    {
+        return acceptSubobject( getObjectInstance().createView( this ) );
+    }
+
+    EntityInstanceImpl acceptSubobject( View view )
     {
         // If the entity is a temporal entity created via createTemporal we'll
         // accept it.
@@ -1932,7 +1949,11 @@ class EntityInstanceImpl implements EntityInstance
         }
 
         // Before we change any version pointers let's validate the entity and attribute values.
-        validateSubobjectThrowException();
+        validateSubobjectThrowException( view );
+
+        // If this EI isn't versioned then we're done.
+        if ( versionStatus == VersionStatus.NONE )
+            return this;
 
         if ( versionStatus != VersionStatus.UNACCEPTED_ROOT )
             throw new TemporalEntityException(this, "Entity is not a root of a temporal subobject root" );
@@ -2078,11 +2099,16 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public void acceptTemporalEntity()
     {
+        acceptSubobject( getObjectInstance().createView( this ) );
+    }
+
+    void acceptTemporalEntity( View view )
+    {
         if ( versionStatus != VersionStatus.UNACCEPTED_ENTITY )
             throw new TemporalEntityException(this, "Entity is not the root of a temporal entity");
 
         // Before we change any version pointers let's validate the entity and attribute values.
-        validateSubobjectThrowException();
+        validateSubobjectThrowException( view );
 
         for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
             ei.setVersionStatus( VersionStatus.NONE );
