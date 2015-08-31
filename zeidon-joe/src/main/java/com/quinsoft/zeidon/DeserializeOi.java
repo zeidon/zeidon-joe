@@ -178,6 +178,12 @@ public class DeserializeOi
         return this;
     }
 
+    public DeserializeOi fromTempDir( String baseFilename )
+    {
+        String tempFile = System.getProperty( "java.io.tmpdir" ) + File.separator + baseFilename;
+        return fromFile( tempFile );
+    }
+
     /**
      * Convenience method that prepends the Zeidon HOME to the filename.
      *

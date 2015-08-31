@@ -120,23 +120,32 @@ public class LodDef implements PortableFileAttributeHandler
         return filename;
     }
 
-    public EntityDef getEntityDef( String entityName, boolean required )
+    public EntityDef getEntityDef( String entityName, boolean required, boolean ignoreCase )
     {
         // We allow the dbhandler to use a special string to indicate the
         // root.
         if ( StringUtils.equals( entityName, DbHandler.ROOT_ENTITY ) )
             return getEntityDef( 0 );  // Return the root LodDef.
 
-        EntityDef entityDef = nameMap.get( entityName );
+        String searchName = entityName;
+        if ( ignoreCase )
+            searchName = searchName.toLowerCase();
+
+        EntityDef entityDef = nameMap.get( searchName );
         if ( entityDef == null && required )
             throw new UnknownEntityDefException( this, entityName );
 
         return entityDef;
     }
 
+    public EntityDef getEntityDef( String entityName, boolean required )
+    {
+        return getEntityDef( entityName, true, false );
+    }
+
     public EntityDef getEntityDef( String entityName )
     {
-        return getEntityDef( entityName, true );
+        return getEntityDef( entityName, true, false );
     }
 
     public EntityDef getEntityDef( int index )
@@ -161,6 +170,7 @@ public class LodDef implements PortableFileAttributeHandler
     private void addEntityDef( EntityDef entityDef )
     {
         nameMap.put( entityDef.getName(), entityDef );
+        nameMap.put( entityDef.getName().toLowerCase(), entityDef );
         height = Math.max( height, entityDef.getDepth() );
         entityList.add( entityDef );
     }

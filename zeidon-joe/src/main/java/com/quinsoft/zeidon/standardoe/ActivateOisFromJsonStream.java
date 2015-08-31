@@ -275,7 +275,7 @@ class ActivateOisFromJsonStream implements StreamReader
         if ( token != JsonToken.END_OBJECT )
         {
             fieldName = jp.getCurrentName();
-            if ( !StringUtils.equals( fieldName, lodDef.getRoot().getName() ) )
+            if ( !StringUtils.equalsIgnoreCase( fieldName, lodDef.getRoot().getName() ) )
                 throw new ZeidonException( "First entity specified in OI (%s) is not the root (%s)", fieldName,
                                            lodDef.getRoot().getName() );
 
@@ -363,7 +363,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
         assert token == JsonToken.START_OBJECT;
 
-        EntityDef entityDef = lodDef.getEntityDef( entityName );
+        EntityDef entityDef = lodDef.getEntityDef( entityName, true, true );
 
         // Read tokens until we find the token that ends the current list of entities.
         while ( ( token = jp.nextToken() ) != null )
@@ -430,7 +430,7 @@ class ActivateOisFromJsonStream implements StreamReader
                     boolean recursiveChild = false;
 
                     // Validate that the entity name is valid.
-                    EntityDef childEntity = lodDef.getEntityDef( fieldName );
+                    EntityDef childEntity = lodDef.getEntityDef( fieldName, true, true );
                     if ( childEntity.getParent() != entityDef )
                     {
                         // Check to see the childEntity is a recursive child.
@@ -459,7 +459,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 // This better be an attribute
                 // Try getting the attribute.  We won't throw an exception (yet) if there
                 // is no attribute with a matching name.
-                AttributeDef attributeDef = entityDef.getAttribute( fieldName, false );
+                AttributeDef attributeDef = entityDef.getAttribute( fieldName, false, true );
                 if ( attributeDef == null )
                 {
                     // We didn't find an attribute with a name matching fieldName.  Do we allow
@@ -476,7 +476,7 @@ class ActivateOisFromJsonStream implements StreamReader
                     attributeDef = entityDef.createDynamicAttributeDef( config );
                 }
 
-                ei.getAttribute( attributeDef).setInternalValue( jp.getText(), false ) ;
+                ei.getAttribute( attributeDef ).setInternalValue( jp.getText(), false ) ;
                 if ( incremental )
                 {
                     // Since incremental flags are set, assume the attribute hasn't been
@@ -504,7 +504,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 {
                     String[] names = entityMeta.lazyLoaded.split( "," );
                     for ( String name: names )
-                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name ) );
+                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name, true, true ) );
                 }
             }
 
@@ -520,7 +520,7 @@ class ActivateOisFromJsonStream implements StreamReader
     {
         String attribName = fieldName.substring( 1 ); // Remove the ".".
         AttributeMeta meta = new AttributeMeta();
-        meta.attributeDef = ei.getEntityDef().getAttribute( attribName );
+        meta.attributeDef = ei.getEntityDef().getAttribute( attribName, true, true );
 
         while ( jp.nextToken() != JsonToken.END_OBJECT )
         {

@@ -157,6 +157,23 @@ public class WriteOisToJsonStream implements StreamWriter
         jg.writeEndObject();
     }
 
+    private String camelCaseName( String name )
+    {
+        if ( ! options.isCamelCase() )
+            return name;
+
+        char[] nameChars = name.toCharArray();
+        for ( int i = 0; i < nameChars.length; i++ )
+        {
+            if ( ! Character.isUpperCase( nameChars[ i ] ) )
+                break;
+
+            nameChars[ i ] = Character.toLowerCase( nameChars[ i ] );
+        }
+
+        return String.valueOf( nameChars );
+    }
+
     private EntityDef writeEntity( EntityInstanceImpl ei, EntityDef lastEntityDef ) throws Exception
     {
         try
@@ -169,7 +186,7 @@ public class WriteOisToJsonStream implements StreamWriter
                     jg.writeEndArray();
 
                 lastEntityDef = entityDef;
-                jg.writeArrayFieldStart( entityDef.getName() );
+                jg.writeArrayFieldStart( camelCaseName( entityDef.getName() ) );
             }
 
             jg.writeStartObject();
@@ -180,7 +197,7 @@ public class WriteOisToJsonStream implements StreamWriter
                 if ( writePersistent || ! attributeDef.isPersistent() )
                 {
                     String value = attrib.getString( ei.getTask(), attributeDef );
-                    jg.writeStringField( attributeDef.getName(), value );
+                    jg.writeStringField( camelCaseName( attributeDef.getName() ), value );
                     if ( attributeDef.isPersistent() )
                         writeAttributeMeta( attrib, attributeDef );
                 }

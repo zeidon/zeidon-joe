@@ -555,6 +555,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         if ( ! attributeDef.isHidden() )
             nonHiddenAttributes.add( attributeDef );
         attributeMap.put( attributeDef.getName(), attributeDef );
+        attributeMap.put( attributeDef.getName().toLowerCase(), attributeDef );
 
         if ( attributeDef.isDynamicAttribute() )
             assert attributeDef.getErAttributeToken() < 0;
@@ -582,17 +583,26 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     public int getAttributeCount()
     {
-        return attributeMap.size();
+        return attributes.size();
     }
 
     public AttributeDef getAttribute( String attribName )
     {
-        return getAttribute( attribName, true );
+        return getAttribute( attribName, true, false );
     }
 
     public AttributeDef getAttribute( String attribName, boolean required )
     {
-        AttributeDef attrib = attributeMap.get( attribName );
+        return getAttribute( attribName, required, false );
+    }
+
+    public AttributeDef getAttribute( String attribName, boolean required, boolean ignoreCase )
+    {
+        String searchName = attribName;
+        if ( ignoreCase )
+            searchName = searchName.toLowerCase();
+
+        AttributeDef attrib = attributeMap.get( searchName );
         if ( attrib == null && required )
             throw new UnknownAttributeDefException( this, attribName );
 
