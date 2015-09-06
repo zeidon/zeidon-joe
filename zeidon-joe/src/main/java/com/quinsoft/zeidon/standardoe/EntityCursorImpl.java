@@ -159,6 +159,7 @@ class EntityCursorImpl implements EntityCursor
                 if ( viewCursor.getRecursiveRoot() != null &&
                      viewCursor.getRecursiveRoot().getDepth() > parentInstance.getDepth() )
                 {
+                    viewCursor.getView().logObjectInstance();
                     throw new ZeidonException("Internal error: parent level for %s doesn't match " +
                                               "level for suboject root %s", parentInstance,
                                               viewCursor.getRecursiveRoot() );
@@ -644,7 +645,7 @@ class EntityCursorImpl implements EntityCursor
             EntityCursorImpl searchParentCursor = searchCursor.getParentCursor();
             if ( searchParentCursor == null )
             {
-                while ( topEi.getEntityDef() != searchCursor.getEntityDef() )
+                while ( topEi.getEntityDef().getErEntityToken() != searchCursor.getEntityDef().getErEntityToken() )
                     topEi = topEi.getParent();
 
                 break;
