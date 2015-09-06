@@ -72,4 +72,27 @@ public class GeneratedKeyImpl implements GeneratedKey
     {
         return nativeValue;
     }
+
+    @Override
+    public int hashCode()
+    {
+        if ( nativeValue == null )
+            return 0;
+        
+        return nativeValue.hashCode();
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if ( nativeValue == null )
+        {
+            if ( obj == null )
+                return true;
+            else
+                return false;
+        }
+        
+        return nativeValue.equals( obj );
+    }
 }

@@ -622,11 +622,14 @@ class IteratorBuilder
         if ( attributeValueList == null )
             attributeValueList = new ArrayList<IteratorBuilder.AttributeValue>();
 
-        attributeValueList.add( new AttributeValue( attributeDef, value ) );
+        Object convertedValue = attributeDef.getDomain()
+                                            .convertExternalValue( objectInstance.getTask(), 
+                                                                   null, attributeDef, null, value );
+        attributeValueList.add( new AttributeValue( attributeDef, convertedValue ) );
 
         if ( attributeDef.getHashKeyType() != AttributeHashKeyType.NONE )
         {
-            setHashKeyAttribute( attributeDef, value );
+            setHashKeyAttribute( attributeDef, convertedValue );
             usingAttributeHashKey  = true;
         }
 

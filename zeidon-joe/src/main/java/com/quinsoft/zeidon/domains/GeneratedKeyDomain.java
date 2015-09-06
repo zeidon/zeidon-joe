@@ -149,11 +149,13 @@ public class GeneratedKeyDomain extends AbstractDomain
                         Object internalValue,
                         Object externalValue )
     {
-        Object value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
-        Integer rc = compareNull( task, attributeDef, internalValue, value);
+        GeneratedKey externalKey = (GeneratedKey) convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
+        Integer rc = compareNull( task, attributeDef, internalValue, externalKey );
         if ( rc != null )
             return rc;
 
-        return internalValue.toString().compareTo( externalValue.toString() );
+        GeneratedKey internalKey = (GeneratedKey) internalValue;
+        
+        return internalKey.getString().compareTo( externalKey.getString() );
     }
 }

@@ -38,7 +38,7 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
         classes2.name( "classes2" )
 
         val id = classes2.College.ID.toInt
-        userList.College.set( _.ID == id )
+        userList.College.set( _.ID = id )
         assertTrue( userList.College.isLinked( classes2.College ) )
         assertFalse( userList.College.isLinked( classes.College ) )
         assertEquals( classes.getEntityCount(false), classes2.getEntityCount( false ) )

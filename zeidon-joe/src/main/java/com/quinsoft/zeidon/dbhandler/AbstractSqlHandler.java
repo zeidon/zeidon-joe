@@ -1220,7 +1220,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         String keyString = getKeyString(view, entityDef);
         if ( StringUtils.isBlank( keyString ) )
+        {
+            view.cursor( entityDef ).logEntity();
             return false;
+        }
 
         return true;
     }
