@@ -104,7 +104,7 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
      * myView.MyEntity.MyAttribute = "New Value"
      * }}}
      */
-    def updateDynamic( attributeName: String)(value: Any): Any = {
+    def updateDynamic( attributeName: String)(value: Any): AbstractEntity = {
         var newValue = value
         if ( value.isInstanceOf[ AttributeInstance ] )
             newValue = value.asInstanceOf[ AttributeInstance ].jattributeInstance.getValue
@@ -113,9 +113,9 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
         return setValue( jattributeDef, newValue )
     }
 
-    protected[scala] def setValue( jattributeDef: AttributeDef, value: Any ): Any = {
+    protected[scala] def setValue( jattributeDef: AttributeDef, value: Any ): AbstractEntity = {
         getEntityInstance.getAttribute( jattributeDef ).setValue( value )
-        return value
+        return this
     }
 
     private def getAttributeDef( attribName: String ) = {

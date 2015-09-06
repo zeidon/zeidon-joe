@@ -580,9 +580,9 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
     val jqual = qualBuilder.jqual
 
-    def exists: QualBuilder = {
+    def exists : QualificationTerminator = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
-       return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 
     /**
