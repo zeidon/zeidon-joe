@@ -354,7 +354,7 @@ class CommitMultiplOIs
                 if ( ei.isUpdated() && ! ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) )
+                    if ( ! entityDef.isUpdate() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance does not have update authority:" );
