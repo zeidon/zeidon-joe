@@ -9,13 +9,13 @@ This page will take you through a quick walk-through of creating a Zeidon applic
 
 The structure of the application is creating using the Zeidon Tools which can be found here.  This walk-through skips over some of the mundane tasks but you can find a complete tutorial for creating the Northwind application here.
 
-### Create the ER Model
+## Create the ER Model
 
 All Zeidon applications start by creating an [ER Model](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model) using Zeidon's ER Diagram (ERD) tool.  Zeidon's ERD helps you create a standard ER model with entities, attributes, and relationships.  The Northwind ER model looks like this:
 
 ![NorthwindERM](images/walkthrough/NorthwindERM.png?raw=true)
 
-### Create Logical Object Definition (LOD)
+## Create Logical Object Definition (LOD)
 
 Zeidon access is handled using LODs.  A LOD is an object that groups related entities from the ERM into a hierarchical object.  At runtime the data is loaded into memory as an Object Instance which is based on the structure defined in the LOD.  The LOD for working with Northwind orders looks like this:
 
@@ -29,16 +29,16 @@ The LOD for changing product data looks like this:
 
 Note that an entity from the ERM ("Product" in this case) can appear in multiple LODs.  In most cases entities will be included in many LODs.
 
-### Load Data From the DB into an Object Instance.
+## Load Data From the DB into an Object Instance.
 
-Loading data from the DB is called an "activate" in Zeidon.  This will create an instantiation of a LOD called an "object instance" (OI).  Access to the data in an OI is through a view.  The code for doing all of this is written in a Scala DSL.
+Loading data from the DB is called an "activate" in Zeidon.  This will instantiate a LOD using data from the DB into an "object instance" (OI).  Access to the data in an OI is through a view.  The code for doing all of this is written in a Scala DSL.
 
 To load the data for order # 10250 you would use the following code:
 
     val order = View( task ) basedOn "Order"
     order activateWhere( _.Order.OrderId = 10250 )
 
-The first line create an empty View that is based on the LOD "Order" shown above.  The second line loads all the data from the entities (i.e. SQL tables) specified in the LOD.  The qualification is specified as "_.Order.OrderId = 10250" which means only load the Orders with OrderId = 10250, which should only be one.  Since the data in a LOD is instantiated as a tree it can easily be represented as JSON.  Here is the data loaded from the above activate:
+The first line creates an empty View that is based on the LOD "Order" shown above.  The second line loads all the data from the entities (i.e. SQL tables) specified in the LOD.  The qualification is specified as "_.Order.OrderId = 10250" which means only load the Orders with OrderId = 10250, which should only be one.  Since the data in a LOD is instantiated as a tree it can easily be represented as JSON.  Here is the data loaded from the above activate:
 
     {
       "Order" : [ {
@@ -138,9 +138,9 @@ The first line create an empty View that is based on the LOD "Order" shown above
 
 Note that only one order was loaded (ID: 10250) and all of its associated data.  
 
-### Manipulating the Data From Code
+## Manipulating the Data From Code
 
-The data in an OI is accessed through a view using "view.EntityName.AttributeName" notation as specified in the LOD.
+The data in an OI is accessed through a view using "view.EntityName.AttributeName" notation using the names specified in the LOD.  For example, to print out the ShipName from the Order entity and First/LastName from the Employee entity use:
 
         println( "Order ShipName = " + order.Order.ShipName )
         println( "Employee Name = " + order.Employee.FirstName + " " + order.Employee.LastName )
@@ -164,7 +164,7 @@ This results in:
        Manjimup Dried Apples: 35
        Louisiana Fiery Hot Pepper Sauce: 15
 
-### Updating the Data and Committing It
+## Updating the Data and Committing It
 Updating data in an OI uses the same "view.EntityName.AttributeName" notation.  Changing the quantity could be like:
 
         order.OrderDetail.Quantity = order.OrderDetail.Quantity + 1
@@ -175,13 +175,13 @@ The output from running this is
 
     New quantity = 16
 
-Saving the change to the DB uses the commit() method.  All changes made to the OI since it was activated are then written to the DB.  Unlike most ORMs Zeidon uses a software-based transaction instead of a DB transaction; it does not hold any DB connections open during the life of the OI.  Instead Zeidon closes the DB connection immediately after the activate and uses a new (or pooled) connection during the commit.  Zeidon keeps track of the changes and performs the SQL commands.  The above "commit()" results in the following SQL:
+Saving the change to the DB uses the commit() method.  All changes made to the OI since it was activated are then written to the DB.  Unlike most ORMs Zeidon uses software-based transactions instead of a DB transaction and does not hold any DB connections open during the life of the OI.  Instead Zeidon closes the DB connection immediately after the activate and uses a new (or pooled) connection during the commit.  Zeidon keeps track of the changes and performs the SQL commands.  The above "commit()" results in the following SQL:
 
     UPDATE orderdetails
            SET    QUANTITY = 16
     WHERE orderdetails.PRODUCTID = 65 AND orderdetails.ORDERID = 10250;
 
-### Creating an Entity Instance
+## Creating an Entity Instance
 To create an entity, call the create() method on the entity cursor and set the attributes.
 
         order.OrderDetail create()
@@ -229,6 +229,7 @@ This, however, throws a different error when we call the create():
 	    at com.quinsoft.northwind.SampleActivates.main(SampleActivates.scala)
 
 Let's look again at our Order LOD:
+
 ![OrderLod](images/walkthrough/OrderLod2.png?raw=true)
 
 Order and OrderDetail are green, indicating that new entities can be created at run time.  However, Product (and Customer) are yellow which means that when using the Order LOD we can't create Products, we can only create a relationship between OrderDetail and Product.  To see all the permissions, double-click on Product to bring up the entity details for Product:
@@ -237,7 +238,7 @@ Order and OrderDetail are green, indicating that new entities can be created at 
 
 Note that run-time permissions Create, Delete, and Update are turned off.  However, Include and Exclude are turned on, which is how Zeidon creates relationships.
 
-### Creating Relationships With Include
+## Creating Relationships With Include
 Creating a relationship between two entities is called "including" an entity.  To perform an include we first need to activate the entity we want to include.  This is where the Product LOD comes in:
 
         val product = View( task ) basedOn "Product"
@@ -252,9 +253,22 @@ This will activate product 48 from the DB, include the Product entity from the p
     INSERT INTO orderdetails ( UNITPRICE, QUANTITY, DISCOUNT, PRODUCTID, ORDERID  ) VALUES 
            ( 10.0, 5, 0.0, 48, 10250 );
 
-### Using a Cache for Product
+## Using a Cache for Product
 The above code works fine but has a potential issue.  If we created a lot of OrderDetails we'd have to load each Product separately, even if we're using the same Product multiple times.  Instead we'd like to load the Products into a cache and chose the correct product.  Zeidon makes this easy with more advanced qualification:
 
+        val products = View( task ) basedOn "Product"
+        products.buildQual( _.Product.Discontinued = false )
+                .cachedAs( "ProductsList" )
+                .activate()
+
+        products.Product setFirst( _.ProductId == 48)
+        order.Product include products.Product
+        
+        order.commit()
+
+The first four lines activate the product data but loads all the products that haven't been discontinued.  The first time this code is run it will activate the products and then cache the results using the name "ProductsList".  Thereafter the product list in the cache will be used instead of loading the data from the DB.
+
+The next line sets the cursor for the Product entity in the products view to point to the product with ProductId = 48.  That product is then included into the order OI.
 
 One important thing to note is that the code uses the same entity and attribute names as specified in the ERM.  This allows the business logic to be close to the relational model.
 
