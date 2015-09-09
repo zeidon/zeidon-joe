@@ -335,7 +335,7 @@ class CommitMultiplOIs
                     if ( ! entityDef.isCreate() && ! validatePermissionForEi( ei, oiSet, hasCreatePermission, null ) )
                     {
                         missingPermission = true;
-                        getTask().log().error( "Entity instance does not have create authority:" );
+                        getTask().log().error( "Entity instance in view %s does not have create authority:", view );
                         ei.logEntity();
                     }
                 }
@@ -346,7 +346,7 @@ class CommitMultiplOIs
                     if ( ! entityDef.isDelete() && ! validatePermissionForEi( ei, oiSet, hasDeletePermission, null ) )
                     {
                         missingPermission = true;
-                        getTask().log().error( "Entity instance does not have delete authority:" );
+                        getTask().log().error( "Entity instance in view %s does not have delete authority:", view );
                         ei.logEntity();
                     }
                 }
@@ -357,7 +357,7 @@ class CommitMultiplOIs
                     if ( ! entityDef.isUpdate() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) )
                     {
                         missingPermission = true;
-                        getTask().log().error( "Entity instance does not have update authority:" );
+                        getTask().log().error( "Entity instance in view %s does not have update authority:", view );
                         ei.logEntity();
                     }
                 }
@@ -368,7 +368,7 @@ class CommitMultiplOIs
                     if ( ! entityDef.isInclude() && ! validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) )
                     {
                         missingPermission = true;
-                        getTask().log().error( "Entity instance does not have include authority:" );
+                        getTask().log().error( "Entity instance in view %s does not have include authority:", view );
                         ei.logEntity();
                     }
                 }
@@ -379,7 +379,7 @@ class CommitMultiplOIs
                     if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) )
                     {
                         missingPermission = true;
-                        getTask().log().error( "Entity instance does not have exclude authority:" );
+                        getTask().log().error( "Entity instance in view %s does not have exclude authority:", view );
                         ei.logEntity();
                     }
                 }
