@@ -52,6 +52,7 @@ public class GeneratedKeyDomain extends AbstractDomain
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.domains.Domain#convertExternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.AttributeInstance, com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.String, java.lang.Object)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Object convertExternalValue( Task task,
                                         AttributeInstance attributeInstance,
@@ -69,7 +70,11 @@ public class GeneratedKeyDomain extends AbstractDomain
         if ( externalValue instanceof GeneratedKey )
             return externalValue;
 
-        return new GeneratedKeyImpl( externalValue );
+        if ( ! ( externalValue instanceof Comparable ) )
+            throw new InvalidAttributeValueException( attributeDef, externalValue, 
+                                                      "Value of GeneratedKeyDomaing must implement Comparable" );
+        
+        return new GeneratedKeyImpl( (Comparable<Object>) externalValue );
     }
 
     @Override
@@ -155,7 +160,6 @@ public class GeneratedKeyDomain extends AbstractDomain
             return rc;
 
         GeneratedKey internalKey = (GeneratedKey) internalValue;
-        
-        return internalKey.getString().compareTo( externalKey.getString() );
+        return internalKey.compareTo( externalKey );
     }
 }

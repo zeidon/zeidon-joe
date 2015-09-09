@@ -26,10 +26,10 @@ import com.quinsoft.zeidon.ZeidonException;
  */
 public class GeneratedKeyImpl implements GeneratedKey
 {
-    private final    Object nativeValue;
+    private final    Comparable<Object>  nativeValue;
     private volatile String stringValue;
 
-    public GeneratedKeyImpl( Object value )
+    public GeneratedKeyImpl( Comparable<Object> value )
     {
         nativeValue = value;
     }
@@ -94,5 +94,14 @@ public class GeneratedKeyImpl implements GeneratedKey
         }
         
         return nativeValue.equals( obj );
+    }
+
+    @Override
+    public int compareTo( Object o )
+    {
+        if ( o instanceof GeneratedKeyImpl )
+            o = ((GeneratedKeyImpl) o).getNativeValue();
+        
+        return nativeValue.compareTo( o );
     }
 }

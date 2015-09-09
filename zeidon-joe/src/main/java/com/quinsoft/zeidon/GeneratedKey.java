@@ -26,7 +26,7 @@ package com.quinsoft.zeidon;
  * This is paired with GeneratedKeyDomain.
  *
  */
-public interface GeneratedKey
+public interface GeneratedKey extends Comparable<Object>
 {
     /**
      * @return the value of the key as a string.  This is different from toString() in
