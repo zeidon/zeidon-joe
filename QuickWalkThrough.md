@@ -5,29 +5,29 @@ layout: default
 
 # Walk-through of Zeidon Application Using Northwind
 
-This page will take you through a quick walk-through of a Zeidon application.  The application is an example using Microsoft's Northwind DB as the backing store.  You can find the final Northwind application written in Zeidon here (to be added).
+This page will take you through a quick walk-through of a Zeidon application based on Microsoft's [Northwind DB](https://northwinddatabase.codeplex.com).  You can find the final Northwind application written in Zeidon here (to be added).
 
-The structure of the application is created using the Zeidon Tools which can be found here.  This walk-through skips over some of the mundane tasks but you can find a complete tutorial for creating the Northwind application here (to be added).
+The structure of the application is created using the Zeidon Tools which can be found here (to be added).  This walk-through skips over some of the mundane tasks but you can find a complete tutorial for creating the Northwind application here (to be added).
 
 ## Create the ER Model
 
-All Zeidon applications start by creating an [ER Model](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model) using Zeidon's ER Diagram (ERD) tool.  Zeidon's ERD helps you create a typical ER model with entities, attributes, and relationships.  The Northwind ER model looks like this:
+All Zeidon applications start by creating an [ER Model](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model) using Zeidon's ER Diagram tool.  Zeidon's ERD helps you create a typical ER model with entities, attributes, and relationships.  The Northwind ER model looks like this:
 
 ![NorthwindERM](images/walkthrough/NorthwindERM.png?raw=true)
 
 ## Create Logical Object Definition (LOD)
 
-Reading and writing to the DB is handled using LODs.  The LOD defines an object that groups related entities from the ERM into an hierarchical tree.  At runtime the data is loaded into memory as an Object Instance which is based on the structure defined in the LOD.  Creating a LOD is simple and fast; start with an entity from the ERM as the root then add related entities as children.  The LOD for working with Northwind orders looks like this:
+All data access and manipulation is controlled using Zeidon LODs.  The LOD defines an object that groups related entities from the ERM into an hierarchical tree.  At runtime the data is loaded into memory as an Object Instance which is based on the structure defined in the LOD.  Creating a LOD is simple and fast; start with an ERM entity as the root and then add related entities as children.  The LOD for working with Northwind orders looks like this:
 
 ![OrderLod](images/walkthrough/OrderLod.png?raw=true)
 
-Don't worry about the different colors for the entities and will be explained later.  The structure of the LOD is a tree; when the data is loaded from the DB the root ("Order") is loaded first.  Then, for each order loaded, all of the child entities (e.g. OrderDetail and Customer) are loaded.  Thus all the data that is associated with an order is loaded into a single object.
+Don't worry about the different colors for the entities for they will be explained later.  The structure of the LOD is a tree; when the data is loaded from the DB the root ("Order") is loaded first.  Then, for each order loaded, all of the child entities (e.g. OrderDetail and Customer) are loaded.  Thus all the data that is associated with an order is loaded into a single logical object.
 
 The LOD for working with product data looks like this:
 
 ![NorthwindERM](images/walkthrough/ProductLod.png?raw=true)
 
-Note that the Product entity is part of both LODs.  In most cases entities will be included in multiple LODs.  This is an important point with Zeidon.  Most ORMs associate one object with one table in the DB.  One problem with this solution is that it reduces the context for which the table is used.  With Zeidon an ER entity can appear in multiple LODs which preserves its context.
+Note that the Product entity is part of both LODs.  In most cases entities will be included in multiple LODs.  This is an important point with Zeidon: most ORMs associate one object with one table in the DB.  One problem with this solution is that it reduces the context for which the table is used.  With Zeidon an ER entity can appear in multiple LODs which preserves its context.
 
 ## Load Data From the DB into an Object Instance.
 
@@ -40,7 +40,7 @@ val order = View( task ) basedOn "Order"
 order activateWhere( _.Order.OrderId = 10250 )
 ```
 
-The first line creates an empty View that is based on the LOD "Order" shown above.  The second line loads all the data from the entities (i.e. SQL tables) that make up the LOD.  The qualification is specified as `_.Order.OrderId = 10250` which means only load the Orders with OrderId = 10250, which should only be one.  Since the data in a LOD is instantiated as a tree it can easily be serialized as JSON (as well as XML).  The following code writes the OI as JSON to a file:
+The first line creates an empty View that is based on the LOD "Order" shown above.  The second line loads all the data from the entities (i.e. SQL tables) that make up the LOD.  The qualification is specified as `_.Order.OrderId = 10250` which means "load the Orders with OrderId = 10250" which should only be one.  Since the data in a LOD is instantiated as a tree it can easily be serialized as JSON (as well as XML).  The following code writes the OI as JSON to a file:
 
 ```scala
 order.serializeOi.toTempDir( "order.json" )
@@ -199,7 +199,7 @@ The output from running this is
 New quantity = 16
 ```
 
-Saving the change to the DB uses the commit() method.  All changes made to the OI since it was activated are then written to the DB.  Unlike most ORMs Zeidon uses software-based transactions instead of a DB transaction and does not hold any DB connections open during the life of the OI.  Instead Zeidon closes the DB connection immediately after the activate and uses a new (or pooled) connection during the commit.  Zeidon keeps track of the changes and performs the SQL commands.  The above "commit()" results in the following SQL:
+Saving the change to the DB uses the `commit()` method.  All changes made to the OI since it was activated are then written to the DB.  Unlike most ORMs Zeidon uses software-based transactions instead of a DB transaction and does not hold any DB connections open during the life of the OI.  Instead Zeidon closes the DB connection immediately after the activate and uses a new (or pooled) connection during the commit.  Zeidon keeps track of the changes and performs the SQL commands.  The above `commit()` results in the following SQL:
 
 ```sql
 UPDATE orderdetails
@@ -208,7 +208,7 @@ WHERE orderdetails.PRODUCTID = 65 AND orderdetails.ORDERID = 10250;
 ```
 
 ## Creating an Entity Instance
-To create an entity, call the create() method on the entity cursor and set the attributes.
+To create an entity, call the `create()` method on the entity cursor and set the attributes.
 
 ```scala
 order.OrderDetail create()
@@ -217,7 +217,7 @@ order.OrderDetail.Quantity = 5
 order.OrderDetail.Discount = 0.0
 ```
 
-To save this, call commit() again.  However, with just this change the commit will trigger an error:
+To save this, call `commit()` again.  However, with just this change the commit will trigger an error:
 
 ```scala
 order commit()
@@ -234,7 +234,7 @@ EntityDef  = Northwind.Order.Product
     at com.quinsoft.zeidon.standardoe.CommitMultiplOIs.commit(CommitMultiplOIs.java:402)
 ```
 
-This error is telling us that the OI is missing the required entity Product.  This error is thrown because in the ERM we specified that the minimum number of Products that an OrderDetail entity can have is one and we haven't specified a Product for the new OrderDetail.  We could try creating a new Product like this:
+This error is telling us that the OI is missing the required entity Product.  This error is thrown because in the ERM we specified that the minimum number of Products for an OrderDetail is one and we haven't specified a Product for the new OrderDetail.  We could try creating a new Product like this:
 
 ```scala
 order.OrderDetail create()
@@ -247,7 +247,7 @@ order.Product.ProductId = 48
 order commit()
 ```
 
-This, however, throws a different error when we call the create():
+This, however, throws a different error when we call the `create()`:
 
 ```console
 Entity is not flagged for create.
@@ -280,7 +280,7 @@ order.Product include product.Product
 order.commit()
 ```
 
-This will activate product 48 from the DB, include the Product entity from the product view into order, and then commit.  The SQL that gets executed to perform the commit is:
+This will activate product 48 from the DB, include the Product entity from the product view into Order, and then commit.  The SQL that gets executed to perform the commit is:
 
 ```sql
 INSERT INTO orderdetails ( UNITPRICE, QUANTITY, DISCOUNT, PRODUCTID, ORDERID  ) VALUES 
@@ -315,7 +315,7 @@ order.OrderDetail setFirst()
 order.OrderDetail delete()
 ```
 
-Performing a delete will delete the entity and remove the entity and its children from the OI.  If the above line is called on the first OrderDetail in our example, the OI now looks like this:
+Calling `delete()` will delete the first entity and remove its children from the OI.  If the above line is called on the first OrderDetail in our example, the OI now looks like this (there are now only two OrderDetails):
 
 ```json
 {
@@ -446,9 +446,74 @@ FROM  orders
 WHERE orders.ORDERID = 10250;
 ```
 
-As you would expect, the OrderDetail records are removed along with the order.  Like Product, the Customer, Employee, and Shipper entities have a parent delete behavior of Exclude, which prevents them from being deleted.
+As you would expect, the OrderDetail records are removed along with the order.  Like Product, the Customer, Employee, and Shipper entities have a parent delete behavior of "exclude" which prevents them from being deleted.
 
-Parent delete behavior is how a LOD can easily control cascading deletes when a parent entity is deleted.  SQL databases can do this as well but a Zeidon LOD quickly illustrates what will happen when an entity is deleted.
+Parent delete behavior is how a LOD can easily control cascading deletes when a parent entity is deleted.
+
+## More Complex Activation Qualification
+A LOD is designed directly from the ERM and thus it knows about the relationships between the entities.  This makes it much easier to create complex qualification because the user doesn't need to specify how to join the tables.
+
+For example, the following query loads all orders that contain a discontinued product:
+
+```scala
+val orders = View( task ) basedOn "Order"
+orders.activateWhere( _.Product.Discontinued = true )
+```
+
+Since the Order/OrderDetail/Product path is part of the LOD Zeidon knows what tables to join.  This will generate the following SQL to load the orders:
+
+```sql
+SELECT orders.ORDERID, orders.ORDERDATE, orders.SHIPPEDDATE, orders.REQUIREDDATE, orders.FREIGHT, orders.SHIPNAME,
+       orders.SHIPADDRESS, orders.SHIPCITY, orders.SHIPREGION, orders.SHIPPOSTALCODE, orders.SHIPCOUNTRY,
+       orders.EMPLOYEEID, orders.CUSTOMERID, orders.SHIPPERID
+FROM orders JOIN
+     orderdetails ON orderdetails.ORDERID = orders.ORDERID JOIN
+     products ON products.PRODUCTID = orderdetails.PRODUCTID
+WHERE products.DISCONTINUED = true;
+```
+
+Note that by default qualification is for the root of the LOD.  The above activate will load only orders that contain discontinued products but it will load all the products for those orders.  If you want to load just discontinued products you need to add a "restricting" filter:
+
+```scala
+orders.buildQual( _.Product.Discontinued = true )
+      .restrict( _.OrderDetail ).to( _.Product.Discontinued = true )
+      .activate()
+```
+
+The `.restrict()` filter specifies that only OrderDetails with discontinued products should be loaded.  The SQL for loading the orders is the same as above but when loading OrderDetail the SQL is:
+
+```sql
+SELECT orderdetails.UNITPRICE, orderdetails.QUANTITY, orderdetails.DISCOUNT, orderdetails.PRODUCTID,
+       orderdetails.ORDERID
+FROM  orderdetails JOIN
+       products ON products.PRODUCTID = orderdetails.PRODUCTID
+WHERE (orderdetails.ORDERID = 10248 AND ( products.DISCONTINUED = true));
+```
+
+Qualification can reference multiple entities in the LOD and any of the attributes, like this:
+
+```scala
+orders.buildQual( _.Order.OrderDate > "2015-01-01" )
+      .and( _.Employee.LastName = "Smith" )
+      .and( _.Product.Discontinued = true )
+      .activate()
+```
+
+Zeidon generates:
+
+```sql
+SELECT orders.ORDERID, orders.ORDERDATE, orders.SHIPPEDDATE, orders.REQUIREDDATE, orders.FREIGHT, orders.SHIPNAME,
+       orders.SHIPADDRESS, orders.SHIPCITY, orders.SHIPREGION, orders.SHIPPOSTALCODE, orders.SHIPCOUNTRY,
+       orders.EMPLOYEEID, orders.CUSTOMERID, orders.SHIPPERID
+FROM  orders JOIN
+       employees ON employees.EMPLOYEEID = orders.EMPLOYEEID JOIN
+       orderdetails ON orderdetails.ORDERID = orders.ORDERID JOIN
+       products ON products.PRODUCTID = orderdetails.PRODUCTID
+WHERE orders.ORDERDATE > '2015-01-01 00:00:00.000' AND employees.LASTNAME = 'Smith' AND products.DISCONTINUED = 1;
+```
+
+## What Makes a LOD an "Object"?
+
 
 One important thing to note is that the code uses the same entity and attribute names as specified in the ERM.  This allows the business logic to be close to the relational model.
 
