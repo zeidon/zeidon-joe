@@ -418,6 +418,7 @@ class EntityCursor( private[this]  val view: View,
      * }}}
      */
     def setFirst( predicate: => Boolean, scopingEntity: AbstractEntity = null ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
         val iter = jentityCursor.eachEntity( if ( scopingEntity == null ) null else scopingEntity.entityDef )
         while ( iter.hasNext() )
         {
@@ -426,10 +427,12 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
+        jentityCursor.setCursor( currentEi )
         return new CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
     }
 
     def setFirst( predicate: (EntityInstance) => Boolean ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
         val iter = jentityCursor.eachEntity()
         while ( iter.hasNext() )
         {
@@ -438,6 +441,7 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
+        jentityCursor.setCursor( currentEi )
         return EntityCursor.CURSOR_UNCHANGED
     }
 
