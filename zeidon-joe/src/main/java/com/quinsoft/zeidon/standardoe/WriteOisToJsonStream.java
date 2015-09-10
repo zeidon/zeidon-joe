@@ -191,16 +191,25 @@ public class WriteOisToJsonStream implements StreamWriter
 
             jg.writeStartObject();
             boolean writePersistent = writeEntityMeta( ei );
-            for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
+            for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
+                // If the attribute is not persistent and we're only writing persisten
+                // then go to the next one.
+                if ( ! attributeDef.isPersistent() && writePersistent )
+                    continue;
+
+                if ( attributeDef.isDerived() )
+                    continue;
+                
+                AttributeInstanceImpl ai = ei.getAttribute( attributeDef );
+                if ( ai.isNull() && ! ai.isUpdated() )
+                    continue;
+                
                 AttributeValue attrib = ei.getInternalAttribute( attributeDef );
-                if ( writePersistent || ! attributeDef.isPersistent() )
-                {
-                    String value = attrib.getString( ei.getTask(), attributeDef );
-                    jg.writeStringField( camelCaseName( attributeDef.getName() ), value );
-                    if ( attributeDef.isPersistent() )
-                        writeAttributeMeta( attrib, attributeDef );
-                }
+                String value = attrib.getString( ei.getTask(), attributeDef );
+                jg.writeStringField( camelCaseName( attributeDef.getName() ), value );
+                if ( attributeDef.isPersistent() )
+                    writeAttributeMeta( attrib, attributeDef );
             }
 
             // Loop through the children and add them.
@@ -229,7 +238,7 @@ public class WriteOisToJsonStream implements StreamWriter
         if ( ! attrib.isUpdated() )
             return;
 
-        jg.writeObjectFieldStart( "." + attributeDef.getName() );
+        jg.writeObjectFieldStart( "." + camelCaseName( attributeDef.getName() ) );
         jg.writeStringField( "updated", "true" );
         jg.writeEndObject();
     }

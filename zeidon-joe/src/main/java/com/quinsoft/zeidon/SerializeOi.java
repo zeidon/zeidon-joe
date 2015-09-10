@@ -55,6 +55,7 @@ public class SerializeOi
     private Map<Long,SelectSet> rootSelectSets;
     private boolean writeDate = false;
     private boolean useCamelCase = false;
+    private boolean writeDerivedAttributes = false;
 
     public SerializeOi()
     {
@@ -292,6 +293,22 @@ public class SerializeOi
         return useCamelCase;
     }
 
+    /**
+     * If specified then write derived attributes and their values.
+     * 
+     * @return this
+     */
+    public SerializeOi writeDerivedAttributes()
+    {
+        writeDerivedAttributes = true;
+        return this;
+    }
+    
+    public boolean isWriteDerivedAttributes()
+    {
+        return writeDerivedAttributes;
+    }
+    
     public SerializeOi writeDate()
     {
         setWriteDate( true );

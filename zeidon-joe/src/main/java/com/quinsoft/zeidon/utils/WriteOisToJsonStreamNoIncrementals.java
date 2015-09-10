@@ -33,6 +33,7 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -92,7 +93,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         view.setInternal( true );  // So it doesn't show up in the browser.
 
         EntityDef rootEntityDef = view.getLodDef().getRoot();
-        jg.writeArrayFieldStart( rootEntityDef.getName() );
+        jg.writeArrayFieldStart( camelCaseName( rootEntityDef.getName() ) );
         if ( ! view.isEmpty() )
         {
             jg.writeStartObject();
@@ -137,9 +138,16 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             // See if we need to open or close an array field.
             final EntityDef entityDef = ei.getEntityDef();
 
-            for ( AttributeInstance attrib : ei.getAttributes( false ) )
+            for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                if ( attrib.getAttributeDef().isHidden() )
+                if ( attributeDef.isHidden() )
+                    continue;
+
+                if ( attributeDef.isDerived() && ! options.isWriteDerivedAttributes() )
+                    continue;
+
+                AttributeInstance attrib = ei.getAttribute( attributeDef );
+                if ( attrib.isNull() )
                     continue;
 
                 String value = attrib.getString( null );

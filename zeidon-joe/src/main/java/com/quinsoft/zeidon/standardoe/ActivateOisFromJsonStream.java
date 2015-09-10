@@ -460,6 +460,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 // Try getting the attribute.  We won't throw an exception (yet) if there
                 // is no attribute with a matching name.
                 AttributeDef attributeDef = entityDef.getAttribute( fieldName, false, true );
+                
                 if ( attributeDef == null )
                 {
                     // We didn't find an attribute with a name matching fieldName.  Do we allow
@@ -475,7 +476,10 @@ class ActivateOisFromJsonStream implements StreamReader
                     config.setAttributeName( fieldName );
                     attributeDef = entityDef.createDynamicAttributeDef( config );
                 }
-
+                else
+                if ( attributeDef.isDerived() ) // We'll ignore derived attributes.
+                    continue;
+                
                 ei.getAttribute( attributeDef ).setInternalValue( jp.getText(), false ) ;
                 if ( incremental )
                 {
