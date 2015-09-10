@@ -469,7 +469,7 @@ SELECT orders.ORDERID, orders.ORDERDATE, orders.SHIPPEDDATE, orders.REQUIREDDATE
 FROM orders JOIN
      orderdetails ON orderdetails.ORDERID = orders.ORDERID JOIN
      products ON products.PRODUCTID = orderdetails.PRODUCTID
-WHERE products.DISCONTINUED = true;
+WHERE products.DISCONTINUED = 1;
 ```
 
 Note that by default qualification is for the root of the LOD.  The above activate will load only orders that contain discontinued products but it will load all the products for those orders.  If you want to load just discontinued products you need to add a "restricting" filter:
@@ -487,7 +487,7 @@ SELECT orderdetails.UNITPRICE, orderdetails.QUANTITY, orderdetails.DISCOUNT, ord
        orderdetails.ORDERID
 FROM  orderdetails JOIN
        products ON products.PRODUCTID = orderdetails.PRODUCTID
-WHERE (orderdetails.ORDERID = 10248 AND ( products.DISCONTINUED = true));
+WHERE (orderdetails.ORDERID = 10248 AND ( products.DISCONTINUED = 1));
 ```
 
 Qualification can reference multiple entities in the LOD and any of the attributes, like this:
@@ -513,9 +513,12 @@ WHERE orders.ORDERDATE > '2015-01-01 00:00:00.000' AND employees.LASTNAME = 'Smi
 ```
 
 ## What Makes a LOD an "Object"?
+The LOD combines multiple entities from the ERM into a single, hierarchical group.  The entities are chosen to fulfill requirements for application (or business) logic and together these entities can be viewed as a single, logical object. Zeidon logical objects share many features of standard OOP objects:
 
+* Encapsulation of all the data needed by the object.
+* Attributes and methods that manipulate those attributes
+* Constructors/destructors.
+* Inheritance (via Scala traits).
+* Limited polymorphism.
 
-One important thing to note is that the code uses the same entity and attribute names as specified in the ERM.  This allows the business logic to be close to the relational model.
-
-
-
+For example the Order LOD encapsulates the entities that make up a a Northwind order; the Product LOD is composed of the entities that are needed to work with Northwind products.
