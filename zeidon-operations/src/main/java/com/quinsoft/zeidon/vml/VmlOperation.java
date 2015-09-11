@@ -5158,15 +5158,8 @@ public abstract class VmlOperation
          nRC = zCURSOR_NULL;
       else
       {
-         if ( cursor.isVersioned( ) )
-         {
-            cursor.acceptSubobject( );
-            nRC = 0;
-         }
-         else
-         {
-            nRC = zCALL_ERROR;
-         }
+          cursor.acceptSubobject( );
+          nRC = 0;
       }
 
       return nRC;
