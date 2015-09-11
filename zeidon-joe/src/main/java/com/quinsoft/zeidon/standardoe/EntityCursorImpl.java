@@ -39,6 +39,7 @@ import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
+import com.quinsoft.zeidon.HiddenAttributeException;
 import com.quinsoft.zeidon.HiddenCursorException;
 import com.quinsoft.zeidon.IncludeFlags;
 import com.quinsoft.zeidon.NullCursorException;
@@ -158,6 +159,7 @@ class EntityCursorImpl implements EntityCursor
                 if ( viewCursor.getRecursiveRoot() != null &&
                      viewCursor.getRecursiveRoot().getDepth() > parentInstance.getDepth() )
                 {
+                    viewCursor.getView().logObjectInstance();
                     throw new ZeidonException("Internal error: parent level for %s doesn't match " +
                                               "level for suboject root %s", parentInstance,
                                               viewCursor.getRecursiveRoot() );
@@ -643,7 +645,7 @@ class EntityCursorImpl implements EntityCursor
             EntityCursorImpl searchParentCursor = searchCursor.getParentCursor();
             if ( searchParentCursor == null )
             {
-                while ( topEi.getEntityDef() != searchCursor.getEntityDef() )
+                while ( topEi.getEntityDef().getErEntityToken() != searchCursor.getEntityDef().getErEntityToken() )
                     topEi = topEi.getParent();
 
                 break;
@@ -1362,7 +1364,7 @@ class EntityCursorImpl implements EntityCursor
     {
         try
         {
-            EntityInstanceImpl ei = getExistingInstance().acceptSubobject();
+            EntityInstanceImpl ei = getExistingInstance().acceptSubobject( getView() );
             setEntityInstance( ei );
 
             // The child cursors still point to the old version.  Reset them all to point
@@ -1400,7 +1402,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public void acceptTemporalEntity()
     {
-        getExistingInstance().acceptTemporalEntity();
+        getExistingInstance().acceptTemporalEntity( getView() );
         assert validateChains() : "Something is wrong with the chain pointers";
     }
 
@@ -2952,12 +2954,6 @@ class EntityCursorImpl implements EntityCursor
         return getExistingInstance( true ).setIncrementalFlags( flag );
     }
 
-    @Override
-    public Collection<ZeidonException> validateSubobject()
-    {
-        return getExistingInstance().validateSubobject();
-    }
-
     private ViewCursor getViewCursor()
     {
         return viewCursor;
@@ -2967,6 +2963,9 @@ class EntityCursorImpl implements EntityCursor
     public AttributeInstance getAttribute( String attributeName )
     {
         AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
+        if ( attributeDef.isHidden() )
+            throw new HiddenAttributeException( attributeDef );
+
         return getAttribute( attributeDef );
     }
 

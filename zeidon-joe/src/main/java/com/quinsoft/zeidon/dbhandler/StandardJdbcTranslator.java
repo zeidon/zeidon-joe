@@ -250,6 +250,12 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                 ps.setObject( idx, new Date( d.getMillis() ) );
             }
             else
+            if ( value instanceof GeneratedKey )
+            {
+                 GeneratedKey k = (GeneratedKey) value;
+                ps.setObject( idx, k.getNativeValue() );
+            }
+            else
             {
                 ps.setObject( idx, value );
             }

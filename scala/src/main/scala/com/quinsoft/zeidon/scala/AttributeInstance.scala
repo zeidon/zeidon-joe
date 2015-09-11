@@ -19,6 +19,8 @@
 package com.quinsoft.zeidon.scala
 
 import scala.util.matching.Regex
+
+import com.quinsoft.zeidon.InvalidAttributeValueException
 import com.quinsoft.zeidon.ZeidonException
 
 /**
@@ -26,6 +28,13 @@ import com.quinsoft.zeidon.ZeidonException
  */
 class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeInstance ) {
 
+    /**
+     * Returns the Scala EntityInstance for this AttributeInstance.
+     */
+    def getEntityInstance = new EntityInstance( jattributeInstance.getEntityInstance )
+    
+    def getView = new View( jattributeInstance.getView )
+    
     /**
      * Returns true if the attribute is null.
      */
@@ -246,7 +255,13 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     /**
      * Converts the attribute value to an integer using default domain processing.
      */
-    def toInt: Int = { jattributeInstance.getInteger() }
+    def toInt: Int = { 
+        if ( jattributeInstance.isNull() )
+            throw new ZeidonException( "Error converting attribute value to Scala Int: attribute is null" )
+                       .prependAttributeDef( jattributeInstance.getAttributeDef )
+        else
+            jattributeInstance.getInteger() 
+    }
 
     def toInt( default: Int ): Int = { 
         if ( jattributeInstance.isNull() )

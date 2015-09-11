@@ -92,7 +92,7 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
      * }}}
      */
     def selectDynamic( attributeName: String): AttributeInstance = {
-        val jattributeDef = jentityDef.getAttribute( attributeName )
+        val jattributeDef = getAttributeDef( attributeName )
         new AttributeInstance( getEntityInstance.getAttribute( jattributeDef ) )
     }
 
@@ -104,29 +104,37 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
      * myView.MyEntity.MyAttribute = "New Value"
      * }}}
      */
-    def updateDynamic( attributeName: String)(value: Any): Any = {
+    def updateDynamic( attributeName: String)(value: Any): AbstractEntity = {
         var newValue = value
         if ( value.isInstanceOf[ AttributeInstance ] )
             newValue = value.asInstanceOf[ AttributeInstance ].jattributeInstance.getValue
 
-        val jattributeDef = jentityDef.getAttribute( attributeName )
+        val jattributeDef = getAttributeDef( attributeName )
         return setValue( jattributeDef, newValue )
     }
 
-    protected[scala] def setValue( jattributeDef: AttributeDef, value: Any ): Any = {
+    protected[scala] def setValue( jattributeDef: AttributeDef, value: Any ): AbstractEntity = {
         getEntityInstance.getAttribute( jattributeDef ).setValue( value )
-        return value
+        return this
     }
 
+    private def getAttributeDef( attribName: String ) = {
+        val jattributeDef = jentityDef.getAttribute( attribName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+
+        jattributeDef
+    }
+    
     /**
      * Retrieves an AttributeInstance by name.  Normally used as part of reflection.
      */
     def getAttribute( attribName: String ): AttributeInstance = {
-        val jattributeDef = jentityDef.getAttribute( attribName )
+        val jattributeDef = getAttributeDef( attribName )
         getAttribute(jattributeDef)
     }
 
-    protected[scala] def getAttribute( jattributeDef: AttributeDef ): AttributeInstance = {
+    def getAttribute( jattributeDef: AttributeDef ): AttributeInstance = {
         new AttributeInstance( getEntityInstance.getAttribute( jattributeDef ) )
     }
 

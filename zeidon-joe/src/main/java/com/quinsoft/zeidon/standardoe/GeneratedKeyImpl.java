@@ -26,11 +26,12 @@ import com.quinsoft.zeidon.ZeidonException;
  */
 public class GeneratedKeyImpl implements GeneratedKey
 {
-    private final String value;
+    private final    Comparable<Object>  nativeValue;
+    private volatile String stringValue;
 
-    public GeneratedKeyImpl( String value )
+    public GeneratedKeyImpl( Comparable<Object> value )
     {
-        this.value = value;
+        nativeValue = value;
     }
 
     /* (non-Javadoc)
@@ -39,7 +40,7 @@ public class GeneratedKeyImpl implements GeneratedKey
     @Override
     public boolean isNull()
     {
-        return value == null;
+        return nativeValue == null;
     }
 
     @Override
@@ -48,7 +49,10 @@ public class GeneratedKeyImpl implements GeneratedKey
         if ( isNull() )
             throw new ZeidonException( "Attempting to convert null GeneratedKey to a string" );
 
-        return value;
+        if ( stringValue == null )
+            stringValue = nativeValue.toString();
+
+        return stringValue;
     }
 
     @Override
@@ -57,6 +61,47 @@ public class GeneratedKeyImpl implements GeneratedKey
         if ( isNull() )
             return "Key: (null)";
 
-        return "Key: " + value;
+        if ( stringValue == null )
+            stringValue = nativeValue.toString();
+
+        return "Key: " + stringValue;
+    }
+
+    @Override
+    public Object getNativeValue()
+    {
+        return nativeValue;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        if ( nativeValue == null )
+            return 0;
+        
+        return nativeValue.hashCode();
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if ( nativeValue == null )
+        {
+            if ( obj == null )
+                return true;
+            else
+                return false;
+        }
+        
+        return nativeValue.equals( obj );
+    }
+
+    @Override
+    public int compareTo( Object o )
+    {
+        if ( o instanceof GeneratedKeyImpl )
+            o = ((GeneratedKeyImpl) o).getNativeValue();
+        
+        return nativeValue.compareTo( o );
     }
 }

@@ -283,11 +283,11 @@ public class TestZencas
 
         SerializeOi options = new SerializeOi();
         options.withIncremental();
-        new SerializeOi().withIncremental().addView( stud, person ).toFile( getTempDir() + "/stud.json" );
+        new SerializeOi().withIncremental().useCamelCase().addView( stud, person ).toTempDir( "stud.json" );
 
         List<View> viewList = new DeserializeOi( zencas )
                                         .asJson()
-                                        .fromResource( getTempDir() + "/stud.json" )
+                                        .fromTempDir( "stud.json" )
                                         .activate();
         for ( View v : viewList )
             v.logObjectInstance();
@@ -1632,13 +1632,13 @@ public class TestZencas
 			//zVIEW    mPerson = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-			
+
 	        View mPerson = new QualificationBuilder( zencas )
             .setLodDef( "mPerson" )
             .addAttribQual( "ID", 50 )
             .activate();
-	        
-	        // After a createEntity, the acceptSubobject should not return an error. 
+
+	        // After a createEntity, the acceptSubobject should not return an error.
 	        mPerson.cursor("Address").createEntity();
 	        mPerson.cursor("Address").acceptSubobject();
 	        //mPerson.cursor("Address").create
@@ -1652,35 +1652,35 @@ public class TestZencas
 			zVIEW    mPerson = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-		
+
 
 	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
 	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
 	         DropView( vTempViewVar_0 );
 	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-	         
+
     		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
 	 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 	 		   DropView( vTempViewVar_0 );
-	 		   
+
 	 		   mPerson.cursor("ApplicationSibling").createEntity();
 	 		   mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
-	 		   
+
 	 		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
-	 		   
+
 	 		  RESULT = CommitObjectInstance( mUser );
-	 		  
+
 	 		  DropView( mPerson);
-	 		  
+
 	 		  StringBuilder szReturn  = new StringBuilder();
-	 		  
+
 	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
 	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-	 		  
+
 	 		  mPerson.cursor("FinAidProfile").setNext();
 	 		  mPerson.cursor("Address").setNext();
-	 		  
-	 		  
+
+
 			 DropView( mUser );
 			 return 0;
 

@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
@@ -294,10 +295,11 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         if ( task == null )
             return "Unknown TaskId";
 
+        task.log().info( "Logging views for task %s (%s)", taskId, new DateTime() );
         for ( View view : task.getViewList() )
         {
             Collection<String> nameList = view.getNameList();
-            task.log().info( "View %s (%s)  Count = %d  Names = %s",
+            task.log().info( "   View %s (%s)  Entity Count = %d  Names = %s",
                              view.getId(), view.getLodDef(), view.getEntityCount( true ), nameList );
         }
 

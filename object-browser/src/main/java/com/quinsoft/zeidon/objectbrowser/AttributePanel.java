@@ -155,20 +155,33 @@ public class AttributePanel extends JPanel
 
             for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                if ( ! attributeDef.isKey() )
+                String attributeValue = "*error*";
+                String isUpdated = "";
+                
+                try
                 {
-                    if ( attributeDef.isHidden() && ! env.isShowHiddenAttributes() )
-                        continue;
-
-                    if ( ei.getAttribute( attributeDef ).isNull() && ! env.isShowNullAttributes() )
-                        continue;
+                    if ( ! attributeDef.isKey() )
+                    {
+                        if ( attributeDef.isHidden() && ! env.isShowHiddenAttributes() )
+                            continue;
+    
+                        if ( ei.getAttribute( attributeDef ).isNull() && ! env.isShowNullAttributes() )
+                            continue;
+                    }
+    
+                    AttributeInstance attrib = ei.getAttribute( attributeDef );
+                    attributeValue = attrib.isNull() ? null : attrib.getString( null );
+                    isUpdated = attrib.isUpdated() ? "Y" : "";
+                }
+                catch ( Exception e )
+                {
+                    // TODO: print error to log.
                 }
 
                 int col = 0;
-                AttributeInstance attrib = ei.getAttribute( attributeDef );
                 row[col++] = attributeDef.getName();
-                row[col++] = attrib.isNull() ? null : attrib.getString( null );
-                row[col++] = attrib.isUpdated() ? "Y" : "";
+                row[col++] = attributeValue;
+                row[col++] = isUpdated;
                 attrModel.addRow( row );
             }
 

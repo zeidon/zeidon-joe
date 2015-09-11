@@ -287,6 +287,7 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public boolean isNull()
     {
+        executeDerivedOper();
         return attributeValue.isNull( getTask(), attributeDef );
     }
 

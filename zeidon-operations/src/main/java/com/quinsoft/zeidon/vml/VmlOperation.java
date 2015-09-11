@@ -28,7 +28,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -71,7 +70,6 @@ import com.google.common.collect.ImmutableSet;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
@@ -4675,7 +4673,8 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.getAttribute( attributeName ).setValue( srcView );
+         String blobStr = srcView.serializeOi().asJson().withIncremental().toString();
+         cursor.getAttribute( attributeName ).setValue( blobStr );
       }
 
       return nRC;
@@ -4982,13 +4981,13 @@ public abstract class VmlOperation
       {
          return -1;
       }
-      
+
   	// There can be more than one view but we are assuming there is only one.
   	List<View> viewList = new DeserializeOi( qualView )
       .asJson()
       .fromString( strTmp )
       .activate();
-  	
+
       for ( View v : viewList )
       {
           v.logObjectInstance();
@@ -4996,7 +4995,7 @@ public abstract class VmlOperation
           sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
           sbLodDefName.append( v.getLodDef().getName() );
       }
-      
+
       /*
 
       View v = qualView.deserializeOi()

@@ -418,6 +418,7 @@ class EntityCursor( private[this]  val view: View,
      * }}}
      */
     def setFirst( predicate: => Boolean, scopingEntity: AbstractEntity = null ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
         val iter = jentityCursor.eachEntity( if ( scopingEntity == null ) null else scopingEntity.entityDef )
         while ( iter.hasNext() )
         {
@@ -426,10 +427,12 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
+        jentityCursor.setCursor( currentEi )
         return new CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
     }
 
     def setFirst( predicate: (EntityInstance) => Boolean ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
         val iter = jentityCursor.eachEntity()
         while ( iter.hasNext() )
         {
@@ -438,6 +441,7 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
+        jentityCursor.setCursor( currentEi )
         return EntityCursor.CURSOR_UNCHANGED
     }
 
@@ -453,7 +457,7 @@ class EntityCursor( private[this]  val view: View,
     /**
       * Set the cursor using a hashkey attribute value.
       */
-    def set( setter: ( HashSetter ) => Any ): CursorResult = {
+    def set( setter: ( HashSetter ) => AbstractEntity ): CursorResult = {
         val hashSetter = new HashSetter()
         setter( hashSetter )
         hashSetter.getResult
@@ -571,20 +575,22 @@ class EntityCursor( private[this]  val view: View,
         def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
         def getResult = rc
 
-        override def setValue( jattributeDef: AttributeDef, value: Any ): Any = {
+        override def setValue( jattributeDef: AttributeDef, value: Any ): AbstractEntity = {
             if ( jattributeDef.getHashKeyType() == AttributeHashKeyType.NONE )
                 throw new ZeidonException( "Cursor.set() can only be used on attributes defined with a hashkey" )
                                   .prependAttributeDef( jattributeDef )
 
             val attributeName = jattributeDef.getName()
-            rc = {
-                if ( value.isInstanceOf[ AttributeInstance ] )
-                    // If the value is of type AttributeInstance then convert it to an internal value.
-                    jentityCursor.setFirst( attributeName, value.asInstanceOf[ AttributeInstance ].
-                                            jattributeInstance.getValue )
-                else
-                    jentityCursor.setFirst( attributeName, value )
+            
+            if ( value.isInstanceOf[ AttributeInstance ] ) {
+                val attr = value.asInstanceOf[ AttributeInstance ]
+                // If the value is of type AttributeInstance then convert it to an internal value.
+                rc = jentityCursor.setFirst( attributeName, attr.jattributeInstance.getValue )
             }
+            else
+                rc = jentityCursor.setFirst( attributeName, value )
+                
+            return this
         }
     }
 

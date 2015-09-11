@@ -54,6 +54,8 @@ public class SerializeOi
     private StreamWriter streamWriter;
     private Map<Long,SelectSet> rootSelectSets;
     private boolean writeDate = false;
+    private boolean useCamelCase = false;
+    private boolean writeDerivedAttributes = false;
 
     public SerializeOi()
     {
@@ -129,7 +131,7 @@ public class SerializeOi
 
     /**
      * Convenience method that prepends the Zeidon HOME to the filename.
-     *  
+     *
      * @param filename
      * @return
      */
@@ -137,18 +139,18 @@ public class SerializeOi
     {
         if ( viewList.size() == 0 )
             throw new ZeidonException( "Specify at least one view before calling toZeidonHomeFile()" );
-        
+
         String tfile = viewList.get( 0 ).getTask().getObjectEngine().getHomeDirectory();
-        
+
         // Append the dir separator if it's not specified.
         if ( ! tfile.endsWith( "\\" ) && ! tfile.endsWith( "/" ) && filename.startsWith( "\\" ) && filename.startsWith( "/" ) )
             tfile += "/";
-        
+
         tfile += filename;
-        
+
         return toFile( tfile );
     }
-    
+
     /**
      * Serializes the OI to the specified file name.  If the format has not yet been specified
      * the format will be determined (if possible) from the filename extension.  E.g. "myfile.json"
@@ -274,12 +276,45 @@ public class SerializeOi
         return this;
     }
 
+    /**
+     * If specified then write Entity and Attribute names using camel
+     * casing, which mostly sets the first character to lower-case.
+     *
+     * @return this
+     */
+    public SerializeOi useCamelCase()
+    {
+        useCamelCase = true;
+        return this;
+    }
+
+    public boolean isCamelCase()
+    {
+        return useCamelCase;
+    }
+
+    /**
+     * If specified then write derived attributes and their values.
+     * 
+     * @return this
+     */
+    public SerializeOi writeDerivedAttributes()
+    {
+        writeDerivedAttributes = true;
+        return this;
+    }
+    
+    public boolean isWriteDerivedAttributes()
+    {
+        return writeDerivedAttributes;
+    }
+    
     public SerializeOi writeDate()
     {
         setWriteDate( true );
         return this;
     }
-    
+
     public SerializeOi addView( View view, View... views )
     {
         viewList.add( view );

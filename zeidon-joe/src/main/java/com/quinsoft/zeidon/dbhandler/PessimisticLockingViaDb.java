@@ -307,7 +307,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         catch ( Exception e )
         {
             vlock.logObjectInstance();
-            throw new PessimisticLockingException( views, "Error creating pessimistic locking semaphore" )
+            throw new PessimisticLockingException( views, "Error deleting pessimistic locking semaphore" )
                             .setCause( e );
         }
     }
