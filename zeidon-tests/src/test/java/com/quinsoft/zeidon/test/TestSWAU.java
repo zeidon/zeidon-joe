@@ -131,6 +131,7 @@ public class TestSWAU
 		                "target/test-classes/testdata//SWAU/mPersonPrimaryAddress.json", zSINGLE );
 		   	   SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
 		   	   
+		   	   mPerson.cursor("Person").acceptSubobject();
 		   	   AcceptSubobject( mPerson, "Person");
 		   	   
 		       RESULT = SetCursorFirstEntity( mPerson, "Address", "" );
