@@ -105,7 +105,7 @@ class OiDisplay extends JPanel
         this.lodDef = view.getLodDef();
         originalView = view;
         this.view = view.newView();
-        view.setInternal( true );  // So the browser doesn't display it.
+        this.view.setInternal( true );  // So the browser doesn't display it.
         this.entitySelectedListener = listener;
 
         entities = new HashMap<EntityDef, EntitySquare>();
