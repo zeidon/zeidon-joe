@@ -36,6 +36,16 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+            	<groupId>org.codehaus.mojo</groupId>
+            	<artifactId>build-helper-maven-plugin</artifactId>
+            	<version>1.9.1</version>
+            </plugin>
+            <plugin>
+            	<groupId>org.codehaus.mojo</groupId>
+            	<artifactId>build-helper-maven-plugin</artifactId>
+            	<version>1.9.1</version>
+            </plugin>
         </plugins>
     </build>
 

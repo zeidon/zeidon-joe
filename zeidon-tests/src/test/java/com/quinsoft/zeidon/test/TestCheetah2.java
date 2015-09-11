@@ -13,6 +13,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+//import com.quinsoft.zeidon.test.TestSWAU.SwauVmlTester;
 //import com.quinsoft.zeidon.test.TestCheetah2.VmlTester;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
@@ -74,6 +75,16 @@ public class TestCheetah2
 		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntity2( testview );
         System.out.println("===== Finished testOrderEntity2 ========");
+	}
+	
+	@Test
+	public void testOrderEntityNull()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		tester.testOrderEntityNull( testview );
+        System.out.println("===== Finished testOrderEntityNull ========");
 	}
 
 	private class CheetahVmlTester extends VmlObjectOperations
@@ -225,6 +236,20 @@ public class TestCheetah2
 			OrderEntityForView( wDateSrt, "wDateSrt", szSort );
 
 			return 0;
+		}
+
+		public int
+		testOrderEntityNull( View ViewToWindow )
+		{
+		   zVIEW    mCTBillMed      = new zVIEW( );
+		   int RESULT=0;
+
+	   	   ActivateOI_FromFile( mCTBillMed, "mCTBill", ViewToWindow,
+		                "target/test-classes/testdata/Cheetah/mCTBillMed.json", zSINGLE );
+		   SetNameForView( mCTBillMed, "mCTBillMed", null, zLEVEL_TASK );
+	       mCTBillMed.cursor( "Application" ).orderEntities( "VisitBillingLine.PayDate D [YYYY/MM/DD]" );
+
+	       return 0;
 		}
    }
 }
