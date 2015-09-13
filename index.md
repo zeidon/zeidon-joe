@@ -12,6 +12,7 @@ Zeidon is an application framework for developing data-oriented applications.  I
 Zeidon does all the work of an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) but it does much more than a traditional ORM.
 
 For more details see [What Is Zeidon?](WhatIsZeidon.html).  Additional information:
+
 * [Zeidon Walk-through](WhatIsZeidon.html) - Takes you through a quick tour of a Zeidon application.
 * [Zeidon JOE](https://github.com/DeegC/zeidon-joe) - The Zeidon Java Object Engine (JOE), the Java run-time engine.
 
