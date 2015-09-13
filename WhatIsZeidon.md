@@ -5,51 +5,39 @@ layout: default
 
 ## What is Zeidon?
 
-Zeidon is an application framework for developing data-oriented applications. It enables engineers to design their solutions at a higher level of abstraction to separate the business logic from the underlying storage system. The abstraction eliminates the the impedance mismatch that occurs between relational DBs and OOP applications.
+Zeidon is an application framework for developing data-oriented applications.  It has two aspects that give it power:
 
-The abstraction also helps engineers manage the complexity of applications with many tables and relationships.
+1) Zeidon abstracts the structure of the ER model and makes it directly accessable from application code.  There is no need to build objects (e.g. Java objects) to retrieve and store the data in memory because Zeidon does this.
 
-### Why use Zeidon
+2) The abstraction lets the developer create "logical objects".  Logical objects group multiple entities from the ER model into structures that are based on business logic.  Because of the abstraction the structures have many aspects of object-oriented programming.  The entities in the logical object are chosen to perform some business logic, like create an order or update user information.  This allows multiple entities (i.e. SQL tables) to be accessed like a single object instead of a group of related-but-separate objects.
+
+The structure of the logical object is laid out in the Logical Object Definition (lOD) which is the fundamental unit in Zeidon.  The LOD, combined with the abstraction, are the basis of Zeidon's power.  For a quick demonstration of a Zeidon application [check out the walk-through](QuickWalkThrough.html).  Some of the advantages of Zeidon over traditional methods for application development include the following.
+
+## Software Transactions
+
+## Entity Context
+
+## Eliminates Impedance Mismatch
+
+> Object/relational mapping is the Vietnam of Computer Science
+
+– Ted Neward, author of Effective Enterprise Java
 
 Industry standard engineering solutions such as Ruby on Rails and Hibernate are excellent for writing simple and medium-complixity applications.  They begin to break down, however, when the data behind the applications become large and complex with a myriad of business rules.  The break down for a few reasons:
 
   * They don't solve the impedance mismatch between object-oriented programming and relational DBs.
   * Most solutions do little to help you design the structure of your data.
 
-### Impedance Mismatch
+Zeidon solves the mismatch problem with the LOD.  The LOD is built directly from the ER model and is used to load data from the DB.  The application logic, using a Scala DSL, then accesses the data in the LOD.  The code is thus written against the entities in the ER model instead of an intermediate Java object.
 
-> Object/relational mapping is the Vietnam of Computer Science
+## Full Development-cycle
 
-– Ted Neward, author of Effective Enterprise Java
+* *DB Design* - Zeidon's ER Diagrammer and LOD tool help the developer design the DB and how it will be accessed.
+* *Implementation* - Zeidon's DSL make it easy to write complex queries and implement business logic.
+* *Debugging* - The Object Browser lets the developer view the data loaded into objects instances.
 
-### Industry response to Impedance Mismatch
+## Better Control of Joins
 
-The industry has tried to solve the problem with multiple solutions:
+## Sane Lazy Loading
 
-  * Object-oriented DBs.
-  * Translators like stored procedures.
-  * NoSQL/Document DBs like MongoDB
-  * ORB/ORMs like Hibernate.
-  * Microsoft's Entity Framework.
 
-All of these solutions have their own problems. Except for Entity Framework, none of them attempt to solve the problem with data abstraction.
-
-### Zeidon eliminates Impedance Mismatch
-
-Zeidon solves the mismatch problem by using a data abstraction--the Logical Object Definition (LOD)--that straddles both the Relational DB and OOP business logic.  All Zeidon applications start with an ERD which models the data.  A LOD is a logical grouping of entities from the ERD into an object to perform business logic on those entities.
-
-Perhaps an example is in order.  The following is a simple ERD for an application that keeps track of professors, students, and their classes.  It's a standard ERD with entities and attributes (i.e. fields or columns).
-
-![SampleERD](images/sample-erd.png?raw=true)
-
-This is a LOD created to edit information about a professor:  The colors mean something but that's not important now.
-
-![SampleERD](images/prof-lod-full.png?raw=true)
-
-To load the information for a Professor, use Scala to perform a Zeidon activate:
-
-    val prof = new View( task ) basedOn "Professor"
-    prof.activateWhere( _.Professor.Id = 10 )
-
-Zeidon will generate the SQL required to load professor 10 from the DB and all the child
-data that is associated with professor 10.

@@ -7,18 +7,19 @@ layout: default
 This is the main page for learning about the Zeidon, the Java Object Engine (JOE) and related projects.
 
 ### What is Zeidon?
-Zeidon is an application framework for developing data-oriented applications.  It enables engineers to design their solutions at a higher level of abstraction to separate the business logic from the underlying storage system.  The abstraction eliminates the the impedance mismatch that occurs between relational DBs and OOP applications.
+Zeidon is an application framework for developing data-oriented applications.  It enables engineers to design their solutions at a higher level of abstraction to separate the business logic from the underlying storage system.  Zeidon developers use the abstraction to build "logical objects" which group multiple entities from the ER model into structures that are given object-oriented traits.  The abstraction also eliminates the the impedance mismatch that occurs between relational DBs and OOP applications.
 
-The abstraction also helps engineers manage the complexity of applications with many tables and relationships.
+Zeidon does all the work of an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) but it does much more than a traditional ORM.
 
-For more details see [What Is Zeidon?](WhatIsZeidon.html)
+For more details see [What Is Zeidon?](WhatIsZeidon.html).  Additional information:
+* [Zeidon Walk-through](WhatIsZeidon.html) - Takes you through a quick tour of a Zeidon application.
+* [Zeidon JOE](https://github.com/DeegC/zeidon-joe) - The Zeidon Java Object Engine (JOE), the Java run-time engine.
 
 ### Additional Documentation
 JOE 1.3
 
-* [JOE Javadoc](zeidon-joe/javadoc/1.3/joe/)
-* [JOE Javadoc](http://deegc.github.io/zeidon-joe/javadoc/1.3/joe/)
-* [JOE for Android Javadoc](javadoc/1.2/android/)
-* [JOE Scaladoc](http://deegc.github.io/zeidon-joe/javadoc/1.3/scala/)
+* [JOE Javadoc](javadoc/1.3/joe/)
+* [JOE Scaladoc](javadoc/1.3/scala/)
+* [JOE for Android Javadoc](javadoc/1.3/android/)
 
 
