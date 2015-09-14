@@ -40,4 +40,6 @@ Zeidon solves the mismatch problem with the LOD.  The LOD is built directly from
 
 ## Sane Lazy Loading
 
+## Easier Data Locking
+
 

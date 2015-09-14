@@ -313,6 +313,7 @@ Call the `delete()` method on an entity to delete an entity instance:
 ```scala
 order.OrderDetail setFirst()
 order.OrderDetail delete()
+order commit()
 ```
 
 Calling `delete()` will delete the first entity and remove its children from the OI.  If the above line is called on the first OrderDetail in our example, the OI now looks like this (there are now only two OrderDetails):
@@ -522,3 +523,9 @@ The LOD combines multiple entities from the ERM into a single, hierarchical grou
 * Limited polymorphism.
 
 For example the Order LOD encapsulates the entities that make up a a Northwind order; the Product LOD is composed of the entities that are needed to work with Northwind products.
+
+## Zeidon Object Browser
+The Object Browser is a run-time tool to help debug applications.  The browser displays the data in Object Instances that are currently loaded by the Zeidon object engine.  Developers can manipulate the cursors to see the data and change it if necessary.  For complex object instances the browser is a powerful tool.  Here is a screen shot that displays one of the OIs loaded by one of the complex activates:
+
+![ObjectBrowser](images/walkthrough/ObjectBrowser.png?raw=true)
+
