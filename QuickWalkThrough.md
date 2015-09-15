@@ -525,7 +525,11 @@ The LOD combines multiple entities from the ERM into a single, hierarchical grou
 For example the Order LOD encapsulates the entities that make up a a Northwind order; the Product LOD is composed of the entities that are needed to work with Northwind products.
 
 ## Zeidon Object Browser
-The Object Browser is a run-time tool to help debug applications.  The browser displays the data in Object Instances that are currently loaded by the Zeidon object engine.  Developers can manipulate the cursors to see the data and change it if necessary.  For complex object instances the browser is a powerful tool.  Here is a screen shot that displays one of the OIs loaded by one of the complex activates:
+The Object Browser is a run-time tool to help debug applications.  The browser displays the data in any Object Instance that is still in memory.  Developers can manipulate the cursors to see the data and change it if necessary.  For complex object instances the browser is a powerful tool.  The following is a screen shot that displays all tasks and all OIs for the selected task:
+
+![ObjectBrowser1](images/walkthrough/ObjectBrowser1.png?raw=true)
+
+This screen shot shows the attribute values for the selected entity instances:
 
 ![ObjectBrowser](images/walkthrough/ObjectBrowser.png?raw=true)
 
