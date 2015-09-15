@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -33,10 +34,12 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.BigDecimalDomain;
 import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.DoubleDomain;
 import com.quinsoft.zeidon.domains.IntegerDomain;
+import com.quinsoft.zeidon.domains.LongDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -155,16 +158,21 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                     continue;
 
                 Domain domain = attributeDef.getDomain();
-                
-                // Check for integer, double, or boolean so that it gets written without quotes.
+                String jsonName = camelCaseName( attributeDef.getName() );
                 if ( domain instanceof IntegerDomain )
-                    jg.writeNumberField( camelCaseName( attrib.getAttributeDef().getName() ), attrib.getInteger() );
+                    jg.writeNumberField( jsonName, attrib.getInteger() );
                 else
                 if ( domain instanceof DoubleDomain )
-                    jg.writeNumberField( camelCaseName( attrib.getAttributeDef().getName() ), attrib.getDouble() );
+                    jg.writeNumberField( jsonName, attrib.getDouble() );
                 else
                 if ( domain instanceof BooleanDomain )
-                    jg.writeBooleanField( camelCaseName( attrib.getAttributeDef().getName() ), attrib.getBoolean() );
+                    jg.writeBooleanField( jsonName, attrib.getBoolean() );
+                else
+                if ( domain instanceof LongDomain )
+                    jg.writeNumberField( jsonName, (Long) attrib.getValue() );
+                else
+                if ( domain instanceof BigDecimalDomain )
+                    jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
                 else
                 {
                     String value = attrib.getString( null );
