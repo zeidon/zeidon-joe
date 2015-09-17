@@ -427,7 +427,10 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
-        jentityCursor.setCursor( currentEi )
+        // Reset the cursor to its original position.
+        if ( currentEi != null )
+            jentityCursor.setCursor( currentEi )
+            
         return new CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
     }
 
@@ -441,7 +444,10 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
-        jentityCursor.setCursor( currentEi )
+        // Reset the cursor to its original position.
+        if ( currentEi != null )
+            jentityCursor.setCursor( currentEi )
+            
         return EntityCursor.CURSOR_UNCHANGED
     }
 

@@ -275,20 +275,6 @@ class AttributeValue
         return attributeValue == null ? "NULL" : attributeValue.toString();
     }
 
-    Object addToAttribute( TaskImpl task, AttributeInstance attributeInstance, Object value )
-    {
-        Object newValue = domain.addToAttribute( task, attributeInstance, attributeInstance.getAttributeDef(), getInternalValue(), value );
-        setInternalValue( task, attributeInstance.getAttributeDef(), newValue, true );
-        return newValue;
-    }
-
-    Object multiplyAttribute( TaskImpl task, AttributeInstance attributeInstance, Object value )
-    {
-        Object newValue = domain.multiplyAttribute( task, attributeInstance, attributeInstance.getAttributeDef(), getInternalValue(), value );
-        setInternalValue( task, attributeInstance.getAttributeDef(), newValue, true );
-        return newValue;
-    }
-
     void copyUpdateFlags( AttributeValue source )
     {
         setUpdated( source.isUpdated() );

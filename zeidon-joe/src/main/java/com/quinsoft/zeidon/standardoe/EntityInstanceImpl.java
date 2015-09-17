@@ -2728,7 +2728,7 @@ class EntityInstanceImpl implements EntityInstance
             AttributeValue attr = getInternalAttribute( key );
             if ( ! attr.isNull( getTask(), key ) )
                 nonnull = true;
-            builder.append( attr.toString() );
+            builder.append( attr.getString( getTask(), key ) );
 
             if ( first )
                 first = false;

@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -33,6 +34,12 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.BigDecimalDomain;
+import com.quinsoft.zeidon.domains.BooleanDomain;
+import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DoubleDomain;
+import com.quinsoft.zeidon.domains.IntegerDomain;
+import com.quinsoft.zeidon.domains.LongDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -150,13 +157,32 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 if ( attrib.isNull() )
                     continue;
 
-                String value = attrib.getString( null );
-
-                // getAttributes will include null attributes if they have been updated
-                // (i.e. explicitly set to null).  Since we aren't writing incrementals
-                // we don't want those so check for null.
-                if ( ! StringUtils.isBlank( value ) )
-                    jg.writeStringField( camelCaseName( attrib.getAttributeDef().getName() ), value );
+                Domain domain = attributeDef.getDomain();
+                String jsonName = camelCaseName( attributeDef.getName() );
+                if ( domain instanceof IntegerDomain )
+                    jg.writeNumberField( jsonName, attrib.getInteger() );
+                else
+                if ( domain instanceof DoubleDomain )
+                    jg.writeNumberField( jsonName, attrib.getDouble() );
+                else
+                if ( domain instanceof BooleanDomain )
+                    jg.writeBooleanField( jsonName, attrib.getBoolean() );
+                else
+                if ( domain instanceof LongDomain )
+                    jg.writeNumberField( jsonName, (Long) attrib.getValue() );
+                else
+                if ( domain instanceof BigDecimalDomain )
+                    jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
+                else
+                {
+                    String value = attrib.getString( null );
+    
+                    // getAttributes will include null attributes if they have been updated
+                    // (i.e. explicitly set to null).  Since we aren't writing incrementals
+                    // we don't want those so check for null.
+                    if ( ! StringUtils.isBlank( value ) )
+                        jg.writeStringField( camelCaseName( attrib.getAttributeDef().getName() ), value );
+                }
             }
 
             // Loop through the children and add them.
