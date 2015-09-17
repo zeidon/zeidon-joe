@@ -400,8 +400,17 @@ class ActivateOisFromJsonStream implements StreamReader
             while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )
             {
                 String fieldName = jp.getCurrentName();
-                if ( token != JsonToken.VALUE_STRING )
+                
+                // If the token isn't a value, skip to the next token.
+                if ( token != JsonToken.VALUE_STRING && 
+                     token != JsonToken.VALUE_NUMBER_INT &&
+                     token != JsonToken.VALUE_NUMBER_FLOAT && 
+                     token != JsonToken.VALUE_NULL && 
+                     token != JsonToken.VALUE_FALSE && 
+                     token != JsonToken.VALUE_TRUE )
+                {
                     token = jp.nextToken();
+                }
 
                 if ( StringUtils.equals( fieldName, ".meta" ) )
                 {
