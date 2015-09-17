@@ -1311,8 +1311,16 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return null;
     }
 
+    /**
+     * Validate that the 'source' EntityDef can be linked with 'this'.
+     *
+     * @param source
+     * @return
+     */
     public LinkValidation validateLinking( EntityDef source )
     {
+        assert getErEntityToken() == source.getErEntityToken() : "Trying to link mismatching ER tokens";
+
         if ( this == source )
             return LinkValidation.SOURCE_OK;
 
