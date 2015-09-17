@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 06/09/15   11:01:22 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 09/01/15   10:36:14 1.0a2    
 eDomainGroup 1
 aName      ePamms
 
@@ -109,35 +109,6 @@ eContext   3
 aZKey      68567481
 aName      BLOB
 aIsDefault Y
-
-eDomain    2
-aZKey      110226099
-aName      InsertTextKeywordType
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      110226100
-aName      InsertTextKeywordType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      110226101
-aExternalValue All Optional
-aInternalValue A
-
-eTableEntry 4
-aZKey      110226102
-aExternalValue Only One Allowed
-aInternalValue O
-
-eTableEntry 4
-aZKey      110226103
-aExternalValue At Least One Req'd
-aInternalValue R
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -550,6 +521,36 @@ aInternalValue M
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110370112
+aName      ContainerTypeStorageDisposal
+aDesc      Type of Container that drives Storage and Disposal Section selection
+aDomainType T
+aDataType  S
+aMaxStringLth 30
+aContextRestriction N
+
+eContext   3
+aZKey      110370113
+aName      ContainerTypeStorageDisposal
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110370114
+aExternalValue Refillable
+aInternalValue Refillable
+
+eTableEntry 4
+aZKey      110370115
+aExternalValue Non-refillable
+aInternalValue Non-refillable
+
+eTableEntry 4
+aZKey      110388980
+aExternalValue Bag-In-Box, Non-refillable Packets, Sealed Containers
+aInternalValue Sealed Containers
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110059061
 aName      ContainerVolumeEnvironmentHazard
 aDesc      Environmental split <5 or >=5
@@ -597,6 +598,31 @@ eTableEntry 4
 aZKey      110059060
 aExternalValue > 1 gallon
 aInternalValue >1
+
+eTableEntry 4
+aZKey      110363536
+aExternalValue 1 to 5 gallons
+aInternalValue 1-5
+
+eTableEntry 4
+aZKey      110363537
+aExternalValue <= 5 gallons
+aInternalValue <=5
+
+eTableEntry 4
+aZKey      110388981
+aExternalValue > 5 gallons
+aInternalValue >5
+
+eTableEntry 4
+aZKey      110183167
+aExternalValue Old Value 1
+aInternalValue 1
+
+eTableEntry 4
+aZKey      110183168
+aExternalValue Old Value 5
+aInternalValue 5
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2865,6 +2891,35 @@ aExternalValue auto
 aInternalValue auto
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110226099
+aName      InsertTextKeywordType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110226100
+aName      InsertTextKeywordType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110226101
+aExternalValue All Optional
+aInternalValue A
+
+eTableEntry 4
+aZKey      110226102
+aExternalValue Only One Allowed
+aInternalValue O
+
+eTableEntry 4
+aZKey      110226103
+aExternalValue At Least One Req'd
+aInternalValue R
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
 aZKey      68568083
 aName      Integer
@@ -3112,11 +3167,11 @@ aName      Note
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.RegularExpressionDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      18568062
 aName      NumericId
 aDesc      Numeric Text (0-9).
-aDomainType F
+aDomainType A
 aDataType  S
 aMaxStringLth 32
 aContextRestriction N
@@ -3124,8 +3179,6 @@ aContextRestriction N
 eContext   3
 aZKey      18568063
 aName      NumericId
-aEditString 99999999999999999999999999999999
-aJavaEditString ^[0-9]*$
 aIsDefault Y
 
 eDomain    2
