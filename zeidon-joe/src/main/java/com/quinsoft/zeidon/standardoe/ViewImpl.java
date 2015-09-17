@@ -94,6 +94,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     private boolean isReadOnly = false;
 
     /**
+     * If true, then when this view is dropped don't drop the pessimistic locks.
+     * This is turned on when a new view is created from a locked view.
+     */
+    private boolean ignoreLocks = false;
+
+    /**
      * True if this view was created by internal JOE processing.  This is intended
      * to be used by the browser to ignore views that weren't created by the user.
      */
@@ -368,6 +374,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void dropDbLocks()
     {
+        if ( ignoreLocks )
+            return;
+
         ObjectInstance oi = getObjectInstance();
         synchronized ( oi )
         {
@@ -377,6 +386,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
                 releaser.releaseLocks( this );
                 getTask().removePessimisticLock( this );
                 oi.setLocked( false );
+                oi.setReadOnly( true );
             }
         }
     }
@@ -417,14 +427,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public ViewImpl newView( TaskQualification owningTask, boolean readOnly )
     {
-        // If the current view is locked then we can only create new views if they
-        // are readOnly.
-        if ( isLocked() && ! readOnly )
-            throw new ZeidonException( "Views created from a locked view must be readOnly." );
-
         ViewImpl newView = new ViewImpl( (TaskImpl) owningTask.getTask(), this );
         if ( readOnly )
             newView.setReadOnly( true );
+
+        if ( isLocked() )
+            newView.ignoreLocks = true;
 
         return newView;
     }
@@ -1092,5 +1100,10 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         this.isInternal = isInternal;
         return this;
+    }
+
+    boolean isIgnoreLocks()
+    {
+        return ignoreLocks;
     }
 }

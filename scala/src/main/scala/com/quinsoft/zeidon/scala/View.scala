@@ -246,8 +246,8 @@ case class View( val task: Task ) extends Dynamic {
      * Drops the view and all its names.
      */
     def drop() = {
-        validateNonNull
-        jview.drop
+        if ( jview != null )
+            jview.drop
         this
     }
 

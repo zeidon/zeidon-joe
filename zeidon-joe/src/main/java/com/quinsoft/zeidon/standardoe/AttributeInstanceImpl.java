@@ -351,15 +351,17 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public EntityInstance add( Object value )
     {
-        attributeValue.addToAttribute( getTask(), this, value );
-        return entityInstance;
+        Domain domain = attributeDef.getDomain();
+        Object newValue = domain.addToAttribute( getTask(), this, attributeDef, getValue(), value );
+        return setValue( newValue );
     }
 
     @Override
     public EntityInstance multiply( Object value )
     {
-        attributeValue.multiplyAttribute( getTask(), this, value );
-        return entityInstance;
+        Domain domain = attributeDef.getDomain();
+        Object newValue = domain.multiplyAttribute( getTask(), this, attributeDef, getValue(), value );
+        return setValue( newValue );
     }
 
     @Override

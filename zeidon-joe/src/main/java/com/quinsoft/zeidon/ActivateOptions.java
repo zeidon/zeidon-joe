@@ -261,6 +261,11 @@ public class ActivateOptions extends AbstractOptionsConfiguration
         this.activator = activator;
     }
 
+    public boolean isReadOnly()
+    {
+        return activateFlags.contains( ActivateFlags.fREAD_ONLY ); 
+    }
+    
     public boolean isPerformingLazyLoad()
     {
         return performingLazyLoad;

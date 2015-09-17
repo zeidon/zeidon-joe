@@ -198,7 +198,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void addHostname( EntityCursor cursor )
     {
         EntityDef zeidonLock = cursor.getEntityDef();
-        if ( zeidonLock.getAttribute( "Hostname", false ) != null )
+        if ( zeidonLock.getAttribute( "Hostname", false ) == null )
             return;
 
         String hostname;
@@ -227,7 +227,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void addCallStack( EntityCursor cursor )
     {
         EntityDef zeidonLock = cursor.getEntityDef();
-        if ( zeidonLock.getAttribute( "CallStack", false ) != null )
+        if ( zeidonLock.getAttribute( "CallStack", false ) == null )
             return;
 
         StringBuilder sb = new StringBuilder();

@@ -81,8 +81,9 @@ class ActivateOiFromDB implements Activator
         Timer timer = new Timer();
         ObjectInstance oi = view.getObjectInstance();
 
+        // TODO: We don't check for locks that don't even allow reads.
         PessimisticLockingHandler pessimisticLlock = null;
-        if ( options.getLockingLevel().isPessimisticLock() )
+        if ( options.getLockingLevel().isPessimisticLock() && ! options.isReadOnly() )
         {
             pessimisticLlock = view.getPessimisticLockingHandler();
             pessimisticLlock.initialize( options );
@@ -106,8 +107,12 @@ class ActivateOiFromDB implements Activator
                 }
 
                 view.reset();
+                if ( options.isReadOnly() )
+                    view.getObjectInstance().setReadOnly( true );
+                
                 view.getLodDef().executeActivateConstraint( view );
     		}
+            
             task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
 
             return view;
@@ -117,15 +122,6 @@ class ActivateOiFromDB implements Activator
             if ( pessimisticLlock != null )
                 pessimisticLlock.cleanup();
         }
-    }
-
-    private boolean assertValid()
-    {
-        Collection<ZeidonException> exceptions = view.validateOi();
-        if ( exceptions == null )
-            return true;
-
-        throw new SubobjectValidationException( exceptions );
     }
 
     /**
@@ -163,8 +159,6 @@ class ActivateOiFromDB implements Activator
             rc = singleActivate( subobjectRootEntity );
 
             commit = true;
-
-//            assert assertValid();
         }
         catch ( Exception e )
         {

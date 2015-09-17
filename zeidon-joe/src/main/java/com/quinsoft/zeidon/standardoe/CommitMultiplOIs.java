@@ -141,6 +141,14 @@ class CommitMultiplOIs
                 throw new ZeidonException("Attempting to commit a view with outstanding versioned instances.  " +
                                           "View = %s", v );
 
+            if ( oi.isLocked() && view.isIgnoreLocks() )
+            {
+                getTask().log().warn( "You are committing an OI with pessimistic locking using a view that " +
+                                      "was created from the original view.  THE PESSIMISTIC LOCK WILL NOT BE REMOVED.\n" +
+                                      "View ID = %s", view.toString() );
+                view.logObjectInstance();
+            }
+            
             viewList.add( view );
         }
 
