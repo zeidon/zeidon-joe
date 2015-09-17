@@ -162,7 +162,7 @@ class ActivateOisFromJsonStream implements StreamReader
                                                " but the LodDef has not been specified.", fieldName );
 
                 String rootName = lodDef.getRoot().getName();
-                if ( ! fieldName.equals( rootName ) )
+                if ( ! fieldName.equalsIgnoreCase( rootName ) )
                     throw new ZeidonException( "The first field in the JSON stream must be the root entity name" +
                                                " (%s) or '.meta' but was %s.", rootName, fieldName );
 
@@ -400,13 +400,13 @@ class ActivateOisFromJsonStream implements StreamReader
             while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )
             {
                 String fieldName = jp.getCurrentName();
-                
+
                 // If the token isn't a value, skip to the next token.
-                if ( token != JsonToken.VALUE_STRING && 
+                if ( token != JsonToken.VALUE_STRING &&
                      token != JsonToken.VALUE_NUMBER_INT &&
-                     token != JsonToken.VALUE_NUMBER_FLOAT && 
-                     token != JsonToken.VALUE_NULL && 
-                     token != JsonToken.VALUE_FALSE && 
+                     token != JsonToken.VALUE_NUMBER_FLOAT &&
+                     token != JsonToken.VALUE_NULL &&
+                     token != JsonToken.VALUE_FALSE &&
                      token != JsonToken.VALUE_TRUE )
                 {
                     token = jp.nextToken();
@@ -469,7 +469,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 // Try getting the attribute.  We won't throw an exception (yet) if there
                 // is no attribute with a matching name.
                 AttributeDef attributeDef = entityDef.getAttribute( fieldName, false, true );
-                
+
                 if ( attributeDef == null )
                 {
                     // We didn't find an attribute with a name matching fieldName.  Do we allow
@@ -488,7 +488,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 else
                 if ( attributeDef.isDerived() ) // We'll ignore derived attributes.
                     continue;
-                
+
                 ei.getAttribute( attributeDef ).setInternalValue( jp.getText(), false ) ;
                 if ( incremental )
                 {
