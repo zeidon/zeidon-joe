@@ -88,6 +88,16 @@ public class TestCheetah2
 	}
 	
 	@Test
+	public void testOrderEntitySortOrderNotCaseSensitive()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		tester.testOrderEntitySortOrderNotCaseSensitive( testview );
+        System.out.println("===== Finished testOrderEntitySortOrderNotCaseSensitive ========");
+	}
+	
+	@Test
 	public void testOrderEntitySortOrderCaseSensitive()
 	{
 	    View         testview;
@@ -265,7 +275,7 @@ public class TestCheetah2
 		}
 
 		public int
-		testOrderEntitySortOrderCaseSensitive( View ViewToWindow )
+		testOrderEntitySortOrderNotCaseSensitive( View ViewToWindow )
 		{
 		   zVIEW    wMyListD      = new zVIEW( );
 		   int RESULT=0;
@@ -276,7 +286,24 @@ public class TestCheetah2
 		   wMyListD.cursor( "DisplayValues" ).orderEntities( "DisplayValues.ApplicantNumber" );
 		   
 		   wMyListD.cursor( "DisplayValues" ).setLast();
-           Assert.assertTrue( "orderEntities is not case sensitive, ordering incorrectly!", wMyListD.cursor( "DisplayValues" ).getAttribute("ApplicantNumber").equals("MR5226244") );
+           Assert.assertTrue( "orderEntities is NOT case sensitive, ordering incorrectly!", wMyListD.cursor( "DisplayValues" ).getAttribute("ApplicantNumber").equals("MR5226244") );
+		   
+	       return 0;
+		}
+
+		public int
+		testOrderEntitySortOrderCaseSensitive( View ViewToWindow )
+		{
+		   zVIEW    wMyListD      = new zVIEW( );
+		   int RESULT=0;
+
+	   	   ActivateOI_FromFile( wMyListD, "wMyListDCS", ViewToWindow,
+		                "target/test-classes/testdata/Cheetah/wDisplBillFollowupCS.json", zSINGLE );
+		   SetNameForView( wMyListD, "wMyListD", null, zLEVEL_TASK );
+		   wMyListD.cursor( "DisplayValues" ).orderEntities( "DisplayValues.ApplicantNumber" );
+		   
+		   wMyListD.cursor( "DisplayValues" ).setLast();
+           Assert.assertTrue( "orderEntities IS case sensitive, ordering incorrectly!", wMyListD.cursor( "DisplayValues" ).getAttribute("ApplicantNumber").equals("mr5226243") );
 		   
 	       return 0;
 		}
