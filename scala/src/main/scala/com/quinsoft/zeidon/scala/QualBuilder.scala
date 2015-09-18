@@ -765,6 +765,13 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
             return addQual( "<=", value )
     }
 
+    /**
+     * Activates entities with attributes that are null.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.Name isNull )
+     * }}}
+     */
     def isNull(): QualificationTerminator = {
         if ( checkNot )
             return addQual( "!=", null )    
@@ -772,6 +779,13 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
             return addQual( "=", null )    
     }
 
+    /**
+     * Activates entities with attributes that are not null.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.Name isNotNull )
+     * }}}
+     */
     def isNotNull(): QualificationTerminator = {
         if ( checkNot )
             return addQual( "=", null )    
