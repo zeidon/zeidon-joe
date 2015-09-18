@@ -1944,7 +1944,7 @@ class EntityInstanceImpl implements EntityInstance
         // accept it.
         if ( versionStatus == VersionStatus.UNACCEPTED_ENTITY )
         {
-            acceptTemporalEntity();
+            acceptTemporalEntity( view );
             return this;
         }
 
@@ -2099,7 +2099,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public void acceptTemporalEntity()
     {
-        acceptSubobject( getObjectInstance().createView( this ) );
+        acceptTemporalEntity( getObjectInstance().createView( this ) );
     }
 
     void acceptTemporalEntity( View view )

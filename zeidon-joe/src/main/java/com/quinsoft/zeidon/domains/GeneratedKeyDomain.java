@@ -71,9 +71,9 @@ public class GeneratedKeyDomain extends AbstractDomain
             return externalValue;
 
         if ( ! ( externalValue instanceof Comparable ) )
-            throw new InvalidAttributeValueException( attributeDef, externalValue, 
+            throw new InvalidAttributeValueException( attributeDef, externalValue,
                                                       "Value of GeneratedKeyDomaing must implement Comparable" );
-        
+
         return new GeneratedKeyImpl( (Comparable<Object>) externalValue );
     }
 
@@ -160,6 +160,6 @@ public class GeneratedKeyDomain extends AbstractDomain
             return rc;
 
         GeneratedKey internalKey = (GeneratedKey) internalValue;
-        return internalKey.compareTo( externalKey );
+        return internalKey.getString().compareTo( externalKey.getString() );
     }
 }

@@ -766,6 +766,34 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
     }
 
     /**
+     * Activates entities with attributes that are null.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.Name isNull )
+     * }}}
+     */
+    def isNull(): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "!=", null )    
+        else
+            return addQual( "=", null )    
+    }
+
+    /**
+     * Activates entities with attributes that are not null.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.Name isNotNull )
+     * }}}
+     */
+    def isNotNull(): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "=", null )    
+        else
+            return addQual( "!=", null )    
+    }
+    
+    /**
      * Uses SQL like to qualify activation.
      *
      * Note: The value is NOT converted by domain processing before being added

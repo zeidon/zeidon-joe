@@ -17,7 +17,7 @@
     Copyright 2009-2015 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon;
 
@@ -25,28 +25,28 @@ import java.util.EnumSet;
 
 /**
  * Convenience class to build flags for setMatchingAttributesByName.
- * 
+ *
  */
 public class CopyAttributesBuilder
 {
     private EntityInstance srcEntityInstance;
     private EntityInstance tgtEntityInstance;
-    
-    private EnumSet<SetMatchingFlags> flags = EnumSet.noneOf( SetMatchingFlags.class );
-    
+
+    private final EnumSet<SetMatchingFlags> flags = EnumSet.noneOf( SetMatchingFlags.class );
+
     private boolean copyKeys = false;
     private boolean copyNulls = false;
     private boolean copyWork = true;
     private boolean copyHidden = false;
-    private boolean keepNonNull = true;
+    private boolean keepNonNull = false;
     private boolean copyPersistent = true;
-    
+
     public int from( EntityInstance sourceEi )
     {
         srcEntityInstance = sourceEi;
         return copy();
     }
-    
+
     public CopyAttributesBuilder to( EntityInstance targetEi )
     {
         tgtEntityInstance = targetEi;
@@ -56,7 +56,7 @@ public class CopyAttributesBuilder
     /**
      * Ignore source attributes if they are null.  This only applies if overwriteNonNull()
      * option is set.
-     * 
+     *
      * @return
      */
     public CopyAttributesBuilder ignoreNull()
@@ -64,11 +64,11 @@ public class CopyAttributesBuilder
         flags.add( SetMatchingFlags.fSET_SRCNOTNULL );
         return this;
     }
-    
+
     /**
      * This causes non-null attributes in target EI to be overwritten.
      * Default processing is to not overwrite non-null values.
-     * 
+     *
      * @return
      */
     public CopyAttributesBuilder overwriteNonNull()
@@ -76,7 +76,7 @@ public class CopyAttributesBuilder
         flags.add( SetMatchingFlags.fSET_NOTNULL );
         return this;
     }
-    
+
     public CopyAttributesBuilder copyKeys()
     {
         flags.add( SetMatchingFlags.fSET_KEYS );
@@ -93,12 +93,12 @@ public class CopyAttributesBuilder
 
     /**
      * If set to true, then copy key attributes.
-     * 
+     *
      * Default: false
-     * 
+     *
      * @param copyKeys the copyKeys to set
-     * 
-     * @return this 
+     *
+     * @return this
      */
     public CopyAttributesBuilder setCopyKeys( boolean copyKeys )
     {
@@ -117,12 +117,12 @@ public class CopyAttributesBuilder
     /**
      * If set to true, then copy null attributes (will override non-null attributes
      * in the target entity instance).
-     * 
+     *
      * Default: false
-     * 
+     *
      * @param copyNulls the copyNulls to set
-     * 
-     * @return this 
+     *
+     * @return this
      */
     public CopyAttributesBuilder setCopyNulls( boolean copyNulls )
     {
@@ -140,10 +140,10 @@ public class CopyAttributesBuilder
 
     /**
      * If set to true, then copy work attributes.
-     * 
+     *
      * @param copyWork the copyWork to set
-     * 
-     * @return this 
+     *
+     * @return this
      */
     public CopyAttributesBuilder setCopyWork( boolean copyWork )
     {
@@ -165,15 +165,15 @@ public class CopyAttributesBuilder
     {
         return srcEntityInstance;
     }
-    
+
     public int copy()
     {
         if ( srcEntityInstance == null )
             throw new ZeidonException( "Source Entity Instance was not specified" );
-        
+
         if ( tgtEntityInstance == null )
             throw new ZeidonException( "Target Entity Instance was not specified" );
-        
+
         tgtEntityInstance.copyAttributes( this );
         return 0;
     }
@@ -186,11 +186,11 @@ public class CopyAttributesBuilder
     /**
      * If set to true, then non-null attributes in the target instance will NOT be
      * updated.
-     * 
+     *
      * Default: false
-     * 
+     *
      * @param keepNonNull
-     * 
+     *
      * @return this
      */
     public CopyAttributesBuilder setKeepNonNull( boolean keepNonNull )

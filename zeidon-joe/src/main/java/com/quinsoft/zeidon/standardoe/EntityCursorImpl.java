@@ -1006,6 +1006,12 @@ class EntityCursorImpl implements EntityCursor
         if ( ei == null )
             return CursorResult.NULL;
 
+        if ( ei.isDropped() )
+        {
+            this.resetChildCursors( null );
+            ei = getEntityInstance();
+        }
+
         // Find the first twin.
         ei = ei.getFirstTwin();
         while ( ei != null && ei.isHidden() )
@@ -1242,6 +1248,12 @@ class EntityCursorImpl implements EntityCursor
         EntityInstanceImpl ei = getEntityInstance();
         if ( ei == null )
             return CursorResult.NULL;
+
+        if ( ei.isDropped() )
+        {
+            this.resetChildCursors( null );
+            ei = getEntityInstance();
+        }
 
         ei = ei.getLastTwin();
         while ( ei != null && ei.isHidden() )
