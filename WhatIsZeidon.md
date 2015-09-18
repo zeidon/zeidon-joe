@@ -42,4 +42,4 @@ Zeidon solves the mismatch problem with the LOD.  The LOD is built directly from
 
 ## Easier Data Locking
 
-
+## Trivial Asynchronous DB Loads
