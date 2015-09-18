@@ -765,6 +765,20 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
             return addQual( "<=", value )
     }
 
+    def isNull(): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "!=", null )    
+        else
+            return addQual( "=", null )    
+    }
+
+    def isNotNull(): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "=", null )    
+        else
+            return addQual( "!=", null )    
+    }
+    
     /**
      * Uses SQL like to qualify activation.
      *
