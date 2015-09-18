@@ -524,6 +524,107 @@ The LOD combines multiple entities from the ERM into a single, hierarchical grou
 
 For example the Order LOD encapsulates the entities that make up a a Northwind order; the Product LOD is composed of the entities that are needed to work with Northwind products.
 
+## Locking
+To make the ordering example more rubust we need to subtract the quantity ordered from the UnitsInStock value in the products table.  To do this, however, we need to be able to lock the product so two threads can't update the value simultaneously.  Zeidon makes this easy with locking.  The Product LOD is specified to use non-exclusive locking:
+
+![ProductLocking](images/walkthrough/Product-Locking.png?raw=true)
+
+Non-exclusive locking allows allows other threads to activate the LOD for read-only; exclusive locking doesn't allow even this.  With the locking set, activating the LOD creates a locking record in the ZEIDONLOCKING table:
+
+```scala
+val product = View( task ) basedOn "Product"
+try {
+    // This will activate the OI with pessimistic locking.
+    product.activateWhere( _.Product.ProductId = 10 )
+    
+}
+catch {
+    case e: PessimisticLockingException => {
+        // Do something here.
+    }
+}
+finally {
+    // This will remove the pessimistic lock. 
+    product drop()
+}
+```
+
+Will generate:
+
+```sql
+INSERT INTO ZEIDONLOCKING ( LOD_NAME, KEYVALUE, USERNAME, ALLOWREAD, z_TIMESTAMP, ID  ) VALUES 
+       ( 'Product', '10', 'user', 1, '2015-09-17 21:24:51.272', null );
+```
+
+When the product view is dropped the lock is released by deleting the record.  If an activate is attempted on a product that is locked the PessimisticLockingException is thrown and can be acted upon.
+
+## Putting It All Together: Making an Order
+Now that we can lock a Product, the code for creating a new order might look like this.  Note that the commit uses a slightly different form to commit both the order and product OIs in the same DB transaction.
+
+```scala
+def createOrder( productId: Int, 
+                 quantity: Int,
+                 customerId: String,
+                 employeeId: Int,
+                 shipperId: Int ) = {
+    
+    val shippers = loadShippers()
+    val employees = loadEmployees()
+    val customers = loadCustomers()
+    
+    val newOrder = View( task ) basedOn "Order"
+    newOrder activateEmpty()
+    newOrder.Order create()
+    newOrder.Order.ShipName = "Joe Smith"
+    newOrder.Order.ShipAddress = "1 Main St"
+    newOrder.Order.ShipPostalCode = "01234"
+    
+    val product = View( task ) basedOn "Product"
+    try {
+        // This will activate the OI with pessimistic locking.
+        product.activateWhere( _.Product.ProductId = productId )
+        
+        // Make sure we have enough units in stock.
+        if ( product.Product.UnitsInStock < quantity )
+            throw new ZeidonException( "Not enough units in stock to buy # %s", quantity.toString )
+
+        product.Product.UnitsInStock -= quantity
+        
+        newOrder.OrderDetail create()
+        newOrder.OrderDetail.UnitPrice = product.Product.UnitPrice
+        newOrder.OrderDetail.Quantity = quantity
+        newOrder.Product include product.Product
+        
+        customers.Customer setFirst( _.CustomerId == customerId )
+        newOrder.Customer include customers.Customer
+        
+        employees.Employee setFirst( _.EmployeeId == employeeId )
+        newOrder.Employee include employees.Employee
+        
+        shippers.Shipper set( _.ShipperId = shipperId )
+        newOrder.Shipper include shippers.Shipper
+        
+        task.commitMultipleOis( newOrder, product )
+    }
+    catch {
+        case e: PessimisticLockingException => {
+            ...
+        }
+    }
+    finally {
+        // This will remove the pessimistic lock. 
+        product drop()
+    }
+}
+```
+
+## Why Not Just Do Everything Using the Order LOD?
+So the question could be asked: why not just set the permissions in the Order LOD to update Products?  A single LOD would be simpler than requiring two different LODs.
+
+The answer is fundamental to understanding Zeidon.  As constructed, the Order LOD limits the code to changing just data directly associated with an order.  A developer can be confident in loading, changing, and committing an Order LOD in the knowledge that nothing outside the Order can be changed.  If a Product needs to be changed (like when creating an order) then the Product LOD is used and it forces locking.
+
+Well-designed LODs isolate permissions to protect data integrity.
+
 ## Zeidon Object Browser
 The Object Browser is a run-time tool to help debug applications.  The browser displays the data in any Object Instance that is still in memory.  Developers can manipulate the cursors to see the data and change it if necessary.  For complex object instances the browser is a powerful tool.  The following is a screen shot that displays all tasks and all OIs for the selected task:
 
