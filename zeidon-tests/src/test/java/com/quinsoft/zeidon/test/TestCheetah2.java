@@ -3,7 +3,7 @@
  */
 package com.quinsoft.zeidon.test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
@@ -85,6 +85,16 @@ public class TestCheetah2
 		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntityNull( testview );
         System.out.println("===== Finished testOrderEntityNull ========");
+	}
+	
+	@Test
+	public void testOrderEntitySortOrderCaseSensitive()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		tester.testOrderEntitySortOrderCaseSensitive( testview );
+        System.out.println("===== Finished testOrderEntitySortOrderCaseSensitive ========");
 	}
 
 	private class CheetahVmlTester extends VmlObjectOperations
@@ -243,12 +253,31 @@ public class TestCheetah2
 		{
 		   zVIEW    mCTBillMed      = new zVIEW( );
 		   int RESULT=0;
+		   
+		   // PayDate is null. We crash when a date value is null (this would be for any attribute with a context).
 
 	   	   ActivateOI_FromFile( mCTBillMed, "mCTBill", ViewToWindow,
 		                "target/test-classes/testdata/Cheetah/mCTBillMed.json", zSINGLE );
 		   SetNameForView( mCTBillMed, "mCTBillMed", null, zLEVEL_TASK );
 	       mCTBillMed.cursor( "Application" ).orderEntities( "VisitBillingLine.PayDate D [YYYY/MM/DD]" );
 
+	       return 0;
+		}
+
+		public int
+		testOrderEntitySortOrderCaseSensitive( View ViewToWindow )
+		{
+		   zVIEW    wMyListD      = new zVIEW( );
+		   int RESULT=0;
+
+	   	   ActivateOI_FromFile( wMyListD, "wMyListD", ViewToWindow,
+		                "target/test-classes/testdata/Cheetah/wDisplBillFollowup.json", zSINGLE );
+		   SetNameForView( wMyListD, "wMyListD", null, zLEVEL_TASK );
+		   wMyListD.cursor( "DisplayValues" ).orderEntities( "DisplayValues.ApplicantNumber" );
+		   
+		   wMyListD.cursor( "DisplayValues" ).setLast();
+           Assert.assertTrue( "orderEntities is not case sensitive, ordering incorrectly!", wMyListD.cursor( "DisplayValues" ).getAttribute("ApplicantNumber").equals("MR5226244") );
+		   
 	       return 0;
 		}
    }
