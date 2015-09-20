@@ -3,7 +3,7 @@ title: What is Zeidon
 layout: default
 ---
 
-## What is Zeidon?
+# What is Zeidon?
 
 Zeidon is an application framework for developing data-oriented applications.  It has two aspects that give it power:
 
@@ -13,9 +13,15 @@ Zeidon is an application framework for developing data-oriented applications.  I
 
 The structure of the logical object is laid out in the Logical Object Definition (lOD) which is the fundamental unit in Zeidon.  The LOD, combined with the abstraction, are the basis of Zeidon's power.  For a quick demonstration of a Zeidon application [check out the walk-through](QuickWalkThrough.html).  Some of the advantages of Zeidon over traditional methods for application development include the following.
 
+# Why Use Zeidon?
+The combination of abstraction and logical objects brings many benefits.
+
 ## Software Transactions
+Since a logical object brings together all the data used for a transaction changes can usually be isolated to a single logical object.  Zeidon keeps track of changes made to the data so that they can be committed together.  This allows transactions to be controlled by Zeidon instead of the DB which means that DB connections are not held open, increasing throughput.
 
 ## Entity Context
+Entities (e.g. SQL tables) are used differently depending on the context.  A report might not need all the columns and tables should not be lazy-loaded.  In another situation the UI might need all the columns but tables can be lazy-loaded because it depends on the user's actions.  In traditional ORMs it can be difficult to handle all the contexts in an optimal way.  However, Zeidon allows entities to be included in multiple logical objects and keeps the context inherent in the design of the object.
+
 
 ## Eliminates Impedance Mismatch
 
