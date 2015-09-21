@@ -1003,14 +1003,14 @@ class EntityCursorImpl implements EntityCursor
         forwardDirection = true;
 
         EntityInstanceImpl ei = getEntityInstance();
-        if ( ei == null )
-            return CursorResult.NULL;
-
-        if ( ei.isDropped() )
+        if ( ei != null && ei.isDropped() )
         {
             this.resetChildCursors( null );
             ei = getEntityInstance();
         }
+
+        if ( ei == null )
+            return CursorResult.NULL;
 
         // Find the first twin.
         ei = ei.getFirstTwin();
@@ -1246,14 +1246,14 @@ class EntityCursorImpl implements EntityCursor
         forwardDirection = false;
 
         EntityInstanceImpl ei = getEntityInstance();
-        if ( ei == null )
-            return CursorResult.NULL;
-
-        if ( ei.isDropped() )
+        if ( ei != null && ei.isDropped() )
         {
             this.resetChildCursors( null );
             ei = getEntityInstance();
         }
+
+        if ( ei == null )
+            return CursorResult.NULL;
 
         ei = ei.getLastTwin();
         while ( ei != null && ei.isHidden() )
