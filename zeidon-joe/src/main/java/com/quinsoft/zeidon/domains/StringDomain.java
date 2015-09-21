@@ -183,7 +183,13 @@ public class StringDomain extends AbstractDomain
         if ( rc != null )
             return rc;
 
-        int c = s1.compareTo( s2 );
+        int c = 0;
+        
+        if ( attributeDef.isCaseSensitive() )
+           c = s1.compareTo( s2 );
+        else 
+           c = s1.compareToIgnoreCase(s2);
+        	
         if ( c < 0 )
             return -1;
         if ( c > 0 )

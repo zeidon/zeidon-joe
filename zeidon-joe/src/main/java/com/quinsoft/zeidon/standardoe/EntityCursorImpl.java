@@ -1602,7 +1602,15 @@ class EntityCursorImpl implements EntityCursor
                 int cmp = 0;
                 if (key.context != null)
                 {
-                	// Use context for sort order.
+                	// Use context for comparing.
+                	if ( cei1.getAttribute(key.attributeDef ).isNull() || cei2.getAttribute(key.attributeDef ).isNull() )
+                	{
+                		if ( !cei1.getAttribute(key.attributeDef ).isNull() )
+                			return 1;
+                		if ( !cei2.getAttribute(key.attributeDef ).isNull() )
+                			return -1;
+                		return 0; // Both are null.
+                	}
                 	String value1 = cei1.getAttribute(key.attributeDef ).getString( key.context );
                 	String value2 = cei2.getAttribute(key.attributeDef ).getString( key.context );
 
