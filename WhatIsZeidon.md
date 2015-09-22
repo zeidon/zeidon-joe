@@ -46,6 +46,18 @@ Zeidon solves the mismatch problem with the LOD.  The LOD is built directly from
 
 ## Sane Lazy Loading
 
-## Easier Data Locking
+## Logical Data Locking
 
 ## Trivial Asynchronous DB Loads
+Asynchronous loads are trivial with Zeidon.  Simply add the ".synchronous" qualification to the activate.  The call will return immediately; the first time the view is used it will block until the load has finished.
+
+```scala
+val orders = View( task ) basedOn "Order"
+orders.buildQual( _.Product.Discontinued = true )
+      .asynchronous
+      .activate()
+
+// Do other work here.
+
+println( "Id = " + order.Order.OrderId ) // This will block until load has finished.
+```
