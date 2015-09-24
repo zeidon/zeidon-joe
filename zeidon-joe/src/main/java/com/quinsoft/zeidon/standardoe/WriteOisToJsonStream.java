@@ -202,12 +202,12 @@ public class WriteOisToJsonStream implements StreamWriter
             {
                 // If the attribute is not persistent and we're only writing persisten
                 // then go to the next one.
-                if ( ! attributeDef.isPersistent() && writePersistent )
+                if ( attributeDef.isPersistent() && ! writePersistent )
                     continue;
 
                 if ( attributeDef.isDerived() )
                     continue;
-                
+
                 AttributeInstanceImpl attrib = ei.getAttribute( attributeDef );
                 if ( attrib.isNull() && ! attrib.isUpdated() )
                     continue;
@@ -236,7 +236,7 @@ public class WriteOisToJsonStream implements StreamWriter
                     String value = attribValue.getString( ei.getTask(), attributeDef );
                     jg.writeStringField( jsonName, value );
                 }
-                
+
                 if ( attributeDef.isPersistent() )
                     writeAttributeMeta( attribValue, attributeDef );
             }
