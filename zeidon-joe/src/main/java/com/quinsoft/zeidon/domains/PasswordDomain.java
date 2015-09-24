@@ -83,12 +83,12 @@ public class PasswordDomain extends StringDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
-        if ( externalValue == null )
-            return null;
-
         // If external value is an AttributeInstance then get *its* internal value.
         if ( externalValue instanceof AttributeInstance )
             externalValue = ((AttributeInstance) externalValue).getValue();
+
+        if ( externalValue == null )
+            return null;
 
         String password = externalValue.toString();
         if ( password.isEmpty() )
@@ -144,7 +144,7 @@ public class PasswordDomain extends StringDomain
                 return 1;
         }
         else
-*/            
+*/
             assert plaintextPassword instanceof String;
 
         if ( encryptor.checkPassword( plaintextPassword.toString(), encyrptedHash.toString() ) )
