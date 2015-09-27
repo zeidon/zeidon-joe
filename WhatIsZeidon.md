@@ -7,9 +7,9 @@ layout: default
 
 Zeidon is an application framework for developing data-oriented applications.  It has two aspects that give it power:
 
-1) Zeidon abstracts the structure of the ER model and makes it directly accessable from application code.  There is no need to build objects (e.g. Java objects) to retrieve and store the data in memory because Zeidon does this.
+1. Zeidon abstracts the structure of the ER model and makes it directly accessable from application code.  There is no need to build objects (e.g. Java objects) to retrieve and store the data in memory because Zeidon does this.
 
-2) The abstraction lets the developer create "logical objects".  Logical objects group multiple entities from the ER model into structures that are based on business logic.  Because of the abstraction the structures have many aspects of object-oriented programming.  The entities in the logical object are chosen to perform some business logic, like create an order or update user information.  This allows multiple entities (i.e. SQL tables) to be accessed like a single object instead of a group of related-but-separate objects.
+2. The abstraction lets the developer create "logical objects".  Logical objects group multiple entities from the ER model into structures that are based on business logic.  Because of the abstraction the structures have many aspects of object-oriented programming.  The entities in the logical object are chosen to perform some business logic, like create an order or update user information.  This allows multiple entities (i.e. SQL tables) to be accessed like a single object instead of a group of related-but-separate objects.
 
 The structure of the logical object is laid out in the Logical Object Definition (lOD) which is the fundamental unit in Zeidon.  The LOD, combined with the abstraction, are the basis of Zeidon's power.  For a quick demonstration of a Zeidon application [check out the walk-through](QuickWalkThrough.html).  Some of the advantages of Zeidon over traditional methods for application development include the following.
 
@@ -38,15 +38,15 @@ Zeidon solves the mismatch problem with the LOD.  The LOD is built directly from
 
 ## Full Development-cycle
 
-* *DB Design* - Zeidon's ER Diagrammer and LOD tool help the developer design the DB and how it will be accessed.
+* *DB Design* - Zeidon's ER Diagrammer and LOD tool helps you design the DB and how it will be accessed.
 * *Implementation* - Zeidon's DSL make it easy to write complex queries and implement business logic.
 * *Debugging* - The Object Browser lets the developer view the data loaded into objects instances.
 
-## Better Control of Joins
-
-## Sane Lazy Loading
+## Better Control over DB Optimization
+The context of the logical object makes it easier to tailor DB optimization like joins and lazy loading to the problem.  For more details on the different options for optimization see wiki page on [improving performance](https://github.com/DeegC/zeidon-joe/wiki/Improving-Performance).
 
 ## Logical Data Locking
+Logical objects give fine-grained control over what ER entities can be updated.  This usually allows for simpler locking in situations that can lead to race conditions when updating data.  See the "Locking" section in the [Qual Walk Through](QuickWalkThrough.html) for an example.
 
 ## Trivial Asynchronous DB Loads
 Asynchronous loads are trivial with Zeidon.  Simply add the ".synchronous" qualification to the activate.  The call will return immediately; the first time the view is used it will block until the load has finished.
