@@ -833,7 +833,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
         // to the dbh... flags in EntityInstanceImpl.
         //
         //TODO: genkey flag is now available via method on cursor.  Should we change this logic?
-        final Map<Integer, Integer> genkeys = genkeyHandler.setGenKeys( genKeyObj, viewList );
+        final Map<String, Integer> genkeys = genkeyHandler.setGenKeys( genKeyObj, viewList );
         for ( final ViewImpl view : viewList )
         {
             if ( ! view.getObjectInstance().dbhNeedsGenKeys )

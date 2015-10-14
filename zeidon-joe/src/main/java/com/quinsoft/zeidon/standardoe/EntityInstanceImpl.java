@@ -105,14 +105,14 @@ class EntityInstanceImpl implements EntityInstance
      * persistentAttributes.
      *      Key = ER Attribute token
      */
-    private Map<Integer, AttributeValue> persistentAttributes;
+    private Map<String, AttributeValue> persistentAttributes;
 
     /**
      * Map of work attributes. Every entity, even linked ones, will have their
      * own set of workAttributes.
      *      Key = ER Attribute token
      */
-    private Map<Integer, AttributeValue> workAttributes;
+    private Map<String, AttributeValue> workAttributes;
 
     /**
      * List of instances linked with this one. This is a set of weak references;
@@ -673,14 +673,14 @@ class EntityInstanceImpl implements EntityInstance
     {
         AttributeDef va = validateMatchingEntities( attributeDef );
 
-        Map<Integer, AttributeValue> attributes = getInstanceMap( va );
+        Map<String, AttributeValue> attributes = getInstanceMap( va );
         if ( ! attributes.containsKey( va.getErAttributeToken() ) )
             attributes.put( va.getErAttributeToken(), new AttributeValue( va ) );
 
         return attributes.get( va.getErAttributeToken() );
     }
 
-    private Map<Integer, AttributeValue> getInstanceMap( AttributeDef attributeDef )
+    private Map<String, AttributeValue> getInstanceMap( AttributeDef attributeDef )
     {
         if ( attributeDef.isPersistent() )
             return persistentAttributes;

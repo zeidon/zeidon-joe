@@ -264,7 +264,7 @@ class AttributeValue
         }
     }
 
-    long getErAttributeToken()
+    String getErAttributeToken()
     {
         return createAttribute.getErAttributeToken();
     }

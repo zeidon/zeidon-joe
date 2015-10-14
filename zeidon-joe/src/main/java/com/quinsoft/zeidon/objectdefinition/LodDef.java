@@ -665,7 +665,7 @@ public class LodDef implements PortableFileAttributeHandler
      */
     private void computeDuplicateInstances()
     {
-        Map<Integer, List<EntityDef>> duplicateMap = new HashMap<>();
+        Map<String, List<EntityDef>> duplicateMap = new HashMap<>();
 
         for ( EntityDef entityDef : entityList )
         {
@@ -687,7 +687,7 @@ public class LodDef implements PortableFileAttributeHandler
         for ( List<EntityDef> list : duplicateMap.values() )
         {
             // Get the set of attributes that are to be activated by any entity.
-            Set<Integer> activatedAttributes = new HashSet<>();
+            Set<String> activatedAttributes = new HashSet<>();
             for ( EntityDef entityDef : list )
             {
                 for ( AttributeDef attributeDef : entityDef.getAttributes() )
@@ -701,7 +701,7 @@ public class LodDef implements PortableFileAttributeHandler
             // flag set for all entities.
             for ( EntityDef entityDef : list )
             {
-                for ( Integer erAttributetoken : activatedAttributes )
+                for ( String erAttributetoken : activatedAttributes )
                     entityDef.getAttributeByErToken( erAttributetoken ).setActivate( true );
             }
         }

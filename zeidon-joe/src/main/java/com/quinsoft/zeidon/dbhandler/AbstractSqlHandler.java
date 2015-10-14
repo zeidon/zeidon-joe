@@ -1483,11 +1483,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     @Override
-    public Map<Integer, Integer> setGenKeys(View kzgkhwob, List<? extends View> viewList )
+    public Map<String, Integer> setGenKeys(View kzgkhwob, List<? extends View> viewList )
     {
         // This map will keep track of the next assignable genkey.  The map key is
         // ER entity token.
-        Map<Integer, Integer> genkeyValues = new HashMap<Integer, Integer>();
+        Map<String, Integer> genkeyValues = new HashMap<>();
 
         acquireGenkeyLock( kzgkhwob, viewList );
 
@@ -1509,7 +1509,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                          .getAttribute( "CurrentGenkey" ).setValue( 0 );
                 }
 
-                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getInteger(),
+                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getString(),
                                   cursor.getAttribute( "CurrentGenkey" ).getInteger() + 1 );
                 Integer count = genkey.getAttribute( "EntityCount" ).getInteger();
                 Integer c = cursor.getAttribute( "CurrentGenkey" ).getInteger();

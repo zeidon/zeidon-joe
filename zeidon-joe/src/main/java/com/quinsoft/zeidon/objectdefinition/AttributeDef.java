@@ -43,7 +43,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private static final long serialVersionUID = 1L;
     private final EntityDef   entityDef;
     private String       name;
-    private int          erAttributeToken;
+    private String       erAttributeToken;
     private InternalType type = InternalType.STRING;
     private Integer      length;
 
@@ -112,9 +112,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         setDomain( config.getDomainName() );
         setDynamicAttribute( true );
 
-        // We'll set the ER attribute token to be a negative number to indicate
-        // that it's not a normal token.
-        erAttributeToken = -attributeNumber;
+        erAttributeToken = ( entityDef.toString() + "." + getName() ).intern() ;
     }
 
     @Override
@@ -173,7 +171,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
             case 'E':
                 if ( reader.getAttributeName().equals( "ERATT_TOK" ))
                 {
-                    erAttributeToken = Integer.parseInt( reader.getAttributeValue() );
+                    erAttributeToken = reader.getAttributeValue().intern();
                 }
                 break;
 
@@ -349,7 +347,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         return name;
     }
 
-    public int getErAttributeToken()
+    public String getErAttributeToken()
     {
         return erAttributeToken;
     }

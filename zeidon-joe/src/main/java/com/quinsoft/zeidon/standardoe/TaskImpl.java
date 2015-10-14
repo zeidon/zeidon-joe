@@ -88,7 +88,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     /**
      * Keep track of entity caches for this task.
      */
-    private Map<Integer, EntityCache> entityCacheMap;
+    private Map<String, EntityCache> entityCacheMap;
 
     private Map<Application, Map<String, Map<String, String>>> configOverrideMap;
 
@@ -96,7 +96,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     {
         super(app);
         isValid = true;
-        this.taskId = taskId.intern();
+        this.taskId = taskId;
         this.objectEngine = objectEngine;
 
         // Check to see if this is the system task.  It's ok to use '=' instead of '=='
