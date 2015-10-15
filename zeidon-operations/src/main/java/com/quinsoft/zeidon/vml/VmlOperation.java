@@ -7364,6 +7364,29 @@ public abstract class VmlOperation
       return 0;
    }
 
+   protected int FormatSubobjectOnDoc( View sourceOIView, String entityName, View viewToWindow,
+                                       String reportDefName, int printFlag )
+   {
+      // printFlag: 0-Print;2-PrintDlg +4-force Prt/PV/PD +8-Multi Entity
+      int nRC = 0;
+
+      // TODO - Create Code. Or is this only something for windows side?
+      
+      return nRC;
+   }
+
+   protected int FormatSubobjectOnDocWithXRP( View sourceOIView, String entityName, View viewToWindow,
+                                       String reportDefName, View reportDefView, int printFlag )
+   {
+      // printFlag: 0-Print;2-PrintDlg +4-force Prt/PV/PD +8-Multi Entity
+      int nRC = 0;
+
+      // TODO - Create Code. Or is this only something for windows side?
+      
+      return nRC;
+   }
+   
+   
    //./ ADD NAME=GetIncrementalUpdateFlags
    // Source Module=kzoeeiaa.c
    /////////////////////////////////////////////////////////////////////////////

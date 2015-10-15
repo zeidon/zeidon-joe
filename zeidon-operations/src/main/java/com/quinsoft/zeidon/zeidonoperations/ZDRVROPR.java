@@ -3220,6 +3220,7 @@ fopFactory.setUserConfig(new File("C:/Temp/mycfg.xml"));
        return 0;
     }
 
+    /* KJS - 10/15/15 - Believe this is supposed to be in VmlOperations.java
     public static final int FormatSubobjectOnDoc( View view, String string, View viewToWindow, String string2, int i )
     {
        // TODO ... DKS???
@@ -3232,6 +3233,7 @@ fopFactory.setUserConfig(new File("C:/Temp/mycfg.xml"));
        // TODO ... DKS???
        return 0;
     }
+    */
 
     public static final String GetLastCtrlTag( View view, String lastCtrl )
     {

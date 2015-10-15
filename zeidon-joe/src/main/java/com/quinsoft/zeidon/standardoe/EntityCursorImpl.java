@@ -1010,6 +1010,10 @@ class EntityCursorImpl implements EntityCursor
         {
             this.resetChildCursors( null );
             ei = getEntityInstance();
+            // KJS 10/07/15 - When I delete the last entity with cursorposition.PREV, we get here
+            // and ei is null. We will return then, otherwise getLastTwin gives null exception.
+            if ( ei == null )
+            	return CursorResult.NULL;
         }
 
         // Find the first twin.
@@ -1253,6 +1257,10 @@ class EntityCursorImpl implements EntityCursor
         {
             this.resetChildCursors( null );
             ei = getEntityInstance();
+            // KJS 10/07/15 - When I delete the last entity with cursorposition.NEXT, we get here
+            // and ei is null. We will return then, otherwise getLastTwin gives null exception.
+            if ( ei == null )
+            	return CursorResult.NULL;
         }
 
         ei = ei.getLastTwin();
