@@ -22,10 +22,12 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.ToolTipManager;
 
+import com.google.common.io.Resources;
 import com.quinsoft.zeidon.ObjectEngine;
 
 /**
@@ -52,6 +54,10 @@ public class ObjectBrowser
         mainFrame.setTitle( "Zeidon Object Browser" );
         mainFrame.setName( "Object Browser" );
         mainFrame.getContentPane().add( new MainPanel( env ) );
+        
+        URL iconUrl = Resources.getResource( "tzobrwad.png" );
+        ImageIcon image = new ImageIcon( iconUrl );
+        mainFrame.setIconImage( image.getImage() );
 
         BrowserEventHandler listener = new BrowserEventHandler();
         mainFrame.addWindowStateListener( listener );

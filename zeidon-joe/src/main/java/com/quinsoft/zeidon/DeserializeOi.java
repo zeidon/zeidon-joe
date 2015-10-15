@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -80,6 +81,8 @@ public class DeserializeOi
      * We will assume it's true unless the user explicitly sets the stream.
      */
     private boolean closeStream = true;
+
+    private String inputString;
 
     /**
      * Create a deserializer.  Client apps should use task.deserializeOi() instead
@@ -256,6 +259,7 @@ public class DeserializeOi
         try
         {
             inputStream = IOUtils.toInputStream( inputString, "UTF-8");
+            this.inputString = inputString;
             return this;
         }
         catch ( IOException e )
@@ -278,7 +282,12 @@ public class DeserializeOi
         catch ( Exception e )
         {
             ZeidonException ze = ZeidonException.wrapException( e );
-            ze.prependFilename( resourceName );
+            if ( ! StringUtils.isBlank( resourceName ) )
+                ze.prependFilename( resourceName );
+
+            if ( ! StringUtils.isBlank( inputString ) )
+                task.log().error( "OI String = %s", inputString );
+
             throw ze;
         }
     }

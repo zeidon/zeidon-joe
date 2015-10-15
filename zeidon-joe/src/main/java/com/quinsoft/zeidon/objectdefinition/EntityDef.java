@@ -62,8 +62,8 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private EntityDef  prevSibling;
     private EntityDef  nextSibling;
     private String     name;
-    private int        erEntityToken;
-    private int        erRelToken;
+    private String     erEntityToken;
+    private String     erRelToken;
     private boolean    erRelLink;  // RelLink direction.  True = '1' from the XOD file.
     private final int        depth;
     private final int        entityNumber;
@@ -93,7 +93,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * Map of attributes by ER attribute token.
      */
-    private final Map<Integer, AttributeDef> erAttributeMap = new HashMap<>();
+    private final Map<String, AttributeDef> erAttributeMap = new HashMap<>();
 
     /**
      * This map keeps track of entities that have been checked to see if 'this' entity
@@ -294,12 +294,12 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 else
                 if ( reader.getAttributeName().equals( "ERENT_TOK" ))
                 {
-                    erEntityToken = Integer.parseInt( reader.getAttributeValue() );
+                    erEntityToken = reader.getAttributeValue().intern();
                 }
                 else
                 if ( reader.getAttributeName().equals( "ERREL_TOK" ))
                 {
-                    erRelToken = Integer.parseInt( reader.getAttributeValue() );
+                    erRelToken = reader.getAttributeValue().intern();
                 }
                 else
                 if ( reader.getAttributeName().equals( "ERREL_LINK" ))
@@ -446,12 +446,24 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     }
 
+    /**
+     * Name of the entity  This string has been intern() so it is safe to use ==
+     * instead of equals().
+     * 
+     * @return internal string.
+     */
     public String getName()
     {
         return name;
     }
 
-    public int getErEntityToken()
+    /**
+     * A string ID that uniquely defines this entity from the ER.  This string has 
+     * been intern() so it is safe to use == instead of equals().
+     * 
+     * @return internal string.
+     */
+    public String getErEntityToken()
     {
         return erEntityToken;
     }
@@ -461,7 +473,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return lodDef;
     }
 
-    public void setLodDef(LodDef lodDef)
+    void setLodDef(LodDef lodDef)
     {
         this.lodDef = lodDef;
     }
@@ -557,13 +569,8 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         attributeMap.put( attributeDef.getName(), attributeDef );
         attributeMap.put( attributeDef.getName().toLowerCase(), attributeDef );
 
-        if ( attributeDef.isDynamicAttribute() )
-            assert attributeDef.getErAttributeToken() < 0;
-        else
-        {
-            assert attributeDef.getErAttributeToken() != 0;
+        if ( ! attributeDef.isDynamicAttribute() )
             erAttributeMap.put( attributeDef.getErAttributeToken(), attributeDef );
-        }
     }
 
     public AttributeDef createDynamicAttributeDef( DynamicAttributeDefConfiguration config )
@@ -618,7 +625,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return attributes.get( index );
     }
 
-    public AttributeDef getAttributeByErToken( int erToken )
+    public AttributeDef getAttributeByErToken( String erToken )
     {
         return erAttributeMap.get( erToken );
     }
@@ -773,7 +780,14 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return list.get( list.size() - 1 );
     }
 
-    public int getErRelToken()
+    /**
+     * A string ID that uniquely defines the relationship between this EntityDef
+     * and its parent.  This string has been intern() so it is safe to use ==
+     * instead of equals().
+     * 
+     * @return internal string.
+     */
+    public String getErRelToken()
     {
         return erRelToken;
     }

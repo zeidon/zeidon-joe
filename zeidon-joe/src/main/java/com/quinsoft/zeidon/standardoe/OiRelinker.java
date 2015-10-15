@@ -48,12 +48,12 @@ public class OiRelinker
      *
      * We use TIntObjectHashMap because it is faster/smaller when dealing with integer keys.
      */
-    private final Map<Integer,Map<String,EntityInstance>> entityTokens;
+    private final Map<String,Map<String,EntityInstance>> entityTokens;
 
     public OiRelinker( TaskQualification taskQual )
     {
         task = taskQual;
-        entityTokens = new HashMap<Integer, Map<String,EntityInstance>>( 10 );
+        entityTokens = new HashMap<>( 10 );
     }
 
     OiRelinker add( ObjectInstance oi )
@@ -77,7 +77,7 @@ public class OiRelinker
         // restrictive for now.
         assert ! StringUtils.isBlank( entityKeyString );
         EntityDef entityDef = ei.getEntityDef();
-        int token = entityDef.getErEntityToken();
+        String token = entityDef.getErEntityToken();
 
         Map<String, EntityInstance> tokenMap = entityTokens.get( token );
         if ( tokenMap == null )
@@ -108,7 +108,7 @@ public class OiRelinker
     public EntityInstance getInstance( EntityDef entityDef, String entityKeyString )
     {
         assert ! StringUtils.isBlank( entityKeyString );
-        int token = entityDef.getErEntityToken();
+        String token = entityDef.getErEntityToken();
 
         Map<String, EntityInstance> tokenMap = entityTokens.get( token );
         if ( tokenMap == null )

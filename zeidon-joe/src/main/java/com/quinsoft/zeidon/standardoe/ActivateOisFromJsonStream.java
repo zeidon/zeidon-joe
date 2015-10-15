@@ -328,7 +328,7 @@ class ActivateOisFromJsonStream implements StreamReader
         String fieldName = jp.getCurrentName();
 
         assert token == JsonToken.FIELD_NAME;
-        assert lodDef.getRoot().getName().equals( fieldName );
+        assert lodDef.getRoot().getName().equalsIgnoreCase( fieldName );
 
         // If the token after reading the .oimeta is END_OBJECT then the OI is empty.
         if ( token != JsonToken.END_OBJECT )
@@ -401,16 +401,8 @@ class ActivateOisFromJsonStream implements StreamReader
             {
                 String fieldName = jp.getCurrentName();
 
-                // If the token isn't a value, skip to the next token.
-                if ( token != JsonToken.VALUE_STRING &&
-                     token != JsonToken.VALUE_NUMBER_INT &&
-                     token != JsonToken.VALUE_NUMBER_FLOAT &&
-                     token != JsonToken.VALUE_NULL &&
-                     token != JsonToken.VALUE_FALSE &&
-                     token != JsonToken.VALUE_TRUE )
-                {
+                if ( token == JsonToken.FIELD_NAME || token == JsonToken.START_OBJECT )
                     token = jp.nextToken();
-                }
 
                 if ( StringUtils.equals( fieldName, ".meta" ) )
                 {

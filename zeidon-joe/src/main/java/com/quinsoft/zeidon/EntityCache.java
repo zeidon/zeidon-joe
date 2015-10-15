@@ -25,8 +25,8 @@ public class EntityCache
     private final View      qualOi;
     private final String    cacheName;
     private final Task      task;
-    private final Integer   erEntityToken;
-    private final Set<Integer> relationships = new HashSet<>();
+    private final String    erEntityToken;
+    private final Set<String> relationships = new HashSet<>();
 
     public EntityCache( View cacheView, View qualOi, String cacheName )
     {
@@ -76,7 +76,7 @@ public class EntityCache
                                  + "specfied on the key ");
     }
 
-    public Integer getErEntityToken()
+    public String getErEntityToken()
     {
         return erEntityToken;
     }
@@ -107,7 +107,7 @@ public class EntityCache
     /**
      * @return a set of the ER Rel tokens for all the child entities of this LOD.
      */
-    public Set<Integer> getRelationships()
+    public Set<String> getRelationships()
     {
         return relationships;
     }
