@@ -35,6 +35,7 @@ import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.Timer;
 
 /**
@@ -55,13 +56,13 @@ class CommitMultiplOIs
      * have explicit authority to do the include for all the OIs.
      */
     private Map<Object,Object> includableRelationships;
-    
+
     /**
      * This will hold the pairings of all the excludes that
      * have explicit authority to do the exclude for all the OIs.
      */
     private Map<Object,Object> excludableRelationships;
-    
+
     /**
      * This is used to determine where an OI is activated from.
      * Some day this may be provided by the OE options.
@@ -135,6 +136,10 @@ class CommitMultiplOIs
             if ( v.isReadOnly() )
                 throw new ZeidonException("Attempting to commit read-only view.  View = %s", v.getLodDef().getName() );
 
+            LodDef lodDef = v.getLodDef();
+            if ( ! lodDef.hasPhysicalMappings() )
+                throw new ZeidonException("Attempting to commit OI with no physical mappings.  LOD = %s", lodDef.getName() );
+
             ViewImpl view = ((InternalView) v).getViewImpl();
             ObjectInstance oi = view.getObjectInstance();
             if ( oi.isVersioned() )
@@ -148,7 +153,7 @@ class CommitMultiplOIs
                                       "View ID = %s", view.toString() );
                 view.logObjectInstance();
             }
-            
+
             viewList.add( view );
         }
 
@@ -196,8 +201,8 @@ class CommitMultiplOIs
      * @param permissionChecker
      * @return
      */
-    private boolean validatePermissionForEi( EntityInstanceImpl ei, 
-                                             Set<ObjectInstance> oiSet, 
+    private boolean validatePermissionForEi( EntityInstanceImpl ei,
+                                             Set<ObjectInstance> oiSet,
                                              HasPermission permissionChecker,
                                              Map<Object, Object> permissionMap )
     {
@@ -207,7 +212,7 @@ class CommitMultiplOIs
         // Does the EI have permission?
         if ( permissionChecker.hasPermission( ei ) )
             return true;
-        
+
         EntityInstanceImpl parent = ei.getParent();
         if ( permissionMap != null && parent != null )
         {
@@ -216,7 +221,7 @@ class CommitMultiplOIs
             // have explicit permission to do the include/exclude.  We'll use the
             // permission map to see if the same relationship exists in linked EIs
             // that does have permission.
-            
+
             // Check relationship in one direction.
             if ( permissionMap.get( ei.getUniqueLinkedObject() ) == parent.getUniqueLinkedObject() )
                 return true;
@@ -229,7 +234,7 @@ class CommitMultiplOIs
             // then we have a problem.
             return false;
         }
-        
+
         // If we get here then the EI doesn't have permission to perform its operation.
         // We need to go through all the entities linked with ei to see if *they* have
         // permission.  We'll start by creating a list of valid linked EIs.
@@ -238,7 +243,7 @@ class CommitMultiplOIs
         {
             EntityDef linkedEntityDef = linked.getEntityDef();
             assert linkedEntityDef.getErEntityToken() == ei.getEntityDef().getErEntityToken() : "Mismatching ER tokens";
-            
+
             if ( linkedEntityDef.isDerivedPath() )
                 continue;
 
@@ -248,10 +253,10 @@ class CommitMultiplOIs
 
             linkedEis.add( linked );
         }
-        
+
         if ( linkedEis.size() == 0 )
             return false;
-        
+
         // First check the simple case.  Do any of the linked EIs have the same parent
         // relationship with permission?
         for ( EntityInstanceImpl linked : linkedEis )
@@ -270,7 +275,7 @@ class CommitMultiplOIs
      * This creates two maps, one for includes and one for excludes.  Each map will contain
      * all the includes/excludes that have explicit permission (via EntityDef flags) to do
      * the include/exclude.
-     * 
+     *
      * The keys and values of the maps are taken from ei.getUniqueLinkedObject().  This allows
      * us to do a quick verification for authority for all linked EIs.
      */
@@ -278,17 +283,17 @@ class CommitMultiplOIs
     {
         includableRelationships = new HashMap<>();
         excludableRelationships = new HashMap<>();
-        
+
         for ( ViewImpl view : viewList )
         {
             ObjectInstance oi = view.getObjectInstance();
             for ( EntityInstanceImpl ei : oi.getEntities( true ) )
             {
                 EntityInstanceImpl parent = ei.getParent();
-                
+
                 if ( parent == null )
                     continue;
-                
+
                 EntityDef entityDef = ei.getEntityDef();
                 if ( entityDef.isDerivedPath() )
                     continue;
@@ -307,9 +312,9 @@ class CommitMultiplOIs
                 }
             } // each entityInstance
         } // each view
-        
+
     }
-    
+
     /**
      * For each entity instance that has been changed in all the OIs, make sure that
      * one of the OI's has the permission to create/delete/update/etc.
@@ -320,7 +325,7 @@ class CommitMultiplOIs
     {
         boolean missingPermission = false;
         accumulatePermissionMaps();
-        
+
         for ( ViewImpl view : viewList )
         {
             ObjectInstance oi = view.getObjectInstance();
