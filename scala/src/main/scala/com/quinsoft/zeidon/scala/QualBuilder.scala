@@ -523,6 +523,17 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     /**
+     * Indicates that the resulting view (and backing OI) should be read-only if 'readOnly'
+     * is true.
+     */
+    def readOnly( readOnly: Boolean = true ) = {
+        if ( readOnly )
+            jqual.readOnly()
+            
+        this
+    }
+
+    /**
      * Indicates this activate should be done asynchronously.
      *
      * An asynchronous activate will create a view that will block the first
