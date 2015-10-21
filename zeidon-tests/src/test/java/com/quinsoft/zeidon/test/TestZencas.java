@@ -4945,7 +4945,7 @@ mUser_ActivateUserLST(  View     ViewToSubtask )
    //if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
    //    return false;
    // Which does give me a correct sql statement here but then I get asserts errors in
-   // testActivateRootOnly, because the activate isn't ROOT ONLY.
+   // testActivateRootOnly, because the activate isn't ROOT ONLY (but in mUser_Activate... it is root only... odd)
 
 
    /*
