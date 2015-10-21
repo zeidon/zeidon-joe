@@ -580,7 +580,7 @@ omPerson_ObjectConstraint( View     mPerson,
          //: // Relink PrimaryAddress with Address.
          //: IF mPerson2.PrimaryAddress EXISTS
          lTempInteger_0 = CheckExistenceOfEntity( mPerson2, "PrimaryAddress" );
-         if ( lTempInteger_0 == 0 )
+         if ( CheckExistenceOfEntity( mPerson2, "PrimaryAddress" ) == 0 && CheckExistenceOfEntity( mPerson2, "Address" ) == 0)
          { 
             //: SET CURSOR FIRST mPerson2.Address WHERE mPerson2.Address.ID = mPerson2.PrimaryAddress.ID
             {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );

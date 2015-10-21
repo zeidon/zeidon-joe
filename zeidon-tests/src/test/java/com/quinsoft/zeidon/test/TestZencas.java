@@ -970,6 +970,16 @@ public class TestZencas
         System.out.println("===== Finished testDerivedDerived ========");
 	}
 
+	@Test
+	public void mUser_ActivateUserLST()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mUser_ActivateUserLST( testview );
+        System.out.println("===== Finished mUser_ActivateUserLST ========");
+	}
+
 //	@Test
 	public void testTimeFormatting()
 	{
@@ -4915,5 +4925,134 @@ public class TestZencas
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
+		
+
+public int 
+mUser_ActivateUserLST(  View     ViewToSubtask )
+{
+   zVIEW    mUser = new zVIEW( );
+   zVIEW    vTempViewVar_0 = new zVIEW( );
+   int      RESULT = 0;
+   
+   // In this test I have two exact activate statements except one is MULTIPLE, the other is ROOTONLYMULTIPLE and
+   // both contain a mUser.UserGroup EXISTS (if I don't have the EXISTS, then there is no error).
+   // In the MULTIPLE activate everything seems fine but in the ROOTONLYMULTIPLE activate, we do not have
+   // the JOIN as part of the select statement (see below statement). This works with sqlite but does
+   // not work with sqlserver where we get an error:
+   // Msg 156, Level 15, State 1, Line 9
+   // Incorrect syntax near the keyword 'ON'.
+   // I tried commenting out the following lines in AbstractSqlHandler.activatingWithJoins()
+   //if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
+   //    return false;
+   // Which does give me a correct sql statement here but then I get asserts errors in
+   // testActivateRootOnly, because the activate isn't ROOT ONLY.
+
+
+   /*
+   ACTIVATE mUser MULTIPLE 
+            WHERE ( mUser.User.Status = "A" ) AND
+            (mUser.User.UserName = "ddennis" OR mUser.User.UserName = "testerpl" OR mUser.User.UserName = "monicak")
+             AND mUser.UserGroup EXISTS
+             
+SELECT z_USER.ID, z_USER.USERNAME, z_USER.PASSWORD, z_USER.JAVAPASSWORD, z_USER.STATUS, z_USER.AUTHORIZATIONLEVEL,
+       z_USER.EMAILADDRESS, z_USER.EMAILPASSWORD, z_USER.EMAILUSERNAME, z_USER.LOGINAUTHENTICTNTY,
+       z_USER.MODIFIEDDATETIME, z_USER.OVERRIDESTATUS, z_USER.ONLNPRSPCTINTLCRTD, z_USER.SECURITYANSWER1,
+       z_USER.SECURITYANSWER2, z_USER.SECURITYANSWER3, z_USER.SECURITYQUESTION1, z_USER.SECURITYQUESTION2,
+       z_USER.SECURITYQUESTION3, z_USER.SMTPSERVER, z_USER.ACTIVE, z_USER.WEBBROADCASTMSSGFL, z_USER.CREATEDBY,
+       z_USER.CREATEDDATETIME, z_USER.LASTMODIFIEDBY, z_USER.MERGEOUTPUTFILENAM, z_USER.LASTLOGINDATETIME,
+       z_USER.FKIDADMINISTRATIVE, z_USER.FK_ID_PERSON, z_USER.PRSPCTINTLAPLCTNPR, z_USER.z_NOTE
+FROM  z_USER JOIN
+       MM_USERGROUP_CONTANSMMBR_Z_USE ON MM_USERGROUP_CONTANSMMBR_Z_USE.FK_ID_Z_USER = z_USER.ID JOIN
+       USERGROUP ON USERGROUP.ID = MM_USERGROUP_CONTANSMMBR_Z_USE.FK_ID_USERGROUP
+WHERE  ( z_USER.STATUS = 'A' )  AND  ( z_USER.USERNAME = 'halll' OR z_USER.USERNAME = 'hardeem' OR z_USER.USERNAME =
+       'murphyr' )  AND USERGROUP.ID  IS NOT NULL ;
+
+   ACTIVATE mUser RootOnlyMultiple 
+            WHERE ( mUser.User.Status = "A" ) AND
+            (mUser.User.UserName = "ddennis" OR mUser.User.UserName = "testerpl" OR mUser.User.UserName = "monicak")
+             AND mUser.UserGroup EXISTS
+
+SELECT z_USER.ID, z_USER.USERNAME, z_USER.PASSWORD, z_USER.JAVAPASSWORD, z_USER.STATUS, z_USER.AUTHORIZATIONLEVEL,
+       z_USER.EMAILADDRESS, z_USER.EMAILPASSWORD, z_USER.EMAILUSERNAME, z_USER.LOGINAUTHENTICTNTY,
+       z_USER.MODIFIEDDATETIME, z_USER.OVERRIDESTATUS, z_USER.ONLNPRSPCTINTLCRTD, z_USER.SECURITYANSWER1,
+       z_USER.SECURITYANSWER2, z_USER.SECURITYANSWER3, z_USER.SECURITYQUESTION1, z_USER.SECURITYQUESTION2,
+       z_USER.SECURITYQUESTION3, z_USER.SMTPSERVER, z_USER.ACTIVE, z_USER.WEBBROADCASTMSSGFL, z_USER.CREATEDBY,
+       z_USER.CREATEDDATETIME, z_USER.LASTMODIFIEDBY, z_USER.MERGEOUTPUTFILENAM, z_USER.LASTLOGINDATETIME,
+       z_USER.FKIDADMINISTRATIVE, z_USER.FK_ID_PERSON, z_USER.PRSPCTINTLAPLCTNPR, z_USER.z_NOTE
+FROM  z_USER, MM_USERGROUP_CONTANSMMBR_Z_USE ON MM_USERGROUP_CONTANSMMBR_Z_USE.FK_ID_Z_USER = z_USER.ID, USERGROUP ON
+       USERGROUP.ID = MM_USERGROUP_CONTANSMMBR_Z_USE.FK_ID_USERGROUP
+WHERE  ( z_USER.STATUS = 'A' )  AND  ( z_USER.USERNAME = 'halll' OR z_USER.USERNAME = 'hardeem' OR z_USER.USERNAME =
+       'murphyr' )  AND USERGROUP.ID  IS NOT NULL ;
+
+             
+    */
+   omUser_fnLocalBuildQualActivateUserLST( ViewToSubtask, vTempViewVar_0 );
+   RESULT = ActivateObjectInstance( mUser, "mUser", ViewToSubtask, vTempViewVar_0, zMULTIPLE );
+
+   DropView( mUser );
+   RESULT = ActivateObjectInstance( mUser, "mUser", ViewToSubtask, vTempViewVar_0, zACTIVATE_ROOTONLY_MULTIPLE );
+   DropView( vTempViewVar_0 );
+
+   //://NAME VIEW  mUser  "mUserLST"
+   //:SetNameForView( mUser, "mUserLST", ViewToSubtask, zLEVEL_APPLICATION )
+   SetNameForView( mUser, "mUserLST", ViewToSubtask, zLEVEL_APPLICATION );
+   return( 0 );
+// END
+} 
+
+
+private int 
+omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
+                           zVIEW    vQualObject )
+{
+	   int      RESULT = 0;
+
+	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "User" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "(" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "User" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "Status" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "A" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "(" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "User" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "UserName" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "halll" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "User" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "UserName" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "hardeem" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "User" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "UserName" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "murphyr" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+	   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "UserGroup" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
+	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "EXISTS" );
+	   return( 0 );
+} 
+		
    }
 }
