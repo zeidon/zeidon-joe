@@ -18,13 +18,11 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.util.Collection;
 import java.util.EnumSet;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
-import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -64,6 +62,8 @@ class ActivateOiFromDB implements Activator
         this.options = options;
         control = options.getActivateFlags();
         lodDef = options.getLodDef();
+        if ( ! lodDef.hasPhysicalMappings() )
+            throw new ZeidonException("Attempting to activate OI with no physical mappings.  LOD = %s", lodDef.getName() );
 
         JdbcHandlerUtils helper = new JdbcHandlerUtils( options, lodDef.getDatabase() );
         dbHandler = helper.getDbHandler();
@@ -82,11 +82,11 @@ class ActivateOiFromDB implements Activator
         ObjectInstance oi = view.getObjectInstance();
 
         // TODO: We don't check for locks that don't even allow reads.
-        PessimisticLockingHandler pessimisticLlock = null;
+        PessimisticLockingHandler pessimisticLock = null;
         if ( options.getLockingLevel().isPessimisticLock() && ! options.isReadOnly() )
         {
-            pessimisticLlock = view.getPessimisticLockingHandler();
-            pessimisticLlock.initialize( options );
+            pessimisticLock = view.getPessimisticLockingHandler();
+            pessimisticLock.initialize( options );
         }
 
         try
@@ -99,9 +99,9 @@ class ActivateOiFromDB implements Activator
                 // Check the pessimistic locks.  We need to do this after we load the OI because
                 // databases (sqlite--grrrrr) can't handle two open connections updating the DB
                 // at the same time.
-                if ( pessimisticLlock != null )
+                if ( pessimisticLock != null )
                 {
-                    pessimisticLlock.acquireLocks( view );
+                    pessimisticLock.acquireLocks( view );
                     view.getTask().addLockedView( view );
                     view.getObjectInstance().setLocked( true );
                 }
@@ -109,18 +109,18 @@ class ActivateOiFromDB implements Activator
                 view.reset();
                 if ( options.isReadOnly() )
                     view.getObjectInstance().setReadOnly( true );
-                
+
                 view.getLodDef().executeActivateConstraint( view );
     		}
-            
+
             task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
 
             return view;
         }
         finally
         {
-            if ( pessimisticLlock != null )
-                pessimisticLlock.cleanup();
+            if ( pessimisticLock != null )
+                pessimisticLock.cleanup();
         }
     }
 
