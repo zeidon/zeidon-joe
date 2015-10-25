@@ -1,5 +1,4 @@
 ---
-title: Zeidon
 layout: default
 ---
 
@@ -7,9 +6,9 @@ layout: default
 This is the main page for learning about the Zeidon, the Java Object Engine (JOE) and related projects.
 
 ## What is Zeidon?
-Zeidon is an application framework for developing data-oriented applications.  It enables engineers to design their solutions at a higher level of abstraction to separate the business logic from the underlying storage system.  Zeidon developers use the abstraction to build "logical objects" which group multiple entities from the ER model into structures that are given object-oriented traits.  The abstraction also eliminates the the impedance mismatch that occurs between relational DBs and OOP applications.
+Zeidon is an application framework for developing data-oriented applications.  It enables engineers to design their solutions at a higher level of abstraction to separate the business logic from the underlying storage system.  Zeidon developers use the abstraction to build "logical objects" which group multiple entities from the ER model into structures that are given object-oriented traits.  The abstraction also eliminates the impedance mismatch that occurs between relational DBs and OOP applications.
 
-Zeidon does all the work of an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) but it does much more than a traditional ORM.  For more details see [What Is Zeidon?](WhatIsZeidon.html).  
+Zeidon does all the work of an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) but it does much more than a traditional ORM.  For more details see [What Is Zeidon?](WhatIsZeidon.html)
 
 ## Additional information:
 
