@@ -902,6 +902,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      */
     void reassignTask( Task task )
     {
+        // Do we care if we're reassigning to a non-system task?  It probably will never
+        // happen but why restrict it?
         assert task == task.getSystemTask() : "Attempting to reassign to a non-system task.";
         getObjectInstance().setTask( (TaskImpl) task );
     }
