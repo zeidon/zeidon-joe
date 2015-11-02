@@ -746,8 +746,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( activateFlags.contains( ActivateFlags.fIGNORE_JOINS ) )
             return false;
 
-        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
-            return false;
+//        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
+//            return false;
 
         // Check the zeidon.ini file.
         if ( ignoreJoins() )
@@ -870,6 +870,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // join it.
         if ( getEntityCache( entityDef ) != null )
             return false;
+        
+        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) && entityDef.getParent() != null )
+            return false;
+        
 
         // We can't join a child to its parent if there is an activate limit on the
         // parent AND if the child has a x-to-many relationship.  Joining the parent
