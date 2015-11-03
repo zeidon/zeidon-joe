@@ -2292,6 +2292,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 where.append( o );
         }
 
+        /**
+         * Adds the default ordering for entityDef as defined in the LOD.
+         *
+         * @param entityDef
+         */
         void appendOrdering( EntityDef entityDef )
         {
             final AttributeDef autoSeq = entityDef.getAutoSeq();
