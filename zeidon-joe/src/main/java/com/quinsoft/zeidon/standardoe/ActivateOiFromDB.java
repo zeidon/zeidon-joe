@@ -54,12 +54,12 @@ class ActivateOiFromDB implements Activator
         assert options != null;
 
         this.task = (TaskImpl) task;
-        
+
         // View will be non-null when we're performing a lazy-load.
         if ( view == null )
-            view = new ViewImpl( (TaskImpl) task, options.getLodDef() );
-        
-        this.view = ((InternalView) view).getViewImpl();
+            this.view = (ViewImpl) task.activateEmptyObjectInstance( options.getLodDef() );
+        else
+            this.view = ((InternalView) view).getViewImpl();
 
         this.qual = options.getQualificationObject();
         this.options = options;
@@ -70,7 +70,7 @@ class ActivateOiFromDB implements Activator
 
         JdbcHandlerUtils helper = new JdbcHandlerUtils( options, lodDef.getDatabase() );
         dbHandler = helper.getDbHandler();
-        return view;
+        return this.view;
     }
 
     /**

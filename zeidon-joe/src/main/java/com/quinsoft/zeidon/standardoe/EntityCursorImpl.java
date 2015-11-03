@@ -62,8 +62,6 @@ class EntityCursorImpl implements EntityCursor
     private final ViewCursor       viewCursor;
     private final EntityCursorImpl parentCursor;
 
-    private EntityCursorImpl   prevHier;
-    private EntityCursorImpl   nextHier;
     private EntityIterator<EntityInstanceImpl> currentIterator;
 
     /**
@@ -77,12 +75,16 @@ class EntityCursorImpl implements EntityCursor
      */
     private EntityInstanceImpl entityInstance;
 
-    EntityCursorImpl(ViewCursor viewCursor, EntityDef entityDef, EntityCursorImpl parentCsr)
+    EntityCursorImpl(ViewCursor viewCursor, EntityDef entityDef)
     {
         this.viewCursor = viewCursor;
         this.entityDef = entityDef;
-        this.parentCursor = parentCsr;
-        assert parentCsr != null || entityDef.getParent() == null : "Parent Cursor not set correctly";
+        if ( entityDef.getParent() == null )
+            parentCursor = null;
+        else
+            parentCursor = viewCursor.getEntityCursor( entityDef.getParent() );
+
+        assert parentCursor != null || entityDef.getParent() == null : "Parent Cursor not set correctly";
         setEntityInstance( null );
     }
 
@@ -93,9 +95,9 @@ class EntityCursorImpl implements EntityCursor
      * @param source
      * @param parentCsr
      */
-    EntityCursorImpl( ViewCursor viewCursor, EntityCursorImpl source, EntityCursorImpl parentCsr )
+    EntityCursorImpl( ViewCursor viewCursor, EntityCursorImpl source )
     {
-        this( viewCursor, source.getEntityDef(), parentCsr );
+        this( viewCursor, source.getEntityDef() );
         setEntityInstance( source.entityInstance );
         if ( source.currentIterator != null)
             currentIterator = IteratorBuilder.build( source.currentIterator, this );
@@ -686,34 +688,22 @@ class EntityCursorImpl implements EntityCursor
         return cursorResult;
     }
 
-    EntityCursorImpl getPrevHier()
+    private EntityCursorImpl getOtherCursor( EntityDef entityDef )
     {
-        return prevHier;
+        if ( entityDef == null )
+            return null;
+
+        return getViewCursor().getEntityCursor( entityDef );
     }
 
-    /**
-     * Sets the prev *cursor*.  Used when building a new ViewCursor.
-     *
-     * @param prevHier
-     */
-    void setPrevHier(EntityCursorImpl prevHier)
+    EntityCursorImpl getPrevHier()
     {
-        this.prevHier = prevHier;
+        return getOtherCursor( getEntityDef().getPrevHier() );
     }
 
     EntityCursorImpl getNextHierCursor()
     {
-        return nextHier;
-    }
-
-    /**
-     * Sets the next *cursor*.  Used when building a new ViewCursor.
-     *
-     * @param prevHier
-     */
-    void setNextHierCursor(EntityCursorImpl nextHier)
-    {
-        this.nextHier = nextHier;
+        return getOtherCursor( getEntityDef().getNextHier() );
     }
 
     @Override

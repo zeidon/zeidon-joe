@@ -441,7 +441,7 @@ public class JdbcHandler extends AbstractSqlHandler
                             // We've already loaded this entity instance.  Set the cursor and stop
                             // loading the attributes for this instance.  We need to set the cursor because
                             // we might be loading instances that are children of entityDef.
-                            view.cursor(  entityDef ).setCursor( entityInstance );
+                            view.cursor( entityDef ).setCursor( entityInstance );
                             break;
                         }
 

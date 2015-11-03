@@ -87,28 +87,10 @@ class ViewCursor
         {
             int idx = entityDef.getHierIndex();
 
-            EntityCursorImpl parentCsr = null;
-            EntityDef parent = entityDef.getParent();
-            if ( parent != null )
-            {
-                int parentIdx = parent.getHierIndex();
-                parentCsr = cursorList[ parentIdx ];
-            }
-
             if ( sourceCursor != null )
-                cursorList[ idx ] = new EntityCursorImpl( this, sourceCursor.cursorList[ idx ], parentCsr );
+                cursorList[ idx ] = new EntityCursorImpl( this, sourceCursor.cursorList[ idx ] );
             else
-                cursorList[ idx ] = new EntityCursorImpl( this, entityDef, parentCsr );
-        }
-
-        // Set the next/prev pointers.
-        for ( int i = 0; i < cursorList.length; i++ )
-        {
-            if ( i > 0 )
-                cursorList[i].setPrevHier( cursorList[i - 1] );
-
-            if ( i < cursorList.length - 1 )
-                cursorList[i].setNextHierCursor( cursorList[i + 1] );
+                cursorList[ idx ] = new EntityCursorImpl( this, entityDef );
         }
 
         if ( oi != null )
