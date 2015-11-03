@@ -28,6 +28,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
@@ -227,7 +228,16 @@ public class QualificationBuilder
     {
         return asynchronous();
     }
-
+    
+    public QualificationBuilder setPagination( Pagination pagingOptions )
+    {
+        if ( activateOptions.getPagingOptions() != null )
+            throw new ZeidonException( "Pagination options has already been set." );
+        
+        activateOptions.setPagingOptions( pagingOptions );
+        return this;
+    }
+    
     public QualificationBuilder asynchronous()
     {
         /*  Why can't we do async?  Removing this for now.

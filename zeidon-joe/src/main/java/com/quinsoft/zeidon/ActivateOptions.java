@@ -51,6 +51,8 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     private String qualificationName;
 
     private boolean performingLazyLoad = false;
+    
+    private Pagination pagingOptions = null;
 
     public ActivateOptions( TaskQualification task )
     {
@@ -274,5 +276,15 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     public void setPerformingLazyLoad( boolean performingLazyLoad )
     {
         this.performingLazyLoad = performingLazyLoad;
+    }
+
+    public Pagination getPagingOptions()
+    {
+        return pagingOptions;
+    }
+
+    public void setPagingOptions( Pagination pagingOptions )
+    {
+        this.pagingOptions = pagingOptions;
     }
 }

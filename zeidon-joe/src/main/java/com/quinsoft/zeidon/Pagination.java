@@ -18,14 +18,31 @@
  */
 package com.quinsoft.zeidon;
 
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+
 /**
  * Sets up pagination options to be used as part of an activate.
  *
  */
 public class Pagination
 {
-
+    private int pageSize = 1000;
+    private boolean rollingPagination = true;
+    private boolean asynchronousFetch = false;
+    private AttributeDef orderingAttribute = null;
+    
     public Pagination()
     {
+    }
+
+    public boolean isRollingPagination()
+    {
+        return rollingPagination;
+    }
+
+    public Pagination setRollingPagination( boolean rollingPagination )
+    {
+        this.rollingPagination = rollingPagination;
+        return this;
     }
 }

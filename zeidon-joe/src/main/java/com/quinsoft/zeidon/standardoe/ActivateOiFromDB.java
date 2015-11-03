@@ -54,8 +54,11 @@ class ActivateOiFromDB implements Activator
         assert options != null;
 
         this.task = (TaskImpl) task;
+        
+        // View will be non-null when we're performing a lazy-load.
         if ( view == null )
-            view = task.activateEmptyObjectInstance( options.getLodDef() );
+            view = new ViewImpl( (TaskImpl) task, options.getLodDef() );
+        
         this.view = ((InternalView) view).getViewImpl();
 
         this.qual = options.getQualificationObject();
