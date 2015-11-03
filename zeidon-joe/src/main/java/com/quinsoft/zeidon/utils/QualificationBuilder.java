@@ -490,10 +490,22 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .getAttribute( ENTITYNAME).setValue( entityName )
-                                     .getAttribute( ATTRIBUTENAME).setValue( attribName )
-                                     .getAttribute( OPER).setValue( oper )
-                                     .getAttribute( VALUE).setValue( attribValue == null ? null : attribValue.toString() ) ;
+                                     .getAttribute( ENTITYNAME ).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( attribName )
+                                     .getAttribute( OPER ).setValue( oper )
+                                     .getAttribute( VALUE ).setValue( attribValue == null ? null : attribValue.toString() ) ;
+
+        return this;
+    }
+
+    public QualificationBuilder addActivateOrdering( String entityName, String attribName, boolean descending )
+    {
+        validateEntity();
+        qualView.cursor( QUALATTRIB ).createEntity()
+                                     .getAttribute( ENTITYNAME ).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( attribName )
+                                     .getAttribute( OPER ).setValue( "ORDERBY" )
+                                     .getAttribute( VALUE ).setValue( descending ? "DESC" : "ASC" ) ;
 
         return this;
     }

@@ -556,6 +556,23 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     }
                 }
 
+                if ( qualAttrib.oper.equals( "ORDERBY" ) )
+                {
+                    if ( qualAttrib.attributeDef == null )
+                        throw new ZeidonException("Using Order By in qualification requires an attribute name" );
+
+                    boolean descending = false;
+
+                    if ( ! qualAttribInstance.getAttribute( "Value"  ).isNull() ) {
+                        String str = qualAttribInstance.getAttribute( "Value"  ).getString().toLowerCase();
+                        descending =  str.startsWith( "desc" );
+                    }
+
+                    qualEntity.addOrderBy( qualAttrib.attributeDef, descending );
+                    continue;
+                }
+
+
                 //
                 // Verify Value
                 //
@@ -870,10 +887,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // join it.
         if ( getEntityCache( entityDef ) != null )
             return false;
-        
+
         if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) && entityDef.getParent() != null )
             return false;
-        
+
 
         // We can't join a child to its parent if there is an activate limit on the
         // parent AND if the child has a x-to-many relationship.  Joining the parent
@@ -947,7 +964,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         if ( qualEntity != null )
         {
-            addQualification( stmt, view, entityDef );
+            addQualification( qualEntity, stmt, view, entityDef );
 
             // If the parent is non-null then we added foreign keys above.  Add
             // the closing paren.
@@ -955,11 +972,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 stmt.appendWhere( ")" );
         }
 
-        // TODO: Add ORDER BY if we have an activate limit.
-
-        stmt.appendOrdering( entityDef );
+        addOrdering( entityDef, stmt );
         for ( EntityDef child : joinedChildren )
-            stmt.appendOrdering( child );
+            addOrdering( child, stmt );
 
         if ( qualEntity != null && qualEntity.activateLimit != null )
             addActivateLimit( qualEntity.activateLimit, stmt );
@@ -972,6 +987,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // parent load and will not need to be loaded separately.
         loadedViewEntities.addAll( joinedChildren );
         return null;
+    }
+
+    private void addOrdering( EntityDef entityDef, SqlStatement stmt )
+    {
+        QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity == null || ! qualEntity.hasOrdering() )
+            stmt.appendOrdering( entityDef );
     }
 
     /**
@@ -1333,10 +1355,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return qualString;
     }
 
-    private void addQualification(SqlStatement stmt, View view, EntityDef entityDef)
+    private void addQualification( QualEntity qualEntity, SqlStatement stmt, View view, EntityDef entityDef)
     {
-        QualEntity qualEntity = qualMap.get( entityDef );
-
         /*
          * If this qualification has a DOES NOT EXIST clause then we need to
          * use a left join when adding tables.
@@ -1654,7 +1674,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         if ( entityDef.getAutoSeq() != null )
-            stmt.appendOrdering( entityDef.getAutoSeq() );
+            throw new ZeidonException( "Adding autoseq" );
+//            stmt.appendOrdering( entityDef.getAutoSeq() );
 
         return true;
     }
@@ -2553,7 +2574,19 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
     } // class SqlStatement
 
-    private static class QualEntity
+    protected static class ActivateOrder
+    {
+        protected AttributeDef attributeDef;
+        protected boolean      descending = false;
+
+        protected ActivateOrder( AttributeDef attributeDef, boolean descending )
+        {
+            this.attributeDef = attributeDef;
+            this.descending = descending;
+        }
+    }
+
+    protected static class QualEntity
     {
         private boolean                usesChildQualification;
         private boolean                exclude;
@@ -2562,6 +2595,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private final EntityInstance   qualEntityInstance;
         private final EntityDef        entityDef;
         private final List<QualAttrib> qualAttribs;
+        private List<ActivateOrder>    ordering;
 
         /**
          * Keeps track of the EntityDefs that are used as part of this qualification.
@@ -2597,6 +2631,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 usesChildQualification = true;
                 usesEntityDefs.add( qualAttrib.entityDef );
             }
+        }
+
+        protected boolean hasOrdering()
+        {
+            return ordering != null;
+        }
+
+        protected List<ActivateOrder> getOrdering()
+        {
+            return ordering;
+        }
+
+        protected void addOrderBy( AttributeDef attributeDef, boolean descending )
+        {
+            if ( ordering == null )
+                ordering = new ArrayList<>();
+
+            ordering.add( new ActivateOrder( attributeDef, descending ) );
         }
 
         @Override

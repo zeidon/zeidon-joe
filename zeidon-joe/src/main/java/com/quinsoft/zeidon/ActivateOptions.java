@@ -18,10 +18,13 @@
  */
 package com.quinsoft.zeidon;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -53,7 +56,8 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     private boolean performingLazyLoad = false;
     
     private Pagination pagingOptions = null;
-
+    
+    
     public ActivateOptions( TaskQualification task )
     {
         super( task.getTask() );
