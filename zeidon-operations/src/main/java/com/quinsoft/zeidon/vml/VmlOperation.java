@@ -1136,7 +1136,7 @@ public abstract class VmlOperation
       if ( isValid( view ) ) {
          inServer = view.readZeidonConfig( view.getApplication().getName(), "InServer" );
       }
-      if ( inServer.equals( "Y" ) ) {
+      if ( inServer != null && inServer.equals( "Y" ) ) {
          view.log( ).info( msgTitle + " " + msgText );
       } else {
          JoeUtils.sysMessageBox( msgTitle, msgText );
