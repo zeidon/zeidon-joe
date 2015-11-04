@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -563,7 +564,11 @@ public class JoeUtils
 
     public static final void sysMessageBox( String msgTitle, String msgText )
     {
-        JOptionPane.showMessageDialog( null, msgText, msgTitle, JOptionPane.PLAIN_MESSAGE );
+        //JOptionPane.showMessageDialog( null, msgText, msgTitle, JOptionPane.PLAIN_MESSAGE );
+        JOptionPane pane = new JOptionPane(msgText, JOptionPane.INFORMATION_MESSAGE); 
+        JDialog dialog = pane.createDialog(msgTitle); 
+        dialog.setAlwaysOnTop(true); 
+        dialog.setVisible(true);
     }
 
     /**
