@@ -59,8 +59,8 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 class EntityCursorImpl implements EntityCursor
 {
     private final EntityDef        entityDef;
+    private final EntityDef        parentEntityDef;
     private final ViewCursor       viewCursor;
-    private final EntityCursorImpl parentCursor;
 
     private EntityIterator<EntityInstanceImpl> currentIterator;
 
@@ -79,12 +79,7 @@ class EntityCursorImpl implements EntityCursor
     {
         this.viewCursor = viewCursor;
         this.entityDef = entityDef;
-        if ( entityDef.getParent() == null )
-            parentCursor = null;
-        else
-            parentCursor = viewCursor.getEntityCursor( entityDef.getParent() );
-
-        assert parentCursor != null || entityDef.getParent() == null : "Parent Cursor not set correctly";
+        parentEntityDef = entityDef.getParent();
         setEntityInstance( null );
     }
 
@@ -277,7 +272,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public EntityInstanceImpl getParent()
     {
-        if ( parentCursor == null )
+        if ( getParentCursor() == null )
             return null;
 
         // If this entity is a recursive parent and the current view is in a subobject
@@ -295,10 +290,10 @@ class EntityCursorImpl implements EntityCursor
             }
             else
                 return getViewCursor().getRecursiveRoot().getParent();
-//                assert getViewCursor().getRecursiveRoot().getParent() == parentCursor.getExistingInstance();
+//                assert getViewCursor().getRecursiveRoot().getParent() == getParentCursor().getExistingInstance();
         }
 
-        EntityInstanceImpl parent = parentCursor.getExistingInstance();
+        EntityInstanceImpl parent = getParentCursor().getExistingInstance();
         return parent;
     }
 
@@ -1866,7 +1861,10 @@ class EntityCursorImpl implements EntityCursor
 
     EntityCursorImpl getParentCursor()
     {
-        return parentCursor;
+        if ( parentEntityDef == null )
+            return null;
+
+        return viewCursor.getEntityCursor( parentEntityDef );
     }
 
     @Override
@@ -2905,9 +2903,9 @@ class EntityCursorImpl implements EntityCursor
             LazyLoadConfig config = getEntityDef().getLazyLoadConfig();
             if ( config.isLazyLoad() )
             {
-                assert parentCursor != null : "Root cannot be lazy load candidate";
+                assert getParentCursor() != null : "Root cannot be lazy load candidate";
 
-                EntityInstanceImpl parent = parentCursor.getEntityInstance( false );
+                EntityInstanceImpl parent = getParentCursor().getEntityInstance( false );
                 if ( parent == null )
                     // TODO: What if there are multiple levels of LazyLoad?  It's possible that
                     // the parent entity wasn't loaded because it is lazyload.
@@ -2921,7 +2919,7 @@ class EntityCursorImpl implements EntityCursor
             else
             if ( config.hasLazyLoadParent() )
             {
-                assert parentCursor != null : "Root cannot be lazy load candidate";
+                assert getParentCursor() != null : "Root cannot be lazy load candidate";
 
                 // Get the status of the parent.  If the status isn't normal (i.e. set to an EI)
                 // then the child must have the same status.

@@ -12,7 +12,9 @@ import java.util.List;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -176,8 +178,17 @@ class SimpleTest
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
-                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+//                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+                            .setPagination( new Pagination().withPageSize( 10 ) )
+                            .addActivateOrdering( "Student", "FinalClassRank", true )
                             .activate();
+
+        for ( EntityInstance ei : stud.cursor( "Student" ).eachEntity() )
+        {
+            stud.log().info( "Key = %s", ei.getAttribute( "ID" ) );
+            stud.log().info( "Key = %s", stud.cursor( "Student" ).getAttribute( "ID" ) );
+            stud.log().info( "-----------" );
+        }
 
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "dgc@xyz.com" );
         stud.cursor( "Student" ).setPosition( 6 );

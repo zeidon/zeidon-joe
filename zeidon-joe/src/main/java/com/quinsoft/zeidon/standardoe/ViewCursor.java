@@ -29,10 +29,9 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  */
 class ViewCursor
 {
-    private final ViewImpl         view;
     private final LodDef           lodDef;
     private final EntityCursorImpl cursorList[];
-    private final ObjectInstance   objectInstance;
+    private       ObjectInstance   objectInstance;
 
     /**
      * If this view was set to a recursive suboject this points to the root instance
@@ -54,6 +53,7 @@ class ViewCursor
     private int recursiveDiff;
     private int firstValidCursorIndex;
     private int lastValidCursorIndex;
+    private ViewImpl view;
 
     ViewCursor( TaskImpl task, ViewImpl view, LodDef lodDef )
     {
@@ -83,6 +83,7 @@ class ViewCursor
         this.lodDef = lodDef;
         this.view = view;
         cursorList = new EntityCursorImpl[ lodDef.getEntityCount() ];
+
         for ( EntityDef entityDef : lodDef.getEntityDefs() )
         {
             int idx = entityDef.getHierIndex();
@@ -226,7 +227,7 @@ class ViewCursor
                 entityDef = entityDef.getRecursiveParent();
         }
 
-        view.cursor( entityDef ).resetChildCursors( null );
+        getEntityCursor( entityDef ).resetChildCursors( null );
         resetRecursiveParent();
         assert recursiveDiff == 0 : "recursiveDiff is not 0";
     }
@@ -252,7 +253,7 @@ class ViewCursor
 
     //        setRecursiveParent( ancestor, ancestor.getEntityDef(), null );
     //        view.cursor( recursiveParent ).setCursor( ancestor );  // Set the cursor for the parent entity.
-            view.cursor( entityDef ).setCursor( currentRoot );    // Set the cursor for the recursive child.
+            getEntityCursor( entityDef ).setCursor( currentRoot );    // Set the cursor for the recursive child.
         }
         else
         {
@@ -270,7 +271,7 @@ class ViewCursor
             EntityInstanceImpl subobjectParent = currentRoot;
             if ( ! currentRoot.getEntityDef().isRecursive() )
                 subobjectParent = currentRoot.findMatchingParent( entityDef );
-            view.cursor( entityDef ).setCursor( subobjectParent );    // Set the cursor for the recursive child.
+            getEntityCursor( entityDef ).setCursor( subobjectParent );    // Set the cursor for the recursive child.
         }
 
         return true;
@@ -339,5 +340,14 @@ class ViewCursor
     EntityInstanceImpl getRecursiveRootParent()
     {
         return recursiveRootParent;
+    }
+
+    /**
+     * Replaces the entity cursor with newCursor.
+     */
+    void replaceEntityCursor( EntityCursorImpl newCursor )
+    {
+        EntityDef entityDef = newCursor.getEntityDef();
+        cursorList[ entityDef.getHierIndex() ] = newCursor;
     }
 }

@@ -46,6 +46,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
 import com.quinsoft.zeidon.IncludeFlags;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -137,6 +138,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private Set<EntityDef> loadInOneSelect;
     private HashMap<EntityCache, View> entityCacheViewMap;
+
+    private Pagination pagingOptions;
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
@@ -664,6 +667,22 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             assert parenCount == 0;
 
         } // for each EntitySpec...
+
+        // For rolling pagination we *must* have the keys as part of the ordering.
+        if ( pagingOptions != null && pagingOptions.isRollingPagination() )
+        {
+            EntityDef root = lodDef.getRoot();
+            QualEntity qualRootEntity = qualMap.get( root );
+            if ( qualRootEntity == null )
+            {
+                qualRootEntity = new QualEntity( null, root );
+                qualMap.put( root, qualRootEntity );
+            }
+
+            qualRootEntity.checkForKeysInOrderBy(); // Add the keys if they aren't there.
+            qualRootEntity.activateLimit = pagingOptions.getPageSize();
+        }
+
     } // method loadQualificationObject
 
     /**
@@ -711,6 +730,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         this.qual = qual;
         this.activateFlags = control;
         activateOptions = (ActivateOptions) options;
+        pagingOptions = activateOptions.getPagingOptions();
         loadQualificationObject( view.getLodDef() );
 
         loadedViewEntities = new HashSet<>();
@@ -991,9 +1011,20 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     private void addOrdering( EntityDef entityDef, SqlStatement stmt )
     {
+        // Do we have ordering specified in the qualification object?
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity == null || ! qualEntity.hasOrdering() )
+        {
+            // No qualification order.  If entity has any ordering specified
+            // in the LOD, add it.
             stmt.appendOrdering( entityDef );
+        }
+        else
+        {
+            // Ordering has been specified in the qual object.  Add it.
+            for ( ActivateOrder order : qualEntity.getOrdering().values() )
+                stmt.appendOrdering( order.attributeDef, order.descending );
+        }
     }
 
     /**
@@ -2314,8 +2345,26 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         void appendOrdering( AttributeDef attributeDef )
         {
             appendOrdering( attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef ), attributeDef.isAutoSeq() );
+
+            if ( ! attributeDef.isSequencingAscending() )
+                ordering.append( " DESC " );
         }
 
+        void appendOrdering( AttributeDef attributeDef, boolean descending )
+        {
+            appendOrdering( attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef ), false );
+
+            if ( descending )
+                ordering.append( " DESC " );
+        }
+
+        /**
+         * Adds the column represented by dataField.  If the column is an autoseq
+         * field then we may have to use the correspondance table.
+         *
+         * @param dataField
+         * @param isAutoSeq
+         */
         void appendOrdering( DataField dataField, boolean isAutoSeq )
         {
             if ( ordering.length() > 0 )
@@ -2335,9 +2384,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             ordering.append( "." )
                     .append( dataField.getName() );
-
-            if ( ! dataField.getAttributeDef().isSequencingAscending() )
-                ordering.append( " DESC " );
         }
 
         public void appendSuffix( Object value )
@@ -2596,11 +2642,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private boolean                usesChildQualification;
         private boolean                exclude;
         private boolean                hasDoesNotExist;
-        private final Integer          activateLimit;
-        private final EntityInstance   qualEntityInstance;
+        private Integer                activateLimit;
         private final EntityDef        entityDef;
         private final List<QualAttrib> qualAttribs;
-        private List<ActivateOrder>    ordering;
+        private LinkedHashMap<AttributeDef, ActivateOrder> ordering;
 
         /**
          * Keeps track of the EntityDefs that are used as part of this qualification.
@@ -2610,14 +2655,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
         {
             super();
-            this.qualEntityInstance = qualEntityInstance;
             this.entityDef = entityDef;
             qualAttribs = new ArrayList<QualAttrib>();
-            AttributeInstance limitAttr = qualEntityInstance.getAttribute( "ActivateLimit" );
-            if ( limitAttr.isNull() )
-                activateLimit = null;
-            else
-                activateLimit = limitAttr.getInteger();
+
+            // qualEntityInstance may be null if we're creating a qualEntity just for ordering.
+            if ( qualEntityInstance != null )
+            {
+                AttributeInstance limitAttr = qualEntityInstance.getAttribute( "ActivateLimit" );
+                if ( ! limitAttr.isNull() )
+                    activateLimit = limitAttr.getInteger();
+            }
         }
 
         void addQualAttrib( QualAttrib qualAttrib )
@@ -2643,7 +2690,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return ordering != null;
         }
 
-        protected List<ActivateOrder> getOrdering()
+        protected LinkedHashMap<AttributeDef, ActivateOrder> getOrdering()
         {
             return ordering;
         }
@@ -2651,9 +2698,26 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         protected void addOrderBy( AttributeDef attributeDef, boolean descending )
         {
             if ( ordering == null )
-                ordering = new ArrayList<>();
+                ordering = new LinkedHashMap<>();
 
-            ordering.add( new ActivateOrder( attributeDef, descending ) );
+            if ( ordering.containsKey( attributeDef ) )
+                throw new ZeidonException( "Ordering attribute %s specified twice", attributeDef );
+
+            ordering.put( attributeDef, new ActivateOrder( attributeDef, descending ) );
+        }
+
+        /**
+         * Check to see if the key is part of the order by and add it if
+         * it is not.  Intended to be used by rolling pagination.
+         */
+        protected void checkForKeysInOrderBy()
+        {
+            assert entityDef.getKeys().size() > 0 : "Attemping rolling pagination on entity without a key.";
+            for ( AttributeDef key : entityDef.getKeys() )
+            {
+                if ( ! ordering.containsKey( key ) )
+                    ordering.put( key, new ActivateOrder( key, false ) );
+            }
         }
 
         @Override

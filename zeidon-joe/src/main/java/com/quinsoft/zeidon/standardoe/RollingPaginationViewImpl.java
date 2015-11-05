@@ -16,42 +16,24 @@
 
     Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon;
+package com.quinsoft.zeidon.standardoe;
 
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
- * Sets up pagination options to be used as part of an activate.
  *
  */
-public class Pagination
+public class RollingPaginationViewImpl extends ViewImpl
 {
-    private int pageSize = 1000;
-    private boolean rollingPagination = true;
-    private boolean asynchronousFetch = false;
 
-    public Pagination()
+    /**
+     * @param task
+     * @param lodDef
+     */
+    public RollingPaginationViewImpl( TaskImpl task, LodDef lodDef )
     {
+        super( task, lodDef );
     }
 
-    public boolean isRollingPagination()
-    {
-        return rollingPagination;
-    }
 
-    public Pagination setRollingPagination( boolean rollingPagination )
-    {
-        this.rollingPagination = rollingPagination;
-        return this;
-    }
-
-    public int getPageSize()
-    {
-        return pageSize;
-    }
-
-    public Pagination withPageSize( int pageSize )
-    {
-        this.pageSize = pageSize;
-        return this;
-    }
 }
