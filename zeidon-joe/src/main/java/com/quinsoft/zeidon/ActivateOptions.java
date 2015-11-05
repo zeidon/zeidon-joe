@@ -18,9 +18,8 @@
  */
 package com.quinsoft.zeidon;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,6 +56,11 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     
     private Pagination pagingOptions = null;
     
+    
+    /**
+     * This is the activate ordering for the root entity.
+     */
+    private LinkedHashMap<AttributeDef, ActivateOrder> rootActivateOrdering;
     
     public ActivateOptions( TaskQualification task )
     {
@@ -291,4 +295,34 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     {
         this.pagingOptions = pagingOptions;
     }
+    
+    public LinkedHashMap<AttributeDef, ActivateOrder> getRootGetActivateOrdering()
+    {
+        return rootActivateOrdering;
+    }
+
+    /**
+     * This is the activate ordering for the root entity.  This is set by the
+     * activate code and it is not expected to be set by the user.
+     */
+    public void setRootActivateOrdering( LinkedHashMap<AttributeDef, ActivateOrder> activateOrdering )
+    {
+        this.rootActivateOrdering = activateOrdering;
+    }
+
+    /**
+     * Used to specify the ordering used on an activate.
+     */
+    public static class ActivateOrder
+    {
+        public AttributeDef attributeDef;
+        public boolean      descending = false;
+
+        public ActivateOrder( AttributeDef attributeDef, boolean descending )
+        {
+            this.attributeDef = attributeDef;
+            this.descending = descending;
+        }
+    }
+
 }

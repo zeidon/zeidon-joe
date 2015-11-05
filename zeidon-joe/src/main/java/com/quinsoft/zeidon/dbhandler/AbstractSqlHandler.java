@@ -36,6 +36,7 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CreateEntityFlags;
@@ -681,6 +682,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             qualRootEntity.checkForKeysInOrderBy(); // Add the keys if they aren't there.
             qualRootEntity.activateLimit = pagingOptions.getPageSize();
+            
+            // Copy the root ordering back to the ActivateOptions so we can use
+            // them later when attempting to load the next page.
+            activateOptions.setRootActivateOrdering( qualRootEntity.ordering );
         }
 
     } // method loadQualificationObject
@@ -2625,18 +2630,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
     } // class SqlStatement
 
-    protected static class ActivateOrder
-    {
-        protected AttributeDef attributeDef;
-        protected boolean      descending = false;
-
-        protected ActivateOrder( AttributeDef attributeDef, boolean descending )
-        {
-            this.attributeDef = attributeDef;
-            this.descending = descending;
-        }
-    }
-
     protected static class QualEntity
     {
         private boolean                usesChildQualification;
@@ -2713,6 +2706,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         protected void checkForKeysInOrderBy()
         {
             assert entityDef.getKeys().size() > 0 : "Attemping rolling pagination on entity without a key.";
+            
+            if ( ordering == null )
+                ordering = new LinkedHashMap<>();
+            
             for ( AttributeDef key : entityDef.getKeys() )
             {
                 if ( ! ordering.containsKey( key ) )

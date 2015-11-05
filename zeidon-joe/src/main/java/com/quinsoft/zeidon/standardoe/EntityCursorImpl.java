@@ -98,7 +98,7 @@ class EntityCursorImpl implements EntityCursor
             currentIterator = IteratorBuilder.build( source.currentIterator, this );
     }
 
-    private ObjectInstance getObjectInstance()
+    protected ObjectInstance getObjectInstance()
     {
         return viewCursor.getObjectInstance();
     }
@@ -2966,7 +2966,7 @@ class EntityCursorImpl implements EntityCursor
         return getExistingInstance( true ).setIncrementalFlags( flag );
     }
 
-    private ViewCursor getViewCursor()
+    protected ViewCursor getViewCursor()
     {
         return viewCursor;
     }

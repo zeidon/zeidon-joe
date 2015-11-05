@@ -350,4 +350,10 @@ class ViewCursor
         EntityDef entityDef = newCursor.getEntityDef();
         cursorList[ entityDef.getHierIndex() ] = newCursor;
     }
+    
+    void replaceObjectInstance( ObjectInstance newOi )
+    {
+        objectInstance = newOi;
+        resetRecursiveParent();
+    }
 }

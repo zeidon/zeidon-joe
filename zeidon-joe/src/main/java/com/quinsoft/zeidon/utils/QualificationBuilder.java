@@ -111,7 +111,7 @@ public class QualificationBuilder
         qualView = qual;
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
-        entitySpecCount = 0;
+        entitySpecCount = qual.cursor( ENTITYSPEC ).getEntityCount();
         synch = this;
     }
 
@@ -285,9 +285,19 @@ public class QualificationBuilder
         return this;
     }
 
-    public int qualAttribCount()
+    /**
+     * Returns true if there is attribute qualification for the currently selected 
+     * QualEntity.  This does NOT include "ORDERBY".
+     */
+    public boolean hasQualAttrib()
     {
-        return qualView.cursor( QUALATTRIB ).getEntityCount();
+        for ( EntityInstance qa : qualView.cursor( QUALATTRIB ).eachEntity() )
+        {
+            if ( ! qa.getAttribute( OPER ).equals( "ORDERBY" ) )
+                return true;
+        }
+        
+        return false;
     }
 
     public QualificationBuilder setOiSourceUrl( String url )
