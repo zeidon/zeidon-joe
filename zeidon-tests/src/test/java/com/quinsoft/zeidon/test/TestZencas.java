@@ -29,6 +29,7 @@ import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.SetMatchingFlags;
@@ -100,6 +101,43 @@ public class TestZencas
         }
     }
 
+    @Test
+    public void testRollingPagination() throws IOException
+    {
+        View studFull = new QualificationBuilder( zencas )
+                            .setLodDef( "lStudDpt" )
+                            .addActivateOrdering( "Student", "LS_AdvisorName", true )
+                            .addActivateOrdering( "Student", "ID", false )
+                            .limitCountTo( 100 )
+                            .activate();
+        studFull.cursor( "Student" ).setFirst();
+        
+        View stud = new QualificationBuilder( zencas )
+                            .setLodDef( "lStudDpt" )
+                            .setPagination( new Pagination().withPageSize( 10 ) )
+                            .addActivateOrdering( "Student", "LS_AdvisorName", true )
+                            .activate();
+
+        int count = 0;
+        for ( EntityInstance ei : stud.cursor( "Student" ).eachEntity() )
+        {
+            stud.log().info( "Key = %s", ei.getAttribute( "ID" ) );
+            stud.log().info( "Key = %s", stud.cursor( "Student" ).getAttribute( "ID" ) );
+            stud.log().info( "Key = %s", studFull.cursor( "Student" ).getAttribute( "ID" ) );
+            stud.log().info( "%d -----------", count++ );
+            
+            // Verify that we're loading everything by comparing the IDs with studFull.
+            Assert.assertEquals( studFull.cursor( "Student" ).getAttribute( "ID" ).getInteger(), 
+                                 stud    .cursor( "Student" ).getAttribute( "ID" ).getInteger() );
+            
+            if ( count > 55 )
+                break;
+            
+            studFull.cursor( "Student" ).setNext();
+            
+        }
+    }
+	
 	@Test
 	public void testRecursion()
 	{

@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -54,9 +55,12 @@ class ActivateOiFromDB implements Activator
         assert options != null;
 
         this.task = (TaskImpl) task;
+
+        // View will be non-null when we're performing a lazy-load.
         if ( view == null )
-            view = task.activateEmptyObjectInstance( options.getLodDef() );
-        this.view = ((InternalView) view).getViewImpl();
+            this.view = (ViewImpl) task.activateEmptyObjectInstance( options.getLodDef() );
+        else
+            this.view = ((InternalView) view).getViewImpl();
 
         this.qual = options.getQualificationObject();
         this.options = options;
@@ -67,11 +71,12 @@ class ActivateOiFromDB implements Activator
 
         JdbcHandlerUtils helper = new JdbcHandlerUtils( options, lodDef.getDatabase() );
         dbHandler = helper.getDbHandler();
-        return view;
+        return this.view;
     }
 
     /**
-     * Activate the OI.
+     * Activate the OI.  This gets called for the initial activate of the OI.
+     * This will not be called for lazy-loads.
      *
      * @return
      */
@@ -81,13 +86,34 @@ class ActivateOiFromDB implements Activator
         Timer timer = new Timer();
         ObjectInstance oi = view.getObjectInstance();
 
-        // TODO: We don't check for locks that don't even allow reads.
+        // Store the activate options for later use.
+        oi.setActivateOptions( options );
+
+        // Get pessimistic lock handler.
         PessimisticLockingHandler pessimisticLock = null;
         if ( options.getLockingLevel().isPessimisticLock() && ! options.isReadOnly() )
-        {
             pessimisticLock = view.getPessimisticLockingHandler();
-            pessimisticLock.initialize( options );
+
+        // If we are activating with rolling pagination then replace the root cursor
+        // with a special one that will attempt to load the next page when required.
+        if ( options != null )
+        {
+            Pagination pagingOptions = options.getPagingOptions();
+            if ( pagingOptions != null && pagingOptions.isRollingPagination() )
+            {
+                if ( pessimisticLock != null )
+                    throw new ZeidonException( "Pessimistic locking is not supported with rolling pagination."
+                                           + "  Use read-only option on the acivate." );
+
+                ViewCursor viewCursor = view.getViewCursor();
+                EntityCursorImpl newCursor = new RollingPaginationEntityCursorImpl( viewCursor, lodDef.getRoot(), options );
+                viewCursor.replaceEntityCursor( newCursor );
+            }
         }
+
+        // TODO: We don't check for locks that don't even allow reads.
+        if ( pessimisticLock != null )
+            pessimisticLock.initialize( options );
 
         try
         {
@@ -142,9 +168,6 @@ class ActivateOiFromDB implements Activator
         ObjectInstance oi = view.getObjectInstance();
         try
         {
-            // Store the activate options for later use.
-            view.getObjectInstance().setActivateOptions( options );
-
             // Set flag to tell cursor processing to not bother with checking for lazy-loaded
             // entities.  Since we're activating we know we don't want to load lazy entities
             // via cursor access.

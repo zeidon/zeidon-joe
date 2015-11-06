@@ -60,10 +60,7 @@ class EntityCursorImpl implements EntityCursor
 {
     private final EntityDef        entityDef;
     private final ViewCursor       viewCursor;
-    private final EntityCursorImpl parentCursor;
 
-    private EntityCursorImpl   prevHier;
-    private EntityCursorImpl   nextHier;
     private EntityIterator<EntityInstanceImpl> currentIterator;
 
     /**
@@ -77,12 +74,10 @@ class EntityCursorImpl implements EntityCursor
      */
     private EntityInstanceImpl entityInstance;
 
-    EntityCursorImpl(ViewCursor viewCursor, EntityDef entityDef, EntityCursorImpl parentCsr)
+    EntityCursorImpl(ViewCursor viewCursor, EntityDef entityDef)
     {
         this.viewCursor = viewCursor;
         this.entityDef = entityDef;
-        this.parentCursor = parentCsr;
-        assert parentCsr != null || entityDef.getParent() == null : "Parent Cursor not set correctly";
         setEntityInstance( null );
     }
 
@@ -93,18 +88,19 @@ class EntityCursorImpl implements EntityCursor
      * @param source
      * @param parentCsr
      */
-    EntityCursorImpl( ViewCursor viewCursor, EntityCursorImpl source, EntityCursorImpl parentCsr )
+    EntityCursorImpl( ViewCursor viewCursor, EntityCursorImpl source )
     {
-        this( viewCursor, source.getEntityDef(), parentCsr );
+        this( viewCursor, source.getEntityDef() );
         setEntityInstance( source.entityInstance );
         if ( source.currentIterator != null)
             currentIterator = IteratorBuilder.build( source.currentIterator, this );
     }
 
-    private ObjectInstance getObjectInstance()
+    protected ObjectInstance getObjectInstance()
     {
         return viewCursor.getObjectInstance();
     }
+
     /**
      * Returns the current entity pointed to by this cursor or null.
      *
@@ -275,7 +271,7 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public EntityInstanceImpl getParent()
     {
-        if ( parentCursor == null )
+        if ( getParentCursor() == null )
             return null;
 
         // If this entity is a recursive parent and the current view is in a subobject
@@ -293,10 +289,10 @@ class EntityCursorImpl implements EntityCursor
             }
             else
                 return getViewCursor().getRecursiveRoot().getParent();
-//                assert getViewCursor().getRecursiveRoot().getParent() == parentCursor.getExistingInstance();
+//                assert getViewCursor().getRecursiveRoot().getParent() == getParentCursor().getExistingInstance();
         }
 
-        EntityInstanceImpl parent = parentCursor.getExistingInstance();
+        EntityInstanceImpl parent = getParentCursor().getExistingInstance();
         return parent;
     }
 
@@ -686,34 +682,22 @@ class EntityCursorImpl implements EntityCursor
         return cursorResult;
     }
 
-    EntityCursorImpl getPrevHier()
+    private EntityCursorImpl getOtherCursor( EntityDef entityDef )
     {
-        return prevHier;
+        if ( entityDef == null )
+            return null;
+
+        return getViewCursor().getEntityCursor( entityDef );
     }
 
-    /**
-     * Sets the prev *cursor*.  Used when building a new ViewCursor.
-     *
-     * @param prevHier
-     */
-    void setPrevHier(EntityCursorImpl prevHier)
+    EntityCursorImpl getPrevHier()
     {
-        this.prevHier = prevHier;
+        return getOtherCursor( getEntityDef().getPrevHier() );
     }
 
     EntityCursorImpl getNextHierCursor()
     {
-        return nextHier;
-    }
-
-    /**
-     * Sets the next *cursor*.  Used when building a new ViewCursor.
-     *
-     * @param prevHier
-     */
-    void setNextHierCursor(EntityCursorImpl nextHier)
-    {
-        this.nextHier = nextHier;
+        return getOtherCursor( getEntityDef().getNextHier() );
     }
 
     @Override
@@ -1876,7 +1860,10 @@ class EntityCursorImpl implements EntityCursor
 
     EntityCursorImpl getParentCursor()
     {
-        return parentCursor;
+        if ( getEntityDef().getParent() == null )
+            return null;
+
+        return viewCursor.getEntityCursor( getEntityDef().getParent() );
     }
 
     @Override
@@ -2915,9 +2902,9 @@ class EntityCursorImpl implements EntityCursor
             LazyLoadConfig config = getEntityDef().getLazyLoadConfig();
             if ( config.isLazyLoad() )
             {
-                assert parentCursor != null : "Root cannot be lazy load candidate";
+                assert getParentCursor() != null : "Root cannot be lazy load candidate";
 
-                EntityInstanceImpl parent = parentCursor.getEntityInstance( false );
+                EntityInstanceImpl parent = getParentCursor().getEntityInstance( false );
                 if ( parent == null )
                     // TODO: What if there are multiple levels of LazyLoad?  It's possible that
                     // the parent entity wasn't loaded because it is lazyload.
@@ -2931,7 +2918,7 @@ class EntityCursorImpl implements EntityCursor
             else
             if ( config.hasLazyLoadParent() )
             {
-                assert parentCursor != null : "Root cannot be lazy load candidate";
+                assert getParentCursor() != null : "Root cannot be lazy load candidate";
 
                 // Get the status of the parent.  If the status isn't normal (i.e. set to an EI)
                 // then the child must have the same status.
@@ -2978,7 +2965,7 @@ class EntityCursorImpl implements EntityCursor
         return getExistingInstance( true ).setIncrementalFlags( flag );
     }
 
-    private ViewCursor getViewCursor()
+    protected ViewCursor getViewCursor()
     {
         return viewCursor;
     }
