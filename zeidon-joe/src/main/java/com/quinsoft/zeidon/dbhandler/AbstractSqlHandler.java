@@ -682,7 +682,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             qualRootEntity.checkForKeysInOrderBy(); // Add the keys if they aren't there.
             qualRootEntity.activateLimit = pagingOptions.getPageSize();
-            
+
             // Copy the root ordering back to the ActivateOptions so we can use
             // them later when attempting to load the next page.
             activateOptions.setRootActivateOrdering( qualRootEntity.ordering );
@@ -1710,8 +1710,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         if ( entityDef.getAutoSeq() != null )
-            throw new ZeidonException( "Adding autoseq" );
-//            stmt.appendOrdering( entityDef.getAutoSeq() );
+            stmt.appendOrdering( entityDef.getAutoSeq() );
 
         return true;
     }
@@ -2706,10 +2705,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         protected void checkForKeysInOrderBy()
         {
             assert entityDef.getKeys().size() > 0 : "Attemping rolling pagination on entity without a key.";
-            
+
             if ( ordering == null )
                 ordering = new LinkedHashMap<>();
-            
+
             for ( AttributeDef key : entityDef.getKeys() )
             {
                 if ( ! ordering.containsKey( key ) )
