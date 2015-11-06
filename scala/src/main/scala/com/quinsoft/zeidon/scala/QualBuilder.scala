@@ -593,6 +593,19 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         return view
     }
 
+    /**
+     * Overrides the oiSourceUrl config value that is retrieved from Zeidon configuration
+     * (usually zeidon.ini).
+     */
+    def useOiSourceUrl( oiSourceUrl : String ) = {
+        jqual.setOiSourceUrl( oiSourceUrl )
+        this
+    }
+
+    def useConfigValue( key: String, value: String ) = {
+        jqual.overrideConfigValue( key, value )
+        this
+    }
 }
 
 class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {

@@ -228,16 +228,16 @@ public class QualificationBuilder
     {
         return asynchronous();
     }
-    
+
     public QualificationBuilder setPagination( Pagination pagingOptions )
     {
         if ( activateOptions.getPagingOptions() != null )
             throw new ZeidonException( "Pagination options has already been set." );
-        
+
         activateOptions.setPagingOptions( pagingOptions );
         return this;
     }
-    
+
     public QualificationBuilder asynchronous()
     {
         /*  Why can't we do async?  Removing this for now.
@@ -286,7 +286,7 @@ public class QualificationBuilder
     }
 
     /**
-     * Returns true if there is attribute qualification for the currently selected 
+     * Returns true if there is attribute qualification for the currently selected
      * QualEntity.  This does NOT include "ORDERBY".
      */
     public boolean hasQualAttrib()
@@ -296,13 +296,19 @@ public class QualificationBuilder
             if ( ! qa.getAttribute( OPER ).equals( "ORDERBY" ) )
                 return true;
         }
-        
+
         return false;
     }
 
     public QualificationBuilder setOiSourceUrl( String url )
     {
         activateOptions.setOiSourceUrl( url );
+        return this;
+    }
+
+    public QualificationBuilder overrideConfigValue( String key, String value )
+    {
+        activateOptions.overrideConfigValue( key, value );
         return this;
     }
 
