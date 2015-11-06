@@ -59,7 +59,6 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 class EntityCursorImpl implements EntityCursor
 {
     private final EntityDef        entityDef;
-    private final EntityDef        parentEntityDef;
     private final ViewCursor       viewCursor;
 
     private EntityIterator<EntityInstanceImpl> currentIterator;
@@ -79,7 +78,6 @@ class EntityCursorImpl implements EntityCursor
     {
         this.viewCursor = viewCursor;
         this.entityDef = entityDef;
-        parentEntityDef = entityDef.getParent();
         setEntityInstance( null );
     }
 
@@ -102,6 +100,7 @@ class EntityCursorImpl implements EntityCursor
     {
         return viewCursor.getObjectInstance();
     }
+
     /**
      * Returns the current entity pointed to by this cursor or null.
      *
@@ -1861,10 +1860,10 @@ class EntityCursorImpl implements EntityCursor
 
     EntityCursorImpl getParentCursor()
     {
-        if ( parentEntityDef == null )
+        if ( getEntityDef().getParent() == null )
             return null;
 
-        return viewCursor.getEntityCursor( parentEntityDef );
+        return viewCursor.getEntityCursor( getEntityDef().getParent() );
     }
 
     @Override

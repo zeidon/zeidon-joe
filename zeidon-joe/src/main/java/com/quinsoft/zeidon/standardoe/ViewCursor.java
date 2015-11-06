@@ -32,6 +32,7 @@ class ViewCursor
     private final LodDef           lodDef;
     private final EntityCursorImpl cursorList[];
     private       ObjectInstance   objectInstance;
+    private final ViewImpl view;
 
     /**
      * If this view was set to a recursive suboject this points to the root instance
@@ -53,7 +54,6 @@ class ViewCursor
     private int recursiveDiff;
     private int firstValidCursorIndex;
     private int lastValidCursorIndex;
-    private ViewImpl view;
 
     ViewCursor( TaskImpl task, ViewImpl view, LodDef lodDef )
     {
@@ -350,7 +350,7 @@ class ViewCursor
         EntityDef entityDef = newCursor.getEntityDef();
         cursorList[ entityDef.getHierIndex() ] = newCursor;
     }
-    
+
     void replaceObjectInstance( ObjectInstance newOi )
     {
         objectInstance = newOi;

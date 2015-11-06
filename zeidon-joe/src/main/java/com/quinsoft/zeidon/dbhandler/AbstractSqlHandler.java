@@ -140,6 +140,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Set<EntityDef> loadInOneSelect;
     private HashMap<EntityCache, View> entityCacheViewMap;
 
+    /**
+     * If set, this is the paging options for the activate.
+     */
     private Pagination pagingOptions;
 
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )

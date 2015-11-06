@@ -27,7 +27,6 @@ public class Pagination
 {
     private int pageSize = 1000;
     private boolean rollingPagination = true;
-    private boolean asynchronousFetch = false;
 
     public Pagination()
     {

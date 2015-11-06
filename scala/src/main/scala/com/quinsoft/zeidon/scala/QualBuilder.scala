@@ -1085,7 +1085,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
 }
 
 /**
- * Builder for setting attribute values for an entity.
+ * Builder for setting ORDER BY attribute.
  */
 class AttributeOrderByBuilder( val qualBuilder: QualBuilder,
                                val jentityDef: EntityDef )
