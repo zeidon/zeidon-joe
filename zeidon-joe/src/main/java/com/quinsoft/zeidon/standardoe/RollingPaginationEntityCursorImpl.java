@@ -211,28 +211,6 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
         throw new ZeidonException( "Method allEntities() is not supported on root of rolling pagination" );
     }
 
-    
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#getPrevHier()
-     */
-    @Override
-    EntityCursorImpl getPrevHier()
-    {
-        // TODO Auto-generated method stub
-        return super.getPrevHier();
-    }
-
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#getNextHierCursor()
-     */
-    @Override
-    EntityCursorImpl getNextHierCursor()
-    {
-        // TODO Auto-generated method stub
-        return super.getNextHierCursor();
-    }
-
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#deleteAll()
@@ -240,21 +218,8 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult deleteAll()
     {
-        // TODO Auto-generated method stub
-        return super.deleteAll();
+        throw new ZeidonException( "Method deleteAll() is not supported on root of rolling pagination" );
     }
-
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst()
-     */
-    @Override
-    public CursorResult setFirst()
-    {
-        // TODO Auto-generated method stub
-        return super.setFirst();
-    }
-
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(java.lang.String)
@@ -262,8 +227,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirst( String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setFirst( scopingEntityName );
+        throw new ZeidonException( "Method setFirst is not supported on root of rolling pagination" );
     }
 
 
@@ -273,8 +237,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirst( EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setFirst( scopingEntity );
+        throw new ZeidonException( "Method setFirst is not supported on root of rolling pagination" );
     }
 
 
@@ -284,8 +247,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirst( String attributeName, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setFirst( attributeName, value );
+        throw new ZeidonException( "Method setFirst is not supported on root of rolling pagination" );
     }
 
 
@@ -295,8 +257,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirst( AttributeDef attribute, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setFirst( attribute, value );
+        throw new ZeidonException( "Method setFirst is not supported on root of rolling pagination" );
     }
 
 
@@ -306,8 +267,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirst( String attributeName, Object value, String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setFirst( attributeName, value, scopingEntityName );
+        throw new ZeidonException( "Method setFirst is not supported on root of rolling pagination" );
     }
 
 
@@ -317,8 +277,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirst( AttributeDef attribute, Object value, EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setFirst( attribute, value, scopingEntity );
+        throw new ZeidonException( "Method setFirst is not supported on root of rolling pagination" );
     }
 
 
@@ -328,8 +287,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setNext( String attributeName, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setNext( attributeName, value );
+        throw new ZeidonException( "Method setNext is not supported on root of rolling pagination" );
     }
 
 
@@ -339,8 +297,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setNext( AttributeDef attribute, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setNext( attribute, value );
+        throw new ZeidonException( "Method setNext is not supported on root of rolling pagination" );
     }
 
 
@@ -350,8 +307,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setNext( String attributeName, Object value, String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setNext( attributeName, value, scopingEntityName );
+        throw new ZeidonException( "Method setNext is not supported on root of rolling pagination" );
     }
 
 
@@ -361,8 +317,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setNext( AttributeDef attribute, Object value, EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setNext( attribute, value, scopingEntity );
+        throw new ZeidonException( "Method setNext is not supported on root of rolling pagination" );
     }
 
 
@@ -372,8 +327,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast()
     {
-        // TODO Auto-generated method stub
-        return super.setLast();
+        throw new ZeidonException( "Method setLast() is not supported on root of rolling pagination" );
     }
 
 
@@ -383,8 +337,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrevContinue()
     {
-        // TODO Auto-generated method stub
-        return super.setPrevContinue();
+        throw new ZeidonException( "Method setPrevContinue() is not supported on root of rolling pagination" );
     }
 
 
@@ -394,8 +347,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setByEntityKey( long entityKey )
     {
-        // TODO Auto-generated method stub
-        return super.setByEntityKey( entityKey );
+        throw new ZeidonException( "Method setByEntityKey is not supported on root of rolling pagination" );
     }
 
 
@@ -405,8 +357,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPosition( int position )
     {
-        // TODO Auto-generated method stub
-        return super.setPosition( position );
+        throw new ZeidonException( "Method setPosition is not supported on root of rolling pagination" );
     }
 
 
@@ -416,8 +367,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPosition( int position, String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setPosition( position, scopingEntityName );
+        throw new ZeidonException( "Method setPosition is not supported on root of rolling pagination" );
     }
 
 
@@ -427,8 +377,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public void orderEntities( String orderKeys )
     {
-        // TODO Auto-generated method stub
-        super.orderEntities( orderKeys );
+        throw new ZeidonException( "Method ey is not supported on root of rolling pagination" );
     }
 
 
@@ -438,8 +387,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public void orderEntities( Comparator<? extends EntityInstance> comparator )
     {
-        // TODO Auto-generated method stub
-        super.orderEntities( comparator );
+        throw new ZeidonException( "Method ato is not supported on root of rolling pagination" );
     }
 
 
@@ -449,8 +397,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast( String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setLast( scopingEntityName );
+        throw new ZeidonException( "Method setLast is not supported on root of rolling pagination" );
     }
 
 
@@ -460,8 +407,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast( EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setLast( scopingEntity );
+        throw new ZeidonException( "Method setLast is not supported on root of rolling pagination" );
     }
 
 
@@ -471,8 +417,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast( String attributeName, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setLast( attributeName, value );
+        throw new ZeidonException( "Method setLast is not supported on root of rolling pagination" );
     }
 
 
@@ -482,8 +427,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast( String attributeName, Object value, String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setLast( attributeName, value, scopingEntityName );
+        throw new ZeidonException( "Method setLast is not supported on root of rolling pagination" );
     }
 
 
@@ -493,8 +437,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast( AttributeDef attributeDef, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setLast( attributeDef, value );
+        throw new ZeidonException( "Method setLast is not supported on root of rolling pagination" );
     }
 
 
@@ -504,8 +447,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLast( AttributeDef attribute, Object value, EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setLast( attribute, value, scopingEntity );
+        throw new ZeidonException( "Method setLast is not supported on root of rolling pagination" );
     }
 
 
@@ -515,8 +457,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev()
     {
-        // TODO Auto-generated method stub
-        return super.setPrev();
+        throw new ZeidonException( "Method setPrev() is not supported on root of rolling pagination" );
     }
 
 
@@ -526,8 +467,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev( String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setPrev( scopingEntityName );
+        throw new ZeidonException( "Method setPrev is not supported on root of rolling pagination" );
     }
 
 
@@ -537,8 +477,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev( EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setPrev( scopingEntity );
+        throw new ZeidonException( "Method setPrev is not supported on root of rolling pagination" );
     }
 
 
@@ -548,8 +487,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev( String attributeName, Object value, String scopingEntityName )
     {
-        // TODO Auto-generated method stub
-        return super.setPrev( attributeName, value, scopingEntityName );
+        throw new ZeidonException( "Method setPrev is not supported on root of rolling pagination" );
     }
 
 
@@ -559,8 +497,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev( AttributeDef attribute, Object value, EntityDef scopingEntity )
     {
-        // TODO Auto-generated method stub
-        return super.setPrev( attribute, value, scopingEntity );
+        throw new ZeidonException( "Method setPrev is not supported on root of rolling pagination" );
     }
 
 
@@ -570,8 +507,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev( String attributeName, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setPrev( attributeName, value );
+        throw new ZeidonException( "Method setPrev is not supported on root of rolling pagination" );
     }
 
 
@@ -581,8 +517,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrev( AttributeDef attribute, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setPrev( attribute, value );
+        throw new ZeidonException( "Method setPrev is not supported on root of rolling pagination" );
     }
 
 
@@ -592,8 +527,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirstWithinOi()
     {
-        // TODO Auto-generated method stub
-        return super.setFirstWithinOi();
+        throw new ZeidonException( "Method setFirstWithinOi() is not supported on root of rolling pagination" );
     }
 
 
@@ -603,8 +537,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public boolean hasPrev()
     {
-        // TODO Auto-generated method stub
-        return super.hasPrev();
+        throw new ZeidonException( "Method hasPrev() is not supported on root of rolling pagination" );
     }
 
 
@@ -614,8 +547,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirstWithinOi( AttributeDef attributeDef, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setFirstWithinOi( attributeDef, value );
+        throw new ZeidonException( "Method setFirstWithinOi is not supported on root of rolling pagination" );
     }
 
 
@@ -625,8 +557,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLastWithinOi()
     {
-        // TODO Auto-generated method stub
-        return super.setLastWithinOi();
+        throw new ZeidonException( "Method setLastWithinOi() is not supported on root of rolling pagination" );
     }
 
 
@@ -636,8 +567,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLastWithinOi( String attributeName, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setLastWithinOi( attributeName, value );
+        throw new ZeidonException( "Method setLastWithinOi is not supported on root of rolling pagination" );
     }
 
 
@@ -647,8 +577,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrevWithinOi()
     {
-        // TODO Auto-generated method stub
-        return super.setPrevWithinOi();
+        throw new ZeidonException( "Method setPrevWithinOi() is not supported on root of rolling pagination" );
     }
 
 
@@ -658,8 +587,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setPrevWithinOi( AttributeDef attributeDef, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setPrevWithinOi( attributeDef, value );
+        throw new ZeidonException( "Method setPrevWithinOi is not supported on root of rolling pagination" );
     }
 
 
@@ -669,8 +597,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setFirstWithinOi( String attributeName, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setFirstWithinOi( attributeName, value );
+        throw new ZeidonException( "Method setFirstWithinOi is not supported on root of rolling pagination" );
     }
 
 
@@ -680,8 +607,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public CursorResult setLastWithinOi( AttributeDef attributeDef, Object value )
     {
-        // TODO Auto-generated method stub
-        return super.setLastWithinOi( attributeDef, value );
+        throw new ZeidonException( "Method setLastWithinOi is not supported on root of rolling pagination" );
     }
 
 
@@ -691,8 +617,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public EntityInstance getPrevTwin()
     {
-        // TODO Auto-generated method stub
-        return super.getPrevTwin();
+        throw new ZeidonException( "Method getPrevTwin() is not supported on root of rolling pagination" );
     }
 
 
@@ -702,8 +627,7 @@ public class RollingPaginationEntityCursorImpl extends EntityCursorImpl
     @Override
     public boolean hasPrevTwin()
     {
-        // TODO Auto-generated method stub
-        return super.hasPrevTwin();
+        throw new ZeidonException( "Method hasPrevTwin() is not supported on root of rolling pagination" );
     }
 
 

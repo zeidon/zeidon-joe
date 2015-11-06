@@ -459,7 +459,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def forEntity( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
         jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.forEntity( jcurrentEntityDef.getName() )
-        firstOperator = jqual.qualAttribCount() == 0
+        firstOperator = jqual.hasQualAttrib()
         this
     }
 
