@@ -6,7 +6,7 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>${basedir}/src/main/ruby</directory>
+      <directory>${basedir}/src/main/resources</directory>
       <outputDirectory>/</outputDirectory>
     </fileSet>
     <fileSet>
