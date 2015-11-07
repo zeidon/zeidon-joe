@@ -179,7 +179,7 @@ class SimpleTest
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
 //                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
-                            .setPagination( new Pagination().withPageSize( 10 ) )
+                            .setPagination( new Pagination().setPageSize( 10 ) )
                             .addActivateOrdering( "Student", "CreationDate", true )
                             .activate();
 

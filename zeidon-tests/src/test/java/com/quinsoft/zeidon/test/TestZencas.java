@@ -111,10 +111,10 @@ public class TestZencas
                             .limitCountTo( 100 )
                             .activate();
         studFull.cursor( "Student" ).setFirst();
-        
+
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
-                            .setPagination( new Pagination().withPageSize( 10 ) )
+                            .setPagination( new Pagination().setRollingPagination( true ).setPageSize( 10 ) )
                             .addActivateOrdering( "Student", "LS_AdvisorName", true )
                             .activate();
 
@@ -125,19 +125,19 @@ public class TestZencas
             stud.log().info( "Key = %s", stud.cursor( "Student" ).getAttribute( "ID" ) );
             stud.log().info( "Key = %s", studFull.cursor( "Student" ).getAttribute( "ID" ) );
             stud.log().info( "%d -----------", count++ );
-            
+
             // Verify that we're loading everything by comparing the IDs with studFull.
-            Assert.assertEquals( studFull.cursor( "Student" ).getAttribute( "ID" ).getInteger(), 
+            Assert.assertEquals( studFull.cursor( "Student" ).getAttribute( "ID" ).getInteger(),
                                  stud    .cursor( "Student" ).getAttribute( "ID" ).getInteger() );
-            
+
             if ( count > 55 )
                 break;
-            
+
             studFull.cursor( "Student" ).setNext();
-            
+
         }
     }
-	
+
 	@Test
 	public void testRecursion()
 	{
@@ -4963,15 +4963,15 @@ public class TestZencas
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
-		
 
-public int 
+
+public int
 mUser_ActivateUserLST(  View     ViewToSubtask )
 {
    zVIEW    mUser = new zVIEW( );
    zVIEW    vTempViewVar_0 = new zVIEW( );
    int      RESULT = 0;
-   
+
    // In this test I have two exact activate statements except one is MULTIPLE, the other is ROOTONLYMULTIPLE and
    // both contain a mUser.UserGroup EXISTS (if I don't have the EXISTS, then there is no error).
    // In the MULTIPLE activate everything seems fine but in the ROOTONLYMULTIPLE activate, we do not have
@@ -4987,11 +4987,11 @@ mUser_ActivateUserLST(  View     ViewToSubtask )
 
 
    /*
-   ACTIVATE mUser MULTIPLE 
+   ACTIVATE mUser MULTIPLE
             WHERE ( mUser.User.Status = "A" ) AND
             (mUser.User.UserName = "ddennis" OR mUser.User.UserName = "testerpl" OR mUser.User.UserName = "monicak")
              AND mUser.UserGroup EXISTS
-             
+
 SELECT z_USER.ID, z_USER.USERNAME, z_USER.PASSWORD, z_USER.JAVAPASSWORD, z_USER.STATUS, z_USER.AUTHORIZATIONLEVEL,
        z_USER.EMAILADDRESS, z_USER.EMAILPASSWORD, z_USER.EMAILUSERNAME, z_USER.LOGINAUTHENTICTNTY,
        z_USER.MODIFIEDDATETIME, z_USER.OVERRIDESTATUS, z_USER.ONLNPRSPCTINTLCRTD, z_USER.SECURITYANSWER1,
@@ -5005,7 +5005,7 @@ FROM  z_USER JOIN
 WHERE  ( z_USER.STATUS = 'A' )  AND  ( z_USER.USERNAME = 'halll' OR z_USER.USERNAME = 'hardeem' OR z_USER.USERNAME =
        'murphyr' )  AND USERGROUP.ID  IS NOT NULL ;
 
-   ACTIVATE mUser RootOnlyMultiple 
+   ACTIVATE mUser RootOnlyMultiple
             WHERE ( mUser.User.Status = "A" ) AND
             (mUser.User.UserName = "ddennis" OR mUser.User.UserName = "testerpl" OR mUser.User.UserName = "monicak")
              AND mUser.UserGroup EXISTS
@@ -5022,7 +5022,7 @@ FROM  z_USER, MM_USERGROUP_CONTANSMMBR_Z_USE ON MM_USERGROUP_CONTANSMMBR_Z_USE.F
 WHERE  ( z_USER.STATUS = 'A' )  AND  ( z_USER.USERNAME = 'halll' OR z_USER.USERNAME = 'hardeem' OR z_USER.USERNAME =
        'murphyr' )  AND USERGROUP.ID  IS NOT NULL ;
 
-             
+
     */
    omUser_fnLocalBuildQualActivateUserLST( ViewToSubtask, vTempViewVar_0 );
    RESULT = ActivateObjectInstance( mUser, "mUser", ViewToSubtask, vTempViewVar_0, zMULTIPLE );
@@ -5036,10 +5036,10 @@ WHERE  ( z_USER.STATUS = 'A' )  AND  ( z_USER.USERNAME = 'halll' OR z_USER.USERN
    SetNameForView( mUser, "mUserLST", ViewToSubtask, zLEVEL_APPLICATION );
    return( 0 );
 // END
-} 
+}
 
 
-private int 
+private int
 omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
                            zVIEW    vQualObject )
 {
@@ -5090,7 +5090,7 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "EXISTS" );
 	   return( 0 );
-} 
-		
+}
+
    }
 }

@@ -26,7 +26,7 @@ package com.quinsoft.zeidon;
 public class Pagination
 {
     private int pageSize = 1000;
-    private boolean rollingPagination = true;
+    private boolean rollingPagination = false;
 
     public Pagination()
     {
@@ -48,7 +48,7 @@ public class Pagination
         return pageSize;
     }
 
-    public Pagination withPageSize( int pageSize )
+    public Pagination setPageSize( int pageSize )
     {
         this.pageSize = pageSize;
         return this;

@@ -606,6 +606,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.overrideConfigValue( key, value )
         this
     }
+    
+    def withRollingPagination( pageSize: Int = 1000 ) = {
+        jqual.setPagination( new Pagination().setRollingPagination( true ).withPageSize( pageSize ) )
+        this
+    }
 }
 
 class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {
