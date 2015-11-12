@@ -4673,7 +4673,8 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         String blobStr = srcView.serializeOi().asJson().withIncremental().toString();
+         //String blobStr = srcView.serializeOi().asJson().withIncremental().toString();
+         String blobStr = srcView.serializeOi().withIncremental().toString();
          cursor.getAttribute( attributeName ).setValue( blobStr );
       }
 
@@ -4984,7 +4985,7 @@ public abstract class VmlOperation
 
   	// There can be more than one view but we are assuming there is only one.
   	List<View> viewList = new DeserializeOi( qualView )
-      .asJson()
+      //.asJson()
       .fromString( strTmp )
       .activate();
 
