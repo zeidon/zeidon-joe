@@ -46,6 +46,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
 
+    private var jcurrentEntityDef = jlodDef.getRoot
+    
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
     private var firstOperator = true
 
@@ -426,19 +428,38 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      */
     def restricting( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
         firstOperator = true
-        val jentityDef = restrictTo( new EntitySelector( jlodDef ) )
-        jqual.restricting( jentityDef.getName() )
+        jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
+        jqual.restricting( jcurrentEntityDef.getName() )
         this
     }
 
+    /**
+     * Specifies how entity is to be ordered when retrieved from DB.  
+     * 
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID > 400 )
+     *             .orderBy( _.Name DESC )
+     *             .activate
+     * }}}
+     * 
+     * Overrides ordering specified in the LOD.
+     */
+    def orderBy( selectAttr: (AttributeOrderByBuilder) => OrderByTerminator ) : QualBuilder = {
+        val builder = new AttributeOrderByBuilder( this, jcurrentEntityDef )
+        selectAttr( builder )
+        jqual.addActivateOrdering( jcurrentEntityDef.getName, builder.jattributeDef.getName, builder.descending )
+        this
+    }
+    
     /**
      * Specifies which entity the following qualification is for.  Used to build
      * qualification programatically.
      */
     def forEntity( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
-        val jentityDef = restrictTo( new EntitySelector( jlodDef ) )
-        jqual.forEntity( jentityDef.getName() )
-        firstOperator = jqual.qualAttribCount() == 0
+        jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
+        jqual.forEntity( jcurrentEntityDef.getName() )
+        firstOperator = jqual.hasQualAttrib()
         this
     }
 
@@ -572,6 +593,24 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         return view
     }
 
+    /**
+     * Overrides the oiSourceUrl config value that is retrieved from Zeidon configuration
+     * (usually zeidon.ini).
+     */
+    def useOiSourceUrl( oiSourceUrl : String ) = {
+        jqual.setOiSourceUrl( oiSourceUrl )
+        this
+    }
+
+    def useConfigValue( key: String, value: String ) = {
+        jqual.overrideConfigValue( key, value )
+        this
+    }
+    
+    def withRollingPagination( pageSize: Int = 1000 ) = {
+        jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
+        this
+    }
 }
 
 class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {
@@ -1064,10 +1103,47 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
 }
 
 /**
+ * Builder for setting ORDER BY attribute.
+ */
+class AttributeOrderByBuilder( val qualBuilder: QualBuilder,
+                               val jentityDef: EntityDef )
+        extends Dynamic {
+
+    var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
+    val jqual = qualBuilder.jqual
+    var descending = false
+
+    /**
+     * Adds dynamic support for qualifying on an attribute.
+     */
+    def selectDynamic( attributeName: String ): OrderByTerminator = {
+        jattributeDef = jentityDef.getAttribute( attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+        new OrderByTerminator( this )
+    }
+}
+
+/**
  * A class to indicate that qualification has been correctly specified.
  */
 class QualificationTerminator {
 
+}
+
+/**
+ * A class to indicate that qualification has been correctly specified.
+ */
+class OrderByTerminator( val builder : AttributeOrderByBuilder ) {
+    def DESC = {
+        builder.descending = true
+        this
+    }
+
+    def ASC = {
+        builder.descending = false
+        this
+    }
 }
 
 object QualBuilder {

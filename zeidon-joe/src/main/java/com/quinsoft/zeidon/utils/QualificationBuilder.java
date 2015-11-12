@@ -28,6 +28,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
@@ -110,7 +111,7 @@ public class QualificationBuilder
         qualView = qual;
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
-        entitySpecCount = 0;
+        entitySpecCount = qual.cursor( ENTITYSPEC ).getEntityCount();
         synch = this;
     }
 
@@ -228,6 +229,15 @@ public class QualificationBuilder
         return asynchronous();
     }
 
+    public QualificationBuilder setPagination( Pagination pagingOptions )
+    {
+        if ( activateOptions.getPagingOptions() != null )
+            throw new ZeidonException( "Pagination options has already been set." );
+
+        activateOptions.setPagingOptions( pagingOptions );
+        return this;
+    }
+
     public QualificationBuilder asynchronous()
     {
         /*  Why can't we do async?  Removing this for now.
@@ -275,14 +285,30 @@ public class QualificationBuilder
         return this;
     }
 
-    public int qualAttribCount()
+    /**
+     * Returns true if there is attribute qualification for the currently selected
+     * QualEntity.  This does NOT include "ORDERBY".
+     */
+    public boolean hasQualAttrib()
     {
-        return qualView.cursor( QUALATTRIB ).getEntityCount();
+        for ( EntityInstance qa : qualView.cursor( QUALATTRIB ).eachEntity() )
+        {
+            if ( ! qa.getAttribute( OPER ).equals( "ORDERBY" ) )
+                return true;
+        }
+
+        return false;
     }
 
     public QualificationBuilder setOiSourceUrl( String url )
     {
         activateOptions.setOiSourceUrl( url );
+        return this;
+    }
+
+    public QualificationBuilder overrideConfigValue( String key, String value )
+    {
+        activateOptions.overrideConfigValue( key, value );
         return this;
     }
 
@@ -480,10 +506,22 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .getAttribute( ENTITYNAME).setValue( entityName )
-                                     .getAttribute( ATTRIBUTENAME).setValue( attribName )
-                                     .getAttribute( OPER).setValue( oper )
-                                     .getAttribute( VALUE).setValue( attribValue == null ? null : attribValue.toString() ) ;
+                                     .getAttribute( ENTITYNAME ).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( attribName )
+                                     .getAttribute( OPER ).setValue( oper )
+                                     .getAttribute( VALUE ).setValue( attribValue == null ? null : attribValue.toString() ) ;
+
+        return this;
+    }
+
+    public QualificationBuilder addActivateOrdering( String entityName, String attribName, boolean descending )
+    {
+        validateEntity();
+        qualView.cursor( QUALATTRIB ).createEntity()
+                                     .getAttribute( ENTITYNAME ).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( attribName )
+                                     .getAttribute( OPER ).setValue( "ORDERBY" )
+                                     .getAttribute( VALUE ).setValue( descending ? "DESC" : "ASC" ) ;
 
         return this;
     }
