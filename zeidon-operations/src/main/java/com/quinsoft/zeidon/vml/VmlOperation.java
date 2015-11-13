@@ -5020,7 +5020,10 @@ public abstract class VmlOperation
    protected String SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
                                     View srcView, String srcEntity, String srcAttribute, int control )
    {
-      StringBuilder sb = new StringBuilder( lodDefName );
+      StringBuilder sb = new StringBuilder( 256 );
+      
+      if ( lodDefName != null )
+    	  sb.append( lodDefName );
       int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
       if ( rc < 0 )
       {

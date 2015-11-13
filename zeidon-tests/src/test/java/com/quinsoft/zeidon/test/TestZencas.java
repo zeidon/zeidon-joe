@@ -1715,12 +1715,21 @@ public class TestZencas
 	 		   mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
 
 	 		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
+		 		  DropView( mPerson);
+		 		  
+		 		  StringBuilder szReturn  = new StringBuilder();
+
+		 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
+	                      mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
 
 	 		  RESULT = CommitObjectInstance( mUser );
-
+	 		  
+	 		  DropView( mUser );
 	 		  DropView( mPerson);
-
-	 		  StringBuilder szReturn  = new StringBuilder();
+		         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+		         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		         DropView( vTempViewVar_0 );
+		         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
 	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
 	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
@@ -1730,6 +1739,19 @@ public class TestZencas
 
 
 			 DropView( mUser );
+                 DropView( mPerson);
+
+	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "marycribben@aol.com" );
+	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	         DropView( vTempViewVar_0 );
+	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+			 
+	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
+	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
+
+				 DropView( mUser );
+	             DropView( mPerson);
+
 			 return 0;
 
 		}
@@ -4971,6 +4993,9 @@ mUser_ActivateUserLST(  View     ViewToSubtask )
    zVIEW    mUser = new zVIEW( );
    zVIEW    vTempViewVar_0 = new zVIEW( );
    int      RESULT = 0;
+   
+   // kkk just a test for IssueError.
+   //IssueError( ViewToSubtask, 0, 0, "Testing IssueError" );
 
    // In this test I have two exact activate statements except one is MULTIPLE, the other is ROOTONLYMULTIPLE and
    // both contain a mUser.UserGroup EXISTS (if I don't have the EXISTS, then there is no error).
