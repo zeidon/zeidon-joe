@@ -608,7 +608,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
     
     def withRollingPagination( pageSize: Int = 1000 ) = {
-        jqual.setPagination( new Pagination().setRollingPagination( true ).withPageSize( pageSize ) )
+        jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
         this
     }
 }
