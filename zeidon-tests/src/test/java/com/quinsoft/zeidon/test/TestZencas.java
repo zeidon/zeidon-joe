@@ -1740,7 +1740,7 @@ public class TestZencas
 
 			 DropView( mUser );
                  DropView( mPerson);
-
+/*
 	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "marycribben@aol.com" );
 	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
 	         DropView( vTempViewVar_0 );
@@ -1751,7 +1751,7 @@ public class TestZencas
 
 				 DropView( mUser );
 	             DropView( mPerson);
-
+*/
 			 return 0;
 
 		}
