@@ -59,6 +59,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     private static final String PREV_CURSOR  = "PreviousCursor";
     private static final String NEXT_CURSOR  = "NextCursor";
     private static final String LAST_CURSOR  = "LastCursor";
+    private static final String REFRESH_OI   = "RefreshOI";
 
     private final BrowserEnvironment env;
     private       EntityDef selectedEntityDef;
@@ -83,6 +84,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         addButton( buttonPane, "Prev in OI", PREV_CURSOR, "[Page Up]" );
         addButton( buttonPane, "Next in OI", NEXT_CURSOR, "[Page Down]" );
         addButton( buttonPane, "Last", LAST_CURSOR, "[End]" );
+        addButton( buttonPane, "Refresh OI", REFRESH_OI, "" );
 
         // Add a dummy, invisible label for spacing.  It's a hack but it's easy.
         JLabel dummy = new JLabel( "                               " );
@@ -103,25 +105,19 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         }
 
         add( buttonPane, BorderLayout.NORTH );
-        
+
         InputMap im = getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
         ActionMap am = getActionMap();
-        im.put( KeyStroke.getKeyStroke(KeyEvent.VK_ADD,
-                                                  KeyEvent.CTRL_DOWN_MASK),  "increaseScale" );
-        im.put( KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS,
-                                                  KeyEvent.CTRL_DOWN_MASK),  "increaseScale" );
-        im.put( KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
-                                                  KeyEvent.CTRL_DOWN_MASK),  "increaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_ADD, KeyEvent.CTRL_DOWN_MASK ), "increaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK ), "increaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_PLUS, KeyEvent.CTRL_DOWN_MASK ), "increaseScale" );
         am.put("increaseScale", new ChangeScaleAction( +2 ) );
-        
-        im.put( KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT,
-                                                  KeyEvent.CTRL_DOWN_MASK),  "decreaseScale" );
-        im.put( KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
-                                       KeyEvent.CTRL_DOWN_MASK),  "decreaseScale" );
+
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_SUBTRACT, KeyEvent.CTRL_DOWN_MASK ), "decreaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK ), "decreaseScale" );
         am.put("decreaseScale", new ChangeScaleAction( -2 ) );
 
-        im.put( KeyStroke.getKeyStroke(KeyEvent.VK_0,
-                                       KeyEvent.CTRL_DOWN_MASK),  "resetScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK ), "resetScale" );
         am.put("resetScale", new ChangeScaleAction( 0 ) );
 
         setVisible( true );
@@ -181,6 +177,17 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         oiDisplay.repositionScroll( p );
     }
 
+    /**
+     * Refresh the browser view of the OI.  Make sure we keep positioned
+     * on the selected entity.
+     */
+    private void refreshOi()
+    {
+        EntitySquare selectedEntity = oiDisplay.getSelectedEntity();
+        displayView( currentView );
+        setSelectedEntity( selectedEntity.getEntityDef() );
+    }
+
     @Override
     public void actionPerformed(ActionEvent action)
     {
@@ -198,6 +205,9 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         else
         if ( action.getActionCommand().equals( LAST_CURSOR ) )
             oiDisplay.getView().cursor( selectedEntityDef ).setLast();
+        else
+        if ( action.getActionCommand().equals( REFRESH_OI ) )
+            refreshOi();
         else
             throw new ZeidonException( "Internal action error" );
 
@@ -231,7 +241,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
                 scale = env.getDefaultPainterScale();
             else
                 scale = scale + delta;
-            
+
             if ( env.setPainterScaleFactor( scale ) )
             {
                 EntityDef ve = selectedEntityDef; // Save this because it'll be changed by displayView.
