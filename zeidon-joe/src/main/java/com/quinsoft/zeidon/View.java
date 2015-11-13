@@ -595,7 +595,7 @@ public interface View extends TaskQualification, CacheMap
     boolean isInternal();
 
     /**
-     * Sets the 'internal' flag.
+     * Sets the 'internal' flag.  The only effect is that this will hide the view from the browser.
      *
      * @param internal
      * @return

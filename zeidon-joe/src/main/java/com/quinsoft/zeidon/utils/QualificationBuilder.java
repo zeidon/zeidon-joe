@@ -688,7 +688,6 @@ public class QualificationBuilder
                 cacheTask.setEntityCache( entityCache );
             }
 
-            qualView.setInternal( true ); // So it doesn't show up in the browser any more.
             return view;
         } // synchronized ( synch )...
     }
