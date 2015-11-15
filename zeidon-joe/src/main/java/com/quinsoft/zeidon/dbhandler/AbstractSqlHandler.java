@@ -149,6 +149,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         this.task = task;
         this.application = options.getApplication();
+        this.options = options;
         entityLinker = new OiRelinker( task );
         cachedStmts = new HashMap<EntityDef, AbstractSqlHandler.SqlStatement>();
     }

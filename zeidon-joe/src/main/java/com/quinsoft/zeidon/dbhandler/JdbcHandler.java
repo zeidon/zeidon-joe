@@ -93,7 +93,6 @@ public class JdbcHandler extends AbstractSqlHandler
     public JdbcHandler(Task task, AbstractOptionsConfiguration options )
     {
         super( task, options );
-        this.options = options;
         configGroupName = options.getConfigValue( "_JDBC", "JdbcConfigGroupName" );
         task.log().debug( "JDBC config group = %s", configGroupName );
 
