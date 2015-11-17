@@ -460,6 +460,27 @@ class EntityCursor( private[this]  val view: View,
             jentityCursor.setFirst( attributeName, value )
     }
 
+    def setLast( predicate: (EntityInstance) => Boolean ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
+        
+        // Since we're going to go backwards through the list we can't use a normal
+        // iterator so we'll do it by hand.
+        var rc = jentityCursor.setLast()
+        while ( rc.isSet() ) {
+            val ei = jentityCursor.getEntityInstance
+            if ( predicate( new EntityInstance( ei ) ) )
+                return EntityCursor.CURSOR_SET
+
+            rc = jentityCursor.setPrev()
+        }
+
+        // If we get here then we didn't find a match. Reset the cursor to its original position.
+        if ( currentEi != null )
+            jentityCursor.setCursor( currentEi )
+            
+        return EntityCursor.CURSOR_UNCHANGED
+    }
+
     /**
       * Set the cursor using a hashkey attribute value.
       */
