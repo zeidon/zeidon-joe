@@ -229,4 +229,6 @@ public interface Task extends TaskQualification, CacheMap
      * @return true if there was already an EntityCache for the entity.
      */
     boolean setEntityCache( EntityCache entityCache);
+
+    void addTaskCleanupWork( DropTaskCleanup work );
 }

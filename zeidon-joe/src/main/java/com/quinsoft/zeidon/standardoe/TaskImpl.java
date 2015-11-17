@@ -37,6 +37,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.DropTaskCleanup;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -91,6 +92,8 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     private Map<String, EntityCache> entityCacheMap;
 
     private Map<Application, Map<String, Map<String, String>>> configOverrideMap;
+
+    private List<DropTaskCleanup> cleanupWork;
 
     TaskImpl(JavaObjectEngine objectEngine, Application app, String taskId)
     {
@@ -238,13 +241,19 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     }
 
     @Override
-    public void dropTask()
+    public synchronized void dropTask()
     {
         // If this has already been dropped return silently.
         if ( ! isValid )
             return;
 
         log().info( "Dropping task %s", taskId );
+
+        if ( cleanupWork != null )
+        {
+            for ( DropTaskCleanup work : cleanupWork )
+                work.taskDropped( this );
+        }
 
         if ( lockedViews != null )
         {
@@ -658,5 +667,14 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         }
 
         groupMap.put( key, value );
+    }
+
+    @Override
+    public void addTaskCleanupWork( DropTaskCleanup work )
+    {
+        if ( cleanupWork != null )
+            cleanupWork = new ArrayList<>();
+
+        cleanupWork.add( work );
     }
 }

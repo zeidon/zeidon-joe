@@ -104,6 +104,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * I.e. activateOptions = (ActivateOptions) options.
      */
     protected ActivateOptions activateOptions;
+    protected boolean closeTransaction = true;
 
     /**
      * Keeps a list of entities that are joinable for this activate.
@@ -741,10 +742,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         activateOptions = (ActivateOptions) options;
         pagingOptions = activateOptions.getPagingOptions();
         loadQualificationObject( view.getLodDef() );
-
         loadedViewEntities = new HashSet<>();
-
         determineEntitiesThatCanBeLoadedInOneSelect( view );
+        if ( activateOptions.isSingleTransaction() )
+            closeTransaction = false;
 
         return 0;
     }

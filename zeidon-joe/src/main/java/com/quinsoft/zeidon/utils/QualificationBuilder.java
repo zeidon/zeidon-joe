@@ -343,6 +343,12 @@ public class QualificationBuilder
         return this;
     }
 
+    public QualificationBuilder setSingleTransaction()
+    {
+        activateOptions.setSingleTransaction( true );
+        return this;
+    }
+
     /**
      * @deprecated  Use forEntity() instead.
      */

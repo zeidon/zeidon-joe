@@ -25,9 +25,6 @@ import com.quinsoft.zeidon.dbhandler.DbHandler;
 
 /**
  * Common code for getting activate/commit configuration values from task config.
- *
- * @author dgc
- *
  */
 public abstract class AbstractOptionsConfiguration
 {
@@ -40,6 +37,12 @@ public abstract class AbstractOptionsConfiguration
      * If not null then the activator/committer will use this DbHandler for processing.
      */
     private DbHandler dbHandler;
+
+    /**
+     * If true then the activate will share a single transaction.
+     * Activates will keep the transaction open, a commit will close it.
+     */
+    private boolean singleTransaction = false;
 
     public AbstractOptionsConfiguration( Task task )
     {
@@ -105,5 +108,15 @@ public abstract class AbstractOptionsConfiguration
     public void setDbHandler( DbHandler dbHandler )
     {
         this.dbHandler = dbHandler;
+    }
+
+    public boolean isSingleTransaction()
+    {
+        return singleTransaction;
+    }
+
+    public void setSingleTransaction( boolean singleTransaction )
+    {
+        this.singleTransaction = singleTransaction;
     }
 }

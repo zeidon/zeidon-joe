@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.CommitFlags;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
@@ -34,6 +35,7 @@ import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.dbhandler.JdbcTransaction;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.Timer;
@@ -326,9 +328,24 @@ class CommitMultiplOIs
         boolean missingPermission = false;
         accumulatePermissionMaps();
 
+        // If any of the activates was made using a single transaction then
+        // this will be set to the transaction so we can use it to do the
+        // commit.
+        // TODO: Some day, when we support other DBs besides JDBC we'll need
+        // to make this more generic.
+        JdbcTransaction transaction = null;
+
         for ( ViewImpl view : viewList )
         {
             ObjectInstance oi = view.getObjectInstance();
+
+            ActivateOptions activateOptions = oi.getActivateOptions();
+            if ( activateOptions.isSingleTransaction() && transaction == null )
+            {
+                transaction = getTask().getCacheMap( JdbcTransaction.class );
+                options.setSingleTransaction( true );
+            }
+
             for ( EntityInstanceImpl ei : oi.getEntities( true ) )
             {
                 EntityDef entityDef = ei.getEntityDef();

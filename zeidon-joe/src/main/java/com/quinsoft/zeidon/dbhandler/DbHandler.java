@@ -43,7 +43,11 @@ public interface DbHandler
      */
     static final String ROOT_ENTITY = "*root*";
 
-    void beginTransaction();
+    /**
+     * Begins a transaction.  If it returns true then endTransaction must
+     * be called immediately; i.e. the transaction isn't saved for later.
+     */
+    boolean beginTransaction();
     void endTransaction( boolean commit );
 
     int beginActivate( View view, View qual, EnumSet<ActivateFlags> control );

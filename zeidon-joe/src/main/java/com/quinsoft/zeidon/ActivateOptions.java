@@ -51,17 +51,14 @@ public class ActivateOptions extends AbstractOptionsConfiguration
      * stored procedures or something with the FileDB.
      */
     private String qualificationName;
-
     private boolean performingLazyLoad = false;
-    
     private Pagination pagingOptions = null;
-    
-    
+
     /**
      * This is the activate ordering for the root entity.
      */
     private LinkedHashMap<AttributeDef, ActivateOrder> rootActivateOrdering;
-    
+
     public ActivateOptions( TaskQualification task )
     {
         super( task.getTask() );
@@ -273,9 +270,9 @@ public class ActivateOptions extends AbstractOptionsConfiguration
 
     public boolean isReadOnly()
     {
-        return activateFlags.contains( ActivateFlags.fREAD_ONLY ); 
+        return activateFlags.contains( ActivateFlags.fREAD_ONLY );
     }
-    
+
     public boolean isPerformingLazyLoad()
     {
         return performingLazyLoad;
@@ -295,7 +292,7 @@ public class ActivateOptions extends AbstractOptionsConfiguration
     {
         this.pagingOptions = pagingOptions;
     }
-    
+
     public LinkedHashMap<AttributeDef, ActivateOrder> getRootGetActivateOrdering()
     {
         return rootActivateOrdering;
@@ -324,5 +321,4 @@ public class ActivateOptions extends AbstractOptionsConfiguration
             this.descending = descending;
         }
     }
-
 }

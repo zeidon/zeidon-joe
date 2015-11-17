@@ -109,6 +109,7 @@ public class TestZencas
                             .addActivateOrdering( "Student", "LS_AdvisorName", true )
                             .addActivateOrdering( "Student", "ID", false )
                             .limitCountTo( 100 )
+                            .setSingleTransaction()
                             .activate();
         studFull.cursor( "Student" ).setFirst();
 
@@ -116,6 +117,7 @@ public class TestZencas
                             .setLodDef( "lStudDpt" )
                             .setPagination( new Pagination().setRollingPagination( true ).setPageSize( 10 ) )
                             .addActivateOrdering( "Student", "LS_AdvisorName", true )
+                            .setSingleTransaction()
                             .activate();
 
         int count = 0;
@@ -134,7 +136,6 @@ public class TestZencas
                 break;
 
             studFull.cursor( "Student" ).setNext();
-
         }
     }
 
@@ -1716,14 +1717,14 @@ public class TestZencas
 
 	 		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
 		 		  DropView( mPerson);
-		 		  
+
 		 		  StringBuilder szReturn  = new StringBuilder();
 
 		 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
 	                      mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
 
 	 		  RESULT = CommitObjectInstance( mUser );
-	 		  
+
 	 		  DropView( mUser );
 	 		  DropView( mPerson);
 		         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
@@ -1745,7 +1746,7 @@ public class TestZencas
 	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
 	         DropView( vTempViewVar_0 );
 	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-			 
+
 	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
 	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
 
@@ -4993,7 +4994,7 @@ mUser_ActivateUserLST(  View     ViewToSubtask )
    zVIEW    mUser = new zVIEW( );
    zVIEW    vTempViewVar_0 = new zVIEW( );
    int      RESULT = 0;
-   
+
    // kkk just a test for IssueError.
    //IssueError( ViewToSubtask, 0, 0, "Testing IssueError" );
 
