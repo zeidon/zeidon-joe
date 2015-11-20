@@ -5853,6 +5853,11 @@ public abstract class VmlOperation
    {
       EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
       AttributeDef AttributeDef = entityDef.getAttribute( 0 );
+      if ( AttributeDef == null )
+          return -1;
+       
+      if ( AttributeDef.isHidden() )
+     	  return  -1;
       //if ( sbAttribName != null ) // Do we need this?
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbAttribName.append( AttributeDef.getName() );
@@ -5866,6 +5871,9 @@ public abstract class VmlOperation
       AttributeDef = AttributeDef.getNextAttributeDef();
       if ( AttributeDef == null )
          return -1;
+      
+      if ( AttributeDef.isHidden() )
+    	  return  -1;
 
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbAttribName.append( AttributeDef.getName() );
