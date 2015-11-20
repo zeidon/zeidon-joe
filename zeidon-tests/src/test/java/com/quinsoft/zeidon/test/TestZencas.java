@@ -517,6 +517,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testzGetNextEntityAttributeName()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testzGetNextEntityAttributeName( testview );
+        System.out.println("===== Finished testzGetNextEntityAttributeName ========");
+	}
+
+	@Test
 	public void testActivateRecurObj()
 	{
 	    View         testview;
@@ -1759,7 +1769,149 @@ public class TestZencas
 
 		}
 
+		public int
+		testzGetNextEntityAttributeName( View ViewToWindow )
+		{
+			   zVIEW    fPerson= new zVIEW( );
+			   //:VIEW vWindow
+			   zVIEW    vWindow = new zVIEW( );
+			   //:INTEGER nResult
+			   int      nResult = 0;
+			   //:INTEGER nRC
+			   int      nRC = 0;
+			   //:INTEGER nExists
+			   int      nExists = 0;
+			   //:INTEGER nRCE
+			   int      nRCE = 0;
+			   //:INTEGER nRCA
+			   int      nRCA = 0;
+			   int      RESULT = 0;
+			   String   szString = null;
+			   String   szFindString = null;
+			   String   szAddToString = null;
+			   String   szEntityName = null;
+			   String   szAttributeName = null;
+			   
+			   //:// activate and create the find object for the screen
+			   //:ACTIVATE fPerson EMPTY
+			   RESULT = ActivateEmptyObjectInstance( fPerson, "fPerson", ViewToWindow, zSINGLE );
+			   //:NAME VIEW fPerson  "fPerson"
+			   SetNameForView( fPerson, "fPerson", null, zLEVEL_TASK );
+			   //:CREATE ENTITY fPerson.Person
+			   RESULT = CreateEntity( fPerson, "Person", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.Address
+			   RESULT = CreateEntity( fPerson, "Address", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.PrimaryAddress
+			   RESULT = CreateEntity( fPerson, "PrimaryAddress", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.Demographics
+			   RESULT = CreateEntity( fPerson, "Demographics", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.HomeChurch
+			   RESULT = CreateEntity( fPerson, "HomeChurch", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.HomeChurchAddress
+			   RESULT = CreateEntity( fPerson, "HomeChurchAddress", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.DescendantRole
+			   RESULT = CreateEntity( fPerson, "DescendantRole", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.DescendantPerson
+			   RESULT = CreateEntity( fPerson, "DescendantPerson", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.ParentRole
+			   RESULT = CreateEntity( fPerson, "ParentRole", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.ParentPerson
+			   RESULT = CreateEntity( fPerson, "ParentPerson", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.PriorEducation
+			   RESULT = CreateEntity( fPerson, "PriorEducation", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.School
+			   RESULT = CreateEntity( fPerson, "School", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.Staff
+			   RESULT = CreateEntity( fPerson, "Staff", zPOS_AFTER );
+			   //:CREATE ENTITY fPerson.Category
+			   RESULT = CreateEntity( fPerson, "Category", zPOS_AFTER );
+			   
+			   // loop through each entity and attribute to find what ones were not null, the add a
+			   //    qual attribute for each one.
+			   {StringBuilder sb_szEntityName;
+			   if ( szEntityName == null )
+			      sb_szEntityName = new StringBuilder( 32 );
+			   else
+			      sb_szEntityName = new StringBuilder( szEntityName );
+			       nRCE = zGetFirstEntityNameForView( fPerson, sb_szEntityName );
+			   szEntityName = sb_szEntityName.toString( );}
+			   //:szFindString = ""
+			    {StringBuilder sb_szFindString;
+			   if ( szFindString == null )
+			      sb_szFindString = new StringBuilder( 32 );
+			   else
+			      sb_szFindString = new StringBuilder( szFindString );
+			      ZeidonStringCopy( sb_szFindString, 1, 0, "", 1, 0, 2049 );
+			   szFindString = sb_szFindString.toString( );}
+			   //:LOOP WHILE nRCE >= 0
+			   while ( nRCE >= 0 )
+			   { 
+			      nExists = CheckExistenceOfEntity( fPerson, szEntityName );
+			      if ( nExists >= zCURSOR_SET )
+			      { 
+			         //:// get the attributes
+			         {StringBuilder sb_szAttributeName;
+			         if ( szAttributeName == null )
+			            sb_szAttributeName = new StringBuilder( 32 );
+			         else
+			            sb_szAttributeName = new StringBuilder( szAttributeName );
+			                   nRCA = zGetFirstAttributeNameForEntity( fPerson, szEntityName, sb_szAttributeName );
+			         szAttributeName = sb_szAttributeName.toString( );}
+			         while ( nRCA >= 0 )
+			         { 
+			            {StringBuilder sb_szString;
+			            if ( szString == null )
+			               sb_szString = new StringBuilder( 32 );
+			            else
+			               sb_szString = new StringBuilder( szString );
+			                         GetStringFromAttribute( sb_szString, fPerson, szEntityName, szAttributeName );
+			            szString = sb_szString.toString( );}
+			            //:// if a value was entered...qualify on it.
+			            //:IF szString != ""
+			            if ( ZeidonStringCompare( szString, 1, 0, "", 1, 0, 1025 ) != 0 )
+			            { 
+			               //:szAddToString = szEntityName + "." + szAttributeName + " like %" + szString + "%"
+			                {StringBuilder sb_szAddToString;
+			               if ( szAddToString == null )
+			                  sb_szAddToString = new StringBuilder( 32 );
+			               else
+			                  sb_szAddToString = new StringBuilder( szAddToString );
+			                              ZeidonStringCopy( sb_szAddToString, 1, 0, szEntityName, 1, 0, 1025 );
+			               szAddToString = sb_szAddToString.toString( );}
+			                {StringBuilder sb_szAddToString;
+			               if ( szAddToString == null )
+			                  sb_szAddToString = new StringBuilder( 32 );
+			               else
+			                  sb_szAddToString = new StringBuilder( szAddToString );
+			                              ZeidonStringConcat( sb_szAddToString, 1, 0, ".", 1, 0, 1025 );
+			               szAddToString = sb_szAddToString.toString( );}
+			            } 
 
+			            //:END
+			            //:nRCA = zGetNextAttributeNameForEntity( fPerson, szEntityName, szAttributeName )
+			            {StringBuilder sb_szAttributeName;
+			            if ( szAttributeName == null )
+			               sb_szAttributeName = new StringBuilder( 32 );
+			            else
+			               sb_szAttributeName = new StringBuilder( szAttributeName );
+			                         nRCA = zGetNextAttributeNameForEntity( fPerson, szEntityName, sb_szAttributeName );
+			            szAttributeName = sb_szAttributeName.toString( );}
+			         } 
+
+			      } 
+
+			      //:nRCE = zGetNextEntityNameForView( fPerson, szEntityName )
+			      {StringBuilder sb_szEntityName;
+			      if ( szEntityName == null )
+			         sb_szEntityName = new StringBuilder( 32 );
+			      else
+			         sb_szEntityName = new StringBuilder( szEntityName );
+			             nRCE = zGetNextEntityNameForView( fPerson, sb_szEntityName );
+			      szEntityName = sb_szEntityName.toString( );}
+			   } 
+
+			   return( 0 );
+			} 		
 		public int
 		testmUserActivateTime( View ViewToWindow )
 		{
