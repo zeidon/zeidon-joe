@@ -35,7 +35,6 @@ import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.dbhandler.JdbcTransaction;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.Timer;
@@ -147,14 +146,6 @@ class CommitMultiplOIs
             if ( oi.isVersioned() )
                 throw new ZeidonException("Attempting to commit a view with outstanding versioned instances.  " +
                                           "View = %s", v );
-
-            if ( oi.isLocked() && view.isIgnoreLocks() )
-            {
-                getTask().log().warn( "You are committing an OI with pessimistic locking using a view that " +
-                                      "was created from the original view.  THE PESSIMISTIC LOCK WILL NOT BE REMOVED.\n" +
-                                      "View ID = %s", view.toString() );
-                view.logObjectInstance();
-            }
 
             viewList.add( view );
         }
@@ -328,23 +319,15 @@ class CommitMultiplOIs
         boolean missingPermission = false;
         accumulatePermissionMaps();
 
-        // If any of the activates was made using a single transaction then
-        // this will be set to the transaction so we can use it to do the
-        // commit.
-        // TODO: Some day, when we support other DBs besides JDBC we'll need
-        // to make this more generic.
-        JdbcTransaction transaction = null;
-
         for ( ViewImpl view : viewList )
         {
             ObjectInstance oi = view.getObjectInstance();
 
+            // Get the activate options to see if we are sharing a transaction.
+            // activateOptions will be null on a new OI.
             ActivateOptions activateOptions = oi.getActivateOptions();
-            if ( activateOptions.isSingleTransaction() && transaction == null )
-            {
-                transaction = getTask().getCacheMap( JdbcTransaction.class );
+            if ( activateOptions != null && activateOptions.isSingleTransaction() )
                 options.setSingleTransaction( true );
-            }
 
             for ( EntityInstanceImpl ei : oi.getEntities( true ) )
             {

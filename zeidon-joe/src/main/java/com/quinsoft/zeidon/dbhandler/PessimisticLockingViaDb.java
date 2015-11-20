@@ -62,8 +62,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private Task task;
     private LodDef lodDef;
 
-    @Override
-    public void initialize( ActivateOptions options ) throws PessimisticLockingException
+    public PessimisticLockingViaDb( ActivateOptions options ) throws PessimisticLockingException
     {
         task = options.getTask();
         lodDef = options.getLodDef();
@@ -344,5 +343,11 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
 
             return locks.get( lodDef );
         }
+    }
+
+    @Override
+    public void viewDropped( View view )
+    {
+        releaseLocks( view );
     }
 }

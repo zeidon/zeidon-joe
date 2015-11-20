@@ -22,6 +22,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -46,8 +47,9 @@ public interface DbHandler
     /**
      * Begins a transaction.  If it returns true then endTransaction must
      * be called immediately; i.e. the transaction isn't saved for later.
+     * @param view TODO
      */
-    boolean beginTransaction();
+    boolean beginTransaction(View view );
     void endTransaction( boolean commit );
 
     int beginActivate( View view, View qual, EnumSet<ActivateFlags> control );
@@ -86,4 +88,6 @@ public interface DbHandler
      * @param set
      */
     void setDbGenerateKeys( boolean set );
+
+    PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  );
 }

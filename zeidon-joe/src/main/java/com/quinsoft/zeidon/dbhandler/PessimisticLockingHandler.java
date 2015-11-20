@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.dbhandler;
 
 import java.util.Collection;
 
-import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.View;
 
@@ -31,17 +31,8 @@ import com.quinsoft.zeidon.View;
  * @author DG
  *
  */
-public interface PessimisticLockingHandler
+public interface PessimisticLockingHandler extends DropViewCleanup
 {
-    /**
-     * Performs any initialization necessary for acquiring pessimistic locks.
-     * Called at the beginning of activation.
-     *
-     * @param options
-     * @throws PessimisticLockingException
-     */
-    void initialize( ActivateOptions options ) throws PessimisticLockingException;
-
     /**
      * Called at the end of activation to release any resources.
      */

@@ -27,6 +27,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -41,6 +42,7 @@ import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -53,8 +55,6 @@ import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
-import com.quinsoft.zeidon.dbhandler.PessimisticLockingViaDb;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -94,18 +94,14 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     private boolean isReadOnly = false;
 
     /**
-     * If true, then when this view is dropped don't drop the pessimistic locks.
-     * This is turned on when a new view is created from a locked view.
-     */
-    private boolean ignoreLocks = false;
-
-    /**
      * True if this view was created by internal JOE processing.  This is intended
      * to be used by the browser to ignore views that weren't created by the user.
      */
     private boolean isInternal = false;
 
     private boolean allowHiddenEntities = false;
+
+    private List<DropViewCleanup> cleanupWork;
 
     ViewImpl( TaskImpl task, LodDef lodDef )
     {
@@ -228,8 +224,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void drop()
     {
-        dropDbLocks();
         getTask().dropView( this );
+        if ( cleanupWork != null )
+        {
+            for ( DropViewCleanup work : cleanupWork )
+                work.viewDropped( this );
+        }
     }
 
     @Override
@@ -372,26 +372,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public void dropDbLocks()
-    {
-        if ( ignoreLocks )
-            return;
-
-        ObjectInstance oi = getObjectInstance();
-        synchronized ( oi )
-        {
-            if ( oi.isLocked() )
-            {
-                PessimisticLockingHandler releaser = getPessimisticLockingHandler();
-                releaser.releaseLocks( this );
-                getTask().removePessimisticLock( this );
-                oi.setLocked( false );
-                oi.setReadOnly( true );
-            }
-        }
-    }
-
-    @Override
     public boolean isReadOnly()
     {
         if ( isReadOnly )
@@ -430,9 +410,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         ViewImpl newView = new ViewImpl( (TaskImpl) owningTask.getTask(), this );
         if ( readOnly )
             newView.setReadOnly( true );
-
-        if ( isLocked() )
-            newView.ignoreLocks = true;
 
         return newView;
     }
@@ -1040,21 +1017,11 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return new SerializeOi( this );
     }
 
-    PessimisticLockingHandler getPessimisticLockingHandler()
-    {
-        //TODO: At some point we want to dynamically load the pessimistic locking handler.
-        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb();
-        return lockingHandler;
-    }
-
+    /**
+     * Calls drop().  This is implemented to support Closeable interface.
+     */
     @Override
-    public boolean isLocked()
-    {
-        return getObjectInstance().isLocked();
-    }
-
- //   @Override
-    public void close() throws Exception
+    public void close()
     {
         drop();
     }
@@ -1104,8 +1071,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return this;
     }
 
-    boolean isIgnoreLocks()
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
     {
-        return ignoreLocks;
+        if ( cleanupWork == null )
+            cleanupWork = new ArrayList<>();
+
+        cleanupWork.add( work );
     }
 }

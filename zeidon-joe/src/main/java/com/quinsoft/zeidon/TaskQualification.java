@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
+import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -29,7 +30,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * Instances).
  *
  */
-public interface TaskQualification extends Lockable
+public interface TaskQualification extends Lockable, Closeable
 {
     /**
      * Returns the default application for this task.

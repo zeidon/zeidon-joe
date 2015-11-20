@@ -413,16 +413,6 @@ public interface View extends TaskQualification, CacheMap
     Collection<ZeidonException> validateOi();
 
     /**
-     * Returns true if the OI of this view was activated with locking.
-     */
-    boolean isLocked();
-
-    /**
-     * Drops any outstanding pessimistic locks in the DB.
-     */
-    void dropDbLocks();
-
-    /**
      * Relinks all the OIs specified in the view list with this one.
      *
      * @param otherViews other, optional, views that can be relinked all at once.
@@ -610,4 +600,7 @@ public interface View extends TaskQualification, CacheMap
      * @return
      */
     int getEntityCount( boolean includeHidden );
+    
+    public void addViewCleanupWork( DropViewCleanup work );
+
 }

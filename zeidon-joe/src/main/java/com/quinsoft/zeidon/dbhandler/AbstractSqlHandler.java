@@ -921,7 +921,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) && entityDef.getParent() != null )
             return false;
 
-
         // We can't join a child to its parent if there is an activate limit on the
         // parent AND if the child has a x-to-many relationship.  Joining the parent
         // and child could result in a result-set that has more rows than expected.
@@ -2965,5 +2964,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     public String getUserName()
     {
         return getConfigValue( "Username" );
+    }
+
+    @Override
+    public PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  )
+    {
+        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb( activateOptions );
+        return lockingHandler;
     }
 }

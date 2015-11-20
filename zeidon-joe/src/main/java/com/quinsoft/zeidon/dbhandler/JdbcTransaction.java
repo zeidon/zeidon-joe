@@ -20,13 +20,17 @@ package com.quinsoft.zeidon.dbhandler;
 
 import java.sql.Connection;
 
+import com.quinsoft.zeidon.DropTaskCleanup;
+import com.quinsoft.zeidon.DropViewCleanup;
+import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 
 /**
  * Keeps track of a JDBC transaction/connection.
  *
  */
-public class JdbcTransaction
+public class JdbcTransaction implements DropTaskCleanup, DropViewCleanup
 {
     private final Connection connection;
     private boolean closed = false;
@@ -51,5 +55,48 @@ public class JdbcTransaction
 
         connection.close();
         closed = true;
+    }
+
+    boolean isClosed()
+    {
+        return closed;
+    }
+
+    /**
+     * This is called when a task is dropped and will close the connection
+     * if it hasn't been already.
+     */
+    @Override
+    public void taskDropped( Task task )
+    {
+        if ( closed )
+            return;
+
+        try
+        {
+            task.log().warn( "Task has open JDBC connection.  Commit/rollback may not have been called.  Closing now." );
+            close();
+        }
+        catch ( Exception e )
+        {
+            ZeidonException.wrapException( e );
+        }
+    }
+
+    @Override
+    public void viewDropped( View view )
+    {
+        if ( closed )
+            return;
+        
+        try
+        {
+            view.dblog().debug( "Closing JDBC transaction" );
+            close();
+        }
+        catch ( Exception e )
+        {
+            ZeidonException.wrapException( e );
+        }
     }
 }

@@ -157,7 +157,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
              */
             boolean commit = false;
 
-            dbHandler.beginTransaction();
+            dbHandler.beginTransaction( null );
             try
             {
                 // First do all the inserts.
@@ -187,13 +187,6 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             // entities/attributes and remove deleted/excluded entities from the OI chain.
             for ( ViewImpl view : viewList )
                 cleanupOI( view.getObjectInstance() );
-
-            // Drop any pessimistic locks we might have.
-            if ( ! options.getControl().contains( CommitFlags.fKEEP_LOCKS ) )
-            {
-                for ( ViewImpl view : viewList )
-                    view.dropDbLocks();
-            }
 
             return viewList;
         }

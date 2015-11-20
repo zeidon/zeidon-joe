@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.quinsoft.zeidon.CommitFlags;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.EntityCursor;
@@ -118,7 +117,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
              */
             boolean commit = false;
 
-            dbHandler.beginTransaction();
+            dbHandler.beginTransaction( null );
 
             try
             {
@@ -146,13 +145,6 @@ class CommitToDbUsingGenkeyHandler implements Committer
             // entities/attributes and remove deleted/excluded entities from the OI chain.
             for ( ViewImpl view : viewList )
                 cleanupOI( view.getObjectInstance() );
-
-            // Drop any pessimistic locks we might have.
-            if ( ! options.getControl().contains( CommitFlags.fKEEP_LOCKS ) )
-            {
-                for ( ViewImpl view : viewList )
-                    view.dropDbLocks();
-            }
 
             return viewList;
         }

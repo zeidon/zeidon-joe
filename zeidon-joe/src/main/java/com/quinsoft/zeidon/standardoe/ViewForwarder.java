@@ -29,6 +29,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -365,15 +366,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#dropDbLocks()
-     */
-    @Override
-    public void dropDbLocks()
-    {
-        getView().dropDbLocks();
-    }
-
-    /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#setName(java.lang.String)
      */
     @Override
@@ -614,14 +606,11 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         return getView().newView( owningTask, readOnly );
     }
 
+    /**
+     * Calls drop().  This is implemented to support Closeable interface.
+     */
     @Override
-    public boolean isLocked()
-    {
-        return getView().isLocked();
-    }
-
-//    @Override
-    public void close() throws Exception
+    public void close()
     {
         getView().drop();
     }
@@ -654,5 +643,11 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public Set<Object> getSelectSetNames()
     {
         return getView().getSelectSetNames();
+    }
+    
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
+    {
+        getView().addViewCleanupWork( work );
     }
 }

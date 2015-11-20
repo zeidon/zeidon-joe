@@ -92,7 +92,10 @@ class ActivateOiFromDB implements Activator
         // Get pessimistic lock handler.
         PessimisticLockingHandler pessimisticLock = null;
         if ( options.getLockingLevel().isPessimisticLock() && ! options.isReadOnly() )
-            pessimisticLock = view.getPessimisticLockingHandler();
+        {
+            pessimisticLock = dbHandler.getPessimisticLockingHandler( options, view );
+            view.addViewCleanupWork( pessimisticLock );
+        }
 
         // If we are activating with rolling pagination then replace the root cursor
         // with a special one that will attempt to load the next page when required.
@@ -103,17 +106,13 @@ class ActivateOiFromDB implements Activator
             {
                 if ( pessimisticLock != null )
                     throw new ZeidonException( "Pessimistic locking is not supported with rolling pagination."
-                                           + "  Use read-only option on the acivate." );
+                                           + "  Use read-only option on the activate." );
 
                 ViewCursor viewCursor = view.getViewCursor();
                 EntityCursorImpl newCursor = new RollingPaginationEntityCursorImpl( viewCursor, lodDef.getRoot(), options );
                 viewCursor.replaceEntityCursor( newCursor );
             }
         }
-
-        // TODO: We don't check for locks that don't even allow reads.
-        if ( pessimisticLock != null )
-            pessimisticLock.initialize( options );
 
         try
         {
@@ -128,7 +127,6 @@ class ActivateOiFromDB implements Activator
                 if ( pessimisticLock != null )
                 {
                     pessimisticLock.acquireLocks( view );
-                    view.getTask().addLockedView( view );
                     view.getObjectInstance().setLocked( true );
                 }
 
@@ -176,7 +174,8 @@ class ActivateOiFromDB implements Activator
             task.log().debug( "Activating %s from DB", lodDef.getName() );
             view.setName( viewName );
 
-            dbHandler.beginTransaction();
+            dbHandler.beginActivate( view, qual, control );
+            dbHandler.beginTransaction(view);
             transactionStarted = true;
 
             rc = singleActivate( subobjectRootEntity );
@@ -335,7 +334,6 @@ class ActivateOiFromDB implements Activator
             isUpdatedFile = oi.isUpdatedFile();
         }
 
-        dbHandler.beginActivate( view, qual, control );
         int rc = dbHandler.loadEntity( view, rootEntityDef );
 
         // Activate the child entities unless we're activating the root and ROOT_ONLY is set.
@@ -390,13 +388,5 @@ class ActivateOiFromDB implements Activator
         }
 
         return rc;
-    }
-
-    private void acquirePessimisticLocks()
-    {
-        PessimisticLockingHandler locker = view.getPessimisticLockingHandler();
-        locker.acquireLocks( view );
-        view.getTask().addLockedView( view );
-        view.getObjectInstance().setLocked( true );
     }
 }

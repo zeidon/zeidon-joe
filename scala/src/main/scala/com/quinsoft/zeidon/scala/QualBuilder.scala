@@ -535,6 +535,10 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def useSingleTransaction = {
+        jqual.setSingleTransaction()
+        this
+    }
     /**
      * Indicates that the resulting view (and backing OI) should be read-only.
      */

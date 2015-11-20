@@ -32,6 +32,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -140,12 +141,6 @@ public class zVIEW extends VmlOperation implements View
     public void displayObjectInstance( )
     {
         logObjectInstance();
-    }
-
-    @Override
-    public void dropDbLocks()
-    {
-        view().dropDbLocks();
     }
 
     @Override
@@ -694,14 +689,11 @@ public class zVIEW extends VmlOperation implements View
         return view().newView( owningTask, readOnly );
     }
 
+    /**
+     * Calls drop().  This is implemented to support Closeable interface.
+     */
     @Override
-    public boolean isLocked()
-    {
-        return view().isLocked();
-    }
-
-//    @Override
-    public void close() throws Exception
+    public void close()
     {
         drop();
     }
@@ -758,5 +750,11 @@ public class zVIEW extends VmlOperation implements View
     public void overrideZeidonConfig( String appName, String group, String key, String value )
     {
         getView().overrideZeidonConfig( appName, group, key, value );
+    }
+    
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
+    {
+        getView().addViewCleanupWork( work );
     }
 }

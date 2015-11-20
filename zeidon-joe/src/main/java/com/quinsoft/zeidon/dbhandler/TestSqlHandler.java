@@ -61,7 +61,7 @@ public class TestSqlHandler extends JdbcHandler
      * @see com.quinsoft.zeidon.dbhandler.DbHandler#beginTransaction()
      */
     @Override
-    public boolean beginTransaction()
+    public boolean beginTransaction(View view )
     {
         getTask().dblog().debug( "TestSql: Begin Transaction" );
         return true;

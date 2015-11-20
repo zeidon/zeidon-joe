@@ -137,6 +137,8 @@ public class TestZencas
 
             studFull.cursor( "Student" ).setNext();
         }
+        
+        studFull.drop();
     }
 
 	@Test

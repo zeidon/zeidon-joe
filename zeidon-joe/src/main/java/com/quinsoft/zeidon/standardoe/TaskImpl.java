@@ -16,9 +16,6 @@
 
     Copyright 2009-2015 QuinSoft
  */
-/**
- *
- */
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.File;
@@ -68,11 +65,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     private final LazyLoadLock         lock;
     private final NamedLockableList    lockList = new NamedLockableList();
     private final boolean              isSystemTask;
-
-    /**
-     * List of views that have pessimistic locks.
-     */
-    private ConcurrentMap<ViewImpl, Boolean> lockedViews;
 
     private       String               tempDir;
     private       String               userId;
@@ -181,31 +173,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         // make it easier to find resource leaks.
     }
 
-    private synchronized ConcurrentMap<ViewImpl, Boolean> getLockedViews()
-    {
-        if ( lockedViews == null )
-            lockedViews = new MapMaker().concurrencyLevel( 2 ).makeMap();
-
-        return lockedViews;
-    }
-
-    /**
-     * Keep track of views with pessimistic locks so we can drop the locks.
-     *
-     * @param view
-     */
-    void addLockedView( ViewImpl view )
-    {
-        assert ! getLockedViews().containsKey( view ) : "Attempting to add a pessimistic lock twice.";
-        getLockedViews().putIfAbsent( view, Boolean.TRUE );
-    }
-
-    void removePessimisticLock( ViewImpl view )
-    {
-        assert getLockedViews().containsKey( view ) : "Attempting to remove a non-existent pessimistic lock.";
-        getLockedViews().remove( view );
-    }
-
     @Override
     public Collection<ViewImpl> getViewList()
     {
@@ -240,6 +207,15 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         this.userId = userId;
     }
 
+    /**
+     * Calls dropTask().  This is implemented to support Closeable interface.
+     */
+    @Override
+    public void close()
+    {
+        dropTask();
+    }
+
     @Override
     public synchronized void dropTask()
     {
@@ -253,15 +229,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         {
             for ( DropTaskCleanup work : cleanupWork )
                 work.taskDropped( this );
-        }
-
-        if ( lockedViews != null )
-        {
-            for ( ViewImpl view : lockedViews.keySet() )
-            {
-                log().warn( "View %s still has pessimistic locks.  Dropping them.", view.toString() );
-                view.dropDbLocks();
-            }
         }
 
         isValid = false;
@@ -672,7 +639,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     @Override
     public void addTaskCleanupWork( DropTaskCleanup work )
     {
-        if ( cleanupWork != null )
+        if ( cleanupWork == null )
             cleanupWork = new ArrayList<>();
 
         cleanupWork.add( work );
