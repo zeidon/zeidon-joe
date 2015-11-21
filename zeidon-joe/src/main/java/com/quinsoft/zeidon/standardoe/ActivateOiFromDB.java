@@ -41,8 +41,6 @@ import com.quinsoft.zeidon.utils.Timer;
  */
 class ActivateOiFromDB implements Activator
 {
-    private static final PessimisticLockingHandler NOOP_PESSIMISTIC_LOCKING_HANDLER = new NoOpPessimisticLockingHandler();
-    
     private TaskImpl  task;
     private ViewImpl  view;
     private View      qual;
@@ -51,7 +49,7 @@ class ActivateOiFromDB implements Activator
     private DbHandler   dbHandler;
     private ActivateOptions options;
 
-    private PessimisticLockingHandler pessimisticLock = NOOP_PESSIMISTIC_LOCKING_HANDLER;
+    private PessimisticLockingHandler pessimisticLock;
 
     @Override
     public View init(Task task, View view, ActivateOptions options )
@@ -95,8 +93,7 @@ class ActivateOiFromDB implements Activator
         oi.setActivateOptions( options );
 
         // Get pessimistic lock handler.
-        if ( options.getLockingLevel().isPessimisticLock() && ! options.isReadOnly() )
-            pessimisticLock = dbHandler.getPessimisticLockingHandler( options, view );
+        pessimisticLock = dbHandler.getPessimisticLockingHandler( options, view );
 
         // If we are activating with rolling pagination then replace the root cursor
         // with a special one that will attempt to load the next page when required.
@@ -111,7 +108,7 @@ class ActivateOiFromDB implements Activator
         try
         {
             pessimisticLock.acquireGlobalLock( view );
-            
+
             EntityDef rootEntity = lodDef.getRoot();
             activate( rootEntity );
 
@@ -323,7 +320,7 @@ class ActivateOiFromDB implements Activator
         }
 
         int rc = dbHandler.loadEntity( view, rootEntityDef );
-        
+
         if ( isOiRoot )
             pessimisticLock.acquireRootLocks( view );
 

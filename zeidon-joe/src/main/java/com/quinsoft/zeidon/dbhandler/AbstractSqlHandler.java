@@ -56,9 +56,11 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
+import com.quinsoft.zeidon.standardoe.NoOpPessimisticLockingHandler;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
 /**
@@ -67,6 +69,8 @@ import com.quinsoft.zeidon.standardoe.OiRelinker;
  */
 public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 {
+    public static final PessimisticLockingHandler NOOP_PESSIMISTIC_LOCKING_HANDLER = new NoOpPessimisticLockingHandler();
+
     /**
      * These are the flags to use when creating an entity.  It prevents some
      * normal processing for occuring that we don't need when activating.
@@ -2816,6 +2820,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     @Override
     public PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  )
     {
+        LockingLevel lockLevel = activateOptions.getLockingLevel();
+        if ( ! lockLevel.isPessimisticLock() )
+            return NOOP_PESSIMISTIC_LOCKING_HANDLER;
+
+        if ( lockLevel == LockingLevel.PESSIMISTIC_WITHREAD && activateOptions.isReadOnly() )
+            return NOOP_PESSIMISTIC_LOCKING_HANDLER;
+
         PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb( activateOptions, qualMap );
         view.addViewCleanupWork( lockingHandler );
         return lockingHandler;
