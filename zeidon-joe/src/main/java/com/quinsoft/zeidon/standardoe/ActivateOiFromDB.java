@@ -117,14 +117,8 @@ class ActivateOiFromDB implements Activator
 
             if ( oi.getRootEntityInstance() != null ) // Did we load anything?
     		{
-                // Check the pessimistic locks.  We need to do this after we load the OI because
-                // databases (sqlite--grrrrr) can't handle two open connections updating the DB
-                // at the same time.
-                if ( pessimisticLock != null )
-                {
-                    pessimisticLock.acquireRootLocks( view );
-                    view.getObjectInstance().setLocked( true );
-                }
+                pessimisticLock.acquireOiLocks( view );
+//                view.getObjectInstance().setLocked( true );
 
                 view.reset();
                 if ( options.isReadOnly() )
@@ -139,7 +133,7 @@ class ActivateOiFromDB implements Activator
         }
         finally
         {
-            pessimisticLock.cleanup();
+            pessimisticLock.releaseGlobalLock( view );
         }
     }
 
@@ -329,6 +323,9 @@ class ActivateOiFromDB implements Activator
         }
 
         int rc = dbHandler.loadEntity( view, rootEntityDef );
+        
+        if ( isOiRoot )
+            pessimisticLock.acquireRootLocks( view );
 
         // Activate the child entities unless we're activating the root and ROOT_ONLY is set.
         if ( isOiRoot && control.contains( ActivateFlags.fROOT_ONLY ) )

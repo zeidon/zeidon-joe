@@ -32,13 +32,8 @@ import com.quinsoft.zeidon.View;
 public interface PessimisticLockingHandler extends DropViewCleanup
 {
     /**
-     * Called at the end of activation to release any resources.
-     */
-    void cleanup();
-
-    /**
      * For situations that require it, acquire a global lock that prevents
-     * other tasks from performing pessimistic locking.
+     * other tasks from performing pessimistic locking on this view.
      *
      * @param view View to lock
      *
@@ -66,7 +61,9 @@ public interface PessimisticLockingHandler extends DropViewCleanup
 
     /**
      * Acquires the pessimistic locks for a view.  This is called after the entire
-     * OI has been loaded.
+     * OI has been loaded.  This call is intended for dbhandlers that can't have
+     * more than one open connection at once.  This will be called after the
+     * connection that loaded the OI has been closed.
      *
      * @param view View to lock
      *

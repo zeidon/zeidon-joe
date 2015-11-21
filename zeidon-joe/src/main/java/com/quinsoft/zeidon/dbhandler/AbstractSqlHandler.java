@@ -1429,16 +1429,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected int executeStatement(View view, EntityDef entityDef, EntityInstance entityInstance, SqlStatement stmt)
     {
-        try
-        {
-            return executeStatement( view, entityDef, stmt );
-        }
-        catch ( Throwable t )
-        {
-            task.dblog().error( "Entity that caused the error:", t, (Object[]) null );
-            entityInstance.logEntity( false );
-            throw ZeidonException.wrapException( t );
-        }
+        return executeStatement( view, entityDef, stmt );
     }
 
     /**

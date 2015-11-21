@@ -51,10 +51,10 @@ import com.quinsoft.zeidon.utils.KeyStringBuilder;
  */
 public class PessimisticLockingViaDb implements PessimisticLockingHandler
 {
-    private Task task;
-    private LodDef lodDef;
-    private Application application;
-    
+    private final Task task;
+    private final LodDef lodDef;
+    private final Application application;
+
     /**
      * This is the ZPLOCK OI that has the lock entities that will be written to the DB.
      */
@@ -65,9 +65,9 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
      */
     private boolean lockPerformed = false;
     private boolean lockedByQual = false;
-    private EntityDef rootEntityDef;
-    private Map<EntityDef, QualEntity> qualMap;
-    private ActivateOptions activateOptions;
+    private final EntityDef rootEntityDef;
+    private final Map<EntityDef, QualEntity> qualMap;
+    private final ActivateOptions activateOptions;
 
     public PessimisticLockingViaDb( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  ) throws PessimisticLockingException
     {
@@ -77,7 +77,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         rootEntityDef = lodDef.getRoot();
         this.qualMap = qualMap;
         activateOptions = options;
-        
+
         // If we are activating with rolling pagination then replace the root cursor
         // with a special one that will attempt to load the next page when required.
         Pagination pagingOptions = activateOptions.getPagingOptions();
@@ -96,7 +96,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
 
         return user;
     }
-    
+
     /**
      * Adds a global lock to the lock OI to prevent another task from attempting
      * to lock the same LOD.
@@ -108,7 +108,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         DataRecord dataRecord = rootEntityDef.getDataRecord();
         String tableName = dataRecord.getRecordName();
         lockOi.cursor( "ZeidonLock" ).createEntity()
-                                    .getAttribute( "LOD_Name" ).setValue ( lodDef.getName() + "|" )
+                                    .getAttribute( "LOD_Name" ).setValue ( lodDef.getName() + "-GlobalLock" )
                                     .getAttribute( "KeyValue" ).setValue ( tableName )
                                     .getAttribute( "UserName" ).setValue ( getUserName() )
                                     .getAttribute( "Timestamp" ).setValue ( new Date() )
@@ -119,48 +119,44 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     }
 
     /**
-     * Adds locking to the 
+     * Adds locking to the
      */
     private void addQualLocksToLockOi()
     {
         // We can only implement this if we have qualification on the keys
-        // and 
+        // and
         QualEntity rootQual = qualMap.get( rootEntityDef );
         if ( rootQual == null || ! rootQual.isKeyQualification() )
             return;
-        
+
         // Currently we only handle a single key.  Someday we could add more.
         if ( rootQual.qualAttribs.size() != 1 )
             return;
-        
+
         KeyStringBuilder builder = new KeyStringBuilder();
-        builder.appendKey( rootQual.qualAttribs.get( 0 ).toString() );
-            
+        QualAttrib qualAttrib = rootQual.qualAttribs.get( 0 );
+        builder.appendKey( task, qualAttrib.attributeDef, qualAttrib.value );
+
         lockOi.cursor( "ZeidonLock" ).createEntity()
                                      .getAttribute( "LOD_Name" ).setValue ( lodDef.getName() )
                                      .getAttribute( "KeyValue" ).setValue ( builder.toString() )
                                      .getAttribute( "UserName" ).setValue ( getUserName() )
                                      .getAttribute( "Timestamp" ).setValue ( new Date() )
                                      .getAttribute( "AllowRead" ).setValue ( "Y" );
-        
+
         addCallStack( lockOi.cursor( "ZeidonLock" ) );
         addHostname( lockOi.cursor( "ZeidonLock" ) );
-        
+
         // Indicate that the lock of the roots has been performed.
         lockPerformed = true;
         lockedByQual = true;
-    }
-    
-    @Override
-    public void cleanup()
-    {
     }
 
     private View createLockOi( Task task )
     {
         if ( lockOi != null )
             return lockOi;
-        
+
         // See if the locking view exists.
         try
         {
@@ -196,7 +192,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             addHostname( lockCursor );
         }
     }
-    
+
     private void addHostname( EntityCursor cursor )
     {
         EntityDef zeidonLock = cursor.getEntityDef();
@@ -255,6 +251,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     }
 
     // Dunno if we'll ever need this.  Saving for now.
+    @SuppressWarnings("unused")
     private void createOiToDropLocks( View view )
     {
         createLockOi( task );
@@ -270,7 +267,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                       .setIncrementalFlags( IncrementalEntityFlags.DELETED );
         }
     }
-    
+
     /**
      * This gets called when a view is dropped.  Release the locks.
      */
@@ -286,7 +283,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         createLockOi( task );
         addGlobalLockToLockOi();
         addQualLocksToLockOi();
-        
+
         writeLocks( view );
     }
 
@@ -296,12 +293,12 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         // Delete the global lock.
         lockCursor.setFirst();
         lockCursor.deleteEntity();
-        
+
         // If we lockedByQual then we've also locked the entities we tried to activate.
         // If the activated view is empty then we didn't find anything so drop all the locks.
         if ( lockedByQual && view.isEmpty() )
             lockCursor.deleteAll();
-        
+
         lockOi.commit();
     }
 
@@ -323,18 +320,18 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
             catch ( Exception e )
             {
                 exception = e;
-                
+
                 // We'll log message.  The level of the message will depend on the # of tries.
                 switch ( i )
                 {
                     case 0:
                         task.log().debug( "Caught exception writing pessimisic locks on %s.  Trying again", lodDef );
                         break;
-                        
+
                     case 1:
                         task.log().info( "Caught exception writing pessimisic locks on %s.  Trying again", lodDef );
                         break;
-                        
+
                     default:
                         task.log().warn( "Caught exception writing pessimisic locks on %s.  Trying again", lodDef );
                         lockOi.logObjectInstance();
@@ -342,16 +339,28 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
 
                 try
                 {
-                    Thread.sleep( 10 * i * i );
+                    if ( i < retryCount )
+                        Thread.sleep( 10 * i * i );
                 }
                 catch ( InterruptedException e1 )
                 {
                 }
             }
         }
-        
+
         // If we get here then none of the commits succeeded and we're giving up.
         throw new PessimisticLockingException( view, "Unable to acquire pessimistic locks" ).setCause( exception );
+    }
+
+    private void acquireLocksFromView( View view )
+    {
+        if ( lockPerformed )
+            return; // We've already locked the view.
+
+        createLockOi( task );
+        addRootsToLockOi( view );
+
+        writeLocks( view );
     }
 
     /* (non-Javadoc)
@@ -360,29 +369,19 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     @Override
     public void acquireRootLocks( View view ) throws PessimisticLockingException
     {
-        if ( lockPerformed )
-            return; // We've already locked the view.
-        
-        createLockOi( task );
-        addRootsToLockOi( view );
-    
-        writeLocks( view );
+        acquireLocksFromView( view );
     }
 
     @Override
     public void acquireOiLocks( View view ) throws PessimisticLockingException
     {
-        if ( lockPerformed )
-            return; // We've already locked the view.
-
-        createLockOi( task );
-        addRootsToLockOi( view );
-    
-        writeLocks( view );
+        // This call is for DB handlers that can't have more than one open connection
+        // at a time.  For normal processing this doesn't do anything.  Those DB handlers
+        // would call acquireLocksFromView( view ) from here.
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler#releaseLock(com.quinsoft.zeidon.View)
+     * @see com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler#releaseLocks(com.quinsoft.zeidon.View)
      */
     @Override
     public void releaseLocks( View view )

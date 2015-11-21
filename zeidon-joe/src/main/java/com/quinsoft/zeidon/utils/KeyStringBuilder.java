@@ -4,7 +4,9 @@
 package com.quinsoft.zeidon.utils;
 
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
@@ -46,8 +48,11 @@ public class KeyStringBuilder
         return appendString( str );
     }
     
-    public KeyStringBuilder appendKey( AttributeDef attributeDef, String str )
+    public KeyStringBuilder appendKey( Task task, AttributeDef attributeDef, Object internalValue )
     {
+        Domain domain = attributeDef.getDomain();
+        String str = domain.convertToString( task, attributeDef, internalValue );
+        
         return appendString( str );
     }
     

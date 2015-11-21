@@ -789,7 +789,7 @@ class EntityCursorImpl implements EntityCursor
         if ( getEntityInstance() == null )
             return result;
 
-        for ( EntityInstanceImpl ei = getExistingInstance().getFirstTwin();
+        for ( EntityInstanceImpl ei = getEntityInstance().getFirstTwin();
               ei != null;
               ei = ei.getNextTwin() )
         {

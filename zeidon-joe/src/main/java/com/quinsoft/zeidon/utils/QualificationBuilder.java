@@ -746,7 +746,7 @@ public class QualificationBuilder
 
     public static View activateFromFile( Task task, String filename )
     {
-        LodDef qua = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
-        return task.activateOiFromFile( qua, filename, null );
+        LodDef qual = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
+        return task.deserializeOi().fromFile( filename ).setLodDef( qual ).activateFirst();
     }
 }

@@ -37,14 +37,6 @@ public class NoOpPessimisticLockingHandler implements PessimisticLockingHandler
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler#cleanup()
-     */
-    @Override
-    public void cleanup()
-    {
-    }
-
-    /* (non-Javadoc)
      * @see com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler#acquireGlobalLock(com.quinsoft.zeidon.View)
      */
     @Override
