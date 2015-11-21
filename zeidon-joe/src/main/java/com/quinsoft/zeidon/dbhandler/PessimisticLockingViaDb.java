@@ -23,6 +23,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,6 +70,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private final EntityDef rootEntityDef;
     private final Map<EntityDef, QualEntity> qualMap;
     private final ActivateOptions activateOptions;
+    private GlobalJavaLock javaLock;
 
     public PessimisticLockingViaDb( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  ) throws PessimisticLockingException
     {
@@ -277,6 +280,18 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         releaseLocks( view );
     }
 
+    private GlobalJavaLock getJavaLock()
+    {
+        if ( javaLock == null )
+        {
+            javaLock = lodDef.getCacheMap( GlobalJavaLock.class );
+            if ( javaLock == null )
+                javaLock = lodDef.putCacheMap( GlobalJavaLock.class, new GlobalJavaLock() );
+        }
+
+        return javaLock;
+    }
+
     @Override
     public void acquireGlobalLock( View view ) throws PessimisticLockingException
     {
@@ -284,22 +299,37 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         addGlobalLockToLockOi();
         addQualLocksToLockOi();
 
+        // To minimize attempts to write to the DB we'll use a global Java
+        // lock to single-thread writes for the current JVM.
+        view.log().trace( "Locking global Java lock" );
+        getJavaLock().lock.lock();
+        view.log().trace( "Global Java acquired" );
+
         writeLocks( view );
     }
 
     @Override
     public void releaseGlobalLock( View view )
     {
-        // Delete the global lock.
-        lockCursor.setFirst();
-        lockCursor.deleteEntity();
+        try
+        {
+            // Delete the global lock.
+            lockCursor.setFirst();
+            lockCursor.deleteEntity();
 
-        // If we lockedByQual then we've also locked the entities we tried to activate.
-        // If the activated view is empty then we didn't find anything so drop all the locks.
-        if ( lockedByQual && view.isEmpty() )
-            lockCursor.deleteAll();
+            // If we lockedByQual then we've also locked the entities we tried to activate.
+            // If the activated view is empty then we didn't find anything so drop all the locks.
+            if ( lockedByQual && view.isEmpty() )
+                lockCursor.deleteAll();
 
-        lockOi.commit();
+            lockOi.commit();
+        }
+        finally
+        {
+            // Make sure we remove the java lock.
+            getJavaLock().lock.unlock();
+            view.log().trace( "Global Java unlocked" );
+        }
     }
 
     /**
@@ -388,5 +418,10 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     {
         lockCursor.deleteAll();
         lockOi.commit();
+    }
+
+    private static class GlobalJavaLock
+    {
+        private final Lock lock = new ReentrantLock();
     }
 }

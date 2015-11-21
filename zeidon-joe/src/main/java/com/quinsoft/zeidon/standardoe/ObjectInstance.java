@@ -26,19 +26,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateOptions;
-import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
-import com.quinsoft.zeidon.utils.LazyLoadLock;
 
 /**
  * @author DG
  *
  */
-class ObjectInstance implements Lockable
+class ObjectInstance
 {
     private TaskImpl            task;
     private final LodDef        lodDef;
@@ -76,8 +73,6 @@ class ObjectInstance implements Lockable
     boolean dbhNeedsForeignKeys;
     boolean dbhNeedsGenKeys;
 
-    private final LazyLoadLock lock;
-
     /**
      * If true, then tell cursor processing to not attempt to lazy load entities.
      * This is intended to be used during activation so we don't go through
@@ -105,7 +100,6 @@ class ObjectInstance implements Lockable
         this.lodDef = lodDef;
         id = task.getObjectEngine().getNextObjectKey();
         uuid = task.getObjectEngine().generateUuid();
-        lock = new LazyLoadLock();
         versionedInstances = new AtomicInteger( 0 );
         attributeHashkeyMap = new AttributeHashKeyMap( this );
 
@@ -236,15 +230,6 @@ class ObjectInstance implements Lockable
     public String toString()
     {
         return lodDef.toString();
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Lockable#getLock()
-     */
-    @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return lock.getLock();
     }
 
     /**

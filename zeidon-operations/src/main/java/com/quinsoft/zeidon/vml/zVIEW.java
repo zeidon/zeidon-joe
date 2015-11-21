@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
@@ -381,12 +380,6 @@ public class zVIEW extends VmlOperation implements View
     public ZeidonLogger log()
     {
         return view().log();
-    }
-
-    @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return view().getLock();
     }
 
     @Override
@@ -751,7 +744,7 @@ public class zVIEW extends VmlOperation implements View
     {
         getView().overrideZeidonConfig( appName, group, key, value );
     }
-    
+
     @Override
     public void addViewCleanupWork( DropViewCleanup work )
     {

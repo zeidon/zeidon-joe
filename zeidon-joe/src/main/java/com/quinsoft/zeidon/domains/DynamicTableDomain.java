@@ -21,13 +21,10 @@ package com.quinsoft.zeidon.domains;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
-import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
@@ -42,10 +39,10 @@ import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
  * Implementation of standard dynamic table domains.
- * 
+ *
  * This class is designed for user application to subclass so they can add/change
  * functionality to their own needs.
- * 
+ *
  * @author DG
  *
  */
@@ -60,7 +57,7 @@ public class DynamicTableDomain extends AbstractTableDomain
     {
         return "_DM_" + getName() + "_" + context.getName();
     }
-    
+
     protected View activateApplicationDomain( Task task, DomainContext context )
     {
         LodDef lodDef = task.getApplication().getLodDef( task, "DomainT" );
@@ -73,33 +70,25 @@ public class DynamicTableDomain extends AbstractTableDomain
                                             .activate();
         if ( view.cursor( "Domain" ).getEntityCount() == 0 )
             throw new ZeidonException( "Dynamic domain '%s' has no values in the DB", this.toString() );
-        
+
         return view;
     }
-    
+
     protected View loadApplicationDomainView( Task task, DomainContext context, String viewName )
     {
         Application app = getApplication();
-        ReentrantReadWriteLock appLock = app.getNamedLock( viewName ).getLock();
-        WriteLock lock = appLock.writeLock();
-        try 
+        synchronized( viewName.intern() )
         {
-            lock.lock();
-
             View domainView = app.getViewByName( viewName );
             if ( domainView != null )
                 return domainView;
-            
+
             domainView = activateApplicationDomain( task, context );
             app.setNameForView( viewName, domainView );
             return domainView;
         }
-        finally
-        {
-            lock.unlock();
-        }
     }
-    
+
     protected void loadTableEntries( Task task, TableDomainContext context, View domainView )
     {
         context.resetTableEntries(task);
@@ -112,7 +101,7 @@ public class DynamicTableDomain extends AbstractTableDomain
             context.addTableEntry( task, internalValue, externalValue );
         }
     }
-    
+
     protected synchronized View loadDomainView( Task task, DomainContext context )
     {
         View domainView = null;
@@ -125,14 +114,14 @@ public class DynamicTableDomain extends AbstractTableDomain
             domainView.setName( viewName );
             loadTableEntries( task, (TableDomainContext) context, domainView );
         }
-        
+
         return domainView;
     }
 
     //
     // Override AbstractTableDomain methods to load the domain view first.
     //
-    
+
     @Override
     public List<TableEntry> getTableEntries(Task task, String contextName)
     {

@@ -22,8 +22,6 @@ package com.quinsoft.opencuas;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import org.joda.time.DateTime;
 
@@ -50,7 +48,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
- * This domain 
+ * This domain
  * @author DG
  *
  */
@@ -60,8 +58,9 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
     {
         super( application, domainProperties, task );
     }
-    
+
 /******** KELLY ********/
+    @Override
     protected View activateApplicationDomain( Task task, DomainContext context )
     {
         LodDef lodDef = task.getApplication().getLodDef( task, "DomainT" );
@@ -73,30 +72,23 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
         View view = task.activateObjectInstance( lodDef, qual.getView(), ActivateFlags.MULTIPLE );
         if ( view.cursor( "Domain" ).getEntityCount() == 0 )
             throw new ZeidonException( "Dynamic domain '%s' has no values in the DB", this.toString() );
-        
+
         return view;
     }
-    
+
+    @Override
     protected View loadApplicationDomainView( Task task, DomainContext context, String viewName )
     {
         Application app = getApplication();
-        ReentrantReadWriteLock appLock = app.getNamedLock( viewName ).getLock();
-        WriteLock lock = appLock.writeLock();
-        try 
+        synchronized( viewName.intern() )
         {
-            lock.lock();
-
             View domainView = app.getViewByName( viewName );
             if ( domainView != null )
                 return domainView;
-            
+
             domainView = activateApplicationDomain( task, context );
             task.setNameForView(viewName, domainView);
             return domainView;
-        }
-        finally
-        {
-            lock.unlock();
         }
     }
 
@@ -111,7 +103,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
     {
     	Integer id = 0;
         EntityCursor domainCsr = domainView.cursor( "Domain" );
-        
+
         if ( domainCsr.getEntityCount() > 1 )
         {
             View mUser = domainView.getViewByName( "mUser" );
@@ -129,17 +121,17 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
 	            if ( id.equals(0))
 	            	id = 1;
            }
-            
+
             // Drop admin div domain for the admin div that is not being used.
             for ( @SuppressWarnings("unused") EntityInstance domain : domainView.cursor( "Domain" ).eachEntity() )
             {
             	if ( ! domainView.cursor("AdministrativeDivision").getAttribute("ID").getInteger().equals(id) )
-            		domainView.cursor("Domain").dropEntity( CursorPosition.NONE );        		
+            		domainView.cursor("Domain").dropEntity( CursorPosition.NONE );
             }
             domainView.cursor("Domain").setFirst();
         }
     }
-    
+
     @Override
     protected void loadTableEntries( Task task, TableDomainContext context, View domainView )
     {
@@ -147,18 +139,18 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
         {
             setDomainCursor( domainView );
         }
-        
+
         super.loadTableEntries( task, context, domainView );
     }
-    
+
     private String getKey( DomainContext context )
     {
         return this.getName() + "/" + context.getName();
     }
-    
+
     /**
      * Contexts are saved in the task cache.
-     * 
+     *
      * @param task
      * @param context
      * @return
@@ -171,7 +163,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
         {
             taskData = task.putCacheMap( TaskData.class, new TaskData() );
         }
-            
+
         synchronized ( taskData )
         {
             String key = getKey( context );
@@ -181,7 +173,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
                 taskContext = new TableListContext( this, task );
                 taskData.map.put( key, taskContext );
             }
-            
+
             return taskContext;
         }
     }
@@ -193,11 +185,11 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
     {
         private final Map<String,TableListContext> map = new HashMap<String, TableListContext>();
     }
-    
+
     /**
      * Contexts for this domain are stored at the task level.  Each method forwards the call
      * to the task context.
-     * 
+     *
      * @author DG
      *
      */
@@ -281,7 +273,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
         {
             return getTaskContext( task, this ).getTableEntryByInternalValue( task, internalValue );
         }
-        
+
         @Override
         public int compare(Task task, Object o1, Object o2)
         {

@@ -78,7 +78,6 @@ public interface Application
     Collection<String> getAllViewNames(View view);
     Collection<? extends View> getAllNamedViews();
     void setNameForView( String name, View view );
-    Lockable getNamedLock( String name );
     boolean isSystemApp();
 
     /**

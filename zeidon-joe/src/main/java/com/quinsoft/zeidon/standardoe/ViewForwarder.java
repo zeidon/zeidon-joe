@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
@@ -91,15 +90,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public View getViewByKey( long key )
     {
         return getViewByKey( key );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Lockable#getLock()
-     */
-    @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return getView().getLock();
     }
 
     /* (non-Javadoc)
@@ -644,7 +634,7 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         return getView().getSelectSetNames();
     }
-    
+
     @Override
     public void addViewCleanupWork( DropViewCleanup work )
     {

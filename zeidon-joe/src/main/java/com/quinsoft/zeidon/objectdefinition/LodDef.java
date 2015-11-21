@@ -31,6 +31,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.ObjectConstraintType;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -42,6 +43,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
@@ -51,7 +53,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.Nu
  * @author DG
  *
  */
-public class LodDef implements PortableFileAttributeHandler
+public class LodDef implements PortableFileAttributeHandler, CacheMap
 {
     private final Application  app;
     private String       name;
@@ -77,6 +79,8 @@ public class LodDef implements PortableFileAttributeHandler
      */
     private boolean      hasPhysicalMappings = false;
     private String       libraryName;
+
+    private CacheMap cacheMap;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
 
@@ -778,5 +782,29 @@ public class LodDef implements PortableFileAttributeHandler
     void setHasDuplicateInstances( boolean hasDuplicateInstances )
     {
         this.hasDuplicateInstances = hasDuplicateInstances;
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
+     */
+    @Override
+    synchronized public <T> T getCacheMap(Class<T> key)
+    {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
+        return cacheMap.getCacheMap( key );
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
+     */
+    @Override
+    synchronized public <T> T putCacheMap(Class<T> key, T value)
+    {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
+        return cacheMap.putCacheMap( key, value );
     }
 }

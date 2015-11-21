@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownLodDefException;
@@ -51,7 +50,6 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     private final Map<String, LodDef> lodDefList = new HashMap<String, LodDef>();
     private final String              zeidonRootDir;
     private final ViewNameList        viewNameList = new ViewNameList();
-    private final NamedLockableList   lockList = new NamedLockableList();
     private       DomainList          domainList;
 
     /**
@@ -164,12 +162,6 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
 	{
 		return domainList.getDomain(name);
 	}
-
-    @Override
-    public Lockable getNamedLock(String name)
-    {
-        return lockList.getNamedLock( name );
-    }
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.Application#getPackage()

@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * Instances).
  *
  */
-public interface TaskQualification extends Lockable, Closeable
+public interface TaskQualification extends Closeable
 {
     /**
      * Returns the default application for this task.

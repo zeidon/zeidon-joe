@@ -20,7 +20,6 @@ package com.quinsoft.zeidon;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.standardoe.ScalaHelper;
@@ -188,23 +187,6 @@ public interface Task extends TaskQualification, CacheMap
      * @return task description
      */
     String getDescription();
-
-    Lockable getNamedLock( String name );
-
-    /**
-     * Will attempt to lock all the locks passed in.
-     *
-     * @param locks
-     * @return true if all locks are locked, false otherwise.
-     */
-    boolean lockAll( Lock...locks );
-
-    /**
-     * Will unlock all locks passed in.
-     *
-     * @param locks
-     */
-    void unlockAll( Lock...locks );
 
     /**
      * Returns a helper object for calling Scala code from the JOE.  Creates one per task.

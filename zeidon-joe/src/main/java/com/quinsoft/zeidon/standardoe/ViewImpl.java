@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -626,15 +625,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     ViewCursor getViewCursor()
     {
         return viewCursor;
-    }
-
-    /**
-     * Locking a view is locking the object instance.
-     */
-    @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return getObjectInstance().getLock();
     }
 
     @Override
