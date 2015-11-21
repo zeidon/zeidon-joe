@@ -61,6 +61,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef.LinkValidation;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.KeyStringBuilder;
 
 /**
  * @author DG
@@ -2719,24 +2720,12 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public String getKeyString()
     {
-        boolean nonnull = false;  // We'll assume all keys are null until we find one that isn't.
-        StringBuilder builder = new StringBuilder();
-        boolean first = true;
+        KeyStringBuilder builder = new KeyStringBuilder();
 
         for ( AttributeDef key : getEntityDef().getKeys() )
-        {
-            AttributeValue attr = getInternalAttribute( key );
-            if ( ! attr.isNull( getTask(), key ) )
-                nonnull = true;
-            builder.append( attr.getString( getTask(), key ) );
+            builder.appendKey( getAttribute( key ) );
 
-            if ( first )
-                first = false;
-            else
-                builder.append( "|" );
-        }
-
-        if ( ! nonnull )
+        if ( builder.isNull() )
             return null;
 
         return builder.toString();

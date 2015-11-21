@@ -41,6 +41,8 @@ import com.quinsoft.zeidon.utils.Timer;
  */
 class ActivateOiFromDB implements Activator
 {
+    private static final PessimisticLockingHandler NOOP_PESSIMISTIC_LOCKING_HANDLER = new NoOpPessimisticLockingHandler();
+    
     private TaskImpl  task;
     private ViewImpl  view;
     private View      qual;
@@ -48,6 +50,8 @@ class ActivateOiFromDB implements Activator
     private LodDef      lodDef;
     private DbHandler   dbHandler;
     private ActivateOptions options;
+
+    private PessimisticLockingHandler pessimisticLock = NOOP_PESSIMISTIC_LOCKING_HANDLER;
 
     @Override
     public View init(Task task, View view, ActivateOptions options )
@@ -71,6 +75,7 @@ class ActivateOiFromDB implements Activator
 
         JdbcHandlerUtils helper = new JdbcHandlerUtils( options, lodDef.getDatabase() );
         dbHandler = helper.getDbHandler();
+        dbHandler.beginActivate( this.view, qual, control );
         return this.view;
     }
 
@@ -90,32 +95,23 @@ class ActivateOiFromDB implements Activator
         oi.setActivateOptions( options );
 
         // Get pessimistic lock handler.
-        PessimisticLockingHandler pessimisticLock = null;
         if ( options.getLockingLevel().isPessimisticLock() && ! options.isReadOnly() )
-        {
             pessimisticLock = dbHandler.getPessimisticLockingHandler( options, view );
-            view.addViewCleanupWork( pessimisticLock );
-        }
 
         // If we are activating with rolling pagination then replace the root cursor
         // with a special one that will attempt to load the next page when required.
-        if ( options != null )
+        Pagination pagingOptions = options.getPagingOptions();
+        if ( pagingOptions != null && pagingOptions.isRollingPagination() )
         {
-            Pagination pagingOptions = options.getPagingOptions();
-            if ( pagingOptions != null && pagingOptions.isRollingPagination() )
-            {
-                if ( pessimisticLock != null )
-                    throw new ZeidonException( "Pessimistic locking is not supported with rolling pagination."
-                                           + "  Use read-only option on the activate." );
-
-                ViewCursor viewCursor = view.getViewCursor();
-                EntityCursorImpl newCursor = new RollingPaginationEntityCursorImpl( viewCursor, lodDef.getRoot(), options );
-                viewCursor.replaceEntityCursor( newCursor );
-            }
+            ViewCursor viewCursor = view.getViewCursor();
+            EntityCursorImpl newCursor = new RollingPaginationEntityCursorImpl( viewCursor, lodDef.getRoot(), options );
+            viewCursor.replaceEntityCursor( newCursor );
         }
 
         try
         {
+            pessimisticLock.acquireGlobalLock( view );
+            
             EntityDef rootEntity = lodDef.getRoot();
             activate( rootEntity );
 
@@ -126,7 +122,7 @@ class ActivateOiFromDB implements Activator
                 // at the same time.
                 if ( pessimisticLock != null )
                 {
-                    pessimisticLock.acquireLocks( view );
+                    pessimisticLock.acquireRootLocks( view );
                     view.getObjectInstance().setLocked( true );
                 }
 
@@ -143,8 +139,7 @@ class ActivateOiFromDB implements Activator
         }
         finally
         {
-            if ( pessimisticLock != null )
-                pessimisticLock.cleanup();
+            pessimisticLock.cleanup();
         }
     }
 
@@ -174,7 +169,6 @@ class ActivateOiFromDB implements Activator
             task.log().debug( "Activating %s from DB", lodDef.getName() );
             view.setName( viewName );
 
-            dbHandler.beginActivate( view, qual, control );
             dbHandler.beginTransaction(view);
             transactionStarted = true;
 

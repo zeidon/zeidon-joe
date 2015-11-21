@@ -54,6 +54,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.KeyStringBuilder;
 
 /**
  * A DB handler for JDBC.
@@ -299,12 +300,11 @@ public class JdbcHandler extends AbstractSqlHandler
      */
     private String getKeyValuesForCurrentEntity( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
-        StringBuilder builder = new StringBuilder();
+        KeyStringBuilder builder = new KeyStringBuilder();
 
         DataRecord dataRecord = entityDef.getDataRecord();
         assert dataRecord != null;
 
-        boolean first = true;
         List<AttributeDef> keys = entityDef.getKeys();
         for ( AttributeDef key : keys )
         {
@@ -313,12 +313,7 @@ public class JdbcHandler extends AbstractSqlHandler
             assert columnIdx != null;
             Object value = getSqlObject( rs, columnIdx, dataField, loadedObjects );
             String str = value.toString();
-            builder.append( str );
-
-            if ( first )
-                first = false;
-            else
-                builder.append( "|" );
+            builder.appendKey( str );
         }
 
         return builder.toString();

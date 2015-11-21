@@ -516,7 +516,7 @@ public class TestZencas
         System.out.println("===== Finished testIncludeMtoMWithCommitJeff ========");
 	}
 
-	@Test
+//	@Test
 	public void testzGetNextEntityAttributeName()
 	{
 	    View         testview;
