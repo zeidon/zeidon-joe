@@ -29,6 +29,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.DropViewCleanup;
@@ -606,18 +607,6 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public <T> T putCacheMap( Class<T> key, T value )
-    {
-        return view().putCacheMap( key, value );
-    }
-
-    @Override
-    public <T> T getCacheMap( Class<T> key )
-    {
-        return view().getCacheMap( key );
-    }
-
-    @Override
     public String readZeidonConfig( String applicationName, String group, String key, String defaultValue )
     {
         return view().readZeidonConfig( applicationName, group, key, defaultValue );
@@ -749,5 +738,11 @@ public class zVIEW extends VmlOperation implements View
     public void addViewCleanupWork( DropViewCleanup work )
     {
         getView().addViewCleanupWork( work );
+    }
+
+    @Override
+    public CacheMap getCacheMap()
+    {
+        return getView().getCacheMap();
     }
 }

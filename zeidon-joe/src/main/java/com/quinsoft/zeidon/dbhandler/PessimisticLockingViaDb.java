@@ -283,11 +283,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private GlobalJavaLock getJavaLock()
     {
         if ( javaLock == null )
-        {
-            javaLock = lodDef.getCacheMap( GlobalJavaLock.class );
-            if ( javaLock == null )
-                javaLock = lodDef.putCacheMap( GlobalJavaLock.class, new GlobalJavaLock() );
-        }
+            javaLock = lodDef.getCacheMap().getOrCreate( GlobalJavaLock.class );
 
         return javaLock;
     }

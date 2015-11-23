@@ -155,14 +155,9 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
      * @param context
      * @return
      */
-    @SuppressWarnings("unchecked") // For cast of getTaskCache to map
     private TableListContext getTaskContext( Task task, TableDomainContext context )
     {
-        TaskData taskData = task.getCacheMap( TaskData.class );
-        if ( taskData == null )
-        {
-            taskData = task.putCacheMap( TaskData.class, new TaskData() );
-        }
+        TaskData taskData = task.getCacheMap().getOrCreate( TaskData.class );
 
         synchronized ( taskData )
         {

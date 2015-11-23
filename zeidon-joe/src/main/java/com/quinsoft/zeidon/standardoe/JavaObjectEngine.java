@@ -407,21 +407,10 @@ public class JavaObjectEngine implements ObjectEngine
         return oeListener;
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
-     */
     @Override
-    public <T> T getCacheMap(Class<T> key)
+    public CacheMap getCacheMap()
     {
-        return cacheMap.getCacheMap( key );
+        return cacheMap;
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
-     */
-    @Override
-    public <T> T putCacheMap(Class<T> key, T value)
-    {
-        return cacheMap.putCacheMap( key, value );
-    }
 }

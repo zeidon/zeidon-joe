@@ -53,7 +53,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
  * @author DG
  *
  */
-public class EntityDef implements PortableFileAttributeHandler, CacheMap
+public class EntityDef implements PortableFileAttributeHandler
 {
     private LodDef     lodDef;
     private EntityDef  prevHier;
@@ -105,7 +105,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
      */
     private final ConcurrentMap<EntityDef, Boolean> attributeSuperset = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
 
-    private final CacheMap cacheMap = new CacheMapImpl();
+    private CacheMap cacheMap;
 
     // Permission flags.
     private boolean    create  = false;
@@ -449,7 +449,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * Name of the entity  This string has been intern() so it is safe to use ==
      * instead of equals().
-     * 
+     *
      * @return internal string.
      */
     public String getName()
@@ -458,9 +458,9 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     }
 
     /**
-     * A string ID that uniquely defines this entity from the ER.  This string has 
+     * A string ID that uniquely defines this entity from the ER.  This string has
      * been intern() so it is safe to use == instead of equals().
-     * 
+     *
      * @return internal string.
      */
     public String getErEntityToken()
@@ -784,7 +784,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
      * A string ID that uniquely defines the relationship between this EntityDef
      * and its parent.  This string has been intern() so it is safe to use ==
      * instead of equals().
-     * 
+     *
      * @return internal string.
      */
     public String getErRelToken()
@@ -985,22 +985,12 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return maxcardinality;
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
-     */
-    @Override
-    public <T> T putCacheMap(Class<T> key, T value)
+    public synchronized CacheMap getCacheMap()
     {
-        return cacheMap.putCacheMap( key, value );
-    }
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
-     */
-    @Override
-    public <T> T getCacheMap(Class<T> key)
-    {
-        return cacheMap.getCacheMap( key );
+        return cacheMap;
     }
 
     /**

@@ -29,11 +29,16 @@ package com.quinsoft.zeidon;
  * For example, application code could cache a value in a task like this:
  * <pre><code>
  * Task task = ...
- * MyCache value = task.getCacheMap( MyCache.class );
+ * MyCache value = task.getCacheMap().getCacheMap( MyCache.class );
  * if ( value == null ) {
- *     value = ...
- *     value = task.putCacheMap( MyCache.class, value );
+ *     value = new MyCache( 1, 2, 3 );
+ *     value = task.getCacheMap().putCacheMap( putCacheMap( MyCache.class, value );
  * }
+ * </code></pre>
+ * If the constructor for the cached value takes no arguments then this can be
+ * simplified to:
+ * <pre><code>
+ * MyCache value = task.getOrCreateCacheMap( MyCache.class );
  * </code></pre>
  *
  */
@@ -49,7 +54,19 @@ public interface CacheMap
      * @param value
      * @return
      */
-    <T> T putCacheMap( Class<T> key, T value );
+    <T> T put( Class<T> key, T value );
+
+    /**
+     * putTaskCache puts 'value' into the cache using value.getClass as the key.
+     * If the value already exists in the
+     * cache for the specified key then 'value' is *not* added and the current value
+     * from the cache map is returned.
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
+    <T> T put( T value );
 
     /**
      * Retrieves a value from the cache map.
@@ -57,5 +74,15 @@ public interface CacheMap
      * @param key the map key.
      * @return the value stored in the cache map.
      */
-    <T> T getCacheMap( Class<T> key );
+    <T> T get( Class<T> key );
+
+    /**
+     * Retrieves a value from the cache map.  If the value is null (or doesn't exist)
+     * then a value will be instantiated using the empty constructor of the class and
+     * inserted in the CacheMap before returning.
+     *
+     * @param key
+     * @return
+     */
+    <T> T getOrCreate( Class<T> key );
 }

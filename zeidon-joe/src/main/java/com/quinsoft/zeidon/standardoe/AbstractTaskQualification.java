@@ -41,7 +41,7 @@ import com.quinsoft.zeidon.utils.CacheMapImpl;
  * @author DG
  *
  */
-abstract class AbstractTaskQualification implements TaskQualification, CacheMap
+abstract class AbstractTaskQualification implements TaskQualification
 {
 
     private final Application app;
@@ -283,28 +283,12 @@ abstract class AbstractTaskQualification implements TaskQualification, CacheMap
         return getTask().getTempDirectory();
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
-     */
-    @Override
-    synchronized public <T> T getCacheMap(Class<T> key)
+    public synchronized CacheMap getCacheMap()
     {
         if ( cacheMap == null )
             cacheMap = new CacheMapImpl();
 
-        return cacheMap.getCacheMap( key );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
-     */
-    @Override
-    synchronized public <T> T putCacheMap(Class<T> key, T value)
-    {
-        if ( cacheMap == null )
-            cacheMap = new CacheMapImpl();
-
-        return cacheMap.putCacheMap( key, value );
+        return cacheMap;
     }
 
     @Override

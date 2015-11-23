@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.CacheMap;
+import com.quinsoft.zeidon.ZeidonException;
 
 /**
  * Implementation of CacheMap using Google Guava MapMaker.
@@ -35,22 +36,50 @@ public class CacheMapImpl implements CacheMap
     private final ConcurrentMap<Class<?>, Object> cache = new MapMaker().concurrencyLevel( 2 ).makeMap();
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
+     * @see com.quinsoft.zeidon.CacheMap#put(java.lang.Class, java.lang.Object)
      */
     @Override
-    public <T> T putCacheMap(Class<T> key, T value)
+    public <T> T put(Class<T> key, T value)
     {
         cache.putIfAbsent( key, value );
-        return getCacheMap( key );
+        return get( key );
     }
 
     /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
+     * @see com.quinsoft.zeidon.CacheMap#get(java.lang.Class)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCacheMap(Class<T> key)
+    public <T> T get(Class<T> key)
     {
         return (T) cache.get( key );
+    }
+
+    @Override
+    public <T> T getOrCreate( Class<T> key )
+    {
+        @SuppressWarnings("unchecked")
+        T value = (T) cache.get( key );
+        if ( value == null )
+        {
+            try
+            {
+                value = key.newInstance();
+                value = put( key, value );
+            }
+            catch ( Exception e )
+            {
+                throw ZeidonException.wrapException( e );
+            }
+        }
+
+        return value;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T put( T value )
+    {
+        return put( (Class<T>) value.getClass(), value );
     }
 }

@@ -30,7 +30,7 @@ import com.quinsoft.zeidon.domains.DomainClassLoader;
  * is JavaObjectEngine.
  *
  */
-public interface ObjectEngine extends CacheMap
+public interface ObjectEngine
 {
     /**
      * Name of the application for the Zeidon System.
@@ -172,4 +172,8 @@ public interface ObjectEngine extends CacheMap
      */
     ZeidonPreferences getZeidonPreferences( Application app );
 
+    /**
+     * Get the CacheMap for the ObjectEngine.
+     */
+    public CacheMap getCacheMap();
 }

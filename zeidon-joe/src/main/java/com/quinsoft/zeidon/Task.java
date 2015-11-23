@@ -57,7 +57,7 @@ import com.quinsoft.zeidon.standardoe.ScalaHelper;
  * </code></pre>
  *
  */
-public interface Task extends TaskQualification, CacheMap
+public interface Task extends TaskQualification
 {
     /**
      * Get the list of views for this task.  Includes views without names.  Use this
@@ -213,4 +213,9 @@ public interface Task extends TaskQualification, CacheMap
     boolean setEntityCache( EntityCache entityCache);
 
     void addTaskCleanupWork( DropTaskCleanup work );
+
+    /**
+     * Get the CacheMap for the Task.
+     */
+    public CacheMap getCacheMap();
 }

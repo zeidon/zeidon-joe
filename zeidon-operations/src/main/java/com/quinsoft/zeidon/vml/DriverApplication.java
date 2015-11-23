@@ -18,15 +18,15 @@
  */
 package com.quinsoft.zeidon.vml;
 
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *@author DKS
@@ -78,31 +78,31 @@ public class DriverApplication
 
    public static Task GetTaskFromSubtask( TaskQualification taskView, int subtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap().get( SubtaskList.class );
       return subtaskList.subtaskMap.get( subtask ).task;
    }
 
    public static View GetViewFromSubtask( TaskQualification taskView, int subtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap().get( SubtaskList.class );
       return subtaskList.subtaskMap.get( subtask ).view;
    }
 
    public static String GetDialogTagFromSubtask( TaskQualification taskView, int subtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap().get( SubtaskList.class );
       return subtaskList.subtaskMap.get( subtask ).dialogTag;
    }
 
    public static String GetWindowTagFromSubtask( TaskQualification taskView, int subtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap().get( SubtaskList.class );
       return subtaskList.subtaskMap.get( subtask ).windowTag;
    }
 
    public static String GetCommandFromSubtask( TaskQualification taskView, int subtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap().get( SubtaskList.class );
       return subtaskList.subtaskMap.get( subtask ).command;
    }
 
@@ -129,10 +129,10 @@ public class DriverApplication
       // We'll increment a file count and store the File in a concurrent hashmap.
       View v = VmlOperation.getView( vSubtask );
       Task t = v.getTask( );
-      SubtaskList subtaskList = t.getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = t.getCacheMap().get( SubtaskList.class );
       if ( subtaskList == null )
       {
-         subtaskList = t.putCacheMap( SubtaskList.class, new SubtaskList() );
+         subtaskList = t.getCacheMap().put( SubtaskList.class, new SubtaskList() );
       }
 
       int subtask = subtaskList.dialogCount.incrementAndGet( );
@@ -148,10 +148,10 @@ public class DriverApplication
       // We'll increment a file count and store the File in a concurrent hashmap.
       View v = VmlOperation.getView( vSubtask );
       Task t = vSubtask.getTask( );
-      SubtaskList subtaskList = t.getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = t.getCacheMap().get( SubtaskList.class );
       if ( subtaskList == null )
       {
-         subtaskList = t.putCacheMap( SubtaskList.class, new SubtaskList() );
+         subtaskList = t.getCacheMap().put( SubtaskList.class, new SubtaskList() );
       }
 
       int subtask = subtaskList.dialogCount.incrementAndGet( );
@@ -163,7 +163,7 @@ public class DriverApplication
 
    public static int SetViewForSubtask( TaskQualification taskQual, int subtask, View vSubtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskQual.getTask( ).getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskQual.getTask( ).getCacheMap().get( SubtaskList.class );
       SubtaskItem subtaskItem = subtaskList.subtaskMap.get( subtask );
       if ( subtaskItem != null )
       {
@@ -178,7 +178,7 @@ public class DriverApplication
 
    public static int DropDialogWindowForHandle( TaskQualification taskView, int subtask )
    {
-      SubtaskList subtaskList = (SubtaskList) taskView.getTask().getCacheMap( SubtaskList.class );
+      SubtaskList subtaskList = (SubtaskList) taskView.getTask().getCacheMap().get( SubtaskList.class );
    // SubtaskItem item = subtaskList.subtaskMap.get( subtask );
       subtaskList.subtaskMap.remove( subtask );
 
@@ -212,7 +212,7 @@ public class DriverApplication
          ObjectEngine oe = taskView.getObjectEngine();
          for ( Task t : oe.getTaskList( ) )
          {
-            SubtaskList subtaskList = (SubtaskList) t.getCacheMap( SubtaskList.class );
+            SubtaskList subtaskList = (SubtaskList) t.getCacheMap().get( SubtaskList.class );
             if ( subtaskList != null )
             {
                subtask = getDialog( subtaskList, dialogName );
@@ -225,7 +225,7 @@ public class DriverApplication
       }
       else
       {
-         SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap( SubtaskList.class );
+         SubtaskList subtaskList = (SubtaskList) taskView.getTask( ).getCacheMap().get( SubtaskList.class );
          if ( subtaskList != null )
          {
             subtask = getDialog( subtaskList, dialogName );
@@ -253,7 +253,7 @@ public class DriverApplication
          View v = VmlOperation.getView( vSubtask );
          Task t = v.getTask();
          int subtask;
-         SubtaskList subtaskList = (SubtaskList) t.getCacheMap( SubtaskList.class );
+         SubtaskList subtaskList = (SubtaskList) t.getCacheMap().get( SubtaskList.class );
          if ( subtaskList != null )
          {
             Iterator<Integer> it = subtaskList.subtaskMap.keySet().iterator();
@@ -272,7 +272,7 @@ public class DriverApplication
             if ( t != t.getSystemTask() )
             {
                t = t.getSystemTask();
-               subtaskList = (SubtaskList) t.getCacheMap( SubtaskList.class );
+               subtaskList = (SubtaskList) t.getCacheMap().get( SubtaskList.class );
                it = subtaskList.subtaskMap.keySet().iterator();
                while ( it.hasNext() )
                {

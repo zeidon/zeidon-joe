@@ -126,7 +126,7 @@ public class JdbcHandler extends AbstractSqlHandler
             if ( options.isSingleTransaction() )
             {
                 // Yes.  See if there's already a transaction open for this task.
-                transaction = getTask().getCacheMap( JdbcTransaction.class );
+                transaction = getTask().getCacheMap().get( JdbcTransaction.class );
                 if ( transaction != null )
                 {
                     if ( transaction.isClosed() )
@@ -148,7 +148,7 @@ public class JdbcHandler extends AbstractSqlHandler
             initializeTransaction();
             if ( options.isSingleTransaction() )
             {
-                getTask().putCacheMap( JdbcTransaction.class, transaction );
+                getTask().getCacheMap().put( JdbcTransaction.class, transaction );
                 getTask().addTaskCleanupWork( transaction );
             }
 
@@ -166,12 +166,7 @@ public class JdbcHandler extends AbstractSqlHandler
         if ( connectionPool == null )
         {
             Task systemTask = getTask().getSystemTask();
-            connectionPool = systemTask.getCacheMap( JdbcConnectionPool.class );
-            if ( connectionPool == null )
-            {
-                connectionPool = new JdbcConnectionPool();
-                connectionPool = systemTask.putCacheMap( JdbcConnectionPool.class, connectionPool );
-            }
+            connectionPool = systemTask.getCacheMap().getOrCreate( JdbcConnectionPool.class );
         }
 
         return connectionPool;

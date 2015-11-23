@@ -2634,12 +2634,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     EntityDefSqlData getEntityDefData( EntityDef entityDef )
     {
-        EntityDefSqlData data = entityDef.getCacheMap( EntityDefSqlData.class );
+        EntityDefSqlData data = entityDef.getCacheMap().get( EntityDefSqlData.class );
         if ( data != null )
             return data;
 
         data = new EntityDefSqlData( entityDef );
-        data = entityDef.putCacheMap( EntityDefSqlData.class, data );
+        data = entityDef.getCacheMap().put( EntityDefSqlData.class, data );
         return data;
     }
 

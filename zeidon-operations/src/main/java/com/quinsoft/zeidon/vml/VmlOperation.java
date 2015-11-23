@@ -7973,9 +7973,9 @@ public abstract class VmlOperation
 
    private ClusterInfo getClusterInfo()
    {
-       ClusterInfo info = task.getTask().getCacheMap( ClusterInfo.class );
+       ClusterInfo info = task.getTask().getCacheMap().get( ClusterInfo.class );
        if ( info == null )
-           info = task.getTask().putCacheMap( ClusterInfo.class, new ClusterInfo() );
+           info = task.getTask().getCacheMap().put( ClusterInfo.class, new ClusterInfo() );
 
        return info;
    }

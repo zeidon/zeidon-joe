@@ -208,13 +208,13 @@ public class KZOEP1AA extends VmlOperation
 
    private BufferedReader getReaderFromInt( Task task, int fileHandle )
    {
-      FileList fileList = (FileList) task.getCacheMap( FileList.class );
+      FileList fileList = (FileList) task.getCacheMap().get( FileList.class );
       return fileList.fileMap.get( fileHandle ).reader;
    }
 
    protected BufferedWriter getWriterFromInt( Task task, int fileHandle )
    {
-      FileList fileList = (FileList) task.getCacheMap( FileList.class );
+      FileList fileList = (FileList) task.getCacheMap().get( FileList.class );
       return fileList.fileMap.get( fileHandle ).writer;
    }
 
@@ -414,10 +414,10 @@ public class KZOEP1AA extends VmlOperation
 
       // Generated VML uses ints as file handles so we need to convert a File to a int.
       // We'll increment a file count and store the File in a concurrent hashmap.
-      FileList fileList = task.getTask().getCacheMap( FileList.class );
+      FileList fileList = task.getTask().getCacheMap().get( FileList.class );
       if ( fileList == null )
       {
-         fileList = task.getTask().putCacheMap( FileList.class, new FileList() );
+         fileList = task.getTask().getCacheMap().put( FileList.class, new FileList() );
       }
 
       int fileHandle = fileList.fileCount.incrementAndGet( );
@@ -434,7 +434,7 @@ public class KZOEP1AA extends VmlOperation
 
    public int SysCloseFile( TaskQualification taskView, int file, int control ) throws IOException
    {
-      FileList fileList = (FileList) taskView.getTask().getCacheMap( FileList.class );
+      FileList fileList = (FileList) taskView.getTask().getCacheMap().get( FileList.class );
       FileItem item = fileList.fileMap.get( file );
       fileList.fileMap.remove( file );
       if ( item.reader != null )
@@ -485,7 +485,7 @@ public class KZOEP1AA extends VmlOperation
 
    public int SysGetFileSize( TaskQualification qual, int fileHandle )
    {
-      FileList fileList = qual.getTask().getCacheMap( FileList.class );
+      FileList fileList = qual.getTask().getCacheMap().get( FileList.class );
       File file = fileList.fileMap.get( fileHandle ).file;
       return (int) file.length();
    }

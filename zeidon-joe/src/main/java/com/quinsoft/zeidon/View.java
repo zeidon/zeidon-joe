@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * The EntityCursor is used to scan through existing Entity Instances in an OI.
  *
  */
-public interface View extends TaskQualification, CacheMap
+public interface View extends TaskQualification
 {
     final static long DISPLAY_HIDDEN        = 0x00000001;
     final static long DISPLAY_EMPTY_ATTRIBS = 0x00000002;
@@ -603,4 +603,8 @@ public interface View extends TaskQualification, CacheMap
     
     public void addViewCleanupWork( DropViewCleanup work );
 
+    /**
+     * Get the CacheMap for the View.
+     */
+    public CacheMap getCacheMap();
 }

@@ -53,7 +53,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.Nu
  * @author DG
  *
  */
-public class LodDef implements PortableFileAttributeHandler, CacheMap
+public class LodDef implements PortableFileAttributeHandler
 {
     private final Application  app;
     private String       name;
@@ -784,27 +784,11 @@ public class LodDef implements PortableFileAttributeHandler, CacheMap
         this.hasDuplicateInstances = hasDuplicateInstances;
     }
 
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
-     */
-    @Override
-    synchronized public <T> T getCacheMap(Class<T> key)
+    public synchronized CacheMap getCacheMap()
     {
         if ( cacheMap == null )
             cacheMap = new CacheMapImpl();
 
-        return cacheMap.getCacheMap( key );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
-     */
-    @Override
-    synchronized public <T> T putCacheMap(Class<T> key, T value)
-    {
-        if ( cacheMap == null )
-            cacheMap = new CacheMapImpl();
-
-        return cacheMap.putCacheMap( key, value );
+        return cacheMap;
     }
 }
