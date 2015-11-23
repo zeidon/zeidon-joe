@@ -38,6 +38,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
@@ -199,7 +200,8 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void addHostname( EntityCursor cursor )
     {
         EntityDef zeidonLock = cursor.getEntityDef();
-        if ( zeidonLock.getAttribute( "Hostname", false ) == null )
+        AttributeDef hostnameAttr = zeidonLock.getAttribute( "Hostname", false );
+        if ( hostnameAttr == null || hostnameAttr.isHidden() )
             return;
 
         String hostname;
@@ -228,7 +230,8 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void addCallStack( EntityCursor cursor )
     {
         EntityDef zeidonLock = cursor.getEntityDef();
-        if ( zeidonLock.getAttribute( "CallStack", false ) == null )
+        AttributeDef callStackAttr = zeidonLock.getAttribute( "CallStack", false );
+        if ( callStackAttr == null || callStackAttr.isHidden() )
             return;
 
         StringBuilder sb = new StringBuilder();
@@ -307,6 +310,9 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     @Override
     public void releaseGlobalLock( View view )
     {
+        if ( javaLock == null )
+            return;
+
         try
         {
             // Delete the global lock.
@@ -323,7 +329,9 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         finally
         {
             // Make sure we remove the java lock.
-            getJavaLock().lock.unlock();
+            javaLock.lock.unlock();
+            javaLock = null;
+
             view.log().trace( "Global Java unlocked" );
         }
     }
@@ -335,7 +343,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void writeLocks( View view )
     {
         int retryCount = 4;
-        Exception exception = null;;
+        Exception exception = null;
         for ( int i = 0; i < retryCount; i++ )
         {
             try
@@ -387,6 +395,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         addRootsToLockOi( view );
 
         writeLocks( view );
+        releaseGlobalLock( view );
     }
 
     /* (non-Javadoc)

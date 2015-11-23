@@ -66,8 +66,9 @@ public class CacheMapImpl implements CacheMap
         {
             try
             {
-                Constructor<?> ctor = key.getDeclaredConstructors()[0];
-                ctor.setAccessible( true );
+                // Get the first constructor.  We'll assume it's the no-args constructor.
+                Constructor<?> ctor = key.getDeclaredConstructors()[0]; 
+                ctor.setAccessible( true ); // So we can call private constructors.
                 value = (T) ctor.newInstance();
                 value = put( key, value );
             }

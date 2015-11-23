@@ -373,7 +373,7 @@ class EntityCursorImpl implements EntityCursor
 
         // If the entity is a derived entity or a work entity (both marked as derived) then
         // we don't need to check if the entity is read only.
-        if ( !getEntityDef().isDerived() )
+        if ( ! flags.contains( CreateEntityFlags.fIGNORE_PERMISSIONS ) )
            validateOiUpdate();
 
         EntityInstanceImpl ei = getEntityInstance();
@@ -815,6 +815,12 @@ class EntityCursorImpl implements EntityCursor
      */
     private void validateOiUpdate()
     {
+        if ( getEntityDef().isDerived() )
+            return;
+
+        if ( ! getEntityDef().isPersistent() )
+            return;
+
         // If the entity is a derived entity or a work entity (both marked as derived) then
         // we don't need to check if the entity is read only.
         if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )

@@ -220,6 +220,7 @@ public class QualificationBuilder
 
     public QualificationBuilder limitCountTo( int limit )
     {
+        validateEntity();
         qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).setValue( limit );
         return setFlag( ActivateFlags.fMULTIPLE );
     }

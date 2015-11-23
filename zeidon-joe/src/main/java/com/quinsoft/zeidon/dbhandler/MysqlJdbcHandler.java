@@ -134,7 +134,7 @@ public class MysqlJdbcHandler extends JdbcHandler
     {
         // If the user has indicated she's doing multiple activates in a single transaction
         // then we'll assume she wants locking.  Set the isolation level for locking.
-        if ( activateOptions.isSingleTransaction() )
+        if ( options.isSingleTransaction() )
         {
             // Using executeSql() could be dangerous because it results in a recursive
             // call to getTransaction().  As currently constructed, however, it works.
