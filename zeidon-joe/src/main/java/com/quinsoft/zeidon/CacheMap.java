@@ -29,7 +29,7 @@ package com.quinsoft.zeidon;
  * For example, application code could cache a value in a task like this:
  * <pre><code>
  * Task task = ...
- * MyCache value = task.getCacheMap().getCacheMap( MyCache.class );
+ * MyCache value = task.getCacheMap().get( MyCache.class );
  * if ( value == null ) {
  *     value = new MyCache( 1, 2, 3 );
  *     value = task.getCacheMap().putCacheMap( putCacheMap( MyCache.class, value );
@@ -38,7 +38,7 @@ package com.quinsoft.zeidon;
  * If the constructor for the cached value takes no arguments then this can be
  * simplified to:
  * <pre><code>
- * MyCache value = task.getOrCreateCacheMap( MyCache.class );
+ * MyCache value = task.getCachMap().getOrCreate( MyCache.class );
  * </code></pre>
  *
  */
@@ -57,7 +57,7 @@ public interface CacheMap
     <T> T put( Class<T> key, T value );
 
     /**
-     * putTaskCache puts 'value' into the cache using value.getClass as the key.
+     * putTaskCache puts 'value' into the cache using value.getClass() as the key.
      * If the value already exists in the
      * cache for the specified key then 'value' is *not* added and the current value
      * from the cache map is returned.

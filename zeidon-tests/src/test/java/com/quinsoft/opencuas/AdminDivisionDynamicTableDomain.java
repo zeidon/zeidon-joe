@@ -19,6 +19,7 @@
 
 package com.quinsoft.opencuas;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +177,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
     /**
      * Simple class for storing data in Task CacheMap
      */
-    private class TaskData
+    private static class TaskData
     {
         private final Map<String,TableListContext> map = new HashMap<String, TableListContext>();
     }

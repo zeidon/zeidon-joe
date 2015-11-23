@@ -19,6 +19,8 @@
 
 package com.quinsoft.zeidon.utils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentMap;
 
 import com.google.common.collect.MapMaker;
@@ -55,21 +57,24 @@ public class CacheMapImpl implements CacheMap
         return (T) cache.get( key );
     }
 
+    @SuppressWarnings({ "unchecked" })
     @Override
     public <T> T getOrCreate( Class<T> key )
     {
-        @SuppressWarnings("unchecked")
         T value = (T) cache.get( key );
         if ( value == null )
         {
             try
             {
-                value = key.newInstance();
+                Constructor<?> ctor = key.getDeclaredConstructors()[0];
+                ctor.setAccessible( true );
+                value = (T) ctor.newInstance();
                 value = put( key, value );
             }
             catch ( Exception e )
             {
-                throw ZeidonException.wrapException( e );
+                throw ZeidonException.wrapException( e )
+                                     .prependMessage( "If the class \"%s\" is an inner class it must be declared as static", key.getCanonicalName() );
             }
         }
 
