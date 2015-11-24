@@ -27,6 +27,7 @@ import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 
 /**
  * JDBC handler for mysql that uses "lock table" to lock the genkey table.
@@ -90,15 +91,15 @@ public class MysqlJdbcHandler extends JdbcHandler
     @Override
     protected boolean isJoinable( EntityDef entityDef )
     {
-        if ( lockingRoot && ! activateOptions.isReadOnly() )
-        {
-            // We are going to use
-            if ( entityDef.getParent() == entityDef.getLodDef().getRoot() )
-            {
-                getTask().dblog().trace( "Entity %s is not joined with its parent because the parent is loaded with record-level locking", entityDef );
-                return false;
-            }
-        }
+//        if ( lockingRoot && ! activateOptions.isReadOnly() )
+//        {
+//            // We are going to use
+//            if ( entityDef.getParent() == entityDef.getLodDef().getRoot() )
+//            {
+//                getTask().dblog().trace( "Entity %s is not joined with its parent because the parent is loaded with record-level locking", entityDef );
+//                return false;
+//            }
+//        }
 
         return super.isJoinable( entityDef );
     }
@@ -112,7 +113,7 @@ public class MysqlJdbcHandler extends JdbcHandler
         if ( activateOptions.isSingleTransaction() )
         {
             lockingRoot  = true;
-            return null;
+            return AbstractSqlHandler.NOOP_PESSIMISTIC_LOCKING_HANDLER;
         }
 
         return super.getPessimisticLockingHandler( activateOptions, view );
@@ -121,10 +122,18 @@ public class MysqlJdbcHandler extends JdbcHandler
     @Override
     protected int executeLoad(View view, EntityDef entityDef, SqlStatement stmt)
     {
-        // If the user has indicated she's doing multiple activates in a single transaction
-        // then we'll assume she wants locking.  Add locking command if it's not read-only.
-        if ( entityDef.getParent() == null && activateOptions.isSingleTransaction() && ! activateOptions.isReadOnly() )
-            stmt.appendSuffix( " for update " );
+        if ( entityDef.getParent() == null )
+        {
+            LockingLevel lockLevel = activateOptions.getLockingLevel();
+            if ( lockLevel.isPessimisticLock() && activateOptions.isSingleTransaction() )
+            {
+                if ( lockLevel == LockingLevel.PESSIMISTIC_NOREAD || ! activateOptions.isReadOnly() )
+                {
+                    // Add "FOR UPDATE" to lock the root records.
+                    stmt.appendSuffix( " FOR UPDATE " );
+                }
+            }
+        }
 
         return super.executeLoad( view, entityDef, stmt );
     }
