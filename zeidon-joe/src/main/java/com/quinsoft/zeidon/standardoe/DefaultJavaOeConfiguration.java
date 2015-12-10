@@ -271,8 +271,9 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
         return preferencesFilename;
     }
 
-    public void setPreferencesFilename( String preferencesFilename )
+    public DefaultJavaOeConfiguration setPreferencesFilename( String preferencesFilename )
     {
         this.preferencesFilename = preferencesFilename;
+        return this;
     }
 }
