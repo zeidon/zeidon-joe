@@ -738,11 +738,20 @@ public class JdbcHandler extends AbstractSqlHandler
                     valueAsString = getTranslator().bindAttributeValue( ps, boundValue, idx );
                 }
 
-                task.dblog().debug( "Bind idx %d = %s (attr value)", idx, valueAsString );
+                if ( task.dblog().isDebugEnabled() )
+                    task.dblog().debug( "Bind idx %d = %s (attr value)", idx, leftStr( valueAsString ) );
             }
         }
 
         return ps;
+    }
+    
+    private String leftStr( String str )
+    {
+        if ( str.length() <= 100 )
+            return str;
+        
+        return StringUtils.left( str, 100 ) + "<truncated>";
     }
 
     private String generateErrorMessageWithBoundAttributes( String sql, EntityDef entityDef, SqlStatement stmt )
