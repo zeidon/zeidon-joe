@@ -130,6 +130,14 @@ public class JavaObjectEngine implements ObjectEngine
         return s_objectEngine;
     }
 
+    public final static synchronized ObjectEngine getInstance( String preferencesFilename )
+    {
+        if ( s_objectEngine == null )
+            return getInstance( new DefaultJavaOeConfiguration().setPreferencesFilename( preferencesFilename ) );
+
+        return s_objectEngine;
+    }
+
     /**
      * Sets the static instance to null to give us a way to create a new JOE instance.
      *

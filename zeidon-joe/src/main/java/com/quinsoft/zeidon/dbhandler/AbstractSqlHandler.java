@@ -933,6 +933,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity parentQualEntity = qualMap.get( entityDef );
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
                 return false;
+
+            // If the parent of entityDef is the root and we're activating with rolling pagination
+            // then we can't join because the join will throw off the row count.
+            if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() &&
+                 activateOptions.getPagingOptions() != null &&
+                 activateOptions.getPagingOptions().isRollingPagination() )
+            {
+                return false;
+            }
         }
 
         return getEntityDefData( entityDef ).isJoinable( entityDef );
@@ -1230,7 +1239,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
         }
 
-        getTask().dblog().debug( "Auto Loaded %s from parent keys", entityDef.getName() );
+        getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
         return true;
     }
 
