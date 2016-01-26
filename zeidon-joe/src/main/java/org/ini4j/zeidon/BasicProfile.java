@@ -140,11 +140,19 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
         return remove((Object) section.getName());
     }
 
-    @Override public String remove(Object sectionName, Object optionName)
+    @Override public boolean remove(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 
-        return (sec == null) ? null : sec.remove(optionName);
+        if (sec == null || !sec.containsKey(optionName))
+        {
+            return false;
+        }
+        else
+        {
+            sec.remove(optionName);
+            return true;
+        }
     }
 
     boolean isTreeMode()
