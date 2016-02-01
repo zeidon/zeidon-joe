@@ -166,6 +166,11 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
         case _ => toInt + x
     }
 
+    /**
+     * Add a value to an attribute and specify a context.  The result of addition
+     * is domain-specific, as well as the value of the context.
+     */
+    def add( x: Any, contextName: String = "" ) = jattributeInstance.add( x, contextName )
     def +=( x: Any ) = jattributeInstance.add( x )
 
     def -=( x: Int ) = jattributeInstance.add( -x )

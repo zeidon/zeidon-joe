@@ -217,6 +217,15 @@ public interface AttributeInstance
     EntityInstance add( Object value );
 
     /**
+     * Add a value to the current attribute value with a context.  What "add" means is domain-specific.  For
+     * example, for string domains it will likely mean concatenation.  The context name is also domain-specific.
+     *
+     * @param value the value to add to the attribute
+     * @return this
+     */
+    EntityInstance add( Object value, String contextName );
+
+    /**
      * Multiply an attribute by a value.  What "multiply" means is domain-specific.
      *
      * @param value the current attribute value will be multiplied by this value.

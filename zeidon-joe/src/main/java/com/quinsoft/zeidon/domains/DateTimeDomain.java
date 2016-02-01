@@ -137,6 +137,9 @@ public class DateTimeDomain extends AbstractDomain
     public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object addValue )
     {
         DateTime date1 = (DateTime) convertExternalValue( task, attributeInstance, attributeDef, null, currentValue );
+        if ( date1 == null )
+            throw new ZeidonException( "Target attribute for add is NULL" )
+                            .prependAttributeDef( attributeDef );
 
         if ( addValue == null )
             return date1;
@@ -158,7 +161,81 @@ public class DateTimeDomain extends AbstractDomain
                                   Object operand,
                                   String contextName )
     {
-        throw new ZeidonException( "addToAttribute with context not supported for this domain" );
+        if ( ! StringUtils.isBlank( contextName ) )
+        {
+            return addWithContext( task,
+                                   attributeInstance,
+                                   attributeDef,
+                                   currentValue,
+                                   operand,
+                                   contextName );
+        }
+
+        return addToAttribute( task, attributeInstance, attributeDef, currentValue, operand );
+    }
+
+    private Object addWithContext( Task task,
+                                   AttributeInstance attributeInstance,
+                                   AttributeDef attributeDef,
+                                   Object currentValue,
+                                   Object operand,
+                                   String contextName )
+    {
+        assert ! StringUtils.isBlank( contextName );
+
+        if ( operand instanceof AttributeInstance )
+            operand = ((AttributeInstance) operand).getValue();
+
+        if ( ! ( operand instanceof Integer ) && ! ( operand instanceof Long ) )
+        {
+            throw new ZeidonException( "When adding to DateTime with a context, operand must be integer or long value.  " +
+                                       "Type of operand = %s", operand.getClass().getName() )
+                            .prependAttributeDef( attributeDef );
+        }
+
+        int value = ((Number) operand).intValue();
+        DateTime dt = (DateTime) currentValue;
+
+        switch ( contextName.toLowerCase() )
+        {
+            case "day":
+            case "days":
+                return dt.plusDays( value );
+
+            case "hour":
+            case "hours":
+                return dt.plusHours( value );
+
+            case "minute":
+            case "minutes":
+                return dt.plusMinutes( value );
+
+            case "milli":
+            case "millis":
+            case "millisecond":
+            case "milliseconds":
+                return dt.plus( ((Number) operand).longValue() );
+
+            case "month":
+            case "months":
+                return dt.plusMonths( value );
+
+            case "second":
+            case "seconds":
+                return dt.plusSeconds( value );
+
+            case "week":
+            case "weeks":
+                return dt.plusWeeks( value );
+
+            case "year":
+            case "years":
+                return dt.plusYears( value );
+        }
+
+        // TODO Auto-generated method stub
+        throw new ZeidonException( "Unknown context name '%s' for DateTime domain", contextName )
+                        .prependAttributeDef( attributeDef );
     }
 
     @Override
