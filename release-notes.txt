@@ -2,6 +2,9 @@
     - Swapped date and datetime domains; date now extends datetime.  May require app
       changes to DB translators.
     - Added addToAttribute with a context.  Used only by dates so far.
+    - Added Maven enforcer to enforce that jar versions are common across
+      dependencies.
+    - Updated commons-validator from 1.4.1 -> 1.5.0
 
 1.1.0
     - Load all many-to-one child entities with a join.

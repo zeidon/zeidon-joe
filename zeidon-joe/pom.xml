@@ -85,8 +85,19 @@
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>1.4.1</version>
-        </dependency>
+            <version>1.5.0</version>
+            <!-- These jars are pulled in from other dependencies -->
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-logging</groupId>
+	        <artifactId>commons-logging</artifactId>
+	      </exclusion>
+	      <exclusion>
+	        <groupId>commons-collections</groupId>
+	        <artifactId>commons-collections</artifactId>
+	      </exclusion>
+	    </exclusions>
+	 </dependency>
         <dependency>
             <groupId>com.googlecode.java-diff-utils</groupId>
             <artifactId>diffutils</artifactId>
@@ -122,6 +133,17 @@
             <artifactId>commons-digester3</artifactId>
             <version>3.2</version>
             <classifier>with-deps</classifier>
+            <!-- These jars are pulled in from other dependencies -->
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-logging</groupId>
+	        <artifactId>commons-logging</artifactId>
+	      </exclusion>
+	      <exclusion>
+	        <groupId>commons-beanutils</groupId>
+	        <artifactId>commons-beanutils</artifactId>
+	      </exclusion>
+	    </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.uuid</groupId>

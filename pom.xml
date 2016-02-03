@@ -21,7 +21,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<scala.version>2.11.6</scala.version>
+	<scala.version>2.11.7</scala.version>
     </properties>
 
     <scm>
@@ -73,6 +73,32 @@
                 </configuration>
             </plugin>
 
+	    <!-- Enforce that all included jars use the same versions -->
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-enforcer-plugin</artifactId>
+	      <version>1.4.1</version>
+	      <executions>
+		<execution>
+		  <id>enforce-versions</id>
+		  <goals>
+		    <goal>enforce</goal>
+		  </goals>
+		  <configuration>
+		    <rules>
+		      <requireMavenVersion>
+			<version>[3.*.*,)</version>
+		      </requireMavenVersion>
+		      <requireJavaVersion>
+			<version>[1.7.*,)</version>
+		      </requireJavaVersion>
+		      <DependencyConvergence/>
+		    </rules>
+		  </configuration>
+		</execution>
+	      </executions>
+	    </plugin>
+	    
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>

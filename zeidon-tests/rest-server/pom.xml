@@ -40,7 +40,17 @@
                     </compilerArguments>
                 </configuration>
             </plugin>
+            <!-- Turn off dependency enforcer because fop has too many dependency errors -->
             <plugin>
+	      <artifactId>maven-enforcer-plugin</artifactId>
+	      <executions>
+		<execution>
+		  <id>enforce-versions</id>
+		  <phase>none</phase>
+		</execution>
+	      </executions>
+	    </plugin>
+	    <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>

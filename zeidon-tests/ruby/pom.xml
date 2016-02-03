@@ -20,6 +20,21 @@
     <packaging>pom</packaging>
     <name>test-zruby</name>
 
+    <build>
+      <plugins>
+	<!-- Turn off dependency enforcer because fop has too many dependency errors -->
+	<plugin>
+	  <artifactId>maven-enforcer-plugin</artifactId>
+	  <executions>
+	    <execution>
+	      <id>enforce-versions</id>
+	      <phase>none</phase>
+	    </execution>
+	  </executions>
+	</plugin>
+      </plugins>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
