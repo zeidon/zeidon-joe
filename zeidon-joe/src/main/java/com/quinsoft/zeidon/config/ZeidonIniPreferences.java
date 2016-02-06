@@ -26,7 +26,6 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.quinsoft.zeidon.ZeidonException;
@@ -77,16 +76,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     @Override
     public String get( String groupName, String key, String defaultValue )
     {
-        Object value = iniConfObj.getProperty( groupName + "." + key );
-        String str = null;
-        if ( value == null )
-            str = defaultValue;
-        else
-        if ( StringUtils.isEmpty( value .toString() ) )
-            str = defaultValue;
-        else
-            str = value.toString();
-
+        String str = iniConfObj.getSection( groupName ).getString( key, defaultValue );
         return strSub.replace( str );
     }
 
