@@ -19,8 +19,6 @@
 
 package com.quinsoft.zeidon.vml;
 
-import static org.ini4j.zeidon.Config.PROP_PATH_SEPARATOR;
-
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -60,7 +58,6 @@ import net.htmlparser.jericho.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.ini4j.zeidon.Config;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -5021,7 +5018,7 @@ public abstract class VmlOperation
                                     View srcView, String srcEntity, String srcAttribute, int control )
    {
       StringBuilder sb = new StringBuilder( 256 );
-      
+
       if ( lodDefName != null )
     	  sb.append( lodDefName );
       int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
@@ -5450,7 +5447,7 @@ public abstract class VmlOperation
 
    public static int AppendPathSeparator( StringBuilder sbDirectoryName )
    {
-      char pathSeparator = Config.getSystemProperty( PROP_PATH_SEPARATOR, String.valueOf( Config.DEFAULT_PATH_SEPARATOR ) ).charAt( 0 );
+      char pathSeparator = File.separatorChar;
       char replaceCharacter = pathSeparator == '/' ? '\\' : '/';
       String s = sbDirectoryName.toString( );
       s = s.replace( replaceCharacter, pathSeparator );
@@ -5855,7 +5852,7 @@ public abstract class VmlOperation
       AttributeDef AttributeDef = entityDef.getAttribute( 0 );
       if ( AttributeDef == null )
           return -1;
-       
+
       if ( AttributeDef.isHidden() )
      	  return  -1;
       //if ( sbAttribName != null ) // Do we need this?
@@ -5871,7 +5868,7 @@ public abstract class VmlOperation
       AttributeDef = AttributeDef.getNextAttributeDef();
       if ( AttributeDef == null )
          return -1;
-      
+
       if ( AttributeDef.isHidden() )
     	  return  -1;
 
@@ -7383,7 +7380,7 @@ public abstract class VmlOperation
       int nRC = 0;
 
       // TODO - Create Code. Or is this only something for windows side?
-      
+
       return nRC;
    }
 
@@ -7394,11 +7391,11 @@ public abstract class VmlOperation
       int nRC = 0;
 
       // TODO - Create Code. Or is this only something for windows side?
-      
+
       return nRC;
    }
-   
-   
+
+
    //./ ADD NAME=GetIncrementalUpdateFlags
    // Source Module=kzoeeiaa.c
    /////////////////////////////////////////////////////////////////////////////
