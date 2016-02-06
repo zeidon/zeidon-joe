@@ -102,6 +102,13 @@
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
             <version>1.10</version>
+            <!-- These jars are pulled in from other dependencies -->
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-logging</groupId>
+	        <artifactId>commons-logging</artifactId>
+	      </exclusion>
+	    </exclusions>
         </dependency>
         <dependency>
             <groupId>com.googlecode.java-diff-utils</groupId>
