@@ -44,8 +44,28 @@ object Implicits {
             iter.foreach( ei => looper( ei ) )
         }
     }
-    
+
     implicit class ScalaTask( val task : Task ) {
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
+        def id = task.getTaskId
+    }
+
+    implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
+
+        def runTask( appName : String ) = {
+            val task = oe.createTask( appName );
+            TaskRunner( task )
+        }
+    }
+
+    case class TaskRunner( val task: Task ) {
+        def apply( runTask: Task => Any ) = {
+            try {
+                runTask( task )
+            }
+            finally {
+                task.dropTask()
+            }
+        }
     }
 }

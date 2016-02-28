@@ -37,7 +37,7 @@ class SelectQualification  private[scala] ( val selectSet: SelectSet,
     val lodDef = jview.getLodDef()
 
     def selectDynamic( entityName: String ) = {
-        val jentityDef = lodDef.getEntityDef( entityName )
+        val jentityDef =  EntitySelector.getEntityDef( lodDef, entityName )
         new SelectEntityQual( jentityDef )
     }
 
@@ -46,7 +46,7 @@ class SelectQualification  private[scala] ( val selectSet: SelectSet,
         var scopingEntity: EntityDef = null
 
         def under( scopingEntityName: String ) = {
-            scopingEntity = lodDef.getEntityDef( scopingEntityName )
+            scopingEntity =  EntitySelector.getEntityDef( lodDef, scopingEntityName )
             this
         }
 

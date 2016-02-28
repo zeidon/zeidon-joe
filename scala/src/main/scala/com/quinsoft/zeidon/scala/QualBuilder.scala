@@ -47,7 +47,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     jqual.setLodDef( jlodDef )
 
     private var jcurrentEntityDef = jlodDef.getRoot
-    
+
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
     private var firstOperator = true
 
@@ -434,15 +434,15 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     /**
-     * Specifies how entity is to be ordered when retrieved from DB.  
-     * 
+     * Specifies how entity is to be ordered when retrieved from DB.
+     *
      * {{{
      *      val mUser = VIEW basedOn "mUser"
      *      mUser.buildQual( _.User.ID > 400 )
      *             .orderBy( _.Name DESC )
      *             .activate
      * }}}
-     * 
+     *
      * Overrides ordering specified in the LOD.
      */
     def orderBy( selectAttr: (AttributeOrderByBuilder) => OrderByTerminator ) : QualBuilder = {
@@ -451,7 +451,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.addActivateOrdering( jcurrentEntityDef.getName, builder.jattributeDef.getName, builder.descending )
         this
     }
-    
+
     /**
      * Specifies which entity the following qualification is for.  Used to build
      * qualification programatically.
@@ -554,7 +554,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def readOnly( readOnly: Boolean = true ) = {
         if ( readOnly )
             jqual.readOnly()
-            
+
         this
     }
 
@@ -610,7 +610,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.overrideConfigValue( key, value )
         this
     }
-    
+
     def withRollingPagination( pageSize: Int = 1000 ) = {
         jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
         this
@@ -619,7 +619,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
 
 class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {
     def selectDynamic(entityName: String): AttributeQualBuilder = {
-        val jentityDef = qualBuilder.jlodDef.getEntityDef(entityName)
+        val jentityDef =  EntitySelector.getEntityDef( qualBuilder.jlodDef, entityName )
         new AttributeQualBuilder( qualBuilder, jentityDef )
     }
 }
@@ -656,16 +656,16 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
      * Adds dynamic support for qualifying on an attribute.
      */
     def selectDynamic( attributeName: String): AttributeQualOperators = {
-        jattributeDef = jentityDef.getAttribute( attributeName )
+        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
         if ( jattributeDef.isHidden() )
             throw new HiddenAttributeException( jattributeDef );
-        
+
         return new AttributeQualOperators( this )
     }
 
 //    def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
 //        //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
-//        jattributeDef = jentityDef.getAttribute( attributeName )
+//        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
 //        return qualBuilder
 //    }
 //
@@ -678,7 +678,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
       */
     def updateDynamic( attributeName: String)(value: Any): QualificationTerminator = {
 //        println( s"method '$attributeName' called with argument ${value}" )
-        jattributeDef = jentityDef.getAttribute( attributeName )
+        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
         if ( jattributeDef.isHidden() )
             throw new HiddenAttributeException( jattributeDef );
 
@@ -828,9 +828,9 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      */
     def isNull(): QualificationTerminator = {
         if ( checkNot )
-            return addQual( "!=", null )    
+            return addQual( "!=", null )
         else
-            return addQual( "=", null )    
+            return addQual( "=", null )
     }
 
     /**
@@ -842,11 +842,11 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      */
     def isNotNull(): QualificationTerminator = {
         if ( checkNot )
-            return addQual( "=", null )    
+            return addQual( "=", null )
         else
-            return addQual( "!=", null )    
+            return addQual( "!=", null )
     }
-    
+
     /**
      * Uses SQL like to qualify activation.
      *
@@ -1121,7 +1121,7 @@ class AttributeOrderByBuilder( val qualBuilder: QualBuilder,
      * Adds dynamic support for qualifying on an attribute.
      */
     def selectDynamic( attributeName: String ): OrderByTerminator = {
-        jattributeDef = jentityDef.getAttribute( attributeName )
+        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
         if ( jattributeDef.isHidden() )
             throw new HiddenAttributeException( jattributeDef );
         new OrderByTerminator( this )
