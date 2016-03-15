@@ -75,23 +75,22 @@ class ViewCursor
      *
      * @param task
      * @param lodDef
-     * @param sourceCursor - If not null, then initialize the cursors in the new ViewCursor to point to the same entities.
+     * @param sourceViewCursor - If not null, then initialize the cursors in the new ViewCursor to point to the same entities.
      */
-    private ViewCursor(TaskImpl task, ViewImpl view, LodDef lodDef, ViewCursor sourceCursor, ObjectInstance oi )
+    private ViewCursor(TaskImpl task, ViewImpl view, LodDef lodDef, ViewCursor sourceViewCursor, ObjectInstance oi )
     {
         super();
         this.lodDef = lodDef;
         this.view = view;
         cursorList = new EntityCursorImpl[ lodDef.getEntityCount() ];
 
-        for ( EntityDef entityDef : lodDef.getEntityDefs() )
+        if ( sourceViewCursor != null )
         {
-            int idx = entityDef.getHierIndex();
-
-            if ( sourceCursor != null )
-                cursorList[ idx ] = new EntityCursorImpl( this, sourceCursor.cursorList[ idx ] );
-            else
-                cursorList[ idx ] = new EntityCursorImpl( this, entityDef );
+            for ( EntityDef entityDef : lodDef.getEntityDefs() )
+            {
+                int idx = entityDef.getHierIndex();
+                cursorList[ idx ] = new EntityCursorImpl( this, sourceViewCursor.cursorList[ idx ] );
+            }
         }
 
         if ( oi != null )
@@ -100,14 +99,10 @@ class ViewCursor
             resetRecursiveParent();
         }
         else
-        if ( sourceCursor != null )
+        if ( sourceViewCursor != null )
         {
-            objectInstance = sourceCursor.getObjectInstance();
-            recursiveRoot = sourceCursor.getRecursiveRoot();
-            recursiveRootParent = sourceCursor.getRecursiveRootParent();
-            setRecursiveDiff( sourceCursor.getRecursiveDiff() );
-            firstValidCursorIndex = sourceCursor.firstValidCursorIndex;
-            lastValidCursorIndex = sourceCursor.lastValidCursorIndex;
+            objectInstance = sourceViewCursor.getObjectInstance();
+            copyRecursiveSettings( sourceViewCursor );
         }
         else
         {
@@ -116,6 +111,15 @@ class ViewCursor
         }
 
         objectInstance.addReferringViewCursor( this );
+    }
+
+    void copyRecursiveSettings( ViewCursor sourceViewCursor )
+    {
+        recursiveRoot = sourceViewCursor.getRecursiveRoot();
+        recursiveRootParent = sourceViewCursor.getRecursiveRootParent();
+        setRecursiveDiff( sourceViewCursor.getRecursiveDiff() );
+        firstValidCursorIndex = sourceViewCursor.firstValidCursorIndex;
+        lastValidCursorIndex = sourceViewCursor.lastValidCursorIndex;
     }
 
     TaskImpl getTask()
@@ -130,6 +134,9 @@ class ViewCursor
 
     protected EntityCursorImpl getEntityCursor( EntityDef entityDef )
     {
+        if ( cursorList[ entityDef.getHierIndex() ] == null )
+            cursorList[ entityDef.getHierIndex() ] = new EntityCursorImpl( this, entityDef );
+
         return cursorList[ entityDef.getHierIndex() ];
     }
 
@@ -141,12 +148,6 @@ class ViewCursor
     protected LodDef getLodDef()
     {
         return lodDef;
-    }
-
-    void copyEntityCursors( ViewCursor source )
-    {
-        for ( int i = 0; i < cursorList.length; i++ )
-            cursorList[ i ] = source.cursorList[ i ];
     }
 
     /**
@@ -326,8 +327,8 @@ class ViewCursor
         if ( objectInstance.getRootEntityInstance() == null )
             return;
 
-        cursorList[0].setCursor( objectInstance.getRootEntityInstance() );
-        resetRecursiveParent();
+        EntityCursorImpl cursor = getEntityCursor( objectInstance.getRootEntityInstance().getEntityDef() );
+        cursor.setCursor( objectInstance.getRootEntityInstance() );
     }
 
     /**
