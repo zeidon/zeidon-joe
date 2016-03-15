@@ -481,13 +481,20 @@ class ActivateOisFromJsonStream implements StreamReader
                 if ( attributeDef.isDerived() ) // We'll ignore derived attributes.
                     continue;
 
-                ei.getAttribute( attributeDef ).setInternalValue( jp.getText(), false ) ;
+                ei.getAttribute( attributeDef ).setInternalValue( jp.getText(), ! attributeDef.isKey() ) ;
                 if ( incremental )
                 {
                     // Since incremental flags are set, assume the attribute hasn't been
                     // updated.  We'll be told later if it has.
                     AttributeValue attrib = ei.getInternalAttribute( attributeDef );
                     attrib.setUpdated( false );
+                }
+                else
+                {
+                    // If we just set the key then we'll assume the entity has
+                    // already been created.
+                    if ( attributeDef.isKey() )
+                        ei.setIncrementalFlags( IncrementalEntityFlags.UPDATED );
                 }
             } // while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )...
 
