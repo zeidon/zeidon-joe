@@ -52,14 +52,30 @@ object Implicits {
 
     implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
 
-        def runTask( appName : String ) = {
+        /**
+         * Run a function inside a task.
+         *
+         * This is a convenience method to create a task, execute a method, and then
+         * automatically drop the task.
+         * {{{
+         * objectEngine.forTask( "Northwind" ) { task =>
+         *   val order = View( task ) basedOn "Order"
+         *   order.activateWhere( _.Order.OrderID = orderId )
+         *   order.Order.OrderDate
+         * }
+         * }}}
+         */
+        def forTask( appName : String ) : TaskRunner = {
             val task = oe.createTask( appName );
             TaskRunner( task )
         }
     }
 
+    /**
+     * Convenience class for ScalaObjectEngine.forTask
+     */
     case class TaskRunner( val task: Task ) {
-        def apply( runTask: Task => Any ) = {
+        def apply[T]( runTask: Task => T ): T = {
             try {
                 runTask( task )
             }
