@@ -554,6 +554,60 @@ class EntityCursorImpl implements EntityCursor
     }
 
     /**
+     * Set 'this' cursor to match targetCursor.  This will change parent and child
+     * cursors if necessary.
+     *
+     * @param targetCursor
+     * @return
+     */
+    private CursorResult setCursorFromCursor( EntityCursorImpl targetCursor )
+    {
+        assert targetCursor.getEntityDef() == getEntityDef();
+        assert targetCursor.getObjectInstance() == getObjectInstance();
+
+        CursorResult cursorResult = CursorResult.SET;
+
+        // Find the top-most parent cursor that needs to be changed.
+        EntityCursorImpl parentTargetCursor = targetCursor;
+        EntityCursorImpl parentSourceCursor = this;
+        while ( parentTargetCursor.getParentCursor() != null &&
+                parentTargetCursor.getParentCursor().entityInstance !=
+                        parentSourceCursor.getParentCursor().entityInstance )
+        {
+            cursorResult = CursorResult.SET_NEWPARENT;
+            parentTargetCursor = parentTargetCursor.getParentCursor();
+            parentSourceCursor = parentSourceCursor.getParentCursor();
+        }
+
+        // Set the top-most parent and then set all children to UNSET.
+        parentSourceCursor.resetChildCursors( parentTargetCursor.entityInstance );
+
+        // Now search through the parents again.  This time we'll set the cursors.
+        if ( parentTargetCursor != targetCursor )
+        {
+            parentTargetCursor = targetCursor;
+            parentSourceCursor = this;
+            while ( parentTargetCursor.getParentCursor() != null &&
+                    parentTargetCursor.getParentCursor().entityInstance !=
+                            parentSourceCursor.getParentCursor().entityInstance )
+            {
+                // Set don't use setEntityInstance because that will attempt to set parents
+                // and other logic.  We'll just set it directly.
+                parentSourceCursor.entityInstance = parentSourceCursor.entityInstance;
+
+                parentTargetCursor = parentTargetCursor.getParentCursor();
+                parentSourceCursor = parentSourceCursor.getParentCursor();
+            }
+
+            // If we are changing parents then it's also possible we're changing
+            // recursive entities.  Just copy the values from the target.
+            viewCursor.copyRecursiveSettings( targetCursor.getViewCursor() );
+        }
+
+        return cursorResult;
+    }
+
+    /**
      * Set the cursor to point to targetInstance and set all child cursors to point to
      * UNSET_CSR.  This will also check to see if the parent cursors need to be
      * set.
@@ -566,6 +620,17 @@ class EntityCursorImpl implements EntityCursor
     {
         if ( targetInstance == null )
             throw new ZeidonException("Cannot set a cursor to null.");
+
+        // Optimization: if the target instance is a cursor then we can just
+        // copy the entity instances from the target.
+        // TODO: Following doesn't appear to be faster.  Why not?
+//        if ( targetInstance instanceof EntityCursorImpl &&
+//             targetInstance.getEntityDef() == getEntityDef() )
+//        {
+//            EntityCursorImpl targetCursor = (EntityCursorImpl) targetInstance;
+//            if ( targetCursor.getObjectInstance() == getObjectInstance() )
+//                return setCursorFromCursor( (EntityCursorImpl) targetInstance );
+//        }
 
         // Convert the targetInstance to an EntityInstanceImpl
         EntityInstanceImpl newInstance = (EntityInstanceImpl) targetInstance.getEntityInstance();
