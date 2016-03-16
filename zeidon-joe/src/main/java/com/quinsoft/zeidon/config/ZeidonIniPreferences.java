@@ -25,7 +25,7 @@ import java.util.Iterator;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.text.StrSubstitutor;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.log4j.Logger;
 
 import com.quinsoft.zeidon.ZeidonException;
