@@ -27,6 +27,7 @@ public class Pagination
 {
     private int pageSize = 1000;
     private boolean rollingPagination = false;
+    private int page = 1;
 
     public Pagination()
     {
@@ -52,5 +53,15 @@ public class Pagination
     {
         this.pageSize = pageSize;
         return this;
+    }
+
+    public int getPage()
+    {
+        return page;
+    }
+
+    public void setPage( int page )
+    {
+        this.page = page;
     }
 }

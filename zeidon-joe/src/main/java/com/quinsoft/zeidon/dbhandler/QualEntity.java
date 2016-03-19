@@ -27,10 +27,10 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -51,19 +51,19 @@ class QualEntity
      * Keeps track of the EntityDefs that are used as part of this qualification.
      */
     final Set<EntityDef>   usesEntityDefs = new HashSet<>();
-    
+
     /**
      * This keeps track if all the qualification on this entity are
      * keys and the opers are all '='.
      */
     private boolean keyQualification;
-    
+
     QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
     {
         super();
         this.entityDef = entityDef;
         qualAttribs = new ArrayList<QualAttrib>();
-        
+
         // For now we only support entities with a single key.
         keyQualification = entityDef.getKeys().size() == 1;
 
@@ -84,7 +84,7 @@ class QualEntity
         {
             usesEntityDefs.add( qualAttrib.entityDef );
             usesChildQualification = true;
-            
+
             // We're qualifying on a child entity so that's not a key.
             keyQualification = false;
         }
@@ -97,7 +97,7 @@ class QualEntity
         }
 
         // Are we qualifying using a key?
-        if ( qualAttrib.attributeDef != null && 
+        if ( qualAttrib.attributeDef != null &&
              ( ! qualAttrib.attributeDef.isKey() || ! StringUtils.equals( qualAttrib.oper, "=" ) ) )
         {
             // No.
@@ -130,9 +130,11 @@ class QualEntity
      * Check to see if the key is part of the order by and add it if
      * it is not.  Intended to be used by rolling pagination.
      */
-    protected void checkForKeysInOrderBy()
+    protected boolean checkForKeysInOrderBy()
     {
         assert entityDef.getKeys().size() > 0 : "Attemping rolling pagination on entity without a key.";
+
+        boolean keyAdded = false;
 
         if ( ordering == null )
             ordering = new LinkedHashMap<>();
@@ -140,8 +142,13 @@ class QualEntity
         for ( AttributeDef key : entityDef.getKeys() )
         {
             if ( ! ordering.containsKey( key ) )
+            {
+                keyAdded = true;
                 ordering.put( key, new ActivateOrder( key, false ) );
+            }
         }
+
+        return keyAdded;
     }
 
     @Override

@@ -678,8 +678,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         } // for each EntitySpec...
 
-        // For rolling pagination we *must* have the keys as part of the ordering.
-        if ( pagingOptions != null && pagingOptions.isRollingPagination() )
+        // For pagination we *must* have the keys as part of the ordering, even if
+        // it's the last value to order by.
+        if ( pagingOptions != null )
         {
             EntityDef root = lodDef.getRoot();
             QualEntity qualRootEntity = qualMap.get( root );
@@ -689,7 +690,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 qualMap.put( root, qualRootEntity );
             }
 
-            qualRootEntity.checkForKeysInOrderBy(); // Add the keys if they aren't there.
+            if ( qualRootEntity.checkForKeysInOrderBy() ) // Add the keys if they aren't there.
+                getTask().log().trace( "Key(s) added to ordering for pagination" );
+
             qualRootEntity.activateLimit = pagingOptions.getPageSize();
 
             // Copy the root ordering back to the ActivateOptions so we can use
@@ -934,12 +937,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
                 return false;
 
-            // If the parent of entityDef is the root and we're activating with rolling pagination
+            // If the parent of entityDef is the root and we're activating with pagination
             // then we can't join because the join will throw off the row count.
-            if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() &&
-                 activateOptions.getPagingOptions() != null &&
-                 activateOptions.getPagingOptions().isRollingPagination() )
+            if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() && pagingOptions != null )
             {
+                getTask().log().trace( "Can't join %s with parent because of pagination", entityDef.getName() );
                 return false;
             }
         }
