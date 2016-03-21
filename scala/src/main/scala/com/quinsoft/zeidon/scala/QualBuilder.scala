@@ -373,14 +373,19 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      *      mUser.buildQual( _.User.ID = 400 )
      *                  .or( _.User.ID = 500 )
      *                  .restrict( _.UserGroup )
-     *                      .limitCountTo( 5 )
+     *                      .limit( 5 )
      *                 .activate
      * }}}
      *
      * Could activate a total of 10 UserGroup entities, 5 for each parent.
      */
-    def limitCountTo( limit: Integer ): QualBuilder = {
+    def limit( limit: Integer ): QualBuilder = {
         jqual.limitCountTo(limit)
+        this
+    }
+
+    def withPaging( pageSize: Int, page: Int = 1 ): QualBuilder = {
+        jqual.getPagination().setPageSize(pageSize).setPageNumber( page )
         this
     }
 
@@ -593,6 +598,21 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Returns the view for convenience.
      */
     def activate(): View = {
+        view.jview = jqual.activate()
+        return view
+    }
+
+    /**
+     * Performs the activate on the view using the specified qualification.
+     *
+     * Returns the view for convenience.
+     */
+    def activatePage( page: Int ): View = {
+        val paging = jqual.getPagination(false)
+        if ( paging == null )
+            throw new ZeidonException( "Page size was not set")
+
+        paging.setPageNumber( page )
         view.jview = jqual.activate()
         return view
     }

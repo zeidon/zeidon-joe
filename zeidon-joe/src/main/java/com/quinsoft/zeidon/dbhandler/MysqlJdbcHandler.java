@@ -91,6 +91,10 @@ public class MysqlJdbcHandler extends JdbcHandler
     @Override
     protected boolean isJoinable( EntityDef entityDef )
     {
+        // If we're locking the root entity in a single transaction then we don't want to
+        // join any children because the locking mechanism will lock all the joined tables.
+        // TODO: Leave this out for now.  What's worse, locking all the joined tables or
+        // skipping the joins all together?
 //        if ( lockingRoot && ! activateOptions.isReadOnly() )
 //        {
 //            // We are going to use

@@ -43,6 +43,7 @@ import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -192,12 +193,12 @@ public class JdbcHandler extends AbstractSqlHandler
     public boolean beginTransaction( View view )
     {
         transaction = getTransaction( application );
-        
+
         // If we're doing the activating using a shared transaction then we need
         // to add a cleanup task to the drop task to close the transaction.
         if ( activateOptions != null && activateOptions.isSingleTransaction() && view != null )
             view.addViewCleanupWork( transaction );
-        
+
         return true;
     }
 
@@ -318,6 +319,16 @@ public class JdbcHandler extends AbstractSqlHandler
     protected void addActivateLimit( int limit, SqlStatement stmt )
     {
         stmt.activateLimit = limit;
+    }
+
+    @Override
+    protected void addPageOffset( Pagination pagingOptions, SqlStatement stmt )
+    {
+        assert stmt.activateLimit > 1;
+
+        int offset = pagingOptions.getPageSize() * ( pagingOptions.getPageNumber() - 1 );
+        String str = String.format( " LIMIT %d OFFSET %d", stmt.activateLimit, offset );
+        stmt.appendSuffix( str );
     }
 
     @Override
@@ -745,12 +756,12 @@ public class JdbcHandler extends AbstractSqlHandler
 
         return ps;
     }
-    
+
     private String leftStr( String str )
     {
         if ( str.length() <= 100 )
             return str;
-        
+
         return StringUtils.left( str, 100 ) + "<truncated>";
     }
 

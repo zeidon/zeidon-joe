@@ -27,7 +27,8 @@ public class Pagination
 {
     private int pageSize = 1000;
     private boolean rollingPagination = false;
-    private int page = 1;
+    private int pageNumber = 0;
+    private boolean totalCount = false;
 
     public Pagination()
     {
@@ -55,13 +56,23 @@ public class Pagination
         return this;
     }
 
-    public int getPage()
+    public int getPageNumber()
     {
-        return page;
+        return pageNumber;
     }
 
-    public void setPage( int page )
+    public void setPageNumber( int pageNumber )
     {
-        this.page = page;
+        this.pageNumber = pageNumber;
+    }
+
+    public boolean isTotalCount()
+    {
+        return totalCount;
+    }
+
+    public void setTotalCount( boolean totalCount )
+    {
+        this.totalCount = totalCount;
     }
 }
