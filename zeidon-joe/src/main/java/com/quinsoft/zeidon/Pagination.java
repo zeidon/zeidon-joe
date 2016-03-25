@@ -61,9 +61,10 @@ public class Pagination
         return pageNumber;
     }
 
-    public void setPageNumber( int pageNumber )
+    public Pagination setPageNumber( int pageNumber )
     {
         this.pageNumber = pageNumber;
+        return this;
     }
 
     public boolean isTotalCount()
@@ -71,8 +72,9 @@ public class Pagination
         return totalCount;
     }
 
-    public void setTotalCount( boolean totalCount )
+    public Pagination setTotalCount( boolean totalCount )
     {
         this.totalCount = totalCount;
+        return this;
     }
 }

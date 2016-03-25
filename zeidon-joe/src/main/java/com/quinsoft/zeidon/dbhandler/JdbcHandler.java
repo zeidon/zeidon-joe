@@ -634,7 +634,6 @@ public class JdbcHandler extends AbstractSqlHandler
     @Override
     protected int executeSql(String sql)
     {
-        beginTransaction( null );
         logSql( sql );
 
         PreparedStatement ps = null;
@@ -642,6 +641,7 @@ public class JdbcHandler extends AbstractSqlHandler
 
         try
         {
+            beginTransaction( null );
             ps = prepareAndBind( null, sql, null, null, null );
             ps.execute();
         }
@@ -822,6 +822,13 @@ public class JdbcHandler extends AbstractSqlHandler
                 else
                     generatedKeys = null;
 
+            }
+            else
+            if ( stmt.commandType == SqlCommand.SELECT )
+            {
+                // This should be getting the count.
+                rs = ps.executeQuery();
+                return rs.getInt( 1 );
             }
             else
             {

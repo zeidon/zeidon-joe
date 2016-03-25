@@ -384,8 +384,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
-    def withPaging( pageSize: Int, page: Int = 1 ): QualBuilder = {
-        jqual.getPagination().setPageSize(pageSize).setPageNumber( page )
+    def withPaging( pageSize: Int, page: Int = 1, getTotalCount: Boolean = false ): QualBuilder = {
+        jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setTotalCount( getTotalCount )
         this
     }
 
