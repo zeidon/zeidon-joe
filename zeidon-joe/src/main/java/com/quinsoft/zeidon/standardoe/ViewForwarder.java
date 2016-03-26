@@ -612,6 +612,25 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     }
 
     /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    @Override
+    public Integer getTotalRootCount()
+    {
+        return getView().getTotalRootCount();
+    }
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    @Override
+    public void setTotalRootCount( int totalRootCount )
+    {
+        getView().setTotalRootCount( totalRootCount );
+    }
+
+    /**
      * Returns true if this view was created by internal JOE processing.  This is intended
      * to be used by the browser to ignore views that weren't created by the user.
      *

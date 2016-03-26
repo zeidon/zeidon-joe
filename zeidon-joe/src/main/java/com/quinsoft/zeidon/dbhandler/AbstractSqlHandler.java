@@ -1155,14 +1155,18 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( parent != null && loadInOneSelect.contains( entityDef ) )
             parentEi = view.cursor( parent ).getEntityInstance();
 
-        // If we're getting the total count then don't execute the load.
-        if ( ! activateOptions.isGetRootCount() )
-            executeLoad( view, entityDef, stmt );
+        executeLoad( view, entityDef, stmt );
 
-        if ( activateOptions.isGetRootCount() ||
-             ( pagingOptions != null && pagingOptions.isTotalCount() && parent == null ) )
+        // Set the total root count if we're loading the root.
+        if ( parent == null )
         {
-            getTotalCount( view, entityDef, stmt );
+            if ( pagingOptions != null )
+            {
+                if ( pagingOptions.isTotalCount() )
+                    getTotalCount( view, entityDef, stmt );
+            }
+            else
+                view.setTotalRootCount( view.cursor( view.getLodDef().getRoot() ).getEntityCount() );
         }
 
         if ( parentEi != null )
@@ -1199,6 +1203,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                        .append( "  ) " );
 
         int count = executeStatement(view, root, stmt);
+        view.setTotalRootCount( count );
         System.out.println( "count = " + count );
     }
 

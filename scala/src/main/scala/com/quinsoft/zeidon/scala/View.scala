@@ -358,6 +358,10 @@ case class View( val task: Task ) extends Dynamic {
         new EntityCursor( this, jview.cursor( jlodDef.getRoot() ) )
     }
 
+    def totalRootCount : Int = {
+        jview.getTotalRootCount
+    }
+
     /**
      * This is called when the compiler doesn't recognize a method name.  This
      * is used to find the entity cursor for a view.

@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
 /**
@@ -93,6 +94,12 @@ class ObjectInstance
      * remote servers.
      */
     private final ConcurrentMap<ViewCursor, Boolean> referringViewCursors;
+
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    private Integer totalRootCount;
 
     ObjectInstance(TaskImpl task, LodDef lodDef)
     {
@@ -401,5 +408,21 @@ class ObjectInstance
         }
 
         return count;
+    }
+
+    Integer getTotalRootCount()
+    {
+        if ( totalRootCount == null )
+            throw new ZeidonException( "This OI was loaded with pagination but the root count was not loaded." );
+
+        return totalRootCount;
+    }
+
+    void setTotalRootCount( int totalRootCount )
+    {
+        if ( this.totalRootCount != null )
+            throw new ZeidonException( "Total root count has already been set for this OI." );
+
+        this.totalRootCount = totalRootCount;
     }
 }

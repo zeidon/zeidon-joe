@@ -600,7 +600,18 @@ public interface View extends TaskQualification
      * @return
      */
     int getEntityCount( boolean includeHidden );
-    
+
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    Integer getTotalRootCount();
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    void setTotalRootCount( int totalRootCount );
+
     public void addViewCleanupWork( DropViewCleanup work );
 
     /**

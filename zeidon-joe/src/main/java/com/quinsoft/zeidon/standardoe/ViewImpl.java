@@ -1023,6 +1023,25 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    @Override
+    public Integer getTotalRootCount()
+    {
+        return getObjectInstance().getTotalRootCount();
+    }
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    @Override
+    public void setTotalRootCount( int totalRootCount )
+    {
+        getObjectInstance().setTotalRootCount( totalRootCount );
+    }
+
+    /**
      * If true then allow cursors to refer to hidden entities without throwing
      * an exception.  Intended to be used  by DBHandlers.
      *

@@ -686,6 +686,25 @@ public class zVIEW extends VmlOperation implements View
         return view().getEntityCount( includeHidden );
     }
 
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    @Override
+    public Integer getTotalRootCount()
+    {
+        return getView().getTotalRootCount();
+    }
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    @Override
+    public void setTotalRootCount( int totalRootCount )
+    {
+        getView().setTotalRootCount( totalRootCount );
+    }
+
     @Override
     public boolean isAllowHiddenEntities()
     {

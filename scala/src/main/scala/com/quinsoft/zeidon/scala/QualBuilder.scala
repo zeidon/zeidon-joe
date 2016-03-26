@@ -50,6 +50,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
 
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
     private var firstOperator = true
+    private var totalRootCount: Integer = null
 
     private [scala] def callAddQual( addQual: (EntityQualBuilder) => QualificationTerminator ) = {
         firstOperator = false
@@ -598,6 +599,21 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      */
     def activate(): View = {
         view.jview = jqual.activate()
+
+        val paging = jqual.getPagination(false)
+        if ( paging != null ) {
+            // Are we getting the total count?
+            if ( paging.isTotalCount() ) {
+                totalRootCount = view.jview.getTotalRootCount
+                paging.setTotalCount( false ) // Don't get it again.
+            }
+            else
+            // We didn't load the root count as part of the activate.  If we
+            // have it from a previous activate then set it.
+            if ( totalRootCount != null )
+                view.jview.setTotalRootCount( totalRootCount )
+        }
+
         return view
     }
 
@@ -612,8 +628,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
             throw new ZeidonException( "Page size was not set")
 
         paging.setPageNumber( page )
-        view.jview = jqual.activate()
-        return view
+        return activate()
     }
 
     /**
