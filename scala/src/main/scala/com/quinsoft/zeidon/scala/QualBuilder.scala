@@ -432,9 +432,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Synonym for restrict( ... ) method.
      */
     def restricting( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
-        firstOperator = true
         jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.restricting( jcurrentEntityDef.getName() )
+        firstOperator = ! jqual.hasQualAttrib()
         this
     }
 
@@ -486,9 +486,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * See restrict() for more information.
      */
     def to( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
-        firstOperator = false
-        addQual( entityQualBuilder )
-        this
+        // to() is really just an .and() but easier to understand in its context.
+        and( addQual )
     }
 
     /**

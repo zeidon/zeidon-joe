@@ -45,4 +45,17 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
         userList.logOi
     }
+    
+    @Test
+    def testMultipleWhenNull() {
+        val userList = new View( task ) basedOn "mAdmDiv"
+        val adminId: Integer = 0
+        val personId: Integer = 10
+
+        userList.buildQual( _.AdministrativeDivision.ID < 10 )
+                .whenNotNull( adminId, _.restrict { _.Cohort }.to { _.Cohort.ID > adminId } )
+                .whenNotNull( personId, _.restrict { _.Cohort }.to { _.Cohort.ID < personId } )
+                .activate()
+        println( "here" )      
+    }
 }
