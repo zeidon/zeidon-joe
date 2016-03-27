@@ -355,10 +355,10 @@ case class View( val task: Task ) extends Dynamic {
      */
     def root = {
         validateNonNull
-        new EntityCursor( this, jview.cursor( jlodDef.getRoot() ) )
+        new EntityCursor( this, jview.root() )
     }
 
-    def totalRootCount : Int = {
+    def totalRootCount : Integer = {
         jview.getTotalRootCount
     }
 
