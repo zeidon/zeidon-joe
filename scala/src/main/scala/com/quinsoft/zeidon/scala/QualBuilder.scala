@@ -46,7 +46,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
 
-    private var jcurrentEntityDef = jlodDef.getRoot
+    private [scala] var jcurrentEntityDef = jlodDef.getRoot
 
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
     private var firstOperator = true
@@ -656,6 +656,33 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
         val jentityDef =  EntitySelector.getEntityDef( qualBuilder.jlodDef, entityName )
         new AttributeQualBuilder( qualBuilder, jentityDef )
     }
+
+    /**
+     * This allows code to specify the entity/attr by string.  E.g.
+     * {{{
+     *  view.buildQual( _.withName( "Entity.Attr" ) eq 10 )
+     * }}}
+     * is the same as:
+     * {{{
+     *  view.buildQual( _.Entity.Attr = 10 )
+     * }}}
+     *
+     * Note that "eq" must be used instead of "=".  All other comparators can be
+     * used as normal.
+     */
+    def withName( entityAttrName: String ): AttributeQualOperators = {
+        val parts = entityAttrName.split("\\.")
+        if ( parts.length == 2 ) {
+            val jentityDef =  qualBuilder.jlodDef.getEntityDef( parts(0) )
+            val ab = new AttributeQualBuilder( qualBuilder, jentityDef )
+            ab.withName( parts(1) )
+        }
+        else
+        {
+            val ab = new AttributeQualBuilder( qualBuilder, qualBuilder.jcurrentEntityDef )
+            ab.withName( parts(0) )
+        }
+    }
 }
 
 /**
@@ -687,14 +714,31 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 
     /**
-     * Adds dynamic support for qualifying on an attribute.
+     * This allows code to specify the attr by string.  E.g.
+     * {{{
+     *  view.buildQual( _.Entity.withName( "Attr" ) eq 10 )
+     * }}}
+     * is the same as:
+     * {{{
+     *  view.buildQual( _.Entity.Attr = 10 )
+     * }}}
+     *
+     * Note that "eq" must be used instead of "=".  All other comparators can be
+     * used as normal.
      */
-    def selectDynamic( attributeName: String): AttributeQualOperators = {
+    def withName( attributeName: String ): AttributeQualOperators = {
         jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
         if ( jattributeDef.isHidden() )
             throw new HiddenAttributeException( jattributeDef );
 
         return new AttributeQualOperators( this )
+    }
+
+    /**
+     * Adds dynamic support for qualifying on an attribute.
+     */
+    def selectDynamic( attributeName: String): AttributeQualOperators = {
+        withName( attributeName )
     }
 
 //    def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
@@ -766,6 +810,23 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
         }
         else
             false
+    }
+
+    /**
+     * Activates entities with attributes that are equal to the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID eq 490 )
+     * }}}
+     */
+    def eq( value: Any ): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "<>", value )
+        else
+            return addQual( "=", value )
     }
 
     /**

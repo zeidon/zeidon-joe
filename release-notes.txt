@@ -13,6 +13,7 @@
     - Added convenience implicit method .unpickle() to automatically return a Scala view
       when deserializing.
     - Added Base64BlobDomain for blobs that can be (de)serialized to strings.
+    - Scala QualBuilder can specify entity/attr names by string.  See .withName().
       
 1.1.0
     - Load all many-to-one child entities with a join.
