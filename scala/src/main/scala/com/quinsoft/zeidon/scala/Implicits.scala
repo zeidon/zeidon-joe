@@ -3,6 +3,7 @@ package com.quinsoft.zeidon.scala
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.DeserializeOi
 
 /**
  * @author dgc
@@ -69,6 +70,14 @@ object Implicits {
             val task = oe.createTask( appName );
             TaskRunner( task )
         }
+    }
+
+    implicit class ScalaDeserializeOi( val deserializer: DeserializeOi ) {
+        /**
+         * A convenience method to deserialize directly to a Scala view using
+         * Scala (de-)serialization nomenclature.
+         */
+        def unpickle : View = new View( deserializer.activateFirst() )
     }
 
     /**
