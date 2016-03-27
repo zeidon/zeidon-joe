@@ -155,6 +155,12 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         return getView().cursor( entityDef );
     }
 
+    @Override
+    public EntityCursorImpl root()
+    {
+        return getView().root();
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getCursor(java.lang.String)
      */

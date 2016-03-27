@@ -209,6 +209,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
+    public EntityCursorImpl root()
+    {
+        return viewCursor.getEntityCursor( getLodDef().getRoot() );
+    }
+
+    @Override
     public void setName(String name)
     {
         getTask().setNameForView( name, this );

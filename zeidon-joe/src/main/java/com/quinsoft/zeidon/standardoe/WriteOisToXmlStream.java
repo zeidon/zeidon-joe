@@ -129,12 +129,12 @@ public class WriteOisToXmlStream implements StreamWriter
             write( "  " );
     }
 
-    private void startElement( final String elementName, final String...attributes )
+    private void startElement( final String elementName, final Object...attributes )
     {
         startElement( elementName, null, false, attributes );
     }
 
-    private void startElement( final String elementName, final String value, final boolean close, final String...attributes )
+    private void startElement( final String elementName, final String value, final boolean close, final Object...attributes )
     {
         assert attributes.length % 2 == 0 : "Illegal number of attributes; should be an even number.";
         writeIndent();
@@ -145,7 +145,11 @@ public class WriteOisToXmlStream implements StreamWriter
         {
             for ( int i = 0; i < attributes.length; i += 2 )
             {
-                String esc = StringEscapeUtils.escapeXml( attributes[ i + 1 ] );
+                // Don't bother printing null attributes.
+                if ( attributes[ i + 1 ] == null )
+                    continue;
+
+                String esc = StringEscapeUtils.escapeXml( attributes[ i + 1 ].toString() );
                 // Don't bother printing if it's empty.
                 if ( ! StringUtils.isBlank( esc ) )
                     write( " %s=\"%s\"", attributes[ i ], esc );
@@ -273,20 +277,22 @@ public class WriteOisToXmlStream implements StreamWriter
             startElement( entityDef.getName() );
 
         currentIndent++;
-        String[] attrIncr = new String[] { "updated", null };
+        Object[] attrIncr = new Object[] { "updated", null };
         if ( writeAttributes )
         {
             for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
                 AttributeValue attrib = ei.getInternalAttribute( attributeDef );
-                String value = attrib.getString( currentView.getTask(), attributeDef );
+                String value;
+                value = attrib.getString( currentView.getTask(), attributeDef );
+
                 if ( incremental )
                 {
                     attrIncr[ 1 ] = yesNull( attrib.isUpdated() );
                     startElement( attributeDef.getName(), value, true, attrIncr );
                 }
                 else
-                    startElement( attributeDef.getName(), value, true, (String[]) null );
+                    startElement( attributeDef.getName(), value, true, (Object[]) null );
             }
         }
 
@@ -319,7 +325,8 @@ public class WriteOisToXmlStream implements StreamWriter
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
         startElement( "zOI", "objectName", currentView.getLodDef().getName(),
                              "appName", currentView.getApplication().getName(),
-                             "increFlags", yesNo( incremental ) );
+                             "increFlags", yesNo( incremental ),
+                             "totalRootCount", currentView.getTotalRootCount() );
 
         currentIndent++;
 

@@ -123,6 +123,13 @@ public interface View extends TaskQualification
     EntityCursor cursor( EntityDef entityDef );
 
     /**
+     * A convenience method to retrieve the cursor for the root entity.
+     *
+     * @return EntityCursor for the root entity.
+     */
+    EntityCursor root();
+
+    /**
      * Synonym for cursor( String entityName );
      *
      * @param entityName name of the entity.

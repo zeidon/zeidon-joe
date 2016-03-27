@@ -57,7 +57,6 @@ public class WriteOisToJsonStream implements StreamWriter
     private final static String VERSION = "1";
 
     private Collection<? extends View> viewList;
-    private Writer writer;
     private SerializeOi options;
     private EnumSet<WriteOiFlags> flags;
     private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
@@ -68,7 +67,6 @@ public class WriteOisToJsonStream implements StreamWriter
     public void writeToStream( SerializeOi options, Writer writer )
     {
         this.viewList = options.getViewList();
-        this.writer = writer;
         this.options = options;
         if ( options.getFlags() == null )
             flags = EnumSet.noneOf( WriteOiFlags.class );
@@ -100,7 +98,7 @@ public class WriteOisToJsonStream implements StreamWriter
             jg.writeObjectFieldStart( ".meta" );
             jg.writeStringField( "version", VERSION );
             if ( options.isWriteDate() )
-                jg.writeStringField( "date", new LocalDateTime().toString() );
+                jg.writeStringField( "datetime", new LocalDateTime().toString() );
             jg.writeEndObject();
 
             jg.writeArrayFieldStart( "OIs" );
@@ -160,6 +158,10 @@ public class WriteOisToJsonStream implements StreamWriter
         else
             if ( view.isReadOnly() )
                 jg.writeBooleanField( "readOnly", true );
+
+        Integer rootCount = view.getTotalRootCount();
+        if ( rootCount != null && rootCount != view.root().getEntityCount() )
+            jg.writeNumberField( "totalRootCount", rootCount );
 
         jg.writeEndObject();
     }

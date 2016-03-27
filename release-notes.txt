@@ -1,4 +1,6 @@
 1.4.0
+    - View.scala is no longer a case class because it is mutable.
+    - Added pagination.
     - Swapped date and datetime domains; date now extends datetime.  May require app
       changes to DB translators.
     - Removed ini4j and replaced it with Apache Commons configuration.  JOE should now
@@ -7,8 +9,11 @@
     - Added Maven enforcer to enforce that jar versions are common across
       dependencies.
     - Updated commons-validator from 1.4.1 -> 1.5.0
-    
-
+    - Added convenience method view.root() to return the cursor for the root entity.
+    - Added convenience implicit method .unpickle() to automatically return a Scala view
+      when deserializing.
+    - Added Base64BlobDomain for blobs that can be (de)serialized to strings.
+      
 1.1.0
     - Load all many-to-one child entities with a join.
 

@@ -128,6 +128,12 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
+    public EntityCursor root()
+    {
+        return getView().root();
+    }
+
+    @Override
     public void logObjectInstance()
     {
         view().logObjectInstance();

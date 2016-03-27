@@ -193,6 +193,10 @@ class ActivateOisFromXmlStream implements StreamReader
         if ( ! StringUtils.isBlank( increFlags ) )
             incremental = isYes( increFlags );
 
+        String rootCount = attributes.getValue( "totalRootCount" );
+        if ( ! StringUtils.isBlank( rootCount ) )
+            view.setTotalRootCount( Integer.parseInt( rootCount ) );
+
         // Create a list to keep track of selected instances.
         selectedInstances = new ArrayList<>();
     }
@@ -291,6 +295,7 @@ class ActivateOisFromXmlStream implements StreamReader
                 {
                     EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
                     ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), ! attributeDef.isKey() ) ;
+
                     characterBuffer = null; // Indicates we've read the attribute.
 
                     if ( incremental )

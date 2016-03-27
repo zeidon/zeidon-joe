@@ -56,6 +56,7 @@ public class SerializeOi
     private boolean writeDate = false;
     private boolean useCamelCase = false;
     private boolean writeDerivedAttributes = false;
+    private boolean writeTotalRootCount = false;
 
     public SerializeOi()
     {
@@ -295,7 +296,7 @@ public class SerializeOi
 
     /**
      * If specified then write derived attributes and their values.
-     * 
+     *
      * @return this
      */
     public SerializeOi writeDerivedAttributes()
@@ -303,12 +304,12 @@ public class SerializeOi
         writeDerivedAttributes = true;
         return this;
     }
-    
+
     public boolean isWriteDerivedAttributes()
     {
         return writeDerivedAttributes;
     }
-    
+
     public SerializeOi writeDate()
     {
         setWriteDate( true );
@@ -478,13 +479,28 @@ public class SerializeOi
         return this;
     }
 
+    /**
+     * Write the current date/time to the stream as "datetime".
+     */
     public boolean isWriteDate()
     {
         return writeDate;
     }
 
-    public void setWriteDate( boolean writeDate )
+    public SerializeOi setWriteDate( boolean writeDate )
     {
         this.writeDate = writeDate;
+        return this;
+    }
+
+    public boolean isWriteTotalRootCount()
+    {
+        return writeTotalRootCount;
+    }
+
+    public SerializeOi setWriteTotalRootCount( boolean writeTotalRootCount )
+    {
+        this.writeTotalRootCount = writeTotalRootCount;
+        return this;
     }
 }

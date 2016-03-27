@@ -41,6 +41,7 @@ import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -98,6 +99,7 @@ class ActivateOisFromJsonStream implements StreamReader
      * If trure then mark the view as readonly.
      */
     private boolean readOnly;
+    private Integer totalRootCount;
 
     /**
      * A JSON stream will have a version.  Once the version is read from the stream a
@@ -157,6 +159,16 @@ class ActivateOisFromJsonStream implements StreamReader
                     throw new ZeidonException( "First field must be version" );
                 }
 
+                totalRootCount = null;
+                if ( StringUtils.equalsIgnoreCase( fieldName, "totalRootCount" ) )
+                {
+                    token = jp.nextToken(); // Move to value.
+                    totalRootCount = jp.getValueAsInt();
+                    token = jp.nextToken(); // Move to next field name.
+                    assert token == JsonToken.FIELD_NAME;
+                    fieldName = jp.getCurrentName();
+                }
+
                 if ( lodDef == null )
                     throw new ZeidonException( "JSON stream appears to start with the root entity name (%s)" +
                                                " but the LodDef has not been specified.", fieldName );
@@ -168,6 +180,8 @@ class ActivateOisFromJsonStream implements StreamReader
 
                 view = task.activateEmptyObjectInstance( lodDef );
                 returnList.add( view );
+                if ( totalRootCount != null )
+                    view.setTotalRootCount( totalRootCount );
 
                 JsonReader reader = getSimpleReaderForVersion();
                 reader.process();
@@ -296,6 +310,9 @@ class ActivateOisFromJsonStream implements StreamReader
 
         if ( readOnly )
             view.setReadOnly( true );
+
+        if ( totalRootCount != null )
+            view.setTotalRootCount( totalRootCount );
 
         return true;  // Keep looking for OIs in the stream.
     }
@@ -481,7 +498,10 @@ class ActivateOisFromJsonStream implements StreamReader
                 if ( attributeDef.isDerived() ) // We'll ignore derived attributes.
                     continue;
 
-                ei.getAttribute( attributeDef ).setInternalValue( jp.getText(), ! attributeDef.isKey() ) ;
+                Domain domain = attributeDef.getDomain();
+                Object internalValue = domain.convertExternalValue( task, ei.getAttribute( attributeDef ),
+                                                                    attributeDef, null, jp.getText() );
+                ei.getAttribute( attributeDef ).setInternalValue( internalValue, ! attributeDef.isKey() );
                 if ( incremental )
                 {
                     // Since incremental flags are set, assume the attribute hasn't been
@@ -602,6 +622,7 @@ class ActivateOisFromJsonStream implements StreamReader
         String odName = null;
         readOnlyOi = false;
         readOnly   = false;
+        totalRootCount = null;
 
         jp.nextToken();
         while ( jp.nextToken() != JsonToken.END_OBJECT )
@@ -615,6 +636,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 case "incremental": incremental = jp.getValueAsBoolean(); break;
                 case "readOnlyOi":  readOnlyOi = true; break;
                 case "readOnly":    readOnly = true; break;
+                case "totalRootCount": totalRootCount = jp.getValueAsInt(); break;
 
                 default: task.log().warn( "Unknown .oimeta fieldname %s", fieldName ); break;
             }

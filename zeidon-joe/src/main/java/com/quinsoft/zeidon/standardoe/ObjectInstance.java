@@ -412,9 +412,6 @@ class ObjectInstance
 
     Integer getTotalRootCount()
     {
-        if ( totalRootCount == null )
-            throw new ZeidonException( "This OI was loaded with pagination but the root count was not loaded." );
-
         return totalRootCount;
     }
 
