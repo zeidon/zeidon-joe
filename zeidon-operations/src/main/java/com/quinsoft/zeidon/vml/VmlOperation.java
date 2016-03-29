@@ -8693,6 +8693,81 @@ public abstract class VmlOperation
       return( 0 );
    }
 
+/*
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<p><span style="font-size: xx-small;">{{ProductName}}, EPA Reg. No. {{EPA_RegNo}}</span></p>
+<p><span style="font-size: xx-small;">{</span><span style="font-size: xx-small;">{PageOf}}</span></p>
+<p><span style="font-size: xx-small;">2-3-15</span></p>
+<p><span style="font-size: xx-small;">(</span><span style="font-size: xx-small;"><strong>Note to Reviewer</strong></span><span style="font-size: xx-small;">: Text in { } is optional. Brackets [ ] indicate that at least one option within the brackets must be used in the final label text. Parentheticals ( ) are meant to appear on final label. </span><span style="font-size: xx-small;">&ldquo;This product&rdquo; can be substituted with actual product name.</span><span style="font-size: xx-small;">)</span></p>
+<p><span style="font-size: xx-small;">EPA Accepted 5-5-15</span></p>
+</body>
+</html>
+*/
+   private static String
+   RemoveHtmlTag( String strHtml, String strTag, String strReplaceTag )
+   {
+      String openTag = "<" + strTag;
+      String closeTag = "</" + strTag + ">";
+      String strTemp;
+      int nOpenPos;
+      int nPos;
+      int nEndPos;
+      while ( (nOpenPos = strHtml.indexOf( openTag )) >= 0 )
+      {
+         nPos = nOpenPos + openTag.length();
+         nEndPos = strHtml.indexOf( '>', nPos );
+         if ( nEndPos >= 0 )
+         {
+            nEndPos++;
+            strTemp = strHtml.substring( 0, nOpenPos );
+            nOpenPos = strHtml.indexOf( closeTag, nEndPos );
+            if ( nOpenPos >= 0 )
+            {
+               strTemp += strHtml.substring( nEndPos, nOpenPos );
+               if ( strReplaceTag != null )
+                  strTemp += strReplaceTag;
+               
+               nOpenPos += closeTag.length();
+               strTemp += strHtml.substring( nOpenPos );
+               strHtml = strTemp;
+            }
+            else
+            {
+               break;
+            }
+         }
+         else
+         {
+            break;
+         }
+      }
+      return strHtml;
+   }
+   
+   public static String
+   TrimTinyHtml( String strHtmlEnclosedValue )
+   {
+      int nStartPos = strHtmlEnclosedValue.indexOf( "<body>" );
+      if ( nStartPos < 0 )
+         nStartPos = 0;
+      else
+         nStartPos += 6;  // length of "<body>"
+      
+      int nEndPos = strHtmlEnclosedValue.lastIndexOf( "</body>" );
+      if ( nEndPos < 0 )
+         strHtmlEnclosedValue = strHtmlEnclosedValue.substring( nStartPos );
+      else
+         strHtmlEnclosedValue = strHtmlEnclosedValue.substring( nStartPos, nEndPos );
+      
+      strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "span", null );
+      strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "p", "<br>" );
+      return strHtmlEnclosedValue;
+   }
+   
    // This function checks for the existence of the specified file/directory.
    // If it is a check for a valid file, that's all we do.  For a directory,
    // if the directory does not exist (and bCheckCreate is TRUE) the directory is created.
