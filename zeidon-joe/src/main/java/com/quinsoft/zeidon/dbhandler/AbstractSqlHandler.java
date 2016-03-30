@@ -1183,6 +1183,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private void getTotalCount( View view, EntityDef root, SqlStatement stmt )
     {
         assert root.getParent() == null;
+        assert  pagingOptions != null;
+
+        // If the entity count is less than the page size then we don't need to
+        // execute a query to determine the total root count.
+        if ( view.root().getEntityCount() < pagingOptions.getPageSize() )
+        {
+            view.setTotalRootCount( view.root().getEntityCount() );
+            return;
+        }
 
         // Reset the assembled command so it will be recreated after the changes.
         stmt.assembledCommand = null;
