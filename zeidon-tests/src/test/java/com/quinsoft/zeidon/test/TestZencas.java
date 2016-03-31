@@ -174,6 +174,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testRelinking()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testRelinking( testview );
+        System.out.println("===== Finished testRelinking ========");
+	}
+
+	@Test
 	public void testAttributeUpdated()
 	{
 	    View         testview;
@@ -1188,6 +1198,457 @@ public class TestZencas
 
 		   return 0;
 		}
+
+
+		public int
+		testRelinking( View ViewToWindow )
+		{
+			   zVIEW    mSAAdmin = new zVIEW( );
+			   int      RESULT = 0;
+			   //:VIEW mSAAdmin2   BASED ON LOD  mSAAdmin
+			   zVIEW    mSAAdmin2 = new zVIEW( );
+			   //:VIEW lSATermLST  REGISTERED AS lSATermLST
+			   zVIEW    lSATermLST = new zVIEW( );
+			   //:VIEW lSATermLST2 BASED ON LOD  lTermLST
+			   zVIEW    lSATermLST2 = new zVIEW( );
+			   //:VIEW lTermLST    BASED ON LOD  lTermLST
+			   zVIEW    lTermLST = new zVIEW( );
+			   //:INTEGER TermID
+			   int      TermID = 0;
+			   String   szTempString_0 = null;
+			   int      lTempInteger_0 = 0;
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			   int      lTempInteger_1 = 0;
+			   String   szTempString_1 = null;
+			   String   szTempString_2 = null;
+			   String   szTempString_3 = null;
+			   String   szTempString_4 = null;
+			   int      lTempInteger_2 = 0;
+			   zVIEW    vTempViewVar_1 = new zVIEW( );
+			   zVIEW    vTempViewVar_2 = new zVIEW( );
+			   int      lTempInteger_3 = 0;
+			   
+			   // After doing a couple of relinks, it appears that the relink fails (or relinks the opposite of how it's supposed to).
+
+		   	   ActivateOI_FromFile( mSAAdmin, "mSAAdmin", ViewToWindow, "target/test-classes/testdata//ZENCAs/mSAAdmin.por", zSINGLE );
+		   	   ActivateOI_FromFile( lSATermLST, "lTermLST", ViewToWindow, "target/test-classes/testdata//ZENCAs/lSATermsLST.por", zMULTIPLE );
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 175, "" );
+			   //RESULT = GetViewByName( mSAAdmin, "mSAAdmin", ViewToWindow, zLEVEL_TASK );
+			   //RESULT = GetViewByName( lSATermLST, "lSATermLST", ViewToWindow, zLEVEL_TASK );
+           
+
+		   	   //:// Set the selected College Term as "Current" after making sure all others are NOT Current.
+		   	   //:TermID = mSAAdmin.CollegeTerm.ID
+		   	   {MutableInt mi_TermID = new MutableInt( TermID );
+		   	       GetIntegerFromAttribute( mi_TermID, mSAAdmin, "CollegeTerm", "ID" );
+		   	   TermID = mi_TermID.intValue( );}
+
+		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = 175
+		   	o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_0, 175 );
+		   	   RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   	   DropView( vTempViewVar_0 );
+		   	   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = ""
+		   	   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "" );
+		   	   //:COMMIT lTermLST
+		   	   RESULT = CommitObjectInstance( lTermLST );
+		   	   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID
+		   	   {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+		   	       GetIntegerFromAttribute( mi_lTempInteger_0, lTermLST, "CollegeTerm", "ID" );
+		   	   lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_0, "" );
+		   	   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+		   	   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+		   	   //:DropObjectInstance( lTermLST )
+		   	   DropObjectInstance( lTermLST );
+		   	   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = 176
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 176, "" );
+		   	   //:// Then set Term on which we're currently positioned to Current.
+		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+		   	   {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
+		   	       GetIntegerFromAttribute( mi_lTempInteger_1, mSAAdmin, "CollegeTerm", "ID" );
+		   	   lTempInteger_1 = mi_lTempInteger_1.intValue( );}
+		   	o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_1, lTempInteger_1 );
+		   	   RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_1, zSINGLE );
+		   	   DropView( vTempViewVar_1 );
+		   	   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+		   	   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+		   	   //:COMMIT lTermLST
+		   	   RESULT = CommitObjectInstance( lTermLST );
+		   	   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+		   	   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+		   	   //:DropObjectInstance( lTermLST )
+		   	   DropObjectInstance( lTermLST );
+
+		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = 176
+		   	o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_2, 176 );
+		   	   RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_2, zSINGLE );
+		   	   DropView( vTempViewVar_2 );
+		   	   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = ""
+		   	   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "" );
+		   	   //:COMMIT lTermLST
+		   	   RESULT = CommitObjectInstance( lTermLST );
+		   	   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID
+		   	   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
+		   	       GetIntegerFromAttribute( mi_lTempInteger_2, lTermLST, "CollegeTerm", "ID" );
+		   	   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_2, "" );
+		   	   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+		   	   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+		   	   // ERROR OCCURS HERE?????
+		   	   // lTermLST and mSAAdmin CollegeTerm.CurrentForStudentAccounts should be "" not "Y"
+		   	szTempString_1 = lTermLST.cursor( "CollegeTerm" ).getAttribute("CurrentForStudentAccounts").getString();
+	 		   //Assert.assertEquals("HELP", "",szTempString_1 );
+		   	if (szTempString_1.equals("Y"))
+	 	      Assert.assertTrue( "lTermLST/mSAAdmin CollegeTerm.CurrentForStudentAccounts should be blank not Y. ", 1 == 0 );
+		   	   
+		   	   //:DropObjectInstance( lTermLST )
+		   	   DropObjectInstance( lTermLST );
+		   	   
+		   	   /*
+		   	   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = 175
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 175, "" );
+		   	   //:// Then set Term on which we're currently positioned to Current.
+		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+		   	   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
+		   	       GetIntegerFromAttribute( mi_lTempInteger_3, mSAAdmin, "CollegeTerm", "ID" );
+		   	   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
+		   	o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_2, lTempInteger_3 );
+		   	   RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_2, zSINGLE );
+		   	   DropView( vTempViewVar_2 );
+		   	   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+		   	   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+		   	   //:COMMIT lTermLST
+		   	   RESULT = CommitObjectInstance( lTermLST );
+		   	   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+		   	   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+		   	   //:DropObjectInstance( lTermLST )
+		   	   DropObjectInstance( lTermLST );
+		   	   */
+		   	   return( 0 );
+		}		
+
+
+		public int
+		testRelinkingOrig( View ViewToWindow )
+		{
+			   zVIEW    mSAAdmin = new zVIEW( );
+			   int      RESULT = 0;
+			   //:VIEW mSAAdmin2   BASED ON LOD  mSAAdmin
+			   zVIEW    mSAAdmin2 = new zVIEW( );
+			   //:VIEW lSATermLST  REGISTERED AS lSATermLST
+			   zVIEW    lSATermLST = new zVIEW( );
+			   //:VIEW lSATermLST2 BASED ON LOD  lTermLST
+			   zVIEW    lSATermLST2 = new zVIEW( );
+			   //:VIEW lTermLST    BASED ON LOD  lTermLST
+			   zVIEW    lTermLST = new zVIEW( );
+			   //:INTEGER TermID
+			   int      TermID = 0;
+			   String   szTempString_0 = null;
+			   int      lTempInteger_0 = 0;
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			   int      lTempInteger_1 = 0;
+			   String   szTempString_1 = null;
+			   String   szTempString_2 = null;
+			   String   szTempString_3 = null;
+			   String   szTempString_4 = null;
+			   int      lTempInteger_2 = 0;
+			   zVIEW    vTempViewVar_1 = new zVIEW( );
+			   int      lTempInteger_3 = 0;
+
+		   	   ActivateOI_FromFile( mSAAdmin, "mSAAdmin", ViewToWindow, "target/test-classes/testdata//ZENCAs/mSAAdmin.por", zSINGLE );
+		   	   ActivateOI_FromFile( lSATermLST, "lTermLST", ViewToWindow, "target/test-classes/testdata//ZENCAs/lSATermsLST.por", zMULTIPLE );
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 175, "" );
+			   //RESULT = GetViewByName( mSAAdmin, "mSAAdmin", ViewToWindow, zLEVEL_TASK );
+			   //RESULT = GetViewByName( lSATermLST, "lSATermLST", ViewToWindow, zLEVEL_TASK );
+           
+			   //:// Set the selected College Term as "Current" after making sure all others are NOT Current.
+			   //:TermID = mSAAdmin.CollegeTerm.ID
+			   {MutableInt mi_TermID = new MutableInt( TermID );
+			       GetIntegerFromAttribute( mi_TermID, mSAAdmin, "CollegeTerm", "ID" );
+			   TermID = mi_TermID.intValue( );}
+
+			   //:// First make sure others are NOT Current.
+			   //:FOR EACH lSATermLST.CollegeTerm 
+			   RESULT = SetCursorFirstEntity( lSATermLST, "CollegeTerm", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      //:TraceLineS("In loop.  Pointer on: ", lSATermLST.CollegeTerm.YearSemester)
+			      {StringBuilder sb_szTempString_0;
+			      if ( szTempString_0 == null )
+			         sb_szTempString_0 = new StringBuilder( 32 );
+			      else
+			         sb_szTempString_0 = new StringBuilder( szTempString_0 );
+			             GetStringFromAttribute( sb_szTempString_0, lSATermLST, "CollegeTerm", "YearSemester" );
+			      szTempString_0 = sb_szTempString_0.toString( );}
+			      TraceLineS( "In loop.  Pointer on: ", szTempString_0 );
+			      //:IF lSATermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+			      if ( CompareAttributeToString( lSATermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" ) == 0 )
+			      { 
+			         //:TraceLineS("In loop.  This one is marked as current ", "")
+			         TraceLineS( "In loop.  This one is marked as current ", "" );
+			         //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = lSATermLST.CollegeTerm.ID 
+			         {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+			                   GetIntegerFromAttribute( mi_lTempInteger_0, lSATermLST, "CollegeTerm", "ID" );
+			         lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+			         o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_0, lTempInteger_0 );
+			         RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zSINGLE );
+			         DropView( vTempViewVar_0 );
+			         if (RESULT >= 0)
+			         {
+			         //:lTermLST.CollegeTerm.CurrentForStudentAccounts = ""
+			         SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "" );
+
+			         //:COMMIT lTermLST
+			         RESULT = CommitObjectInstance( lTermLST );
+
+			         //:// Relink the changed values into the current Annual Admin object, if the CollegeTerm is there.
+			         //://CreateViewFromView( mSAAdmin2, mSAAdmin )
+
+			         //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID 
+			         {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
+			                   GetIntegerFromAttribute( mi_lTempInteger_1, lTermLST, "CollegeTerm", "ID" );
+			         lTempInteger_1 = mi_lTempInteger_1.intValue( );}
+			         RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_1, "" );
+			         //:IF RESULT >= zCURSOR_SET
+			         if ( RESULT >= zCURSOR_SET )
+			         { 
+			            //:TraceLineS("In relink.  Pointer on: ", lTermLST.CollegeTerm.YearSemester)
+			            {StringBuilder sb_szTempString_1;
+			            if ( szTempString_1 == null )
+			               sb_szTempString_1 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_1 = new StringBuilder( szTempString_1 );
+			                         GetStringFromAttribute( sb_szTempString_1, lTermLST, "CollegeTerm", "YearSemester" );
+			            szTempString_1 = sb_szTempString_1.toString( );}
+			            TraceLineS( "In relink.  Pointer on: ", szTempString_1 );
+			            //:TraceLineS("In relink.  Current: ", lTermLST.CollegeTerm.CurrentForStudentAccounts)
+			            {StringBuilder sb_szTempString_2;
+			            if ( szTempString_2 == null )
+			               sb_szTempString_2 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_2 = new StringBuilder( szTempString_2 );
+			                         GetStringFromAttribute( sb_szTempString_2, lTermLST, "CollegeTerm", "CurrentForStudentAccounts" );
+			            szTempString_2 = sb_szTempString_2.toString( );}
+			            TraceLineS( "In relink.  Current: ", szTempString_2 );
+			            //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+			            RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+			            //: TraceLineS("In relink.  After Value: ", mSAAdmin.CollegeTerm.YearSemester)
+			            {StringBuilder sb_szTempString_3;
+			            if ( szTempString_3 == null )
+			               sb_szTempString_3 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_3 = new StringBuilder( szTempString_3 );
+			                         GetStringFromAttribute( sb_szTempString_3, mSAAdmin, "CollegeTerm", "YearSemester" );
+			            szTempString_3 = sb_szTempString_3.toString( );}
+			            TraceLineS( "In relink.  After Value: ", szTempString_3 );
+			            //: TraceLineS("In relink.  After Value current: ", mSAAdmin.CollegeTerm.CurrentForStudentAccounts)
+			            {StringBuilder sb_szTempString_4;
+			            if ( szTempString_4 == null )
+			               sb_szTempString_4 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_4 = new StringBuilder( szTempString_4 );
+			                         GetStringFromAttribute( sb_szTempString_4, mSAAdmin, "CollegeTerm", "CurrentForStudentAccounts" );
+			            szTempString_4 = sb_szTempString_4.toString( );}
+			            TraceLineS( "In relink.  After Value current: ", szTempString_4 );
+			         } 
+
+			         //:END
+			         //://DropView( mSAAdmin2 )
+			         //:DropObjectInstance( lTermLST )
+			         DropObjectInstance( lTermLST );
+			         }
+			      } 
+
+			      RESULT = SetCursorNextEntity( lSATermLST, "CollegeTerm", "" );
+			      //:END
+			   } 
+
+			   //:END
+			   //:COMMIT lSATermLST
+			   RESULT = CommitObjectInstance( lSATermLST );
+			   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = TermID
+			   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", TermID, "" );
+			   //:// Then set Term on which we're currently positioned to Current.
+			   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+			   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
+			       GetIntegerFromAttribute( mi_lTempInteger_2, mSAAdmin, "CollegeTerm", "ID" );
+			   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
+			   o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_1, lTempInteger_2 );
+			   RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_1, zSINGLE );
+			   DropView( vTempViewVar_1 );
+			   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+			   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+			   //:SET CURSOR FIRST lSATermLST.CollegeTerm WHERE lSATermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID  
+			   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
+			       GetIntegerFromAttribute( mi_lTempInteger_3, mSAAdmin, "CollegeTerm", "ID" );
+			   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
+			   RESULT = SetCursorFirstEntityByInteger( lSATermLST, "CollegeTerm", "ID", lTempInteger_3, "" );
+			   //:lSATermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+			   SetAttributeFromString( lSATermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+			   //:COMMIT lTermLST
+			   RESULT = CommitObjectInstance( lTermLST );
+			   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+			   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+			   //:DropObjectInstance( lTermLST )
+			   DropObjectInstance( lTermLST );
+			   
+/******************************************************************************/			   
+			   // Now do the whole thing over for a different term.
+		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 176, "" );
+			   {MutableInt mi_TermID = new MutableInt( TermID );
+		       GetIntegerFromAttribute( mi_TermID, mSAAdmin, "CollegeTerm", "ID" );
+		       
+		   TermID = mi_TermID.intValue( );}
+
+		   //:// First make sure others are NOT Current.
+		   //:FOR EACH lSATermLST.CollegeTerm 
+			   //:// First make sure others are NOT Current.
+			   //:FOR EACH lSATermLST.CollegeTerm 
+			   RESULT = SetCursorFirstEntity( lSATermLST, "CollegeTerm", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      //:TraceLineS("In loop.  Pointer on: ", lSATermLST.CollegeTerm.YearSemester)
+			      {StringBuilder sb_szTempString_0;
+			      if ( szTempString_0 == null )
+			         sb_szTempString_0 = new StringBuilder( 32 );
+			      else
+			         sb_szTempString_0 = new StringBuilder( szTempString_0 );
+			             GetStringFromAttribute( sb_szTempString_0, lSATermLST, "CollegeTerm", "YearSemester" );
+			      szTempString_0 = sb_szTempString_0.toString( );}
+			      TraceLineS( "In loop.  Pointer on: ", szTempString_0 );
+			      //:IF lSATermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+			      if ( CompareAttributeToString( lSATermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" ) == 0 )
+			      { 
+			         //:TraceLineS("In loop.  This one is marked as current ", "")
+			         TraceLineS( "In loop.  This one is marked as current ", "" );
+			         //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = lSATermLST.CollegeTerm.ID 
+			         {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+			                   GetIntegerFromAttribute( mi_lTempInteger_0, lSATermLST, "CollegeTerm", "ID" );
+			         lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+			         o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_0, lTempInteger_0 );
+			         RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zSINGLE );
+			         DropView( vTempViewVar_0 );
+			         if (RESULT >= 0 )
+			         {
+			         //:lTermLST.CollegeTerm.CurrentForStudentAccounts = ""
+			         SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "" );
+
+			         //:COMMIT lTermLST
+			         RESULT = CommitObjectInstance( lTermLST );
+
+			         //:// Relink the changed values into the current Annual Admin object, if the CollegeTerm is there.
+			         //://CreateViewFromView( mSAAdmin2, mSAAdmin )
+
+			         //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID 
+			         {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
+			                   GetIntegerFromAttribute( mi_lTempInteger_1, lTermLST, "CollegeTerm", "ID" );
+			         lTempInteger_1 = mi_lTempInteger_1.intValue( );}
+			         RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_1, "" );
+			         //:IF RESULT >= zCURSOR_SET
+			         if ( RESULT >= zCURSOR_SET )
+			         { 
+			            //:TraceLineS("In relink.  Pointer on: ", lTermLST.CollegeTerm.YearSemester)
+			            {StringBuilder sb_szTempString_1;
+			            if ( szTempString_1 == null )
+			               sb_szTempString_1 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_1 = new StringBuilder( szTempString_1 );
+			                         GetStringFromAttribute( sb_szTempString_1, lTermLST, "CollegeTerm", "YearSemester" );
+			            szTempString_1 = sb_szTempString_1.toString( );}
+			            TraceLineS( "In relink.  Pointer on: ", szTempString_1 );
+			            //:TraceLineS("In relink.  Current: ", lTermLST.CollegeTerm.CurrentForStudentAccounts)
+			            {StringBuilder sb_szTempString_2;
+			            if ( szTempString_2 == null )
+			               sb_szTempString_2 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_2 = new StringBuilder( szTempString_2 );
+			                         GetStringFromAttribute( sb_szTempString_2, lTermLST, "CollegeTerm", "CurrentForStudentAccounts" );
+			            szTempString_2 = sb_szTempString_2.toString( );}
+			            TraceLineS( "In relink.  Current: ", szTempString_2 );
+			            //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+			            RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+			            //: TraceLineS("In relink.  After Value: ", mSAAdmin.CollegeTerm.YearSemester)
+			            {StringBuilder sb_szTempString_3;
+			            if ( szTempString_3 == null )
+			               sb_szTempString_3 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_3 = new StringBuilder( szTempString_3 );
+                        //GetStringFromAttribute( sb_szTempString_3, mSAAdmin, "CollegeTerm", "YearSemester" );
+                        GetStringFromAttribute( sb_szTempString_3, lTermLST, "CollegeTerm", "CurrentForStudentAccounts" );
+                        //!!!!!!!!!!!!!
+			            szTempString_3 = sb_szTempString_3.toString( );}
+			            if (szTempString_3.equals("Y"))
+			            	Assert.assertEquals("This should be blank, not 'Y'!!", szTempString_3, "" );			            
+			            //: TraceLineS("In relink.  After Value current: ", mSAAdmin.CollegeTerm.CurrentForStudentAccounts)
+			            {StringBuilder sb_szTempString_4;
+			            if ( szTempString_4 == null )
+			               sb_szTempString_4 = new StringBuilder( 32 );
+			            else
+			               sb_szTempString_4 = new StringBuilder( szTempString_4 );
+			                         GetStringFromAttribute( sb_szTempString_4, mSAAdmin, "CollegeTerm", "CurrentForStudentAccounts" );
+			            szTempString_4 = sb_szTempString_4.toString( );}
+			            TraceLineS( "In relink.  After Value current: ", szTempString_4 );
+			         } 
+
+			         //:END
+			         //://DropView( mSAAdmin2 )
+			         //:DropObjectInstance( lTermLST )
+			         DropObjectInstance( lTermLST );
+			         }
+			      } 
+
+			      RESULT = SetCursorNextEntity( lSATermLST, "CollegeTerm", "" );
+			      //:END
+			   } 
+
+			   //:END
+			   //:COMMIT lSATermLST
+			   RESULT = CommitObjectInstance( lSATermLST );
+			   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = TermID
+			   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", TermID, "" );
+			   //:// Then set Term on which we're currently positioned to Current.
+			   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+			   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
+			       GetIntegerFromAttribute( mi_lTempInteger_2, mSAAdmin, "CollegeTerm", "ID" );
+			   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
+			   o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_1, lTempInteger_2 );
+			   RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_1, zSINGLE );
+			   DropView( vTempViewVar_1 );
+			   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+			   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+			   //:SET CURSOR FIRST lSATermLST.CollegeTerm WHERE lSATermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID  
+			   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
+			       GetIntegerFromAttribute( mi_lTempInteger_3, mSAAdmin, "CollegeTerm", "ID" );
+			   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
+			   RESULT = SetCursorFirstEntityByInteger( lSATermLST, "CollegeTerm", "ID", lTempInteger_3, "" );
+			   //:lSATermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
+			   SetAttributeFromString( lSATermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+			   //:COMMIT lTermLST
+			   RESULT = CommitObjectInstance( lTermLST );
+			   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+			   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+			   //:DropObjectInstance( lTermLST )
+			   DropObjectInstance( lTermLST );
+			   return( 0 );
+		}		
+
+private int 
+o_fnLocalBuildQual_3( View     vSubtask,
+                      zVIEW    vQualObject,
+                      int      lTempInteger_0 )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeTerm" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+} 
 
 		public int
 		testSpawning1( View ViewToWindow )
