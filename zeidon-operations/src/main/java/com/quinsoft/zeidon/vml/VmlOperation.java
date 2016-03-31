@@ -4165,7 +4165,10 @@ public abstract class VmlOperation
       sb.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
 
       EntityCursor cursor = view.cursor( entityName );
-      if ( cursor.isNull() )
+      // KJS 01/29/16 - If the entity cursor is null, then this would send back zCALL_ERROR but didn't throw and error.
+      // Don C is thinking that we should throw the error because we shouldn't be trying to get the attribute if the cursor
+      // is null. If we want to reverse back... take out the "&& (contro...".
+      if ( cursor.isNull() && (control == zACCEPT_NULL_ENTITY)  )
       {
          returnLth.setValue( 0 );
          return (control & zACCEPT_NULL_ENTITY) != 0 ? zENTITY_NULL : zCALL_ERROR;
@@ -4642,7 +4645,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.getAttribute( attributeName ).setValue( value );
+         cursor.getAttribute( attributeName ).setValue( value, contextName );
       }
 
       return nRC;
