@@ -123,6 +123,13 @@ public interface View extends TaskQualification
     EntityCursor cursor( EntityDef entityDef );
 
     /**
+     * A convenience method to retrieve the cursor for the root entity.
+     *
+     * @return EntityCursor for the root entity.
+     */
+    EntityCursor root();
+
+    /**
      * Synonym for cursor( String entityName );
      *
      * @param entityName name of the entity.
@@ -600,7 +607,18 @@ public interface View extends TaskQualification
      * @return
      */
     int getEntityCount( boolean includeHidden );
-    
+
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    Integer getTotalRootCount();
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    void setTotalRootCount( int totalRootCount );
+
     public void addViewCleanupWork( DropViewCleanup work );
 
     /**

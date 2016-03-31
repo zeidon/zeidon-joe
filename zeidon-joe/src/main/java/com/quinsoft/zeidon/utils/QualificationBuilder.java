@@ -239,6 +239,19 @@ public class QualificationBuilder
         return this;
     }
 
+    public Pagination getPagination()
+    {
+        return getPagination( true );
+    }
+
+    public Pagination getPagination( boolean create )
+    {
+        if ( activateOptions.getPagingOptions() == null  && create )
+            activateOptions.setPagingOptions( new Pagination() );
+
+        return activateOptions.getPagingOptions();
+    }
+
     public QualificationBuilder asynchronous()
     {
         /*  Why can't we do async?  Removing this for now.

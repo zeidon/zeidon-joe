@@ -300,7 +300,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         ArrayList<View> list = new ArrayList<View>();
         list.addAll( views );
         options.setViewList( list );
-        CommitMultiplOIs committer = new CommitMultiplOIs( this, options, views );
+        CommitMultipleOIs committer = new CommitMultipleOIs( this, options, views );
         return committer.commit();
     }
 

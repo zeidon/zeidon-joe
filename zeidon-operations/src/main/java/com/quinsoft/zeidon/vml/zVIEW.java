@@ -128,6 +128,12 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
+    public EntityCursor root()
+    {
+        return getView().root();
+    }
+
+    @Override
     public void logObjectInstance()
     {
         view().logObjectInstance();
@@ -684,6 +690,25 @@ public class zVIEW extends VmlOperation implements View
     public int getEntityCount( boolean includeHidden )
     {
         return view().getEntityCount( includeHidden );
+    }
+
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    @Override
+    public Integer getTotalRootCount()
+    {
+        return getView().getTotalRootCount();
+    }
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    @Override
+    public void setTotalRootCount( int totalRootCount )
+    {
+        getView().setTotalRootCount( totalRootCount );
     }
 
     @Override

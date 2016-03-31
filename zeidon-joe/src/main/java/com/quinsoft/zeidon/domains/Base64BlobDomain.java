@@ -1,4 +1,4 @@
-/**
+/*
     This file is part of the Zeidon Java Object Engine (Zeidon JOE).
 
     Zeidon JOE is free software: you can redistribute it and/or modify
@@ -21,25 +21,22 @@ package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.apache.commons.codec.binary.Base64;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
- * @author DG
- *
+ * A version of the Blob domain that uses Base64 for getString()
+ * and setting from a string.
  */
-public class DateDomain extends DateTimeDomain
+public class Base64BlobDomain extends BlobDomain
 {
-    protected DateTimeFormatter defaultDateFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT );
 
-    public DateDomain(Application application, Map<String, Object> domainProperties, Task task)
+    public Base64BlobDomain( Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
     }
@@ -47,19 +44,28 @@ public class DateDomain extends DateTimeDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
-        DateTime dt = (DateTime) super.convertExternalValue( task, attributeInstance, attributeDef, contextName, externalValue );
-        if ( dt != null)
-            dt = dt.withMillisOfDay( 0 );
+        if ( externalValue instanceof CharSequence )
+            return new Blob( Base64.decodeBase64( externalValue.toString() ) );
 
-        return dt;
+        return super.convertExternalValue( task, attributeInstance, attributeDef, contextName, externalValue );
+    }
+
+    @Override
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+    {
+        return convertToString( task, attributeDef, internalValue );
     }
 
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
-        if ( internalValue == null )
-            return super.convertToString( task, attributeDef, internalValue );
+        if ( internalValue instanceof Blob )
+        {
+            Blob blob = (Blob) internalValue;
+            return Base64.encodeBase64String( blob.getBytes() );
+        }
 
-        return defaultDateFormatter.print( (DateTime) internalValue );
+        return super.convertToString( task, attributeDef, internalValue );
     }
+
 }

@@ -355,7 +355,11 @@ case class View( val task: Task ) extends Dynamic {
      */
     def root = {
         validateNonNull
-        new EntityCursor( this, jview.cursor( jlodDef.getRoot() ) )
+        new EntityCursor( this, jview.root() )
+    }
+
+    def totalRootCount : Integer = {
+        jview.getTotalRootCount
     }
 
     /**
@@ -367,7 +371,7 @@ case class View( val task: Task ) extends Dynamic {
     def selectDynamic( entityName: String ): EntityCursor = {
         validateNonNull
 
-        val jentityDef = jlodDef.getEntityDef( entityName )
+        val jentityDef =  EntitySelector.getEntityDef( jlodDef, entityName )
         val jcur = jview.cursor( jentityDef )
         new EntityCursor( this, jcur )
     }

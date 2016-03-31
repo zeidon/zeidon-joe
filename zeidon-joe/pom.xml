@@ -85,7 +85,30 @@
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>1.4.1</version>
+            <version>1.5.0</version>
+            <!-- These jars are pulled in from other dependencies -->
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-logging</groupId>
+	        <artifactId>commons-logging</artifactId>
+	      </exclusion>
+	      <exclusion>
+	        <groupId>commons-collections</groupId>
+	        <artifactId>commons-collections</artifactId>
+	      </exclusion>
+	    </exclusions>
+	 </dependency>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+            <!-- These jars are pulled in from other dependencies -->
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-logging</groupId>
+	        <artifactId>commons-logging</artifactId>
+	      </exclusion>
+	    </exclusions>
         </dependency>
         <dependency>
             <groupId>com.googlecode.java-diff-utils</groupId>
@@ -106,6 +129,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-codec</groupId>
+	        <artifactId>commons-codec</artifactId>
+	      </exclusion>
+	    </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -122,6 +151,17 @@
             <artifactId>commons-digester3</artifactId>
             <version>3.2</version>
             <classifier>with-deps</classifier>
+            <!-- These jars are pulled in from other dependencies -->
+            <exclusions>
+	      <exclusion>
+	        <groupId>commons-logging</groupId>
+	        <artifactId>commons-logging</artifactId>
+	      </exclusion>
+	      <exclusion>
+	        <groupId>commons-beanutils</groupId>
+	        <artifactId>commons-beanutils</artifactId>
+	      </exclusion>
+	    </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.uuid</groupId>
@@ -133,6 +173,11 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+        	<groupId>commons-codec</groupId>
+        	<artifactId>commons-codec</artifactId>
+        	<version>1.10</version>
         </dependency>
     </dependencies>
 </project>

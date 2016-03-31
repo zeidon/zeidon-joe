@@ -11,6 +11,21 @@
     <name>zeidon-operations</name>
     <description>Zeidon wrapper code and helper functions for using with code generated from VML.</description>
 
+    <build>
+      <plugins>
+	<!-- Turn off dependency enforcer because fop has too many dependency errors -->
+	<plugin>
+	  <artifactId>maven-enforcer-plugin</artifactId>
+	  <executions>
+	    <execution>
+	      <id>enforce-versions</id>
+	      <phase>none</phase>
+	    </execution>
+	  </executions>
+	</plugin>
+      </plugins>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
@@ -31,7 +46,7 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
             <version>1.0</version>
-        </dependency>
+	</dependency>
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>

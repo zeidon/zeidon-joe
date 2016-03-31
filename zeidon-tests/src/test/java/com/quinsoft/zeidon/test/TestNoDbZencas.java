@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.EntityCursor;
@@ -49,7 +50,7 @@ public class TestNoDbZencas
         pref.set( "ZENCAs", "oiSourceUrl", "jdbc:sqlite:target/test-classes/zencasa-domains.sqlite" );
 		zeidonSystem = oe.getSystemTask();
 	}
-	
+
 	@After
 	public void after()
 	{
@@ -102,4 +103,24 @@ public class TestNoDbZencas
         Assert.assertTrue( "Entity Compare doesn't work", stud1.compareEntity( stud2 ) );
         Assert.assertTrue( "Entity Compare doesn't work", stud2.compareEntity( stud1 ) );
 	}
+
+    @Test
+    public void testDateAddition() throws IOException
+    {
+        View prof2 = zencas.deserializeOi()
+                            .fromFile( "target/test-classes/testdata//ZENCAs/TestInclude3-mFAProfO.por" )
+                            .setLodDef( "mFAProf" )
+                            .activateFirst();
+
+        AttributeInstance yearBegin = prof2.cursor( "FinAidProfile" ).getAttribute( "ProfileYearBegin" );
+        yearBegin.add( 1, "YEAR" );
+        String s2 = yearBegin.getString( "yyyy/MM/dd" );
+        Assert.assertTrue( "Year wasn't added correctly", "2011/07/01".equals( s2 ) );
+        yearBegin.add( 1, "months" );
+        s2 = yearBegin.getString( "yyyy/MM/dd" );
+        Assert.assertTrue( "Year wasn't added correctly", "2011/08/01".equals( s2 ) );
+        yearBegin.add( 1, "day" );
+        s2 = yearBegin.getString( "yyyy/MM/dd" );
+        Assert.assertTrue( "Year wasn't added correctly", "2011/08/02".equals( s2 ) );
+    }
 }

@@ -32,9 +32,9 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * Returns the Scala EntityInstance for this AttributeInstance.
      */
     def getEntityInstance = new EntityInstance( jattributeInstance.getEntityInstance )
-    
+
     def getView = new View( jattributeInstance.getView )
-    
+
     /**
      * Returns true if the attribute is null.
      */
@@ -82,12 +82,12 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def setDerivedValue( any: Any ) = any match {
         case a : AttributeInstance => jattributeInstance.setDerivedValue( a.jattributeInstance )
         case _ => jattributeInstance.setDerivedValue( any )
-    } 
-        
+    }
+
     /**
      * Returns the internal value of the attribute.
      */
-    def value = jattributeInstance.getValue()
+    def value: AnyRef = jattributeInstance.getValue()
 
     /**
      * Returns the name of this attribute.
@@ -95,7 +95,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def name = jattributeInstance .getAttributeDef().getName()
 
     def isKey = jattributeInstance .getAttributeDef().isKey()
-    
+
     /**
      * Returns the AttributeDef for this attribute.
      */
@@ -166,6 +166,11 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
         case _ => toInt + x
     }
 
+    /**
+     * Add a value to an attribute and specify a context.  The result of addition
+     * is domain-specific, as well as the value of the context.
+     */
+    def add( x: Any, contextName: String = "" ) = jattributeInstance.add( x, contextName )
     def +=( x: Any ) = jattributeInstance.add( x )
 
     def -=( x: Int ) = jattributeInstance.add( -x )
@@ -188,7 +193,7 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def in ( values: Any* ): Boolean = {
         values.exists { value => compare( value ) == 0 }
     }
-    
+
     def compare(other: Any): Int = other match {
         // If 'other' is a Scala AttributeInstance, get its value before calling compare.
         // We have to do this here because the JOE doesn't know anything about Scala objects.
@@ -242,47 +247,47 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     /**
      * Converts the attribute value to a boolean using default domain processing.
      */
-    def toBoolean: Boolean = { 
+    def toBoolean: Boolean = {
         val b = jattributeInstance.getBoolean()
         if ( b == null )
-            throw new ZeidonException( "Attribute value is null and can't be converted to a Boolean.  " + 
+            throw new ZeidonException( "Attribute value is null and can't be converted to a Boolean.  " +
                                        "Use isTruthy to handle null boolean attributes." )
                                        .prependAttributeDef( jattributeInstance.getAttributeDef )
-        
+
         b
     }
 
     /**
      * Converts the attribute value to an integer using default domain processing.
      */
-    def toInt: Int = { 
+    def toInt: Int = {
         if ( jattributeInstance.isNull() )
             throw new ZeidonException( "Error converting attribute value to Scala Int: attribute is null" )
                        .prependAttributeDef( jattributeInstance.getAttributeDef )
         else
-            jattributeInstance.getInteger() 
+            jattributeInstance.getInteger()
     }
 
-    def toInt( default: Int ): Int = { 
+    def toInt( default: Int ): Int = {
         if ( jattributeInstance.isNull() )
             default
         else
             jattributeInstance.getInteger()
     }
-    
+
     /**
      * Converts the attribute value to a double using default domain processing.
      */
     def toDouble: Double = { jattributeInstance.getDouble }
-    
+
     /**
-     * Converts the attribute value to a double using domain processing with 
+     * Converts the attribute value to a double using domain processing with
      * the specified context.
      */
     def toDouble( contextName: String ): Double = { jattributeInstance.getDouble( contextName ) }
-    
+
     override def hashCode() = jattributeInstance.hashCode()
-    override def equals( obj: Any ) = compare( obj ) == 0 //jattributeInstance.equals( obj ) 
+    override def equals( obj: Any ) = compare( obj ) == 0 //jattributeInstance.equals( obj )
 }
 
 object AttributeInstance {

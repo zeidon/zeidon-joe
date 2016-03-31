@@ -209,6 +209,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
+    public EntityCursorImpl root()
+    {
+        return viewCursor.getEntityCursor( getLodDef().getRoot() );
+    }
+
+    @Override
     public void setName(String name)
     {
         getTask().setNameForView( name, this );
@@ -1020,6 +1026,25 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     public int getEntityCount( boolean includeHidden )
     {
         return getObjectInstance().getEntityCount( includeHidden );
+    }
+
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    @Override
+    public Integer getTotalRootCount()
+    {
+        return getObjectInstance().getTotalRootCount();
+    }
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    @Override
+    public void setTotalRootCount( int totalRootCount )
+    {
+        getObjectInstance().setTotalRootCount( totalRootCount );
     }
 
     /**

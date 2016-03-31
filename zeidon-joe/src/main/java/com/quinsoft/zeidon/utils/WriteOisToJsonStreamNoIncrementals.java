@@ -99,6 +99,10 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         view = view.newView();  // To preserve cursor positions in the original view.
         view.setInternal( true );  // So it doesn't show up in the browser.
 
+        Integer rootCount = view.getTotalRootCount();
+        if ( rootCount != null && rootCount != view.root().getEntityCount() )
+            jg.writeNumberField( "totalRootCount", rootCount );
+
         EntityDef rootEntityDef = view.getLodDef().getRoot();
         jg.writeArrayFieldStart( camelCaseName( rootEntityDef.getName() ) );
         if ( ! view.isEmpty() )
@@ -176,7 +180,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 else
                 {
                     String value = attrib.getString( null );
-    
+
                     // getAttributes will include null attributes if they have been updated
                     // (i.e. explicitly set to null).  Since we aren't writing incrementals
                     // we don't want those so check for null.

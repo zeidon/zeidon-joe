@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -163,7 +162,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             buffer.append( (Boolean) b ? "true" : "false" );
             return true;
         }
-        
+
         if ( domain instanceof BlobDomain )
         {
             String s = domain.convertToString( task, attributeDef, value );
@@ -186,23 +185,6 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             return clob.getSubString( 1L, (int) clob.length() );
         }
 
-        if ( domain instanceof DateTimeDomain )
-        {
-            if ( dbValue instanceof CharSequence )
-            {
-                String date = dbValue.toString();
-                try
-                {
-                    return dateTimeFormatter.parseDateTime( date );
-                }
-                catch ( IllegalArgumentException e )
-                {
-                    throw ZeidonException.prependMessage( e, "Invalid datetime format.  Got '%s' but expected format '%s'",
-                                                          date, dateTimeFormatter );
-                }
-            }
-        }
-
         if ( domain instanceof DateDomain )
         {
             if ( dbValue instanceof CharSequence )
@@ -222,6 +204,23 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             if ( dbValue instanceof Date )
             {
                 return new DateTime( dbValue );
+            }
+        }
+
+        if ( domain instanceof DateTimeDomain )
+        {
+            if ( dbValue instanceof CharSequence )
+            {
+                String date = dbValue.toString();
+                try
+                {
+                    return dateTimeFormatter.parseDateTime( date );
+                }
+                catch ( IllegalArgumentException e )
+                {
+                    throw ZeidonException.prependMessage( e, "Invalid datetime format.  Got '%s' but expected format '%s'",
+                                                          date, dateTimeFormatter );
+                }
             }
         }
 

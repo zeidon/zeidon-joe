@@ -13,8 +13,20 @@
     <description>Zeidon JUnit tests.  This is in a separate package because it requires ZeidonOperations and application files.</description>
 
     <build>
-        <plugins>
-            <plugin>
+      <plugins>
+	
+          <!-- Turn off dependency enforcer because fop has too many dependency errors -->
+	  <plugin>
+	    <artifactId>maven-enforcer-plugin</artifactId>
+	    <executions>
+	      <execution>
+		<id>enforce-versions</id>
+		<phase>none</phase>
+	      </execution>
+	    </executions>
+	  </plugin>
+	  
+          <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.2.0</version>
@@ -153,7 +165,7 @@
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.11</artifactId>
-            <version>2.2.4</version>
+            <version>2.2.6</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -134,6 +134,8 @@ public interface Domain
     Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
 
     Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand );
+    Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand, String contextName );
+
     Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand );
 
     /**

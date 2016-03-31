@@ -193,15 +193,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
             stmt.appendCmd( "INSERT INTO ", dataRecord.getRecordName(), " ( " );
             addColumnList( stmt, entityInstances.get( idx ), dataRecord, 0 );
-            stmt.appendCmd( "  ) VALUES " );
+            stmt.appendColumn( "  )" );
+            stmt.appendInsertValues( " VALUES \n (" );
 
             EntityInstance entityInstance = null;
             for ( int count = 0; count < maxInserts && idx < numInserts; count++ )
             {
-                if ( count == 0 ) // First row?
-                    stmt.appendCmd( "\n ( " );
-                else
-                    stmt.appendCmd( " ),\n ( " );
+                if ( count > 0 ) // First row?
+                    stmt.appendInsertValues( " ),\n ( " );
 
                 entityInstance = entityInstances.get( idx );
                 addColumnValueList( stmt, entityInstance );
@@ -209,7 +208,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 idx++;
             }
 
-            stmt.appendCmd( " )" );
+            stmt.appendInsertValues( " )" );
             executeStatement( view, entityDef, entityInstance, stmt );
         }
 
@@ -230,9 +229,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( firstColumn )
                 firstColumn = false;
             else
-                stmt.appendCmd( ", " );
+                stmt.appendInsertValues( ", " );
 
-            getAttributeValue( stmt, stmt.sqlCmd, dataField, entityInstance );
+            getAttributeValue( stmt, stmt.insertValues, dataField, entityInstance );
         }
     }
 
@@ -410,11 +409,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
 
             colName.append( dataField.getName() );
-            if ( stmt.columns.size() > 0 )
-                stmt.appendCmd( ", " );
-
-            stmt.appendCmd( colName );
-            stmt.addColumn( dataRecord, dataField );
+            stmt.addColumn( colName, dataRecord, dataField );
         }
 
         // If entityDef can be loaded all at once and this is a many-to-many relationship
@@ -432,8 +427,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( stmt.columns.size() > 0 )
                 stmt.appendCmd( ", " );
 
-            stmt.appendCmd( colName );
-            stmt.addColumn( dataRecord, relField.getSrcDataField() );
+            stmt.addColumn( colName, dataRecord, relField.getSrcDataField() );
         }
     }
 
@@ -678,8 +672,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         } // for each EntitySpec...
 
-        // For rolling pagination we *must* have the keys as part of the ordering.
-        if ( pagingOptions != null && pagingOptions.isRollingPagination() )
+        // For pagination we *must* have the keys as part of the ordering, even if
+        // it's the last value to order by.  This is so sorting will always have
+        // the same results.
+        if ( pagingOptions != null )
         {
             EntityDef root = lodDef.getRoot();
             QualEntity qualRootEntity = qualMap.get( root );
@@ -689,7 +685,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 qualMap.put( root, qualRootEntity );
             }
 
-            qualRootEntity.checkForKeysInOrderBy(); // Add the keys if they aren't there.
+            if ( qualRootEntity.checkForKeysInOrderBy() ) // Add the keys if they aren't there.
+                getTask().log().trace( "Key(s) added to ordering for pagination" );
+
             qualRootEntity.activateLimit = pagingOptions.getPageSize();
 
             // Copy the root ordering back to the ActivateOptions so we can use
@@ -934,12 +932,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
                 return false;
 
-            // If the parent of entityDef is the root and we're activating with rolling pagination
+            // If the parent of entityDef is the root and we're activating with pagination
             // then we can't join because the join will throw off the row count.
-            if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() &&
-                 activateOptions.getPagingOptions() != null &&
-                 activateOptions.getPagingOptions().isRollingPagination() )
+            if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() && pagingOptions != null )
             {
+                getTask().log().trace( "Can't join %s with parent because of pagination", entityDef.getName() );
                 return false;
             }
         }
@@ -1023,6 +1020,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         else
         if ( entityDef.getActivateLimit() != null )
             addActivateLimit( entityDef.getActivateLimit(), stmt );
+
+        if ( pagingOptions != null && ! pagingOptions.isRollingPagination() && entityDef.getParent() == null )
+            addPageOffset( pagingOptions, stmt );
 
         // Add all the children that will be joined to the loaded set.  This
         // indicates that the joined children will be loaded as part of the
@@ -1157,12 +1157,63 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         executeLoad( view, entityDef, stmt );
 
+        // Set the total root count if we're loading the root.
+        if ( parent == null )
+        {
+            if ( pagingOptions != null )
+            {
+                if ( pagingOptions.isTotalCount() )
+                    getTotalCount( view, entityDef, stmt );
+            }
+            else
+                view.setTotalRootCount( view.cursor( view.getLodDef().getRoot() ).getEntityCount() );
+        }
+
         if ( parentEi != null )
             view.cursor( parent ).setCursor( parentEi );
 
         assert assertNotNullKey( view, entityDef ) : "Activated entity has null key";
 
         return DbHandler.LOAD_DONE;
+    }
+
+    /**
+     * Change the query for the root entity so the count can be loaded.
+     */
+    private void getTotalCount( View view, EntityDef root, SqlStatement stmt )
+    {
+        assert root.getParent() == null;
+        assert  pagingOptions != null;
+
+        // If the entity count is less than the page size then we don't need to
+        // execute a query to determine the total root count.
+        if ( view.root().getEntityCount() < pagingOptions.getPageSize() )
+        {
+            view.setTotalRootCount( view.root().getEntityCount() );
+            return;
+        }
+
+        // Reset the assembled command so it will be recreated after the changes.
+        stmt.assembledCommand = null;
+        stmt.ordering.setLength( 0 );
+        stmt.suffix.setLength( 0 );
+
+        if ( root.getKeys().size() != 1 )
+            throw new ZeidonException( "getTotalCount currently only supported for entities with a single key" );
+
+        DataRecord dataRecord = root.getDataRecord();
+        DataField keyField = dataRecord.getDataField( root.getKeys().get( 0 ) );
+
+        stmt.columnList.setLength( 0 ); // Clear out the column list.
+        stmt.columnList.append( "count( distinct " )
+                       .append(  dataRecord.getRecordName() )
+                       .append(  "." )
+                       .append( keyField.getName() )
+                       .append( "  ) " );
+
+        int count = executeStatement(view, root, stmt);
+        view.setTotalRootCount( count );
+        System.out.println( "count = " + count );
     }
 
     /**
@@ -1439,6 +1490,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     protected abstract int executeLoad(View view, EntityDef entityDef, SqlStatement stmt);
     protected abstract int executeStatement(View view, EntityDef entityDef, SqlStatement stmt);
     protected abstract void addActivateLimit( int limit, SqlStatement stmt );
+    protected abstract void addPageOffset( Pagination pagingOptions, SqlStatement stmt );
 
     protected int executeStatement(View view, EntityDef entityDef, EntityInstance entityInstance, SqlStatement stmt)
     {
@@ -2197,6 +2249,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         int activateLimit = 0;  // Max number of entities to activate.  If 0 then activate all.
         private final StringBuilder sqlCmd;   // The final results.
         private final StringBuilder from;     // Holds FROM clause.
+        private final StringBuilder insertValues;  // Holds values during insert.
+        private final StringBuilder columnList;  // Holds column list.
         private final StringBuilder where;    // Holds WHERE clause.
         private final StringBuilder ordering; // Holds "order by" clause.
         private       StringBuilder suffix;   // DB-specific db-handlers put stuff here.
@@ -2243,6 +2297,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             sqlCmd = new StringBuilder();
             from =   new StringBuilder();
             where =  new StringBuilder();
+            columnList =  new StringBuilder();
             ordering = new StringBuilder();
             columns = new LinkedHashMap<DataField, Integer>();
             tables  = new HashMap<Object,String>();
@@ -2250,14 +2305,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             boundValues = new ArrayList<Object>();
             this.selectRoot = selectRoot;
             targetView = view;
+
+            if ( commandType == SqlCommand.INSERT )
+                insertValues = new StringBuilder();
+            else
+                insertValues = null;
         }
 
         /**
          * @param dataRecord
          * @param dataField
          */
-        public void addColumn( DataRecord dataRecord, DataField dataField )
+        public void addColumn( StringBuilder colName, DataRecord dataRecord, DataField dataField )
         {
+            if ( columns.size() > 0 )
+                columnList.append( ", " );
+
+            columnList.append( colName );
+
             assert ! columns.containsKey( dataField ); // Make sure we haven't added this datafield already.
             columns.put( dataField, columns.size() + 1 );
 
@@ -2333,6 +2398,18 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             for ( Object o : objects )
                 where.append( o );
+        }
+
+        void appendColumn(Object...objects)
+        {
+            for ( Object o : objects )
+                columnList.append( o );
+        }
+
+        void appendInsertValues(Object...objects)
+        {
+            for ( Object o : objects )
+                insertValues.append( o );
         }
 
         /**
@@ -2599,11 +2676,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             StringBuilder str = new StringBuilder();
             addStringWithWrapping( str, sqlCmd, prettyPrint );
+            addStringWithWrapping( str, columnList, prettyPrint );
             if ( from.length() > 0 )
             {
                 str.append( "\nFROM " );
                 addStringWithWrapping( str, from, prettyPrint );
             }
+
+            if ( insertValues != null )
+                addStringWithWrapping( str, insertValues, prettyPrint );
 
             if ( where.length() > 0 )
             {

@@ -52,8 +52,8 @@ class EntityInstanceIterator( val jiterator: EntityIterator[_]) extends Iterable
         }
     }
 
-    def each( looper: => Any ) = {
-        var any: Any = null
+    def each[T]( looper: => T ) = {
+        var any: T = null.asInstanceOf[T]
         val iter = iterator
         breakable {
             while ( iter.hasNext )

@@ -3,6 +3,7 @@ package com.quinsoft.zeidon.scala
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.DeserializeOi
 
 /**
  * @author dgc
@@ -44,8 +45,52 @@ object Implicits {
             iter.foreach( ei => looper( ei ) )
         }
     }
-    
+
     implicit class ScalaTask( val task : Task ) {
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
+        def id = task.getTaskId
+    }
+
+    implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
+
+        /**
+         * Run a function inside a task.
+         *
+         * This is a convenience method to create a task, execute a method, and then
+         * automatically drop the task.
+         * {{{
+         * objectEngine.forTask( "Northwind" ) { task =>
+         *   val order = View( task ) basedOn "Order"
+         *   order.activateWhere( _.Order.OrderID = orderId )
+         *   order.Order.OrderDate
+         * }
+         * }}}
+         */
+        def forTask( appName : String ) : TaskRunner = {
+            val task = oe.createTask( appName );
+            TaskRunner( task )
+        }
+    }
+
+    implicit class ScalaDeserializeOi( val deserializer: DeserializeOi ) {
+        /**
+         * A convenience method to deserialize directly to a Scala view using
+         * Scala (de-)serialization nomenclature.
+         */
+        def unpickle : View = new View( deserializer.activateFirst() )
+    }
+
+    /**
+     * Convenience class for ScalaObjectEngine.forTask
+     */
+    case class TaskRunner( val task: Task ) {
+        def apply[T]( runTask: Task => T ): T = {
+            try {
+                runTask( task )
+            }
+            finally {
+                task.dropTask()
+            }
+        }
     }
 }

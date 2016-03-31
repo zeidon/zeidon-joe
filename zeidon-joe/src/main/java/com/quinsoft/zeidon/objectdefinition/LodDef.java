@@ -144,7 +144,7 @@ public class LodDef implements PortableFileAttributeHandler
 
     public EntityDef getEntityDef( String entityName, boolean required )
     {
-        return getEntityDef( entityName, true, false );
+        return getEntityDef( entityName, required, false );
     }
 
     public EntityDef getEntityDef( String entityName )

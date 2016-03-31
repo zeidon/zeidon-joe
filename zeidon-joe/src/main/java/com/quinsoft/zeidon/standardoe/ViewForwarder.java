@@ -155,6 +155,12 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         return getView().cursor( entityDef );
     }
 
+    @Override
+    public EntityCursorImpl root()
+    {
+        return getView().root();
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getCursor(java.lang.String)
      */
@@ -609,6 +615,25 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public int getEntityCount( boolean includeHidden )
     {
         return getView().getEntityCount( includeHidden );
+    }
+
+    /**
+     * This is the total count of root entities.  For OIs loaded with paging this
+     * is the total number of roots, not just the ones loaded.
+     */
+    @Override
+    public Integer getTotalRootCount()
+    {
+        return getView().getTotalRootCount();
+    }
+
+    /**
+     * Sets the total root count.  Intended to be used by the dbhandler.
+     */
+    @Override
+    public void setTotalRootCount( int totalRootCount )
+    {
+        getView().setTotalRootCount( totalRootCount );
     }
 
     /**

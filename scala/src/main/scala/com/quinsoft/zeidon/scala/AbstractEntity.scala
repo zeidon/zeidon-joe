@@ -118,14 +118,10 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
         return this
     }
 
-    private def getAttributeDef( attribName: String ) = {
-        val jattributeDef = jentityDef.getAttribute( attribName )
-        if ( jattributeDef.isHidden() )
-            throw new HiddenAttributeException( jattributeDef );
-
-        jattributeDef
+    private def getAttributeDef( attribName: String ): AttributeDef = {
+        AbstractEntity.getAttributeDef( jentityDef, attribName )
     }
-    
+
     /**
      * Retrieves an AttributeInstance by name.  Normally used as part of reflection.
      */
@@ -218,4 +214,20 @@ object AbstractEntity {
      * Automatically converts a Scala EntityInstance to a Java EntityInstance
      */
     implicit def ei2jei( ei: AbstractEntity ) = ei.getEntityInstance
+
+    def getAttributeDef( jentityDef: EntityDef, attribName: String ): AttributeDef = {
+         if ( attribName == "key" ) {
+            if ( jentityDef.getKeys.size() != 1 )
+                throw new ZeidonException( "Cannot use 'key' attribute name for an entity that does not have one (and only one) key" )
+                          .prependEntityDef(jentityDef)
+
+            return jentityDef.getKeys.get(0)
+        }
+
+        val jattributeDef = jentityDef.getAttribute( attribName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+
+        jattributeDef
+    }
 }

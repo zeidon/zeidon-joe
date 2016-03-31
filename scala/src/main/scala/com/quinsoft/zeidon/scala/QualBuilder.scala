@@ -46,10 +46,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
 
-    private var jcurrentEntityDef = jlodDef.getRoot
-    
+    private [scala] var jcurrentEntityDef = jlodDef.getRoot
+
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
     private var firstOperator = true
+    private var totalRootCount: Integer = null
 
     private [scala] def callAddQual( addQual: (EntityQualBuilder) => QualificationTerminator ) = {
         firstOperator = false
@@ -373,14 +374,19 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      *      mUser.buildQual( _.User.ID = 400 )
      *                  .or( _.User.ID = 500 )
      *                  .restrict( _.UserGroup )
-     *                      .limitCountTo( 5 )
+     *                      .limit( 5 )
      *                 .activate
      * }}}
      *
      * Could activate a total of 10 UserGroup entities, 5 for each parent.
      */
-    def limitCountTo( limit: Integer ): QualBuilder = {
+    def limit( limit: Integer ): QualBuilder = {
         jqual.limitCountTo(limit)
+        this
+    }
+
+    def withPaging( pageSize: Int, page: Int = 1, getTotalCount: Boolean = false ): QualBuilder = {
+        jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setTotalCount( getTotalCount )
         this
     }
 
@@ -427,22 +433,22 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Synonym for restrict( ... ) method.
      */
     def restricting( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
-        firstOperator = true
         jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
         jqual.restricting( jcurrentEntityDef.getName() )
+        firstOperator = ! jqual.hasQualAttrib()
         this
     }
 
     /**
-     * Specifies how entity is to be ordered when retrieved from DB.  
-     * 
+     * Specifies how entity is to be ordered when retrieved from DB.
+     *
      * {{{
      *      val mUser = VIEW basedOn "mUser"
      *      mUser.buildQual( _.User.ID > 400 )
      *             .orderBy( _.Name DESC )
      *             .activate
      * }}}
-     * 
+     *
      * Overrides ordering specified in the LOD.
      */
     def orderBy( selectAttr: (AttributeOrderByBuilder) => OrderByTerminator ) : QualBuilder = {
@@ -451,7 +457,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.addActivateOrdering( jcurrentEntityDef.getName, builder.jattributeDef.getName, builder.descending )
         this
     }
-    
+
     /**
      * Specifies which entity the following qualification is for.  Used to build
      * qualification programatically.
@@ -481,9 +487,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * See restrict() for more information.
      */
     def to( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
-        firstOperator = false
-        addQual( entityQualBuilder )
-        this
+        // to() is really just an .and() but easier to understand in its context.
+        and( addQual )
     }
 
     /**
@@ -554,7 +559,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def readOnly( readOnly: Boolean = true ) = {
         if ( readOnly )
             jqual.readOnly()
-            
+
         this
     }
 
@@ -594,7 +599,36 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      */
     def activate(): View = {
         view.jview = jqual.activate()
+
+        val paging = jqual.getPagination(false)
+        if ( paging != null ) {
+            // Are we getting the total count?
+            if ( paging.isTotalCount() ) {
+                totalRootCount = view.jview.getTotalRootCount
+                paging.setTotalCount( false ) // Don't get it again.
+            }
+            else
+            // We didn't load the root count as part of the activate.  If we
+            // have it from a previous activate then set it.
+            if ( totalRootCount != null )
+                view.jview.setTotalRootCount( totalRootCount )
+        }
+
         return view
+    }
+
+    /**
+     * Performs the activate on the view using the specified qualification.
+     *
+     * Returns the view for convenience.
+     */
+    def activatePage( page: Int ): View = {
+        val paging = jqual.getPagination(false)
+        if ( paging == null )
+            throw new ZeidonException( "Page size was not set")
+
+        paging.setPageNumber( page )
+        return activate()
     }
 
     /**
@@ -610,7 +644,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.overrideConfigValue( key, value )
         this
     }
-    
+
     def withRollingPagination( pageSize: Int = 1000 ) = {
         jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
         this
@@ -619,8 +653,35 @@ class QualBuilder private [scala] ( private [this]  val view: View,
 
 class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {
     def selectDynamic(entityName: String): AttributeQualBuilder = {
-        val jentityDef = qualBuilder.jlodDef.getEntityDef(entityName)
+        val jentityDef =  EntitySelector.getEntityDef( qualBuilder.jlodDef, entityName )
         new AttributeQualBuilder( qualBuilder, jentityDef )
+    }
+
+    /**
+     * This allows code to specify the entity/attr by string.  E.g.
+     * {{{
+     *  view.buildQual( _.withName( "Entity.Attr" ) eq 10 )
+     * }}}
+     * is the same as:
+     * {{{
+     *  view.buildQual( _.Entity.Attr = 10 )
+     * }}}
+     *
+     * Note that "eq" must be used instead of "=".  All other comparators can be
+     * used as normal.
+     */
+    def withName( entityAttrName: String ): AttributeQualOperators = {
+        val parts = entityAttrName.split("\\.")
+        if ( parts.length == 2 ) {
+            val jentityDef =  qualBuilder.jlodDef.getEntityDef( parts(0) )
+            val ab = new AttributeQualBuilder( qualBuilder, jentityDef )
+            ab.withName( parts(1) )
+        }
+        else
+        {
+            val ab = new AttributeQualBuilder( qualBuilder, qualBuilder.jcurrentEntityDef )
+            ab.withName( parts(0) )
+        }
     }
 }
 
@@ -653,19 +714,36 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 
     /**
+     * This allows code to specify the attr by string.  E.g.
+     * {{{
+     *  view.buildQual( _.Entity.withName( "Attr" ) eq 10 )
+     * }}}
+     * is the same as:
+     * {{{
+     *  view.buildQual( _.Entity.Attr = 10 )
+     * }}}
+     *
+     * Note that "eq" must be used instead of "=".  All other comparators can be
+     * used as normal.
+     */
+    def withName( attributeName: String ): AttributeQualOperators = {
+        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+
+        return new AttributeQualOperators( this )
+    }
+
+    /**
      * Adds dynamic support for qualifying on an attribute.
      */
     def selectDynamic( attributeName: String): AttributeQualOperators = {
-        jattributeDef = jentityDef.getAttribute( attributeName )
-        if ( jattributeDef.isHidden() )
-            throw new HiddenAttributeException( jattributeDef );
-        
-        return new AttributeQualOperators( this )
+        withName( attributeName )
     }
 
 //    def applyDynamic( attributeName: String)(args: Any*): QualBuilder = {
 //        //println( s"method '$attributeName' called with arguments ${args.mkString("'", "', '", "'")}" )
-//        jattributeDef = jentityDef.getAttribute( attributeName )
+//        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
 //        return qualBuilder
 //    }
 //
@@ -678,7 +756,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
       */
     def updateDynamic( attributeName: String)(value: Any): QualificationTerminator = {
 //        println( s"method '$attributeName' called with argument ${value}" )
-        jattributeDef = jentityDef.getAttribute( attributeName )
+        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
         if ( jattributeDef.isHidden() )
             throw new HiddenAttributeException( jattributeDef );
 
@@ -732,6 +810,23 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
         }
         else
             false
+    }
+
+    /**
+     * Activates entities with attributes that are equal to the specified value.
+     *
+     * The value is converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID eq 490 )
+     * }}}
+     */
+    def eq( value: Any ): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "<>", value )
+        else
+            return addQual( "=", value )
     }
 
     /**
@@ -828,9 +923,9 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      */
     def isNull(): QualificationTerminator = {
         if ( checkNot )
-            return addQual( "!=", null )    
+            return addQual( "!=", null )
         else
-            return addQual( "=", null )    
+            return addQual( "=", null )
     }
 
     /**
@@ -842,11 +937,11 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      */
     def isNotNull(): QualificationTerminator = {
         if ( checkNot )
-            return addQual( "=", null )    
+            return addQual( "=", null )
         else
-            return addQual( "!=", null )    
+            return addQual( "!=", null )
     }
-    
+
     /**
      * Uses SQL like to qualify activation.
      *
@@ -1121,7 +1216,7 @@ class AttributeOrderByBuilder( val qualBuilder: QualBuilder,
      * Adds dynamic support for qualifying on an attribute.
      */
     def selectDynamic( attributeName: String ): OrderByTerminator = {
-        jattributeDef = jentityDef.getAttribute( attributeName )
+        jattributeDef = AbstractEntity.getAttributeDef( jentityDef, attributeName )
         if ( jattributeDef.isHidden() )
             throw new HiddenAttributeException( jattributeDef );
         new OrderByTerminator( this )

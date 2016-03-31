@@ -193,6 +193,10 @@ class ActivateOisFromXmlStream implements StreamReader
         if ( ! StringUtils.isBlank( increFlags ) )
             incremental = isYes( increFlags );
 
+        String rootCount = attributes.getValue( "totalRootCount" );
+        if ( ! StringUtils.isBlank( rootCount ) )
+            view.setTotalRootCount( Integer.parseInt( rootCount ) );
+
         // Create a list to keep track of selected instances.
         selectedInstances = new ArrayList<>();
     }
@@ -290,13 +294,21 @@ class ActivateOisFromXmlStream implements StreamReader
                 else
                 {
                     EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
-                    ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), false ) ;
+                    ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), ! attributeDef.isKey() ) ;
+
                     characterBuffer = null; // Indicates we've read the attribute.
 
                     if ( incremental )
                     {
                         Attributes attributes = attributeAttributes.pop();
                         ei.getAttribute( attributeDef ).setIsUpdated( isYes( attributes.getValue( "updated" ) ) );
+                    }
+                    else
+                    {
+                        // If we just set the key then we'll assume the entity has
+                        // already been created.
+                        if ( attributeDef.isKey() )
+                            ei.setIncrementalFlags( IncrementalEntityFlags.UPDATED );
                     }
 
                     return;

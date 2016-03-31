@@ -89,6 +89,19 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
             println( "Is truthy" )
     }
 
+    def dates( mUser : View @basedOn( "mUser" ) ) {
+        mUser.User.CreatedDateTime = "NOW"  // Sets attribute to current date.
+        
+        // Use a context to get a formatted string.
+        val formattedDate =  mUser.User.CreatedDateTime.getString( "yyyy-MM-dd" )
+        
+        // To add milliseconds to a time, use add() or +=
+        mUser.User.CreatedDateTime += 1000 // Adds 1000 milliseconds.
+        
+        // To add time to a date, use the add() method and specify a context.
+        mUser.User.CreatedDateTime.add( 1, "YEAR" )
+    }
+    
     /**
      * Information about an attribute other than its value.
      */
@@ -145,6 +158,7 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         compareAttribute( mUser )
         attributeInstance( mUser )
         attributeLists( mUser )
+        dates( mUser )
     }
 }
 

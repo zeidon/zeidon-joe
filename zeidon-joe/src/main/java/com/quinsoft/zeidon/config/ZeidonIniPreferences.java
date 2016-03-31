@@ -19,14 +19,14 @@
 package com.quinsoft.zeidon.config;
 
 import java.io.InputStream;
-import java.util.prefs.Preferences;
+import java.io.InputStreamReader;
+import java.util.Iterator;
 
+import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.log4j.Logger;
-import org.ini4j.zeidon.Config;
-import org.ini4j.zeidon.Ini;
-import org.ini4j.zeidon.IniPreferences;
 
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -42,9 +42,11 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 {
     private static final Logger LOG = Logger.getLogger( ZeidonIniPreferences.class );
 
-    private       Preferences   preferences;
     private final String        iniFileName;
     private       String        iniFileDesc;
+    private       HierarchicalINIConfiguration iniConfObj;
+
+    private static final StrSubstitutor strSub = new StrSubstitutor( System.getenv(), "${env.", "}" );
 
     public ZeidonIniPreferences( HomeDirectory homeDirectory, String jmxAppName )
     {
@@ -74,8 +76,8 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     @Override
     public String get( String groupName, String key, String defaultValue )
     {
-        Preferences node = preferences.node( groupName );
-        return node.get( key, defaultValue );
+        String str = iniConfObj.getSection( groupName ).getString( key, defaultValue );
+        return strSub.replace( str );
     }
 
     private void loadZeidonIni()
@@ -95,23 +97,25 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 
     private void loadZeidonIni( InputStream iniFile )
     {
+        if ( iniFile == null )
+            throw new ZeidonException( "Could not find zeidon.ini" );
+
+        InputStreamReader reader = new InputStreamReader( iniFile );
+
         try
         {
-            if ( iniFile == null )
-                throw new ZeidonException( "Could not find zeidon.ini" );
 
-            Config iniConfig = new Config();
-            iniConfig.setLowerCaseOption( true );
-            iniConfig.setLowerCaseSection( true );
-            iniConfig.setEscape( false );
-            Ini ini = new Ini();
-            ini.setConfig( iniConfig );
-            ini.load( iniFile );
-            preferences = new IniPreferences( ini );
+            iniConfObj = new HierarchicalINIConfiguration();
+            iniConfObj.load( reader );
+            reader.close();
         }
         catch ( Exception e )
         {
             throw ZeidonException.wrapException( e ).prependFilename( iniFileName );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( reader );
         }
     }
 
@@ -127,12 +131,15 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         try
         {
             StringBuilder builder = new StringBuilder();
-            for ( String groupName : preferences.childrenNames() )
+
+            for ( String sectionName : iniConfObj.getSections() )
             {
-                builder.append( "[" ).append( groupName ).append( "]\n" );
-                Preferences group = preferences.node( groupName );
-                for ( String key : group.keys() )
-                    builder.append( key ).append( "=" ).append( group.get( key, null ) ).append( "\n" );
+                builder.append( "[" ).append( sectionName ).append( "]\n" );
+                for ( Iterator<String> iter = iniConfObj.getSection(sectionName).getKeys(); iter.hasNext(); )
+                {
+                    String key = iter.next();
+                    builder.append( key ).append( "=" ).append( get( sectionName, key, null ) ).append( "\n" );
+                }
                 builder.append( "\n" );
             }
 
@@ -153,8 +160,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     @Override
     public ZeidonPreferences set( String groupName, String key, String value )
     {
-        Preferences node = preferences.node( groupName );
-        node.put( key, value );
+        iniConfObj.setProperty( groupName + "." + key, value );
         return this;
     }
 }

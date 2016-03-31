@@ -28,6 +28,15 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
  */
 class EntitySelector( val lodDef: LodDef ) extends Dynamic {
     def selectDynamic( entityName: String ): EntityDef = {
-        lodDef.getEntityDef( entityName )
+        EntitySelector.getEntityDef( lodDef, entityName )
+    }
+}
+
+object EntitySelector {
+    def getEntityDef( lodDef: LodDef, entityName: String ): EntityDef = {
+        if ( entityName == "root" )
+            lodDef.getRoot
+        else
+            lodDef.getEntityDef( entityName )
     }
 }

@@ -243,6 +243,17 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
+    public Object addToAttribute( Task task,
+                                  AttributeInstance attributeInstance,
+                                  AttributeDef attributeDef,
+                                  Object currentValue,
+                                  Object operand,
+                                  String contextName )
+    {
+        throw new ZeidonException( "addToAttribute with context not supported for this domain" );
+    }
+
+    @Override
     public Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
         throw new ZeidonException( "multiplyAttribute not supported for this domain" );

@@ -78,7 +78,7 @@ public class GeneratedKeyImpl implements GeneratedKey
     {
         if ( nativeValue == null )
             return 0;
-        
+
         return nativeValue.hashCode();
     }
 
@@ -92,7 +92,10 @@ public class GeneratedKeyImpl implements GeneratedKey
             else
                 return false;
         }
-        
+
+        if ( obj instanceof GeneratedKey )
+            return getString().equals( ((GeneratedKey) obj ).getString() );
+
         return nativeValue.equals( obj );
     }
 
@@ -100,8 +103,8 @@ public class GeneratedKeyImpl implements GeneratedKey
     public int compareTo( Object o )
     {
         if ( o instanceof GeneratedKeyImpl )
-            o = ((GeneratedKeyImpl) o).getNativeValue();
-        
+            return getString().compareTo( ((GeneratedKeyImpl) o).getString() );
+
         return nativeValue.compareTo( o );
     }
 }

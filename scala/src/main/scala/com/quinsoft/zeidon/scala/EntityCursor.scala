@@ -51,7 +51,7 @@ class EntityCursor( private[this]  val view: View,
      * Returns the Scala entity instance for the current cursor.
      */
     def instance = new EntityInstance( getEntityInstance() )
-    
+
     /** Creates a new entity instance.
       *
       * Creates a new entity instance.  The position of the new instance is determined
@@ -69,7 +69,7 @@ class EntityCursor( private[this]  val view: View,
         jentityCursor.createTemporalEntity( position )
         this
     }
-    
+
     /**
      * Accept either a temporal entity or a temporal subobject.
      */
@@ -77,12 +77,12 @@ class EntityCursor( private[this]  val view: View,
         jentityCursor.acceptSubobject()
         this
     }
-    
+
     def cancel() : EntityCursor = {
         jentityCursor.cancelSubobject()
         this
     }
-    
+
     /**
       *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
       */
@@ -216,7 +216,7 @@ class EntityCursor( private[this]  val view: View,
     }
 
     /**
-     * Excludes the Entity Instance refered to by this cursor.
+     * Excludes the Entity Instance referred to by this cursor.
      */
     def exclude( position: CursorPosition = CursorPosition.NEXT ) = jentityCursor.excludeEntity( position )
 
@@ -430,7 +430,7 @@ class EntityCursor( private[this]  val view: View,
         // Reset the cursor to its original position.
         if ( currentEi != null )
             jentityCursor.setCursor( currentEi )
-            
+
         return new CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
     }
 
@@ -447,7 +447,7 @@ class EntityCursor( private[this]  val view: View,
         // Reset the cursor to its original position.
         if ( currentEi != null )
             jentityCursor.setCursor( currentEi )
-            
+
         return EntityCursor.CURSOR_UNCHANGED
     }
 
@@ -462,7 +462,7 @@ class EntityCursor( private[this]  val view: View,
 
     def setLast( predicate: (EntityInstance) => Boolean ): CursorResult = {
         val currentEi = jentityCursor.getEntityInstance
-        
+
         // Since we're going to go backwards through the list we can't use a normal
         // iterator so we'll do it by hand.
         var rc = jentityCursor.setLast()
@@ -477,7 +477,7 @@ class EntityCursor( private[this]  val view: View,
         // If we get here then we didn't find a match. Reset the cursor to its original position.
         if ( currentEi != null )
             jentityCursor.setCursor( currentEi )
-            
+
         return EntityCursor.CURSOR_UNCHANGED
     }
 
@@ -526,8 +526,9 @@ class EntityCursor( private[this]  val view: View,
       * Returns the AttributeInstance.
       *
       * Example: sets the cursor to the youngest child:
-      *
-      *      view.Child.setMin( _.Age )
+      * {{{
+      * view.Child.setMin( _.Age )
+      * }}}
       */
     def setMin( f_attr: ( AbstractEntity ) => AttributeInstance ): AttributeInstance = {
         var minAttr: AttributeInstance = null
@@ -553,7 +554,7 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Loop through all entities of a single type under the current parent.
      */
-    def each( looper: => Any ) = {
+    def each[T]( looper: => T ): T = {
         val iter = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this )
         iter.each( looper )
     }
@@ -608,7 +609,7 @@ class EntityCursor( private[this]  val view: View,
                                   .prependAttributeDef( jattributeDef )
 
             val attributeName = jattributeDef.getName()
-            
+
             if ( value.isInstanceOf[ AttributeInstance ] ) {
                 val attr = value.asInstanceOf[ AttributeInstance ]
                 // If the value is of type AttributeInstance then convert it to an internal value.
@@ -616,7 +617,7 @@ class EntityCursor( private[this]  val view: View,
             }
             else
                 rc = jentityCursor.setFirst( attributeName, value )
-                
+
             return this
         }
     }
