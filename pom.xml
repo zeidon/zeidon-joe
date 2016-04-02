@@ -22,6 +22,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<scala.version>2.11.6</scala.version>
+	<!-- Following is needed to avoid interpolation warnings -->
+	<jar.version>${project.version}</jar.version>
     </properties>
 
     <scm>
@@ -194,23 +196,27 @@
                 <module>zeidon-tests/lod-server</module>
                 <module>zeidon-tests/jconsole</module>
                 <module>zeidon-tests/ruby</module>
+		<!-- sinatra-server will be considered a test project for now because
+		     it can't be pushed to maven as release project because it doesn't
+		     have javadoc.  -->
+		<module>sinatra-server</module>
             </modules>
         </profile>
  
         <!-- The sinatra server only needs to be built once per release because 
              it doesn't include any Zeidon code. It is a convenience .jar for LOD servers.
-         -->
         <profile>
             <id>sinatra-server</id>
             <activation>
                 <file>
-                    <missing>sinatra-server/target/zeidon-sinatra-server-${version}.jar</missing>
+                    <missing>sinatra-server/target/zeidon-sinatra-server-${jar.version}.jar</missing>
                 </file>
             </activation>
             <modules>
                 <module>sinatra-server</module>
             </modules>
         </profile>
+        -->
  
         <!-- 
             Builds required objects for deploying to OSSRH
@@ -261,12 +267,6 @@
                     </plugin>
                 </plugins>
             </build>
-
-            <!-- Make sure sinatra-server is included. 
-            <modules>
-                <module>sinatra-server</module>
-            </modules>
-	    -->
         </profile>
     </profiles>
 
