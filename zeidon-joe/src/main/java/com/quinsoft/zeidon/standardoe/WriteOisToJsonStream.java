@@ -160,7 +160,7 @@ public class WriteOisToJsonStream implements StreamWriter
                 jg.writeBooleanField( "readOnly", true );
 
         Integer rootCount = view.getTotalRootCount();
-        if ( rootCount != null && rootCount != view.root().getEntityCount() )
+        if ( rootCount != null )
             jg.writeNumberField( "totalRootCount", rootCount );
 
         jg.writeEndObject();

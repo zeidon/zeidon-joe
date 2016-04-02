@@ -100,7 +100,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         view.setInternal( true );  // So it doesn't show up in the browser.
 
         Integer rootCount = view.getTotalRootCount();
-        if ( rootCount != null && rootCount != view.root().getEntityCount() )
+        if ( rootCount != null )
             jg.writeNumberField( "totalRootCount", rootCount );
 
         EntityDef rootEntityDef = view.getLodDef().getRoot();
