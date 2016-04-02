@@ -94,7 +94,27 @@ public class TestEpamms2
        System.out.println("===== Finished ExecuteJOEIncludeError3 ========");
 	}
 
+	@Test
+	public void TEST_TwoViewsSetAttributeError()
+	{
+	   View         testview;
+		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( testview );
+		tester.TEST_TwoViewsSetAttributeError( testview );
+       System.out.println("===== Finished TEST_TwoViewsSetAttributeError ========");
+	}
 
+	@Test
+	public void TEST_ActivateOI_FromOIRecursive()
+	{
+	   View         testview;
+		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
+		VmlTester tester = new VmlTester( testview );
+		tester.TEST_ActivateOI_FromOIRecursive( testview );
+       System.out.println("===== Finished TEST_ActivateOI_FromOIRecursive ========");
+	}
+	
+	
 	private class VmlTester extends VmlObjectOperations
 	{
 		public VmlTester( View view )
@@ -387,6 +407,255 @@ public class TestEpamms2
 		   RESULT = DeleteEntity( mMasLC, "M_Usage", zPOS_NEXT );
 		   return( 0 );
 		}
+		
+
+		//:DIALOG OPERATION
+		//:TEST_IncludeError( VIEW ViewToWindow )
+
+		//:   VIEW mSPLDef1 BASED ON LOD mSPLDef
+		public int
+		TEST_TwoViewsSetAttributeError( View     ViewToWindow )
+		{
+		   zVIEW    mSPLDef1 = new zVIEW( );
+		   //:VIEW mSPLDef2 BASED ON LOD mSPLDef
+		   zVIEW    mSPLDef2 = new zVIEW( );
+		   //:STRING ( 50 ) szText
+		   String   szText = null;
+		   //:STRING ( 50 ) szText1
+		   String   szText1 = null;
+		   //:STRING ( 50 ) szText2
+		   String   szText2 = null;
+		   int      RESULT = 0;
+		   int      lTempInteger_0 = 0;
+		   int      lTempInteger_1 = 0;
+		   int      lTempInteger_2 = 0;
+		   int      lTempInteger_3 = 0;
+
+
+		   //:// CREATING ENTITY IN ONE VIEW NOT VISIBLE IN ANOTHER
+
+		   //:// It seems that there are two errors:
+		   //:// 1. It seems that we should get an error on get attribute after line with null???????
+		   // KJS 01/29/15 - For above issue, we made a change to GetVariableFromAttribute. If the entity is
+		   // null and flag is not zACCEPT_NULL_ENTITY we allow thrown nullexception.
+		   //:// 2. After the set cursor below, we should get the value in view mSPLDef1 created in view mSPLDef2.
+
+		   //:// Browser is more inaccurate as it shows first view still having the first value.
+
+		   //:ACTIVATE mSPLDef1 EMPTY 
+		   RESULT = ActivateEmptyObjectInstance( mSPLDef1, "mSPLDef", ViewToWindow, zSINGLE );
+		   //:NAME VIEW mSPLDef1 "mSPLDef1"
+		   SetNameForView( mSPLDef1, "mSPLDef1", null, zLEVEL_TASK );
+
+		   //:CREATE ENTITY mSPLDef1.SubregPhysicalLabelDef
+		   RESULT = CreateEntity( mSPLDef1, "SubregPhysicalLabelDef", zPOS_AFTER );
+		   //:mSPLDef1.SubregPhysicalLabelDef.Name = "Test"
+		   SetAttributeFromString( mSPLDef1, "SubregPhysicalLabelDef", "Name", "Test" );
+		   //:CREATE ENTITY mSPLDef1.SPLD_LLD
+		   RESULT = CreateEntity( mSPLDef1, "SPLD_LLD", zPOS_AFTER );
+		   //:CREATE ENTITY mSPLDef1.LLD_Page
+		   RESULT = CreateEntity( mSPLDef1, "LLD_Page", zPOS_AFTER );
+		   //:CREATE ENTITY mSPLDef1.LLD_Panel
+		   RESULT = CreateEntity( mSPLDef1, "LLD_Panel", zPOS_AFTER );
+		   //:CREATE ENTITY mSPLDef1.LLD_Block
+		   RESULT = CreateEntity( mSPLDef1, "LLD_Block", zPOS_AFTER );
+
+		   //:CreateViewFromView( mSPLDef2, mSPLDef1 )
+		   CreateViewFromView( mSPLDef2, mSPLDef1 );
+		   //:NAME VIEW mSPLDef2 "mSPLDef2"
+		   SetNameForView( mSPLDef2, "mSPLDef2", null, zLEVEL_TASK );
+		   //:CREATE ENTITY mSPLDef1.ContinuationStatement
+		   RESULT = CreateEntity( mSPLDef1, "ContinuationStatement", zPOS_AFTER );
+		   //:mSPLDef1.ContinuationStatement.Text  = "Text 1"
+		   SetAttributeFromString( mSPLDef1, "ContinuationStatement", "Text", "Text 1" );
+		   //:szText = mSPLDef1.ContinuationStatement.Text
+		   {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+		   StringBuilder sb_szText;
+		   if ( szText == null )
+		      sb_szText = new StringBuilder( 32 );
+		   else
+		      sb_szText = new StringBuilder( szText );
+		       GetVariableFromAttribute( sb_szText, mi_lTempInteger_0, 'S', 51, mSPLDef1, "ContinuationStatement", "Text", "", 0 );
+		   lTempInteger_0 = mi_lTempInteger_0.intValue( );
+		   szText = sb_szText.toString( );}
+		   //:TraceLineS( "**** Continuation Text Before: ", szText )
+		   TraceLineS( "**** Continuation Text Before: ", szText );
+		   //:DELETE ENTITY mSPLDef1.ContinuationStatement
+		   RESULT = DeleteEntity( mSPLDef1, "ContinuationStatement", zPOS_NEXT );
+
+		   //:// Should there be an error on next statement since cursor is null???????
+		   //:szText = mSPLDef1.ContinuationStatement.Text
+		   try
+		   {
+			   {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
+			   StringBuilder sb_szText;
+			   if ( szText == null )
+			      sb_szText = new StringBuilder( 32 );
+			   else
+			      sb_szText = new StringBuilder( szText );
+			       GetVariableFromAttribute( sb_szText, mi_lTempInteger_1, 'S', 51, mSPLDef1, "ContinuationStatement", "Text", "", 0 );
+			   lTempInteger_1 = mi_lTempInteger_1.intValue( );
+			   szText = sb_szText.toString( );}
+			   //:TraceLineS( "**** Continuation Text After: ", szText )
+	           Assert.assertTrue( "Error! We think we should crash with GetVariableFromAttribute and Null Entity!", 1 == 0 );
+		   }
+		   catch( Exception e)
+		   {
+		      TraceLineS("**** Error thrown for GetVariableFromAttribute with Null Entity, which is correct.", "");
+		   }
+		   TraceLineS( "**** Continuation Text After: ", szText );
+
+		   //:CREATE ENTITY mSPLDef2.ContinuationStatement
+		   RESULT = CreateEntity( mSPLDef2, "ContinuationStatement", zPOS_AFTER );
+		   //:mSPLDef2.ContinuationStatement.Text  = "Text 2"
+		   SetAttributeFromString( mSPLDef2, "ContinuationStatement", "Text", "Text 2" );
+
+		   //:// This Set Cursor should position on the entity just created.
+		   //:SET CURSOR FIRST mSPLDef1.ContinuationStatement
+		   RESULT = SetCursorFirstEntity( mSPLDef1, "ContinuationStatement", "" );
+		   //:szText1 = mSPLDef1.ContinuationStatement.Text
+		   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
+		   StringBuilder sb_szText1;
+		   if ( szText1 == null )
+		      sb_szText1 = new StringBuilder( 32 );
+		   else
+		      sb_szText1 = new StringBuilder( szText1 );
+		       GetVariableFromAttribute( sb_szText1, mi_lTempInteger_2, 'S', 51, mSPLDef1, "ContinuationStatement", "Text", "", 0 );
+		   lTempInteger_2 = mi_lTempInteger_2.intValue( );
+		   szText1 = sb_szText1.toString( );}
+		   //:TraceLineS( "**** After Set Text 1: ", szText1 )
+		   TraceLineS( "**** After Set Text 1: ", szText1 );
+
+		   //:szText2 = mSPLDef2.ContinuationStatement.Text
+		   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
+		   StringBuilder sb_szText2;
+		   if ( szText2 == null )
+		      sb_szText2 = new StringBuilder( 32 );
+		   else
+		      sb_szText2 = new StringBuilder( szText2 );
+		       GetVariableFromAttribute( sb_szText2, mi_lTempInteger_3, 'S', 51, mSPLDef2, "ContinuationStatement", "Text", "", 0 );
+		   lTempInteger_3 = mi_lTempInteger_3.intValue( );
+		   szText2 = sb_szText2.toString( );}
+		   //:TraceLineS( "**** Continuation Text 2: ", szText2 )
+		   TraceLineS( "**** Continuation Text 2: ", szText2 );
+
+		   //:IF szText1 = szText2
+		   if ( ZeidonStringCompare( szText1, 1, 0, szText2, 1, 0, 51 ) == 0 )
+		   {
+		      //:TraceLineS( "**** TEXT VALUES MATCH", "" )
+		      TraceLineS( "**** TEXT VALUES MATCH", "" );
+		      //:ELSE
+		   }
+		   else
+		   {
+		      //:MessageSend( ViewToWindow, "", "View Error",
+		      //:             "Attribute shows differently for two views.",
+		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+		      MessageSend( ViewToWindow, "", "View Error", "Attribute shows differently for two views.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
+		      //:TraceLineS( "**** NO MATCH ON TEXT", "" )
+		      TraceLineS( "**** NO MATCH ON TEXT", "" );
+		      //:RETURN 2
+		      if(8==8)return( 2 );
+		   }
+
+		   //:END
+		   return( 0 );
+		//   
+		// END
+		}
+		
+		//:DIALOG OPERATION
+		//:TEST_IncludeError( VIEW ViewToWindow )
+
+		//:   VIEW mSPLDef1 BASED ON LOD mSPLDef
+		public int 
+		TEST_ActivateOI_FromOIRecursive( View     ViewToWindow )
+		{
+		   zVIEW    mSPLDef1 = new zVIEW( );
+		   //:VIEW mSPLDef2 BASED ON LOD mSPLDef
+		   zVIEW    mSPLDef2 = new zVIEW( );
+		   //:STRING ( 50 ) szText
+		   String   szText = null;
+		   //:STRING ( 50 ) szText1
+		   String   szText1 = null;
+		   //:STRING ( 50 ) szText2
+		   String   szText2 = null;
+		   int      RESULT = 0;
+		   int      lTempInteger_0 = 0;
+		   int      lTempInteger_1 = 0;
+
+
+		   //:// ActivateOI_FromOI not working correctly for recursive subobject.
+
+		   //:// Subentities down a recursive path are not being copied during the function.
+
+		   //:ActivateOI_FromFile( mSPLDef1, "mSPLDef", ViewToWindow, "c:\lplr\epamms\temp\mspldef1.por", zSINGLE )
+		   ActivateOI_FromFile( mSPLDef1, "mSPLDef", ViewToWindow, "target/test-classes/testdata/ePammsDon/mspldef1.por", zSINGLE );
+		   //:NAME VIEW mSPLDef1 "mSPLDef1"
+		   SetNameForView( mSPLDef1, "mSPLDef1", null, zLEVEL_TASK );
+		   //:ActivateOI_FromOI( mSPLDef2, mSPLDef1, zSINGLE )
+		   ActivateOI_FromOI( mSPLDef2, mSPLDef1, zSINGLE );
+		   //:NAME VIEW mSPLDef2 "mSPLDef2"
+		   SetNameForView( mSPLDef2, "mSPLDef2", null, zLEVEL_TASK );
+
+		   //:SET CURSOR FIRST mSPLDef1.LLD_Panel 
+		   RESULT = SetCursorFirstEntity( mSPLDef1, "LLD_Panel", "" );
+		   //:SET CURSOR FIRST mSPLDef2.LLD_Panel 
+		   RESULT = SetCursorFirstEntity( mSPLDef2, "LLD_Panel", "" );
+		   //:SetViewToSubobject( mSPLDef1, "LLD_SubBlock" )
+		   SetViewToSubobject( mSPLDef1, "LLD_SubBlock" );
+		   //:SetViewToSubobject( mSPLDef2, "LLD_SubBlock" )
+		   SetViewToSubobject( mSPLDef2, "LLD_SubBlock" );
+
+		   //:IF mSPLDef1.LLD_SpecialSectionAttribute DOES NOT EXIST
+		   lTempInteger_0 = CheckExistenceOfEntity( mSPLDef1, "LLD_SpecialSectionAttribute" );
+		   if ( lTempInteger_0 != 0 )
+		   { 
+		      //:MessageSend( ViewToWindow, "", "Subobject Error",
+		      //:             "Test Case Error: LLD_SpecialSectionAttribute doesn't exist for mSPLDef1.",
+		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+		      MessageSend( ViewToWindow, "", "Subobject Error", "Test Case Error: LLD_SpecialSectionAttribute doesn't exist for mSPLDef1.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
+		      //:RETURN 2
+		      if(8==8)return( 2 );
+		   } 
+
+		   //:END
+
+		   //:// Check if recursive subobject entity was copied.
+		   //:IF mSPLDef2.LLD_SpecialSectionAttrBlock DOES NOT EXIST
+		   lTempInteger_1 = CheckExistenceOfEntity( mSPLDef2, "LLD_SpecialSectionAttrBlock" );
+		   if ( lTempInteger_1 != 0 )
+		   { 
+		      //:MessageSend( ViewToWindow, "", "Subobject Error",
+		      //:             "Entity LLD_SpecialSectionAttribute doesn't exist for mSPLDef1.",
+		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+		      MessageSend( ViewToWindow, "", "Subobject Error", "Entity LLD_SpecialSectionAttribute doesn't exist for mSPLDef1.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
+		      //:RETURN 2
+		      if(8==8)return( 2 );
+		   } 
+
+		   //:END
+
+		   //:// Check if recursive subobject entity attribute was copied.
+		   //:IF mSPLDef2.LLD_SpecialSectionAttrBlock.MarginTop != mSPLDef1.LLD_SpecialSectionAttrBlock.MarginTop 
+		   if ( CompareAttributeToAttribute( mSPLDef2, "LLD_SpecialSectionAttrBlock", "MarginTop", mSPLDef1, "LLD_SpecialSectionAttrBlock", "MarginTop" ) != 0 )
+		   { 
+		      //:MessageSend( ViewToWindow, "", "Subobject Error",
+		      //:             "Entity LLD_SpecialSectionAttribute doesn't exist for mSPLDef1.",
+		      //:             zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 )
+		      MessageSend( ViewToWindow, "", "Subobject Error", "Entity LLD_SpecialSectionAttribute doesn't exist for mSPLDef1.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
+		      //:RETURN 2
+		      if(8==8)return( 2 );
+		   } 
+
+		   //:END
+		   //:TraceLineS( "*** ActivateOI_FromOI recursive test works correctly.", "" )
+		   TraceLineS( "*** ActivateOI_FromOI recursive test works correctly.", "" );
+		   return( 0 );
+//		      
+		// END
+		} 
+		
    }
 
 }
