@@ -959,16 +959,16 @@ public class KZOEP1AA extends VmlOperation
        {
            if ( ! view.cursor( "Dialog" ).setFirst( "DialogName", cpcDialog ).isSet() )
            {
-               view.cursor( "Dialog" ).createEntity().setAttribute( "DialogName", cpcDialog );
+               view.cursor( "Dialog" ).createEntity().getAttribute( "DialogName").setValue( cpcDialog ) ;
            }
            if ( ! view.cursor( "Window" ).setFirst( "WindowName", cpcWindow ).isSet() )
            {
-               view.cursor( "Window" ).createEntity().setAttribute( "WindowName", cpcWindow );
+               view.cursor( "Window" ).createEntity().getAttribute( "WindowName").setValue( cpcWindow ) ;
            }
 
       // Right now I am skipping code for cpcEntity because I don't fully understand and
       // Jeff doesn't seem to use that.  Will come back to that...
-      view.cursor( "Window" ).setAttribute( "FocusCtrl", cpcCtrlTag );
+      view.cursor( "Window" ).getAttribute( "FocusCtrl").setValue( cpcCtrlTag ) ;
 
       // Code to look at...
       /*

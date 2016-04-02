@@ -1,0 +1,4951 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "epamms",
+      "odName" : "mSPLDef",
+      "incremental" : true
+    },
+    "SubregPhysicalLabelDef" : [ {
+      ".meta" : {
+        "selected" : true
+      },
+      "ID" : "13",
+      "Name" : "Don New 5 Gallon Label from Scratch (DKS)",
+      "ProductName" : "Kennelsol Test",
+      "FK_ID_SUBREGLABELCONTENT" : "6",
+      "SubregLabelContent" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "6",
+        "Description" : "KennelSol 5 Gallon",
+        "Version" : "Version 1",
+        "ModifiedDateTime" : "20140530",
+        "FK_ID_SUBREGPRODUCT" : "3",
+        "FK_ID_MASTERLABELCONTENT" : "10",
+        "SubregProduct" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "3",
+          "Name" : "KennelSol",
+          "Number" : "129",
+          "Description" : "Germicidal Detergent & Deodorant",
+          "ChemicalFamily" : "DQ",
+          "EPA_RegistrationNumber" : "62472-1",
+          "EPA_DraftLabel" : "20120611",
+          "ESL_Date" : "20150225",
+          "FK_ID_MASTERPRODUCT" : "3",
+          "FK_ID_SUBREGISTRANT" : "1",
+          "Subregistrant" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "1",
+            "FK_ID_ORGANIZATION" : "9",
+            "SubregOrganization" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "9",
+              "LoginName" : "ATP",
+              "Name" : "Alpha Tech Pet, Inc.",
+              "Description" : "Veterinary Products Supplier",
+              "Role" : "S"
+            } ],
+            "Color" : [ {
+              "ID" : "1",
+              "Name" : "Red",
+              "RGB" : "ff0000",
+              "dColorName" : "Red",
+              "FK_ID_SUBREGISTRANT" : "1"
+            }, {
+              "ID" : "2",
+              "Name" : "Blue",
+              "RGB" : "0000ff",
+              "Pantone" : "pan-68",
+              "dColorName" : "pan-68",
+              "FK_ID_SUBREGISTRANT" : "1"
+            }, {
+              "ID" : "3",
+              "Name" : "Green",
+              "RGB" : "00ff00",
+              "dColorName" : "Green",
+              "FK_ID_SUBREGISTRANT" : "1"
+            }, {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "4",
+              "Name" : "Yellow",
+              "RGB" : "ffff00",
+              "dColorName" : "Yellow",
+              "FK_ID_SUBREGISTRANT" : "1"
+            } ]
+          } ],
+          "MasterProduct" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "3",
+            "Name" : "FORMULATION HWS-256",
+            "Number" : "129",
+            "Description" : "ONE-STEP DISINFECTANT\r\nGERMICIDAL DETERGENT AND DEODORANT",
+            "ChemicalFamily" : "DQ",
+            "EPA_EstablishmentNumber" : "00000",
+            "EPA_ToxicityCategory" : "2",
+            "FK_ID_PRIMARYREGISTRANT" : "8",
+            "PrimaryRegistrant" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "8",
+              "EPA_CompanyNumber" : "47371",
+              "FK_ID_EPAMMS" : "1",
+              "FK_ID_ORGANIZATION" : "8",
+              "Organization" : [ {
+                ".meta" : {
+                  "selected" : true
+                },
+                "ID" : "8",
+                "LoginName" : "Lonza",
+                "Name" : "Lonza",
+                "Role" : "P"
+              } ]
+            } ]
+          } ]
+        } ],
+        "MasterLabelContent" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "10",
+          "Version" : "1 or 5 Gallon",
+          "RevisionDate" : "20150416",
+          "CreatedDateTime" : "20150416",
+          "FK_ID_MASTERLABELCONTENT" : "9",
+          "FK_ID_MASTERPRODUCT" : "3"
+        } ]
+      } ],
+      "SPLD_GeneralSection" : [ {
+        "ID" : "199",
+        "Title" : "PRECAUTIONARY STATEMENTS",
+        "Subtitle" : "HAZARDS TO HUMANS AND DOMESTIC ANIMALS",
+        "BoldItalic" : "R",
+        "SectionType" : "P",
+        "AUTOSEQ02" : "1",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_GENERALSECTION" : "43",
+        "SPLD_GeneralStatement" : [ {
+          "ID" : "400",
+          "Text" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.",
+          "BoldItalic" : "R",
+          "FK_ID_SPLD_GENERALSECTION" : "199",
+          "FK_ID_S_GENERALSTATEMENT" : "85",
+          "S_GeneralStatement" : [ {
+            "ID" : "85",
+            "FK_ID_M_GENERALSTATEMENT" : "53",
+            "FK_ID_S_GENERALSECTION" : "43"
+          } ]
+        } ],
+        "S_GeneralSection" : [ {
+          "ID" : "43",
+          "FK_ID_M_GENERALSECTION" : "26",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "200",
+        "BoldItalic" : "R",
+        "SectionType" : "F",
+        "ContactNote" : "Call a poison control center or doctor for treatment advice.\r\nHave the product container or label with you when calling a poison control center or doctor or going for treatment.",
+        "NoteToPhysician" : "<p><strong>NOTE TO PHYSICIAN: </strong>Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depression and convulsion may be needed.</p>",
+        "AUTOSEQ02" : "2",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_GENERALSECTION" : "44",
+        "SPLD_GeneralStatement" : [ {
+          "ID" : "401",
+          "Text" : "Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes. Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+          "Title" : "If in eyes:",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLD_GENERALSECTION" : "200",
+          "FK_ID_S_GENERALSTATEMENT" : "86",
+          "S_GeneralStatement" : [ {
+            "ID" : "86",
+            "FK_ID_M_GENERALSTATEMENT" : "54",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        }, {
+          "ID" : "402",
+          "Text" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes.",
+          "Title" : "If on skin or clothing:",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLD_GENERALSECTION" : "200",
+          "FK_ID_S_GENERALSTATEMENT" : "87",
+          "S_GeneralStatement" : [ {
+            "ID" : "87",
+            "FK_ID_M_GENERALSTATEMENT" : "55",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        }, {
+          "ID" : "403",
+          "Text" : "Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of water if able to swallow. Do not induce vomiting unless told to do so by the poison control center or doctor. Do not give anything by mouth to an unconscious person.",
+          "Title" : "If swallowed:",
+          "AUTOSEQ" : "3",
+          "FK_ID_SPLD_GENERALSECTION" : "200",
+          "FK_ID_S_GENERALSTATEMENT" : "88",
+          "S_GeneralStatement" : [ {
+            "ID" : "88",
+            "FK_ID_M_GENERALSTATEMENT" : "56",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        }, {
+          "ID" : "404",
+          "Text" : "Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible. Call a poison control center or doctor for treatment advice. Have the product container or label with you when calling a poison control center or doctor or going for treatment. NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depression and convulsion may be needed.ove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+          "Title" : "If inhaled:",
+          "AUTOSEQ" : "4",
+          "FK_ID_SPLD_GENERALSECTION" : "200",
+          "FK_ID_S_GENERALSTATEMENT" : "89",
+          "S_GeneralStatement" : [ {
+            "ID" : "89",
+            "FK_ID_M_GENERALSTATEMENT" : "57",
+            "FK_ID_S_GENERALSECTION" : "44"
+          } ]
+        } ],
+        "S_GeneralSection" : [ {
+          "ID" : "44",
+          "FK_ID_M_GENERALSECTION" : "27",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "201",
+        "Title" : "ENVIRONMENTAL HAZARDS",
+        "BoldItalic" : "R",
+        "SectionType" : "E",
+        "ReviewerNote" : "(Note to reviewer: If container size is 5 gallons or greater, the following Environmental Hazards statements will be used:)",
+        "AUTOSEQ02" : "3",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_GENERALSECTION" : "45",
+        "SPLD_GeneralStatement" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "405",
+          "Text" : "Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge. Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority. For guidance contact your State Water Board or Regional Office of the EPA.",
+          "BoldItalic" : "R",
+          "FK_ID_SPLD_GENERALSECTION" : "201",
+          "FK_ID_S_GENERALSTATEMENT" : "90",
+          "S_GeneralStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "90",
+            "FK_ID_M_GENERALSTATEMENT" : "58",
+            "FK_ID_S_GENERALSECTION" : "45"
+          } ]
+        } ],
+        "S_GeneralSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "45",
+          "FK_ID_M_GENERALSECTION" : "28",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_IngredientsSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "67",
+        "ActiveTitle" : "Active Ingredients:",
+        "ActiveBoldItalic" : "R",
+        "InertTitle" : "Inert Ingredients:",
+        "GeneralInactivePercent" : "95.775",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_INGREDIENTSSECTION" : "15",
+        "SPLD_IngredientsStatement" : [ {
+          "ID" : "133",
+          "ChemicalName" : "Didecyl dimethyl ammonium chloride",
+          "BoldItalic" : "R",
+          "Active" : "A",
+          "Percent" : "2.535",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLD_INGREDIENTSSECTION" : "67",
+          "FK_ID_S_INGREDIENTSSTATEMENT" : "29",
+          "S_IngredientsStatement" : [ {
+            "ID" : "29",
+            "FK_ID_S_INGREDIENTSSECTION" : "15",
+            "FK_ID_M_INGREDIENTSSTATEMENT" : "17"
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "134",
+          "ChemicalName" : "n-Alkyll (C<sub>14</sub> 50%, C<sub>12</sub> 40%, C<sub>16</sub> 10%) dimethyl benzyl ammonium chloride",
+          "BoldItalic" : "R",
+          "Active" : "A",
+          "Percent" : "1.69",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLD_INGREDIENTSSECTION" : "67",
+          "FK_ID_S_INGREDIENTSSTATEMENT" : "30",
+          "S_IngredientsStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "30",
+            "FK_ID_S_INGREDIENTSSECTION" : "15",
+            "FK_ID_M_INGREDIENTSSTATEMENT" : "18"
+          } ]
+        } ],
+        "S_IngredientsSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "15",
+          "FK_ID_SUBREGLABELCONTENT" : "6",
+          "FK_ID_M_INGREDIENTSSECTION" : "9"
+        } ]
+      } ],
+      "SPLD_StorageDisposalSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "97",
+        "ContainerVolumeEnvironmentHazard" : "5",
+        "SDSectionType" : "StorageDisposal1",
+        "Title" : "STORAGE AND DISPOSAL",
+        "BoldItalic" : "R",
+        "ReviewerNote" : "<p>Note to reviewer: If the container size is greater than one gallon, the following Storage and Disposal directions will be used:)</p>",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_STORAGEDISPOSALSECTION" : "24",
+        "SPLD_StorageDisposalStatement" : [ {
+          "ID" : "332",
+          "Title" : "Storage and Disposal",
+          "BoldItalic" : "R",
+          "Text" : "(containers for household/residential use) Store in original container in areas inaccessible to children. Nonrefillable container. Do not reuse or refill this container. Offer for recycling if available.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "97",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "71",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "71",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "42",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          "ID" : "333",
+          "Title" : "Storage and Disposal",
+          "BoldItalic" : "R",
+          "Text" : "(containers for commercial, industrial, and institutional use) Do not contaminate water, food, or feed by storage or disposal.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "97",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "72",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "72",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "43",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          "ID" : "334",
+          "Title" : "Pesticide Disposal",
+          "BoldItalic" : "R",
+          "Text" : "Store in original container in areas inaccessible to children. Open dumping is prohibited. Do not reuse empty container.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "3",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "97",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "73",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "73",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "44",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          "ID" : "335",
+          "Title" : "Pesticide Disposal",
+          "BoldItalic" : "R",
+          "Text" : "Pesticide wastes are acutely hazardous. Improper disposal of excess pesticide, spray mixture or rinsate is a violation of Federal Law. If these wastes cannot be disposed of by use according to label instruction, contact your local State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "4",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "97",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "74",
+          "S_StorageDisposalStatement" : [ {
+            "ID" : "74",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "45",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "336",
+          "Title" : "Container Handling",
+          "BoldItalic" : "R",
+          "Text" : "(Plastic containers:) Nonrefillable container. Do not reuse or refill this container. Triple rinse container (or equivalent) promptly after emptying. Triple rinse as follows: Fill container 1/4 full with water. Tip container on side and roll it back and forth, ensuring at least one complete revolution for 30 seconds. Stand container on its end and tip it back and forth several times. Turn the container over its other end and tip it back and forth several times. Follow Pesticide Disposal instructions for rinsate disposal. Repeat two more times.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "5",
+          "FK_ID_SPLD_STORAGEDISPOSALSECTIO" : "97",
+          "FK_ID_S_STORAGEDISPOSALSTATEMENT" : "75",
+          "S_StorageDisposalStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "75",
+            "FK_ID_M_STORAGEDISPOSALSTATEMENT" : "46",
+            "FK_ID_S_STORAGEDISPOSALSECTION" : "24"
+          } ]
+        } ],
+        "S_StorageDisposalSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "24",
+          "FK_ID_M_STORAGEDISPOSALSECTION" : "18",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_DirectionsForUseSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "448",
+        "Name" : "Five Gallon Directions of Use",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_DIRECTIONSFORUSESECTION" : "26",
+        "SPLD_DirectionsForUseStatement" : [ {
+          "ID" : "3070",
+          "Text" : "It is a violation of Federal Law to use this product in a manner inconsistent with its labeling.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "1",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "61",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "61",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "181",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "3071",
+          "Title" : "DIRECTIONS FOR DISINFECTlNG: (Bactericidal, Fungicidal, Virucidal)",
+          "Text" : "For use on hard, non-porous surfaces in animal care facilities such as floors, walls, metal surfaces, stainless steel surfaces, glazed porcelain, and plastic surfaces. Remove gross filth and heavy soil deposits then thoroughly wet surfaces. Use 2 ounces per gallon of water (8 ounces per gallon against canine parvovirus and Porcine parvovirus) for a minimum contact time of 10 minutes in a single application. Can be applied with a cloth, mop, or sponge, as well as by coarse spray or soaking. The use solution is prepared fresh for each use then discarded. Rinsing is not necessary unless floors are to be waxed or polished. This product is not for use on medical device surfaces.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "2",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "62",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "62",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "182",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "3072",
+          "Title" : "FUNGICIDAL DIRECTIONS:",
+          "Text" : "For use in areas such as locker rooms, dressing rooms, shower and bath areas and exercise facilities follow disinfection directions.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "3",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "63",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "63",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "183",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "3073",
+          "Title" : "MILDEWSTATIC INSTRUCTIONS:",
+          "Text" : "Will effectively control the growth of mold and mildew plus the odors caused by them when applied to hard, non-porous surfaces such as walls, floors, and table tops. Apply solution (2 ounces per gallon of water) with a cloth, mop, sponge or coarse spray making sure to wet all surfaces completely. Let air dry. Repeat application weekly or when growth reappears.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "4",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "64",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "64",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "184",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "3074",
+          "Title" : "VETERINARY CLINICS / ANIMAL CARE / ANIMAL LIFE SCIENCE LABORATORIES / ZOOS / PET SHOP / KENNELS / BREEDING AND GROOMING ESTABLISHMENTS / EQUINE FARMS DISINFECTION DIRECTIONS:",
+          "Text" : "For disinfecting the following hard nonporous surfaces: equipment not used for animal food or water, utensils, instruments, cages, kennels, stables, catteries, etc. Remove all animals and feeds from premises, animal transportation vehicles, crates, etc. Remove all litter, droppings and manure from floors, walls and surfaces of facilities occupied or traversed by animals. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with a solution of 2 oz of KennelSol per gallon of water (or equivalent dilution) (8 ounces per gallon against Canine parvovirus or Porcine parvovirus), using a cloth, mop, sponge, spray, or soaking for a period of 10 minutes. Ventilate buildings and other closed spaces. Do not house animals or employ equipment until treatment has been absorbed, set or dried.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "5",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "65",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "65",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "185",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          "ID" : "3075",
+          "Title" : "*FOR CANINE PARVOVIRUS (AND PORCINE PARVOVIRUS) ACTIVITY:",
+          "Text" : "KennelSol is effective against Canine Parvovirus (and Porcine parvovirus) at 8 oz. per gallon. Follow Veterinary Practice / Animal Care / Animal Laboratory / Zoos / Pet Shop / Kennels Disinfection Directions.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "6",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "66",
+          "S_DirectionsForUseStatement" : [ {
+            "ID" : "66",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "186",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "3076",
+          "Title" : "**SPECIAL INSTRUCTIONS FOR INACTIVATING AVIAN INFLUENZA:",
+          "Text" : "Remove all poultry and feeds from premises, trucks, coops, and crates. Remove all litter and droppings from floors, walls, and surfaces of facilities occupied or traversed by poultry. Empty all troughs, racks, and other feeding and watering appliances. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with the disinfecting solution (2 oz per gallon of water) (660 ppm active quat) (equivalent use dilution) for a period of 10 minutes. Immerse all halters, ropes and other types of equipment sed in handling and restraining animals as well as forks, shovels, and scrapers used in removing litter and manure. Ventilate buildings, coops, and other closed spaces. Do not house poultry or employ equipment until treatment has been absorbed, set, or dried. Thoroughly scrub treated feed racks, troughs, automatic feeders, fountains, and waterers with soap or detergent, and rinse with potable water before reuse.",
+          "NotForUseType" : "NA",
+          "AUTOSEQ" : "7",
+          "FK_ID_SPLDDIRECTIONSFORUSESECTIO" : "448",
+          "FK_ID_S_DIRECTIONSFORUSESTATEMEN" : "67",
+          "S_DirectionsForUseStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "67",
+            "FK_ID_M_DIRECTIONSFORUSESTATEMEN" : "188",
+            "FK_ID_S_DIRECTIONSFORUSESECTION" : "26"
+          } ]
+        } ],
+        "S_DirectionsForUseSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "26",
+          "FK_ID_M_DIRECTIONSFORUSESECTION" : "34",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_MarketingSection" : [ {
+        "ID" : "3315",
+        "Name" : "Germicidal Detergent",
+        "AUTOSEQ02" : "1",
+        "FK_ID_S_MARKETINGSECTION" : "80",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3342",
+          "Text" : "Germicidal Detergent and Deordorant",
+          "FK_ID_S_MARKETINGSTATEMENT" : "135",
+          "S_MarketingStatement" : [ {
+            "ID" : "135",
+            "Text" : "Germicidal Detergent and Deordorant",
+            "FK_ID_S_MARKETINGSECTION" : "80",
+            "FK_ID_M_MARKETINGSTATEMENT" : "103"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "80",
+          "FK_ID_M_MARKETINGSECTION" : "35",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3316",
+        "Name" : "For Use Areas / Surfaces",
+        "AUTOSEQ02" : "2",
+        "FK_ID_S_MARKETINGSECTION" : "81",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3343",
+          "Text" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanimate surfaces: {{Surface}}, etc.).",
+          "FK_ID_S_MARKETINGSTATEMENT" : "136",
+          "S_MarketingStatement" : [ {
+            "ID" : "136",
+            "Text" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanimate surfaces: {{Surface}}, etc.).",
+            "FK_ID_S_MARKETINGSECTION" : "81",
+            "FK_ID_M_MARKETINGSTATEMENT" : "101"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28234",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "77413",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77413",
+              "UsageType" : "S",
+              "Name" : "Appliances",
+              "FK_ID_S_USAGE" : "1390",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28235",
+            "wSortOrder" : "2",
+            "AUTOSEQ" : "2",
+            "FK_ID_SPLD_USAGE" : "77414",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77414",
+              "UsageType" : "S",
+              "Name" : "Bathroom fixtures",
+              "FK_ID_S_USAGE" : "1391",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28236",
+            "wSortOrder" : "3",
+            "AUTOSEQ" : "3",
+            "FK_ID_SPLD_USAGE" : "77415",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77415",
+              "UsageType" : "S",
+              "Name" : "Bathtubs (Fiberglass)",
+              "FK_ID_S_USAGE" : "1392",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28237",
+            "wSortOrder" : "4",
+            "AUTOSEQ" : "4",
+            "FK_ID_SPLD_USAGE" : "77416",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77416",
+              "UsageType" : "S",
+              "Name" : "Cabinets",
+              "FK_ID_S_USAGE" : "1393",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28238",
+            "wSortOrder" : "5",
+            "AUTOSEQ" : "5",
+            "FK_ID_SPLD_USAGE" : "77417",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77417",
+              "UsageType" : "S",
+              "Name" : "Cages",
+              "FK_ID_S_USAGE" : "1394",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28239",
+            "wSortOrder" : "6",
+            "AUTOSEQ" : "6",
+            "FK_ID_SPLD_USAGE" : "77418",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77418",
+              "UsageType" : "S",
+              "Name" : "Chairs",
+              "FK_ID_S_USAGE" : "1395",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28240",
+            "wSortOrder" : "7",
+            "AUTOSEQ" : "7",
+            "FK_ID_SPLD_USAGE" : "77419",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77419",
+              "UsageType" : "S",
+              "Name" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps",
+              "FK_ID_S_USAGE" : "1396",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28241",
+            "wSortOrder" : "8",
+            "AUTOSEQ" : "8",
+            "FK_ID_SPLD_USAGE" : "77420",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77420",
+              "UsageType" : "S",
+              "Name" : "Conductive flooring",
+              "FK_ID_S_USAGE" : "1397",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28242",
+            "wSortOrder" : "9",
+            "AUTOSEQ" : "9",
+            "FK_ID_SPLD_USAGE" : "77421",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77421",
+              "UsageType" : "S",
+              "Name" : "Counters (countertops)",
+              "FK_ID_S_USAGE" : "1398",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28243",
+            "wSortOrder" : "10",
+            "AUTOSEQ" : "10",
+            "FK_ID_SPLD_USAGE" : "77422",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77422",
+              "UsageType" : "S",
+              "Name" : "Countertop laminates",
+              "FK_ID_S_USAGE" : "1399",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28244",
+            "wSortOrder" : "11",
+            "AUTOSEQ" : "11",
+            "FK_ID_SPLD_USAGE" : "77423",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77423",
+              "UsageType" : "U",
+              "Name" : "Airports",
+              "FK_ID_S_USAGE" : "1401",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28245",
+            "wSortOrder" : "12",
+            "AUTOSEQ" : "12",
+            "FK_ID_SPLD_USAGE" : "77424",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77424",
+              "UsageType" : "U",
+              "Name" : "Animal Care",
+              "FK_ID_S_USAGE" : "1402",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28246",
+            "wSortOrder" : "13",
+            "AUTOSEQ" : "13",
+            "FK_ID_SPLD_USAGE" : "77425",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77425",
+              "UsageType" : "U",
+              "Name" : "Animal Laboratories",
+              "FK_ID_S_USAGE" : "1403",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28247",
+            "wSortOrder" : "14",
+            "AUTOSEQ" : "14",
+            "FK_ID_SPLD_USAGE" : "77426",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77426",
+              "UsageType" : "U",
+              "Name" : "Animal Life Science Laboratories",
+              "FK_ID_S_USAGE" : "1404",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28248",
+            "wSortOrder" : "15",
+            "AUTOSEQ" : "15",
+            "FK_ID_SPLD_USAGE" : "77427",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77427",
+              "UsageType" : "U",
+              "Name" : "Athletic Facilities",
+              "FK_ID_S_USAGE" : "1405",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28249",
+            "wSortOrder" : "16",
+            "AUTOSEQ" : "16",
+            "FK_ID_SPLD_USAGE" : "77428",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77428",
+              "UsageType" : "U",
+              "Name" : "Automotive Industy",
+              "FK_ID_S_USAGE" : "1406",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28250",
+            "wSortOrder" : "17",
+            "AUTOSEQ" : "17",
+            "FK_ID_SPLD_USAGE" : "77429",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77429",
+              "UsageType" : "U",
+              "Name" : "Barber Shops",
+              "FK_ID_S_USAGE" : "1407",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28251",
+            "wSortOrder" : "18",
+            "AUTOSEQ" : "18",
+            "FK_ID_SPLD_USAGE" : "77430",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77430",
+              "UsageType" : "U",
+              "Name" : "Bars",
+              "FK_ID_S_USAGE" : "1408",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28252",
+            "wSortOrder" : "19",
+            "AUTOSEQ" : "19",
+            "FK_ID_SPLD_USAGE" : "77431",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77431",
+              "UsageType" : "U",
+              "Name" : "Bathrooms",
+              "FK_ID_S_USAGE" : "1409",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28253",
+            "wSortOrder" : "20",
+            "AUTOSEQ" : "20",
+            "FK_ID_SPLD_USAGE" : "77432",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3343",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77432",
+              "UsageType" : "U",
+              "Name" : "Beverage Plants",
+              "FK_ID_S_USAGE" : "1410",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "81",
+          "FK_ID_M_MARKETINGSECTION" : "33",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3317",
+        "Name" : "For Use Areas Only",
+        "Title" : "For use in:",
+        "AUTOSEQ02" : "3",
+        "FK_ID_S_MARKETINGSECTION" : "82",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3344",
+          "Text" : "For use in {{Area Of Use}}.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "137",
+          "S_MarketingStatement" : [ {
+            "ID" : "137",
+            "Text" : "For use in {{Area Of Use}}.",
+            "FK_ID_S_MARKETINGSECTION" : "82",
+            "FK_ID_M_MARKETINGSTATEMENT" : "104"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28254",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "77423",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77423",
+              "UsageType" : "U",
+              "Name" : "Airports",
+              "FK_ID_S_USAGE" : "1401",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28255",
+            "wSortOrder" : "2",
+            "AUTOSEQ" : "2",
+            "FK_ID_SPLD_USAGE" : "77424",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77424",
+              "UsageType" : "U",
+              "Name" : "Animal Care",
+              "FK_ID_S_USAGE" : "1402",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28256",
+            "wSortOrder" : "3",
+            "AUTOSEQ" : "3",
+            "FK_ID_SPLD_USAGE" : "77425",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77425",
+              "UsageType" : "U",
+              "Name" : "Animal Laboratories",
+              "FK_ID_S_USAGE" : "1403",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28257",
+            "wSortOrder" : "4",
+            "AUTOSEQ" : "4",
+            "FK_ID_SPLD_USAGE" : "77426",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77426",
+              "UsageType" : "U",
+              "Name" : "Animal Life Science Laboratories",
+              "FK_ID_S_USAGE" : "1404",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28258",
+            "wSortOrder" : "5",
+            "AUTOSEQ" : "5",
+            "FK_ID_SPLD_USAGE" : "77427",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77427",
+              "UsageType" : "U",
+              "Name" : "Athletic Facilities",
+              "FK_ID_S_USAGE" : "1405",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28259",
+            "wSortOrder" : "6",
+            "AUTOSEQ" : "6",
+            "FK_ID_SPLD_USAGE" : "77428",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77428",
+              "UsageType" : "U",
+              "Name" : "Automotive Industy",
+              "FK_ID_S_USAGE" : "1406",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28260",
+            "wSortOrder" : "7",
+            "AUTOSEQ" : "7",
+            "FK_ID_SPLD_USAGE" : "77429",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77429",
+              "UsageType" : "U",
+              "Name" : "Barber Shops",
+              "FK_ID_S_USAGE" : "1407",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28261",
+            "wSortOrder" : "8",
+            "AUTOSEQ" : "8",
+            "FK_ID_SPLD_USAGE" : "77430",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77430",
+              "UsageType" : "U",
+              "Name" : "Bars",
+              "FK_ID_S_USAGE" : "1408",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28262",
+            "wSortOrder" : "9",
+            "AUTOSEQ" : "9",
+            "FK_ID_SPLD_USAGE" : "77431",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77431",
+              "UsageType" : "U",
+              "Name" : "Bathrooms",
+              "FK_ID_S_USAGE" : "1409",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28263",
+            "wSortOrder" : "10",
+            "AUTOSEQ" : "10",
+            "FK_ID_SPLD_USAGE" : "77432",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3344",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77432",
+              "UsageType" : "U",
+              "Name" : "Beverage Plants",
+              "FK_ID_S_USAGE" : "1410",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "82",
+          "FK_ID_M_MARKETINGSECTION" : "37",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3318",
+        "Name" : "Multi-Purpose Detergent",
+        "AUTOSEQ02" : "4",
+        "FK_ID_S_MARKETINGSECTION" : "83",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3345",
+          "Text" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5 % organic serum. Disinfects, cleans, and deodorizes in one labor saving step.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "138",
+          "S_MarketingStatement" : [ {
+            "ID" : "138",
+            "Text" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5 % organic serum. Disinfects, cleans, and deodorizes in one labor saving step.",
+            "FK_ID_S_MARKETINGSECTION" : "83",
+            "FK_ID_M_MARKETINGSTATEMENT" : "106"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "83",
+          "FK_ID_M_MARKETINGSECTION" : "38",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3319",
+        "Name" : "Recommended Use",
+        "Title" : "Recommeded for use in:",
+        "AUTOSEQ02" : "5",
+        "FK_ID_S_MARKETINGSECTION" : "84",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3346",
+          "Text" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food products and packaging materials must be removed from the room or carefully protected. Use product in accordance with its label. All surfaces must be thoroughly rinsed with potable water.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "139",
+          "S_MarketingStatement" : [ {
+            "ID" : "139",
+            "Text" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food products and packaging materials must be removed from the room or carefully protected. Use product in accordance with its label. All surfaces must be thoroughly rinsed with potable water.",
+            "FK_ID_S_MARKETINGSECTION" : "84",
+            "FK_ID_M_MARKETINGSTATEMENT" : "102"
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "84",
+          "FK_ID_M_MARKETINGSECTION" : "34",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3320",
+        "Name" : "Bactericidal Claims",
+        "AUTOSEQ02" : "6",
+        "FK_ID_S_MARKETINGSECTION" : "85",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3347",
+          "Text" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test method, current edition, modified in the presence of 400 ppm synthetic hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum:",
+          "FK_ID_S_MARKETINGSTATEMENT" : "140",
+          "S_MarketingStatement" : [ {
+            "ID" : "140",
+            "Text" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test method, current edition, modified in the presence of 400 ppm synthetic hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum:",
+            "FK_ID_S_MARKETINGSECTION" : "85",
+            "FK_ID_M_MARKETINGSTATEMENT" : "105"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28264",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "77358",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77358",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_S_USAGE" : "1204",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28265",
+            "wSortOrder" : "2",
+            "AUTOSEQ" : "2",
+            "FK_ID_SPLD_USAGE" : "77369",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77369",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Kiebsiella pneumoniae",
+              "FK_ID_S_USAGE" : "1427",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28266",
+            "wSortOrder" : "3",
+            "AUTOSEQ" : "3",
+            "FK_ID_SPLD_USAGE" : "77372",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77372",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Pasteurella multocida ",
+              "FK_ID_S_USAGE" : "1430",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28267",
+            "wSortOrder" : "4",
+            "AUTOSEQ" : "4",
+            "FK_ID_SPLD_USAGE" : "77368",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77368",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Fusobacterium necrophorum",
+              "FK_ID_S_USAGE" : "1426",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28268",
+            "wSortOrder" : "5",
+            "AUTOSEQ" : "5",
+            "FK_ID_SPLD_USAGE" : "77366",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77366",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Enterococcus faecalis- Vancomycin Resistant (VRE)",
+              "FK_ID_S_USAGE" : "1424",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28269",
+            "wSortOrder" : "6",
+            "AUTOSEQ" : "6",
+            "FK_ID_SPLD_USAGE" : "77365",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77365",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Enterobacter cloacae",
+              "FK_ID_S_USAGE" : "1423",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28270",
+            "wSortOrder" : "7",
+            "AUTOSEQ" : "7",
+            "FK_ID_SPLD_USAGE" : "77359",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77359",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Bordetella bronchiseptica",
+              "FK_ID_S_USAGE" : "1205",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28271",
+            "wSortOrder" : "8",
+            "AUTOSEQ" : "8",
+            "FK_ID_SPLD_USAGE" : "77370",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77370",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Legionella pneumophilia",
+              "FK_ID_S_USAGE" : "1428",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28272",
+            "wSortOrder" : "9",
+            "AUTOSEQ" : "9",
+            "FK_ID_SPLD_USAGE" : "77373",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77373",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Proteus mirabilis",
+              "FK_ID_S_USAGE" : "1431",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28273",
+            "wSortOrder" : "10",
+            "AUTOSEQ" : "10",
+            "FK_ID_SPLD_USAGE" : "77371",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77371",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Listeria monocytogenes",
+              "FK_ID_S_USAGE" : "1429",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28274",
+            "wSortOrder" : "11",
+            "AUTOSEQ" : "11",
+            "FK_ID_SPLD_USAGE" : "77374",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77374",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Proteus vulgaris",
+              "FK_ID_S_USAGE" : "1432",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28275",
+            "wSortOrder" : "12",
+            "AUTOSEQ" : "12",
+            "FK_ID_SPLD_USAGE" : "77375",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77375",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Pseudomonas aeruginosa",
+              "FK_ID_S_USAGE" : "1433",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28276",
+            "wSortOrder" : "13",
+            "AUTOSEQ" : "13",
+            "FK_ID_SPLD_USAGE" : "77376",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77376",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella choleraesuis",
+              "FK_ID_S_USAGE" : "1434",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28277",
+            "wSortOrder" : "14",
+            "AUTOSEQ" : "14",
+            "FK_ID_SPLD_USAGE" : "77377",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77377",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella enteritidis",
+              "FK_ID_S_USAGE" : "1435",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28278",
+            "wSortOrder" : "15",
+            "AUTOSEQ" : "15",
+            "FK_ID_SPLD_USAGE" : "77378",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77378",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella typhi",
+              "FK_ID_S_USAGE" : "1436",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28279",
+            "wSortOrder" : "16",
+            "AUTOSEQ" : "16",
+            "FK_ID_SPLD_USAGE" : "77386",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3347",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77386",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Staphylococcus epidermidis<sub> (2)</sub>",
+              "FK_ID_S_USAGE" : "1444",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "85",
+          "FK_ID_M_MARKETINGSECTION" : "36",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        "ID" : "3321",
+        "Name" : "Fungicidal",
+        "AUTOSEQ02" : "7",
+        "FK_ID_S_MARKETINGSECTION" : "86",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          "ID" : "3348",
+          "Text" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presense of 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "141",
+          "S_MarketingStatement" : [ {
+            "ID" : "141",
+            "Text" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presense of 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum.",
+            "FK_ID_S_MARKETINGSECTION" : "86",
+            "FK_ID_M_MARKETINGSTATEMENT" : "107"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28280",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "77358",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3348",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77358",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_S_USAGE" : "1204",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28281",
+            "wSortOrder" : "2",
+            "AUTOSEQ" : "2",
+            "FK_ID_SPLD_USAGE" : "77359",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3348",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77359",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Bordetella bronchiseptica",
+              "FK_ID_S_USAGE" : "1205",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28282",
+            "wSortOrder" : "3",
+            "AUTOSEQ" : "3",
+            "FK_ID_SPLD_USAGE" : "77360",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3348",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77360",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Chlamydia psittaci",
+              "FK_ID_S_USAGE" : "1206",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          "ID" : "86",
+          "FK_ID_M_MARKETINGSECTION" : "39",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      }, {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "3322",
+        "Name" : "Virucidal",
+        "AUTOSEQ02" : "8",
+        "FK_ID_S_MARKETINGSECTION" : "87",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_MarketingStatement" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "3349",
+          "Text" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 400 ppm hard water (calculated as CaCO3) plus 5 % organic serum.",
+          "FK_ID_S_MARKETINGSTATEMENT" : "142",
+          "S_MarketingStatement" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "142",
+            "Text" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 400 ppm hard water (calculated as CaCO3) plus 5 % organic serum.",
+            "FK_ID_S_MARKETINGSECTION" : "87",
+            "FK_ID_M_MARKETINGSTATEMENT" : "108"
+          } ],
+          "SPLD_MarketingUsageOrdering" : [ {
+            ".meta" : {
+              "incrementals" : "U",
+              "selected" : true
+            },
+            "ID" : "28283",
+            "wSortOrder" : "1",
+            "AUTOSEQ" : "1",
+            "FK_ID_SPLD_USAGE" : "77359",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3349",
+            "SPLD_MarketingUsage" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "77359",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Bordetella bronchiseptica",
+              "FK_ID_S_USAGE" : "1205",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28284",
+            "wSortOrder" : "2",
+            "AUTOSEQ" : "2",
+            "FK_ID_SPLD_USAGE" : "77358",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3349",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77358",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_S_USAGE" : "1204",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "U"
+            },
+            "ID" : "28285",
+            "wSortOrder" : "3",
+            "AUTOSEQ" : "3",
+            "FK_ID_SPLD_USAGE" : "77360",
+            "FK_ID_SPLD_MARKETINGSTATEMENT" : "3349",
+            "SPLD_MarketingUsage" : [ {
+              "ID" : "77360",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Chlamydia psittaci",
+              "FK_ID_S_USAGE" : "1206",
+              "FK_ID_SPLD_USAGETYPE" : "143"
+            } ]
+          } ]
+        } ],
+        "S_MarketingSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "87",
+          "FK_ID_M_MARKETINGSECTION" : "40",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_HumanHazardSection" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "67",
+        "EPA_SignalWord" : "DANGER",
+        "EPA_ChildHazardWarning" : "U",
+        "PrecautionaryStatement" : "See {{Precautionary Panel Location}} Panel for Precautionary Statements and First Aid",
+        "BoldItalic" : "R",
+        "PanelLoc1" : "right",
+        "PanelLoc2" : "left",
+        "PanelLoc3" : "side",
+        "PanelLoc4" : "back",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "FK_ID_S_HUMANHAZARDSECTION" : "6",
+        "S_HumanHazardSection" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "6",
+          "FK_ID_M_HUMANHAZARDSECTION" : "9",
+          "FK_ID_SUBREGLABELCONTENT" : "6"
+        } ]
+      } ],
+      "SPLD_UsageType" : [ {
+        ".meta" : {
+          "selected" : true
+        },
+        "ID" : "143",
+        "UsageType" : "C",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "SPLD_Usage" : [ {
+          "ID" : "77358",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Acinetobacter calcoaceticus",
+          "FK_ID_S_USAGE" : "1204",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1204",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Acinetobacter calcoaceticus",
+            "FK_ID_M_USAGE" : "1683",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1683",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77359",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Bordetella bronchiseptica",
+          "FK_ID_S_USAGE" : "1205",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1205",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Bordetella bronchiseptica",
+            "FK_ID_M_USAGE" : "1684",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1684",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Bordetella bronchiseptica",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "77360",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Chlamydia psittaci",
+          "FK_ID_S_USAGE" : "1206",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "1206",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Chlamydia psittaci",
+            "FK_ID_M_USAGE" : "1685",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              ".meta" : {
+                "selected" : true
+              },
+              "ID" : "1685",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Chlamydia psittaci",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77361",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Acinetobacter calcoaceticus",
+          "FK_ID_S_USAGE" : "1419",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1419",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Acinetobacter calcoaceticus",
+            "FK_ID_M_USAGE" : "1683",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1683",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Acinetobacter calcoaceticus",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77362",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Bordetella bronchiseptica",
+          "FK_ID_S_USAGE" : "1420",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1420",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Bordetella bronchiseptica",
+            "FK_ID_M_USAGE" : "1684",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1684",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Bordetella bronchiseptica",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77363",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Chlamydia psittaci",
+          "FK_ID_S_USAGE" : "1421",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1421",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Chlamydia psittaci",
+            "FK_ID_M_USAGE" : "1685",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1685",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Chlamydia psittaci",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77364",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Enterobacter aerogenes",
+          "FK_ID_S_USAGE" : "1422",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1422",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Enterobacter aerogenes",
+            "FK_ID_M_USAGE" : "1686",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1686",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Enterobacter aerogenes",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77365",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Enterobacter cloacae",
+          "FK_ID_S_USAGE" : "1423",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1423",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Enterobacter cloacae",
+            "FK_ID_M_USAGE" : "1687",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1687",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Enterobacter cloacae",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77366",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Enterococcus faecalis- Vancomycin Resistant (VRE)",
+          "FK_ID_S_USAGE" : "1424",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1424",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Enterococcus faecalis- Vancomycin Resistant (VRE)",
+            "FK_ID_M_USAGE" : "1688",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1688",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Enterococcus faecalis- Vancomycin Resistant (VRE)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77367",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Escherichi",
+          "FK_ID_S_USAGE" : "1425",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1425",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Escherichi",
+            "FK_ID_M_USAGE" : "1689",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1689",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Escherichi",
+              "FK_ID_M_USAGEFOOTNOTE" : "4",
+              "FK_ID_M_USAGETYPE" : "1",
+              "M_UsageFootnoteUsed" : [ {
+                "ID" : "4",
+                "Text" : "ATCC &amp; antibiotic-resistant strain",
+                "FK_ID_MASTERLABELCONTENT" : "10"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : "77368",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Fusobacterium necrophorum",
+          "FK_ID_S_USAGE" : "1426",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1426",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Fusobacterium necrophorum",
+            "FK_ID_M_USAGE" : "1690",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1690",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Fusobacterium necrophorum",
+              "FK_ID_M_USAGEFOOTNOTE" : "5",
+              "FK_ID_M_USAGETYPE" : "1",
+              "M_UsageFootnoteUsed" : [ {
+                "ID" : "5",
+                "Text" : "antibiotic-resistant strain only",
+                "FK_ID_MASTERLABELCONTENT" : "10"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : "77369",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Kiebsiella pneumoniae",
+          "FK_ID_S_USAGE" : "1427",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1427",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Kiebsiella pneumoniae",
+            "FK_ID_M_USAGE" : "1691",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1691",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Kiebsiella pneumoniae",
+              "FK_ID_M_USAGEFOOTNOTE" : "4",
+              "FK_ID_M_USAGETYPE" : "1",
+              "M_UsageFootnoteUsed" : [ {
+                "ID" : "4",
+                "Text" : "ATCC &amp; antibiotic-resistant strain",
+                "FK_ID_MASTERLABELCONTENT" : "10"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : "77370",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Legionella pneumophilia",
+          "FK_ID_S_USAGE" : "1428",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1428",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Legionella pneumophilia",
+            "FK_ID_M_USAGE" : "1692",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1692",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Legionella pneumophilia",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77371",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Listeria monocytogenes",
+          "FK_ID_S_USAGE" : "1429",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1429",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Listeria monocytogenes",
+            "FK_ID_M_USAGE" : "1693",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1693",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Listeria monocytogenes",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77372",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Pasteurella multocida ",
+          "FK_ID_S_USAGE" : "1430",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1430",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Pasteurella multocida ",
+            "FK_ID_M_USAGE" : "1694",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1694",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Pasteurella multocida ",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77373",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Proteus mirabilis",
+          "FK_ID_S_USAGE" : "1431",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1431",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Proteus mirabilis",
+            "FK_ID_M_USAGE" : "1695",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1695",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Proteus mirabilis",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77374",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Proteus vulgaris",
+          "FK_ID_S_USAGE" : "1432",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1432",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Proteus vulgaris",
+            "FK_ID_M_USAGE" : "1696",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1696",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Proteus vulgaris",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77375",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Pseudomonas aeruginosa",
+          "FK_ID_S_USAGE" : "1433",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1433",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Pseudomonas aeruginosa",
+            "FK_ID_M_USAGE" : "1697",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1697",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Pseudomonas aeruginosa",
+              "FK_ID_M_USAGEFOOTNOTE" : "4",
+              "FK_ID_M_USAGETYPE" : "1",
+              "M_UsageFootnoteUsed" : [ {
+                "ID" : "4",
+                "Text" : "ATCC &amp; antibiotic-resistant strain",
+                "FK_ID_MASTERLABELCONTENT" : "10"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : "77376",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella choleraesuis",
+          "FK_ID_S_USAGE" : "1434",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1434",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Salmonella choleraesuis",
+            "FK_ID_M_USAGE" : "1698",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1698",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella choleraesuis",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77377",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella enteritidis",
+          "FK_ID_S_USAGE" : "1435",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1435",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Salmonella enteritidis",
+            "FK_ID_M_USAGE" : "1699",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1699",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella enteritidis",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77378",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella typhi",
+          "FK_ID_S_USAGE" : "1436",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1436",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Salmonella typhi",
+            "FK_ID_M_USAGE" : "1700",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1700",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella typhi",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77379",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Salmonella typhimurium",
+          "FK_ID_S_USAGE" : "1437",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1437",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Salmonella typhimurium",
+            "FK_ID_M_USAGE" : "1701",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1701",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Salmonella typhimurium",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77380",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Serratia marcescens",
+          "FK_ID_S_USAGE" : "1438",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1438",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Serratia marcescens",
+            "FK_ID_M_USAGE" : "1702",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1702",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Serratia marcescens",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77381",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Shigella fiexneri",
+          "FK_ID_S_USAGE" : "1439",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1439",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Shigella fiexneri",
+            "FK_ID_M_USAGE" : "1703",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1703",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Shigella fiexneri",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77382",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Shigella sonnei",
+          "FK_ID_S_USAGE" : "1440",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1440",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Shigella sonnei",
+            "FK_ID_M_USAGE" : "1704",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1704",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Shigella sonnei",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77383",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus aureus- Methicillin resistant (MRSA)",
+          "FK_ID_S_USAGE" : "1441",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1441",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Staphylococcus aureus- Methicillin resistant (MRSA)",
+            "FK_ID_M_USAGE" : "1705",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1705",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Staphylococcus aureus- Methicillin resistant (MRSA)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77384",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus aureus- Vancomycin Intermediate Resistant (VISA)",
+          "FK_ID_S_USAGE" : "1442",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1442",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Staphylococcus aureus- Vancomycin Intermediate Resistant (VISA)",
+            "FK_ID_M_USAGE" : "1706",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1706",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Staphylococcus aureus- Vancomycin Intermediate Resistant (VISA)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77385",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus aureus",
+          "FK_ID_S_USAGE" : "1443",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1443",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Staphylococcus aureus",
+            "FK_ID_M_USAGE" : "1707",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1707",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Staphylococcus aureus",
+              "FK_ID_M_USAGEFOOTNOTE" : "4",
+              "FK_ID_M_USAGETYPE" : "1",
+              "M_UsageFootnoteUsed" : [ {
+                "ID" : "4",
+                "Text" : "ATCC &amp; antibiotic-resistant strain",
+                "FK_ID_MASTERLABELCONTENT" : "10"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : "77386",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Staphylococcus epidermidis<sub> (2)</sub>",
+          "FK_ID_S_USAGE" : "1444",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1444",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Staphylococcus epidermidis<sub> (2)</sub>",
+            "FK_ID_M_USAGE" : "1708",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1708",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Staphylococcus epidermidis",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77387",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Bacteria",
+          "Name" : "Streptococcus faecalis",
+          "FK_ID_S_USAGE" : "1445",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1445",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Bacteria",
+            "Name" : "Streptococcus faecalis",
+            "FK_ID_M_USAGE" : "1709",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1709",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Bacteria",
+              "Name" : "Streptococcus faecalis",
+              "FK_ID_M_USAGEFOOTNOTE" : "4",
+              "FK_ID_M_USAGETYPE" : "1",
+              "M_UsageFootnoteUsed" : [ {
+                "ID" : "4",
+                "Text" : "ATCC &amp; antibiotic-resistant strain",
+                "FK_ID_MASTERLABELCONTENT" : "10"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : "77388",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "Aspergillus niger",
+          "FK_ID_S_USAGE" : "1446",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1446",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Fungi",
+            "Name" : "Aspergillus niger",
+            "FK_ID_M_USAGE" : "1710",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1710",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Fungi",
+              "Name" : "Aspergillus niger",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77389",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "Candida albicans",
+          "FK_ID_S_USAGE" : "1447",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1447",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Fungi",
+            "Name" : "Candida albicans",
+            "FK_ID_M_USAGE" : "1711",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1711",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Fungi",
+              "Name" : "Candida albicans",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77390",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "Trichophyton mentagrophytes [Athlete's Foot Fungus]",
+          "FK_ID_S_USAGE" : "1448",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1448",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Fungi",
+            "Name" : "Trichophyton mentagrophytes [Athlete's Foot Fungus]",
+            "FK_ID_M_USAGE" : "1712",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1712",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Fungi",
+              "Name" : "Trichophyton mentagrophytes [Athlete's Foot Fungus]",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77391",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Fungi",
+          "Name" : "[a cause of Ringworm] [a cause of Ringworm of the foot]",
+          "FK_ID_S_USAGE" : "1449",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1449",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Fungi",
+            "Name" : "[a cause of Ringworm] [a cause of Ringworm of the foot]",
+            "FK_ID_M_USAGE" : "1713",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1713",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Fungi",
+              "Name" : "[a cause of Ringworm] [a cause of Ringworm of the foot]",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77392",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Adenovirus Type 4",
+          "FK_ID_S_USAGE" : "1450",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1450",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Adenovirus Type 4",
+            "FK_ID_M_USAGE" : "1714",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1714",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Adenovirus Type 4",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77393",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Avian polyomavirus",
+          "FK_ID_S_USAGE" : "1451",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1451",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Avian polyomavirus",
+            "FK_ID_M_USAGE" : "1715",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1715",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Avian polyomavirus",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77394",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Canine distemper",
+          "FK_ID_S_USAGE" : "1452",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1452",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Canine distemper",
+            "FK_ID_M_USAGE" : "1716",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1716",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Canine distemper",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77395",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Canine parvovirus- at 2 oz. per gallon",
+          "FK_ID_S_USAGE" : "1453",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1453",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Canine parvovirus- at 2 oz. per gallon",
+            "FK_ID_M_USAGE" : "1717",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1717",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Canine parvovirus- at 2 oz. per gallon",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77396",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Feline leukemia",
+          "FK_ID_S_USAGE" : "1454",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1454",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Feline leukemia",
+            "FK_ID_M_USAGE" : "1718",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1718",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Feline leukemia",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77397",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Feline picomavirus",
+          "FK_ID_S_USAGE" : "1455",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1455",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Feline picomavirus",
+            "FK_ID_M_USAGE" : "1719",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1719",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Feline picomavirus",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77398",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*HIV-1 (AIDS virus)",
+          "FK_ID_S_USAGE" : "1456",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1456",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*HIV-1 (AIDS virus)",
+            "FK_ID_M_USAGE" : "1720",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1720",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*HIV-1 (AIDS virus)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77399",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Hepatitis B Virus (HBV)",
+          "FK_ID_S_USAGE" : "1457",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1457",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Hepatitis B Virus (HBV)",
+            "FK_ID_M_USAGE" : "1721",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1721",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Hepatitis B Virus (HBV)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77400",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Hepatitis C Virus (HCV)",
+          "FK_ID_S_USAGE" : "1458",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1458",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Hepatitis C Virus (HCV)",
+            "FK_ID_M_USAGE" : "1722",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1722",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Hepatitis C Virus (HCV)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77401",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Herpes Simplex Type 1",
+          "FK_ID_S_USAGE" : "1459",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1459",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Herpes Simplex Type 1",
+            "FK_ID_M_USAGE" : "1723",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1723",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Herpes Simplex Type 1",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77402",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Herpes Simplex Type 2",
+          "FK_ID_S_USAGE" : "1460",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1460",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Herpes Simplex Type 2",
+            "FK_ID_M_USAGE" : "1724",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1724",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Herpes Simplex Type 2",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77403",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Human coronavirus ",
+          "FK_ID_S_USAGE" : "1461",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1461",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Human coronavirus ",
+            "FK_ID_M_USAGE" : "1725",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1725",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Human coronavirus ",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77404",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Infectious bovine rhinotracheitis",
+          "FK_ID_S_USAGE" : "1462",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1462",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Infectious bovine rhinotracheitis",
+            "FK_ID_M_USAGE" : "1726",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1726",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Infectious bovine rhinotracheitis",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77405",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Infectious bronchitis (Avian IBV)",
+          "FK_ID_S_USAGE" : "1463",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1463",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Infectious bronchitis (Avian IBV)",
+            "FK_ID_M_USAGE" : "1727",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1727",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Infectious bronchitis (Avian IBV)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77406",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Influenza A/ Hong Kong",
+          "FK_ID_S_USAGE" : "1464",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1464",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Influenza A/ Hong Kong",
+            "FK_ID_M_USAGE" : "1728",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1728",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Influenza A/ Hong Kong",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77407",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Pseudorabies (PRV)",
+          "FK_ID_S_USAGE" : "1465",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1465",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Pseudorabies (PRV)",
+            "FK_ID_M_USAGE" : "1729",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1729",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Pseudorabies (PRV)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77408",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Rabies",
+          "FK_ID_S_USAGE" : "1466",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1466",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Rabies",
+            "FK_ID_M_USAGE" : "1730",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1730",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Rabies",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77409",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Respiratory Syncytial Virus (RSV)",
+          "FK_ID_S_USAGE" : "1467",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1467",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Respiratory Syncytial Virus (RSV)",
+            "FK_ID_M_USAGE" : "1731",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1731",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Respiratory Syncytial Virus (RSV)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77410",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Rubella (German Measles)",
+          "FK_ID_S_USAGE" : "1468",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1468",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Rubella (German Measles)",
+            "FK_ID_M_USAGE" : "1732",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1732",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Rubella (German Measles)",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77411",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Transmissible gastroenteritis virus (TGE)\u001A",
+          "FK_ID_S_USAGE" : "1469",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1469",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Transmissible gastroenteritis virus (TGE)\u001A",
+            "FK_ID_M_USAGE" : "1733",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1733",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Transmissible gastroenteritis virus (TGE)\u001A",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77412",
+          "UsageType" : "C",
+          "ClaimsClassification" : "Viruses",
+          "Name" : "*Vaccinia [Pox virus]",
+          "FK_ID_S_USAGE" : "1470",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1470",
+            "UsageType" : "C",
+            "ClaimsClassification" : "Viruses",
+            "Name" : "*Vaccinia [Pox virus]",
+            "FK_ID_M_USAGE" : "1734",
+            "FK_ID_S_USAGETYPE" : "1",
+            "M_Usage" : [ {
+              "ID" : "1734",
+              "UsageType" : "C",
+              "ClaimsClassification" : "Viruses",
+              "Name" : "*Vaccinia [Pox virus]",
+              "FK_ID_M_USAGETYPE" : "1"
+            } ]
+          } ]
+        }, {
+          "ID" : "77413",
+          "UsageType" : "S",
+          "Name" : "Appliances",
+          "FK_ID_S_USAGE" : "1390",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1390",
+            "UsageType" : "S",
+            "Name" : "Appliances",
+            "FK_ID_M_USAGE" : "1735",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1735",
+              "UsageType" : "S",
+              "Name" : "Appliances",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77414",
+          "UsageType" : "S",
+          "Name" : "Bathroom fixtures",
+          "FK_ID_S_USAGE" : "1391",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1391",
+            "UsageType" : "S",
+            "Name" : "Bathroom fixtures",
+            "FK_ID_M_USAGE" : "1736",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1736",
+              "UsageType" : "S",
+              "Name" : "Bathroom fixtures",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77415",
+          "UsageType" : "S",
+          "Name" : "Bathtubs (Fiberglass)",
+          "FK_ID_S_USAGE" : "1392",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1392",
+            "UsageType" : "S",
+            "Name" : "Bathtubs (Fiberglass)",
+            "FK_ID_M_USAGE" : "1737",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1737",
+              "UsageType" : "S",
+              "Name" : "Bathtubs (Fiberglass)",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77416",
+          "UsageType" : "S",
+          "Name" : "Cabinets",
+          "FK_ID_S_USAGE" : "1393",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1393",
+            "UsageType" : "S",
+            "Name" : "Cabinets",
+            "FK_ID_M_USAGE" : "1738",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1738",
+              "UsageType" : "S",
+              "Name" : "Cabinets",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77417",
+          "UsageType" : "S",
+          "Name" : "Cages",
+          "FK_ID_S_USAGE" : "1394",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1394",
+            "UsageType" : "S",
+            "Name" : "Cages",
+            "FK_ID_M_USAGE" : "1739",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1739",
+              "UsageType" : "S",
+              "Name" : "Cages",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77418",
+          "UsageType" : "S",
+          "Name" : "Chairs",
+          "FK_ID_S_USAGE" : "1395",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1395",
+            "UsageType" : "S",
+            "Name" : "Chairs",
+            "FK_ID_M_USAGE" : "1740",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1740",
+              "UsageType" : "S",
+              "Name" : "Chairs",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77419",
+          "UsageType" : "S",
+          "Name" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps",
+          "FK_ID_S_USAGE" : "1396",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1396",
+            "UsageType" : "S",
+            "Name" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps",
+            "FK_ID_M_USAGE" : "1741",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1741",
+              "UsageType" : "S",
+              "Name" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77420",
+          "UsageType" : "S",
+          "Name" : "Conductive flooring",
+          "FK_ID_S_USAGE" : "1397",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1397",
+            "UsageType" : "S",
+            "Name" : "Conductive flooring",
+            "FK_ID_M_USAGE" : "1742",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1742",
+              "UsageType" : "S",
+              "Name" : "Conductive flooring",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77421",
+          "UsageType" : "S",
+          "Name" : "Counters (countertops)",
+          "FK_ID_S_USAGE" : "1398",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1398",
+            "UsageType" : "S",
+            "Name" : "Counters (countertops)",
+            "FK_ID_M_USAGE" : "1743",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1743",
+              "UsageType" : "S",
+              "Name" : "Counters (countertops)",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77422",
+          "UsageType" : "S",
+          "Name" : "Countertop laminates",
+          "FK_ID_S_USAGE" : "1399",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1399",
+            "UsageType" : "S",
+            "Name" : "Countertop laminates",
+            "FK_ID_M_USAGE" : "1744",
+            "FK_ID_S_USAGETYPE" : "6",
+            "M_Usage" : [ {
+              "ID" : "1744",
+              "UsageType" : "S",
+              "Name" : "Countertop laminates",
+              "FK_ID_M_USAGETYPE" : "2"
+            } ]
+          } ]
+        }, {
+          "ID" : "77423",
+          "UsageType" : "U",
+          "Name" : "Airports",
+          "FK_ID_S_USAGE" : "1401",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1401",
+            "UsageType" : "U",
+            "Name" : "Airports",
+            "FK_ID_M_USAGE" : "1785",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1785",
+              "UsageType" : "U",
+              "Name" : "Airports",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77424",
+          "UsageType" : "U",
+          "Name" : "Animal Care",
+          "FK_ID_S_USAGE" : "1402",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1402",
+            "UsageType" : "U",
+            "Name" : "Animal Care",
+            "FK_ID_M_USAGE" : "1786",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1786",
+              "UsageType" : "U",
+              "Name" : "Animal Care",
+              "BoldItalic" : "R",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77425",
+          "UsageType" : "U",
+          "Name" : "Animal Laboratories",
+          "FK_ID_S_USAGE" : "1403",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1403",
+            "UsageType" : "U",
+            "Name" : "Animal Laboratories",
+            "FK_ID_M_USAGE" : "1787",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1787",
+              "UsageType" : "U",
+              "Name" : "Animal Laboratories",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77426",
+          "UsageType" : "U",
+          "Name" : "Animal Life Science Laboratories",
+          "FK_ID_S_USAGE" : "1404",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1404",
+            "UsageType" : "U",
+            "Name" : "Animal Life Science Laboratories",
+            "FK_ID_M_USAGE" : "1788",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1788",
+              "UsageType" : "U",
+              "Name" : "Animal Life Science Laboratories",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77427",
+          "UsageType" : "U",
+          "Name" : "Athletic Facilities",
+          "FK_ID_S_USAGE" : "1405",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1405",
+            "UsageType" : "U",
+            "Name" : "Athletic Facilities",
+            "FK_ID_M_USAGE" : "1789",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1789",
+              "UsageType" : "U",
+              "Name" : "Athletic Facilities",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77428",
+          "UsageType" : "U",
+          "Name" : "Automotive Industy",
+          "FK_ID_S_USAGE" : "1406",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1406",
+            "UsageType" : "U",
+            "Name" : "Automotive Industy",
+            "FK_ID_M_USAGE" : "1790",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1790",
+              "UsageType" : "U",
+              "Name" : "Automotive Industy",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77429",
+          "UsageType" : "U",
+          "Name" : "Barber Shops",
+          "FK_ID_S_USAGE" : "1407",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1407",
+            "UsageType" : "U",
+            "Name" : "Barber Shops",
+            "FK_ID_M_USAGE" : "1791",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1791",
+              "UsageType" : "U",
+              "Name" : "Barber Shops",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77430",
+          "UsageType" : "U",
+          "Name" : "Bars",
+          "FK_ID_S_USAGE" : "1408",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1408",
+            "UsageType" : "U",
+            "Name" : "Bars",
+            "FK_ID_M_USAGE" : "1792",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1792",
+              "UsageType" : "U",
+              "Name" : "Bars",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77431",
+          "UsageType" : "U",
+          "Name" : "Bathrooms",
+          "FK_ID_S_USAGE" : "1409",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1409",
+            "UsageType" : "U",
+            "Name" : "Bathrooms",
+            "FK_ID_M_USAGE" : "1793",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1793",
+              "UsageType" : "U",
+              "Name" : "Bathrooms",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77432",
+          "UsageType" : "U",
+          "Name" : "Beverage Plants",
+          "FK_ID_S_USAGE" : "1410",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1410",
+            "UsageType" : "U",
+            "Name" : "Beverage Plants",
+            "FK_ID_M_USAGE" : "1794",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1794",
+              "UsageType" : "U",
+              "Name" : "Beverage Plants",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77433",
+          "UsageType" : "U",
+          "Name" : "Airplanes",
+          "FK_ID_S_USAGE" : "1471",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1471",
+            "UsageType" : "U",
+            "Name" : "Airplanes",
+            "FK_ID_M_USAGE" : "1784",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1784",
+              "UsageType" : "U",
+              "Name" : "Airplanes",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77434",
+          "UsageType" : "U",
+          "Name" : "Cafeterias",
+          "FK_ID_S_USAGE" : "1472",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1472",
+            "UsageType" : "U",
+            "Name" : "Cafeterias",
+            "FK_ID_M_USAGE" : "1800",
+            "FK_ID_S_USAGETYPE" : "7",
+            "M_Usage" : [ {
+              "ID" : "1800",
+              "UsageType" : "U",
+              "Name" : "Cafeterias",
+              "FK_ID_M_USAGETYPE" : "4"
+            } ]
+          } ]
+        }, {
+          "ID" : "77435",
+          "UsageType" : "T",
+          "Name" : "Algaecide",
+          "FK_ID_S_USAGE" : "1412",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1412",
+            "UsageType" : "T",
+            "Name" : "Algaecide",
+            "FK_ID_M_USAGE" : "1777",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1777",
+              "UsageType" : "T",
+              "Name" : "Algaecide",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        }, {
+          "ID" : "77436",
+          "UsageType" : "T",
+          "Name" : "Disinfectant",
+          "FK_ID_S_USAGE" : "1413",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1413",
+            "UsageType" : "T",
+            "Name" : "Disinfectant",
+            "FK_ID_M_USAGE" : "1778",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1778",
+              "UsageType" : "T",
+              "Name" : "Disinfectant",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        }, {
+          "ID" : "77437",
+          "UsageType" : "T",
+          "Name" : "Fungicide",
+          "FK_ID_S_USAGE" : "1414",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1414",
+            "UsageType" : "T",
+            "Name" : "Fungicide",
+            "FK_ID_M_USAGE" : "1779",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1779",
+              "UsageType" : "T",
+              "Name" : "Fungicide",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        }, {
+          "ID" : "77438",
+          "UsageType" : "T",
+          "Name" : "General Purpose Anti-microbial",
+          "FK_ID_S_USAGE" : "1415",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1415",
+            "UsageType" : "T",
+            "Name" : "General Purpose Anti-microbial",
+            "FK_ID_M_USAGE" : "1780",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1780",
+              "UsageType" : "T",
+              "Name" : "General Purpose Anti-microbial",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        }, {
+          "ID" : "77439",
+          "UsageType" : "T",
+          "Name" : "Sanitizer",
+          "FK_ID_S_USAGE" : "1416",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1416",
+            "UsageType" : "T",
+            "Name" : "Sanitizer",
+            "FK_ID_M_USAGE" : "1781",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1781",
+              "UsageType" : "T",
+              "Name" : "Sanitizer",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        }, {
+          "ID" : "77440",
+          "UsageType" : "T",
+          "Name" : "Tuberculocide",
+          "FK_ID_S_USAGE" : "1417",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1417",
+            "UsageType" : "T",
+            "Name" : "Tuberculocide",
+            "FK_ID_M_USAGE" : "1782",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1782",
+              "UsageType" : "T",
+              "Name" : "Tuberculocide",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        }, {
+          "ID" : "77441",
+          "UsageType" : "T",
+          "Name" : "Viruscide",
+          "FK_ID_S_USAGE" : "1418",
+          "FK_ID_SPLD_USAGETYPE" : "143",
+          "S_Usage" : [ {
+            "ID" : "1418",
+            "UsageType" : "T",
+            "Name" : "Viruscide",
+            "FK_ID_M_USAGE" : "1783",
+            "FK_ID_S_USAGETYPE" : "8",
+            "M_Usage" : [ {
+              "ID" : "1783",
+              "UsageType" : "T",
+              "Name" : "Viruscide",
+              "FK_ID_M_USAGETYPE" : "3"
+            } ]
+          } ]
+        } ]
+      } ],
+      "SPLD_LLD" : [ {
+        ".meta" : {
+          "incrementals" : "U",
+          "selected" : true
+        },
+        "ID" : "50",
+        "Tag" : "label",
+        ".Tag" : {
+          "updated" : "true"
+        },
+        "Depth" : "0",
+        ".Depth" : {
+          "updated" : "true"
+        },
+        "wE" : "label",
+        "wID" : "50",
+        "FK_ID_SUBREGPHYSICALLABELDEF" : "13",
+        "LLD_Page" : [ {
+          ".meta" : {
+            "selected" : true
+          },
+          "ID" : "356",
+          "Tag" : "page1",
+          "Height" : "14.0",
+          "Width" : "19.5",
+          "PageNbr" : "1",
+          "Depth" : "0",
+          "wE" : "page",
+          "wID" : "356",
+          "wPID" : "50",
+          "wPE" : "label",
+          "FK_ID_SPLD_LLD" : "50",
+          "LLD_Panel" : [ {
+            "ID" : "78",
+            "Tag" : "t_62",
+            "Top" : "0.31",
+            "Left" : "0.88",
+            "Height" : "7.13",
+            "Width" : "5.77",
+            "BackgroundColor" : "n/a",
+            "BorderColor" : "n/a",
+            "Depth" : "1",
+            "wE" : "panel",
+            "wID" : "78",
+            "wPID" : "356",
+            "wPE" : "page",
+            "FK_ID_LLD_PAGE" : "356",
+            "LLD_Block" : [ {
+              "ID" : "994",
+              "Tag" : "t_102",
+              "LLD_SectionType" : "DirectionsForUse",
+              "Top" : "0.14",
+              "Left" : "0.15",
+              "Height" : "6.77",
+              "Width" : "5.39",
+              "BackgroundColor" : "n/a",
+              "BorderColor" : "n/a",
+              "Depth" : "2",
+              "wComputedTopPosition" : "0.14",
+              "wE" : "block",
+              "wID" : "994",
+              "wPID" : "78",
+              "wPE" : "panel",
+              "FK_ID_LLD_PANEL" : "78",
+              "LLD_SubBlock" : [ {
+                "ID" : "995",
+                "Tag" : "t_105",
+                "Top" : "0.97",
+                "Left" : "2.39",
+                "Height" : "1.0",
+                "Width" : "1.0",
+                "BackgroundColor" : "n/a",
+                "BorderColor" : "n/a",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.97",
+                "wE" : "block",
+                "wID" : "995",
+                "wPID" : "994",
+                "wPE" : "block",
+                "FK_ID_LLD_BLOCK" : "994"
+              } ]
+            } ]
+          }, {
+            ".meta" : {
+              "selected" : true
+            },
+            "ID" : "79",
+            "Tag" : "t_100",
+            "Top" : "0.31",
+            "Left" : "6.99",
+            "Height" : "7.07",
+            "Width" : "5.71",
+            "BackgroundColor" : "n/a",
+            "BorderColor" : "n/a",
+            "Depth" : "1",
+            "wE" : "panel",
+            "wID" : "79",
+            "wPID" : "356",
+            "wPE" : "page",
+            "FK_ID_LLD_PAGE" : "356",
+            "LLD_Block" : [ {
+              ".meta" : {
+                "incrementals" : "U",
+                "selected" : true
+              },
+              "ID" : "996",
+              "Tag" : "t_101",
+              "LLD_SectionType" : "Graphic",
+              "Top" : "0.17",
+              "Left" : "0.19",
+              "Height" : "2.81",
+              "Width" : "5.02",
+              "BackgroundColor" : "n/a",
+              "BorderColor" : "n/a",
+              "Depth" : "2",
+              "wComputedTopPosition" : "0.17",
+              "wE" : "block",
+              "wID" : "996",
+              "wPID" : "79",
+              "wPE" : "panel",
+              "AUTOSEQ" : "1",
+              "FK_ID_LLD_PANEL" : "79",
+              "LLD_SubBlock" : [ {
+                ".meta" : {
+                  "selected" : true
+                },
+                "ID" : "997",
+                "Tag" : "t_104",
+                "Top" : "0.51",
+                "Left" : "1.67",
+                "Height" : "1.0",
+                "Width" : "1.0",
+                "BackgroundColor" : "n/a",
+                "BorderColor" : "n/a",
+                "Depth" : "3",
+                "wComputedTopPosition" : "0.51",
+                "wE" : "block",
+                "wID" : "997",
+                "wPID" : "996",
+                "wPE" : "block",
+                "FK_ID_LLD_BLOCK" : "996",
+                "LLD_SpecialSectionAttribute" : [ {
+                  "ID" : "334",
+                  "Name" : "Title",
+                  "PF1ID_LLD_BLOCK" : "997",
+                  "PF2ID_LLD_BLOCK" : "998",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "998"
+                  } ]
+                }, {
+                  "ID" : "335",
+                  "Name" : "Text",
+                  "PF1ID_LLD_BLOCK" : "997",
+                  "PF2ID_LLD_BLOCK" : "999",
+                  "LLD_SpecialSectionAttrBlock" : [ {
+                    "ID" : "999"
+                  } ]
+                } ]
+              } ]
+            }, {
+              ".meta" : {
+                "incrementals" : "U"
+              },
+              "ID" : "1000",
+              "Tag" : "t_103",
+              "Top" : "3.15",
+              "Left" : "0.2",
+              "Height" : "3.75",
+              "Width" : "5.19",
+              "BackgroundColor" : "n/a",
+              "BorderColor" : "n/a",
+              "Depth" : "2",
+              "wComputedTopPosition" : "3.15",
+              "wE" : "block",
+              "wID" : "1000",
+              "wPID" : "79",
+              "wPE" : "panel",
+              "AUTOSEQ" : "2",
+              "FK_ID_LLD_PANEL" : "79",
+              "LLD_SubBlock" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "Tag" : "t_106",
+                ".Tag" : {
+                  "updated" : "true"
+                },
+                "Top" : "0.28",
+                ".Top" : {
+                  "updated" : "true"
+                },
+                "Left" : "0.35",
+                ".Left" : {
+                  "updated" : "true"
+                },
+                "Height" : "3.01",
+                ".Height" : {
+                  "updated" : "true"
+                },
+                "Width" : "4.26",
+                ".Width" : {
+                  "updated" : "true"
+                },
+                "BackgroundColor" : "n/a",
+                ".BackgroundColor" : {
+                  "updated" : "true"
+                },
+                "BorderColor" : "n/a",
+                ".BorderColor" : {
+                  "updated" : "true"
+                },
+                "Depth" : "3",
+                ".Depth" : {
+                  "updated" : "true"
+                },
+                "wE" : "block",
+                "wID" : "t_106",
+                "wPID" : "1000",
+                "wPE" : "block",
+                "LLD_SubBlock" : [ {
+                  ".meta" : {
+                    "incrementals" : "UC"
+                  },
+                  "Tag" : "t_107",
+                  ".Tag" : {
+                    "updated" : "true"
+                  },
+                  "Top" : "0.22",
+                  ".Top" : {
+                    "updated" : "true"
+                  },
+                  "Left" : "0.29",
+                  ".Left" : {
+                    "updated" : "true"
+                  },
+                  "Height" : "2.42",
+                  ".Height" : {
+                    "updated" : "true"
+                  },
+                  "Width" : "3.38",
+                  ".Width" : {
+                    "updated" : "true"
+                  },
+                  "BackgroundColor" : "n/a",
+                  ".BackgroundColor" : {
+                    "updated" : "true"
+                  },
+                  "BorderColor" : "n/a",
+                  ".BorderColor" : {
+                    "updated" : "true"
+                  },
+                  "Depth" : "4",
+                  ".Depth" : {
+                    "updated" : "true"
+                  },
+                  "wE" : "block",
+                  "wID" : "t_107",
+                  "wPID" : "t_106",
+                  "wPE" : "block",
+                  "LLD_SubBlock" : [ {
+                    ".meta" : {
+                      "incrementals" : "UC"
+                    },
+                    "Tag" : "t_108",
+                    ".Tag" : {
+                      "updated" : "true"
+                    },
+                    "Top" : "0.34",
+                    ".Top" : {
+                      "updated" : "true"
+                    },
+                    "Left" : "0.51",
+                    ".Left" : {
+                      "updated" : "true"
+                    },
+                    "Height" : "1.62",
+                    ".Height" : {
+                      "updated" : "true"
+                    },
+                    "Width" : "2.11",
+                    ".Width" : {
+                      "updated" : "true"
+                    },
+                    "BackgroundColor" : "n/a",
+                    ".BackgroundColor" : {
+                      "updated" : "true"
+                    },
+                    "BorderColor" : "n/a",
+                    ".BorderColor" : {
+                      "updated" : "true"
+                    },
+                    "Depth" : "5",
+                    ".Depth" : {
+                      "updated" : "true"
+                    },
+                    "wE" : "block",
+                    "wID" : "t_108",
+                    "wPID" : "t_107",
+                    "wPE" : "block"
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ],
+      "CompositeComponentList" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralSection",
+        "SectionType" : "P",
+        "SelectLevel" : "1",
+        "Value" : "PRECAUTIONARY STATEMENTS",
+        "DisplayType" : "General",
+        "DisplayTypeIndent" : "General",
+        "OriginalTypeID" : "199",
+        "DisplayValue" : "PRECAUTIONARY STATEMENTS"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get in eyes, on skin, or on clothing. Wear protective eyewear (goggles, face shield or safety glasses), protective clothing and protective gloves (rubber or chemical resistant). Harmful if inhaled. Wash thoroughly with soap and water after handling. Remove contaminated clothing and wash clothing before reuse.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "400",
+        "DisplayValue" : "DANGER. CORROSIVE. Causes irreversible eye damage and skin burns. Harmful if swallowed. Do not get i....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralSection",
+        "SectionType" : "F",
+        "SelectLevel" : "1",
+        "DisplayType" : "General",
+        "DisplayTypeIndent" : "General",
+        "OriginalTypeID" : "200"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "Title" : "If in eyes:",
+        "SelectLevel" : "2",
+        "Value" : "Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes. Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "401",
+        "DisplayValue" : "Hold eye open and rinse slowly and gently with water for 15 ? 20 minutes. Remove contact lenses, if ....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "Title" : "If on skin or clothing:",
+        "SelectLevel" : "2",
+        "Value" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "402",
+        "DisplayValue" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15 ? 20 minutes......"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "Title" : "If swallowed:",
+        "SelectLevel" : "2",
+        "Value" : "Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of water if able to swallow. Do not induce vomiting unless told to do so by the poison control center or doctor. Do not give anything by mouth to an unconscious person.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "403",
+        "DisplayValue" : "Call a poison control center or doctor immediately for treatment advice. Have person sip a glass of ....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "Title" : "If inhaled:",
+        "SelectLevel" : "2",
+        "Value" : "Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably by mouth-to-mouth, if possible. Call a poison control center or doctor for treatment advice. Have the product container or label with you when calling a poison control center or doctor or going for treatment. NOTE TO PHYSICIAN: Probable mucosal damage may contraindicate the use of gastric lavage. Measures against circulatory shock, respiratory depression and convulsion may be needed.ove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "404",
+        "DisplayValue" : "Move person to fresh air. If person is not breathing, call 911 or an ambulance, then give artificial....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralSection",
+        "SectionType" : "E",
+        "SelectLevel" : "1",
+        "Value" : "ENVIRONMENTAL HAZARDS",
+        "DisplayType" : "General",
+        "DisplayTypeIndent" : "General",
+        "OriginalTypeID" : "201",
+        "DisplayValue" : "ENVIRONMENTAL HAZARDS"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_GeneralStatement",
+        "SelectLevel" : "2",
+        "Value" : "Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or other waters unless in accordance with the requirements of a National Pollutant Discharge Elimination System (NPDES) permit and the permitting authority has been notified in writing prior to discharge. Do not discharge effluent containing this product to sewer systems without previously notifying the local sewage treatment plant authority. For guidance contact your State Water Board or Regional Office of the EPA.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "405",
+        "DisplayValue" : "Do not discharge effluent containing this product into lakes, streams, ponds, estuaries, oceans, or ....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_IngredientsSection",
+        "SectionType" : "I",
+        "SelectLevel" : "1",
+        "Value" : "Active Ingredients:",
+        "DisplayType" : "Ingredients",
+        "DisplayTypeIndent" : "Ingredients",
+        "OriginalTypeID" : "67",
+        "DisplayValue" : "Active Ingredients:"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_IngredientsStatement",
+        "SelectLevel" : "2",
+        "Value" : "Didecyl dimethyl ammonium chloride",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "133",
+        "DisplayValue" : "Didecyl dimethyl ammonium chloride"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_IngredientsStatement",
+        "SelectLevel" : "2",
+        "Value" : "n-Alkyll (C<sub>14</sub> 50%, C<sub>12</sub> 40%, C<sub>16</sub> 10%) dimethyl benzyl ammonium chloride",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "134",
+        "DisplayValue" : "n-Alkyll (C<sub>14</sub> 50%, C<sub>12</sub> 40%, C<sub>16</sub> 10%) dimethyl benzyl ammonium chloride"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalSection",
+        "SectionType" : "S",
+        "SelectLevel" : "1",
+        "Value" : "STORAGE AND DISPOSAL",
+        "DisplayType" : "StorageDisposal",
+        "DisplayTypeIndent" : "Storage and Disposal",
+        "OriginalTypeID" : "97",
+        "DisplayValue" : "STORAGE AND DISPOSAL"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Storage and Disposal",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "332"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "Title" : "Storage and Disposal",
+        "SelectLevel" : "2",
+        "Value" : "(containers for household/residential use) Store in original container in areas inaccessible to children. Nonrefillable container. Do not reuse or refill this container. Offer for recycling if available.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "332",
+        "DisplayValue" : "(containers for household/residential use) Store in original container in areas inaccessible to chil....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Storage and Disposal",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "333"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "Title" : "Storage and Disposal",
+        "SelectLevel" : "2",
+        "Value" : "(containers for commercial, industrial, and institutional use) Do not contaminate water, food, or feed by storage or disposal.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "333",
+        "DisplayValue" : "(containers for commercial, industrial, and institutional use) Do not contaminate water, food, or fe....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Pesticide Disposal",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "334"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "Title" : "Pesticide Disposal",
+        "SelectLevel" : "2",
+        "Value" : "Store in original container in areas inaccessible to children. Open dumping is prohibited. Do not reuse empty container.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "334",
+        "DisplayValue" : "Store in original container in areas inaccessible to children. Open dumping is prohibited. Do not re....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Pesticide Disposal",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "335"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "Title" : "Pesticide Disposal",
+        "SelectLevel" : "2",
+        "Value" : "Pesticide wastes are acutely hazardous. Improper disposal of excess pesticide, spray mixture or rinsate is a violation of Federal Law. If these wastes cannot be disposed of by use according to label instruction, contact your local State Pesticide or Environmental Control Agency, or the Hazardous Waste representative at the nearest EPA Regional Office for guidance.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "335",
+        "DisplayValue" : "Pesticide wastes are acutely hazardous. Improper disposal of excess pesticide, spray mixture or rins....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalTitle",
+        "SelectLevel" : "2",
+        "Value" : "Container Handling",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "336"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_StorageDisposalStatement",
+        "Title" : "Container Handling",
+        "SelectLevel" : "2",
+        "Value" : "(Plastic containers:) Nonrefillable container. Do not reuse or refill this container. Triple rinse container (or equivalent) promptly after emptying. Triple rinse as follows: Fill container 1/4 full with water. Tip container on side and roll it back and forth, ensuring at least one complete revolution for 30 seconds. Stand container on its end and tip it back and forth several times. Turn the container over its other end and tip it back and forth several times. Follow Pesticide Disposal instructions for rinsate disposal. Repeat two more times.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "336",
+        "DisplayValue" : "(Plastic containers:) Nonrefillable container. Do not reuse or refill this container. Triple rinse c....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseSection",
+        "SectionType" : "D",
+        "SelectLevel" : "1",
+        "Value" : "Five Gallon Directions of Use",
+        "DisplayType" : "DirectionsForUse",
+        "DisplayTypeIndent" : "Directions For Use",
+        "OriginalTypeID" : "448",
+        "DisplayValue" : "Five Gallon Directions of Use"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "SelectLevel" : "2",
+        "Value" : "It is a violation of Federal Law to use this product in a manner inconsistent with its labeling.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3070",
+        "DisplayValue" : "It is a violation of Federal Law to use this product in a manner inconsistent with its labeling......"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "DIRECTIONS FOR DISINFECTlNG: (Bactericidal, Fungicidal, Virucidal)",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "3071"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "Title" : "DIRECTIONS FOR DISINFECTlNG: (Bactericidal, Fungicidal, Virucidal)",
+        "SelectLevel" : "2",
+        "Value" : "For use on hard, non-porous surfaces in animal care facilities such as floors, walls, metal surfaces, stainless steel surfaces, glazed porcelain, and plastic surfaces. Remove gross filth and heavy soil deposits then thoroughly wet surfaces. Use 2 ounces per gallon of water (8 ounces per gallon against canine parvovirus and Porcine parvovirus) for a minimum contact time of 10 minutes in a single application. Can be applied with a cloth, mop, or sponge, as well as by coarse spray or soaking. The use solution is prepared fresh for each use then discarded. Rinsing is not necessary unless floors are to be waxed or polished. This product is not for use on medical device surfaces.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3071",
+        "DisplayValue" : "For use on hard, non-porous surfaces in animal care facilities such as floors, walls, metal surfaces....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "FUNGICIDAL DIRECTIONS:",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "3072"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "Title" : "FUNGICIDAL DIRECTIONS:",
+        "SelectLevel" : "2",
+        "Value" : "For use in areas such as locker rooms, dressing rooms, shower and bath areas and exercise facilities follow disinfection directions.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3072",
+        "DisplayValue" : "For use in areas such as locker rooms, dressing rooms, shower and bath areas and exercise facilities....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "MILDEWSTATIC INSTRUCTIONS:",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "3073"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "Title" : "MILDEWSTATIC INSTRUCTIONS:",
+        "SelectLevel" : "2",
+        "Value" : "Will effectively control the growth of mold and mildew plus the odors caused by them when applied to hard, non-porous surfaces such as walls, floors, and table tops. Apply solution (2 ounces per gallon of water) with a cloth, mop, sponge or coarse spray making sure to wet all surfaces completely. Let air dry. Repeat application weekly or when growth reappears.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3073",
+        "DisplayValue" : "Will effectively control the growth of mold and mildew plus the odors caused by them when applied to....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "VETERINARY CLINICS / ANIMAL CARE / ANIMAL LIFE SCIENCE LABORATORIES / ZOOS / PET SHOP / KENNELS / BREEDING AND GROOMING ESTABLISHMENTS / EQUINE FARMS DISINFECTION DIRECTIONS:",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "3074"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "Title" : "VETERINARY CLINICS / ANIMAL CARE / ANIMAL LIFE SCIENCE LABORATORIES / ZOOS / PET SHOP / KENNELS / BREEDING AND GROOMING ESTABLISHMENTS / EQUINE FARMS DISINFECTION DIRECTIONS:",
+        "SelectLevel" : "2",
+        "Value" : "For disinfecting the following hard nonporous surfaces: equipment not used for animal food or water, utensils, instruments, cages, kennels, stables, catteries, etc. Remove all animals and feeds from premises, animal transportation vehicles, crates, etc. Remove all litter, droppings and manure from floors, walls and surfaces of facilities occupied or traversed by animals. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with a solution of 2 oz of KennelSol per gallon of water (or equivalent dilution) (8 ounces per gallon against Canine parvovirus or Porcine parvovirus), using a cloth, mop, sponge, spray, or soaking for a period of 10 minutes. Ventilate buildings and other closed spaces. Do not house animals or employ equipment until treatment has been absorbed, set or dried.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3074",
+        "DisplayValue" : "For disinfecting the following hard nonporous surfaces: equipment not used for animal food or water,....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "*FOR CANINE PARVOVIRUS (AND PORCINE PARVOVIRUS) ACTIVITY:",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "3075"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "Title" : "*FOR CANINE PARVOVIRUS (AND PORCINE PARVOVIRUS) ACTIVITY:",
+        "SelectLevel" : "2",
+        "Value" : "KennelSol is effective against Canine Parvovirus (and Porcine parvovirus) at 8 oz. per gallon. Follow Veterinary Practice / Animal Care / Animal Laboratory / Zoos / Pet Shop / Kennels Disinfection Directions.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3075",
+        "DisplayValue" : "KennelSol is effective against Canine Parvovirus (and Porcine parvovirus) at 8 oz. per gallon. Follo....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseTitle",
+        "SelectLevel" : "2",
+        "Value" : "**SPECIAL INSTRUCTIONS FOR INACTIVATING AVIAN INFLUENZA:",
+        "DisplayType" : "Title",
+        "DisplayTypeIndent" : "...Stmt Title",
+        "OriginalTypeID" : "3076"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_DirectionsForUseStatement",
+        "Title" : "**SPECIAL INSTRUCTIONS FOR INACTIVATING AVIAN INFLUENZA:",
+        "SelectLevel" : "2",
+        "Value" : "Remove all poultry and feeds from premises, trucks, coops, and crates. Remove all litter and droppings from floors, walls, and surfaces of facilities occupied or traversed by poultry. Empty all troughs, racks, and other feeding and watering appliances. Thoroughly clean all surfaces with soap or detergent and rinse with water. Saturate surfaces with the disinfecting solution (2 oz per gallon of water) (660 ppm active quat) (equivalent use dilution) for a period of 10 minutes. Immerse all halters, ropes and other types of equipment sed in handling and restraining animals as well as forks, shovels, and scrapers used in removing litter and manure. Ventilate buildings, coops, and other closed spaces. Do not house poultry or employ equipment until treatment has been absorbed, set, or dried. Thoroughly scrub treated feed racks, troughs, automatic feeders, fountains, and waterers with soap or detergent, and rinse with potable water before reuse.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3076",
+        "DisplayValue" : "Remove all poultry and feeds from premises, trucks, coops, and crates. Remove all litter and droppin....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "Germicidal Detergent",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "Germicidal Detergent",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3315",
+        "DisplayValue" : "Germicidal Detergent"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Germicidal Detergent and Deordorant",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3342",
+        "DisplayValue" : "Germicidal Detergent and Deordorant....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "For Use Areas / Surfaces",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "For Use Areas / Surfaces",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3316",
+        "DisplayValue" : "For Use Areas / Surfaces"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanimate surfaces: {{Surface}}, etc.).",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3343",
+        "DisplayValue" : "For use in: {{Area Of Use}}. Disinfects, cleans, and deodorizes the following hard nonporous\r\ninanim....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Appliances",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77413",
+        "DisplayValue" : "Appliances"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bathroom fixtures",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77414",
+        "DisplayValue" : "Bathroom fixtures"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bathtubs (Fiberglass)",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77415",
+        "DisplayValue" : "Bathtubs (Fiberglass)"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Cabinets",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77416",
+        "DisplayValue" : "Cabinets"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Cages",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77417",
+        "DisplayValue" : "Cages"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Chairs",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77418",
+        "DisplayValue" : "Chairs"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77419",
+        "DisplayValue" : "Coils and drain pans of air conditioning and refrigeration equipment and heat pumps"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Conductive flooring",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77420",
+        "DisplayValue" : "Conductive flooring"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Counters (countertops)",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77421",
+        "DisplayValue" : "Counters (countertops)"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Countertop laminates",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Surface",
+        "OriginalTypeID" : "77422",
+        "DisplayValue" : "Countertop laminates"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Airports",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77423",
+        "DisplayValue" : "Airports"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Animal Care",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77424",
+        "DisplayValue" : "Animal Care"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Animal Laboratories",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77425",
+        "DisplayValue" : "Animal Laboratories"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Animal Life Science Laboratories",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77426",
+        "DisplayValue" : "Animal Life Science Laboratories"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Athletic Facilities",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77427",
+        "DisplayValue" : "Athletic Facilities"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Automotive Industy",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77428",
+        "DisplayValue" : "Automotive Industy"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Barber Shops",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77429",
+        "DisplayValue" : "Barber Shops"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bars",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77430",
+        "DisplayValue" : "Bars"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bathrooms",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77431",
+        "DisplayValue" : "Bathrooms"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Beverage Plants",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77432",
+        "DisplayValue" : "Beverage Plants"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "For Use Areas Only",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "For Use Areas Only - For use in:",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3317",
+        "DisplayValue" : "For Use Areas Only - For use in:"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "For use in {{Area Of Use}}.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3344",
+        "DisplayValue" : "For use in {{Area Of Use}}......"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Airports",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77423",
+        "DisplayValue" : "Airports"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Animal Care",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77424",
+        "DisplayValue" : "Animal Care"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Animal Laboratories",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77425",
+        "DisplayValue" : "Animal Laboratories"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Animal Life Science Laboratories",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77426",
+        "DisplayValue" : "Animal Life Science Laboratories"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Athletic Facilities",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77427",
+        "DisplayValue" : "Athletic Facilities"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Automotive Industy",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77428",
+        "DisplayValue" : "Automotive Industy"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Barber Shops",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77429",
+        "DisplayValue" : "Barber Shops"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bars",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77430",
+        "DisplayValue" : "Bars"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bathrooms",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77431",
+        "DisplayValue" : "Bathrooms"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Beverage Plants",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Area of Use",
+        "OriginalTypeID" : "77432",
+        "DisplayValue" : "Beverage Plants"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "Multi-Purpose Detergent",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "Multi-Purpose Detergent",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3318",
+        "DisplayValue" : "Multi-Purpose Detergent"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5 % organic serum. Disinfects, cleans, and deodorizes in one labor saving step.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3345",
+        "DisplayValue" : "A multi-purpose germicidal detergent and deodorant effective in hard waters up to 400 ppm hard water....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "Recommended Use",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "Recommended Use - Recommeded for use in:",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3319",
+        "DisplayValue" : "Recommended Use - Recommeded for use in:"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food products and packaging materials must be removed from the room or carefully protected. Use product in accordance with its label. All surfaces must be thoroughly rinsed with potable water.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3346",
+        "DisplayValue" : "Federally inspected meat and poultry plants as a disinfectant agent for use in all departments. Food....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "Bactericidal Claims",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "Bactericidal Claims",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3320",
+        "DisplayValue" : "Bactericidal Claims"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test method, current edition, modified in the presence of 400 ppm synthetic hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum:",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3347",
+        "DisplayValue" : "Bactericidal against the following pathogenic bacteria according to the AOAC Use-Dilution Test metho....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Acinetobacter calcoaceticus",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77358",
+        "DisplayValue" : "Acinetobacter calcoaceticus"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Kiebsiella pneumoniae",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77369",
+        "DisplayValue" : "Kiebsiella pneumoniae"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Pasteurella multocida ",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77372",
+        "DisplayValue" : "Pasteurella multocida "
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Fusobacterium necrophorum",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77368",
+        "DisplayValue" : "Fusobacterium necrophorum"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Enterococcus faecalis- Vancomycin Resistant (VRE)",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77366",
+        "DisplayValue" : "Enterococcus faecalis- Vancomycin Resistant (VRE)"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Enterobacter cloacae",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77365",
+        "DisplayValue" : "Enterobacter cloacae"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bordetella bronchiseptica",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77359",
+        "DisplayValue" : "Bordetella bronchiseptica"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Legionella pneumophilia",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77370",
+        "DisplayValue" : "Legionella pneumophilia"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Proteus mirabilis",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77373",
+        "DisplayValue" : "Proteus mirabilis"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Listeria monocytogenes",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77371",
+        "DisplayValue" : "Listeria monocytogenes"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Proteus vulgaris",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77374",
+        "DisplayValue" : "Proteus vulgaris"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Pseudomonas aeruginosa",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77375",
+        "DisplayValue" : "Pseudomonas aeruginosa"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Salmonella choleraesuis",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77376",
+        "DisplayValue" : "Salmonella choleraesuis"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Salmonella enteritidis",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77377",
+        "DisplayValue" : "Salmonella enteritidis"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Salmonella typhi",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77378",
+        "DisplayValue" : "Salmonella typhi"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Staphylococcus epidermidis<sub> (2)</sub>",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77386",
+        "DisplayValue" : "Staphylococcus epidermidis<sub> (2)</sub>"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "Fungicidal",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "Fungicidal",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3321",
+        "DisplayValue" : "Fungicidal"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presense of 400 ppm hard water (calculated as CaCO<sub>3</sub>) plus 5% organic serum.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3348",
+        "DisplayValue" : "Fungicidal against {{Claims}} albicans according to the AOAC fungicidal test, modified in the presen....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Acinetobacter calcoaceticus",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77358",
+        "DisplayValue" : "Acinetobacter calcoaceticus"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bordetella bronchiseptica",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77359",
+        "DisplayValue" : "Bordetella bronchiseptica"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Chlamydia psittaci",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77360",
+        "DisplayValue" : "Chlamydia psittaci"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingSection",
+        "Name" : "Virucidal",
+        "SectionType" : "M",
+        "SelectLevel" : "1",
+        "Value" : "Virucidal",
+        "DisplayType" : "Marketing",
+        "DisplayTypeIndent" : "Marketing",
+        "OriginalTypeID" : "3322",
+        "DisplayValue" : "Virucidal"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingStatement",
+        "SelectLevel" : "2",
+        "Value" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 400 ppm hard water (calculated as CaCO3) plus 5 % organic serum.",
+        "DisplayType" : "Statement",
+        "DisplayTypeIndent" : "...Statement",
+        "OriginalTypeID" : "3349",
+        "DisplayValue" : "Virucidal against {{Claims}} according to the virucidal qualification, modified in the presence of 4....."
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Bordetella bronchiseptica",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77359",
+        "DisplayValue" : "Bordetella bronchiseptica"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Acinetobacter calcoaceticus",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77358",
+        "DisplayValue" : "Acinetobacter calcoaceticus"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_MarketingUsageOrdering",
+        "SelectLevel" : "3",
+        "Value" : "Chlamydia psittaci",
+        "DisplayType" : "MarketingUsage",
+        "DisplayTypeIndent" : "...Mktg Claim",
+        "OriginalTypeID" : "77360",
+        "DisplayValue" : "Chlamydia psittaci"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "SPLD_HumanHazardSection",
+        "SelectLevel" : "1",
+        "DisplayType" : "Hazards",
+        "DisplayTypeIndent" : "Hazards",
+        "OriginalTypeID" : "67"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "SelectLevel" : "2",
+        "DisplayType" : "Signal Word",
+        "DisplayTypeIndent" : "...Signal Word",
+        "DisplayValue" : "DANGER"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "SelectLevel" : "2",
+        "DisplayType" : "Child Warning",
+        "DisplayTypeIndent" : "...Child Warning",
+        "DisplayValue" : "U"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "SelectLevel" : "2",
+        "DisplayType" : "Precautionary Stmt",
+        "DisplayTypeIndent" : "...Precautionary Stmt",
+        "DisplayValue" : "See {{Precautionary Panel Location}} Panel for Precautionary Statements and First Aid"
+      }, {
+        ".meta" : {
+          "incrementals" : "C",
+          "selected" : true
+        },
+        "DisplayType" : "Location",
+        "DisplayTypeIndent" : "Location",
+        "DisplayValue" : "...right / left / side / back"
+      } ]
+    } ]
+  } ]
+}

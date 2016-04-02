@@ -32,8 +32,6 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
  * This domain handles any differences needed to deal with dates+time.
- * @author DG
- *
  */
 public class DateTimeDomain extends DateDomain
 {

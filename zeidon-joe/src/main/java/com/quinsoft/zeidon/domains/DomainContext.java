@@ -35,7 +35,8 @@ public interface DomainContext extends PortableFileAttributeHandler
 {
     String getName();
     boolean isDefault();
-
+    String getEditString();
+    
     /**
      * Takes an external value and converts it into an internal value using domain processing.
      * @param task

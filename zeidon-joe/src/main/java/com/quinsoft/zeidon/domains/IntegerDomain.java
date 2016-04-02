@@ -20,25 +20,85 @@
 package com.quinsoft.zeidon.domains;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.primitives.Ints;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
- * @author DG
+ * Domain for storing Integers.
  *
  */
 public class IntegerDomain extends AbstractNumericDomain
 {
+    static final private Pattern BETWEEN = Pattern.compile( "\\((\\d+)(<|<=)x(<|<=)(\\d+)\\)" );
+    static final private Pattern RANGE   = Pattern.compile( "\\((\\d+)\\.\\.(\\d+)\\)" );
+
+    private final IntChecker intChecker;
+
     public IntegerDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
+        intChecker = configure( task, domainProperties );
+    }
+
+    private IntChecker configure( Task task, Map<String,Object> domainProperties )
+    {
+        if ( StringUtils.isBlank( getConstraintRule() ) )
+            return null;
+
+        String config = getConstraintRule().replaceAll( "\\s", "" ); // Remove all whitespace.
+
+        // Check for BETWEEN config
+        Matcher m = BETWEEN.matcher( config );
+        if ( m.matches() )
+        {
+            task.log().info( "Domain %s: using between logic '%s'", getName(), config );
+
+            int lowerBound = Integer.parseInt( m.group( 1 ) );
+            int upperBound = Integer.parseInt( m.group( 4 ) );
+            String lowerCompare = m.group( 2 );
+            String upperCompare = m.group( 3 );
+            switch ( lowerCompare )
+            {
+                case "<":
+                    if ( upperCompare.equals( "<" ) )
+                        return new BetweenLL( lowerBound, upperBound );
+                    else
+                        return new BetweenLLe( lowerBound, upperBound );
+
+                case "<=":
+                    if ( upperCompare.equals( "<" ) )
+                        return new BetweenLeL( lowerBound, upperBound );
+                    else
+                        return new BetweenLeLe( lowerBound, upperBound );
+            }
+        }
+
+        m = RANGE.matcher( config );
+        if ( m.matches() )
+        {
+            return new Range( m.group( 1 ), m.group( 2 ) );
+        }
+
+        throw new ZeidonException("Unknown config string '%s' for IntegerDomain", config );
+    }
+
+    private Integer check( AttributeDef attributeDef, int value )
+    {
+        if ( intChecker != null )
+            intChecker.checkValue( attributeDef, value );
+
+        return value;
     }
 
     @Override
@@ -52,16 +112,26 @@ public class IntegerDomain extends AbstractNumericDomain
             return null;
 
         if ( externalValue instanceof Long )
-            return Ints.checkedCast( (Long) externalValue );
+            return check( attributeDef, Ints.checkedCast( (Long) externalValue ) );
 
         if ( externalValue instanceof Number )
-            return ((Number) externalValue).intValue();
+            return check( attributeDef, ((Number) externalValue).intValue() );
 
         if ( externalValue instanceof CharSequence )
         {
             // VML uses "" as a synonym for null.
         	if ( externalValue instanceof String && StringUtils.isBlank( (String) externalValue) )
         		return null;
+
+        	if ( ! StringUtils.isBlank( contextName ) )
+        	{
+        	    NumericContext context = (NumericContext) getContext( contextName );
+        	    if ( context.hasFormatter() )
+        	    {
+            	    Number number = (Number) context.convertExternalValue( task, attributeDef, externalValue );
+            	    return check( attributeDef, number.intValue() );
+        	    }
+        	}
 
         	Integer num;
         	try
@@ -70,14 +140,16 @@ public class IntegerDomain extends AbstractNumericDomain
         	}
         	catch( Exception e )
         	{
-                throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
-                        externalValue.getClass().getName() );
+                throw new InvalidAttributeValueException( attributeDef, externalValue,
+                                                          "Can't convert '%s' (class: %s) to Integer",
+                                                          externalValue, externalValue.getClass().getName() );
         	}
-            return num;
+
+            return check( attributeDef, num );
         }
 
-        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Integer",
-                                                  externalValue.getClass().getName() );
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' (class: %s) to Integer",
+                                                  externalValue, externalValue.getClass().getName() );
     }
 
     @Override
@@ -106,13 +178,196 @@ public class IntegerDomain extends AbstractNumericDomain
         return value * num;
     }
 
+    @Override
+    public DomainContext newContext(Task task)
+    {
+        return new NumericContext( this );
+    }
 
     @Override
-    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+    public DomainContext getContext(Task task, String contextName)
     {
-     	if ( internalValue == null )
-    		return null;
+        DomainContext context = getContext( contextName );
+        if ( context != null )
+            return context;  // We found one by name.
 
-     	return internalValue.toString();
+        if ( StringUtils.isBlank( contextName ) )
+            throw new ZeidonException("Domain '%s' does not have a default context defined.", getName() );
+
+        // Create a temporary new one and set its edit string to the context name.
+        NumericContext intContext = new NumericContext( this );
+        intContext.setName( contextName );
+        intContext.setEditString( contextName );
+        return intContext;
     }
+
+    @Override
+    public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
+    {
+        if ( intChecker == null )
+            return super.generateRandomTestValue( task, attributeDef, entityInstance );
+
+        return intChecker.generateRandomTestValue( task, attributeDef, entityInstance );
+    }
+
+    private interface IntChecker
+    {
+        void checkValue( AttributeDef attributeDef, int value );
+        Integer generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance );
+    }
+
+    private class BetweenLL implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+
+        public BetweenLL( int lowerBound, int upperBound ) // 0 < x < 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value <= lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is less than lower bound %d", lowerBound );
+            if ( value >= upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is greater than upper bound %d", lowerBound );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
+    }
+
+    private class BetweenLeL implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+
+        public BetweenLeL( int lowerBound, int upperBound ) // 0 <= x < 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value < lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is less than lower bound %d", lowerBound );
+            if ( value >= upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is greater than upper bound %d", lowerBound );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
+    }
+
+    private class BetweenLeLe implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+
+        public BetweenLeLe( int lowerBound, int upperBound ) // 0 <= x <= 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value < lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is less than lower bound %d", lowerBound );
+            if ( value > upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is greater than upper bound %d", lowerBound );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
+    }
+
+    private class BetweenLLe implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+
+        public BetweenLLe( int lowerBound, int upperBound ) // 0 < x <= 100
+        {
+            super();
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value <= lowerBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is less than lower bound %d", lowerBound );
+            if ( value > upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is greater than upper bound %d", lowerBound );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
+    }
+
+    private class Range implements IntChecker
+    {
+        private final int lowerBound;
+        private final int upperBound;
+
+        public Range( String lowerBound, String upperBound ) // 0 <= x <= 100
+        {
+            super();
+            this.lowerBound = Integer.parseInt( lowerBound );
+            this.upperBound = Integer.parseInt( upperBound );
+        }
+
+        @Override
+        public void checkValue( AttributeDef attributeDef, int value )
+        {
+            if ( value < lowerBound || value > upperBound )
+                throw new InvalidAttributeValueException( attributeDef, value,
+                                                          "Value is outside of range %s", getConstraintRule() );
+        }
+
+        @Override
+        public Integer generateRandomTestValue( Task task, AttributeDef attributeDef,
+                                                EntityInstance entityInstance )
+        {
+            return random.nextInt( upperBound - lowerBound ) + lowerBound;
+        }
+    }
+
 }

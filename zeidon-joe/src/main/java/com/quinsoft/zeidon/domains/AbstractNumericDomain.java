@@ -19,8 +19,13 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.EntityInstance;
@@ -40,7 +45,7 @@ public abstract class AbstractNumericDomain extends AbstractDomain
     private final Double max;
     @SuppressWarnings("unused")
     private final String editString;
-    private final Random random = new Random();
+    protected final Random random = new Random();
 
     public AbstractNumericDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
@@ -78,5 +83,64 @@ public abstract class AbstractNumericDomain extends AbstractDomain
     public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
     {
         return random.nextInt( 256 );
+    }
+
+    public class NumericContext extends BaseDomainContext
+    {
+        private NumberFormat formatter;
+
+        public NumericContext( Domain domain )
+        {
+            super( domain );
+        }
+
+        @Override
+        public void setEditString( String editString )
+        {
+            if ( editString.startsWith( ":" ) )
+            {
+                super.setEditString( editString.substring( 1 ) );
+                return;
+            }
+
+            if ( StringUtils.equalsIgnoreCase( editString, "default" ) )
+                formatter = NumberFormat.getInstance( Locale.getDefault() );
+            else
+                formatter = NumberFormat.getInstance( Locale.forLanguageTag( editString ) );
+        }
+
+        protected boolean hasFormatter()
+        {
+            return formatter != null;
+        }
+
+        @Override
+        public Object convertExternalValue( Task task, AttributeDef attributeDef, Object value )
+                                      throws InvalidAttributeValueException
+        {
+            try
+            {
+                return formatter.parse( value.toString() );
+            }
+            catch ( ParseException e )
+            {
+                throw new InvalidAttributeValueException( attributeDef, value, "Parse exception: %s", e.getMessage() );
+            }
+        }
+
+        @Override
+        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+        {
+            if ( internalValue == null )
+                return null;
+
+            if ( formatter != null )
+                return formatter.format( internalValue );
+
+            if ( getEditString() != null )
+                return String.format( getEditString(), internalValue );
+
+            return internalValue.toString();
+        }
     }
 }

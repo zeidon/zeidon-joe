@@ -16,22 +16,41 @@
 
     Copyright 2009-2015 QuinSoft
  */
-
 package com.quinsoft.zeidon;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Zeidon objects that may be locked for exclusive access implement this interface.
- * 
- * @author DG
+ * Sets up pagination options to be used as part of an activate.
  *
  */
-public interface Lockable
+public class Pagination
 {
-    /**
-     * @return Returns a reentrant read-write lock that can be used to control access
-     * to different Zeidon objects.
-     */
-    ReentrantReadWriteLock getLock();
+    private int pageSize = 1000;
+    private boolean rollingPagination = false;
+
+    public Pagination()
+    {
+    }
+
+    public boolean isRollingPagination()
+    {
+        return rollingPagination;
+    }
+
+    public Pagination setRollingPagination( boolean rollingPagination )
+    {
+        this.rollingPagination = rollingPagination;
+        return this;
+    }
+
+    public int getPageSize()
+    {
+        return pageSize;
+    }
+
+    public Pagination setPageSize( int pageSize )
+    {
+        this.pageSize = pageSize;
+        return this;
+    }
 }

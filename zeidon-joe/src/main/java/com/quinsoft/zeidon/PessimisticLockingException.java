@@ -19,8 +19,6 @@
 
 package com.quinsoft.zeidon;
 
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Thrown by activates if the DB can't acquire a pessimistic lock for an OI.
@@ -32,26 +30,16 @@ public class PessimisticLockingException extends ZeidonException
 {
     private static final long serialVersionUID = 1L;
     
-    private final Collection<View> views;
-
-    /**
-     * @param format
-     * @param strings
-     */
-    public PessimisticLockingException(Collection<View> views, String format, Object... strings)
-    {
-        super( format, strings );
-        this.views = views;
-    }
+    private final View view;
 
     public PessimisticLockingException(View view, String format, Object... strings)
     {
-        this( new ArrayList<View>(), format, strings );
-        views.add( view );
+        super( format, strings );
+        this.view = view;
     }
 
-    public Collection<View> getViews()
+    public View getView()
     {
-        return views;
+        return view;
     }
 }

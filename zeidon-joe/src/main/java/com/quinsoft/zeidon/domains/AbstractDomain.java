@@ -56,6 +56,7 @@ public abstract class AbstractDomain implements Domain
     private final DomainType    domainType;
     private final InternalType  dataType;
     private final String        description;
+    private final String        constraintRule;
 
     public AbstractDomain( Application app, Map<String, Object> domainProperties, Task task )
     {
@@ -64,6 +65,7 @@ public abstract class AbstractDomain implements Domain
         domainType = DomainType.mapCode( ((String) domainProperties.get( "DomainType" )).charAt( 0 ) );
         dataType = InternalType.mapCode( (String) domainProperties.get( "DataType" ) );
         description = (String) domainProperties.get( "Desc" );
+        constraintRule = (String) domainProperties.get( "ConstraintRule" );
     }
 
     /* (non-Javadoc)
@@ -292,8 +294,14 @@ public abstract class AbstractDomain implements Domain
     @Override
     public DomainContext getContext(Task task, String contextName)
     {
+        return getContext( task, contextName, true );
+    }
+
+    @Override
+    public DomainContext getContext(Task task, String contextName, boolean required )
+    {
         DomainContext context = getContext( contextName );
-        if ( context == null )
+        if ( context == null && required )
         {
             if ( StringUtils.isBlank( contextName ) )
                 throw new ZeidonException("Domain '%s' does not have a default context defined.", getName() );
@@ -431,5 +439,22 @@ public abstract class AbstractDomain implements Domain
     public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
     {
         throw new ZeidonException( "Must be implemented for this domain" ).appendMessage( "Domain = %s", getName() );
+    }
+
+    public String getConstraintRule()
+    {
+        return constraintRule;
+    }
+
+    @Override
+    public boolean hasInitialValue( Task task, AttributeDef attributeDef )
+    {
+        return false;
+    }
+
+    @Override
+    public void setInitialValue( AttributeInstance attributeInstance  )
+    {
+        throw new ZeidonException( "setInitialValue not implemented for domain %s", getName() );
     }
 }

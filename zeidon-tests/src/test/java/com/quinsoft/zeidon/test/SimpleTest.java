@@ -9,9 +9,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.Pagination;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -66,7 +70,7 @@ class SimpleTest
                 view.log().debug( "Creating %s %d", rootEntity, i );
 
             entityCount = createChildEntities( entityCount, view, rootEntity );
-            view.cursor( rootEntity.getName() ).setAttribute( "Tag", i );
+            view.cursor( rootEntity.getName() ).getAttribute( "Tag").setValue( i ) ;
         }
 
         view.log().debug( "Created %d entities", entityCount );
@@ -80,7 +84,7 @@ class SimpleTest
                   rc.isSet();
                   rc = view.cursor( "Dlg" ).setNext() )
             {
-                if ( view.cursor( "Dlg" ).compareAttribute( "Tag", tag ) == 0 )
+                if ( view.cursor( "Dlg" ).getAttribute( "Tag").compare( tag )  == 0 )
                     break;
             }
         }
@@ -93,7 +97,7 @@ class SimpleTest
                   rc.isSet();
                   rc = view.cursor( "Dlg" ).setNext() )
             {
-                if ( view.cursor( "Dlg" ).compareAttribute( "Tag", 1500 ) == 0 )
+                if ( view.cursor( "Dlg" ).getAttribute( "Tag").compare( 1500 )  == 0 )
                     break;
             }
         }
@@ -107,7 +111,7 @@ class SimpleTest
                   rc.isSet();
                   rc = cursor.setNext() )
             {
-                if ( cursor.compareAttribute( "Tag", 1500 ) == 0 )
+                if ( cursor.getAttribute( "Tag").compare( 1500 )  == 0 )
                     break;
             }
         }
@@ -120,7 +124,7 @@ class SimpleTest
                   rc.isSet();
                   rc = cursor.setNext() )
             {
-                if ( cursor.compareAttribute( "Tag", tag ) == 0 )
+                if ( cursor.getAttribute( "Tag").compare( tag )  == 0 )
                     break;
             }
         }
@@ -128,7 +132,7 @@ class SimpleTest
 
 //        for ( EntityInstance dlg : view.getEntityListUnderParent( "Dlg" ) )
 //        {
-//            zeidonSystem.log().debug( "Dlg %s", dlg.getStringFromAttribute( "Tag" ) );
+//            zeidonSystem.log().debug( "Dlg %s", dlg.getAttribute( "Tag" ).getString() );
 //            view.cursor( "Wnd" ).deleteEntity();
 //        }
 //        zeidonSystem.log().debug( "Done cursor test" );
@@ -137,8 +141,8 @@ class SimpleTest
     private static void test( Task zencas )
     {
         View v = zencas.activateOiFromFile( "mStudent", "testdata/ZENCAs/mstudent_ac.por" );
-        v.cursor("Student").setAttributeFromAttribute( "GeneralNote", v, "Student", "StudentLifeClearedDate" );
-        System.out.println( "done " + v.cursor( "Student" ).getStringFromAttribute( "GeneralNote" ) );
+        v.cursor("Student").getAttribute( "GeneralNote").setValue( v.cursor(  "Student" ).getAttribute(  "StudentLifeClearedDate" ).getValue() )  ;
+        System.out.println( "done " + v.cursor( "Student" ).getAttribute( "GeneralNote" ).getString() );
     }
 
     /**
@@ -158,11 +162,8 @@ class SimpleTest
 //        String fileDbUrl = "http://localhost:8080/test-restserver-1.0.6-SNAPSHOT/restserver";
         String fileDbUrl = "jdbc:sqlite:/home/dgc/zeidon/sqlite/zencasa.sqlite";
         ObjectEngine oe = JavaObjectEngine.getInstance();
-        oe.startBrowser();
+//        oe.startBrowser();
         Task zencas = oe.createTask( "ZENCAs" );
-        View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).loadFile( "/tmp/qual.json" ).activate();
-        int count = mUser.cursor( "User" ).getEntityCount();
-        mUser.logObjectInstance();
 
 //        Task cheetah = oe.createTask(  "Cheetah" );
 //        View fPerson = new QualificationBuilder( cheetah )
@@ -177,10 +178,18 @@ class SimpleTest
         View stud = new QualificationBuilder( zencas )
                             .setLodDef( "lStudDpt" )
                             .setOiSourceUrl( fileDbUrl )
-                            .addAttribQual( "Status", "@Student.eMailAddress" )
-                            .addAttribQual( "AND" )
-                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+//                            .addAttribQual( "MajorDepartment", "ID", "=", 3 )
+                            .setPagination( new Pagination().setPageSize( 10 ) )
+                            .addActivateOrdering( "Student", "CreationDate", true )
                             .activate();
+
+        int count = 0;
+        for ( EntityInstance ei : stud.cursor( "Student" ).eachEntity() )
+        {
+            stud.log().info( "Key = %s", ei.getAttribute( "ID" ) );
+            stud.log().info( "Key = %s", stud.cursor( "Student" ).getAttribute( "ID" ) );
+            stud.log().info( "%d -----------", count++ );
+        }
 
         stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "dgc@xyz.com" );
         stud.cursor( "Student" ).setPosition( 6 );
@@ -189,11 +198,25 @@ class SimpleTest
         stud.serializeOi().asJson().withIncremental().toFile( "/tmp/stud.json" );
         String jsonFile = stud.serializeOi().withIncremental().toFile( "/tmp/stud2.json" );
 
+        AttributeInstance attr = stud.cursor( "Student" ).getAttribute( "ID" );
+        System.out.println( "US = " + attr.getString("en_US") );
+        System.out.println( "FR = " + attr.getString("fr") );
+        System.out.println( "DE = " + attr.getString("de") );
+
         View stud2 = zencas.deserializeOi()
                             .fromResource( jsonFile )
                             .setLodDef( "lStudDpt" )
                             .activateFirst();
 //        stud2.logObjectInstance();
+
+        stud2.setName( "ViewWithSelectSet" );
+        SelectSet selectSet = stud2.getSelectSet( "TestSet" );
+        selectSet.select( stud2.cursor( "Student" ) );
+        stud2.cursor( "Student" ).setFirst();
+        selectSet.select( stud2.cursor( "Student" ) );
+        stud2.getSelectSet( "TestSet2" );
+        stud2.getSelectSet( "TestSet3" );
+        stud2.dropSelectSet( "TestSet2" );
 
         String xmlFile = stud.serializeOi().withIncremental().compressed().toTempDir( "stud2.xml" );
         stud2 = zencas.deserializeOi().fromResource( xmlFile ).activateFirst();

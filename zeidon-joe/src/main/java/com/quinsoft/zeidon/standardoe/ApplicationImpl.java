@@ -27,12 +27,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
@@ -52,7 +50,6 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     private final Map<String, LodDef> lodDefList = new HashMap<String, LodDef>();
     private final String              zeidonRootDir;
     private final ViewNameList        viewNameList = new ViewNameList();
-    private final NamedLockableList   lockList = new NamedLockableList();
     private       DomainList          domainList;
 
     /**
@@ -122,13 +119,13 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     @Override
     public void setNameForView(String name, View view)
     {
-        // The task for the OI referenced by this view should be the system task.  This is
-        // necessary because the view is expected to have a life-time longer than the current task
-        // and if it isn't changed then it will hold on to a dead task and the GC can't clean up.
-    	// If the task is not the system task, then throw an exception.
+        // Move the view to be under the system task.  We do this because when
+        // the view's current task is dropped this view will still hold on to
+        // a reference to the task and it won't get cleaned up.
         if ( view.getTask() != view.getTask().getSystemTask() ) // Already system task?
         {
-            throw new ZeidonException("The Application view '%s' should be assigned to the system task but is not.",name);
+            ViewImpl v = ((InternalView) view ).getViewImpl();
+            v.reassignTask( view.getTask().getSystemTask() );
         }
 
         viewNameList.setNameForView( name, view );
@@ -165,12 +162,6 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
 	{
 		return domainList.getDomain(name);
 	}
-
-    @Override
-    public Lockable getNamedLock(String name)
-    {
-        return lockList.getNamedLock( name );
-    }
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.Application#getPackage()

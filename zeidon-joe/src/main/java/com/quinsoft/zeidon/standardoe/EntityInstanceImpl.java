@@ -32,12 +32,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.joda.time.DateTime;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CopyAttributesBuilder;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
@@ -45,14 +44,13 @@ import com.quinsoft.zeidon.EntityConstraintType;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.EventNotification;
-import com.quinsoft.zeidon.InvalidAttributeValueException;
+import com.quinsoft.zeidon.HiddenAttributeException;
 import com.quinsoft.zeidon.MaxCardinalityException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.TemporalEntityException;
-import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
@@ -60,9 +58,10 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.InternalType;
+import com.quinsoft.zeidon.objectdefinition.EntityDef.LinkValidation;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.KeyStringBuilder;
 
 /**
  * @author DG
@@ -107,14 +106,14 @@ class EntityInstanceImpl implements EntityInstance
      * persistentAttributes.
      *      Key = ER Attribute token
      */
-    private Map<Long, AttributeValue> persistentAttributes;
+    private Map<String, AttributeValue> persistentAttributes;
 
     /**
      * Map of work attributes. Every entity, even linked ones, will have their
      * own set of workAttributes.
      *      Key = ER Attribute token
      */
-    private Map<Long, AttributeValue> workAttributes;
+    private Map<String, AttributeValue> workAttributes;
 
     /**
      * List of instances linked with this one. This is a set of weak references;
@@ -203,12 +202,6 @@ class EntityInstanceImpl implements EntityInstance
     boolean dbhLoaded;  // True if this EI was just loaded by the DBHandler.
 
     /**
-     * AttributeInstances cannot be be shared by multiple entities because the AttributeInstance
-     * must be able to refer to its entity instance.
-     */
-    private Map<AttributeDef, AttributeInstanceImpl> attributeInstanceMap;
-
-    /**
      * This keeps track of child entity instances that have been loaded lazily.
      */
     private Set<EntityDef> entitiesLoadedLazily;
@@ -223,8 +216,8 @@ class EntityInstanceImpl implements EntityInstance
         EntityInstanceImpl newInstance =
             new EntityInstanceImpl( oi, entityDef, parent, relativeEntity, position );
         newInstance.setCreated( true );
-        newInstance.workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
-        newInstance.persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
+        newInstance.workAttributes = new HashMap<>( entityDef.getWorkAttributeCount() );
+        newInstance.persistentAttributes = new HashMap<>( entityDef.getPersistentAttributeCount() );
         newInstance.linkedInstances = null;
 
         return newInstance;
@@ -304,19 +297,28 @@ class EntityInstanceImpl implements EntityInstance
             this.depth = 1;
         }
 
-        workAttributes = new HashMap<Long, AttributeValue>( getEntityDef().getWorkAttributeCount() );
+        workAttributes = new HashMap<>( getEntityDef().getWorkAttributeCount() );
     }
 
     void initializeDefaultAttributes()
     {
-        if ( getEntityDef().hasInitializedAttributes() )
+        for ( AttributeDef attributeDef : getEntityDef().getAttributes( true ) )
         {
-            for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
+            Domain domain = attributeDef.getDomain();
+            if ( ! StringUtils.isBlank( attributeDef.getInitialValue() ) )
             {
-                if ( StringUtils.isBlank( attributeDef.getInitialValue() ) )
-                    continue;
-
-                setAttribute( attributeDef, attributeDef.getInitialValue(), null, true );
+                // Use the domain to convert the string to an internal value.  Then
+                // set the value using setInternalValue.  This bypasses the restriction
+                // on read-only attributes.
+                Object internalValue = domain.convertExternalValue( getTask(), null, attributeDef, null,
+                                                                    attributeDef.getInitialValue() );
+                getAttribute( attributeDef).setInternalValue( internalValue, false );
+            }
+            else
+            if ( ! attributeDef.isHidden() )
+            {
+                if ( domain.hasInitialValue( getTask(), attributeDef ) )
+                    domain.setInitialValue( getAttribute( attributeDef ) );
             }
         }
     }
@@ -672,14 +674,14 @@ class EntityInstanceImpl implements EntityInstance
     {
         AttributeDef va = validateMatchingEntities( attributeDef );
 
-        Map<Long, AttributeValue> attributes = getInstanceMap( va );
+        Map<String, AttributeValue> attributes = getInstanceMap( va );
         if ( ! attributes.containsKey( va.getErAttributeToken() ) )
             attributes.put( va.getErAttributeToken(), new AttributeValue( va ) );
 
         return attributes.get( va.getErAttributeToken() );
     }
 
-    private Map<Long, AttributeValue> getInstanceMap( AttributeDef attributeDef )
+    private Map<String, AttributeValue> getInstanceMap( AttributeDef attributeDef )
     {
         if ( attributeDef.isPersistent() )
             return persistentAttributes;
@@ -705,22 +707,13 @@ class EntityInstanceImpl implements EntityInstance
             // Find the attribute in getEntityDef() that matches attributeDef.
             for ( AttributeDef va : getEntityDef().getAttributes() )
             {
-                if ( va.getErAttributeToken().equals( attributeDef.getErAttributeToken() ) )
+                if ( va.getErAttributeToken() == attributeDef.getErAttributeToken() )
                     return va;
             }
         }
 
         throw new ZeidonException( "Mismatching entities.  AttributeDefEntity: %s, EntityDef: %s",
                                     attributeDef.getEntityDef(), getEntityDef() );
-    }
-
-    private void executeDerivedOper( View view, AttributeDef attributeDef )
-    {
-        if ( ! attributeDef.isDerived() )
-            return;
-
-        AttributeInstanceImpl instance = getAttribute( view, attributeDef );
-        attributeDef.executeDerivedAttributeForGet( instance );
     }
 
     @Override
@@ -1413,34 +1406,6 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
-     * Checks to see if all the attributes in targetEi as sourceEi.
-     *
-     * @return null if all attributes exist otherwise AttributeDef of first missing attribute found.
-     */
-    static private AttributeDef checkForAllPersistentAttributes( EntityDef source, EntityDef target )
-    {
-        for ( AttributeDef attr : target.getAttributes() )
-        {
-            if ( ! attr.isPersistent() )
-                continue;
-
-            // It's ok if autoseq is missing because it's maintained by the relationship.
-            if ( attr.isAutoSeq() )
-                continue;
-
-            if ( source.getAttribute( attr.getName(), false ) == null )
-                return attr;
-        }
-
-        return null;
-    }
-
-    enum LinkValidation
-    {
-        SOURCE_OK;
-    }
-
-    /**
      * Validate that the source and target entities are OK to link.  The error we're checking
      * for is that the source entity doesn't define all the attributes that the target has.  If
      * that happens the attributes in target will be lost when it is linked to source.
@@ -1454,70 +1419,6 @@ class EntityInstanceImpl implements EntityInstance
      * @param source
      * @return
      */
-    static LinkValidation validateLinking( EntityDef target, EntityDef source )
-    {
-        if ( target == source )
-            return LinkValidation.SOURCE_OK;
-
-        AttributeDef missingAttributeDef = null;
-
-        // If they have the same ER date we'll assume all is good.
-        if ( source.getLodDef().getErDate().equals( target.getLodDef().getErDate() ) )
-            return LinkValidation.SOURCE_OK;
-
-        // Check to see if it's ok for target to be linked to source.
-        EntityDefLinkInfo sourceInfo = getEntityDefLinkInfo( source );
-        Boolean sourceOk = sourceInfo.mayBeLinked.get( target );
-        if ( sourceOk == Boolean.TRUE )
-            return LinkValidation.SOURCE_OK;
-
-        /*  This leads to a NPE.  Some day we may try to fix it.
-        // Check to see if source can be linked to 'this'.
-        EntityDefLinkInfo targetInfo = getEntityDefLinkInfo( entityDef );
-        Boolean targetOk = targetInfo.mayBeLinked.get( entityDef );
-        if ( targetOk == Boolean.TRUE )
-        {
-            source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
-                                                                                 this, this.attributeList );
-            return;
-        }
-        */
-
-        if ( sourceOk == null ) // If it's null we've never checked this one.
-        {
-            missingAttributeDef = checkForAllPersistentAttributes( source, target );
-            sourceOk = missingAttributeDef == null;
-            sourceInfo.mayBeLinked.putIfAbsent( target, sourceOk );
-            if ( sourceOk == Boolean.TRUE )
-                return LinkValidation.SOURCE_OK;
-        }
-
-        /*  This leads to a NPE.  Some day we may try to fix it.
-        if ( targetOk == null ) // If it's null we've never checked this one.
-        {
-            missingAttributeDef = checkForAllPersistentAttributes( source, this );
-            targetOk = missingAttributeDef == null;
-            targetInfo.mayBeLinked.putIfAbsent( sourceEntityDef, targetOk );
-            if ( targetOk == Boolean.TRUE )
-            {
-                source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
-                                                                                     this, this.attributeList );
-                return;
-            }
-        }
-        */
-
-        ZeidonException ex = new ZeidonException( "Attempting to link instances that don't have matching attributes.  "
-                                                + "You probably need to re-save the target LOD." );
-        ex.appendMessage( "Source instance = %s", source );
-        ex.appendMessage( "Target instance type = %s", target );
-        ex.appendMessage( "Missing attribute = %s.%s.%s",
-                          missingAttributeDef.getEntityDef().getLodDef().getName(),
-                          missingAttributeDef.getEntityDef().getName(),
-                          missingAttributeDef.getName() );
-
-        throw ex;
-    }
 
     /**
      * Link this entity instance with 'source'.
@@ -1530,7 +1431,7 @@ class EntityInstanceImpl implements EntityInstance
         assert sourceInstance != this;
         assert entityDef.getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken();
 
-        LinkValidation valid = validateLinking( getEntityDef(), sourceInstance.getEntityDef() );
+        LinkValidation valid = getEntityDef().validateLinking( sourceInstance.getEntityDef() );
         if ( valid != LinkValidation.SOURCE_OK )
         {
             // We should never get here because validateLinking() should throw an exception if
@@ -1557,7 +1458,6 @@ class EntityInstanceImpl implements EntityInstance
                     linkedInstances = newInstance.linkedInstances;
                     linkedInstances.putIfAbsent( this, Boolean.TRUE );
                     persistentAttributes = newInstance.persistentAttributes;
-                    attributeInstanceMap = null;
                     return;
                 }
 
@@ -1576,7 +1476,6 @@ class EntityInstanceImpl implements EntityInstance
             linkedInstances.putIfAbsent( newInstance, Boolean.TRUE );
             newInstance.linkedInstances = linkedInstances;
             newInstance.persistentAttributes = persistentAttributes;
-            newInstance.attributeInstanceMap = null;
 
             assert assertLinkedInstances() : "Error with linked instances";
         }
@@ -1845,7 +1744,6 @@ class EntityInstanceImpl implements EntityInstance
                     // attribute list.
                     linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
                     linked.persistentAttributes = persistentAttributes;
-                    linked.attributeInstanceMap = null;
                     linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
 
                     // The spawn logic should have correctly set most of the flags.  The only one we have to
@@ -1911,15 +1809,28 @@ class EntityInstanceImpl implements EntityInstance
         assert assertLinkedInstances() : "Error with linked instances";
     }
 
-    void validateSubobject( Collection<ZeidonException> list )
+    void validateSubobject( View view, Collection<ZeidonException> list )
     {
         assert isHidden() == false : "Attempting to validate a hidden instance.";
 
+        if ( getEntityDef().hasAcceptConstraint() )
+        {
+            try
+            {
+                getEntityDef().executeEntityConstraint( view, EntityConstraintType.ACCEPT );
+            }
+            catch ( Exception e )
+            {
+                list.add( ZeidonException.wrapException( e ) );
+                return;
+            }
+        }
+
         //
-        // First make sure that all the required attributes have non-null values
+        // Make sure that all the required attributes have non-null values
         // if this entity has been changed in any way.
         //
-        if ( isCreated() || isChanged() || isIncluded() )
+        if ( isCreated() || isUpdated() || isIncluded() )
         {
             for ( AttributeDef attributeDef : getEntityDef().getAttributes() )
             {
@@ -1934,7 +1845,7 @@ class EntityInstanceImpl implements EntityInstance
                 if ( ! attributeDef.isRequired() )
                     continue;
 
-                if ( ! isAttributeNull( attributeDef ) )
+                if ( ! getAttribute( attributeDef) .isNull() )
                     continue;
 
                 list.add( new RequiredAttributeException( attributeDef ) );
@@ -1990,17 +1901,16 @@ class EntityInstanceImpl implements EntityInstance
 
         // Now run this on all direct children.
         for ( EntityInstanceImpl childInstance : getDirectChildren( false, false ) )
-            childInstance.validateSubobject( list );
+            childInstance.validateSubobject( view, list );
     }
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.EntityInstance#validateSubobject()
      */
-    @Override
-    public Collection<ZeidonException> validateSubobject()
+    Collection<ZeidonException> validateSubobject( View view )
     {
         Collection<ZeidonException> list = new ArrayList<ZeidonException>();
-        validateSubobject( list );
+        validateSubobject( view, list );
 
         if ( list.size() == 0 )
             return null;
@@ -2014,9 +1924,9 @@ class EntityInstanceImpl implements EntityInstance
      *
      * @throws SubobjectValidationException
      */
-    void validateSubobjectThrowException()
+    void validateSubobjectThrowException( View view )
     {
-        Collection<ZeidonException> list = validateSubobject();
+        Collection<ZeidonException> list = validateSubobject( view );
         if ( list == null || list.size() == 0 )
             return;
 
@@ -2026,16 +1936,25 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public EntityInstanceImpl acceptSubobject()
     {
+        return acceptSubobject( getObjectInstance().createView( this ) );
+    }
+
+    EntityInstanceImpl acceptSubobject( View view )
+    {
         // If the entity is a temporal entity created via createTemporal we'll
         // accept it.
         if ( versionStatus == VersionStatus.UNACCEPTED_ENTITY )
         {
-            acceptTemporalEntity();
+            acceptTemporalEntity( view );
             return this;
         }
 
         // Before we change any version pointers let's validate the entity and attribute values.
-        validateSubobjectThrowException();
+        validateSubobjectThrowException( view );
+
+        // If this EI isn't versioned then we're done.
+        if ( versionStatus == VersionStatus.NONE )
+            return this;
 
         if ( versionStatus != VersionStatus.UNACCEPTED_ROOT )
             throw new TemporalEntityException(this, "Entity is not a root of a temporal subobject root" );
@@ -2181,11 +2100,16 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public void acceptTemporalEntity()
     {
+        acceptTemporalEntity( getObjectInstance().createView( this ) );
+    }
+
+    void acceptTemporalEntity( View view )
+    {
         if ( versionStatus != VersionStatus.UNACCEPTED_ENTITY )
             throw new TemporalEntityException(this, "Entity is not the root of a temporal entity");
 
         // Before we change any version pointers let's validate the entity and attribute values.
-        validateSubobjectThrowException();
+        validateSubobjectThrowException( view );
 
         for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
             ei.setVersionStatus( VersionStatus.NONE );
@@ -2796,18 +2720,12 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public String getKeyString()
     {
-        boolean nonnull = false;  // We'll assume all keys are null until we find one that isn't.
-        StringBuilder builder = new StringBuilder();
+        KeyStringBuilder builder = new KeyStringBuilder();
 
         for ( AttributeDef key : getEntityDef().getKeys() )
-        {
-            AttributeValue attr = getInternalAttribute( key );
-            if ( ! attr.isNull( getTask(), key ) )
-                nonnull = true;
-            builder.append( attr.toString() ).append( "|" );
-        }
+            builder.appendKey( getAttribute( key ) );
 
-        if ( ! nonnull )
+        if ( builder.isNull() )
             return null;
 
         return builder.toString();
@@ -2912,7 +2830,7 @@ class EntityInstanceImpl implements EntityInstance
             }
 
             Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
-            setAttribute( targetAttr, sourceValue );
+            getAttribute( targetAttr ).setValue( sourceValue );
         } // for each target AttributeDef...
 
         return 0;
@@ -2990,104 +2908,6 @@ class EntityInstanceImpl implements EntityInstance
         return domain.getContext( getTask(), contextName ).getName();
     }
 
-    @Override
-    public EntityInstance setAttribute(String attributeName, Object value, String contextName) throws InvalidAttributeValueException
-    {
-        return setAttribute( getEntityDef().getAttribute( attributeName ), value, contextName );
-    }
-
-    /**
-     * Validates that setting this attribute is authorized and then calls attrib.set()
-     * to perform the set.
-     */
-    @Override
-    public EntityInstance setAttribute(AttributeDef attributeDef, Object value, String contextName) throws InvalidAttributeValueException
-    {
-        return setAttribute( attributeDef, value, contextName, false );
-    }
-
-    EntityInstance setAttribute( AttributeDef attributeDef,
-                                 Object value,
-                                 String contextName,
-                                 boolean beingInitialized ) throws InvalidAttributeValueException
-    {
-        if ( attributeDef.isHidden() )
-            throw new UnknownAttributeDefException( getEntityDef(), attributeDef.getName() );
-
-        contextName = checkContextName( attributeDef, contextName );
-
-        try
-        {
-            AttributeInstanceImpl attrib = getAttribute( attributeDef );
-            if ( beingInitialized )
-                attrib.setInternalValue( value, false ); // This bypasses some validation.
-            else
-                attrib.setValue( value, contextName );
-        }
-        catch( Throwable t )
-        {
-            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
-        }
-
-        return this;
-    }
-
-    void setAttributeUpdated( AttributeDef attributeDef, boolean updated )
-    {
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        attrib.setUpdated( updated );
-    }
-
-    @Override
-    public EntityInstance setAttribute( AttributeDef attributeDef, Object value)
-    {
-        return setAttribute( attributeDef, value, null );
-    }
-
-    @Override
-    public EntityInstance setAttribute(String attributeName, Object value)
-    {
-        return setAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public EntityInstance setAttributeFromAttribute( String tgtAttributeName,
-                                                     View srcView,
-                                                     String srcEntityName,
-                                                     String srcAttributeName )
-    {
-        AttributeDef tgtAttributeDef = getEntityDef().getAttribute( tgtAttributeName );
-        Domain tgtDomain = tgtAttributeDef.getDomain();
-        Object source;
-        // If the target is a string, we'll ask the source to convert its value to a
-        // string.  This is necessary for copying Dates to strings. Should we do this with other data types?
-        if ( tgtDomain.getDataType() == InternalType.STRING )
-            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getString();
-        else
-            source = srcView.cursor( srcEntityName ).getAttribute( srcAttributeName ).getValue();
-
-        return setAttribute( tgtAttributeDef, source );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.EntityInstance#setInternalAttributeValue(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
-     */
-    @Override
-    public EntityInstance setInternalAttributeValue(AttributeDef attributeDef, Object value, boolean setIncremental) throws InvalidAttributeValueException
-    {
-        try
-        {
-            AttributeInstanceImpl attrib = getAttribute( attributeDef );
-            attrib.setInternalValue( value, setIncremental );
-        }
-        catch( Throwable t )
-        {
-            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
-        }
-
-        return this;
-    }
-
     AttributeHashKeyMap getAttributeHashkeyMap()
     {
         if ( attributeHashkeyMap == null )
@@ -3162,308 +2982,6 @@ class EntityInstanceImpl implements EntityInstance
 
         for ( AttributeDef attributeDef : getEntityDef().getHashKeyAttributes() )
             addHashKeyAttributeToMap( attributeDef );
-    }
-
-    String getStringFromAttribute( View view, AttributeDef attributeDef )
-    {
-        return getAttribute( view, attributeDef ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute( AttributeDef attributeDef )
-    {
-        return getAttribute( null, attributeDef ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute(String attributeName)
-    {
-        return getAttribute( attributeName ).getString();
-    }
-
-    @Override
-    public String getStringFromAttribute( AttributeDef attributeDef, String contextName )
-    {
-        try
-        {
-            return getAttribute( attributeDef ).getString( contextName );
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef )
-                                                    .appendMessage( "ContextName: %s", contextName );
-        }
-    }
-
-    String getStringFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        return getAttribute( view, attributeDef ).getString( contextName );
-    }
-
-    @Override
-    public String getStringFromAttribute(String attributeName, String contextName)
-    {
-        return getAttribute( attributeName ).getString( contextName );
-    }
-
-    Integer getIntegerFromAttribute( View view, AttributeDef attributeDef)
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getInteger( getTask(), attributeDef );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(AttributeDef attributeDef)
-    {
-        return getIntegerFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(String attributeName)
-    {
-        return getIntegerFromAttribute( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    Integer getIntegerFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        contextName = checkContextName( attributeDef, contextName );
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getInteger( getTask(), attributeDef, contextName );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getIntegerFromAttribute( null, attributeDef, contextName );
-    }
-
-    @Override
-    public Integer getIntegerFromAttribute(String attributeName, String contextName )
-    {
-        return getIntegerFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    Double getDoubleFromAttribute( View view, AttributeDef attributeDef)
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDouble( getTask(), attributeDef );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(AttributeDef attributeDef)
-    {
-        return getDoubleFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(String attributeName)
-    {
-        return getDoubleFromAttribute( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    Double getDoubleFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        contextName = checkContextName( attributeDef, contextName );
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDouble( getTask(), attributeDef, contextName );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getDoubleFromAttribute( null, attributeDef, contextName );
-    }
-
-    @Override
-    public Double getDoubleFromAttribute(String attributeName, String contextName )
-    {
-        return getDoubleFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    DateTime getDateTimeFromAttribute( View view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDateTime( getTask(), attributeDef );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(AttributeDef attributeDef)
-    {
-        return getDateTimeFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(String attributeName)
-    {
-        return getDateTimeFromAttribute( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    DateTime getDateTimeFromAttribute( View view, AttributeDef attributeDef, String contextName )
-    {
-        contextName = checkContextName( attributeDef, contextName );
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getDateTime( getTask(), attributeDef, contextName );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(AttributeDef attributeDef, String contextName )
-    {
-        return getDateTimeFromAttribute( null, attributeDef, contextName );
-    }
-
-    @Override
-    public DateTime getDateTimeFromAttribute(String attributeName, String contextName )
-    {
-        return getDateTimeFromAttribute( getEntityDef().getAttribute( attributeName ), contextName );
-    }
-
-    Blob getBlobFromAttribute( View view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.getBlob( getTask(), attributeDef );
-    }
-
-    @Override
-    public Blob getBlobFromAttribute(String attributeName)
-    {
-        AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
-        return getBlobFromAttribute( attributeDef );
-    }
-
-    @Override
-    public Blob getBlobFromAttribute( AttributeDef attributeDef )
-    {
-        return getBlobFromAttribute( null, attributeDef );
-    }
-
-    @Override
-    public boolean isAttributeNull(String attributeName)
-    {
-        return isAttributeNull( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    boolean isAttributeNull( View view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.isNull( getTask(), attributeDef  );
-    }
-
-    @Override
-    public boolean isAttributeNull(AttributeDef attributeDef )
-    {
-        return isAttributeNull( null, attributeDef );
-    }
-
-    @Override
-    public boolean isAttributeUpdated(AttributeDef attributeDef )
-    {
-        AttributeValue attrib = getInternalAttribute( attributeDef );
-        return attrib.isUpdated();
-    }
-
-    @Override
-    public Object getInternalAttributeValue( AttributeDef attributeDef )
-    {
-        return getInternalAttributeValue( null, attributeDef );
-    }
-
-    Object getInternalAttributeValue( ViewImpl view, AttributeDef attributeDef )
-    {
-        executeDerivedOper( view, attributeDef );
-        return getInternalAttribute( attributeDef ).getInternalValue( );
-    }
-
-    @Override
-    public Object getInternalAttributeValue(String attributeName)
-    {
-        return  getInternalAttributeValue( getEntityDef().getAttribute( attributeName ) );
-    }
-
-    int compareAttribute( View view, AttributeDef attributeDef, Object value)
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeInstanceImpl attrib = getAttribute( attributeDef );
-        return getInternalAttribute( attributeDef ).compare( getTask(), attrib, attributeDef, value );
-    }
-
-    @Override
-    public int compareAttribute(String attributeName, Object value)
-    {
-        return compareAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public int compareAttribute(AttributeDef attributeDef, Object value)
-    {
-        return compareAttribute( null, attributeDef, value );
-    }
-
-    @Override
-    public int compareAttribute(String attributeName, EntityInstance entityInstance, String attributeName2)
-    {
-        return compareAttribute( getEntityDef().getAttribute( attributeName ),
-                                 entityInstance, entityInstance.getEntityDef().getAttribute( attributeName2 ) );
-    }
-
-    int compareAttribute( View view, AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 )
-    {
-        executeDerivedOper( view, attributeDef );
-        Object value = entityInstance.getAttribute( attributeDef2 ).getValue();
-        return compareAttribute( attributeDef, value );
-    }
-
-    @Override
-    public int compareAttribute(AttributeDef attributeDef, EntityInstance entityInstance, AttributeDef attributeDef2 )
-    {
-        return compareAttribute( null, attributeDef, entityInstance, attributeDef2 );
-    }
-
-    Object addToAttribute( View view, AttributeDef attributeDef, Object value )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeInstanceImpl attrib = getAttribute( attributeDef );
-        attrib.add( value );
-        return attrib.getValue();
-    }
-
-    @Override
-    public Object addToAttribute( String attributeName, Object value )
-    {
-        return addToAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public Object addToAttribute( AttributeDef attributeDef, Object value )
-    {
-        return addToAttribute( null, attributeDef, value );
-    }
-
-    Object multiplyAttribute( View view, AttributeDef attributeDef, Object value )
-    {
-        executeDerivedOper( view, attributeDef );
-        AttributeInstanceImpl attrib = getAttribute( attributeDef );
-        attrib.multiply( value );
-        return attrib.getValue();
-    }
-
-    @Override
-    public Object multiplyAttribute( String attributeName, Object value )
-    {
-        return multiplyAttribute( getEntityDef().getAttribute( attributeName ), value );
-    }
-
-    @Override
-    public Object multiplyAttribute( AttributeDef attributeDef, Object value )
-    {
-        return multiplyAttribute( null, attributeDef, value );
     }
 
     /**
@@ -3600,11 +3118,11 @@ class EntityInstanceImpl implements EntityInstance
     void newTemporalAttributeList( EntityInstanceImpl sourceInstance,
                                    EntityInstanceImpl linkedSourceInstance )
     {
-        workAttributes = new HashMap<Long, AttributeValue>( entityDef.getWorkAttributeCount() );
+        workAttributes = new HashMap<>( entityDef.getWorkAttributeCount() );
 
         if ( linkedSourceInstance == null )
         {
-            persistentAttributes = new HashMap<Long, AttributeValue>( entityDef.getPersistentAttributeCount() );
+            persistentAttributes = new HashMap<>( entityDef.getPersistentAttributeCount() );
 
             // Copy work and persistent attributes.
             copyAttributes( sourceInstance, true, true );
@@ -3617,8 +3135,6 @@ class EntityInstanceImpl implements EntityInstance
             // Copy just work attributes.
             copyAttributes( sourceInstance, false, true );
         }
-
-        attributeInstanceMap = null;
     }
 
     /* (non-Javadoc)
@@ -3856,6 +3372,9 @@ class EntityInstanceImpl implements EntityInstance
     public AttributeInstance getAttribute( String attributeName )
     {
         AttributeDef attributeDef = getEntityDef().getAttribute( attributeName );
+        if ( attributeDef.isHidden() )
+            throw new HiddenAttributeException( attributeDef );
+
         return getAttribute( null, attributeDef );
     }
 
@@ -3865,35 +3384,15 @@ class EntityInstanceImpl implements EntityInstance
         return getAttribute( null, attributeDef );
     }
 
-    /**
-     * @deprecated use getAttributes( includeNullValues ) instead.
-     */
-    @Deprecated
-    @Override
-    public List<AttributeInstance> attributeList( boolean includeNullValues )
+    AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
     {
-        return getAttributes( includeNullValues );
-    }
+        AttributeInstanceImpl attributeInstance =
+                new AttributeInstanceImpl( attributeDef,
+                                           getInternalAttribute( attributeDef ),
+                                           view,
+                                           this );
 
-    synchronized AttributeInstanceImpl getAttribute( View view, AttributeDef attributeDef )
-    {
-        if ( attributeInstanceMap == null )
-            attributeInstanceMap = new HashMap<AttributeDef, AttributeInstanceImpl>();
-
-        if ( ! attributeInstanceMap.containsKey( attributeDef ) )
-        {
-            AttributeInstanceImpl attributeInstance =
-                    new AttributeInstanceImpl( attributeDef,
-                                               getInternalAttribute( attributeDef ),
-                                               this );
-            attributeInstanceMap.put( attributeDef, attributeInstance );
-        }
-
-        AttributeInstanceImpl attrInstance = attributeInstanceMap.get( attributeDef );
-        if ( view != null )
-            attrInstance.setView( view );
-
-        return attrInstance;
+        return attributeInstance;
     }
 
     @Override
@@ -3901,17 +3400,6 @@ class EntityInstanceImpl implements EntityInstance
     {
         AttributeDef attributeDef = getEntityDef().createDynamicAttributeDef( config );
         return getAttribute( attributeDef );
-    }
-
-    static private synchronized EntityDefLinkInfo getEntityDefLinkInfo( EntityDef entityDef )
-    {
-        EntityDefLinkInfo info = entityDef.getCacheMap( EntityDefLinkInfo.class );
-        if ( info != null )
-            return info;
-
-        info = new EntityDefLinkInfo();
-        entityDef.putCacheMap( EntityDefLinkInfo.class, info );
-        return info;
     }
 
     /**
@@ -3984,14 +3472,6 @@ class EntityInstanceImpl implements EntityInstance
         // If there is a parent entity then we'll set its incomplete flag.
         if ( getParent() != null )
             getParent().setIncomplete( getEntityDef() );
-    }
-
-    /**
-     * This keeps track of whether two view entities can be validly linked together.
-     */
-    private static class EntityDefLinkInfo
-    {
-        private final ConcurrentMap<EntityDef, Boolean> mayBeLinked = new MapMaker().concurrencyLevel( 4 ).makeMap();
     }
 
     @Override
@@ -4089,7 +3569,65 @@ class EntityInstanceImpl implements EntityInstance
             }
 
             Object sourceValue = sourceInstance.getAttribute( sourceAttr ).getValue();
-            setAttribute( targetAttr, sourceValue );
+            getAttribute( targetAttr ).setValue( sourceValue );
         } // for each target AttributeDef...
+    }
+
+    @Override
+    public boolean compareEntity(EntityInstance sourceInstance)
+    {
+        return compareEntity( sourceInstance, CompareEntityOptions.DEFAULT_OPTIONS );
+    }
+
+    @Override
+    public boolean compareEntity( EntityInstance sourceInstance, CompareEntityOptions options )
+    {
+        EntityInstance sourceEi = sourceInstance.getEntityInstance();
+        if ( isLinked( sourceEi ) )
+            return true;  // If the EIs are linked then they are the same.
+
+        List<AttributeDef> attribs = this.getEntityDef().getAttributes( true );
+        EntityDef rightDef = sourceEi.getEntityDef();
+        for ( AttributeDef attrib : attribs )
+        {
+            if ( attrib.isDerived() )  // Skip derived attributes?
+            {
+                if ( ! options.isCompareDeriviedAttributes() )
+                    continue;
+            }
+            else
+            if ( ! attrib.isPersistent() ) // Skip work attributes?
+            {
+                if ( ! options.isCompareWorkAttributes() )
+                    continue;
+            }
+
+            AttributeInstance lai = this.getAttribute( attrib );
+            if ( lai.isNull() && options.isIgnoreNullAttributes() )
+                continue;
+
+            AttributeDef rightAttrib = rightDef.getAttribute( attrib.getName(), false );
+            if ( rightAttrib == null || rightAttrib.isHidden() )
+            {
+                if ( ! options.isCommonAttributesOnly() )
+                {
+                    getTask().log().trace( "CompareEntity: Attribute missing = %s", attrib.getName() );
+                    return false;
+                }
+
+                continue;
+            }
+
+            AttributeInstance rai = sourceEi.getAttribute( rightAttrib );
+            if ( lai.compare( rai ) != 0 )
+            {
+                getTask().log().trace( "CompareEntity: Attribute is different = %s", attrib.getName() );
+                lai.compare( rai );
+                return false;
+            }
+        } // each attrib.
+
+        // If we get here then we didn't find any differences.
+        return true;
     }
 }

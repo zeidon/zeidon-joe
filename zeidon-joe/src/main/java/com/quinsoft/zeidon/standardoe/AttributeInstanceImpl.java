@@ -22,9 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.TemporalEntityException;
-import com.quinsoft.zeidon.UnknownAttributeDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
@@ -43,20 +43,16 @@ class AttributeInstanceImpl implements AttributeInstance
     private final EntityInstanceImpl entityInstance;
 
 
-    AttributeInstanceImpl( AttributeDef attributeDef,
-                           AttributeValue attributeValue,
+    AttributeInstanceImpl( AttributeDef       attributeDef,
+                           AttributeValue     attributeValue,
+                           View               view,
                            EntityInstanceImpl entityInstance )
     {
         super();
         this.attributeDef = attributeDef;
         this.attributeValue = attributeValue;
-        this.entityInstance = entityInstance;
-    }
-
-    AttributeInstanceImpl setView( View view )
-    {
         this.view = view;
-        return this;
+        this.entityInstance = entityInstance;
     }
 
     /* (non-Javadoc)
@@ -269,9 +265,6 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public EntityInstance setValue( Object value, String contextName )
     {
-        if ( attributeDef.isHidden() )
-            throw new UnknownAttributeDefException( getEntityDef(), attributeDef.getName() );
-
         validateUpdateAttribute();
         contextName = checkContextName( contextName );
         Object oldValue = attributeValue.getInternalValue();
@@ -294,6 +287,7 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public boolean isNull()
     {
+        executeDerivedOper();
         return attributeValue.isNull( getTask(), attributeDef );
     }
 
@@ -317,6 +311,13 @@ class AttributeInstanceImpl implements AttributeInstance
     public boolean isUpdated()
     {
         return attributeValue.isUpdated();
+    }
+
+    @Override
+    public EntityInstance setIsUpdated( boolean isUpdated )
+    {
+        attributeValue.setUpdated( isUpdated );
+        return entityInstance;
     }
 
     @Override
@@ -350,15 +351,17 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public EntityInstance add( Object value )
     {
-        attributeValue.addToAttribute( getTask(), this, value );
-        return entityInstance;
+        Domain domain = attributeDef.getDomain();
+        Object newValue = domain.addToAttribute( getTask(), this, attributeDef, getValue(), value );
+        return setValue( newValue );
     }
 
     @Override
     public EntityInstance multiply( Object value )
     {
-        attributeValue.multiplyAttribute( getTask(), this, value );
-        return entityInstance;
+        Domain domain = attributeDef.getDomain();
+        Object newValue = domain.multiplyAttribute( getTask(), this, attributeDef, getValue(), value );
+        return setValue( newValue );
     }
 
     @Override
@@ -386,5 +389,12 @@ class AttributeInstanceImpl implements AttributeInstance
     public boolean equals( Object obj )
     {
         return compare( obj ) == 0;
+    }
+
+    @Override
+    public Blob getBlob()
+    {
+        executeDerivedOper();
+        return attributeValue.getBlob( getTask(), attributeDef );
     }
 }

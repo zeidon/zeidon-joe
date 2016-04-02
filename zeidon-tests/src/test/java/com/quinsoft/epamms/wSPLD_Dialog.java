@@ -3823,7 +3823,7 @@ GENERATE_SPLD_Label( View     ViewToWindow )
    //:// ConvertXMLToPDF( "c:\lplr\epamms\xsl\TestLabel.xml", "c:\lplr\epamms\xsl\TestLabel.xsl", "TestLabel" )
    //:// ConvertXMLToPDF( szXmlName, szXslName, szLabelName )
    //:ConvertXML_ToPDF( szDirectory, szApplication, szLabelName )
-   m_ZDRVROPR.ConvertXML_ToPDF( szDirectory, szApplication, szLabelName );
+   m_ZDRVROPR.ConvertXML_ToPDF( szDirectory, szApplication, szLabelName, "" );
    return( 0 );
 // END
 } 
@@ -5640,7 +5640,7 @@ GENERATE_SPLD_LabelDottedBorders( View     ViewToWindow )
    //:// ConvertXMLToPDF( "c:\lplr\epamms\xsl\TestLabel.xml", "c:\lplr\epamms\xsl\TestLabel.xsl", "TestLabel" )
    //:// ConvertXMLToPDF( szXmlName, szXslName, szLabelName )
    //:ConvertXML_ToPDF( szDirectory, szApplication, szLabelName )
-   m_ZDRVROPR.ConvertXML_ToPDF( szDirectory, szApplication, szLabelName );
+   m_ZDRVROPR.ConvertXML_ToPDF( szDirectory, szApplication, szLabelName, "" );
    return( 0 );
 // END
 } 

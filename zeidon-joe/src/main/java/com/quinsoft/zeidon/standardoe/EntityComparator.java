@@ -52,7 +52,7 @@ class EntityComparator
         if ( compareValue == ANY_VALUE )
             return true;
 
-        return entityInstance.compareAttribute( attributeDef, compareValue ) == 0;
+        return entityInstance.getAttribute( attributeDef ).compare( compareValue ) == 0;
     }
 
     AttributeDef getAttributeDef()

@@ -330,15 +330,28 @@ public class ZDRVROPR extends VmlOperation
       return 0;
    }
 
-   public int ConvertXML_ToPDF( String directory, String application, String label )
+/*
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
+*/
+/*..*/
+/*
+DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
+Configuration cfg = cfgBuilder.buildFromFile(new File("C:/Temp/mycfg.xml"));
+fopFactory.setUserConfig(cfg);
+*/
+/* ..or.. */
+/*
+fopFactory.setUserConfig(new File("C:/Temp/mycfg.xml"));
+*/
+
+   public int ConvertXML_ToPDF( String directory, String application, String label, String fopConfig )
    {
-      // Examples can be found...
-      //http://xmlgraphics.apache.org/fop/1.0/embedding.html#examples
       String pdf = label + ".pdf";
       String root = directory + application;
-      String xml = root + "xml/";
-      String xsl = root + "xsl/";
-      String copyPdf = root + "pdf/";
+      String xml = root + "/xml/";
+      String xsl = root + "/xsl/";
+      String copyPdf = root + "/pdf/";
       SysValidDirOrFile( xml, 1, 1, 256 );
       SysValidDirOrFile( xsl, 1, 1, 256 );
       SysValidDirOrFile( copyPdf, 1, 1, 256 );
@@ -352,7 +365,11 @@ public class ZDRVROPR extends VmlOperation
          // Step 1: Construct a FopFactory
          // (reuse if you plan to render multiple documents!)
          FopFactory fopFactory = FopFactory.newInstance();
-
+         if ( fopConfig != null && fopConfig.equals( "" ) == false )
+         {
+         // fopFactory.setUserConfig( new File( "C:/lplr/epamms/fop/conf/fop.xconf" ) );
+            fopFactory.setUserConfig( new File( fopConfig ) );
+         }
          // Step 2: Set up output stream.
          // Note: Using BufferedOutputStream for performance reasons (helpful with FileOutputStreams).
          //OutputStream out = new BufferedOutputStream(new FileOutputStream(new File("C:/temp/name.pdf")));
@@ -389,8 +406,8 @@ public class ZDRVROPR extends VmlOperation
             // we can retrieve this name in FindOpenFile (kzoejava.c) when trying to
             // open the file in the jsp files.
             View vKZXMLPGO = task.getViewByName( "_KZXMLPGO" );
-            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( application + "pdf/" + pdf );
-            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( application + "pdf/" + pdf );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileName" ).setValue( "/" + application + "/pdf/" + pdf );
+            vKZXMLPGO.cursor("Session").getAttribute( "PrintFileType" ).setValue( "" );
          }
          catch (Exception e)
          {
@@ -3203,6 +3220,7 @@ public class ZDRVROPR extends VmlOperation
        return 0;
     }
 
+    /* KJS - 10/15/15 - Believe this is supposed to be in VmlOperations.java
     public static final int FormatSubobjectOnDoc( View view, String string, View viewToWindow, String string2, int i )
     {
        // TODO ... DKS???
@@ -3215,6 +3233,7 @@ public class ZDRVROPR extends VmlOperation
        // TODO ... DKS???
        return 0;
     }
+    */
 
     public static final String GetLastCtrlTag( View view, String lastCtrl )
     {

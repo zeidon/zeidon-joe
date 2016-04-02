@@ -19,9 +19,7 @@
 
 package com.quinsoft.zeidon.dbhandler;
 
-import java.util.Collection;
-
-import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.View;
 
@@ -31,43 +29,50 @@ import com.quinsoft.zeidon.View;
  * @author DG
  *
  */
-public interface PessimisticLockingHandler
+public interface PessimisticLockingHandler extends DropViewCleanup
 {
     /**
-     * Performs any initialization necessary for acquiring pessimistic locks.
-     * Called at the beginning of activation.
-     *
-     * @param options
-     * @throws PessimisticLockingException
-     */
-    void initialize( ActivateOptions options ) throws PessimisticLockingException;
-
-    /**
-     * Called at the end of activation to release any resources.
-     */
-    void cleanup();
-
-    /**
-     * Acquires the pessimistic locks for a view.  This is called after the root
-     * entities are loaded.
+     * For situations that require it, acquire a global lock that prevents
+     * other tasks from performing pessimistic locking on this view.
      *
      * @param view View to lock
      *
      * @throws PessimisticLockingException
      */
-    void acquireLocks( View view ) throws PessimisticLockingException;
-
+    void acquireGlobalLock( View view ) throws PessimisticLockingException;
+    
     /**
-     * Release the pessimistic locks for the views.  This is called when a view is
-     * dropped and is not part of activation.
-     *
-     * @param views List of views to release.
+     * Release the global locks needed for this view.
+     * 
+     * @param view
+     * @throws PessimisticLockingException
      */
-    void releaseLocks( Collection<View> views );
+    void releaseGlobalLock( View view );
 
     /**
-     * Release the pessimistic locks for this view.  This is called when a view is
-     * dropped and is not part of activation.
+     * Acquires the pessimistic locks for a view.  This is called after the root
+     * entities are loaded but before the rest of the OI.
+     *
+     * @param view View to lock
+     *
+     * @throws PessimisticLockingException
+     */
+    void acquireRootLocks( View view ) throws PessimisticLockingException;
+
+    /**
+     * Acquires the pessimistic locks for a view.  This is called after the entire
+     * OI has been loaded.  This call is intended for dbhandlers that can't have
+     * more than one open connection at once.  This will be called after the
+     * connection that loaded the OI has been closed.
+     *
+     * @param view View to lock
+     *
+     * @throws PessimisticLockingException
+     */
+    void acquireOiLocks( View view ) throws PessimisticLockingException;
+
+    /**
+     * Release the pessimistic locks for this view.
      *
      * @param view
      */

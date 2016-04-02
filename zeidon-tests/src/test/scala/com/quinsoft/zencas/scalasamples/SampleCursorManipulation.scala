@@ -19,14 +19,15 @@
 package com.quinsoft.zencas.scalasamples
 
 import com.quinsoft.zeidon.scala.ZeidonOperations
-import com.quinsoft.zeidon.scala.Task
-import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.VmlCursorResult
 import com.quinsoft.zeidon.scala.basedOn
 import com.quinsoft.zeidon.scala.AbstractEntity
 import com.quinsoft.zeidon.scala.EntityCursor
 import com.quinsoft.zeidon.scala.EntityInstance
+import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
  *  This gives examples of how to manipulate cursors.  Usually there are two
@@ -292,10 +293,14 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         mUser.Staff.deleteAll()
     }
     
+    def usingFilter( mUser: View ) = {
+        val list = mUser.Report.filter { _.ID > 0 }.foreach( e => println( e ) )
+    }
+    
     def countEntities( mUser: View ) = {
         val count = mUser.Report.count
         val count2 = mUser.Report.count( _.ID >< (338, 400) )
-        val count3 = mUser.Report.count( (e: EntityInstance) => { print( e.ID + " " ); e.ID < 10 } )
+        val count3 = mUser.Report.count( ei => { print( ei.ID + " " ); ei.ID < 10 } )
         print( count3 )
     }
 
@@ -308,6 +313,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         forEachCursor(mUser)
         sortEntities(mUser)
         deleteEntities(mUser.cloneRoot)
+        usingFilter( mUser )
 //        mUser.logObjectInstance
     }
 }
@@ -317,7 +323,7 @@ object SampleCursorManipulation {
    def main(args: Array[String]): Unit = {
 
         // Load the object engine and create a task.
-        val oe = ObjectEngine.getInstance
+        val oe = JavaObjectEngine.getInstance()
         val task = oe.createTask("ZENCAs")
 
         val activator = new SampleActivates( task )

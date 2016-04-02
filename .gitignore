@@ -4,8 +4,8 @@ tmp/
 *.bak
 *.bat
 .tmpclasspath
-.cache
+.cache*
 .settings
 .project
 .classpath
-zeidon-tests/src/test/resources/zeidon.app
+bin

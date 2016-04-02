@@ -16,33 +16,19 @@
 
     Copyright 2009-2015 QuinSoft
  */
-
-package com.quinsoft.zeidon.standardoe;
-
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.quinsoft.zeidon.Lockable;
-import com.quinsoft.zeidon.utils.LazyLoadLock;
+package com.quinsoft.zeidon;
 
 /**
- * @author DG
  *
  */
-class NamedLockableList
+public interface DropViewCleanup
 {
-    private final ConcurrentHashMap<String, Lockable> lockMap = new ConcurrentHashMap<String, Lockable>();
-    
-    Lockable getNamedLock( String name )
-    {
-        Lockable lock = lockMap.get( name );
-        if ( lock != null )
-            return lock;
-        
-        lock = new LazyLoadLock();
-        Lockable lock2 = lockMap.putIfAbsent( name, lock );
-        if ( lock2 == null )
-            return lock;
+    /**
+     * The view has been dropped and this method is called to perform
+     * any cleanup work.
+     * 
+     * @param view
+     */
+    public void viewDropped( View view );
 
-        return lock2;
-    }
 }

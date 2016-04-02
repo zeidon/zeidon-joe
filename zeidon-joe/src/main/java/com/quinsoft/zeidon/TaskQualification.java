@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
+import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -29,7 +30,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * Instances).
  *
  */
-public interface TaskQualification extends Lockable
+public interface TaskQualification extends Closeable
 {
     /**
      * Returns the default application for this task.
@@ -248,6 +249,9 @@ public interface TaskQualification extends Lockable
      * @return configuration value as a string or defaultValue if not found.
      */
     String readZeidonConfig( Application application, String group, String key, String defaultValue );
+
+    void overrideZeidonConfig( Application application, String group, String key, String value );
+    void overrideZeidonConfig( String appName, String group, String key, String value );
 
     /**
      * Get the Object Engine that contains this task.

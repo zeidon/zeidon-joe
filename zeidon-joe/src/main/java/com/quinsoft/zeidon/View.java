@@ -155,12 +155,27 @@ public interface View extends TaskQualification, CacheMap
     SelectSet getSelectSet( Object index );
 
     /**
+     * Returns a list of current select set names for this view.
+     *
+     * @return
+     */
+    Set<Object> getSelectSetNames();
+
+    /**
      * Creates a new SelectSet.  This is *not* stored in the internal SelectSet hash and
      * can not be retrieved through getSelectSet.
      *
      * @return new SelectSet.
      */
     SelectSet createSelectSet();
+
+    /**
+     * Deletes the SelectSet with the specified index.  If one isn't found then
+     * it is ignored.
+     *
+     * @param index of the SelectSet created via getSelectSet( idx )
+     */
+    void dropSelectSet( Object index );
 
     /**
      * Set the default select set, i.e. the select set that will be returned
@@ -398,16 +413,6 @@ public interface View extends TaskQualification, CacheMap
     Collection<ZeidonException> validateOi();
 
     /**
-     * Returns true if the OI of this view was activated with locking.
-     */
-    boolean isLocked();
-
-    /**
-     * Drops any outstanding pessimistic locks in the DB.
-     */
-    void dropDbLocks();
-
-    /**
      * Relinks all the OIs specified in the view list with this one.
      *
      * @param otherViews other, optional, views that can be relinked all at once.
@@ -573,20 +578,20 @@ public interface View extends TaskQualification, CacheMap
 
     /**
      * Returns true if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user.  
-     * 
+     * to be used by the browser to ignore views that weren't created by the user.
+     *
      * @return Returns true if this view was created by internal JOE processing.
      */
     boolean isInternal();
-    
+
     /**
-     * Sets the 'internal' flag.
-     * 
+     * Sets the 'internal' flag.  The only effect is that this will hide the view from the browser.
+     *
      * @param internal
      * @return
      */
     View setInternal( boolean internal );
-    
+
     /**
      * Return the number of entities in the OI.
      *
@@ -595,4 +600,7 @@ public interface View extends TaskQualification, CacheMap
      * @return
      */
     int getEntityCount( boolean includeHidden );
+    
+    public void addViewCleanupWork( DropViewCleanup work );
+
 }

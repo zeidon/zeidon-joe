@@ -48,12 +48,12 @@ public class OiRelinker
      *
      * We use TIntObjectHashMap because it is faster/smaller when dealing with integer keys.
      */
-    private final Map<Integer,Map<String,EntityInstance>> entityTokens;
+    private final Map<String,Map<String,EntityInstance>> entityTokens;
 
     public OiRelinker( TaskQualification taskQual )
     {
         task = taskQual;
-        entityTokens = new HashMap<Integer, Map<String,EntityInstance>>( 100 );
+        entityTokens = new HashMap<>( 10 );
     }
 
     OiRelinker add( ObjectInstance oi )
@@ -65,23 +65,24 @@ public class OiRelinker
     /**
      * Adds the entity instance to the relinker cache.  If an entity with the same key already
      * exists then the ei will be relinked with the one in the cache.
+     *
      * @param ei
      * @param entityKeyString a string representation of the EI's keys.  May not be null.
      * @return true if the entity was relinked, false otherwise.
      */
-    private boolean addEntity( final EntityInstance ei, final String entityKeyString )
+    public boolean addEntity( final EntityInstance ei, final String entityKeyString )
     {
         // Asserting that the key not be blank may be wrong because some day we may support
         // string keys but since everybody uses an integer as the key we can be a bit more
         // restrictive for now.
         assert ! StringUtils.isBlank( entityKeyString );
         EntityDef entityDef = ei.getEntityDef();
-        int token = entityDef.getErEntityToken();
+        String token = entityDef.getErEntityToken();
 
         Map<String, EntityInstance> tokenMap = entityTokens.get( token );
         if ( tokenMap == null )
         {
-            tokenMap = new HashMap<String, EntityInstance>( 1000 );
+            tokenMap = new HashMap<>( 20 );
             entityTokens.put( token, tokenMap );
         }
 
@@ -96,6 +97,25 @@ public class OiRelinker
         // If we get here then we've found an entity that matches the key values in 'ei'.
         // Relink ei with cachedEntity.
         return ei.linkInstances( cachedEntity ); // Returns false if they're already linked.
+    }
+
+    /**
+     * Returns the cached EI indicated by the key string if it exists, otherwise returns null.
+     * @param entityDef
+     * @param entityKeyString
+     * @return
+     */
+    public EntityInstance getInstance( EntityDef entityDef, String entityKeyString )
+    {
+        assert ! StringUtils.isBlank( entityKeyString );
+        String token = entityDef.getErEntityToken();
+
+        Map<String, EntityInstance> tokenMap = entityTokens.get( token );
+        if ( tokenMap == null )
+            return null;
+
+        EntityInstance cachedEntity = tokenMap.get( entityKeyString );
+        return cachedEntity;
     }
 
     int relinkOis()

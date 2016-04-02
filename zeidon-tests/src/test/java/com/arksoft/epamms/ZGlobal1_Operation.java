@@ -3470,7 +3470,7 @@ public class ZGlobal1_Operation extends VmlOperation
    public int
    SetAttrFromStrByContext( View view, String entityName, String attributeName, String value, String context )
    {
-      view.cursor( entityName ).setAttribute( attributeName, value, context );
+      view.cursor( entityName ).getAttribute( attributeName).setValue( value, context ) ;
       return 0;
    }
 

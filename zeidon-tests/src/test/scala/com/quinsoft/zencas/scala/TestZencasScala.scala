@@ -3,14 +3,14 @@ package com.quinsoft.zencas.scala
 import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._
 import org.junit.Before
-import com.quinsoft.zeidon.scala.ObjectEngine
 import org.junit.Test
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
-    val oe = ObjectEngine.getInstance
+    val oe = JavaObjectEngine.getInstance()
     var task = oe.createTask("ZENCAs")
 
     @Before
@@ -38,11 +38,24 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
         classes2.name( "classes2" )
 
         val id = classes2.College.ID.toInt
-        userList.College.set( _.ID == id )
+        userList.College.set( _.ID = id )
         assertTrue( userList.College.isLinked( classes2.College ) )
         assertFalse( userList.College.isLinked( classes.College ) )
         assertEquals( classes.getEntityCount(false), classes2.getEntityCount( false ) )
 
         userList.logOi
+    }
+    
+    @Test
+    def testMultipleWhenNull() {
+        val userList = new View( task ) basedOn "mAdmDiv"
+        val adminId: Integer = 0
+        val personId: Integer = 10
+
+        userList.buildQual( _.AdministrativeDivision.ID < 10 )
+                .whenNotNull( adminId, _.restrict { _.Cohort }.to { _.Cohort.ID > adminId } )
+                .whenNotNull( personId, _.restrict { _.Cohort }.to { _.Cohort.ID < personId } )
+                .activate()
+        println( "here" )      
     }
 }

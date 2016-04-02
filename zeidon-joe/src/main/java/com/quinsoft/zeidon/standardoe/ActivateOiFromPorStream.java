@@ -184,10 +184,10 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
                         throw ZeidonException.wrapException( e );
                     }
                     assert read == length;
-                    entityInstance.setInternalAttributeValue( attributeDef, new Blob( buffer ), true );
+                    entityInstance.getAttribute( attributeDef).setInternalValue( new Blob( buffer ), true ) ;
                 }
                 else
-                    entityInstance.setInternalAttributeValue( attributeDef, reader.getAttributeValue(), true );
+                    entityInstance.getAttribute( attributeDef).setInternalValue( reader.getAttributeValue(), true ) ;
 
                 if ( reader.isIncremental() )
                 {

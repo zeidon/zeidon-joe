@@ -234,10 +234,13 @@ public interface EntityCursor extends EntityInstance
     EntityIterator<? extends EntityInstance> eachEntity( EntityDef scopingEntity );
 
     /**
+     * TODO: This should be moved to the view.  It makes no sense to be on the entity cursor.
+     *
      * Loops through all the entities in the OI.
      *
      * @return EntityInstance iterator
      */
+    @Deprecated
     EntityIterator<? extends EntityInstance> allEntities();
 
     /**

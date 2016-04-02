@@ -44,22 +44,32 @@ public class BlobDomain extends AbstractDomain
     {
         if ( externalValue instanceof byte[] )
             return new Blob( (byte[]) externalValue );
-        
+
         if ( externalValue instanceof Blob )
             return externalValue;
-        
+
         if ( externalValue instanceof String )
             return new Blob( ((String) externalValue).getBytes() );
-        
+
         throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Blob", externalValue.getClass().getName() );
     }
-    
+
+    @Override
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+    {
+        if ( internalValue == null )
+            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+
+        Blob blob = (Blob) internalValue;
+        return new String( blob.getBytes() );
+    }
+
     @Override
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
         @SuppressWarnings("unused")
         Blob blob = (Blob) internalValue;
-        
+
         //TODO: Should blobs have a max value?  The length defined in the attributeDef is the number of bytes
         // the old C OE needed to store a blob pointer.
 //        if ( blob.getBytes().length > attributeDef.getLength() )

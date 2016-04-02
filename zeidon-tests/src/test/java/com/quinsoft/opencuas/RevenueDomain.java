@@ -38,19 +38,19 @@ import com.quinsoft.zeidon.utils.PortableFileReader;
 
 /**
  * Decimal domain, which stores values as Double.
- * 
- * Uses DecimalFormat for formatting values to string.  See 
+ *
+ * Uses DecimalFormat for formatting values to string.  See
  * http://java.sun.com/docs/books/tutorial/i18n/format/decimalFormat.html
  * Also has code for java edit string TextForCheckAmount and for a java edit string containing "CR" which shows CR when
  * number is negative instead of "-".
- * 
+ *
  * @author DG/KJS
  *
  */
 public class RevenueDomain extends AbstractNumericDomain
 {
     private final DecimalFormat parser = new DecimalFormat( "#,###.#" );
-    
+
     public RevenueDomain( Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
@@ -60,21 +60,25 @@ public class RevenueDomain extends AbstractNumericDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
-    	// KJS - Added 01/28/11 the following two returns.
+        // If external value is an AttributeInstance then get *its* internal value.
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue).getValue();
+
+        // KJS - Added 01/28/11 the following two returns.
     	if ( externalValue == null )
     		return null;
-    	
+
     	if ( externalValue instanceof Number )
             return ((Number) externalValue).doubleValue();
 
         if ( externalValue instanceof CharSequence )
         {
             String str = externalValue.toString();
-            
+
             // VML uses "" as a synonym for null.
             if ( StringUtils.isBlank( str ) )
             	return null;
-            	
+
             ParsePosition ps = new ParsePosition( 0 );
             Double d;
             synchronized ( parser )
@@ -91,17 +95,17 @@ public class RevenueDomain extends AbstractNumericDomain
 
             return d;
         }
-        
-        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Double", 
+
+        throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Double",
                                                   externalValue.getClass().getName() );
     }
-    
+
     @Override
-    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) 
+    public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue )
         throws InvalidAttributeValueException
     {
         if ( ! ( internalValue instanceof Double ) )
-            throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for RevenueDomain", 
+            throw new InvalidAttributeValueException( attributeDef, internalValue, "'%s' is an invalid Object for RevenueDomain",
                                                       internalValue.getClass().getName() );
 
         super.validateInternalValue( task, attributeDef, internalValue );
@@ -114,7 +118,7 @@ public class RevenueDomain extends AbstractNumericDomain
         Double value = (Double) currentValue;
         return value + num;
     }
-    
+
     @Override
     public Object multiplyAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object operand )
     {
@@ -134,12 +138,12 @@ public class RevenueDomain extends AbstractNumericDomain
     {
         return new DoubleContext( this );
     }
-    
+
     private static class DoubleContext extends BaseDomainContext
     {
         private DecimalFormat format = null;
         private String        formatPattern = null;
-        
+
         /**
          * @param domain
          */
@@ -153,9 +157,9 @@ public class RevenueDomain extends AbstractNumericDomain
         {
          	if ( internalValue == null )
         		return null;
-        	
+
             Double d = (Double) internalValue;
-            
+
             // KJS 10/13/11 - In Zencas we have a revenue context "RevenueText" which renders the double amount as number text
             // in the format for a check amount (Three Thousand Nine Hundred Thirty and 00 / 100 Dollars).
             // I decided to create a Java Edit Format of "TextForCheckAmount".  Perhaps this is a bad way to do this
@@ -164,7 +168,7 @@ public class RevenueDomain extends AbstractNumericDomain
             {
                 String tmpStr = EnglishNumberToWords.convert(d);
                 return tmpStr;
-           	
+
             }
             // KJS 10/13/11 - In Zencas we have a revenue context "RevenueWithDollarSignCR" renders the decimal with a dollar sign and if
             // the decimal is < 0, a "CR" is concatenated instead of having a "-" negative sign.
@@ -181,7 +185,7 @@ public class RevenueDomain extends AbstractNumericDomain
     		    String tmpStr = df.format(d);
     		    tmpStr = tmpStr + cr;
     		    return tmpStr;
-    		    
+
             }
             synchronized ( format )
             {
@@ -209,7 +213,7 @@ public class RevenueDomain extends AbstractNumericDomain
                 super.setAttribute( reader );
         }
     }
-    private static class EnglishNumberToWords 
+    private static class EnglishNumberToWords
     {
     	  private static final String[] tensNames = {
     		    "",
@@ -266,7 +270,7 @@ public class RevenueDomain extends AbstractNumericDomain
 		  }
 
 
-		  public static String convert(Double number) 
+		  public static String convert(Double number)
 		  {
 		    // 0 to 999 999 999 999
 		    if (number == 0) { return "Zero"; }
@@ -277,21 +281,21 @@ public class RevenueDomain extends AbstractNumericDomain
 		    String snumber = df.format(number);
 		    String sdecimal = snumber.substring(snumber.indexOf(".")+ 1);
 		    snumber = snumber.substring(0, snumber.indexOf("."));
-		    		    	
+
 
 		    // pad with "0"
 		    mask = "000000000000";
 		    df = new DecimalFormat(mask);
 		    snumber = df.format(number);
 
-		    // XXXnnnnnnnnn 
+		    // XXXnnnnnnnnn
 		    int billions = Integer.parseInt(snumber.substring(0,3));
 		    // nnnXXXnnnnnn
-		    int millions  = Integer.parseInt(snumber.substring(3,6)); 
+		    int millions  = Integer.parseInt(snumber.substring(3,6));
 		    // nnnnnnXXXnnn
-		    int hundredThousands = Integer.parseInt(snumber.substring(6,9)); 
+		    int hundredThousands = Integer.parseInt(snumber.substring(6,9));
 		    // nnnnnnnnnXXX
-		    int thousands = Integer.parseInt(snumber.substring(9,12));    
+		    int thousands = Integer.parseInt(snumber.substring(9,12));
 
 		    String tradBillions;
 		    switch (billions) {
@@ -299,11 +303,11 @@ public class RevenueDomain extends AbstractNumericDomain
 		      tradBillions = "";
 		      break;
 		    case 1 :
-		      tradBillions = convertLessThanOneThousand(billions) 
+		      tradBillions = convertLessThanOneThousand(billions)
 		      + " Billion ";
 		      break;
 		    default :
-		      tradBillions = convertLessThanOneThousand(billions) 
+		      tradBillions = convertLessThanOneThousand(billions)
 		      + " Billion ";
 		    }
 		    String result =  tradBillions;
@@ -314,11 +318,11 @@ public class RevenueDomain extends AbstractNumericDomain
 		      tradMillions = "";
 		      break;
 		    case 1 :
-		      tradMillions = convertLessThanOneThousand(millions) 
+		      tradMillions = convertLessThanOneThousand(millions)
 		      + " Million ";
 		      break;
 		    default :
-		      tradMillions = convertLessThanOneThousand(millions) 
+		      tradMillions = convertLessThanOneThousand(millions)
 		      + " Million ";
 		    }
 		    result =  result + tradMillions;
@@ -332,7 +336,7 @@ public class RevenueDomain extends AbstractNumericDomain
 		      tradHundredThousands = "One Thousand ";
 		      break;
 		    default :
-		      tradHundredThousands = convertLessThanOneThousand(hundredThousands) 
+		      tradHundredThousands = convertLessThanOneThousand(hundredThousands)
 		      + " Thousand ";
 		    }
 		    result =  result + tradHundredThousands;
@@ -340,7 +344,7 @@ public class RevenueDomain extends AbstractNumericDomain
 		    String tradThousand;
 		    tradThousand = convertLessThanOneThousand(thousands);
 		    result =  result + tradThousand;
-		    
+
 		    if (!sdecimal.isEmpty())
 		    {
 		    	result = result + " and " + sdecimal + " / 100 Dollars";
@@ -350,5 +354,5 @@ public class RevenueDomain extends AbstractNumericDomain
 		    return result.replaceAll("^\\s+", "").replaceAll("\\b\\s{2,}\\b", " ");
 		  }
     }
-    	
+
 }

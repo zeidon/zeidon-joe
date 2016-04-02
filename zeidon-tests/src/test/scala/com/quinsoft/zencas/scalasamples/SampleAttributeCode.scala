@@ -19,10 +19,11 @@
 package com.quinsoft.zencas.scalasamples
 
 import com.quinsoft.zeidon.scala.ZeidonOperations
-import com.quinsoft.zeidon.scala.Task
-import com.quinsoft.zeidon.scala.ObjectEngine
 import com.quinsoft.zeidon.scala.basedOn
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
  * Sample code for dealing with Zeidon attributes in Scala.
@@ -72,6 +73,9 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         if ( mUser.User.ID == 10 )
             println( "Equal to 10" )
 
+        if ( mUser.User.ID in (10, 21, 32 ) )
+            println( "ID is 10, 21, or 32" )
+            
         // This will compare the attribute using Zeidon domain processing.  If the domain
         // comparison handles nulls then this line will not throw an exception.
         if ( mUser.User.Active @== "Y" )
@@ -131,11 +135,16 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
         attr2 = attr // This re-assigns attr2.
     }
 
+    def attributeLists( mUser : View @basedOn( "mUser" ) ) {
+        mUser.User.attributes.filter { _.attributeDef.isKey() }.foreach { attr => println( attr ) }
+    }
+    
     def runAll( mUser: View ) = {
         attributeValues( mUser )
         metaInformation( mUser )
         compareAttribute( mUser )
         attributeInstance( mUser )
+        attributeLists( mUser )
     }
 }
 
@@ -144,7 +153,7 @@ object SampleAttributeCode {
     def main(args: Array[String]): Unit = {
 
         // Load the object engine and create a task.
-        val oe = ObjectEngine.getInstance
+        val oe = JavaObjectEngine.getInstance()
         val task = oe.createTask("ZENCAs")
 
         val activator = new SampleActivates( task )

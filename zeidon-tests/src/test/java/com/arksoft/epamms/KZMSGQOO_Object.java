@@ -67,11 +67,11 @@ public class KZMSGQOO_Object extends VmlObjectOperations
             // Get only the first error message for presentation.
             while ( nRC == 0 )
             {
-               String s = vMsgQ.cursor( "WebMsg" ).getStringFromAttribute( "ControlTag" );
+               String s = vMsgQ.cursor( "WebMsg" ).getAttribute( "ControlTag" ).getString();
                String strError = GetStringFromAttribute( vMsgQ, "WebMsg", "ErrorMsg" );
                if ( s == null || s.isEmpty( ) )
                {
-                  s = vMsgQ.cursor( "WebMsg" ).getStringFromAttribute( "Title" );
+                  s = vMsgQ.cursor( "WebMsg" ).getAttribute( "Title" ).getString();
                   if ( s == null || s.isEmpty( ) )
                      s = "Unknown Error Title";
 

@@ -37,7 +37,7 @@ class EntityCursor( private[this]  val view: View,
             with Iterable[EntityInstance]
 {
     /**
-      * Returns the underlying Java EntityCursor.
+      * Returns the underlying Java EntityInstance.
       */
     def getEntityInstance: com.quinsoft.zeidon.EntityInstance = {
         val instance = jentityCursor.getEntityInstance()
@@ -47,6 +47,11 @@ class EntityCursor( private[this]  val view: View,
         instance
     }
 
+    /**
+     * Returns the Scala entity instance for the current cursor.
+     */
+    def instance = new EntityInstance( getEntityInstance() )
+    
     /** Creates a new entity instance.
       *
       * Creates a new entity instance.  The position of the new instance is determined
@@ -60,11 +65,29 @@ class EntityCursor( private[this]  val view: View,
         this
     }
 
+    def createTemporalEntity( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
+        jentityCursor.createTemporalEntity( position )
+        this
+    }
+    
+    /**
+     * Accept either a temporal entity or a temporal subobject.
+     */
+    def accept() : EntityCursor = {
+        jentityCursor.acceptSubobject()
+        this
+    }
+    
+    def cancel() : EntityCursor = {
+        jentityCursor.cancelSubobject()
+        this
+    }
+    
     /**
       *  Returns true if there are any valid twins for this cursor.  Does NOT change the cursor.
       */
-    def exists = jentityCursor.hasAny()   
-    
+    def exists = jentityCursor.hasAny()
+
     def notExists = ! exists
 
     /**
@@ -395,6 +418,7 @@ class EntityCursor( private[this]  val view: View,
      * }}}
      */
     def setFirst( predicate: => Boolean, scopingEntity: AbstractEntity = null ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
         val iter = jentityCursor.eachEntity( if ( scopingEntity == null ) null else scopingEntity.entityDef )
         while ( iter.hasNext() )
         {
@@ -403,10 +427,15 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
+        // Reset the cursor to its original position.
+        if ( currentEi != null )
+            jentityCursor.setCursor( currentEi )
+            
         return new CursorResult( com.quinsoft.zeidon.CursorResult.UNCHANGED )
     }
 
     def setFirst( predicate: (EntityInstance) => Boolean ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
         val iter = jentityCursor.eachEntity()
         while ( iter.hasNext() )
         {
@@ -415,6 +444,10 @@ class EntityCursor( private[this]  val view: View,
                 return EntityCursor.CURSOR_SET
         }
 
+        // Reset the cursor to its original position.
+        if ( currentEi != null )
+            jentityCursor.setCursor( currentEi )
+            
         return EntityCursor.CURSOR_UNCHANGED
     }
 
@@ -427,10 +460,31 @@ class EntityCursor( private[this]  val view: View,
             jentityCursor.setFirst( attributeName, value )
     }
 
+    def setLast( predicate: (EntityInstance) => Boolean ): CursorResult = {
+        val currentEi = jentityCursor.getEntityInstance
+        
+        // Since we're going to go backwards through the list we can't use a normal
+        // iterator so we'll do it by hand.
+        var rc = jentityCursor.setLast()
+        while ( rc.isSet() ) {
+            val ei = jentityCursor.getEntityInstance
+            if ( predicate( new EntityInstance( ei ) ) )
+                return EntityCursor.CURSOR_SET
+
+            rc = jentityCursor.setPrev()
+        }
+
+        // If we get here then we didn't find a match. Reset the cursor to its original position.
+        if ( currentEi != null )
+            jentityCursor.setCursor( currentEi )
+            
+        return EntityCursor.CURSOR_UNCHANGED
+    }
+
     /**
       * Set the cursor using a hashkey attribute value.
       */
-    def set( setter: ( HashSetter ) => Any ): CursorResult = {
+    def set( setter: ( HashSetter ) => AbstractEntity ): CursorResult = {
         val hashSetter = new HashSetter()
         setter( hashSetter )
         hashSetter.getResult
@@ -512,6 +566,8 @@ class EntityCursor( private[this]  val view: View,
         iter.each( looper )
     }
 
+    def all() = new EntityInstanceIterator( jentityCursor.allEntities() ).setCursor( this )
+
     def iterator = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this ).iterator
 
     def under( scopingEntity: String ) = {
@@ -520,6 +576,11 @@ class EntityCursor( private[this]  val view: View,
 
     def under( scopingEntity: AbstractEntity ) = {
         new EntityInstanceIterator( jentityCursor.eachEntity( scopingEntity.entityDef ) ).setCursor( this )
+    }
+
+    def under( entitySelector: (EntitySelector) => EntityDef ) = {
+        val scopingEntity = entitySelector( new EntitySelector( view.lodDef ) )
+        new EntityInstanceIterator( jentityCursor.eachEntity( scopingEntity ) ).setCursor( this )
     }
 
     /**
@@ -541,20 +602,22 @@ class EntityCursor( private[this]  val view: View,
         def getEntityInstance: com.quinsoft.zeidon.EntityInstance = jentityCursor.getEntityInstance()
         def getResult = rc
 
-        override def setValue( jattributeDef: AttributeDef, value: Any ): Any = {
+        override def setValue( jattributeDef: AttributeDef, value: Any ): AbstractEntity = {
             if ( jattributeDef.getHashKeyType() == AttributeHashKeyType.NONE )
                 throw new ZeidonException( "Cursor.set() can only be used on attributes defined with a hashkey" )
                                   .prependAttributeDef( jattributeDef )
 
             val attributeName = jattributeDef.getName()
-            rc = {
-                if ( value.isInstanceOf[ AttributeInstance ] )
-                    // If the value is of type AttributeInstance then convert it to an internal value.
-                    jentityCursor.setFirst( attributeName, value.asInstanceOf[ AttributeInstance ].
-                                            jattributeInstance.getValue )
-                else
-                    jentityCursor.setFirst( attributeName, value )
+            
+            if ( value.isInstanceOf[ AttributeInstance ] ) {
+                val attr = value.asInstanceOf[ AttributeInstance ]
+                // If the value is of type AttributeInstance then convert it to an internal value.
+                rc = jentityCursor.setFirst( attributeName, attr.jattributeInstance.getValue )
             }
+            else
+                rc = jentityCursor.setFirst( attributeName, value )
+                
+            return this
         }
     }
 
@@ -610,6 +673,6 @@ object EntityCursor {
     /**
      * Convert a Scala EntityCursor to a Scala EntityInstance.
      */
-    implicit def cursor2instance( cursor: EntityCursor ) = new EntityInstance( cursor.getEntityInstance )
+    implicit def cursor2instance( cursor: EntityCursor ) = cursor.instance
     implicit def cursorResult2boolean( result: CursorResult ) = result.jcursorResult.isSet()
 }

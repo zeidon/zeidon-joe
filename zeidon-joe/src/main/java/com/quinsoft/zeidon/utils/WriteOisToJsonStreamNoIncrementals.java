@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -33,6 +34,13 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.BigDecimalDomain;
+import com.quinsoft.zeidon.domains.BooleanDomain;
+import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DoubleDomain;
+import com.quinsoft.zeidon.domains.IntegerDomain;
+import com.quinsoft.zeidon.domains.LongDomain;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
@@ -49,7 +57,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
 
     private Collection<? extends View> viewList;
     private EnumSet<WriteOiFlags> flags;
-
+    private SerializeOi options;
     private JsonGenerator jg;
 
     @Override
@@ -62,6 +70,8 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             flags = options.getFlags();
         if ( flags.contains( WriteOiFlags.INCREMENTAL ) )
             throw new ZeidonException( "This JSON stream writer not intended for writing incremental." );
+
+        this.options = options;
 
         JsonFactory jsonF = new JsonFactory();
         try
@@ -90,7 +100,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         view.setInternal( true );  // So it doesn't show up in the browser.
 
         EntityDef rootEntityDef = view.getLodDef().getRoot();
-        jg.writeArrayFieldStart( rootEntityDef.getName() );
+        jg.writeArrayFieldStart( camelCaseName( rootEntityDef.getName() ) );
         if ( ! view.isEmpty() )
         {
             jg.writeStartObject();
@@ -111,6 +121,23 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         jg.writeEndArray();
     }
 
+    private String camelCaseName( String name )
+    {
+        if ( ! options.isCamelCase() )
+            return name;
+
+        char[] nameChars = name.toCharArray();
+        for ( int i = 0; i < nameChars.length; i++ )
+        {
+            if ( ! Character.isUpperCase( nameChars[ i ] ) )
+                break;
+
+            nameChars[ i ] = Character.toLowerCase( nameChars[ i ] );
+        }
+
+        return String.valueOf( nameChars );
+    }
+
     private EntityDef writeEntity( EntityInstance ei ) throws Exception
     {
         try
@@ -118,18 +145,44 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             // See if we need to open or close an array field.
             final EntityDef entityDef = ei.getEntityDef();
 
-            for ( AttributeInstance attrib : ei.getAttributes( false ) )
+            for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                if ( attrib.getAttributeDef().isHidden() )
+                if ( attributeDef.isHidden() )
                     continue;
 
-                String value = attrib.getString( null );
+                if ( attributeDef.isDerived() && ! options.isWriteDerivedAttributes() )
+                    continue;
 
-                // getAttributes will include null attributes if they have been updated
-                // (i.e. explicitly set to null).  Since we aren't writing incrementals
-                // we don't want those so check for null.
-                if ( ! StringUtils.isBlank( value ) )
-                    jg.writeStringField( attrib.getAttributeDef().getName(), value );
+                AttributeInstance attrib = ei.getAttribute( attributeDef );
+                if ( attrib.isNull() )
+                    continue;
+
+                Domain domain = attributeDef.getDomain();
+                String jsonName = camelCaseName( attributeDef.getName() );
+                if ( domain instanceof IntegerDomain )
+                    jg.writeNumberField( jsonName, attrib.getInteger() );
+                else
+                if ( domain instanceof DoubleDomain )
+                    jg.writeNumberField( jsonName, attrib.getDouble() );
+                else
+                if ( domain instanceof BooleanDomain )
+                    jg.writeBooleanField( jsonName, attrib.getBoolean() );
+                else
+                if ( domain instanceof LongDomain )
+                    jg.writeNumberField( jsonName, (Long) attrib.getValue() );
+                else
+                if ( domain instanceof BigDecimalDomain )
+                    jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
+                else
+                {
+                    String value = attrib.getString( null );
+    
+                    // getAttributes will include null attributes if they have been updated
+                    // (i.e. explicitly set to null).  Since we aren't writing incrementals
+                    // we don't want those so check for null.
+                    if ( ! StringUtils.isBlank( value ) )
+                        jg.writeStringField( camelCaseName( attrib.getAttributeDef().getName() ), value );
+                }
             }
 
             // Loop through the children and add them.
@@ -140,11 +193,11 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 {
                     if ( childEntityDef.getMaxCardinality() > 1 )
                     {
-                        jg.writeArrayFieldStart( childEntityDef.getName() );
+                        jg.writeArrayFieldStart( camelCaseName( childEntityDef.getName() ) );
                         jg.writeStartObject();
                     }
                     else
-                        jg.writeObjectFieldStart( childEntityDef.getName() );
+                        jg.writeObjectFieldStart( camelCaseName( childEntityDef.getName() ) );
                 }
                 else
                     jg.writeStartObject();

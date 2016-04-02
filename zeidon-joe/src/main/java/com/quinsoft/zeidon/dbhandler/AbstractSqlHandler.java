@@ -36,6 +36,7 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CreateEntityFlags;
@@ -46,6 +47,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
 import com.quinsoft.zeidon.IncludeFlags;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -54,9 +56,11 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
+import com.quinsoft.zeidon.standardoe.NoOpPessimisticLockingHandler;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
 /**
@@ -65,6 +69,8 @@ import com.quinsoft.zeidon.standardoe.OiRelinker;
  */
 public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 {
+    public static final PessimisticLockingHandler NOOP_PESSIMISTIC_LOCKING_HANDLER = new NoOpPessimisticLockingHandler();
+
     /**
      * These are the flags to use when creating an entity.  It prevents some
      * normal processing for occuring that we don't need when activating.
@@ -76,10 +82,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                                                                  CreateEntityFlags.fDBHANDLER,
                                                                                  CreateEntityFlags.fIGNORE_PERMISSIONS );
 
+    /**
+     * Flags that are used to create EIs in the new OI from a cache of EIs.
+     */
     protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
 
     private static final long COL_KEYS_ONLY = 0x00000001;
-    private static final long COL_NO_HIDDEN = 0x00000002;
     private static final long COL_FULL_QUAL = 0x00000004;
 
     protected enum SqlCommand
@@ -100,6 +108,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      * I.e. activateOptions = (ActivateOptions) options.
      */
     protected ActivateOptions activateOptions;
+    protected boolean closeTransaction = true;
 
     /**
      * Keeps a list of entities that are joinable for this activate.
@@ -136,10 +145,16 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Set<EntityDef> loadInOneSelect;
     private HashMap<EntityCache, View> entityCacheViewMap;
 
+    /**
+     * If set, this is the paging options for the activate.
+     */
+    private Pagination pagingOptions;
+
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
         this.application = options.getApplication();
+        this.options = options;
         entityLinker = new OiRelinker( task );
         cachedStmts = new HashMap<EntityDef, AbstractSqlHandler.SqlStatement>();
     }
@@ -342,17 +357,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ( control & COL_KEYS_ONLY ) != 0 && attributeDef.isKey() )
                 continue;
 
-            // If nControl indicates that we don't want hidden attributes, then
-            // don't use hidden attributes UNLESS THEY ARE KEYS.  Keys, even if
-            // they are hidden, should be included.  Same thing with auto sequencing
-            // attributes.
-            if ( ( control & COL_NO_HIDDEN ) == 0 &&
-                 ( attributeDef.isHidden() && ! attributeDef.isKey() &&
-                                            ! attributeDef.isForeignKey() &&
-                                            ! attributeDef.isAutoSeq() ))
-            {
+            if ( ! attributeDef.isActivate() )
                 continue;
-            }
 
             // If the attribute is an Auto Seq attribute and the relationship
             // is many-to-many then the attribute is stored in the corresponding
@@ -548,19 +554,37 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                             relRecord != null &&
                             relRecord.getRelationshipType() == RelRecord.CHILD_IS_SOURCE )
                     {
-                        // Find the rel field for the qualifying attribute.
-                        for ( RelField relField : relRecord.getRelFields() )
-                        {
-                            // Change the column we are qualifying on.
-                            DataField dataField = relField.getRelDataField();
-                            qualAttrib.attributeDef = dataField.getAttributeDef();
-                            qualAttrib.entityDef = qualAttrib.attributeDef.getEntityDef();
+                        assert relRecord.getRelFields().size() == 1;
 
-                            dataRecord = qualAttrib.entityDef.getDataRecord();
-                            relRecord = dataRecord.getRelRecord();
-                        }
+                        // Find the rel field for the qualifying attribute.
+                        RelField relField = relRecord.getRelFields().get( 0 );
+
+                        // Change the column we are qualifying on.
+                        DataField dataField = relField.getRelDataField();
+                        qualAttrib.attributeDef = dataField.getAttributeDef();
+                        qualAttrib.entityDef = qualAttrib.attributeDef.getEntityDef();
+
+                        dataRecord = qualAttrib.entityDef.getDataRecord();
+                        relRecord = dataRecord.getRelRecord();
                     }
                 }
+
+                if ( qualAttrib.oper.equals( "ORDERBY" ) )
+                {
+                    if ( qualAttrib.attributeDef == null )
+                        throw new ZeidonException("Using Order By in qualification requires an attribute name" );
+
+                    boolean descending = false;
+
+                    if ( ! qualAttribInstance.getAttribute( "Value"  ).isNull() ) {
+                        String str = qualAttribInstance.getAttribute( "Value"  ).getString().toLowerCase();
+                        descending =  str.startsWith( "desc" );
+                    }
+
+                    qualEntity.addOrderBy( qualAttrib.attributeDef, descending );
+                    continue;
+                }
+
 
                 //
                 // Verify Value
@@ -653,6 +677,26 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             assert parenCount == 0;
 
         } // for each EntitySpec...
+
+        // For rolling pagination we *must* have the keys as part of the ordering.
+        if ( pagingOptions != null && pagingOptions.isRollingPagination() )
+        {
+            EntityDef root = lodDef.getRoot();
+            QualEntity qualRootEntity = qualMap.get( root );
+            if ( qualRootEntity == null )
+            {
+                qualRootEntity = new QualEntity( null, root );
+                qualMap.put( root, qualRootEntity );
+            }
+
+            qualRootEntity.checkForKeysInOrderBy(); // Add the keys if they aren't there.
+            qualRootEntity.activateLimit = pagingOptions.getPageSize();
+
+            // Copy the root ordering back to the ActivateOptions so we can use
+            // them later when attempting to load the next page.
+            activateOptions.setRootActivateOrdering( qualRootEntity.ordering );
+        }
+
     } // method loadQualificationObject
 
     /**
@@ -700,11 +744,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         this.qual = qual;
         this.activateFlags = control;
         activateOptions = (ActivateOptions) options;
+        pagingOptions = activateOptions.getPagingOptions();
         loadQualificationObject( view.getLodDef() );
-
         loadedViewEntities = new HashSet<>();
-
         determineEntitiesThatCanBeLoadedInOneSelect( view );
+        if ( activateOptions.isSingleTransaction() )
+            closeTransaction = false;
 
         return 0;
     }
@@ -752,8 +797,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( activateFlags.contains( ActivateFlags.fIGNORE_JOINS ) )
             return false;
 
-        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
-            return false;
+//        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) )
+//            return false;
 
         // Check the zeidon.ini file.
         if ( ignoreJoins() )
@@ -877,6 +922,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( getEntityCache( entityDef ) != null )
             return false;
 
+        if ( activateFlags.contains( ActivateFlags.fROOT_ONLY ) && entityDef.getParent() != null )
+            return false;
+
         // We can't join a child to its parent if there is an activate limit on the
         // parent AND if the child has a x-to-many relationship.  Joining the parent
         // and child could result in a result-set that has more rows than expected.
@@ -949,7 +997,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         if ( qualEntity != null )
         {
-            addQualification( stmt, view, entityDef );
+            addQualification( qualEntity, stmt, view, entityDef );
 
             // If the parent is non-null then we added foreign keys above.  Add
             // the closing paren.
@@ -957,11 +1005,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 stmt.appendWhere( ")" );
         }
 
-        // TODO: Add ORDER BY if we have an activate limit.
-
-        stmt.appendOrdering( entityDef );
+        addOrdering( entityDef, stmt );
         for ( EntityDef child : joinedChildren )
-            stmt.appendOrdering( child );
+            addOrdering( child, stmt );
 
         if ( qualEntity != null && qualEntity.activateLimit != null )
             addActivateLimit( qualEntity.activateLimit, stmt );
@@ -974,6 +1020,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // parent load and will not need to be loaded separately.
         loadedViewEntities.addAll( joinedChildren );
         return null;
+    }
+
+    private void addOrdering( EntityDef entityDef, SqlStatement stmt )
+    {
+        // Do we have ordering specified in the qualification object?
+        QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity == null || ! qualEntity.hasOrdering() )
+        {
+            // No qualification order.  If entity has any ordering specified
+            // in the LOD, add it.
+            stmt.appendOrdering( entityDef );
+        }
+        else
+        {
+            // Ordering has been specified in the qual object.  Add it.
+            for ( ActivateOrder order : qualEntity.getOrdering().values() )
+                stmt.appendOrdering( order.attributeDef, order.descending );
+        }
     }
 
     /**
@@ -1049,6 +1113,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             loadedViewEntities.add( entityDef );
 
         if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
+            return DbHandler.LOAD_DONE;
+
+        if ( entityDef.isDuplicateEntity() && loadFromDuplicateCache( view, entityDef ) )
             return DbHandler.LOAD_DONE;
 
         // TODO: We can't handle cached recursive statements because the cached statement is
@@ -1167,6 +1234,49 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return true;
     }
 
+    /**
+     * See if we can load entityDef from the the duplicate-entity cache, which is
+     * kept in the entityLinker.  We can load an EI from the cache if the relationship
+     * is many-to-one (which means the FK is in the parent and has been loaded).  We'll
+     * check to see if that key has already been loaded.
+     *
+     * @param view
+     * @param entityDef
+     * @return
+     */
+    private boolean loadFromDuplicateCache( View view, EntityDef entityDef )
+    {
+        if ( entityDef.getParent() == null )
+            return false;
+
+        DataRecord dataRecord = entityDef.getDataRecord();
+        RelRecord relRecord = dataRecord.getRelRecord();
+        if ( ! relRecord.getRelationshipType().isManyToOne() )
+            return false;  // Can only do it if it's many-to-one.
+
+        // For now we can only handle entities with a single key.
+        if ( entityDef.getKeys().size() > 1 )
+            return false;
+
+        assert relRecord.getRelFields().size() == 1;
+
+        // Get the FK that's in the parent.
+        AttributeDef parentAttributeFk = relRecord.getRelFields().get( 0 ).getRelDataField().getAttributeDef();
+
+        // Create the key string.  We need to match what entityInstance.getKeyString().
+        String keyString = view.cursor( entityDef.getParent() ).getAttribute( parentAttributeFk ).getString();
+
+        // Has it been loaded?
+        EntityInstance cachedEi = entityLinker.getInstance( entityDef, keyString );
+        if ( cachedEi == null )
+            return false; // No.
+
+        view.cursor( entityDef ).includeSubobject( cachedEi, CursorPosition.LAST, INCLUDE_FLAGS );
+
+        getTask().dblog().debug( "Auto Loaded %s from duplicate cache", entityDef.getName() );
+        return true;
+    }
+
     @Override
     public boolean isQualified( EntityDef entityDef )
     {
@@ -1180,7 +1290,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         String keyString = getKeyString(view, entityDef);
         if ( StringUtils.isBlank( keyString ) )
+        {
+            view.cursor( entityDef ).logEntity();
             return false;
+        }
 
         return true;
     }
@@ -1286,10 +1399,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return qualString;
     }
 
-    private void addQualification(SqlStatement stmt, View view, EntityDef entityDef)
+    private void addQualification( QualEntity qualEntity, SqlStatement stmt, View view, EntityDef entityDef)
     {
-        QualEntity qualEntity = qualMap.get( entityDef );
-
         /*
          * If this qualification has a DOES NOT EXIST clause then we need to
          * use a left join when adding tables.
@@ -1322,16 +1433,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected int executeStatement(View view, EntityDef entityDef, EntityInstance entityInstance, SqlStatement stmt)
     {
-        try
-        {
-            return executeStatement( view, entityDef, stmt );
-        }
-        catch ( Throwable t )
-        {
-            task.dblog().error( "Entity that caused the error:", t, (Object[]) null );
-            entityInstance.logEntity( false );
-            throw ZeidonException.wrapException( t );
-        }
+        return executeStatement( view, entityDef, stmt );
     }
 
     /**
@@ -1440,11 +1542,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     @Override
-    public Map<Integer, Integer> setGenKeys(View kzgkhwob, List<? extends View> viewList )
+    public Map<String, Integer> setGenKeys(View kzgkhwob, List<? extends View> viewList )
     {
         // This map will keep track of the next assignable genkey.  The map key is
         // ER entity token.
-        Map<Integer, Integer> genkeyValues = new HashMap<Integer, Integer>();
+        Map<String, Integer> genkeyValues = new HashMap<>();
 
         acquireGenkeyLock( kzgkhwob, viewList );
 
@@ -1466,7 +1568,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                                          .getAttribute( "CurrentGenkey" ).setValue( 0 );
                 }
 
-                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getInteger(),
+                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getString(),
                                   cursor.getAttribute( "CurrentGenkey" ).getInteger() + 1 );
                 Integer count = genkey.getAttribute( "EntityCount" ).getInteger();
                 Integer c = cursor.getAttribute( "CurrentGenkey" ).getInteger();
@@ -2224,6 +2326,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 where.append( o );
         }
 
+        /**
+         * Adds the default ordering for entityDef as defined in the LOD.
+         *
+         * @param entityDef
+         */
         void appendOrdering( EntityDef entityDef )
         {
             final AttributeDef autoSeq = entityDef.getAutoSeq();
@@ -2241,8 +2348,26 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         void appendOrdering( AttributeDef attributeDef )
         {
             appendOrdering( attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef ), attributeDef.isAutoSeq() );
+
+            if ( ! attributeDef.isSequencingAscending() )
+                ordering.append( " DESC " );
         }
 
+        void appendOrdering( AttributeDef attributeDef, boolean descending )
+        {
+            appendOrdering( attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef ), false );
+
+            if ( descending )
+                ordering.append( " DESC " );
+        }
+
+        /**
+         * Adds the column represented by dataField.  If the column is an autoseq
+         * field then we may have to use the correspondance table.
+         *
+         * @param dataField
+         * @param isAutoSeq
+         */
         void appendOrdering( DataField dataField, boolean isAutoSeq )
         {
             if ( ordering.length() > 0 )
@@ -2262,9 +2387,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             ordering.append( "." )
                     .append( dataField.getName() );
-
-            if ( ! dataField.getAttributeDef().isSequencingAscending() )
-                ordering.append( " DESC " );
         }
 
         public void appendSuffix( Object value )
@@ -2506,109 +2628,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
     } // class SqlStatement
 
-    private static class QualEntity
-    {
-        private boolean                usesChildQualification;
-        private boolean                exclude;
-        private boolean                hasDoesNotExist;
-        private final Integer          activateLimit;
-        private final EntityInstance   qualEntityInstance;
-        private final EntityDef        entityDef;
-        private final List<QualAttrib> qualAttribs;
-
-        /**
-         * Keeps track of the EntityDefs that are used as part of this qualification.
-         */
-        private final Set<EntityDef>   usesEntityDefs = new HashSet<>();
-
-        QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
-        {
-            super();
-            this.qualEntityInstance = qualEntityInstance;
-            this.entityDef = entityDef;
-            qualAttribs = new ArrayList<QualAttrib>();
-            AttributeInstance limitAttr = qualEntityInstance.getAttribute( "ActivateLimit" );
-            if ( limitAttr.isNull() )
-                activateLimit = null;
-            else
-                activateLimit = limitAttr.getInteger();
-        }
-
-        void addQualAttrib( QualAttrib qualAttrib )
-        {
-            qualAttribs.add( qualAttrib );
-
-            if ( qualAttrib.entityDef != null && qualAttrib.entityDef != entityDef )
-            {
-                usesEntityDefs.add( qualAttrib.entityDef );
-                usesChildQualification = true;
-            }
-            else
-            if ( qualAttrib.columnAttributeValue != null &&
-                 qualAttrib.columnAttributeValue.getEntityDef() != entityDef )
-            {
-                usesChildQualification = true;
-                usesEntityDefs.add( qualAttrib.entityDef );
-            }
-        }
-
-        @Override
-        public String toString()
-        {
-            StringBuilder sb = new StringBuilder();
-            if ( entityDef != null )
-                sb.append("EntityDef = ").append( entityDef.getName() ).append( " " );
-
-            if ( qualAttribs.size() > 0 )
-                sb.append( StringUtils.join( qualAttribs, ", " ) );
-
-            return sb.toString();
-        }
-    }
-
-    private static class QualAttrib
-    {
-        public Object value;
-        String        oper;
-        EntityDef     entityDef;
-        AttributeDef  attributeDef;
-
-        /**
-         * If non-null then this specifies a list of value that should be used
-         * as part of an "IN" clause.
-         */
-        List<Object>  valueList;
-
-        /**
-         * If non-null this value specifies an attribute in the target LOD that will
-         * be used as qualification.  It allows qualification to refer to another
-         * column in the query.
-         */
-        AttributeDef  columnAttributeValue;
-
-        private QualAttrib(String oper)
-        {
-            super();
-
-            if ( oper.trim().toUpperCase().equals("!=" ) )
-                this.oper = "<>";
-            else
-                this.oper = oper.trim().toUpperCase();
-        }
-
-        @Override
-        public String toString()
-        {
-            StringBuilder sb = new StringBuilder();
-            if ( entityDef != null )
-                sb.append( entityDef.getName() ).append( "." ).append( attributeDef.getName() ).append( " "  );
-            sb.append( oper ).append( " " );
-            if ( value != null )
-                sb.append( value );
-            return sb.toString();
-        }
-    }
-
     /*
      * Check to see if we've created the cached data for this LodDef. If we have,
      * return it, otherwise create it and put it in the cache.
@@ -2796,5 +2815,20 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     public String getUserName()
     {
         return getConfigValue( "Username" );
+    }
+
+    @Override
+    public PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  )
+    {
+        LockingLevel lockLevel = activateOptions.getLockingLevel();
+        if ( ! lockLevel.isPessimisticLock() )
+            return NOOP_PESSIMISTIC_LOCKING_HANDLER;
+
+        if ( lockLevel == LockingLevel.PESSIMISTIC_WITHREAD && activateOptions.isReadOnly() )
+            return NOOP_PESSIMISTIC_LOCKING_HANDLER;
+
+        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb( activateOptions, qualMap );
+        view.addViewCleanupWork( lockingHandler );
+        return lockingHandler;
     }
 }

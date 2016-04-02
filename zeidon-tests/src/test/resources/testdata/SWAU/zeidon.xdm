@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 01/29/15   11:36:29 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 07/16/15   09:59:59 1.0a2    
 eDomainGroup 1
 aName      OpenCUAS
 
@@ -574,9 +574,6 @@ aName      BatchEntryType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92972213
-
-eTableEntry 4
 aZKey      90421847
 aExternalValue Prospect
 aInternalValue P
@@ -602,6 +599,21 @@ aExternalValue Mail Room
 aInternalValue M
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      93257015
+aName      BatchItemInquiryOrApplType
+aDesc      Identifies the type of application entry, usually its source or "I" for Inquiry.
+aDomainType E
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      93257016
+aName      BatchItemInquiryOrApplType
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92719396
 aName      BatchOnlineOrManualEntryType
@@ -615,9 +627,6 @@ eContext   3
 aZKey      92719397
 aName      BatchOnlineOrManualEntryType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92972214
 
 eTableEntry 4
 aZKey      92719398
@@ -5132,7 +5141,7 @@ aName      FA_AmountDetereminedBy
 aDesc      109
 Calculated- scaled means based on some min max. 
 Flat - Flat rate is just always the same amount of money
- 
+ 
 aDomainType T
 aDataType  S
 aMaxStringLth 1
@@ -7087,7 +7096,7 @@ aDesc      50
 G - grant
 L - oan
 S - cholarship
-W - ork study 
+W - ork study 
 aDomainType T
 aDataType  S
 aMaxStringLth 5
@@ -10681,6 +10690,30 @@ eContext   3
 aZKey      90421752
 aName      OrganizationResponseToContact
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      93325517
+aName      OrganizationType
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      93325518
+aName      OrganizationType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      93325519
+aExternalValue Bank
+aInternalValue B
+
+eTableEntry 4
+aZKey      93325520
+aExternalValue Other
+aInternalValue O
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain

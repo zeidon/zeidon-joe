@@ -16,9 +16,6 @@
 
     Copyright 2009-2015 QuinSoft
  */
-/**
- *
- */
 package com.quinsoft.zeidon.standardoe;
 
 import java.io.File;
@@ -32,13 +29,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.DropTaskCleanup;
 import com.quinsoft.zeidon.EntityCache;
-import com.quinsoft.zeidon.Lockable;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
@@ -47,7 +43,6 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.utils.LazyLoadLock;
 
 /**
  * Comparable interface is implemented so that we can easily sort tasks by ID.
@@ -64,14 +59,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     private final String               taskId;
     private final JavaObjectEngine     objectEngine;
     private boolean                    isValid;
-    private final LazyLoadLock         lock;
-    private final NamedLockableList    lockList = new NamedLockableList();
     private final boolean              isSystemTask;
-
-    /**
-     * List of views that have pessimistic locks.
-     */
-    private ConcurrentMap<ViewImpl, Boolean> lockedViews;
 
     private       String               tempDir;
     private       String               userId;
@@ -88,13 +76,17 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     /**
      * Keep track of entity caches for this task.
      */
-    private Map<Integer, EntityCache> entityCacheMap;
+    private Map<String, EntityCache> entityCacheMap;
+
+    private Map<Application, Map<String, Map<String, String>>> configOverrideMap;
+
+    private List<DropTaskCleanup> cleanupWork;
 
     TaskImpl(JavaObjectEngine objectEngine, Application app, String taskId)
     {
         super(app);
         isValid = true;
-        this.taskId = taskId.intern();
+        this.taskId = taskId;
         this.objectEngine = objectEngine;
 
         // Check to see if this is the system task.  It's ok to use '=' instead of '=='
@@ -111,7 +103,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         String prefix = String.format( " [%4s] ", taskId );
         logger = new TaskLogger( prefix );
         dblogger = new TaskLogger( prefix );
-        lock = new LazyLoadLock();
 
         log().info( "Created new task for app %s, task ID = %s", app.getName(), taskId );
     }
@@ -128,7 +119,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         viewNameList = null;
         logger = new TaskLogger( " [bootstrap] " );
         dblogger = new TaskLogger( " [bootstrap] " );
-        lock = null;
         isSystemTask = false;
     }
 
@@ -176,31 +166,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         // make it easier to find resource leaks.
     }
 
-    private synchronized ConcurrentMap<ViewImpl, Boolean> getLockedViews()
-    {
-        if ( lockedViews == null )
-            lockedViews = new MapMaker().concurrencyLevel( 2 ).makeMap();
-
-        return lockedViews;
-    }
-
-    /**
-     * Keep track of views with pessimistic locks so we can drop the locks.
-     *
-     * @param view
-     */
-    void addLockedView( ViewImpl view )
-    {
-        assert ! getLockedViews().containsKey( view ) : "Attempting to add a pessimistic lock twice.";
-        getLockedViews().putIfAbsent( view, Boolean.TRUE );
-    }
-
-    void removePessimisticLock( ViewImpl view )
-    {
-        assert getLockedViews().containsKey( view ) : "Attempting to remove a non-existent pessimistic lock.";
-        getLockedViews().remove( view );
-    }
-
     @Override
     public Collection<ViewImpl> getViewList()
     {
@@ -235,8 +200,17 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         this.userId = userId;
     }
 
+    /**
+     * Calls dropTask().  This is implemented to support Closeable interface.
+     */
     @Override
-    public void dropTask()
+    public void close()
+    {
+        dropTask();
+    }
+
+    @Override
+    public synchronized void dropTask()
     {
         // If this has already been dropped return silently.
         if ( ! isValid )
@@ -244,13 +218,10 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
 
         log().info( "Dropping task %s", taskId );
 
-        if ( lockedViews != null )
+        if ( cleanupWork != null )
         {
-            for ( ViewImpl view : lockedViews.keySet() )
-            {
-                log().warn( "View %s still has pessimistic locks.  Dropping them.", view.toString() );
-                view.dropDbLocks();
-            }
+            for ( DropTaskCleanup work : cleanupWork )
+                work.taskDropped( this );
         }
 
         isValid = false;
@@ -388,18 +359,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     }
 
     @Override
-    public synchronized ReentrantReadWriteLock getLock()
-    {
-        return lock.getLock();
-    }
-
-    @Override
-    public Lockable getNamedLock(String name)
-    {
-        return lockList.getNamedLock( name );
-    }
-
-    @Override
     public String getTempDirectory()
     {
         if ( tempDir != null )
@@ -458,74 +417,6 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
                 }
             }
         }
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Task#lockAll(java.util.concurrent.locks.Lock[])
-     */
-    @Override
-    public boolean lockAll(Lock... locks)
-    {
-        int lockCount = 0;
-        try
-        {
-            while ( lockCount < locks.length )
-            {
-                if ( ! locks[lockCount].tryLock() )
-                {
-                    unlockAll( lockCount, locks );
-                    return false;
-                }
-                lockCount++;
-            }
-        }
-        catch ( Throwable t )
-        {
-            unlockAll( lockCount, locks );
-            throw ZeidonException.wrapException( t );
-        }
-
-        return true;
-    }
-
-    /**
-     * Attempt to lock all the locks. If there is contention then the logic will sleep a short amount of
-     * time and try again.  After totalRetries times the method will throw an exception.
-     *
-     * @param retryWait time in milliseconds.
-     * @param totalRetries total number of times to retry acquiring locks.
-     * @param locks
-     *
-     * @throws ZeidonException if locks could not be acquired.
-     */
-    void lockAll( int retryWait, int totalRetries, Lock...locks)
-    {
-        for ( int count = 0; count < totalRetries; count++ )
-        {
-            if ( lockAll( locks ) )
-                return;
-
-            try
-            {
-                Thread.sleep( retryWait );
-            }
-            catch ( InterruptedException e )
-            {
-                throw ZeidonException.wrapException( e );
-            }
-        }
-
-        // If we get here then we were never able to get all the locks.
-        throw new ZeidonException( "Unable to acquire all locks" );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Task#unlockAll(java.util.concurrent.locks.Lock[])
-     */
-    @Override
-    public void unlockAll(Lock... locks)
-    {
-        unlockAll( locks.length, locks );
     }
 
     /* (non-Javadoc)
@@ -605,5 +496,65 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         boolean b = entityCacheMap.containsKey( entityCache.getErEntityToken() );
         entityCacheMap.put( entityCache.getErEntityToken(), entityCache );
         return b;
+    }
+
+    @Override
+    public synchronized String readZeidonConfig(Application application, String group, String key, String defaultValue)
+    {
+        String g = normalizeGroup( group );
+
+        // Check to see if the value has been overridden for this task.
+        if ( configOverrideMap != null )
+        {
+            Map<String, Map<String, String>> appMap = configOverrideMap.get( application );
+            if ( appMap != null )
+            {
+                Map<String, String> groupMap = appMap.get( group );
+                if ( groupMap != null )
+                {
+                    if ( groupMap.containsKey( key ) )
+                        return groupMap.get( key ); // If we get here then the value has been overridden.
+                }
+            }
+        }
+
+        return getObjectEngine().getZeidonPreferences( application ).get( g, key, defaultValue );
+    }
+
+    /**
+     * Synchronized so it can be used for the system task.
+     */
+    @Override
+    public synchronized void overrideZeidonConfig( Application application, String group, String key, String value )
+    {
+        group = normalizeGroup( group );
+
+        if ( configOverrideMap == null )
+            configOverrideMap = new HashMap<>();
+
+        Map<String, Map<String, String>> appMap = configOverrideMap.get( application );
+        if ( appMap == null )
+        {
+            appMap = new HashMap<>();
+            configOverrideMap.put( application, appMap );
+        }
+
+        Map<String, String> groupMap = appMap.get( group );
+        if ( groupMap == null )
+        {
+            groupMap = new HashMap<>();
+            appMap.put( group, groupMap );
+        }
+
+        groupMap.put( key, value );
+    }
+
+    @Override
+    public void addTaskCleanupWork( DropTaskCleanup work )
+    {
+        if ( cleanupWork == null )
+            cleanupWork = new ArrayList<>();
+
+        cleanupWork.add( work );
     }
 }

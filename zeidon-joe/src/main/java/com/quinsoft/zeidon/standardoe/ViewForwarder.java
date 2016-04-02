@@ -23,12 +23,12 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -90,15 +90,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public View getViewByKey( long key )
     {
         return getViewByKey( key );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Lockable#getLock()
-     */
-    @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return getView().getLock();
     }
 
     /* (non-Javadoc)
@@ -189,6 +180,16 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public SelectSet createSelectSet()
     {
         return getView().createSelectSet();
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#deleteSelectSet(java.lang.Object)
+     */
+    @Override
+    public void dropSelectSet( Object index )
+    {
+        getView().dropSelectSet( index );
     }
 
     /* (non-Javadoc)
@@ -352,15 +353,6 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public int commit( CommitOptions options )
     {
         return getView().commit( options );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.View#dropDbLocks()
-     */
-    @Override
-    public void dropDbLocks()
-    {
-        getView().dropDbLocks();
     }
 
     /* (non-Javadoc)
@@ -604,14 +596,11 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
         return getView().newView( owningTask, readOnly );
     }
 
+    /**
+     * Calls drop().  This is implemented to support Closeable interface.
+     */
     @Override
-    public boolean isLocked()
-    {
-        return getView().isLocked();
-    }
-
-//    @Override
-    public void close() throws Exception
+    public void close()
     {
         getView().drop();
     }
@@ -621,11 +610,11 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         return getView().getEntityCount( includeHidden );
     }
-    
+
     /**
      * Returns true if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user.  
-     * 
+     * to be used by the browser to ignore views that weren't created by the user.
+     *
      * @return Returns true if this view was created by internal JOE processing.
      */
     @Override
@@ -638,5 +627,17 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     public View setInternal( boolean isInternal )
     {
         return getView().setInternal( isInternal );
+    }
+
+    @Override
+    public Set<Object> getSelectSetNames()
+    {
+        return getView().getSelectSetNames();
+    }
+
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
+    {
+        getView().addViewCleanupWork( work );
     }
 }

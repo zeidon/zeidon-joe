@@ -43,7 +43,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private static final long serialVersionUID = 1L;
     private final EntityDef   entityDef;
     private String       name;
-    private Long         erAttributeToken;
+    private String       erAttributeToken;
     private InternalType type = InternalType.STRING;
     private Integer      length;
 
@@ -72,6 +72,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private final int    attributeNumber;
     private boolean      hidden;
     private boolean      persistent;
+    private boolean      activate;
     private boolean      key;
     private boolean      foreignKey;
     private boolean      autoSeq;
@@ -80,7 +81,6 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private boolean      required;
     private boolean      debugChange;
     private Domain       domain;
-    private String       domainName;
     private EntityDef    hashKeyParent;
     private Boolean      isSequencingAscending = Boolean.TRUE;
 
@@ -99,6 +99,12 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         attributeNumber = entityDef.getAttributeCount();
     }
 
+    /**
+     * Create a dynamic attribute.
+     *
+     * @param entityDef
+     * @param config
+     */
     public AttributeDef(EntityDef entityDef, DynamicAttributeDefConfiguration config )
     {
         this( entityDef );
@@ -106,9 +112,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         setDomain( config.getDomainName() );
         setDynamicAttribute( true );
 
-        // We'll set the ER attribute token to be a negative number to indicate
-        // that it's not a normal token.
-        erAttributeToken = (long) -attributeNumber;
+        erAttributeToken = ( entityDef.toString() + "." + getName() ).intern() ;
     }
 
     @Override
@@ -167,7 +171,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
             case 'E':
                 if ( reader.getAttributeName().equals( "ERATT_TOK" ))
                 {
-                    erAttributeToken = Long.parseLong( reader.getAttributeValue() );
+                    erAttributeToken = reader.getAttributeValue().intern();
                 }
                 break;
 
@@ -305,6 +309,16 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         }
     }
 
+    /**
+     * Perform any final initializing that can only be done after the attribute
+     * has been loaded.
+     */
+    void finishAttributeLoading()
+    {
+        // Persistent, non-hidden attributes should always be activated.
+        activate = persistent && ( ! hidden || isKey() || isForeignKey() || isAutoSeq() );
+    }
+
     private Application getApplication()
     {
         return getEntityDef().getLodDef().getApplication();
@@ -313,7 +327,6 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     AttributeDef setDomain( String domainName )
     {
         Application app = entityDef.getLodDef().getApplication();
-        this.domainName = domainName;
         domain = app.getDomain( domainName );
         return this;
     }
@@ -334,7 +347,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         return name;
     }
 
-    public Long getErAttributeToken()
+    public String getErAttributeToken()
     {
         return erAttributeToken;
     }
@@ -378,6 +391,26 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     public boolean isPersistent()
     {
         return persistent;
+    }
+
+    /**
+     * Return true if this attribute should be loaded from the DB.  This should
+     * be true for all persistent, non-hidden attributes.  It may also be true
+     * for hidden attributes if this entity is expected to be linked to other
+     * instances.  This allows the DB handler to load attributes that might
+     * be hidden in this entity but non-hidden in the linked instance.
+     *
+     * @return
+     */
+    public boolean isActivate()
+    {
+        return activate;
+    }
+
+    void setActivate( boolean act )
+    {
+        assert persistent : "Internal error: attributes with activate flag must be persistent.";
+        activate = act;
     }
 
     public boolean isRequired()

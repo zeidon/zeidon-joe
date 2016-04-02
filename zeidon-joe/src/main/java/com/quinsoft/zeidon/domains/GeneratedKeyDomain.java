@@ -52,6 +52,7 @@ public class GeneratedKeyDomain extends AbstractDomain
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.domains.Domain#convertExternalValue(com.quinsoft.zeidon.Task, com.quinsoft.zeidon.AttributeInstance, com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.String, java.lang.Object)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Object convertExternalValue( Task task,
                                         AttributeInstance attributeInstance,
@@ -68,8 +69,12 @@ public class GeneratedKeyDomain extends AbstractDomain
 
         if ( externalValue instanceof GeneratedKey )
             return externalValue;
-        
-        return new GeneratedKeyImpl( externalValue.toString() );
+
+        if ( ! ( externalValue instanceof Comparable ) )
+            throw new InvalidAttributeValueException( attributeDef, externalValue,
+                                                      "Value of GeneratedKeyDomaing must implement Comparable" );
+
+        return new GeneratedKeyImpl( (Comparable<Object>) externalValue );
     }
 
     @Override
@@ -91,6 +96,15 @@ public class GeneratedKeyDomain extends AbstractDomain
         return ((GeneratedKey) value).isNull();
     }
 
+
+    @Override
+    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+    {
+        if ( isNull( task, attributeDef, internalValue ) )
+            return null;
+
+        return ((GeneratedKey) internalValue).getString();
+    }
 
     @Override
     public String convertToString( Task task, AttributeDef attributeDef, Object internalValue, String contextName )
@@ -140,11 +154,12 @@ public class GeneratedKeyDomain extends AbstractDomain
                         Object internalValue,
                         Object externalValue )
     {
-        Object value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
-        Integer rc = compareNull( task, attributeDef, internalValue, value);
+        GeneratedKey externalKey = (GeneratedKey) convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
+        Integer rc = compareNull( task, attributeDef, internalValue, externalKey );
         if ( rc != null )
             return rc;
 
-        return internalValue.toString().compareTo( externalValue.toString() );
+        GeneratedKey internalKey = (GeneratedKey) internalValue;
+        return internalKey.getString().compareTo( externalKey.getString() );
     }
 }

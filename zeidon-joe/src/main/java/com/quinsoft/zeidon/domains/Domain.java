@@ -44,6 +44,7 @@ public interface Domain
     DomainType getDomainType();
     InternalType getDataType();
     DomainContext getContext(Task task, String contextName);
+    DomainContext getContext(Task task, String contextName, boolean required );
     String getName();
 
     /**
@@ -146,6 +147,18 @@ public interface Domain
      * @return random test data for this domain.
      */
     Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance );
+
+    /**
+     * Returns true if this domain has an initial value for the specified attribute.  Will
+     * only be called if the attribute does not have its own initial value.
+     *
+     * @param task
+     * @param attributeDef
+     * @return
+     */
+    boolean hasInitialValue( Task task, AttributeDef attributeDef );
+
+    void setInitialValue( AttributeInstance attributeInstance  );
 
     /**
      * Creates an empty context which will then be initialized from values in zeidon.xdm.  Used when

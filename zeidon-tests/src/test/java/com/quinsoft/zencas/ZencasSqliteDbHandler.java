@@ -26,11 +26,11 @@ public class ZencasSqliteDbHandler extends SqliteJdbcHandler
     }
 
     @Override
-    protected void setAttribute( EntityInstance entityInstance, AttributeDef AttributeDef, Object value ) throws SQLException
+    protected void setAttribute( EntityInstance entityInstance, AttributeDef attributeDef, Object value ) throws SQLException
     {
         try
         {
-            super.setAttribute( entityInstance, AttributeDef, value );
+            super.setAttribute( entityInstance, attributeDef, value ) ;
         }
         catch ( InvalidAttributeValueException e )
         {

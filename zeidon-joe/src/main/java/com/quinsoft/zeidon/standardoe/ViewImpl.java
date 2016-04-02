@@ -22,13 +22,14 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,7 @@ import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -52,8 +54,6 @@ import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
-import com.quinsoft.zeidon.dbhandler.PessimisticLockingViaDb;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -91,14 +91,16 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * True if this view is read only.
      */
     private boolean isReadOnly = false;
-    
+
     /**
      * True if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user. 
+     * to be used by the browser to ignore views that weren't created by the user.
      */
     private boolean isInternal = false;
-    
+
     private boolean allowHiddenEntities = false;
+
+    private List<DropViewCleanup> cleanupWork;
 
     ViewImpl( TaskImpl task, LodDef lodDef )
     {
@@ -221,8 +223,12 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public void drop()
     {
-        dropDbLocks();
         getTask().dropView( this );
+        if ( cleanupWork != null )
+        {
+            for ( DropViewCleanup work : cleanupWork )
+                work.viewDropped( this );
+        }
     }
 
     @Override
@@ -365,22 +371,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     }
 
     @Override
-    public void dropDbLocks()
-    {
-        ObjectInstance oi = getObjectInstance();
-        synchronized ( oi )
-        {
-            if ( oi.isLocked() )
-            {
-                PessimisticLockingHandler releaser = getPessimisticLockingHandler();
-                releaser.releaseLocks( this );
-                getTask().removePessimisticLock( this );
-                oi.setLocked( false );
-            }
-        }
-    }
-
-    @Override
     public boolean isReadOnly()
     {
         if ( isReadOnly )
@@ -416,11 +406,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     @Override
     public ViewImpl newView( TaskQualification owningTask, boolean readOnly )
     {
-        // If the current view is locked then we can only create new views if they
-        // are readOnly.
-        if ( isLocked() && ! readOnly )
-            throw new ZeidonException( "Views created from a locked view must be readOnly." );
-
         ViewImpl newView = new ViewImpl( (TaskImpl) owningTask.getTask(), this );
         if ( readOnly )
             newView.setReadOnly( true );
@@ -437,7 +422,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         newView.setInternal( true );
         return newView;
     }
-    
+
     @Override
     public View getViewByName(String name)
     {
@@ -642,15 +627,6 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return viewCursor;
     }
 
-    /**
-     * Locking a view is locking the object instance.
-     */
-    @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return getObjectInstance().getLock();
-    }
-
     @Override
     public EntityCursor getCursor(String entityName)
     {
@@ -759,7 +735,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      * @see com.quinsoft.zeidon.View#createSelectSet()
      */
     @Override
-    public SelectSet createSelectSet()
+    public SelectSetImpl createSelectSet()
     {
         return new SelectSetImpl( this );
     }
@@ -773,6 +749,16 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return getSelectSet( defaultSelectSet );
     }
 
+
+    @Override
+    public Set<Object> getSelectSetNames()
+    {
+        if ( selectSets == null )
+            return Collections.emptySet();
+
+        return selectSets.keySet();
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.View#getSelectSet(int)
      */
@@ -783,13 +769,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             selectSets = new HashMap<Object,SelectSet>();
 
         SelectSet set = selectSets.get( index );
-        if ( set == null )
-        {
-            set = createSelectSet();
-            selectSets.put( index, set );
-        }
+        if ( set != null )
+            return set;
 
-        return set;
+        SelectSetImpl newSet = createSelectSet();
+        newSet.setName( index );
+        selectSets.put( index, newSet );
+        return newSet;
     }
 
     @Override
@@ -798,6 +784,13 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         Object oldKey = defaultSelectSet;
         defaultSelectSet = key;
         return oldKey;
+    }
+
+    @Override
+    public void dropSelectSet( Object index )
+    {
+        if ( selectSets != null && selectSets.containsKey( index ) )
+            selectSets.remove( index );
     }
 
     /* (non-Javadoc)
@@ -876,6 +869,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
      */
     void reassignTask( Task task )
     {
+        // Do we care if we're reassigning to a non-system task?  It probably will never
+        // happen but why restrict it?
         assert task == task.getSystemTask() : "Attempting to reassign to a non-system task.";
         getObjectInstance().setTask( (TaskImpl) task );
     }
@@ -891,7 +886,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             if ( ei.isHidden() ) // Only validate non-hidden entities.
                 continue;
 
-            ei.validateSubobject( list );
+            ei.validateSubobject( this, list );
         }
 
         if ( list.size() == 0 )
@@ -1012,21 +1007,11 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         return new SerializeOi( this );
     }
 
-    PessimisticLockingHandler getPessimisticLockingHandler()
-    {
-        //TODO: At some point we want to dynamically load the pessimistic locking handler.
-        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb();
-        return lockingHandler;
-    }
-
+    /**
+     * Calls drop().  This is implemented to support Closeable interface.
+     */
     @Override
-    public boolean isLocked()
-    {
-        return getObjectInstance().isLocked();
-    }
-
- //   @Override
-    public void close() throws Exception
+    public void close()
     {
         drop();
     }
@@ -1059,8 +1044,8 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
 
     /**
      * Returns true if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user.  
-     * 
+     * to be used by the browser to ignore views that weren't created by the user.
+     *
      * @return Returns true if this view was created by internal JOE processing.
      */
     @Override
@@ -1074,5 +1059,14 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         this.isInternal = isInternal;
         return this;
+    }
+
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
+    {
+        if ( cleanupWork == null )
+            cleanupWork = new ArrayList<>();
+
+        cleanupWork.add( work );
     }
 }

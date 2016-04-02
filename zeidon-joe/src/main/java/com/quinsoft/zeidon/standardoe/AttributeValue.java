@@ -145,7 +145,7 @@ class AttributeValue
      */
     boolean setInternalValue( TaskImpl task, AttributeDef attributeDef, Object newValue, boolean setIncremental )
     {
-        assert createAttribute.getErAttributeToken().equals( attributeDef.getErAttributeToken() );
+        assert createAttribute.getErAttributeToken() == attributeDef.getErAttributeToken();
 
         if ( areEqual( task, attributeDef, newValue ) )
             return false;
@@ -264,7 +264,7 @@ class AttributeValue
         }
     }
 
-    long getErAttributeToken()
+    String getErAttributeToken()
     {
         return createAttribute.getErAttributeToken();
     }
@@ -273,20 +273,6 @@ class AttributeValue
     public String toString()
     {
         return attributeValue == null ? "NULL" : attributeValue.toString();
-    }
-
-    Object addToAttribute( TaskImpl task, AttributeInstance attributeInstance, Object value )
-    {
-        Object newValue = domain.addToAttribute( task, attributeInstance, attributeInstance.getAttributeDef(), getInternalValue(), value );
-        setInternalValue( task, attributeInstance.getAttributeDef(), newValue, true );
-        return newValue;
-    }
-
-    Object multiplyAttribute( TaskImpl task, AttributeInstance attributeInstance, Object value )
-    {
-        Object newValue = domain.multiplyAttribute( task, attributeInstance, attributeInstance.getAttributeDef(), getInternalValue(), value );
-        setInternalValue( task, attributeInstance.getAttributeDef(), newValue, true );
-        return newValue;
     }
 
     void copyUpdateFlags( AttributeValue source )

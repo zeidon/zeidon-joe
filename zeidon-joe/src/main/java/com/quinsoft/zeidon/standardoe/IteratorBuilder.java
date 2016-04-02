@@ -105,7 +105,7 @@ class IteratorBuilder
 
         if ( scopingInstance != null && ! scopingInstance.getEntityDef().getLazyLoadConfig().hasLazyLoadChild() )
             return null;
-        
+
         // Determine if we are going to lazy-load entities.
         if ( targetEntityDef != null )
         {
@@ -622,11 +622,14 @@ class IteratorBuilder
         if ( attributeValueList == null )
             attributeValueList = new ArrayList<IteratorBuilder.AttributeValue>();
 
-        attributeValueList.add( new AttributeValue( attributeDef, value ) );
+        Object convertedValue = attributeDef.getDomain()
+                                            .convertExternalValue( objectInstance.getTask(), 
+                                                                   null, attributeDef, null, value );
+        attributeValueList.add( new AttributeValue( attributeDef, convertedValue ) );
 
         if ( attributeDef.getHashKeyType() != AttributeHashKeyType.NONE )
         {
-            setHashKeyAttribute( attributeDef, value );
+            setHashKeyAttribute( attributeDef, convertedValue );
             usingAttributeHashKey  = true;
         }
 
@@ -774,7 +777,7 @@ class IteratorBuilder
                     // We use entity tokens because this could be a recursive structure.
                     assert attrib.getEntityDef().getErEntityToken() == nextInstance.getEntityDef().getErEntityToken();
 
-                    if ( nextInstance.compareAttribute( attrib.getAttributeDef(), attrib.getValue() ) != 0 )
+                    if ( nextInstance.getAttribute( attrib.getAttributeDef() ).compare( attrib.getValue() ) != 0 )
                         return false;
                 }
             }

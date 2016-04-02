@@ -167,7 +167,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  208
 PES sent Pt`s Proof of income from February to August 2013 to Maria Torres.
 Received proof of income verification from Thomas Gennis but Mrs. Haskell does not want us to use that form. I will place in file. 
@@ -183,7 +183,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  57
 PES received  from Prime Resource Pt`s Proof of income. 
 
@@ -198,7 +198,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  53
 Received a receipt confirming that the fax was sent.
 
@@ -213,7 +213,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  63
 PES sent Pt`s POA by fax to Prime Resource to Marilyn from HR.
 
@@ -228,7 +228,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  208
 PES called Pt`s job (Prime resource) at (203)331-9100 to requesting proof of the gross income from February to August 2013. PES spoke with Marilyn from HR and she asked to send the POA at Fax #(203)336-9710.
 
@@ -243,7 +243,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  157
 PES called and left message to Pt`s work (Prime Resource) to  Marylin at the HR Department requesting proof of the gross income from  February to July 2013.
 
@@ -257,7 +257,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  132
 Left a message asking to return call to the HFI CM Rep Sara Nieves at (617)482-2200 Ext:444. Need to send Employment verifications.
 
@@ -693,7 +693,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Provide missing information
+aActivity  Prepare for hearing
 aComments  380
 Sent request to DSS toapply the bills that we sent correctly.  It looks as though they posted the following bills to meet 10/13 to 3/14  4/19/13  12661.53 4/20/13   6440.50 4/21/13   4402.26  We wanted DSS to use them to meet the 4/13 to 9/13 since the patient has a 60,000.00 bill that is currently not covered because they posted to ongoing instead of the 4/13 to 9/13 segment.
 
@@ -708,7 +708,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  378
 Resubmitted to DSS the medical bills needed to meet the spenddown of $23.342.01 for the period of 04/01/13 to 09/30/13 which bills are attached with the following information: $12,661.52 date of service 04/19/13 to 04/19/13 Bridgeport Hospital. $4402.26 date of service 04/21/13 to 04/21/13 Bridgeport Hospital. 6440.50 date of service 04/20/13 to 04/20/13 Bridgeport Hospital.
 
@@ -723,7 +723,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  373
 resend to DSS the medical bills needed to meet the spenddown of $23.342.01 for the period of 04/01/13 to 09/30/13 which bills are attached with the following information: $12,661.52 date of service 04/19/13 to 04/19/13 Bridgeport Hospital. $4402.26 date of service 04/21/13 to 04/21/13 Bridgeport Hospital. 6440.50 date of service 04/20/13 to 04/20/13 Bridgeport Hospital.
 
@@ -738,7 +738,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  279
 Sent the medical bills needed to meet the spenddown of $ 23342.01 for the period of 04/13 to 09/13 for segments $12.661.53 date of service 04/19/13  Bridgeport Hospital $6.44050 date of service 04/20/13 Bridgeport Hospital $4.402.26 date of service 04/21/13  Bridgeport Hospital
 
@@ -753,7 +753,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  HFI Client: Obtain bills to submit for spend down
+aActivity  Prepare for hearing
 aComments  234
 Sent email to Marcy to let her know that DSS informed me that: the Spenddown amount is $23.342.01 and the segments dates are from 04/01/13 to 09/30/13  and Spenddown amount $23.303.22 for the segments dates from 10/01/31 to 03/31/14.
 
@@ -768,7 +768,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  176
 Sent email to Marcy to let her know that DSS informed me that the client's spenddown Amount is $23.303.22 and the segment dates is from 04/13 to 03/14. I also checked in AEVS.
 
@@ -783,7 +783,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Request spend down documentation
+aActivity  Prepare for hearing
 aComments  106
 DSS informed me that the client's spenddown Amount is $23.303.22 and the segment dates is 10/13 to 03/14.
 
@@ -798,7 +798,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  94
 Left a message asking to return call to the HFI CM Rep Sara Nieves at (617)482-2200 Ext:444. 
 
@@ -918,7 +918,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Provide missing information
+aActivity  Prepare for hearing
 aComments  241
 Asked DSS to remove the following bills from the 4/13 to 9/13 SDME :  4/15/13  Northeast Med Group  225.00 4/16/13  Northeast Med Group  450.00 4/17/13  Northeast Med Group  320.00  Please replace it with the 5/8/10 bill we originally sent.
 
@@ -933,7 +933,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  196
 Sent to DSS the bill yesterday and I ask DSS to remove any and all bills currently on the 4/13 to 9/13 segment and to replace it with the attached $2899.34  Date 5/8/10  from Bridgeport Hospital.
 
@@ -1036,7 +1036,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      SSA
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  309
 PES received confirmation staid that :Thank you for contacting SUBWAY® Restaurants. Your feedback is important to the SUBWAY® brand and your recent inquiry has been forwarded to the appropriate areas for further review.  Sincerely, The Customer Care Team SUBWAY® Restaurants  325 Bic Drive Milford, CT 06461 
 
@@ -1051,7 +1051,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  245
 I received an email confirming that my recent inquiry has been forwarded to the Appropriate areas for Further review to The Customer Care Team SUBWAY ® Restaurants at 325 Bic Drive Milford, CT 06461 USA, http://www.subway.com,Ph: 1.800.888.4848
 
@@ -1066,7 +1066,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  683
 PES sent an email to Subway Main office requesting Pt`s proof of income and explained that the Subway restaurant located at 1700 Barnum Ave. in Ct seems to me that is permanently closed and my office represents your employee Michael Spencer Social Security Number 040-92-9734, who recently applied for Medicaid benefits.In order for my client`s application to be processed,verification of gross income is required by the Department of Social Services I need his gross income from April,May, June and July.I have the release form, signed by your employee authorizing us to obtain this information from you. I appreciate your help in assisting my client with this application process.
 
@@ -1081,7 +1081,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  247
 Called the other Subway store at the same Street (1345 Barnum Ave.) and the manager name Surille stated that the Subway located at 1700 Barnum Ave. closed about 2 months ago and they don`t have any employer with name Michael Spencer in her store.
 
@@ -1096,7 +1096,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  75
 Called Pt`s workplace Subway at(203) 275-8397 and phone is out of service.
 
@@ -1111,7 +1111,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  72
 Message said that the person I trying to call is unavailable right now.
 
@@ -1126,7 +1126,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  72
 Message said that the person I trying to call is unavailable right now.
 
@@ -1140,7 +1140,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  182
 PES did a search on white pages to find the phone number where Pt working, however the number of his job (Subway Sandwich Shop 203-726-5772) is disconnected or no longer in service.
 
@@ -1154,7 +1154,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  73
 Message said that the person I trying to call is unavailable right now. 
 
@@ -1255,7 +1255,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  94
 Left a message asking to return call to the HFI CM Rep Sara Nieves at (617)482-2200 Ext:444. 
 
@@ -1269,7 +1269,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aFK_PERSONID 347628
 aFK_USERID 1202
 
@@ -1456,7 +1456,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  153
 Left a message requesting verifications.Income for unemployment compensation benefit- Provide proof of gross wkly amount for November and December 2013.
 
@@ -1471,7 +1471,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  149
 Called DSS Hearing Office at (860)424-5760 and left a message asked what is missing and ask if we supply that before 12/31 can we avoid the hearing?
 
@@ -1486,7 +1486,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  277
 I received a letter from the state of Ct Hearings Department Office informing me that the date of the hearing will be on 31/12/13 at 11am Location New Haven DSS Regional Office address 50 Humphrey St, New Haven Ct and we have the hearing with Hearing Officer: Pamela Gonzalez.
 
@@ -1501,7 +1501,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  264
 DSS Worker Dona Rodriguez informed me that they still do not have the date of the hearing because they have a high volume of appeals and because of this they are a little late with cases. However she told me if we have any questions to call her at (860) 424-4123.
 
@@ -1516,7 +1516,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  111
  Called the BOH at (860) 424-5760 and left a message requested the date and time the hearing is scheduled for?
 
@@ -1531,7 +1531,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: File Appeal
+aActivity  Prepare for hearing
 aComments  106
 Sent hearing request via fax to DSS/BOH to the fax number 860-424-5729 and the phone number 860-424-5760.
 
@@ -1546,7 +1546,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  72
 Sent an email  asked HFI Bridgeport Team to find where this patient is.
 
@@ -1561,7 +1561,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -1576,7 +1576,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Left message
+aActivity  Prepare for hearing
 aComments  66
 Left a message requesting verifications. VA pention Statements.  
 
@@ -1591,7 +1591,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -1606,7 +1606,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -1621,7 +1621,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  106
 DSS informed me that they need VA Pention proof of income from the patient's husband and not the patient.
 
@@ -1636,7 +1636,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  246
 I call VA USA.gov's National Contact Center at 1-800-333-4636 and after checking by her SSN was stating that the Pt not receive any VA Pension. Now I'm waiting in line to see if the DSS really need this information to complete the verifications.
 
@@ -1651,7 +1651,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  147
 Left a message asking to return call to the HFI CM Rep George Andrade at (617)482-2200 Ext:290. PES Explained that he needs to send verifications.
 
@@ -1665,7 +1665,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  97
 Left a message asking to return call to the HFI CM Rep George Andrade at (617)482-2200 Ext:290. 
 
@@ -1791,7 +1791,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  130
 Submitted to DSS the bill for $52.335.36 It was posted as 5/18/2013 to be changed to 5/16/13 since that was when it was incurred.
 
@@ -1806,7 +1806,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  144
  DSS worker asked to submitted the bill for $52.335.36 It was posted as 5/18/2013 to be changed to 5/16/13 since that was when it was incurred.
 
@@ -1910,7 +1910,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  194
 DSS worker review and back dated to cover the visit for the month of 05/13, client is on spenddown with the amount of $10131.64 from 05/01/13 TO 10/31/13 and $4238.16 from 11/01/13 to 04/30/14.
 
@@ -1925,7 +1925,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  97
 DSS worker informed me that  client is on the spenddown $12714.48 from 05/01/2013 to 12/31/2013.
 
@@ -1940,7 +1940,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  294
 Ask Colleen to submit  proof of income along with pt`s medical record. 1348 rec'd - You must provide current proof of your address(you already send) & please provide proof that you had a medical need in May 2013(medical record from 05/13 and All gross pay received from T. Arduini in May 2013.
 
@@ -1955,7 +1955,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  47
 Sent proof of Pt`s gross income from May 2013.
 
@@ -1970,7 +1970,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  166
 DSS informed me that they need proof of income for the month of May 2013. I told DSS worker that this verification has already sented, but has no show in DSS record.
 
@@ -1985,7 +1985,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  28
 Still pending for a review.
 
@@ -2000,7 +2000,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Confirm application is on file
+aActivity  Prepare for hearing
 aComments  209
 DSS told me that they still do not have the Pt`s application in the system they are 3 to 4 weeks behind with the applications and because I sent the refile on 08/28/13 to check again in the end of this month.
 
@@ -2015,7 +2015,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit application
+aActivity  Prepare for hearing
 aComments  36
 PES sent refile application to DSS.
 
@@ -2030,7 +2030,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  213
 Sent email to Maria Torres asking to send me the copy of the application from Pt Juan Martinez, I need to re-file his case his employer sent to me prove of the gross income from the month of May that was missing.
 
@@ -2045,7 +2045,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  68
 PES sent Pt`s income verifications to Maria Torres and Sara Nieves.
 
@@ -2060,7 +2060,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  101
 PES received by fax from T Arduini Co(Linda) Pt`s income verifications for the month of May of 2013.
 
@@ -2075,7 +2075,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  53
 Received a receipt confirming that the fax was sent.
 
@@ -2090,7 +2090,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  27
 Sent fax in att: to Linda.
 
@@ -2105,7 +2105,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  125
 PES called the work of the participant and asked Linda from HR to send proof of Pt`s income from May of 2013. PES faxed POA.
 
@@ -2120,7 +2120,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Obtain missing information
+aActivity  Prepare for hearing
 aComments  257
 Spoke with Pt girlfriend the name Genie and she said that the Pt is not home, however she would give him a message asking him to call us back. Pes explained that he only needs to send proof that resides in the state of Ct to complete his App with Medicaid.
 
@@ -2134,7 +2134,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Next of Kin: Unable to leave message
+aActivity  Prepare for hearing
 aComments  34
 Number or area code is incorrect.
 
@@ -2148,7 +2148,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  34
 Number or area code is incorrect.
 
@@ -2225,7 +2225,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  56
 DSS worker informed me that client is active for 05/13.
 
@@ -2240,7 +2240,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  79
 DSS reviewed the bills and said she would send to her supervisor for approval.
 
@@ -2255,7 +2255,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  236
 Resubmitted to DSS the medical bills needed to meet the spenddown of $1442.96 the period of 05/01/13 to 05/31/13 which bills are attached with the following information:$1442.96 date of service 07/09/12 to 07/09/12 Bridgeport Hospital.
 
@@ -2270,7 +2270,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  236
 Resubmitted to DSS the medical bills needed to meet the spenddown of $1442.96 the period of 05/01/13 to 05/31/13 which bills are attached with the following information:$1442.96 date of service 07/09/12 to 07/09/12 Bridgeport Hospital.
 
@@ -2285,7 +2285,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  238
 Resubmitted to DSS the medical bills needed to meet the spenddown of $1308.00 the period of 04/01/13 to 04/30/13 which bills are attached with the following information:  $1308.00 date of service 07/07/12 to 07/07/12 Bridgeport Hospital.
 
@@ -2300,7 +2300,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  232
 Sent to DSS the medical bills needed to meet the spenddown of $1772.02 the period of 03/01/13 to 03/31/13 which bills are attached. with the following information:  $1772.03 date of service 05/26/12 to 05/26/12 Bridgeport Hospital.
 
@@ -2315,7 +2315,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  240
 Resubmitted to DSS the medical bills needed to meet the spenddown of 1442.96 for the period of 05/01/13 to 05/31/13 which bills are attached with the following information: $1442.96 date of service 07/09/12 to 07/09/12 Bridgeport Hospital.
 
@@ -2330,7 +2330,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  241
 Resubmitted to DSS the medical bills needed to meet the spenddown of 1442.96 for the period of 05/01/13 to 05/31/13 which bills are attached with the following information:  $1442.96 date of service 07/09/12 to 07/09/12 Bridgeport Hospital.
 
@@ -2345,7 +2345,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit application
+aActivity  Prepare for hearing
 aComments  241
 Resubmitted to DSS the medical bills needed to meet the spenddown of 1308.00 for the period of 04/01/13 to 04/30/13 which bills are attached with the following information:  $1308.00 date of service 07/07/12 to 07/12/13 Bridgeport Hospital.
 
@@ -2360,7 +2360,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  241
 Resubmitted to DSS the medical bills needed to meet the spenddown of 1772.02 for the period of 03/01/13 to 03/31/13 which bills are attached with the following information:  $1772.03 date of service 05/26/12 to 05/26/13 Bridgeport Hospital.
 
@@ -2375,7 +2375,7 @@ aContactBy jbraga
 aContactMethod INTERNET
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  232
 I Mail again to DSS Connect scanning Center Po Box 1320 asking to use the following bill to meet the patients 3/13 s/d segment:5/26/12 $1772.02 patient 4/13 s/d segment:7/7/12 $1308.00 and patients 5/13 s/d segment:7/9/12 $1442.96.
 
@@ -2390,7 +2390,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  236
 Fax to to DSS Connect scanning Center at fax # 888-495-2897 asking to use the following bill to meet the patients 3/13 s/d segment:5/26/12 $1772.02 patient 4/13 s/d segment:7/7/12 $1308.00 and patients 5/13 s/d segment:7/9/12 $1442.96.
 
@@ -2405,7 +2405,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Request spend down documentation
+aActivity  Prepare for hearing
 aComments  229
 I Mail to DSS Connect scanning Center Po Box 1320 asking to use the following bill to meet the patients 3/13 s/d segment:5/26/12  $1772.02  patient 4/13 s/d segment:7/7/12 $1308.00 and patients 5/13 s/d segment:7/9/12  $1442.96.
 
@@ -2420,7 +2420,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  148
 Asking Susan if she has Pt grant date back dated to March 2013 because DSS inform me that Pt is eligible for Medical Assistance effective 03/01/13.
 
@@ -2435,7 +2435,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Request spend down documentation
+aActivity  Prepare for hearing
 aComments  267
 DSS informed me that the patient did not have any coverage for the months of May and July 2012 and January 2013 because Pt not submit proof of gross income. however they back dated to the month of March 2013, and informed me that she has coverage until June 1, 2013.
 
@@ -2450,7 +2450,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      INTERNALHFI
 aDirection I
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  306
 Susan informed me that we have two cases open in cheetah with this Pacient and asked me to check with DSS if they could cover the months of May and July 2012 and January 2013 for the first case HFI 303033.  For the second case HFI 349211 if DSS  back dated to March 2013 and will cover until June 1, 2013.
 
@@ -2465,7 +2465,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Request spend down documentation
+aActivity  Prepare for hearing
 aComments  260
 I Call DSS again and they back dated to March 1 of  2013 and  They Told me that the  Segment dates from March, April and May of 2013 and the Spenddown amount is:  $1.220.86 for March of 2013     $1.220.86 for April of 2013     and  $1.100.26 for May of 2013. 
 
@@ -2480,7 +2480,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Request spend down documentation
+aActivity  Prepare for hearing
 aComments  216
 Call DSS and they back dated to 1 March 2013 and put Pt in Spenddown and segment amount is $ 1.220.86 for the month of March and $ 1,100.26 for the month of May of 2013, I checked in AEVS and shows that is approved.
 
@@ -2495,7 +2495,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  32
 phone number is not in service.
 
@@ -2509,7 +2509,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  94
 Left a message asking to return call to the HFI CM Rep Sara Nieves at (617)482-2200 Ext:444. 
 
@@ -2523,7 +2523,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  94
 Left a message asking to return call to the HFI CM Rep Sara Nieves at (617)482-2200 Ext:444. 
 
@@ -2783,7 +2783,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  235
 Re-Sent to DSS the medical bills needed to meet the spenddown of $1.472.47 the period of 07/01/13 to 07/31/13. which bills are attached with the following information: $2119.00 date of service 12/18/11 to 12/18/11 Bridgeport Hospital.
 
@@ -2798,7 +2798,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  235
 Re-Sent to DSS the medical bills needed to meet the spenddown of $1.472.47 the period of 07/01/13 to 07/31/13. which bills are attached with the following information: $2119.00 date of service 12/18/11 to 12/18/11 Bridgeport Hospital.
 
@@ -2813,7 +2813,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  233
 Sent to DSS the medical bills needed to meet the spenddown of $1.472.47 the period of 07/01/13 to 07/31/13. which bills are attached with the following information:  $2119.00 date of service 12/18/11 to 12/18/11 Bridgeport Hospital.
 
@@ -2828,7 +2828,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  128
 DSS informed me that this case is on Speddown with the amount of $1.472.47 and the segments dates is from 07/01/13 to 07/31/13.
 
@@ -2843,7 +2843,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  175
 DSS informed me that This client application have to be resubmitted again with all verifications. DSS worker recommended to work with the DSS onsite from Bridgeport Hospital.
 
@@ -2858,7 +2858,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  74
 Sent verifications to Maria Torres and Colleen Keyes. Proof of Residency.
 
@@ -2873,7 +2873,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  85
 Requesting Pt`s proof of residency from Chimwae McGarrah to complete his aplication.
 
@@ -2888,7 +2888,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  77
 Sent verifications to Maria Torres and Colleen Keyes. Proof of gross income.
 
@@ -2903,7 +2903,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  53
 Received Pt`s income verification from his employer.
 
@@ -2918,7 +2918,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  121
 Requesting by email from Pt`s work place Robert Hansen Landscaping, LLC proof of gross income from 07/01/13 to 09/17/13.
 
@@ -2933,7 +2933,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  134
 Requesting by fax (203) 924-6697 from Pt`s work place Robert Hansen Landscaping, LLC proof of gross income from 07/01/13 to 09/17/13.
 
@@ -2948,7 +2948,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  128
 Requesting from Pt`s work place Robert Hansen Landscaping, LLC proof of gross income from 07/01/13 to 09/17/13. Left a message.
 
@@ -3303,7 +3303,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  443
 Submitted to DSS the medical bills needed to meet the spenddown of $1.623.81the period of 06/01/13 to 06/30/13.   Which bills are attached with the following information:   $1390.00 date of service 09/20/05 to 09/20/05 Bridgeport Hospital.  $50.00 date of service 09/06/08 to 09/06/08 Bridgeport Hospital.  $1973.00 date of service 06/06/13 to 06/06/13 Bridgeport Hospital.  $22116.58 date of service 07/10/13 to 07/10/13 Bridgeport Hospital.
 
@@ -3318,7 +3318,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  151
 DSS worker review the case and back dated to covered the 06/13 visit. The client is in spenddown with the amount of $1.623.81 for the period of 06/13.
 
@@ -3333,7 +3333,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Request correct start date
+aActivity  Prepare for hearing
 aComments  153
 DSS worker review the case and back dated to covered the 06/13 visit. The client is in spenddown with the amount of $1.6623.81 for the  period of 06/13.
 
@@ -3348,7 +3348,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  100
 DSS worker informed me that client is on spenddown with the amount of 11677.68 from 07/13 to 12/13.
 
@@ -3363,7 +3363,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  52
 DSS worker will call me back after review the case.
 
@@ -3457,7 +3457,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  313
 Submitted to DSS Xerox the medical bills needed to meet the spenddown of $ 5.804.60 the period of 07/01/13 to 07/31/13.  Which bills are attached with the following information: $3239.00 date of service 09/13/06 to 09/13/06 Bridgeport Hospital.  $3440.00 date of service 10/19/06 to 10/19/06 Bridgeport Hospital.
 
@@ -3472,7 +3472,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  131
 DSS back dated and grant client` visits from 07/13 client is on spend-down from 0701/13 to 07/31/13 with the amount of $ 5.804.60.
 
@@ -3487,7 +3487,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  256
 DSS informed me that the client is the spend-down from 08/13 until 01/14 with the amount of $ 32.483.07. I asked if she could back date to cover the visit for the month of 07/13 and she said she would review with her supervisor and she would call me back.
 
@@ -3502,7 +3502,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  45
 DSS informed me that the case still pending.
 
@@ -3517,7 +3517,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Complete application
+aActivity  Prepare for hearing
 aComments  185
 I called to inform that all the documents and her Medicaid application have already been delivered by Kathy Barreiro to DSS on 08/29/13 and for now she has nothing pending with the DSS
 
@@ -3528,7 +3528,7 @@ aFK_USERID 1202
 eReferral  1,0
 aReferralID 451799
 aReferralDate 20130730
-aSource    WI
+aSource    WL
 aStatusCode BAT
 aStatusDate 20130920
 aClosed    N
@@ -3608,7 +3608,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Request verifications
+aActivity  Prepare for hearing
 aComments  62
 Left a message to Johmann Nancy POA requesting verifications.
 
@@ -3623,7 +3623,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  159
 DSS worker informed me that  client has Life insurance from Mutual of Omaha	with $4000 in assets 	and they need this verification to complete his application.
 
@@ -3638,7 +3638,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  48
 Left a message requesting up date on this case.
 
@@ -3653,7 +3653,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  213
 Please disregard this information below, DSS worker Maureen informed me that they continue working on this case and that next week they inform me if this case is approved or if we need to send more verifications.
 
@@ -3668,7 +3668,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  165
 DSS worker Maureen informed me that client is approved for Husky C (LTC) Beginning from June 2013 I also checked in AEVS and is showing that the client is approved.
 
@@ -3683,7 +3683,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  182
 DSS Supervisor name Michaelle informed me that all the verifications have been received and they are reviewing and that next week they will tell us if we need to send more document.
 
@@ -3698,7 +3698,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  99
 DSS informed me that the case is approved I also checked in AEVS and is showing that is approved .
 
@@ -3713,7 +3713,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  166
 The DSS supervisor named Marcello informed me that he received all verifications and now will make a revision to check if any thing is pending and will call me back.
 
@@ -3728,7 +3728,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  52
 Submitted verifications to DSS office in New Haven.
 
@@ -3743,7 +3743,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  52
 Submitted verifications to DSS office in New Haven.
 
@@ -3758,7 +3758,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  100
 Ask Jacqueline Santos to submit client`s verifications to DSS(LTC) to complete client application..
 
@@ -3773,7 +3773,7 @@ aContactBy jbraga
 aContactMethod OTHER
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  34
 Disregard this information below.
 
@@ -3788,7 +3788,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  121
 Ms.Massicotte(DSS) informed me that the lawsuit letter is the only document is missing to complete client`s application.
 
@@ -3803,7 +3803,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  525
 Sent to DSS(LTC) Name of of Nursing Home Bishop Wicke to enter long term car approval (to date, only short term approval has been entered & it expired on 10/31/13), Assets must be reduced to under $1600 to be asset eligible. Applied income is due upon your 30th day in the skilled nursing home. This is your gross income less any medical deductions. Bal as of 11-5-13 = $1973.69. Please spenddown & submit updated statement, Assets: Please submit to the following bank statements: 0160025807 for 12/08, 12/09, 12/10 & 7/2011
 
@@ -3818,7 +3818,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  525
 Sent to DSS(LTC) Name of of Nursing Home Bishop Wicke to enter long term car approval (to date, only short term approval has been entered & it expired on 10/31/13), Assets must be reduced to under $1600 to be asset eligible. Applied income is due upon your 30th day in the skilled nursing home. This is your gross income less any medical deductions. Bal as of 11-5-13 = $1973.69. Please spenddown & submit updated statement, Assets: Please submit to the following bank statements: 0160025807 for 12/08, 12/09, 12/10 & 7/2011
 
@@ -3833,7 +3833,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection I
-aActivity  Next of Kin: Provide verifications
+aActivity  Prepare for hearing
 aComments  163
 Nancy Johmann (POA) called me and said that she faxed part of client People Bank Statements and the rest of the verifications she mailed today for the HFI office.
 
@@ -3848,7 +3848,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Request verifications
+aActivity  Prepare for hearing
 aComments  598
 Informed Nancy(POA) what verifications DSS requested to complete client LTC application. Name of of Nursing Home Bishop Wicke to enter long term car approval (to date, only short term approval has been entered & it expired on 10/31/13), Assets must be reduced to under $1600 to be asset eligible. Applied income is due upon your 30th day in the skilled nursing home. This is your gross income less any medical deductions. Bal as of 11-5-13 = $1973.69. Please spenddown & submit updated statement, Assets: Please submit to the following bank statements: 0160025807 for 12/08, 12/09, 12/10 & 7/2011 
 
@@ -4014,7 +4014,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  14
 Not answered.
 
@@ -4029,7 +4029,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  37
 Phone(203) 360-8500 is not answered.
 
@@ -4044,7 +4044,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  82
 DSS informed me that they does not accept the employer emails as proof of income.
 
@@ -4059,7 +4059,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  44
 Send to Mrs. Haskell client`s proof income.
 
@@ -4074,7 +4074,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  86
 Send to DSS verifications from GMS Management (Richard Grass). Proof of gross income.
 
@@ -4089,7 +4089,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  84
 Received  verifications from GMS Management (Richard Grass). Proof of gross income.
 
@@ -4104,7 +4104,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  94
 Requesting client`s verifications from GMS Management (Richard Grass). Proof of gross income.
 
@@ -4119,7 +4119,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  94
 Requesting client`s verifications from GMS Management (Richard Grass). Proof of gross income.
 
@@ -4134,7 +4134,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      SSA
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -4149,7 +4149,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  60
 Client stated that he will call me back today. he was busy.
 
@@ -4164,7 +4164,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  53
 Client  will sent the verifications tomorrow by fax.
 
@@ -4179,7 +4179,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  54
 Client  will sent the verifications this week by fax.
 
@@ -4194,7 +4194,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  162
 Call Pt`s work place G M S Management in Bridgeport phone (805) 270-5585 left a message Requesting Pt`s proof of proof of gross income from 08/01/13 to 10/22/13.
 
@@ -4209,7 +4209,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  163
 Call Pt`s work place G M S Management in Bridgeport phone (805) 270-5585  left a message Requesting Pt`s proof of proof of gross income from 08/01/13 to 09/17/13.
 
@@ -4302,7 +4302,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  292
 Send to DSS the medical bills needed to meet the spenddown of $3693.6 for the period of 08/01/13 to 01/31/14 which bills are $1600.00 date of service 08/10/11 Bridgeport Hospital.  $1030.00 date of service 08/17/11 Bridgeport Hospital.  $1600.00 date of service 08/26/11 Bridgeport Hospital.
 
@@ -4317,7 +4317,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  92
 Sent client`s bank statement from People United Bank to DSS by fax at number (888)495-2897.
 
@@ -4332,7 +4332,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  61
 Sent client`s bank statement from People United Bank to DSS.
 
@@ -4347,7 +4347,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  58
 Received client`s bank statement from People United Bank.
 
@@ -4362,7 +4362,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  60
 Requesting client`s bank statement from  People United Bank
 
@@ -4377,7 +4377,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection I
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  197
 Sent verifications to Colleen. Alex the manager of Fairfaild County Federal Credit Union sent a letter Stated that they do not have any client with that name and with this Social Security number. 
 
@@ -4392,7 +4392,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  152
 Alex the manager of Fairfaild County Federal Credit Union Stated that they do not have any client with that name and with this Social Security number. 
 
@@ -4407,7 +4407,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  198
 Alex the manager of Fairfaild County Federal Credit Union Stated that they do not have any client with that name and with this Social Security number. I ask Manager to send what he said in writing.
 
@@ -4422,7 +4422,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  204
 Sent fax to Fairfield County Federal Credit Union at  MAIN OFFICE 242 Hope St Stamford, CT 06906 requesting 3 months of the most recent banks statements in this customer?s name from 08/01/13 to 10/25/13/
 
@@ -4437,7 +4437,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  206
 Sent fax to Fairfield County Federal Credit Union at 1515 Black Rock Turnpike, Fairfield, CT 06825 requesting 3 months of the most recent banks statements in this customer?s name from 08/01/13 to 10/25/13/
 
@@ -4452,7 +4452,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  94
 DSS informed me that the case still pending to MCCT decision.Pt need to send bank statements.
 
@@ -4467,7 +4467,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  100
 DSS informed me that the case is approved I also checked in AEVR and is showing that is approved.  
 
@@ -4482,7 +4482,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  131
 Pt said he will send all  Verifications by fax until Monday (SSI, Marriage Certificate, Bank statements and Ct Proof of residency)
 
@@ -4561,7 +4561,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  152
 Sent a email to Colleen and Ct Team stated that DSS has no record of this client in their file. Please resubmit his application with all verifications.
 
@@ -4576,7 +4576,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  108
 DSS informed me that has not show any application in the patient record they ask me to call back next week.
 
@@ -4677,7 +4677,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  100
 DSS worker informed me that client still pending status, client need to send proof of gross Income.
 
@@ -4692,7 +4692,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  112
 Requesting client`s proof of gross Income from 07/01/13 to 03/31/14 from Tires and Wheels HR Department Sandra.
 
@@ -4707,7 +4707,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  112
 Requesting client`s proof of gross Income from 07/01/13 to 03/31/14 from Tires and Wheels HR Department Sandra.
 
@@ -4722,7 +4722,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  112
 Requesting client`s proof of gross Income from 07/01/13 to 03/31/14 from Tires and Wheels HR Department Sandra.
 
@@ -4737,7 +4737,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  112
 Requesting client`s proof of gross Income from 07/01/13 to 03/31/14 from Tires and Wheels HR Department Sandra.
 
@@ -4752,7 +4752,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  84
 Requesting Proof of Gross income from 07/01/13 to 02/28/14 from Tires and Wheels.  
 
@@ -4767,7 +4767,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  108
 Requesting client`s proof of gross Income from 07/01/13 to 02/28/14 from Tires and Wheels in bridgeport CT.
 
@@ -4782,7 +4782,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  136
 Requesting Proof of Gross income from 07/01/13 to 02/12/14 from Tires and Wheels, sent form W-35 must to be completed even if client.  
 
@@ -4797,7 +4797,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  237
 Left a message requesting verifications Employment,  Citizenship, Identity and Social Security Card, since he has a medical visit scheduled for 10/28/13 at Bridgeport Hospital, told him to deliver the verifications to someone from HFI. 
 
@@ -4812,7 +4812,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -5005,7 +5005,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  462
 DSS informed me that  because the spend-down bills I sent also applies to the current spenddown is the client who making the decision to which segment date the bills will be used that`s why the bills were not processed yet. DSS will try to contact the clients to know what they want to do and if the do not get in touch with the client they will use the bills for the current segment dates. The new Spenddown of $4.387.45 for the period of 09/01/13 to 02/28/13.
 
@@ -5020,7 +5020,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  229
 nt to DSS the medical bills needed to meet the spenddown of $2136.33 the period of 08/01/13 to 08/31/13 which bills are attached with the following information:  $2975.20 date of service 10/31/12 to 10/31/12 Bridgeport Hospital.
 
@@ -5035,7 +5035,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  106
 Disregard the information below the client is on Spenddown frm 08/13 to 08/13 with the amount of $2136.33
 
@@ -5050,7 +5050,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  128
 DSS informed me that this case is on Speddown with the amount of $2.136.33 and the segments dates is from 07/01/13 to 07/31/13.
 
@@ -5065,7 +5065,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  62
 Asking Colleen to resend client proof of gross income to DSS.
 
@@ -5080,7 +5080,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  90
 DSS informed me that the case still pending and ask me to send his proof of income again.
 
@@ -5095,7 +5095,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  52
 Called and left message asked Pt`s to call me back.
 
@@ -5110,7 +5110,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  129
 Sent verifications to Maria Torres and Colleen Keyes. Proof of Pt`s gross Income for the months of August and September of 2013.
 
@@ -5125,7 +5125,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  131
 Cm received from Gulick Building and Development, LLC.  proof of Pt`s gross Income for the months of August and September of 2013.
 
@@ -5140,7 +5140,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  52
 PES send Pt`s POA for the fax number (203)612-7333.
 
@@ -5155,7 +5155,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  151
 PES called Gulick Building and Development, LLC. asked thlick to send the Pt `s proof of gross Income for the months of August and September of 2013. 
 
@@ -5322,7 +5322,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  85
 DSS worker ask me to call back later today or tomorrow because their system is down.
 
@@ -5337,7 +5337,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  156
 DSS informed me that the case is approved I also checked in AEVR and is showing that is approved for Medicare Covered Services from 09/01/13/ to 09/30/13. 
 
@@ -5427,7 +5427,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  267
 DSS worker name Megan informed me that they don`t have client application in their system. She asked to send the application with all verifications and medical summary  to the fax number (203)579-6921 as soon as possible and asked to put the client ID on every page.
 
@@ -5442,7 +5442,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  44
 Send to DSS client`s proof of citizenship. 
 
@@ -5457,7 +5457,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  44
 Received proof of  citizenship from client.
 
@@ -5472,7 +5472,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  52
 Client  will sent the verifications by mail Friday.
 
@@ -5563,7 +5563,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Left message
+aActivity  Prepare for hearing
 aComments  345
 I left a message with client`s wife Marile santos informed that client has to call the DSS Xerox and ask for use the medical bills $388.36 date of service 08/10/05 to 08/10/05 Bridgeport Hospital. $3,247.10 date of service 09/23/13 to 09/23/13 Bridgeport Hospital needed to meet the spenddown of $1163.69 for the period of 09/01/13 to 09/30/13.
 
@@ -5578,7 +5578,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  117
 DSS worker informed me that the client is the only one who client can decide for which month the bill will be used. 
 
@@ -5593,7 +5593,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  455
 DSS informed me that  because the spend-down bills I sent also applies to the current spenddown is the client who making the decision to which segment date the bills will be used that`s why the bills were not processed yet. DSS will try to contact the clients to know what they want to do and if the do not get in touch with the client they will use the bills for the current segment dates.The new Spenddown amount is $ 6.783.52 for 10/01/13 to 03 30/14.
 
@@ -5608,7 +5608,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  311
 Resubmetted to DSS the medical bills needed to meet the spenddown of $1163.69 for the period of 09/01/13 to 09/31/13. which bills are attached with the following information:  $388.36 date of service 08/10/05 to 08/10/05 Bridgeport Hospital.  $3,247.10 date of service 09/23/13 to 09/23/13 Bridgeport Hospital.
 
@@ -5623,7 +5623,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  311
 Resubmetted to DSS the medical bills needed to meet the spenddown of $1163.69 for the period of 09/01/13 to 09/31/13. which bills are attached with the following information:  $388.36 date of service 08/10/05 to 08/10/05 Bridgeport Hospital.  $3,247.10 date of service 09/23/13 to 09/23/13 Bridgeport Hospital.
 
@@ -5638,7 +5638,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  239
 Submitted to DSS the medical bills needed to meet the spenddown of $1163.69 for the period of 09/01/13 to 09/30/13. which bills are attached with the following information: $388.36 date of service 08/10/05 to 08/10/05 Bridgeport Hospital.
 
@@ -5653,7 +5653,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  239
 Submitted to DSS the medical bills needed to meet the spenddown of $1163.69 for the period of 09/01/13 to 09/30/13. which bills are attached with the following information: $388.36 date of service 08/10/05 to 08/10/05 Bridgeport Hospital.
 
@@ -5668,7 +5668,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  54
 Client  will sent the verifications this week by fax.
 
@@ -5758,7 +5758,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  273
 Submitted to DSS HUSKY Spend-down Processing Center the medical bills needed to meet the spenddown of $1.292.98  the period of 09/01/13 to 09/30/13 which bills are attached. with the following information:$28475.35 date of service 06/02/13 to 06/02/13 Bridgeport Hospital.
 
@@ -5773,7 +5773,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  155
 DSS worker review and back dated to cover the visit for the month of 09/13, client is on spenddown with the amount of $1.292.98 from 09/01/13 TO 09/30/13.
 
@@ -5788,7 +5788,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  275
 I spoke with DSS worker and she reviewed the case and approved for 1 year for Husky A, also checked in AEVS and is showing as approved for Husky. She informed me that the reason the client is approved for 1 year is because she is already in the new government program (ACA).
 
@@ -5803,7 +5803,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  88
 DSS worker name Aly said that some one will call me back today to talk about this case.
 
@@ -5818,7 +5818,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  58
 Phone message said that not accepting calls at this time.
 
@@ -5833,7 +5833,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  262
 Client said already delivered all verifications for a HFI person at Bridgeport Hospital I advised her to send me the Verifications again by fax. She ask me to call tomorrow around noon to give to her the fax number to which she can send the verifications again.
 
@@ -5911,7 +5911,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -5926,7 +5926,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -6030,7 +6030,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  349
 Ms. Douglas informed me that she continues to work if the client case and also informed me that the client is in the protection service and her need to have to point out who will be conservative for the client, however she informed that if all documents are delivered she will honer the client`s visit for the month of 09/13 at Bridgeport Hospital.
 
@@ -6045,7 +6045,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  98
 DSS worker will review the case to check back date request for 09/13 and will call me back today.
 
@@ -6060,7 +6060,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  73
 Left a message to DSS Worker Ms. Douglas requested client status update.
 
@@ -6075,7 +6075,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  257
 Ms. Douglas informed me that she continues to work if the client  case and also informed me that the client is in the protection service, however she does not know why, she knows that has a Social Worker involved in the case but she will not know her name.
 
@@ -6090,7 +6090,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  224
 DSS Worker Ms. Douglas thanked for the information and said she would contact the Fairview Nursery Home of Fairfield to know which type of coverage they are looking for the client and asked me to call her again next Friday.
 
@@ -6105,7 +6105,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  314
 Ms. Douglas(DSS) informed me that she still reviewing the case and asked me to call her again next Friday 14/14.   She informed me that has not yet been informed of the death of the client`s espouse, however this may change the client status for an individual application and client can go on to have high income.
 
@@ -6120,7 +6120,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  97
 DSS informed me that the case still on review for a decision, she ask me to call back next week.
 
@@ -6135,7 +6135,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  99
 Submitted to DSS LTC Silver Team Certificate of Burial for the owners MR. and Mrs. Robert Nolting.
 
@@ -6150,7 +6150,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  77
 Received a Certificate of Burial for the owners MR. and Mrs. Robert Nolting.
 
@@ -6165,7 +6165,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  122
 Requesting from Liz(gates of Heaven Secretary) prepaid funeral or a contract for each at Gates of Heaven in Trumbull.    
 
@@ -6180,7 +6180,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Request verifications
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -6195,7 +6195,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  118
 Submitted to DSS LTC Silver Team from People United Bank Client`s 5 years banks statements from 01/01/09 to 01/08/14.
 
@@ -6210,7 +6210,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  118
 Submitted to DSS LTC Silver Team from People United Bank Client`s 5 years banks statements from 01/01/09 to 01/08/14.
 
@@ -6225,7 +6225,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  94
 Received from People United Bank client`s 5 years banks statements from 01/01/09 to 01/08/14.
 
@@ -6240,7 +6240,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  363
 Sent email to  Kathy : The DSS informed me that these verifications have to be shipped with the application; they never received any application on behalf of the client. Can you please send these verifications with the application? I already sent a fax to the bank requesting the client 5 years bank statements and when arrive I will send to DSS LTC Silver Team.
 
@@ -6255,7 +6255,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  95
 Sent POA to People United Bank requesting 5 years banks statements from 01/01/09 to 01/08/14. 
 
@@ -6270,7 +6270,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Request verifications
+aActivity  Prepare for hearing
 aComments  93
 Spoke with client`s husband (Robert Nolting)and will requesting the 5 years bank statements.
 
@@ -6362,7 +6362,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  40
 Requesting Pension statements from BPH.
 
@@ -6377,7 +6377,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Request verifications
+aActivity  Prepare for hearing
 aComments  98
 Left a message requesting verifications to client`s daughter Juana Wofford	 at (203) 414-4130.	 	
 
@@ -6392,7 +6392,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process verifications received
+aActivity  Prepare for hearing
 aComments  38
 Sent verifications to Colleen Keyes. 
 
@@ -6407,7 +6407,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  104
 Received from the Social worker named Frank Tuchols all documents we need to complete the application. 
 
@@ -6422,7 +6422,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Obtain missing information
+aActivity  Prepare for hearing
 aComments  72
 Tha Social Worker Frank Tuchols phone number is (203)455-3300 Ext-3584.
 
@@ -6437,7 +6437,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Obtain missing information
+aActivity  Prepare for hearing
 aComments  334
 The Social worker named Frank Tuchols called me to inquire about what we could do to speed up the case. I send by fax # (203) 455-3350 the list of documents we need to complete the application. He said he will going to the hospital today to visit the patient and will discuss with her to find out how he can obtain the verifications.
 
@@ -6452,7 +6452,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Obtain missing information
+aActivity  Prepare for hearing
 aComments  165
   I called Lory Norenbery at (203) 455-3300 ext 3559 she is a Social Worker for this case called & left a message asked her to call me back at (617)482-2200 ext:291
 
@@ -6666,7 +6666,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Forms Submitted
+aActivity  Prepare for hearing
 aComments  72
 Left a message requesting verifications. Copy of her birth certificate.
 
@@ -7025,7 +7025,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  94
 Submitted to DSS  Connect Scanning Center client`s bank statements from Peoples United Bank. 
 
@@ -7040,7 +7040,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  61
 Received client`s bank statements from Peoples United Bank. 
 
@@ -7055,7 +7055,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  76
 Client will sent the verifications by fax today bank statements from 07/13.
 
@@ -7070,7 +7070,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  77
 Client  will sent the verifications by fax today bank statements from 07/13.
 
@@ -7085,7 +7085,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  141
 Submitted to  Connect Scanning Center client`s proof of Gross income from her employer Howard & Michael Rowan for the entire month of 07/13.
 
@@ -7100,7 +7100,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  112
 Received client`s proof of Gross income from her employer Howard & Michael Rowan for the entire month of 07/13.
 
@@ -7115,7 +7115,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  153
 Client  will sent the verifications by fax today. Proof of gross income for the entire month of 07/13 and Bank statements for the entire month of 07/13.
 
@@ -7130,7 +7130,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  72
 Left a message requesting proof of gross income for the month of 12/13.
 
@@ -7145,7 +7145,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  538
 Sent email to Sara stated that: Please read the contact log from 07/15/13 in cheetah: (hfi completed medical and free care application with patient. patient is unemployed with no other income. Patients monthly rent is $800.00. Patients Son, Tyrone Cole a resident in North Carolina presently is supporting the patient. patient is a permanent Resident. patient provided copy of Pass port, ID , letter of support and permanent resident document. Patient does not own any assets.)  Also has no phone number to contact the client in cheetah.
 
@@ -7235,7 +7235,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  81
 DSS worker Mike informed me that they sent to MCC Team on 02/14/14 for a review.
 
@@ -7250,7 +7250,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  51
 DSS worker send the case to MCC Team for a review.
 
@@ -7265,7 +7265,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  47
 Sent to DSS client proof of gross income from.
 
@@ -7280,7 +7280,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  96
 Received verifications from client`s employer. Proof of gross income from 10/01/13 to 11/23/13.
 
@@ -7371,7 +7371,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  160
 DSS worker informed me that we need to send the medical record for the visit on 09/13 to the case being approved. She said clientnhas less them 5 years at USA.
 
@@ -7461,7 +7461,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  116
 I called the mother of the client Jacqueline and she will send me the 2012 tax return and copy of client`s SS card.
 
@@ -7476,7 +7476,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  272
 The SSN on the client application belongs to the client's mother Jacqueline Rossi. The application is for the entire family as the client is a minor. DSS sent a W-1348 for the client on 3/20/14 asking for 2012 Tax return with all Schedules. The medical ID is: 002713642 .
 
@@ -7491,7 +7491,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  191
 DSS worker informed me that they do not have any application with that name on their system and the Social Security number on this application has the name of another person on their record.
 
@@ -7712,7 +7712,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  248
 Submitted to DSS Xerox the medical bills needed to meet the spenddown of $1568.68 the period of 09/01/13 to 09/30/13.  Which bills are attached with the following information:  	  $3,078.00 date of service 09/22/13 to 09/22/13 Bridgeport Hospital.
 
@@ -7727,7 +7727,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  256
 DSS worker has told me that the verification of the month of 09/13 is there, however the system is not letting her to back date. DSS worker sent an email to her supervisor informed about the case and next Tuesday she will call me to report about the case.
 
@@ -7742,7 +7742,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  127
 Sent to DSS verifications from client`s work place Mandy Management ,client`s proof of gross income from 09/01/13 to 12/06/13.
 
@@ -7757,7 +7757,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  124
 Received verifications from client`s work place Mandy Management ,client`s proof of gross income from 09/01/13 to 12/06/13.
 
@@ -7772,7 +7772,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  55
 Sent request to DSS to obtain client`s status up date.
 
@@ -7787,7 +7787,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  120
 Sent fax to client`s work place Mandy Management  resquesting client`s proof of gross income from 09/01/13 to 12/06/13.
 
@@ -7877,7 +7877,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Provide missing information
+aActivity  Prepare for hearing
 aComments  279
 Sent request to DSS to apply the bills that we sent correctly.  It looks as though the 10/30/13 Bridgeport bill was used to meet 11/13 to 4/14 spend down segment.  It needs to be removed from the 11/13 to 4/14 segment and used to meet the spend down segment that includes 10/13.
 
@@ -7892,7 +7892,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  233
 Sent to DSS the medical bills needed to meet the spenddown of $70.68 the period of 11/01/13 to 04/30/14 which bills are attached. n with the following information:  $9,843.10 date of service 10/30/13 to 10/30/13 Bridgeport Hospital.
 
@@ -7907,7 +7907,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  40
 Phone number (646) 474-0079 is invalid.
 
@@ -8008,7 +8008,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  522
 DSS worker review the application and included client` wife (Carmen Serrano) in the same health plan and now she is also eligible for HUSKY D from 11/06/13 until 04/01/14 with the same Spend-down $ 8.565.24. She thought it was too high because client receives $ 500 a week and this is the only income they have. I recommended her to seek help in the Office of the Healthcare Advocate in Hartford, CT 06144 Toll Free: 1-866-HMO-4446. She informed me that she will call to see if they can help them with the hospital bills.
 
@@ -8023,7 +8023,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Obtain missing information
+aActivity  Prepare for hearing
 aComments  323
 I spoke with the client wife name Carmen to informed her that the client is covered from 11/13 until 04/13 but he is on Spend-down and about her DSS worker cannot give me information because they don`t have the POA signed by her and they asked me to let her know that she needs to call the DSS to obtain her status update.
 
@@ -8038,7 +8038,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  258
 DSS worker fixed the case and the month of 02/14 is active for HUSKY D. The client is on the spend down from 11/13 until 04/13 and the correct is $8.565.24. On 1/30/13 I sent the bills in the amount of $9,284.37 and was used by DSS to meet the spend-down.  
 
@@ -8053,7 +8053,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  401
 The client is on the spend down from 11/13 until 04/13 with the amount of $7.134.46 and on 1/30/13 I sent the bills in the amount of $9,284.37 and was used by DSS to met the spenddown, however the month of 02/14 client is not active which the DSS worker will review the case and call me back to tell me what happened. In AEVS showing that client is approved for the 11/13,12/13 and 01/14 for HUSKY D.
 
@@ -8068,7 +8068,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  245
 Submitted to DSS xerox the medical bills needed to meet the spenddown of $7.153.30 the period of 11/01/13 to 04/30/14. Which bills are attached with the following information:  $9,284.37 date of service 11/06/13 to 11/07/13 Bridgeport Hospital.
 
@@ -8083,7 +8083,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  93
 DSS informed me that Client is on spend-down from 11/13 to 04/14 to the amount of $7.153.30.
 
@@ -8098,7 +8098,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  162
 DSS worker reviewed the case and informed me that the client is going to the spend-down and asked to send all the bills we have in his name as soon as possible. 
 
@@ -8113,7 +8113,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  77
 Submitted to DSS letter from Propark Inc. verifying client last date worked.
 
@@ -8128,7 +8128,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  82
 Received from client company letter from Propark Inc. verifying last date worked.
 
@@ -8143,7 +8143,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  63
 Client  will sent the proof of income from Propark Inc. today.
 
@@ -8158,7 +8158,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  73
 Requesting client`s proof of income from Propark Inc. Client`s employer.
 
@@ -8173,7 +8173,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  60
 Received verifications from Propark Inc. Client`s employer.
 
@@ -8188,7 +8188,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  25
 Phone is out of service.
 
@@ -8257,7 +8257,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -8423,7 +8423,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  256
 DSS worker will sent an email to her supervisor asking to re-send the bill to meet the spend-down in the amount of $ 1,967.91 for the period of 11/2013 thru 11/2013 with the amount of $ 31,747.19 date of service 11/16/13 20/11/2013 to Bridgeport Hospital.
 
@@ -8438,7 +8438,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  250
 Submitted to DSS Xerox the medical bills needed to meet the spenddown of $1967.91 the period of 11/01/13 to 11/30/13.  Which bills are attached with the following information:  	 $31,747.19 date of service 11/16/13 to 11/20/2013 Bridgeport Hospital.
 
@@ -8453,7 +8453,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  82
 DSS worker stated that client is on spenddown $1967.91 from 11/01/13 to 11/30/13.
 
@@ -8468,7 +8468,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  119
 DSS worker will review the case and will call me back today or tomorrow to let me know if the case is approved or not.
 
@@ -8483,7 +8483,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  102
 Submitted to DSS client`s proof of gross income from North East Laser for the entire month of 11/13. 
 
@@ -8498,7 +8498,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  96
 Received a client`s proof of gross income from North East Laser for the entire month of 11/13. 
 
@@ -8513,7 +8513,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  100
 Requesting client`s proof of Gross Income from 11/01/13 to 12/20/13 from employer North East Laser.
 
@@ -8694,7 +8694,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  95
 DSS worker informed me that  client is on the spenddown $183.22 from 11/01/2013 to 04/30/2014.
 
@@ -8709,7 +8709,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  126
 DSS worker stated that she did received the bank statements and she will call me back today to confirm that case is approved.
 
@@ -8724,7 +8724,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  183
 Submitted to  Connect Scanning Center client`s Bank Statements from Webster Bank from 11/04/13 to 01/19/14 and a letter from Webster Bank client`s account Bank was opened on 11/04/14
 
@@ -8739,7 +8739,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  155
 Received client`s Bank Statements from Webster Bank from 11/04/13 to 01/19/14 and a letter from Webster Bank client`s account Bank was opened on 11/04/14.
 
@@ -8754,7 +8754,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  157
 Requesting client`s Bank Statements from Webster Bank from 11/04/13 to 01/19/14 and a letter from Webster Bank client`s account Bank was opened on 11/04/14.
 
@@ -8769,7 +8769,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  71
 Requested Bank Statements from Webster Bank from 08/01/13 to 01/17/13.
 
@@ -8860,7 +8860,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  468
 DSS worker asked to resubmit to DSS scanning center proof of gross income we are sent on 01/31/14 (Signed letter from applicant's employer The Wood Den, Inc. stating that he has been employed since Jan 2011 & as of March 2011 his gross weekly pay has been $454.00 for 36.25 hours weekly) as soon as possible so that the DSS can do back date to the month of 11/13. DSS informed me that they never received the verification and ask to put client ID number in all pages.
 
@@ -9077,7 +9077,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  91
 DSS worker name Megan informed me that they don`t have client application in their system.
 
@@ -9359,7 +9359,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  241
 Submitted to DSS the medical bills needed to meet the spenddown of $12647.60 the period of 12/01/13 to 05/31/14.   Which bills are attached with the following information:   $9182.04 date of service 02/07/13 to 02/07/13 Bridgeport Hospital.
 
@@ -9374,7 +9374,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  240
 Submitted to DSSthe medical bills needed to meet the spenddown of $12647.60 the period of 12/01/13 to 05/31/14.   Which bills are attached with the following information:   $8977.56 date of service 02/06/13 to 02/06/13 Bridgeport Hospital.
 
@@ -9389,7 +9389,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  241
 Submitted to DSS the medical bills needed to meet the spenddown of $4.082.60 the period of 11/01/13 to 11/30/13.   Which bills are attached with the following information:   $8977.56 date of service 02/06/13 to 02/06/13 Bridgeport Hospital.
 
@@ -9404,7 +9404,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  142
 DSS informed me that client is on spenddown  with the amount of $4.082.60 from 11/01/13 to 11/30/13 and $12.647.60 from 12/01/13 to 05/30/14.
 
@@ -9419,7 +9419,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  237
 Client was denied in April 2013 for the visits on 02/13 because she had over income and on 12/06/14 they received the new application for HUSKY A and tomorrow they will start to process the application. She asked to call back next week.
 
@@ -9509,7 +9509,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  75
 Requesting proof of gross Income from 02/01/14 to 01/31/13 from Valvoline.
 
@@ -9524,7 +9524,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -9614,7 +9614,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -9629,7 +9629,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  125
 Requesting client`s proof of gross income from 11/01/13 to 12/31/13 from VA Connecticut Healthcare System, Newington Campus.
 
@@ -9644,7 +9644,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  94
 Left a message to the HR office asked to call me back to obtain client proof of gross income.
 
@@ -9743,7 +9743,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  201
 DSS workere informed me that they received the client`s application on 01/03/14 and they can not back date for the month of 09/13 and that the application is valid starting from the date they receive.
 
@@ -9758,7 +9758,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  155
 DSS worker need client`s proof of address and the mail receipt proving that the application was sent on 12/13 so DSS can back date for the month of 09/13.
 
@@ -9871,7 +9871,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  109
 Submitted to DSS Scanning Center Proof of Gross income from 09/01/13 to 12/31/13 from Kencrest Services inc.
 
@@ -9886,7 +9886,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  94
 Received client`s Proof of Gross income from 09/01/13 to 12/31/13 from Kencrest Services inc.
 
@@ -9901,7 +9901,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  87
 Requesting Proof of Gross income from 09/01/13 to 12/31/13 from Kencrest Services inc.
 
@@ -9916,7 +9916,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  282
 Asked Colleen to send to me send me client`s proof of income that she sent to DSS on 12/30/13 (paystubs from 9/14-12/8 from KenCrest Services) and (3 biweekly pay stubs from 10/25/2013, 11/22/2013 and 12 / 06/2013 from client employer the Kennedy Center) that you sent on 12/11/13.
 
@@ -9931,7 +9931,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  185
 DSS worker informed me that they never received proof of gross income from send me client`s proof of income that you sent on 12/30/13 (pay stubs from 9/14-12/8 from Ken Crest Services)
 
@@ -10021,7 +10021,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  442
 DSS worker informed me that they do not have any record of this client on file, she informed me that this application should have been made online and we need to call the AccessHealth in CT at 1-855-805-HEALTH (1-855-805 - 4325 or check online at www.accesshealthct.com to know if they have an application with this client`s name and if they not have she have she need to apply again and ask them to back date for the month of December 2013.
 
@@ -10036,7 +10036,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  116
 DSS worker name Amanda informed that the application does not in the system yet. She ask me to call back next week.
 
@@ -10051,7 +10051,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  116
 DSS worker name Amanda informed that the application does not in the system yet. She ask me to call back next week.
 
@@ -10066,7 +10066,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  136
 Submitted to DSS DSS Connect Scanning Center client`s proof of gross income from 11/01/13 to 01/24/14 from client`employer Stop e Shop.
 
@@ -10081,7 +10081,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  100
 Received client`s proof of gross income from 11/01/13 to 01/24/14 from client`employer Stop e Shop.
 
@@ -10096,7 +10096,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  103
 Requesting client`s proof of gross income from 11/01/13 to 01/24/14 from client`employer Stop e Shop. 
 
@@ -10177,7 +10177,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  89
 Requesting client`s proof of gross Income from 11/01/13 to 12/31/13 from Dunkin' Donuts.
 
@@ -10266,7 +10266,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  81
 DSS worker informed me that  does not have client`s application in their record.
 
@@ -10388,7 +10388,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  462
 Sent an email to Ryan, Beverly and Susan L. stated that: DSS worker informed me that has no application on record in the name of this client and asked me to call the AccesHealthCT. DSS worker informed me that eve we send the application to them they can not grant the visit for the month of December and we have to solve this issue with AccesHealthCT.  I called AccesHealthCT and they informed me that they don`t have any application in the name of this client.
 
@@ -10403,7 +10403,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  109
 I called AccesHealthCT and they informed me that they don`t have any application in the name of this client.
 
@@ -10418,7 +10418,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  295
 DSS worker informed me that has no application on record in the name of this client and asked me to call the AccesHealthCT. DSS worker informed me that eve we send the application to them they can not grant the visit for the month of December and we have to solve this issue with AccesHealthCT.
 
@@ -10520,7 +10520,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  Applicant: Provide status update
+aActivity  Prepare for hearing
 aComments  180
 DSS worker informed me that the client meet the spend-down however they still not activated in AEVS and she will send an email to her supervisor to find out why is not active yet.
 
@@ -10535,7 +10535,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  235
 Submitted to DSS Xerox the medical bills needed to meet the spenddown of $1131.78 the period of 12/01/13 to 05/31/13.  Which bills are attached with the following information:  	  $2747.28 date of service 12/08/13 Bridgeport Hospital.
 
@@ -10550,7 +10550,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  93
 DSS informed me that client is on spenddown with the amount of $1156.08 from 12/13 to 05/14.
 
@@ -10684,7 +10684,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  HFI Client: Provide status update
+aActivity  Prepare for hearing
 aComments  214
 Sent email to Colleen, Ryan, Beverly and Crisitna Lima stated that: DSS worker informed me that they do not have client`s application in file. DSS asked to resubmit again with all verifications and medical record.
 
@@ -10699,7 +10699,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  75
 DSS worker informed me that they do not have client`s application in file.
 
@@ -10710,7 +10710,7 @@ aFK_USERID 1202
 eReferral  1,0
 aReferralID 470360
 aReferralDate 20131219
-aSource    WI
+aSource    WL
 aStatusCode BAT
 aStatusDate 20131224
 aClosed    N
@@ -10863,7 +10863,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  137
 Submitted to  Connect Scanning Center W-35 as proof of gross income in this client`s name from 12/01/13 to 03/01/14 from Stew Leonard's.
 
@@ -10878,7 +10878,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      THIRDPARTY
 aDirection I
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  108
 Received W-35 as proof of gross income in this client`s name from 12/01/13 to 03/01/14 from Stew Leonard's.
 
@@ -10893,7 +10893,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  102
 Requesting proof of gross income in this client`s name from 12/01/13 to 03/01/14 from Stew Leonard's.
 
@@ -11145,7 +11145,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  138
 DSS worker informed me that they are re-screening  the case and between today and Monday the client will be active for 12/13 and ongoing.
 
@@ -11235,7 +11235,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Process medical records received
+aActivity  Prepare for hearing
 aComments  86
 Asked Colleen to submit to DSS client`s medical record and medical discharge summary.
 
@@ -11250,7 +11250,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  81
 DSS worker asked to send client`s medical record and medical discharge summary .
 
@@ -11491,7 +11491,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  153
 Left a message requesting verifications.Income for unemployment compensation benefit- Provide proof of gross wkly amount for November and December 2013.
 
@@ -11506,7 +11506,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  149
 Called DSS Hearing Office at (860)424-5760 and left a message asked what is missing and ask if we supply that before 12/31 can we avoid the hearing?
 
@@ -11521,7 +11521,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  277
 I received a letter from the state of Ct Hearings Department Office informing me that the date of the hearing will be on 31/12/13 at 11am Location New Haven DSS Regional Office address 50 Humphrey St, New Haven Ct and we have the hearing with Hearing Officer: Pamela Gonzalez.
 
@@ -11536,7 +11536,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  264
 DSS Worker Dona Rodriguez informed me that they still do not have the date of the hearing because they have a high volume of appeals and because of this they are a little late with cases. However she told me if we have any questions to call her at (860) 424-4123.
 
@@ -11551,7 +11551,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  111
  Called the BOH at (860) 424-5760 and left a message requested the date and time the hearing is scheduled for?
 
@@ -11566,7 +11566,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: File Appeal
+aActivity  Prepare for hearing
 aComments  106
 Sent hearing request via fax to DSS/BOH to the fax number 860-424-5729 and the phone number 860-424-5760.
 
@@ -11581,7 +11581,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  72
 Sent an email  asked HFI Bridgeport Team to find where this patient is.
 
@@ -11596,7 +11596,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -11611,7 +11611,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Left message
+aActivity  Prepare for hearing
 aComments  66
 Left a message requesting verifications. VA pention Statements.  
 
@@ -11626,7 +11626,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -11641,7 +11641,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -11656,7 +11656,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  106
 DSS informed me that they need VA Pention proof of income from the patient's husband and not the patient.
 
@@ -11671,7 +11671,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  246
 I call VA USA.gov's National Contact Center at 1-800-333-4636 and after checking by her SSN was stating that the Pt not receive any VA Pension. Now I'm waiting in line to see if the DSS really need this information to complete the verifications.
 
@@ -11686,7 +11686,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  147
 Left a message asking to return call to the HFI CM Rep George Andrade at (617)482-2200 Ext:290. PES Explained that he needs to send verifications.
 
@@ -11700,7 +11700,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  97
 Left a message asking to return call to the HFI CM Rep George Andrade at (617)482-2200 Ext:290. 
 
@@ -11866,7 +11866,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Request verifications
+aActivity  Prepare for hearing
 aComments  66
 Brittney Roach-Spouse will submit the verifications today by fax.
 
@@ -12020,7 +12020,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  100
 Requesting client`s proof of gross Income from 01/01/14 to 03/31/14 from Russell Speeder's Carwash.
 
@@ -12035,7 +12035,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  134
 Informed Colleen, Beverly, Ryan, Linda Bravo that: DSS worker informed me that they don`t have this client application in their file.
 
@@ -12050,7 +12050,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  142
 Informed Colleen, Beverly, Ryan, Crisitna Lima that: Access Health CT informed me that they don`t have this client application in their file.
 
@@ -12065,7 +12065,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  83
 DSS worker informed me that they don`t have this client application in their file.
 
@@ -12080,7 +12080,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  89
 Access Health CT informed me that they don`t have this client application in their file.
 
@@ -12181,7 +12181,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -12196,7 +12196,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  40
 Client ask to call him back at 3:30 pm.
 
@@ -12211,7 +12211,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  76
 DSS worker informed me that client need to send proof of income from 12/13.
 
@@ -12226,7 +12226,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  119
 DSS worker will review the case and will call me back today or tomorrow to let me know if the case is approved or not.
 
@@ -12241,7 +12241,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Forms Submitted
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -12331,7 +12331,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Complete application
+aActivity  Prepare for hearing
 aComments  140
 Client  applied yesterday in person on the DSS office in Bridgeport CT, client also reported that the number of his application is: 255932.
 
@@ -12497,7 +12497,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  54
 Sent client proof of income (2012 Tax Return) to DSS.
 
@@ -12512,7 +12512,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      NOK
 aDirection I
-aActivity  Next of Kin: Provide verifications
+aActivity  Prepare for hearing
 aComments  80
 Client`s girl friend name Debbie send client proof of income (2012 Tax Return).
 
@@ -12527,7 +12527,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  87
 client said that her girl friend name Debbie will send all verifications today by fax.
 
@@ -12542,7 +12542,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  223
 Left a message requesting verifications stated that the client is self employed roofer,you must provide your income  tax form  all pages and schedules for 2012 or provide verification that your business has been dissolved.
 
@@ -12557,7 +12557,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  109
 Pt said that he can not talk on the phone because he was drive on the high way.He said he will call me back.
 
@@ -12743,7 +12743,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  95
 Requesting client`s proof of gross Income from 01/01/14 to 03/31/14 from hqbarberinginstitute.
 
@@ -12758,7 +12758,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      THIRDPARTY
 aDirection O
-aActivity  Third Party: Request verifications
+aActivity  Prepare for hearing
 aComments  95
 Requesting client`s proof of gross Income from 01/01/14 to 03/31/14 from hqbarberinginstitute.
 
@@ -13095,7 +13095,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  33
 DSS worker will send the W-1348.
 
@@ -13110,7 +13110,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Submit verifications
+aActivity  Prepare for hearing
 aComments  100
 Submitted to  Connect Scanning Center verifications from client. Social Security letter statements.
 
@@ -13125,7 +13125,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  71
 Received verifications from client. Social Security letter statements.
 
@@ -13140,7 +13140,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  49
 Client will send the verifications today by fax.
 
@@ -13155,7 +13155,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  54
 Client will send the verification today by fax (SSI).
 
@@ -13580,7 +13580,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -14972,7 +14972,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Unable to leave message
+aActivity  Prepare for hearing
 aComments  47
 Phone number (203) 375-7821 is not in service.
 
@@ -14987,7 +14987,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Wrong number
+aActivity  Prepare for hearing
 aComments  39
 Phone(203) 375-7821 is not in service.
 
@@ -15414,7 +15414,7 @@ aPhone1    2035434205
 eReferral  1,0
 aReferralID 476325
 aReferralDate 20140217
-aSource    WI
+aSource    WL
 aStatusCode BAT
 aStatusDate 20140217
 aClosed    N
@@ -15590,7 +15590,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  47
 Client will fax copy of her ID to me tomorrow.
 
@@ -15692,7 +15692,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  59
 Left a message at (203) 360-4699 requesting verifications.
 
@@ -15707,7 +15707,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  41
 Left a message requesting verifications.
 
@@ -15810,7 +15810,7 @@ aContactBy jbraga
 aContactMethod FAX
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Provide verifications
+aActivity  Prepare for hearing
 aComments  44
 Received client client`s letter of Support.
 
@@ -16133,7 +16133,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection I
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  107
 DSS worker informed me that client is on spend-down with the amount of $1273.68 from 05/01/13 to 05/31/13.
 
@@ -16148,7 +16148,7 @@ aContactBy jbraga
 aContactMethod MAIL
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain appeal status
+aActivity  Prepare for hearing
 aComments  201
 DSS Supervisor Mrs. Lee said he review the case and will back date for the month of 05/13 and tomorrow he will calls me to tell me the Spend-down amount because he had to leave a little earlier today.
 
@@ -16163,7 +16163,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  212
 DSS worker reviewed the case and said she will back date however she needs the approval from her supervisor and tomorrow she calls me confirming that she back date to the month of 05/13 and the case is approved.
 
@@ -16178,7 +16178,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  276
 I called Mrs. Querette from DSS again and she informed me that this case is on Speddown with the amount of $6328.36 and the segments dates is from 05/01/13 untill the date of his death  10/11/13. I checked in AEVS and is showing that client is on spendowndown until 10/11/13.
 
@@ -16193,7 +16193,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  357
 I call the DSS to let they know that we no longer need LTC and that we would like to pursue just the community Medicaid piece. I talked to the DSS worker Angela Querette and she informed me that she is reviewing this case, however it needs to be sent copies of the client death certificate or a summary of the doctor who confirmed that the client had died.
 
@@ -16208,7 +16208,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  270
 DSS worker sent an email to the LTC unit (Angela Querette) reporting on the death of the client and asked to change his status, She asked me to call next week again they to obtain an answer about this case, however she believes he will be Granted from 05 / 13 to 10/13.
 
@@ -16223,7 +16223,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Obtain status update
+aActivity  Prepare for hearing
 aComments  191
  I talked to the DSS worker Lashan and she informed me that the worker Angela Querette started working on this case yesterday and next week we'll probably get a letter with the DSS decision.
 
@@ -16238,7 +16238,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      SSA
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  157
  Ms. Kwerette from DSS informed me that she received the verifications and is now in the process of review and if they need anything they send another 1348.
 
@@ -16253,7 +16253,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection O
-aActivity  Internal HFI: Obtain missing information
+aActivity  Prepare for hearing
 aComments  172
 I emailed Kathy B. informing  Mrs. Douglas decision who works with Mrs. Gethers. He told me to send what we have now because we have until 09/16/13 to complete the #1348. 
 
@@ -16268,7 +16268,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      MHDSS
 aDirection O
-aActivity  MH/DSS: Report new information
+aActivity  Prepare for hearing
 aComments  343
 I called  Ms. Gethers to let him know that we have the documentation and we are just waiting for the his son to identify two transactions and see if she wishes to have us send what we have or send it all once? and Mrs. Douglas who works with Mrs. Gethers told me to send what we have now because we have until 09/16/13 to complete the #1348. 
 
@@ -16283,7 +16283,7 @@ aContactBy jbraga
 aContactMethod EMAIL
 aWhom      INTERNALHFI
 aDirection I
-aActivity  Internal HFI: Review next step options with colleagues
+aActivity  Prepare for hearing
 aComments  668
 I received an email from Kathy B. asking me to contact Ms. Gethers to inform it that: she received the final paperwork for Gerald Bowers.   A few items?.there are 2 transactions that the son Jerry may have to write up.    ?	A checking debit for $97700.34 ?	A cash deposit of $5000.00   The last #1348 was from Ms. Gethers.  Can you let Ms. Gethers know that we have the documentation and we are just waiting for the NOK to identify two transactions and see if she wishes to have us send what we have or send it all once the son has addressed the two transactions in question?   The #1348 has Ms. Gethers fax # and the worker indicates Bpt Silver Team, 203-551-3015.  
 
@@ -16812,7 +16812,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection I
-aActivity  Applicant: Request verifications
+aActivity  Prepare for hearing
 aComments  35
 Client will provide verifications.
 
@@ -16827,7 +16827,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      APPLICANT
 aDirection O
-aActivity  Applicant: Left message
+aActivity  Prepare for hearing
 aComments  40
 Left a message requested verifications.
 
@@ -16988,7 +16988,7 @@ aPhone1    2035499322
 eReferral  1,0
 aReferralID 478505
 aReferralDate 20140228
-aSource    WI
+aSource    WL
 aStatusCode BAT
 aStatusDate 20140301
 aClosed    N
@@ -17119,7 +17119,7 @@ aContactBy jbraga
 aContactMethod PHONE
 aWhom      NOK
 aDirection O
-aActivity  Next of Kin: Left message
+aActivity  Prepare for hearing
 aComments  96
 Returned phone call to client`s son Richard Klaff at (203)384-3000 Ext:2203 and left a message.
 

@@ -28,12 +28,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.AbstractNumericDomain;
+import com.quinsoft.zeidon.domains.BlobDomain;
 import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
@@ -161,6 +163,12 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             buffer.append( (Boolean) b ? "true" : "false" );
             return true;
         }
+        
+        if ( domain instanceof BlobDomain )
+        {
+            String s = domain.convertToString( task, attributeDef, value );
+            return appendString( stmt, buffer, s );
+        }
 
 //        String string = domain.convertToString( task, attributeDef, value );
         return appendString( stmt, buffer, value.toString() );
@@ -248,6 +256,12 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             {
                 DateTime d = (DateTime) value;
                 ps.setObject( idx, new Date( d.getMillis() ) );
+            }
+            else
+            if ( value instanceof GeneratedKey )
+            {
+                 GeneratedKey k = (GeneratedKey) value;
+                ps.setObject( idx, k.getNativeValue() );
             }
             else
             {

@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
@@ -32,6 +31,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.DuplicateOiOptions;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
@@ -140,12 +140,6 @@ public class zVIEW extends VmlOperation implements View
     public void displayObjectInstance( )
     {
         logObjectInstance();
-    }
-
-    @Override
-    public void dropDbLocks()
-    {
-        view().dropDbLocks();
     }
 
     @Override
@@ -389,12 +383,6 @@ public class zVIEW extends VmlOperation implements View
     }
 
     @Override
-    public ReentrantReadWriteLock getLock()
-    {
-        return view().getLock();
-    }
-
-    @Override
     public Blob writeOiToBlob(long control)
     {
         return view().writeOiToBlob( control );
@@ -462,6 +450,15 @@ public class zVIEW extends VmlOperation implements View
     public SelectSet createSelectSet()
     {
         return view().createSelectSet();
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.View#deleteSelectSet(java.lang.Object)
+     */
+    @Override
+    public void dropSelectSet( Object index )
+    {
+        getView().dropSelectSet( index );
     }
 
     /* (non-Javadoc)
@@ -685,14 +682,11 @@ public class zVIEW extends VmlOperation implements View
         return view().newView( owningTask, readOnly );
     }
 
+    /**
+     * Calls drop().  This is implemented to support Closeable interface.
+     */
     @Override
-    public boolean isLocked()
-    {
-        return view().isLocked();
-    }
-
-//    @Override
-    public void close() throws Exception
+    public void close()
     {
         drop();
     }
@@ -714,11 +708,11 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().setAllowHiddenEntities( allowHiddenEntities );
     }
-    
+
     /**
      * Returns true if this view was created by internal JOE processing.  This is intended
-     * to be used by the browser to ignore views that weren't created by the user.  
-     * 
+     * to be used by the browser to ignore views that weren't created by the user.
+     *
      * @return Returns true if this view was created by internal JOE processing.
      */
     @Override
@@ -731,5 +725,29 @@ public class zVIEW extends VmlOperation implements View
     public View setInternal( boolean isInternal )
     {
         return getView().setInternal( isInternal );
+    }
+
+    @Override
+    public Set<Object> getSelectSetNames()
+    {
+        return getView().getSelectSetNames();
+    }
+
+    @Override
+    public void overrideZeidonConfig( Application application, String group, String key, String value )
+    {
+        getView().overrideZeidonConfig( application, group, key, value );
+    }
+
+    @Override
+    public void overrideZeidonConfig( String appName, String group, String key, String value )
+    {
+        getView().overrideZeidonConfig( appName, group, key, value );
+    }
+
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
+    {
+        getView().addViewCleanupWork( work );
     }
 }

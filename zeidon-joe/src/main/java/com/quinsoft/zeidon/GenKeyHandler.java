@@ -27,5 +27,5 @@ import java.util.Map;
  */
 public interface GenKeyHandler
 {
-    Map<Integer, Integer> setGenKeys( View kzgkhwob, List<? extends View> viewList );
+    Map<String, Integer> setGenKeys( View kzgkhwob, List<? extends View> viewList );
 }

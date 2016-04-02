@@ -1,10 +1,31 @@
 /**
- *
+    This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+
+    Zeidon JOE is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Zeidon JOE is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2009-2015 QuinSoft
  */
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
+import scala.collection.JavaConversions.asScalaIterator
+
 import com.quinsoft.zeidon._
+import com.quinsoft.zeidon.objectdefinition.EntityDef
+import com.quinsoft.zeidon.objectdefinition.LodDef
+import org.apache.commons.lang3.StringUtils
+
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -21,11 +42,26 @@ import com.quinsoft.zeidon._
 class QualBuilder private [scala] ( private [this]  val view: View,
                                     private [scala] val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
 
-    private [this]  val jtask = view.task.jtask
+    private [this]  val jtask = view.task
     private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
     jqual.setLodDef( jlodDef )
 
-    private [scala]  val entityQualBuilder = new EntityQualBuilder( this )
+    private var jcurrentEntityDef = jlodDef.getRoot
+    
+    private [scala] val entityQualBuilder = new EntityQualBuilder( this )
+    private var firstOperator = true
+
+    private [scala] def callAddQual( addQual: (EntityQualBuilder) => QualificationTerminator ) = {
+        firstOperator = false
+        addQual( entityQualBuilder )
+        this
+    }
+
+    private [scala] def callBuilder( builder: (QualBuilder) => QualBuilder ) = {
+        firstOperator = false
+        builder( this )
+        this
+    }
 
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
@@ -43,10 +79,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE USER.ID > 400 AND USER.ID < 500;
      * }}}
      */
-    def and( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
-        jqual.addAttribQual( "AND" )
-        addQual( entityQualBuilder )
-        this
+    def and( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
+        if ( ! firstOperator )
+            jqual.addAttribQual( "AND" )
+
+        callAddQual( addQual )
     }
 
     /**
@@ -71,12 +108,12 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID = 100 OR USER.ID = 200 )
      * }}}
      */
-    def any( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def any( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( entityQualBuilder )
+            callAddQual( iter.next() )
             if ( iter.hasNext )
                 jqual.addAttribQual( "OR" )
         }
@@ -86,7 +123,6 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     /**
-     * EXPERIMENTAL
      *
      * Add qualification if a predicate evaluates to true.
      *
@@ -94,7 +130,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      *  val id = 10
      *  val mUser = VIEW basedOn "mUser"
      *  mUser.buildQual( _.User.ID > 0 )
-     *       .conditional(id != 0, _.and( _.User.ID < id ) )
+     *       .when(id != 0, _.and( _.User.ID < id ) )
      *       .activate()
      * }}}
      *
@@ -105,9 +141,50 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE USER.ID > 0 AND USER.ID < 10;
      * }}}
      */
-    def conditional( predicate: Boolean, addQual: (QualBuilder) => Unit ): QualBuilder = {
+    def when( predicate: Boolean,
+              addQualIfTrue: (QualBuilder) => QualBuilder,
+              addQualIfFalse: (QualBuilder) => QualBuilder = null ): QualBuilder = {
+
         if ( predicate )
-            addQual( this )
+            callBuilder( addQualIfTrue )
+        else
+        if ( addQualIfFalse != null )
+            callBuilder( addQualIfFalse )
+
+        this
+    }
+
+    private def ifNotNull( value: AnyRef ) = value match {
+        case ei: EntityCursor => ! ei.isNull
+        case ei: com.quinsoft.zeidon.EntityCursor  => ! ei.isNull
+        case attr: AttributeInstance => ! attr.isNull
+        case attr: com.quinsoft.zeidon.AttributeInstance => ! attr.isNull
+        case str: String => ! StringUtils.isEmpty( str )
+        case _ => value != null
+    }
+
+    def whenNotNull( value: AnyRef,
+                     addQualIfTrue: (QualBuilder) => QualBuilder,
+                     addQualIfFalse: (QualBuilder) => QualBuilder = null ): QualBuilder = {
+
+        if ( ifNotNull( value ))
+            callBuilder( addQualIfTrue )
+        else
+        if ( addQualIfFalse != null )
+            callBuilder( addQualIfFalse )
+
+        this
+    }
+
+    def whenNotBlank( value: String,
+                      addQualIfTrue: (QualBuilder) => QualBuilder,
+                      addQualIfFalse: (QualBuilder) => QualBuilder = null ): QualBuilder = {
+
+        if ( ! StringUtils.isBlank( value ) )
+            callBuilder( addQualIfTrue )
+        else
+        if ( addQualIfFalse != null )
+            callBuilder( addQualIfFalse )
 
         this
     }
@@ -131,13 +208,15 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      *
      */
-    def andAny( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
-        jqual.addAttribQual( "AND" )
+    def andAny( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
+        if ( ! firstOperator )
+            jqual.addAttribQual( "AND" )
+
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( entityQualBuilder )
+            callAddQual( iter.next() )
             if ( iter.hasNext )
                 jqual.addAttribQual( "OR" )
         }
@@ -162,10 +241,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID = 400 OR USER.ID = 500 );
      * }}}
      */
-    def or( addQual: (EntityQualBuilder) => Unit ): QualBuilder = {
-        jqual.addAttribQual( "OR" )
-        addQual( entityQualBuilder )
-        this
+    def or( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
+        if ( ! firstOperator )
+            jqual.addAttribQual( "OR" )
+
+        callAddQual( addQual )
     }
 
     /**
@@ -190,12 +270,12 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * WHERE ( USER.ID > 100 AND USER.ID < 200 )
      * }}}
      */
-    def all( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
+    def all( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( entityQualBuilder )
+            callAddQual( iter.next() )
             if ( iter.hasNext )
                 jqual.addAttribQual( "AND" )
         }
@@ -222,13 +302,15 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * }}}
      */
 
-    def andAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
-        jqual.addAttribQual( "AND" )
+    def andAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
+        if ( ! firstOperator )
+            jqual.addAttribQual( "AND" )
+
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( entityQualBuilder )
+            callAddQual( iter.next() )
             if ( iter.hasNext )
                 jqual.addAttribQual( "AND" )
         }
@@ -238,13 +320,15 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
 
-    def orAll( addQual: (EntityQualBuilder) => Unit* ): QualBuilder = {
-        jqual.addAttribQual( "OR" )
+    def orAll( addQual: (EntityQualBuilder) => QualificationTerminator* ): QualBuilder = {
+        if ( ! firstOperator )
+            jqual.addAttribQual( "OR" )
+
         jqual.addAttribQual( "(" )
 
         val iter = addQual.iterator
         while ( iter.hasNext ) {
-            iter.next()( entityQualBuilder )
+            callAddQual( iter.next() )
             if ( iter.hasNext )
                 jqual.addAttribQual( "AND" )
         }
@@ -337,35 +421,56 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Note: depending on how the LOD is defined this could prevent child entities
      * from being deleted because that would violate referential integrity.
      */
-    def restrict( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ) = restricting( restrictTo )
+    def restrict( restrictTo: (EntitySelector) => EntityDef ) = restricting( restrictTo )
 
     /**
      * Synonym for restrict( ... ) method.
      */
-    def restricting( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
-        val jentityDef = restrictTo( new EntitySelector )
-        jqual.restricting( jentityDef.getName() )
+    def restricting( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
+        jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
+        jqual.restricting( jcurrentEntityDef.getName() )
+        firstOperator = ! jqual.hasQualAttrib()
         this
     }
 
     /**
-     * Specifies which entity the following qualification is for.  Used to build
-     * qualification programatically.
+     * Specifies how entity is to be ordered when retrieved from DB.  
+     * 
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.buildQual( _.User.ID > 400 )
+     *             .orderBy( _.Name DESC )
+     *             .activate
+     * }}}
+     * 
+     * Overrides ordering specified in the LOD.
      */
-    def forEntity( restrictTo: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
-        val jentityDef = restrictTo( new EntitySelector )
-        jqual.forEntity( jentityDef.getName() )
+    def orderBy( selectAttr: (AttributeOrderByBuilder) => OrderByTerminator ) : QualBuilder = {
+        val builder = new AttributeOrderByBuilder( this, jcurrentEntityDef )
+        selectAttr( builder )
+        jqual.addActivateOrdering( jcurrentEntityDef.getName, builder.jattributeDef.getName, builder.descending )
         this
     }
     
+    /**
+     * Specifies which entity the following qualification is for.  Used to build
+     * qualification programatically.
+     */
+    def forEntity( restrictTo: (EntitySelector) => EntityDef ): QualBuilder = {
+        jcurrentEntityDef = restrictTo( new EntitySelector( jlodDef ) )
+        jqual.forEntity( jcurrentEntityDef.getName() )
+        firstOperator = ! jqual.hasQualAttrib()
+        this
+    }
+
     /**
      * Exclude the specified entity from the activate.
      *
      * Note: depending on how the LOD is defined this could prevent child entities
      * from being deleted because that would violate referential integrity.
      */
-    def exclude( excludeEntity: (EntitySelector) => com.quinsoft.zeidon.objectdefinition.EntityDef ): QualBuilder = {
-        val jentityDef = excludeEntity( new EntitySelector )
+    def exclude( excludeEntity: (EntitySelector) => EntityDef ): QualBuilder = {
+        val jentityDef = excludeEntity( new EntitySelector( jlodDef ) )
         jqual.excludeEntity( jentityDef.getName() )
         this
     }
@@ -375,8 +480,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      *
      * See restrict() for more information.
      */
-    def to( addQual: (EntityQualBuilder) => QualBuilder ): QualBuilder = {
-        addQual( entityQualBuilder )
+    def to( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
+        // to() is really just an .and() but easier to understand in its context.
+        and( addQual )
     }
 
     /**
@@ -428,11 +534,26 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def useSingleTransaction = {
+        jqual.setSingleTransaction()
+        this
+    }
     /**
      * Indicates that the resulting view (and backing OI) should be read-only.
      */
     def readOnly = {
         jqual.readOnly()
+        this
+    }
+
+    /**
+     * Indicates that the resulting view (and backing OI) should be read-only if 'readOnly'
+     * is true.
+     */
+    def readOnly( readOnly: Boolean = true ) = {
+        if ( readOnly )
+            jqual.readOnly()
+            
         this
     }
 
@@ -475,11 +596,23 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         return view
     }
 
+    /**
+     * Overrides the oiSourceUrl config value that is retrieved from Zeidon configuration
+     * (usually zeidon.ini).
+     */
+    def useOiSourceUrl( oiSourceUrl : String ) = {
+        jqual.setOiSourceUrl( oiSourceUrl )
+        this
+    }
 
-    class EntitySelector() extends Dynamic {
-        def selectDynamic( entityName: String ): com.quinsoft.zeidon.objectdefinition.EntityDef = {
-            jlodDef.getEntityDef( entityName )
-        }
+    def useConfigValue( key: String, value: String ) = {
+        jqual.overrideConfigValue( key, value )
+        this
+    }
+    
+    def withRollingPagination( pageSize: Int = 1000 ) = {
+        jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
+        this
     }
 }
 
@@ -493,16 +626,16 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
 /**
  * Builder for setting attribute values for an entity.
  */
-class AttributeQualBuilder private[scala] ( val qualBuilder: QualBuilder,
-                                            val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
+class AttributeQualBuilder( val qualBuilder: QualBuilder,
+                            val jentityDef: EntityDef )
         extends Dynamic {
 
     var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
     val jqual = qualBuilder.jqual
 
-    def exists: QualBuilder = {
+    def exists : QualificationTerminator = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
-       return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 
     /**
@@ -523,6 +656,9 @@ class AttributeQualBuilder private[scala] ( val qualBuilder: QualBuilder,
      */
     def selectDynamic( attributeName: String): AttributeQualOperators = {
         jattributeDef = jentityDef.getAttribute( attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+        
         return new AttributeQualOperators( this )
     }
 
@@ -539,15 +675,18 @@ class AttributeQualBuilder private[scala] ( val qualBuilder: QualBuilder,
      *      mUser.activateWhere( _.User.ID = 20 )
      * }}}
       */
-    def updateDynamic( attributeName: String)(value: Any): QualBuilder = {
+    def updateDynamic( attributeName: String)(value: Any): QualificationTerminator = {
 //        println( s"method '$attributeName' called with argument ${value}" )
         jattributeDef = jentityDef.getAttribute( attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+
         if ( value.isInstanceOf[AttributeQualOperators] ) {
             addQualFromAttributeBuilder( "=", value )
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "=", value )
         }
-        return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 }
 
@@ -561,6 +700,10 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
     val jattributeDef = attrQualBuilder.jattributeDef
 
     var _not = false;
+
+    override def equals(value: Any) = {
+        throw new ZeidonException("Operators '==' and '!=' are invalid when building qualification.  Use '=' and '<>' instead" )
+    }
 
     /**
      * Negates the operator that follows.  Can be used with any
@@ -600,7 +743,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID > 490 )
      * }}}
      */
-    def > ( value: Any ): QualBuilder = {
+    def > ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "<=", value )
         else
@@ -617,7 +760,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID <> 490 )
      * }}}
      */
-    def <> ( value: Any ): QualBuilder = {
+    def <> ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "=", value )
         else
@@ -634,7 +777,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID >= 490 )
      * }}}
      */
-    def >= ( value: Any ): QualBuilder = {
+    def >= ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "<", value )
         else
@@ -651,7 +794,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID < 490 )
      * }}}
      */
-    def < ( value: Any ): QualBuilder = {
+    def < ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( ">=", value )
         else
@@ -668,13 +811,41 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID <= 490 )
      * }}}
      */
-    def <= ( value: Any ): QualBuilder = {
+    def <= ( value: Any ): QualificationTerminator = {
         if ( checkNot )
             return addQual( ">", value )
         else
             return addQual( "<=", value )
     }
 
+    /**
+     * Activates entities with attributes that are null.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.Name isNull )
+     * }}}
+     */
+    def isNull(): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "!=", null )    
+        else
+            return addQual( "=", null )    
+    }
+
+    /**
+     * Activates entities with attributes that are not null.
+     * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.Name isNotNull )
+     * }}}
+     */
+    def isNotNull(): QualificationTerminator = {
+        if ( checkNot )
+            return addQual( "=", null )    
+        else
+            return addQual( "!=", null )    
+    }
+    
     /**
      * Uses SQL like to qualify activation.
      *
@@ -685,7 +856,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.UserName like 'John%' )
      * }}}
      */
-    def like ( value: String ): QualBuilder = {
+    def like ( value: String ): QualificationTerminator = {
         if ( checkNot )
             return addQual( "NOT LIKE", value )
         else
@@ -693,7 +864,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
     }
 
     /**
-     * Activates entities with attributes that are in than the list of
+     * Activates entities with attributes that are in the list of
      * specified values.
      *
      * The values are converted by domain processing before being added
@@ -703,13 +874,46 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID in (123, 456, 789) )
      * }}}
      */
-    def in ( values: Any* ): QualBuilder = {
+    def in ( values: Any* ): QualificationTerminator = {
         if ( checkNot )
             return notIn( values )
 
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "IN", null )
         addValues( values )
-        return qualBuilder
+        return QualBuilder.TERMINATOR
+    }
+
+    /**
+     * Activates entities with attributes that are in all the entities
+     * in the specified cursor.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUserList = VIEW basedOn "mUser"...
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID in mUserList.User )
+     * }}}
+     */
+    def in ( valueCursor: EntityCursor ): QualificationTerminator = {
+        if ( checkNot )
+            return notIn( valueCursor )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        return in( attrs )
+    }
+
+    def in ( selectSet: SelectSet ): QualificationTerminator = {
+        if ( checkNot )
+            return notIn( selectSet )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = for ( e <- selectSet.iterator() ) yield e.getAttribute( jattributeDef.getName() )
+
+        return in( attrs )
     }
 
     /**
@@ -723,15 +927,46 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID notIn (123, 456, 789) )
      * }}}
      */
-    def notIn ( values: Any* ): QualBuilder = {
+    def notIn ( values: Any* ): QualificationTerminator = {
         if ( checkNot )
             return in( values )
 
         jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), "NOT IN", null )
         addValues( values )
-        return qualBuilder
+        return QualBuilder.TERMINATOR
     }
 
+    /**
+     * Activates entities with attributes that are in all the entities
+     * in the specified cursor.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUserList = VIEW basedOn "mUser"...
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User.ID notIn mUserList.User )
+     * }}}
+     */
+    def notIn ( valueCursor: EntityCursor ): QualificationTerminator = {
+        if ( checkNot )
+            return in( valueCursor )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        return notIn( attrs )
+    }
+
+    def notIn ( selectSet: SelectSet ): QualificationTerminator = {
+        if ( checkNot )
+            return in( selectSet )
+
+        // Get the list of attribute values.  Note that we use the attr NAME.
+        // This allows the user to use a different target entity.
+        val attrs = for ( e <- selectSet.iterator() ) yield e.getAttribute( jattributeDef.getName() )
+        return notIn( attrs )
+    }
 
     /**
      * Add the values in Seq[Any] to the IN/NOT IN clause.  If any of the values in the
@@ -859,12 +1094,61 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
             return between( values, ">", "<=" )
     }
 
-    private[scala] def addQual( oper: String, value: Any ): QualBuilder = {
+    private[scala] def addQual( oper: String, value: Any ): QualificationTerminator = {
         if ( value.isInstanceOf[AttributeQualBuilder] ) {
             attrQualBuilder.addQualFromAttributeBuilder( oper, value )
         } else {
             jqual.addAttribQual(jentityDef.getName(), jattributeDef.getName(), oper, value )
         }
-        return qualBuilder
+
+        return QualBuilder.TERMINATOR
     }
+}
+
+/**
+ * Builder for setting ORDER BY attribute.
+ */
+class AttributeOrderByBuilder( val qualBuilder: QualBuilder,
+                               val jentityDef: EntityDef )
+        extends Dynamic {
+
+    var jattributeDef: com.quinsoft.zeidon.objectdefinition.AttributeDef = null
+    val jqual = qualBuilder.jqual
+    var descending = false
+
+    /**
+     * Adds dynamic support for qualifying on an attribute.
+     */
+    def selectDynamic( attributeName: String ): OrderByTerminator = {
+        jattributeDef = jentityDef.getAttribute( attributeName )
+        if ( jattributeDef.isHidden() )
+            throw new HiddenAttributeException( jattributeDef );
+        new OrderByTerminator( this )
+    }
+}
+
+/**
+ * A class to indicate that qualification has been correctly specified.
+ */
+class QualificationTerminator {
+
+}
+
+/**
+ * A class to indicate that qualification has been correctly specified.
+ */
+class OrderByTerminator( val builder : AttributeOrderByBuilder ) {
+    def DESC = {
+        builder.descending = true
+        this
+    }
+
+    def ASC = {
+        builder.descending = false
+        this
+    }
+}
+
+object QualBuilder {
+    val TERMINATOR = new QualificationTerminator
 }

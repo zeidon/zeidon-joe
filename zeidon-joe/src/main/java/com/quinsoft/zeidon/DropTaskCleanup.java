@@ -16,32 +16,20 @@
 
     Copyright 2009-2015 QuinSoft
  */
-
-package com.quinsoft.zeidon.utils;
-
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import com.quinsoft.zeidon.Lockable;
+package com.quinsoft.zeidon;
 
 /**
- * A simple class that implements Lockable by lazy-loading a lock.
- * 
- * @author DG
+ * Every task keeps track of work that needs to be done when the task is dropped.
+ * The work is handled by objects that implement this interface.
  *
  */
-public class LazyLoadLock implements Lockable
+public interface DropTaskCleanup
 {
-    private ReentrantReadWriteLock lock;
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.Lockable#getLock()
+    /**
+     * The task has been dropped and this method is called to perform
+     * any cleanup work.
+     * 
+     * @param task
      */
-    @Override
-    public synchronized ReentrantReadWriteLock getLock()
-    {
-        if ( lock == null )
-            lock = new ReentrantReadWriteLock();
-        
-        return lock;
-    }
+    public void taskDropped( Task task );
 }

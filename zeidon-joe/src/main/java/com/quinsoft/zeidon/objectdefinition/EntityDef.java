@@ -62,8 +62,8 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private EntityDef  prevSibling;
     private EntityDef  nextSibling;
     private String     name;
-    private int        erEntityToken;
-    private int        erRelToken;
+    private String     erEntityToken;
+    private String     erRelToken;
     private boolean    erRelLink;  // RelLink direction.  True = '1' from the XOD file.
     private final int        depth;
     private final int        entityNumber;
@@ -72,10 +72,17 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     private EventListener eventListener;
     private ArrayList<AttributeDef> activateOrdering;
     private Integer    activateLimit;
+    private EntityDefLinkInfo linkInfo;
+
     /**
      * List of the attributes in the order they are defined in the XOD file.
      */
     private final List<AttributeDef> attributes = Collections.synchronizedList( new ArrayList<AttributeDef>() );
+
+    /**
+     * List of the non-hidden attributes in the order they are defined in the XOD file.
+     */
+    private volatile List<AttributeDef> nonHiddenAttributes = Collections.synchronizedList( new ArrayList<AttributeDef>() );;
 
     /**
      * Map of attributes by attribute name.  This is a concurrent map because this can be increased
@@ -86,7 +93,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     /**
      * Map of attributes by ER attribute token.
      */
-    private final Map<Long, AttributeDef> erAttributeMap = new HashMap<Long, AttributeDef>();
+    private final Map<String, AttributeDef> erAttributeMap = new HashMap<>();
 
     /**
      * This map keeps track of entities that have been checked to see if 'this' entity
@@ -228,6 +235,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 if ( reader.getAttributeName().equals( "DUPENTIN" ))
                 {
                     duplicateEntity = true;
+                    lodDef.setHasDuplicateInstances( true );
                 }
 
                 break;
@@ -286,12 +294,12 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
                 else
                 if ( reader.getAttributeName().equals( "ERENT_TOK" ))
                 {
-                    erEntityToken = Integer.parseInt( reader.getAttributeValue() );
+                    erEntityToken = reader.getAttributeValue().intern();
                 }
                 else
                 if ( reader.getAttributeName().equals( "ERREL_TOK" ))
                 {
-                    erRelToken = Integer.parseInt( reader.getAttributeValue() );
+                    erRelToken = reader.getAttributeValue().intern();
                 }
                 else
                 if ( reader.getAttributeName().equals( "ERREL_LINK" ))
@@ -438,12 +446,24 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     }
 
+    /**
+     * Name of the entity  This string has been intern() so it is safe to use ==
+     * instead of equals().
+     * 
+     * @return internal string.
+     */
     public String getName()
     {
         return name;
     }
 
-    public int getErEntityToken()
+    /**
+     * A string ID that uniquely defines this entity from the ER.  This string has 
+     * been intern() so it is safe to use == instead of equals().
+     * 
+     * @return internal string.
+     */
+    public String getErEntityToken()
     {
         return erEntityToken;
     }
@@ -453,7 +473,7 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return lodDef;
     }
 
-    public void setLodDef(LodDef lodDef)
+    void setLodDef(LodDef lodDef)
     {
         this.lodDef = lodDef;
     }
@@ -544,15 +564,13 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     void addAttributeDef( AttributeDef attributeDef )
     {
         attributes.add( attributeDef );
+        if ( ! attributeDef.isHidden() )
+            nonHiddenAttributes.add( attributeDef );
         attributeMap.put( attributeDef.getName(), attributeDef );
+        attributeMap.put( attributeDef.getName().toLowerCase(), attributeDef );
 
-        if ( attributeDef.isDynamicAttribute() )
-            assert attributeDef.getErAttributeToken() < 0;
-        else
-        {
-            assert attributeDef.getErAttributeToken() != null;
+        if ( ! attributeDef.isDynamicAttribute() )
             erAttributeMap.put( attributeDef.getErAttributeToken(), attributeDef );
-        }
     }
 
     public AttributeDef createDynamicAttributeDef( DynamicAttributeDefConfiguration config )
@@ -572,40 +590,60 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
 
     public int getAttributeCount()
     {
-        return attributeMap.size();
+        return attributes.size();
     }
 
     public AttributeDef getAttribute( String attribName )
     {
-        return getAttribute( attribName, true );
+        return getAttribute( attribName, true, false );
     }
 
     public AttributeDef getAttribute( String attribName, boolean required )
     {
-        AttributeDef attrib = attributeMap.get( attribName );
+        return getAttribute( attribName, required, false );
+    }
+
+    public AttributeDef getAttribute( String attribName, boolean required, boolean ignoreCase )
+    {
+        String searchName = attribName;
+        if ( ignoreCase )
+            searchName = searchName.toLowerCase();
+
+        AttributeDef attrib = attributeMap.get( searchName );
         if ( attrib == null && required )
             throw new UnknownAttributeDefException( this, attribName );
 
         return attrib;
     }
 
-    public AttributeDef getAttribute( int attributeNumber )
+    public AttributeDef getAttribute( int index )
     {
-        if ( attributeNumber >= attributes.size() )
+        if ( index >= attributes.size() )
             throw new ZeidonException("Attribute index %d out of range for %s.",
-                                      attributeNumber, lodDef.getName() );
+                                      index, lodDef.getName() );
 
-        return attributes.get( attributeNumber );
+        return attributes.get( index );
     }
 
-    public AttributeDef getAttributeByErToken( long erToken )
+    public AttributeDef getAttributeByErToken( String erToken )
     {
         return erAttributeMap.get( erToken );
     }
 
+    /**
+     * @return all the attributes, including non-hidden ones.
+     */
     public List<AttributeDef> getAttributes()
     {
         return Collections.unmodifiableList( attributes );
+    }
+
+    public List<AttributeDef> getAttributes( boolean excludeHidden )
+    {
+        if ( ! excludeHidden )
+            return getAttributes();
+
+        return Collections.unmodifiableList( nonHiddenAttributes );
     }
 
     public int getHierIndex()
@@ -742,7 +780,14 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
         return list.get( list.size() - 1 );
     }
 
-    public int getErRelToken()
+    /**
+     * A string ID that uniquely defines the relationship between this EntityDef
+     * and its parent.  This string has been intern() so it is safe to use ==
+     * instead of equals().
+     * 
+     * @return internal string.
+     */
+    public String getErRelToken()
     {
         return erRelToken;
     }
@@ -1254,5 +1299,123 @@ public class EntityDef implements PortableFileAttributeHandler, CacheMap
     public boolean isAutoloadFromParent()
     {
         return autoloadFromParent;
+    }
+
+    /**
+     * Checks to see if all the attributes in targetEi as sourceEi.
+     *
+     * @return null if all attributes exist otherwise AttributeDef of first missing attribute found.
+     */
+    private AttributeDef checkForAllPersistentAttributes( EntityDef source, EntityDef target )
+    {
+        for ( AttributeDef attr : target.getAttributes() )
+        {
+            if ( ! attr.isActivate() )
+                continue;
+
+            // It's ok if autoseq is missing because it's maintained by the relationship.
+            if ( attr.isAutoSeq() )
+                continue;
+
+            // Check to see if the attribute exists in the source.
+            if ( source.getAttribute( attr.getName(), false ) == null )
+                return attr;
+        }
+
+        return null;
+    }
+
+    /**
+     * Validate that the 'source' EntityDef can be linked with 'this'.
+     *
+     * @param source
+     * @return
+     */
+    public LinkValidation validateLinking( EntityDef source )
+    {
+        assert getErEntityToken() == source.getErEntityToken() : "Trying to link mismatching ER tokens";
+
+        if ( this == source )
+            return LinkValidation.SOURCE_OK;
+
+        AttributeDef missingAttributeDef = null;
+
+        // If they have the same ER date we'll assume all is good.
+        if ( source.getLodDef().getErDate().equals( getLodDef().getErDate() ) )
+            return LinkValidation.SOURCE_OK;
+
+        // Check to see if it's ok for target to be linked to source.
+        EntityDefLinkInfo sourceInfo = getLinkInfo( source );
+        Boolean sourceOk = sourceInfo.mayBeLinked.get( this );
+        if ( sourceOk == Boolean.TRUE )
+            return LinkValidation.SOURCE_OK;
+
+        /*  This leads to a NPE.  Some day we may try to fix it.
+        // Check to see if source can be linked to 'this'.
+        EntityDefLinkInfo targetInfo = getEntityDefLinkInfo( entityDef );
+        Boolean targetOk = targetInfo.mayBeLinked.get( entityDef );
+        if ( targetOk == Boolean.TRUE )
+        {
+            source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
+                                                                                 this, this.attributeList );
+            return;
+        }
+        */
+
+        if ( sourceOk == null ) // If it's null we've never checked this one.
+        {
+            missingAttributeDef = checkForAllPersistentAttributes( source, this );
+            sourceOk = missingAttributeDef == null;
+            sourceInfo.mayBeLinked.putIfAbsent( this, sourceOk );
+            if ( sourceOk == Boolean.TRUE )
+                return LinkValidation.SOURCE_OK;
+        }
+
+        /*  This leads to a NPE.  Some day we may try to fix it.
+        if ( targetOk == null ) // If it's null we've never checked this one.
+        {
+            missingAttributeDef = checkForAllPersistentAttributes( source, this );
+            targetOk = missingAttributeDef == null;
+            targetInfo.mayBeLinked.putIfAbsent( sourceEntityDef, targetOk );
+            if ( targetOk == Boolean.TRUE )
+            {
+                source.attributeList = AttributeListInstance.newSharedAttributeList( source, source.attributeList,
+                                                                                     this, this.attributeList );
+                return;
+            }
+        }
+        */
+
+        ZeidonException ex = new ZeidonException( "Attempting to link instances that don't have matching attributes.  "
+                                                + "You probably need to re-save the target LOD." );
+        ex.appendMessage( "Source instance = %s", source );
+        ex.appendMessage( "Target instance type = %s", this );
+        ex.appendMessage( "Missing attribute = %s.%s.%s",
+                          missingAttributeDef.getEntityDef().getLodDef().getName(),
+                          missingAttributeDef.getEntityDef().getName(),
+                          missingAttributeDef.getName() );
+
+        throw ex;
+    }
+
+    private synchronized EntityDefLinkInfo getLinkInfo( EntityDef entityDef )
+    {
+        if ( linkInfo == null )
+            linkInfo = new EntityDefLinkInfo();
+
+        return linkInfo;
+    }
+
+    public enum LinkValidation
+    {
+        SOURCE_OK;
+    }
+
+    /**
+     * This keeps track of whether two view entities can be validly linked together.
+     */
+    private class EntityDefLinkInfo
+    {
+        public final ConcurrentMap<EntityDef, Boolean> mayBeLinked = new MapMaker().concurrencyLevel( 4 ).makeMap();
     }
 }

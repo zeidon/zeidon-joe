@@ -23,12 +23,15 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.ObjectConstraintType;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -40,6 +43,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
@@ -49,7 +53,7 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.Nu
  * @author DG
  *
  */
-public class LodDef implements PortableFileAttributeHandler
+public class LodDef implements PortableFileAttributeHandler, CacheMap
 {
     private final Application  app;
     private String       name;
@@ -68,12 +72,15 @@ public class LodDef implements PortableFileAttributeHandler
     private SourceFileType sourceFileType = SourceFileType.VML;
     private String         sourceFileName;
     private boolean      hasLazyLoadEntities;
+    private boolean      hasDuplicateInstances;
 
     /**
      * True if any entities in this LOD have DataRecords.
      */
     private boolean      hasPhysicalMappings = false;
     private String       libraryName;
+
+    private CacheMap cacheMap;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
 
@@ -117,23 +124,32 @@ public class LodDef implements PortableFileAttributeHandler
         return filename;
     }
 
-    public EntityDef getEntityDef( String entityName, boolean required )
+    public EntityDef getEntityDef( String entityName, boolean required, boolean ignoreCase )
     {
         // We allow the dbhandler to use a special string to indicate the
         // root.
         if ( StringUtils.equals( entityName, DbHandler.ROOT_ENTITY ) )
             return getEntityDef( 0 );  // Return the root LodDef.
 
-        EntityDef entityDef = nameMap.get( entityName );
+        String searchName = entityName;
+        if ( ignoreCase )
+            searchName = searchName.toLowerCase();
+
+        EntityDef entityDef = nameMap.get( searchName );
         if ( entityDef == null && required )
             throw new UnknownEntityDefException( this, entityName );
 
         return entityDef;
     }
 
+    public EntityDef getEntityDef( String entityName, boolean required )
+    {
+        return getEntityDef( entityName, true, false );
+    }
+
     public EntityDef getEntityDef( String entityName )
     {
-        return getEntityDef( entityName, true );
+        return getEntityDef( entityName, true, false );
     }
 
     public EntityDef getEntityDef( int index )
@@ -158,6 +174,7 @@ public class LodDef implements PortableFileAttributeHandler
     private void addEntityDef( EntityDef entityDef )
     {
         nameMap.put( entityDef.getName(), entityDef );
+        nameMap.put( entityDef.getName().toLowerCase(), entityDef );
         height = Math.max( height, entityDef.getDepth() );
         entityList.add( entityDef );
     }
@@ -598,6 +615,7 @@ public class LodDef implements PortableFileAttributeHandler
             if ( handler instanceof AttributeDef )
             {
                 AttributeDef attrib = (AttributeDef) handler;
+                attrib.finishAttributeLoading();
                 currentEntityDef.addAttributeDef( attrib );
             }
             else
@@ -619,14 +637,14 @@ public class LodDef implements PortableFileAttributeHandler
             Map<Integer, AttributeDef> attribMap = new HashMap<Integer, AttributeDef>();
 
             // Find the AttributeDef for each of the DataFields.
-            for ( EntityDef ve : entityList )
+            for ( EntityDef entityDef : entityList )
             {
-                for ( AttributeDef AttributeDef : ve.getAttributes() )
+                for ( AttributeDef AttributeDef : entityDef.getAttributes() )
                 {
                     attribMap.put( AttributeDef.getXvaAttrToken(), AttributeDef );
                 }
 
-                DataRecord dataRecord = ve.getDataRecord();
+                DataRecord dataRecord = entityDef.getDataRecord();
                 if ( dataRecord != null )
                 {
                     for ( DataField dataField : dataRecord.dataFields() )
@@ -635,11 +653,63 @@ public class LodDef implements PortableFileAttributeHandler
                         assert AttributeDef != null : "Can't find matching XVA Token for DataField";
                         dataField.setAttributeDef( AttributeDef );
                     }
-                    dataRecord.setFields( ve );
+                    dataRecord.setFields( entityDef );
                 }
             }
+
+            if ( hasDuplicateInstances() )
+                computeDuplicateInstances();
         }
     } // class LodDefHandler
+
+    /**
+     * This LodDef has entities flagged as duplicate instances.  Find all the entityDefs
+     * flagged as duplicate instances, then make sure they all activate the total sum
+     * of attributes.
+     */
+    private void computeDuplicateInstances()
+    {
+        Map<String, List<EntityDef>> duplicateMap = new HashMap<>();
+
+        for ( EntityDef entityDef : entityList )
+        {
+            if ( ! entityDef.isDuplicateEntity() )
+                continue;
+
+            List<EntityDef> list = duplicateMap.get( entityDef.getErEntityToken() );
+            if ( list == null )
+            {
+                list = new ArrayList<>();
+                duplicateMap.put( entityDef.getErEntityToken(), list );
+            }
+
+            list.add( entityDef );
+        }
+
+        assert duplicateMap.size() > 0;
+
+        for ( List<EntityDef> list : duplicateMap.values() )
+        {
+            // Get the set of attributes that are to be activated by any entity.
+            Set<String> activatedAttributes = new HashSet<>();
+            for ( EntityDef entityDef : list )
+            {
+                for ( AttributeDef attributeDef : entityDef.getAttributes() )
+                {
+                    if ( attributeDef.isActivate() )
+                        activatedAttributes.add( attributeDef.getErAttributeToken() );
+                }
+            }
+
+            // Now go through and make sure all the attributes have the activate
+            // flag set for all entities.
+            for ( EntityDef entityDef : list )
+            {
+                for ( String erAttributetoken : activatedAttributes )
+                    entityDef.getAttributeByErToken( erAttributetoken ).setActivate( true );
+            }
+        }
+    }
 
     public int getHeight()
     {
@@ -702,5 +772,39 @@ public class LodDef implements PortableFileAttributeHandler
     void setHasLazyLoadEntities( boolean hasLazyLoadEntities )
     {
         this.hasLazyLoadEntities = hasLazyLoadEntities;
+    }
+
+    boolean hasDuplicateInstances()
+    {
+        return hasDuplicateInstances;
+    }
+
+    void setHasDuplicateInstances( boolean hasDuplicateInstances )
+    {
+        this.hasDuplicateInstances = hasDuplicateInstances;
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.CacheMap#getCacheMap(java.lang.Class)
+     */
+    @Override
+    synchronized public <T> T getCacheMap(Class<T> key)
+    {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
+        return cacheMap.getCacheMap( key );
+    }
+
+    /* (non-Javadoc)
+     * @see com.quinsoft.zeidon.CacheMap#putCacheMap(java.lang.Class, java.lang.Object)
+     */
+    @Override
+    synchronized public <T> T putCacheMap(Class<T> key, T value)
+    {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
+        return cacheMap.putCacheMap( key, value );
     }
 }

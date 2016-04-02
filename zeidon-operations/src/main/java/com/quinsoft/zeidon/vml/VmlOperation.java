@@ -28,7 +28,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -71,7 +70,6 @@ import com.google.common.collect.ImmutableSet;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
@@ -920,12 +918,12 @@ public abstract class VmlOperation
       Task task = qual.getTask();
       if ( session != null )
       {
-         session.setAttribute( "ZeidonAction", strActionToProcess );
-         task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment
+         session.setAttribute( "ZeidonAction", strActionToProcess ) ;
+         task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment?
       }
       else
       {
-         task.log().debug( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment
+         task.log().debug( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment?
       }
    } // set breakpoint here
 
@@ -1134,7 +1132,15 @@ public abstract class VmlOperation
     */
    public static final void SysMessageBox( View view, String msgTitle, String msgText, int beep )
    {
-      JoeUtils.sysMessageBox( msgTitle, msgText );
+      String inServer = "";
+      if ( isValid( view ) ) {
+         inServer = view.readZeidonConfig( view.getApplication().getName(), "InServer" );
+      }
+      if ( inServer != null && inServer.equals( "Y" ) ) {
+         view.log( ).info( msgTitle + " " + msgText );
+      } else {
+         JoeUtils.sysMessageBox( msgTitle, msgText );
+      }
    }
 
    public static final void SysMessageBox( String msgTitle, String msgText )
@@ -2056,7 +2062,6 @@ public abstract class VmlOperation
       return sb.length( );
    }
 
-   
    protected static final  String zstrncpyoffset( String s, String s2, int nLth, int nOffset )
    {
       if ( s2.length() < nOffset + nLth )
@@ -3173,7 +3178,7 @@ public abstract class VmlOperation
       }
       else
       {
-         String value = srcView.cursor( srcEntity ).getStringFromAttribute( srcAttribute );
+         String value = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
          nRC = cursor.setFirst( tgtAttribute, value, scopingEntity ).toInt();
       }
 
@@ -3197,7 +3202,7 @@ public abstract class VmlOperation
       }
       else
       {
-         String value = srcView.cursor( srcEntity ).getStringFromAttribute( srcAttribute );
+         String value = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
       // nRC = cursor.setFirst( tgtAttribute, value, scopingEntity ).toInt();
          nRC = cursor.setFirst( scopingEntity ).toInt();
       }
@@ -3831,7 +3836,7 @@ public abstract class VmlOperation
       }
       else
       {
-         //k = cursor.getIntegerFromAttribute( attributeName );
+         //k = cursor.getAttribute( attributeName ).getInteger();
          AttributeInstance attrib = cursor.getAttribute( attributeName );
          k = attrib.getInteger();
          if ( k == null )
@@ -3855,7 +3860,7 @@ public abstract class VmlOperation
       }
       else
       {
-         //k = cursor.getIntegerFromAttribute( attributeName );
+         //k = cursor.getAttribute( attributeName ).getInteger();
          AttributeInstance attrib = cursor.getAttribute( attributeName );
          k = attrib.getInteger();
          if ( k == null )
@@ -3973,7 +3978,7 @@ public abstract class VmlOperation
       }
       else
       {
-         s = cursor.getStringFromAttribute( attributeName, context );
+         s = cursor.getAttribute( attributeName ).getString( context );
 
          // Because in our vml code we compare a null to "", we should return a "" instead of null.
          if ( s == null )
@@ -3998,7 +4003,7 @@ public abstract class VmlOperation
       }
       else
       {
-         String s = cursor.getStringFromAttribute( attributeName, context );
+         String s = cursor.getAttribute( attributeName ).getString( context );
          if ( s == null )
          {
             s = "";
@@ -4059,7 +4064,7 @@ public abstract class VmlOperation
       }
       else
       {
-         decimalValue = cursor.getDoubleFromAttribute( attributeName );
+         decimalValue = cursor.getAttribute( attributeName ).getDouble();
       }
 
       // KJS 05/26/10 - Having a problem in my derived attribute when this returns a null.
@@ -4108,7 +4113,7 @@ public abstract class VmlOperation
       }
       else
       {
-         Double d1 = cursor.getDoubleFromAttribute( attributeName );
+         Double d1 = cursor.getAttribute( attributeName ).getDouble();
          if ( d1 == null )
          {
             d1 = 0.0;
@@ -4170,11 +4175,11 @@ public abstract class VmlOperation
          String s;
          if ( StringUtils.isBlank( context ) && control != zUSE_DEFAULT_CONTEXT )
          {
-             s = cursor.getStringFromAttribute( attributeName );
+             s = cursor.getAttribute( attributeName ).getString();
          }
          else
          {
-             s = cursor.getStringFromAttribute( attributeName, context );
+             s = cursor.getAttribute( attributeName ).getString( context );
          }
 
          if ( s == null )
@@ -4246,11 +4251,11 @@ public abstract class VmlOperation
       {
          if ( StringUtils.isBlank( context ) )
          {
-             i = cursor.getIntegerFromAttribute( attributeName );
+             i = cursor.getAttribute( attributeName ).getInteger();
          }
          else
          {
-             i = cursor.getIntegerFromAttribute( attributeName, context );
+             i = cursor.getAttribute( attributeName ).getInteger( context );
          }
 
          nRC = 0;
@@ -4617,7 +4622,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         tgtCursor.setAttributeFromAttribute( tgtAttribute, srcView, srcEntity, srcAttribute );
+         tgtCursor.getAttribute( tgtAttribute).setValue( srcView.cursor(  srcEntity ).getAttribute(  srcAttribute ).getValue() )  ;
       }
 
       return nRC;
@@ -4668,7 +4673,9 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.getAttribute( attributeName ).setValue( srcView );
+         //String blobStr = srcView.serializeOi().asJson().withIncremental().toString();
+         String blobStr = srcView.serializeOi().withIncremental().toString();
+         cursor.getAttribute( attributeName ).setValue( blobStr );
       }
 
       return nRC;
@@ -4969,28 +4976,54 @@ public abstract class VmlOperation
       }
 
       Application application = qualView.getApplication();
-      Blob blob = srcView.cursor( srcEntity ).getBlobFromAttribute( srcAttribute );
-      if ( blob == null )
+      //Blob blob = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getBlob();
+      String strTmp = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
+      if ( strTmp == null )
       {
          return -1;
       }
 
-      View v = qualView.deserializeOi()
-                       .fromInputStream( new ByteArrayInputStream( blob.getBytes() ) )
-                       .setFlags( ACTIVATE_CONTROL.get(control) )
-                       .setApplication( application )
-                       .activateFirst();
+  	// There can be more than one view but we are assuming there is only one.
+  	List<View> viewList = new DeserializeOi( qualView )
+      //.asJson()
+      .fromString( strTmp )
+      .activate();
 
+      for ( View v : viewList )
+      {
+          v.logObjectInstance();
+          returnView.setView( v );
+          sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
+          sbLodDefName.append( v.getLodDef().getName() );
+      }
+
+      /*
+
+      View v = qualView.deserializeOi()
+              .fromResource( strTmp )
+              .setFlags( ACTIVATE_CONTROL.get(control) )
+              .setApplication( application )
+              .activateFirst();
+      View v = qualView.deserializeOi()
+              .fromInputStream( new ByteArrayInputStream( blob.getBytes() ) )
+              .setFlags( ACTIVATE_CONTROL.get(control) )
+              .setApplication( application )
+              .activateFirst();
       returnView.setView( v );
       sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbLodDefName.append( v.getLodDef().getName() );
+      */
+
       return 0;
    }
 
    protected String SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
                                     View srcView, String srcEntity, String srcAttribute, int control )
    {
-      StringBuilder sb = new StringBuilder( lodDefName );
+      StringBuilder sb = new StringBuilder( 256 );
+      
+      if ( lodDefName != null )
+    	  sb.append( lodDefName );
       int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
       if ( rc < 0 )
       {
@@ -5129,15 +5162,8 @@ public abstract class VmlOperation
          nRC = zCURSOR_NULL;
       else
       {
-         if ( cursor.isVersioned( ) )
-         {
-            cursor.acceptSubobject( );
-            nRC = 0;
-         }
-         else
-         {
-            nRC = zCALL_ERROR;
-         }
+          cursor.acceptSubobject( );
+          nRC = 0;
       }
 
       return nRC;
@@ -5827,6 +5853,11 @@ public abstract class VmlOperation
    {
       EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
       AttributeDef AttributeDef = entityDef.getAttribute( 0 );
+      if ( AttributeDef == null )
+          return -1;
+       
+      if ( AttributeDef.isHidden() )
+     	  return  -1;
       //if ( sbAttribName != null ) // Do we need this?
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbAttribName.append( AttributeDef.getName() );
@@ -5840,6 +5871,9 @@ public abstract class VmlOperation
       AttributeDef = AttributeDef.getNextAttributeDef();
       if ( AttributeDef == null )
          return -1;
+      
+      if ( AttributeDef.isHidden() )
+    	  return  -1;
 
       sbAttribName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       sbAttribName.append( AttributeDef.getName() );
@@ -7342,6 +7376,29 @@ public abstract class VmlOperation
       return 0;
    }
 
+   protected int FormatSubobjectOnDoc( View sourceOIView, String entityName, View viewToWindow,
+                                       String reportDefName, int printFlag )
+   {
+      // printFlag: 0-Print;2-PrintDlg +4-force Prt/PV/PD +8-Multi Entity
+      int nRC = 0;
+
+      // TODO - Create Code. Or is this only something for windows side?
+      
+      return nRC;
+   }
+
+   protected int FormatSubobjectOnDocWithXRP( View sourceOIView, String entityName, View viewToWindow,
+                                       String reportDefName, View reportDefView, int printFlag )
+   {
+      // printFlag: 0-Print;2-PrintDlg +4-force Prt/PV/PD +8-Multi Entity
+      int nRC = 0;
+
+      // TODO - Create Code. Or is this only something for windows side?
+      
+      return nRC;
+   }
+   
+   
    //./ ADD NAME=GetIncrementalUpdateFlags
    // Source Module=kzoeeiaa.c
    /////////////////////////////////////////////////////////////////////////////
@@ -7432,7 +7489,7 @@ public abstract class VmlOperation
 
 	  AttributeDef attributeDef = view.getLodDef().getEntityDef( entityName ).getAttribute( attributeName );
 
-	  if ( entityInstance.isAttributeUpdated(attributeDef) )
+	  if ( entityInstance.getAttribute(attributeDef).isUpdated() )
 	     return 1;
 	  else
 		 return 0;
@@ -8591,6 +8648,33 @@ public abstract class VmlOperation
       }
    }
 
+   // Valid characters: Letters (a-z A-Z)  Digits (0-9)  Underscore (_)   Hyphen (-)   Space   Dot (.)
+   public String
+   RemoveInvalidCharsFromFilename( String in ) {
+      StringBuilder sbFileName = new StringBuilder( in );
+      RemoveInvalidCharsFromFilename( sbFileName );
+      return sbFileName.toString();
+   }
+
+   // Valid characters: Letters (a-z A-Z)  Digits (0-9)  Underscore (_)   Hyphen (-)   Space   Dot (.)
+   public int
+   RemoveInvalidCharsFromFilename( StringBuilder sbFileName ) {
+      String in = sbFileName.toString();
+      TraceLineS( "RemoveInvalidCharsFromFilename original: ", in );
+      char ch;
+      int k;
+      int pos = 0;
+      for ( k = 0; k < in.length(); k++ ) {
+         ch = in.charAt( k );
+         if ( (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_' || ch == '-' || ch == '.' || ch == ' ' ) {
+            sbFileName.setCharAt( pos++, ch );
+         }
+      }
+      sbFileName.setLength( pos );
+      TraceLineS( "RemoveInvalidCharsFromFilename validated: ", sbFileName.toString() );
+      return sbFileName.length();
+   }
+
    public int
    ConvertXML_SpecialCharacters( View vReportDef, StringBuilder sb_szConvertedString, StringBuilder sb_szSourceString, int MaxLth )
    {
@@ -8636,7 +8720,7 @@ public abstract class VmlOperation
 
       File file = new File( directory );
       boolean exists;
- 
+
       if ( file.exists() )
       {
          if ( (bDirectory != 0 && file.isDirectory()) || (bDirectory == 0 && file.isFile()) )
@@ -8687,11 +8771,6 @@ public abstract class VmlOperation
       if ( szFileName != null && szFileName.isEmpty() == false )
       {
          szDir = "./pdf/";
-         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
-        	  szFileName.startsWith( "./" ) == false )
-         {
-            szFileName = szDir + szFileName;
-         }
          if ( szFileName.contains(".") == false )
          {
             szFileName = szFileName + ".";
@@ -8704,6 +8783,11 @@ public abstract class VmlOperation
             {
                szFileName = szFileName + "html";
             }
+         }
+         if ( szFileName.startsWith( "\\" ) == false && szFileName.startsWith( "/" ) == false &&
+        	     szFileName.startsWith( "./" ) == false )
+         {
+            szFileName = szDir + szFileName;
          }
       }
       else

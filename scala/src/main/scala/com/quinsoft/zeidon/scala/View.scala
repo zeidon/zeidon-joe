@@ -1,20 +1,39 @@
 /**
- *
- */
+  * This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+  *
+  * Zeidon JOE is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU Lesser General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * Zeidon JOE is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU Lesser General Public License for more details.
+  *
+  * You should have received a copy of the GNU Lesser General Public License
+  * along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
+  *
+  * Copyright 2009-2015 QuinSoft
+  */
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-
 import com.quinsoft.zeidon.ActivateFlags
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
+import com.quinsoft.zeidon.SelectSet
+import com.quinsoft.zeidon.SubobjectValidationException
+import com.quinsoft.zeidon.Task
+import scala.collection.concurrent.TrieMap
+import org.apache.commons.lang3.StringUtils
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
  */
-class View( val task: Task ) extends Dynamic {
+case class View( val task: Task ) extends Dynamic {
 
     /**
      * The underlying EntityDef for this View.  May be null.
@@ -27,12 +46,11 @@ class View( val task: Task ) extends Dynamic {
     var jview: com.quinsoft.zeidon.View = null
 
     def this( jv: com.quinsoft.zeidon.View ) = {
-        this( new Task( jv.getTask() ) )
+        this( jv.getTask() )
         jlodDef = jv.getLodDef()
         jview = jv
     }
 
-    def this( jtask: com.quinsoft.zeidon.Task ) = this( new Task( jtask ) )
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
     def this( task: com.quinsoft.zeidon.TaskQualification ) = this( task.getTask() )
 
@@ -59,9 +77,9 @@ class View( val task: Task ) extends Dynamic {
 
     private def setLod( lodName: String, appName: String = null ): View = {
         if ( appName == null )
-            jlodDef = task.jtask.getApplication().getLodDef( task.jtask, lodName )
+            jlodDef = task.getApplication().getLodDef( task, lodName )
         else
-            jlodDef = task.jtask.getApplication( appName ).getLodDef( task.jtask, lodName )
+            jlodDef = task.getApplication( appName ).getLodDef( task, lodName )
 
         if ( jview != null && jview.getLodDef() != jlodDef )
             throw new ZeidonException( "LodDef set by basedOnLod doesn't match view." )
@@ -101,6 +119,17 @@ class View( val task: Task ) extends Dynamic {
     }
 
     /**
+     * Validates the OI by running accept() on all the entity instances.
+     */
+    def validate( throwException: Boolean = true ) = {
+        val validateExceptions = jview.validateOi()
+        if ( validateExceptions != null && throwException )
+            throw new SubobjectValidationException( validateExceptions )
+
+        validateExceptions
+    }
+
+    /**
      * Creates an empty OI for this view.  The LOD must have been previously
      * specified with basedOn.
      * {{{
@@ -110,7 +139,7 @@ class View( val task: Task ) extends Dynamic {
      */
     def activateEmpty() = {
         validateLodDef
-        jview = task.jtask.activateEmptyObjectInstance( jlodDef )
+        jview = task.activateEmptyObjectInstance( jlodDef )
         this
     }
 
@@ -123,7 +152,7 @@ class View( val task: Task ) extends Dynamic {
      *      mUser.activateWhere( _.User.ID = 490 )
      * }}}
      */
-    def activateWhere( addQual: ( EntityQualBuilder ) => Unit ): View = {
+    def activateWhere( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         validateLodDef
         val builder = new QualBuilder( this, jlodDef )
         addQual( builder.entityQualBuilder )
@@ -155,10 +184,9 @@ class View( val task: Task ) extends Dynamic {
      *                  .activate
      * }}}
      */
-    def buildQual( initialQual: ( EntityQualBuilder ) => Unit ): QualBuilder = {
+    def buildQual( initialQual: ( EntityQualBuilder ) => QualificationTerminator ): QualBuilder = {
         val builder = buildQual()
-        initialQual( builder.entityQualBuilder ) // Add the qualifcation.
-        builder
+        builder.callAddQual( initialQual )
     }
 
     /**
@@ -218,8 +246,8 @@ class View( val task: Task ) extends Dynamic {
      * Drops the view and all its names.
      */
     def drop() = {
-        validateNonNull
-        jview.drop
+        if ( jview != null )
+            jview.drop
         this
     }
 
@@ -270,6 +298,13 @@ class View( val task: Task ) extends Dynamic {
      * Returns the options that were used to activate this OI.
      */
     def activateOptions = { validateNonNull; jview.getActivateOptions() }
+
+    def getSelectSet( name: String = null ) = {
+        if ( name == null )
+            jview.createSelectSet()
+        else
+            jview.getSelectSet( name )
+    }
 
     /**
      * Returns a serializer that can be used to serialize this OI.
@@ -346,8 +381,11 @@ class View( val task: Task ) extends Dynamic {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
         validateNonNull
 
-        val oe = task.objectEngine
-        val oper = oe.objectOperationMap.getObjectOperation( operationName, jlodDef, args: _* )
+        val oe = task.getObjectEngine
+        var operMap = oe.getCacheMap( classOf[ObjectOperationMap] )
+        if ( operMap == null )
+            operMap = oe.putCacheMap(classOf[ObjectOperationMap], new ObjectOperationMap )
+        val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
         val value = oper.invokeOperation( this, args: _* )
         ObjectOperationResult( value )
     }

@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -38,6 +39,12 @@ import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.domains.BigDecimalDomain;
+import com.quinsoft.zeidon.domains.BooleanDomain;
+import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DoubleDomain;
+import com.quinsoft.zeidon.domains.IntegerDomain;
+import com.quinsoft.zeidon.domains.LongDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -157,6 +164,23 @@ public class WriteOisToJsonStream implements StreamWriter
         jg.writeEndObject();
     }
 
+    private String camelCaseName( String name )
+    {
+        if ( ! options.isCamelCase() )
+            return name;
+
+        char[] nameChars = name.toCharArray();
+        for ( int i = 0; i < nameChars.length; i++ )
+        {
+            if ( ! Character.isUpperCase( nameChars[ i ] ) )
+                break;
+
+            nameChars[ i ] = Character.toLowerCase( nameChars[ i ] );
+        }
+
+        return String.valueOf( nameChars );
+    }
+
     private EntityDef writeEntity( EntityInstanceImpl ei, EntityDef lastEntityDef ) throws Exception
     {
         try
@@ -169,21 +193,52 @@ public class WriteOisToJsonStream implements StreamWriter
                     jg.writeEndArray();
 
                 lastEntityDef = entityDef;
-                jg.writeArrayFieldStart( entityDef.getName() );
+                jg.writeArrayFieldStart( camelCaseName( entityDef.getName() ) );
             }
 
             jg.writeStartObject();
             boolean writePersistent = writeEntityMeta( ei );
-            for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
+            for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                AttributeValue attrib = ei.getInternalAttribute( attributeDef );
-                if ( writePersistent || ! attributeDef.isPersistent() )
+                // If the attribute is not persistent and we're only writing persisten
+                // then go to the next one.
+                if ( attributeDef.isPersistent() && ! writePersistent )
+                    continue;
+
+                if ( attributeDef.isDerived() )
+                    continue;
+
+                AttributeInstanceImpl attrib = ei.getAttribute( attributeDef );
+                if ( attrib.isNull() && ! attrib.isUpdated() )
+                    continue;
+
+                AttributeValue attribValue = ei.getInternalAttribute( attributeDef );
+
+                // Check for integer, double, or boolean so that it gets written without quotes.
+                Domain domain = attributeDef.getDomain();
+                String jsonName = camelCaseName( attributeDef.getName() );
+                if ( domain instanceof IntegerDomain )
+                    jg.writeNumberField( jsonName, attrib.getInteger() );
+                else
+                if ( domain instanceof DoubleDomain )
+                    jg.writeNumberField( jsonName, attrib.getDouble() );
+                else
+                if ( domain instanceof BooleanDomain )
+                    jg.writeBooleanField( jsonName, attrib.getBoolean() );
+                else
+                if ( domain instanceof LongDomain )
+                    jg.writeNumberField( jsonName, (Long) attrib.getValue() );
+                else
+                if ( domain instanceof BigDecimalDomain )
+                    jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
+                else
                 {
-                    String value = attrib.getString( ei.getTask(), attributeDef );
-                    jg.writeStringField( attributeDef.getName(), value );
-                    if ( attributeDef.isPersistent() )
-                        writeAttributeMeta( attrib, attributeDef );
+                    String value = attribValue.getString( ei.getTask(), attributeDef );
+                    jg.writeStringField( jsonName, value );
                 }
+
+                if ( attributeDef.isPersistent() )
+                    writeAttributeMeta( attribValue, attributeDef );
             }
 
             // Loop through the children and add them.
@@ -212,7 +267,7 @@ public class WriteOisToJsonStream implements StreamWriter
         if ( ! attrib.isUpdated() )
             return;
 
-        jg.writeObjectFieldStart( "." + attributeDef.getName() );
+        jg.writeObjectFieldStart( "." + camelCaseName( attributeDef.getName() ) );
         jg.writeStringField( "updated", "true" );
         jg.writeEndObject();
     }

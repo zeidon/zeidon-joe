@@ -20,18 +20,23 @@
 package com.quinsoft.zeidon.objectbrowser;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -54,17 +59,19 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     private static final String PREV_CURSOR  = "PreviousCursor";
     private static final String NEXT_CURSOR  = "NextCursor";
     private static final String LAST_CURSOR  = "LastCursor";
+    private static final String REFRESH_OI   = "RefreshOI";
 
     private final BrowserEnvironment env;
     private       EntityDef selectedEntityDef;
     private final BorderLayout borderLayout;
-    private       OiDisplay oiDisplay;
+    protected     OiDisplay oiDisplay;
+    private       View currentView;
 
     OiDisplayPanel( BrowserEnvironment env )
     {
         super( );
         this.env = env;
-        setSize( new Dimension( 1000, 200 ) );
+//        setSize( new Dimension( 1000, 200 ) );
         borderLayout = new BorderLayout();
         setLayout( borderLayout );
 
@@ -77,6 +84,7 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         addButton( buttonPane, "Prev in OI", PREV_CURSOR, "[Page Up]" );
         addButton( buttonPane, "Next in OI", NEXT_CURSOR, "[Page Down]" );
         addButton( buttonPane, "Last", LAST_CURSOR, "[End]" );
+        addButton( buttonPane, "Refresh OI", REFRESH_OI, "" );
 
         // Add a dummy, invisible label for spacing.  It's a hack but it's easy.
         JLabel dummy = new JLabel( "                               " );
@@ -97,6 +105,21 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         }
 
         add( buttonPane, BorderLayout.NORTH );
+
+        InputMap im = getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+        ActionMap am = getActionMap();
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_ADD, KeyEvent.CTRL_DOWN_MASK ), "increaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK ), "increaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_PLUS, KeyEvent.CTRL_DOWN_MASK ), "increaseScale" );
+        am.put("increaseScale", new ChangeScaleAction( +2 ) );
+
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_SUBTRACT, KeyEvent.CTRL_DOWN_MASK ), "decreaseScale" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK ), "decreaseScale" );
+        am.put("decreaseScale", new ChangeScaleAction( -2 ) );
+
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK ), "resetScale" );
+        am.put("resetScale", new ChangeScaleAction( 0 ) );
+
         setVisible( true );
     }
 
@@ -114,10 +137,16 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         if ( oiDisplay != null )
             remove( oiDisplay );
 
+        currentView = view;
         oiDisplay = new OiDisplay( env, view, this, this );
 
         add( oiDisplay, BorderLayout.CENTER );
         oiDisplay.revalidate();
+    }
+
+    View getDisplayedView()
+    {
+        return currentView;
     }
 
     void setFocusToDisplay()
@@ -148,6 +177,17 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         oiDisplay.repositionScroll( p );
     }
 
+    /**
+     * Refresh the browser view of the OI.  Make sure we keep positioned
+     * on the selected entity.
+     */
+    private void refreshOi()
+    {
+        EntitySquare selectedEntity = oiDisplay.getSelectedEntity();
+        displayView( currentView );
+        setSelectedEntity( selectedEntity.getEntityDef() );
+    }
+
     @Override
     public void actionPerformed(ActionEvent action)
     {
@@ -166,6 +206,9 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         if ( action.getActionCommand().equals( LAST_CURSOR ) )
             oiDisplay.getView().cursor( selectedEntityDef ).setLast();
         else
+        if ( action.getActionCommand().equals( REFRESH_OI ) )
+            refreshOi();
+        else
             throw new ZeidonException( "Internal action error" );
 
         entitySelected( selectedEntityDef, oiDisplay.getView().cursor( selectedEntityDef ).getEntityInstance() );
@@ -176,5 +219,37 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
     public void lostOwnership( Clipboard arg0, Transferable arg1 )
     {
         // Do nothing.
+    }
+
+    private class ChangeScaleAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private int delta;
+
+        public ChangeScaleAction( int delta )
+        {
+            super();
+            this.delta = delta;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            System.out.println( "Ctrl +/- pressed");
+            int scale = env.getPainterScaleFactor();
+            if ( delta == 0 )
+                scale = env.getDefaultPainterScale();
+            else
+                scale = scale + delta;
+
+            if ( env.setPainterScaleFactor( scale ) )
+            {
+                EntityDef ve = selectedEntityDef; // Save this because it'll be changed by displayView.
+                displayView( currentView );
+                oiDisplay.setSelectedEntityFromEntityDef( ve );
+                oiDisplay.revalidate();
+                setFocusToDisplay();
+            }
+        }
     }
 }

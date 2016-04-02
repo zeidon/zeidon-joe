@@ -546,7 +546,7 @@ post '/:application/save/:loddef' do
     cursor = @view.cursor( entity_name )
     values.each_pair do |attrib_name, value|
       attrib = cursor.get_attribute( attrib_name )
-      attrib.set( value ) unless attrib.hidden? || attrib.isGenKey || ! attrib.isUpdate
+      attrib.setValue( value ) unless attrib.hidden? || attrib.isGenKey || ! attrib.isUpdate
     end
   end
 

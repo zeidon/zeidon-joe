@@ -28,6 +28,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
@@ -110,7 +111,7 @@ public class QualificationBuilder
         qualView = qual;
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
-        entitySpecCount = 0;
+        entitySpecCount = qual.cursor( ENTITYSPEC ).getEntityCount();
         synch = this;
     }
 
@@ -219,6 +220,7 @@ public class QualificationBuilder
 
     public QualificationBuilder limitCountTo( int limit )
     {
+        validateEntity();
         qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).setValue( limit );
         return setFlag( ActivateFlags.fMULTIPLE );
     }
@@ -226,6 +228,15 @@ public class QualificationBuilder
     public QualificationBuilder setAsynchronous()
     {
         return asynchronous();
+    }
+
+    public QualificationBuilder setPagination( Pagination pagingOptions )
+    {
+        if ( activateOptions.getPagingOptions() != null )
+            throw new ZeidonException( "Pagination options has already been set." );
+
+        activateOptions.setPagingOptions( pagingOptions );
+        return this;
     }
 
     public QualificationBuilder asynchronous()
@@ -275,9 +286,30 @@ public class QualificationBuilder
         return this;
     }
 
+    /**
+     * Returns true if there is attribute qualification for the currently selected
+     * QualEntity.  This does NOT include "ORDERBY".
+     */
+    public boolean hasQualAttrib()
+    {
+        for ( EntityInstance qa : qualView.cursor( QUALATTRIB ).eachEntity() )
+        {
+            if ( ! qa.getAttribute( OPER ).equals( "ORDERBY" ) )
+                return true;
+        }
+
+        return false;
+    }
+
     public QualificationBuilder setOiSourceUrl( String url )
     {
         activateOptions.setOiSourceUrl( url );
+        return this;
+    }
+
+    public QualificationBuilder overrideConfigValue( String key, String value )
+    {
+        activateOptions.overrideConfigValue( key, value );
         return this;
     }
 
@@ -309,6 +341,12 @@ public class QualificationBuilder
         this.cacheViewName = cacheName;
         this.synch = syncObject;
         cacheTask = taskQual.getTask();
+        return this;
+    }
+
+    public QualificationBuilder setSingleTransaction()
+    {
+        activateOptions.setSingleTransaction( true );
         return this;
     }
 
@@ -415,15 +453,15 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .setAttribute( ENTITYNAME, entityName )
-                                     .setAttribute( OPER, "EXISTS" );
+                                     .getAttribute( ENTITYNAME).setValue( entityName )
+                                     .getAttribute( OPER).setValue( "EXISTS" ) ;
         return this;
     }
 
     public QualificationBuilder addAttribQual( String oper )
     {
         validateEntity();
-        qualView.cursor( QUALATTRIB ).createEntity().setAttribute( OPER, oper );
+        qualView.cursor( QUALATTRIB ).createEntity().getAttribute( OPER).setValue( oper ) ;
         return this;
     }
 
@@ -451,14 +489,14 @@ public class QualificationBuilder
     public QualificationBuilder newEntityKey( Integer key )
     {
         qualView.cursor( KEYLIST ).createEntity()
-                                  .setAttribute( "IntegerValue", key );
+                                  .getAttribute( "IntegerValue").setValue( key ) ;
         return this;
     }
 
     public QualificationBuilder newEntityKey( String key )
     {
         qualView.cursor( KEYLIST ).createEntity()
-                                  .setAttribute( "StringValue", key );
+                                  .getAttribute( "StringValue").setValue( key ) ;
         return this;
     }
 
@@ -475,10 +513,22 @@ public class QualificationBuilder
     {
         validateEntity();
         qualView.cursor( QUALATTRIB ).createEntity()
-                                     .setAttribute( ENTITYNAME, entityName )
-                                     .setAttribute( ATTRIBUTENAME, attribName )
-                                     .setAttribute( OPER, oper )
-                                     .setAttribute( VALUE, attribValue == null ? null : attribValue.toString() );
+                                     .getAttribute( ENTITYNAME ).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( attribName )
+                                     .getAttribute( OPER ).setValue( oper )
+                                     .getAttribute( VALUE ).setValue( attribValue == null ? null : attribValue.toString() ) ;
+
+        return this;
+    }
+
+    public QualificationBuilder addActivateOrdering( String entityName, String attribName, boolean descending )
+    {
+        validateEntity();
+        qualView.cursor( QUALATTRIB ).createEntity()
+                                     .getAttribute( ENTITYNAME ).setValue( entityName )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( attribName )
+                                     .getAttribute( OPER ).setValue( "ORDERBY" )
+                                     .getAttribute( VALUE ).setValue( descending ? "DESC" : "ASC" ) ;
 
         return this;
     }
@@ -589,8 +639,25 @@ public class QualificationBuilder
                 // No.  Make sure cacheTask and task are the same.
                 assert cacheTask == task : "Unequal tasks for non-cached activate";
             else
-                // Yes.  Attempt to get the view by name in the cacheTask.
+            {
+                // Yes.  See if we've already loaded it.
                 view = cacheTask.getViewByName( cacheViewName );
+
+                // We found it in the global cache.  If it's not in the local cache then
+                // create it and return it.
+                if ( view != null && cacheTask != task )
+                {
+                    View localView = task.getViewByName( cacheViewName );
+                    if ( localView == null )
+                    {
+                        // Create a local copy of the view.
+                        view = view.newView( task );
+                        task.setNameForView( cacheViewName, view );
+                    }
+                    else
+                        view = localView; // Return the local one.
+                }
+            }
 
             if ( view == null )
             {
@@ -598,8 +665,16 @@ public class QualificationBuilder
 
                 // Are we dealing with a cached view?
                 if ( ! StringUtils.isBlank( cacheViewName ) )
+                {
                     // Yes.  Name the view for later.
                     cacheTask.setNameForView( cacheViewName, view );
+                    if ( cacheTask != task )
+                    {
+                        // Create a local copy of the view.
+                        view = view.newView( task );
+                        task.setNameForView( cacheViewName, view ); // Set in local task as well.
+                    }
+                }
             }
 
             // If the source instance is specified and is the same type as the root, then relink.
@@ -620,7 +695,6 @@ public class QualificationBuilder
                 cacheTask.setEntityCache( entityCache );
             }
 
-            qualView.setInternal( true ); // So it doesn't show up in the browser any more.
             return view;
         } // synchronized ( synch )...
     }
@@ -673,7 +747,7 @@ public class QualificationBuilder
 
     public static View activateFromFile( Task task, String filename )
     {
-        LodDef qua = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
-        return task.activateOiFromFile( qua, filename, null );
+        LodDef qual = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
+        return task.deserializeOi().fromFile( filename ).setLodDef( qual ).activateFirst();
     }
 }

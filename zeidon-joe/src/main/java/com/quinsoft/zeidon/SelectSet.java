@@ -30,6 +30,13 @@ import java.util.Set;
 public interface SelectSet extends Set<EntityInstance>
 {
     /**
+     * Returns the View associated with this SelectSet
+     *
+     * @return view for the SelectSet
+     */
+    View getView();
+
+    /**
      * Returns true if the entity is selected in this set.
      *
      * @param ei
@@ -69,6 +76,18 @@ public interface SelectSet extends Set<EntityInstance>
 
     /**
      * Iterates over each of the entities in the set in hierarchical order.
+     *
+     * Note that for large OIs this may be slow because this will loop through
+     * all the entities looking for ones that are in the set.  To loop through
+     * just the entities (without changing the underlying View) then use
+     * the standard Set iterator; however this is not guaranteed to loop in
+     * hierarchical order.
      */
     EntityIterator<? extends EntityInstance> eachEntity();
+
+    /**
+     * If this SelectSet is named then this removes the name from the view's
+     * list.  If it is not named then this does nothing.
+     */
+    void drop();
 }

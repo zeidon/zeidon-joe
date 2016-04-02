@@ -3,7 +3,7 @@
  */
 package com.quinsoft.zeidon.test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
@@ -13,6 +13,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+//import com.quinsoft.zeidon.test.TestSWAU.SwauVmlTester;
 //import com.quinsoft.zeidon.test.TestCheetah2.VmlTester;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
@@ -74,6 +75,36 @@ public class TestCheetah2
 		CheetahVmlTester tester = new CheetahVmlTester( testview );
 		tester.testOrderEntity2( testview );
         System.out.println("===== Finished testOrderEntity2 ========");
+	}
+	
+	@Test
+	public void testOrderEntityNull()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		tester.testOrderEntityNull( testview );
+        System.out.println("===== Finished testOrderEntityNull ========");
+	}
+	
+	@Test
+	public void testOrderEntitySortOrderNotCaseSensitive()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		tester.testOrderEntitySortOrderNotCaseSensitive( testview );
+        System.out.println("===== Finished testOrderEntitySortOrderNotCaseSensitive ========");
+	}
+	
+	@Test
+	public void testOrderEntitySortOrderCaseSensitive()
+	{
+	    View         testview;
+		testview = cheetah.activateEmptyObjectInstance( "mUser" );
+		CheetahVmlTester tester = new CheetahVmlTester( testview );
+		tester.testOrderEntitySortOrderCaseSensitive( testview );
+        System.out.println("===== Finished testOrderEntitySortOrderCaseSensitive ========");
 	}
 
 	private class CheetahVmlTester extends VmlObjectOperations
@@ -225,6 +256,56 @@ public class TestCheetah2
 			OrderEntityForView( wDateSrt, "wDateSrt", szSort );
 
 			return 0;
+		}
+
+		public int
+		testOrderEntityNull( View ViewToWindow )
+		{
+		   zVIEW    mCTBillMed      = new zVIEW( );
+		   int RESULT=0;
+		   
+		   // PayDate is null. We crash when a date value is null (this would be for any attribute with a context).
+
+	   	   ActivateOI_FromFile( mCTBillMed, "mCTBill", ViewToWindow,
+		                "target/test-classes/testdata/Cheetah/mCTBillMed.json", zSINGLE );
+		   SetNameForView( mCTBillMed, "mCTBillMed", null, zLEVEL_TASK );
+	       mCTBillMed.cursor( "Application" ).orderEntities( "VisitBillingLine.PayDate D [YYYY/MM/DD]" );
+
+	       return 0;
+		}
+
+		public int
+		testOrderEntitySortOrderNotCaseSensitive( View ViewToWindow )
+		{
+		   zVIEW    wMyListD      = new zVIEW( );
+		   int RESULT=0;
+
+	   	   ActivateOI_FromFile( wMyListD, "wMyListD", ViewToWindow,
+		                "target/test-classes/testdata/Cheetah/wDisplBillFollowup.json", zSINGLE );
+		   SetNameForView( wMyListD, "wMyListD", null, zLEVEL_TASK );
+		   wMyListD.cursor( "DisplayValues" ).orderEntities( "DisplayValues.ApplicantNumber" );
+		   
+		   wMyListD.cursor( "DisplayValues" ).setLast();
+           Assert.assertTrue( "orderEntities is NOT case sensitive, ordering incorrectly!", wMyListD.cursor( "DisplayValues" ).getAttribute("ApplicantNumber").equals("MR5226244") );
+		   
+	       return 0;
+		}
+
+		public int
+		testOrderEntitySortOrderCaseSensitive( View ViewToWindow )
+		{
+		   zVIEW    wMyListD      = new zVIEW( );
+		   int RESULT=0;
+
+	   	   ActivateOI_FromFile( wMyListD, "wMyListDCS", ViewToWindow,
+		                "target/test-classes/testdata/Cheetah/wDisplBillFollowupCS.json", zSINGLE );
+		   SetNameForView( wMyListD, "wMyListD", null, zLEVEL_TASK );
+		   wMyListD.cursor( "DisplayValues" ).orderEntities( "DisplayValues.ApplicantNumber" );
+		   
+		   wMyListD.cursor( "DisplayValues" ).setLast();
+           Assert.assertTrue( "orderEntities IS case sensitive, ordering incorrectly!", wMyListD.cursor( "DisplayValues" ).getAttribute("ApplicantNumber").equals("mr5226243") );
+		   
+	       return 0;
 		}
    }
 }

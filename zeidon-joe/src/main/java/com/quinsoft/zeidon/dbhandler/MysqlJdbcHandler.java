@@ -23,8 +23,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * JDBC handler for mysql that uses "lock table" to lock the genkey table.
@@ -34,6 +36,10 @@ import com.quinsoft.zeidon.View;
  */
 public class MysqlJdbcHandler extends JdbcHandler
 {
+    /**
+     * This is true if we're locking the root and we're using a single transaction.
+     */
+    private boolean lockingRoot = false;
 
     public MysqlJdbcHandler(Task task, AbstractOptionsConfiguration options )
     {
@@ -79,5 +85,60 @@ public class MysqlJdbcHandler extends JdbcHandler
 
         // If we get here then we didn't acquire the lock.
         throw new GenkeyLockException("Unable to UNLOCK GENKEY lock.  See logs for possible explanation.");
+    }
+
+    @Override
+    protected boolean isJoinable( EntityDef entityDef )
+    {
+        if ( lockingRoot && ! activateOptions.isReadOnly() )
+        {
+            // We are going to use
+            if ( entityDef.getParent() == entityDef.getLodDef().getRoot() )
+            {
+                getTask().dblog().trace( "Entity %s is not joined with its parent because the parent is loaded with record-level locking", entityDef );
+                return false;
+            }
+        }
+
+        return super.isJoinable( entityDef );
+    }
+
+    @Override
+    public PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  )
+    {
+        // If we're doing an activate in a single transaction we'll use record-level locking
+        // as part of the transaction which is part of the select and doesn't need a separate
+        // locking handler.
+        if ( activateOptions.isSingleTransaction() )
+        {
+            lockingRoot  = true;
+            return null;
+        }
+
+        return super.getPessimisticLockingHandler( activateOptions, view );
+    }
+
+    @Override
+    protected int executeLoad(View view, EntityDef entityDef, SqlStatement stmt)
+    {
+        // If the user has indicated she's doing multiple activates in a single transaction
+        // then we'll assume she wants locking.  Add locking command if it's not read-only.
+        if ( entityDef.getParent() == null && activateOptions.isSingleTransaction() && ! activateOptions.isReadOnly() )
+            stmt.appendSuffix( " for update " );
+
+        return super.executeLoad( view, entityDef, stmt );
+    }
+
+    @Override
+    protected void initializeTransaction( )
+    {
+        // If the user has indicated she's doing multiple activates in a single transaction
+        // then we'll assume she wants locking.  Set the isolation level for locking.
+        if ( activateOptions.isSingleTransaction() )
+        {
+            // Using executeSql() could be dangerous because it results in a recursive
+            // call to getTransaction().  As currently constructed, however, it works.
+            executeSql( "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ" );
+        }
     }
 }

@@ -18,13 +18,12 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.util.Collection;
 import java.util.EnumSet;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
-import com.quinsoft.zeidon.SubobjectValidationException;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -50,28 +49,37 @@ class ActivateOiFromDB implements Activator
     private DbHandler   dbHandler;
     private ActivateOptions options;
 
+    private PessimisticLockingHandler pessimisticLock;
+
     @Override
     public View init(Task task, View view, ActivateOptions options )
     {
         assert options != null;
 
         this.task = (TaskImpl) task;
+
+        // View will be non-null when we're performing a lazy-load.
         if ( view == null )
-            view = task.activateEmptyObjectInstance( options.getLodDef() );
-        this.view = ((InternalView) view).getViewImpl();
+            this.view = (ViewImpl) task.activateEmptyObjectInstance( options.getLodDef() );
+        else
+            this.view = ((InternalView) view).getViewImpl();
 
         this.qual = options.getQualificationObject();
         this.options = options;
         control = options.getActivateFlags();
         lodDef = options.getLodDef();
+        if ( ! lodDef.hasPhysicalMappings() )
+            throw new ZeidonException("Attempting to activate OI with no physical mappings.  LOD = %s", lodDef.getName() );
 
         JdbcHandlerUtils helper = new JdbcHandlerUtils( options, lodDef.getDatabase() );
         dbHandler = helper.getDbHandler();
-        return view;
+        dbHandler.beginActivate( this.view, qual, control );
+        return this.view;
     }
 
     /**
-     * Activate the OI.
+     * Activate the OI.  This gets called for the initial activate of the OI.
+     * This will not be called for lazy-loads.
      *
      * @return
      */
@@ -81,51 +89,49 @@ class ActivateOiFromDB implements Activator
         Timer timer = new Timer();
         ObjectInstance oi = view.getObjectInstance();
 
-        PessimisticLockingHandler pessimisticLlock = null;
-        if ( options.getLockingLevel().isPessimisticLock() )
+        // Store the activate options for later use.
+        oi.setActivateOptions( options );
+
+        // Get pessimistic lock handler.
+        pessimisticLock = dbHandler.getPessimisticLockingHandler( options, view );
+
+        // If we are activating with rolling pagination then replace the root cursor
+        // with a special one that will attempt to load the next page when required.
+        Pagination pagingOptions = options.getPagingOptions();
+        if ( pagingOptions != null && pagingOptions.isRollingPagination() )
         {
-            pessimisticLlock = view.getPessimisticLockingHandler();
-            pessimisticLlock.initialize( options );
+            ViewCursor viewCursor = view.getViewCursor();
+            EntityCursorImpl newCursor = new RollingPaginationEntityCursorImpl( viewCursor, lodDef.getRoot(), options );
+            viewCursor.replaceEntityCursor( newCursor );
         }
 
         try
         {
+            pessimisticLock.acquireGlobalLock( view );
+
             EntityDef rootEntity = lodDef.getRoot();
             activate( rootEntity );
 
             if ( oi.getRootEntityInstance() != null ) // Did we load anything?
     		{
-                // Check the pessimistic locks.  We need to do this after we load the OI because
-                // databases (sqlite--grrrrr) can't handle two open connections updating the DB
-                // at the same time.
-                if ( pessimisticLlock != null )
-                {
-                    pessimisticLlock.acquireLocks( view );
-                    view.getTask().addLockedView( view );
-                    view.getObjectInstance().setLocked( true );
-                }
+                pessimisticLock.acquireOiLocks( view );
+//                view.getObjectInstance().setLocked( true );
 
                 view.reset();
+                if ( options.isReadOnly() )
+                    view.getObjectInstance().setReadOnly( true );
+
                 view.getLodDef().executeActivateConstraint( view );
     		}
+
             task.getObjectEngine().getOeEventListener().objectInstanceActivated( view, qual, timer.getMilliTime(), null );
 
             return view;
         }
         finally
         {
-            if ( pessimisticLlock != null )
-                pessimisticLlock.cleanup();
+            pessimisticLock.releaseGlobalLock( view );
         }
-    }
-
-    private boolean assertValid()
-    {
-        Collection<ZeidonException> exceptions = view.validateOi();
-        if ( exceptions == null )
-            return true;
-
-        throw new SubobjectValidationException( exceptions );
     }
 
     /**
@@ -146,9 +152,6 @@ class ActivateOiFromDB implements Activator
         ObjectInstance oi = view.getObjectInstance();
         try
         {
-            // Store the activate options for later use.
-            view.getObjectInstance().setActivateOptions( options );
-
             // Set flag to tell cursor processing to not bother with checking for lazy-loaded
             // entities.  Since we're activating we know we don't want to load lazy entities
             // via cursor access.
@@ -157,14 +160,12 @@ class ActivateOiFromDB implements Activator
             task.log().debug( "Activating %s from DB", lodDef.getName() );
             view.setName( viewName );
 
-            dbHandler.beginTransaction();
+            dbHandler.beginTransaction(view);
             transactionStarted = true;
 
             rc = singleActivate( subobjectRootEntity );
 
             commit = true;
-
-//            assert assertValid();
         }
         catch ( Exception e )
         {
@@ -318,8 +319,10 @@ class ActivateOiFromDB implements Activator
             isUpdatedFile = oi.isUpdatedFile();
         }
 
-        dbHandler.beginActivate( view, qual, control );
         int rc = dbHandler.loadEntity( view, rootEntityDef );
+
+        if ( isOiRoot )
+            pessimisticLock.acquireRootLocks( view );
 
         // Activate the child entities unless we're activating the root and ROOT_ONLY is set.
         if ( isOiRoot && control.contains( ActivateFlags.fROOT_ONLY ) )
@@ -373,13 +376,5 @@ class ActivateOiFromDB implements Activator
         }
 
         return rc;
-    }
-
-    private void acquirePessimisticLocks()
-    {
-        PessimisticLockingHandler locker = view.getPessimisticLockingHandler();
-        locker.acquireLocks( view );
-        view.getTask().addLockedView( view );
-        view.getObjectInstance().setLocked( true );
     }
 }

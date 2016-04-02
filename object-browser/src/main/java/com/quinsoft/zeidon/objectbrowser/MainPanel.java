@@ -55,10 +55,10 @@ public class MainPanel extends JPanel
         leftTabbedPane.addTab( "Twins", new TwinInstancesPanel( this.env ) );
         leftTabbedPane.addTab( "Entity List", new EntityListPanel( this.env ) );
 
-        leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_V);
-        leftTabbedPane.setMnemonicAt(1, KeyEvent.VK_A);
-        leftTabbedPane.setMnemonicAt(2, KeyEvent.VK_W);
-        leftTabbedPane.setMnemonicAt(3, KeyEvent.VK_E);
+        leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_V); // Alt-V
+        leftTabbedPane.setMnemonicAt(1, KeyEvent.VK_A); // Alt-A
+        leftTabbedPane.setMnemonicAt(2, KeyEvent.VK_W); // Alt-W
+        leftTabbedPane.setMnemonicAt(3, KeyEvent.VK_E); // Alt-E
 
         JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, oiDisplay );
 

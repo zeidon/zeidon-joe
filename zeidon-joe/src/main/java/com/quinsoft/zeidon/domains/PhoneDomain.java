@@ -195,8 +195,6 @@ public class PhoneDomain extends StringDomain
             super( domain );
         }
 
-        private String            editString;
-
         @Override
         public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
         {
@@ -204,10 +202,10 @@ public class PhoneDomain extends StringDomain
         		return StringDomain.checkNullString(task.getApplication(), null);
 
         	// If the user has not entered a Java Format string, just return the internal value.
-        	if ( editString == null )
+        	if ( getEditString() == null )
         	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
 
-        	int formatLength = editString.length();
+        	int formatLength = getEditString().length();
         	String internalString = internalValue.toString();
             int j = 0;
             char[] tempCharArray = new char[formatLength];
@@ -217,15 +215,13 @@ public class PhoneDomain extends StringDomain
             // given.
             for (int i = 0; i < formatLength; i++)
             {
-            	if ( editString.charAt(i) != '9' )
+            	if ( getEditString().charAt(i) != '9' )
             	{
-                    tempCharArray[i] =
-                        editString.charAt(i);
+                    tempCharArray[i] = getEditString().charAt(i);
             	}
             	else
             	{
-                    tempCharArray[i] =
-                        internalString.charAt(j);
+                    tempCharArray[ i ] = internalString.charAt( j );
                     j++;
             	}
             }
@@ -250,17 +246,6 @@ public class PhoneDomain extends StringDomain
         		return null;
 
         	return (s);
-        }
-
-        @Override
-        public void setAttribute(PortableFileReader reader)
-        {
-            if ( reader.getAttributeName().equals( "JavaEditString" ) )
-            {
-                editString = reader.getAttributeValue();
-            }
-            else
-                super.setAttribute( reader );
         }
     }
 

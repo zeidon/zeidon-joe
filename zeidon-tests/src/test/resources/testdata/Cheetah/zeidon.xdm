@@ -5502,6 +5502,11 @@ aZKey      92748339
 aExternalValue Redeterm
 aInternalValue RE
 
+eTableEntry 4
+aZKey      110029620
+aExternalValue INPATIENT
+aInternalValue INPATIENT
+
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      92748301
@@ -5563,6 +5568,11 @@ eTableEntry 4
 aZKey      92748309
 aExternalValue Worklist
 aInternalValue W
+
+eTableEntry 4
+aZKey      110029619
+aExternalValue WL
+aInternalValue WL
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain

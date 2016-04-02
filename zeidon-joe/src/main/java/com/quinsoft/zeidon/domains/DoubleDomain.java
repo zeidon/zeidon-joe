@@ -279,6 +279,14 @@ public class DoubleDomain extends AbstractNumericDomain
        }
 
         @Override
+        protected void setEditString( String editString )
+        {
+            super.setEditString( editString );
+            formatPattern = editString;
+            format = new DecimalFormat( formatPattern );
+        }
+
+        @Override
         public void setAttribute(PortableFileReader reader)
         {
             String name = reader.getAttributeName();
@@ -286,12 +294,6 @@ public class DoubleDomain extends AbstractNumericDomain
             {
                 decimalPlaces = Integer.parseInt( reader.getAttributeValue() );
                 formatPattern = decimalPlaces == 0 ? "#" : "#." + StringUtils.repeat( "#", decimalPlaces );
-                format = new DecimalFormat( formatPattern );
-            }
-            else
-            if ( name.equals( "JavaEditString" ) )
-            {
-                formatPattern = reader.getAttributeValue();
                 format = new DecimalFormat( formatPattern );
             }
             else

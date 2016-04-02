@@ -269,12 +269,12 @@ public class EpammsEbTests
 
       View qualView = vKZXMLPGO.activateEmptyObjectInstance( "KZDBHQUA", vKZXMLPGO.getSystemTask().getApplication() );
       qualView.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "EntitySpec" ).setAttribute( "EntityName", "MasterProduct" );
+      qualView.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
       qualView.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+      qualView.cursor( "QualAttrib" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "AttributeName").setValue( "ID" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "Value").setValue( 1 ) ;  // assuming ID = 1
+      qualView.cursor( "QualAttrib" ).getAttribute( "Oper").setValue( "=" ) ;
 
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
@@ -314,15 +314,15 @@ public class EpammsEbTests
       View mMasLC = vKZXMLPGO.getViewByName( "mMasLC" );
       EntityCursor srcCursor = mMasLC.cursor( "M_MarketingStatement" );
       int nRC = srcCursor.setFirst().toInt();
-      String str = srcCursor.getStringFromAttribute( "Text" );
+      String str = srcCursor.getAttribute( "Text" ).getString();
       if ( str.endsWith( "Updated" ) )
          str = str.replaceAll( "Updated", "" );
       else
          str += "Updated";
 
-      srcCursor.setAttribute( "Text", str );
+      srcCursor.getAttribute( "Text").setValue( str ) ;
       srcCursor.logEntity( false );
-      str = srcCursor.getStringFromAttribute( "Text" );
+      str = srcCursor.getAttribute( "Text" ).getString();
 
       // ZeidonAction: wMLCMarketingStatement.smAcceptMarketingStmt
       // ZeidonOperation: wMLC.AcceptMarketingStmt called from wMLCMarketingStatement
@@ -348,12 +348,12 @@ public class EpammsEbTests
       // ZeidonOperation: wMLC.InitMasterProductForUpdate called from wMLCUpdateMasterProduct
       View qualView = vKZXMLPGO.activateEmptyObjectInstance( "KZDBHQUA", vKZXMLPGO.getSystemTask().getApplication() );
       qualView.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "EntitySpec" ).setAttribute( "EntityName", "MasterProduct" );
+      qualView.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
       qualView.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "Value", 4 );  // assuming ID = 4
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+      qualView.cursor( "QualAttrib" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "AttributeName").setValue( "ID" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "Value").setValue( 4 ) ;  // assuming ID = 4
+      qualView.cursor( "QualAttrib" ).getAttribute( "Oper").setValue( "=" ) ;
 
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
       wWebXfer.cursor( "Root" ).createEntity( );
@@ -398,12 +398,12 @@ public class EpammsEbTests
 
       View qualView = vKZXMLPGO.activateEmptyObjectInstance( "KZDBHQUA", vKZXMLPGO.getSystemTask().getApplication() );
       qualView.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "EntitySpec" ).setAttribute( "EntityName", "MasterProduct" );
+      qualView.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
       qualView.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+      qualView.cursor( "QualAttrib" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "AttributeName").setValue( "ID" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "Value").setValue( 1 ) ;  // assuming ID = 1
+      qualView.cursor( "QualAttrib" ).getAttribute( "Oper").setValue( "=" ) ;
 
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
@@ -430,12 +430,12 @@ public class EpammsEbTests
 
       View qualView = vKZXMLPGO.activateEmptyObjectInstance( "KZDBHQUA", vKZXMLPGO.getSystemTask().getApplication() );
       qualView.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "EntitySpec" ).setAttribute( "EntityName", "MasterProduct" );
+      qualView.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
       qualView.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+      qualView.cursor( "QualAttrib" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "AttributeName").setValue( "ID" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "Value").setValue( 1 ) ;  // assuming ID = 1
+      qualView.cursor( "QualAttrib" ).getAttribute( "Oper").setValue( "=" ) ;
 
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
@@ -454,9 +454,9 @@ public class EpammsEbTests
       wMLC.SelectMarketingSectForUpdate( vKZXMLPGO );
       wMLC.InitMarketingSect( vKZXMLPGO );
       View mMasLC = vKZXMLPGO.getViewByName( "mMasLC" );
-      mMasLC.cursor( "M_MarketingSection" ).setAttribute( "Title", "Title", "" );
-      mMasLC.cursor( "M_MarketingSection" ).setAttribute( "Subtitle", "Subtitle", "" );
-      mMasLC.cursor( "M_MarketingSection" ).setAttribute( "ReviewerNote", "Reviewer Note", "" );
+      mMasLC.cursor( "M_MarketingSection" ).getAttribute( "Title").setValue( "Title", "" ) ;
+      mMasLC.cursor( "M_MarketingSection" ).getAttribute( "Subtitle").setValue( "Subtitle", "" ) ;
+      mMasLC.cursor( "M_MarketingSection" ).getAttribute( "ReviewerNote").setValue( "Reviewer Note", "" ) ;
       wMLC.AcceptMarketingSect( vKZXMLPGO );
    }
 
@@ -467,12 +467,12 @@ public class EpammsEbTests
 
       View qualView = vKZXMLPGO.activateEmptyObjectInstance( "KZDBHQUA", vKZXMLPGO.getSystemTask().getApplication() );
       qualView.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "EntitySpec" ).setAttribute( "EntityName", "MasterProduct" );
+      qualView.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
       qualView.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterProduct" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+      qualView.cursor( "QualAttrib" ).getAttribute( "EntityName").setValue( "MasterProduct" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "AttributeName").setValue( "ID" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "Value").setValue( 1 ) ;  // assuming ID = 1
+      qualView.cursor( "QualAttrib" ).getAttribute( "Oper").setValue( "=" ) ;
 
       wMLC_Dialog wMLC = new wMLC_Dialog( vKZXMLPGO );
       View wWebXfer = vKZXMLPGO.activateEmptyObjectInstance( "wWebXfer", task.getApplication() );
@@ -506,7 +506,7 @@ public class EpammsEbTests
       nRC = tgtCursor.moveSubobject( CursorPosition.PREV, srcCursor, CursorPosition.PREV );
       mTempLC.drop( );
       nRC = srcCursor.setLast().toInt();;
-      int nID1 = srcCursor.getIntegerFromAttribute( "ID" );
+      int nID1 = srcCursor.getAttribute( "ID" ).getInteger();
       srcCursor.displayEntity( false );
 
       wMLC.AcceptMarketingSect( vKZXMLPGO );
@@ -519,7 +519,7 @@ public class EpammsEbTests
 
       srcCursor = mMasLC.cursor( "M_GeneralStatement" );
       nRC = srcCursor.setLast().toInt();;
-      int nID2 = srcCursor.getIntegerFromAttribute( "ID" );
+      int nID2 = srcCursor.getAttribute( "ID" ).getInteger();
       srcCursor.displayEntity( false );
       assertEquals( "testAutoSeq failed", nID1, nID2 );
    }
@@ -532,7 +532,7 @@ public class EpammsEbTests
       view.displayObjectInstance();
       EntityCursor cursor = view.cursor( "M_StorageDisposalStatement" );
       cursor.createTemporalSubobjectVersion();
-      cursor.setAttribute( "Title", "this is a another test" );
+      cursor.getAttribute( "Title").setValue( "this is a another test" ) ;
       cursor.acceptSubobject();
       view.commit();
 //    view.displayObjectInstance();
@@ -565,12 +565,12 @@ public class EpammsEbTests
 
       View qualView = vKZXMLPGO.activateEmptyObjectInstance( "KZDBHQUA", vKZXMLPGO.getSystemTask().getApplication() );
       qualView.cursor( "EntitySpec" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "EntitySpec" ).setAttribute( "EntityName", "MasterLabelContent" );
+      qualView.cursor( "EntitySpec" ).getAttribute( "EntityName").setValue( "MasterLabelContent" ) ;
       qualView.cursor( "QualAttrib" ).createEntity( CursorPosition.NEXT );
-      qualView.cursor( "QualAttrib" ).setAttribute( "EntityName", "MasterLabelContent" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "AttributeName", "ID" );
-      qualView.cursor( "QualAttrib" ).setAttribute( "Value", 1 );  // assuming ID = 1
-      qualView.cursor( "QualAttrib" ).setAttribute( "Oper", "=" );
+      qualView.cursor( "QualAttrib" ).getAttribute( "EntityName").setValue( "MasterLabelContent" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "AttributeName").setValue( "ID" ) ;
+      qualView.cursor( "QualAttrib" ).getAttribute( "Value").setValue( 1 ) ;  // assuming ID = 1
+      qualView.cursor( "QualAttrib" ).getAttribute( "Oper").setValue( "=" ) ;
 
       View mMasLC = vKZXMLPGO.activateEmptyObjectInstance( "mMasLC", task.getApplication() );
       mMasLC.getLodDef().displayLodDef( task );

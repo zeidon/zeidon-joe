@@ -51,7 +51,7 @@ public wFacultD(Task task) {
 //   
 //   // Make sure an entry is selected and position on that entry for the audit.
 //   IF wStudent.Work.WebDegreeAuditType = "P"    // Potential Audit needs lDegTrk selection.
-      if ( wStudent.cursor( "Work" ).compareAttribute( "WebDegreeAuditType", "P" ) == 0 )
+      if ( wStudent.cursor( "Work" ).getAttribute( "WebDegreeAuditType").compare( "P" )  == 0 )
       {
 //      GET VIEW lDegTrk NAMED "lDegTrk"
           lDegTrk = viewToWindow.getViewByName( "lDegTrk" );
@@ -85,7 +85,7 @@ public wFacultD(Task task) {
 //   // If this is an audit as a part of a proposed class registration, add the proposed classes to
 //   // mStudenC.
 //   IF wStudent.Work.WebDegreeAuditType = "S"
-      if ( wStudent.cursor( "Work" ).compareAttribute( "WebDegreeAuditType", "S" ) == 0 )
+      if ( wStudent.cursor( "Work" ).getAttribute( "WebDegreeAuditType").compare( "S" )  == 0 )
       {
 //      GET VIEW mStuPSch NAMED "mStuPSch"
           mStuPSch = viewToWindow.getViewByName( "mStuPSch" );
@@ -102,7 +102,7 @@ public wFacultD(Task task) {
 //         CREATE ENTITY mStudenC.Registration
               mStudenC.cursor( "Registration" ).createEntity();
 //         mStudenC.Registration.Status               = "T"
-              mStudenC.cursor( "Registration" ).setAttribute( "Status", "T" );
+              mStudenC.cursor( "Registration" ).getAttribute( "Status").setValue( "T" ) ;
 //         mStudenC.Registration.CreditHours          = mStuPSch.ProposedEnrollment.CreditHours
 //         mStudenC.Registration.wCopyFlag            = "Y"      // Use as flag for proposesd entry.
 //         mStudenC.Registration.wCollegeYearSemester = TermslClsLstC.CollegeTerm.YearSemester 

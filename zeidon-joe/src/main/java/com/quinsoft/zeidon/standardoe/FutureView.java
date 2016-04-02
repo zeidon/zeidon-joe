@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.Level;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -33,8 +34,6 @@ import com.quinsoft.zeidon.ZeidonException;
  * A view used for asynchronous views.  An activate that is performed asynchronously returns
  * a future view.  Any operations that require the OI are blocked until the activate
  * finishes.
- *
- * @author DG
  *
  */
 class FutureView extends InternalViewForwarder implements Future<View>
@@ -179,5 +178,13 @@ class FutureView extends InternalViewForwarder implements Future<View>
         // We don't need to wait for the activate to set this flag.
         // Call super to get the view without waiting for the future to return.
         return super.getView().setAllowHiddenEntities( allowHiddenEntities );
+    }
+
+    @Override
+    public void addViewCleanupWork( DropViewCleanup work )
+    {
+        // We don't need to wait for the activate to finish to add a work task.
+        // Call super to get the view without waiting for the future to return.
+        super.getView().addViewCleanupWork( work );
     }
 }

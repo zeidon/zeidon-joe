@@ -39,6 +39,8 @@ public class BaseDomainContext implements DomainContext
     private String name;
     private boolean isDefault;
     private Domain domain;
+    private String editString;
+    
 
     public BaseDomainContext(Domain domain)
     {
@@ -49,6 +51,22 @@ public class BaseDomainContext implements DomainContext
     protected void setName( String name )
     {
         this.name = name;
+    }
+    
+    protected void setIsDefault( boolean isDefault )
+    {
+        this.isDefault = isDefault;
+    }
+
+    protected void setEditString( String editString )
+    {
+        this.editString = editString;
+    }
+    
+    @Override
+    public String getEditString()
+    {
+        return editString;
     }
 
     @Override
@@ -76,11 +94,13 @@ public class BaseDomainContext implements DomainContext
     @Override
     public void setAttribute(PortableFileReader reader)
     {
-        if ( reader.getAttributeName().equals( "Name" ))
-            setName( reader.getAttributeValue() );
-        else
-        if ( reader.getAttributeName().equals( "IsDefault" ))
-            isDefault = reader.getAttributeValue().startsWith( "Y" );
+        String propertyName = reader.getAttributeName();
+        switch ( propertyName )
+        {
+            case "Name":           setName( reader.getAttributeValue() ); break;
+            case "IsDefault":      isDefault = reader.getAttributeValue().startsWith( "Y" ); break;
+            case "JavaEditString": setEditString( reader.getAttributeValue() ); break;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -132,7 +152,6 @@ public class BaseDomainContext implements DomainContext
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
     	return internalValue.toString();
-        //throw new UnsupportedOperationException();
     }
 
     @Override

@@ -72,10 +72,10 @@ public class RoomSchd_Dialog
 
 //        SetNameForView( ViewToWindow,
 //                        sAppMgr.GeneralTask.SpecificDialogName, ViewToWindow, zLEVEL_APPLICATION )
-          viewToWindow.setName( sAppMgr.cursor( "GeneralTask" ).getStringFromAttribute( "SpecificDialogName" ),
+          viewToWindow.setName( sAppMgr.cursor( "GeneralTask" ).getAttribute( "SpecificDialogName" ).getString(),
                                        Level.APPLICATION );
           // ---- OR ----
-          String value = sAppMgr.cursor( "GeneralTask" ).getStringFromAttribute( "SpecificDialogName" );
+          String value = sAppMgr.cursor( "GeneralTask" ).getAttribute( "SpecificDialogName" ).getString();
           viewToWindow.setName( value, Level.APPLICATION );
 
 //        ActivateDomainsForDivision( ViewToWindow )
