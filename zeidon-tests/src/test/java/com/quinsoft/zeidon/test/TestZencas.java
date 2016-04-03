@@ -137,7 +137,7 @@ public class TestZencas
 
             studFull.cursor( "Student" ).setNext();
         }
-        
+
         studFull.drop();
     }
 
@@ -1227,7 +1227,7 @@ public class TestZencas
 			   zVIEW    vTempViewVar_1 = new zVIEW( );
 			   zVIEW    vTempViewVar_2 = new zVIEW( );
 			   int      lTempInteger_3 = 0;
-			   
+
 			   // After doing a couple of relinks, it appears that the relink fails (or relinks the opposite of how it's supposed to).
 
 		   	   ActivateOI_FromFile( mSAAdmin, "mSAAdmin", ViewToWindow, "target/test-classes/testdata//ZENCAs/mSAAdmin.por", zSINGLE );
@@ -1235,7 +1235,7 @@ public class TestZencas
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 175, "" );
 			   //RESULT = GetViewByName( mSAAdmin, "mSAAdmin", ViewToWindow, zLEVEL_TASK );
 			   //RESULT = GetViewByName( lSATermLST, "lSATermLST", ViewToWindow, zLEVEL_TASK );
-           
+
 
 		   	   //:// Set the selected College Term as "Current" after making sure all others are NOT Current.
 		   	   //:TermID = mSAAdmin.CollegeTerm.ID
@@ -1256,14 +1256,16 @@ public class TestZencas
 		   	       GetIntegerFromAttribute( mi_lTempInteger_0, lTermLST, "CollegeTerm", "ID" );
 		   	   lTempInteger_0 = mi_lTempInteger_0.intValue( );}
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_0, "" );
-		   	   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+
+		   	   // Relink the the instances.
 		   	   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
+               szTempString_1 = lTermLST.cursor( "CollegeTerm" ).getAttribute("CurrentForStudentAccounts").getString();
 		   	   //:DropObjectInstance( lTermLST )
 		   	   DropObjectInstance( lTermLST );
 		   	   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = 176
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 176, "" );
 		   	   //:// Then set Term on which we're currently positioned to Current.
-		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID
 		   	   {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
 		   	       GetIntegerFromAttribute( mi_lTempInteger_1, mSAAdmin, "CollegeTerm", "ID" );
 		   	   lTempInteger_1 = mi_lTempInteger_1.intValue( );}
@@ -1293,6 +1295,10 @@ public class TestZencas
 		   	   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_2, "" );
 		   	   //:RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" )
+
+               szTempString_1 = lTermLST.cursor( "CollegeTerm" ).getAttribute("CurrentForStudentAccounts").getString();
+               szTempString_2 = mSAAdmin.cursor( "CollegeTerm" ).getAttribute("CurrentForStudentAccounts").getString();
+
 		   	   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
 		   	   // ERROR OCCURS HERE?????
 		   	   // lTermLST and mSAAdmin CollegeTerm.CurrentForStudentAccounts should be "" not "Y"
@@ -1300,15 +1306,15 @@ public class TestZencas
 	 		   //Assert.assertEquals("HELP", "",szTempString_1 );
 		   	if (szTempString_1.equals("Y"))
 	 	      Assert.assertTrue( "lTermLST/mSAAdmin CollegeTerm.CurrentForStudentAccounts should be blank not Y. ", 1 == 0 );
-		   	   
+
 		   	   //:DropObjectInstance( lTermLST )
 		   	   DropObjectInstance( lTermLST );
-		   	   
+
 		   	   /*
 		   	   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = 175
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 175, "" );
 		   	   //:// Then set Term on which we're currently positioned to Current.
-		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+		   	   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID
 		   	   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
 		   	       GetIntegerFromAttribute( mi_lTempInteger_3, mSAAdmin, "CollegeTerm", "ID" );
 		   	   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
@@ -1325,7 +1331,7 @@ public class TestZencas
 		   	   DropObjectInstance( lTermLST );
 		   	   */
 		   	   return( 0 );
-		}		
+		}
 
 
 		public int
@@ -1360,7 +1366,7 @@ public class TestZencas
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 175, "" );
 			   //RESULT = GetViewByName( mSAAdmin, "mSAAdmin", ViewToWindow, zLEVEL_TASK );
 			   //RESULT = GetViewByName( lSATermLST, "lSATermLST", ViewToWindow, zLEVEL_TASK );
-           
+
 			   //:// Set the selected College Term as "Current" after making sure all others are NOT Current.
 			   //:TermID = mSAAdmin.CollegeTerm.ID
 			   {MutableInt mi_TermID = new MutableInt( TermID );
@@ -1368,10 +1374,10 @@ public class TestZencas
 			   TermID = mi_TermID.intValue( );}
 
 			   //:// First make sure others are NOT Current.
-			   //:FOR EACH lSATermLST.CollegeTerm 
+			   //:FOR EACH lSATermLST.CollegeTerm
 			   RESULT = SetCursorFirstEntity( lSATermLST, "CollegeTerm", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
-			   { 
+			   {
 			      //:TraceLineS("In loop.  Pointer on: ", lSATermLST.CollegeTerm.YearSemester)
 			      {StringBuilder sb_szTempString_0;
 			      if ( szTempString_0 == null )
@@ -1383,10 +1389,10 @@ public class TestZencas
 			      TraceLineS( "In loop.  Pointer on: ", szTempString_0 );
 			      //:IF lSATermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
 			      if ( CompareAttributeToString( lSATermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" ) == 0 )
-			      { 
+			      {
 			         //:TraceLineS("In loop.  This one is marked as current ", "")
 			         TraceLineS( "In loop.  This one is marked as current ", "" );
-			         //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = lSATermLST.CollegeTerm.ID 
+			         //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = lSATermLST.CollegeTerm.ID
 			         {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
 			                   GetIntegerFromAttribute( mi_lTempInteger_0, lSATermLST, "CollegeTerm", "ID" );
 			         lTempInteger_0 = mi_lTempInteger_0.intValue( );}
@@ -1404,14 +1410,14 @@ public class TestZencas
 			         //:// Relink the changed values into the current Annual Admin object, if the CollegeTerm is there.
 			         //://CreateViewFromView( mSAAdmin2, mSAAdmin )
 
-			         //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID 
+			         //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID
 			         {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
 			                   GetIntegerFromAttribute( mi_lTempInteger_1, lTermLST, "CollegeTerm", "ID" );
 			         lTempInteger_1 = mi_lTempInteger_1.intValue( );}
 			         RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_1, "" );
 			         //:IF RESULT >= zCURSOR_SET
 			         if ( RESULT >= zCURSOR_SET )
-			         { 
+			         {
 			            //:TraceLineS("In relink.  Pointer on: ", lTermLST.CollegeTerm.YearSemester)
 			            {StringBuilder sb_szTempString_1;
 			            if ( szTempString_1 == null )
@@ -1450,18 +1456,18 @@ public class TestZencas
 			                         GetStringFromAttribute( sb_szTempString_4, mSAAdmin, "CollegeTerm", "CurrentForStudentAccounts" );
 			            szTempString_4 = sb_szTempString_4.toString( );}
 			            TraceLineS( "In relink.  After Value current: ", szTempString_4 );
-			         } 
+			         }
 
 			         //:END
 			         //://DropView( mSAAdmin2 )
 			         //:DropObjectInstance( lTermLST )
 			         DropObjectInstance( lTermLST );
 			         }
-			      } 
+			      }
 
 			      RESULT = SetCursorNextEntity( lSATermLST, "CollegeTerm", "" );
 			      //:END
-			   } 
+			   }
 
 			   //:END
 			   //:COMMIT lSATermLST
@@ -1469,7 +1475,7 @@ public class TestZencas
 			   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = TermID
 			   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", TermID, "" );
 			   //:// Then set Term on which we're currently positioned to Current.
-			   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+			   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID
 			   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
 			       GetIntegerFromAttribute( mi_lTempInteger_2, mSAAdmin, "CollegeTerm", "ID" );
 			   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
@@ -1478,7 +1484,7 @@ public class TestZencas
 			   DropView( vTempViewVar_1 );
 			   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
 			   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
-			   //:SET CURSOR FIRST lSATermLST.CollegeTerm WHERE lSATermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID  
+			   //:SET CURSOR FIRST lSATermLST.CollegeTerm WHERE lSATermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID
 			   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
 			       GetIntegerFromAttribute( mi_lTempInteger_3, mSAAdmin, "CollegeTerm", "ID" );
 			   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
@@ -1491,22 +1497,22 @@ public class TestZencas
 			   RelinkInstanceToInstance( mSAAdmin, "CollegeTerm", lTermLST, "CollegeTerm" );
 			   //:DropObjectInstance( lTermLST )
 			   DropObjectInstance( lTermLST );
-			   
-/******************************************************************************/			   
+
+/******************************************************************************/
 			   // Now do the whole thing over for a different term.
 		   	   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", 176, "" );
 			   {MutableInt mi_TermID = new MutableInt( TermID );
 		       GetIntegerFromAttribute( mi_TermID, mSAAdmin, "CollegeTerm", "ID" );
-		       
+
 		   TermID = mi_TermID.intValue( );}
 
 		   //:// First make sure others are NOT Current.
-		   //:FOR EACH lSATermLST.CollegeTerm 
+		   //:FOR EACH lSATermLST.CollegeTerm
 			   //:// First make sure others are NOT Current.
-			   //:FOR EACH lSATermLST.CollegeTerm 
+			   //:FOR EACH lSATermLST.CollegeTerm
 			   RESULT = SetCursorFirstEntity( lSATermLST, "CollegeTerm", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
-			   { 
+			   {
 			      //:TraceLineS("In loop.  Pointer on: ", lSATermLST.CollegeTerm.YearSemester)
 			      {StringBuilder sb_szTempString_0;
 			      if ( szTempString_0 == null )
@@ -1518,10 +1524,10 @@ public class TestZencas
 			      TraceLineS( "In loop.  Pointer on: ", szTempString_0 );
 			      //:IF lSATermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
 			      if ( CompareAttributeToString( lSATermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" ) == 0 )
-			      { 
+			      {
 			         //:TraceLineS("In loop.  This one is marked as current ", "")
 			         TraceLineS( "In loop.  This one is marked as current ", "" );
-			         //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = lSATermLST.CollegeTerm.ID 
+			         //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = lSATermLST.CollegeTerm.ID
 			         {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
 			                   GetIntegerFromAttribute( mi_lTempInteger_0, lSATermLST, "CollegeTerm", "ID" );
 			         lTempInteger_0 = mi_lTempInteger_0.intValue( );}
@@ -1539,14 +1545,14 @@ public class TestZencas
 			         //:// Relink the changed values into the current Annual Admin object, if the CollegeTerm is there.
 			         //://CreateViewFromView( mSAAdmin2, mSAAdmin )
 
-			         //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID 
+			         //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = lTermLST.CollegeTerm.ID
 			         {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
 			                   GetIntegerFromAttribute( mi_lTempInteger_1, lTermLST, "CollegeTerm", "ID" );
 			         lTempInteger_1 = mi_lTempInteger_1.intValue( );}
 			         RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", lTempInteger_1, "" );
 			         //:IF RESULT >= zCURSOR_SET
 			         if ( RESULT >= zCURSOR_SET )
-			         { 
+			         {
 			            //:TraceLineS("In relink.  Pointer on: ", lTermLST.CollegeTerm.YearSemester)
 			            {StringBuilder sb_szTempString_1;
 			            if ( szTempString_1 == null )
@@ -1578,7 +1584,7 @@ public class TestZencas
                         //!!!!!!!!!!!!!
 			            szTempString_3 = sb_szTempString_3.toString( );}
 			            if (szTempString_3.equals("Y"))
-			            	Assert.assertEquals("This should be blank, not 'Y'!!", szTempString_3, "" );			            
+			            	Assert.assertEquals("This should be blank, not 'Y'!!", szTempString_3, "" );
 			            //: TraceLineS("In relink.  After Value current: ", mSAAdmin.CollegeTerm.CurrentForStudentAccounts)
 			            {StringBuilder sb_szTempString_4;
 			            if ( szTempString_4 == null )
@@ -1588,18 +1594,18 @@ public class TestZencas
 			                         GetStringFromAttribute( sb_szTempString_4, mSAAdmin, "CollegeTerm", "CurrentForStudentAccounts" );
 			            szTempString_4 = sb_szTempString_4.toString( );}
 			            TraceLineS( "In relink.  After Value current: ", szTempString_4 );
-			         } 
+			         }
 
 			         //:END
 			         //://DropView( mSAAdmin2 )
 			         //:DropObjectInstance( lTermLST )
 			         DropObjectInstance( lTermLST );
 			         }
-			      } 
+			      }
 
 			      RESULT = SetCursorNextEntity( lSATermLST, "CollegeTerm", "" );
 			      //:END
-			   } 
+			   }
 
 			   //:END
 			   //:COMMIT lSATermLST
@@ -1607,7 +1613,7 @@ public class TestZencas
 			   //:SET CURSOR FIRST mSAAdmin.CollegeTerm WHERE mSAAdmin.CollegeTerm.ID = TermID
 			   RESULT = SetCursorFirstEntityByInteger( mSAAdmin, "CollegeTerm", "ID", TermID, "" );
 			   //:// Then set Term on which we're currently positioned to Current.
-			   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID 
+			   //:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID
 			   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
 			       GetIntegerFromAttribute( mi_lTempInteger_2, mSAAdmin, "CollegeTerm", "ID" );
 			   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
@@ -1616,7 +1622,7 @@ public class TestZencas
 			   DropView( vTempViewVar_1 );
 			   //:lTermLST.CollegeTerm.CurrentForStudentAccounts = "Y"
 			   SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
-			   //:SET CURSOR FIRST lSATermLST.CollegeTerm WHERE lSATermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID  
+			   //:SET CURSOR FIRST lSATermLST.CollegeTerm WHERE lSATermLST.CollegeTerm.ID = mSAAdmin.CollegeTerm.ID
 			   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
 			       GetIntegerFromAttribute( mi_lTempInteger_3, mSAAdmin, "CollegeTerm", "ID" );
 			   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
@@ -1630,9 +1636,9 @@ public class TestZencas
 			   //:DropObjectInstance( lTermLST )
 			   DropObjectInstance( lTermLST );
 			   return( 0 );
-		}		
+		}
 
-private int 
+private int
 o_fnLocalBuildQual_3( View     vSubtask,
                       zVIEW    vQualObject,
                       int      lTempInteger_0 )
@@ -1648,7 +1654,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
    SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
    SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
    return( 0 );
-} 
+}
 
 		public int
 		testSpawning1( View ViewToWindow )
@@ -2252,7 +2258,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   String   szAddToString = null;
 			   String   szEntityName = null;
 			   String   szAttributeName = null;
-			   
+
 			   //:// activate and create the find object for the screen
 			   //:ACTIVATE fPerson EMPTY
 			   RESULT = ActivateEmptyObjectInstance( fPerson, "fPerson", ViewToWindow, zSINGLE );
@@ -2286,7 +2292,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   RESULT = CreateEntity( fPerson, "Staff", zPOS_AFTER );
 			   //:CREATE ENTITY fPerson.Category
 			   RESULT = CreateEntity( fPerson, "Category", zPOS_AFTER );
-			   
+
 			   // loop through each entity and attribute to find what ones were not null, the add a
 			   //    qual attribute for each one.
 			   {StringBuilder sb_szEntityName;
@@ -2306,10 +2312,10 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   szFindString = sb_szFindString.toString( );}
 			   //:LOOP WHILE nRCE >= 0
 			   while ( nRCE >= 0 )
-			   { 
+			   {
 			      nExists = CheckExistenceOfEntity( fPerson, szEntityName );
 			      if ( nExists >= zCURSOR_SET )
-			      { 
+			      {
 			         //:// get the attributes
 			         {StringBuilder sb_szAttributeName;
 			         if ( szAttributeName == null )
@@ -2319,7 +2325,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			                   nRCA = zGetFirstAttributeNameForEntity( fPerson, szEntityName, sb_szAttributeName );
 			         szAttributeName = sb_szAttributeName.toString( );}
 			         while ( nRCA >= 0 )
-			         { 
+			         {
 			            {StringBuilder sb_szString;
 			            if ( szString == null )
 			               sb_szString = new StringBuilder( 32 );
@@ -2330,7 +2336,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			            //:// if a value was entered...qualify on it.
 			            //:IF szString != ""
 			            if ( ZeidonStringCompare( szString, 1, 0, "", 1, 0, 1025 ) != 0 )
-			            { 
+			            {
 			               //:szAddToString = szEntityName + "." + szAttributeName + " like %" + szString + "%"
 			                {StringBuilder sb_szAddToString;
 			               if ( szAddToString == null )
@@ -2346,7 +2352,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			                  sb_szAddToString = new StringBuilder( szAddToString );
 			                              ZeidonStringConcat( sb_szAddToString, 1, 0, ".", 1, 0, 1025 );
 			               szAddToString = sb_szAddToString.toString( );}
-			            } 
+			            }
 
 			            //:END
 			            //:nRCA = zGetNextAttributeNameForEntity( fPerson, szEntityName, szAttributeName )
@@ -2357,9 +2363,9 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			               sb_szAttributeName = new StringBuilder( szAttributeName );
 			                         nRCA = zGetNextAttributeNameForEntity( fPerson, szEntityName, sb_szAttributeName );
 			            szAttributeName = sb_szAttributeName.toString( );}
-			         } 
+			         }
 
-			      } 
+			      }
 
 			      //:nRCE = zGetNextEntityNameForView( fPerson, szEntityName )
 			      {StringBuilder sb_szEntityName;
@@ -2369,10 +2375,10 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			         sb_szEntityName = new StringBuilder( szEntityName );
 			             nRCE = zGetNextEntityNameForView( fPerson, sb_szEntityName );
 			      szEntityName = sb_szEntityName.toString( );}
-			   } 
+			   }
 
 			   return( 0 );
-			} 		
+			}
 		public int
 		testmUserActivateTime( View ViewToWindow )
 		{
