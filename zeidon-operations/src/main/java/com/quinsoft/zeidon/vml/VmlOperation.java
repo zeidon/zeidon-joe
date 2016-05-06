@@ -8768,6 +8768,23 @@ public abstract class VmlOperation
       
       strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "span", null );
       strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "p", "<br>" );
+   // strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "p", "\r\n" );
+      if ( (nEndPos = strHtmlEnclosedValue.indexOf( "\r\n" )) == 0 )
+      {
+         strHtmlEnclosedValue = strHtmlEnclosedValue.substring( 2 );
+      }
+      if ( (nEndPos = strHtmlEnclosedValue.lastIndexOf( "\r\n" )) >= 0 )
+      {
+         if ( nEndPos == strHtmlEnclosedValue.length() - 2 )
+            strHtmlEnclosedValue = strHtmlEnclosedValue.substring( 0, nEndPos );
+      }
+      if ( (nEndPos = strHtmlEnclosedValue.lastIndexOf( "<br>" )) >= 0 )
+      {
+         if ( nEndPos == strHtmlEnclosedValue.length() - 4 )
+         {
+            strHtmlEnclosedValue = strHtmlEnclosedValue.substring( 0, nEndPos );
+         }
+      }
       return strHtmlEnclosedValue;
    }
    

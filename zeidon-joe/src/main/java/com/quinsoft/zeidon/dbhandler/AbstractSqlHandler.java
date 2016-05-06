@@ -928,7 +928,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // and child could result in a result-set that has more rows than expected.
         if ( entityDef.getParent() != null && entityDef.getMaxCardinality() > 1 )
         {
-            QualEntity parentQualEntity = qualMap.get( entityDef );
+            QualEntity parentQualEntity = qualMap.get( entityDef.getParent() );
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
                 return false;
 
