@@ -3,7 +3,6 @@ tmp/
 .svn
 *.bak
 *.bat
-zeidon-tests/src/test/resources/zeidon.app
 .tmpclasspath
 .cache*
 .settings
