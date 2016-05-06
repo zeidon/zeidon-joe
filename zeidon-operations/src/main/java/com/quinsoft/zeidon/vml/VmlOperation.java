@@ -4961,7 +4961,13 @@ public abstract class VmlOperation
 
    protected int CommitOI_ToFile( View view, String fileName, int control )
    {
+	   /* setFlags gives error???
+       view.serializeOi()
+       		.toFile( fileName )
+       		.setFlags( WriteOiFlags.convertLongFlags( control ) );
+      */
       view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
+       		
       return 0;
    }
 

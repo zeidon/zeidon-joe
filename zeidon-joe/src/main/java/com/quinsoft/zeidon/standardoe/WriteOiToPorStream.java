@@ -128,7 +128,7 @@ public class WriteOiToPorStream implements StreamWriter
 
         String header = String.format( "z%s%s%s%s%sZeidon    %8s %s %s",
                                         erDate, incremental, compressed, optimisticOIs, attribFlags,
-                                        name, view.getLodDef().getName().toUpperCase(),
+                                        name, view.getLodDef().getName().toString(),
                                         DATE_FORMATTER.print( new DateTime() ) );
         try
         {
