@@ -68,6 +68,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorPosition;
@@ -4865,8 +4866,13 @@ public abstract class VmlOperation
       // applicable in the JOE so ignore and just use zSINGLE.
       if ( control == 4 )
     	  control = 0;
+    ActivateOptions options = new ActivateOptions( qual );	       
+    options.setLodDef(qual, lodDefName);
+    options.setActivateFlags(ACTIVATE_CONTROL.get( control ));
+    options.setQualificationObject(activateQualificationView);
+    //View view2 = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
+    View view = qual.activateObjectInstance(options);
 
-      View view = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
       LodDef lodDef = view.getLodDef();
       returnView.setView( view );
       switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
@@ -4880,7 +4886,11 @@ public abstract class VmlOperation
             break;
 
          default:
-            nRC = 1;
+        	 // If we have defined a limit on the root, and we activated that limit, then return 2.
+        	 if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
+	             nRC = 2;
+        	 else
+        		 nRC = 1;
             break;
       }
 
@@ -4985,8 +4995,10 @@ public abstract class VmlOperation
 
   	// There can be more than one view but we are assuming there is only one.
   	List<View> viewList = new DeserializeOi( qualView )
-      //.asJson()
       .fromString( strTmp )
+      // Not doing the setLodDef here because I am assuming that we would only be
+      // passing back sbLodDefName, not using it here.
+  	  //.setLodDef(sbLodDefName.toString())
       .activate();
 
       for ( View v : viewList )
@@ -5021,19 +5033,39 @@ public abstract class VmlOperation
                                     View srcView, String srcEntity, String srcAttribute, int control )
    {
       StringBuilder sb = new StringBuilder( 256 );
+      EntityCursor cursor = srcView.cursor( srcEntity );
+      if ( cursor.isNull() )
+      {
+         return "";
+      }
+
+      Application application = qualView.getApplication();
+      //Blob blob = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getBlob();
+      String strTmp = srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getString();
+      if ( strTmp == null )
+      {
+         return "";
+      }
+
+      // There can be more than one view but we are assuming there is only one.
+  	  List<View> viewList = new DeserializeOi( qualView )
+      .fromString( strTmp )
+  	  .setLodDef(lodDefName)
+      .activate();
+
+      for ( View v : viewList )
+      {
+          v.logObjectInstance();
+          returnView.setView( v );
+          sb.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
+          sb.append( v.getLodDef().getName() );
+      }
       
-      if ( lodDefName != null )
-    	  sb.append( lodDefName );
-      int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
-      if ( rc < 0 )
-      {
-         return null;
-      }
-      else
-      {
-         return sb.toString( );
-      }
+      return sb.toString();
+      
    }
+
+
 
    // Not sure why but we have a lot of calls to SetOI_FromBlob where the lodDefName is
    // 0. We never seem to use this value... So I am adding this override.
