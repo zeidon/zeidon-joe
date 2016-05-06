@@ -1,0 +1,26 @@
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:     * This is the list of instances that have been loaded.  It is limited to instances
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        // We can't join a child to its parent if there is an activate limit on the
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:    protected abstract void addActivateLimit( int limit, SqlStatement stmt );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            // Edge case: when loading entities with a limit we may end up dropping
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            // If there is an activate limit for this entity then we can't join it
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            // with it's parent because we have to set the limit in the SQL call.
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:    protected void addActivateLimit( int limit, SqlStatement stmt )
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        stmt.activateLimit = limit;
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:            AttributeInstance limitAttr = qualEntityInstance.getAttribute( "ActivateLimit" );
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:            if ( ! limitAttr.isNull() )
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:                activateLimit = limitAttr.getInteger();
+src\main\java\com\quinsoft\zeidon\dbhandler\TestSqlHandler.java:    protected void addActivateLimit( int limit, SqlStatement stmt )
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                                       "One or more of its children were activated with qualification that limited results.  " +
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                    linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
+src\main\java\com\quinsoft\zeidon\utils\JoeUtils.java://      The following delimiters may be used to put string constants in
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:     * group of delimiters.
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:    private String[] splitLine( String line, char delimiter )
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:        // Find first set of chars up to first delimiter.
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:        while ( idx < line.length() && line.charAt( idx ) != delimiter )
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:        // Now skip over all consecutive delimiters.
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:        while ( idx < line.length() && line.charAt( idx ) == delimiter )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:    public QualificationBuilder limitCountTo( int limit )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).setValue( limit );
+src\main\java\com\quinsoft\zeidon\utils\ZeidonInputStream.java:    public void mark( int readlimit )
+src\main\java\com\quinsoft\zeidon\utils\ZeidonInputStream.java:        source.mark( readlimit );
+src\main\java\com\quinsoft\zeidon\View.java:     * @param entityName If non-blank, then limit entities to this.

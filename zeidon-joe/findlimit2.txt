@@ -1,0 +1,31 @@
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            qualRootEntity.activateLimit = pagingOptions.getPageSize();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        if ( qualEntity != null && qualEntity.activateLimit != null )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            addActivateLimit( qualEntity.activateLimit, stmt );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        if ( entityDef.getActivateLimit() != null )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            addActivateLimit( entityDef.getActivateLimit(), stmt );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:    protected abstract void addActivateLimit( int limit, SqlStatement stmt );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        int activateLimit = 0;  // Max number of entities to activate.  If 0 then activate all.
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            if ( def.getActivateLimit() != null )
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:    protected void addActivateLimit( int limit, SqlStatement stmt )
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        stmt.activateLimit = limit;
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        assert stmt.activateLimit > 1;
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        String str = String.format( " LIMIT %d OFFSET %d", stmt.activateLimit, offset );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:                if ( stmt.activateLimit > 0 )
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:                    task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:                    ps.setMaxRows( stmt.activateLimit );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:            if ( stmt != null && stmt.activateLimit > 0 )
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:                task.dblog().debug( "setMaxRows = %d", stmt.activateLimit );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:                ps.setMaxRows( stmt.activateLimit );
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:    Integer                activateLimit;
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:            AttributeInstance limitAttr = qualEntityInstance.getAttribute( "ActivateLimit" );
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:                activateLimit = limitAttr.getInteger();
+src\main\java\com\quinsoft\zeidon\dbhandler\TestSqlHandler.java:     * @see com.quinsoft.zeidon.dbhandler.AbstractSqlHandler#addActivateLimit(int, com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement)
+src\main\java\com\quinsoft\zeidon\dbhandler\TestSqlHandler.java:    protected void addActivateLimit( int limit, SqlStatement stmt )
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:    private Integer    activateLimit;
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:                    activateLimit = Integer.parseInt( reader.getAttributeValue() );
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:     * @return the activateLimit
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:    public Integer getActivateLimit()
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:        return activateLimit;
+src\main\java\com\quinsoft\zeidon\standardoe\IteratorBuilder.java:     * Limit the entities found to those matching this EntityDef.  This is normally set except for
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).setValue( limit );
