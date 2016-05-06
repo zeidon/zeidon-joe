@@ -37,10 +37,19 @@ public class TestEpamms2
 	@Before
 	public void setUp() throws Exception
 	{
-           oe = JavaObjectEngine.getInstance();
-           ePamms = oe.createTask( "ePammsDon" );
+      oe = JavaObjectEngine.getInstance();
+      ePamms = oe.createTask( "ePammsDon" );
 
-           zeidonSystem = oe.getSystemTask();
+      zeidonSystem = oe.getSystemTask();
+	}
+
+	@Test
+   public void ExecuteSubobjectTemporalEntity()
+	{
+	   View mMasLC = ePamms.activateEmptyObjectInstance( "mMasLC" );
+		VmlTester tester = new VmlTester( mMasLC );
+		tester.TEST_SubobjectTemporalEntity( mMasLC );
+      System.out.println("===== Finished ExecuteSubobjectTemporalEntity ========");
 	}
 
 	@Test
@@ -50,7 +59,7 @@ public class TestEpamms2
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.ExecuteJOE_TestSubobjectCreateView( testview );
-       System.out.println("===== Finished ExecuteJOE_TestSubobjectCreateView ========");
+      System.out.println("===== Finished ExecuteJOE_TestSubobjectCreateView ========");
 	}
 
 	@Test
@@ -60,7 +69,7 @@ public class TestEpamms2
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.TEST_IncludeError( testview );
-       System.out.println("===== Finished ExecuteJOEIncludeError ========");
+      System.out.println("===== Finished ExecuteJOEIncludeError ========");
 	}
 
     //@Test
@@ -70,9 +79,8 @@ public class TestEpamms2
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.TEST_IncludeError2( testview );
-       System.out.println("===== Finished ExecuteJOEIncludeError2 ========");
+      System.out.println("===== Finished ExecuteJOEIncludeError2 ========");
 	}
-
 
 	@Test
 	public void ExecuteJOEIncludeError3()
@@ -81,7 +89,7 @@ public class TestEpamms2
 		testview = ePamms.activateEmptyObjectInstance( "mSPLDef" );
 		VmlTester tester = new VmlTester( testview );
 		tester.TEST_IncludeError3( testview );
-       System.out.println("===== Finished ExecuteJOEIncludeError3 ========");
+      System.out.println("===== Finished ExecuteJOEIncludeError3 ========");
 	}
 
 	@Test
@@ -105,12 +113,37 @@ public class TestEpamms2
        System.out.println("===== Finished TEST_ActivateOI_FromOIRecursive ========");
 	}
 
-
 	private class VmlTester extends VmlObjectOperations
 	{
 		public VmlTester( View view )
 		{
 			super( view );
+		}
+
+      public int 
+		TEST_SubobjectTemporalEntity( View mMasLC )
+		{
+         mMasLC.cursor( "MasterLabelContent" ).createEntity();
+         mMasLC.cursor( "MasterLabelContent" ).getAttribute("Version").setValue("1");
+         mMasLC.cursor( "MasterLabelContent" ).getAttribute("RevisionDate").setValue("20040404");
+         mMasLC.cursor( "MasterLabelContent" ).createTemporalSubobjectVersion();
+         mMasLC.cursor( "MasterSubLabelContent" ).setToSubobject();
+         mMasLC.cursor( "MasterLabelContent" ).createTemporalEntity();
+         mMasLC.cursor( "MasterLabelContent" ).getAttribute("Version").setValue("2");
+         mMasLC.cursor( "MasterLabelContent" ).getAttribute("RevisionDate").setValue("20050505");
+         mMasLC.cursor( "MasterLabelContent" ).acceptSubobject();
+         mMasLC.cursor( "MasterLabelContent" ).resetSubobjectToParent();
+         mMasLC.cursor( "MasterSubLabelContent" ).setToSubobject();
+         mMasLC.cursor( "MasterLabelContent" ).createTemporalEntity();
+         mMasLC.cursor( "MasterLabelContent" ).cancelSubobject();
+         mMasLC.cursor( "MasterLabelContent" ).resetSubobjectToParent();
+         mMasLC.cursor( "MasterLabelContent" ).acceptSubobject();
+         mMasLC.cursor( "M_StorageDisposalSection" ).createEntity();
+         mMasLC.cursor( "M_StorageDisposalStatement" ).createEntity();
+         mMasLC.cursor( "M_StorageDisposalSubStatement" ).setToSubobject();
+         mMasLC.cursor( "M_StorageDisposalStatement" ).createTemporalEntity();
+         mMasLC.cursor( "M_StorageDisposalStatement" ).cancelSubobject();         
+		   return( 0 );
 		}
 
 		public int
