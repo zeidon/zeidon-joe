@@ -195,6 +195,16 @@ public class TestZencas
 
 
 	@Test
+	public void testLODDisplayRoot()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testLODDisplayRoot( testview );
+        System.out.println("===== Finished testLODDisplayRoot ========");
+	}
+
+	@Test
 	public void testDerivedAttrCompare()
 	{
 	    View         testview;
@@ -1197,6 +1207,21 @@ public class TestZencas
 		   RESULT = IncludeSubobjectFromSubobject( mSAProfEList, "StudentAccountProfile", mSAProf, "StudentAccountProfile", zPOS_AFTER );
 
 		   return 0;
+		}
+		
+		public int
+		testLODDisplayRoot( View ViewToWindow )
+		{
+			zVIEW    DOMAINTL = new zVIEW( );
+			int RESULT=0;
+			
+			// At IBOE when we do this activate the admin divs are not correct, and it seems like it's because Domain is display only
+			// and AdminDiv is not. However... here in this test it works just fine. Will try adding this test to 1.3.8.3.
+			
+		    RESULT = ActivateObjectInstance( DOMAINTL, "DOMAINTL", ViewToWindow, 0, zMULTIPLE );
+			
+
+			return 0;
 		}
 
 
