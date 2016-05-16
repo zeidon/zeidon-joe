@@ -478,12 +478,11 @@ class EntityCursorImpl implements EntityCursor
     @Override
     public EntityInstance createTemporalEntity(CursorPosition position)
     {
-        validateMaxCardinality();
-        validateOiUpdate();
         EntityInstanceImpl ei = createEntity( position,
                                               CreateEntityFlags.fNO_SPAWNING,
                                               CreateEntityFlags.fDONT_UPDATE_OI );
         ei.setVersionedEntity();
+
         assert validateChains() : "Something is wrong with the chain pointers";
         return ei;
     }
@@ -1441,7 +1440,11 @@ class EntityCursorImpl implements EntityCursor
             // The child cursors still point to the old version.  Reset them all to point
             // to the new version so that the GC doesn't hold onto the old ones.
             for ( EntityCursorImpl child : getChildCursors() )
-                child.getEntityInstance();
+            {
+                // If the child cursor is pointing to something, reset it.
+                if ( child.entityInstance != null )
+                    child.getEntityInstance();
+            }
 
             assert validateChains() : "Something is wrong with the chain pointers";
             return ei;
@@ -1461,7 +1464,11 @@ class EntityCursorImpl implements EntityCursor
         // The child cursors may still point to the new version.  Reset them all to point
         // to the old version so that the GC doesn't hold onto the new ones.
         for ( EntityCursorImpl child : getChildCursors() )
-            child.getEntityInstance();
+        {
+            // If the child cursor is pointing to something, reset it.
+            if ( child.entityInstance != null )
+                child.getEntityInstance();
+        }
 
         assert validateChains() : "Something is wrong with the chain pointers";
         return ei;
