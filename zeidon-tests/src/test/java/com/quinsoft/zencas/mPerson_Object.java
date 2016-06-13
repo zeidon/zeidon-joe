@@ -1342,7 +1342,8 @@ omPerson_PersonEntityConstraint( View     mPerson,
       //:OF   zECE_ACCEPT:
       case zECE_ACCEPT :
 
-         //:// Validate that Person name is entered.
+/*
+    	  //:// Validate that Person name is entered.
          //:IF mPerson.Person.LastName = ""
          if ( CompareAttributeToString( mPerson, "Person", "LastName", "" ) == 0 )
          { 
@@ -1415,7 +1416,7 @@ omPerson_PersonEntityConstraint( View     mPerson,
 
             //:END
          } 
-
+*/
          //:END
          break ;
 

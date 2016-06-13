@@ -205,6 +205,26 @@ public class TestZencas
 	}
 
 	@Test
+	public void testDeletePersonRoot()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDeletePersonRoot( testview );
+        System.out.println("===== Finished testDeletePersonRoot ========");
+	}
+
+	@Test
+	public void testUpdateNonLatinCharacters()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testUpdateNonLatinCharacters( testview );
+        System.out.println("===== Finished testUpdateNonLatinCharacters ========");
+	}
+	
+	@Test
 	public void testDerivedAttrCompare()
 	{
 	    View         testview;
@@ -3623,6 +3643,150 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	         DropObjectInstance( mStudenC );
 			return 0;
 		}
+
+		
+		public int
+		testDeletePersonRoot( View     ViewToWindow )
+		{
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			   //: 
+			   //: This test creates a Person with Address.  
+			   //: Include Address into mPerson.PrimaryAddress which then creates the display entity "PrimaryForPerson" under Address.
+			   //: When we try to delete mPerson.Person we get the following error:
+			   //: 
+			   //: com.quinsoft.zeidon.ZeidonException: Entity is not flagged for delete.
+			   //: EntityDef  = ZENCAs.mPerson.PrimaryForPerson
+			   //: 
+			   //: But I don't think PrimaryForPerson should need to have "delete flagged".
+
+			   o_fnLocalBuildQual_Humpty( ViewToWindow, vTempViewVar_0 );
+			   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+			   DropView( vTempViewVar_0 );
+			   // Create temporary person if it doeson't exist.
+			   if ( RESULT < 0 )
+			   {
+				   RESULT = ActivateEmptyObjectInstance( mPerson, "mPerson", ViewToWindow, zSINGLE );
+				   //: CREATE ENTITY mPerson.Person 
+				   RESULT = CreateEntity( mPerson, "Person", zPOS_AFTER );
+				   //: mPerson.Person.LastName = "Dumpty"
+				   SetAttributeFromString( mPerson, "Person", "LastName", "Dumpty" );
+				   //: mPerson.Person.FirstName = "Humpty"
+				   SetAttributeFromString( mPerson, "Person", "FirstName", "Humpty" );
+				   RESULT = CreateEntity( mPerson, "Address", zPOS_AFTER );
+				   //: mPerson.Address.Line1 = "1111"
+				   SetAttributeFromString( mPerson, "Address", "Line1", "1111" );
+				   //: mPerson.Address.City = "xxxxxxx"
+				   SetAttributeFromString( mPerson, "Address", "City", "xxxxxxx" );
+				   //: INCLUDE mPerson.PrimaryAddress FROM mPerson.Address 
+				   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
+				   //: COMMIT mPerson
+				   RESULT = CommitObjectInstance( mPerson );
+				   //: DropObjectInstance( mPerson )
+				   DropObjectInstance( mPerson );
+			   }  
+
+			   //: ACTIVATE mPerson WHERE mPerson.Person.LastName = "Dumpty" AND  
+			   //:          mPerson.Person.FirstName = "Humpty"
+			   o_fnLocalBuildQual_Humpty( ViewToWindow, vTempViewVar_0 );
+			   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+			   DropView( vTempViewVar_0 );
+			   //: DELETE ENTITY mPerson.Person  
+			   RESULT = DeleteEntity( mPerson, "Person", zPOS_NEXT );
+			   
+			   return 0;
+		}
+		
+		
+		public int
+		testUpdateNonLatinCharacters( View     ViewToWindow )
+		{
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			   //: 
+			   //: This test tries to set Address.city to the Cyrillic characters 'Германия'.
+			   //:
+			   //: When we do and commit the object, the sql code generated (this is for SqlServer) gets set to:
+			   //: UPDATE ADDRESS
+			   //:    SET    MODIFIEDDATETIME = '2016-06-13 09:48:16',
+			   //:    CITY = '????????'
+			   //:  WHERE ADDRESS.ID = 235512;
+			
+			   //: If we do the update in sqlserver, we need to put an "N" in front like the following,
+			   //: so would we need to do something similar in our code?
+			   //: UPDATE ADDRESS
+		   	   //: SET CITY = N'Германия'
+			   //: 
+			   //: If the address is already set to 'Германия' in the database, when we activate, the city looks
+			   //: corect. Also, when we do the SetAttributeFromString( mPerson, "Address", "City", "Германия" );
+			   //: the object looks correct, it's when we do the update.
+
+			   o_fnLocalBuildQual_Humpty( ViewToWindow, vTempViewVar_0 );
+			   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+			   //DropView( vTempViewVar_0 );
+			   // Create temporary person if it doeson't exist.
+			   if ( RESULT < 0 )
+			   {
+				   RESULT = ActivateEmptyObjectInstance( mPerson, "mPerson", ViewToWindow, zSINGLE );
+				   //: CREATE ENTITY mPerson.Person 
+				   RESULT = CreateEntity( mPerson, "Person", zPOS_AFTER );
+				   //: mPerson.Person.LastName = "Dumpty"
+				   SetAttributeFromString( mPerson, "Person", "LastName", "Dumpty" );
+				   //: mPerson.Person.FirstName = "Humpty"
+				   SetAttributeFromString( mPerson, "Person", "FirstName", "Humpty" );
+				   RESULT = CreateEntity( mPerson, "Address", zPOS_AFTER );
+				   //: mPerson.Address.Line1 = "1111"
+				   SetAttributeFromString( mPerson, "Address", "Line1", "1111" );
+				   //: mPerson.Address.City = "xxxxxxx"
+				   SetAttributeFromString( mPerson, "Address", "City", "xxxxxxx" );
+				   //: INCLUDE mPerson.PrimaryAddress FROM mPerson.Address 
+				   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
+				   //: COMMIT mPerson
+				   RESULT = CommitObjectInstance( mPerson );
+				   //: DropObjectInstance( mPerson )
+				   DropObjectInstance( mPerson );
+			   }  
+
+			   SetAttributeFromString( mPerson, "Address", "City", "xxxxxxx" );
+			   RESULT = CommitObjectInstance( mPerson );
+
+			   SetAttributeFromString( mPerson, "Address", "City", "Германия" );
+			   RESULT = CommitObjectInstance( mPerson );
+			   DropObjectInstance( mPerson );
+
+			   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		       Assert.assertEquals( mPerson.cursor( "Address" ).getAttribute( "City" ).getString(), "Германия" );
+			   
+			   return 0;
+		}
+		
+
+private int 
+o_fnLocalBuildQual_Humpty( View     vSubtask,
+                      zVIEW    vQualObject )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Person" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "LastName" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Dumpty" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Person" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "FirstName" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Humpty" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+} 
+		
 
 		public int
 		testVariousItems( View ViewToWindow )
