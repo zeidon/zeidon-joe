@@ -42,6 +42,9 @@ public class BlobDomain extends AbstractDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
+        if ( externalValue instanceof AttributeInstance )
+            externalValue = ((AttributeInstance) externalValue ).getValue();
+
         if ( externalValue instanceof byte[] )
             return new Blob( (byte[]) externalValue );
 

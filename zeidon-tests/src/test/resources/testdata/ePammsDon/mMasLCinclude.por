@@ -280,8 +280,8 @@ eMP_StorageDisposalSection 3,0
 
 eM_StorageDisposalSection 2,0
 aID        27
-aName      Non-refillable Container <= 5 Gallons
-aContainerVolume <=5
+aName      Non-refillable Container <= 1 Gallons
+aContainerVolume <=1
 aContainerType Non-refillable
 aAUTOSEQ   4
 aFK_ID_MASTERLABELCONTENT 16
@@ -300,8 +300,8 @@ eMP_StorageDisposalSection 3,0
 
 eM_StorageDisposalSection 2,0
 aID        28
-aName      Non-refillable Container > 5 Gallons
-aContainerVolume >5
+aName      Non-refillable Container > 1 Gallons
+aContainerVolume >1
 aContainerType Non-refillable
 aAUTOSEQ   5
 aFK_ID_MASTERLABELCONTENT 16
@@ -996,7 +996,6 @@ aID        13
 aEPA_SignalWord DANGER
 aEPA_ChildHazardWarning U
 aPrecautionaryStatement See {{Precautionary Panel Location}} Panel {{Precautionary Label Location}} for Precautionary Statements
-aBoldItalic R
 aPanelLoc1 [Back]
 aPanelLoc2 [Side]
 aPanelLoc3 [Left]
@@ -2535,7 +2534,7 @@ eM_UsageGroupUsage 4,32
 
 eM_UsageType 2,0
 aID        15
-aUsageType U
+aUsageType L
 aFK_ID_MASTERLABELCONTENT 16
 
 eM_UsageFootnote 2,0
