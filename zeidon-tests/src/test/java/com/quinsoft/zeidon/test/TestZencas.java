@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
@@ -193,6 +194,16 @@ public class TestZencas
         System.out.println("===== Finished testAttributeUpdated ========");
 	}
 
+
+	@Test
+	public void testDropDynamicDomain()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDropDynamicDomain( testview );
+        System.out.println("===== Finished testDropDynamicDomain ========");
+	}
 
 	@Test
 	public void testLODDisplayRoot()
@@ -2217,6 +2228,36 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	        //mPerson.cursor("Address").create
 			return 0;
 		}
+		
+		public int
+		testDropDynamicDomain( View ViewToWindow )
+		{
+
+			zVIEW    mUser = new zVIEW( );
+			//zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			zVIEW    domainT = new zVIEW( );
+			int RESULT=0;
+			String szDomainName="_DM_Ethnicity_Ethnicity";
+
+	        View mPerson = new QualificationBuilder( zencas )
+            .setLodDef( "mPerson" )
+            .addAttribQual( "ID", 50 )
+            .activate();
+
+	        Application app = ViewToWindow.getApplication();
+	        app.getViewByName( szDomainName ).drop();
+	        View domainView = app.getViewByName( szDomainName );
+	        if ( domainView != null )
+	           domainView.drop();
+	        domainView = app.getViewByName( szDomainName );
+	        RESULT = GetViewByName( domainT, szDomainName, ViewToWindow, zLEVEL_APPLICATION );
+	        DropObjectInstance( domainT );
+	        RESULT = GetViewByName( domainT, szDomainName, ViewToWindow, zLEVEL_APPLICATION );
+		    Assert.assertEquals( -1, RESULT);
+			return 0;
+		}
+		
 		public int
 		testBlobs( View ViewToWindow )
 		{
