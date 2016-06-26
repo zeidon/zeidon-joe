@@ -54,3 +54,14 @@ aAPP_QLPLR testdata/ePammsDon
 aAPP_SOURCE testdata/ePammsDon
 aAPP_PACKAGE com.quinsoft.epamms
 
+
+eAPPLICATION 2
+aAPP_NAME  ePammsDKS
+aAPP_DLL   testdata/epammsDKS
+aAPP_ADOBIN testdata/epammsDKS
+aAPP_LOCAL testdata/epammsDKS
+aAPP_SHARED testdata/epammsDKS
+aAPP_QLPLR testdata/epammsDKS
+aAPP_SOURCE testdata/epammsDKS
+aAPP_PACKAGE com.quinsoft.epamms
+

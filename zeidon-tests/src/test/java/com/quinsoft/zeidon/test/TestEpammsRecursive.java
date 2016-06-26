@@ -3,32 +3,24 @@
  */
 package com.quinsoft.zeidon.test;
 
-import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.CursorPosition;
-import org.apache.commons.lang3.mutable.MutableInt;
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.CursorResult;
-import com.quinsoft.zeidon.EntityCursor;
-import com.quinsoft.zeidon.utils.JsonUtils;
-import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
-import com.quinsoft.zeidon.vml.zVIEW;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.junit.BeforeClass;
 
 // Just for temporary testing...
 //import com.jacob.com.*;
@@ -178,10 +170,10 @@ public class TestEpammsRecursive
       {
          if ( s.length() < 2 )
             return s;
-         
+
          if ( s.charAt( 0 ) == '(' && s.charAt( s.length() - 1 ) == ')' )
             s = s.substring( 1, s.length() - 1 );
-         
+
          String[] sub = s.split( " " );
          StringBuilder sb = new StringBuilder();
          int k = 0;
@@ -214,7 +206,7 @@ public class TestEpammsRecursive
          char openSemaphore = keywordSemaphore.charAt( 0 );
          char closeSemaphore = keywordSemaphore.charAt( 1 );
 
-      // 0.75 oz. of this product per 4 gal. of water {(0.19 oz. per gal. of water)} {(150 ppm active quat)}{(or equivalent use dilution)} 
+      // 0.75 oz. of this product per 4 gal. of water {(0.19 oz. per gal. of water)} {(150 ppm active quat)}{(or equivalent use dilution)}
       // 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123  << lth = 133
       //          1         2         3         4         5         6         7         8         9        10        11        12        13
          String szOrigStatement = mMasLC.cursor( statementEntity ).getAttribute( "Text" ).getValue().toString();
@@ -299,12 +291,12 @@ public class TestEpammsRecursive
          mMasLC.cursor( "M_DirectionsForUseStatement" ).resetSubobjectToParent();
          return 0;
       }
-      
+
       public int
       TEST_MoveEntity( View mMasLC )
       {
          mMasLC = ePammsDKS.deserializeOi()
-                        .fromFile( "target/test-classes/testdata/ePammsDKS/mMasLC.json" )
+                        .fromFile( "target/test-classes/testdata/epammsDKS/mMasLC.json" )
                         .setLodDef( "mMasLC" )
                         .setFlags( zSINGLE )
                         .setApplication(ePammsDKS.getApplication() )
@@ -323,8 +315,8 @@ public class TestEpammsRecursive
          mMasLC.logObjectInstance();
          return 0;
       }
-      
-      public int 
+
+      public int
 		TEST_AcceptSubobjectTemporalEntity( View mMasLC )
 		{
          mMasLC.cursor( "MasterLabelContent" ).createEntity();
