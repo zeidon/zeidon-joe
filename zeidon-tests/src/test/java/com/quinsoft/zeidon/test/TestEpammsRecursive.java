@@ -248,7 +248,7 @@ public class TestEpammsRecursive
       TEST_AcceptSubobjectTemporalEntityFromFile( View mMasLC )
       {
          mMasLC = ePammsDKS.deserializeOi()
-                        .fromFile( "target/test-classes/testdata/ePammsDKS/mMasLC.json" )
+                        .fromFile( "target/test-classes/testdata/epammsDKS/mMasLC.json" )
                         .setLodDef( "mMasLC" )
                         .setFlags( zSINGLE )
                         .setApplication(ePammsDKS.getApplication() )
