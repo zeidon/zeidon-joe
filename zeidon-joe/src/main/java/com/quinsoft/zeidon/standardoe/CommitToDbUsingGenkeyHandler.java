@@ -691,7 +691,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
                 // included which will set the FK to a non-null value.  We can assume this because
                 // the OI has passed cardinality validation and if no EI was being included it
                 // would have thrown a validation exception.
-                if ( entityDef.getMinCardinality() == 0)
+                if ( ! relAttributeDef.isRequired() )
                 {
                     relInstance.getAttribute( relAttributeDef).setInternalValue( null, true ) ;
                     relInstance.dbhNeedsCommit = true;
@@ -793,9 +793,9 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     if ( ! genKeyCursor.setFirst( "EntityID", entityDef.getErEntityToken() ).isSet() )
                     {
                         DataRecord dataRecord = entityDef.getDataRecord();
-                        genKeyCursor.createEntity().getAttribute( "EntityID").setValue( entityDef.getErEntityToken() ) 
-                                                   .getAttribute( "EntityCount").setValue( 0 ) 
-                                                   .getAttribute( "TableName").setValue( dataRecord.getRecordName() ) 
+                        genKeyCursor.createEntity().getAttribute( "EntityID").setValue( entityDef.getErEntityToken() )
+                                                   .getAttribute( "EntityCount").setValue( 0 )
+                                                   .getAttribute( "TableName").setValue( dataRecord.getRecordName() )
                                                    .getAttribute( "EntityName").setValue( entityDef.getName() ) ;
                     }
                     currentGenKeyEntity = entityDef;
