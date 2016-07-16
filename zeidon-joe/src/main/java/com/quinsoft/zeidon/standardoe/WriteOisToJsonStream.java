@@ -358,7 +358,7 @@ public class WriteOisToJsonStream implements StreamWriter
             jg.writeBooleanField( "selected", true );
 
         if ( ei.isIncomplete() )
-            jg.writeStringField( "incomplete", "true" );
+            jg.writeBooleanField( "incomplete", true );
 
         if ( ei.hasLoadedLazyChildren() )
         {
