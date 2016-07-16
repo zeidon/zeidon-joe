@@ -234,7 +234,7 @@ public class TestZencas
 		tester.testUpdateNonLatinCharacters( testview );
         System.out.println("===== Finished testUpdateNonLatinCharacters ========");
 	}
-	
+
 	@Test
 	public void testDerivedAttrCompare()
 	{
@@ -1239,18 +1239,18 @@ public class TestZencas
 
 		   return 0;
 		}
-		
+
 		public int
 		testLODDisplayRoot( View ViewToWindow )
 		{
 			zVIEW    DOMAINTL = new zVIEW( );
 			int RESULT=0;
-			
+
 			// At IBOE when we do this activate the admin divs are not correct, and it seems like it's because Domain is display only
 			// and AdminDiv is not. However... here in this test it works just fine. Will try adding this test to 1.3.8.3.
-			
+
 		    RESULT = ActivateObjectInstance( DOMAINTL, "DOMAINTL", ViewToWindow, 0, zMULTIPLE );
-			
+
 
 			return 0;
 		}
@@ -2228,7 +2228,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	        //mPerson.cursor("Address").create
 			return 0;
 		}
-		
+
 		public int
 		testDropDynamicDomain( View ViewToWindow )
 		{
@@ -2252,12 +2252,10 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	           domainView.drop();
 	        domainView = app.getViewByName( szDomainName );
 	        RESULT = GetViewByName( domainT, szDomainName, ViewToWindow, zLEVEL_APPLICATION );
-	        DropObjectInstance( domainT );
-	        RESULT = GetViewByName( domainT, szDomainName, ViewToWindow, zLEVEL_APPLICATION );
 		    Assert.assertEquals( -1, RESULT);
 			return 0;
 		}
-		
+
 		public int
 		testBlobs( View ViewToWindow )
 		{
@@ -2322,7 +2320,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 
 	 		   mPerson.cursor("ApplicationSibling").createEntity();
 	 		   mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
-	 		   
+
 	 		  //srcView.serializeOi().withIncremental().toString()
 	 		   //mPerson.serializeOi().withIncremental().toWriter(writer)
 
@@ -3685,21 +3683,21 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			return 0;
 		}
 
-		
+
 		public int
 		testDeletePersonRoot( View     ViewToWindow )
 		{
 			zVIEW    mPerson = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-			   //: 
-			   //: This test creates a Person with Address.  
+			   //:
+			   //: This test creates a Person with Address.
 			   //: Include Address into mPerson.PrimaryAddress which then creates the display entity "PrimaryForPerson" under Address.
 			   //: When we try to delete mPerson.Person we get the following error:
-			   //: 
+			   //:
 			   //: com.quinsoft.zeidon.ZeidonException: Entity is not flagged for delete.
 			   //: EntityDef  = ZENCAs.mPerson.PrimaryForPerson
-			   //: 
+			   //:
 			   //: But I don't think PrimaryForPerson should need to have "delete flagged".
 
 			   o_fnLocalBuildQual_Humpty( ViewToWindow, vTempViewVar_0 );
@@ -3709,7 +3707,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   if ( RESULT < 0 )
 			   {
 				   RESULT = ActivateEmptyObjectInstance( mPerson, "mPerson", ViewToWindow, zSINGLE );
-				   //: CREATE ENTITY mPerson.Person 
+				   //: CREATE ENTITY mPerson.Person
 				   RESULT = CreateEntity( mPerson, "Person", zPOS_AFTER );
 				   //: mPerson.Person.LastName = "Dumpty"
 				   SetAttributeFromString( mPerson, "Person", "LastName", "Dumpty" );
@@ -3720,33 +3718,33 @@ o_fnLocalBuildQual_3( View     vSubtask,
 				   SetAttributeFromString( mPerson, "Address", "Line1", "1111" );
 				   //: mPerson.Address.City = "xxxxxxx"
 				   SetAttributeFromString( mPerson, "Address", "City", "xxxxxxx" );
-				   //: INCLUDE mPerson.PrimaryAddress FROM mPerson.Address 
+				   //: INCLUDE mPerson.PrimaryAddress FROM mPerson.Address
 				   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
 				   //: COMMIT mPerson
 				   RESULT = CommitObjectInstance( mPerson );
 				   //: DropObjectInstance( mPerson )
 				   DropObjectInstance( mPerson );
-			   }  
+			   }
 
-			   //: ACTIVATE mPerson WHERE mPerson.Person.LastName = "Dumpty" AND  
+			   //: ACTIVATE mPerson WHERE mPerson.Person.LastName = "Dumpty" AND
 			   //:          mPerson.Person.FirstName = "Humpty"
 			   o_fnLocalBuildQual_Humpty( ViewToWindow, vTempViewVar_0 );
 			   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 			   DropView( vTempViewVar_0 );
-			   //: DELETE ENTITY mPerson.Person  
+			   //: DELETE ENTITY mPerson.Person
 			   RESULT = DeleteEntity( mPerson, "Person", zPOS_NEXT );
-			   
+
 			   return 0;
 		}
-		
-		
+
+
 		public int
 		testUpdateNonLatinCharacters( View     ViewToWindow )
 		{
 			zVIEW    mPerson = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-			   //: 
+			   //:
 			   //: This test tries to set Address.city to the Cyrillic characters 'Германия'.
 			   //:
 			   //: When we do and commit the object, the sql code generated (this is for SqlServer) gets set to:
@@ -3754,12 +3752,12 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   //:    SET    MODIFIEDDATETIME = '2016-06-13 09:48:16',
 			   //:    CITY = '????????'
 			   //:  WHERE ADDRESS.ID = 235512;
-			
+
 			   //: If we do the update in sqlserver, we need to put an "N" in front like the following,
 			   //: so would we need to do something similar in our code?
 			   //: UPDATE ADDRESS
 		   	   //: SET CITY = N'Германия'
-			   //: 
+			   //:
 			   //: If the address is already set to 'Германия' in the database, when we activate, the city looks
 			   //: corect. Also, when we do the SetAttributeFromString( mPerson, "Address", "City", "Германия" );
 			   //: the object looks correct, it's when we do the update.
@@ -3771,7 +3769,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   if ( RESULT < 0 )
 			   {
 				   RESULT = ActivateEmptyObjectInstance( mPerson, "mPerson", ViewToWindow, zSINGLE );
-				   //: CREATE ENTITY mPerson.Person 
+				   //: CREATE ENTITY mPerson.Person
 				   RESULT = CreateEntity( mPerson, "Person", zPOS_AFTER );
 				   //: mPerson.Person.LastName = "Dumpty"
 				   SetAttributeFromString( mPerson, "Person", "LastName", "Dumpty" );
@@ -3782,13 +3780,13 @@ o_fnLocalBuildQual_3( View     vSubtask,
 				   SetAttributeFromString( mPerson, "Address", "Line1", "1111" );
 				   //: mPerson.Address.City = "xxxxxxx"
 				   SetAttributeFromString( mPerson, "Address", "City", "xxxxxxx" );
-				   //: INCLUDE mPerson.PrimaryAddress FROM mPerson.Address 
+				   //: INCLUDE mPerson.PrimaryAddress FROM mPerson.Address
 				   RESULT = IncludeSubobjectFromSubobject( mPerson, "PrimaryAddress", mPerson, "Address", zPOS_AFTER );
 				   //: COMMIT mPerson
 				   RESULT = CommitObjectInstance( mPerson );
 				   //: DropObjectInstance( mPerson )
 				   DropObjectInstance( mPerson );
-			   }  
+			   }
 
 			   SetAttributeFromString( mPerson, "Address", "City", "xxxxxxx" );
 			   RESULT = CommitObjectInstance( mPerson );
@@ -3799,12 +3797,12 @@ o_fnLocalBuildQual_3( View     vSubtask,
 
 			   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 		       Assert.assertEquals( mPerson.cursor( "Address" ).getAttribute( "City" ).getString(), "Германия" );
-			   
+
 			   return 0;
 		}
-		
 
-private int 
+
+private int
 o_fnLocalBuildQual_Humpty( View     vSubtask,
                       zVIEW    vQualObject )
 {
@@ -3826,8 +3824,8 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
    SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Humpty" );
    SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
    return( 0 );
-} 
-		
+}
+
 
 		public int
 		testVariousItems( View ViewToWindow )
