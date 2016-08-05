@@ -16,10 +16,10 @@ Zeidon does all the work of an [ORM](https://en.wikipedia.org/wiki/Object-relati
 * [Zeidon JOE](https://github.com/DeegC/zeidon-joe) - The Zeidon Java Object Engine (JOE), the Java run-time engine.
 
 ## Code Documentation
-JOE 1.3
+JOE 1.4
 
-* [JOE Javadoc](javadoc/1.3/joe/)
-* [JOE Scaladoc](javadoc/1.3/scala/)
-* [JOE for Android Javadoc](javadoc/1.3/android/)
+* [JOE Javadoc](javadoc/1.4/joe/)
+* [JOE Scaladoc](javadoc/1.4/scala/)
+* [JOE for Android Javadoc](javadoc/1.4/android/)
 
 
