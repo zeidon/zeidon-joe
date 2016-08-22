@@ -1,0 +1,285 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "epamms",
+      "odName" : "mMasLC",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "MasterLabelContent" : [ {
+      ".meta" : {
+        "incrementals" : "u", "selected" : true
+      },
+      "ID" : 36,
+      "Version" : "1",
+      "RevisionDate" : "20160614",
+      "CreatedDateTime" : "20160614",
+      "Title" : "Cleaner &middot; Disinfectant &middot; {Food Contact} {Non-Food Contact} Sanitizer<br>\r\n<ul>\r\n<li>Deodorizer &middot; Mildewstat &middot; Virucide*</li>\r\n</ul>",
+      "ReviewerNote" : "(Note to Reviewer: Marketing claims may be used on the front panel.)",
+      "Finalized" : "W",
+      "FK_ID_MASTERPRODUCT" : 13,
+      "MasterProduct" : [ {
+        ".meta" : {
+          "incrementals" : "uc", "selected" : true
+        },
+
+        "Name" : "Maquat&reg; 710-M Jack",
+        "Number" : "710-M",
+        "Description" : "Cleaner &middot; Disinfectant &middot; {Food Contact} {Non-Food Contact} Sanitizer Deodorizer &middot; Mildewstat &middot; Virucide*",
+        "ChemicalFamily" : "DQ",
+        "EPA_EstablishmentNumber" : "10324-117",
+        "EPA_ToxicityCategory" : "4",
+        "ReviewerNote" : "(Note to Reviewer: Marketing claims may be used on the front panel.)",
+        "Footer" : "(<strong>Note to Reviewer</strong>: Text in { } is optional. Brackets [ ] indicate that at least one option within the brackets must be used in the final label text. Parentheticals ( ) are meant to appear on final label. &ldquo;This product&rdquo; can be substituted with actual product name.)",
+        "FK_ID_PRIMARYREGISTRANT" : 15,
+        "PrimaryRegistrant" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true
+          },
+  
+          "EPA_CompanyNumber" : "10324",
+          "FK_ID_EPAMMS" : 1,
+          "FK_ID_ORGANIZATION" : 21,
+          "Organization" : [ {
+            ".meta" : {
+              "incrementals" : "uc", "selected" : true
+            },
+
+            "LoginName" : "Mason",
+            "Name" : "Mason Chemical Company",
+            "Description" : "The Quaternary Specialists",
+            "AdministratorPassword" : "zPrefixJiNPY+drS/4vDAxqbnxmk/9ayF0nNwh03yofjDRxVgAZLpi5hN/wcg==",
+            "Role" : "P"
+          } ]
+        } ]
+      } ],
+      "M_GeneralSection" : [ {
+        ".meta" : {
+          "isLinkedSource" : "true",
+          "entityKey" : "311"
+        },
+       
+        "Title" : "FIRST AID",
+        "Combined" : "Y",
+        "BoldTitle" : "Y",
+        "SectionType" : "F",
+        "ReviewerNote" : "First Aid may only appear on different area of the container label if the Front Panel is less than 12 square inches in total",
+        "AUTOSEQ" : 1,
+        "FK_ID_MASTERLABELCONTENT" : 36,
+        "M_GeneralStatement" : [ {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "314"
+          },
+        
+          "Text" : "In case of emergency, call a poison control center or doctor for treatment advice. Have the product container or label with you when calling a poison control center or doctor, or going for treatment.",
+          "AUTOSEQ" : 1,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        }, {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "315"
+          },
+         
+          "Text" : "Hold eye open and rinse slowly and gently with water for 15-20 minutes. Remove contact lenses, if present, after the first 5 minutes, then continue rinsing eye.",
+          "Title" : "IF IN EYES:",
+          "AUTOSEQ" : 2,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        }, {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "316"
+          },
+          
+          "Text" : "Take off contaminated clothing. Rinse skin immediately with plenty of water for 15-20 minutes.",
+          "Title" : "IF ON SKIN:",
+          "AUTOSEQ" : 3,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        }, {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "317"
+          },
+          
+          "Text" : "Have person sip a glass of water if able to swallow. Do not induce vomiting unless told to do so by a poison control center or doctor. Do not give anything by mouth to an unconscious person. Call a poison control center or doctor immediately for treatment advice.",
+          "Title" : "IF SWALLOWED:",
+          "AUTOSEQ" : 4,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        }, {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "318"
+          },
+          
+          "Text" : "Move person to fresh air.  If person is not breathing, call 911 or an ambulance, then give artificial respiration, preferably mouth-to-mouth, if possible.",
+          "Title" : "IF INHALED:",
+          "AUTOSEQ" : 5,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        }, {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "319"
+          },
+         
+          "Text" : "Probable mucosal damage may contraindicate the use of gastric lavage.",
+          "Title" : "NOTE TO PHYSICIAN:",
+          "AUTOSEQ" : 6,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        }, {
+          ".meta" : {
+            "isLinkedSource" : "true",
+            "entityKey" : "320"
+          },
+         
+          "Text" : "{For [{chemical}{and}{or}{medical}{and}{or}{environmental}] emergencies, call {insert name and/or number of emergency contact} {hours of operation}{24 hours a day}{7 days a week}}.",
+          "AUTOSEQ" : 7,
+          "FK_ID_M_GENERALSECTION" : 112,
+          "MP_GeneralStatement" : [ { } ]
+        } ],
+        "MP_GeneralSection" : [ { } ]
+      }, {
+        ".meta" : {
+          "isLinkedSource" : "true",
+          "entityKey" : "312"
+        },
+     
+        "SectionType" : "P",
+        "AUTOSEQ" : 2,
+        "FK_ID_MASTERLABELCONTENT" : 36,
+        "MP_GeneralSection" : [ { } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "uc", "selected" : true,
+          "isLinkedSource" : "true",
+          "entityKey" : "313"
+        },
+       
+        "SectionType" : "E",
+        "AUTOSEQ" : 3,
+        "FK_ID_MASTERLABELCONTENT" : 36,
+        "MP_GeneralSection" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true
+          }
+        } ]
+      } ],
+      "M_IngredientsSection" : [ {
+        ".meta" : {
+          "incrementals" : "uc", "selected" : true
+        },
+    
+        "ActiveTitle" : "ACTIVE INGREDIENTS:",
+        "InertTitle" : "OTHER INGREDIENTS:",
+        "FK_ID_MASTERLABELCONTENT" : 36,
+        "M_IngredientsStatement" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true
+          },
+       
+          "ChemicalName" : "Alkyl (50% C<sub>14</sub>, 40% C<sub>12</sub>, 10% C<sub>16</sub>)<br /> Dimethyl Benzyl Ammonium Chloride",
+          "Active" : "A",
+          "FK_ID_M_INGREDIENTSSECTION" : 32,
+          "MP_IngredientsStatement" : [ {
+            ".meta" : {
+              "incrementals" : "uc", "selected" : true
+            }
+          } ]
+        } ],
+        "MP_IngredientsSection" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true
+          }
+        } ]
+      } ],
+      "M_HumanHazardSection" : [ {
+        ".meta" : {
+          "incrementals" : "uc", "selected" : true
+        },
+  
+        "EPA_SignalWord" : "DANGER {PELIGRO}",
+        "EPA_ChildHazardWarning" : "U",
+        "PrecautionaryStatement" : "{See [{left} {back} {side} {right} {panel} {of label}} {below}] for {additional} \r\n{precautionary statements}{and}{or}{first aid}}.",
+        "LocationSeparator" : "{}",
+        "EncloseFirstLocation" : "Y",
+        "PanelLoc1" : "left",
+        "PanelLoc2" : "back",
+        "PanelLoc3" : "side",
+        "PanelLoc4" : "right",
+        "PanelLoc5" : "panel",
+        "PanelLoc6" : "of label",
+        "PanelLoc7" : "below",
+        "LabelLoc1" : "additional",
+        "LabelLoc2" : "precautionary statements",
+        "LabelLoc3" : "and",
+        "LabelLoc4" : "or",
+        "LabelLoc5" : "first aid",
+        "FK_ID_MASTERLABELCONTENT" : 36,
+        "MP_HumanHazardSection" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true
+          }
+        } ]
+      } ],
+      "MI_FirstAidSection" : [ {
+        ".meta" : {
+          "incrementals" : "I",
+          "incrementals" : "uc", "selected" : true,
+          "linkedSource" : "311"
+        },
+        "M_FirstAidStatement" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true,
+            "linkedSource" : "314"
+          }
+        }, {
+          ".meta" : {
+            "linkedSource" : "315"
+          }
+        }, {
+          ".meta" : {
+            "linkedSource" : "316"
+          }
+        }, {
+          ".meta" : {
+            "linkedSource" : "317"
+          }
+        }, {
+          ".meta" : {
+            "linkedSource" : "318"
+          }
+        }, {
+          ".meta" : {
+            "linkedSource" : "319"
+          }
+        }, {
+          ".meta" : {
+            "linkedSource" : "320"
+          }
+        } ]
+      } ],
+      "MI_PrecautionarySection" : [ {
+        ".meta" : {
+          "incrementals" : "I",
+          "incrementals" : "uc", "selected" : true,
+          "linkedSource" : "312"
+        }
+      } ],
+      "MI_HazardSection" : [ {
+        ".meta" : {
+          "incrementals" : "I",
+          "incrementals" : "uc", "selected" : true,
+          "linkedSource" : "313"
+        }
+      } ]
+    } ]
+  } ]
+}

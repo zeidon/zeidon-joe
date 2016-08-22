@@ -4,7 +4,7 @@
   },
   "OIs" : [ {
     ".oimeta" : {
-      "application" : "epammsDKS",
+      "application" : "epamms",
       "odName" : "mMasLC",
       "incremental" : true,
       "totalRootCount" : 1
@@ -16260,7 +16260,7 @@
           "MP_MarketingStatement" : [ { } ]
         }, {
           "ID" : 303,
-          "Text" : "Cleans, sanitizes and disinfects hard, non-porous surfaces of {(protective_equipment)}. Rinse all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120F), and allow to air dry. (Precaution: Cleaning at 120F temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.)",
+          "Text" : "Cleans, sanitizes and disinfects hard, non-porous surfaces of {(protective_equipment)}. Rinse all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120°F), and allow to air dry. (Precaution: Cleaning at 120°F temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.)",
           "AUTOSEQ" : 10,
           "FK_ID_M_MARKETINGSECTION" : 181,
           "MP_MarketingStatement" : [ { } ],
@@ -16481,7 +16481,7 @@
           "MP_MarketingStatement" : [ { } ]
         }, {
           "ID" : 326,
-          "Text" : "Is used to clean, sanitize and disinfect non-porous ambulance equipment and surfaces by rinsing all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120F), and allow to air dry. (Precaution: Cleaning at 120F temperature will avoid overheating and distortion of the ambulance equipment and surfaces that would necessitate replacement.)",
+          "Text" : "Is used to clean, sanitize and disinfect non-porous ambulance equipment and surfaces by rinsing all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120°F), and allow to air dry. (Precaution: Cleaning at 120°F temperature will avoid overheating and distortion of the ambulance equipment and surfaces that would necessitate replacement.)",
           "AUTOSEQ" : 33,
           "FK_ID_M_MARKETINGSECTION" : 181,
           "MP_MarketingStatement" : [ { } ]
@@ -16766,7 +16766,7 @@
           "MP_MarketingStatement" : [ { } ]
         }, {
           "ID" : 352,
-          "Text" : "Is for use as a food grade egg shell sanitizer, with best results achieved in water temperatures ranging from 78-110F.",
+          "Text" : "Is for use as a food grade egg shell sanitizer, with best results achieved in water temperatures ranging from 78°-110°F.",
           "AUTOSEQ" : 11,
           "FK_ID_M_MARKETINGSECTION" : 182,
           "MP_MarketingStatement" : [ { } ]

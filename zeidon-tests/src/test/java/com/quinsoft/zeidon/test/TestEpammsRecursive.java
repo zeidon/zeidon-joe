@@ -178,10 +178,14 @@ public class TestEpammsRecursive
          StringBuilder sb = new StringBuilder();
          int k = 0;
          while ( k < sub.length ) {
-            if ( sub[ k ].length() > 0 && sub[ k ].compareToIgnoreCase( "or" ) != 0 && sub[ k ].compareToIgnoreCase( "and" ) != 0 ) {
-               sb.append( sub[ k ].substring( 0, 1 ).toUpperCase() + sub[ k ].substring( 1 ) );
+            if ( sub[ k ].length() > 0 && (sub.length == 1 || (sub[ k ].compareToIgnoreCase( "or" ) != 0 && sub[ k ].compareToIgnoreCase( "and" ) != 0)) ) {
+               sb.append( sub[ k ].substring( 0, 1 ).toUpperCase() ).append( sub[ k ].substring( 1 ) );
             }
             k++;
+         }
+         k = sb.indexOf( "PpmActive" );
+         if ( k >= 0 ) {
+            sb.replace( k, k + 9, "PPM" );
          }
          return sb.toString();
       }

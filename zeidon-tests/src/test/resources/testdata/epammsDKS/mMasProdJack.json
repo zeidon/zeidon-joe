@@ -1,0 +1,52 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "epamms",
+      "odName" : "mMasProd",
+      "incremental" : false,
+      "totalRootCount" : 1
+    },
+    "MasterProduct" : [ {
+      ".meta" : {
+        "incrementals" : "uc", "selected" : true
+      },
+      "Name" : "Maquat&reg; 710-M Jack",
+      "Number" : "710-M",
+      "Description" : "Cleaner &middot; Disinfectant &middot; {Food Contact} {Non-Food Contact} Sanitizer Deodorizer &middot; Mildewstat &middot; Virucide*",
+      "ChemicalFamily" : "DQ",
+      "EPA_EstablishmentNumber" : "10324-117",
+      "EPA_ToxicityCategory" : "4",
+      "ReviewerNote" : "(Note to Reviewer: Marketing claims may be used on the front panel.)",
+      "Footer" : "(<strong>Note to Reviewer</strong>: Text in { } is optional. Brackets [ ] indicate that at least one option within the brackets must be used in the final label text. Parentheticals ( ) are meant to appear on final label. &ldquo;This product&rdquo; can be substituted with actual product name.)",
+      "MasterLabelContent" : [ {
+        ".meta" : {
+          "incrementals" : "uc", "selected" : true
+        },
+        "Version" : "1",
+        "RevisionDate" : "20160614",
+        "CreatedDateTime" : "20160614",
+        "Finalized" : "W"
+      } ],
+      "PrimaryRegistrant" : [ {
+        ".meta" : {
+          "incrementals" : "uc", "selected" : true
+        },
+        "EPA_CompanyNumber" : "10324",
+        "FK_ID_EPAMMS" : 1,
+        "Organization" : [ {
+          ".meta" : {
+            "incrementals" : "uc", "selected" : true
+          },
+          "LoginName" : "Mason",
+          "Name" : "Mason Chemical Company",
+          "Description" : "The Quaternary Specialists",
+          "AdministratorPassword" : "zPrefixJiNPY+drS/4vDAxqbnxmk/9ayF0nNwh03yofjDRxVgAZLpi5hN/wcg==",
+          "Role" : "P"
+        } ]
+      } ]
+    } ]
+  } ]
+}

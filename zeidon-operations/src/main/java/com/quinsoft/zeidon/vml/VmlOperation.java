@@ -8754,6 +8754,9 @@ public abstract class VmlOperation
    public static String
    TrimTinyHtml( String strHtmlEnclosedValue )
    {
+      if ( strHtmlEnclosedValue == null || strHtmlEnclosedValue.isEmpty() ) {
+         return "";
+      }
       int nStartPos = strHtmlEnclosedValue.indexOf( "<body>" );
       if ( nStartPos < 0 )
          nStartPos = 0;
