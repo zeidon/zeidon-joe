@@ -1207,7 +1207,9 @@ class EntityInstanceImpl implements EntityInstance
             getEntityDef().getEventListener().event( EventNotification.EntityDeleted, data );
         }
 
-        EntitySpawner spawner = new EntitySpawner( this, view );
+        // Keep track of child entities that are deleted.  Later all we'll use them
+        // to spawn the delete.
+        ArrayList<EntityInstanceImpl> deletedEntities = new ArrayList<>();
 
         // Run through the entity and all it's children and set the delete flag.
         // We start with 'this' because the logic below spawns the delete and
@@ -1238,10 +1240,16 @@ class EntityInstanceImpl implements EntityInstance
             // delete for instances linked to the root of the root ('this') because we
             // may be in a recursive call to delete.
             if ( scan != this || spawnRootDelete )
-                spawner.spawnDelete( scan );
+                deletedEntities.add( scan );
 
             scan = scan.getNextHier();
         }
+
+        // Now go through and spwan the delete.  We do it here instead of the main
+        // loop because we want to process all the entities in the main OI first.
+        EntitySpawner spawner = new EntitySpawner( this, view );
+        for ( EntityInstanceImpl ei : deletedEntities )
+            spawner.spawnDelete( ei );
 
         dropIfDead();
 

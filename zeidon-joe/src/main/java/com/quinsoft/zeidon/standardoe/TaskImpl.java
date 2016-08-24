@@ -159,6 +159,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         viewNameList.dropView( view );
         getSystemTask().viewNameList.dropView( view );
         getApplication().dropView( view );
+        view.getApplication().dropView( view );
 
         // Don't remove the view from viewList.  It has a weak reference to the view so
         // it will eventually get cleaned up.  If the view doesn't disappear from the
