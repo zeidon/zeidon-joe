@@ -603,6 +603,20 @@ public class TestZencas
 	}
 
 	@Test
+	public void testAutoloadFromParent()
+	{
+	    View         testview;
+        // Turn off assertions for zeidon for this test.
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        loader.setPackageAssertionStatus( "com.quinsoft.zeidon", false );
+        loader.getSystemClassLoader().setDefaultAssertionStatus(false);
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAutoloadFromParent( testview );
+        System.out.println("===== Finished testAutoloadFromParent ========");
+	}
+
+	@Test
 	public void testActivateRecurObjSetFirst()
 	{
 	    View         testview;
@@ -2966,6 +2980,28 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			return 0;
 		}
 
+
+		public int
+		testAutoloadFromParent( View     ViewToWindow )
+		{
+			zVIEW    mTstAutos = new zVIEW( );
+			zVIEW    wXferO = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			
+			// When an entity is marked as AUTOLOADFROMPARENT in xod, if the parent entity fk_id is null, then we should not create an
+			// entity for this child.
+			// We have Student->Person where Person is AUTOLOAD... Student.fk_id_person2 is null so Person should not exists but
+			// currently it does although attribute ID in Person is null.
+
+			o_fnLocalBuildmTstAuto( ViewToWindow, vTempViewVar_0, 16406 );
+		    RESULT = ActivateObjectInstance( mTstAutos, "mTstAutos", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+		    Assert.assertFalse( "Person exists but should not because parent key is null.", mTstAutos.cursor("Person").checkExistenceOfEntity().isSet());
+
+		    DropView( vTempViewVar_0 );
+			DropView( mTstAutos );
+			return 0;
+		}
 
 		public int
 		testhasAny( View     ViewToWindow )
@@ -5379,6 +5415,23 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 		}
 		private int
 		o_fnLocalBuildmStudent( View     vSubtask,
+		                       zVIEW    vQualObject,
+		                       int      lTempInteger_0 )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Student" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
+		private int
+		o_fnLocalBuildmTstAuto( View     vSubtask,
 		                       zVIEW    vQualObject,
 		                       int      lTempInteger_0 )
 		{
