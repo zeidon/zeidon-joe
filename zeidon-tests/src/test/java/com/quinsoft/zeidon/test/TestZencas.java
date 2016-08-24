@@ -174,6 +174,17 @@ public class TestZencas
         System.out.println("===== Finished testBlobs ========");
 	}
 
+
+	@Test
+	public void testDateTimeCompare()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testDateTimeCompare( testview );
+        System.out.println("===== Finished testDateTimeCompare ========");
+	}
+
 	@Test
 	public void testRelinking()
 	{
@@ -1255,6 +1266,72 @@ public class TestZencas
 			return 0;
 		}
 
+		//:DIALOG OPERATION
+		//:Test_Time( VIEW ViewToWindow )
+		//:   VIEW mDrvRoute BASED ON LOD mDrvRoute
+		public int 
+		testDateTimeCompare( View     ViewToWindow )
+		{
+		   zVIEW    mDrvRoute = new zVIEW( );
+		   //:VIEW wXferO    REGISTERED AS wXferO
+		   zVIEW    wXferO = new zVIEW( );
+		   int      RESULT = 0;
+		   //:STRING ( 30 ) szStartDateTime
+		   String   szStartDateTime = null;
+		   //:STRING ( 30 ) szEndDateTime
+		   String   szEndDateTime = null;
+		   
+		   // Comparing date/time does not appear to be working unless we get the dates as strings first.
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    //:CREATE ENTITY wXferO.Root
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    //:NAME VIEW wXferO "wXferO"
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+
+		   //:// 4/21 to 6/16
+
+		   //:SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime",  "201608040100000", "YYYYMMDDHHMMSSS" )
+		   {
+		    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wXferO );
+		    m_ZGLOBAL1_Operation.SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime", "201608040100000", "YYYYMMDDHHMMSSS" );
+		    // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
+		   }
+		   //:SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime2", "201608042230000", "YYYYMMDDHHMMSSS" )
+		   {
+		    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wXferO );
+		    m_ZGLOBAL1_Operation.SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime2", "201608042230000", "YYYYMMDDHHMMSSS" );
+		    // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
+		   }
+		   //:IF wXferO.Root.WorkDateTime > wXferO.Root.WorkDateTime2 
+		   if ( CompareAttributeToAttribute( wXferO, "Root", "WorkDateTime", wXferO, "Root", "WorkDateTime2" ) > 0 )
+		   { 
+		      MessageSend( ViewToWindow, "", "Save", "End Date/Time is not later than Start Date/Time.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
+		      //:RETURN 2
+		      if(8==8)return( 2 );
+		   } 
+
+		   {
+			    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wXferO );
+			    m_ZGLOBAL1_Operation.SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime", "201608040100000", "YYYYMMDDHHMMSSS" );
+			    // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
+		   }
+			   //:SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime2", "201608042230000", "YYYYMMDDHHMMSSS" )
+			   {
+			    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wXferO );
+			    m_ZGLOBAL1_Operation.SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime2", "201608040100000", "YYYYMMDDHHMMSSS" );
+			    // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
+			   }
+
+			   
+			   if ( CompareAttributeToAttribute( wXferO, "Root", "WorkDateTime", wXferO, "Root", "WorkDateTime2" ) > 0 )
+			   { 
+			      MessageSend( ViewToWindow, "", "Save", "End Date/Time is not later than Start Date/Time.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
+			      //:RETURN 2
+			      if(8==8)return( 2 );
+			   } 
+			   
+		   return( 0 );
+		} 
 
 		public int
 		testRelinking( View ViewToWindow )
