@@ -1469,13 +1469,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     private void addQualification( QualEntity qualEntity, SqlStatement stmt, View view, EntityDef entityDef)
     {
-        /*
-         * If this qualification has a DOES NOT EXIST clause then we need to
-         * use a left join when adding tables.
-         */
-        if ( qualEntity.hasDoesNotExist )
-            stmt.useLeftJoinForQualification = true;
-
         // Go through each of the QualAttrib's looking for tables that are not
         // already part of the select.
         for ( QualAttrib qualAttrib : qualEntity.qualAttribs )
@@ -1492,7 +1485,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         stmt.appendWhere( buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString() );
-        stmt.useLeftJoinForQualification = false;
     }
 
     protected abstract int executeLoad(View view, EntityDef entityDef, SqlStatement stmt);
@@ -2268,13 +2260,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         private final List<Object> boundValues;
 
         /**
-         * If true then when adding qualification to the FROM clause use "LEFT JOIN"
-         * instead of just JOIN.  We use LEFT JOIN for qualification when we have a
-         * "DOES NOT EXIST" statement.
-         */
-        private boolean useLeftJoinForQualification;
-
-        /**
          * List of DataRecords involved in the SQL.  For each DataRecord, the list of DataFields.
          */
         final Map<DataRecord, List<DataField>>  dataRecords;
@@ -2571,10 +2556,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             {
             	if ( activatingWithJoins() )
             	{
-            	    if ( useLeftJoinForQualification)
-            	        from.append( " LEFT JOIN\n");
-            	    else
-            	        from.append( " JOIN\n");
+          	        from.append( " LEFT JOIN\n");
             	}
             	else
                     from.append( ",");
