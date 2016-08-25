@@ -1282,15 +1282,23 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( ! relRecord.getRelationshipType().isManyToOne() )
             return false;
 
-        EntityInstance entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+        EntityInstance entityInstance = null;
         EntityCursor parent = view.cursor( entityDef.getParent() );
         for ( RelField relField : relRecord.getRelFields() )
         {
             AttributeInstance sourceAttr = parent.getAttribute( relField.getRelDataField().getAttributeDef() );
+            if ( sourceAttr.isNull() )
+                continue;
+
+            if ( entityInstance == null )
+                entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+
             entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
         }
 
-        getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
+        if ( entityInstance != null )
+            getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
+
         return true;
     }
 
