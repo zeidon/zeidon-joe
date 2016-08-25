@@ -617,6 +617,20 @@ public class TestZencas
 	}
 
 	@Test
+	public void testActivateORStmnt()
+	{
+	    View         testview;
+        // Turn off assertions for zeidon for this test.
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        loader.setPackageAssertionStatus( "com.quinsoft.zeidon", false );
+        loader.getSystemClassLoader().setDefaultAssertionStatus(false);
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testActivateORStmnt( testview );
+        System.out.println("===== Finished testActivateORStmnt ========");
+	}
+
+	@Test
 	public void testActivateRecurObjSetFirst()
 	{
 	    View         testview;
@@ -3001,6 +3015,37 @@ o_fnLocalBuildQual_3( View     vSubtask,
 		    DropView( vTempViewVar_0 );
 			DropView( mTstAutos );
 			return 0;
+		}
+
+		public int
+		testActivateORStmnt( View     ViewToWindow )
+		{
+			   zVIEW    mTstOR = new zVIEW( );
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			   int      RESULT = 0;
+
+			   /*
+			    *  We have an activate statement with an OR.
+   				ACTIVATE mTstOR Multiple WHERE mTstOR.AdministrativeDivision.ID = 2 OR mTstOR.DegreeTrack.ID = 1212
+   				
+   				Because of the OR, we believe that the join from STUDENT to STUDENTMAJORDEGREETRACK should be a
+   				LEFT JOIN but the sql is created as JOIN.
+			   
+			    SELECT  STUDENT.ID, STUDENT.FKIDADMINISTRATIVE, STUDENTMAJORDEGREETRACK.FK_ID_DEGREETRACK
+			    FROM  STUDENT JOIN
+			          STUDENTMAJORDEGREETRACK ON STUDENTMAJORDEGREETRACK.FKHISTID_STUDENT = STUDENT.ID
+			    WHERE STUDENT.FKIDADMINISTRATIVE = 2 OR STUDENTMAJORDEGREETRACK.FK_ID_DEGREETRACK = 1212
+			   
+			   */
+			   o_fnLocalBuildmTstOR( ViewToWindow, vTempViewVar_0 );
+			   RESULT = ActivateObjectInstance( mTstOR, "mTstOR", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			   DropView( vTempViewVar_0 );
+			   //:NAME VIEW mTstOR "mTstOR"
+			   SetNameForView( mTstOR, "mTstOR", null, zLEVEL_TASK );
+			   CursorResult rc  = mTstOR.cursor("Student").setFirst("ID", 28);
+		       Assert.assertEquals( "ResultSet is missing a student we expect to return", CursorResult.SET, rc );
+			   
+			   return( 0 );
 		}
 
 		public int
@@ -5463,6 +5508,49 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ">=" );
 		   return( 0 );
 		}
+
+private int 
+o_fnLocalBuildmTstOR( View     vSubtask,
+                      zVIEW    vQualObject )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Student" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "AdministrativeDivision" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "2" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "DegreeTrack" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "1212" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+
+   /////////////////////////
+   /*
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Student" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "AdministrativeDivision" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "2" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeTerm" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "166" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   */
+   return( 0 );
+} 		
 		private int
 		o_fnLocalBuildDOMAINT( View     vSubtask,
 		                       zVIEW    vQualObject,
