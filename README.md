@@ -6,9 +6,9 @@ For more information see the [Zeidon documentation page](http://deegc.github.io/
 
 ## Javadoc/Scaladoc
 
-* Scala: http://deegc.github.io/zeidon-joe/javadoc/1.3/scala/
-* JOE: http://deegc.github.io/zeidon-joe/javadoc/1.3/joe/
-* Android: http://deegc.github.io/zeidon-joe/javadoc/1.3/android/
+* Scala: http://zeidon.github.io/zeidon-joe/javadoc/1.3/scala/
+* JOE: http://zeidon.github.io/zeidon-joe/javadoc/1.3/joe/
+* Android: http://zeidon.github.io/zeidon-joe/javadoc/1.3/android/
 
 ## Additional links
 
