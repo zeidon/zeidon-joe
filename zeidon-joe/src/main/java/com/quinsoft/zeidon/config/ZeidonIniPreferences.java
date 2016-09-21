@@ -20,7 +20,9 @@ package com.quinsoft.zeidon.config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FilenameUtils;
@@ -46,7 +48,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     private       String        iniFileDesc;
     private       HierarchicalINIConfiguration iniConfObj;
 
-    private static final StrSubstitutor strSub = new StrSubstitutor( System.getenv(), "${env.", "}" );
+    private static final StrSubstitutor strSub = new StrSubstitutor( combinePropertiesAndEnvironment(), "${env.", "}" );
 
     public ZeidonIniPreferences( HomeDirectory homeDirectory, String jmxAppName )
     {
@@ -162,5 +164,14 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     {
         iniConfObj.setProperty( groupName + "." + key, value );
         return this;
+    }
+    
+    private static Map<String,String> combinePropertiesAndEnvironment()
+    {
+        Map<String,String> map = new HashMap<>( System.getenv() );
+        for (final String name: System.getProperties().stringPropertyNames())
+            map.put(name, System.getProperties().getProperty(name));
+        
+        return map;
     }
 }
