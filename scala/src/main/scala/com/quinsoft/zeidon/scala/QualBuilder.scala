@@ -649,6 +649,14 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
         this
     }
+    
+    /**
+     * Sets the internal qualifcation OI from the seralized JSON string.
+     */
+    def setQualFromJson( jsonString: String ) = {
+        jqual.loadFromSerializedString( jsonString )
+        this
+    }
 }
 
 class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends Dynamic {
