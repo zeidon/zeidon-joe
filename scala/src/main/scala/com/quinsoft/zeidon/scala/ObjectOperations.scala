@@ -83,7 +83,7 @@ private[scala] class ObjectOperationCaller( private[scala] val operationName: St
                                            Int.box( argLength ), Int.box( args.length ) )
 
             val instance = constructor.newInstance( view )
-            view.task.log.debug( "Invoking %s.%s", className, operationName )
+            view.task.log.debug( "Invoking %s." + operationName, className )
             method.invoke(instance, args:_*)
         }
         catch {

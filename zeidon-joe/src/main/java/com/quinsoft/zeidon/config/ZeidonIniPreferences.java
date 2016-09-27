@@ -28,7 +28,8 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -42,7 +43,7 @@ import com.quinsoft.zeidon.utils.ZeidonInputStream;
  */
 public class ZeidonIniPreferences implements ZeidonPreferences
 {
-    private static final Logger LOG = Logger.getLogger( ZeidonIniPreferences.class );
+    private static final Logger LOG = LoggerFactory.getLogger( ZeidonIniPreferences.class );
 
     private final String        iniFileName;
     private       String        iniFileDesc;

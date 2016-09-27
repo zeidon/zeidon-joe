@@ -23,7 +23,8 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrLookup;
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -43,7 +44,7 @@ import com.quinsoft.zeidon.utils.ZeidonInputStream;
  */
 public class ZeidonPropertyPreferences implements ZeidonPreferences
 {
-    private static final Logger LOG = Logger.getLogger( ZeidonPropertyPreferences.class );
+    private static final Logger LOG = LoggerFactory.getLogger( ZeidonPropertyPreferences.class );
 
     private final String     filename;
     private       Properties properties;

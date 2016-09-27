@@ -20,28 +20,23 @@
 package com.quinsoft.zeidon;
 
 import java.util.Formatter;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+import org.slf4j.ext.LoggerWrapper;
 
 
 /**
- * A wrapper around log4j Logger that supports the following:
+ * A wrapper around slf4j Logger that supports the following:
  * 
  * - Messages use String.format() functionality.
- * - Multiple TaskLogger instances can be created for one log4j instance.  This
+ * - Multiple TaskLogger instances can be created for one logger instance.  This
  *   allows each task to have its own logging level.
  *
- * The wrapper is necessary because log4j caches each logger created and we want a new
- * one for each task.  Without a wrapper we'll have a memory leak.
- * 
  * @author DG
  *
  */
-public class TaskLogger extends Logger implements ZeidonLogger
+public class TaskLogger extends LoggerWrapper implements ZeidonLogger
 {
     private static ThreadLocal<Formatter> formatterCache = new ThreadLocal<Formatter>() {
         @Override
@@ -51,38 +46,37 @@ public class TaskLogger extends Logger implements ZeidonLogger
         }
     };
    
-    private static Map<Logger,Level> originalLevel = new HashMap<Logger, Level>();
-    
     private       Level  level;
     private final String prefix;
-    private final Logger parentLogger;
     
     /**
      * @param name
      */
     public TaskLogger(String prefix)
     {
-        super( Task.class.getName() );
+        super( LoggerFactory.getLogger( Task.class ), Task.class.getName() );
         
         this.prefix = prefix;
-        parentLogger = org.apache.log4j.Logger.getLogger( Task.class );
-        
-        // We want to set the level of the new TaskLogger to match parentLogger but then we
-        // want to change the level of the parent logger to TRACE so that the parent logger
-        // will write all messages.  Store the initial level of parentLogger in a map and
-        // set it to TRACE.
-        synchronized ( originalLevel )
-        {
-            level = originalLevel.get( parentLogger );
-            if ( level == null )
-            {
-                level = parentLogger.getEffectiveLevel();
-                originalLevel.put( parentLogger, level );
-                parentLogger.setLevel( Level.TRACE );
-            }
-        }
+        this.level = intializeLevel();
     }
 
+    private Level intializeLevel()
+    {
+        if ( super.isTraceEnabled() )
+            return Level.TRACE;
+        
+        if ( super.isDebugEnabled() )
+            return Level.DEBUG;
+        
+        if ( super.isInfoEnabled() )
+            return Level.INFO;
+        
+        if ( super.isWarnEnabled() )
+            return Level.WARN;
+        
+        return Level.ERROR;
+    }
+    
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#getLoggerLevel()
      */
@@ -107,16 +101,16 @@ public class TaskLogger extends Logger implements ZeidonLogger
     @Override
     public void setLevel( String level)
     {
-        setLevel( Level.toLevel( level ) );
+        setLevel( Level.valueOf( level ) );
     }
     
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#isEnabledFor(org.apache.log4j.Priority)
      */
     @Override
-    public boolean isEnabledFor( Priority priority )
+    public boolean isEnabledFor( Level checkLevel )
     {
-        return priority.isGreaterOrEqual( level );
+        return checkLevel.compareTo( this.level ) <= 0;
     }
     
     /* (non-Javadoc)
@@ -155,15 +149,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         return isEnabledFor( Level.WARN );
     }
     
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.ZeidonLogger#log(org.apache.log4j.Priority, java.lang.Object)
-     */
-    @Override
-    public void log( Priority priority, Object msg )
-    {
-        parentLogger.log( priority, msg );
-    }
-    
+   
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#info(java.lang.String, java.lang.Object)
      */
@@ -173,7 +159,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isInfoEnabled() ) 
             return;
 
-        parentLogger.info( sprintf( format, args ) );
+        super.info( sprintf( format, args ) );
     }
 
     /* (non-Javadoc)
@@ -185,7 +171,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isInfoEnabled() ) 
             return;
 
-        parentLogger.info( sprintf( format, args ), t );
+        super.info( sprintf( format, args ), t );
     }
 
     /* (non-Javadoc)
@@ -197,7 +183,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( ! isDebugEnabled() )
             return;
         
-        parentLogger.debug( sprintf( msg ) );
+        super.debug( sprintf( msg ) );
     }
 
     /* (non-Javadoc)
@@ -209,7 +195,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( ! isInfoEnabled() )
             return;
         
-        parentLogger.info( sprintf( msg ) );
+        super.info( sprintf( msg ) );
     }
 
     /* (non-Javadoc)
@@ -221,7 +207,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( ! isWarnEnabled() )
             return;
         
-        parentLogger.warn( sprintf( msg ) );
+        super.warn( sprintf( msg ) );
     }
 
     /* (non-Javadoc)
@@ -233,7 +219,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( ! isTraceEnabled() )
             return;
         
-        parentLogger.trace( sprintf( msg ) );
+        super.trace( sprintf( msg ) );
     }
 
     /* (non-Javadoc)
@@ -242,7 +228,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
     @Override
     public void error(String msg)
     {
-        parentLogger.error( sprintf( msg ) );
+        super.error( sprintf( msg ) );
     }
 
     /* (non-Javadoc)
@@ -254,7 +240,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isDebugEnabled() ) 
             return;
 
-        parentLogger.debug( sprintf( format, args ) );
+        super.debug( sprintf( format, args ) );
     }
 
     /* (non-Javadoc)
@@ -266,7 +252,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isDebugEnabled() ) 
             return;
 
-        parentLogger.debug( sprintf( format, args ), t );
+        super.debug( sprintf( format, args ), t );
     }
 
     /* (non-Javadoc)
@@ -278,7 +264,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isEnabledFor( Level.ERROR ) ) 
             return;
 
-        parentLogger.error( sprintf( format, args ) );
+        super.error( sprintf( format, args ) );
     }
 
     /* (non-Javadoc)
@@ -290,31 +276,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isEnabledFor( Level.ERROR ) ) 
             return;
 
-        parentLogger.error( sprintf( format, args ), t );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.ZeidonLogger#fatal(java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void fatal(String format, Object... args)
-    {
-        if ( !isEnabledFor( Level.FATAL ) ) 
-            return;
-
-        parentLogger.fatal( sprintf( format, args ) );
-    }
-
-    /* (non-Javadoc)
-     * @see com.quinsoft.zeidon.ZeidonLogger#fatal(java.lang.String, java.lang.Throwable, java.lang.Object)
-     */
-    @Override
-    public void fatal(String format, Throwable t, Object... args)
-    {
-        if ( !isEnabledFor( Level.FATAL ) ) 
-            return;
-
-        parentLogger.fatal( sprintf( format, args ), t );
+        super.error( sprintf( format, args ), t );
     }
 
     /* (non-Javadoc)
@@ -326,7 +288,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isEnabledFor( Level.WARN ) ) 
             return;
 
-        parentLogger.warn( sprintf( format, args ) );
+        super.warn( sprintf( format, args ) );
     }
 
     /* (non-Javadoc)
@@ -338,7 +300,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isEnabledFor( Level.WARN ) ) 
             return;
 
-        parentLogger.warn( sprintf( format, args ), t );
+        super.warn( sprintf( format, args ), t );
     }
 
     /* (non-Javadoc)
@@ -350,7 +312,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
         if ( !isTraceEnabled() ) 
             return;
 
-        parentLogger.trace( sprintf( format, args ) );
+        super.trace( sprintf( format, args ) );
     }
 
     /* (non-Javadoc)
@@ -361,7 +323,7 @@ public class TaskLogger extends Logger implements ZeidonLogger
     {
         if ( !isTraceEnabled() ) return;
 
-        parentLogger.trace( sprintf( format, args ), t );
+        super.trace( sprintf( format, args ), t );
     }
 
     /* (non-Javadoc)
@@ -370,9 +332,31 @@ public class TaskLogger extends Logger implements ZeidonLogger
     @Override
     public void log( Level level, String format, Object...args )
     {
-        if ( !isEnabledFor( level ) ) return;
+        if ( !isEnabledFor( level ) )
+            return;
         
-        parentLogger.log( level, sprintf( format, args ) );
+        switch ( level )
+        {
+            case DEBUG:
+                debug( sprintf( format, args ) );
+                break;
+                
+            case ERROR:
+                error( sprintf( format, args ) );
+                break;
+                
+            case INFO:
+                info( sprintf( format, args ) );
+                break;
+                
+            case TRACE:
+                trace( sprintf( format, args ) );
+                break;
+                
+            case WARN:
+                warn( sprintf( format, args ) );
+                break;
+        }
     }
 
     private String sprintf(String format, Object... args)
@@ -400,6 +384,6 @@ public class TaskLogger extends Logger implements ZeidonLogger
     @Override
     public void error(Throwable t)
     {
-        parentLogger.error( t );
+        error( "", t );
     }
 }

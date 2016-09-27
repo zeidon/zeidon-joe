@@ -21,7 +21,8 @@ package com.quinsoft.zeidon.config;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.quinsoft.zeidon.utils.JoeUtils;
 
@@ -34,7 +35,7 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  */
 public class JmxZeidonPreferences implements JmxZeidonPreferencesMBean
 {
-    private static final Logger LOG = Logger.getLogger( JmxZeidonPreferences.class );
+    private static final Logger LOG = LoggerFactory.getLogger( JmxZeidonPreferences.class );
 
     private final ZeidonPreferences zeidonPreferences;
     private final String            description;
