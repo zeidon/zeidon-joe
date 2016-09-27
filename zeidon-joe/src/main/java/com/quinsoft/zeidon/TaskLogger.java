@@ -46,8 +46,14 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
         }
     };
    
-    private       Level  level;
-    private final String prefix;
+    private       Level   level;
+    private final Level   parentLoggerLevel;
+    private final String  prefix;
+    
+    /**
+     * If true then we've already logged a warning about setting the logger level.
+     */
+    private       boolean setWarning = false;
     
     /**
      * @param name
@@ -57,7 +63,8 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
         super( LoggerFactory.getLogger( Task.class ), Task.class.getName() );
         
         this.prefix = prefix;
-        this.level = intializeLevel();
+        parentLoggerLevel = intializeLevel();
+        level = parentLoggerLevel;
     }
 
     private Level intializeLevel()
@@ -90,9 +97,19 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
      * @see com.quinsoft.zeidon.ZeidonLogger#setLevel(org.apache.log4j.Level)
      */
     @Override
-    public void setLevel( Level level)
+    public void setLevel( Level newLevel)
     {
-        this.level = level;
+        if ( ! setWarning && parentLoggerLevel.compareTo( newLevel ) < 0 )
+        {
+            super.warn( "Attempting to set logger level to a higher granularity than specified in logger config.  "
+                    + "To fix, set log level in logger config to TRACE and set InitialLogLevel in zeidon.ini.  "
+                    + "Logger level = {}, new logger level = {}, logger class = {}", parentLoggerLevel.toString(), 
+                    newLevel.toString(), this.logger.getClass().getSimpleName() );
+            setWarning = true;
+        }
+            
+        
+        this.level = newLevel;
     }
     
     /* (non-Javadoc)
@@ -101,7 +118,7 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void setLevel( String level)
     {
-        setLevel( Level.valueOf( level ) );
+        setLevel( Level.valueOf( level.toUpperCase() ) );
     }
     
     /* (non-Javadoc)
@@ -156,9 +173,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info(String format, Object... args)
     {
-        if ( !isInfoEnabled() ) 
-            return;
-
         super.info( sprintf( format, args ) );
     }
 
@@ -168,9 +182,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info(String format, Throwable t, Object... args)
     {
-        if ( !isInfoEnabled() ) 
-            return;
-
         super.info( sprintf( format, args ), t );
     }
 
@@ -180,9 +191,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug(String msg)
     {
-        if ( ! isDebugEnabled() )
-            return;
-        
         super.debug( sprintf( msg ) );
     }
 
@@ -192,9 +200,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info(String msg)
     {
-        if ( ! isInfoEnabled() )
-            return;
-        
         super.info( sprintf( msg ) );
     }
 
@@ -204,9 +209,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn(String msg)
     {
-        if ( ! isWarnEnabled() )
-            return;
-        
         super.warn( sprintf( msg ) );
     }
 
@@ -216,9 +218,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace(String msg)
     {
-        if ( ! isTraceEnabled() )
-            return;
-        
         super.trace( sprintf( msg ) );
     }
 
@@ -237,9 +236,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug(String format, Object... args)
     {
-        if ( !isDebugEnabled() ) 
-            return;
-
         super.debug( sprintf( format, args ) );
     }
 
@@ -249,9 +245,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug(String format, Throwable t, Object... args)
     {
-        if ( !isDebugEnabled() ) 
-            return;
-
         super.debug( sprintf( format, args ), t );
     }
 
@@ -261,9 +254,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error(String format, Object... args)
     {
-        if ( !isEnabledFor( Level.ERROR ) ) 
-            return;
-
         super.error( sprintf( format, args ) );
     }
 
@@ -273,9 +263,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error(String format, Throwable t, Object... args)
     {
-        if ( !isEnabledFor( Level.ERROR ) ) 
-            return;
-
         super.error( sprintf( format, args ), t );
     }
 
@@ -285,9 +272,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn(String format, Object... args)
     {
-        if ( !isEnabledFor( Level.WARN ) ) 
-            return;
-
         super.warn( sprintf( format, args ) );
     }
 
@@ -297,9 +281,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn(String format, Throwable t, Object... args)
     {
-        if ( !isEnabledFor( Level.WARN ) ) 
-            return;
-
         super.warn( sprintf( format, args ), t );
     }
 
@@ -309,9 +290,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace(String format, Object... args)
     {
-        if ( !isTraceEnabled() ) 
-            return;
-
         super.trace( sprintf( format, args ) );
     }
 
@@ -321,8 +299,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace(String format, Throwable t, Object... args)
     {
-        if ( !isTraceEnabled() ) return;
-
         super.trace( sprintf( format, args ), t );
     }
 
@@ -332,9 +308,6 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void log( Level level, String format, Object...args )
     {
-        if ( !isEnabledFor( level ) )
-            return;
-        
         switch ( level )
         {
             case DEBUG:
@@ -357,6 +330,141 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
                 warn( sprintf( format, args ) );
                 break;
         }
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#trace(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void trace( String format, Object arg )
+    {
+        super.trace( sprintf( format, arg ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#trace(java.lang.String, java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public void trace( String format, Object arg1, Object arg2 )
+    {
+        super.trace( sprintf( format, arg1, arg2 ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#trace(java.lang.String, java.lang.Throwable)
+     */
+    @Override
+    public void trace( String msg, Throwable t )
+    {
+        super.trace( msg, t );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#debug(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void debug( String format, Object arg )
+    {
+        super.debug( sprintf( format, arg ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#debug(java.lang.String, java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public void debug( String format, Object arg1, Object arg2 )
+    {
+        super.debug( sprintf( format, arg1, arg2 ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#debug(java.lang.String, java.lang.Throwable)
+     */
+    @Override
+    public void debug( String msg, Throwable t )
+    {
+        super.debug( msg, t );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#info(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void info( String format, Object arg )
+    {
+        super.info( sprintf( format, arg ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#info(java.lang.String, java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public void info( String format, Object arg1, Object arg2 )
+    {
+        super.info( sprintf( format, arg1, arg2 ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#info(java.lang.String, java.lang.Throwable)
+     */
+    @Override
+    public void info( String msg, Throwable t )
+    {
+        super.info( msg, t );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#warn(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void warn( String format, Object arg )
+    {
+        super.warn( sprintf( format, arg ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#warn(java.lang.String, java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public void warn( String format, Object arg1, Object arg2 )
+    {
+        super.warn( sprintf( format, arg1, arg2 ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#warn(java.lang.String, java.lang.Throwable)
+     */
+    @Override
+    public void warn( String msg, Throwable t )
+    {
+        super.warn( msg, t );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#error(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void error( String format, Object arg )
+    {
+        super.error( sprintf( format, arg ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#error(java.lang.String, java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public void error( String format, Object arg1, Object arg2 )
+    {
+        super.error( sprintf( format, arg1, arg2 ) );
+    }
+
+    /* (non-Javadoc)
+     * @see org.slf4j.ext.LoggerWrapper#error(java.lang.String, java.lang.Throwable)
+     */
+    @Override
+    public void error( String msg, Throwable t )
+    {
+        super.error( msg, t );
     }
 
     private String sprintf(String format, Object... args)

@@ -30,6 +30,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
@@ -89,7 +91,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         this.taskId = taskId;
         this.objectEngine = objectEngine;
 
-        // Check to see if this is the system task.  It's ok to use '=' instead of '=='
+        // Check to see if this is the system task.  It's ok to use '==' instead of .equals()
         // because we control the creation of the system task.
         isSystemTask = ( taskId == ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
 
@@ -103,6 +105,12 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         String prefix = String.format( " [%4s] ", taskId );
         logger = new TaskLogger( prefix );
         dblogger = new TaskLogger( prefix );
+        String logLevel = this.readZeidonConfig( app.getName(), "InitialLogLevel" );
+        if ( ! StringUtils.isBlank( logLevel ) )
+        {
+            logger.setLevel( logLevel );
+            dblogger.setLevel( logLevel );
+        }
 
         log().info( "Created new task for app %s, task ID = %s", app.getName(), taskId );
     }
