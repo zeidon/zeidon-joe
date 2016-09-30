@@ -4,6 +4,7 @@ import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.DeserializeOi
+import com.typesafe.scalalogging.Logger
 
 /**
  * @author dgc
@@ -49,6 +50,7 @@ object Implicits {
     implicit class ScalaTask( val task : Task ) {
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
         def id = task.getTaskId
+        def slog = Logger( task.log() )
     }
 
     implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
