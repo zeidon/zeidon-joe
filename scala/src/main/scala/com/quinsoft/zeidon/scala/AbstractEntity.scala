@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
 import scala.collection.Iterable
+import scala.collection.mutable.ListMap
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition._
 
@@ -83,6 +84,12 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
         if ( parent == null ) null else new EntityInstance( parent )
     }
 
+    def attributeMap: ListMap[AttributeInstance, AnyRef] = {
+        val map = ListMap[AttributeInstance, AnyRef]()
+        this.attributes.each( a => map.put(a, a.value ) )
+        map
+    }
+    
     /**
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.
      *

@@ -13,7 +13,7 @@
   </appender> 
   
   <appender name="TraceFile" class="org.apache.log4j.FileAppender">
-    <param name="File" value="/tmp/zeidontrace.log"/>
+    <param name="File" value="${java.io.tmpdir}/zeidontrace.log"/>
     <param name="Threshold" value="DEBUG"/> 
     <param name="Append" value="true"/> 
     <layout class="org.apache.log4j.PatternLayout">

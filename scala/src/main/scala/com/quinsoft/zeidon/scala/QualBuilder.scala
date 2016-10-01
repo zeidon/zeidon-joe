@@ -65,6 +65,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     /**
+     * Returns the underlying qualification OI.
+     */
+    def qualOi: View = jqual.getView()
+    
+    /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
      *      val mUser = VIEW basedOn "mUser"
