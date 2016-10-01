@@ -18,7 +18,6 @@
  */
 package com.quinsoft.zeidon.scala
 
-import org.apache.commons.digester3.annotations.rules.ObjectCreate.List
 
 /**
  * @author dgc

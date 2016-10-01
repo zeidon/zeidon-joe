@@ -4,7 +4,7 @@
   <parent>
     <artifactId>zeidon</artifactId>
     <groupId>com.quinsoft.zeidon</groupId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
   </parent>
 
   <packaging>jar</packaging>
@@ -18,24 +18,19 @@
       <version>${scala.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-reflect</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-joe</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.quinsoft.zeidon</groupId>
-      <artifactId>object-browser</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.joda</groupId>
       <artifactId>joda-convert</artifactId>
       <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.scala-logging</groupId>
+      <artifactId>scala-logging_2.11</artifactId>
+      <version>3.4.0</version>
     </dependency>
 
     <!-- Test -->
@@ -46,12 +41,13 @@
       <scope>test</scope>
     </dependency>
  
-    <!-- For running mvn scala:console -->
+    <!-- For running mvn scala:console
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>jline</artifactId>
       <version>2.10.4</version>
     </dependency> 
+    -->
   </dependencies>
 
   <build>
