@@ -48,9 +48,26 @@ object Implicits {
     }
 
     implicit class ScalaTask( val task : Task ) {
+        /**
+         * Get a view by name in the task.
+         */
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
         def id = task.getTaskId
+        
+        /**
+         * Creates a Scala wrapper around the Zeidon Logger.  It is occasionally useful
+         * to avoid ambiguous method errors.
+         */
         def slog = Logger( task.log() )
+        
+        def activate( lodName: String, addQual: (QualBuilder) => Unit ): View = {
+          val view = new View( task ) basedOn lodName
+          val qb = view.buildQual()
+          addQual( qb )
+          qb.activate
+        }
+        
+        def newView( lodName: String ): View = new View( task ) basedOn lodName
     }
 
     implicit class ScalaObjectEngine( val oe : ObjectEngine ) {

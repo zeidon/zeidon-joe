@@ -92,6 +92,10 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         callAddQual( addQual )
     }
 
+    def where( addQual: (EntityQualBuilder) => QualificationTerminator ): QualBuilder = {
+      and( addQual )
+    }
+
     /**
      * Initialize qualification with a series of OR predicates WITHOUT adding a
      * conjunction to the existing qualification.  This

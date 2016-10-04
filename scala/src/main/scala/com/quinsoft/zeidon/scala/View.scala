@@ -33,7 +33,7 @@ import org.apache.commons.lang3.StringUtils
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
  */
-case class View( val task: Task ) extends Dynamic {
+class View( val task: Task ) extends Dynamic {
 
     /**
      * The underlying EntityDef for this View.  May be null.
@@ -434,4 +434,8 @@ object View {
     implicit def view2jview( view: com.quinsoft.zeidon.scala.View ) = view.jview
 
     val ON = new VmlSyntaxFiller
+    
+    def apply( task: Task ) = {
+      new View( task )
+    }
 }
