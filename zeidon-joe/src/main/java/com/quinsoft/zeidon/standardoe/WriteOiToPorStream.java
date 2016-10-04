@@ -252,7 +252,6 @@ public class WriteOiToPorStream implements StreamWriter
 
                         writeln("%s", value );
                     }
-
                 } // for each attribute...
 
                 // Write a blank line just to look pretty.

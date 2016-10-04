@@ -228,7 +228,8 @@ public class WriteOisToXmlStream implements StreamWriter
 
             // Check to see if the current ei is the selected EI.  We first check the status because
             // calling getEntityInstance() could potentially trigger a lazy-load.
-            boolean selected = cursor.getStatus() == CursorStatus.SET &&
+            boolean selected = options.isWithCursors() &&
+                               cursor.getStatus() == CursorStatus.SET &&
                                cursor.getEntityInstance() == ei;
 
             EntityInstanceImpl recordOwner = findLinkedRecordOwner( ei );

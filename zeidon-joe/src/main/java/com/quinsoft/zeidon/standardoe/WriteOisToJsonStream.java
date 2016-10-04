@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,6 +63,7 @@ public class WriteOisToJsonStream implements StreamWriter
     private final Set<ObjectInstance> ois = new HashSet<ObjectInstance>();
     private JsonGenerator jg;
     private View currentView;
+    private final LinkedHashMap<String, Object> linkedMap = new LinkedHashMap<>(5);
 
     @Override
     public void writeToStream( SerializeOi options, Writer writer )
@@ -345,20 +347,17 @@ public class WriteOisToJsonStream implements StreamWriter
         EntityDef entityDef = ei.getEntityDef();
         boolean selectedCursor = currentView.cursor( entityDef ).getEntityInstance() == ei;
 
+        linkedMap.clear();
+        
         String str = createIncrementalStr( ei );
-        if ( StringUtils.isBlank( str ) && recordOwner == null && ! selectedCursor && ! ei.isIncomplete() )
-            return writeAttributes;
+        if ( ! StringUtils.isBlank( str ) )
+            linkedMap.put( "incrementals", str );
 
-        jg.writeObjectFieldStart( ".meta" );
-
-        if ( ! StringUtils.isBlank( str )  )
-            jg.writeStringField( "incrementals", str );
-
-        if ( selectedCursor )
-            jg.writeBooleanField( "selected", true );
+        if ( selectedCursor && options.isWithCursors() )
+            linkedMap.put( "selected", true );
 
         if ( ei.isIncomplete() )
-            jg.writeBooleanField( "incomplete", true );
+            linkedMap.put( "incomplete", true );
 
         if ( ei.hasLoadedLazyChildren() )
         {
@@ -366,7 +365,7 @@ public class WriteOisToJsonStream implements StreamWriter
             for ( EntityDef def : ei.getEntitiesLoadedLazily() )
                 sb.append( "," ).append( def.getName() );
             sb.deleteCharAt( 0 );
-            jg.writeStringField( "lazyLoaded", sb.toString() );
+            linkedMap.put( "lazyLoaded", sb.toString() );
         }
 
         if ( recordOwner != null )
@@ -376,18 +375,27 @@ public class WriteOisToJsonStream implements StreamWriter
                 // TODO: validate that ei.entityDef has all the attributes in the shared
                 // attribute hash.
                 ei.setRecordOwner( true );
-                jg.writeStringField( "isLinkedSource", "true" );
-                jg.writeStringField( "entityKey", Long.toString( ei.getEntityKey() ));
+                linkedMap.put( "isLinkedSource", true );
+                linkedMap.put( "entityKey", Long.toString( ei.getEntityKey() ) );
             }
             else
             {
                 // Write the entity key of the record owner.
-                jg.writeStringField( "linkedSource", Long.toString( recordOwner.getEntityKey() ));
+                linkedMap.put( "linkedSource", Long.toString( recordOwner.getEntityKey() ));
                 writeAttributes = false;
             }
         }
 
+        if ( linkedMap.size() == 0 )
+            return writeAttributes;
+        
+        jg.writeObjectFieldStart( ".meta" );
+
+        for ( String key : linkedMap.keySet() )
+            jg.writeObjectField( key, linkedMap.get( key ) );
+        
         jg.writeEndObject();
+        
         return writeAttributes;
     }
 }

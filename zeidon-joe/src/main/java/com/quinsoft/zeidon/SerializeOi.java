@@ -57,6 +57,7 @@ public class SerializeOi
     private boolean useCamelCase = false;
     private boolean writeDerivedAttributes = false;
     private boolean writeTotalRootCount = false;
+    private boolean writeCursors = false;
 
     public SerializeOi()
     {
@@ -411,6 +412,17 @@ public class SerializeOi
     {
         flags.add( WriteOiFlags.INCREMENTAL );
         return this;
+    }
+
+    public SerializeOi withCursors()
+    {
+        writeCursors = true;
+        return this;
+    }
+    
+    public boolean isWithCursors()
+    {
+        return writeCursors;
     }
 
     public SerializeOi using( StreamWriter streamWriter )
