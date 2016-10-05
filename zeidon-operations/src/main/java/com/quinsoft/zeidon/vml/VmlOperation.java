@@ -8750,7 +8750,7 @@ public abstract class VmlOperation
       }
       return strHtml;
    }
-   
+
    public static String
    TrimTinyHtml( String strHtmlEnclosedValue )
    {
