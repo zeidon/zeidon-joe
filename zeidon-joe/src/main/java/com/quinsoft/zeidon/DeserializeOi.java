@@ -146,6 +146,19 @@ public class DeserializeOi
         return this;
     }
 
+    public DeserializeOi fromAppResource( String resourceName )
+    {
+        String objDir = getApplication().getObjectDir();
+        String fullName = objDir + "/" + resourceName;
+        this.inputStream = JoeUtils.getInputStream( task, fullName );
+        if ( inputStream == null )
+            throw new ZeidonException( "Application resource %s not found", fullName );
+
+        this.resourceName = fullName;
+        setFormatFromFilename( resourceName, true );
+        return this;
+    }
+
     /**
      * Get the stream from the Zeidon attribute.  The attribute must be retrievable
      * as a string.
@@ -331,6 +344,22 @@ public class DeserializeOi
     public DeserializeOi setLodDef( String lodDefName )
     {
         lodDef = getApplication().getLodDef( getTask(), lodDefName );
+        return this;
+    }
+
+    /**
+     * Sets the LOD definition by name using the supplied application name to 
+     * find the LOD def.
+     *
+     * @param lodDefName name of the LOD.
+     * @param appName name of the application.  This overrides the current application
+     *                (i.e. this.getApplication() ).
+     *
+     * @return this
+     */
+    public DeserializeOi setLodDef( String appName, String lodDefName )
+    {
+        lodDef = getTask().getApplication(appName).getLodDef( getTask(), lodDefName );
         return this;
     }
 
