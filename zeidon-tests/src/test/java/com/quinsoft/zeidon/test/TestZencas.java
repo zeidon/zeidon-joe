@@ -249,6 +249,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testLODDisplayRoot()
+	{
+	    View         testview;
+	    testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+	    VmlTester tester = new VmlTester( testview );
+	    tester.testLODDisplayRoot( testview );
+        System.out.println("===== Finished testLODDisplayRoot ========");
+	}
+
+	@Test
 	public void testActivateControls()
 	{
 	    View         testview;
@@ -1187,6 +1197,18 @@ public class TestZencas
 		   RESULT = IncludeSubobjectFromSubobject( mSAProfEList, "StudentAccountProfile", mSAProf, "StudentAccountProfile", zPOS_AFTER );
 
 		   return 0;
+		}
+			
+		public int
+		testLODDisplayRoot( View ViewToWindow )
+		{
+			zVIEW    DOMAINTL = new zVIEW( );
+			int RESULT=0;
+			
+		    RESULT = ActivateObjectInstance( DOMAINTL, "DOMAINTL", ViewToWindow, 0, zMULTIPLE );
+			
+
+			return 0;
 		}
 
 		public int

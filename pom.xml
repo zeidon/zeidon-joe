@@ -171,21 +171,7 @@
             </modules>
         </profile>
  
-        <!-- The sinatra server only needs to be built once per release because 
-             it doesn't include any Zeidon code. It is a convenience .jar for LOD servers.
-         -->
-        <profile>
-            <id>sinatra-server</id>
-            <activation>
-                <file>
-                    <missing>sinatra-server/target/zeidon-sinatra-server-${version}.jar</missing>
-                </file>
-            </activation>
-            <modules>
-                <module>sinatra-server</module>
-            </modules>
-        </profile>
- 
+  
         <!-- 
             Builds required objects for deploying to OSSRH
          -->
