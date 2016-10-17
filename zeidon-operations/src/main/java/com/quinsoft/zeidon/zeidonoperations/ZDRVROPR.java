@@ -117,9 +117,6 @@ public class ZDRVROPR extends VmlOperation
       InternetAddress[] ccAddress = new InternetAddress[cc.length];
       String bcc[] = szBCCAddress.split("[\\s,;]+");
       InternetAddress[] bccAddress = new InternetAddress[bcc.length];
-      //String host = "enc-exhub.enc-ad.enc.edu";
-      //String from = "kellysautter@comcast.net";
-      //String to = "kellysautter@comcast.net";
 
       // Set properties
       Properties props = new Properties();

@@ -4810,6 +4810,12 @@ public abstract class VmlOperation
                             .setApplication( task.getApplication( "ZeidonTools" ) )
                             .setLodDef( lodDefName )
                             .activateFirst();
+        	
+        }
+        catch (Exception e)
+        {
+        	// file not found
+        	return -1;
         }
 
         returnView.setView( view );

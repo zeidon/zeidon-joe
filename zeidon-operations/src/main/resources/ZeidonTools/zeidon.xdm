@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 01/18/14   21:33:12 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 07/26/16   14:35:34 1.0a2    
 eDomainGroup 1
 aName      Zeidon9B
 
@@ -50,6 +50,25 @@ eTableEntry 4
 aZKey      127082700
 aExternalValue Update
 aInternalValue 1
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110002502
+aName      AD_WebWindowStyle
+aDomainType T
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      110002503
+aName      AD_WebWindowStyle
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110002504
+aExternalValue Accept/Cancel
+aInternalValue AcceptCancel
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -674,20 +693,6 @@ aExternalValue XSLT
 aInternalValue 2016
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      4531067
-aName      Color
-aDomainType E
-aDataType  S
-aMaxStringLth 20
-aContextRestriction N
-
-eContext   3
-aZKey      4531068
-aName      Color
-aIsDefault Y
-
-eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      1319806
 aName      DataType
@@ -1221,6 +1226,8 @@ aJavaEditString yyyyMMdd
 eContext   3
 aZKey      90000068
 aName      Day
+aEditString D
+aJavaEditString D
 
 eContext   3
 aZKey      90000074
@@ -1285,6 +1292,8 @@ aJavaEditString MMM dd, yyyy
 eContext   3
 aZKey      90000069
 aName      Month
+aEditString M
+aJavaEditString M
 
 eContext   3
 aZKey      90000062
@@ -1301,19 +1310,27 @@ aJavaEditString MMMM
 eContext   3
 aZKey      90000066
 aName      MSWindowsLongSetting
+aEditString mm/dd/YYYY
+aJavaEditString MM/dd/yyyy
 
 eContext   3
 aZKey      90000067
 aName      MSWindowsShortSetting
+aEditString mm/dd/YYYY
+aJavaEditString MM/dd/yyyy
 aIsDefault Y
 
 eContext   3
 aZKey      90000076
 aName      WeekOfYear
+aEditString w
+aJavaEditString w
 
 eContext   3
 aZKey      90000070
 aName      Year
+aEditString YYYY
+aJavaEditString yyyy
 
 eContext   3
 aZKey      90000071
@@ -1378,6 +1395,8 @@ aJavaEditString yyyyMMddHHmmssSSS
 eContext   3
 aZKey      90000109
 aName      Day
+aEditString Dddd
+aJavaEditString dddd
 
 eContext   3
 aZKey      90000115
@@ -1502,6 +1521,8 @@ aJavaEditString MMM dd, yyyy
 eContext   3
 aZKey      90000110
 aName      Month
+aEditString Mmmm
+aJavaEditString MMMM
 
 eContext   3
 aZKey      90000102
@@ -1518,14 +1539,20 @@ aJavaEditString MMMM
 eContext   3
 aZKey      90000106
 aName      MSWindowsLongSetting
+aEditString mm/dd/YYYY HH:MI:SS.9
+aJavaEditString MM/dd/yyyy HH:mm:ss.S
 
 eContext   3
 aZKey      90000108
 aName      MSWindowsSetting
+aEditString mm/dd/YYYY
+aJavaEditString MM/dd/yyyy
 
 eContext   3
 aZKey      90000107
 aName      MSWindowsShortSetting
+aEditString mm-dd-YYYY
+aJavaEditString MM-dd-yyyy
 aIsDefault Y
 
 eContext   3
@@ -1543,14 +1570,20 @@ aJavaEditString HHmmssSSS
 eContext   3
 aZKey      123030441
 aName      UserFriendlyGerman
+aEditString dd.mm.YYYY
+aJavaEditString dd.mm.yyyy
 
 eContext   3
 aZKey      90000117
 aName      WeekOfYear
+aEditString w
+aJavaEditString w
 
 eContext   3
 aZKey      90000111
 aName      Year
+aEditString YYYY
+aJavaEditString yyyy
 
 eContext   3
 aZKey      90000112
@@ -2998,7 +3031,7 @@ aName      LanguageType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92484525
+aZKey      110001393
 
 eTableEntry 4
 aZKey      90026795
@@ -3009,6 +3042,16 @@ eTableEntry 4
 aZKey      90026796
 aExternalValue VML
 aInternalValue V
+
+eTableEntry 4
+aZKey      110001385
+aExternalValue Java
+aInternalValue J
+
+eTableEntry 4
+aZKey      110001392
+aExternalValue Scala
+aInternalValue S
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -3315,7 +3358,7 @@ aName      MetaName
 aDesc      Name of a meta object (ie., LOD, Dialog, Report)
 aDomainType E
 aDataType  S
-aMaxStringLth 8
+aMaxStringLth 32
 aContextRestriction N
 aDLL_Name  TZAPDMAA
 aOperName  zdmQSName
@@ -3433,9 +3476,6 @@ aName      OperationGenerationType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92726981
-
-eTableEntry 4
 aZKey      92726979
 aExternalValue C Generation Only
 aInternalValue C
@@ -3517,21 +3557,6 @@ aOperName  zdmPasswordUL
 eContext   3
 aZKey      1084734
 aName      PasswordUL
-aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      4531065
-aName      PositionSize
-aDomainType F
-aDataType  S
-aMaxStringLth 100
-aContextRestriction N
-
-eContext   3
-aZKey      4531066
-aName      PositionSize
-aEditString [0-9 a-z A-Z]
 aIsDefault Y
 
 eDomain    2
@@ -5598,9 +5623,6 @@ aZKey      1320488
 aName      Control/Option Action Type
 
 eTableEntry 4
-aZKey      4847914
-
-eTableEntry 4
 aZKey      1320489
 aExternalValue Same Window / No Refresh
 aInternalValue 1
@@ -5664,9 +5686,6 @@ eContext   3
 aZKey      1320473
 aName      WD_ActionType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      4847915
 
 eTableEntry 4
 aZKey      1320475
@@ -5774,6 +5793,16 @@ aExternalValue Start Browser PDF Page
 aInternalValue 47
 
 eTableEntry 4
+aZKey      130000444
+aExternalValue Start Jasper PDF Report
+aInternalValue 48
+
+eTableEntry 4
+aZKey      130069821
+aExternalValue Start Jasper XLS File
+aInternalValue 49
+
+eTableEntry 4
 aZKey      4847905
 aExternalValue Replace Dialog with Dialog
 aInternalValue 51
@@ -5876,9 +5905,6 @@ aInternalValue 99
 eContext   3
 aZKey      1320500
 aName      Window Event Action Type
-
-eTableEntry 4
-aZKey      4847916
 
 eTableEntry 4
 aZKey      1320501
@@ -6539,6 +6565,11 @@ aExternalValue Email Subject Line
 aInternalValue EmailSubject
 
 eTableEntry 4
+aZKey      130003879
+aExternalValue Escape special HTML characters
+aInternalValue escapeHTML
+
+eTableEntry 4
 aZKey      1141816
 aExternalValue Hidden - not displayed
 aInternalValue Hidden
@@ -6589,12 +6620,9 @@ aName      WD_WebEditControlProperties
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92741378
-
-eTableEntry 4
-aZKey      68304448
-aExternalValue No Current Values
-aInternalValue No Current Values
+aZKey      130069820
+aExternalValue Autocomplete Off
+aInternalValue Autocomplete Off
 
 eTableEntry 4
 aZKey      92656445
@@ -6615,6 +6643,11 @@ eTableEntry 4
 aZKey      92741377
 aExternalValue wysiwyg TinyMCE
 aInternalValue wysiwyg TinyMCE
+
+eTableEntry 4
+aZKey      130000003
+aExternalValue Browse File
+aInternalValue Browse File
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -6637,6 +6670,11 @@ aExternalValue Absolute Width
 aInternalValue Absolute Width
 
 eTableEntry 4
+aZKey      130069695
+aExternalValue Select Set
+aInternalValue Select Set
+
+eTableEntry 4
 aZKey      92656442
 aExternalValue Table Export Option
 aInternalValue Table Export Option
@@ -6650,6 +6688,11 @@ eTableEntry 4
 aZKey      89581085
 aExternalValue Filter Rows (wHideTableRow='Y')
 aInternalValue Filter Rows
+
+eTableEntry 4
+aZKey      130069819
+aExternalValue Generate as <ul> List
+aInternalValue Gen As List
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -6717,9 +6760,6 @@ aName      WD_WebGroupControlProperties
 aIsDefault Y
 
 eTableEntry 4
-aZKey      92741380
-
-eTableEntry 4
 aZKey      68304367
 aExternalValue Div
 aInternalValue Div
@@ -6735,14 +6775,14 @@ aExternalValue Table
 aInternalValue Table
 
 eTableEntry 4
-aZKey      90754211
-aExternalValue Grid Grouping
-aInternalValue Grid Grouping
+aZKey      4634994
+aExternalValue Fieldset
+aInternalValue Container
 
 eTableEntry 4
-aZKey      68304369
-aExternalValue Scrollable
-aInternalValue Scrollable
+aZKey      4634995
+aExternalValue Fieldset Absolute Pos
+aInternalValue Container Absolute Size
 
 eTableEntry 4
 aZKey      89853394
@@ -6755,9 +6795,34 @@ aExternalValue No Width
 aInternalValue No Width
 
 eTableEntry 4
+aZKey      89990860
+aExternalValue Include File
+aInternalValue Include File
+
+eTableEntry 4
+aZKey      130000001
+aExternalValue Absolute Pos
+aInternalValue Absolute Pos
+
+eTableEntry 4
+aZKey      90754211
+aExternalValue Grid Grouping
+aInternalValue Grid Grouping
+
+eTableEntry 4
 aZKey      92656449
 aExternalValue Show/Hide Toggle
 aInternalValue Show/Hide Toggle
+
+eTableEntry 4
+aZKey      130069816
+aExternalValue Show/Hide Toggle2
+aInternalValue Show/Hide Toggle2
+
+eTableEntry 4
+aZKey      130069818
+aExternalValue Menu Action List
+aInternalValue Menu Action List
 
 eTableEntry 4
 aZKey      68304372
@@ -6765,19 +6830,9 @@ aExternalValue Repeating Group
 aInternalValue Repeating Group
 
 eTableEntry 4
-aZKey      68442849
-aExternalValue Relative Positioning
-aInternalValue Relative Positioning
-
-eTableEntry 4
-aZKey      4634994
-aExternalValue Container
-aInternalValue Container
-
-eTableEntry 4
-aZKey      4634995
-aExternalValue Container Absolute Size
-aInternalValue Container Absolute Size
+aZKey      130069814
+aExternalValue Select Set (Repeat Grp)
+aInternalValue Select Set (Repeat Grp)
 
 eTableEntry 4
 aZKey      68544987
@@ -6788,11 +6843,6 @@ eTableEntry 4
 aZKey      92741379
 aExternalValue Survey Group
 aInternalValue Survey Group
-
-eTableEntry 4
-aZKey      89990860
-aExternalValue Include File
-aInternalValue Include File
 
 eTableEntry 4
 aZKey      90127802
@@ -6808,6 +6858,40 @@ eTableEntry 4
 aZKey      90044246
 aExternalValue Dashboard Group
 aInternalValue Dashboard Group
+
+eTableEntry 4
+aZKey      68304369
+aExternalValue Scrollable
+aInternalValue Scrollable
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      130001474
+aName      WD_WebJSPGenerationPositioning
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      130001475
+aName      WD_WebJSPGenerationPositioning
+aIsDefault Y
+
+eTableEntry 4
+aZKey      130001476
+aExternalValue Absolute Positioning
+aInternalValue A
+
+eTableEntry 4
+aZKey      130001477
+aExternalValue Relative Positioning
+aInternalValue R
+
+eTableEntry 4
+aZKey      130001478
+aExternalValue No Positioning
+aInternalValue N
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -6877,9 +6961,6 @@ eContext   3
 aZKey      92709479
 aName      WD_WebTextControlProperties
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92709609
 
 eTableEntry 4
 aZKey      92709482
@@ -7303,4 +7384,17 @@ eTableEntry 4
 aZKey      1320620
 aExternalValue ShortcutKey Operation
 aInternalValue K
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      110003499
+aName      ZKey
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110003500
+aName      ZKey
+aIsDefault Y
 
