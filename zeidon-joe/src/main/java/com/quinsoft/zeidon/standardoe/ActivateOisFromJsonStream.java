@@ -634,8 +634,8 @@ class ActivateOisFromJsonStream implements StreamReader
                 case "application": application = task.getApplication( jp.getValueAsString() ); break;
                 case "odName":      odName = jp.getValueAsString(); break; // Save OD name for later.
                 case "incremental": incremental = jp.getValueAsBoolean(); break;
-                case "readOnlyOi":  readOnlyOi = true; break;
-                case "readOnly":    readOnly = true; break;
+                case "readOnlyOi":  readOnlyOi = jp.getValueAsBoolean(); break;
+                case "readOnly":    readOnly = jp.getValueAsBoolean(); break;
                 case "totalRootCount": totalRootCount = jp.getValueAsInt(); break;
 
                 default: task.log().warn( "Unknown .oimeta fieldname %s", fieldName ); break;
