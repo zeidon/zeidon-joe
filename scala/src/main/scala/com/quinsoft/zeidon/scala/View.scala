@@ -144,7 +144,7 @@ class View( val task: Task ) extends Dynamic {
     }
 
     /**
-     * Activates an OI from the DB with simple qualification.
+     * Activates an OI from the DB with simple qualification on the root.
      * Returns 'this' for convenience.
      *
      * {{{
@@ -157,9 +157,15 @@ class View( val task: Task ) extends Dynamic {
         val builder = new QualBuilder( this, jlodDef )
         addQual( builder.entityQualBuilder )
         builder.activate
-        this
+        return this
     }
 
+    def activate( addQual: (QualBuilder) => QualBuilder ): View = {
+      val qb = this.buildQual()
+      addQual( qb )
+      return qb.activate // Same as "return this".
+    }
+    
     /**
      * Activates all data from the DB for this LOD.  I.e. activates without
      * qualification.  Use carefully.
