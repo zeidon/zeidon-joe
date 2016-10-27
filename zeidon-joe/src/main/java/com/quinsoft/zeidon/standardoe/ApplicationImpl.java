@@ -21,16 +21,24 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
@@ -203,5 +211,28 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     public boolean isSystemApp()
     {
         return false;
+    }
+
+    @Override
+    public List<String> getLodNameList( Task task )
+    {
+        ClassLoader loader = this.getClass().getClassLoader();
+        final String resourceDir = getObjectDir() + "/";
+        
+        Pattern pattern = Pattern.compile( "(.*)(\\.xod$)", Pattern.CASE_INSENSITIVE );
+        try
+        {
+            return (List<String>) IOUtils.readLines( loader.getResourceAsStream( resourceDir ), StandardCharsets.UTF_8)
+                   .stream()
+                   .map( resourceName -> pattern.matcher( resourceName ) ) // Create a matcher
+                   .filter( matcher -> matcher.matches() )                 // Keep only ones that match.
+                   .map( matcher -> matcher.group( 1 ) )                   // Get the base filename.
+                   .collect( Collectors.toList() );
+        }
+        catch ( IOException e )
+        {
+            throw ZeidonException.wrapException( e ).appendMessage( "XOD resource dir: %s", resourceDir );
+        }
+
     }
 }

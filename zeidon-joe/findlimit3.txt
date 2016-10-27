@@ -1,4 +1,0 @@
-src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        String str = String.format( " LIMIT %d OFFSET %d", stmt.activateLimit, offset );
-src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:                if ( reader.getAttributeName().equals( "ACT_LIMIT" ))
-src\main\java\com\quinsoft\zeidon\utils\JoeUtils.java:    private final static Pattern PIPE_DELIMITER = Pattern.compile( "\\|" );
-src\main\java\com\quinsoft\zeidon\utils\JoeUtils.java:        String[] resourceList = PIPE_DELIMITER.split( resourceName );
