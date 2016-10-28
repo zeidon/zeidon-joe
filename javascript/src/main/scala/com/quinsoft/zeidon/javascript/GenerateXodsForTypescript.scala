@@ -180,3 +180,10 @@ export const ${lodDef.getName}_LodDef = {
         try { op(p) } finally { p.close() }
     }
 }
+
+object GenerateXodsForTypescript {
+   def main(args: Array[String]) {
+       val generator = new GenerateXodsForTypescript( args(0), args(1) )
+       generator.generate();
+    }  
+}
