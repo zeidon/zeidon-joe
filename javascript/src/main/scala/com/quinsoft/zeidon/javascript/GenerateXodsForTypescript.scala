@@ -55,10 +55,6 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
 export class $lodName extends zeidon.ObjectInstance {
     protected rootEntityName(): string { return "$lodName" };
 
-    get Configuration$$(): Configuration_Configuration {
-        return this.roots.selected() as Configuration_Configuration;
-    }
-
     public getApplicationName(): String { return "$applicationName" };
 
     getPrototype(entityName: string): any {
@@ -75,6 +71,10 @@ export class $lodName extends zeidon.ObjectInstance {
 
     get ${rootName}$$(): ${lodName}_${rootName} {
         return this.roots.selected() as ${lodName}_${rootName};
+    }
+
+    public static activate( options?: zeidon.ActivateOptions ): Promise<$lodName> {
+        return zeidon.ObjectInstance.activateOi( new $lodName(), options );
     }
 }
 """ )
@@ -115,7 +115,7 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
     
     private def writeEntityPrototypes( writer: java.io.PrintWriter ) {
         writer.println( s"""
-const ConfigurationEntityPrototypes = {""" )
+const ${lodDef.getName}EntityPrototypes = {""" )
 
         lodDef.getEntityDefs.foreach { entityDef => { 
             writer.println( s"    ${entityDef.getName}: ${lodDef.getName}_${entityDef.getName}.prototype, " )
@@ -140,9 +140,10 @@ export const ${lodDef.getName}_LodDef = {
     private def writeEntityDef( writer: java.io.PrintWriter, entityDef: EntityDef ) {
         val entityName = entityDef.getName
         writer.println( s"""        $entityName: {
-            name: "$entityName",
-            create: ${entityDef.isCreate()},
+            name:    "$entityName",
+            create:  ${entityDef.isCreate()},
             cardMax: ${entityDef.getMaxCardinality},
+            cardMax: ${entityDef.hasInitializedAttributes()},
             childEntities: {""" )
 
         entityDef.getChildren.foreach { writeChildEntityDefs( writer, _ ) }
@@ -158,20 +159,21 @@ export const ${lodDef.getName}_LodDef = {
     }
 
     private def writeChildEntityDefs( writer: java.io.PrintWriter, childEntityDef: EntityDef ) {
-        writer.println( s"""                ${childEntityDef.getName},""" )
+        writer.println( s"""                ${childEntityDef.getName}: {},""" )
     }
 
     private def writeAttributeDef( writer: java.io.PrintWriter, attributeDef: AttributeDef ) {
         val name = attributeDef.getName
         
         writer.println( s"""                $name: {
-                    hidden:     ${attributeDef.isHidden()},
-                    required:   ${attributeDef.isRequired() },
-                    domain:     "${attributeDef.getDomain.getName }",
-                    persistent: ${attributeDef.isPersistent() },
-                    key:        ${attributeDef.isKey },
-                    update:     ${attributeDef.isUpdate },
-                    foreignKey: ${attributeDef.isForeignKey() },
+                    hidden:       ${attributeDef.isHidden()},
+                    required:     ${attributeDef.isRequired()},
+                    domain:       "${attributeDef.getDomain.getName}",
+                    persistent:   ${attributeDef.isPersistent()},
+                    key:          ${attributeDef.isKey},
+                    update:       ${attributeDef.isUpdate},
+                    foreignKey:   ${attributeDef.isForeignKey()},
+                    initialValue: "${attributeDef.getInitialValue}",
                 },""" )
     }
     
