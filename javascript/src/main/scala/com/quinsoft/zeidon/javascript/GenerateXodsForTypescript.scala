@@ -107,9 +107,8 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
         val entityName = childEntityDef.getName
         
         writer.println( s"""
-    get ${entityName}(): zeidon.EntityArray<${lodDef.getName}_${entityName}> {
-        let entities = this.getChildEntityArray("$entityName")
-        return entities as zeidon.EntityArray<${lodDef.getName}_${entityName}>;
+    get ${entityName}(): zeidon.EntityArray<this> {
+        return this.getChildEntityArray("$entityName");
     }""" )
     }
     
@@ -140,10 +139,16 @@ export const ${lodDef.getName}_LodDef = {
     private def writeEntityDef( writer: java.io.PrintWriter, entityDef: EntityDef ) {
         val entityName = entityDef.getName
         writer.println( s"""        $entityName: {
-            name:    "$entityName",
-            create:  ${entityDef.isCreate()},
-            cardMax: ${entityDef.getMaxCardinality},
-            cardMax: ${entityDef.hasInitializedAttributes()},
+            name:       "$entityName",
+            create:     ${entityDef.isCreate()},
+            cardMax:    ${entityDef.getMaxCardinality},
+            hasInit:    ${entityDef.hasInitializedAttributes()},
+            creatable:  ${entityDef.isDelete()},
+            includable: ${entityDef.isInclude()},
+            deletable:  ${entityDef.isDelete()},
+            excludable: ${entityDef.isExclude()},
+            updatable:  ${entityDef.isUpdate()},
+            parentDelete: ${entityDef.isParentDelete()},
             childEntities: {""" )
 
         entityDef.getChildren.foreach { writeChildEntityDefs( writer, _ ) }
