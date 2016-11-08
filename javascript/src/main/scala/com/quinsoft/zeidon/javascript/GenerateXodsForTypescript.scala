@@ -10,6 +10,7 @@ import java.time._;
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.AttributeDef
+import org.apache.commons.lang3.StringUtils
 
 class GenerateXodsForTypescript( val applicationName: String, val destinationDir: String ) {
     val oe = JavaObjectEngine.getInstance
@@ -177,9 +178,12 @@ export const ${lodDef.getName}_LodDef = {
                     persistent:   ${attributeDef.isPersistent()},
                     key:          ${attributeDef.isKey},
                     update:       ${attributeDef.isUpdate},
-                    foreignKey:   ${attributeDef.isForeignKey()},
-                    initialValue: "${attributeDef.getInitialValue}",
-                },""" )
+                    foreignKey:   ${attributeDef.isForeignKey()},""" )
+                    
+        if ( ! StringUtils.isBlank( attributeDef.getInitialValue ) )
+          writer.println( s"""                    initialValue: "${attributeDef.getInitialValue}",""" )
+                    
+        writer.println( s"""                },""" )
     }
     
     private def printToFile(filename: String)(op: java.io.PrintWriter => Unit) {
