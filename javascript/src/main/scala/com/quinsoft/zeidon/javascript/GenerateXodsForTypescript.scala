@@ -31,6 +31,7 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
         printToFile( s"$destinationDir/$lodName.ts" )( writer => {
             writeStartingComment(writer)
             writer.println( "import * as zeidon from './zeidon';" )
+            writer.println( "import { Observable } from 'rxjs';" )
             writer.println( "" )
             writeObjectInstance(writer)
             lodDef.getEntityDefs.foreach { writeEntityInstance( writer, _ ) }
@@ -74,7 +75,7 @@ export class $lodName extends zeidon.ObjectInstance {
         return this.roots.selected() as ${lodName}_${rootName};
     }
 
-    public static activate( options?: zeidon.ActivateOptions ): Promise<$lodName> {
+    public static activate( options?: zeidon.ActivateOptions ): Observable<$lodName> {
         return zeidon.ObjectInstance.activateOi( new $lodName(), options );
     }
 }
