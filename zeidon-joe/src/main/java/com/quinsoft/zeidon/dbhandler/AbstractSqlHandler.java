@@ -2190,11 +2190,17 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ! attributeDef.isPersistent() )
                 continue;
 
+            if ( attributeDef.isKey() )
+            {
+                if ( entityInstance.getAttribute( attributeDef ).isUpdated() )
+                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
+
+                if ( entityInstance.getAttribute( attributeDef ).isNull() )
+                    throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
+            }
+            
             if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
                 continue;
-
-            if ( attributeDef.isKey() )
-               throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
 
             // If this is an autosequencing attribute then we need to check to see if the
             // relationship is m-to-m.  If it is then we need to update the correspondence
