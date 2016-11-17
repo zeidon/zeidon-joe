@@ -111,29 +111,8 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
-            </plugin> 
-
-	    <!-- Parses the mvn version into properties:
-		 parsedVersion.majorVersion
-		 parsedVersion.minorVersion
-		 parsedVersion.incrementalVersion
-		 parsedVersion.qualifier
-		 parsedVersion.buildNumber
-	    <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>build-helper-maven-plugin</artifactId>
-              <version>1.9.1</version>
-              <executions>
-		<execution>
-		  <id>parse-version</id>
-		  <goals>
-		    <goal>parse-version</goal>
-		  </goals>
-		</execution>
-              </executions>
-	    </plugin>
-	    -->
-       </plugins>
+            </plugin>            
+        </plugins>
     </build>
 
     <modules>

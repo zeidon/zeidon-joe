@@ -1449,15 +1449,18 @@ class EntityInstanceImpl implements EntityInstance
      */
     private void addLinkedInstance( EntityInstanceImpl newInstance )
     {
-        synchronized( getObjectInstance() )
+        synchronized( getTask() )
         {
             if ( linkedInstances == null )
             {
                 if ( newInstance.linkedInstances != null )
                 {
+                    // Make all the linked entities share the new source attributes.
+                    for ( EntityInstanceImpl ei : newInstance.linkedInstances.keySet() )
+                        ei.persistentAttributes = persistentAttributes;
+
                     linkedInstances = newInstance.linkedInstances;
                     linkedInstances.putIfAbsent( this, Boolean.TRUE );
-                    persistentAttributes = newInstance.persistentAttributes;
                     return;
                 }
 

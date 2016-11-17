@@ -81,7 +81,8 @@ public class DynamicTableDomain extends AbstractTableDomain
         {
             View domainView = app.getViewByName( viewName );
             if ( domainView != null )
-                return domainView;
+               //domainView.drop();
+               return domainView;
 
             domainView = activateApplicationDomain( task, context );
             app.setNameForView( viewName, domainView );
