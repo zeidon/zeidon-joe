@@ -142,6 +142,7 @@ export const ${lodDef.getName}_LodDef = {
         val entityName = entityDef.getName
         writer.println( s"""        $entityName: {
             name:       "$entityName",
+            erToken:    "${entityDef.getErEntityToken}",
             create:     ${entityDef.isCreate()},
             cardMax:    ${entityDef.getMaxCardinality},
             hasInit:    ${entityDef.hasInitializedAttributes()},
@@ -173,6 +174,7 @@ export const ${lodDef.getName}_LodDef = {
         val name = attributeDef.getName
         
         writer.println( s"""                $name: {
+                    name:         ${name},
                     hidden:       ${attributeDef.isHidden()},
                     required:     ${attributeDef.isRequired()},
                     domain:       "${attributeDef.getDomain.getName}",
