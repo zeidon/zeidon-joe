@@ -163,7 +163,7 @@ public class ViewTest
                 "    \"ID\": [10, 11, 12],\r\n" + 
                 "    \"MaidenName\": \"Alice\",\r\n" + 
                 "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"LastName\": \"Smith\" } ],\r\n" + 
-                "    \"DateOfBirth\": { \"$lt\": \"01/01/2001\" }\r\n" + 
+                "    \"DateOfBirth\": { \"$gt\": \"01/01/2001\", \"$lt\": \"01/01/2010\" }\r\n" + 
                 "}"; 
 
         runJsonTest( json );

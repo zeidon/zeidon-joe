@@ -198,6 +198,26 @@ public class QualificationBuilder
         return this;
     }
 
+    /**
+     * Create the qual object from a simple JSON string similar to Mongo DB qualification.
+     * 
+     * Sample JSON:
+     * <pre>
+     {
+         "ID": [10, 11, 12],
+         "MaidenName": "Alice",
+         "$or": [ { "FirstName": "Bob" }, { "$and" : [ { "LastName": "Smith" }, { "MaidenName": { "$neq": "Smith" } } ] } ]
+         "DateOfBirth": { "$gt": "01/01/2001", "<": "01/01/2010" }
+         "restricting": {
+             "Address": {
+                 "Description": { "<>": "" }
+             }
+         }
+     }
+     * </pre>
+     * @param json
+     * @return this
+     */
     public QualificationBuilder loadFromJsonString( String json )
     {
         QualificationBuilderFromJson parser = new QualificationBuilderFromJson( this );
