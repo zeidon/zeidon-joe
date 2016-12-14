@@ -34,6 +34,7 @@ import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
 import com.quinsoft.zencas.scalasamples.SampleActivates;
 import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
@@ -132,6 +133,69 @@ public class ViewTest
         assertEquals( "Multi-line attribute value fails comparison", attrvalue, str );
     }
 
+    private void runJsonTest( String json, boolean rootOnly )
+    {
+        QualificationBuilder qb = new QualificationBuilder( zencas );
+        qb.setLodDef( "mPerson" );
+        qb.loadFromJsonString( json );
+        if ( rootOnly )
+            qb.rootOnly();
+        qb.activate();
+    }
+    
+    private void runJsonTest( String json )
+    {
+        runJsonTest( json, true );
+    }
+    
+    @Test
+    public void testQualBuilderFromJson() throws IOException
+    {
+        String json;
+        
+        json = "{\r\n" + 
+                "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"$and\" : [ { \"LastName\": \"Smith\" }, { \"MaidenName\": { \"$neq\": \"Smith\" } } ] } ]\r\n" + 
+                "}";
+
+        runJsonTest( json );
+        
+        json = "{\r\n" + 
+                "    \"ID\": [10, 11, 12],\r\n" + 
+                "    \"MaidenName\": \"Alice\",\r\n" + 
+                "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"LastName\": \"Smith\" } ],\r\n" + 
+                "    \"DateOfBirth\": { \"$lt\": \"01/01/2001\" }\r\n" + 
+                "}"; 
+
+        runJsonTest( json );
+
+        json = "{\r\n" + 
+                "    \"MaidenName\": { \"$neq\": \"Smith\" }\r\n" + 
+                "}";
+
+        runJsonTest( json );
+        
+        json = "{\r\n" + 
+                "    \"MaidenName\": { \"$neq\": \"Smith\" },\r\n" + 
+                "    \"ID\": [10, 11, 12],\r\n" + 
+                "    \"Address\": { \"Description\": { \"$neq\": \"\" } }\r\n" + 
+                "}";
+
+        runJsonTest( json );
+        
+        json = "{\r\n" + 
+                "    \"ID\": [10, 11, 12],\r\n" + 
+                "    \"restricting\": {\r\n" + 
+                "        \"Address\": {\r\n" + 
+                "            \"Description\": { \"<>\": \"\" }\r\n" + 
+                "        }\r\n" + 
+                "    }\r\n" + 
+                "}";
+
+        runJsonTest( json, false );
+        
+        System.out.println( "here" );
+    }
+    
     @Test
     public void testSubobject() throws IOException
     {
