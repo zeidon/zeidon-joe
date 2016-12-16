@@ -1,0 +1,139 @@
+z1000-Zeidon    SHIPPER  TZZOLODO 03/26/16   21:29:15 1.0a2    
+eLOD       1
+aZKey      110000675
+aName      Shipper
+
+eLOD_EntityParent 2
+aName      Shipper
+aIndentName Shipper
+aIndentLvl 0
+aZKey      110000676
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave D
+
+eLOD_AttributeRec 3
+aZKey      110000677
+aUpdate    Y
+aSeqOrder  A
+aHashkeyType G
+
+eER_AttributeRec 4
+aName      ShipperId
+aZKey      110000338
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 5
+aZKey      110000021
+aName      GeneratedKey
+aDomainType E
+aDataType  L
+aMaxStringLth 64
+aDesc      Generic DB-generated key
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      110000678
+
+eER_AttributeRec 4
+aName      CompanyName
+aZKey      110000339
+aLth       40
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 5
+aZKey      110000042
+aName      Text
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aDesc      Any Character String
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      110000679
+
+eER_AttributeRec 4
+aName      Phone
+aZKey      110000344
+aLth       24
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eER_EntityRec 3
+aName      Shipper
+aZKey      110000337
+aPurpose   F
+aER_DiagramPosX 67
+aER_DiagramPosY 3
+aTE_TableName shippers
+aSAP_Entity 0
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 1
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+ePOD       2
+aNAME      Shipper
+aZKey      110000680
+aTE_SourceZKey 110000445
+
+eTE_DB_Environ 3
+aName      Northwind
+aZKey      833
+aDesc      Zeidon application using Northwind DB
+aType      P
+
+eTE_DBMS_Source 4
+aName      MySql
+aZKey      110000445
+aParadigm  R
+aDBMS      MySql/JDBC with SERIAL keys
+aGenerateExecutable kzhsqlmb
+aExecutable kzhsqloa
+aDisplayOwner N
+
+i10        7
+i12        1
+i13        2
+i14        3
+i15        4
+i16        5
+i17        6
+i18        7
+i19        8
+i20        9
+i21        7
+i22        11

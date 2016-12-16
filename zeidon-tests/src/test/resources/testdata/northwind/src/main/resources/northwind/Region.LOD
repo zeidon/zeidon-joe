@@ -1,0 +1,214 @@
+z1000-Zeidon    REGION   TZZOLODO 03/26/16   21:29:15 1.0a2    
+eLOD       1
+aZKey      110000682
+aName      Region
+
+eLOD_EntityParent 2
+aName      Region
+aIndentName Region
+aIndentLvl 0
+aZKey      110000683
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave D
+
+eLOD_EntityChild 3
+aName      Territory
+aIndentName    Territory
+aIndentLvl 3
+aZKey      110000686
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave D
+aRelLinkIndicator L
+
+eLOD_AttributeRec 4
+aZKey      110000687
+
+eER_AttributeRec 5
+aName      TerritoryId
+aZKey      110000395
+aLth       20
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 6
+aZKey      110000042
+aName      Text
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aDesc      Any Character String
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      110000688
+
+eER_AttributeRec 5
+aName      TerritoryDescription
+aZKey      110000396
+aLth       50
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 6
+
+eER_EntityRec 4
+aName      Territory
+aZKey      110000394
+aPurpose   A
+aER_DiagramPosX 28
+aER_DiagramPosY 23
+aTE_TableName territories
+aSAP_Entity 0
+
+eER_RelLinkRec 4
+aName      has
+aAutoSeq   N
+aHangingForeignKeyEntity N
+aZKey      110000431
+aCardMin   0
+aCardMax   m
+aTE_NoForeignKeyPrefix Y
+
+eER_RelTypeRec 5
+aZKey      110000430
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 32
+aER_DiagramE1PosY 34
+aER_DiagramE2PosX 32
+aER_DiagramE2PosY 28
+
+eLOD_AttributeRec 3
+aZKey      110000684
+
+eER_AttributeRec 4
+aName      RegionId
+aZKey      110000390
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 5
+aZKey      110000021
+aName      GeneratedKey
+aDomainType E
+aDataType  L
+aMaxStringLth 64
+aDesc      Generic DB-generated key
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      110000685
+
+eER_AttributeRec 4
+aName      RegionDescription
+aZKey      110000393
+aLth       50
+aNotNull   Y
+
+eDomainRec 5
+
+eER_EntityRec 3
+aName      Region
+aZKey      110000389
+aPurpose   F
+aER_DiagramPosX 28
+aER_DiagramPosY 35
+aTE_TableName regions
+aSAP_Entity 0
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+ePOD       2
+aNAME      Region
+aZKey      110000689
+aTE_SourceZKey 110000445
+
+eTE_DB_Environ 3
+aName      Northwind
+aZKey      833
+aDesc      Zeidon application using Northwind DB
+aType      P
+
+eTE_DBMS_Source 4
+aName      MySql
+aZKey      110000445
+aParadigm  R
+aDBMS      MySql/JDBC with SERIAL keys
+aGenerateExecutable kzhsqlmb
+aExecutable kzhsqloa
+aDisplayOwner N
+
+i8         5
+i17        5
+i19        1
+i20        12
+i21        13
+i22        14
+i23        15
+i24        16
+i25        5
+i26        18
+i27        2
+i28        3
+i29        4
+i30        5
+i31        6
+i32        7
+i33        5
+i34        9
+i35        10
+i36        11

@@ -1,0 +1,1803 @@
+z1000-Zeidon    NORTHWINDTZEREMDO 03/26/16   21:28:57 1.0a2    
+eEntpER_Model 1
+aName      Northwind
+aZKey      110000047
+aNextZKeyToAssign 110000720
+aLastSyncDate 20160326212857898
+aDesc      Zeidon application using Northwind DB
+
+eER_Entity 2
+aName      Category
+aZKey      110000364
+aPurpose   F
+aER_DiagramPosX 19
+aER_DiagramPosY 16
+aTE_TableName categories
+aSAP_Entity 0
+awkSelectedAttributeForDragSort 5
+
+eER_Attribute 3
+aName      CategoryId
+aZKey      110000365
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+aZKey      110000021
+aDesc      Generic DB-generated key
+aName      GeneratedKey
+aDataType  L
+aMaxStringLth 64
+aDomainType E
+aContextRestriction N
+
+eER_FactTypeForDelete 4
+aZKey      110000367
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000366
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      CategoryName
+aZKey      110000368
+aLth       15
+aNotNull   Y
+awkSequence 2
+
+eDomain    4
+aZKey      110000042
+aDesc      Any Character String
+aName      Text
+aDataType  S
+aMaxStringLth 10000
+aDomainType E
+aContextRestriction N
+
+eER_Attribute 3
+aName      Description
+aZKey      110000369
+aLth       1000
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      Picture
+aZKey      110000370
+awkSequence 4
+
+eDomain    4
+aZKey      110000002
+aDesc      A do nothing domain for blobs
+aName      Blob
+aDataType  B
+aDomainType E
+aContextRestriction N
+
+eER_RelLink 3
+aName      has
+aZKey      110000410
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_RelType_1 4
+aZKey      110000409
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 23
+aER_DiagramE1PosY 15
+aER_DiagramE2PosX 23
+aER_DiagramE2PosY 8
+
+eER_RelLink_Other 5
+aName      for
+aZKey      110000411
+aCardMin   1
+aCardMax   1
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_Entity_Other 6
+aSAP_Entity 0
+aName      Product
+aZKey      110000054
+aPurpose   F
+aER_DiagramPosX 15
+aER_DiagramPosY 3
+aTE_TableName products
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+aName      Customer
+aZKey      110000238
+aPurpose   F
+aER_DiagramPosX 66
+aER_DiagramPosY 10
+aTE_TableName customers
+aSAP_Entity 0
+awkSelectedAttributeForDragSort 1
+
+eER_Attribute 3
+aName      CustomerId
+aZKey      110000239
+aLth       5
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000258
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000257
+aSystemMaintained N
+
+eER_Attribute 3
+aName      CompanyName
+aZKey      110000240
+aLth       40
+aSAP_Attribute 0
+awkSequence 2
+
+eDomain    4
+
+eER_Attribute 3
+aName      ContactName
+aZKey      110000374
+aLth       30
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      ContactTitle
+aZKey      110000377
+aLth       30
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      Address
+aZKey      110000249
+aLth       60
+aSAP_Attribute 0
+awkSequence 5
+
+eDomain    4
+
+eER_Attribute 3
+aName      City
+aZKey      110000250
+aLth       15
+aSAP_Attribute 0
+awkSequence 6
+
+eDomain    4
+
+eER_Attribute 3
+aName      Region
+aZKey      110000251
+aLth       15
+aSAP_Attribute 0
+awkSequence 7
+
+eDomain    4
+
+eER_Attribute 3
+aName      PostalCode
+aZKey      110000252
+aLth       15
+aSAP_Attribute 0
+awkSequence 8
+
+eDomain    4
+
+eER_Attribute 3
+aName      Country
+aZKey      110000253
+aLth       15
+aSAP_Attribute 0
+awkSequence 9
+
+eDomain    4
+
+eER_Attribute 3
+aName      Phone
+aZKey      110000375
+aLth       24
+awkSequence 10
+
+eDomain    4
+
+eER_Attribute 3
+aName      Fax
+aZKey      110000376
+aLth       24
+awkSequence 11
+
+eDomain    4
+
+eER_RelLink 3
+aName      has
+aZKey      110000326
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_RelType_1 4
+aZKey      110000325
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 55
+aER_DiagramBendPosY 12
+aER_DiagramE1PosX 65
+aER_DiagramE1PosY 12
+aER_DiagramE2PosX 55
+aER_DiagramE2PosY 8
+
+eER_RelLink_Other 5
+aName      for
+aZKey      110000327
+aCardMin   1
+aCardMax   1
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_Entity_Other 6
+aSAP_Entity 0
+aName      Order
+aZKey      110000286
+aPurpose   F
+aER_DiagramPosX 51
+aER_DiagramPosY 3
+aTE_TableName orders
+
+eER_RelLink 3
+aName      for
+aZKey      110000438
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_RelType_1 4
+aZKey      110000436
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 70
+aER_DiagramE1PosY 24
+aER_DiagramE2PosX 70
+aER_DiagramE2PosY 15
+aTE_TableName CustomerCustomerDemo
+
+eER_RelLink_Other 5
+aName      has
+aZKey      110000437
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_Entity_Other 6
+aName      CustomerDemographics
+aZKey      110000371
+aPurpose   F
+aER_DiagramPosX 66
+aER_DiagramPosY 25
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+awkSelectedAttributeForDragSort 2
+
+eER_Attribute 3
+aName      CustomerTypeId
+aZKey      110000372
+aLth       10
+aNotNull   Y
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000447
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000446
+aSystemMaintained N
+
+eER_Attribute 3
+aName      CustomerDesc
+aZKey      110000373
+aLth       1000
+awkSequence 2
+
+eDomain    4
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+aName      Employee
+aZKey      110000216
+aPurpose   F
+aER_DiagramPosX 45
+aER_DiagramPosY 18
+aTE_TableName employees
+aSAP_Entity 0
+awkSelectedAttributeForDragSort 12
+
+eER_Attribute 3
+aName      EmployeeId
+aZKey      110000217
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000236
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000235
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      LastName
+aZKey      110000219
+aLth       20
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 2
+
+eDomain    4
+
+eER_Attribute 3
+aName      FirstName
+aZKey      110000220
+aLth       10
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      Title
+aZKey      110000222
+aLth       30
+aSAP_Attribute 0
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      TitleOfCourtesy
+aZKey      110000223
+aLth       25
+aSAP_Attribute 0
+awkSequence 5
+
+eDomain    4
+
+eER_Attribute 3
+aName      BirthDate
+aZKey      110000224
+aSAP_Attribute 0
+awkSequence 6
+
+eDomain    4
+aZKey      110000004
+aDesc      Date without time
+aName      Date
+aDataType  D
+aDomainType E
+aContextRestriction N
+
+eER_Attribute 3
+aName      HireDate
+aZKey      110000225
+aSAP_Attribute 0
+awkSequence 7
+
+eDomain    4
+
+eER_Attribute 3
+aName      HomePhone
+aZKey      110000226
+aLth       24
+aSAP_Attribute 0
+awkSequence 8
+
+eDomain    4
+
+eER_Attribute 3
+aName      Address
+aZKey      110000227
+aLth       60
+aSAP_Attribute 0
+awkSequence 9
+
+eDomain    4
+
+eER_Attribute 3
+aName      City
+aZKey      110000228
+aLth       15
+aSAP_Attribute 0
+awkSequence 10
+
+eDomain    4
+
+eER_Attribute 3
+aName      Region
+aZKey      110000229
+aLth       15
+aSAP_Attribute 0
+awkSequence 11
+
+eDomain    4
+
+eER_Attribute 3
+aName      PostalCode
+aZKey      110000230
+aLth       10
+aSAP_Attribute 0
+awkSequence 12
+
+eDomain    4
+
+eER_Attribute 3
+aName      Country
+aZKey      110000381
+aLth       15
+awkSequence 13
+
+eDomain    4
+
+eER_Attribute 3
+aName      Extension
+aZKey      110000232
+aLth       4
+aSAP_Attribute 0
+awkSequence 14
+
+eDomain    4
+
+eER_Attribute 3
+aName      Notes
+aZKey      110000233
+aLth       10000
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 15
+
+eDomain    4
+
+eER_Attribute 3
+aName      Photo
+aZKey      110000234
+aSAP_Attribute 0
+awkSequence 16
+
+eDomain    4
+
+eER_Attribute 3
+aName      PhotoPath
+aZKey      110000379
+aLth       255
+awkSequence 17
+
+eDomain    4
+
+eER_Attribute 3
+aName      Salary
+aZKey      110000380
+awkSequence 18
+
+eDomain    4
+aZKey      110000023
+aName      Double
+aDataType  M
+aDomainType E
+aContextRestriction N
+
+eER_RelLink 3
+aName      has
+aZKey      110000307
+aCardMin   0
+aCardMax   m
+
+eER_RelType_1 4
+aZKey      110000306
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 49
+aER_DiagramBendPosY 5
+aER_DiagramE1PosX 49
+aER_DiagramE1PosY 17
+aER_DiagramE2PosX 50
+aER_DiagramE2PosY 5
+
+eER_RelLink_Other 5
+aName      for
+aZKey      110000308
+aCardMin   1
+aCardMax   1
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+aName      for
+aZKey      110000426
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_RelType_1 4
+aZKey      110000424
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 32
+aER_DiagramBendPosY 20
+aER_DiagramE1PosX 32
+aER_DiagramE1PosY 22
+aER_DiagramE2PosX 44
+aER_DiagramE2PosY 20
+aTE_TableName EmployeeTerritories
+
+eER_RelLink_Other 5
+aName      has
+aZKey      110000425
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_Entity_Other 6
+aSAP_Entity 0
+aName      Territory
+aZKey      110000394
+aPurpose   A
+aER_DiagramPosX 28
+aER_DiagramPosY 23
+aTE_TableName territories
+
+eER_RelLink 3
+aName      has reports
+aZKey      110000443
+aCardMin   0
+aCardMax   m
+
+eER_RelType_1 4
+aZKey      110000442
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 57
+aER_DiagramBendPosY 14
+aER_DiagramE1PosX 51
+aER_DiagramE1PosY 17
+aER_DiagramE2PosX 54
+aER_DiagramE2PosY 18
+
+eER_RelLink_Other 5
+aName      reports to
+aZKey      110000444
+aCardMin   1
+aCardMax   1
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+aName      Northwind
+aZKey      110000048
+aPurpose   F
+aER_DiagramPosX 7
+aER_DiagramPosY 49
+
+eER_Attribute 3
+aName      Id
+aZKey      110000049
+aNotNull   Y
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000051
+
+eER_FactTypeForDelete 4
+aZKey      110000053
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000052
+aSystemMaintained Y
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+awkSelectedAttributeForDragSort 6
+
+eER_Attribute 3
+aName      OrderId
+aZKey      110000287
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000289
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000288
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      OrderDate
+aZKey      110000290
+awkSequence 2
+
+eDomain    4
+aZKey      110000025
+aDesc      Date/time field
+aName      DateTime
+aDataType  T
+aDomainType E
+aContextRestriction N
+
+eER_Attribute 3
+aName      ShippedDate
+aZKey      110000291
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      RequiredDate
+aZKey      110000382
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      Freight
+aZKey      110000384
+awkSequence 5
+
+eDomain    4
+
+eER_Attribute 3
+aName      ShipName
+aZKey      110000292
+aLth       40
+awkSequence 6
+
+eDomain    4
+
+eER_Attribute 3
+aName      ShipAddress
+aZKey      110000293
+aLth       60
+awkSequence 7
+
+eDomain    4
+
+eER_Attribute 3
+aName      ShipCity
+aZKey      110000294
+aLth       15
+awkSequence 8
+
+eDomain    4
+
+eER_Attribute 3
+aName      ShipRegion
+aZKey      110000295
+aLth       15
+awkSequence 9
+
+eDomain    4
+
+eER_Attribute 3
+aName      ShipPostalCode
+aZKey      110000296
+aLth       10
+awkSequence 10
+
+eDomain    4
+
+eER_Attribute 3
+aName      ShipCountry
+aZKey      110000385
+aLth       15
+awkSequence 11
+
+eDomain    4
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+aName      for
+aZKey      110000363
+aCardMin   1
+aCardMax   1
+
+eER_RelType_1 4
+aZKey      110000361
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 66
+aER_DiagramE1PosY 5
+aER_DiagramE2PosX 60
+aER_DiagramE2PosY 5
+
+eER_RelLink_Other 5
+aName      has
+aZKey      110000362
+aCardMin   0
+aCardMax   m
+
+eER_Entity_Other 6
+aSAP_Entity 0
+aName      Shipper
+aZKey      110000337
+aPurpose   F
+aER_DiagramPosX 67
+aER_DiagramPosY 3
+aTE_TableName shippers
+
+eER_RelLink 3
+aName      has
+aZKey      110000419
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_RelType_1 4
+aZKey      110000418
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 50
+aER_DiagramE1PosY 3
+aER_DiagramE2PosX 43
+aER_DiagramE2PosY 3
+
+eER_RelLink_Other 5
+aName      for
+aZKey      110000420
+aCardMin   1
+aCardMax   1
+aAutoSeq   N
+aTE_NoForeignKeyPrefix N
+aHangingForeignKeyEntity N
+
+eER_Entity_Other 6
+aName      OrderDetail
+aZKey      110000399
+aPurpose   S
+aER_DiagramPosX 34
+aER_DiagramPosY 3
+aTE_TableName orderdetails
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+
+eER_Attribute 3
+aName      UnitPrice
+aZKey      110000400
+aNotNull   Y
+awkSequence 1
+
+eDomain    4
+
+eER_Attribute 3
+aName      Quantity
+aZKey      110000401
+aNotNull   Y
+awkSequence 2
+
+eDomain    4
+aZKey      110000044
+aDesc      Integer numbers from -lots to +lots
+aName      Integer
+aDataType  L
+aMaxStringLth 4
+aDecimalFormat 0
+aDomainType E
+aContextRestriction N
+
+eER_Attribute 3
+aName      Discount
+aZKey      110000402
+aNotNull   Y
+awkSequence 3
+
+eDomain    4
+
+eER_RelLink 3
+aName      for
+aZKey      110000417
+aCardMin   1
+aCardMax   1
+
+eER_RelType_1 4
+aZKey      110000415
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 24
+aER_DiagramE1PosY 5
+aER_DiagramE2PosX 33
+aER_DiagramE2PosY 5
+
+eER_RelLink_Other 5
+aName      has
+aZKey      110000416
+aCardMin   0
+aCardMax   m
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+aName      ProductId
+aZKey      110000672
+aSystemMaintained N
+
+eER_FactType 4
+aZKey      110000673
+
+eER_RelLinkIdentifier 5
+
+eER_Entity_Other_Identifier 6
+
+eER_FactType 4
+aZKey      110000674
+
+eER_RelLinkIdentifier 5
+
+eER_Entity_Other_Identifier 6
+
+eER_Entity 2
+awkSelectedAttributeForDragSort 1
+
+eER_Attribute 3
+aName      ProductId
+aZKey      110000055
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000057
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000056
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      ProductName
+aZKey      110000061
+aLth       40
+aNotNull   Y
+awkSequence 2
+
+eDomain    4
+
+eER_Attribute 3
+aName      ReorderLevel
+aZKey      110000065
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      QuantityPerUnit
+aZKey      110000067
+aLth       20
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      Discontinued
+aZKey      110000068
+aNotNull   Y
+awkSequence 5
+
+eDomain    4
+aZKey      110000019
+aName      Boolean
+aDataType  L
+aDomainType E
+aContextRestriction N
+
+eER_Attribute 3
+aName      UnitPrice
+aZKey      110000386
+awkSequence 6
+
+eDomain    4
+
+eER_Attribute 3
+aName      UnitsInStock
+aZKey      110000387
+awkSequence 7
+
+eDomain    4
+
+eER_Attribute 3
+aName      UnitsOnOrder
+aZKey      110000388
+awkSequence 8
+
+eDomain    4
+
+eER_RelLink 3
+aName      for
+aZKey      110000408
+aCardMin   1
+aCardMax   1
+
+eER_RelType_1 4
+aZKey      110000406
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 11
+aER_DiagramBendPosY 5
+aER_DiagramE1PosX 11
+aER_DiagramE1PosY 15
+aER_DiagramE2PosX 14
+aER_DiagramE2PosY 5
+
+eER_RelLink_Other 5
+aName      has
+aZKey      110000407
+aCardMin   0
+aCardMax   m
+
+eER_Entity_Other 6
+aSAP_Entity 0
+aName      Supplier
+aZKey      110000077
+aPurpose   F
+aER_DiagramPosX 7
+aER_DiagramPosY 16
+aTE_TableName suppliers
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+aName      Region
+aZKey      110000389
+aPurpose   F
+aER_DiagramPosX 28
+aER_DiagramPosY 35
+aTE_TableName regions
+aSAP_Entity 0
+awkSelectedAttributeForDragSort 2
+
+eER_Attribute 3
+aName      RegionId
+aZKey      110000390
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000392
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000391
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      RegionDescription
+aZKey      110000393
+aLth       50
+aNotNull   Y
+awkSequence 2
+
+eDomain    4
+
+eER_RelLink 3
+aName      has
+aZKey      110000431
+aCardMin   0
+aCardMax   m
+aAutoSeq   N
+aTE_NoForeignKeyPrefix Y
+aHangingForeignKeyEntity N
+
+eER_RelType_1 4
+aZKey      110000430
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 32
+aER_DiagramE1PosY 34
+aER_DiagramE2PosX 32
+aER_DiagramE2PosY 28
+
+eER_RelLink_Other 5
+aName      for
+aZKey      110000432
+aCardMin   1
+aCardMax   1
+aAutoSeq   N
+aTE_NoForeignKeyPrefix Y
+aHangingForeignKeyEntity N
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+awkSelectedAttributeForDragSort 18
+
+eER_Attribute 3
+aName      ShipperId
+aZKey      110000338
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000357
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000356
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      CompanyName
+aZKey      110000339
+aLth       40
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 2
+
+eDomain    4
+
+eER_Attribute 3
+aName      Phone
+aZKey      110000344
+aLth       24
+aSAP_Attribute 0
+awkSequence 3
+
+eDomain    4
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+awkSelectedAttributeForDragSort 17
+
+eER_Attribute 3
+aName      SupplierId
+aZKey      110000078
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000080
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000079
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      CompanyName
+aZKey      110000081
+aLth       40
+aNotNull   Y
+awkSequence 2
+
+eDomain    4
+
+eER_Attribute 3
+aName      ContactName
+aZKey      110000082
+aLth       30
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      ContactTitle
+aZKey      110000083
+aLth       30
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      Phone
+aZKey      110000086
+aLth       24
+awkSequence 5
+
+eDomain    4
+
+eER_Attribute 3
+aName      Fax
+aZKey      110000089
+aLth       24
+awkSequence 6
+
+eDomain    4
+
+eER_Attribute 3
+aName      Address
+aZKey      110000090
+aLth       60
+awkSequence 7
+
+eDomain    4
+
+eER_Attribute 3
+aName      City
+aZKey      110000091
+aLth       15
+awkSequence 8
+
+eDomain    4
+
+eER_Attribute 3
+aName      Region
+aZKey      110000092
+aLth       15
+awkSequence 9
+
+eDomain    4
+
+eER_Attribute 3
+aName      PostalCode
+aZKey      110000093
+aLth       15
+awkSequence 10
+
+eDomain    4
+
+eER_Attribute 3
+aName      Country
+aZKey      110000094
+aLth       15
+awkSequence 11
+
+eDomain    4
+
+eER_Attribute 3
+aName      HomePage
+aZKey      110000095
+aLth       1000
+awkSequence 12
+
+eDomain    4
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+awkSelectedAttributeForDragSort 1
+
+eER_Attribute 3
+aName      TerritoryId
+aZKey      110000395
+aLth       20
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000398
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      110000397
+aSystemMaintained N
+
+eER_Attribute 3
+aName      TerritoryDescription
+aZKey      110000396
+aLth       50
+aNotNull   Y
+aSAP_Attribute 0
+awkSequence 2
+
+eDomain    4
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+aName      ZeidonLocking
+aZKey      110000709
+aPurpose   F
+aDesc      Used for Automatic database locking
+aER_DiagramPosX 6
+aER_DiagramPosY 26
+awkSelectedAttributeForDragSort 1
+
+eER_Attribute 3
+aName      LOD_Name
+aZKey      110000710
+aLth       35
+aNotNull   Y
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000712
+
+eER_EntIdentifierForDelete 5
+aName      LockingKey
+aZKey      110000711
+aSystemMaintained N
+
+eER_Attribute 3
+aName      KeyValue
+aZKey      110000713
+aLth       200
+aNotNull   Y
+awkSequence 2
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      110000714
+
+eER_EntIdentifierForDelete 5
+
+eER_Attribute 3
+aName      UserName
+aZKey      110000715
+aLth       32
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      AllowRead
+aZKey      110000716
+aLth       1
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      Timestamp
+aZKey      110000717
+aNotNull   Y
+awkSequence 5
+
+eDomain    4
+
+eER_Attribute 3
+aName      ID
+aZKey      110000718
+awkSequence 6
+
+eDomain    4
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+i9         7
+i16        5
+i17        4
+i18        2
+i21        7
+i25        7
+i27        7
+i29        7
+i31        7
+i33        7
+i35        7
+i37        7
+i39        7
+i41        7
+i43        7
+i52        23
+i53        22
+i54        20
+i55        51
+i57        7
+i61        7
+i62        50
+i63        49
+i64        48
+i65        19
+i66        59
+i67        58
+i68        56
+i71        3
+i75        7
+i77        7
+i79        7
+i81        7
+i85        83
+i87        7
+i89        7
+i91        7
+i93        7
+i95        7
+i97        7
+i99        7
+i101       7
+i103       11
+i105       7
+i111       47
+i119       69
+i120       118
+i121       117
+i122       116
+i123       69
+i124       73
+i125       72
+i126       70
+i129       3
+i133       132
+i134       131
+i135       128
+i136       47
+i138       3
+i144       142
+i146       142
+i148       107
+i150       7
+i152       7
+i154       7
+i156       7
+i158       7
+i160       7
+i161       110
+i162       109
+i163       108
+i164       69
+i165       46
+i166       45
+i167       44
+i168       19
+i177       140
+i178       139
+i179       137
+i180       176
+i182       107
+i186       107
+i190       15
+i191       175
+i192       174
+i193       173
+i194       47
+i197       189
+i198       15
+i200       173
+i201       47
+i202       15
+i204       3
+i208       7
+i210       184
+i212       7
+i216       107
+i218       184
+i220       184
+i225       14
+i226       13
+i227       12
+i228       1
+i229       189
+i230       188
+i231       187
+i232       176
+i233       206
+i234       205
+i235       203
+i238       3
+i242       7
+i246       115
+i247       240
+i248       239
+i249       237
+i250       172
+i252       3
+i256       7
+i258       7
+i259       171
+i260       170
+i261       169
+i262       47
+i263       254
+i264       253
+i265       251
+i266       224
+i268       3
+i272       7
+i274       7
+i276       7
+i278       7
+i280       7
+i282       7
+i284       7
+i286       7
+i288       7
+i290       7
+i292       7
+i293       223
+i294       222
+i295       221
+i296       15
+i297       270
+i298       269
+i299       267
+i300       115
+i302       7
+i306       7
+i307       114
+i308       113
+i309       112
+i310       69
+i311       245
+i312       244
+i313       243
+i314       236
+i315       304
+i316       303
+i317       301
+i320       7
+i324       7
+i326       322
+i328       7
+i330       214
+i332       142
+i334       184
+i335       322
+i336       321
+i337       319
+i338       325
+i339       323
+i340       109
+i341       108
+i342       69
+i343       110
+i344       47
+i345       117
+i346       116
+i347       69
+i348       118
+i349       69
+i350       222
+i351       223
+i352       224
+i353       221
+i354       15
+i355       13
+i356       12
+i357       1
+i358       14
+i359       15
+i360       188
+i361       189
+i362       15
+i363       187
+i364       176
+i365       45
+i366       44
+i367       19
+i368       46
+i369       47
+i370       170
+i371       171
+i372       172
+i373       169
+i374       47
+i375       174
+i376       173
+i377       47
+i378       175
+i379       176
+i380       113
+i381       114
+i382       115
+i383       112
+i384       69
+i385       244
+i386       243
+i387       236
+i388       245
+i389       115
+i390       49
+i391       50
+i392       51
+i393       48
+i394       19

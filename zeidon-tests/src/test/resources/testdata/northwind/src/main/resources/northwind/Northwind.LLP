@@ -1,0 +1,566 @@
+z1000-Zeidon    NORTHWINDTZCMLPLO 09/20/16   23:35:38 1.0a2    
+eLPLR      1
+aName      Northwind
+aDesc      Zeidon application using Northwind DB
+aZKey      92726746
+aPgmSrcDir c:\zeidon\zapp\northwind
+aExecDir   c:\zeidon\zapp\northwind\bin
+aMetaSrcDir c:\zeidon\zapp\northwind
+aTaskUseCount 0
+aLastBuildDate 20150822003426535
+aLPLR_Type 2
+aTempDesc  Zeidon application using Northwind DB
+aJavaPackageName com\quinsoft\northwind
+awExecutableSubDirectory bin
+
+eW_MetaType 2
+aType      0
+
+eW_MetaType 2
+aType      1
+
+eW_MetaType 2
+aType      2
+
+eW_MetaType 2
+aType      3
+
+eW_MetaDef 3
+aCPLR_ZKey 110000002
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000004
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000012
+aStatus    1
+aName      Year
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000019
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000021
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000023
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000025
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000027
+aStatus    1
+aName      Y/N
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000040
+aStatus    1
+aName      AlphaNumeric
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 110000042
+aStatus    1
+aName      Text
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 110000044
+aStatus    1
+aName      Integer
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 110000002
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000004
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000012
+aStatus    1
+aName      Year
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000019
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000021
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000023
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000025
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000027
+aStatus    1
+aName      Y/N
+aGroupName Base
+
+eW_MetaType 2
+aType      4
+
+eW_MetaDef 3
+aCPLR_ZKey 110000047
+aStatus    1
+aUpdateInd 2
+aName      Northwind
+aDesc      Zeidon application using Northwind DB
+aLastSyncDate 20160326212857910
+aLastUpdateDate 20160326212857910
+
+eW_MetaType 2
+aType      5
+
+eW_MetaType 2
+aType      6
+
+eW_MetaDef 3
+aCPLR_ZKey 833
+aStatus    1
+aUpdateInd 2
+aName      Northwind
+aDesc      Zeidon application using Northwind DB
+aLastSyncDate 20150915235051571
+aLastUpdateDate 20150915235051571
+
+eW_MetaType 2
+aType      7
+
+eW_MetaDef 3
+aCPLR_ZKey 110000553
+aStatus    1
+aUpdateInd 2
+aName      Customer
+aLastSyncDate 20150830195912684
+aLastUpdateDate 20150830195912684
+
+eW_MetaDef 3
+aCPLR_ZKey 110000584
+aStatus    1
+aUpdateInd 2
+aName      Employee
+aLastSyncDate 20150923234740593
+aLastUpdateDate 20150923234740593
+
+eW_MetaDef 3
+aCPLR_ZKey 110000478
+aStatus    1
+aUpdateInd 2
+aName      Order
+aLastSyncDate 20151120223241386
+aLastUpdateDate 20151120223241386
+
+eW_MetaDef 3
+aCPLR_ZKey 110000448
+aStatus    1
+aUpdateInd 2
+aName      Product
+aLastSyncDate 20151121143101389
+aLastUpdateDate 20151121143101389
+
+eW_MetaDef 3
+aCPLR_ZKey 110000682
+aStatus    1
+aUpdateInd 2
+aName      Region
+aLastSyncDate 20150906154257460
+aLastUpdateDate 20150906154257460
+
+eW_MetaDef 3
+aCPLR_ZKey 110000675
+aStatus    1
+aUpdateInd 2
+aName      Shipper
+aLastSyncDate 20150905151545594
+aLastUpdateDate 20150905151545594
+
+eW_MetaDef 3
+aCPLR_ZKey 110000719
+aStatus    1
+aUpdateInd 2
+aName      ZPLOCKO
+aDesc      Zeidon Locking Object
+aLastSyncDate 20150915235116134
+aLastUpdateDate 20150915235116134
+
+eW_MetaType 2
+aType      8
+
+eW_MetaType 2
+aType      9
+
+eW_MetaDef 3
+aCPLR_ZKey 110000583
+aStatus    1
+aUpdateInd 2
+aName      Customer
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150830195912743
+aLastUpdateDate 20150830195912743
+
+eW_MetaDef 3
+aCPLR_ZKey 110000642
+aStatus    1
+aUpdateInd 2
+aName      Employee
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150830200209482
+aLastUpdateDate 20150830200209482
+
+eW_MetaDef 3
+aCPLR_ZKey 110000552
+aStatus    1
+aUpdateInd 2
+aName      Order
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150829231339243
+aLastUpdateDate 20150829231339243
+
+eW_MetaDef 3
+aCPLR_ZKey 110000477
+aStatus    1
+aUpdateInd 2
+aName      Product
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150827005336814
+aLastUpdateDate 20150827005336814
+
+eW_MetaDef 3
+aCPLR_ZKey 110000690
+aStatus    1
+aUpdateInd 2
+aName      Region
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150906154257851
+aLastUpdateDate 20150906154257851
+
+eW_MetaDef 3
+aCPLR_ZKey 110000681
+aStatus    1
+aUpdateInd 2
+aName      Shipper
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150905144709928
+aLastUpdateDate 20150905144709928
+
+eW_MetaDef 3
+aCPLR_ZKey 110000728
+aStatus    1
+aUpdateInd 2
+aName      ZPLOCKO
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20150915235116442
+aLastUpdateDate 20150915235116442
+
+eW_MetaType 2
+aType      10
+
+eW_MetaType 2
+aType      11
+
+eW_MetaType 2
+aType      12
+
+eW_MetaType 2
+aType      13
+
+eW_MetaDef 3
+aCPLR_ZKey 110000001
+aStatus    1
+aUpdateInd 2
+aName      Base
+aLastSyncDate 20160326212842781
+aLastUpdateDate 20160326212842781
+
+eW_MetaDef 3
+aCPLR_ZKey 110000036
+aStatus    1
+aUpdateInd 2
+aName      TZAPDMAA
+aLastSyncDate 20150916210640587
+aLastUpdateDate 20150916210640587
+
+eW_MetaType 2
+aType      14
+
+eW_MetaType 2
+aType      15
+
+eW_MetaType 2
+aType      16
+
+eW_MetaType 2
+aType      2000
+
+eW_MetaType 2
+aType      2001
+
+eW_MetaType 2
+aType      2002
+
+eW_MetaType 2
+aType      2003
+
+eW_MetaDef 3
+aCPLR_ZKey 110000040
+aStatus    1
+aName      AlphaNumeric
+aLastUpdateDate 20150916210640587
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 110000002
+aStatus    1
+aName      Blob
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000019
+aStatus    1
+aName      Boolean
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000004
+aStatus    1
+aName      Date
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000025
+aStatus    1
+aName      DateTime
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000023
+aStatus    1
+aName      Double
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000021
+aStatus    1
+aName      GeneratedKey
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000044
+aStatus    1
+aName      Integer
+aLastUpdateDate 20150916210640587
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 110000042
+aStatus    1
+aName      Text
+aLastUpdateDate 20150916210640587
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 110000027
+aStatus    1
+aName      Y/N
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 110000012
+aStatus    1
+aName      Year
+aLastUpdateDate 20160326212842781
+aGroupName Base
+
+eW_MetaType 2
+aType      2004
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2005
+
+eW_MetaType 2
+aType      2006
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2007
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2008
+
+eW_MetaType 2
+aType      2009
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2010
+
+eW_MetaType 2
+aType      2011
+
+eW_MetaType 2
+aType      2012
+
+eW_MetaType 2
+aType      2013
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2014
+
+eW_MetaType 2
+aType      2015
+
+eW_MetaType 2
+aType      2016
+
+eDomainJavaClass 2
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.StaticTableDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DynamicTableDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.BlobDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.BooleanDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DateDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DateTimeDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DoubleDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.GeneratedKeyDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.EmailAddressDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.IntegerDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.PasswordDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.StringDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.SSNDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.TimeDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.RegularExpressionDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.Base64BlobDomain
+
+i71        25
+i74        28
+i76        33
+i77        32
+i78        31
+i79        36
+i80        34
+i81        35
+i82        30
+i85        42
+i86        45
+i87        43
+i88        44
+i89        40
+i90        39
+i91        41
+i96        50
+i97        51
