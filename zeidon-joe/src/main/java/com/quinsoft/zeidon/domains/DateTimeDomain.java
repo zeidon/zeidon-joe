@@ -266,7 +266,7 @@ public class DateTimeDomain extends AbstractDomain
         /**
          * URL for Java SimpleDateFormat help.
          */
-        private static final String JAVA_DATE_FORMATTING_URL = "http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html";
+        private static final String JAVA_DATE_FORMATTING_URL = "http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html";
 
         public DateContext(Domain domain)
         {

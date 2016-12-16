@@ -29,7 +29,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -42,6 +44,7 @@ import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.BigDecimalDomain;
 import com.quinsoft.zeidon.domains.BooleanDomain;
+import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.DoubleDomain;
 import com.quinsoft.zeidon.domains.IntegerDomain;
@@ -219,6 +222,7 @@ public class WriteOisToJsonStream implements StreamWriter
                 AttributeValue attribValue = ei.getInternalAttribute( attributeDef );
 
                 // Check for integer, double, or boolean so that it gets written without quotes.
+                // TODO: Do this more dynamically.
                 Domain domain = attributeDef.getDomain();
                 String jsonName = camelCaseName( attributeDef.getName() );
                 if ( domain instanceof IntegerDomain )
@@ -235,6 +239,9 @@ public class WriteOisToJsonStream implements StreamWriter
                 else
                 if ( domain instanceof BigDecimalDomain )
                     jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
+                else
+                if ( domain instanceof DateTimeDomain )
+                    jg.writeStringField( jsonName, ISODateTimeFormat.dateTime().print( (DateTime) attrib.getValue() ) );
                 else
                 {
                     String value = attribValue.getString( ei.getTask(), attributeDef );

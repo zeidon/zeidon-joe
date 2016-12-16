@@ -199,8 +199,8 @@ public class QualificationBuilder
     }
 
     /**
-     * Create the qual object from a simple JSON string similar to Mongo DB qualification.
-     * 
+     * Create the qual object from a simple JSON string.
+     *
      * Sample JSON:
      * <pre>
      {
@@ -208,7 +208,7 @@ public class QualificationBuilder
          "MaidenName": "Alice",
          "$or": [ { "FirstName": "Bob" }, { "$and" : [ { "LastName": "Smith" }, { "MaidenName": { "$neq": "Smith" } } ] } ]
          "DateOfBirth": { "$gt": "01/01/2001", "<": "01/01/2010" }
-         "restricting": {
+         "$restricting": {
              "Address": {
                  "Description": { "<>": "" }
              }
@@ -220,6 +220,9 @@ public class QualificationBuilder
      */
     public QualificationBuilder loadFromJsonString( String json )
     {
+        if ( activateOptions.getLodDef() == null )
+            throw new ZeidonException( "LodDef has not been set for JSON qualifcation" );
+
         QualificationBuilderFromJson parser = new QualificationBuilderFromJson( this );
         parser.parseJson( json );
         return this;
@@ -346,7 +349,7 @@ public class QualificationBuilder
             String oper = qa.getAttribute( OPER ).getString();
             if ( StringUtils.isBlank( oper ) )
                 throw new ZeidonException("Unexpected blank OPER in qualification" );
-            
+
             oper = oper.toUpperCase().trim();
             if ( oper.equals( "ORDERBY" ) )
                 continue;
@@ -525,9 +528,9 @@ public class QualificationBuilder
     }
 
     /**
-     * Retroactively insert an opening paren just in front of the current QualAttrib.  Used to 
+     * Retroactively insert an opening paren just in front of the current QualAttrib.  Used to
      * wrap some QualAttribs with parens after it is learned that they are needed.
-     * 
+     *
      * @param oper
      * @return
      */

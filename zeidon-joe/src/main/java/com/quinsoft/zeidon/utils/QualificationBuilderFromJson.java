@@ -82,16 +82,17 @@ public class QualificationBuilderFromJson
 
         boolean first = true;
         token = jp.nextToken(); // Consume '{'
-        
+
         while ( ( token = jp.getCurrentToken() ) != JsonToken.END_OBJECT )
         {
             if ( token != JsonToken.FIELD_NAME )
                 throw new ZeidonException( "Unexpected token; expecting FIELD" );
 
             String fieldName = jp.getCurrentName();
-            
-            // We have to handle the "restricting" clause a little differently from everything
-            // else.  First make sure it's not an entity/attribute name.
+
+            // Some keywords don't immediately add qualattribs; we have to treat them
+            // differently because they don't add an "AND" oper.  First make sure it's
+            // not an entity/attribute name.
             AttributeDef attributeDef = entityDef.getAttribute( fieldName, false );
             EntityDef childEntityDef = qualBuilder.getLodDef().getEntityDef( fieldName, false );
 
@@ -105,9 +106,14 @@ public class QualificationBuilderFromJson
                     case "restrict":
                         parseRestricting();
                         continue;
-                }                
+
+                    case "$rootonly":
+                    case "rootonly":
+                        parseRootOnly();
+                        continue;
+                }
             }
-            
+
             if ( first )
                 first = false;
             else
@@ -132,7 +138,7 @@ public class QualificationBuilderFromJson
                 case "or":
                     parseList( qualEntityDef, entityDef, "OR" );
                     continue;
-                    
+
                 case "$and":
                 case "and":
                     parseList( qualEntityDef, entityDef, "AND" );
@@ -141,9 +147,24 @@ public class QualificationBuilderFromJson
 
             throw new ZeidonException( "Unknown field name in JSON string: %s", fieldName );
         }
-        
+
         token = jp.nextToken();  // Skip past closing }.
         return token;
+    }
+
+    private void parseRootOnly() throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume "rootOnly".
+        if ( ! token.isScalarValue() )
+            throw new ZeidonException( "Expecting boolean for rootOnly value.  Found %s", token );
+
+        if ( token.asString().equals( "true" ) )
+            qualBuilder.rootOnlyMultiple();
+        else
+        if ( ! token.asString().equals( "false" ) )
+            throw new ZeidonException( "Expecting boolean for rootOnly value.  Found %s", token );
+
+        token = jp.nextToken(); // Consume boolean.
     }
 
     private void parseRestricting() throws JsonParseException, IOException
@@ -151,23 +172,23 @@ public class QualificationBuilderFromJson
         JsonToken token = jp.nextToken(); // Consume "restricting".
         if ( token != JsonToken.START_OBJECT )
             throw new ZeidonException( "'Restricting' value doesn't start with object.  Found %s", token );
-        
+
         token = jp.nextToken(); // Consume open '{'.
         while ( ( token = jp.getCurrentToken() ) != JsonToken.END_OBJECT )
         {
             if ( token != JsonToken.FIELD_NAME )
                 throw new ZeidonException( "Unexpected token; expecting FIELD" );
-            
+
             String entityName = jp.getCurrentName();
 
             EntityDef childEntityDef = qualBuilder.getLodDef().getEntityDef( entityName, false );
             if ( childEntityDef == null )
                 throw new ZeidonException( "Field name in Restricting object is not an entity name: %s", entityName );
-            
+
             token = jp.nextToken();  // Consume entity name.
             qualBuilder.forEntity( entityName );
             parseEntity( childEntityDef, childEntityDef );
-        }        
+        }
     }
 
     private void parseAttribute( EntityDef qualEntityDef, AttributeDef attributeDef ) throws JsonParseException, IOException
@@ -186,13 +207,13 @@ public class QualificationBuilderFromJson
             parseValueArray( attributeDef );
             return;
         }
-        
+
         if ( token == JsonToken.START_OBJECT )
         {
             parseOper( attributeDef );
             return;
         }
-        
+
         throw new ZeidonException( "Unexpected token found for attribute qualification: %s", token );
     }
 
@@ -201,9 +222,9 @@ public class QualificationBuilderFromJson
         JsonToken token = jp.nextToken(); // Skip past '{'.
         if ( token != JsonToken.FIELD_NAME )
             throw new ZeidonException( "Expecting field name for attribute operation.  Got %s", token );
-     
+
         int count = 0;
-        
+
         while ( token == JsonToken.FIELD_NAME )
         {
             count++;
@@ -212,52 +233,52 @@ public class QualificationBuilderFromJson
                 // We now know we have more than one oper so insert an opening paren.
                 qualBuilder.prependOpenParen();
             }
-            
+
             if ( count > 1 )
                 qualBuilder.addAttribQual( "AND" );
-            
+
             String oper = jp.getCurrentName();
             token = jp.nextToken(); // Skip past field name.
             if ( ! token.isScalarValue() )
                 throw new ZeidonException( "Expecting scalar value for operation operand.  Got %s", token );
-            
+
             String value = jp.getValueAsString();
             token = jp.nextToken(); // Consume value.
-            
+
             switch ( oper.toLowerCase().trim() )
             {
                 case "<":
                 case "$lt":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "<", value );
                     break;
-                    
+
                 case "<=":
                 case "$lte":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "<=", value );
                     break;
-                    
+
                 case ">":
                 case "$gt":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), ">", value );
                     break;
-                    
+
                 case ">=":
                 case "$gte":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), ">=", value );
                     break;
-                    
+
                 case "=":
                 case "==":
                 case "$eq":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "=", value );
                     break;
-                    
+
                 case "!=":
                 case "<>":
                 case "$neq":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "!=", value );
                     break;
-                    
+
                 default:
                     throw new ZeidonException( "Unknown operation %s", oper );
             }
@@ -265,10 +286,10 @@ public class QualificationBuilderFromJson
 
         if ( count > 1 )
             qualBuilder.addAttribQual( ")" );
-        
+
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "Expected '}'.  Got %s", token );
-        
+
         token = jp.nextToken(); // Consume '}'
     }
 
@@ -311,10 +332,10 @@ public class QualificationBuilderFromJson
                 first = false;
             else
                 qualBuilder.addAttribQual( conjunction );
-            
+
             token = parseEntity( qualEntityDef, entityDef );
         }
-        
+
         qualBuilder.addAttribQual( ")" );
         jp.nextToken(); // Consume closing ']'
     }
