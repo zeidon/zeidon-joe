@@ -70,6 +70,31 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     def qualOi: View = jqual.getView()
     
     /**
+     * Create the qual object from a simple JSON string.
+     *
+     * Sample JSON:
+     * {{{
+     {
+         "ID": [10, 11, 12],
+         "MaidenName": "Alice",
+         "$or": [ { "FirstName": "Bob" }, { "$and" : [ { "LastName": "Smith" }, { "MaidenName": { "$neq": "Smith" } } ] } ]
+         "DateOfBirth": { "$gt": "01/01/2001", "<": "01/01/2010" }
+         "$restricting": {
+             "Address": {
+                 "Description": { "<>": "" }
+             }
+         }
+     }
+     * }}}
+     * @param json
+     * @return this
+     */
+    def fromJson( jsonString: String ) : QualBuilder = {
+        jqual.loadFromJsonString( jsonString )
+        this    
+    }
+    
+    /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
      *      val mUser = VIEW basedOn "mUser"

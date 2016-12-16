@@ -30,8 +30,12 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
         lodDef = application.getLodDef( task, lodName )
         printToFile( s"$destinationDir/$lodName.ts" )( writer => {
             writeStartingComment(writer)
-            writer.println( "import * as zeidon from './zeidon';" )
-            writer.println( "import { Observable } from 'rxjs';" )
+            writer.println( s"""
+import * as zeidon from './zeidon';
+import { Observable } from 'rxjs';
+import { ${applicationName}_DomainList } from './${applicationName}-DomainList';
+import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainFunctions';
+""" );
             writer.println( "" )
             writeObjectInstance(writer)
             lodDef.getEntityDefs.foreach { writeEntityInstance( writer, _ ) }
@@ -66,6 +70,15 @@ export class $lodName extends zeidon.ObjectInstance {
     public getLodDef() {
         return ${lodName}_LodDef;
     };
+
+    public getDomain( name: string ): zeidon.Domain { 
+        return ${applicationName}_DomainList[name];
+    };
+
+    public getDomainFunctions( name: string ): any { 
+        return ${applicationName}_DomainFunctions[name];
+    }
+
 
     get $rootName(): zeidon.EntityArray<${lodName}_${rootName}> {
         return this.roots as zeidon.EntityArray<${lodName}_${rootName}>;
@@ -107,10 +120,15 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
 
     private def writeChildEntities( writer: java.io.PrintWriter, childEntityDef: EntityDef ) {
         val entityName = childEntityDef.getName
+        val lodName = lodDef.getName
         
         writer.println( s"""
-    get ${entityName}(): zeidon.EntityArray<this> {
-        return this.getChildEntityArray("$entityName");
+    get ${entityName}(): zeidon.EntityArray<${lodName}_$entityName> {
+        return this.getChildEntityArray("$entityName") as zeidon.EntityArray<${lodName}_$entityName>;
+    }
+
+    get ${entityName}$$(): ${lodName}_$entityName {
+        return this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName;
     }""" )
     }
     
@@ -174,10 +192,10 @@ export const ${lodDef.getName}_LodDef = {
         val name = attributeDef.getName
         
         writer.println( s"""                $name: {
-                    name:         ${name},
+                    name:         "${name}",
                     hidden:       ${attributeDef.isHidden()},
                     required:     ${attributeDef.isRequired()},
-                    domain:       "${attributeDef.getDomain.getName}",
+                    domainName:   "${attributeDef.getDomain.getName}",
                     persistent:   ${attributeDef.isPersistent()},
                     key:          ${attributeDef.isKey},
                     update:       ${attributeDef.isUpdate},
