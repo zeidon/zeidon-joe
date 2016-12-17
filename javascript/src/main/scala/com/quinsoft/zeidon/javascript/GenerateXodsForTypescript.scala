@@ -88,8 +88,8 @@ export class $lodName extends zeidon.ObjectInstance {
         return this.roots.selected() as ${lodName}_${rootName};
     }
 
-    public static activate( options?: zeidon.ActivateOptions ): Observable<$lodName> {
-        return zeidon.ObjectInstance.activateOi( new $lodName(), options );
+    public static activate( qual?: any ): Observable<$lodName> {
+        return zeidon.ObjectInstance.activateOi( new $lodName(), qual );
     }
 }
 """ )
