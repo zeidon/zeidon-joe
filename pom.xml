@@ -169,7 +169,8 @@
 	<module>jconsole-plugin</module>
 	<module>jasper-reports</module>
         <module>zeidon-operations</module>
-        <module>restserver</module>
+        <module>rest-servers/rest-easy</module>
+        <module>rest-servers/scalatra</module>
         <module>zruby</module>
         <module>javascript</module>
         <module>android</module>
