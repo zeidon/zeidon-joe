@@ -19,14 +19,29 @@
 
 package com.quinsoft.zeidon.objectbrowser;
 
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.quinsoft.zeidon.Task;
 
 /**
  * @author DG
@@ -61,6 +76,30 @@ public class TaskList extends JTable
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 taskListMouseClicked(evt);
+            }
+
+            @Override
+            public void mousePressed( MouseEvent evt )
+            {
+                if ( evt.isPopupTrigger() )
+                {
+                    int idx = getSelectedRow();
+                    BrowserTask task = getTaskByIdx( idx );
+                    TaskPopupMenu menu = new TaskPopupMenu( task, evt.getPoint() );
+                    menu.show( evt.getComponent(), evt.getX(), evt.getY() );
+                }
+            }
+
+            @Override
+            public void mouseReleased( MouseEvent evt )
+            {
+                if ( evt.isPopupTrigger() )
+                {
+                    int idx = getSelectedRow();
+                    BrowserTask task = getTaskByIdx( idx );
+                    TaskPopupMenu menu = new TaskPopupMenu( task, evt.getPoint() );
+                    menu.show( evt.getComponent(), evt.getX(), evt.getY() );
+                }
             }
         });
 
@@ -102,7 +141,7 @@ public class TaskList extends JTable
         }
 
         currentTaskList = taskList;
-        
+
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );
     }
@@ -117,11 +156,11 @@ public class TaskList extends JTable
     {
         if ( model.getRowCount() == 0 )
             return null;
-        
+
         int idx = getSelectedRow();
         if ( idx == -1 ) // This means no tasks are selected
             idx = 0;     // Select task 0.  There should always be a system task.
-        
+
         return getTaskByIdx( idx );
     }
 
@@ -130,7 +169,133 @@ public class TaskList extends JTable
     {
         return currentTaskList.toString();
     }
-    
+
+    private class TaskPopupMenu extends JPopupMenu
+    {
+        private static final long serialVersionUID = 1L;
+
+        public TaskPopupMenu(BrowserTask v, Point p )
+        {
+
+            JMenuItem item = new JMenuItem( "Log Level" );
+            item.addActionListener( new SetLogLevelMenuListener( v, p ) );
+            add( item );
+
+        }
+    }
+
+    private class SetLogLevelAction extends AbstractAction
+    {
+        private static final long serialVersionUID = -3397528069416375971L;
+        private final Task task;
+        private final JFrame frame;
+        private final ButtonGroup group;
+
+        public SetLogLevelAction( Task t, JFrame frame, ButtonGroup group )
+        {
+            task = t;
+            this.frame = frame;
+            this.group = group;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent e )
+        {
+            if ( e.getActionCommand().equals( "OK" ) )
+            {
+                task.log().setLevel( group.getSelection().getActionCommand() );
+                task.dblog().setLevel( group.getSelection().getActionCommand() );
+                frame.dispose();
+                return;
+            }
+
+            task.log().setLevel( e.getActionCommand() );
+            task.dblog().setLevel( e.getActionCommand() );
+        }
+    }
+
+    private class SetLogLevelMenuListener extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+        private final BrowserTask task;
+        private final Point location;
+
+        public SetLogLevelMenuListener( BrowserTask t, Point p )
+        {
+            task = t;
+            location = p;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent e )
+        {
+            final JFrame frame = new JFrame("Set Logging Level");
+            frame.setSize(200, 200);
+            frame.setLocation( location );
+            Container cont = frame.getContentPane();
+
+            cont.setLayout(new GridLayout(0, 1));
+            cont.add(new JLabel("Set log level:"));
+
+            ButtonGroup group = new ButtonGroup();
+            JRadioButton radioButton;
+
+            Task t = env.getOe().getTaskById( task.taskId );
+            SetLogLevelAction action = new SetLogLevelAction( t, frame, group );
+
+            String currentLevel = t.log().getLoggerLevel().toString();
+
+            radioButton = new JRadioButton( "Error" );
+            radioButton.setMnemonic(KeyEvent.VK_E);
+            radioButton.setActionCommand( "Error" );
+            radioButton.setSelected( "Error".equalsIgnoreCase( currentLevel ) );
+            radioButton.addActionListener( action );
+            group.add( radioButton );
+            cont.add( radioButton );
+
+            radioButton = new JRadioButton( "Warn" );
+            radioButton.setMnemonic(KeyEvent.VK_W);
+            radioButton.setActionCommand( "Warn" );
+            radioButton.setSelected( "Warn".equalsIgnoreCase( currentLevel ) );
+            radioButton.addActionListener( action );
+            group.add(  radioButton );
+            cont.add( radioButton );
+
+            radioButton = new JRadioButton( "Info" );
+            radioButton.setMnemonic(KeyEvent.VK_I);
+            radioButton.setActionCommand( "Info" );
+            radioButton.setSelected( "Info".equalsIgnoreCase( currentLevel ) );
+            radioButton.addActionListener( action );
+            group.add(  radioButton );
+            cont.add( radioButton );
+
+            radioButton = new JRadioButton( "Debug" );
+            radioButton.setMnemonic(KeyEvent.VK_D);
+            radioButton.setActionCommand( "Debug" );
+            radioButton.setSelected( "Debug".equalsIgnoreCase( currentLevel ) );
+            radioButton.addActionListener( action );
+            group.add(  radioButton );
+            cont.add( radioButton );
+
+            radioButton = new JRadioButton( "Trace" );
+            radioButton.setMnemonic(KeyEvent.VK_T);
+            radioButton.setActionCommand( "Trace" );
+            radioButton.setSelected( "Trace".equalsIgnoreCase( currentLevel ) );
+            radioButton.addActionListener( action );
+            group.add(  radioButton );
+            cont.add( radioButton );
+
+            JButton button = new JButton( "OK" );
+            button.setActionCommand( "OK" );
+            button.setMnemonic(KeyEvent.VK_ENTER);
+            button.addActionListener( action );
+            cont.add( button );
+
+            frame.getRootPane().setDefaultButton( button );
+            frame.setVisible(true);
+        }
+    }
+
     private static class TaskListComparator implements Comparator<BrowserTask>
     {
         @Override
@@ -150,6 +315,6 @@ public class TaskList extends JTable
                 return a.taskId.compareTo( b.taskId );
             }
         }
-        
+
     }
 }
