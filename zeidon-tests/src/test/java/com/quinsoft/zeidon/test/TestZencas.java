@@ -3608,6 +3608,8 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	         //:COMMIT mUser
 	         //RESULT = CommitObjectInstance( mUser );
 	         DropView( mUser );
+	         
+	         testTimeFormatting( ViewToWindow );
 
 	         return ( 0 );
 		}
