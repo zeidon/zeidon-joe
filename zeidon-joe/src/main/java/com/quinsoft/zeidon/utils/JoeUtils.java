@@ -566,16 +566,10 @@ public class JoeUtils
     public static final void sysMessageBox( String msgTitle, String msgText )
     {
         //JOptionPane.showMessageDialog( null, msgText, msgTitle, JOptionPane.PLAIN_MESSAGE );
-<<<<<<< HEAD
-        JOptionPane pane = new JOptionPane(msgText, JOptionPane.INFORMATION_MESSAGE); 
-        JDialog dialog = pane.createDialog(msgTitle); 
-        dialog.setAlwaysOnTop(true); 
-=======
         JOptionPane pane = new JOptionPane(msgText, JOptionPane.INFORMATION_MESSAGE);
         JDialog dialog = pane.createDialog(msgTitle);
         dialog.setModalityType(ModalityType.MODELESS);
         dialog.setAlwaysOnTop(true);
->>>>>>> 7092279... Update sysMessageBox to be modeless
         dialog.setVisible(true);
     }
 
