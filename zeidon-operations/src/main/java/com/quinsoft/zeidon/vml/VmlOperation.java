@@ -4522,6 +4522,7 @@ public abstract class VmlOperation
       else
       {
          int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ).getString() );
+         //int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ) );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }

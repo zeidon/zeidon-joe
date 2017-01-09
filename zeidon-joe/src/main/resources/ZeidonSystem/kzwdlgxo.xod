@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 z1000-Zeidon    KZWDLGXO TZZOXODO 06/26/12   12:15:41 1.0a2    
+=======
+z1000-Zeidon    KZWDLGXO TZZOXODO 12/22/16   12:21:56 1.0a2    
+>>>>>>> 5c8ba40... changes to objects for language conversion
 eOBJECT    1
 aNAME      KZWDLGXO
 aZKey      1330836
 aOPER_LIBNM KZOENGAA
+<<<<<<< HEAD
 aER_DATE   20120626121520029
+=======
+aER_DATE   20161222121552421
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eENTITY    2
 aNAME      Dlg
@@ -593,8 +601,11 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 50
+<<<<<<< HEAD
 aDERIVEDF  oKZWDLGXO_DerivedCaption
 aDERIVEDC  oKZWDLGXO_DerivedCaption
+=======
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    4
 aNAME      NLS
@@ -645,7 +656,6 @@ eCHILDENTITY 4
 aNAME      Ctrl
 aERENT_TOK 1321692
 aERREL_TOK 1330858
-aFULLPERSIST Y
 aCARDMIN   0
 aCARDMAX   999999
 aCREATE    Y
@@ -654,7 +664,7 @@ aPDELETE   D
 aUPDATE    Y
 aDERIVED   Y
 aINCLSRC   Y
-aMAX_LTH   872
+aMAX_LTH   1382
 
 eATTRIB    5
 aNAME      Tag
@@ -877,8 +887,11 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 74
+<<<<<<< HEAD
 aDERIVEDF  oKZWDLGXO_DerivedControlText
 aDERIVEDC  oKZWDLGXO_DerivedControlText
+=======
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    5
 aNAME      NLS
@@ -958,11 +971,32 @@ aLTH       32
 aUPDATE    Y
 aXVAATT_TOK 81
 
+eATTRIB    5
+aNAME      LangID
+aERATT_TOK 130000367
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aUPDATE    Y
+aXVAATT_TOK 82
+
+eATTRIB    5
+aNAME      Placeholder
+aERATT_TOK 130000364
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aHIDDEN    Y
+aXVAATT_TOK 83
+
 eCHILDENTITY 5
 aNAME      CtrlCtrl
 aERENT_TOK 1321692
 aERREL_TOK 1330859
-aFULLPERSIST Y
 aCARDMIN   0
 aCARDMAX   999999
 aCREATE    Y
@@ -972,7 +1006,7 @@ aUPDATE    Y
 aRECURSIVE Y
 aDERIVED   Y
 aINCLSRC   Y
-aMAX_LTH   872
+aMAX_LTH   1382
 
 eATTRIB    6
 aNAME      Tag
@@ -984,7 +1018,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 82
+aXVAATT_TOK 84
 
 eATTRIB    6
 aNAME      Text
@@ -995,7 +1029,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 83
+aXVAATT_TOK 85
 
 eATTRIB    6
 aNAME      Type
@@ -1006,7 +1040,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 84
+aXVAATT_TOK 86
 
 eATTRIB    6
 aNAME      Subtype
@@ -1017,7 +1051,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 85
+aXVAATT_TOK 87
 
 eATTRIB    6
 aNAME      StyleX
@@ -1028,7 +1062,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 86
+aXVAATT_TOK 88
 
 eATTRIB    6
 aNAME      OptionFlags
@@ -1039,7 +1073,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 87
+aXVAATT_TOK 89
 
 eATTRIB    6
 aNAME      IdNbr
@@ -1050,7 +1084,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 88
+aXVAATT_TOK 90
 
 eATTRIB    6
 aNAME      PSDLG_X
@@ -1061,7 +1095,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 89
+aXVAATT_TOK 91
 
 eATTRIB    6
 aNAME      PSDLG_Y
@@ -1072,7 +1106,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 90
+aXVAATT_TOK 92
 
 eATTRIB    6
 aNAME      SZDLG_X
@@ -1083,7 +1117,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 91
+aXVAATT_TOK 93
 
 eATTRIB    6
 aNAME      SZDLG_Y
@@ -1094,7 +1128,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 92
+aXVAATT_TOK 94
 
 eATTRIB    6
 aNAME      RELCNT_X
@@ -1105,7 +1139,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 93
+aXVAATT_TOK 95
 
 eATTRIB    6
 aNAME      RELCNT_Y
@@ -1116,7 +1150,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 94
+aXVAATT_TOK 96
 
 eATTRIB    6
 aNAME      CtrlBOI
@@ -1127,7 +1161,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 95
+aXVAATT_TOK 97
 
 eATTRIB    6
 aNAME      ColorFg
@@ -1138,7 +1172,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 96
+aXVAATT_TOK 98
 
 eATTRIB    6
 aNAME      ColorBk
@@ -1149,7 +1183,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 97
+aXVAATT_TOK 99
 
 eATTRIB    6
 aNAME      DIL
@@ -1160,7 +1194,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 98
+aXVAATT_TOK 100
 
 eATTRIB    6
 aNAME      EventAct
@@ -1171,7 +1205,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 99
+aXVAATT_TOK 101
 
 eATTRIB    6
 aNAME      DD_BOI
@@ -1182,7 +1216,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 100
+aXVAATT_TOK 102
 
 eATTRIB    6
 aNAME      D_Text
@@ -1194,8 +1228,11 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 74
+<<<<<<< HEAD
 aDERIVEDF  oKZWDLGXO_DerivedControlText
 aDERIVEDC  oKZWDLGXO_DerivedControlText
+=======
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    6
 aNAME      NLS
@@ -1206,7 +1243,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 102
+aXVAATT_TOK 104
 
 eATTRIB    6
 aNAME      TagPE
@@ -1217,7 +1254,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 103
+aXVAATT_TOK 105
 
 eATTRIB    6
 aNAME      GUID
@@ -1228,7 +1265,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 104
+aXVAATT_TOK 106
 
 eATTRIB    6
 aNAME      Properties
@@ -1239,7 +1276,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 105
+aXVAATT_TOK 107
 
 eATTRIB    6
 aNAME      LKey
@@ -1250,7 +1287,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 106
+aXVAATT_TOK 108
 
 eATTRIB    6
 aNAME      Script
@@ -1261,7 +1298,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 107
+aXVAATT_TOK 109
 
 eATTRIB    6
 aNAME      ScriptDLL
@@ -1272,7 +1309,29 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 108
+aXVAATT_TOK 110
+
+eATTRIB    6
+aNAME      LangID
+aERATT_TOK 130000367
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aUPDATE    Y
+aXVAATT_TOK 111
+
+eATTRIB    6
+aNAME      Placeholder
+aERATT_TOK 130000364
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aHIDDEN    Y
+aXVAATT_TOK 112
 
 eCHILDENTITY 5
 aNAME      CtrlMap
@@ -1298,7 +1357,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 109
+aXVAATT_TOK 113
 
 eATTRIB    6
 aNAME      VN
@@ -1310,7 +1369,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 110
+aXVAATT_TOK 114
 
 eATTRIB    6
 aNAME      EN
@@ -1322,7 +1381,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 111
+aXVAATT_TOK 115
 
 eATTRIB    6
 aNAME      AN
@@ -1334,7 +1393,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 112
+aXVAATT_TOK 116
 
 eATTRIB    6
 aNAME      Context
@@ -1345,7 +1404,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 113
+aXVAATT_TOK 117
 
 eATTRIB    6
 aNAME      Type
@@ -1356,7 +1415,7 @@ aDOMAIN    WD_MapDefType
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 114
+aXVAATT_TOK 118
 
 eCHILDENTITY 5
 aNAME      Event
@@ -1382,7 +1441,7 @@ aTYPE      L
 aLTH       4
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 115
+aXVAATT_TOK 119
 
 eATTRIB    6
 aNAME      Register
@@ -1393,7 +1452,7 @@ aDOMAIN    Y/N
 aTYPE      S
 aLTH       1
 aHIDDEN    Y
-aXVAATT_TOK 116
+aXVAATT_TOK 120
 
 eCHILDENTITY 6
 aNAME      EventAct
@@ -1420,7 +1479,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 117
+aXVAATT_TOK 121
 
 eATTRIB    7
 aNAME      DO
@@ -1431,7 +1490,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 118
+aXVAATT_TOK 122
 
 eATTRIB    7
 aNAME      DLL
@@ -1442,7 +1501,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       8
 aUPDATE    Y
-aXVAATT_TOK 119
+aXVAATT_TOK 123
 
 eATTRIB    7
 aNAME      SB
@@ -1453,7 +1512,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 120
+aXVAATT_TOK 124
 
 eATTRIB    7
 aNAME      VN
@@ -1464,7 +1523,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 121
+aXVAATT_TOK 125
 
 eATTRIB    7
 aNAME      EN
@@ -1475,7 +1534,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 122
+aXVAATT_TOK 126
 
 eATTRIB    7
 aNAME      Scope
@@ -1486,7 +1545,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 123
+aXVAATT_TOK 127
 
 eATTRIB    7
 aNAME      AutoGray
@@ -1497,7 +1556,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 124
+aXVAATT_TOK 128
 
 eATTRIB    7
 aNAME      NoMap
@@ -1508,7 +1567,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 125
+aXVAATT_TOK 129
 
 eATTRIB    7
 aNAME      Type
@@ -1519,7 +1578,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 126
+aXVAATT_TOK 130
 
 eATTRIB    7
 aNAME      DlgN
@@ -1530,7 +1589,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 127
+aXVAATT_TOK 131
 
 eATTRIB    7
 aNAME      WndN
@@ -1541,7 +1600,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 128
+aXVAATT_TOK 132
 
 eATTRIB    7
 aNAME      SyncIdx
@@ -1552,7 +1611,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 129
+aXVAATT_TOK 133
 
 eATTRIB    7
 aNAME      OperCtrl
@@ -1563,7 +1622,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 130
+aXVAATT_TOK 134
 
 eATTRIB    7
 aNAME      Popup
@@ -1574,7 +1633,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 131
+aXVAATT_TOK 135
 
 eATTRIB    7
 aNAME      Prompt
@@ -1585,7 +1644,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 132
+aXVAATT_TOK 136
 
 eCHILDENTITY 4
 aNAME      WndEvent
@@ -1612,7 +1671,7 @@ aTYPE      L
 aLTH       4
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 133
+aXVAATT_TOK 137
 
 eATTRIB    5
 aNAME      Accel
@@ -1623,7 +1682,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 134
+aXVAATT_TOK 138
 
 eCHILDENTITY 5
 aNAME      WndAct
@@ -1649,7 +1708,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 135
+aXVAATT_TOK 139
 
 eATTRIB    6
 aNAME      DO
@@ -1660,7 +1719,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 136
+aXVAATT_TOK 140
 
 eATTRIB    6
 aNAME      DLL
@@ -1671,7 +1730,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       8
 aUPDATE    Y
-aXVAATT_TOK 137
+aXVAATT_TOK 141
 
 eATTRIB    6
 aNAME      SB
@@ -1682,7 +1741,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 138
+aXVAATT_TOK 142
 
 eATTRIB    6
 aNAME      VN
@@ -1693,7 +1752,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 139
+aXVAATT_TOK 143
 
 eATTRIB    6
 aNAME      EN
@@ -1704,7 +1763,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 140
+aXVAATT_TOK 144
 
 eATTRIB    6
 aNAME      Scope
@@ -1715,7 +1774,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 141
+aXVAATT_TOK 145
 
 eATTRIB    6
 aNAME      AutoGray
@@ -1726,7 +1785,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 142
+aXVAATT_TOK 146
 
 eATTRIB    6
 aNAME      NoMap
@@ -1737,7 +1796,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 143
+aXVAATT_TOK 147
 
 eATTRIB    6
 aNAME      Type
@@ -1748,7 +1807,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 144
+aXVAATT_TOK 148
 
 eATTRIB    6
 aNAME      DlgN
@@ -1759,7 +1818,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 145
+aXVAATT_TOK 149
 
 eATTRIB    6
 aNAME      WndN
@@ -1770,7 +1829,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 146
+aXVAATT_TOK 150
 
 eATTRIB    6
 aNAME      SyncIdx
@@ -1781,7 +1840,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 147
+aXVAATT_TOK 151
 
 eATTRIB    6
 aNAME      OperCtrl
@@ -1792,7 +1851,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 148
+aXVAATT_TOK 152
 
 eATTRIB    6
 aNAME      Popup
@@ -1803,7 +1862,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 149
+aXVAATT_TOK 153
 
 eATTRIB    6
 aNAME      Prompt
@@ -1814,7 +1873,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 150
+aXVAATT_TOK 154
 
 eCHILDENTITY 4
 aNAME      Act
@@ -1841,7 +1900,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 151
+aXVAATT_TOK 155
 
 eATTRIB    5
 aNAME      DO
@@ -1852,7 +1911,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 152
+aXVAATT_TOK 156
 
 eATTRIB    5
 aNAME      DLL
@@ -1863,7 +1922,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       8
 aUPDATE    Y
-aXVAATT_TOK 153
+aXVAATT_TOK 157
 
 eATTRIB    5
 aNAME      SB
@@ -1874,7 +1933,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 154
+aXVAATT_TOK 158
 
 eATTRIB    5
 aNAME      VN
@@ -1885,7 +1944,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 155
+aXVAATT_TOK 159
 
 eATTRIB    5
 aNAME      EN
@@ -1896,7 +1955,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 156
+aXVAATT_TOK 160
 
 eATTRIB    5
 aNAME      Scope
@@ -1907,7 +1966,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 157
+aXVAATT_TOK 161
 
 eATTRIB    5
 aNAME      AutoGray
@@ -1918,7 +1977,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 158
+aXVAATT_TOK 162
 
 eATTRIB    5
 aNAME      NoMap
@@ -1929,7 +1988,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 159
+aXVAATT_TOK 163
 
 eATTRIB    5
 aNAME      Type
@@ -1940,7 +1999,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 160
+aXVAATT_TOK 164
 
 eATTRIB    5
 aNAME      DlgN
@@ -1951,7 +2010,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 161
+aXVAATT_TOK 165
 
 eATTRIB    5
 aNAME      WndN
@@ -1962,7 +2021,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 162
+aXVAATT_TOK 166
 
 eATTRIB    5
 aNAME      SyncIdx
@@ -1973,7 +2032,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 163
+aXVAATT_TOK 167
 
 eATTRIB    5
 aNAME      OperCtrl
@@ -1984,7 +2043,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 164
+aXVAATT_TOK 168
 
 eATTRIB    5
 aNAME      Popup
@@ -1995,7 +2054,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 165
+aXVAATT_TOK 169
 
 eATTRIB    5
 aNAME      Prompt
@@ -2006,7 +2065,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 166
+aXVAATT_TOK 170
 
 eCHILDENTITY 5
 aNAME      ActOpt
@@ -2019,7 +2078,7 @@ aUPDATE    Y
 aINCLUDE   Y
 aEXCLUDE   Y
 aINCLSRC   Y
-aMAX_LTH   253
+aMAX_LTH   508
 
 eATTRIB    6
 aNAME      Tag
@@ -2031,7 +2090,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 167
+aXVAATT_TOK 171
 
 eATTRIB    6
 aNAME      Text
@@ -2042,7 +2101,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 168
+aXVAATT_TOK 172
 
 eATTRIB    6
 aNAME      AccelTitle
@@ -2053,7 +2112,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 169
+aXVAATT_TOK 173
 
 eATTRIB    6
 aNAME      ChkOn
@@ -2064,7 +2123,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 170
+aXVAATT_TOK 174
 
 eATTRIB    6
 aNAME      ChkOff
@@ -2075,7 +2134,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 171
+aXVAATT_TOK 175
 
 eATTRIB    6
 aNAME      Separator
@@ -2086,7 +2145,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 172
+aXVAATT_TOK 176
 
 eATTRIB    6
 aNAME      DIL
@@ -2097,7 +2156,18 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 173
+aXVAATT_TOK 177
+
+eATTRIB    6
+aNAME      LangID
+aERATT_TOK 130000368
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aUPDATE    Y
+aXVAATT_TOK 178
 
 eATTRIB    6
 aNAME      NLS
@@ -2108,7 +2178,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aHIDDEN    Y
-aXVAATT_TOK 174
+aXVAATT_TOK 179
 
 eCHILDENTITY 5
 aNAME      ActEvent
@@ -2133,7 +2203,7 @@ aTYPE      L
 aLTH       4
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 175
+aXVAATT_TOK 180
 
 eATTRIB    6
 aNAME      Register
@@ -2144,7 +2214,7 @@ aDOMAIN    Y/N
 aTYPE      S
 aLTH       1
 aHIDDEN    Y
-aXVAATT_TOK 176
+aXVAATT_TOK 181
 
 eCHILDENTITY 6
 aNAME      ActCtrl
@@ -2157,7 +2227,7 @@ aUPDATE    Y
 aINCLUDE   Y
 aEXCLUDE   Y
 aINCLSRC   Y
-aMAX_LTH   617
+aMAX_LTH   1127
 
 eATTRIB    7
 aNAME      Tag
@@ -2169,7 +2239,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 177
+aXVAATT_TOK 182
 
 eATTRIB    7
 aNAME      Text
@@ -2180,7 +2250,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 178
+aXVAATT_TOK 183
 
 eATTRIB    7
 aNAME      Type
@@ -2191,7 +2261,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 179
+aXVAATT_TOK 184
 
 eATTRIB    7
 aNAME      Subtype
@@ -2202,7 +2272,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 180
+aXVAATT_TOK 185
 
 eATTRIB    7
 aNAME      IdNbr
@@ -2213,7 +2283,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 181
+aXVAATT_TOK 186
 
 eATTRIB    7
 aNAME      PSDLG_X
@@ -2224,7 +2294,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 182
+aXVAATT_TOK 187
 
 eATTRIB    7
 aNAME      PSDLG_Y
@@ -2235,7 +2305,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 183
+aXVAATT_TOK 188
 
 eATTRIB    7
 aNAME      SZDLG_X
@@ -2246,7 +2316,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 184
+aXVAATT_TOK 189
 
 eATTRIB    7
 aNAME      SZDLG_Y
@@ -2257,7 +2327,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 185
+aXVAATT_TOK 190
 
 eATTRIB    7
 aNAME      CtrlBOI
@@ -2268,7 +2338,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 186
+aXVAATT_TOK 191
 
 eATTRIB    7
 aNAME      DD_BOI
@@ -2279,7 +2349,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 187
+aXVAATT_TOK 192
 
 eATTRIB    7
 aNAME      EventAct
@@ -2290,7 +2360,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 188
+aXVAATT_TOK 193
 
 eATTRIB    7
 aNAME      GUID
@@ -2301,7 +2371,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 189
+aXVAATT_TOK 194
 
 eATTRIB    7
 aNAME      NLS
@@ -2312,7 +2382,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 190
+aXVAATT_TOK 195
 
 eATTRIB    7
 aNAME      Properties
@@ -2323,7 +2393,7 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aUPDATE    Y
-aXVAATT_TOK 191
+aXVAATT_TOK 196
 
 eATTRIB    7
 aNAME      Script
@@ -2334,7 +2404,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 192
+aXVAATT_TOK 197
 
 eATTRIB    7
 aNAME      ScriptDLL
@@ -2345,7 +2415,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 193
+aXVAATT_TOK 198
 
 eATTRIB    7
 aNAME      StyleX
@@ -2356,7 +2426,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 194
+aXVAATT_TOK 199
 
 eATTRIB    7
 aNAME      TagPE
@@ -2367,7 +2437,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 195
+aXVAATT_TOK 200
 
 eATTRIB    7
 aNAME      ColorFg
@@ -2378,7 +2448,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 196
+aXVAATT_TOK 201
 
 eATTRIB    7
 aNAME      ColorBk
@@ -2389,7 +2459,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 197
+aXVAATT_TOK 202
 
 eATTRIB    7
 aNAME      DIL
@@ -2400,7 +2470,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 198
+aXVAATT_TOK 203
 
 eATTRIB    7
 aNAME      OptionFlags
@@ -2411,7 +2481,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aHIDDEN    Y
-aXVAATT_TOK 199
+aXVAATT_TOK 204
 
 eATTRIB    7
 aNAME      RELCNT_X
@@ -2422,7 +2492,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aHIDDEN    Y
-aXVAATT_TOK 200
+aXVAATT_TOK 205
 
 eATTRIB    7
 aNAME      RELCNT_Y
@@ -2433,7 +2503,18 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aHIDDEN    Y
-aXVAATT_TOK 201
+aXVAATT_TOK 206
+
+eATTRIB    7
+aNAME      Placeholder
+aERATT_TOK 130000364
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aHIDDEN    Y
+aXVAATT_TOK 207
 
 eATTRIB    7
 aNAME      LKey
@@ -2444,7 +2525,18 @@ aDOMAIN    Blob
 aTYPE      B
 aLTH       7
 aHIDDEN    Y
-aXVAATT_TOK 202
+aXVAATT_TOK 208
+
+eATTRIB    7
+aNAME      LangID
+aERATT_TOK 130000367
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aHIDDEN    Y
+aXVAATT_TOK 209
 
 eCHILDENTITY 5
 aNAME      ActHot
@@ -2470,7 +2562,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 203
+aXVAATT_TOK 210
 
 eATTRIB    6
 aNAME      Title
@@ -2480,7 +2572,7 @@ aAPDM_TOK  90000032
 aDOMAIN    Text
 aTYPE      S
 aLTH       32
-aXVAATT_TOK 204
+aXVAATT_TOK 211
 
 eCHILDENTITY 4
 aNAME      Menu
@@ -2507,7 +2599,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 205
+aXVAATT_TOK 212
 
 eATTRIB    5
 aNAME      OptCnt
@@ -2518,7 +2610,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 206
+aXVAATT_TOK 213
 
 eCHILDENTITY 5
 aNAME      Opt
@@ -2532,7 +2624,7 @@ aDELETE    Y
 aPDELETE   D
 aUPDATE    Y
 aINCLSRC   Y
-aMAX_LTH   286
+aMAX_LTH   541
 
 eATTRIB    6
 aNAME      Tag
@@ -2544,7 +2636,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 207
+aXVAATT_TOK 214
 
 eATTRIB    6
 aNAME      Text
@@ -2556,7 +2648,7 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 208
+aXVAATT_TOK 215
 
 eATTRIB    6
 aNAME      AccelTitle
@@ -2567,7 +2659,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 209
+aXVAATT_TOK 216
 
 eATTRIB    6
 aNAME      ChkOn
@@ -2578,7 +2670,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 210
+aXVAATT_TOK 217
 
 eATTRIB    6
 aNAME      ChkOff
@@ -2589,7 +2681,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 211
+aXVAATT_TOK 218
 
 eATTRIB    6
 aNAME      Separator
@@ -2600,7 +2692,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 212
+aXVAATT_TOK 219
 
 eATTRIB    6
 aNAME      DIL
@@ -2611,7 +2703,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 213
+aXVAATT_TOK 220
 
 eATTRIB    6
 aNAME      D_Text
@@ -2622,9 +2714,13 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aUPDATE    Y
+<<<<<<< HEAD
 aXVAATT_TOK 214
 aDERIVEDF  oKZWDLGXO_DerivedOptionText
 aDERIVEDC  oKZWDLGXO_DerivedOptionText
+=======
+aXVAATT_TOK 221
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    6
 aNAME      NLS
@@ -2635,7 +2731,19 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 215
+aXVAATT_TOK 222
+
+eATTRIB    6
+aNAME      LangID
+aERATT_TOK 130000368
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aSEQ_AD    A
+aUPDATE    Y
+aXVAATT_TOK 223
 
 eCHILDENTITY 6
 aNAME      OptOpt
@@ -2651,7 +2759,7 @@ aUPDATE    Y
 aRECURSIVE Y
 aDERIVED   Y
 aINCLSRC   Y
-aMAX_LTH   286
+aMAX_LTH   541
 
 eATTRIB    7
 aNAME      Tag
@@ -2663,7 +2771,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 216
+aXVAATT_TOK 224
 
 eATTRIB    7
 aNAME      Text
@@ -2674,7 +2782,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 217
+aXVAATT_TOK 225
 
 eATTRIB    7
 aNAME      AccelTitle
@@ -2685,7 +2793,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 218
+aXVAATT_TOK 226
 
 eATTRIB    7
 aNAME      ChkOn
@@ -2696,7 +2804,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 219
+aXVAATT_TOK 227
 
 eATTRIB    7
 aNAME      ChkOff
@@ -2707,7 +2815,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       64
 aUPDATE    Y
-aXVAATT_TOK 220
+aXVAATT_TOK 228
 
 eATTRIB    7
 aNAME      Separator
@@ -2718,7 +2826,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 221
+aXVAATT_TOK 229
 
 eATTRIB    7
 aNAME      DIL
@@ -2729,7 +2837,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 222
+aXVAATT_TOK 230
 
 eATTRIB    7
 aNAME      NLS
@@ -2740,7 +2848,19 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 223
+aXVAATT_TOK 231
+
+eATTRIB    7
+aNAME      LangID
+aERATT_TOK 130000368
+aPERSIST   Y
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       254
+aSEQ_AD    A
+aUPDATE    Y
+aXVAATT_TOK 232
 
 eATTRIB    7
 aNAME      D_Text
@@ -2751,9 +2871,13 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aUPDATE    Y
+<<<<<<< HEAD
 aXVAATT_TOK 214
 aDERIVEDF  oKZWDLGXO_DerivedOptionText
 aDERIVEDC  oKZWDLGXO_DerivedOptionText
+=======
+aXVAATT_TOK 221
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eCHILDENTITY 6
 aNAME      OptAct
@@ -2780,7 +2904,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 224
+aXVAATT_TOK 233
 
 eATTRIB    7
 aNAME      DO
@@ -2791,7 +2915,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 225
+aXVAATT_TOK 234
 
 eATTRIB    7
 aNAME      DLL
@@ -2802,7 +2926,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       8
 aUPDATE    Y
-aXVAATT_TOK 226
+aXVAATT_TOK 235
 
 eATTRIB    7
 aNAME      SB
@@ -2813,7 +2937,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 227
+aXVAATT_TOK 236
 
 eATTRIB    7
 aNAME      VN
@@ -2824,7 +2948,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 228
+aXVAATT_TOK 237
 
 eATTRIB    7
 aNAME      EN
@@ -2835,7 +2959,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 229
+aXVAATT_TOK 238
 
 eATTRIB    7
 aNAME      Scope
@@ -2846,7 +2970,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 230
+aXVAATT_TOK 239
 
 eATTRIB    7
 aNAME      AutoGray
@@ -2857,7 +2981,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 231
+aXVAATT_TOK 240
 
 eATTRIB    7
 aNAME      NoMap
@@ -2868,7 +2992,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 232
+aXVAATT_TOK 241
 
 eATTRIB    7
 aNAME      Type
@@ -2879,7 +3003,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 233
+aXVAATT_TOK 242
 
 eATTRIB    7
 aNAME      DlgN
@@ -2890,7 +3014,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 234
+aXVAATT_TOK 243
 
 eATTRIB    7
 aNAME      WndN
@@ -2901,7 +3025,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 235
+aXVAATT_TOK 244
 
 eATTRIB    7
 aNAME      SyncIdx
@@ -2912,7 +3036,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 236
+aXVAATT_TOK 245
 
 eATTRIB    7
 aNAME      OperCtrl
@@ -2923,7 +3047,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 237
+aXVAATT_TOK 246
 
 eATTRIB    7
 aNAME      Popup
@@ -2934,7 +3058,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 238
+aXVAATT_TOK 247
 
 eATTRIB    7
 aNAME      Prompt
@@ -2945,7 +3069,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 239
+aXVAATT_TOK 248
 
 eCHILDENTITY 6
 aNAME      OptMap
@@ -2971,7 +3095,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 240
+aXVAATT_TOK 249
 
 eATTRIB    7
 aNAME      VN
@@ -2983,7 +3107,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 241
+aXVAATT_TOK 250
 
 eATTRIB    7
 aNAME      EN
@@ -2995,7 +3119,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 242
+aXVAATT_TOK 251
 
 eATTRIB    7
 aNAME      AN
@@ -3007,7 +3131,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 243
+aXVAATT_TOK 252
 
 eATTRIB    7
 aNAME      Context
@@ -3018,7 +3142,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 244
+aXVAATT_TOK 253
 
 eATTRIB    7
 aNAME      Type
@@ -3029,7 +3153,7 @@ aDOMAIN    WD_MapDefType
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 245
+aXVAATT_TOK 254
 
 eCHILDENTITY 4
 aNAME      Subtask
@@ -3056,7 +3180,7 @@ aTYPE      L
 aLTH       4
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 246
+aXVAATT_TOK 255
 
 eCHILDENTITY 4
 aNAME      Hotkey
@@ -3082,7 +3206,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aKEY       Y
-aXVAATT_TOK 247
+aXVAATT_TOK 256
 
 eATTRIB    5
 aNAME      Title
@@ -3092,7 +3216,7 @@ aAPDM_TOK  90000032
 aDOMAIN    Text
 aTYPE      S
 aLTH       32
-aXVAATT_TOK 248
+aXVAATT_TOK 257
 
 eCHILDENTITY 5
 aNAME      HotAct
@@ -3118,7 +3242,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 249
+aXVAATT_TOK 258
 
 eATTRIB    6
 aNAME      DO
@@ -3129,7 +3253,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 250
+aXVAATT_TOK 259
 
 eATTRIB    6
 aNAME      DLL
@@ -3140,7 +3264,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       8
 aUPDATE    Y
-aXVAATT_TOK 251
+aXVAATT_TOK 260
 
 eATTRIB    6
 aNAME      SB
@@ -3151,7 +3275,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 252
+aXVAATT_TOK 261
 
 eATTRIB    6
 aNAME      VN
@@ -3162,7 +3286,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 253
+aXVAATT_TOK 262
 
 eATTRIB    6
 aNAME      EN
@@ -3173,7 +3297,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 254
+aXVAATT_TOK 263
 
 eATTRIB    6
 aNAME      Scope
@@ -3184,7 +3308,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 255
+aXVAATT_TOK 264
 
 eATTRIB    6
 aNAME      AutoGray
@@ -3195,7 +3319,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 256
+aXVAATT_TOK 265
 
 eATTRIB    6
 aNAME      NoMap
@@ -3206,7 +3330,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       1
 aUPDATE    Y
-aXVAATT_TOK 257
+aXVAATT_TOK 266
 
 eATTRIB    6
 aNAME      Type
@@ -3217,7 +3341,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 258
+aXVAATT_TOK 267
 
 eATTRIB    6
 aNAME      DlgN
@@ -3228,7 +3352,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 259
+aXVAATT_TOK 268
 
 eATTRIB    6
 aNAME      WndN
@@ -3239,7 +3363,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 260
+aXVAATT_TOK 269
 
 eATTRIB    6
 aNAME      SyncIdx
@@ -3250,7 +3374,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 261
+aXVAATT_TOK 270
 
 eATTRIB    6
 aNAME      OperCtrl
@@ -3261,7 +3385,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 262
+aXVAATT_TOK 271
 
 eATTRIB    6
 aNAME      Popup
@@ -3272,7 +3396,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 263
+aXVAATT_TOK 272
 
 eATTRIB    6
 aNAME      Prompt
@@ -3283,7 +3407,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       254
 aUPDATE    Y
-aXVAATT_TOK 264
+aXVAATT_TOK 273
 
 eCHILDENTITY 3
 aNAME      DIL
@@ -3311,7 +3435,7 @@ aLTH       254
 aKEY       Y
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 265
+aXVAATT_TOK 274
 
 eATTRIB    4
 aNAME      D_Msg
@@ -3322,9 +3446,13 @@ aTYPE      S
 aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
+<<<<<<< HEAD
 aXVAATT_TOK 266
 aDERIVEDF  oKZWDLGXO_DerivedDIL_Msg
 aDERIVEDC  oKZWDLGXO_DerivedDIL_Msg
+=======
+aXVAATT_TOK 275
+>>>>>>> 5c8ba40... changes to objects for language conversion
 
 eCHILDENTITY 4
 aNAME      NLS_DIL_Text
@@ -3350,7 +3478,7 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 267
+aXVAATT_TOK 276
 
 eATTRIB    5
 aNAME      Text
@@ -3361,7 +3489,7 @@ aTYPE      S
 aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 268
+aXVAATT_TOK 277
 
 eCHILDENTITY 3
 aNAME      NLS
@@ -3402,7 +3530,7 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 269
+aXVAATT_TOK 278
 
 eATTRIB    5
 aNAME      Text
@@ -3413,5 +3541,5 @@ aTYPE      S
 aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
-aXVAATT_TOK 270
+aXVAATT_TOK 279
 
