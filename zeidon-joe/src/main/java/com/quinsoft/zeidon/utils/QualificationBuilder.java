@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
@@ -74,7 +75,7 @@ public class QualificationBuilder
      * When doing the activate we will synchronize using this object.  May be changed
      * by cachedAs().  Defaults to the QualificationBuilder.
      */
-    private Object synch;
+    private Object synch = this;
 
     /**
      * If non-null, then attempt to relink this instance with the root after the activate.
@@ -95,7 +96,6 @@ public class QualificationBuilder
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
         entitySpecCount = 0;
-        synch = this;
     }
 
     /**
@@ -112,7 +112,6 @@ public class QualificationBuilder
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
         entitySpecCount = qual.cursor( ENTITYSPEC ).getEntityCount();
-        synch = this;
     }
 
     /**
@@ -163,6 +162,11 @@ public class QualificationBuilder
         return setLodDef( application.getLodDef( task, lodDefName ) );
     }
 
+    public Task getTask()
+    {
+        return task;
+    }
+
     public LodDef getLodDef()
     {
         return activateOptions.getLodDef();
@@ -191,6 +195,36 @@ public class QualificationBuilder
                        .fromString( qualString )
                        .activateFirst();
         activateOptions.setQualificationObject( qualView );
+        return this;
+    }
+
+    /**
+     * Create the qual object from a simple JSON string.
+     *
+     * Sample JSON:
+     * <pre>
+     {
+         "ID": [10, 11, 12],
+         "MaidenName": "Alice",
+         "$or": [ { "FirstName": "Bob" }, { "$and" : [ { "LastName": "Smith" }, { "MaidenName": { "$neq": "Smith" } } ] } ]
+         "DateOfBirth": { "$gt": "01/01/2001", "<": "01/01/2010" }
+         "$restricting": {
+             "Address": {
+                 "Description": { "<>": "" }
+             }
+         }
+     }
+     * </pre>
+     * @param json
+     * @return this
+     */
+    public QualificationBuilder loadFromJsonString( String json )
+    {
+        if ( activateOptions.getLodDef() == null )
+            throw new ZeidonException( "LodDef has not been set for JSON qualifcation" );
+
+        QualificationBuilderFromJson parser = new QualificationBuilderFromJson( this );
+        parser.parseJson( json );
         return this;
     }
 
@@ -312,8 +346,18 @@ public class QualificationBuilder
     {
         for ( EntityInstance qa : qualView.cursor( QUALATTRIB ).eachEntity() )
         {
-            if ( ! qa.getAttribute( OPER ).equals( "ORDERBY" ) )
-                return true;
+            String oper = qa.getAttribute( OPER ).getString();
+            if ( StringUtils.isBlank( oper ) )
+                throw new ZeidonException("Unexpected blank OPER in qualification" );
+
+            oper = oper.toUpperCase().trim();
+            if ( oper.equals( "ORDERBY" ) )
+                continue;
+
+            if ( oper.equals( "(" ) )
+                continue;
+
+            return true;
         }
 
         return false;
@@ -401,7 +445,7 @@ public class QualificationBuilder
             if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", rootName ) != CursorResult.SET )
             {
                 entitySpecCount++;
-                qualView.cursor( ENTITYSPEC ).createEntity().getAttribute( "EntityName" ).setValue( rootName );
+                qualView.cursor( ENTITYSPEC ).createEntity( CursorPosition.LAST ).getAttribute( "EntityName" ).setValue( rootName );
             }
 
             rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
@@ -418,7 +462,7 @@ public class QualificationBuilder
         if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", entityName ) != CursorResult.SET )
         {
             entitySpecCount++;
-            qualView.cursor( ENTITYSPEC ).createEntity().getAttribute( "EntityName").setValue( entityName );
+            qualView.cursor( ENTITYSPEC ).createEntity( CursorPosition.LAST ).getAttribute( "EntityName").setValue( entityName );
 
             // If this is the root then get the cursor.
             if ( rootInstance == null && getLodDef().getRoot().getName().equals( entityName ) )
@@ -470,7 +514,7 @@ public class QualificationBuilder
     public QualificationBuilder addAttribQualEntityExists( String entityName )
     {
         validateEntity();
-        qualView.cursor( QUALATTRIB ).createEntity()
+        qualView.cursor( QUALATTRIB ).createEntity( CursorPosition.LAST )
                                      .getAttribute( ENTITYNAME).setValue( entityName )
                                      .getAttribute( OPER).setValue( "EXISTS" ) ;
         return this;
@@ -479,7 +523,23 @@ public class QualificationBuilder
     public QualificationBuilder addAttribQual( String oper )
     {
         validateEntity();
-        qualView.cursor( QUALATTRIB ).createEntity().getAttribute( OPER).setValue( oper ) ;
+        qualView.cursor( QUALATTRIB ).createEntity( CursorPosition.LAST ).getAttribute( OPER ).setValue( oper ) ;
+        return this;
+    }
+
+    /**
+     * Retroactively insert an opening paren just in front of the current QualAttrib.  Used to
+     * wrap some QualAttribs with parens after it is learned that they are needed.
+     *
+     * @param oper
+     * @return
+     */
+    public QualificationBuilder prependOpenParen()
+    {
+        validateEntity();
+        qualView.cursor( QUALATTRIB ).setLast();
+        qualView.cursor( QUALATTRIB ).createEntity( CursorPosition.PREV ).getAttribute( OPER ).setValue( "(" ) ;
+        qualView.cursor( QUALATTRIB ).setLast();
         return this;
     }
 
@@ -506,14 +566,14 @@ public class QualificationBuilder
 
     public QualificationBuilder newEntityKey( Integer key )
     {
-        qualView.cursor( KEYLIST ).createEntity()
+        qualView.cursor( KEYLIST ).createEntity( CursorPosition.LAST )
                                   .getAttribute( "IntegerValue").setValue( key ) ;
         return this;
     }
 
     public QualificationBuilder newEntityKey( String key )
     {
-        qualView.cursor( KEYLIST ).createEntity()
+        qualView.cursor( KEYLIST ).createEntity( CursorPosition.LAST )
                                   .getAttribute( "StringValue").setValue( key ) ;
         return this;
     }
@@ -530,7 +590,7 @@ public class QualificationBuilder
     public QualificationBuilder addAttribQual( String entityName, String attribName, String oper, Object attribValue )
     {
         validateEntity();
-        qualView.cursor( QUALATTRIB ).createEntity()
+        qualView.cursor( QUALATTRIB ).createEntity( CursorPosition.LAST )
                                      .getAttribute( ENTITYNAME ).setValue( entityName )
                                      .getAttribute( ATTRIBUTENAME ).setValue( attribName )
                                      .getAttribute( OPER ).setValue( oper )
@@ -542,7 +602,7 @@ public class QualificationBuilder
     public QualificationBuilder addActivateOrdering( String entityName, String attribName, boolean descending )
     {
         validateEntity();
-        qualView.cursor( QUALATTRIB ).createEntity()
+        qualView.cursor( QUALATTRIB ).createEntity( CursorPosition.LAST )
                                      .getAttribute( ENTITYNAME ).setValue( entityName )
                                      .getAttribute( ATTRIBUTENAME ).setValue( attribName )
                                      .getAttribute( OPER ).setValue( "ORDERBY" )

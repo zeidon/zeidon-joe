@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.DropTaskCleanup;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -565,5 +566,11 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
             cleanupWork = new ArrayList<>();
 
         cleanupWork.add( work );
+    }
+
+    @Override
+    public DeserializeOi deserializeOi()
+    {
+        return new DeserializeOi( this ).setApplication( this.getApplication() );
     }
 }

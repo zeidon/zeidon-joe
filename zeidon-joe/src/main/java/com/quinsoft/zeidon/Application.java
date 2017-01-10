@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
@@ -66,6 +67,15 @@ public interface Application
      * @return Domain object.
      */
     Domain getDomain( String name );
+ 
+    /**
+     * Returns a list of known LOD names for this application.  Note that this may
+     * be an expensive operation because it will search through the entire classpath
+     * for matching LODs.
+     * 
+     * @return list of LOD names.
+     */
+    List<String> getLodNameList( Task task );
 
     /**
      *

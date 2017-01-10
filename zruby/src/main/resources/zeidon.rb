@@ -1,4 +1,5 @@
 include Java
+require 'json'
 
 java_import 'com.quinsoft.zeidon.standardoe.JavaObjectEngine'
 java_import 'com.quinsoft.zeidon.CursorPosition'
@@ -90,10 +91,9 @@ module Zeidon
       @jtask = jtask
     end
   
-    def activate view_od, argmap = {}, &block
+    def activate view_od, qual_hash = nil, &block
       qual = Qualification.new( @jtask, view_od )
-      qual.add_qual( argmap[:qual] )
-      qual.add_options( argmap[:options] )
+      qual.add_qual( qual_hash ) if qual_hash
       yield qual if block_given?
       jview = qual.activate
       return View.new jview
@@ -165,37 +165,10 @@ module Zeidon
       end
     end
     
-    # Adds qualification from a hash object
-    def add_qual_hash( qual )
-      return if qual.length == 0 # Empty hash.
-    end
-
-    # Adds qualification from an array object
-    def add_qual_array( qual )
-      return if qual.length == 0 # Empty array.
-
-      # Check to see if we have nested arrays.  If we don't have nested arrays,
-      # this should just be a simple case of qualification
-      # specified as a list.  E.g.
-      #       ["EntityName", "AttributeName", "=", "value"]
-      return @jqual.addAttribQual( *qual ) unless qual[0].kind_of? Array
-
-      # Call add_qual for each element of the array.
-      qual.each { |e| add_qual( e ) }
-    end
-
     def add_qual( qual )
       return if qual.nil?  # Nothing to add.
-      return add_qual_hash( qual ) if qual.kind_of? Hash
-      return add_qual_array( qual ) if qual.kind_of? Array
-      @jqual.addAttribQual( qual )
-    end
-
-    def add_options( options )
-      return if options.nil?
-      @jqual.multipleRoots if options[:multiple_roots] || options[:root_only_multiple]
-      @jqual.singleRoots   if options[:single_root]
-      @jqual.root_only     if options[:root_only]      || options[:root_only_multiple]
+      return if qual.size == 0
+      @jqual.loadFromJsonString( qual.to_json )
     end
 
     def respond_to?( id )

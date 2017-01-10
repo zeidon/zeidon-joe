@@ -1,0 +1,725 @@
+z1000-Zeidon    CUSTOMER TZZOLODO 03/26/16   21:29:13 1.0a2    
+eLOD       1
+aZKey      110000553
+aName      Customer
+
+eLOD_EntityParent 2
+aName      Customer
+aIndentName Customer
+aIndentLvl 0
+aZKey      110000554
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave D
+
+eLOD_EntityChild 3
+aName      Order
+aIndentName    Order
+aIndentLvl 3
+aZKey      110000566
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave R
+aRelLinkIndicator L
+
+eLOD_EntityChild 4
+aName      OrderDetail
+aIndentName       OrderDetail
+aIndentLvl 6
+aZKey      110000578
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave R
+aRelLinkIndicator L
+
+eLOD_AttributeRec 5
+aZKey      110000579
+
+eER_AttributeRec 6
+aName      UnitPrice
+aZKey      110000400
+aNotNull   Y
+
+eDomainRec 7
+aZKey      110000023
+aName      Double
+aDomainType E
+aDataType  M
+aContextRestriction N
+
+eLOD_AttributeRec 5
+aZKey      110000580
+
+eER_AttributeRec 6
+aName      Quantity
+aZKey      110000401
+aNotNull   Y
+
+eDomainRec 7
+aZKey      110000044
+aName      Integer
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aDecimalFormat 0
+aDesc      Integer numbers from -lots to +lots
+aContextRestriction N
+
+eLOD_AttributeRec 5
+aZKey      110000581
+
+eER_AttributeRec 6
+aName      Discount
+aZKey      110000402
+aNotNull   Y
+
+eDomainRec 7
+
+eER_EntityRec 5
+aName      OrderDetail
+aZKey      110000399
+aPurpose   S
+aER_DiagramPosX 34
+aER_DiagramPosY 3
+aTE_TableName orderdetails
+
+eER_RelLinkRec 5
+aName      has
+aAutoSeq   N
+aHangingForeignKeyEntity N
+aZKey      110000419
+aCardMin   0
+aCardMax   m
+aTE_NoForeignKeyPrefix N
+
+eER_RelTypeRec 6
+aZKey      110000418
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 50
+aER_DiagramE1PosY 3
+aER_DiagramE2PosX 43
+aER_DiagramE2PosY 3
+
+eLOD_AttributeRec 4
+aZKey      110000567
+
+eER_AttributeRec 5
+aName      OrderId
+aZKey      110000287
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 6
+aZKey      110000021
+aName      GeneratedKey
+aDomainType E
+aDataType  L
+aMaxStringLth 64
+aDesc      Generic DB-generated key
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      110000568
+
+eER_AttributeRec 5
+aName      OrderDate
+aZKey      110000290
+
+eDomainRec 6
+aZKey      110000025
+aName      DateTime
+aDomainType E
+aDataType  T
+aDesc      Date/time field
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      110000569
+
+eER_AttributeRec 5
+aName      ShippedDate
+aZKey      110000291
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000570
+
+eER_AttributeRec 5
+aName      RequiredDate
+aZKey      110000382
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000571
+
+eER_AttributeRec 5
+aName      Freight
+aZKey      110000384
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000572
+
+eER_AttributeRec 5
+aName      ShipName
+aZKey      110000292
+aLth       40
+
+eDomainRec 6
+aZKey      110000042
+aName      Text
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aDesc      Any Character String
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      110000573
+
+eER_AttributeRec 5
+aName      ShipAddress
+aZKey      110000293
+aLth       60
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000574
+
+eER_AttributeRec 5
+aName      ShipCity
+aZKey      110000294
+aLth       15
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000575
+
+eER_AttributeRec 5
+aName      ShipRegion
+aZKey      110000295
+aLth       15
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000576
+
+eER_AttributeRec 5
+aName      ShipPostalCode
+aZKey      110000296
+aLth       10
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      110000577
+
+eER_AttributeRec 5
+aName      ShipCountry
+aZKey      110000385
+aLth       15
+
+eDomainRec 6
+
+eER_EntityRec 4
+aName      Order
+aZKey      110000286
+aPurpose   F
+aER_DiagramPosX 51
+aER_DiagramPosY 3
+aTE_TableName orders
+aSAP_Entity 0
+
+eER_RelLinkRec 4
+aName      has
+aAutoSeq   N
+aHangingForeignKeyEntity N
+aZKey      110000326
+aCardMin   0
+aCardMax   m
+aTE_NoForeignKeyPrefix N
+
+eER_RelTypeRec 5
+aZKey      110000325
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 55
+aER_DiagramBendPosY 12
+aER_DiagramE1PosX 65
+aER_DiagramE1PosY 12
+aER_DiagramE2PosX 55
+aER_DiagramE2PosY 8
+
+eLOD_AttributeRec 3
+aZKey      110000555
+
+eER_AttributeRec 4
+aName      CustomerId
+aZKey      110000239
+aLth       5
+aNotNull   Y
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000556
+
+eER_AttributeRec 4
+aName      CompanyName
+aZKey      110000240
+aLth       40
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000557
+
+eER_AttributeRec 4
+aName      ContactName
+aZKey      110000374
+aLth       30
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000558
+
+eER_AttributeRec 4
+aName      ContactTitle
+aZKey      110000377
+aLth       30
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000559
+
+eER_AttributeRec 4
+aName      Address
+aZKey      110000249
+aLth       60
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000560
+
+eER_AttributeRec 4
+aName      City
+aZKey      110000250
+aLth       15
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000561
+
+eER_AttributeRec 4
+aName      Region
+aZKey      110000251
+aLth       15
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000562
+
+eER_AttributeRec 4
+aName      PostalCode
+aZKey      110000252
+aLth       15
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000563
+
+eER_AttributeRec 4
+aName      Country
+aZKey      110000253
+aLth       15
+aSAP_Attribute 0
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000564
+
+eER_AttributeRec 4
+aName      Phone
+aZKey      110000375
+aLth       24
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000565
+
+eER_AttributeRec 4
+aName      Fax
+aZKey      110000376
+aLth       24
+
+eDomainRec 5
+
+eER_EntityRec 3
+aName      Customer
+aZKey      110000238
+aPurpose   F
+aER_DiagramPosX 66
+aER_DiagramPosY 10
+aTE_TableName customers
+aSAP_Entity 0
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 8
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 9
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 10
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 11
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 8
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 9
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 10
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 11
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+ePOD       2
+aNAME      Customer
+aZKey      110000582
+aTE_SourceZKey 110000445
+
+eTE_DB_Environ 3
+aName      Northwind
+aZKey      833
+aDesc      Zeidon application using Northwind DB
+aType      P
+
+eTE_DBMS_Source 4
+aName      MySql
+aZKey      110000445
+aParadigm  R
+aDBMS      MySql/JDBC with SERIAL keys
+aGenerateExecutable kzhsqlmb
+aExecutable kzhsqloa
+aDisplayOwner N
+
+i12        6
+i24        21
+i27        21
+i30        6
+i36        33
+i39        33
+i42        33
+i45        33
+i48        33
+i54        33
+i57        33
+i60        33
+i63        33
+i66        33
+i69        33
+i72        33
+i75        33
+i78        33
+i81        33
+i84        33
+i86        1
+i87        52
+i88        53
+i89        33
+i90        55
+i91        56
+i92        33
+i93        58
+i94        59
+i95        33
+i96        61
+i97        62
+i98        33
+i99        64
+i100       65
+i101       33
+i102       67
+i103       68
+i104       33
+i105       70
+i106       71
+i107       33
+i108       73
+i109       74
+i110       33
+i111       76
+i112       77
+i113       33
+i114       79
+i115       80
+i116       33
+i117       82
+i118       83
+i119       33
+i120       85
+i121       2
+i122       16
+i123       17
+i124       18
+i125       19
+i126       20
+i127       21
+i128       22
+i129       23
+i130       21
+i131       25
+i132       26
+i133       21
+i134       28
+i135       29
+i136       6
+i137       31
+i138       32
+i139       33
+i140       34
+i141       35
+i142       33
+i143       37
+i144       38
+i145       33
+i146       40
+i147       41
+i148       33
+i149       43
+i150       44
+i151       33
+i152       46
+i153       47
+i154       33
+i155       49
+i156       50
+i157       51
+i158       3
+i159       4
+i160       5
+i161       6
+i162       7
+i163       8
+i164       9
+i165       10
+i166       11
+i167       6
+i168       13
+i169       14
+i170       15

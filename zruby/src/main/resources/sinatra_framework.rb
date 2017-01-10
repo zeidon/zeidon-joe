@@ -233,7 +233,7 @@ def activate_for_edit( args = {} )
   jloddef = @application.getLodDef( @task.jtask, @loddef )
   jroot = jloddef.getRoot
   jkey = jroot.getKeys[0] # We're assuming there is one and only one key.
-  @view = @task.activate @loddef, :qual => [ jkey.getName, params[:id] ]
+  @view = @task.activate @loddef, jkey.getName => params[:id]
   @view_name = "Edit_#{params[:loddef]}"
   @view.set_name( @view_name )
   return @view_name
@@ -401,7 +401,7 @@ code
 end
 
 get '/:application/list/:loddef' do
-  @view = @task.activate @loddef, :options => {:root_only_multiple => true}
+  @view = @task.activate @loddef, root_only_multiple:> true
   @view.setName @loddef + "_list"
   return haml <<-code
 %title #{@loddef} List
@@ -571,7 +571,7 @@ def activate_include_source
 
   lod_name = settings.lod_for_entity_list[ @entity ] || @entity
 
-  @include_source = @task.activate lod_name, :options => { :root_only_multiple => true }
+  @include_source = @task.activate lod_name, root_only: true
   @include_source.set_name( list_view_name )
   @select_entity = @include_source.getLodDef.getRoot.name
 end

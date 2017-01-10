@@ -1,0 +1,175 @@
+z1000-Zeidon    BASE     TZDGSRCO 03/26/16   21:28:42 1.0a2    
+eDomainGroup 1
+aZKey      110000001
+aName      Base
+aExtension C
+aWorkNumeric 2014
+
+eDomain    2
+aZKey      110000002
+aName      Blob
+aDesc      A do nothing domain for blobs
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.Base64BlobDomain
+aDataType  B
+aContextRestriction N
+
+eContext   3
+aZKey      110000003
+aName      BLOB
+aIsDefault Y
+
+eDomain    2
+aZKey      110000004
+aName      Date
+aDesc      Date without time
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aDataType  D
+aContextRestriction N
+
+eContext   3
+aZKey      110000005
+aName      Date
+aJavaEditString yyyy-MM-dd
+aIsDefault Y
+
+eDomain    2
+aZKey      110000012
+aName      Year
+aDesc      4-digit year
+aDomainType T
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110000013
+aName      Year
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110000014
+aExternalValue 2013
+aInternalValue 2013
+
+eTableEntry 4
+aZKey      110000015
+aExternalValue 2014
+aInternalValue 2014
+
+eTableEntry 4
+aZKey      110000016
+aExternalValue 2015
+aInternalValue 2015
+
+eTableEntry 4
+aZKey      110000017
+aExternalValue 2016
+aInternalValue 2016
+
+eTableEntry 4
+aZKey      110000018
+aExternalValue 2017
+aInternalValue 2017
+
+eDomain    2
+aZKey      110000019
+aName      Boolean
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.BooleanDomain
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110000020
+aName      Boolean
+aIsDefault Y
+
+eDomain    2
+aZKey      110000021
+aName      GeneratedKey
+aDesc      Generic DB-generated key
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.GeneratedKeyDomain
+aDataType  L
+aMaxStringLth 64
+aContextRestriction N
+
+eContext   3
+aZKey      110000022
+aName      GeneratedKey
+aIsDefault Y
+
+eDomain    2
+aZKey      110000023
+aName      Double
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aDataType  M
+aContextRestriction N
+
+eContext   3
+aZKey      110000024
+aName      Double
+aIsDefault Y
+
+eDomain    2
+aZKey      110000025
+aName      DateTime
+aDesc      Date/time field
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.DateTimeDomain
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      110000026
+aName      DateTime
+aJavaEditString yyyy-MM-dd
+aIsDefault Y
+
+eDomain    2
+aZKey      110000027
+aName      Y/N
+aDesc      Yes or No
+aDomainType T
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110000028
+aName      Default
+
+eTableEntry 4
+aZKey      110000029
+
+eTableEntry 4
+aZKey      110000030
+aExternalValue Default
+aInternalValue Y
+
+eTableEntry 4
+aZKey      110000031
+aInternalValue N
+
+eContext   3
+aZKey      110000032
+aName      Y/N
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110000033
+
+eTableEntry 4
+aZKey      110000034
+aExternalValue Y
+aInternalValue Y
+
+eTableEntry 4
+aZKey      110000035
+aExternalValue N
+aInternalValue N
+

@@ -212,6 +212,15 @@ public class StringDomain extends AbstractDomain
 
         return false;
     }
+    
+    @Override
+    public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef,
+                                  Object currentValue, Object operand )
+    {
+        Object value = convertExternalValue( task, attributeInstance, attributeDef, null, operand );
+        String str = checkNullString( value );
+        return StringUtils.join( (String) currentValue, str );
+    }
 
     /**
      * Generate a RANDOM test value for this domain.  This is used by test code to create RANDOM

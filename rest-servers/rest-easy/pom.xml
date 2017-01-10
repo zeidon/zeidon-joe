@@ -5,11 +5,12 @@
         <groupId>com.quinsoft.zeidon</groupId>
         <artifactId>zeidon</artifactId>
         <version>1.4.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>zeidon-restserver</artifactId>
+    <artifactId>zeidon-resteasy</artifactId>
     <packaging>war</packaging>
-    <name>Zeidon REST webserver</name>
+    <name>Zeidon REST webserver using RESTEasy</name>
 
     <dependencies>
         <dependency>

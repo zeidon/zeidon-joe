@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.utils;
 
+import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -39,14 +40,15 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
 import org.joda.time.format.DateTimePrinter;
+import org.joda.time.format.ISODateTimeFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -361,16 +363,15 @@ public class JoeUtils
      * character.  If there are more than one then the first one is considered to
      * be the "print" format.
      *
+     * NOTE: Automatically adds ISO 8601 parser: 2016-11-29T05:41:02+00:00
+     *
      * @param editString
      * @return
      */
     public static DateTimeFormatter createDateFormatterFromEditString( String editString )
     {
         String[] strings = editString.split( "\\|" );
-        if ( strings.length == 1 )
-            return DateTimeFormat.forPattern( strings[0] );
-
-        DateTimeParser list[] = new DateTimeParser[ strings.length ];
+        DateTimeParser list[] = new DateTimeParser[ strings.length + 1];
         DateTimePrinter printer = null;
         for ( int i = 0; i < strings.length; i++ )
         {
@@ -387,6 +388,8 @@ public class JoeUtils
                 throw ZeidonException.wrapException( e ).appendMessage( "Format string = %s", strings[i] );
             }
         }
+
+        list[ strings.length ] = ISODateTimeFormat.dateTimeParser().getParser();
 
         DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
         builder.append( printer, list );
@@ -566,9 +569,10 @@ public class JoeUtils
     public static final void sysMessageBox( String msgTitle, String msgText )
     {
         //JOptionPane.showMessageDialog( null, msgText, msgTitle, JOptionPane.PLAIN_MESSAGE );
-        JOptionPane pane = new JOptionPane(msgText, JOptionPane.INFORMATION_MESSAGE); 
-        JDialog dialog = pane.createDialog(msgTitle); 
-        dialog.setAlwaysOnTop(true); 
+        JOptionPane pane = new JOptionPane(msgText, JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = pane.createDialog(msgTitle);
+        dialog.setModalityType(ModalityType.MODELESS);
+        dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
     }
 

@@ -1,0 +1,205 @@
+z1000-Zeidon    ZPLOCKO  TZZOLODO 03/26/16   21:29:15 1.0a2    
+eLOD       1
+aZKey      110000719
+aName      ZPLOCKO
+aDesc      Zeidon Locking Object
+
+eLOD_EntityParent 2
+aName      ZeidonLock
+aIndentName ZeidonLock
+aZKey      110000720
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave D
+aDesc      Used for Automatic locking.
+
+eLOD_AttributeRec 3
+aZKey      110000721
+
+eER_AttributeRec 4
+aName      LOD_Name
+aZKey      110000710
+aLth       35
+aNotNull   Y
+
+eDomainRec 5
+aZKey      110000042
+aName      Text
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aDesc      Any Character String
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      110000722
+
+eER_AttributeRec 4
+aName      KeyValue
+aZKey      110000713
+aLth       200
+aNotNull   Y
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000723
+
+eER_AttributeRec 4
+aName      UserName
+aZKey      110000715
+aLth       32
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      110000724
+
+eER_AttributeRec 4
+aName      AllowRead
+aZKey      110000716
+aLth       1
+
+eDomainRec 5
+aZKey      110000019
+aName      Boolean
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      110000725
+
+eER_AttributeRec 4
+aName      Timestamp
+aZKey      110000717
+aNotNull   Y
+
+eDomainRec 5
+aZKey      110000025
+aName      DateTime
+aDomainType E
+aDataType  T
+aDesc      Date/time field
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      110000726
+
+eER_AttributeRec 4
+aName      ID
+aZKey      110000718
+
+eDomainRec 5
+aZKey      110000044
+aName      Integer
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aDecimalFormat 0
+aDesc      Integer numbers from -lots to +lots
+aContextRestriction N
+
+eER_EntityRec 3
+aName      ZeidonLocking
+aZKey      110000709
+aPurpose   F
+aDesc      Used for Automatic database locking
+aER_DiagramPosX 6
+aER_DiagramPosY 26
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+ePOD       2
+aNAME      ZPLOCKO
+aZKey      110000727
+aTE_SourceZKey 110000445
+
+eTE_DB_Environ 3
+aName      Northwind
+aZKey      833
+aDesc      Zeidon application using Northwind DB
+aType      P
+
+eTE_DBMS_Source 4
+aName      MySql
+aZKey      110000445
+aParadigm  R
+aDBMS      MySql/JDBC with SERIAL keys
+aGenerateExecutable kzhsqlmb
+aExecutable kzhsqloa
+aDisplayOwner N
+
+i7         4
+i10        4
+i21        1
+i22        2
+i23        3
+i24        4
+i25        5
+i26        6
+i27        4
+i28        8
+i29        9
+i30        4
+i31        11
+i32        12
+i33        13
+i34        14
+i35        15
+i36        16
+i37        17
+i38        18
+i39        19
+i40        20
