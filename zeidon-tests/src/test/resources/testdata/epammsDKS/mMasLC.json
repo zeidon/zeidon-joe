@@ -476,7 +476,7 @@
             "FK_ID_M_DIRECTIONSFORUSESECTION" : 35,
             "MP_DirectionsForUseStatement" : [ { } ]
           } ],
-          "M_DrivingUsage" : [ {
+          "M_ClaimsDrivingUsage" : [ {
             "ID" : 1872,
             "UsageType" : "C",
             "ClaimsClassification" : "Viruses",
@@ -930,7 +930,7 @@
               } ]
             } ]
           } ],
-          "M_DrivingUsage" : [ {
+          "M_ClaimsDrivingUsage" : [ {
             "ID" : 2452,
             "UsageType" : "C",
             "ClaimsClassification" : "Bacteria",
@@ -1003,12 +1003,6 @@
             "Title" : "Note to Reviewer: ",
             "Text" : "For labels that list medical premises and metal and/or stainless steel surfaces, one of the following FDA/EPA Memorandum of Understanding statements must be used.",
             "FK_ID_M_DIRECTIONSFORUSESECTION" : 54
-          } ],
-          "M_DirectionsForUseXOR_Section" : [ {
-            "ID" : 56,
-            "Name" : "NON-MEDICAL",
-            "FK_ID_M_DIRECTIONSFORUSECATEGORY" : 1,
-            "XORID_M_DIRECTIONSFORUSESECTION" : 54
           } ]
         }, {
           "ID" : 56,
@@ -1022,13 +1016,7 @@
             "FK_ID_M_DIRECTIONSFORUSESECTION" : 56,
             "MP_DirectionsForUseStatement" : [ { } ]
           } ],
-          "MP_DirectionsForUseSection" : [ { } ],
-          "M_DirectionsForUseXOR_Section" : [ {
-            "ID" : 54,
-            "Name" : "MEDICAL",
-            "FK_ID_M_DIRECTIONSFORUSECATEGORY" : 1,
-            "XORID_M_DIRECTIONSFORUSESECTION" : 56
-          } ]
+          "MP_DirectionsForUseSection" : [ { } ]
         }, {
           "ID" : 57,
           "Name" : "DILUTION",
@@ -16260,7 +16248,7 @@
           "MP_MarketingStatement" : [ { } ]
         }, {
           "ID" : 303,
-          "Text" : "Cleans, sanitizes and disinfects hard, non-porous surfaces of {(protective_equipment)}. Rinse all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120°F), and allow to air dry. (Precaution: Cleaning at 120°F temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.)",
+          "Text" : "Cleans, sanitizes and disinfects hard, non-porous surfaces of {(protective_equipment)}. Rinse all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120F), and allow to air dry. (Precaution: Cleaning at 120F temperature will avoid overheating and distortion of the personal safety equipment that would necessitate replacement.)",
           "AUTOSEQ" : 10,
           "FK_ID_M_MARKETINGSECTION" : 181,
           "MP_MarketingStatement" : [ { } ],
@@ -16481,7 +16469,7 @@
           "MP_MarketingStatement" : [ { } ]
         }, {
           "ID" : 326,
-          "Text" : "Is used to clean, sanitize and disinfect non-porous ambulance equipment and surfaces by rinsing all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120°F), and allow to air dry. (Precaution: Cleaning at 120°F temperature will avoid overheating and distortion of the ambulance equipment and surfaces that would necessitate replacement.)",
+          "Text" : "Is used to clean, sanitize and disinfect non-porous ambulance equipment and surfaces by rinsing all equipment that comes in prolonged contact with skin before reuse with clean warm water (about 120F), and allow to air dry. (Precaution: Cleaning at 120F temperature will avoid overheating and distortion of the ambulance equipment and surfaces that would necessitate replacement.)",
           "AUTOSEQ" : 33,
           "FK_ID_M_MARKETINGSECTION" : 181,
           "MP_MarketingStatement" : [ { } ]
@@ -16766,7 +16754,7 @@
           "MP_MarketingStatement" : [ { } ]
         }, {
           "ID" : 352,
-          "Text" : "Is for use as a food grade egg shell sanitizer, with best results achieved in water temperatures ranging from 78°-110°F.",
+          "Text" : "Is for use as a food grade egg shell sanitizer, with best results achieved in water temperatures ranging from 78-110F.",
           "AUTOSEQ" : 11,
           "FK_ID_M_MARKETINGSECTION" : 182,
           "MP_MarketingStatement" : [ { } ]
@@ -17787,7 +17775,7 @@
         } ],
         "MP_MarketingSection" : [ { } ]
       } ],
-      "TOC" : [ {
+      "M_TOC" : [ {
         ".meta" : {
           "selected" : true
         },

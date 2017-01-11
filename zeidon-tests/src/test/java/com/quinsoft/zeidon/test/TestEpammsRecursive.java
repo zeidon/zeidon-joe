@@ -16,6 +16,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -67,6 +68,31 @@ public class TestEpammsRecursive
       return System.getProperty("java.io.tmpdir");
    }
 
+   private void copyStorageDisposalStatementsRecursive( View mMasLC, EntityCursor ecMasLC, View mSubLC, EntityCursor ecSubLC )
+   {
+      EntityInstance eiSubLC = ecSubLC.createEntity();
+      eiSubLC.getAttribute("Title").setValue( ecMasLC.getAttribute("Title").getString() );
+      eiSubLC.getAttribute("Text").setValue( ecMasLC.getAttribute("Text").getString() );
+      eiSubLC.getAttribute("ContainerVolume").setValue( ecMasLC.getAttribute("ContainerVolume").getString() );
+      eiSubLC.getAttribute("ContainerType").setValue( ecMasLC.getAttribute("ContainerType").getString() );
+
+      EntityCursor ecMasLCR = mMasLC.cursor( "M_StorageDisposalSubStatement" );
+      if ( ecMasLCR.hasAny() ) {
+         ecMasLCR.setToSubobject();
+         ecMasLCR = mMasLC.cursor( "M_StorageDisposalStatement" );
+         EntityCursor ecSubLCR = mSubLC.cursor( "S_StorageDisposalSubStatement" );
+         ecSubLCR.setToSubobject();
+         ecSubLCR = mSubLC.cursor( "S_StorageDisposalStatement" );
+         
+         CursorResult cr = ecMasLCR.setFirst();
+         while ( cr == CursorResult.SET )
+         {
+            copyStorageDisposalStatementsRecursive( mMasLC, ecMasLCR, mSubLC, ecSubLCR );
+            cr = ecMasLCR.setNext();
+         }
+      }
+    }
+
    private View
    BuildSimpleStringQualification( View   vSubtask,
                                    String strEntityName,
@@ -102,7 +128,7 @@ public class TestEpammsRecursive
       view.cursor( "QualAttrib" ).getAttribute( "Oper" ).setValue( strComparator );
       return( view );
    }
-
+/*
 	@Test
 	public void testMoveEntityToNewParent() throws IOException
 	{
@@ -129,8 +155,151 @@ public class TestEpammsRecursive
       mMasLC.logObjectInstance();
       mMasLC.commit();
    }
+*/
+   @Test
+	public void testMoveEntityToNewParent() throws IOException
+	{
+      View mLLD = ePammsDKS.activateEmptyObjectInstance( "mLLD" );
+
+      System.out.println("===== Started mLLD log ... testMoveEntityToNewParent ========");
+
+      EntityCursor ec = mLLD.cursor( "LLD" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Tag" ).setValue( "LLD_Tag" );
+      ec.getAttribute( "Name" ).setValue( "LLD_Name" );
+
+      ec = mLLD.cursor( "LLD_Page" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Tag" ).setValue( "PageTag" );
+      ec.getAttribute( "Name" ).setValue( "PageName" );
+
+      ec = mLLD.cursor( "LLD_Panel" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Tag" ).setValue( "PanelTag" );
+      ec.getAttribute( "Name" ).setValue( "PanelName" );
+
+      ec = mLLD.cursor( "LLD_Block" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Tag" ).setValue( "BlockTag" );
+      ec.getAttribute( "Name" ).setValue( "BlockName" );
+
+      ec = mLLD.cursor( "LLD_SubBlock" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Tag" ).setValue( "SubBlockTag" );
+      ec.getAttribute( "Name" ).setValue( "SubBlockName" );
+
+      View v = mLLD.newView();
+      System.out.println("===== Begin mLLD log ... testMoveEntityToNewParent ========");
+      v.logObjectInstance();
+      EntityCursor ecp = v.getCursor( "LLD_Panel" );  // this is the new parent entity
+      CursorResult cr = ecp.setFirst();
+      System.out.println("===== Logging ecp entity LLD_Panel ========");
+      ecp.logEntity();
+      Assert.assertTrue( "Panel not found!", cr == CursorResult.SET );
+      ec = mLLD.getCursor( "LLD_SubBlock" );
+      ec.setToSubobject();
+      ec = mLLD.getCursor( "LLD_Block" );
+      System.out.println("===== Logging ec entity LLD_Block ========");
+      ec.logEntity();
+      ecp.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.NONE );
+      mLLD.copyCursors( v );  // we want position on the moved entity
+      System.out.println( "After Moving SubBlock To target entity: LLD_Panel" );
+      v.logObjectInstance();
+      v.drop();
+      ec = mLLD.getCursor( "LLD_SubBlock" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "SubBlock should not be found!", cr != CursorResult.SET );
+   }
+
+	@Test
+	public void testRecursiveCreate() throws IOException
+	{
+      View mMasLC = ePammsDKS.activateEmptyObjectInstance( "mMasLC" );
+      View mSubLC = ePammsDKS.activateEmptyObjectInstance( "mSubLC" );
+
+      System.out.println("===== Started mMasLC log ... testRecursiveCreate ========");
+      EntityCursor ecMasLC = mMasLC.cursor( "MasterLabelContent" );
+      EntityInstance eiMasLC = ecMasLC.createEntity();
+      eiMasLC.getAttribute("Title").setValue( "MAQUAT® 710-M" );
+      ecMasLC = mMasLC.cursor( "M_StorageDisposalSection" );
+      eiMasLC = ecMasLC.createEntity();
+      eiMasLC.getAttribute("Name").setValue( "CONTAINER HANDLING" );
+      eiMasLC.getAttribute("Title").setValue( "CONTAINER HANDLING:" );
+      ecMasLC = mMasLC.cursor( "M_StorageDisposalStatement" );
+      eiMasLC = ecMasLC.createEntity();
+      eiMasLC.getAttribute("Title").setValue( "{{ResidentialUse}}" );
+      eiMasLC.getAttribute("Text").setValue( "Non-refillable container. Do not reuse or refill this container. Offer for recycling if available or place in trash. " );
+      eiMasLC.getAttribute("ContainerVolume").setValue( "<=5" );
+      eiMasLC.getAttribute("ContainerType").setValue( "Sealed" );
+   // ecMasLC = mMasLC.cursor( "M_StorageDisposalStatement" );
+      eiMasLC = ecMasLC.createEntity();
+      eiMasLC.getAttribute("Title").setValue( "{{CommercialUse}}" );
+      eiMasLC.getAttribute("ContainerVolume").setValue( "<=5" );
+      eiMasLC.getAttribute("ContainerType").setValue( "Non-refillable" );
+      ecMasLC = mMasLC.cursor( "M_StorageDisposalSubStatement" );
+      eiMasLC = ecMasLC.createEntity();
+      eiMasLC.getAttribute("Title").setValue( "{{ResidentialUse}}" );
+      eiMasLC.getAttribute("Text").setValue( "Sealed container. Do not reuse or refill this container. Offer for recycling if available or place in trash. " );
+      eiMasLC.getAttribute("ContainerVolume").setValue( ">5" );
+      eiMasLC.getAttribute("ContainerType").setValue( "Sealed" );
+      ecMasLC = mMasLC.cursor( "M_StorageDisposalStatement" );
+      mMasLC.logObjectInstance();
+      System.out.println("===== Finished mMasLC log ... testRecursiveCreate ========");
 
 
+      System.out.println("===== Started mSubLC log ... testRecursiveCreate ========");
+      EntityCursor ecSubLC = mSubLC.cursor( "SubregLabelContent" );
+      EntityInstance eiSubLC = ecSubLC.createEntity();
+      eiSubLC.getAttribute("Description").setValue( "KennelSol MAQUAT® 710-M" );
+      ecMasLC = mMasLC.cursor( "M_StorageDisposalSection" );
+      ecSubLC = mSubLC.cursor( "S_StorageDisposalSection" );
+      eiSubLC = ecSubLC.createEntity();
+      eiSubLC.getAttribute("Name").setValue( ecMasLC.getAttribute("Name").getString() );
+      eiSubLC.getAttribute("Title").setValue( ecMasLC.getAttribute("Title").getString() );
+
+      ecMasLC = mMasLC.cursor( "M_StorageDisposalStatement" );
+      ecSubLC = mSubLC.cursor( "S_StorageDisposalStatement" );
+      CursorResult cr = ecMasLC.setFirst();
+      while ( cr == CursorResult.SET )
+      {
+         copyStorageDisposalStatementsRecursive( mMasLC, ecMasLC, mSubLC, ecSubLC );
+         cr = ecMasLC.setNext();
+      }
+      
+      mSubLC.logObjectInstance();
+      System.out.println("===== Finished mSubLC log ... testRecursiveCreate ========");
+   }
+
+      
+      /*
+      eiSubLC = ecSubLC.createEntity();
+      eiSubLC.getAttribute("Title").setValue( "{{CommercialUse}}" );
+      eiSubLC.getAttribute("ContainerVolume").setValue( "<=5" );
+      eiSubLC.getAttribute("ContainerType").setValue( "Non-refillable" );
+      ecSubLC = mSubLC.cursor( "M_StorageDisposalSubStatement" );
+      eiSubLC = ecSubLC.createEntity();
+      eiSubLC.getAttribute("Title").setValue( "{{ResidentialUse}}" );
+      eiSubLC.getAttribute("Text").setValue( "Non-refillable container. Do not reuse or refill this container. Offer for recycling if available or place in trash. " );
+      eiSubLC.getAttribute("ContainerVolume").setValue( "<=5" );
+      eiSubLC.getAttribute("ContainerType").setValue( "Sealed" );
+      ecSubLC = mSubLC.cursor( "M_StorageDisposalStatement" );
+      
+      
+      ecMasLC = mMasLC.cursor( "MasterLabelContent" );
+      CursorResult crMasLC = ecMasLC.setFirst();
+      EntityCursor ecSubLC = mMasLC.cursor( "M_DirectionsForUseSection" );
+      crMasLC = ecSubLC.setFirst( "Name", "General" );
+      View mMasLC2 = mMasLC.newView();
+      EntityCursor ec2 = mMasLC2.cursor( "M_DirectionsForUseCategory" );
+      crMasLC = ec2.setFirst( "Name", "FOGGING" );
+      ec2 = mMasLC2.cursor( "M_DirectionsForUseSection" );
+
+      Assert.assertTrue( "FOGGING DirectionsForUseSection NotFound!", crMasLC == CursorResult.SET );
+      ec2.moveSubobject(CursorPosition.FIRST, ecSubLC, CursorPosition.NEXT );
+      mMasLC.logObjectInstance();
+      mMasLC.commit();
+      */
+      
 	@Test
    public void ExecuteMoveEntity()
 	{
