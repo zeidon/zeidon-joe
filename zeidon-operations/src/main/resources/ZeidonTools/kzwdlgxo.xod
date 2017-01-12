@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-z1000-Zeidon    KZWDLGXO TZZOXODO 05/15/13   14:13:36 1.0a2    
-=======
-z1000-Zeidon    KZWDLGXO TZZOXODO 12/22/16   12:21:56 1.0a2    
->>>>>>> 5c8ba40... changes to objects for language conversion
+z1000-Zeidon    KZWDLGXO TZZOXODO 06/26/12   12:15:41 1.0a2    
 eOBJECT    1
 aNAME      KZWDLGXO
 aZKey      1330836
 aOPER_LIBNM KZOENGAA
-<<<<<<< HEAD
-aER_DATE   20130515141300331
-=======
 aER_DATE   20161222121552421
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eENTITY    2
 aNAME      Dlg
@@ -601,11 +593,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 50
-<<<<<<< HEAD
-aDERIVEDF  oKZWDLGXO_DerivedCaption
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.KZWDLGXO_Object
-=======
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    4
 aNAME      NLS
@@ -887,11 +874,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 74
-<<<<<<< HEAD
-aDERIVEDF  oKZWDLGXO_DerivedControlText
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.KZWDLGXO_Object
-=======
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    5
 aNAME      NLS
@@ -1228,12 +1210,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 74
-<<<<<<< HEAD
-aDERIVEDF  oKZWDLGXO_DerivedControlText
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.KZWDLGXO_Object
-=======
-aDRSRCTYPE C
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    6
 aNAME      NLS
@@ -2715,13 +2691,7 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aUPDATE    Y
-<<<<<<< HEAD
-aXVAATT_TOK 214
-aDERIVEDF  oKZWDLGXO_DerivedOptionText
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.KZWDLGXO_Object
-=======
 aXVAATT_TOK 221
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eATTRIB    6
 aNAME      NLS
@@ -2872,13 +2842,7 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aUPDATE    Y
-<<<<<<< HEAD
-aXVAATT_TOK 214
-aDERIVEDF  oKZWDLGXO_DerivedOptionText
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.KZWDLGXO_Object
-=======
 aXVAATT_TOK 221
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eCHILDENTITY 6
 aNAME      OptAct
@@ -3448,13 +3412,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 275
-aDERIVEDF  oKZWDLGXO_DerivedDIL_Msg
-<<<<<<< HEAD
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.KZWDLGXO_Object
-=======
-aDERIVEDC  oKZWDLGXO_DerivedDIL_Msg
-aDRSRCTYPE C
->>>>>>> 5c8ba40... changes to objects for language conversion
 
 eCHILDENTITY 4
 aNAME      NLS_DIL_Text
