@@ -405,7 +405,7 @@ eMP_DirectionsForUseSection 3,0
 eM_DirectionsForUseReviewerNote 3,0
 aID        1
 aTitle     Note to Reviewer (General Considerations):
-aNote      316
+aText      316
 Numbered Instructions will be used if label space permits, otherwise may appear In paragraph format. The list of organisms can be formatted into paragraph form using a comma to separate organisms. Unit abbreviations can be spelled out. When choosing optional text, appropriate punctuation can be Inserted or deleted.
 aFK_ID_M_DIRECTIONSFORUSESECTION 36
 
@@ -599,7 +599,7 @@ eMP_MarketingSection 3,0
 eM_MarketingReviewerNote 3,0
 aID        3
 aTitle     Note to Reviewer:
-aNote      The list of organisms can be formatted into paragraph form using a comma to separate organisms.
+aText      The list of organisms can be formatted into paragraph form using a comma to separate organisms.
 aFK_ID_M_MARKETINGSECTION 43
 
 eM_MarketingSection 2,0

@@ -916,11 +916,11 @@ public abstract class VmlOperation
       if ( session != null )
       {
          session.setAttribute( "ZeidonAction", strActionToProcess ) ;
-         task.log().debug( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment?
+         task.log().info( "ZeidonAction ======> " + strCallingJSP + "." + strActionToProcess ); // remove for deployment?
       }
       else
       {
-         task.log().debug( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment?
+         task.log().info( "ZeidonOperation ======> " + strActionToProcess + " called from " + strCallingJSP ); // remove for deployment?
       }
    } // set breakpoint here
 
@@ -1621,7 +1621,7 @@ public abstract class VmlOperation
 
                if ( isValid( returnView ) )
                {
-                  TraceLine( "GetViewByName located Subtask level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
+               // TraceLine( "GetViewByName located Subtask level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
                   return zLEVEL_SUBTASK;
                }
 
@@ -1639,11 +1639,11 @@ public abstract class VmlOperation
                {
                  if ( v == null )
                   {
-                     TraceLine( "GetViewByName located Task level view for Name: %s  Task: %s", name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Task level view for Name: %s  Task: %s", name, t.getTaskId() );
                   }
                   else
                   {
-                     TraceLine( "GetViewByName located Task level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Task level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
                   }
 
                   return zLEVEL_TASK;
@@ -1671,11 +1671,11 @@ public abstract class VmlOperation
                {
                   if ( v == null )
                   {
-                     TraceLine( "GetViewByName located Application (%s) level view for Name: %s  Task: %s", a.getName(), name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Application (%s) level view for Name: %s  Task: %s", a.getName(), name, t.getTaskId() );
                   }
                   else
                   {
-                     TraceLine( "GetViewByName located Application (%s) level view: %s  for Name: %s  Task: %s", a.getName(), v.getId(), name, t.getTaskId() );
+                  // TraceLine( "GetViewByName located Application (%s) level view: %s  for Name: %s  Task: %s", a.getName(), v.getId(), name, t.getTaskId() );
                   }
 
                   return zLEVEL_APPLICATION;
@@ -1703,11 +1703,11 @@ public abstract class VmlOperation
             {
                if ( v == null )
                {
-                  TraceLine( "GetViewByName located System level view for Name: %s  Task: %s", name, t.getTaskId() );
+               // TraceLine( "GetViewByName located System level view for Name: %s  Task: %s", name, t.getTaskId() );
                }
                else
                {
-                  TraceLine( "GetViewByName located System level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
+               // TraceLine( "GetViewByName located System level view: %d  for Name: %s  Task: %s", v.getId(), name, t.getTaskId() );
                }
 
                return zLEVEL_SYSTEM;
@@ -3745,7 +3745,7 @@ public abstract class VmlOperation
 
    public int TraceLineS( String label, String text )
    {
-      task.log( ).info( label + " " + text );
+      task.log().info( label + " " + text );
       return 0;
    }
 
@@ -4522,7 +4522,6 @@ public abstract class VmlOperation
       else
       {
          int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ).getString() );
-         //int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ) );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }
@@ -4623,7 +4622,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         tgtCursor.getAttribute( tgtAttribute).setValue( srcView.cursor(  srcEntity ).getAttribute(  srcAttribute ).getValue() )  ;
+         tgtCursor.getAttribute( tgtAttribute).setValue( srcView.cursor( srcEntity ).getAttribute( srcAttribute ).getValue() )  ;
       }
 
       return nRC;
@@ -8751,7 +8750,7 @@ public abstract class VmlOperation
       }
       return strHtml;
    }
-   
+
    public static String
    TrimTinyHtml( String strHtmlEnclosedValue )
    {
