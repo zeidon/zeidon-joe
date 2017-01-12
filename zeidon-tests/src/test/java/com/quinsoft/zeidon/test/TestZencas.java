@@ -1115,6 +1115,18 @@ public class TestZencas
         view.commit();
 	    view.logObjectInstance();
     }
+    
+
+//	@Test
+	public void testAutoLoadFromParent()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAutoLoadFromParent( testview );
+        System.out.println("===== Finished testAutoLoadFromParent ========");
+	}
+    
 
     public void
     testOutOfMemory()
@@ -1705,6 +1717,7 @@ public class TestZencas
 	        //mPerson.cursor("Address").create
 			return 0;
 		}
+
 		public int
 		testBlobs( View ViewToWindow )
 		{
@@ -2039,7 +2052,25 @@ public class TestZencas
 
 			return ( 0 );
 		}
+		
+		public int
+		testAutoLoadFromParent( View ViewToWindow )
+		{
 
+			zVIEW    mTstClss = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			
+			// When the xod had autoloadforparent=Y but the foreign key in the parent was null, the child was still being created.
+			// It's fixed but I am still adding this.
+			
+			o_fnLocalBuildQualTstClass( ViewToWindow, vTempViewVar_0, 776 );
+			RESULT = ActivateObjectInstance( mTstClss, "mTstClss", ViewToWindow, vTempViewVar_0, zSINGLE );
+			Assert.assertEquals("Child entity faculty should be null.", mTstClss.cursor("Faculty").checkExistenceOfEntity(), CursorResult.NULL);
+			
+			return 0;
+		}
+		
 		public int
 		testCheckExistenceWithRecursiveEnt( View     ViewToWindow )
 		{
@@ -2468,6 +2499,7 @@ public class TestZencas
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
 			int RESULT2=0;
+			
 
 			// The following activate does not work properly when BindAllValues=true.  AdviseeStudentTrack is
 			// null.  If BindAllValues=false then it works correctly.
@@ -4912,6 +4944,25 @@ public class TestZencas
 		   return( 0 );
 		}
 
+		private int
+		o_fnLocalBuildQualTstClass( View     vSubtask,
+                zVIEW    vQualObject,
+        int      lTempInteger_0 )
+		{
+			int      RESULT = 0;
+			
+			RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+			CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Class" );
+			CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Class" );
+			SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+			SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		return( 0 );
+		} 
+		
+		
 		private int
 		o_fnLocalBuildQualmPerson( View     vSubtask,
 		                       zVIEW    vQualObject,
