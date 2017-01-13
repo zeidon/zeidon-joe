@@ -2426,31 +2426,34 @@ class EntityCursorImpl implements EntityCursor
                             .appendMessage( "Target Entity = %s", getEntityDef().getName() )
                             .appendMessage( "Child entity = %s", source.getEntityDef().getName() );
 
-        if ( ! getEntityDef().isInclude() )
-            throw new ZeidonException( "Target of moveSubobject be be includable" )
-                            .appendMessage( "Target = %s", getEntityDef().getName() );
+        EntityDef tgtEntityDef = getEntityDef();
+        EntityDef srcEntityDef = source.getEntityDef();
 
-        if ( ! source.getEntityDef().isExclude() )
+        if ( ! tgtEntityDef.isInclude() )
+            throw new ZeidonException( "Target of moveSubobject be be includable" )
+                            .appendMessage( "Target = %s", tgtEntityDef.getName() );
+
+        if ( ! srcEntityDef.isExclude() )
             throw new ZeidonException( "Source of moveSubobject be be excludable" )
-                            .appendMessage( "Source = %s", source.getEntityDef().getName() );
+                            .appendMessage( "Source = %s", srcEntityDef.getName() );
 
         // Verify that the EntityDefs are the same for source and target -or- one is a recursive
         // child of the other.
         // The COE requires them to be the same EntityDef but is that really necessary?
-        if ( getEntityDef() == source.getEntityDef() )
+        if ( tgtEntityDef == srcEntityDef )
             return;
 
-        if ( source.getEntityDef().getLodDef() != getEntityDef().getLodDef() )
+        if ( srcEntityDef.getLodDef() != tgtEntityDef.getLodDef() )
             throw new ZeidonException( "When moving subobjects, source and target OIs must be using the same LOD" );
 
-        if ( getEntityDef().isRecursiveParent() && source.getEntityDef().isRecursive() &&
-             getEntityDef().isAncestorOf( source.getEntityDef() ) )
+        if ( tgtEntityDef.isRecursiveParent() && srcEntityDef.isRecursive() &&
+             tgtEntityDef.isAncestorOf( srcEntityDef ) )
         {
             return;
         }
 
-        if ( source.getEntityDef().isRecursiveParent() && getEntityDef().isRecursive() &&
-             source.getEntityDef().isAncestorOf( getEntityDef() ) )
+        if ( srcEntityDef.isRecursiveParent() && tgtEntityDef.isRecursive() &&
+             srcEntityDef.isAncestorOf( tgtEntityDef ) )
         {
             return;
         }

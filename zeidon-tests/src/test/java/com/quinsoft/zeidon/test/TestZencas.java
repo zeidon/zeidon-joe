@@ -1141,6 +1141,16 @@ public class TestZencas
         System.out.println("===== Finished testActivatesHost ========");
 	}
 
+//	@Test
+	public void testAutoLoadFromParent()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAutoLoadFromParent( testview );
+        System.out.println("===== Finished testAutoLoadFromParent ========");
+	}
+
 	@Test
 	public void testUsingJacob()
 	{
@@ -3737,6 +3747,24 @@ o_fnLocalBuildQual_3( View     vSubtask,
 
 	         return 0;
 		}
+		
+		public int
+		testAutoLoadFromParent( View ViewToWindow )
+		{
+
+			zVIEW    mTstClss = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			
+			// When the xod had autoloadforparent=Y but the foreign key in the parent was null, the child was still being created.
+			// It's fixed but I am still adding this.
+			
+			o_fnLocalBuildQualTstClass( ViewToWindow, vTempViewVar_0, 776 );
+			RESULT = ActivateObjectInstance( mTstClss, "mTstClss", ViewToWindow, vTempViewVar_0, zSINGLE );
+			Assert.assertEquals("Child entity faculty should be null.", mTstClss.cursor("Faculty").checkExistenceOfEntity(), CursorResult.NULL);
+			
+			return 0;
+		}
 
 		public int
 		testExcludeIncludeSaveError( View     ViewToWindow )
@@ -5552,8 +5580,29 @@ o_fnLocalBuildmTstOR( View     vSubtask,
    SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
    */
    return( 0 );
-}
+} 		
+
 		private int
+		o_fnLocalBuildQualTstClass(
+				View     vSubtask,
+                zVIEW    vQualObject,
+                int      lTempInteger_0)
+		{
+			   int      RESULT = 0;
+
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Class" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Class" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   return( 0 );
+		
+		}
+
+	        private int
 		o_fnLocalBuildDOMAINT( View     vSubtask,
 		                       zVIEW    vQualObject,
 		                       String   szDomainName )
