@@ -22,6 +22,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
+import static com.quinsoft.zeidon.vml.VmlOperation.zSINGLE;
 
 // Just for temporary testing...
 //import com.jacob.com.*;
@@ -188,6 +189,20 @@ public class TestEpammsRecursive
       ec.getAttribute( "Tag" ).setValue( "SubBlockTag" );
       ec.getAttribute( "Name" ).setValue( "SubBlockName" );
 
+      ec.setToSubobject();
+      ec = mLLD.getCursor( "LLD_Block" );
+
+      ec = mLLD.cursor( "LLD_SpecialSectionAttribute" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Name" ).setValue( "SpecialSectionAttributeName" );
+
+      ec = mLLD.cursor( "LLD_SpecialSectionAttrBlock" );
+      ec.createEntity( CursorPosition.LAST );
+      ec.getAttribute( "Tag" ).setValue( "SpecialSectionAttrBlockTag" );
+      ec.getAttribute( "Name" ).setValue( "SpecialSectionAttrBlockName" );
+
+      ec.resetSubobjectToParent();
+      
       View v = mLLD.newView();
       System.out.println("===== Begin mLLD log ... testMoveEntityToNewParent ========");
       v.logObjectInstance();
@@ -196,19 +211,182 @@ public class TestEpammsRecursive
       System.out.println("===== Logging ecp entity LLD_Panel ========");
       ecp.logEntity();
       Assert.assertTrue( "Panel not found!", cr == CursorResult.SET );
+      ecp = v.getCursor( "LLD_Block" );  // this is the new sibling entity
       ec = mLLD.getCursor( "LLD_SubBlock" );
       ec.setToSubobject();
       ec = mLLD.getCursor( "LLD_Block" );
       System.out.println("===== Logging ec entity LLD_Block ========");
       ec.logEntity();
-      ecp.moveSubobject( CursorPosition.FIRST, ec, CursorPosition.NONE );
+      ecp.moveSubobject( CursorPosition.LAST, ec, CursorPosition.NONE );
       mLLD.copyCursors( v );  // we want position on the moved entity
-      System.out.println( "After Moving SubBlock To target entity: LLD_Panel" );
+      System.out.println( "After Moving SubBlock To target entity: LLD_Block" );
       v.logObjectInstance();
       v.drop();
       ec = mLLD.getCursor( "LLD_SubBlock" );
       cr = ec.setFirst();
       Assert.assertTrue( "SubBlock should not be found!", cr != CursorResult.SET );
+      ec = mLLD.getCursor( "LLD_SpecialSectionAttribute" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "SpecialSectionAttribute should be found!", cr == CursorResult.SET );
+   }
+
+   private void displaySPLD( View mSPLDef ) {
+      EntityCursor ec;
+      View t = mSPLDef.newView();
+      t.resetSubobjectTop();
+      ec = t.getCursor( "SPLD_LLD" );
+      ec.logEntity( true );
+      t.drop();
+   }
+
+   public void testMoveSubobjectToNewParent1() throws IOException
+	{
+      View mSPLDef = ePammsDKS.deserializeOi()
+                        .fromFile( "target/test-classes/testdata/epammsDKS/mSPLDef.json" )
+                        .setLodDef( "mSPLDef" )
+                        .setFlags( zSINGLE )
+                        .setApplication(ePammsDKS.getApplication() )
+                        .activateFirst();
+
+      System.out.println("===== Started mSPLDef log ... testMoveSubobjectToNewParent1 ========");
+      displaySPLD( mSPLDef );
+      EntityCursor ec = mSPLDef.cursor( "SPLD_LLD" );
+      CursorResult cr = ec.setFirst();
+      Assert.assertTrue( "SPLD_LLD should be found!", cr == CursorResult.SET );
+      System.out.println("===== Logging before move SPLD_LLD ========");
+      ec.logEntity( true );
+
+      ec = mSPLDef.cursor( "LLD_Page" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_Page should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Panel" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_Panel should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_Block should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setNext();
+      Assert.assertTrue( "Second LLD_Block should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setNext();
+      Assert.assertTrue( "Third LLD_Block should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_SubBlock" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_SubBlock should be found!", cr == CursorResult.SET );
+
+      View v = mSPLDef.newView();
+      v.copyCursors( mSPLDef );
+      System.out.println("===== Begin mSPLDef log ... testMoveSubobjectToNewParent1 ========");
+   // v.logObjectInstance();
+
+      EntityCursor ecp = v.getCursor( "LLD_Panel" );  // this is the new parent entity
+      cr = ecp.setFirst();
+      System.out.println("===== Logging ecp entity LLD_Panel ========");
+      ecp.logEntity();
+      Assert.assertTrue( "Panel not found!", cr == CursorResult.SET );
+      ecp = v.getCursor( "LLD_Block" );  // this is the new sibling entity
+
+      ec = mSPLDef.getCursor( "LLD_SubBlock" );
+      ec.setToSubobject();
+      ec = mSPLDef.getCursor( "LLD_Block" );
+      System.out.println("===== Logging ec entity LLD_Block ========");
+      ec.logEntity();
+      ecp.moveSubobject( CursorPosition.LAST, ec, CursorPosition.NONE );
+      mSPLDef.copyCursors( v );  // we want position on the moved entity
+      System.out.println( "After Moving SubBlock To target entity: LLD_Block" );
+      v.resetSubobjectTop();
+      System.out.println("===== Logging after move SPLD_LLD ========");
+      ecp = v.getCursor( "SPLD_LLD" );
+      ecp.logEntity( true );
+      v.drop();
+      ec = mSPLDef.getCursor( "LLD_SubBlock" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "SubBlock should not be found!", cr != CursorResult.SET );
+      ec = mSPLDef.getCursor( "LLD_SpecialSectionAttribute" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "SpecialSectionAttribute should be found!", cr == CursorResult.SET );
+   }
+
+   @Test
+	public void testMoveSubobjectToNewParent2() throws IOException
+	{
+      View mSPLDef = ePammsDKS.deserializeOi()
+                        .fromFile( "target/test-classes/testdata/epammsDKS/mSPLDef.json" )
+                        .setLodDef( "mSPLDef" )
+                        .setFlags( zSINGLE )
+                        .setApplication(ePammsDKS.getApplication() )
+                        .activateFirst();
+
+      System.out.println("===== Started mSPLDef log ... testMoveSubobjectToNewParent2 ========");
+   // displaySPLD( mSPLDef );
+      EntityCursor ec = mSPLDef.cursor( "SPLD_LLD" );
+      CursorResult cr = ec.setFirst();
+      Assert.assertTrue( "SPLD_LLD should be found!", cr == CursorResult.SET );
+      System.out.println("===== Logging before move SPLD_LLD ========");
+      ec.logEntity( true );
+
+      ec = mSPLDef.cursor( "LLD_Page" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_Page should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Panel" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_Panel should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "LLD_Block should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setNext();
+      Assert.assertTrue( "Second LLD_Block should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setNext();
+      Assert.assertTrue( "Third LLD_Block should be found!", cr == CursorResult.SET );
+
+      ec = mSPLDef.cursor( "LLD_Block" );
+      cr = ec.setFirstWithinOi( "ID", 2782 );
+      Assert.assertTrue( "LLD_Block (ID: 2782) should be found!", cr == CursorResult.SET );
+      System.out.println("===== mSPLDef log entity (ID: 2782) testMoveSubobjectToNewParent2 ========");
+      ec.logEntity();
+
+      View v = mSPLDef.newView();
+      v.copyCursors( mSPLDef );
+      EntityCursor ecp = v.getCursor( "LLD_Block" );  // this is the new parent entity
+      cr = ecp.setFirstWithinOi( "ID", 2781 );
+      Assert.assertTrue( "LLD_Block (ID: 2781) should be found!", cr == CursorResult.SET );
+      System.out.println("===== mSPLDef log entity (ID: 2781) testMoveSubobjectToNewParent2 ========");
+      ecp.logEntity();
+
+      System.out.println("===== Begin mSPLDef move log ... testMoveSubobjectToNewParent2 ========");
+   // v.logObjectInstance();
+      ecp = v.getCursor( "LLD_SubBlock" );
+      ecp.setToSubobject();
+      ecp = v.getCursor( "LLD_Block" );
+      ecp.moveSubobject( CursorPosition.LAST, ec, CursorPosition.NONE );
+   // mSPLDef.copyCursors( v );  // we want position on the moved entity
+      v.drop();
+      mSPLDef.resetSubobjectTop();
+      System.out.println( "After Moving SubBlock To target entity: LLD_Block" );
+      System.out.println("===== Logging after move SPLD_LLD ========");
+      ecp = mSPLDef.getCursor( "SPLD_LLD" );
+      ecp.logEntity( true );
+      ecp = mSPLDef.getCursor( "LLD_Block" );
+      cr = ec.setNext();
+      Assert.assertTrue( "Second LLD_Block should be found!", cr == CursorResult.SET );
+      ecp = mSPLDef.getCursor( "LLD_SubBlock" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "SubBlock should now be found!", cr == CursorResult.SET );
+      ec = mSPLDef.getCursor( "LLD_SpecialSectionAttribute" );
+      cr = ec.setFirst();
+      Assert.assertTrue( "SpecialSectionAttribute should be found!", cr == CursorResult.SET );
    }
 
 	@Test
