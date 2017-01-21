@@ -18,8 +18,8 @@ Zeidon does all the work of an [ORM](https://en.wikipedia.org/wiki/Object-relati
 ## Code Documentation
 JOE 1.4
 
-* [JOE Javadoc](javadoc/1.4/joe/)
-* [JOE Scaladoc](javadoc/1.4/scala/)
-* [JOE for Android Javadoc](javadoc/1.4/android/)
+* [JOE Javadoc](javadoc/1.5/joe/)
+* [JOE Scaladoc](javadoc/1.5/scala/)
+* [JOE for Android Javadoc](javadoc/1.5/android/)
 
 
