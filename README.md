@@ -35,11 +35,19 @@ dependencies {
     compile 'com.quinsoft.zeidon:zeidon-scala:1.4.1'
 }
 
-## Javadoc/Scaladoc
+## Javadoc/Scaladoc (current dev)
 
 * Scala: http://zeidon.github.io/zeidon-joe/javadoc/1.5/scala/
 * JOE: http://zeidon.github.io/zeidon-joe/javadoc/1.5/joe/
 * Android: http://zeidon.github.io/zeidon-joe/javadoc/1.5/android/
+
+## Build Zeidon
+
+Zeidon requires Maven 3.04+.  Build using standard Maven:
+
+```
+mvn install
+```
 
 ## Additional links
 
