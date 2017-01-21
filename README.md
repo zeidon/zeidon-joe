@@ -30,10 +30,12 @@ Scala DSL:
 
 ### Gradle
 
+```
 dependencies {
     compile 'com.quinsoft.zeidon:zeidon-joe:1.4.1'
     compile 'com.quinsoft.zeidon:zeidon-scala:1.4.1'
 }
+```
 
 ## Javadoc/Scaladoc (current dev)
 
