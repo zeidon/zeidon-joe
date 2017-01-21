@@ -12,4 +12,4 @@ For more information see the [Zeidon documentation page](http://zeidon.github.io
 
 ## Additional links
 
-* Travis CI: https://travis-ci.org/DeegC/zeidon-joe
+* Travis CI: https://travis-ci.org/zeidon/zeidon-joe
