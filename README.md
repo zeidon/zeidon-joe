@@ -23,7 +23,7 @@ Scala DSL:
 ```
     <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
-      <artifactId>zeidon-joe</artifactId>
+      <artifactId>zeidon-scala</artifactId>
       <version>1.4.1</version>
     </dependency>
 ```
