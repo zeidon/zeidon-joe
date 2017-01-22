@@ -254,7 +254,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             if ( value instanceof DateTime )
             {
                 DateTime d = (DateTime) value;
-                ps.setObject( idx, new Date( d.getMillis() ) );
+                ps.setDate( idx, new java.sql.Date( d.getMillis() ) );
             }
             else
             if ( value instanceof GeneratedKey )
