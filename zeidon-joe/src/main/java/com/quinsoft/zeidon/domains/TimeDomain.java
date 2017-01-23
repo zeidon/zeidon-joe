@@ -38,7 +38,7 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  * @author DG
  *
  */
-public class TimeDomain extends DateDomain
+public class TimeDomain extends DateTimeDomain
 {
     protected DateTimeFormatter defaultTimeFormatter = DateTimeFormat.forPattern("HHmmssS a");
 
