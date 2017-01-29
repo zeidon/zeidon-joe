@@ -48,10 +48,11 @@ public class DateDomain extends DateTimeDomain
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
         DateTime dt = (DateTime) super.convertExternalValue( task, attributeInstance, attributeDef, contextName, externalValue );
-        if ( dt != null)
+        if ( dt != null && dt.getMillisOfDay() == 0 )
             dt = dt.withMillisOfDay( 0 );
 
         return dt;
+        	
     }
 
     @Override
