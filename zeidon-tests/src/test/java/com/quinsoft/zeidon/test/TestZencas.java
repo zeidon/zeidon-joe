@@ -1121,7 +1121,7 @@ public class TestZencas
         System.out.println("===== Finished mUser_ActivateUserLST ========");
 	}
 
-//	@Test
+	@Test
 	public void testTimeFormatting()
 	{
 	    View         testview;
@@ -1139,6 +1139,16 @@ public class TestZencas
 		VmlTester tester = new VmlTester( testview );
 		tester.testActivatesHost( testview );
         System.out.println("===== Finished testActivatesHost ========");
+	}
+
+//	@Test
+	public void testAutoLoadFromParent()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAutoLoadFromParent( testview );
+        System.out.println("===== Finished testAutoLoadFromParent ========");
 	}
 
 	@Test
@@ -1297,7 +1307,7 @@ public class TestZencas
 		//:DIALOG OPERATION
 		//:Test_Time( VIEW ViewToWindow )
 		//:   VIEW mDrvRoute BASED ON LOD mDrvRoute
-		public int 
+		public int
 		testDateTimeCompare( View     ViewToWindow )
 		{
 		   zVIEW    mDrvRoute = new zVIEW( );
@@ -1308,7 +1318,7 @@ public class TestZencas
 		   String   szStartDateTime = null;
 		   //:STRING ( 30 ) szEndDateTime
 		   String   szEndDateTime = null;
-		   
+
 		   // Comparing date/time does not appear to be working unless we get the dates as strings first.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
 		    //:CREATE ENTITY wXferO.Root
@@ -1330,13 +1340,13 @@ public class TestZencas
 		    m_ZGLOBAL1_Operation.SetAttrFromStrByContext( wXferO, "Root", "WorkDateTime2", "201608042230000", "YYYYMMDDHHMMSSS" );
 		    // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
 		   }
-		   //:IF wXferO.Root.WorkDateTime > wXferO.Root.WorkDateTime2 
+		   //:IF wXferO.Root.WorkDateTime > wXferO.Root.WorkDateTime2
 		   if ( CompareAttributeToAttribute( wXferO, "Root", "WorkDateTime", wXferO, "Root", "WorkDateTime2" ) > 0 )
-		   { 
+		   {
 		      MessageSend( ViewToWindow, "", "Save", "End Date/Time is not later than Start Date/Time.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
 		      //:RETURN 2
 		      if(8==8)return( 2 );
-		   } 
+		   }
 
 		   {
 			    ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( wXferO );
@@ -1350,16 +1360,16 @@ public class TestZencas
 			    // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
 			   }
 
-			   
+
 			   if ( CompareAttributeToAttribute( wXferO, "Root", "WorkDateTime", wXferO, "Root", "WorkDateTime2" ) > 0 )
-			   { 
+			   {
 			      MessageSend( ViewToWindow, "", "Save", "End Date/Time is not later than Start Date/Time.", zMSGQ_OBJECT_CONSTRAINT_ERROR, 0 );
 			      //:RETURN 2
 			      if(8==8)return( 2 );
-			   } 
-			   
+			   }
+
 		   return( 0 );
-		} 
+		}
 
 		public int
 		testRelinking( View ViewToWindow )
@@ -3002,7 +3012,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			zVIEW    wXferO = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-			
+
 			// When an entity is marked as AUTOLOADFROMPARENT in xod, if the parent entity fk_id is null, then we should not create an
 			// entity for this child.
 			// We have Student->Person where Person is AUTOLOAD... Student.fk_id_person2 is null so Person should not exists but
@@ -3027,15 +3037,15 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   /*
 			    *  We have an activate statement with an OR.
    				ACTIVATE mTstOR Multiple WHERE mTstOR.AdministrativeDivision.ID = 2 OR mTstOR.DegreeTrack.ID = 1212
-   				
+
    				Because of the OR, we believe that the join from STUDENT to STUDENTMAJORDEGREETRACK should be a
    				LEFT JOIN but the sql is created as JOIN.
-			   
+
 			    SELECT  STUDENT.ID, STUDENT.FKIDADMINISTRATIVE, STUDENTMAJORDEGREETRACK.FK_ID_DEGREETRACK
 			    FROM  STUDENT JOIN
 			          STUDENTMAJORDEGREETRACK ON STUDENTMAJORDEGREETRACK.FKHISTID_STUDENT = STUDENT.ID
 			    WHERE STUDENT.FKIDADMINISTRATIVE = 2 OR STUDENTMAJORDEGREETRACK.FK_ID_DEGREETRACK = 1212
-			   
+
 			   */
 			   o_fnLocalBuildmTstOR( ViewToWindow, vTempViewVar_0 );
 			   RESULT = ActivateObjectInstance( mTstOR, "mTstOR", ViewToWindow, vTempViewVar_0, zMULTIPLE );
@@ -3044,7 +3054,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			   SetNameForView( mTstOR, "mTstOR", null, zLEVEL_TASK );
 			   CursorResult rc  = mTstOR.cursor("Student").setFirst("ID", 28);
 		       Assert.assertEquals( "ResultSet is missing a student we expect to return", CursorResult.SET, rc );
-			   
+
 			   return( 0 );
 		}
 
@@ -3608,7 +3618,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	         //:COMMIT mUser
 	         //RESULT = CommitObjectInstance( mUser );
 	         DropView( mUser );
-	         
+
 	         testTimeFormatting( ViewToWindow );
 
 	         return ( 0 );
@@ -3736,6 +3746,24 @@ o_fnLocalBuildQual_3( View     vSubtask,
 	         DropObjectInstance( wConList );
 
 	         return 0;
+		}
+		
+		public int
+		testAutoLoadFromParent( View ViewToWindow )
+		{
+
+			zVIEW    mTstClss = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			
+			// When the xod had autoloadforparent=Y but the foreign key in the parent was null, the child was still being created.
+			// It's fixed but I am still adding this.
+			
+			o_fnLocalBuildQualTstClass( ViewToWindow, vTempViewVar_0, 776 );
+			RESULT = ActivateObjectInstance( mTstClss, "mTstClss", ViewToWindow, vTempViewVar_0, zSINGLE );
+			Assert.assertEquals("Child entity faculty should be null.", mTstClss.cursor("Faculty").checkExistenceOfEntity(), CursorResult.NULL);
+			
+			return 0;
 		}
 
 		public int
@@ -5511,7 +5539,7 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 		   return( 0 );
 		}
 
-private int 
+private int
 o_fnLocalBuildmTstOR( View     vSubtask,
                       zVIEW    vQualObject )
 {
@@ -5553,7 +5581,28 @@ o_fnLocalBuildmTstOR( View     vSubtask,
    */
    return( 0 );
 } 		
+
 		private int
+		o_fnLocalBuildQualTstClass(
+				View     vSubtask,
+                zVIEW    vQualObject,
+                int      lTempInteger_0)
+		{
+			   int      RESULT = 0;
+
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Class" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Class" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   return( 0 );
+		
+		}
+
+	        private int
 		o_fnLocalBuildDOMAINT( View     vSubtask,
 		                       zVIEW    vQualObject,
 		                       String   szDomainName )

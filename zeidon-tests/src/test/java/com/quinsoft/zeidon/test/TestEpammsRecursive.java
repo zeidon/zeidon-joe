@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
@@ -84,7 +83,7 @@ public class TestEpammsRecursive
          EntityCursor ecSubLCR = mSubLC.cursor( "S_StorageDisposalSubStatement" );
          ecSubLCR.setToSubobject();
          ecSubLCR = mSubLC.cursor( "S_StorageDisposalStatement" );
-         
+
          CursorResult cr = ecMasLCR.setFirst();
          while ( cr == CursorResult.SET )
          {
@@ -157,9 +156,10 @@ public class TestEpammsRecursive
       mMasLC.commit();
    }
 */
+
    @Test
-	public void testMoveEntityToNewParent() throws IOException
-	{
+    public void testMoveEntityToNewParent() throws IOException
+    {
       View mLLD = ePammsDKS.activateEmptyObjectInstance( "mLLD" );
 
       System.out.println("===== Started mLLD log ... testMoveEntityToNewParent ========");
@@ -240,7 +240,7 @@ public class TestEpammsRecursive
    }
 
    public void testMoveSubobjectToNewParent1() throws IOException
-	{
+   {
       View mSPLDef = ePammsDKS.deserializeOi()
                         .fromFile( "target/test-classes/testdata/epammsDKS/mSPLDef.json" )
                         .setLodDef( "mSPLDef" )
@@ -443,12 +443,12 @@ public class TestEpammsRecursive
          copyStorageDisposalStatementsRecursive( mMasLC, ecMasLC, mSubLC, ecSubLC );
          cr = ecMasLC.setNext();
       }
-      
+
       mSubLC.logObjectInstance();
       System.out.println("===== Finished mSubLC log ... testRecursiveCreate ========");
    }
 
-      
+
       /*
       eiSubLC = ecSubLC.createEntity();
       eiSubLC.getAttribute("Title").setValue( "{{CommercialUse}}" );
@@ -461,8 +461,8 @@ public class TestEpammsRecursive
       eiSubLC.getAttribute("ContainerVolume").setValue( "<=5" );
       eiSubLC.getAttribute("ContainerType").setValue( "Sealed" );
       ecSubLC = mSubLC.cursor( "M_StorageDisposalStatement" );
-      
-      
+
+
       ecMasLC = mMasLC.cursor( "MasterLabelContent" );
       CursorResult crMasLC = ecMasLC.setFirst();
       EntityCursor ecSubLC = mMasLC.cursor( "M_DirectionsForUseSection" );
@@ -477,7 +477,7 @@ public class TestEpammsRecursive
       mMasLC.logObjectInstance();
       mMasLC.commit();
       */
-      
+
 	@Test
    public void ExecuteMoveEntity()
 	{

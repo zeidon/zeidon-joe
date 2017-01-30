@@ -22,12 +22,15 @@ package com.quinsoft.zeidon.domains;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
@@ -38,12 +41,12 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 public class TimeDomain extends DateDomain
 {
     protected DateTimeFormatter defaultTimeFormatter = DateTimeFormat.forPattern("HHmmssS a");
-    
+
     public TimeDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
         super( application, domainProperties, task );
     }
-   
+
     @Override
     public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
     {
@@ -57,9 +60,31 @@ public class TimeDomain extends DateDomain
     @Override
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
-            return;      
+            return;
     }
-/*   
+
+    @Override
+    public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
+    {
+        try
+        {
+            Object value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
+            Integer rc = compareNull( task, attributeDef, internalValue, value);
+            if ( rc != null )
+                return rc;
+
+            assert internalValue instanceof DateTime;
+            assert value instanceof DateTime;
+
+            return DateTimeComparator.getTimeOnlyInstance().compare( internalValue, value );
+        }
+        catch ( Throwable t )
+        {
+            throw ZeidonException.wrapException( t ).prependAttributeDef( attributeDef );
+        }
+    }
+
+/*
     @Override
     public Object convertExternalValue(Task task, attributeDef attributeDef, String contextName, Object externalValue)
     {
@@ -70,11 +95,11 @@ public class TimeDomain extends DateDomain
     	// make sure that the externalValue is a DateTime so that I know I can get the time from it???
         //if ( externalValue instanceof DateTime )
         //    return externalValue;
-    	
+
         //if ( externalValue instanceof Date )
         //    return new DateTime( externalValue );
         //
-    	
+
         // VML operations use "" as synonymous with null.
         if ( externalValue instanceof String && StringUtils.isBlank( (String) externalValue ) )
             return null;
@@ -86,7 +111,7 @@ public class TimeDomain extends DateDomain
             return context.convertExternalValue( task, attributeDef, externalValue );
         }
 
-        throw new InvalidAttributeValueException( attributeDef, externalValue, 
+        throw new InvalidAttributeValueException( attributeDef, externalValue,
                                                   "Invalid object: Domain %s cannot convert value for context %s.",
                                                   this.getClass().getName(), contextName );
     }
@@ -106,7 +131,7 @@ public class TimeDomain extends DateDomain
 
         private String            editString;
         private DateTimeFormatter formatter;
-        
+
         @Override
         public String convertToString(Task task, attributeDef attributeDef, Object internalValue)
         {
@@ -121,13 +146,13 @@ public class TimeDomain extends DateDomain
         {
         	if ( value == null )
         		return null;
-        	
+
             //String s = (String) value;
 
             // VML operations use "" as synonymous with null.
         	//if ( StringUtils.isBlank( s ) )
         		//return null;
-       	        	
+
             return formatter.print( (DateTime) value );
         }
 

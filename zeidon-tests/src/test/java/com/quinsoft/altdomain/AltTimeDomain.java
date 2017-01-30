@@ -19,29 +19,20 @@
 
 package com.quinsoft.altdomain;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.Blob;
-import com.quinsoft.zeidon.EntityCursor;
-import com.quinsoft.zeidon.EntityInstance;
-import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.domains.BaseDomainContext;
-import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.domains.DomainContext;
 import com.quinsoft.zeidon.domains.TimeDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
- * This domain 
+ * This domain
  * @author DG
  *
  */
@@ -52,20 +43,20 @@ public class AltTimeDomain extends TimeDomain
         super( application, domainProperties, task );
     }
 
-    
+
     @Override
     public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
     	Object value = null;
-        
+
     	try
     	{
     		// See if we can convert the externalValue to an internal value. But if not, then
     		// I don't want to throw the exception because,I just want to say that the values
     		// don't compare. In other words, in code we might be comparing a date to an invalid
-    		// date value but since I'm not actually setting the value, then I don't want to 
+    		// date value but since I'm not actually setting the value, then I don't want to
     		// throw the exception.
-            value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );   		
+            value = convertExternalValue( task, attributeInstance, attributeDef, null, externalValue );
     	}
     	catch ( Throwable t )
     	{
@@ -88,18 +79,11 @@ public class AltTimeDomain extends TimeDomain
             Integer rc = compareNull( task, attributeDef, internalValue, value);
             if ( rc != null )
                 return rc;
-            
-            if ( internalValue instanceof Comparable )
-            {
-                assert internalValue.getClass() == value.getClass();
-                
-                @SuppressWarnings("unchecked")
-                Comparable<Object> c = (Comparable<Object>) internalValue;
-                return c.compareTo( value );
-            }
-            
-            DomainContext context = getContext( task, null ); // Get the default context.
-            return context.compare( task, internalValue, value );
+
+            assert internalValue instanceof DateTime;
+            assert value instanceof DateTime;
+
+            return DateTimeComparator.getTimeOnlyInstance().compare( internalValue, value );
         }
         catch ( Throwable t )
         {

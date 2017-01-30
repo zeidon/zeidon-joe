@@ -42,19 +42,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpSession;
 
-import net.htmlparser.jericho.Attribute;
-import net.htmlparser.jericho.CharacterReference;
-import net.htmlparser.jericho.Element;
-import net.htmlparser.jericho.EndTagType;
-import net.htmlparser.jericho.HTMLElementName;
-import net.htmlparser.jericho.HTMLElements;
-import net.htmlparser.jericho.OutputDocument;
-import net.htmlparser.jericho.Segment;
-import net.htmlparser.jericho.Source;
-import net.htmlparser.jericho.StartTag;
-import net.htmlparser.jericho.StartTagType;
-import net.htmlparser.jericho.Tag;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -92,6 +79,19 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.IncrementalEntityFlags;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
+
+import net.htmlparser.jericho.Attribute;
+import net.htmlparser.jericho.CharacterReference;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.EndTagType;
+import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.HTMLElements;
+import net.htmlparser.jericho.OutputDocument;
+import net.htmlparser.jericho.Segment;
+import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.StartTag;
+import net.htmlparser.jericho.StartTagType;
+import net.htmlparser.jericho.Tag;
 
 /*
 //package org.kodejava.example.lowagie;
@@ -4521,7 +4521,7 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ).getString() );
+         int nRC = cursor1.getAttribute( attributeName1 ).compare( cursor2.getAttribute( attributeName2 ) );
          return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
       }
    }
@@ -8733,7 +8733,7 @@ public abstract class VmlOperation
                strTemp += strHtml.substring( nEndPos, nOpenPos );
                if ( strReplaceTag != null )
                   strTemp += strReplaceTag;
-               
+
                nOpenPos += closeTag.length();
                strTemp += strHtml.substring( nOpenPos );
                strHtml = strTemp;
@@ -8762,13 +8762,13 @@ public abstract class VmlOperation
          nStartPos = 0;
       else
          nStartPos += 6;  // length of "<body>"
-      
+
       int nEndPos = strHtmlEnclosedValue.lastIndexOf( "</body>" );
       if ( nEndPos < 0 )
          strHtmlEnclosedValue = strHtmlEnclosedValue.substring( nStartPos );
       else
          strHtmlEnclosedValue = strHtmlEnclosedValue.substring( nStartPos, nEndPos );
-      
+
       strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "span", null );
       strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "p", "<br>" );
    // strHtmlEnclosedValue = RemoveHtmlTag( strHtmlEnclosedValue, "p", "\r\n" );
@@ -8790,7 +8790,7 @@ public abstract class VmlOperation
       }
       return strHtmlEnclosedValue;
    }
-   
+
    // This function checks for the existence of the specified file/directory.
    // If it is a check for a valid file, that's all we do.  For a directory,
    // if the directory does not exist (and bCheckCreate is TRUE) the directory is created.
