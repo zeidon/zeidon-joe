@@ -57,12 +57,12 @@ aAPP_PACKAGE com.quinsoft.epamms
 
 eAPPLICATION 2
 aAPP_NAME  ePammsDKS
-aAPP_DLL   testdata/epammsDKS
-aAPP_ADOBIN testdata/epammsDKS
-aAPP_LOCAL testdata/epammsDKS
-aAPP_SHARED testdata/epammsDKS
-aAPP_QLPLR testdata/epammsDKS
-aAPP_SOURCE testdata/epammsDKS
+aAPP_DLL   testdata/ePammsDKS
+aAPP_ADOBIN testdata/ePammsDKS
+aAPP_LOCAL testdata/ePammsDKS
+aAPP_SHARED testdata/ePammsDKS
+aAPP_QLPLR testdata/ePammsDKS
+aAPP_SOURCE testdata/ePammsDKS
 aAPP_PACKAGE com.quinsoft.epamms
 
 
