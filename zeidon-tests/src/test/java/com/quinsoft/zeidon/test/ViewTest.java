@@ -36,10 +36,10 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
-//import com.quinsoft.zencas.scalasamples.SampleActivates;
-//import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
-//import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
-//import com.quinsoft.zencas.scalasamples.SampleViewManipulations;
+import com.quinsoft.zencas.scalasamples.SampleActivates;
+import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
+import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
+import com.quinsoft.zencas.scalasamples.SampleViewManipulations;
 
 /**
  * @author DG
@@ -899,7 +899,7 @@ public class ViewTest
         value = v.cursor( "Student" ).getAttribute( "DynamicAttr" ).getString();
         assertTrue( "Unexpected dynamic attribute value",  "This is a test".equals( value ) );
     }
-/*
+
     @Test
     public void testScalaSamples()
     {
@@ -915,5 +915,4 @@ public class ViewTest
         SampleAttributeCode sampleCode = new SampleAttributeCode( zencas );
         sampleCode.runAll( mUser );
     }
-*/
 }
