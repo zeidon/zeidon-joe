@@ -1,13 +1,101 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO                         09/13/16   19:39:46 1.0a2   
+z1000-Zeidon    ZEIDON   TZDMXGPO                         11/16/16   14:59:37 1.0a2   
 eDomainGroup 1
 aName      ePamms
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1266501
+aName      ActiveInert
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1266502
+aName      ActiveInert
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1266503
+aExternalValue Active
+aInternalValue A
+
+eTableEntry 4
+aZKey      1266504
+aExternalValue Inert
+aInternalValue I
+
+eContext   3
+aZKey      2448237
+aName      YN
+
+eTableEntry 4
+aZKey      2448238
+aExternalValue Yes
+aInternalValue A
+
+eTableEntry 4
+aZKey      2448239
+aExternalValue No
+aInternalValue I
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      86698168
+aName      ActivityStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      86698169
+aName      ActivityStatus
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      68568073
+aName      AlphaNumeric
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+aDecimalFormat 1234
+
+eContext   3
+aZKey      68568074
+aName      ALPHANUMERIC
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      68567505
+aName      AlphaNumericUpperStrip
+aDesc      Strip all non-alphanumerics and upper case all characters
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  domainc
+aOperName  AlphaNumericUpperStrip
+
+eContext   3
+aZKey      68567506
+aName      AlphaNumericUpperStrip
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.BlobDomain
 aZKey      68567480
 aName      Blob
 aDesc      A do nothing domain for blobs
 aDomainType E
-aJavaClass com.quinsoft.zeidon.domains.BlobDomain
 aDataType  B
 aContextRestriction N
 
@@ -17,189 +105,322 @@ aName      BLOB
 aIsDefault Y
 
 eDomain    2
-aZKey      130001718
-aName      Units
-aDesc      Dilution units
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 4
-aContextRestriction N
-
-eContext   3
-aZKey      130001719
-aName      Units
-aIsDefault Y
-
-eTableEntry 4
-aZKey      130001720
-aExternalValue oz.
-aInternalValue oz
-
-eTableEntry 4
-aZKey      130001721
-aExternalValue gal.
-aInternalValue gal
-
-eTableEntry 4
-aZKey      130001722
-aExternalValue lbs.
-aInternalValue lbs
-
-eDomain    2
-aZKey      130001711
-aName      Status
-aDesc      Historical, Production, Work in Progress
+aZKey      1186473
+aName      BoldItalic
+aDesc      Bold and/or Italic flag
 aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aDataType  S
 aMaxStringLth 1
 aContextRestriction N
 
 eContext   3
-aZKey      130001712
-aName      Status
+aZKey      1186474
+aName      BoldItalic
 aIsDefault Y
+aDesc      Bold, Italic, Bold and Italic, Regular
 
 eTableEntry 4
-aZKey      130001713
-aExternalValue Historical
-aInternalValue H
+aZKey      27201
 
 eTableEntry 4
-aZKey      130001714
-aExternalValue Production
-aInternalValue P
+aZKey      1186475
+aExternalValue Bold
+aInternalValue B
 
 eTableEntry 4
-aZKey      130001715
-aExternalValue Work In Progress
-aInternalValue W
+aZKey      1186476
+aExternalValue Italic
+aInternalValue I
 
 eTableEntry 4
-aZKey      130001717
-aExternalValue WIP
-
-eDomain    2
-aZKey      110370112
-aName      ContainerTypeStorageDisposal
-aDesc      Type of Container that drives Storage and Disposal Section selection
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 30
-aContextRestriction N
-
-eContext   3
-aZKey      110370113
-aName      ContainerTypeStorageDisposal
-aIsDefault Y
+aZKey      1186477
+aExternalValue Bold and Italic
+aInternalValue +
 
 eTableEntry 4
-aZKey      110370114
-aExternalValue Refillable
-aInternalValue Refillable
-
-eTableEntry 4
-aZKey      110370115
-aExternalValue Non-refillable
-aInternalValue Non-refillable
-
-eTableEntry 4
-aZKey      110388980
-aExternalValue Bag-In-Box, Non-refillable Packets, Sealed Containers
-aInternalValue Sealed
-
-eDomain    2
-aZKey      110226099
-aName      InsertTextKeywordType
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      110226100
-aName      InsertTextKeywordType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      110226101
-aExternalValue All Optional
-aInternalValue A
-
-eTableEntry 4
-aZKey      110226102
-aExternalValue Only One Allowed
-aInternalValue O
-
-eTableEntry 4
-aZKey      110226103
-aExternalValue At Least One Required
+aZKey      1187169
+aExternalValue Regular
 aInternalValue R
 
-eTableEntry 4
-aZKey      130001733
-aExternalValue Exactly One Required
-aInternalValue X
-
 eDomain    2
-aZKey      110059061
-aName      ContainerVolumeEnvironmentHazard
-aDesc      Environmental split <5 or >=5
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      4322633
+aName      BorderStyle
+aDomainType T
 aDataType  S
 aMaxStringLth 20
 aContextRestriction N
 
 eContext   3
-aZKey      110059062
-aName      ContainerVolumeEnvironmentHazard
+aZKey      4322634
+aName      BorderStyle
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110059063
-aExternalValue < 5 gallons
-aInternalValue <5
+aZKey      120162452
 
 eTableEntry 4
-aZKey      110059064
-aExternalValue >= 5 gallons
-aInternalValue >=5
+aZKey      4322635
+aExternalValue Solid
+aInternalValue solid
+
+eTableEntry 4
+aZKey      4322637
+aExternalValue Dotted
+aInternalValue dotted
+
+eTableEntry 4
+aZKey      4322638
+aExternalValue Dashed
+aInternalValue dashed
+
+eTableEntry 4
+aZKey      4322639
+aExternalValue Double
+aInternalValue double
+
+eTableEntry 4
+aZKey      4322640
+aExternalValue Groove
+aInternalValue groove
 
 eDomain    2
-aZKey      110059057
-aName      ContainerVolumeStorageDisposal
-aDesc      Storage/Disposal split <=5 or >5
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1178519
+aName      ChemicalFamily
+aDesc      Pesticide, Quat Disinfectant, Iodine Disinfectant, etc.
+aDomainType T
 aDataType  S
-aMaxStringLth 3
+aMaxStringLth 2
 aContextRestriction N
 
 eContext   3
-aZKey      110059058
-aName      ContainerVolumeStorageDisposal
+aZKey      1178520
+aName      ChemicalFamily
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110059059
-aExternalValue <= 5 gallons
-aInternalValue <=5
+aZKey      1178521
+aExternalValue Pesticide
+aInternalValue P
 
 eTableEntry 4
-aZKey      110059060
-aExternalValue > 5 gallons
-aInternalValue >5
+aZKey      1178522
+aExternalValue Quat Disinfectant
+aInternalValue DQ
+
+eTableEntry 4
+aZKey      1178523
+aExternalValue Iodine Disinfectant
+aInternalValue DI
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1178421
+aName      ChildHazardWarning
+aDesc      Normally: Keep Out Of Reach Of Children.  EPA may waive the requirement, or require or permit an alternative child hazard warning.
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1178422
+aName      ChildHazardWarning
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1178423
+aExternalValue KEEP OUT OF REACH OF CHILDREN
+aInternalValue U
+
+eTableEntry 4
+aZKey      1178424
+aExternalValue Keep Out Of Reach Of Children
+aInternalValue L
+
+eTableEntry 4
+aZKey      1178425
+aExternalValue Requirement Waived By EPA
+aInternalValue W
+
+eTableEntry 4
+aZKey      1178509
+aExternalValue EPA Approved Alternative Statement
+aInternalValue A
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      70220060
+aName      ClaimsClassification
+aDesc      Bacteria, Viruses, Fungi, Protozoa
+aDomainType T
+aDataType  S
+aMaxStringLth 16
+aContextRestriction N
+
+eContext   3
+aZKey      70220061
+aName      ClaimsClassification
+aIsDefault Y
+
+eTableEntry 4
+aZKey      2089833
+aExternalValue Bacteria
+aInternalValue Bacteria
+
+eTableEntry 4
+aZKey      70220063
+aExternalValue Protozoa
+aInternalValue Protozoa
+
+eTableEntry 4
+aZKey      70220066
+aExternalValue Viruses
+aInternalValue Viruses
+
+eTableEntry 4
+aZKey      70220067
+aExternalValue Fungi
+aInternalValue Fungi
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      4322642
+aName      Color
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      4322643
+aName      Color
+aIsDefault Y
+
+eTableEntry 4
+aZKey      120162451
+
+eTableEntry 4
+aZKey      120161754
+aExternalValue Red
+aInternalValue red
+
+eTableEntry 4
+aZKey      120161755
+aExternalValue Blue
+aInternalValue blue
+
+eTableEntry 4
+aZKey      120161756
+aExternalValue Green
+aInternalValue green
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1639285
+aName      CompanyRole
+aDesc      Primary Registrant, Subregistrant, Dual Registrant, Non-EPA
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1661900
+aName      CompanyRole
+
+eTableEntry 4
+aZKey      1661901
+aExternalValue P
+aInternalValue P
+
+eTableEntry 4
+aZKey      1661902
+aExternalValue S
+aInternalValue S
+
+eTableEntry 4
+aZKey      1661903
+aExternalValue D
+aInternalValue D
+
+eTableEntry 4
+aZKey      1661904
+aExternalValue N
+aInternalValue N
+
+eTableEntry 4
+aZKey      1661905
+aExternalValue U
+aInternalValue U
+
+eContext   3
+aZKey      1661801
+aName      KeyRole
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1661802
+aExternalValue Primary Registrant
+aInternalValue P
+
+eTableEntry 4
+aZKey      1661803
+aExternalValue Subregistrant
+aInternalValue S
+
+eTableEntry 4
+aZKey      1661804
+aExternalValue Dual Registrant
+aInternalValue D
+
+eTableEntry 4
+aZKey      1661805
+aExternalValue Non EPA
+aInternalValue N
+
+eTableEntry 4
+aZKey      1670198
+aExternalValue Unknown
+aInternalValue U
+
+eContext   3
+aZKey      1639286
+aName      RegistrantRole
+
+eTableEntry 4
+aZKey      1639287
+aExternalValue Primary Registrant
+aInternalValue P
+
+eTableEntry 4
+aZKey      1639288
+aExternalValue Subregistrant
+aInternalValue S
+
+eTableEntry 4
+aZKey      1639289
+aExternalValue Dual Registrant
+aInternalValue D
+
+eTableEntry 4
+aZKey      1659260
+aExternalValue Non EPA
+aInternalValue N
+
+eTableEntry 4
+aZKey      1670199
+aExternalValue Unknown
+aInternalValue U
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110006612
 aName      CompositeSectionType
 aDesc      Precautionary, Environmental/Physical Hazard, First Aid, Ingredients, Storage/Disposal, Directions For Use, Marketing (P,E,F,I,S,D,M)
 aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aDataType  S
 aMaxStringLth 1
 aContextRestriction N
@@ -294,542 +515,104 @@ aExternalValue Marketing
 aInternalValue M
 
 eDomain    2
-aZKey      110003579
-aName      HazardLocationSeparator
-aDesc      Separator when multiple hazard locations are specified (e.g. [], (), /, \)
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110370112
+aName      ContainerTypeStorageDisposal
+aDesc      Type of Container that drives Storage and Disposal Section selection
+aDomainType T
 aDataType  S
-aMaxStringLth 2
+aMaxStringLth 30
 aContextRestriction N
 
 eContext   3
-aZKey      110003580
-aName      HazardLocationSeparator
+aZKey      110370113
+aName      ContainerTypeStorageDisposal
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110003581
-aExternalValue Brackets
-aInternalValue []
+aZKey      110370114
+aExternalValue Refillable
+aInternalValue Refillable
 
 eTableEntry 4
-aZKey      110003582
-aExternalValue Parens
-aInternalValue ()
+aZKey      110370115
+aExternalValue Non-refillable
+aInternalValue Non-refillable
 
 eTableEntry 4
-aZKey      110003612
-aExternalValue Braces
-aInternalValue {}
-
-eTableEntry 4
-aZKey      110003583
-aExternalValue Backslash
-aInternalValue \
-
-eTableEntry 4
-aZKey      110003584
-aExternalValue Slash
-aInternalValue /
-
-eTableEntry 4
-aZKey      110003585
-aExternalValue Pipe
-aInternalValue |
-
-eTableEntry 4
-aZKey      110003588
-aExternalValue Dash
-aInternalValue -
-
-eTableEntry 4
-aZKey      110003586
-aExternalValue Comma
-aInternalValue ,
+aZKey      110388980
+aExternalValue Bag-In-Box, Non-refillable Packets, Sealed Containers
+aInternalValue Sealed
 
 eDomain    2
-aZKey      130001702
-aName      DonTest
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-aConstraintRule This is a test
-
-eContext   3
-aZKey      130001703
-aName      DonTest
-aIsDefault Y
-
-eTableEntry 4
-aZKey      130001704
-aExternalValue Test
-aInternalValue T
-
-eTableEntry 4
-aZKey      130001705
-aExternalValue Incomplete
-aInternalValue I
-
-eTableEntry 4
-aZKey      130001709
-aExternalValue More
-aInternalValue M
-
-eDomain    2
-aZKey      4730208
-aName      DirectionsNotForUseType
-aDesc      For mutually exclusive (not for use) directions for use:  Medical Premises, Food Contact Surfaces
+aZKey      110059061
+aName      ContainerVolumeEnvironmentHazard
+aDesc      Environmental split <5 or >=5
 aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 2
-aContextRestriction N
-
-eContext   3
-aZKey      4730209
-aName      DirectionsNotForUseType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      4730212
-aExternalValue Not Applicable
-aInternalValue NA
-
-eTableEntry 4
-aZKey      4730210
-aExternalValue Food Contact Surfaces
-aInternalValue FC
-
-eTableEntry 4
-aZKey      4730211
-aExternalValue Medical Device Surfaces
-aInternalValue MD
-
-eTableEntry 4
-aZKey      4768851
-aExternalValue Bactericidal stability of  Use-dilution
-aInternalValue BU
-
-eDomain    2
-aZKey      1186473
-aName      BoldItalic
-aDesc      Bold and/or Italic flag
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      1186474
-aDesc      Bold, Italic, Bold and Italic, Regular
-aName      BoldItalic
-aIsDefault Y
-
-eTableEntry 4
-aZKey      27201
-
-eTableEntry 4
-aZKey      1186475
-aExternalValue Bold
-aInternalValue B
-
-eTableEntry 4
-aZKey      1186476
-aExternalValue Italic
-aInternalValue I
-
-eTableEntry 4
-aZKey      1186477
-aExternalValue Bold and Italic
-aInternalValue +
-
-eTableEntry 4
-aZKey      1187169
-aExternalValue Regular
-aInternalValue R
-
-eDomain    2
-aZKey      3934625
-aName      StorageDisposalSectionType
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aDataType  S
 aMaxStringLth 20
 aContextRestriction N
 
 eContext   3
-aZKey      3934626
-aName      StorageDisposalSectionType
+aZKey      110059062
+aName      ContainerVolumeEnvironmentHazard
 aIsDefault Y
 
 eTableEntry 4
-aZKey      3934630
-aExternalValue Product Storage
-aInternalValue Storage
+aZKey      130001734
+aExternalValue All
 
 eTableEntry 4
-aZKey      3934631
-aExternalValue Product Disposal
-aInternalValue Disposal
+aZKey      110059063
+aExternalValue < 5 gallons
+aInternalValue <5
 
 eTableEntry 4
-aZKey      3934632
-aExternalValue Container Handling
-aInternalValue Container
+aZKey      110059064
+aExternalValue >= 5 gallons
+aInternalValue >=5
 
 eDomain    2
-aZKey      3898401
-aName      HazardPanel
-aDesc      Panel where additional hazard statements are found
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  L
-aMaxStringLth 4
-aContextRestriction N
-
-eContext   3
-aZKey      3898402
-aName      HazardPanel
-aIsDefault Y
-
-eTableEntry 4
-aZKey      3898408
-aExternalValue None
-aInternalValue 0
-
-eTableEntry 4
-aZKey      3898403
-aExternalValue Location 1
-aInternalValue 1
-
-eTableEntry 4
-aZKey      3898404
-aExternalValue Location 2
-aInternalValue 2
-
-eTableEntry 4
-aZKey      3898405
-aExternalValue Location 3
-aInternalValue 3
-
-eTableEntry 4
-aZKey      3898406
-aExternalValue Location 4
-aInternalValue 4
-
-eTableEntry 4
-aZKey      3898407
-aExternalValue Location 5
-aInternalValue 5
-
-eTableEntry 4
-aZKey      130001729
-aExternalValue Location 6
-aInternalValue 6
-
-eTableEntry 4
-aZKey      130001730
-aExternalValue Location 7
-aInternalValue 7
-
-eTableEntry 4
-aZKey      130001731
-aExternalValue Location 8
-aInternalValue 8
-
-eTableEntry 4
-aZKey      130001732
-aExternalValue Location 9
-aInternalValue 9
-
-eDomain    2
-aZKey      3785525
-aName      HTML Units
-aDesc      standard measurement units (pt, px, cm, mm, in) + em, normal, auto
+aZKey      110059057
+aName      ContainerVolumeStorageDisposal
+aDesc      Storage/Disposal split <=5 or >5
 aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aDataType  S
-aMaxStringLth 10
+aMaxStringLth 3
 aContextRestriction N
 
 eContext   3
-aZKey      3785526
-aName      HTML Units
+aZKey      110059058
+aName      ContainerVolumeStorageDisposal
 aIsDefault Y
 
 eTableEntry 4
-aZKey      3785527
-aExternalValue point
-aInternalValue pt
+aZKey      110059059
+aExternalValue <= 5 gallons
+aInternalValue <=5
 
 eTableEntry 4
-aZKey      4030902
-aExternalValue pica
-aInternalValue pc
-
-eTableEntry 4
-aZKey      3785528
-aExternalValue pixel
-aInternalValue px
-
-eTableEntry 4
-aZKey      3785529
-aExternalValue centimeter
-aInternalValue cm
-
-eTableEntry 4
-aZKey      3785530
-aExternalValue millimeter
-aInternalValue mm
-
-eTableEntry 4
-aZKey      3785531
-aExternalValue inch
-aInternalValue in
-
-eTableEntry 4
-aZKey      3785532
-aExternalValue em
-aInternalValue em
-
-eTableEntry 4
-aZKey      4030903
-aExternalValue ex
-aInternalValue ex
-
-eTableEntry 4
-aZKey      4030900
-aExternalValue %
-aInternalValue %
-
-eTableEntry 4
-aZKey      3785533
-aExternalValue normal
-aInternalValue normal
-
-eTableEntry 4
-aZKey      3785534
-aExternalValue auto
-aInternalValue auto
+aZKey      110059060
+aExternalValue > 5 gallons
+aInternalValue >5
 
 eDomain    2
-aZKey      2294674
-aName      REVDate
-aDesc      This is the date that any change is made to the artwork. The date format is the same as the ESL date:  REV112203 (This means Revision date: November 22, 2003).  The Revision date must be updated each and every time a change is made to the artwork!
-aDomainType A
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aDataType  T
-aContextRestriction N
-
-eContext   3
-aZKey      2294675
-aName      REVDate
-aIsDefault Y
-
-eDomain    2
-aZKey      2294672
-aName      ESLDate
-aDesc      EPA Stamped Label Date - The ESL Date used for the setup and review is to be on the label. It is for easy regulatory identification and production quality control purposes. The format for the ESL date is: ESL051203 (This means ESL dated May 12, 2003).
-aDomainType A
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aDataType  T
-aContextRestriction N
-
-eContext   3
-aZKey      2294673
-aName      ESLDate
-aIsDefault Y
-
-eDomain    2
-aZKey      70220060
-aName      ClaimsClassification
-aDesc      Bacteria, Viruses, Fungi, Protozoa
-aDomainType T
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 16
-aContextRestriction N
-
-eContext   3
-aZKey      70220061
-aName      ClaimsClassification
-aIsDefault Y
-
-eTableEntry 4
-aZKey      2089833
-aExternalValue Bacteria
-aInternalValue Bacteria
-
-eTableEntry 4
-aZKey      70220063
-aExternalValue Protozoa
-aInternalValue Protozoa
-
-eTableEntry 4
-aZKey      70220066
-aExternalValue Viruses
-aInternalValue Viruses
-
-eTableEntry 4
-aZKey      70220067
-aExternalValue Fungi
-aInternalValue Fungi
-
-eDomain    2
-aZKey      1639285
-aName      CompanyRole
-aDesc      Primary Registrant, Subregistrant, Dual Registrant, Non-EPA
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      1661900
-aName      CompanyRole
-
-eTableEntry 4
-aZKey      1661901
-aExternalValue P
-aInternalValue P
-
-eTableEntry 4
-aZKey      1661902
-aExternalValue S
-aInternalValue S
-
-eTableEntry 4
-aZKey      1661903
-aExternalValue D
-aInternalValue D
-
-eTableEntry 4
-aZKey      1661904
-aExternalValue N
-aInternalValue N
-
-eTableEntry 4
-aZKey      1661905
-aExternalValue U
-aInternalValue U
-
-eContext   3
-aZKey      1661801
-aName      KeyRole
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1661802
-aExternalValue Primary Registrant
-aInternalValue P
-
-eTableEntry 4
-aZKey      1661803
-aExternalValue Subregistrant
-aInternalValue S
-
-eTableEntry 4
-aZKey      1661804
-aExternalValue Dual Registrant
-aInternalValue D
-
-eTableEntry 4
-aZKey      1661805
-aExternalValue Non EPA
-aInternalValue N
-
-eTableEntry 4
-aZKey      1670198
-aExternalValue Unknown
-aInternalValue U
-
-eContext   3
-aZKey      1639286
-aName      RegistrantRole
-
-eTableEntry 4
-aZKey      1639287
-aExternalValue Primary Registrant
-aInternalValue P
-
-eTableEntry 4
-aZKey      1639288
-aExternalValue Subregistrant
-aInternalValue S
-
-eTableEntry 4
-aZKey      1639289
-aExternalValue Dual Registrant
-aInternalValue D
-
-eTableEntry 4
-aZKey      1659260
-aExternalValue Non EPA
-aInternalValue N
-
-eTableEntry 4
-aZKey      1670199
-aExternalValue Unknown
-aInternalValue U
-
-eDomain    2
-aZKey      1266501
-aName      ActiveInert
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      1266502
-aName      ActiveInert
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1266503
-aExternalValue Active
-aInternalValue A
-
-eTableEntry 4
-aZKey      1266504
-aExternalValue Inert
-aInternalValue I
-
-eContext   3
-aZKey      2448237
-aName      YN
-
-eTableEntry 4
-aZKey      2448238
-aExternalValue Yes
-aInternalValue A
-
-eTableEntry 4
-aZKey      2448239
-aExternalValue No
-aInternalValue I
-
-eDomain    2
 aZKey      1206938
 aName      ContentSectionType
 aDesc      Content Section Type ... Precautionary, Physical Hazard, First Aid, Ingredients, Storage and Disposal, Directions for Use, Marketing, Human Hazard, Claims, Surfaces, Locations
 aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aDataType  S
 aMaxStringLth 1
 aContextRestriction N
 
 eContext   3
 aZKey      1206939
-aDesc      Content Section Type ... Claims, Surfaces, Precautionary, Physical Hazard, First Aid, Ingredients, Human Hazard, Storage and Disposal, Directions for Use, Marketing
 aName      ContentSectionType
 aIsDefault Y
+aDesc      Content Section Type ... Claims, Surfaces, Precautionary, Physical Hazard, First Aid, Ingredients, Human Hazard, Storage and Disposal, Directions for Use, Marketing
 
 eTableEntry 4
 aZKey      1206940
@@ -885,419 +668,6 @@ eTableEntry 4
 aZKey      1238186
 aExternalValue Application Type
 aInternalValue T
-
-eDomain    2
-aZKey      1164066
-aName      ExperienceLevel
-aDesc      Beginner, Intermediate, Expert
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      1164067
-aDesc      Beginner, Intermediate, Expert
-aName      ExperienceLevel
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1164068
-aExternalValue Beginner
-aInternalValue B
-
-eTableEntry 4
-aZKey      1164069
-aExternalValue Intermediate
-aInternalValue I
-
-eTableEntry 4
-aZKey      1164070
-aExternalValue Expert
-aInternalValue X
-
-eDomain    2
-aZKey      69055597
-aName      GeneralSectionType
-aDesc      Precautionary, Environmental/Physical Hazard, First Aid (P,E,F)
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      4321560
-aName      FullGeneralSectionType
-
-eTableEntry 4
-aZKey      4321561
-aExternalValue Precautionary
-aInternalValue P
-
-eTableEntry 4
-aZKey      4321563
-aExternalValue FirstAid
-aInternalValue F
-
-eTableEntry 4
-aZKey      4321562
-aExternalValue Environmental Hazard
-aInternalValue E
-
-eTableEntry 4
-aZKey      110030907
-aExternalValue Physical/Chemical Hazard
-aInternalValue C
-
-eContext   3
-aZKey      69055598
-aName      GeneralSectionType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      69055599
-aExternalValue P
-aInternalValue P
-
-eTableEntry 4
-aZKey      69055601
-aExternalValue F
-aInternalValue F
-
-eTableEntry 4
-aZKey      69055600
-aExternalValue E
-aInternalValue E
-
-eTableEntry 4
-aZKey      110030906
-aExternalValue C
-aInternalValue C
-
-eDomain    2
-aZKey      1178868
-aName      EPA_StatementType
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-
-eContext   3
-aZKey      1178869
-aName      EPA_StatementType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1178870
-aExternalValue Precautionary
-aInternalValue Precautionary
-
-eTableEntry 4
-aZKey      1178872
-aExternalValue First Aid
-aInternalValue FirstAid
-
-eTableEntry 4
-aZKey      1178873
-aExternalValue Storage and Disposal
-aInternalValue StorageDisposal
-
-eDomain    2
-aZKey      1178527
-aName      ToxicityCategory
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  L
-aContextRestriction N
-
-eContext   3
-aZKey      1178528
-aName      ToxicityCategory
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1178529
-aExternalValue I
-aInternalValue 1
-
-eTableEntry 4
-aZKey      1178530
-aExternalValue II
-aInternalValue 2
-
-eTableEntry 4
-aZKey      1178531
-aExternalValue III
-aInternalValue 3
-
-eTableEntry 4
-aZKey      1178532
-aExternalValue IV
-aInternalValue 4
-
-eDomain    2
-aZKey      1178519
-aName      ChemicalFamily
-aDesc      Pesticide, Quat Disinfectant, Iodine Disinfectant, etc.
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 2
-aContextRestriction N
-
-eContext   3
-aZKey      1178520
-aName      ChemicalFamily
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1178521
-aExternalValue Pesticide
-aInternalValue P
-
-eTableEntry 4
-aZKey      1178522
-aExternalValue Quat Disinfectant
-aInternalValue DQ
-
-eTableEntry 4
-aZKey      1178523
-aExternalValue Iodine Disinfectant
-aInternalValue DI
-
-eDomain    2
-aZKey      1178421
-aName      ChildHazardWarning
-aDesc      Normally: Keep Out Of Reach Of Children.  EPA may waive the requirement, or require or permit an alternative child hazard warning.
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      1178422
-aName      ChildHazardWarning
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1178423
-aExternalValue KEEP OUT OF REACH OF CHILDREN
-aInternalValue U
-
-eTableEntry 4
-aZKey      1178424
-aExternalValue Keep Out Of Reach Of Children
-aInternalValue L
-
-eTableEntry 4
-aZKey      1178425
-aExternalValue Requirement Waived By EPA
-aInternalValue W
-
-eTableEntry 4
-aZKey      1178509
-aExternalValue EPA Approved Alternative Statement
-aInternalValue A
-
-eDomain    2
-aZKey      1178406
-aName      SignalWord
-aDesc      Based on the Toxicity Profile of the Pesticide Formulation.  Signal Words may not be used anywhere else on the label except as specified in the EPA Regulations.  There are only four Signal Words that may be used: CAUTION, WARNING, DANGER, POISON
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-
-eContext   3
-aZKey      1178407
-aName      SignalWord
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1178409
-aExternalValue CAUTION
-aInternalValue CAUTION
-
-eTableEntry 4
-aZKey      130001726
-aExternalValue CAUTION {PRECAUCIÓN}
-aInternalValue CAUTION {PRECAUCIÓN}
-
-eTableEntry 4
-aZKey      1178410
-aExternalValue WARNING
-aInternalValue WARNING
-
-eTableEntry 4
-aZKey      130001725
-aExternalValue WARNING {ADVERTENCIA}
-aInternalValue WARNING {ADVERTENCIA}
-
-eTableEntry 4
-aZKey      1178411
-aExternalValue DANGER
-aInternalValue DANGER
-
-eTableEntry 4
-aZKey      130001728
-aExternalValue DANGER {PELIGRO}
-aInternalValue DANGER {PELIGRO}
-
-eTableEntry 4
-aZKey      1178413
-aExternalValue POISON
-aInternalValue POISON
-
-eTableEntry 4
-aZKey      130001727
-aExternalValue POISON {VENENO}
-aInternalValue POISON {VENENO}
-
-eTableEntry 4
-aZKey      1178427
-aExternalValue Not Applicable
-aInternalValue N/A
-
-eDomain    2
-aZKey      68567482
-aName      Y/N
-aDesc      Yes or No
-aDomainType T
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      68567483
-aName      Default
-
-eTableEntry 4
-aZKey      44805127
-
-eTableEntry 4
-aZKey      68567484
-aExternalValue Default
-aInternalValue Y
-
-eTableEntry 4
-aZKey      68567485
-aInternalValue N
-
-eContext   3
-aZKey      68567486
-aName      Y/N
-aIsDefault Y
-
-eTableEntry 4
-aZKey      68567487
-aExternalValue Y
-aInternalValue Y
-
-eTableEntry 4
-aZKey      68567488
-aExternalValue N
-aInternalValue N
-
-eTableEntry 4
-aZKey      44805126
-aExternalValue N
-
-eContext   3
-aZKey      1518816
-aName      Yes/No
-
-eTableEntry 4
-aZKey      44805128
-
-eTableEntry 4
-aZKey      1518817
-aExternalValue Yes
-aInternalValue Y
-
-eTableEntry 4
-aZKey      1518818
-aExternalValue No
-aInternalValue N
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      4322633
-aName      BorderStyle
-aDomainType T
-aDataType  S
-aMaxStringLth 20
-aContextRestriction N
-
-eContext   3
-aZKey      4322634
-aName      BorderStyle
-aIsDefault Y
-
-eTableEntry 4
-aZKey      120162452
-
-eTableEntry 4
-aZKey      4322635
-aExternalValue Solid
-aInternalValue solid
-
-eTableEntry 4
-aZKey      4322637
-aExternalValue Dotted
-aInternalValue dotted
-
-eTableEntry 4
-aZKey      4322638
-aExternalValue Dashed
-aInternalValue dashed
-
-eTableEntry 4
-aZKey      4322639
-aExternalValue Double
-aInternalValue double
-
-eTableEntry 4
-aZKey      4322640
-aExternalValue Groove
-aInternalValue groove
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      4322642
-aName      Color
-aDomainType T
-aDataType  S
-aMaxStringLth 20
-aContextRestriction N
-
-eContext   3
-aZKey      4322643
-aName      Color
-aIsDefault Y
-
-eTableEntry 4
-aZKey      120162451
-
-eTableEntry 4
-aZKey      120161754
-aExternalValue Red
-aInternalValue red
-
-eTableEntry 4
-aZKey      120161755
-aExternalValue Blue
-aInternalValue blue
-
-eTableEntry 4
-aZKey      120161756
-aExternalValue Green
-aInternalValue green
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -1578,7 +948,7 @@ aEditString YYYY Mmmm dd
 aJavaEditString yyyy MMMM dd
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aJavaClass com.quinsoft.zeidon.domains.DateTimeDomain
 aZKey      68568141
 aName      DateTime
 aDesc      Basic Timestamp Domain
@@ -1836,11 +1206,17 @@ aEditString YYYY-MM-DD
 aJavaEditString yyyy-MM-dd
 
 eContext   3
+aZKey      68568186
+aName      YYYY/MM/DD HH:MM:SS.S
+aEditString YYYY/mm/dd HH:MI:SS.9 AM
+aJavaEditString yyyyMMddHHmmssSSS
+aIsDefault Y
+
+eContext   3
 aZKey      68568167
 aName      YYYY/MM/DD HH:MM:SS.S AM
 aEditString YYYY/mm/dd HH:MI:SS.9 AM
 aJavaEditString yyyy/MM/dd HH:mm:ss:SSS aa
-aIsDefault Y
 
 eContext   3
 aZKey      68568184
@@ -2762,6 +2138,71 @@ aName      DecimalKey0
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      4730208
+aName      DirectionsNotForUseType
+aDesc      For mutually exclusive (not for use) directions for use:  Medical Premises, Food Contact Surfaces
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      4730209
+aName      DirectionsNotForUseType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      4730212
+aExternalValue Not Applicable
+aInternalValue NA
+
+eTableEntry 4
+aZKey      4730210
+aExternalValue Food Contact Surfaces
+aInternalValue FC
+
+eTableEntry 4
+aZKey      4730211
+aExternalValue Medical Device Surfaces
+aInternalValue MD
+
+eTableEntry 4
+aZKey      4768851
+aExternalValue Bactericidal stability of  Use-dilution
+aInternalValue BU
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      130001702
+aName      DonTest
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+aConstraintRule This is a test
+
+eContext   3
+aZKey      130001703
+aName      DonTest
+aIsDefault Y
+
+eTableEntry 4
+aZKey      130001704
+aExternalValue Test
+aInternalValue T
+
+eTableEntry 4
+aZKey      130001705
+aExternalValue Incomplete
+aInternalValue I
+
+eTableEntry 4
+aZKey      130001709
+aExternalValue More
+aInternalValue M
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      68568053
 aName      EMailAddress
@@ -2774,6 +2215,80 @@ eContext   3
 aZKey      68568054
 aName      EMailAddress
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1178868
+aName      EPA_StatementType
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      1178869
+aName      EPA_StatementType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1178870
+aExternalValue Precautionary
+aInternalValue Precautionary
+
+eTableEntry 4
+aZKey      1178872
+aExternalValue First Aid
+aInternalValue FirstAid
+
+eTableEntry 4
+aZKey      1178873
+aExternalValue Storage and Disposal
+aInternalValue StorageDisposal
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      2294672
+aName      ESLDate
+aDesc      EPA Stamped Label Date - The ESL Date used for the setup and review is to be on the label. It is for easy regulatory identification and production quality control purposes. The format for the ESL date is: ESL051203 (This means ESL dated May 12, 2003).
+aDomainType A
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      2294673
+aName      ESLDate
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1164066
+aName      ExperienceLevel
+aDesc      Beginner, Intermediate, Expert
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1164067
+aName      ExperienceLevel
+aIsDefault Y
+aDesc      Beginner, Intermediate, Expert
+
+eTableEntry 4
+aZKey      1164068
+aExternalValue Beginner
+aInternalValue B
+
+eTableEntry 4
+aZKey      1164069
+aExternalValue Intermediate
+aInternalValue I
+
+eTableEntry 4
+aZKey      1164070
+aExternalValue Expert
+aInternalValue X
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DateDomain
@@ -2822,38 +2337,18 @@ aName      FirstName
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      4322644
 aName      FontFamily
-aDomainType T
+aDomainType E
 aDataType  S
-aMaxStringLth 20
+aMaxStringLth 32
 aContextRestriction N
 
 eContext   3
 aZKey      4322645
 aName      FontFamily
 aIsDefault Y
-
-eTableEntry 4
-aZKey      4322646
-aExternalValue Arial
-aInternalValue Arial
-
-eTableEntry 4
-aZKey      110006764
-aExternalValue Comic Sans MS Bold
-aInternalValue Comic Sans MS Bold
-
-eTableEntry 4
-aZKey      4322647
-aExternalValue Verdana
-aInternalValue Verdana
-
-eTableEntry 4
-aZKey      4322648
-aExternalValue Serif
-aInternalValue Serif
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -3124,6 +2619,289 @@ aName      GeneralNameCaseInsensitive
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      69055597
+aName      GeneralSectionType
+aDesc      Precautionary, Environmental/Physical Hazard, First Aid (P,E,F)
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      4321560
+aName      FullGeneralSectionType
+
+eTableEntry 4
+aZKey      4321561
+aExternalValue Precautionary
+aInternalValue P
+
+eTableEntry 4
+aZKey      4321563
+aExternalValue FirstAid
+aInternalValue F
+
+eTableEntry 4
+aZKey      4321562
+aExternalValue Environmental Hazard
+aInternalValue E
+
+eTableEntry 4
+aZKey      110030907
+aExternalValue Physical/Chemical Hazard
+aInternalValue C
+
+eContext   3
+aZKey      69055598
+aName      GeneralSectionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      69055599
+aExternalValue P
+aInternalValue P
+
+eTableEntry 4
+aZKey      69055601
+aExternalValue F
+aInternalValue F
+
+eTableEntry 4
+aZKey      69055600
+aExternalValue E
+aInternalValue E
+
+eTableEntry 4
+aZKey      110030906
+aExternalValue C
+aInternalValue C
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003579
+aName      HazardLocationSeparator
+aDesc      Separator when multiple hazard locations are specified (e.g. [], (), /, \)
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      110003580
+aName      HazardLocationSeparator
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110003581
+aExternalValue Brackets
+aInternalValue []
+
+eTableEntry 4
+aZKey      110003582
+aExternalValue Parens
+aInternalValue ()
+
+eTableEntry 4
+aZKey      110003612
+aExternalValue Braces
+aInternalValue {}
+
+eTableEntry 4
+aZKey      110003583
+aExternalValue Backslash
+aInternalValue \
+
+eTableEntry 4
+aZKey      110003584
+aExternalValue Slash
+aInternalValue /
+
+eTableEntry 4
+aZKey      110003585
+aExternalValue Pipe
+aInternalValue |
+
+eTableEntry 4
+aZKey      110003588
+aExternalValue Dash
+aInternalValue -
+
+eTableEntry 4
+aZKey      110003586
+aExternalValue Comma
+aInternalValue ,
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      3898401
+aName      HazardPanel
+aDesc      Panel where additional hazard statements are found
+aDomainType T
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      3898402
+aName      HazardPanel
+aIsDefault Y
+
+eTableEntry 4
+aZKey      3898408
+aExternalValue None
+aInternalValue 0
+
+eTableEntry 4
+aZKey      3898403
+aExternalValue Location 1
+aInternalValue 1
+
+eTableEntry 4
+aZKey      3898404
+aExternalValue Location 2
+aInternalValue 2
+
+eTableEntry 4
+aZKey      3898405
+aExternalValue Location 3
+aInternalValue 3
+
+eTableEntry 4
+aZKey      3898406
+aExternalValue Location 4
+aInternalValue 4
+
+eTableEntry 4
+aZKey      3898407
+aExternalValue Location 5
+aInternalValue 5
+
+eTableEntry 4
+aZKey      130001729
+aExternalValue Location 6
+aInternalValue 6
+
+eTableEntry 4
+aZKey      130001730
+aExternalValue Location 7
+aInternalValue 7
+
+eTableEntry 4
+aZKey      130001731
+aExternalValue Location 8
+aInternalValue 8
+
+eTableEntry 4
+aZKey      130001732
+aExternalValue Location 9
+aInternalValue 9
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      3785525
+aName      HTML Units
+aDesc      standard measurement units (pt, px, cm, mm, in) + em, normal, auto
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      3785526
+aName      HTML Units
+aIsDefault Y
+
+eTableEntry 4
+aZKey      3785527
+aExternalValue point
+aInternalValue pt
+
+eTableEntry 4
+aZKey      4030902
+aExternalValue pica
+aInternalValue pc
+
+eTableEntry 4
+aZKey      3785528
+aExternalValue pixel
+aInternalValue px
+
+eTableEntry 4
+aZKey      3785529
+aExternalValue centimeter
+aInternalValue cm
+
+eTableEntry 4
+aZKey      3785530
+aExternalValue millimeter
+aInternalValue mm
+
+eTableEntry 4
+aZKey      3785531
+aExternalValue inch
+aInternalValue in
+
+eTableEntry 4
+aZKey      3785532
+aExternalValue em
+aInternalValue em
+
+eTableEntry 4
+aZKey      4030903
+aExternalValue ex
+aInternalValue ex
+
+eTableEntry 4
+aZKey      4030900
+aExternalValue %
+aInternalValue %
+
+eTableEntry 4
+aZKey      3785533
+aExternalValue normal
+aInternalValue normal
+
+eTableEntry 4
+aZKey      3785534
+aExternalValue auto
+aInternalValue auto
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110226099
+aName      InsertTextKeywordType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110226100
+aName      InsertTextKeywordType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110226101
+aExternalValue All Optional
+aInternalValue A
+
+eTableEntry 4
+aZKey      110226102
+aExternalValue Only One Allowed
+aInternalValue O
+
+eTableEntry 4
+aZKey      110226103
+aExternalValue At Least One Required
+aInternalValue R
+
+eTableEntry 4
+aZKey      130001733
+aExternalValue Exactly One Required
+aInternalValue X
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
 aZKey      68568083
 aName      Integer
@@ -3215,11 +2993,6 @@ aExternalValue Human Hazard
 aInternalValue HumanHazard
 
 eTableEntry 4
-aZKey      69085283
-aExternalValue Environmental Hazard
-aInternalValue Hazards
-
-eTableEntry 4
 aZKey      69081350
 aExternalValue Environmental Hazard
 aInternalValue EnvironmentalHazard
@@ -3296,7 +3069,7 @@ aInternalValue Title
 
 eTableEntry 4
 aZKey      110006310
-aExternalValue MarketingUsage
+aExternalValue Marketing Usage
 aInternalValue MarketingUsage
 
 eTableEntry 4
@@ -3464,6 +3237,20 @@ aName      PhoneNumberDots
 aEditString 999.999.9999
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      2294674
+aName      REVDate
+aDesc      This is the date that any change is made to the artwork. The date format is the same as the ESL date:  REV112203 (This means Revision date: November 22, 2003).  The Revision date must be updated each and every time a change is made to the artwork!
+aDomainType A
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      2294675
+aName      REVDate
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
 aZKey      68567496
 aName      Revenue
@@ -3568,6 +3355,66 @@ eContext   3
 aZKey      68568048
 aName      SIC_Code
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1178406
+aName      SignalWord
+aDesc      Based on the Toxicity Profile of the Pesticide Formulation.  Signal Words may not be used anywhere else on the label except as specified in the EPA Regulations.  There are only four Signal Words that may be used: CAUTION, WARNING, DANGER, POISON
+aDomainType T
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      1178407
+aName      SignalWord
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1178409
+aExternalValue CAUTION
+aInternalValue CAUTION
+
+eTableEntry 4
+aZKey      130001726
+aExternalValue CAUTION {PRECAUCIÓN}
+aInternalValue CAUTION {PRECAUCIÓN}
+
+eTableEntry 4
+aZKey      1178410
+aExternalValue WARNING
+aInternalValue WARNING
+
+eTableEntry 4
+aZKey      130001725
+aExternalValue WARNING {ADVERTENCIA}
+aInternalValue WARNING {ADVERTENCIA}
+
+eTableEntry 4
+aZKey      1178411
+aExternalValue DANGER
+aInternalValue DANGER
+
+eTableEntry 4
+aZKey      130001728
+aExternalValue DANGER {PELIGRO}
+aInternalValue DANGER {PELIGRO}
+
+eTableEntry 4
+aZKey      1178413
+aExternalValue POISON
+aInternalValue POISON
+
+eTableEntry 4
+aZKey      130001727
+aExternalValue POISON {VENENO}
+aInternalValue POISON {VENENO}
+
+eTableEntry 4
+aZKey      1178427
+aExternalValue Not Applicable
+aInternalValue N/A
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -4110,6 +3957,69 @@ aInternalValue WY
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      130001711
+aName      Status
+aDesc      Historical, Production, Work in Progress
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      130001712
+aName      Status
+aIsDefault Y
+
+eTableEntry 4
+aZKey      130001713
+aExternalValue Historical
+aInternalValue H
+
+eTableEntry 4
+aZKey      130001714
+aExternalValue Production
+aInternalValue P
+
+eTableEntry 4
+aZKey      130001715
+aExternalValue Work In Progress
+aInternalValue W
+
+eTableEntry 4
+aZKey      130001717
+aExternalValue WIP
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      3934625
+aName      StorageDisposalSectionType
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      3934626
+aName      StorageDisposalSectionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      3934630
+aExternalValue Product Storage
+aInternalValue Storage
+
+eTableEntry 4
+aZKey      3934631
+aExternalValue Product Disposal
+aInternalValue Disposal
+
+eTableEntry 4
+aZKey      3934632
+aExternalValue Container Handling
+aInternalValue Container
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      69080546
 aName      TemplateStatementFormat
 aDesc      How Statements for a Section will be formatted.
@@ -4338,6 +4248,69 @@ aEditString HHMISS999
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1178527
+aName      ToxicityCategory
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      1178528
+aName      ToxicityCategory
+aIsDefault Y
+
+eTableEntry 4
+aZKey      1178529
+aExternalValue I
+aInternalValue 1
+
+eTableEntry 4
+aZKey      1178530
+aExternalValue II
+aInternalValue 2
+
+eTableEntry 4
+aZKey      1178531
+aExternalValue III
+aInternalValue 3
+
+eTableEntry 4
+aZKey      1178532
+aExternalValue IV
+aInternalValue 4
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      130001718
+aName      Units
+aDesc      Dilution units
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      130001719
+aName      Units
+aIsDefault Y
+
+eTableEntry 4
+aZKey      130001720
+aExternalValue oz.
+aInternalValue oz
+
+eTableEntry 4
+aZKey      130001721
+aExternalValue gal.
+aInternalValue gal
+
+eTableEntry 4
+aZKey      130001722
+aExternalValue lbs.
+aInternalValue lbs
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      1181561
 aName      UsageType
 aDesc      Claim, Surface, Application Type, Location (C,S,T,L)
@@ -4396,6 +4369,68 @@ aExternalValue L
 aInternalValue L
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      68567482
+aName      Y/N
+aDesc      Yes or No
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      68567483
+aName      Default
+
+eTableEntry 4
+aZKey      44805127
+
+eTableEntry 4
+aZKey      68567484
+aExternalValue Default
+aInternalValue Y
+
+eTableEntry 4
+aZKey      68567485
+aInternalValue N
+
+eContext   3
+aZKey      68567486
+aName      Y/N
+aIsDefault Y
+
+eTableEntry 4
+aZKey      68567487
+aExternalValue Y
+aInternalValue Y
+
+eTableEntry 4
+aZKey      68567488
+aExternalValue N
+aInternalValue N
+
+eTableEntry 4
+aZKey      44805126
+aExternalValue N
+
+eContext   3
+aZKey      1518816
+aName      Yes/No
+
+eTableEntry 4
+aZKey      44805128
+
+eTableEntry 4
+aZKey      1518817
+aExternalValue Yes
+aInternalValue Y
+
+eTableEntry 4
+aZKey      1518818
+aExternalValue No
+aInternalValue N
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.DateDomain
 aZKey      68568124
 aName      YearMonth
@@ -4431,54 +4466,4 @@ eContext   3
 aZKey      68568057
 aName      ZipCode10
 aEditString 99999-9999
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
-aZKey      86698168
-aName      ActivityStatus
-aDomainType T
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmDynamicTable
-
-eContext   3
-aZKey      86698169
-aName      ActivityStatus
-aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      68568073
-aName      AlphaNumeric
-aDesc      Characters 'a-z', 'A-Z', '0-9'
-aDomainType E
-aDataType  S
-aMaxStringLth 254
-aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmText
-aDecimalFormat 1234
-
-eContext   3
-aZKey      68568074
-aName      ALPHANUMERIC
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      68567505
-aName      AlphaNumericUpperStrip
-aDesc      Strip all non-alphanumerics and upper case all characters
-aDomainType E
-aDataType  S
-aMaxStringLth 254
-aContextRestriction N
-aDLL_Name  domainc
-aOperName  AlphaNumericUpperStrip
-
-eContext   3
-aZKey      68567506
-aName      AlphaNumericUpperStrip
-aIsDefault Y
 
