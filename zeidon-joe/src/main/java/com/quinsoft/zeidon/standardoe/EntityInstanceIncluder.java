@@ -20,6 +20,7 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.IncludeFlags;
@@ -215,7 +216,15 @@ class EntityInstanceIncluder
     private EntityDef findChildIncludeEntityDef(EntityDef targetParentEntityDef, EntityDef sourceEntityDef)
     {
         EntityDef childByToken = null;
-        for ( EntityDef childTgtEntityDef : targetParentEntityDef.getChildren() )
+        List<EntityDef> children = targetParentEntityDef.getChildren();
+        if ( children.size() == 0 && targetParentEntityDef.isRecursive() )
+        {
+            // We didn't find any children but the target is recursive.  Try again with
+            // it's recursive parent.
+            children = targetParentEntityDef.getRecursiveParent().getChildren();
+        }
+        
+        for ( EntityDef childTgtEntityDef : children )
         {
             if ( sourceEntityDef.getErEntityToken() == childTgtEntityDef.getErEntityToken() &&
                  sourceEntityDef.getErRelToken() == childTgtEntityDef.getErRelToken() &&
