@@ -382,9 +382,14 @@ public class TestEpammsRecursive
       ecp = mSPLDef.getCursor( "LLD_Block" );
       cr = ec.setNext();
       Assert.assertTrue( "Second LLD_Block should be found!", cr == CursorResult.SET );
+      Assert.assertEquals( "Second LLD_Block should have key 2781", new Integer( 2781 ), ec.getAttribute( "ID" ).getInteger() );
+      
       ecp = mSPLDef.getCursor( "LLD_SubBlock" );
-      cr = ec.setFirst();
+      cr = ec.setLast();
       Assert.assertTrue( "SubBlock should now be found!", cr == CursorResult.SET );
+      Assert.assertEquals( "LLD_SubBlock should have key 2782", new Integer( 2782 ), ecp.getAttribute( "ID" ).getInteger() );
+      ecp.setToSubobject();
+      Assert.assertEquals( "LLD_Block should now have key 2782", new Integer( 2782 ), ec.getAttribute( "ID" ).getInteger() );
       ec = mSPLDef.getCursor( "LLD_SpecialSectionAttribute" );
       cr = ec.setFirst();
       Assert.assertTrue( "SpecialSectionAttribute should be found!", cr == CursorResult.SET );

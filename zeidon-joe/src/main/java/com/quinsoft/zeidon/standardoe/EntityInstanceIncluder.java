@@ -216,15 +216,8 @@ class EntityInstanceIncluder
     private EntityDef findChildIncludeEntityDef(EntityDef targetParentEntityDef, EntityDef sourceEntityDef)
     {
         EntityDef childByToken = null;
-        List<EntityDef> children = targetParentEntityDef.getChildren();
-        if ( children.size() == 0 && targetParentEntityDef.isRecursive() )
-        {
-            // We didn't find any children but the target is recursive.  Try again with
-            // it's recursive parent.
-            children = targetParentEntityDef.getRecursiveParent().getChildren();
-        }
         
-        for ( EntityDef childTgtEntityDef : children )
+        for ( EntityDef childTgtEntityDef : targetParentEntityDef.getBaseEntityDef().getChildren() )
         {
             if ( sourceEntityDef.getErEntityToken() == childTgtEntityDef.getErEntityToken() &&
                  sourceEntityDef.getErRelToken() == childTgtEntityDef.getErRelToken() &&
