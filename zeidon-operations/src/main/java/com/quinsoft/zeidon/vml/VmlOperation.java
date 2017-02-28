@@ -4811,6 +4811,11 @@ public abstract class VmlOperation
                             .setLodDef( lodDefName )
                             .activateFirst();
         }
+        catch (Exception e)
+        {
+        	// file not found
+        	return -1;
+        }
 
         returnView.setView( view );
         return 0;
