@@ -52,6 +52,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CursorPosition;
@@ -4853,42 +4854,50 @@ public abstract class VmlOperation
       returnView.setView( view );
       return 0;
    }
-
    protected int ActivateObjectInstance( zVIEW returnView, String lodDefName, View qual,
-                                         View activateQualificationView, int control )
+           View activateQualificationView, int control )
    {
-      int nRC = 0;
-
-  // if ( control == 0 )
-  //     control = zASYNCHRONOUS;
-      // A couple of times in Windows vml we have an activate with zSINGLE + zLEVE_APPLICATION. That is not
-      // applicable in the JOE so ignore and just use zSINGLE.
-      if ( control == 4 )
-    	  control = 0;
-
-      View view = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
-      LodDef lodDef = view.getLodDef();
-      returnView.setView( view );
-      switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
-      {
-         case 0:
-            nRC = -1;
-            break;
-
-         case 1:
-            nRC = 0;
-            break;
-
-         default:
-            nRC = 1;
-            break;
-      }
-
-      TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getLodDef().getName() );
-   // DisplayObjectInstance( view, "", "" );
-      return nRC;
-   }
-
+		int nRC = 0;
+		
+		// if ( control == 0 )
+		//     control = zASYNCHRONOUS;
+		// A couple of times in Windows vml we have an activate with zSINGLE + zLEVE_APPLICATION. That is not
+		// applicable in the JOE so ignore and just use zSINGLE.
+		if ( control == 4 )
+			control = 0;
+		ActivateOptions options = new ActivateOptions( qual );	       
+		options.setLodDef(qual, lodDefName);
+		options.setActivateFlags(ACTIVATE_CONTROL.get( control ));
+		options.setQualificationObject(activateQualificationView);
+		//View view2 = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
+		View view = qual.activateObjectInstance(options);
+		
+		LodDef lodDef = view.getLodDef();
+		returnView.setView( view );
+		switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
+		{
+			case 0:
+				nRC = -1;
+				break;
+			
+			case 1:
+				nRC = 0;
+				break;
+			
+			default:
+				// If we have defined a limit on the root, and we activated that limit, then return 2.
+				if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
+					nRC = 2;
+				else
+					nRC = 1;
+				break;
+		}
+		
+		TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getLodDef().getName() );
+		// DisplayObjectInstance( view, "", "" );
+		return nRC;
+	}
+   
    protected int ActivateObjectInstance( zVIEW returnView, String lodDefName, TaskQualification qual,
                                          View activateQualificationView, int control )
    {
