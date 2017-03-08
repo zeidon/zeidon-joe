@@ -389,13 +389,21 @@ class View( val task: Task ) extends Dynamic {
      */
     def applyDynamic( operationName: String )( args: AnyRef* ): ObjectOperationResult = {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
-        validateNonNull
-
-        val oe = task.getObjectEngine
-        var operMap = oe.getCacheMap().getOrCreate( classOf[ObjectOperationMap] )
-        val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
-        val value = oper.invokeOperation( this, args: _* )
-        ObjectOperationResult( value )
+        try {
+            validateNonNull
+    
+            val oe = task.getObjectEngine
+            var operMap = oe.getCacheMap().getOrCreate( classOf[ObjectOperationMap] )
+            val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
+            val value = oper.invokeOperation( this, args: _* )
+            ObjectOperationResult( value )
+        } catch {
+            case e: Exception => {
+                val ze = ZeidonException.wrapException(e)
+                ze.prependMessage("Operation = %s.%s", this.jlodDef.getName, operationName )
+                throw ze
+            }
+        }
     }
 
     override def toString = {
