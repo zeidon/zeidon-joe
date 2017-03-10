@@ -125,6 +125,11 @@ public class PasswordDomain extends StringDomain
     @Override
     public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object encyrptedHash, Object plaintextPassword)
     {
+    	
+        // If plaintextPassword is an AttributeInstance then get *its* internal value.
+        if ( plaintextPassword instanceof AttributeInstance )
+        	plaintextPassword = ((AttributeInstance) plaintextPassword).getValue();
+    	
         Integer rc = compareNull( task, attributeDef, encyrptedHash, plaintextPassword);
         if ( rc != null )
             return rc;
