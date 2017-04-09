@@ -21,6 +21,11 @@ package com.quinsoft.zeidon.dbhandler;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.StringDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
@@ -57,6 +62,62 @@ class QualAttrib
             this.oper = oper.trim().toUpperCase();
     }
 
+    QualAttrib( QualAttrib qualAttrib )
+    {
+        super();
+        value = qualAttrib.value;
+        oper = qualAttrib.oper;
+        entityDef = qualAttrib.entityDef;
+        attributeDef = qualAttrib.attributeDef;
+        valueList = qualAttrib.valueList;
+        columnAttributeValue = qualAttrib.columnAttributeValue;
+    }
+
+    /**
+     * Returns true if oper is a direct (in)equality (e.g. '=', '!=', 'IN').
+     * @return
+     */
+    public boolean operIsSomeEquality()
+    {
+        if ( oper.equals( "=" ) )
+            return true;
+        
+        if ( oper.equals( "<>" ) )
+            return true;
+        
+        if ( oper.equals( "IN" ) )
+            return true;
+        
+        return false;
+    }
+    
+    public boolean operIsInequality()
+    {
+        return oper.equals( "<>" );
+    }
+    
+    /**
+     * Returns true if this qual attrib uses equality to compare a null/empty string AND
+     * the application considers null and empty strings to be the same.
+     * 
+     * @return
+     */
+    public boolean isNullAndEmptyString()
+    {
+       if ( ! operIsSomeEquality() )
+           return false;
+       
+       Domain domain = attributeDef.getDomain();
+       if ( ! ( domain instanceof StringDomain ) )
+           return false;
+       
+       Application app = domain.getApplication();
+       if ( ! app.nullStringEqualsEmptyString() )
+           return false;
+       
+       return value == null || StringUtils.isBlank( value.toString() );
+    }
+    
     @Override
     public String toString()
     {
