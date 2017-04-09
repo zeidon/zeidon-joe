@@ -279,6 +279,30 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     /**
+     * For applications that equate empty strings to null we need to convert any input
+     * strings from "" to null.
+     */
+    static Object convertEmptyStringValue( Object value, AttributeDef attributeDef )
+    {
+        if ( value == null )
+            return null;
+
+
+        if ( ! ( value instanceof CharSequence ) )
+            return value;
+
+
+        if ( StringUtils.isBlank( (CharSequence ) value ) &&
+             attributeDef.getDomain().getApplication().nullStringEqualsEmptyString() )
+       {
+           return null;
+       }
+
+       return value;
+    }
+
+
+    /**
      * Add the attribute value to the buffer.
      * @param stmt TODO
      * @param buffer
@@ -287,22 +311,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     void getAttributeValue(SqlStatement stmt, StringBuilder buffer, DataField dataField, EntityInstance entityInstance, boolean ignoreBind )
     {
+        AttributeDef attributeDef = dataField.getAttributeDef();
         if ( ignoreBind == false && isBindAllValues() )
         {
-            // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
-            // value instead of the data field.
-            if ( stmt.commandType == SqlCommand.INSERT )
+            if ( stmt.commandType != SqlCommand.INSERT )
             {
-                Object value = entityInstance.getAttribute( dataField.getAttributeDef() ).getValue();
-                stmt.addBoundAttribute( buffer, value );
+                stmt.addBoundAttribute( buffer, dataField );
                 return;
             }
 
-            stmt.addBoundAttribute( buffer, dataField );
+            // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
+            // value instead of the data field.
+            Object value = entityInstance.getAttribute( attributeDef ).getValue();
+            value = convertEmptyStringValue( value, attributeDef );
+
+            stmt.addBoundAttribute( buffer, value );
             return;
         }
 
-        AttributeDef attributeDef = dataField.getAttributeDef();
         Object value = entityInstance.getAttribute( attributeDef ).getValue();
         getSqlValue( stmt, attributeDef.getDomain(), attributeDef, buffer, value );
     }
@@ -665,7 +691,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
                 // TODO: Add the rest of the checks in fnSqlRetrieveQualAttrib.
 
-                qualEntity.addQualAttrib( qualAttrib );
+                // Check to see if we should add qual for both "" and NULL.
+                if ( qualAttrib.isNullAndEmptyString() )
+                    addCheckForNullAndEmptyString( qualEntity, qualAttrib );
+                else
+                    qualEntity.addQualAttrib( qualAttrib );
+
             } // for each QualAttrib...
 
             assert parenCount == 0;
@@ -696,6 +727,29 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
     } // method loadQualificationObject
+
+    /**
+     * Take a single qualAttrib that looks for ""/null string and add two qualAttribs
+     * to the qualEntity to explicitly look for "" and null string.
+     */
+    private void addCheckForNullAndEmptyString( QualEntity qualEntity, QualAttrib qualAttrib )
+    {
+        qualEntity.addQualAttrib( new QualAttrib( "(" ) );
+
+        qualAttrib.value = null;
+        qualEntity.addQualAttrib( qualAttrib );
+
+        if ( qualAttrib.operIsInequality() )
+            qualEntity.addQualAttrib( new QualAttrib( "AND" ) );
+        else
+            qualEntity.addQualAttrib( new QualAttrib( "OR" ) );
+
+        qualAttrib = new QualAttrib( qualAttrib ); // Clone so we can change the value.
+        qualAttrib.value = "";
+        qualEntity.addQualAttrib( qualAttrib );
+
+        qualEntity.addQualAttrib( new QualAttrib( ")" ) );
+    }
 
     /**
      * The value in the qualification is a column name, not a text value.  This means that the
@@ -1439,11 +1493,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 continue;
             }
 
-            boolean isNull = false;
-            if ( qualAttrib.value == null || StringUtils.isBlank( qualAttrib.value.toString() ) )
-                isNull = true;
-
-            if ( isNull )
+            if ( qualAttrib.value == null )
             {
                 // Value is NULL.  Create appropriate SQL.
                 if ( qualAttrib.oper.equals( "<>" ) || qualAttrib.oper.equals( "!=" ) )
@@ -2198,7 +2248,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 if ( entityInstance.getAttribute( attributeDef ).isNull() )
                     throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
             }
-            
+
             if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
                 continue;
 
