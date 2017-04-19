@@ -141,6 +141,29 @@ public class TestZencas
         studFull.drop();
     }
 
+
+    @Test
+    public void testActivatingEmptyString() throws IOException
+    {
+        View studFull = new QualificationBuilder( zencas )
+                            .setLodDef( "lStudDpt" )
+                            .addAttribQual( "eMailAddress", "" )
+                            .limitCountTo( 100 )
+                            .activate();
+        studFull.cursor( "Student" ).setFirst();
+        Assert.assertEquals( studFull.cursor( "Student" ).getEntityCount(), 0 );
+
+        studFull = new QualificationBuilder( zencas )
+                .setLodDef( "lStudDpt" )
+                .addAttribQual( "Student", "eMailAddress", "!=", "" )
+                .addAttribQual( "AND" )
+                .addAttribQual( "Student", "ID", "<=", 10 )
+                .limitCountTo( 20 )
+                .activate();
+        studFull.cursor( "Student" ).setFirst();
+        Assert.assertEquals( studFull.cursor( "Student" ).getEntityCount(), 10 );
+    }
+
 	@Test
 	public void testRecursion()
 	{
