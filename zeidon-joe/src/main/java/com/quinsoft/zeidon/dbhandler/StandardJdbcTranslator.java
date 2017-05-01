@@ -234,7 +234,12 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     public String bindAttributeValue( PreparedStatement ps, View view, DataField dataField, int idx )
     {
         final AttributeDef attributeDef = dataField.getAttributeDef();
-        Object value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getValue();
+        Domain domain = attributeDef.getDomain();
+        Object value;
+        if ( domain instanceof BlobDomain )
+        	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();
+        else
+        	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getValue();
         value = AbstractSqlHandler.convertEmptyStringValue( value, attributeDef );
 
         try
