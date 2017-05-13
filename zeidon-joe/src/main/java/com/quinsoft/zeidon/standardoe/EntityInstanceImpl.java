@@ -38,6 +38,7 @@ import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CompareEntityOptions;
 import com.quinsoft.zeidon.CopyAttributesBuilder;
+import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityConstraintType;
@@ -300,10 +301,18 @@ class EntityInstanceImpl implements EntityInstance
         workAttributes = new HashMap<>( getEntityDef().getWorkAttributeCount() );
     }
 
-    void initializeDefaultAttributes()
+    void initializeDefaultAttributes(EnumSet<CreateEntityFlags> flags)
     {
         for ( AttributeDef attributeDef : getEntityDef().getAttributes( true ) )
         {
+            // Don't initialize persistent attributes if flag is set.  Used when
+            // loading an entity from the DB.  We'll always init work attributes.
+            if ( flags.contains( CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES ) )
+            {
+                if ( attributeDef.isPersistent() )
+                    continue;
+            }
+
             Domain domain = attributeDef.getDomain();
             if ( ! StringUtils.isBlank( attributeDef.getInitialValue() ) )
             {

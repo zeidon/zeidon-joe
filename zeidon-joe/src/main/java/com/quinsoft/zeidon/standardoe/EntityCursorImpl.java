@@ -408,8 +408,7 @@ class EntityCursorImpl implements EntityCursor
             getViewCursor().setRecursiveParent( newInstance, newInstanceEntityDef, null );
         }
 
-        if ( ! flags.contains( CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES ) )
-            newInstance.initializeDefaultAttributes();
+        newInstance.initializeDefaultAttributes( flags );
 
         if ( ! flags.contains( CreateEntityFlags.fDONT_UPDATE_OI ) && ! newInstance.isVersioned() )
             getObjectInstance().setUpdated( true );
