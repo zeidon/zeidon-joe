@@ -693,10 +693,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // TODO: Add the rest of the checks in fnSqlRetrieveQualAttrib.
 
                 // Check to see if we should add qual for both "" and NULL.
-                if ( qualAttrib.isNullAndEmptyString() )
-                    addCheckForNullAndEmptyString( qualEntity, qualAttrib );
-                else
-                    qualEntity.addQualAttrib( qualAttrib );
+                if ( addCheckForNullAndEmptyString( qualEntity, qualAttrib ) )
+                    qualEntity.addQualAttrib( qualAttrib ); // No; just add qualAttrib as normal.
 
             } // for each QualAttrib...
 
@@ -732,9 +730,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     /**
      * Take a single qualAttrib that looks for ""/null string and add two qualAttribs
      * to the qualEntity to explicitly look for "" and null string.
+     *
+     * return: True if qual attrib needs to be added (i.e. it wasn't added here).
      */
-    private void addCheckForNullAndEmptyString( QualEntity qualEntity, QualAttrib qualAttrib )
+    private boolean addCheckForNullAndEmptyString( QualEntity qualEntity, QualAttrib qualAttrib )
     {
+        if ( ! qualAttrib.isNullAndEmptyString() )
+            return true;
+
         qualEntity.addQualAttrib( new QualAttrib( "(" ) );
 
         qualAttrib.value = null;
@@ -750,6 +753,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         qualEntity.addQualAttrib( qualAttrib );
 
         qualEntity.addQualAttrib( new QualAttrib( ")" ) );
+        return false;
     }
 
     /**
