@@ -67,7 +67,7 @@ class SystemApplication extends ApplicationImpl
     @Override
     public boolean nullStringEqualsEmptyString()
     {
-        return false;
+        return true;
     }
 
     @Override

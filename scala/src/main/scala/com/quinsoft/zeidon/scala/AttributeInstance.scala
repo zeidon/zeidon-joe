@@ -41,6 +41,11 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
     def isNull = jattributeInstance.isNull()
 
     /**
+     * Returns true if the attribute is NOT null.
+     */
+    def isPresent = ! jattributeInstance.isNull()
+
+    /**
      * Returns true if the attribute is null or the string representation of the
      * attribute value is the empty string ("").
      */

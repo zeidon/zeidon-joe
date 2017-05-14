@@ -2404,6 +2404,7 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			int RESULT=0;
 
 
+            zencas.activateEmptyObjectInstance( "mPerson" ); // Necessary to load the mPerson XOD.
 	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
 	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
 	         DropView( vTempViewVar_0 );
