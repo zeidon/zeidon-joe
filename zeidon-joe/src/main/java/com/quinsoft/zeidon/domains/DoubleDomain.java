@@ -71,6 +71,13 @@ public class DoubleDomain extends AbstractNumericDomain
         if ( externalValue == null )
             return null;
 
+        if ( externalValue instanceof Double )
+        {
+            Double d = (Double) externalValue;
+            if ( d.isNaN() )
+                return null;
+        }
+
         DomainContext context = getContext( task, contextName );
         return context.convertExternalValue( task, attributeDef, externalValue );
     }
