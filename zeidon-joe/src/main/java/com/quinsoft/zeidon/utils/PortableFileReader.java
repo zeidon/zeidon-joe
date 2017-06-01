@@ -308,7 +308,6 @@ public class PortableFileReader
                         if ( compressed )
                             throw new ZeidonException("Reading compressed streams not supported yet.");
 
-                        //String lodDefName = StringUtils.split( line.substring( 24 ), " ", 3 )[0];
                         String lodDefName = StringUtils.split( line, " " )[2];
                         entityHandler.startFile( this, lodDefName );
 
