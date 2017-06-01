@@ -2404,104 +2404,42 @@ o_fnLocalBuildQual_3( View     vSubtask,
 			int RESULT=0;
 
 
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
-	 		  StringBuilder szReturn  = new StringBuilder();
+    		o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+	 		RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+	 		DropView( vTempViewVar_0 );
 
-		 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                      mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
+	 		mPerson.cursor("ApplicationSibling").createEntity();
+	 		mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
 
+	 		//srcView.serializeOi().withIncremental().toString()
+	 		//mPerson.serializeOi().withIncremental().toWriter(writer)
 
-	 		  mPerson.cursor("FinAidProfile").setNext();
-	 		  mPerson.cursor("Address").setNext();
+	 		SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
+		 	DropView( mPerson);
+		 	RESULT = CommitObjectInstance( mUser );
+	 		DropView( mUser );
 
+			o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+			RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+			DropView( vTempViewVar_0 );
+			SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
-			 DropView( mUser );
-                 DropView( mPerson);
-/*
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "marycribben@aol.com" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+		 	StringBuilder szReturn  = new StringBuilder();
 
-	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
+		 	SetOI_FromBlob( mPerson, "mPerson", ViewToWindow,
+	                      	mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
 
-				 DropView( mUser );
-	             DropView( mPerson);
-*/
-			 return 0;
+	 		mPerson.cursor("FinAidProfile").setNext();
+	 		mPerson.cursor("Address").setNext();
 
-		}
-
-		public int
-		testBlobsOrig( View ViewToWindow )
-		{
-
-			zVIEW    mUser = new zVIEW( );
-			zVIEW    mPerson = new zVIEW( );
-			zVIEW    vTempViewVar_0 = new zVIEW( );
-			int RESULT=0;
-
-
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-
-    		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
-	 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
-	 		   DropView( vTempViewVar_0 );
-
-	 		   mPerson.cursor("ApplicationSibling").createEntity();
-	 		   mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
-
-	 		  //srcView.serializeOi().withIncremental().toString()
-	 		   //mPerson.serializeOi().withIncremental().toWriter(writer)
-
-	 		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
-		 		  DropView( mPerson);
-		 		  RESULT = CommitObjectInstance( mUser );
-
-		 		  StringBuilder szReturn  = new StringBuilder();
-
-		 		  SetOI_FromBlob( mPerson, "mPerson", ViewToWindow,
-	                      mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-
-	 		  RESULT = CommitObjectInstance( mUser );
-
-	 		  DropView( mUser );
-	 		  DropView( mPerson);
-		         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
-		         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-		         DropView( vTempViewVar_0 );
-		         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-
-	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-
-	 		  mPerson.cursor("FinAidProfile").setNext();
-	 		  mPerson.cursor("Address").setNext();
-
-
-			 DropView( mUser );
-                 DropView( mPerson);
-/*
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "marycribben@aol.com" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-
-	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-
-				 DropView( mUser );
-	             DropView( mPerson);
-*/
-			 return 0;
+			DropView( mUser );
+            DropView( mPerson);
+			return 0;
 
 		}
 
