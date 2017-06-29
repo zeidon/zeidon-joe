@@ -47,7 +47,7 @@ import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainF
     private def writeStartingComment( writer: java.io.PrintWriter ) {
         writer.println( s"""
 /*
-  Generated from LOD ${lodDef.getName} on ${LocalDateTime.now()}
+  Generated from LOD ${lodDef.getName}
 
 */""" )
     }
