@@ -143,15 +143,6 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
                 }
             }
 
-
-            for ( ViewImpl view : viewList )
-            {
-                if ( ! view.getObjectInstance().isUpdated() )
-                    continue;
-
-                setAutoSeq( view.getObjectInstance() );
-            }
-
             /**
              * Determines if we should commit or rollback the current transaction.
              */
@@ -214,7 +205,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
 
         // TODO: implement optimistic locking check.
 
-        EntityInstanceImpl lastEntityInstance = oi.getRootEntityInstance().getLastTwin().getLastChildHier();
+        EntityInstanceImpl lastEntityInstance = oi.getLastEntityInstance();
 
         commitExcludes( view, oi, lastEntityInstance );
         commitDeletes( view, oi, lastEntityInstance );
@@ -597,48 +588,6 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             }
         } // for each linked instance of parent...
     } // markDuplicateRelationships()
-
-    /**
-     *
-     * @param view
-     * @return the last EI in the OI.
-     */
-    private EntityInstanceImpl setAutoSeq( final ObjectInstance oi  )
-    {
-        EntityInstanceImpl lastEntityInstance = null;
-
-        // Set any autoseq attributes and find the last EI in the OI.
-        for ( final EntityInstanceImpl ei : oi.getEntities( true ) )
-        {
-            lastEntityInstance = ei;
-
-            final EntityDef entityDef = ei.getEntityDef();
-            if ( entityDef.isDerivedPath() )
-                continue;
-
-            final AttributeDef autoSeq = entityDef.getAutoSeq();
-            if ( autoSeq != null && ei.getPrevTwin() == null && // Must be first twin
-                                    ei.getNextTwin() != null )  // Don't bother if only one twin.
-            {
-                int seq = 1;
-                for ( EntityInstanceImpl twin = ei; twin != null; twin = twin.getNextTwin() )
-                {
-                    if ( twin.isHidden() )
-                        continue;
-
-                    twin.getAttribute( autoSeq).setInternalValue( seq++, true ) ;
-
-                    // Turn off the bDBHUpdated flag (if it's on) so that we
-                    // make sure the entity is updated.  If the entity instance
-                    // is linked with someone else it's possible that the
-                    // entity was updated through the other link.
-                    twin.dbhUpdated = false;
-                }
-            }
-        }
-
-        return lastEntityInstance;
-    }
 
     /**
      * Create each of the entities in all the OIs.

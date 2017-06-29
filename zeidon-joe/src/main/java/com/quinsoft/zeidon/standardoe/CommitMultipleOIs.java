@@ -35,6 +35,7 @@ import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.Timer;
@@ -128,6 +129,43 @@ class CommitMultipleOIs
         return task;
     }
 
+   /**
+    *
+    */
+    private void setAutoSeq( final ObjectInstance oi )
+    {
+        // Set any autoseq attributes and find the last EI in the OI.
+        for ( final EntityInstanceImpl ei : oi.getEntities( true ) )
+        {
+            final EntityDef entityDef = ei.getEntityDef();
+            if ( entityDef.isDerivedPath() )
+                continue;
+
+            final AttributeDef autoSeq = entityDef.getAutoSeq();
+            if ( autoSeq == null )
+                continue;
+            
+            if ( ei.getPrevTwin() == null && // Must be first twin
+                 ei.getNextTwin() != null )  // Don't bother if only one twin.
+            {
+                int seq = 1;
+                for ( EntityInstanceImpl twin = ei; twin != null; twin = twin.getNextTwin() )
+                {
+                    if ( twin.isHidden() )
+                        continue;
+
+                    twin.getAttribute( autoSeq ).setInternalValue( seq++, true );
+
+                    // Turn off the bDBHUpdated flag (if it's on) so that we
+                    // make sure the entity is updated. If the entity instance
+                    // is linked with someone else it's possible that the
+                    // entity was updated through the other link.
+                    twin.dbhUpdated = false;
+                }
+            }
+        }
+    }
+    
     private void validateCommit()
     {
         // Build a list of the non-empty views.
@@ -147,6 +185,7 @@ class CommitMultipleOIs
                 throw new ZeidonException("Attempting to commit a view with outstanding versioned instances.  " +
                                           "View = %s", v );
 
+            setAutoSeq( view.getObjectInstance() );
             viewList.add( view );
         }
 
@@ -415,7 +454,7 @@ class CommitMultipleOIs
         validateCommit();
 
         // If there aren't any valid views then we have nothing to commit.
-        if ( viewList.size() ==0 )
+        if ( viewList.size() == 0 )
         	return 0;
 
         Committer committer = selector.getCommitter( getTask(), viewList, options );
