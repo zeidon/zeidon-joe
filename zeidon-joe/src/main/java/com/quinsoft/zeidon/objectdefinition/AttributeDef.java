@@ -504,6 +504,12 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         return debugChange;
     }
 
+    public AttributeDef setDebugChange( boolean c )
+    {
+        debugChange = c;
+        return this;
+    }
+
     public Domain getDomain()
     {
         return domain;

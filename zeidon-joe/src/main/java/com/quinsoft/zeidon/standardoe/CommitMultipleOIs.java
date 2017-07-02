@@ -144,7 +144,7 @@ class CommitMultipleOIs
             final AttributeDef autoSeq = entityDef.getAutoSeq();
             if ( autoSeq == null )
                 continue;
-            
+
             if ( ei.getPrevTwin() == null && // Must be first twin
                  ei.getNextTwin() != null )  // Don't bother if only one twin.
             {
@@ -163,9 +163,12 @@ class CommitMultipleOIs
                     twin.dbhUpdated = false;
                 }
             }
+
+            if ( entityDef.getName().equals( "xxx" ) )
+                autoSeq.setDebugChange( true );
         }
     }
-    
+
     private void validateCommit()
     {
         // Build a list of the non-empty views.
