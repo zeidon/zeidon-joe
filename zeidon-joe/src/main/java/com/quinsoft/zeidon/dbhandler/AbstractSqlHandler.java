@@ -1498,7 +1498,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 continue;
             }
 
-            if ( qualAttrib.value == null )
+            if ( qualAttrib.value == null || StringUtils.isBlank( qualAttrib.value.toString() ) )
             {
                 // Value is NULL.  Create appropriate SQL.
                 if ( qualAttrib.oper.equals( "<>" ) || qualAttrib.oper.equals( "!=" ) )
