@@ -10,7 +10,7 @@ import com.quinsoft.zeidon.ObjectEngine
 
 
 /**
- * 
+ *
  */
 trait ZeidonRestScalatra extends ScalatraServlet {
 
@@ -26,6 +26,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     // Before every action runs, set the content type to be in JSON format.
     before() {
         contentType = "text/json"
+        val systemTask = getObjectEngine().getSystemTask
+        systemTask.log().debug("Body => %s", request.body )
     }
 
     get("/:appName") {
@@ -38,7 +40,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val view = new View( task ) basedOn params( "lod" )
             val qual = view.buildQual()
-            
+
             if ( params.contains( "qual" ) ) {
               qual.fromJson( params( "qual" ) )
             }
@@ -59,7 +61,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
             val view = task.newView( lodName )
-                           .activateWhere( _.root.key = params( "id" ) ) 
+                           .activateWhere( _.root.key = params( "id" ) )
 
             serializeResponse( view )
         }
@@ -69,7 +71,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
             val view = task.newView( lodName )
-                           .activateWhere( _.root.key = params( "id" ) ) 
+                           .activateWhere( _.root.key = params( "id" ) )
 
             view.root.deleteEntity()
             view.commit()
@@ -115,7 +117,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     protected def serializeResponse( view: View ) : String = {
         if ( view.isEmpty )
             return "{}"
-            
+
         val serialized = view.serializeOi.asJson.withIncremental().toString()
         view.log().debug(serialized)
         return serialized
