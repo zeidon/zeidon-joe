@@ -11,6 +11,9 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.AttributeDef
 import org.apache.commons.lang3.StringUtils
+import com.quinsoft.zeidon.domains.AbstractNumericDomain
+import com.quinsoft.zeidon.domains.BooleanDomain
+import com.quinsoft.zeidon.domains.DateTimeDomain
 
 class GenerateXodsForTypescript( val applicationName: String, val destinationDir: String ) {
     val oe = JavaObjectEngine.getInstance
@@ -112,10 +115,28 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
             return
         
         val name = attributeDef.getName
+        val jsType = javascriptType(attributeDef)
         
         writer.println( s"""
-    get $name(): string { return this.getAttribute("$name") };
-    set $name(value: string) { this.setAttribute("$name", value) };""" )
+    get $name(): $jsType { return this.getAttribute("$name") };
+    set $name(value: $jsType) { this.setAttribute("$name", value) };""" )
+    }
+    
+    private def javascriptType( attributeDef: AttributeDef ) : String = {
+        val domain = attributeDef.getDomain
+        if ( domain.isInstanceOf[AbstractNumericDomain] )
+            return "number"
+
+        if ( domain.isInstanceOf[BooleanDomain] )
+            return "boolean"
+            
+        if ( domain.isInstanceOf[BooleanDomain] )
+            return "boolean"
+            
+        if ( domain.isInstanceOf[DateTimeDomain] )
+            return "Date"
+            
+        return "string"
     }
 
     private def writeChildEntities( writer: java.io.PrintWriter, childEntityDef: EntityDef ) {
