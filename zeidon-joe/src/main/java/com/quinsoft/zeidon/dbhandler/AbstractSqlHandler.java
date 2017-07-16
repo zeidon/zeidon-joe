@@ -1498,8 +1498,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 continue;
             }
 
-            Domain domain = dataField.getAttributeDef().getDomain();
-            if ( domain.isNull( task, dataField.getAttributeDef(), qualAttrib.value ) )
+            if ( qualAttrib.value == null )
             {
                 // Value is NULL.  Create appropriate SQL.
                 if ( qualAttrib.oper.equals( "<>" ) || qualAttrib.oper.equals( "!=" ) )
@@ -1509,6 +1508,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
             else
             {
+                Domain domain = dataField.getAttributeDef().getDomain();
                 StringBuilder buffer = new StringBuilder();
                 getSqlValue( stmt, domain, qualAttrib.attributeDef, buffer, qualAttrib.value );
                 qualString.append( qualAttrib.oper ).append( " " ).append( buffer.toString() );
