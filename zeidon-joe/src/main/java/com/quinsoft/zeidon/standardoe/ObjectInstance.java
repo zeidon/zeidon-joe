@@ -139,6 +139,15 @@ class ObjectInstance
     {
         return rootEntityInstance;
     }
+    
+    EntityInstanceImpl getLastEntityInstance()
+    {
+        if ( rootEntityInstance == null )
+            return null;
+        
+        return rootEntityInstance.getLastTwin().getLastChildHier();
+    }
+    
 
     void setRootEntityInstance(EntityInstanceImpl rootEntityInstance)
     {

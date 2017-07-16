@@ -69,10 +69,10 @@ aAPP_PACKAGE com.quinsoft.epamms
 eAPPLICATION 2
 aAPP_NAME  Northwind
 aAPP_DLL   testdata/northwind
-aAPP_ADOBIN testdata/northwind/src/main/resources/northwind/bin
+aAPP_ADOBIN testdata/northwind
 aAPP_LOCAL testdata/northwind
 aAPP_SHARED testdata/northwind
 aAPP_QLPLR testdata/northwind
 aAPP_SOURCE testdata/northwind/main/scala
-aAPP_PACKAGE com.quinsoft.epamms
+aAPP_PACKAGE com.quinsoft.northwind
 

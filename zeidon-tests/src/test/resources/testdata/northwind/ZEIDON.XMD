@@ -1,0 +1,615 @@
+z1000-Zeidon    ZEIDON   TZEREMXO 03/26/16   21:29:13 1.0a2    
+eMODEL     1
+aNumEnts   13
+aNumRels   11
+
+eENTITY    2
+aZKEY      110000364
+aNumAtts   4
+
+eATTRIB    3
+aZKEY      110000365
+aNAME      CategoryId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000368
+aNAME      CategoryName
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000369
+aNAME      Description
+aAPDM_TOK  110000042
+aLTH       1000
+
+eATTRIB    3
+aZKEY      110000370
+aNAME      Picture
+aAPDM_TOK  110000002
+
+eENTITY    2
+aZKEY      110000238
+aNumAtts   11
+
+eATTRIB    3
+aZKEY      110000239
+aNAME      CustomerId
+aAPDM_TOK  110000042
+aLTH       5
+
+eATTRIB    3
+aZKEY      110000240
+aNAME      CompanyName
+aAPDM_TOK  110000042
+aLTH       40
+
+eATTRIB    3
+aZKEY      110000374
+aNAME      ContactName
+aAPDM_TOK  110000042
+aLTH       30
+
+eATTRIB    3
+aZKEY      110000377
+aNAME      ContactTitle
+aAPDM_TOK  110000042
+aLTH       30
+
+eATTRIB    3
+aZKEY      110000249
+aNAME      Address
+aAPDM_TOK  110000042
+aLTH       60
+
+eATTRIB    3
+aZKEY      110000250
+aNAME      City
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000251
+aNAME      Region
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000252
+aNAME      PostalCode
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000253
+aNAME      Country
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000375
+aNAME      Phone
+aAPDM_TOK  110000042
+aLTH       24
+
+eATTRIB    3
+aZKEY      110000376
+aNAME      Fax
+aAPDM_TOK  110000042
+aLTH       24
+
+eENTITY    2
+aZKEY      110000371
+aNumAtts   2
+
+eATTRIB    3
+aZKEY      110000372
+aNAME      CustomerTypeId
+aAPDM_TOK  110000042
+aLTH       10
+
+eATTRIB    3
+aZKEY      110000373
+aNAME      CustomerDesc
+aAPDM_TOK  110000042
+aLTH       1000
+
+eENTITY    2
+aZKEY      110000216
+aNumAtts   19
+
+eATTRIB    3
+aZKEY      110000217
+aNAME      EmployeeId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000219
+aNAME      LastName
+aAPDM_TOK  110000042
+aLTH       20
+
+eATTRIB    3
+aZKEY      110000220
+aNAME      FirstName
+aAPDM_TOK  110000042
+aLTH       10
+
+eATTRIB    3
+aZKEY      110000222
+aNAME      Title
+aAPDM_TOK  110000042
+aLTH       30
+
+eATTRIB    3
+aZKEY      110000223
+aNAME      TitleOfCourtesy
+aAPDM_TOK  110000042
+aLTH       25
+
+eATTRIB    3
+aZKEY      110000224
+aNAME      BirthDate
+aAPDM_TOK  110000004
+
+eATTRIB    3
+aZKEY      110000225
+aNAME      HireDate
+aAPDM_TOK  110000004
+
+eATTRIB    3
+aZKEY      110000226
+aNAME      HomePhone
+aAPDM_TOK  110000042
+aLTH       24
+
+eATTRIB    3
+aZKEY      110000227
+aNAME      Address
+aAPDM_TOK  110000042
+aLTH       60
+
+eATTRIB    3
+aZKEY      110000228
+aNAME      City
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000229
+aNAME      Region
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000230
+aNAME      PostalCode
+aAPDM_TOK  110000042
+aLTH       10
+
+eATTRIB    3
+aZKEY      110000381
+aNAME      Country
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000232
+aNAME      Extension
+aAPDM_TOK  110000042
+aLTH       4
+
+eATTRIB    3
+aZKEY      110000233
+aNAME      Notes
+aAPDM_TOK  110000042
+aLTH       10000
+
+eATTRIB    3
+aZKEY      110000234
+aNAME      Photo
+aAPDM_TOK  110000002
+
+eATTRIB    3
+aZKEY      110000379
+aNAME      PhotoPath
+aAPDM_TOK  110000042
+aLTH       255
+
+eATTRIB    3
+aZKEY      110000380
+aNAME      Salary
+aAPDM_TOK  110000023
+
+eATTRIB    3
+aZKEY      1878
+aNAME      ReportsTo
+aAPDM_TOK  110000021
+aLTH       64
+
+eENTITY    2
+aZKEY      110000048
+aNumAtts   1
+
+eATTRIB    3
+aZKEY      110000049
+aNAME      Id
+aAPDM_TOK  110000021
+
+eENTITY    2
+aZKEY      110000286
+aNumAtts   14
+
+eATTRIB    3
+aZKEY      110000287
+aNAME      OrderId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000290
+aNAME      OrderDate
+aAPDM_TOK  110000025
+
+eATTRIB    3
+aZKEY      110000291
+aNAME      ShippedDate
+aAPDM_TOK  110000025
+
+eATTRIB    3
+aZKEY      110000382
+aNAME      RequiredDate
+aAPDM_TOK  110000025
+
+eATTRIB    3
+aZKEY      110000384
+aNAME      Freight
+aAPDM_TOK  110000023
+
+eATTRIB    3
+aZKEY      110000292
+aNAME      ShipName
+aAPDM_TOK  110000042
+aLTH       40
+
+eATTRIB    3
+aZKEY      110000293
+aNAME      ShipAddress
+aAPDM_TOK  110000042
+aLTH       60
+
+eATTRIB    3
+aZKEY      110000294
+aNAME      ShipCity
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000295
+aNAME      ShipRegion
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000296
+aNAME      ShipPostalCode
+aAPDM_TOK  110000042
+aLTH       10
+
+eATTRIB    3
+aZKEY      110000385
+aNAME      ShipCountry
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      1877
+aNAME      EMPLOYEEID
+aAPDM_TOK  110000021
+aLTH       64
+
+eATTRIB    3
+aZKEY      1882
+aNAME      CUSTOMERID
+aAPDM_TOK  110000042
+aLTH       5
+
+eATTRIB    3
+aZKEY      1883
+aNAME      SHIPPERID
+aAPDM_TOK  110000021
+aLTH       64
+
+eENTITY    2
+aZKEY      110000399
+aNumAtts   5
+
+eATTRIB    3
+aZKEY      110000400
+aNAME      UnitPrice
+aAPDM_TOK  110000023
+
+eATTRIB    3
+aZKEY      110000401
+aNAME      Quantity
+aAPDM_TOK  110000044
+
+eATTRIB    3
+aZKEY      110000402
+aNAME      Discount
+aAPDM_TOK  110000023
+
+eATTRIB    3
+aZKEY      1881
+aNAME      PRODUCTID
+aAPDM_TOK  110000021
+aLTH       64
+
+eATTRIB    3
+aZKEY      1884
+aNAME      ORDERID
+aAPDM_TOK  110000021
+aLTH       64
+
+eENTITY    2
+aZKEY      110000054
+aNumAtts   10
+
+eATTRIB    3
+aZKEY      110000055
+aNAME      ProductId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000061
+aNAME      ProductName
+aAPDM_TOK  110000042
+aLTH       40
+
+eATTRIB    3
+aZKEY      110000065
+aNAME      ReorderLevel
+aAPDM_TOK  110000044
+
+eATTRIB    3
+aZKEY      110000067
+aNAME      QuantityPerUnit
+aAPDM_TOK  110000042
+aLTH       20
+
+eATTRIB    3
+aZKEY      110000068
+aNAME      Discontinued
+aAPDM_TOK  110000019
+
+eATTRIB    3
+aZKEY      110000386
+aNAME      UnitPrice
+aAPDM_TOK  110000023
+
+eATTRIB    3
+aZKEY      110000387
+aNAME      UnitsInStock
+aAPDM_TOK  110000044
+
+eATTRIB    3
+aZKEY      110000388
+aNAME      UnitsOnOrder
+aAPDM_TOK  110000044
+
+eATTRIB    3
+aZKEY      1879
+aNAME      SUPPLIERID
+aAPDM_TOK  110000021
+aLTH       64
+
+eATTRIB    3
+aZKEY      1880
+aNAME      CATEGORYID
+aAPDM_TOK  110000021
+aLTH       64
+
+eENTITY    2
+aZKEY      110000389
+aNumAtts   2
+
+eATTRIB    3
+aZKEY      110000390
+aNAME      RegionId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000393
+aNAME      RegionDescription
+aAPDM_TOK  110000042
+aLTH       50
+
+eENTITY    2
+aZKEY      110000337
+aNumAtts   3
+
+eATTRIB    3
+aZKEY      110000338
+aNAME      ShipperId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000339
+aNAME      CompanyName
+aAPDM_TOK  110000042
+aLTH       40
+
+eATTRIB    3
+aZKEY      110000344
+aNAME      Phone
+aAPDM_TOK  110000042
+aLTH       24
+
+eENTITY    2
+aZKEY      110000077
+aNumAtts   12
+
+eATTRIB    3
+aZKEY      110000078
+aNAME      SupplierId
+aAPDM_TOK  110000021
+
+eATTRIB    3
+aZKEY      110000081
+aNAME      CompanyName
+aAPDM_TOK  110000042
+aLTH       40
+
+eATTRIB    3
+aZKEY      110000082
+aNAME      ContactName
+aAPDM_TOK  110000042
+aLTH       30
+
+eATTRIB    3
+aZKEY      110000083
+aNAME      ContactTitle
+aAPDM_TOK  110000042
+aLTH       30
+
+eATTRIB    3
+aZKEY      110000086
+aNAME      Phone
+aAPDM_TOK  110000042
+aLTH       24
+
+eATTRIB    3
+aZKEY      110000089
+aNAME      Fax
+aAPDM_TOK  110000042
+aLTH       24
+
+eATTRIB    3
+aZKEY      110000090
+aNAME      Address
+aAPDM_TOK  110000042
+aLTH       60
+
+eATTRIB    3
+aZKEY      110000091
+aNAME      City
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000092
+aNAME      Region
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000093
+aNAME      PostalCode
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000094
+aNAME      Country
+aAPDM_TOK  110000042
+aLTH       15
+
+eATTRIB    3
+aZKEY      110000095
+aNAME      HomePage
+aAPDM_TOK  110000042
+aLTH       1000
+
+eENTITY    2
+aZKEY      110000394
+aNumAtts   3
+
+eATTRIB    3
+aZKEY      110000395
+aNAME      TerritoryId
+aAPDM_TOK  110000042
+aLTH       20
+
+eATTRIB    3
+aZKEY      110000396
+aNAME      TerritoryDescription
+aAPDM_TOK  110000042
+aLTH       50
+
+eATTRIB    3
+aZKEY      1889
+aNAME      REGIONID
+aAPDM_TOK  110000021
+aLTH       64
+
+eENTITY    2
+aZKEY      110000709
+aNumAtts   6
+
+eATTRIB    3
+aZKEY      110000710
+aNAME      LOD_Name
+aAPDM_TOK  110000042
+aLTH       35
+
+eATTRIB    3
+aZKEY      110000713
+aNAME      KeyValue
+aAPDM_TOK  110000042
+aLTH       200
+
+eATTRIB    3
+aZKEY      110000715
+aNAME      UserName
+aAPDM_TOK  110000042
+aLTH       32
+
+eATTRIB    3
+aZKEY      110000716
+aNAME      AllowRead
+aAPDM_TOK  110000019
+aLTH       1
+
+eATTRIB    3
+aZKEY      110000717
+aNAME      Timestamp
+aAPDM_TOK  110000025
+
+eATTRIB    3
+aZKEY      110000718
+aNAME      ID
+aAPDM_TOK  110000044
+
+eREL       2
+aZKEY      110000306
+
+eREL       2
+aZKEY      110000442
+
+eREL       2
+aZKEY      110000406
+
+eREL       2
+aZKEY      110000409
+
+eREL       2
+aZKEY      110000415
+
+eREL       2
+aZKEY      110000325
+
+eREL       2
+aZKEY      110000361
+
+eREL       2
+aZKEY      110000418
+
+eREL       2
+aZKEY      110000424
+
+eREL       2
+aZKEY      110000430
+
+eREL       2
+aZKEY      110000436
+

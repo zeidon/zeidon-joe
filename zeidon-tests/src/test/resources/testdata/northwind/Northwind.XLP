@@ -1,4 +1,4 @@
-z1000-Zeidon    NORTHWINDTZCMLPLO 09/20/16   23:35:38 1.0a2    
+z1000-Zeidon    NORTHWINDTZCMLPLO 07/15/17   00:46:28 1.0a2    
 eLPLR      1
 aName      Northwind
 aDesc      Zeidon application using Northwind DB
@@ -6,7 +6,7 @@ aZKey      92726746
 aPgmSrcDir c:\zeidon\zapp\northwind
 aExecDir   c:\zeidon\zapp\northwind\bin
 aMetaSrcDir c:\zeidon\zapp\northwind
-aTaskUseCount 0
+aTaskUseCount 1
 aLastBuildDate 20150822003426535
 aLPLR_Type 2
 aTempDesc  Zeidon application using Northwind DB
