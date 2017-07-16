@@ -46,6 +46,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.utils.StringInterpolator;
 
 /**
  * Comparable interface is implemented so that we can easily sort tasks by ID.
@@ -572,5 +573,19 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     public DeserializeOi deserializeOi()
     {
         return new DeserializeOi( this ).setApplication( this.getApplication() );
+    }
+
+    @Override
+    public String interpolate( String string )
+    {
+        return interpolate( string, null );
+    }
+
+    @Override
+    public String interpolate( String string, Map<String, Object> variables )
+    {
+        StringInterpolator interpolator = new StringInterpolator();
+        interpolator.setTask( this ).setVariables( variables );
+        return interpolator.interpolate( string );
     }
 }

@@ -21,6 +21,7 @@ package com.quinsoft.zeidon;
 import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -264,4 +265,51 @@ public interface TaskQualification extends Closeable
      * Gets the temp directory for this task.  For now this uses java.io.tmpdir.
      */
     String getTempDirectory();
+
+    /**
+     * Perform interpolation on 'string' using Unified Expression Language.  See
+     * interpolate( string, map ) for more.
+     *
+     * @param string - string to interpolate.
+     *
+     * @return interpolated string.
+     */
+    String interpolate( String string );
+
+    /**
+     * Perform interpolation on 'string' using Unified Expression Language.  The source
+     * of variables is the map, named views, or the source view.  Examples:
+     *
+     * <pre>
+        // Load an Order.
+        QualificationBuilder qb = new QualificationBuilder( task );
+        qb.setLodDef( "Order" );
+        qb.addAttribQual( "Order", "OrderId", "=", 10248 );
+        View order = qb.activate();
+
+        Map<String,Object> variables = new HashMap<>();
+        variables.put( "int", 10 );
+        variables.put( "view", order );
+
+        // Using a map as the source of variables.
+        s = task.interpolate( "int = ${int}, id = ${view.Order.OrderId}", variables );
+           ...results in "int = 10, id = 10248"
+
+        // Named views can be used as variables.
+        order.setName( "TestOrder" );
+        s = northwind.interpolate( "Order ID = ${TestOrder.Order.OrderId}" );
+           ...results in "Order ID = 10248"
+
+        // If interplate is called using a view, variables can be Entity.Attribute.
+        s = order.interpolate( "Order ID = ${Order.OrderId}" );
+           ...results "Order ID = 10248"
+     * </pre
+     *
+     *
+     * @param string - string to interpolate.
+     * @param variables - map of variable names and values.
+     *
+     * @return interpolated string.
+     */
+    String interpolate( String string, Map<String, Object> variables );
 }

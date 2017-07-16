@@ -56,6 +56,7 @@ import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.utils.StringInterpolator;
 
 /**
  *
@@ -1093,5 +1094,19 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
             cleanupWork = new ArrayList<>();
 
         cleanupWork.add( work );
+    }
+
+    @Override
+    public String interpolate( String string )
+    {
+        return interpolate( string, null );
+    }
+
+    @Override
+    public String interpolate( String string, Map<String, Object> variables )
+    {
+        StringInterpolator interpolator = new StringInterpolator();
+        interpolator.setView( this ).setVariables( variables );
+        return interpolator.interpolate( string );
     }
 }

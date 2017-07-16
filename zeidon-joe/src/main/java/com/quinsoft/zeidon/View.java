@@ -475,7 +475,7 @@ public interface View extends TaskQualification
      * views to be grouped together under a single view.  View names do not have to be
      * unique across all views.  For example:
      *
-     * <code>
+     * <pre>
      *  View subtask1 = task.activate...();
      *  View subtask2 = task.activate...();
      *  View v1 = task.activate...();
@@ -485,7 +485,7 @@ public interface View extends TaskQualification
      *  subtask2.setNameForSubtask( "MyName", v2 );
      *
      *  View temp = subtask1.getViewByNameForSubtask( "MyName" ); // temp == v1
-     * </code>
+     * </pre>
      *
      * @param name Name to give to subtask view.
      * @param view View that will be named under the subtask view.

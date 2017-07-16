@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.quinsoft.zeidon.ActivateFlags;
@@ -769,5 +770,17 @@ public class zVIEW extends VmlOperation implements View
     public CacheMap getCacheMap()
     {
         return getView().getCacheMap();
+    }
+
+    @Override
+    public String interpolate( String string )
+    {
+        return getView().interpolate( string );
+    }
+
+    @Override
+    public String interpolate( String string, Map<String, Object> variables )
+    {
+        return getView().interpolate( string, variables );
     }
 }

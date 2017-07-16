@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -186,5 +187,17 @@ class FutureView extends InternalViewForwarder implements Future<View>
         // We don't need to wait for the activate to finish to add a work task.
         // Call super to get the view without waiting for the future to return.
         super.getView().addViewCleanupWork( work );
+    }
+
+    @Override
+    public String interpolate( String string )
+    {
+        return getView().interpolate( string );
+    }
+
+    @Override
+    public String interpolate( String string, Map<String, Object> variables )
+    {
+        return getView().interpolate( string, variables );
     }
 }

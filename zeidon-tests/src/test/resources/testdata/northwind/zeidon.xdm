@@ -1,0 +1,228 @@
+z1000-Zeidon    ZEIDON   TZDMXGPO 03/26/16   21:28:42 1.0a2    
+eDomainGroup 1
+aName      Northwind
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.RegularExpressionDomain
+aZKey      110000040
+aName      AlphaNumeric
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+aDecimalFormat 1234
+
+eContext   3
+aZKey      110000041
+aName      ALPHANUMERIC
+aJavaEditString [\w]*
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.Base64BlobDomain
+aZKey      110000002
+aName      Blob
+aDesc      A do nothing domain for blobs
+aDomainType E
+aDataType  B
+aContextRestriction N
+
+eContext   3
+aZKey      110000003
+aName      BLOB
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.BooleanDomain
+aZKey      110000019
+aName      Boolean
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110000020
+aName      Boolean
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      110000004
+aName      Date
+aDesc      Date without time
+aDomainType E
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      110000005
+aName      Date
+aJavaEditString yyyy-MM-dd
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateTimeDomain
+aZKey      110000025
+aName      DateTime
+aDesc      Date/time field
+aDomainType E
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      110000026
+aName      DateTime
+aJavaEditString yyyy-MM-dd
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      110000023
+aName      Double
+aDomainType E
+aDataType  M
+aContextRestriction N
+
+eContext   3
+aZKey      110000024
+aName      Double
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.GeneratedKeyDomain
+aZKey      110000021
+aName      GeneratedKey
+aDesc      Generic DB-generated key
+aDomainType E
+aDataType  L
+aMaxStringLth 64
+aContextRestriction N
+
+eContext   3
+aZKey      110000022
+aName      GeneratedKey
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      110000044
+aName      Integer
+aDesc      Integer numbers from -lots to +lots
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+aDecimalFormat 0
+
+eContext   3
+aZKey      110000045
+aName      Hex
+
+eContext   3
+aZKey      110000046
+aName      INTEGER
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      110000042
+aName      Text
+aDesc      Any Character String
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      110000043
+aName      Text
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000027
+aName      Y/N
+aDesc      Yes or No
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110000028
+aName      Default
+
+eTableEntry 4
+aZKey      110000029
+
+eTableEntry 4
+aZKey      110000030
+aExternalValue Default
+aInternalValue Y
+
+eTableEntry 4
+aZKey      110000031
+aInternalValue N
+
+eContext   3
+aZKey      110000032
+aName      Y/N
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110000033
+
+eTableEntry 4
+aZKey      110000034
+aExternalValue Y
+aInternalValue Y
+
+eTableEntry 4
+aZKey      110000035
+aExternalValue N
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000012
+aName      Year
+aDesc      4-digit year
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110000013
+aName      Year
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110000014
+aExternalValue 2013
+aInternalValue 2013
+
+eTableEntry 4
+aZKey      110000015
+aExternalValue 2014
+aInternalValue 2014
+
+eTableEntry 4
+aZKey      110000016
+aExternalValue 2015
+aInternalValue 2015
+
+eTableEntry 4
+aZKey      110000017
+aExternalValue 2016
+aInternalValue 2016
+
+eTableEntry 4
+aZKey      110000018
+aExternalValue 2017
+aInternalValue 2017
+

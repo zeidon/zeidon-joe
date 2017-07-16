@@ -37,9 +37,9 @@
                 </configuration>
             </plugin>
             <plugin>
-            	<groupId>org.codehaus.mojo</groupId>
-            	<artifactId>build-helper-maven-plugin</artifactId>
-            	<version>1.9.1</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
             </plugin>
         </plugins>
     </build>
@@ -97,27 +97,27 @@
             <version>1.5.0</version>
             <!-- These jars are pulled in from other dependencies -->
             <exclusions>
-	      <exclusion>
-	        <groupId>commons-logging</groupId>
-	        <artifactId>commons-logging</artifactId>
-	      </exclusion>
-	      <exclusion>
-	        <groupId>commons-collections</groupId>
-	        <artifactId>commons-collections</artifactId>
-	      </exclusion>
-	    </exclusions>
-	 </dependency>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
             <version>1.10</version>
             <!-- These jars are pulled in from other dependencies -->
             <exclusions>
-	      <exclusion>
-	        <groupId>commons-logging</groupId>
-	        <artifactId>commons-logging</artifactId>
-	      </exclusion>
-	    </exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.googlecode.java-diff-utils</groupId>
@@ -134,11 +134,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
             <exclusions>
-	      <exclusion>
-	        <groupId>commons-codec</groupId>
-	        <artifactId>commons-codec</artifactId>
-	      </exclusion>
-	    </exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -162,9 +162,19 @@
             </exclusions>
         </dependency>
         <dependency>
-        	<groupId>commons-codec</groupId>
-        	<artifactId>commons-codec</artifactId>
-        	<version>1.10</version>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-api</artifactId>
+            <version>2.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-impl</artifactId>
+            <version>2.2.7</version>
         </dependency>
     </dependencies>
 </project>
