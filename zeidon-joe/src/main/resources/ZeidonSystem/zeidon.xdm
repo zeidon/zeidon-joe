@@ -87,9 +87,6 @@ aZKey      1320632
 aName      Dialog Operation Types
 
 eTableEntry 4
-aZKey      92484584
-
-eTableEntry 4
 aZKey      1320633
 aExternalValue Dialog Operation
 aInternalValue D
@@ -109,9 +106,6 @@ aZKey      1320648
 aName      Domain Operation Types
 
 eTableEntry 4
-aZKey      92484585
-
-eTableEntry 4
 aZKey      1320649
 aExternalValue Domain Operation
 aInternalValue M
@@ -124,9 +118,6 @@ aInternalValue L
 eContext   3
 aZKey      1320643
 aName      Global Operation Types
-
-eTableEntry 4
-aZKey      92484586
 
 eTableEntry 4
 aZKey      1320645
@@ -146,9 +137,6 @@ aInternalValue L
 eContext   3
 aZKey      1320636
 aName      Object Operation Types
-
-eTableEntry 4
-aZKey      92484587
 
 eTableEntry 4
 aZKey      1320638
@@ -178,9 +166,6 @@ aInternalValue L
 eContext   3
 aZKey      1320621
 aName      OperationTypesShort
-
-eTableEntry 4
-aZKey      92484588
 
 eTableEntry 4
 aZKey      1320623
@@ -231,9 +216,6 @@ eContext   3
 aZKey      1320609
 aName      ZeidonOperationTypes
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92484589
 
 eTableEntry 4
 aZKey      1320610
@@ -319,9 +301,6 @@ aZKey      90000019
 aName      Default
 
 eTableEntry 4
-aZKey      92484582
-
-eTableEntry 4
 aZKey      90000021
 aExternalValue Default
 aInternalValue Y
@@ -334,9 +313,6 @@ eContext   3
 aZKey      90000015
 aName      Y/N
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92484583
 
 eTableEntry 4
 aZKey      90000017
@@ -450,64 +426,6 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      90000208
-aName      SironDB_Type
-aDesc      For Siron DB Handler, the physical database type
-aDomainType T
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      90000209
-aName      SironDB_Type
-aIsDefault Y
-
-eTableEntry 4
-aZKey      92484541
-
-eTableEntry 4
-aZKey      90000210
-aExternalValue Oracle
-aInternalValue O
-
-eTableEntry 4
-aZKey      90000211
-aExternalValue Informix
-aInternalValue I
-
-eTableEntry 4
-aZKey      90000212
-aExternalValue DB2
-aInternalValue 2
-
-eTableEntry 4
-aZKey      90000213
-aExternalValue Ingres
-aInternalValue G
-
-eTableEntry 4
-aZKey      90000214
-aExternalValue RDB
-aInternalValue R
-
-eTableEntry 4
-aZKey      90000215
-aExternalValue ODBC
-aInternalValue D
-
-eTableEntry 4
-aZKey      90000216
-aExternalValue Flat File
-aInternalValue F
-
-eTableEntry 4
-aZKey      98197965
-aExternalValue SAP R3
-aInternalValue S
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      90026793
 aName      LanguageType
 aDesc      Source language type  - VML or C
@@ -520,9 +438,6 @@ eContext   3
 aZKey      90026794
 aName      LanguageType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110001393
 
 eTableEntry 4
 aZKey      90026795
@@ -558,9 +473,6 @@ eContext   3
 aZKey      90201052
 aName      LOD_DB_DerivedValue
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92484528
 
 eTableEntry 4
 aZKey      90201053
