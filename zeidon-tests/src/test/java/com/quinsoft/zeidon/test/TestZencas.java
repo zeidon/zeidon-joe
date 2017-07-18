@@ -679,6 +679,19 @@ public class TestZencas
         System.out.println("===== Finished testDomainCompareIssue ========");
 	}
 
+	@Test
+	public void testNullTableDomain()
+	{
+	    View         testview;
+        // Turn off assertions for zeidon for this test.
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        loader.setPackageAssertionStatus( "com.quinsoft.zeidon", false );
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testNullTableDomain( testview );
+        System.out.println("===== Finished testNullTableDomain ========");
+	}
+
 //    @Test
 	public void
 	testExcludeIncludeSaveError( )
@@ -1293,6 +1306,52 @@ public class TestZencas
  		   Assert.assertEquals("Activate mPerson RootOnly but PrimaryAddress entity exists.", CursorResult.NULL.toInt(), RESULT );
 
 		   return 0;
+		}
+
+		public int
+		testNullTableDomain( View ViewToWindow )
+		{
+		   zVIEW    mStudent = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+           StringBuilder sb_Country = new StringBuilder( );
+
+           /*
+            * KJS 07/18/17
+            * When we create a WHERE clause with a table domain like YNField = "", if the
+            * table domain excepts a blank value, then the where clause is created with only a
+            * "YNField = ''. Because our values are stored in the database as NULL, then we do
+            * not retrieve any database values. We need to where clause to be
+            * "YNField IS NULL OR YNField = ''"
+            * I currently think that in isNullAndEmptyString() "QualAttrib.java" we need the
+            * following line:
+            *        if ( ! ( domain instanceof StringDomain || domain instanceof TableDomain ) )
+            * so that we do not just return the "false" value. Which so far in my testing has
+            * not caused issue...
+		   */
+           
+            // These are views that need to get created in order to be able to activate
+            // mStudent.
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+			RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
+
+			// Activate mStudent where student.id in (7,8,11) and where student.PhiDeltaLambdaFlag = ""
+		    o_BuildQualmStudent( ViewToWindow, vTempViewVar_0 );
+		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+		    DropView( vTempViewVar_0 );
+		    RESULT = CheckExistenceOfEntity( mStudent, "Student");
+		    // Check if we activated any Student entities.
+ 		    Assert.assertEquals("Activate mStudent should have activated 3 entities but is returning none.", CursorResult.SET.toInt(), RESULT );
+		    return 0;
 		}
 
 		public int
@@ -5900,6 +5959,47 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
+		}
+		private int
+		o_BuildQualmStudent( View     vSubtask,
+		                     zVIEW    vQualObject )
+		{
+			int      RESULT = 0;
+
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Student" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "(" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "7" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "8" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "11" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "PhiDeltaLambdaFlag" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   return( 0 );		   
 		}
 
 		private int
