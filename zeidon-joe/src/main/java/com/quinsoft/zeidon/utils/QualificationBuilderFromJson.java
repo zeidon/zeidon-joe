@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -111,6 +112,11 @@ public class QualificationBuilderFromJson
                     case "rootonly":
                         parseRootOnly();
                         continue;
+
+                    case "$pagination":
+                    case "pagination":
+                        parsePagination();
+                        continue;
                 }
             }
 
@@ -189,6 +195,72 @@ public class QualificationBuilderFromJson
             qualBuilder.forEntity( entityName );
             parseEntity( childEntityDef, childEntityDef );
         }
+    }
+
+    /**
+     * {
+     *   pagination: {
+     *     pageSize: 20,
+     *     currentPage: 1,
+     *     totalPages: 4,
+     *     totalCount: 10
+     *   }
+     * }
+     *
+     * @throws JsonParseException
+     * @throws IOException
+     */
+    private void parsePagination() throws JsonParseException, IOException
+    {
+        Pagination page = new Pagination();
+
+        JsonToken token = jp.nextToken(); // Consume "pagination".
+        if ( token != JsonToken.START_OBJECT )
+            throw new ZeidonException( "'pagination' value doesn't start with object.  Found %s", token );
+
+        token = jp.nextToken(); // Consume open '{'.
+        while ( ( token = jp.getCurrentToken() ) != JsonToken.END_OBJECT )
+        {
+            if ( token != JsonToken.FIELD_NAME )
+                throw new ZeidonException( "Unexpected token; expecting FIELD" );
+
+            String param = jp.getCurrentName();
+            token = jp.nextToken();  // Consume param name.
+            String value = jp.getValueAsString();
+            token = jp.nextToken();  // Consume value.
+
+            switch( param )
+            {
+                case "pageSize":
+                    page.setPageSize( Integer.parseInt( value ) );
+                    break;
+
+                case "totalPages":
+                    break;
+
+                case "currentPage":
+                    page.setPageNumber( Integer.parseInt( value ) );
+                    break;
+
+                case "totalCount":
+                    // If the value is null then we'll assume that the root count hasn't been
+                    // loaded yet so set flag to calculate it.
+                    if ( value == null )
+                        page.setLoadTotalCount( true );
+                    else
+                        // The total has already been loaded and the client has told us what it is.
+                        // Save it.
+                        page.setTotalCount( Integer.parseInt( value ) );
+
+                    break;
+
+                default:
+                    throw new ZeidonException( "Unknown pagination param name '%s'", param );
+            }
+        }
+
+        token = jp.nextToken();  // Skip past closing }.
+        qualBuilder.setPagination( page );
     }
 
     private void parseAttribute( EntityDef qualEntityDef, AttributeDef attributeDef ) throws JsonParseException, IOException

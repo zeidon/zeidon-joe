@@ -420,7 +420,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     def withPaging( pageSize: Int, page: Int = 1, getTotalCount: Boolean = false ): QualBuilder = {
-        jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setTotalCount( getTotalCount )
+        jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setLoadTotalCount( getTotalCount )
         this
     }
 
@@ -637,9 +637,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         val paging = jqual.getPagination(false)
         if ( paging != null ) {
             // Are we getting the total count?
-            if ( paging.isTotalCount() ) {
+            if ( paging.isLoadTotalCount() ) {
                 totalRootCount = view.jview.getTotalRootCount
-                paging.setTotalCount( false ) // Don't get it again.
+                paging.setLoadTotalCount( false ) // Don't get it again.
             }
             else
             // We didn't load the root count as part of the activate.  If we

@@ -27,7 +27,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     before() {
         contentType = "text/json"
         val systemTask = getObjectEngine().getSystemTask
-        systemTask.log().debug("Body => %s", request.body )
+        systemTask.log().debug("Path   => %s", request.pathInfo )
+        systemTask.log().debug("Params => %s", request.parameters )
+        systemTask.log().debug("Body   => %s", request.body )
     }
 
     get("/:appName") {
@@ -48,11 +50,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
               qual.rootOnlyMultiple()
             }
 
-            qual.withPaging( params.getOrElse("perPage", "20").toInt,
-                             params.getOrElse("page", "1").toInt,
-                             params.getOrElse("getTotal", "false").toBoolean )
-
-            qual.readOnly.activate()
+            qual.activate()
             serializeResponse( view )
         }
     }

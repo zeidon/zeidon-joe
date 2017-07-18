@@ -36,6 +36,8 @@ import org.joda.time.format.ISODateTimeFormat;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
@@ -167,6 +169,28 @@ public class WriteOisToJsonStream implements StreamWriter
         Integer rootCount = view.getTotalRootCount();
         if ( rootCount != null )
             jg.writeNumberField( "totalRootCount", rootCount );
+
+        writePagination( view );
+        jg.writeEndObject();
+    }
+
+    private void writePagination( View view ) throws Exception
+    {
+        ActivateOptions options = view.getActivateOptions();
+        Pagination paging = options.getPagingOptions();
+        if ( paging == null )
+            return;
+
+        jg.writeObjectFieldStart( "pagination" );
+        jg.writeNumberField( "pageSize", paging.getPageSize() );
+        jg.writeNumberField( "currentPage", paging.getPageNumber() );
+
+        Integer rootCount = view.getTotalRootCount();
+        if ( rootCount != null )
+        {
+            jg.writeNumberField( "totalCount", rootCount );
+            jg.writeNumberField( "totalPages", rootCount / paging.getPageSize() + 1 );
+        }
 
         jg.writeEndObject();
     }
@@ -355,7 +379,7 @@ public class WriteOisToJsonStream implements StreamWriter
         boolean selectedCursor = currentView.cursor( entityDef ).getEntityInstance() == ei;
 
         linkedMap.clear();
-        
+
         String str = createIncrementalStr( ei );
         if ( ! StringUtils.isBlank( str ) )
             linkedMap.put( "incrementals", str );
@@ -395,14 +419,14 @@ public class WriteOisToJsonStream implements StreamWriter
 
         if ( linkedMap.size() == 0 )
             return writeAttributes;
-        
+
         jg.writeObjectFieldStart( ".meta" );
 
         for ( String key : linkedMap.keySet() )
             jg.writeObjectField( key, linkedMap.get( key ) );
-        
+
         jg.writeEndObject();
-        
+
         return writeAttributes;
     }
 }

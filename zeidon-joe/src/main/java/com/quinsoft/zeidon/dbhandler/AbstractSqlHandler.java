@@ -1221,7 +1221,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             if ( pagingOptions != null )
             {
-                if ( pagingOptions.isTotalCount() )
+                if ( pagingOptions.isLoadTotalCount() )
                     getTotalCount( view, entityDef, stmt );
             }
             else
