@@ -1325,11 +1325,8 @@ public class TestZencas
             * "YNField = ''. Because our values are stored in the database as NULL, then we do
             * not retrieve any database values. We need to where clause to be
             * "YNField IS NULL OR YNField = ''"
-            * I currently think that in isNullAndEmptyString() "QualAttrib.java" we need the
-            * following line:
-            *        if ( ! ( domain instanceof StringDomain || domain instanceof TableDomain ) )
-            * so that we do not just return the "false" value. Which so far in my testing has
-            * not caused issue...
+            * DG changed SystemApplication.nullStringEqualsEmptyString to true and now
+            * this works correctly. Make sure it still works.
 		   */
            
             // These are views that need to get created in order to be able to activate
@@ -1363,7 +1360,27 @@ public class TestZencas
  		    Assert.assertEquals("Activate mStudent should have activated 2 entities but is returning none.", CursorResult.SET.toInt(), RESULT );
 		    RESULT = SetCursorNextEntity( mStudent, "Student", "" );
  		    Assert.assertEquals("Activate mStudent should have activated 2 entities but is returning only one.", CursorResult.SET.toInt(), RESULT );
-		    return 0;
+		    
+ 		    DropView( lTermLST );
+		   	//:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = 175
+		   	o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_0, 175 );
+	   	    RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zSINGLE );
+	   	    DropView( vTempViewVar_0 );
+	   	    SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "Y" );
+	   	    RESULT = CommitObjectInstance( lTermLST );
+	   	    SetAttributeFromString( lTermLST, "CollegeTerm", "CurrentForStudentAccounts", "" );
+	   	    RESULT = CommitObjectInstance( lTermLST );
+	   	    // We want to make sure that when we update a table list domain to "" that it updates the db with null not ''.
+	   	    // The activate for lTermLST should activate CurrentForStudentAccounts to "CurrentForStudentAccounts IS NULL" and
+	   	    // so if the setting of "" is incorrect, then we wouldn't retrieve a value.
+	   	    o_fnLocalBuildlTermWithNullValue( ViewToWindow, vTempViewVar_0, 175 );
+	   	    RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zSINGLE );
+	   	    DropView( vTempViewVar_0 );
+		    RESULT = CheckExistenceOfEntity( lTermLST, "CollegeTerm");
+		    // Check if we activated any Student entities.
+ 		    Assert.assertEquals("Activate lTermLST should have activated 1 entity but is returning none.", CursorResult.SET.toInt(), RESULT );
+
+	   	    return 0;
 		}
 
 		public int
@@ -1902,24 +1919,49 @@ public class TestZencas
 			   DropObjectInstance( lTermLST );
 			   return( 0 );
 		}
-
-private int
-o_fnLocalBuildQual_3( View     vSubtask,
-                      zVIEW    vQualObject,
-                      int      lTempInteger_0 )
-{
-   int      RESULT = 0;
-
-   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
-   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
-   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
-   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
-   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeTerm" );
-   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
-   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
-   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-   return( 0 );
-}
+		
+		private int
+		o_fnLocalBuildQual_3( View     vSubtask,
+		                      zVIEW    vQualObject,
+		                      int      lTempInteger_0 )
+		{
+		   int      RESULT = 0;
+		
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeTerm" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
+		
+		private int
+		o_fnLocalBuildlTermWithNullValue( View     vSubtask,
+		                      zVIEW    vQualObject,
+		                      int      lTempInteger_0 )
+		{
+		   int      RESULT = 0;
+		
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeTerm" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeTerm" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "CurrentForStudentAccounts" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
 
 		public int
 		testSpawning1( View ViewToWindow )
