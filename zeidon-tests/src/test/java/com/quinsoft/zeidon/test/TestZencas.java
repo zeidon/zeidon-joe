@@ -1345,12 +1345,13 @@ public class TestZencas
 			RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
 
 			// Activate mStudent where student.id in (7,8,11) and where student.PhiDeltaLambdaFlag = ""
+			// Changed to only Activate only where student.id = 7 and where student.PhiDeltaLambdaFlag = ""
 		    o_BuildQualmStudent( ViewToWindow, vTempViewVar_0 );
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zMULTIPLE );
 		    DropView( vTempViewVar_0 );
 		    RESULT = CheckExistenceOfEntity( mStudent, "Student");
 		    // Check if we activated any Student entities.
- 		    Assert.assertEquals("Activate mStudent should have activated 3 entities but is returning none.", CursorResult.SET.toInt(), RESULT );
+ 		    Assert.assertEquals("Activate mStudent should have activated 1 entity but is returning none.", CursorResult.SET.toInt(), RESULT );
 		    return 0;
 		}
 
