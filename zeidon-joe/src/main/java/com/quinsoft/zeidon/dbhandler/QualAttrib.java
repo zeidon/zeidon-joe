@@ -109,7 +109,7 @@ class QualAttrib
            return false;
        
        Domain domain = attributeDef.getDomain();
-       if ( ! ( domain instanceof StringDomain || domain instanceof TableDomain ) )
+       if ( ! ( domain instanceof StringDomain ) )
            return false;
        
        Application app = domain.getApplication();

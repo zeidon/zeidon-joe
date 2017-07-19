@@ -1345,12 +1345,25 @@ public class TestZencas
 			RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
 
 			// Activate mStudent where student.id in (7,8,11) and where student.PhiDeltaLambdaFlag = ""
+			// Changed to only activate student.id = 7
+			// This is to make sure that we have "PhiDeltaLamdaFlag IS NULL" as opposed to only "PhiDeltaLamdaFlag = ''"
 		    o_BuildQualmStudent( ViewToWindow, vTempViewVar_0 );
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zMULTIPLE );
 		    DropView( vTempViewVar_0 );
 		    RESULT = CheckExistenceOfEntity( mStudent, "Student");
 		    // Check if we activated any Student entities.
- 		    Assert.assertEquals("Activate mStudent should have activated 3 entities but is returning none.", CursorResult.SET.toInt(), RESULT );
+ 		    Assert.assertEquals("Activate mStudent should have activated 1 entity but is returning none.", CursorResult.SET.toInt(), RESULT );
+		    DropView( mStudent );
+			// Activate mStudent where student.id = 8 and where student.GeneralNote = ""
+		    // This is to make sure that we have "(GeneralNote IS NULL OR GeneralNote = '')"
+		    o_BuildQualmStudent2( ViewToWindow, vTempViewVar_0 );
+		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+		    DropView( vTempViewVar_0 );
+		    RESULT = CheckExistenceOfEntity( mStudent, "Student");
+		    // Check if we activated any Student entities.
+ 		    Assert.assertEquals("Activate mStudent should have activated 2 entities but is returning none.", CursorResult.SET.toInt(), RESULT );
+		    RESULT = SetCursorNextEntity( mStudent, "Student", "" );
+ 		    Assert.assertEquals("Activate mStudent should have activated 2 entities but is returning only one.", CursorResult.SET.toInt(), RESULT );
 		    return 0;
 		}
 
@@ -5960,6 +5973,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
+		
 		private int
 		o_BuildQualmStudent( View     vSubtask,
 		                     zVIEW    vQualObject )
@@ -5999,6 +6013,42 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "PhiDeltaLambdaFlag" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   return( 0 );		   
+		}
+		private int
+		o_BuildQualmStudent2( View     vSubtask,
+		                      zVIEW    vQualObject )
+		{
+			int      RESULT = 0;
+
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Student" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "(" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "8" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "9" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
+			  
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "GeneralNote" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 			   return( 0 );		   
