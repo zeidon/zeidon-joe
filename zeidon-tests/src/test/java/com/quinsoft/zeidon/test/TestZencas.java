@@ -5969,13 +5969,14 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Student" );
-			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
-			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "(" );
+			   //CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   //SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "(" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Student" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "7" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   /*
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
@@ -5992,6 +5993,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
+			   */
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
