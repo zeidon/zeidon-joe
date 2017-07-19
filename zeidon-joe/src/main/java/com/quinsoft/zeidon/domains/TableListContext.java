@@ -151,6 +151,8 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     public void resetTableEntries(Task task)
     {
         entryList = new ArrayList<TableEntry>();
+        internalMap = new HashMap<String, TableEntry>();
+        externalMap = new HashMap<String, TableEntry>();
     }
 
     @Override
