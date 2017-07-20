@@ -1350,7 +1350,7 @@ public class TestZencas
 		    // Check if we activated any Student entities.
  		    Assert.assertEquals("Activate mStudent should have activated 1 entity but is returning none.", CursorResult.SET.toInt(), RESULT );
 		    DropView( mStudent );
-			// Activate mStudent where student.id = 8 and where student.GeneralNote = ""
+			// Activate mStudent where student.id in ( 8, 9 ) and where student.GeneralNote = ""
 		    // This is to make sure that we have "(GeneralNote IS NULL OR GeneralNote = '')"
 		    o_BuildQualmStudent2( ViewToWindow, vTempViewVar_0 );
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zMULTIPLE );
