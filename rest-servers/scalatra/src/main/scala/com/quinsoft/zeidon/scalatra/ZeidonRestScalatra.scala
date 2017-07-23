@@ -8,6 +8,7 @@ import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.scala.QualBuilder
 import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.PessimisticLockingException
+import com.quinsoft.zeidon.ZeidonException
 
 
 /**
@@ -58,7 +59,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             }
 
             qual.activate()
-            serializeResponse( view )
+            Ok( serializeResponse( view ) )
         }
     }
 
@@ -81,6 +82,27 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             view.root.deleteEntity()
             view.commit()
             Ok("")
+        }
+    }
+
+    post("/:appName/:lod/dropLock") {
+        getObjectEngine().forTask( params( "appName" ) ) { task =>
+            val view = new View( task ) basedOn params( "lod" )
+            val qual = view.buildQual()
+
+            if ( params.contains( "qual" ) ) {
+              qual.fromJson( params( "qual" ) )
+            }
+            else {
+                throw new ZeidonException("dropLock requires qualification")
+            }
+
+//            qual.rootOnlyMultiple()
+            qual.keysOnly()
+            qual.readOnly()
+
+            qual.activate()
+            Ok( serializeResponse( view ) )
         }
     }
 
