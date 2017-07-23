@@ -68,7 +68,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Returns the underlying qualification OI.
      */
     def qualOi: View = jqual.getView()
-    
+
     /**
      * Create the qual object from a simple JSON string.
      *
@@ -91,9 +91,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      */
     def fromJson( jsonString: String ) : QualBuilder = {
         jqual.loadFromJsonString( jsonString )
-        this    
+        this
     }
-    
+
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
@@ -391,6 +391,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def keysOnly(): QualBuilder = {
+        jqual.keysOnly()
+        this
+    }
+
     /**
      * Activate all roots that match the qualification (and their children).
      */
@@ -683,7 +688,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
         this
     }
-    
+
     /**
      * Sets the internal qualifcation OI from the seralized JSON string.
      */
