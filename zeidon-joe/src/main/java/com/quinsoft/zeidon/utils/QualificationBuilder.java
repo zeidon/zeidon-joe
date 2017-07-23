@@ -251,6 +251,11 @@ public class QualificationBuilder
         return setFlag( ActivateFlags.fREAD_ONLY );
     }
 
+    public QualificationBuilder keysOnly()
+    {
+        return setFlag( ActivateFlags.fKEYS_ONLY );
+    }
+
     public QualificationBuilder multipleRoots()
     {
         getRootInstance().getAttribute( "MultipleRoots" ).setValue( "Y" );

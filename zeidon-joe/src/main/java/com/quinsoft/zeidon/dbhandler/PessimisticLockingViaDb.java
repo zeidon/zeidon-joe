@@ -37,6 +37,7 @@ import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonDbException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
@@ -343,7 +344,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void writeLocks( View view )
     {
         int retryCount = 4;
-        Exception exception = null;
+        ZeidonDbException exception = null;
         for ( int i = 0; i < retryCount; i++ )
         {
             try
@@ -351,7 +352,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                 lockOi.commit();
                 return;
             }
-            catch ( Exception e )
+            catch ( ZeidonDbException e )
             {
                 exception = e;
 

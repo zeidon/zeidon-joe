@@ -46,6 +46,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonDbException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -834,6 +835,10 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 ps.execute();
             }
+        }
+        catch ( SQLException e )
+        {
+            throw new ZeidonDbException( view, e ).appendMessage( generateErrorMessageWithBoundAttributes( sql, entityDef, stmt ) );
         }
         catch ( Exception e )
         {

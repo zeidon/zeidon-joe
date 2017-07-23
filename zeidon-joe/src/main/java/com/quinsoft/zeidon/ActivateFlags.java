@@ -45,6 +45,11 @@ public enum ActivateFlags
     fASYNCHRONOUS,
 
     /**
+     * If set, only load the keys when activating the OI.
+     */
+    fKEYS_ONLY,
+
+    /**
      * If set, then we won't load all EntityDef instances in one SELECT statement.
      */
     fIGNORE_LOAD_OPTIMIZATION;

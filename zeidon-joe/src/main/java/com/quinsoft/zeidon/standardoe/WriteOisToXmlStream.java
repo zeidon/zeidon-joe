@@ -327,6 +327,7 @@ public class WriteOisToXmlStream implements StreamWriter
         startElement( "zOI", "objectName", currentView.getLodDef().getName(),
                              "appName", currentView.getApplication().getName(),
                              "increFlags", yesNo( incremental ),
+                             "locked", yesNo( currentView.getObjectInstance().isLocked() ),
                              "totalRootCount", currentView.getTotalRootCount() );
 
         currentIndent++;

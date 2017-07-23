@@ -156,15 +156,19 @@ public class WriteOisToJsonStream implements StreamWriter
 
     private void writeOiMeta( View view ) throws Exception
     {
+        ObjectInstance oi = ((InternalView) view).getViewImpl().getObjectInstance();
         jg.writeObjectFieldStart( ".oimeta" );
         jg.writeStringField( "application", view.getLodDef().getApplication().getName() );
         jg.writeStringField( "odName", view.getLodDef().getName() );
         jg.writeBooleanField( "incremental", true );
-        if ( ((InternalView) view).getViewImpl().getObjectInstance().isReadOnly() )
+        if ( oi.isReadOnly() )
             jg.writeBooleanField( "readOnlyOi", true );
         else
             if ( view.isReadOnly() )
                 jg.writeBooleanField( "readOnly", true );
+
+        if ( oi.isLocked() )
+            jg.writeBooleanField( "locked", true );
 
         Integer rootCount = view.getTotalRootCount();
         if ( rootCount != null )

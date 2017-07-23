@@ -115,11 +115,12 @@ class ActivateOiFromDB implements Activator
             if ( oi.getRootEntityInstance() != null ) // Did we load anything?
     		{
                 pessimisticLock.acquireOiLocks( view );
-//                view.getObjectInstance().setLocked( true );
 
                 view.reset();
                 if ( options.isReadOnly() )
                     view.getObjectInstance().setReadOnly( true );
+                else
+                    view.getObjectInstance().setLocked( true );
 
                 view.getLodDef().executeActivateConstraint( view );
     		}

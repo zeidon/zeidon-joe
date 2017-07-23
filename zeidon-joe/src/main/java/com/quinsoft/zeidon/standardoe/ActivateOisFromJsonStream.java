@@ -99,6 +99,7 @@ class ActivateOisFromJsonStream implements StreamReader
      * If trure then mark the view as readonly.
      */
     private boolean readOnly;
+    private boolean locked;
     private Integer totalRootCount;
 
     /**
@@ -305,8 +306,12 @@ class ActivateOisFromJsonStream implements StreamReader
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "OI JSON stream doesn't end with object." );
 
+        ObjectInstance oi = ((InternalView) view).getViewImpl().getObjectInstance();
         if ( readOnlyOi )
-            ((InternalView) view).getViewImpl().getObjectInstance().setReadOnly( true );
+            oi.setReadOnly( true );
+
+        if ( locked )
+            oi.setLocked( true );
 
         if ( readOnly )
             view.setReadOnly( true );
@@ -622,6 +627,7 @@ class ActivateOisFromJsonStream implements StreamReader
         String odName = null;
         readOnlyOi = false;
         readOnly   = false;
+        locked     = false;
         totalRootCount = null;
 
         jp.nextToken();
@@ -636,6 +642,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 case "incremental": incremental = jp.getValueAsBoolean(); break;
                 case "readOnlyOi":  readOnlyOi = jp.getValueAsBoolean(); break;
                 case "readOnly":    readOnly = jp.getValueAsBoolean(); break;
+                case "locked":      locked = jp.getValueAsBoolean(); break;
                 case "totalRootCount": totalRootCount = jp.getValueAsInt(); break;
 
                 default: task.log().warn( "Unknown .oimeta fieldname %s", fieldName ); break;

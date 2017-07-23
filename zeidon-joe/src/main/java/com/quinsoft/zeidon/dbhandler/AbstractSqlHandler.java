@@ -87,7 +87,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
 
-    private static final long COL_KEYS_ONLY = 0x00000001;
     private static final long COL_FULL_QUAL = 0x00000004;
 
     protected enum SqlCommand
@@ -380,8 +379,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( DataField dataField : dataRecord.dataFields() )
         {
             AttributeDef attributeDef = dataField.getAttributeDef();
-            if ( ( control & COL_KEYS_ONLY ) != 0 && attributeDef.isKey() )
-                continue;
+
+            if ( activateFlags != null )
+            {
+                if ( activateFlags.contains( ActivateFlags.fKEYS_ONLY ) )
+                {
+                    if ( ! attributeDef.isKey() && ! attributeDef.isForeignKey() )
+                        continue;
+                }
+            }
 
             if ( ! attributeDef.isActivate() )
                 continue;
