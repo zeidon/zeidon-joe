@@ -110,7 +110,16 @@ public class QualificationBuilderFromJson
 
                     case "$rootonly":
                     case "rootonly":
-                        parseRootOnly();
+                        if ( parseBoolean( "rootOnly" ) )
+                            qualBuilder.rootOnlyMultiple();
+
+                        continue;
+
+                    case "$readonly":
+                    case "readonly":
+                        if ( parseBoolean( "readOnly" ) )
+                            qualBuilder.readOnly();
+
                         continue;
 
                     case "$pagination":
@@ -158,19 +167,21 @@ public class QualificationBuilderFromJson
         return token;
     }
 
-    private void parseRootOnly() throws JsonParseException, IOException
+    private boolean parseBoolean( String paramName ) throws JsonParseException, IOException
     {
         JsonToken token = jp.nextToken(); // Consume "rootOnly".
         if ( ! token.isScalarValue() )
             throw new ZeidonException( "Expecting boolean for rootOnly value.  Found %s", token );
 
+        boolean returnValue = false;
         if ( token.asString().equals( "true" ) )
-            qualBuilder.rootOnlyMultiple();
+            returnValue = true;
         else
         if ( ! token.asString().equals( "false" ) )
             throw new ZeidonException( "Expecting boolean for rootOnly value.  Found %s", token );
 
         token = jp.nextToken(); // Consume boolean.
+        return returnValue;
     }
 
     private void parseRestricting() throws JsonParseException, IOException
