@@ -7,6 +7,7 @@ import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.scala.QualBuilder
 import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.PessimisticLockingException
 
 
 /**
@@ -17,9 +18,15 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     def getObjectEngine(): ObjectEngine
 
     error {
+      case e: PessimisticLockingException => {
+          getObjectEngine().getSystemTask.log().debug( "LOD is locked" )
+          Locked( "LOD is locked" )
+      }
+
       case e: Throwable => {
         getObjectEngine().getSystemTask.log().error(e)
         e.printStackTrace();
+        UnprocessableEntity( e.getMessage )
       }
     }
 
@@ -61,7 +68,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             val view = task.newView( lodName )
                            .activateWhere( _.root.key = params( "id" ) )
 
-            serializeResponse( view )
+            Ok( serializeResponse( view ) )
         }
     }
 
@@ -73,7 +80,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
             view.root.deleteEntity()
             view.commit()
-            ""
+            Ok("")
         }
     }
 
@@ -92,12 +99,12 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
             val serialized = view.serializeOi.asJson.withIncremental().toString()
             task.log().debug( serialized )
-            serialized
+            Ok(serialized)
         }
     }
 
     get("/echo/:string") {
-        params("string" )
+        Ok( params("string" ) )
     }
 
     get("/:appName/xod/:name") {
@@ -108,7 +115,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             // Return it as JSON
             val serialized = xod.serializeOi.asJson.toString()
             task.log().debug( serialized )
-            serialized
+            Ok( serialized )
         }
     }
 
