@@ -28,6 +28,7 @@ import com.quinsoft.zeidon.SubobjectValidationException
 import com.quinsoft.zeidon.Task
 import scala.collection.concurrent.TrieMap
 import org.apache.commons.lang3.StringUtils
+import collection.JavaConversions._
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -414,6 +415,13 @@ class View( val task: Task ) extends Dynamic {
            "null " + jlodDef.getName()
        else
            "*undefined*"
+    }
+    
+    def interpolate( string: String, variables: Map[String, AnyRef] = null ): String = {
+        if ( variables == null )
+            return jview.interpolate( string )
+        else
+            return jview.interpolate( string, variables )
     }
 
     /**

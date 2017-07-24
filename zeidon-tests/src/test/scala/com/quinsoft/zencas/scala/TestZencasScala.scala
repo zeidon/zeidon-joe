@@ -58,4 +58,16 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
                 .activate()
         println( "here" )      
     }
+
+    @Test
+    def testStringInterpolation() {
+        val classes = new View( task ) basedOn "mClass"
+        classes.activateWhere( _.Class.ID = 118 )
+        var x = classes.interpolate( "${Class.ID}" )
+        assertEquals( "118", x )
+        
+        val vars = Map( "class" -> classes )
+        x = classes.interpolate( "${class.Class.ID}", vars )
+        assertEquals( "118", x )
+    }
 }
