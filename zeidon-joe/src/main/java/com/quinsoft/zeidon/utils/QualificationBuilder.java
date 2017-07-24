@@ -706,6 +706,18 @@ public class QualificationBuilder
         return this;
     }
 
+    /**
+     * This will drop any DB locks on OIs specified by the qualification.
+     */
+    public void dropLocks()
+    {
+        this.readOnly();
+        this.rootOnly();
+        this.keysOnly();
+        View view = activate();
+        view.drop();
+    }
+
     public View activate()
     {
         View view = null;

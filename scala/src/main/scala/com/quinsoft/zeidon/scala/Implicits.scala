@@ -53,20 +53,27 @@ object Implicits {
          */
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
         def id = task.getTaskId
-        
+
         /**
          * Creates a Scala wrapper around the Zeidon Logger.  It is occasionally useful
          * to avoid ambiguous method errors.
          */
         def slog = Logger( task.log() )
-        
+
         def activate( lodName: String, addQual: (QualBuilder) => Unit ): View = {
           val view = new View( task ) basedOn lodName
           val qb = view.buildQual()
           addQual( qb )
           qb.activate
         }
-        
+
+        def dropLocks( lodName: String, addQual: (QualBuilder) => Unit ): Unit = {
+          val view = new View( task ) basedOn lodName
+          val qb = view.buildQual()
+          addQual( qb )
+          qb.dropLocks
+        }
+
         def newView( lodName: String ): View = new View( task ) basedOn lodName
     }
 
