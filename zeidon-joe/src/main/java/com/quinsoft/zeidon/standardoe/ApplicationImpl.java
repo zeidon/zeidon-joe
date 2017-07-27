@@ -222,14 +222,9 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
         Pattern pattern = Pattern.compile( "(.*)(\\.xod$)", Pattern.CASE_INSENSITIVE );
         try
         {
-            return (List<String>) IOUtils.readLines( loader.getResourceAsStream( resourceDir ), StandardCharsets.UTF_8)
-                   .stream()
-                   .map( resourceName -> pattern.matcher( resourceName ) ) // Create a matcher
-                   .filter( matcher -> matcher.matches() )                 // Keep only ones that match.
-                   .map( matcher -> matcher.group( 1 ) )                   // Get the base filename.
-                   .collect( Collectors.toList() );
+            return null;
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
             throw ZeidonException.wrapException( e ).appendMessage( "XOD resource dir: %s", resourceDir );
         }
