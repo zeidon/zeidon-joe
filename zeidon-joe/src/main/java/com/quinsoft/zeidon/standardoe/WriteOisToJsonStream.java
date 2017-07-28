@@ -181,6 +181,9 @@ public class WriteOisToJsonStream implements StreamWriter
     private void writePagination( View view ) throws Exception
     {
         ActivateOptions options = view.getActivateOptions();
+        if ( options == null )
+            return;
+        
         Pagination paging = options.getPagingOptions();
         if ( paging == null )
             return;
