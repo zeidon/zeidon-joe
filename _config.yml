@@ -1,1 +1,7 @@
 name: Zeidon JOE
+
+title: Zeidon JOE
+description: Zeidon Java Object Engine and related projects.
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-slate
