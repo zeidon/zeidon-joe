@@ -72,4 +72,9 @@ public class NoOpPessimisticLockingHandler implements PessimisticLockingHandler
     public void acquireOiLocks( View view ) throws PessimisticLockingException
     {
     }
+
+    @Override
+    public void dropOutstandingLocks()
+    {
+    }
 }

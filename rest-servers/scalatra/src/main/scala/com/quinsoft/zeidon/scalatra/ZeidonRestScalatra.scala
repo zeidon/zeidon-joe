@@ -97,12 +97,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
                 throw new ZeidonException("dropLock requires qualification")
             }
 
-//            qual.rootOnlyMultiple()
-            qual.keysOnly()
-            qual.readOnly()
-
-            qual.activate()
-            Ok( serializeResponse( view ) )
+            qual.dropLocks()
+            Ok( "Locks dropped" )
         }
     }
 

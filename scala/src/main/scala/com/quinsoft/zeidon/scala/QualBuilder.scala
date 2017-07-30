@@ -689,7 +689,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
-    def dropLocks = {
+    def dropLocks() = {
         jqual.dropLocks()
     }
     /**

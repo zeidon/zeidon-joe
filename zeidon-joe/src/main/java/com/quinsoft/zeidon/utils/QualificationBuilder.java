@@ -23,12 +23,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -711,11 +713,10 @@ public class QualificationBuilder
      */
     public void dropLocks()
     {
-        this.readOnly();
-        this.rootOnly();
-        this.keysOnly();
-        View view = activate();
-        view.drop();
+        final OiSourceSelector selector = getTask().getOiSourceSelector();
+        final Activator activator = selector.getActivator( getTask(), application, activateOptions );
+        activator.init( getTask(), null, activateOptions );
+        activator.dropOutstandingLocks();
     }
 
     public View activate()

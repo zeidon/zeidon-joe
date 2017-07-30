@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
@@ -164,5 +165,11 @@ class ActivateOiFromRestServer implements Activator
     private TaskImpl getTask()
     {
         return task;
+    }
+
+    @Override
+    public void dropOutstandingLocks()
+    {
+        throw new NotImplementedException();
     }
 }

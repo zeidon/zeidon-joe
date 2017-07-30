@@ -44,4 +44,9 @@ public interface Activator
      * @return
      */
     int activate( EntityDef subobjectRootEntity );
+
+    /**
+     * Drops any outstanding locks for OIs specified by the activate options.
+     */
+    void dropOutstandingLocks( );
 }
