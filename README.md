@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/zeidon/zeidon-joe.svg?branch=current-dev)](https://travis-ci.org/zeidon)
+[![Build Status](https://travis-ci.org/zeidon/zeidon-joe.svg?branch=current-dev)](https://travis-ci.org/zeidon/zeidon-joe)
 
 # Zeidon Java Object Engine (JOE) and related projects.
 
