@@ -15,6 +15,10 @@ pushd scala
 mvn scala:doc
 popd
 
+pushd rest-servers/scalatra
+mvn scala:doc
+popd
+
 popd
 
 rm -rf javadoc/$version > /dev/null
