@@ -60,13 +60,17 @@ object Implicits {
          */
         def slog = Logger( task.log() )
         
-        def activate( lodName: String, addQual: (QualBuilder) => Unit ): View = {
+        def activate( lodName: String, addQual: (QualBuilder) => QualBuilder ): View = {
           val view = new View( task ) basedOn lodName
           val qb = view.buildQual()
           addQual( qb )
           qb.activate
         }
-        
+
+       def activate( lodName: String): TaskActivator = {
+          new TaskActivator( task, lodName )
+        }
+
         def newView( lodName: String ): View = new View( task ) basedOn lodName
     }
 
@@ -110,6 +114,23 @@ object Implicits {
             finally {
                 task.dropTask()
             }
+        }
+    }
+    
+    case class TaskActivator( val task: Task, val lodName: String ) {
+        val view: View = task.newView(lodName)
+        
+        def apply( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
+            val builder = new QualBuilder( view, view.lodDef )
+            addQual( builder.entityQualBuilder )
+            return builder.activate
+        }
+        
+        def using( addQual: (QualBuilder) => QualBuilder ): View = {
+          val view = new View( task ) basedOn lodName
+          val qb = view.buildQual()
+          addQual( qb )
+          qb.activate
         }
     }
 }
