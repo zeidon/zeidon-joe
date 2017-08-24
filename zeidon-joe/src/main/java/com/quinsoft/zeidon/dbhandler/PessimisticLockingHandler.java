@@ -40,10 +40,10 @@ public interface PessimisticLockingHandler extends DropViewCleanup
      * @throws PessimisticLockingException
      */
     void acquireGlobalLock( View view ) throws PessimisticLockingException;
-    
+
     /**
      * Release the global locks needed for this view.
-     * 
+     *
      * @param view
      * @throws PessimisticLockingException
      */
@@ -77,4 +77,12 @@ public interface PessimisticLockingHandler extends DropViewCleanup
      * @param view
      */
     void releaseLocks( View view );
+
+    /**
+     * Drops any outstanding locks on OIs specified by the activate options.  Intended to
+     * be used in situations where the OI no longer exists in memory (like REST servers).
+     *
+     * @param activateOptions Qualification for OIs that will have their locks dropped.
+     */
+    void dropOutstandingLocks();
 }

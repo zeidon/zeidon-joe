@@ -41,23 +41,21 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  */
 class ActivateObjectInstance
 {
-    private final TaskImpl        task;
-    private final ActivateOptions options;
-
-    /**
-     * Same day this may be provided by the OE options.
-     */
-    private final OiSourceSelector     selector = new DefaultOiSourceSelector();
+    private final TaskImpl         task;
+    private final ActivateOptions  options;
+    private final OiSourceSelector selector;
 
     ActivateObjectInstance( TaskImpl task, ActivateOptions options )
     {
         this.task = task;
         this.options = options;
+        selector = task.getOiSourceSelector();
     }
 
     ActivateObjectInstance( ViewImpl view )
     {
         this.task = view.getViewImpl().getTask();
+        selector = task.getOiSourceSelector();
         if ( view.getActivateOptions() == null )
         {
             // If we get here then we're in an edge case.  The current OI was created

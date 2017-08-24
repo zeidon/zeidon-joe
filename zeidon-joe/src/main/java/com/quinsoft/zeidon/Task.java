@@ -218,4 +218,9 @@ public interface Task extends TaskQualification
      * Get the CacheMap for the Task.
      */
     public CacheMap getCacheMap();
+
+    /**
+     * Returns an OI source selector for the default application of the task.
+     */
+    public OiSourceSelector getOiSourceSelector();
 }

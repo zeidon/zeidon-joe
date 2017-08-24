@@ -378,4 +378,11 @@ class ActivateOiFromDB implements Activator
 
         return rc;
     }
+
+    @Override
+    public void dropOutstandingLocks()
+    {
+        pessimisticLock = dbHandler.getPessimisticLockingHandler( options, view );
+        pessimisticLock.dropOutstandingLocks();
+    }
 }

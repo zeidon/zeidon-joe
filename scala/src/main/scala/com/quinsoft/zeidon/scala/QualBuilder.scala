@@ -689,6 +689,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def dropLocks() = {
+        jqual.dropLocks()
+    }
     /**
      * Sets the internal qualifcation OI from the seralized JSON string.
      */

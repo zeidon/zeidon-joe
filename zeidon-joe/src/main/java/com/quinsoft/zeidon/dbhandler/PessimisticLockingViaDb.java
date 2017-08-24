@@ -422,12 +422,22 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     @Override
     public void releaseLocks( View view )
     {
-        lockCursor.deleteAll();
+        for ( EntityInstance ei : lockCursor.allEntities() )
+            ei.setIncrementalFlags( IncrementalEntityFlags.DELETED );
+
         lockOi.commit();
     }
 
     private static class GlobalJavaLock
     {
         private final Lock lock = new ReentrantLock();
+    }
+
+    @Override
+    public void dropOutstandingLocks(  )
+    {
+        createLockOi( task );
+        addQualLocksToLockOi();
+        releaseLocks( null );
     }
 }
