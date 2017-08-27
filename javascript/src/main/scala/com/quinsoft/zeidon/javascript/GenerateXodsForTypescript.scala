@@ -34,7 +34,7 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
         printToFile( s"$destinationDir/$lodName.ts" )( writer => {
             writeStartingComment(writer)
             writer.println( s"""
-import * as zeidon from './zeidon';
+import * as zeidon from '../zeidon';
 import { Observable } from 'rxjs';
 import { ${applicationName}_DomainList } from './${applicationName}-DomainList';
 import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainFunctions';
