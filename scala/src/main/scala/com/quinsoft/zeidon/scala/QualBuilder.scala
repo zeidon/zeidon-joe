@@ -1041,13 +1041,13 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID in mUserList.User )
      * }}}
      */
-    def in ( valueCursor: EntityCursor ): QualificationTerminator = {
+    def in ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
         if ( checkNot )
-            return notIn( valueCursor )
+            return notIn( iter )
 
         // Get the list of attribute values.  Note that we use the attr NAME.
         // This allows the user to use a different target entity.
-        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        val attrs = ( for ( e <- iter ) yield e.getAttribute( jattributeDef.getName() ) )
         return in( attrs )
     }
 
@@ -1094,13 +1094,13 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID notIn mUserList.User )
      * }}}
      */
-    def notIn ( valueCursor: EntityCursor ): QualificationTerminator = {
+    def notIn ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
         if ( checkNot )
-            return in( valueCursor )
+            return in( iter )
 
         // Get the list of attribute values.  Note that we use the attr NAME.
         // This allows the user to use a different target entity.
-        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        val attrs = ( for ( e <- iter ) yield e.getAttribute( jattributeDef.getName() ) )
         return notIn( attrs )
     }
 
