@@ -174,6 +174,13 @@ public class JdbcHandler extends AbstractSqlHandler
         return connectionPool;
     }
 
+    protected void initializeBasicDataSource( BasicDataSource dataSource,
+                                              Task task,
+                                              Application application)
+    {
+        // By default do nothing but give other handlers a chance to do something.
+    }
+
     @Override
     protected void getSqlValue(SqlStatement stmt, Domain domain, AttributeDef attributeDef, StringBuilder buffer, Object value)
     {
@@ -1030,6 +1037,7 @@ public class JdbcHandler extends AbstractSqlHandler
                     pool.setUrl( url );
                     pool.setTestOnBorrow( true );
                     pool.setValidationQuery( "select 1" );
+                    handler.initializeBasicDataSource( pool, task, application );
                     poolMap.putIfAbsent( url, pool );
 
                     // It's even less likely that two threads created their own transaction

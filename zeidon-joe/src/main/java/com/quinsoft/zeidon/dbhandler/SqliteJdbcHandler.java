@@ -18,7 +18,15 @@
  */
 package com.quinsoft.zeidon.dbhandler;
 
+import java.util.Properties;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.lang3.StringUtils;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteOpenMode;
+
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
+import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 
 /**
@@ -58,5 +66,26 @@ public class SqliteJdbcHandler extends JdbcHandler
             return 1;
 
         return ic;
+    }
+
+    @Override
+    protected void initializeBasicDataSource( BasicDataSource dataSource,
+                                              Task task,
+                                              Application application)
+    {
+        String openModes = getConfigValue( "OpenModes" );
+        if ( ! StringUtils.isBlank( openModes ) )
+        {
+            SQLiteConfig config = new SQLiteConfig();
+            String[] modes = openModes.split( "," );
+            for ( String mode : modes )
+                config.setOpenMode(SQLiteOpenMode.valueOf( mode.trim().toUpperCase() ) );
+
+            Properties props = config.toProperties();
+            task.log().info( "Sqlite: setting open modes = %s", props );
+
+            for ( Object prop : props.keySet() )
+                dataSource.addConnectionProperty( prop.toString(), props.getProperty( prop.toString() ) );
+        }
     }
 }
