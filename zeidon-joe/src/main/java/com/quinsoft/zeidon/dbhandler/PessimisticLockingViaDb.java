@@ -138,8 +138,13 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         if ( rootQual.qualAttribs.size() != 1 )
             return;
 
-        KeyStringBuilder builder = new KeyStringBuilder();
         QualAttrib qualAttrib = rootQual.qualAttribs.get( 0 );
+
+        // Some day we'd like to handle "IN" but that is not this day.
+        if ( ! StringUtils.equals( qualAttrib.oper, "=" ) )
+            return;
+
+        KeyStringBuilder builder = new KeyStringBuilder();
         builder.appendKey( task, qualAttrib.attributeDef, qualAttrib.value );
 
         lockOi.cursor( "ZeidonLock" ).createEntity()
