@@ -526,14 +526,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     {
                         throw new ZeidonException( "Entity " + entityName + " is derived or doesn't have DB information.");
                     }
-
-                    // This entity better be a child of what we are qualifying.
-//                    EntityDef search = qualAttrib.entityDef.getParent();
-//                    while ( search != null && search != entityDef )
-//                        search = search.getParent();
-//                    if ( search == null )
-//                        throw new ZeidonException( "EntityName " + qualEntityName + " for QualAttrib " +
-//                                                   qualEntityName + " is not a child of " + entityName );
                 }
 
                 if ( qualAttrib.oper.equals( "EXISTS" ) || qualAttrib.oper.equals( "NOT EXISTS" ) )

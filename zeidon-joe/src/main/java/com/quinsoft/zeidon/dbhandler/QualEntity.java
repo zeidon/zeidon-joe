@@ -97,11 +97,19 @@ class QualEntity
         }
 
         // Are we qualifying using a key?
-        if ( qualAttrib.attributeDef != null &&
-             ( ! qualAttrib.attributeDef.isKey() || ! StringUtils.equals( qualAttrib.oper, "=" ) ) )
+        if ( qualAttrib.attributeDef != null && ! qualAttrib.attributeDef.isKey() )
         {
-            // No.
-            keyQualification = false;
+            switch ( qualAttrib.oper )
+            {
+                // Following operations are key operations.
+                case "=":
+                case "IN":
+                    break;
+
+                // All other operations are not exact key qualifications.
+                default:
+                    keyQualification = false;
+            }
         }
     }
 
