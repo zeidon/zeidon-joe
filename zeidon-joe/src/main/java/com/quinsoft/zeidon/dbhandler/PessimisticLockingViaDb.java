@@ -55,9 +55,9 @@ import com.quinsoft.zeidon.utils.KeyStringBuilder;
  */
 public class PessimisticLockingViaDb implements PessimisticLockingHandler
 {
-    private final Task task;
-    private final LodDef lodDef;
-    private final Application application;
+    private Task task;
+    private LodDef lodDef;
+    private Application application;
 
     /**
      * This is the ZPLOCK OI that has the lock entities that will be written to the DB.
@@ -69,12 +69,13 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
      */
     private boolean lockPerformed = false;
     private boolean lockedByQual = false;
-    private final EntityDef rootEntityDef;
-    private final Map<EntityDef, QualEntity> qualMap;
-    private final ActivateOptions activateOptions;
+    private EntityDef rootEntityDef;
+    private Map<EntityDef, QualEntity> qualMap;
+    private ActivateOptions activateOptions;
     private GlobalJavaLock javaLock;
 
-    public PessimisticLockingViaDb( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  ) throws PessimisticLockingException
+    @Override
+    public void initialize( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  )
     {
         task = options.getTask();
         lodDef = options.getLodDef();

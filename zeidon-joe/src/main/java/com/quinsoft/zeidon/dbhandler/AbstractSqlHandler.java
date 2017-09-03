@@ -47,6 +47,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
 import com.quinsoft.zeidon.IncludeFlags;
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -2956,6 +2957,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return getConfigValue( "Username" );
     }
 
+    private PessimisticLockingHandler dynamicallyLoadLockingHandler( String lockingHandlerName )
+    {
+        try
+        {
+            ObjectEngine oe = task.getObjectEngine();
+            ClassLoader classLoader = oe.getClassLoader( lockingHandlerName );
+            @SuppressWarnings("unchecked")
+            Class<? extends PessimisticLockingHandler> lockingClass =
+                    (Class<? extends PessimisticLockingHandler>) classLoader.loadClass( lockingHandlerName );
+            return lockingClass.newInstance();
+        }
+        catch ( Throwable t )
+        {
+            throw ZeidonException.prependMessage( t, "Error trying to load PessimisticLockingHandler class = '%s', DB=%s",
+                                                  lockingHandlerName, options.getOiSourceUrl() );
+        }
+    }
+
     @Override
     public PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  )
     {
@@ -2966,7 +2985,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( lockLevel == LockingLevel.PESSIMISTIC_WITHREAD && activateOptions.isReadOnly() )
             return NOOP_PESSIMISTIC_LOCKING_HANDLER;
 
-        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb( activateOptions, qualMap );
+        PessimisticLockingHandler lockingHandler;
+        String lockingHandlerName = getConfigValue( "PessimisticLockingHandler" );
+        if ( StringUtils.isBlank( lockingHandlerName ) )
+           lockingHandler = new PessimisticLockingViaDb();
+        else
+            lockingHandler = dynamicallyLoadLockingHandler( lockingHandlerName );
+
+        lockingHandler.initialize( activateOptions, qualMap );
         view.addViewCleanupWork( lockingHandler );
         return lockingHandler;
     }

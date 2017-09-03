@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 /**
  * Keeps track of qualification information for an entity.
  */
-class QualEntity
+public class QualEntity
 {
     boolean                usesChildQualification;
     boolean                exclude;

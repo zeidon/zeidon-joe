@@ -19,9 +19,13 @@
 
 package com.quinsoft.zeidon.dbhandler;
 
+import java.util.Map;
+
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Specifies the interface for locking OIs using pessimistic locking.
@@ -31,6 +35,8 @@ import com.quinsoft.zeidon.View;
  */
 public interface PessimisticLockingHandler extends DropViewCleanup
 {
+    void initialize( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  );
+
     /**
      * For situations that require it, acquire a global lock that prevents
      * other tasks from performing pessimistic locking on this view.

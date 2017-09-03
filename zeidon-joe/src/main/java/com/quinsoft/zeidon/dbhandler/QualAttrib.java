@@ -32,7 +32,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 /**
  * Keeps track of qualification information for an attribute.
  */
-class QualAttrib
+public class QualAttrib
 {
     Object        value;
     String        oper;
@@ -81,43 +81,43 @@ class QualAttrib
     {
         if ( oper.equals( "=" ) )
             return true;
-        
+
         if ( oper.equals( "<>" ) )
             return true;
-        
+
         if ( oper.equals( "IN" ) )
             return true;
-        
+
         return false;
     }
-    
+
     public boolean operIsInequality()
     {
         return oper.equals( "<>" );
     }
-    
+
     /**
      * Returns true if this qual attrib uses equality to compare a null/empty string AND
      * the application considers null and empty strings to be the same.
-     * 
+     *
      * @return
      */
     public boolean isNullAndEmptyString()
     {
        if ( ! operIsSomeEquality() )
            return false;
-       
+
        Domain domain = attributeDef.getDomain();
        if ( ! ( domain instanceof StringDomain ) )
            return false;
-       
+
        Application app = domain.getApplication();
        if ( ! app.nullStringEqualsEmptyString() )
            return false;
-       
+
        return value == null || StringUtils.isBlank( value.toString() );
     }
-    
+
     @Override
     public String toString()
     {
