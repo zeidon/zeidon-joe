@@ -151,8 +151,12 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     public void resetTableEntries(Task task)
     {
         entryList = new ArrayList<TableEntry>();
-        internalMap = new HashMap<String, TableEntry>();
-        externalMap = new HashMap<String, TableEntry>();
+        // KJS 09/15/17 - The following lines are correct because otherwise, we have loaded the static values from the xdm and then
+        // additionally loaded the dynamic values from the database (if it's a dynamic domain). But there is an issues we
+        // run into with language conversion and SetAttrFromStrByContext with DayOfWeek so for the moment I am commenting them
+        // out until we figure out what to do with DayOfWeek.
+        //internalMap = new HashMap<String, TableEntry>();
+        //externalMap = new HashMap<String, TableEntry>();
     }
 
     @Override
