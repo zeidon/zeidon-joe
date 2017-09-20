@@ -29,8 +29,8 @@
     </dependency>
     <dependency>
       <groupId>com.typesafe.scala-logging</groupId>
-      <artifactId>scala-logging_2.11</artifactId>
-      <version>3.4.0</version>
+      <artifactId>scala-logging_2.12</artifactId>
+      <version>3.7.2</version>
     </dependency>
 
     <!-- Test -->
