@@ -180,19 +180,24 @@ export const ${lodDef.getName}_LodDef = {
     private def writeEntityDef( writer: java.io.PrintWriter, entityDef: EntityDef ) {
         val entityName = entityDef.getName
         writer.println( s"""        $entityName: {
-            name:       "$entityName",
-            erToken:    "${entityDef.getErEntityToken}",
-            create:     ${entityDef.isCreate()},
-            cardMax:    ${entityDef.getMaxCardinality},
-            hasInit:    ${entityDef.hasInitializedAttributes()},
-            creatable:  ${entityDef.isDelete()},
-            includable: ${entityDef.isInclude()},
-            deletable:  ${entityDef.isDelete()},
-            excludable: ${entityDef.isExclude()},
-            updatable:  ${entityDef.isUpdate()},
+            name:        "$entityName",
+            erToken:     "${entityDef.getErEntityToken}",""" )
+
+        if ( entityDef.getParent != null )
+            writer.println( s"""            isErRelLink: ${entityDef.isErRelLink},
+            relToken:    "${entityDef.getErRelToken}",""" )
+
+        writer.println( s"""            create:      ${entityDef.isCreate()},
+            cardMax:     ${entityDef.getMaxCardinality},
+            hasInit:     ${entityDef.hasInitializedAttributes()},
+            creatable:   ${entityDef.isDelete()},
+            includable:  ${entityDef.isInclude()},
+            deletable:   ${entityDef.isDelete()},
+            excludable:  ${entityDef.isExclude()},
+            updatable:   ${entityDef.isUpdate()},
             parentDelete: ${entityDef.isParentDelete()},
             childEntities: {""" )
-
+            
         entityDef.getChildren.foreach { writeChildEntityDefs( writer, _ ) }
     
         writer.println( s"""            },
