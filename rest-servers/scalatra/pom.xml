@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.scalatra</groupId>
       <artifactId>scalatra_2.12</artifactId>
-      <version>2.5.1</version>
+      <version>2.5.0</version>
       <exclusions>
 	<exclusion>
 	  <groupId>org.slf4j</groupId>
