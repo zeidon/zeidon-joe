@@ -73,9 +73,11 @@ public interface PessimisticLockingHandler extends DropViewCleanup
      *
      * @param view View to lock
      *
+     * @returns true if this OI needs to have its locks released, false otherwise.
+     *
      * @throws PessimisticLockingException
      */
-    void acquireOiLocks( View view ) throws PessimisticLockingException;
+    boolean acquireOiLocks( View view ) throws PessimisticLockingException;
 
     /**
      * Release the pessimistic locks for this view.

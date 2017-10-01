@@ -415,11 +415,12 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     }
 
     @Override
-    public void acquireOiLocks( View view ) throws PessimisticLockingException
+    public boolean acquireOiLocks( View view ) throws PessimisticLockingException
     {
         // This call is for DB handlers that can't have more than one open connection
         // at a time.  For normal processing this doesn't do anything.  Those DB handlers
         // would call acquireLocksFromView( view ) from here.
+        return true;
     }
 
     /* (non-Javadoc)
