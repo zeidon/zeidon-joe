@@ -53,6 +53,12 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     private final String        iniFileName;
     private       String        iniFileDesc;
     private       INIConfiguration iniConfObj;
+    
+    /**
+     * This maps the lower-case section name to the section names in the INI file.
+     * Used to ensure case-insensitivity.
+     */
+    private Map<String,String> sectionNameMap;
 
     private static final StrSubstitutor strSub = new StrSubstitutor( combinePropertiesAndEnvironment(), "${env.", "}" );
 
@@ -78,7 +84,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     @Override
     public String get( String groupName, String key, String defaultValue )
     {
-        String str = iniConfObj.getSection( groupName ).getString( key, defaultValue );
+        String str = iniConfObj.getSection( sectionNameMap.get( groupName.toLowerCase() ) ).getString( key, defaultValue );
         return strSub.replace( str );
     }
 
@@ -112,11 +118,15 @@ public class ZeidonIniPreferences implements ZeidonPreferences
             Parameters params = new Parameters();
             FileBasedConfigurationBuilder<INIConfiguration> builder = 
                     new FileBasedConfigurationBuilder<INIConfiguration>( INIConfiguration.class )
-                    .configure( params.hierarchical().setExpressionEngine( engine ) );
+                    .configure( params.hierarchical().setFileName( "/tmp/zeidon.ini" ).setExpressionEngine( engine ) );
             iniConfObj = builder.getConfiguration();
 
             iniConfObj.read( reader );
             reader.close();
+            
+            sectionNameMap = new HashMap<>();
+            for ( String sectionName : iniConfObj.getSections() )
+                sectionNameMap.put( sectionName.toLowerCase(), sectionName );
         }
         catch ( Exception e )
         {
