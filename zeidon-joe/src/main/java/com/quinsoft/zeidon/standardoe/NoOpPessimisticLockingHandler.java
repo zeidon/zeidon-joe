@@ -79,8 +79,9 @@ public class NoOpPessimisticLockingHandler implements PessimisticLockingHandler
     }
 
     @Override
-    public void acquireOiLocks( View view ) throws PessimisticLockingException
+    public boolean acquireOiLocks( View view ) throws PessimisticLockingException
     {
+        return false;
     }
 
     @Override

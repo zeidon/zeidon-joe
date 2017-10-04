@@ -114,13 +114,13 @@ class ActivateOiFromDB implements Activator
 
             if ( oi.getRootEntityInstance() != null ) // Did we load anything?
     		{
-                pessimisticLock.acquireOiLocks( view );
+                boolean isLocked = pessimisticLock.acquireOiLocks( view );
 
                 view.reset();
                 if ( options.isReadOnly() )
                     view.getObjectInstance().setReadOnly( true );
                 else
-                    view.getObjectInstance().setLocked( true );
+                    view.getObjectInstance().setLocked( isLocked );
 
                 view.getLodDef().executeActivateConstraint( view );
     		}
@@ -189,7 +189,6 @@ class ActivateOiFromDB implements Activator
             else
                 task.log().info( "==> Activate for %s took %d milliseconds", lodDef, timer.getMilliTime() );
         }
-
 
         return rc;
     }
