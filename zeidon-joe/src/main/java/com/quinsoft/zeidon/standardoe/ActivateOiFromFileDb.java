@@ -23,7 +23,6 @@ import java.io.FileFilter;
 import java.util.EnumSet;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
@@ -205,6 +204,6 @@ class ActivateOiFromFileDb implements Activator
     @Override
     public void dropOutstandingLocks()
     {
-        throw new NotImplementedException();
+        throw new ZeidonException( "Not implemented" );
     }
 }

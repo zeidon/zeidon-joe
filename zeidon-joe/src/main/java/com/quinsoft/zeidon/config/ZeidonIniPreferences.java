@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.configuration.HierarchicalINIConfiguration;
+import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -47,7 +47,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 
     private final String        iniFileName;
     private       String        iniFileDesc;
-    private       HierarchicalINIConfiguration iniConfObj;
+    private       INIConfiguration iniConfObj;
 
     private static final StrSubstitutor strSub = new StrSubstitutor( combinePropertiesAndEnvironment(), "${env.", "}" );
 
@@ -68,12 +68,6 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         iniFileName = fileName;
         loadZeidonIni();
         new JmxZeidonPreferences( this, "com.quinsoft.zeidon:type=ZeidonIniPreferences", jmxAppName, iniFileName );
-    }
-
-    public ZeidonIniPreferences( InputStream iniFile )
-    {
-        iniFileName = "input stream";
-        loadZeidonIni( iniFile );
     }
 
     @Override
@@ -108,8 +102,8 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         try
         {
 
-            iniConfObj = new HierarchicalINIConfiguration();
-            iniConfObj.load( reader );
+            iniConfObj = new INIConfiguration();
+            iniConfObj.read( reader );
             reader.close();
         }
         catch ( Exception e )
