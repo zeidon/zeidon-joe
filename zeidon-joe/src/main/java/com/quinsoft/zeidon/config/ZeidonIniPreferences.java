@@ -25,6 +25,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
+import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
+import org.apache.commons.configuration2.tree.NodeNameMatchers;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -101,8 +106,15 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 
         try
         {
+            DefaultExpressionEngine engine = new DefaultExpressionEngine( DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS,
+                                                                          NodeNameMatchers.EQUALS_IGNORE_CASE );
 
-            iniConfObj = new INIConfiguration();
+            Parameters params = new Parameters();
+            FileBasedConfigurationBuilder<INIConfiguration> builder = 
+                    new FileBasedConfigurationBuilder<INIConfiguration>( INIConfiguration.class )
+                    .configure( params.hierarchical().setExpressionEngine( engine ) );
+            iniConfObj = builder.getConfiguration();
+
             iniConfObj.read( reader );
             reader.close();
         }
