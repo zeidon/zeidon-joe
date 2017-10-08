@@ -316,7 +316,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     void finishAttributeLoading()
     {
         // Persistent, non-hidden attributes should always be activated.
-        activate = persistent && ( ! hidden || isKey() || isForeignKey() || isAutoSeq() );
+        setActivate( persistent && ( ! hidden || isKey() || isForeignKey() || isAutoSeq() ) );
     }
 
     private Application getApplication()
@@ -409,7 +409,7 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
 
     void setActivate( boolean act )
     {
-        assert persistent : "Internal error: attributes with activate flag must be persistent.";
+        assert act ? persistent : true : "Internal error: attributes with activate flag must be persistent.";
         activate = act;
     }
 
