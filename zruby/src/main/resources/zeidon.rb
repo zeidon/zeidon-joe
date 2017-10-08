@@ -14,6 +14,12 @@ module Zeidon
     return @@oe || @@oe = ObjectEngine.new( joe || JavaObjectEngine.getInstance() )
   end
 
+  def self.reload_object_engine()
+    @@oe = nil
+    JavaObjectEngine.resetInstance()
+    return get_object_engine()
+  end
+
   class ObjectEngine
     
     def initialize joe
@@ -91,7 +97,7 @@ module Zeidon
       @jtask = jtask
     end
   
-    def activate view_od, qual_hash = nil, &block
+    def activate view_od, qual_hash = nil
       qual = Qualification.new( @jtask, view_od )
       qual.add_qual( qual_hash ) if qual_hash
       yield qual if block_given?
