@@ -60,8 +60,6 @@ class ActivateOisFromJsonStream implements StreamReader
                                                                                CreateEntityFlags.fDONT_UPDATE_OI,
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
-    private static final EntityMeta DEFAULT_ENTITY_META = new EntityMeta();
-
     private Task                    task;
     private InputStream             stream;
 
@@ -89,6 +87,8 @@ class ActivateOisFromJsonStream implements StreamReader
      * stream.  Cursors will be set afterwards.
      */
     private List<EntityInstanceImpl> selectedInstances;
+
+    private Map<EntityInstanceImpl, EntityMeta> entityMetas = new HashMap<>();
 
     /**
      * If true then mark the OI that is being read as readonly.
@@ -298,6 +298,28 @@ class ActivateOisFromJsonStream implements StreamReader
             token = jp.nextToken();
         }
 
+        // Now that we've updated everything, set the flags.
+        if ( incremental )
+        {
+            for ( EntityInstanceImpl ei : entityMetas.keySet() )
+            {
+                EntityMeta entityMeta = entityMetas.get( ei );
+                ei.setCreated( entityMeta.created );
+                ei.setUpdated( entityMeta.updated );
+                ei.setDeleted( entityMeta.deleted );
+                ei.setIncluded( entityMeta.included );
+                ei.setExcluded( entityMeta.excluded );
+                if ( entityMeta.incomplete )
+                    ei.setIncomplete( null );
+                if ( entityMeta.lazyLoaded != null )
+                {
+                    String[] names = entityMeta.lazyLoaded.split( "," );
+                    for ( String name: names )
+                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name, true, true ) );
+                }
+            }
+        }
+
         if ( selectedInstances.size() > 0 )
             setCursors();
         else
@@ -418,7 +440,7 @@ class ActivateOisFromJsonStream implements StreamReader
             List<AttributeMeta> attributeMetas = new ArrayList<>();
 
             // Read tokens until we find the token that ends the current entity.
-            EntityMeta entityMeta = DEFAULT_ENTITY_META;
+            EntityMeta entityMeta = null;
             while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )
             {
                 String fieldName = jp.getCurrentName();
@@ -527,22 +549,10 @@ class ActivateOisFromJsonStream implements StreamReader
             for ( AttributeMeta am : attributeMetas )
                 am.apply( ei );
 
-            // Now that we've updated everything, set the flags.
-            if ( incremental )
+            if ( entityMeta == null )
             {
-                ei.setCreated( entityMeta.created );
-                ei.setUpdated( entityMeta.updated );
-                ei.setDeleted( entityMeta.deleted );
-                ei.setIncluded( entityMeta.included );
-                ei.setExcluded( entityMeta.excluded );
-                if ( entityMeta.incomplete )
-                    ei.setIncomplete( null );
-                if ( entityMeta.lazyLoaded != null )
-                {
-                    String[] names = entityMeta.lazyLoaded.split( "," );
-                    for ( String name: names )
-                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name, true, true ) );
-                }
+                ei.setCreated( false );
+                ei.setUpdated( false );
             }
 
             // If the entity list didn't start with a [ then there is only one entity
@@ -608,6 +618,7 @@ class ActivateOisFromJsonStream implements StreamReader
             }
         }
 
+        entityMetas.put( ei, meta );
         return meta;
     }
 
