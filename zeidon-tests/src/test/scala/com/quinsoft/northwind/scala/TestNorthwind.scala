@@ -6,6 +6,7 @@ import org.junit.Before
 import org.junit.Test
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 class TestNorthwind extends AssertionsForJUnit {
@@ -20,7 +21,10 @@ class TestNorthwind extends AssertionsForJUnit {
 
     @Test
     def testLoadFromJson() {
-        val order = task.deserializeOi().fromFile("testdata/northwind/data/order1.json").activateFirst()
+        val order = task.deserializeOi().fromFile("testdata/northwind/data/order1.json").unpickle
+        assertTrue( order.Employee.exists )
+        assertTrue( order.Customer.exists )
+        assertTrue( order.Shipper.exists )
         order.logObjectInstance
     }
 }
