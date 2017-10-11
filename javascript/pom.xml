@@ -13,24 +13,24 @@
 
  <dependencies>
     <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-scala</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.joda</groupId>
-      <artifactId>joda-convert</artifactId>
-      <version>1.2</version>
-    </dependency>
-    <dependency>
       <groupId>com.typesafe.scala-logging</groupId>
       <artifactId>scala-logging_2.12</artifactId>
       <version>3.7.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-reflect</artifactId>
+                </exclusion>
+            </exclusions>
     </dependency>
 
     <!-- Test -->
