@@ -69,7 +69,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -81,7 +81,7 @@
             <!-- Following is necessary to force maven to write .sqlite files for every build --> 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <id>default-resources</id>
@@ -113,11 +113,6 @@
         </dependency>
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
-            <artifactId>zeidon-joe</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.quinsoft.zeidon</groupId>
             <artifactId>zeidon-scala</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -129,27 +124,27 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
         </dependency>
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby</artifactId>
-            <version>1.6.7.2</version>
+            <version>9.1.13.0</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.18</version>
+            <version>6.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.8.11.2</version>
+            <version>3.20.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
