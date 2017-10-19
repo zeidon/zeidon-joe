@@ -46,14 +46,14 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     /**
      * Map of the internal value to TableEntry.
      */
-    private Map<String, TableEntry> internalMap = new HashMap<String, TableEntry>();
-    private Map<String, TableEntry> externalMap = new HashMap<String, TableEntry>();
-    private List<TableEntry>        entryList = new ArrayList<TableEntry>();
+    protected Map<String, TableEntry> internalMap = new HashMap<String, TableEntry>();
+    protected Map<String, TableEntry> externalMap = new HashMap<String, TableEntry>();
+    protected List<TableEntry>        entryList   = new ArrayList<TableEntry>();
 
     /**
      * We use a string domain to convert external values to a string.
      */
-    private StringDomain            stringConverter;
+    protected StringDomain            stringConverter;
 
     private static final Map<String, Object> STRING_CONVERTER_PROPERTIES =
         Collections.unmodifiableMap( new HashMap<String, Object>() {
