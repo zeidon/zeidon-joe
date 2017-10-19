@@ -45,19 +45,6 @@
             <artifactId>object-browser</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.quinsoft.zeidon</groupId>
-            <artifactId>zeidon-tests</artifactId>
-            <type>test-jar</type>
-            <version>${project.parent.version}</version>
-	    <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>fop</artifactId>
-                    <groupId>org.apache.xmlgraphics</groupId>
-                </exclusion>
-	    </exclusions>
-	</dependency>
          <dependency>
             <groupId>com.sun</groupId>
             <artifactId>jconsole</artifactId>
