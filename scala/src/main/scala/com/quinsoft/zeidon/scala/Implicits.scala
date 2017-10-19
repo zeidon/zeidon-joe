@@ -31,7 +31,7 @@ object Implicits {
         def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
         def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
 
-        def each( looper: => Unit ) = {
+        def each[T]( looper: => T ): T = {
             val iter = new EntityInstanceIterator( selectSet.eachEntity )
             iter.each( looper )
         }
@@ -70,7 +70,7 @@ object Implicits {
         def activate( lodName: String): TaskActivator = {
           new TaskActivator( task, lodName )
         }
-       
+
         def dropLocks( lodName: String, addQual: (QualBuilder) => Unit ): Unit = {
           val view = new View( task ) basedOn lodName
           val qb = view.buildQual()
@@ -123,16 +123,16 @@ object Implicits {
             }
         }
     }
-    
+
     case class TaskActivator( val task: Task, val lodName: String ) {
         val view: View = task.newView(lodName)
-        
+
         def apply( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
             val builder = new QualBuilder( view, view.lodDef )
             addQual( builder.entityQualBuilder )
             return builder.activate
         }
-        
+
         def using( addQual: (QualBuilder) => QualBuilder ): View = {
           val view = new View( task ) basedOn lodName
           val qb = view.buildQual()

@@ -562,7 +562,7 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Loop through all entities of a single type in the OI
      */
-    def all( looper: => Any ) = {
+    def all[T]( looper: => T ): T = {
         val iter = new EntityInstanceIterator( jentityCursor.allEntities() ).setCursor( this )
         iter.each( looper )
     }
