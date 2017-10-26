@@ -836,6 +836,7 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 // This should be getting the count.
                 rs = ps.executeQuery();
+                rs.next();
                 return rs.getInt( 1 );
             }
             else
