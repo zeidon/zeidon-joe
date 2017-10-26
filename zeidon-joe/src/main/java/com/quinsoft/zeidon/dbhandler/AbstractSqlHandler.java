@@ -126,6 +126,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Boolean ignoreJoins;
 
     /**
+     * If true, then surround all SQL names with back-ticks.
+     */
+    private Boolean quoteNames = false;
+
+    /**
      * This is the list of instances that have been loaded.  It is limited to instances
      * that have children that can be loaded in one SELECT.
      *
@@ -166,6 +171,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected SqlStatement initializeCommand( SqlCommand sqlCommand, View view, EntityDef selectRoot )
     {
+        String useQuotes = getConfigValue( "QuoteNames" );
+        if ( ! StringUtils.isBlank( useQuotes ) )
+            quoteNames = "1ty".contains( useQuotes.substring( 0, 1 ).toLowerCase() );
+
         return new SqlStatement( sqlCommand, view, selectRoot );
     }
 
@@ -2547,34 +2556,39 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             assert ( source instanceof DataRecord ) || ( source instanceof RelRecord );
 
             // Already exists?
-            String name = tables.get( source );
-            if ( name != null )
-                return name;
-
-            // Is an alias needed?
-            String alias = null;
-            if ( tables.containsValue( tableName ) )
+            String returnName = tables.get( source );
+            if ( returnName == null )
             {
-                // We've got a table listed twice but with different relationships.  We need to create
-                // an alias name.
-                for ( int i = 1; i < 40; i++ )
+                // Is an alias needed?
+                if ( tables.containsValue( tableName ) )
                 {
-                    if ( ! tables.containsValue( tableName + i ) )
+                    // We've got a table listed twice but with different relationships.  We need to create
+                    // an alias name.
+                    for ( int i = 1; i < 40; i++ )
                     {
-                        alias = tableName + i;
-                        break;
+                        if ( ! tables.containsValue( tableName + i ) )
+                        {
+                            returnName = tableName + i;
+                            break;
+                        }
                     }
+
+                    if ( returnName == null )
+                        throw new ZeidonException( "We ran out of alias names.  There's probably an internal error somewhere." );
+
+                    tables.put( source, returnName );
                 }
-
-                if ( alias == null )
-                    throw new ZeidonException( "We ran out of alias names.  There's probably an internal error somewhere." );
-
-                tables.put( source, alias );
+                else
+                {
+                    tables.put( source, tableName );
+                    returnName = tableName;
+                }
             }
-            else
-                tables.put( source, tableName );
 
-            return tables.get( source );
+            if ( quoteNames )
+                returnName = "`" + returnName + "`";
+
+            return returnName;
         }
 
         String getTableName( EntityDef entityDef )
@@ -2623,7 +2637,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
 
             String alias = getTableName( tableName, source );
+            if ( quoteNames )
+                tableName = "`" + tableName + "`";
             from.append( " " ).append( tableName );
+
             if ( ! StringUtils.equals( tableName, alias ) )
                 from.append( " " ).append( alias );
 
