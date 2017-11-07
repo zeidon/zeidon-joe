@@ -78,10 +78,13 @@ export class $lodName extends zeidon.ObjectInstance {
         return ${applicationName}_DomainList[name];
     };
 
-    public getDomainFunctions( name: string ): any { 
-        return ${applicationName}_DomainFunctions[name];
-    }
+    public getDomainFunctions( domain: zeidon.Domain ): zeidon.DomainFunctions {
+        let f = ${applicationName}_DomainFunctions[ domain.class ];
+        if ( f )
+            return new f( domain );
 
+        return undefined;
+    }
 
     get $rootName(): zeidon.EntityArray<${lodName}_${rootName}> {
         return this.roots as zeidon.EntityArray<${lodName}_${rootName}>;
