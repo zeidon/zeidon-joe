@@ -53,7 +53,7 @@ class CommitHelper
                     linked.setCreated( false );
                 if ( linked.dbhIncluded )
                     linked.setIncluded( false );
-                if ( linked.dbhUpdated )
+                if ( linked.dbhUpdated || linked.dbhCreated )
                     linked.setUpdated( false );
 
                 EntityDef entityDef = linked.getEntityDef();
