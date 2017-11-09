@@ -94,6 +94,13 @@ export class $lodName extends zeidon.ObjectInstance {
         return this.roots.selected() as ${lodName}_${rootName};
     }
 
+    // Returns the current entity instance if it exists, otherwise returns an instance
+    // that will returned 'undefined' for any property values.  This is the 
+    // equivalent to the "elvis operator"
+    get ${rootName}$$$$(): ${lodName}_${rootName} {
+        return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
+    }
+
     public static activate( qual?: any ): Observable<$lodName> {
         return zeidon.ObjectInstance.activateOi( new $lodName(), qual );
     }
@@ -151,8 +158,13 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
         return this.getChildEntityArray("$entityName") as zeidon.EntityArray<${lodName}_$entityName>;
     }
 
+
     get ${entityName}$$(): ${lodName}_$entityName {
         return this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName;
+    }
+
+    get ${entityName}$$$$(): ${lodName}_$entityName {
+        return (this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName) || zeidon.SAFE_INSTANCE;
     }""" )
     }
     
