@@ -733,6 +733,24 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
             ab.withName( parts(0) )
         }
     }
+
+    /**
+     * Adds support for qualifying an entity using '=':
+    * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User = UserList.User )
+     * }}}
+      */
+    def updateDynamic( targetEntityName: String)(sourceEntity: AbstractEntity): QualificationTerminator = {
+        val jtargetEntityDef =  EntitySelector.getEntityDef( qualBuilder.jlodDef, targetEntityName )
+        val jsourceEntityDef = sourceEntity.entityDef
+        if ( jtargetEntityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
+            throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
+        
+        qualBuilder.jqual.fromEntityKeys( sourceEntity )
+
+        return QualBuilder.TERMINATOR
+    }
 }
 
 /**
@@ -750,6 +768,45 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         return QualBuilder.TERMINATOR
     }
 
+    /**
+     * Activates entities with attributes that are in all the entities
+     * in the specified cursor.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUserList = VIEW basedOn "mUser"...
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User in mUserList.User )
+     * }}}
+     */
+    def in ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
+        if ( jentityDef.getKeys().size() > 1 )
+            throw new ZeidonException( "'in' operator currently only supports entities with a single key" )
+        
+        jattributeDef = jentityDef.getKeys.get(0)
+        new AttributeQualOperators( this ).in( iter )
+        return QualBuilder.TERMINATOR
+    }
+
+    def in ( selectSet: SelectSet ): QualificationTerminator = {
+        if ( jentityDef.getKeys().size() > 1 )
+            throw new ZeidonException( "'in' operator currently only supports entities with a single key" )
+        
+        jattributeDef = jentityDef.getKeys.get(0)
+        new AttributeQualOperators( this ).in( selectSet )
+        return QualBuilder.TERMINATOR
+    }
+
+    def in ( sourceEntity : AbstractEntity ): QualificationTerminator = {
+        val jsourceEntityDef = sourceEntity.entityDef
+        if ( jentityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
+            throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
+        
+        qualBuilder.jqual.fromEntityKeys( sourceEntity )
+        return QualBuilder.TERMINATOR
+    }
+    
     /**
      * This adds qualification on an attribute using another attribute from the same
      * query.  In SQL terms this qualifies a column on using a different column from
