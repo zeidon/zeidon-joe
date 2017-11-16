@@ -134,10 +134,11 @@ object Implicits {
         }
 
         def using( addQual: (QualBuilder) => QualBuilder ): View = {
-          val view = new View( task ) basedOn lodName
           val qb = view.buildQual()
           addQual( qb )
           qb.activate
         }
+
+	def all() : View = { view.activateAll() }
     }
 }
