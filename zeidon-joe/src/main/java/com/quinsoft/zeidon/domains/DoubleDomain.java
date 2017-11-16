@@ -20,7 +20,6 @@
 package com.quinsoft.zeidon.domains;
 
 import java.text.DecimalFormat;
-import java.text.ParsePosition;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
@@ -255,26 +254,15 @@ public class DoubleDomain extends AbstractNumericDomain
                 if ( StringUtils.isBlank( str ) )
                     return null;
 
-                ParsePosition ps = new ParsePosition( 0 );
                 Double d;
                 try
                 {
-                    synchronized ( parser )
-                    {
-                        d = parser.parse( str, ps ).doubleValue();
-                    }
+                    d = Double.parseDouble( str );
                 }
                 catch ( Exception e )
                 {
                     throw new InvalidAttributeValueException( attributeDef, str, e.getMessage() )
                             .setCause( e );
-                }
-
-                int idx = Math.max( ps.getErrorIndex(), ps.getIndex() );
-                if ( idx != str.length() )
-                {
-                    throw new InvalidAttributeValueException( attributeDef, str, "Error parsing '" + str
-                            + "' at position " + ( idx + 1 ) );
                 }
 
                 return d;
