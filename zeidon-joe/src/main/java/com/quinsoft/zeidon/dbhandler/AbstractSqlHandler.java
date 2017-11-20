@@ -1008,7 +1008,19 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
         }
 
-        return getEntityDefData( entityDef ).isJoinable( entityDef );
+        if ( getEntityDefData( entityDef ).isJoinable( entityDef ) )
+            return true;
+        
+        // If we get here then normally we don't join this table.  Check to see if user wants
+        // all 1-to-1 tables automatically joined.
+        if ( entityDef.getDataRecord().getRelRecord().getRelationshipType().isManyToOne() )
+        {
+            String value = getConfigValue( "JoinAll1to1Relationships" );
+            if ( ! StringUtils.isBlank( value ) && "TY1".contains( value.substring( 0, 1 ).toUpperCase() ) ) // Catches "true", "yes", "1".
+                return true;
+        }
+        
+        return false;
     }
 
     /**
