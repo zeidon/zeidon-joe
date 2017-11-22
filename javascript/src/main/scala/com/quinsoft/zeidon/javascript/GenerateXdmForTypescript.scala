@@ -40,8 +40,7 @@ export const ${application.getName()}_DomainList = {
     }
 
     private def writeDomain( writer: java.io.PrintWriter, xdm : View ) {
-        writer.println( s"""
-    "${xdm.Domain.Name}" : {
+        writer.println( s"""    "${xdm.Domain.Name}" : {
         name:  "${xdm.Domain.Name}",
         class: "${xdm.Domain.JavaClass}", """ )
 
