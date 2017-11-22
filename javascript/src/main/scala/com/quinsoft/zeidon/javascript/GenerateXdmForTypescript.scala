@@ -25,7 +25,7 @@ class GenerateXdmForTypescript( val applicationName: String, val destinationDir:
 
     private def generateXdm( task: Task, filename: String ) = {
         val xdm = task.deserializeOi().setApplication( "ZeidonSystem" ).setLodDef( "tzdmxgpo" ).fromFile( filename )
-        printToFile( s"$destinationDir/${application.getName}-DomainLists.ts" )( writer => {
+        printToFile( s"$destinationDir/${application.getName}-DomainList.ts" )( writer => {
             writer.println( s"""
 // Generated from ${filename}
 import * as zeidon from '../zeidon';
