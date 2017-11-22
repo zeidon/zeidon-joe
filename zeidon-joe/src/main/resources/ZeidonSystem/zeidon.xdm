@@ -646,3 +646,31 @@ eContext   3
 aZKey      90000041
 aName      QSFILENAME
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      110003499
+aName      ZKey
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110003500
+aName      ZKey
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1158059
+aName      Note
+aDesc      10000 byte string
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      1158060
+aName      Note
+aIsDefault Y
