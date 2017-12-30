@@ -414,12 +414,20 @@ public class SerializeOi
         return this;
     }
 
+    public SerializeOi withIncremental( boolean incre )
+    {
+        if ( incre )
+            flags.add( WriteOiFlags.INCREMENTAL );
+
+        return this;
+    }
+
     public SerializeOi withCursors()
     {
         writeCursors = true;
         return this;
     }
-    
+
     public boolean isWithCursors()
     {
         return writeCursors;

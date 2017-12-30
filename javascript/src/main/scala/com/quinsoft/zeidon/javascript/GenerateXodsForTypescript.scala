@@ -35,7 +35,6 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
             writeStartingComment(writer)
             writer.println( s"""
 import * as zeidon from '../zeidon';
-import { Observable } from 'rxjs';
 import { ${applicationName}_DomainList } from './${applicationName}-DomainList';
 import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainFunctions';
 """ );
@@ -101,7 +100,7 @@ export class $lodName extends zeidon.ObjectInstance {
         return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
     }
 
-    public static activate( qual?: any ): Observable<$lodName> {
+    public static activate( qual?: any ): Promise<$lodName> {
         return zeidon.ObjectInstance.activateOi( new $lodName(), qual );
     }
 }
