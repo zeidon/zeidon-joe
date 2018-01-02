@@ -2782,9 +2782,12 @@ public abstract class VmlOperation
       // Ensure the source index does not point beyond the end of the source string.
       if ( sourceIdx > zstrlen(sbSource) )
       {
-         SysMessageBox( null, "JOE System Error",
-                        "ZeidonStringCopy: Invalid parameter (source index).", 1 );
-         return( qINVALIDPARAMETER );
+    	 // KJS 03/23/17 - Instead of sending back an error, we will just
+    	 // copy what we have in sbSource to sbTarget.
+    	 sourceIdx = 0;
+         //SysMessageBox( null, "JOE System Error",
+         //               "ZeidonStringCopy: Invalid parameter (source index).", 1 );
+         //return( qINVALIDPARAMETER );
       }
 
       // If maxReceive is -1, move the characters to the target without a null at end.
@@ -5005,7 +5008,7 @@ public abstract class VmlOperation
 
       for ( View v : viewList )
       {
-          v.logObjectInstance();
+          //v.logObjectInstance();
           returnView.setView( v );
           sbLodDefName.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
           sbLodDefName.append( v.getLodDef().getName() );

@@ -1325,8 +1325,13 @@ public class TestZencas
             * "YNField = ''. Because our values are stored in the database as NULL, then we do
             * not retrieve any database values. We need to where clause to be
             * "YNField IS NULL OR YNField = ''"
-            * DG changed SystemApplication.nullStringEqualsEmptyString to true and now
-            * this works correctly. Make sure it still works.
+            * I currently think that in isNullAndEmptyString() "QualAttrib.java" we need the
+            * following line:
+            *        if ( ! ( domain instanceof StringDomain || domain instanceof TableDomain ) )
+            * so that we do not just return the "false" value. Which so far in my testing has
+            * not caused issue...
+            * But DG changed SystemApplication.nullStringEqualsEmptyString to true and now
+            * this works correctly. So I took my change out and put his in.
 		   */
            
             // These are views that need to get created in order to be able to activate
@@ -1341,7 +1346,8 @@ public class TestZencas
 			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
 			RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
 
-			// Activate mStudent where student.id = 7 and where student.PhiDeltaLambdaFlag = ""
+			// Activate mStudent where student.id in (7,8,11) and where student.PhiDeltaLambdaFlag = ""
+			// Changed to only activate student.id = 7
 			// This is to make sure that we have "PhiDeltaLamdaFlag IS NULL" as opposed to only "PhiDeltaLamdaFlag = ''"
 		    o_BuildQualmStudent( ViewToWindow, vTempViewVar_0 );
 		    RESULT = ActivateObjectInstance( mStudent, "mStudent", ViewToWindow, vTempViewVar_0, zMULTIPLE );
@@ -1360,7 +1366,6 @@ public class TestZencas
  		    Assert.assertEquals("Activate mStudent should have activated 2 entities but is returning none.", CursorResult.SET.toInt(), RESULT );
 		    RESULT = SetCursorNextEntity( mStudent, "Student", "" );
  		    Assert.assertEquals("Activate mStudent should have activated 2 entities but is returning only one.", CursorResult.SET.toInt(), RESULT );
-		    
  		    DropView( lTermLST );
 		   	//:ACTIVATE lTermLST WHERE lTermLST.CollegeTerm.ID = 175
 		   	o_fnLocalBuildQual_3( ViewToWindow, vTempViewVar_0, 175 );
@@ -1380,7 +1385,7 @@ public class TestZencas
 		    // Check if we activated any Student entities.
  		    Assert.assertEquals("Activate lTermLST should have activated 1 entity but is returning none.", CursorResult.SET.toInt(), RESULT );
 
-	   	    return 0;
+ 		    return 0;
 		}
 
 		public int
@@ -1919,7 +1924,7 @@ public class TestZencas
 			   DropObjectInstance( lTermLST );
 			   return( 0 );
 		}
-		
+
 		private int
 		o_fnLocalBuildQual_3( View     vSubtask,
 		                      zVIEW    vQualObject,
@@ -2517,105 +2522,42 @@ public class TestZencas
 			int RESULT=0;
 
 
-            zencas.activateEmptyObjectInstance( "mPerson" ); // Necessary to load the mPerson XOD.
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
-	 		  StringBuilder szReturn  = new StringBuilder();
+    		o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+	 		RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+	 		DropView( vTempViewVar_0 );
 
-		 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                      mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
+	 		mPerson.cursor("ApplicationSibling").createEntity();
+	 		mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
 
+	 		//srcView.serializeOi().withIncremental().toString()
+	 		//mPerson.serializeOi().withIncremental().toWriter(writer)
 
-	 		  mPerson.cursor("FinAidProfile").setNext();
-	 		  mPerson.cursor("Address").setNext();
+	 		SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
+		 	DropView( mPerson);
+		 	RESULT = CommitObjectInstance( mUser );
+	 		DropView( mUser );
 
+			o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+			RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+			DropView( vTempViewVar_0 );
+			SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
-			 DropView( mUser );
-                 DropView( mPerson);
-/*
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "marycribben@aol.com" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+		 	StringBuilder szReturn  = new StringBuilder();
 
-	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
+		 	SetOI_FromBlob( mPerson, "mPerson", ViewToWindow,
+	                      	mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
 
-				 DropView( mUser );
-	             DropView( mPerson);
-*/
-			 return 0;
+	 		mPerson.cursor("FinAidProfile").setNext();
+	 		mPerson.cursor("Address").setNext();
 
-		}
-
-		public int
-		testBlobsOrig( View ViewToWindow )
-		{
-
-			zVIEW    mUser = new zVIEW( );
-			zVIEW    mPerson = new zVIEW( );
-			zVIEW    vTempViewVar_0 = new zVIEW( );
-			int RESULT=0;
-
-
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-
-    		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
-	 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
-	 		   DropView( vTempViewVar_0 );
-
-	 		   mPerson.cursor("ApplicationSibling").createEntity();
-	 		   mPerson.cursor("ApplicationSibling").getAttribute("FirstName1").setValue("TestFirst");
-
-	 		  //srcView.serializeOi().withIncremental().toString()
-	 		   //mPerson.serializeOi().withIncremental().toWriter(writer)
-
-	 		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson.getView(), 0 ) ;
-		 		  DropView( mPerson);
-		 		  RESULT = CommitObjectInstance( mUser );
-
-		 		  StringBuilder szReturn  = new StringBuilder();
-
-		 		  SetOI_FromBlob( mPerson, "mPerson", ViewToWindow,
-	                      mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-
-	 		  RESULT = CommitObjectInstance( mUser );
-
-	 		  DropView( mUser );
-	 		  DropView( mPerson);
-		         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
-		         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-		         DropView( vTempViewVar_0 );
-		         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-
-	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-
-	 		  mPerson.cursor("FinAidProfile").setNext();
-	 		  mPerson.cursor("Address").setNext();
-
-
-			 DropView( mUser );
-                 DropView( mPerson);
-/*
-	         o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "marycribben@aol.com" );
-	         RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
-	         DropView( vTempViewVar_0 );
-	         SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
-
-	 		  SetOI_FromBlob( mPerson, szReturn, ViewToWindow,
-	                          mUser,  "User", "ProspectInitialApplicationPerson", zIGNORE_ERRORS );
-
-				 DropView( mUser );
-	             DropView( mPerson);
-*/
-			 return 0;
+			DropView( mUser );
+            DropView( mPerson);
+			return 0;
 
 		}
 
@@ -6077,7 +6019,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
-
+		
 		private int
 		o_BuildQualmStudent( View     vSubtask,
 		                     zVIEW    vQualObject )
@@ -6109,9 +6051,9 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "11" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
 			   */
-			   //CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
-			   //SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );

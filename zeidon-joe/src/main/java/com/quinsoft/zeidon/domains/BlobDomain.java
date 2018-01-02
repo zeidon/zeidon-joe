@@ -45,6 +45,9 @@ public class BlobDomain extends AbstractDomain
         if ( externalValue instanceof AttributeInstance )
             externalValue = ((AttributeInstance) externalValue ).getValue();
 
+        if ( externalValue == null )
+        	return null;
+        
         if ( externalValue instanceof byte[] )
             return new Blob( (byte[]) externalValue );
 
@@ -52,7 +55,12 @@ public class BlobDomain extends AbstractDomain
             return externalValue;
 
         if ( externalValue instanceof String )
+        {
+        	// If externalValue = "" then return "".
+        	if ( ((String) externalValue).isEmpty() )
+        		return externalValue;
             return new Blob( ((String) externalValue).getBytes() );
+        }
 
         throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Blob", externalValue.getClass().getName() );
     }
