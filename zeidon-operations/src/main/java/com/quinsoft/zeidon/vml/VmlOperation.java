@@ -4924,12 +4924,19 @@ public abstract class VmlOperation
 
    public int ActivateOI_FromFile( zVIEW view, String lodDefName, View qualView, String fileName, int control )
    {
-       view.setView( task.deserializeOi()
-                         .fromFile( fileName )
-                         .setLodDef( lodDefName )
-                         .setFlags( control )
-                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
-                         .activateFirst() );
+	   try
+	   {
+	       view.setView( task.deserializeOi()
+	                         .fromFile( fileName )
+	                         .setLodDef( lodDefName )
+	                         .setFlags( control )
+	                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+	                         .activateFirst() );
+	   }
+	   catch( Exception e )
+	   {
+	      return -1;   
+	   }
       return 0;
    }
 
