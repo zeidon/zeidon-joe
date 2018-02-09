@@ -2861,9 +2861,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( def.isRecursive() )
                 return false;
 
-            if ( def.isDerived() )
-                return false;
-
             // If there is an activate limit for this entity then we can't join it
             // with it's parent because we have to set the limit in the SQL call.
             if ( def.getActivateLimit() != null )
@@ -2887,10 +2884,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     return false;
             }
 
-            // If we get here then normally we don't join this table.  Check to see if user wants
-            // all 1-to-1 tables automatically joined.
             RelRecord relRecord = dataRecord.getRelRecord();
-            if ( relRecord != null && relRecord.getRelationshipType().isManyToOne() )
+            if ( relRecord != null && relRecord.getRelationshipType() != null &&
+                 relRecord.getRelationshipType().isManyToOne() )
             {
                 if ( joinAll1To1 )
                     return true;
