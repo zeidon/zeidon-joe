@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.EntityCursor;
@@ -311,14 +313,30 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     instances.add( twin );
             }
 
+            EntityDef entityDef = ei.getEntityDef();
+            if ( entityDef.getDbCreatedTimestamp() != null )
+            {
+                for ( EntityInstanceImpl tempEi : instances )
+                {
+                    AttributeInstanceImpl timestamp = tempEi.getAttribute( entityDef.getDbCreatedTimestamp() );
+                    if ( ! timestamp.isNull() )
+                    {
+                        DateTime now = new DateTime();
+                        timestamp.setValue( now );
+
+                        if ( entityDef.getDbUpdatedTimestamp() != null )
+                            tempEi.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( now );
+                    }
+                }
+            }
+
             try
             {
                 dbHandler.insertEntity( view, instances );
             }
             catch ( Exception e )
             {
-                throw ZeidonException.wrapException( e )
-                                     .prependEntityInstance( ei );
+                throw ZeidonException.wrapException( e ).prependEntityInstance( ei );
             }
 
             // Flag all linked entities (including 'ei') as having been created.
@@ -390,6 +408,9 @@ class CommitToDbUsingGenkeyHandler implements Committer
             // Skip if the entity was created or deleted.
             if ( ei.dbhCreated || ei.dbhDeleted )
                 continue;
+
+            if ( entityDef.getDbUpdatedTimestamp() != null )
+                ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
 
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );

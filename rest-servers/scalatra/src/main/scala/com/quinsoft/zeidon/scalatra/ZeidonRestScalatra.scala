@@ -137,11 +137,15 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         }
     }
 
-    protected def serializeResponse( view: View ) : String = {
+    protected def serializeResponse( view: View,
+                                     withIncrementals: Boolean = true ) : String = {
         if ( view.isEmpty )
             return "{}"
 
-        val serialized = view.serializeOi.asJson.withIncremental().toString()
+        val serialized = view.serializeOi
+                             .asJson
+                             .withIncremental( withIncrementals )
+                             .toString()
         view.log().debug(serialized)
         return serialized
     }

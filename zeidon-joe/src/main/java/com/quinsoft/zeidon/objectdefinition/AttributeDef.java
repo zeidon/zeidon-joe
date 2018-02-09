@@ -336,9 +336,21 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         return entityDef;
     }
 
-    AttributeDef setName( String name )
+    private AttributeDef setName( String name )
     {
         this.name = name;
+
+        switch ( name.toLowerCase() )
+        {
+            case "dbcreatedtimestamp":
+                entityDef.setDbCreatedTimestamp( this );
+                break;
+
+            case "dbupdatedtimestamp":
+                entityDef.setDbUpdatedTimestamp( this );
+                break;
+        }
+
         return this;
     }
 

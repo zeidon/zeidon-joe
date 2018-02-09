@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.DbUtils;
@@ -991,6 +993,8 @@ public class JdbcHandler extends AbstractSqlHandler
             return connection;
         }
 
+        private static final Pattern JDBC_FINDER = Pattern.compile( "^jdbc:([a-zA-Z]*):" );
+
         private String getDriver( String url, Task task, JdbcHandler handler )
         {
             String driver = handler.getDrivers();
@@ -998,19 +1002,36 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 // Drivers wasn't specified in the config, so if possible we'll guess
                 // by using the transaction string.
-                if ( url.startsWith( "jdbc:mysql:" ) )
-                    driver = "com.mysql.jdbc.Driver";
-                else
-                if ( url.startsWith( "jdbc:sqlite:" ) )
-                    driver = "org.sqlite.JDBC";
-                else
-                if ( url.startsWith( "jdbc:odbc:" ) )
-                    driver = "sun.jdbc.odbc.JdbcOdbcDriver";
-                else
-                if ( url.startsWith( "jdbc:sqlserver:" ) )
-                    driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-                else
-                    throw new ZeidonException( "JDBC Driver wasn't specified in config for %s", url );
+                Matcher matcher = JDBC_FINDER.matcher( url );
+                if ( matcher.matches() )
+                {
+                    String driverName = matcher.group( 1 );
+                    switch ( driverName )
+                    {
+                        case "mysql":
+                            driver = "com.mysql.jdbc.Driver";
+                            break;
+
+                        case "odbc":
+                            driver = "sun.jdbc.odbc.JdbcOdbcDriver";
+                            break;
+
+                        case "postgresql":
+                            driver = "org.postgresql.Driver";
+                            break;
+
+                        case "sqlite":
+                            driver = "org.sqlite.JDBC";
+                            break;
+
+                        case "sqlserver":
+                            driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+                            break;
+
+                        default:
+                            throw new ZeidonException( "JDBC Driver wasn't specified in config for %s", url );
+                     }
+                }
             }
 
             return driver;

@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.quinsoft.zeidon.CommitFlags;
+import org.joda.time.DateTime;
+
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.EntityInstance;
@@ -475,6 +476,9 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             if ( ei.dbhCreated || ei.dbhDeleted )
                 continue;
 
+            if ( entityDef.getDbUpdatedTimestamp() != null )
+                ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
+
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );
 
@@ -756,6 +760,19 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         // We'll retrieve the generated key from the DB after the row has been inserted.
         try
         {
+            if ( entityDef.getDbCreatedTimestamp() != null )
+            {
+                AttributeInstanceImpl timestamp = ei.getAttribute( entityDef.getDbCreatedTimestamp() );
+                if ( ! timestamp.isNull() )
+                {
+                    DateTime now = new DateTime();
+                    timestamp.setValue( now );
+
+                    if ( entityDef.getDbUpdatedTimestamp() != null )
+                        ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( now );
+                }
+            }
+
             // We need to handle multiple entities being created.
             List<EntityInstance> list = new ArrayList<EntityInstance>();
             list.add( ei );

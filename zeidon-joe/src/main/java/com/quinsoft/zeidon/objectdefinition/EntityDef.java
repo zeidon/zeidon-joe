@@ -163,6 +163,8 @@ public class EntityDef implements PortableFileAttributeHandler
     private boolean hasIncludeConstraint;
     private boolean hasDeleteConstraint;
     private boolean hasCreateConstraint;
+    private AttributeDef dbCreatedTimestamp;
+    private AttributeDef dbUpdatedTimestamp;
 
     public EntityDef( LodDef lodDef, int level )
     {
@@ -1394,6 +1396,26 @@ public class EntityDef implements PortableFileAttributeHandler
             linkInfo = new EntityDefLinkInfo();
 
         return linkInfo;
+    }
+
+    public AttributeDef getDbCreatedTimestamp()
+    {
+        return dbCreatedTimestamp;
+    }
+
+    void setDbCreatedTimestamp( AttributeDef dbCreatedTimestamp )
+    {
+        this.dbCreatedTimestamp = dbCreatedTimestamp;
+    }
+
+    public AttributeDef getDbUpdatedTimestamp()
+    {
+        return dbUpdatedTimestamp;
+    }
+
+    void setDbUpdatedTimestamp( AttributeDef dbUpdatedTimestamp )
+    {
+        this.dbUpdatedTimestamp = dbUpdatedTimestamp;
     }
 
     public enum LinkValidation

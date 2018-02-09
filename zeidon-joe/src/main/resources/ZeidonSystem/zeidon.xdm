@@ -520,3 +520,157 @@ eContext   3
 aZKey      1165601
 aName      TEXT
 
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      90000089
+aName      DateTime
+aDesc      Basic Timestamp Domain
+aDomainType A
+aDataType  T
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDateTime
+
+eContext   3
+aZKey      90000090
+aName      DateTime
+aEditString YYYYmmddHHMISS999
+aJavaEditString yyyy-MM-dd_HH:mm:ss.SSS
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320095
+aName      DM_DomainType
+aDesc      Type of Zeidon Domain
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320102
+aName      Display
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484512
+
+eTableEntry 4
+aZKey      1320104
+aExternalValue Table
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320105
+aExternalValue Expression
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320106
+aExternalValue Algorithm
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320107
+aExternalValue Format
+aInternalValue F
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319867
+aName      DataTypeDomain
+aDesc      Zeidon domain datatypes (logical) supported by Core
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1319868
+aName      DataTypeDomain
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484501
+
+eTableEntry 4
+aZKey      1319870
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319871
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319872
+aExternalValue Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      90024741
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      1319873
+aExternalValue Date & Time
+aInternalValue T
+
+eTableEntry 4
+aZKey      90025043
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      1319874
+aExternalValue BLOb - Binary Large Object
+aInternalValue B
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000040
+aName      QSFileName
+aDesc      QuinSoft File Name - 32 chars
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      90000041
+aName      QSFILENAME
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      110003499
+aName      ZKey
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110003500
+aName      ZKey
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1158059
+aName      Note
+aDesc      10000 byte string
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      1158060
+aName      Note
+aIsDefault Y

@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.StringDomain;
+import com.quinsoft.zeidon.domains.TableDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
