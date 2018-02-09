@@ -155,6 +155,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private Pagination pagingOptions;
 
+    private boolean joinAll1To1 = false;
+
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
@@ -174,6 +176,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         String useQuotes = getConfigValue( "QuoteNames" );
         if ( ! StringUtils.isBlank( useQuotes ) )
             quoteNames = "1ty".contains( useQuotes.substring( 0, 1 ).toLowerCase() );
+
+        String value = getConfigValue( "JoinAll1to1Relationships" );
+        if ( ! StringUtils.isBlank( value ) && "TY1".contains( value.substring( 0, 1 ).toUpperCase() ) ) // Catches "true", "yes", "1".
+            joinAll1To1 = true;
 
         return new SqlStatement( sqlCommand, view, selectRoot );
     }
@@ -1008,19 +1014,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
         }
 
-        if ( getEntityDefData( entityDef ).isJoinable( entityDef ) )
-            return true;
-        
-        // If we get here then normally we don't join this table.  Check to see if user wants
-        // all 1-to-1 tables automatically joined.
-        if ( entityDef.getDataRecord().getRelRecord().getRelationshipType().isManyToOne() )
-        {
-            String value = getConfigValue( "JoinAll1to1Relationships" );
-            if ( ! StringUtils.isBlank( value ) && "TY1".contains( value.substring( 0, 1 ).toUpperCase() ) ) // Catches "true", "yes", "1".
-                return true;
-        }
-        
-        return false;
+        return getEntityDefData( entityDef ).isJoinable( entityDef );
     }
 
     /**
@@ -2807,7 +2801,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( data != null )
             return data;
 
-        data = new EntityDefSqlData( entityDef );
+        data = new EntityDefSqlData( entityDef, this );
         data = entityDef.getCacheMap().put( EntityDefSqlData.class, data );
         return data;
     }
@@ -2819,6 +2813,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     static class EntityDefSqlData
     {
         private final EntityDef entityDef;
+        private final boolean joinAll1To1;
 
         /**
          * This is the list of children that can be loaded by joining
@@ -2828,11 +2823,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         /**
          * @param entityDef
+         * @param abstractSqlHandler
          */
-        private EntityDefSqlData(EntityDef entityDef)
+        private EntityDefSqlData(EntityDef entityDef, AbstractSqlHandler abstractSqlHandler)
         {
             this.entityDef = entityDef;
 
+            joinAll1To1 = abstractSqlHandler.joinAll1To1;
             Builder<EntityDef> builder = ImmutableList.builder();
             addJoinedChildren( builder, this.entityDef );
             joinedChildren = builder.build();
@@ -2864,6 +2861,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( def.isRecursive() )
                 return false;
 
+            if ( def.isDerived() )
+                return false;
+
             // If there is an activate limit for this entity then we can't join it
             // with it's parent because we have to set the limit in the SQL call.
             if ( def.getActivateLimit() != null )
@@ -2885,6 +2885,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // its parent.  In that situation we don't want to join this entity.
                 if ( relRecord.getRelationshipType().isManyToOne() )
                     return false;
+            }
+
+            // If we get here then normally we don't join this table.  Check to see if user wants
+            // all 1-to-1 tables automatically joined.
+            RelRecord relRecord = dataRecord.getRelRecord();
+            if ( relRecord != null && relRecord.getRelationshipType().isManyToOne() )
+            {
+                if ( joinAll1To1 )
+                    return true;
             }
 
             return dataRecord.isJoinable();
