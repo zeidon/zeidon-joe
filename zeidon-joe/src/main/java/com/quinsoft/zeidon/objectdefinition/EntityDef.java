@@ -351,20 +351,13 @@ public class EntityDef implements PortableFileAttributeHandler
                     }
                 }
 
-                if ( !recursive )
+                if ( ! recursive )
                     throw new ZeidonException( "Internal error: Recursive flag is set but no recursive parent found. %s",
                                                this );
                 break;
 
             case "UPDATE":
                 update = reader.getAttributeValue().startsWith( "Y" );
-                break;
-
-            case 'V':
-                if ( reader.getAttributeName().equals( "UPDATE" ))
-                {
-                    update = reader.getAttributeValue().startsWith( "Y" );
-                }
                 break;
         }
     }
