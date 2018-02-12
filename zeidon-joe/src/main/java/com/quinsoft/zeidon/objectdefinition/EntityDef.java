@@ -180,225 +180,178 @@ public class EntityDef implements PortableFileAttributeHandler
     {
         String attributeName = reader.getAttributeName();
 
-        switch ( attributeName.charAt( 0 ) )
+        switch ( attributeName )
         {
-            case 'A':
-                if ( reader.getAttributeName().equals( "ACT_LIMIT" ))
+            case "ACT_LIMIT":
+                activateLimit = Integer.parseInt( reader.getAttributeValue() );
+                break;
+
+            case "AUTOLOADFROMPARENT":
+                autoloadFromParent = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "CREATE":
+                create = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "CARDMAX":
+                maxcardinality = Integer.parseInt( reader.getAttributeValue() );
+                break;
+
+            case "CARDMIN":
+                minCardinality = Integer.parseInt( reader.getAttributeValue() );
+                break;
+
+            case "DELETE":
+                delete = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "DERIVED":
+                derived = true;
+                derivedPath = true;
+                break;
+
+            case "DEBUGCHG":
+                // Set up a listener to write stack trace when an entity is
+                // changed.
+                if ( StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" ) )
+                    eventListener = new EventStackTrace();
+                break;
+
+            case "DEBUGINCRE":
+                debugIncrementalFlag = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                break;
+
+            case "DUPENTIN":
+                duplicateEntity = true;
+                lodDef.setHasDuplicateInstances( true );
+                break;
+
+            case "ECESRCFILE":
+                sourceFileName = reader.getAttributeValue();
+                if ( !sourceFileName.contains( "." ) )
+                    sourceFileName = getLodDef().getApplication().getPackage() + "." + sourceFileName;
+                break;
+
+            case "ECESRCTYPE":
+                sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
+                break;
+
+            case "ECEOPER":
+                constraintOper = reader.getAttributeValue().intern();
+                break;
+
+            case "ECCR":
+                hasCreateConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                break;
+
+            case "ECDEL":
+                hasDeleteConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                break;
+
+            case "ECINC":
+                hasIncludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+
+                // Include constraints take some work. Since nobody appears to
+                // use them let's not
+                // worry about implementing them for now.
+                throw new UnsupportedOperationException( "Include constraints not supported yet." );
+
+            case "ECEXC":
+                hasExcludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                break;
+
+            case "ECACC":
+                hasAcceptConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                break;
+
+            case "ECCAN":
+                hasCancelConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
+                break;
+
+            case "ERENT_TOK":
+                erEntityToken = reader.getAttributeValue().intern();
+                break;
+
+            case "ERREL_TOK":
+                erRelToken = reader.getAttributeValue().intern();
+                break;
+
+            case "ERREL_LINK":
+                erRelLink = reader.getAttributeValue().equals( "1" );
+                break;
+
+            case "EXCLUDE":
+                exclude = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "INCLUDE":
+                include = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "INCLSRC":
+                includeSrc = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "LAZYLOAD":
+                getLazyLoadConfig().setFlag( LazyLoadFlags.IS_LAZYLOAD );
+                if ( getParent() == null )
+                    throw new ZeidonException( "LAZYLOAD is invalid for root entity" );
+
+                LazyLoadConfig parentConfig = getParent().getLazyLoadConfig();
+                parentConfig.setFlag( LazyLoadFlags.HAS_LAZYLOAD_CHILD );
+                getLodDef().setHasLazyLoadEntities( true );
+
+                break;
+
+            case "NAME":
+                name = reader.getAttributeValue().intern();
+                break;
+
+            case "PDELETE":
+                switch ( reader.getAttributeValue().charAt( 0 ) )
                 {
-                    activateLimit = Integer.parseInt( reader.getAttributeValue() );
-                }
-                else
-                if ( reader.getAttributeName().equals( "AUTOLOADFROMPARENT" ))
-                {
-                    autoloadFromParent = reader.getAttributeValue().startsWith( "Y" );
+                    case 'D':
+                        parentDelete = true;
+                        break;
+
+                    case 'R':
+                        restrictParentDelete = true;
+                        getParent().setCheckRestrictedDelete( true );
+                        break;
+
+                    // It looks like we're supposed to ignore 'E'.
                 }
                 break;
 
-            case 'C':
-                if ( reader.getAttributeName().equals( "CREATE" ))
+            case "RECURSIVE":
+                // Check to see if this entity is recursive.
+                for ( EntityDef search = parent; search != null; search = search.getParent() )
                 {
-                    create = reader.getAttributeValue().startsWith( "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "CARDMAX" ))
-                {
-                    maxcardinality = Integer.parseInt( reader.getAttributeValue() );
-                }
-                else
-                if ( reader.getAttributeName().equals( "CARDMIN" ))
-                {
-                    minCardinality = Integer.parseInt( reader.getAttributeValue() );
-                }
-                break;
-
-            case 'D':
-                if ( reader.getAttributeName().equals( "DELETE" ))
-                {
-                    delete = reader.getAttributeValue().startsWith( "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "DERIVED" ))
-                {
-                    derived = true;
-                    derivedPath = true;
-                }
-                else
-                if ( reader.getAttributeName().equals( "DEBUGCHG" ))
-                {
-                    // Set up a listener to write stack trace when an entity is changed.
-                    if ( StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" ) )
-                        eventListener = new EventStackTrace();
-                }
-                if ( reader.getAttributeName().equals( "DEBUGINCRE" ))
-                {
-                    debugIncrementalFlag = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "DUPENTIN" ))
-                {
-                    duplicateEntity = true;
-                    lodDef.setHasDuplicateInstances( true );
-                }
-
-                break;
-
-            case 'E':
-                if ( reader.getAttributeName().equals( "ECESRCFILE" ))
-                {
-                    sourceFileName = reader.getAttributeValue();
-                    if ( ! sourceFileName.contains( "." ) )
-                        sourceFileName = getLodDef().getApplication().getPackage() + "." + sourceFileName;
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECESRCTYPE" ))
-                {
-                    sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECEOPER" ))
-                {
-                    constraintOper = reader.getAttributeValue().intern();
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECCR" ))
-                {
-                    hasCreateConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECDEL" ))
-                {
-                    hasDeleteConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECINC" ))
-                {
-                    hasIncludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-
-                    // Include constraints take some work.  Since nobody appears to use them let's not
-                    // worry about implementing them for now.
-                    throw new UnsupportedOperationException( "Include constraints not supported yet." );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECEXC" ))
-                {
-                    hasExcludeConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECACC" ))
-                {
-                    hasAcceptConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ECCAN" ))
-                {
-                    hasCancelConstraint = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "ERENT_TOK" ))
-                {
-                    erEntityToken = reader.getAttributeValue().intern();
-                }
-                else
-                if ( reader.getAttributeName().equals( "ERREL_TOK" ))
-                {
-                    erRelToken = reader.getAttributeValue().intern();
-                }
-                else
-                if ( reader.getAttributeName().equals( "ERREL_LINK" ))
-                {
-                    erRelLink = reader.getAttributeValue().equals( "1" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "EXCLUDE" ))
-                {
-                    exclude = reader.getAttributeValue().startsWith( "Y" );
-                }
-                break;
-
-            case 'I':
-                if ( reader.getAttributeName().equals( "INCLUDE" ))
-                {
-                    include = reader.getAttributeValue().startsWith( "Y" );
-                }
-                else
-                if ( reader.getAttributeName().equals( "INCLSRC" ))
-                {
-                    includeSrc = reader.getAttributeValue().startsWith( "Y" );
-                }
-                break;
-
-            case 'L':
-                if ( reader.getAttributeName().equals( "LAZYLOAD" ))
-                {
-                    getLazyLoadConfig().setFlag( LazyLoadFlags.IS_LAZYLOAD );
-                    if ( getParent() == null )
-                        throw new ZeidonException("LAZYLOAD is invalid for root entity" );
-
-                    LazyLoadConfig parentConfig = getParent().getLazyLoadConfig();
-                    parentConfig.setFlag( LazyLoadFlags.HAS_LAZYLOAD_CHILD );
-                    getLodDef().setHasLazyLoadEntities( true );
-                }
-                break;
-
-            case 'N':
-                if ( reader.getAttributeName().equals( "NAME" ))
-                {
-                    name = reader.getAttributeValue().intern();
-                }
-                break;
-
-            case 'P':
-                if ( reader.getAttributeName().equals( "PDELETE" ))
-                {
-                    switch ( reader.getAttributeValue().charAt( 0 ) )
+                    if ( search.getErEntityToken() == erEntityToken )
                     {
-                        case 'D':
-                            parentDelete = true;
-                            break;
+                        search.recursiveChild = this;
+                        this.recursive = true;
+                        this.recursiveParent = search;
 
-                        case 'R':
-                            restrictParentDelete = true;
-                            getParent().setCheckRestrictedDelete( true );
-                            break;
-
-                        // It looks like we're supposed to ignore 'E'.
-                    }
-                }
-                break;
-
-            case 'R':
-                if ( reader.getAttributeName().equals( "RECURSIVE" ))
-                {
-                    // Check to see if this entity is recursive.
-                    for ( EntityDef search = parent; search != null; search = search.getParent() )
-                    {
-                        if ( search.getErEntityToken() == erEntityToken )
+                        for ( EntityDef child = search;
+                              child != null && child.getDepth() > this.getDepth();
+                              child = child.getNextHier() )
                         {
-                            search.recursiveChild = this;
-                            this.recursive = true;
-                            this.recursiveParent = search;
-
-                            for ( EntityDef child = search;
-                                  child != null && child.getDepth() > this.getDepth();
-                                  child = child.getNextHier() )
-                            {
-                                child.recursivePath = true;
-                            }
-
-                            break;
+                            child.recursivePath = true;
                         }
-                    }
 
-                    if ( ! recursive )
-                        throw new ZeidonException( "Internal error: Recursive flag is set but no recursive parent found. %s", this );
+                        break;
+                    }
                 }
+
+                if ( !recursive )
+                    throw new ZeidonException( "Internal error: Recursive flag is set but no recursive parent found. %s",
+                                               this );
                 break;
 
-            case 'U':
-                if ( reader.getAttributeName().equals( "UPDATE" ))
-                {
-                    update = reader.getAttributeValue().startsWith( "Y" );
-                }
+            case "UPDATE":
+                update = reader.getAttributeValue().startsWith( "Y" );
                 break;
         }
     }
