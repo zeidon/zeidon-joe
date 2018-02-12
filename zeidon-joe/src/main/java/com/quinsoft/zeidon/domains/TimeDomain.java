@@ -159,7 +159,7 @@ public class TimeDomain extends DateTimeDomain
         @Override
         public void setAttribute(PortableFileReader reader)
         {
-            if ( reader.getAttributeName().equals( "JavaEditString" ) )
+            case "JavaEditString" ) )
             {
                 editString = reader.getAttributeValue();
                 formatter = DateTimeFormat.forPattern( editString );
