@@ -2312,7 +2312,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     @Override
-    public int copyEntity( View view, EntityInstance entityInstance )
+    public int copyEntityForVersioning( View view, EntityInstance entityInstance )
     {
         EntityDef entityDef = entityInstance.getEntityDef();
         DataRecord dataRecord = entityDef.getDataRecord();

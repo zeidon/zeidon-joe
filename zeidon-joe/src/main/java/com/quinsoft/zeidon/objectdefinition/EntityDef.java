@@ -359,6 +359,10 @@ public class EntityDef implements PortableFileAttributeHandler
             case "UPDATE":
                 update = reader.getAttributeValue().startsWith( "Y" );
                 break;
+
+            case "VERSIONINGATTRIBUTETOK":
+                versioningAttributeTok = reader.getAttributeValue();
+                break;
         }
     }
 
