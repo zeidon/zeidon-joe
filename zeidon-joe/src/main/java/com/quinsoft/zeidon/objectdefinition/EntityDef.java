@@ -130,6 +130,12 @@ public class EntityDef implements PortableFileAttributeHandler
     private int        persistentAttributeCount;
     private int        workAttributeCount;
     private DataRecord dataRecord;
+    /**
+     * If not null, this is the relationship that is used to version this entity.
+     */
+    private DataField  versioningDataField;
+    private String     versioningAttributeTok;
+
     private EntityDef  recursiveParent;
     private int        minCardinality;
     private int        maxcardinality;
@@ -400,6 +406,13 @@ public class EntityDef implements PortableFileAttributeHandler
                     update = reader.getAttributeValue().startsWith( "Y" );
                 }
                 break;
+
+            case 'V':
+                if ( reader.getAttributeName().equals( "UPDATE" ))
+                {
+                    update = reader.getAttributeValue().startsWith( "Y" );
+                }
+                break;
         }
     }
 
@@ -446,6 +459,25 @@ public class EntityDef implements PortableFileAttributeHandler
             }
         }
 
+        // Everything looks good.  Lets check to see if there's a versioning relationship.
+        if ( versioningAttributeTok != null )
+            setVersioningRel();
+    }
+
+    private void setVersioningRel()
+    {
+        if ( ! isUpdate() )
+            return;
+
+        if ( isDerived() )
+            return;
+
+        AttributeDef versioningAttribute = getAttributeByErToken( versioningAttributeTok );
+
+        // The versioning attribute should be a foreign key, which means it should be hidden.
+        assert versioningAttribute.isHidden() : "Versioning attribute is not hidden.";
+
+        versioningDataField = getDataRecord().getDataField( versioningAttribute );
     }
 
     /**

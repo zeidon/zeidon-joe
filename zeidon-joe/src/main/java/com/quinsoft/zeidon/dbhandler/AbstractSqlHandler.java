@@ -2311,6 +2311,75 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return 0;
     }
 
+    @Override
+    public int copyEntity( View view, EntityInstance entityInstance )
+    {
+        EntityDef entityDef = entityInstance.getEntityDef();
+        DataRecord dataRecord = entityDef.getDataRecord();
+
+        SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
+        task.dblog().debug( "Copying entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
+
+        stmt.appendCmd( "INSERT ", dataRecord.getRecordName(), "( " );
+        int updateCount = 0;
+        for ( DataField dataField : dataRecord.dataFields() )
+        {
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ! attributeDef.isPersistent() )
+                continue;
+
+            if ( attributeDef.isKey() )
+            {
+                if ( entityInstance.getAttribute( attributeDef ).isUpdated() )
+                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
+
+                if ( entityInstance.getAttribute( attributeDef ).isNull() )
+                    throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
+            }
+
+
+            if ( updateCount > 0 )
+                stmt.appendCmd( ", " );
+
+            updateCount++;
+
+            stmt.appendCmd( dataField.getName() );
+        }
+
+        stmt.appendCmd( " )\n SELECT " );
+
+        updateCount = 0;
+        for ( DataField dataField : dataRecord.dataFields() )
+        {
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ! attributeDef.isPersistent() )
+                continue;
+
+            if ( attributeDef.isKey() )
+            {
+                if ( entityInstance.getAttribute( attributeDef ).isUpdated() )
+                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
+
+                if ( entityInstance.getAttribute( attributeDef ).isNull() )
+                    throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
+            }
+
+
+            if ( updateCount > 0 )
+                stmt.appendCmd( ", " );
+
+            updateCount++;
+
+            stmt.appendCmd( dataField.getName() );
+        }
+
+        stmt.appendCmd( "\n FROM ", dataRecord.getRecordName() );
+        stmt.buildWhere( stmt, entityInstance );
+        executeStatement( view, entityDef, entityInstance, stmt );
+
+        return 0;
+    }
+
     /**
      * This object is used to keep track of the different parts of a SQL statement.
      * Since statements can be nested (e.g. subselect) there can be nested SqlStatements.
