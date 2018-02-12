@@ -120,191 +120,134 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     {
         String attributeName = reader.getAttributeName();
 
-        switch ( attributeName.charAt( 0 ) )
+        switch ( attributeName )
         {
-            case 'A':
-                if ( reader.getAttributeName().equals( "AUTO_SEQ" ))
-                {
-                    autoSeq = true;
-                    entityDef.setAutoSeq( this );
-                }
+            case "AUTO_SEQ":
+                autoSeq = true;
+                entityDef.setAutoSeq( this );
                 break;
 
-            case 'C':
-                if ( reader.getAttributeName().equals( "CASESENS" ))
-                {
-                    isCaseSensitive = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
+            case "CASESENS":
+                isCaseSensitive = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
                 break;
 
-            case 'D':
-                // DERIVEDC is the name of the Java class that declares the derived function.
-                // Java only (e.g. not in the C OE).
-                if ( reader.getAttributeName().equals( "DERIVEDC" ))
-                {
-                    derivedOperationClassName = reader.getAttributeValue().intern();
-                    if ( ! derivedOperationClassName.contains( "." ) )
-                        derivedOperationClassName = getApplication().getPackage() + "." + derivedOperationClassName;
-                }
-                else
-                if ( reader.getAttributeName().equals( "DERIVEDF" ))
-                {
-                    derivedOperationName = reader.getAttributeValue().intern();
-                }
-                else
-                if ( reader.getAttributeName().equals( "DRSRCTYPE" ))
-                {
-                    derivedOperationsourceFileType = SourceFileType.parse( reader.getAttributeValue() );
-                }
-                else
-                if ( reader.getAttributeName().equals( "DOMAIN" ))
-                {
-                    setDomain( reader.getAttributeValue().intern() );
-                }
-                else
-                if ( reader.getAttributeName().equals( "DEBUGCHG" ))
-                {
-                    debugChange = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
-                }
+            // DERIVEDC is the name of the Java class that declares the derived function.
+            // Java only (e.g. not in the C OE).
+            case "DERIVEDC":
+                derivedOperationClassName = reader.getAttributeValue().intern();
+                if ( ! derivedOperationClassName.contains( "." ) )
+                    derivedOperationClassName = getApplication().getPackage() + "." + derivedOperationClassName;
                 break;
 
-            case 'E':
-                if ( reader.getAttributeName().equals( "ERATT_TOK" ))
-                {
-                    erAttributeToken = reader.getAttributeValue().intern();
-                }
+            case "DERIVEDF":
+                derivedOperationName = reader.getAttributeValue().intern();
                 break;
 
-            case 'F':
-                if ( reader.getAttributeName().equals( "FORKEY" ))
-                {
-                    foreignKey = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
-                }
+            case "DRSRCTYPE":
+                derivedOperationsourceFileType = SourceFileType.parse( reader.getAttributeValue() );
                 break;
 
-            case 'G':
-                if ( reader.getAttributeName().equals( "GENKEY" ))
-                {
-                    genKey = true;
-                    entityDef.setGenKey( this );
-                    entityDef.getLodDef().setHasGenKey( true );
-                }
+            case "DOMAIN":
+                setDomain( reader.getAttributeValue().intern() );
                 break;
 
-            case 'H':
-                if ( reader.getAttributeName().equals( "HASHKEY" ))
-                {
-                    if ( hashKeyParent == null )
-                        hashKeyParent = getEntityDef().getParent();
-
-                    hashKeyType = AttributeHashKeyType.valueOf( reader.getAttributeValue() );
-                    if ( hashKeyType != AttributeHashKeyType.NONE )
-                        entityDef.addHashKeyAttribute( this );
-                }
-                else
-                if ( reader.getAttributeName().equals( "HASHKEY_PARENT" ))
-                {
-                    String entityName = reader.getAttributeValue();
-                    for ( hashKeyParent = getEntityDef().getParent();
-                          hashKeyParent != null;
-                          hashKeyParent = hashKeyParent.getParent() )
-                    {
-                        if ( hashKeyParent.getName().equals( entityName ) )
-                            break;
-                    }
-
-                    if ( hashKeyParent == null )
-                        throw new ZeidonException("Unknown hashkey parent %s", entityName );
-                }
-                else
-                if ( reader.getAttributeName().equals( "HIDDEN" ))
-                {
-                    hidden = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
-                }
+            case "DEBUGCHG":
+                debugChange = StringUtils.startsWithIgnoreCase( reader.getAttributeValue(), "Y" );
                 break;
 
-            case 'I':
-                if ( reader.getAttributeName().equals( "INIT" ))
-                {
-                    initialValue = reader.getAttributeValue();
-                    entityDef.setHasInitializedAttributes( true );
-                }
-
-            case 'K':
-                if ( reader.getAttributeName().equals( "KEY" ))
-                {
-                    key = true;
-                    entityDef.addKey( this );
-                }
+            case "ERATT_TOK":
+                erAttributeToken = reader.getAttributeValue().intern();
                 break;
 
-            case 'L':
-                if ( reader.getAttributeName().equals( "LTH" ))
-                {
-                    length = Integer.parseInt( reader.getAttributeValue() );
-                }
+            case "FORKEY":
+                foreignKey = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
                 break;
 
-            case 'N':
-                if ( reader.getAttributeName().equals( "NAME" ))
-                {
-                    setName( reader.getAttributeValue().intern() );
-                }
+            case "GENKEY":
+                genKey = true;
+                entityDef.setGenKey( this );
+                entityDef.getLodDef().setHasGenKey( true );
                 break;
 
-            case 'P':
-                if ( reader.getAttributeName().equals( "PERSIST" ))
-                {
-                    persistent = reader.getAttributeValue().startsWith( "Y" );
-                }
+            case "HASHKEY":
+                if ( hashKeyParent == null )
+                    hashKeyParent = getEntityDef().getParent();
+
+                hashKeyType = AttributeHashKeyType.valueOf( reader.getAttributeValue() );
+                if ( hashKeyType != AttributeHashKeyType.NONE )
+                    entityDef.addHashKeyAttribute( this );
                 break;
 
-            case 'R':
-                if ( reader.getAttributeName().equals( "REQUIRED" ))
+            case "HASHKEY_PARENT":
+                String entityName = reader.getAttributeValue();
+                for ( hashKeyParent = getEntityDef().getParent();
+                      hashKeyParent != null;
+                      hashKeyParent = hashKeyParent.getParent() )
                 {
-                    required = reader.getAttributeValue().startsWith( "Y" );
+                    if ( hashKeyParent.getName().equals( entityName ) )
+                        break;
                 }
+
+                if ( hashKeyParent == null )
+                    throw new ZeidonException("Unknown hashkey parent %s", entityName );
                 break;
 
-            case 'S':
-                if ( reader.getAttributeName().equals( "SEQUENCING" ))
-                {
-                    int position = Integer.parseInt( reader.getAttributeValue() );
-
-                    // Find the first parent that can have multiple children.  If a parent has
-                    // max cardinality of 1 then it can't be ordered.
-                    EntityDef search = entityDef;
-                    while ( search.getMaxCardinality() == 1 )
-                        search = search.getParent();
-
-                    search.addSequencingAttribute( this, position );
-                }
-                else
-                if ( reader.getAttributeName().equals( "SEQ_AD" ))
-                {
-                    isSequencingAscending = reader.getAttributeValue().toUpperCase().startsWith( "A" );
-                }
+            case "HIDDEN":
+                hidden = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
                 break;
 
-            case 'T':
-                if ( reader.getAttributeName().equals( "TYPE" ))
-                {
-                    type = InternalType.mapCode( reader.getAttributeValue() );
-                }
+            case "INIT":
+                initialValue = reader.getAttributeValue();
+                entityDef.setHasInitializedAttributes( true );
                 break;
 
-            case 'U':
-                if ( reader.getAttributeName().equals( "UPDATE" ))
-                {
-                    update = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
-                }
+            case "KEY":
+                key = true;
+                entityDef.addKey( this );
                 break;
 
-            case 'X':
-                if ( reader.getAttributeName().equals( "XVAATT_TOK" ))
-                {
-                    xvaAttrToken = Integer.parseInt( reader.getAttributeValue() );
-                }
+            case "LTH":
+                length = Integer.parseInt( reader.getAttributeValue() );
+                break;
+
+            case "NAME":
+                setName( reader.getAttributeValue().intern() );
+                break;
+
+            case "PERSIST":
+                persistent = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "REQUIRED":
+                required = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "SEQUENCING":
+                int position = Integer.parseInt( reader.getAttributeValue() );
+
+                // Find the first parent that can have multiple children.  If a parent has
+                // max cardinality of 1 then it can't be ordered.
+                EntityDef search = entityDef;
+                while ( search.getMaxCardinality() == 1 )
+                    search = search.getParent();
+
+                search.addSequencingAttribute( this, position );
+                break;
+
+            case "SEQ_AD":
+                isSequencingAscending = reader.getAttributeValue().toUpperCase().startsWith( "A" );
+                break;
+
+            case "TYPE":
+                type = InternalType.mapCode( reader.getAttributeValue() );
+                break;
+
+            case "UPDATE":
+                update = reader.getAttributeValue().toUpperCase().startsWith( "Y" );
+                break;
+
+            case "XVAATT_TOK":
+                xvaAttrToken = Integer.parseInt( reader.getAttributeValue() );
                 break;
         }
     }
