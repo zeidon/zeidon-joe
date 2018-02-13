@@ -258,6 +258,11 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
      */
     void finishAttributeLoading()
     {
+        // If this attribute is automatically set by the OE then it isn't required to be
+        // set before commit.
+        if ( entityDef.getDbCreatedTimestamp() == this || entityDef.getDbUpdatedTimestamp() == this )
+            required = false;
+
         // Persistent, non-hidden attributes should always be activated.
         setActivate( persistent && ( ! hidden || isKey() || isForeignKey() || isAutoSeq() ) );
     }

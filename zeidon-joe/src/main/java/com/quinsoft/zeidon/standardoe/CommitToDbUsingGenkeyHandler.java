@@ -277,7 +277,7 @@ class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
                 for ( EntityInstanceImpl tempEi : instances )
                 {
                     AttributeInstanceImpl timestamp = tempEi.getAttribute( entityDef.getDbCreatedTimestamp() );
-                    if ( ! timestamp.isNull() )
+                    if ( timestamp.isNull() )
                     {
                         DateTime now = new DateTime();
                         timestamp.setValue( now );
