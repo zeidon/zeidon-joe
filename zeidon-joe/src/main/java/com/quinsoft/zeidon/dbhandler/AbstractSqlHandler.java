@@ -2364,7 +2364,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
             }
 
-
             if ( updateCount > 0 )
                 stmt.appendCmd( ", " );
 
