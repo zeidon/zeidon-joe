@@ -218,6 +218,16 @@ module Zeidon
       return list
     end
     
+    def attributes=( attribute_hash )
+      attribute_hash.each do |name, value|
+        if has_attribute( name )
+          attrib = getAttribute( name )
+          attrib.setValue( value )
+        end
+      end
+      return self
+    end
+    
     def each_attrib( options = {} )
       list = attributes( options )
       list.each do |attrib|
@@ -244,7 +254,19 @@ module Zeidon
       getAttribute( entity_def.keys[ 0 ] )
     end
     
-    def create( position = CursorPosition::NEXT )
+    def create( *args )
+      position = CursorPosition::NEXT
+      
+      args.each do |arg|
+        if arg.kind_of?( CursorPosition )
+          position = arg
+        elsif arg.kind_of?( Hash )
+          self.attributes = arg
+        else
+          raise "Unknown argument type for create(): #{arg.class}"
+        end
+      end
+      
       createEntity( position )
     end
 
