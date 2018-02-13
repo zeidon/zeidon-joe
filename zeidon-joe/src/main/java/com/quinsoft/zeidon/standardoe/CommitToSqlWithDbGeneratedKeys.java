@@ -751,7 +751,7 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
             if ( entityDef.getDbCreatedTimestamp() != null )
             {
                 AttributeInstanceImpl timestamp = ei.getAttribute( entityDef.getDbCreatedTimestamp() );
-                if ( ! timestamp.isNull() )
+                if ( timestamp.isNull() )
                 {
                     DateTime now = new DateTime();
                     timestamp.setValue( now );
