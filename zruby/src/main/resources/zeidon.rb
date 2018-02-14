@@ -221,7 +221,7 @@ module Zeidon
     def attributes=( attribute_hash )
       attribute_hash.each do |name, value|
         if has_attribute( name )
-          attrib = getAttribute( name )
+          attrib = getAttribute( name.to_s )
           attrib.setValue( value )
         end
       end
@@ -256,18 +256,21 @@ module Zeidon
     
     def create( *args )
       position = CursorPosition::NEXT
+      attribute_hash = nil
       
       args.each do |arg|
         if arg.kind_of?( CursorPosition )
           position = arg
         elsif arg.kind_of?( Hash )
-          self.attributes = arg
+          attribute_hash = arg
         else
           raise "Unknown argument type for create(): #{arg.class}"
         end
       end
       
-      createEntity( position )
+      rc = createEntity( position )
+      self.attributes = attribute_hash if attribute_hash
+      return rc
     end
 
     # Loop through the child *cursors* of this cursor. 
