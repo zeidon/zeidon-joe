@@ -427,7 +427,7 @@ public class EntityDef implements PortableFileAttributeHandler
         // The versioning attribute should be a foreign key, which means it should be hidden.
         assert versioningAttribute.isHidden() : "Versioning attribute is not hidden.";
 
-        versioningDataField = getDataRecord().getDataField( versioningAttribute );
+        versioningDataField  = getDataRecord().getDataField( versioningAttribute );
     }
 
     /**
@@ -1398,6 +1398,11 @@ public class EntityDef implements PortableFileAttributeHandler
     void setDbUpdatedTimestamp( AttributeDef dbUpdatedTimestamp )
     {
         this.dbUpdatedTimestamp = dbUpdatedTimestamp;
+    }
+
+    public DataField getVersioningDataField()
+    {
+        return versioningDataField;
     }
 
     public enum LinkValidation

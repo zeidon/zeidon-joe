@@ -2246,6 +2246,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         EntityDef entityDef = entityInstance.getEntityDef();
         DataRecord dataRecord = entityDef.getDataRecord();
 
+        copyEntityForVersioning( view, entityInstance );
+
         SqlStatement stmt = initializeCommand( SqlCommand.UPDATE, view );
         task.dblog().debug( "Updating entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
@@ -2311,10 +2313,18 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return 0;
     }
 
+    /**
+     * An entity has been updated.  If it is specified as being versioned, then we
+     * need to copy the current row to a new one.
+     */
     @Override
     public int copyEntityForVersioning( View view, EntityInstance entityInstance )
     {
         EntityDef entityDef = entityInstance.getEntityDef();
+        DataField versioningDataField = entityDef.getVersioningDataField();
+        if ( versioningDataField == null )
+            return 0;
+
         DataRecord dataRecord = entityDef.getDataRecord();
 
         SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
