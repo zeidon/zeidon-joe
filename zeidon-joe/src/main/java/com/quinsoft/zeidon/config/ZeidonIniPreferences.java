@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -188,6 +189,9 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         Map<String,String> map = new HashMap<>( System.getenv() );
         for (final String name: System.getProperties().stringPropertyNames())
             map.put(name, System.getProperties().getProperty(name));
+
+        if ( LOG.isDebugEnabled() )
+            LOG.debug( "Environment variables = {}", Arrays.toString(map.entrySet().toArray()) );
 
         return map;
     }
