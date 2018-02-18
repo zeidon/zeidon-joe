@@ -370,9 +370,8 @@ public class EntityDef implements PortableFileAttributeHandler
      * This is called after the entity def has been completely loaded.  We'll validate that
      * the entity def is configured correctly.
      *
-     * @param reader used to pass the task.
      */
-    void validateEntityDef( PortableFileReader reader )
+    void validateEntityDef( )
     {
         DataRecord childRecord = getDataRecord();
         if ( childRecord != null )

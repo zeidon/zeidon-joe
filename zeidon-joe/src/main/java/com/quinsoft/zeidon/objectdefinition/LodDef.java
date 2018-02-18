@@ -605,7 +605,6 @@ public class LodDef implements PortableFileAttributeHandler
 
                 entityDef.setPersistentAttributeCount( persistentCount );
                 entityDef.setWorkAttributeCount( workCount );
-                entityDef.validateEntityDef( reader );
             }
             else
             if ( handler instanceof AttributeDef )
@@ -636,9 +635,7 @@ public class LodDef implements PortableFileAttributeHandler
             for ( EntityDef entityDef : entityList )
             {
                 for ( AttributeDef AttributeDef : entityDef.getAttributes() )
-                {
                     attribMap.put( AttributeDef.getXvaAttrToken(), AttributeDef );
-                }
 
                 DataRecord dataRecord = entityDef.getDataRecord();
                 if ( dataRecord != null )
@@ -651,6 +648,8 @@ public class LodDef implements PortableFileAttributeHandler
                     }
                     dataRecord.setFields( entityDef );
                 }
+
+                entityDef.validateEntityDef();
             }
 
             if ( hasDuplicateInstances() )
