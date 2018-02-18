@@ -2330,6 +2330,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
         task.dblog().debug( "Copying entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
+        DataField keyDataField = null;
+
         stmt.appendCmd( "INSERT INTO ", dataRecord.getRecordName(), "( " );
         int updateCount = 0;
         for ( DataField dataField : dataRecord.dataFields() )
@@ -2346,9 +2348,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 if ( entityInstance.getAttribute( attributeDef ).isNull() )
                     throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
 
+                keyDataField = dataField;
+
                 // If the DB is generating the keys then don't add generated keys to
                 // the list of columns.
-                if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() && entityInstance.getAttribute( attributeDef ).isNull() )
+                if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() )
                     continue;
             }
 
@@ -2371,7 +2375,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             // If the DB is generating the keys then don't add generated keys to
             // the list of columns.
-            if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() && entityInstance.getAttribute( attributeDef ).isNull() )
+            if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() )
                 continue;
 
             if ( updateCount > 0 )
@@ -2379,7 +2383,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             updateCount++;
 
-            stmt.appendCmd( dataField.getName() );
+            if ( dataField == versioningDataField )
+            {
+                getAttributeValue( stmt, stmt.sqlCmd, keyDataField, entityInstance );
+            }
+            else
+                stmt.appendCmd( dataField.getName() );
         }
 
         stmt.appendCmd( "\n FROM ", dataRecord.getRecordName() );

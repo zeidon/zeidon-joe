@@ -421,6 +421,9 @@ public class EntityDef implements PortableFileAttributeHandler
         if ( isDerived() )
             return;
 
+        if ( getKeys().size() != 1 )
+            throw new ZeidonException( "Automatic Entity Versioning only supported for entities with a single key" );
+
         AttributeDef versioningAttribute = getAttributeByErToken( versioningAttributeTok );
 
         // The versioning attribute should be a foreign key, which means it should be hidden.
