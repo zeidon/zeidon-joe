@@ -2330,7 +2330,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
         task.dblog().debug( "Copying entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
-        stmt.appendCmd( "INSERT ", dataRecord.getRecordName(), "( " );
+        stmt.appendCmd( "INSERT INTO ", dataRecord.getRecordName(), "( " );
         int updateCount = 0;
         for ( DataField dataField : dataRecord.dataFields() )
         {
@@ -2345,8 +2345,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
                 if ( entityInstance.getAttribute( attributeDef ).isNull() )
                     throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
-            }
 
+                // If the DB is generating the keys then don't add generated keys to
+                // the list of columns.
+                if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() && entityInstance.getAttribute( attributeDef ).isNull() )
+                    continue;
+            }
 
             if ( updateCount > 0 )
                 stmt.appendCmd( ", " );
@@ -2365,14 +2369,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ! attributeDef.isPersistent() )
                 continue;
 
-            if ( attributeDef.isKey() )
-            {
-                if ( entityInstance.getAttribute( attributeDef ).isUpdated() )
-                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
-
-                if ( entityInstance.getAttribute( attributeDef ).isNull() )
-                    throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
-            }
+            // If the DB is generating the keys then don't add generated keys to
+            // the list of columns.
+            if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() && entityInstance.getAttribute( attributeDef ).isNull() )
+                continue;
 
             if ( updateCount > 0 )
                 stmt.appendCmd( ", " );
@@ -3031,10 +3031,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // that if debug is on that the user would like to see the SQL statements with the values
             // embedded in the SQL.
             if ( StringUtils.isBlank( value ) )
-                return task.dblog().isDebugEnabled() ? false  // Debug is enabled so don't bind all attributes.
-                                                     : true;  // Debug is off so we'll bind everything.
-
-            isBindAllValues = "TY1".contains( value.substring( 0, 1 ).toUpperCase() );  // Catches "true", "yes", "1".
+                isBindAllValues = true;
+            else
+                isBindAllValues = "TY1".contains( value.substring( 0, 1 ).toUpperCase() );  // Catches "true", "yes", "1".
         }
 
         return isBindAllValues;
