@@ -230,7 +230,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         if ( ! isValid )
             return;
 
-        log().info( "Dropping task %s", taskId );
+        log().debug( "Dropping task %s", taskId );
 
         if ( cleanupWork != null )
         {

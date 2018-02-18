@@ -1084,6 +1084,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 stmt.appendWhere( ")" );
         }
 
+        addVersioningQualification( stmt, view, entityDef );
         addOrdering( entityDef, stmt );
         for ( EntityDef child : joinedChildren )
             addOrdering( child, stmt );
@@ -1102,6 +1103,33 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // parent load and will not need to be loaded separately.
         loadedViewEntities.addAll( joinedChildren );
         return null;
+    }
+
+    /**
+     * If this entity has automatic versioning then we may need to add qualification so that the older
+     * versions aren't loaded.
+     *
+     */
+    private void addVersioningQualification( SqlStatement stmt, View view, EntityDef entityDef )
+    {
+        DataField versioningDataField = entityDef.getVersioningDataField();
+        if ( versioningDataField == null )
+            return;  // No versioning.
+
+        // If the entity is the root we definitely have to prevent loading of older versions.
+        if ( entityDef.getParent() == null )
+        {
+            DataRecord dataRecord = entityDef.getDataRecord();
+
+            if ( stmt.conjunctionNeeded )
+                stmt.appendWhere( " AND " );
+            else
+                stmt.conjunctionNeeded = true;
+
+            String col = versioningDataField.getName();
+            stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " IS NULL" );
+            return;
+        }
     }
 
     private void addOrdering( EntityDef entityDef, SqlStatement stmt )
@@ -1554,6 +1582,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         stmt.appendWhere( buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString() );
+        stmt.conjunctionNeeded = true;
     }
 
     protected abstract int executeLoad(View view, EntityDef entityDef, SqlStatement stmt);
