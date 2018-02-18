@@ -48,24 +48,14 @@ public class SqliteJdbcHandler extends JdbcHandler
      * insert statement.  This should result in a value of NULL.  Sqlite requires
      * genkeys (i.e. columns that are specified as INTEGER PRIMARY KEY) be set
      * to NULL for insert statements.
+     *
+     * NOTE: was needed for older Sqlite.  Does not appear to be needed anymore
+     * so for now we're returning false (2018-02-17).
      */
     @Override
     protected boolean addGeneratedKeyForInsert()
     {
-        return true;
-    }
-
-    /**
-     * Default insert count to 1 if it isn't specified.
-     */
-    @Override
-    public Integer getInsertCount()
-    {
-        Integer ic = super.getInsertCount();
-        if ( ic == null || ic == 0 )
-            return 1;
-
-        return ic;
+        return false;
     }
 
     @Override

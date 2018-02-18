@@ -1099,10 +1099,14 @@ public class JdbcHandler extends AbstractSqlHandler
                 if ( ! StringUtils.isBlank( connStr ) )
                 {
                     if ( connStr.contains( "sqlite" ) )
-                        return new SqliteJdbcTranslator( task, this );
+                    {
+                        translator = new SqliteJdbcTranslator( task, this );
+                        return translator;
+                    }
                 }
 
-                return new StandardJdbcTranslator( task, this );
+                translator = new StandardJdbcTranslator( task, this );
+                return translator;
             }
 
             try
