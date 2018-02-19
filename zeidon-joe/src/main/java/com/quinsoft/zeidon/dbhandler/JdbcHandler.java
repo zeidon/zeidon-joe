@@ -993,7 +993,7 @@ public class JdbcHandler extends AbstractSqlHandler
             return connection;
         }
 
-        private static final Pattern JDBC_FINDER = Pattern.compile( "^jdbc:([a-zA-Z]*):" );
+        private static final Pattern JDBC_FINDER = Pattern.compile( "^jdbc:([a-zA-Z]*):.*" );
 
         private String getDriver( String url, Task task, JdbcHandler handler )
         {
