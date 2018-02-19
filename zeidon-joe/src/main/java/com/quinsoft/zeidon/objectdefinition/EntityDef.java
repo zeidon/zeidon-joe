@@ -415,9 +415,6 @@ public class EntityDef implements PortableFileAttributeHandler
 
     private void setVersioningRel()
     {
-        if ( ! isUpdate() )
-            return;
-
         if ( isDerived() )
             return;
 

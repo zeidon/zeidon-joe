@@ -61,6 +61,7 @@ import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
+import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
 import com.quinsoft.zeidon.standardoe.NoOpPessimisticLockingHandler;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
@@ -1112,24 +1113,20 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private void addVersioningQualification( SqlStatement stmt, View view, EntityDef entityDef )
     {
-        DataField versioningDataField = entityDef.getVersioningDataField();
-        if ( versioningDataField == null )
-            return;  // No versioning.
-
-        // If the entity is the root we definitely have to prevent loading of older versions.
-        if ( entityDef.getParent() == null )
-        {
-            DataRecord dataRecord = entityDef.getDataRecord();
-
-            if ( stmt.conjunctionNeeded )
-                stmt.appendWhere( " AND " );
-            else
-                stmt.conjunctionNeeded = true;
-
-            String col = versioningDataField.getName();
-            stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " IS NULL" );
+        EntityDefSqlData data = getEntityDefData( entityDef );
+        if ( ! data.requiresVersioningQualification )
             return;
-        }
+
+        DataField versioningDataField = entityDef.getVersioningDataField();
+        DataRecord dataRecord = entityDef.getDataRecord();
+
+        if ( stmt.conjunctionNeeded )
+            stmt.appendWhere( " AND " );
+        else
+            stmt.conjunctionNeeded = true;
+
+        String col = versioningDataField.getName();
+        stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " IS NULL" );
     }
 
     private void addOrdering( EntityDef entityDef, SqlStatement stmt )
@@ -2936,6 +2933,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
          * with the parent entityDef.
          */
         private final ImmutableList<EntityDef> joinedChildren;
+        private boolean requiresVersioningQualification;
 
         /**
          * @param entityDef
@@ -2949,6 +2947,42 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             Builder<EntityDef> builder = ImmutableList.builder();
             addJoinedChildren( builder, this.entityDef );
             joinedChildren = builder.build();
+            requiresVersioningQualification = computeVersioningQualification();
+        }
+
+        private boolean computeVersioningQualification()
+        {
+            DataField versioningDataField = entityDef.getVersioningDataField();
+            if ( versioningDataField == null )
+                return false;
+
+            // Root always needs the qualification.
+            if ( entityDef.getParent() == null )
+                return true;
+
+            // Check to see if this relationship requires additional qualification to prevent
+            // loading all
+            RelRecord relRecord = entityDef.getDataRecord().getRelRecord();
+            RelationshipType relType = relRecord.getRelationshipType();
+            switch( relType )
+            {
+                case MANY_TO_ONE:
+                    // The FK is stored in the parent table which means there can only be
+                    // one instance found so we don't need qualification.
+                    return false;
+
+                case MANY_TO_MANY:
+                    // We know this requires qualification since it's m-to-m and therefore
+                    // can't be the versioning relationship.
+                    return true;
+
+                case ONE_TO_MANY:
+                    // We will need qualification in all cases except when the rel is the history rel.
+                    // We can determine this by looking at the target dataField.
+                    return relRecord.getRelFields().get( 0 ).getRelDataField() != versioningDataField;
+            }
+
+            return false;
         }
 
         private void addJoinedChildren( Builder<EntityDef> builder, EntityDef parent )
