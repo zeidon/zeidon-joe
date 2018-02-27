@@ -2561,7 +2561,7 @@ public abstract class VmlOperation
                                       int    strTwoMaxCompare,
                                       int    maxCompareLth )
    {
-      int  nRC;
+      int  nRC = 0;
 
       // Ensure all parms sync up and that strOneIdx + strOneMaxReceive is less than maxCompareLth.
       if ( maxCompareLth <= 0 )
@@ -2613,6 +2613,9 @@ public abstract class VmlOperation
 
       String string1 = null;
       String string2 = null;
+      try
+      {
+      
 
       if ( strOneMaxCompare <= 0 )
       {
@@ -2666,6 +2669,12 @@ public abstract class VmlOperation
 //          nRC = zstrncmp( string1, string2, nbrToCompare );
 //       else
              nRC = zstrcmp( string1, string2 );
+      }
+      }
+      catch( Exception e )
+      {
+         TraceLineS("ZeidonStringCompare Error: ", e.getMessage()); 	  
+         return -1;
       }
 
       nRC = nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
