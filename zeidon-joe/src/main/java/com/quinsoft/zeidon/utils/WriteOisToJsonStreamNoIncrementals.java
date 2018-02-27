@@ -77,7 +77,8 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
         try
         {
             jg = jsonF.createGenerator( writer );
-            jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
+            if ( ! options.isCompressed() )
+                jg.useDefaultPrettyPrinter();
             jg.writeStartObject();
 
             jg.writeStringField( "version", VERSION );

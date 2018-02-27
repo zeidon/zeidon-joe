@@ -235,7 +235,6 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         @Override
         public void actionPerformed( ActionEvent arg0 )
         {
-            System.out.println( "Ctrl +/- pressed");
             int scale = env.getPainterScaleFactor();
             if ( delta == 0 )
                 scale = env.getDefaultPainterScale();
