@@ -10,8 +10,15 @@ java_import 'com.quinsoft.zeidon.CursorResult'
 module Zeidon
   @@oe = nil
 
-  def self.get_object_engine( joe = nil )
-    return @@oe || @@oe = ObjectEngine.new( joe || JavaObjectEngine.getInstance() )
+  def self.get_object_engine( properties_file = nil )
+    return @@oe if @@oe
+
+    if properties_file
+      joe = JavaObjectEngine.getInstance( properties_file )
+    else
+      joe = JavaObjectEngine.getInstance( )
+    end
+    @@oe = ObjectEngine.new( joe )
   end
 
   def self.reload_object_engine()

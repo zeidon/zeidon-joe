@@ -18,17 +18,18 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.List;
+import java.net.URI;
+import java.net.URLEncoder;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.util.EntityUtils;
 
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
@@ -36,10 +37,8 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.ZeidonRestException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
-import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 
 /**
  * Activate an OI from a REST server.
@@ -55,9 +54,58 @@ class ActivateOiFromRestServer implements Activator
     private ViewImpl  view;
     private ActivateOptions activateOptions;
 
+    //
+    // These are shared by all connections
+    //
+
+    private static RequestConfig requestConfig;
+    private static CloseableHttpClient httpClient;
+
     public ActivateOiFromRestServer( String serverUrl )
     {
         this.serverUrl = serverUrl;
+    }
+
+    private synchronized void initHttp( Task task )
+    {
+        if ( requestConfig != null )
+            return;
+
+        // TODO: This assumes all applications use the same config.  We should someday update this to allow
+        // different applications to have different configs.
+        String group = task.getApplication().getName() + ".Http";
+        int timeout;
+        try
+        {
+            timeout = Integer.parseInt( task.readZeidonConfig( group, "HttpTimeout", "2000" ) );
+        }
+        catch ( Exception e )
+        {
+            throw new ZeidonException( "Error reading HTTP config: " + e.getMessage() )
+                        .appendMessage( "Group = %s, key = 'HttpTimeout'", group );
+        }
+
+        int connectionPoolSize;
+        try
+        {
+            connectionPoolSize = Integer.parseInt( task.readZeidonConfig( group, "ConnectionPoolSize", "5" ) );
+        }
+        catch ( Exception e )
+        {
+            throw new ZeidonException( "Error reading HTTP config: " + e.getMessage() )
+                        .appendMessage( "Group = %s, key = 'ConnectionPoolSize'", group );
+        }
+
+        requestConfig = RequestConfig.custom()
+                .setSocketTimeout(timeout)
+                .setConnectTimeout(timeout)
+                .setConnectionRequestTimeout(timeout)
+                .build();
+
+        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+        cm.setMaxTotal( connectionPoolSize );
+        cm.setDefaultMaxPerRoute( connectionPoolSize );
+        httpClient = HttpClients.custom().setConnectionManager( cm ).build();
     }
 
     /* (non-Javadoc)
@@ -75,6 +123,8 @@ class ActivateOiFromRestServer implements Activator
             view = ((InternalView) initialView).getViewImpl();
 
         activateOptions = options;
+        initHttp( task );
+
         return view;
     }
 
@@ -86,69 +136,57 @@ class ActivateOiFromRestServer implements Activator
     {
         LodDef lodDef = view.getLodDef();
         Application application = lodDef.getApplication();
-        String stringResponse = null;
-        BufferedBinaryStreamReader reader = null;
-        HttpClient client = null;
+
+        View qual = activateOptions.getQualificationObject();
+        String qualStr = qual.serializeOi().asJson().compressed().withIncremental().toStringWriter().toString();
+        String url = "";
+        CloseableHttpResponse response = null;
+
+        // The underlying HTTP connection is still held by the response object
+        // to allow the response content to be streamed directly from the network socket.
+        // In order to ensure correct deallocation of system resources
+        // the user MUST call CloseableHttpResponse#close() from a finally clause.
+        // Please note that if response content is not fully consumed the underlying
+        // connection cannot be safely re-used and will be shut down and discarded
+        // by the connection manager.
 
         try
         {
-            String url = String.format( "%s/activate?application=%s&lodDefName=%s",
-                                        serverUrl, application.getName(), view.getLodDef().getName() );
-            client = new DefaultHttpClient();
-            HttpPost post = new HttpPost( url );
-            View qual = activateOptions.getQualificationObject();
-            String qualStr = qual.serializeOi().asJson().withIncremental().toStringWriter().toString();
-            StringEntity entity = new StringEntity( qualStr );
-            post.setEntity( entity );
-            post.setHeader( "Content-Type", "application/json" );
+            url = String.format( "%s/%s/%s?qualOi=%s", serverUrl, application.getName(),
+                                  view.getLodDef().getName(), URLEncoder.encode( qualStr, "UTF-8" ) );
 
-            HttpResponse response = client.execute( post );
-            InputStream stream = response.getEntity().getContent();
-            StatusLine status = response.getStatusLine();
-            task.log().info( "Status from http activate = %s", status );
-            int statusCode = status.getStatusCode();
+            URI urlObject = new URI( url );
+            HttpGet httpGet = new HttpGet( urlObject );
+            httpGet.setConfig( requestConfig );
 
-            // If we're in debug mode, print out the results.
-            if ( task.log().isDebugEnabled() || statusCode != 200 )
+            response = httpClient.execute(httpGet);
+            int status = response.getStatusLine().getStatusCode();
+            task.log().debug( "HTTP activate status = %d", status );
+            if ( status != 200 )
             {
-                StringWriter writer = new StringWriter();
-                IOUtils.copy(stream, writer, "UTF-8");
-                stringResponse = writer.toString();
-                task.log().debug( "REST response: %s", stringResponse );
-                stream = IOUtils.toInputStream(stringResponse, "UTF-8");
+                qual.logObjectInstance();
+                throw new ZeidonException( "Status error when activating from HTTP server.  Status = %d", status )
+                                .appendMessage( "URL = %s", url );
             }
 
-            if ( statusCode != 200 )
-            {
-                throw new ZeidonException( "http activate failed with status %s", status )
-                            .appendMessage( "web URL = %s", url );
-            }
-
-
-            List<View> views = getTask().deserializeOi()
-                                        .asJson()
-                                        .fromInputStream( stream )
-                                        .activate();
-            View restRc = views.get( 0 );
-            restRc.logObjectInstance();
-            Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();
-            if ( rc != 0 )
-            {
-                String errorMsg = restRc.cursor( "RestResponse" ).getAttribute( "ErrorMessage" ).getString();
-                throw new ZeidonRestException( "Error activating OI from REST server %d", rc )
-                                                .appendMessage( "%s", errorMsg );
-            }
-
-            return views.get( 1 );
+            HttpEntity entity = response.getEntity();
+            String json = IOUtils.toString( entity.getContent(), "UTF-8" );
+            return getTask().deserializeOi()
+                    .asJson()
+                    .fromString( json )
+                    .activateFirst();
         }
         catch ( Exception e )
         {
-            throw ZeidonException.wrapException( e )
-                                 .appendMessage( "Server URL = %s", serverUrl );
+            throw ZeidonException.wrapException( e );
         }
         finally
         {
-            IOUtils.closeQuietly( reader );
+            if ( response != null )
+            {
+                EntityUtils.consumeQuietly(response.getEntity());
+                IOUtils.closeQuietly( response );
+            }
         }
     }
 
