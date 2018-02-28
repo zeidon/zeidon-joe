@@ -18,17 +18,11 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.net.URI;
 import java.net.URLEncoder;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
 import com.quinsoft.zeidon.ActivateOptions;
@@ -43,8 +37,6 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 /**
  * Activate an OI from a REST server.
  *
- * @author dgc
- *
  */
 class ActivateOiFromRestServer implements Activator
 {
@@ -54,58 +46,9 @@ class ActivateOiFromRestServer implements Activator
     private ViewImpl  view;
     private ActivateOptions activateOptions;
 
-    //
-    // These are shared by all connections
-    //
-
-    private static RequestConfig requestConfig;
-    private static CloseableHttpClient httpClient;
-
     public ActivateOiFromRestServer( String serverUrl )
     {
         this.serverUrl = serverUrl;
-    }
-
-    private synchronized void initHttp( Task task )
-    {
-        if ( requestConfig != null )
-            return;
-
-        // TODO: This assumes all applications use the same config.  We should someday update this to allow
-        // different applications to have different configs.
-        String group = task.getApplication().getName() + ".Http";
-        int timeout;
-        try
-        {
-            timeout = Integer.parseInt( task.readZeidonConfig( group, "HttpTimeout", "2000" ) );
-        }
-        catch ( Exception e )
-        {
-            throw new ZeidonException( "Error reading HTTP config: " + e.getMessage() )
-                        .appendMessage( "Group = %s, key = 'HttpTimeout'", group );
-        }
-
-        int connectionPoolSize;
-        try
-        {
-            connectionPoolSize = Integer.parseInt( task.readZeidonConfig( group, "ConnectionPoolSize", "5" ) );
-        }
-        catch ( Exception e )
-        {
-            throw new ZeidonException( "Error reading HTTP config: " + e.getMessage() )
-                        .appendMessage( "Group = %s, key = 'ConnectionPoolSize'", group );
-        }
-
-        requestConfig = RequestConfig.custom()
-                .setSocketTimeout(timeout)
-                .setConnectTimeout(timeout)
-                .setConnectionRequestTimeout(timeout)
-                .build();
-
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-        cm.setMaxTotal( connectionPoolSize );
-        cm.setDefaultMaxPerRoute( connectionPoolSize );
-        httpClient = HttpClients.custom().setConnectionManager( cm ).build();
     }
 
     /* (non-Javadoc)
@@ -123,7 +66,6 @@ class ActivateOiFromRestServer implements Activator
             view = ((InternalView) initialView).getViewImpl();
 
         activateOptions = options;
-        initHttp( task );
 
         return view;
     }
@@ -155,26 +97,25 @@ class ActivateOiFromRestServer implements Activator
             url = String.format( "%s/%s/%s?qualOi=%s", serverUrl, application.getName(),
                                   view.getLodDef().getName(), URLEncoder.encode( qualStr, "UTF-8" ) );
 
-            URI urlObject = new URI( url );
-            HttpGet httpGet = new HttpGet( urlObject );
-            httpGet.setConfig( requestConfig );
+            response = ZeidonHttpClient.getClient( task, application ).callGet( url );
 
-            response = httpClient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            String json = IOUtils.toString( entity.getContent(), "UTF-8" );
+
             int status = response.getStatusLine().getStatusCode();
             task.log().debug( "HTTP activate status = %d", status );
             if ( status != 200 )
             {
                 qual.logObjectInstance();
                 throw new ZeidonException( "Status error when activating from HTTP server.  Status = %d", status )
-                                .appendMessage( "URL = %s", url );
+                                .appendMessage( "URL = %s", url )
+                                .appendMessage( "Response = %s", json );
             }
 
-            HttpEntity entity = response.getEntity();
-            String json = IOUtils.toString( entity.getContent(), "UTF-8" );
             return getTask().deserializeOi()
-                    .asJson()
-                    .fromString( json )
-                    .activateFirst();
+                            .asJson()
+                            .fromString( json )
+                            .activateFirst();
         }
         catch ( Exception e )
         {
