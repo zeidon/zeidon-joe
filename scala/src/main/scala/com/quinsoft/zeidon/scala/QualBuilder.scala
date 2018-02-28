@@ -94,6 +94,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def fromSerializedOi( oiString: String ) : QualBuilder = {
+        jqual.loadFromSerializedString(oiString )
+        this
+    }
+
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
@@ -746,7 +751,7 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
         val jsourceEntityDef = sourceEntity.entityDef
         if ( jtargetEntityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
             throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
-        
+
         qualBuilder.jqual.fromEntityKeys( sourceEntity )
 
         return QualBuilder.TERMINATOR
@@ -783,7 +788,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     def in ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
         if ( jentityDef.getKeys().size() > 1 )
             throw new ZeidonException( "'in' operator currently only supports entities with a single key" )
-        
+
         jattributeDef = jentityDef.getKeys.get(0)
         new AttributeQualOperators( this ).in( iter )
         return QualBuilder.TERMINATOR
@@ -792,7 +797,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     def in ( selectSet: SelectSet ): QualificationTerminator = {
         if ( jentityDef.getKeys().size() > 1 )
             throw new ZeidonException( "'in' operator currently only supports entities with a single key" )
-        
+
         jattributeDef = jentityDef.getKeys.get(0)
         new AttributeQualOperators( this ).in( selectSet )
         return QualBuilder.TERMINATOR
@@ -802,11 +807,11 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         val jsourceEntityDef = sourceEntity.entityDef
         if ( jentityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
             throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
-        
+
         qualBuilder.jqual.fromEntityKeys( sourceEntity )
         return QualBuilder.TERMINATOR
     }
-    
+
     /**
      * This adds qualification on an attribute using another attribute from the same
      * query.  In SQL terms this qualifies a column on using a different column from

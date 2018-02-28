@@ -32,6 +32,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Pagination;
+import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
@@ -189,10 +190,16 @@ public class QualificationBuilder
      */
     public QualificationBuilder loadFromSerializedString( String qualString )
     {
+        // We'll take a guess and if the string starts with a "<" we'll assume it's XML,
+        // otherwise it's json.
+        StreamFormat format = StreamFormat.JSON;
+        if ( qualString.startsWith( "<" ) )
+            format = StreamFormat.XML;
+
         LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
         qualView = task.deserializeOi()
                        .setLodDef( qualLodDef )
-                       .asJson()
+                       .setFormat( format )
                        .setVersion( "1" )
                        .fromString( qualString )
                        .activateFirst();
