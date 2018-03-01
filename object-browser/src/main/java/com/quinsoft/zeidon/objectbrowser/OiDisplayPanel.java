@@ -120,6 +120,9 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
         im.put( KeyStroke.getKeyStroke( KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK ), "resetScale" );
         am.put("resetScale", new ChangeScaleAction( 0 ) );
 
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_R, KeyEvent.ALT_DOWN_MASK ), "refreshTaskList" );
+        am.put("refreshTaskList", new RefreshAction( ) );
+
         setVisible( true );
     }
 
@@ -249,6 +252,18 @@ class OiDisplayPanel extends JPanel implements EntitySelectedListener, ActionLis
                 oiDisplay.revalidate();
                 setFocusToDisplay();
             }
+        }
+    }
+
+    private class RefreshAction extends AbstractAction
+    {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed( ActionEvent arg0 )
+        {
+            env.getTaskList().refresh();
+            env.getViewList().refresh( env.getTaskList().getCurrentTask() );
         }
     }
 }
