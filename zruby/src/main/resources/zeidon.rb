@@ -346,6 +346,22 @@ module Zeidon
   
       super
     end
+
+    def set_first( *args, &block )
+      if args.length == 1 and args[0].kind_of?( Hash )
+        arg_hash = args[0]
+        if arg_hash.length == 1
+          return super.setFirst( arg_hash.first.to_s, arg_hash.last )
+        end
+      end
+
+      super
+    end
+
+    # Simple wrapper for includeSubobject method.
+    def include( *args )
+      super.includeSubobject( *args )
+    end
     
     def method_missing( id, *args, &block )
       return getAttribute( id.to_s ) if has_attribute( id )
