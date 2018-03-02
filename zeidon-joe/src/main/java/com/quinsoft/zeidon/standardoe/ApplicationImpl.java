@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownLodDefException;
@@ -41,6 +42,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 
@@ -59,6 +61,7 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     private final String              zeidonRootDir;
     private final ViewNameList        viewNameList = new ViewNameList();
     private       DomainList          domainList;
+    private       CacheMap cacheMap;
 
     /**
      * Create an application and get the name from zeidon.app.
@@ -218,11 +221,11 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     {
         ClassLoader loader = this.getClass().getClassLoader();
         final String resourceDir = getObjectDir() + "/";
-        
+
         Pattern pattern = Pattern.compile( "(.*)(\\.xod$)", Pattern.CASE_INSENSITIVE );
         try
         {
-            return (List<String>) IOUtils.readLines( loader.getResourceAsStream( resourceDir ), StandardCharsets.UTF_8)
+            return IOUtils.readLines( loader.getResourceAsStream( resourceDir ), StandardCharsets.UTF_8)
                    .stream()
                    .map( resourceName -> pattern.matcher( resourceName ) ) // Create a matcher
                    .filter( matcher -> matcher.matches() )                 // Keep only ones that match.
@@ -233,6 +236,14 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
         {
             throw ZeidonException.wrapException( e ).appendMessage( "XOD resource dir: %s", resourceDir );
         }
+    }
 
+    @Override
+    public synchronized CacheMap getCacheMap()
+    {
+        if ( cacheMap == null )
+            cacheMap = new CacheMapImpl();
+
+        return cacheMap;
     }
 }

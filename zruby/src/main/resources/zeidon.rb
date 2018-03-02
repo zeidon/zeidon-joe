@@ -10,8 +10,15 @@ java_import 'com.quinsoft.zeidon.CursorResult'
 module Zeidon
   @@oe = nil
 
-  def self.get_object_engine( joe = nil )
-    return @@oe || @@oe = ObjectEngine.new( joe || JavaObjectEngine.getInstance() )
+  def self.get_object_engine( properties_file = nil )
+    return @@oe if @@oe
+
+    if properties_file
+      joe = JavaObjectEngine.getInstance( properties_file )
+    else
+      joe = JavaObjectEngine.getInstance( )
+    end
+    @@oe = ObjectEngine.new( joe )
   end
 
   def self.reload_object_engine()
@@ -126,9 +133,39 @@ module Zeidon
 
     def method_missing( id, *args, &block )
       return @jtask.send( id, *args, &block ) if @jtask.respond_to?( id )
+      return ViewDef.new( self, id ) if is_lod_name?( id )
       super
     end
+
+    private
+
+    def is_lod_name?( str )
+      begin
+        @jtask.getApplication.getLodDef( @jtask, str )
+        return true
+      rescue Exception => e
+        return false
+      end
+    end
   end # Task
+
+  class ViewDef
+    attr_reader :task, :lod_name
+
+    def initialize( task, lod_name )
+      @task = task
+      @lod_name = lod_name.to_s
+    end
+
+    def activate qual_hash
+      task.activate( lod_name, qual_hash )
+    end
+
+    def activate_empty
+      task.activate_empty( lod_name )
+    end
+    
+  end
   
   class View
     attr_reader :jview
@@ -154,6 +191,18 @@ module Zeidon
 
     def copy_view
       return View.new( @jview.newView )
+    end
+
+    def to_s
+      @jview.toString
+    end
+
+    def to_json
+      @jview.serializeOi.compressed.asJson.toString
+    end
+
+    def to_hash
+      JSON.parse( self.to_json )
     end
   end # View
   
@@ -216,6 +265,12 @@ module Zeidon
       list = getAttributes( include_null_attributes )
       list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
       return list
+    end
+
+    def to_hash
+      Hash[ attributes.map do |attr|
+        [attr.name, attr.getValue]
+      end ]
     end
     
     def attributes=( attribute_hash )
@@ -290,6 +345,22 @@ module Zeidon
       end
   
       super
+    end
+
+    def set_first( *args, &block )
+      if args.length == 1 and args[0].kind_of?( Hash )
+        arg_hash = args[0]
+        if arg_hash.length == 1
+          return super.setFirst( arg_hash.first.to_s, arg_hash.last )
+        end
+      end
+
+      super
+    end
+
+    # Simple wrapper for includeSubobject method.
+    def include( *args )
+      super.includeSubobject( *args )
     end
     
     def method_missing( id, *args, &block )

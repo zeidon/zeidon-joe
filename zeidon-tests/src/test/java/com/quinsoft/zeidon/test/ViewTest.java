@@ -31,6 +31,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.WriteOiFlags;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.DynamicAttributeDefConfiguration;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
@@ -524,7 +525,7 @@ public class ViewTest
     public void testDomains()
     {
         createTestOI();
-
+        
         // Date domain
         mFASrc.cursor( "Fund" ).getAttribute( "FullyEndowedDate").setValue( "03/11/2020" ) ;
         String dateString = mFASrc.cursor( "Fund" ).getAttribute( "FullyEndowedDate" ).getString(null);

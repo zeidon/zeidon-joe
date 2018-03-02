@@ -405,8 +405,6 @@ public class TestZencas
                             .addAttribQual( "ID", 50 )
                             .activate();
 
-        stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
-
         SerializeOi options = new SerializeOi();
         options.withIncremental();
         new SerializeOi().withIncremental().useCamelCase().addView( stud, person ).toTempDir( "stud.json" );
@@ -1333,7 +1331,7 @@ public class TestZencas
             * But DG changed SystemApplication.nullStringEqualsEmptyString to true and now
             * this works correctly. So I took my change out and put his in.
 		   */
-           
+
             // These are views that need to get created in order to be able to activate
             // mStudent.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
@@ -1931,7 +1929,7 @@ public class TestZencas
 		                      int      lTempInteger_0 )
 		{
 		   int      RESULT = 0;
-		
+
 		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
@@ -1942,14 +1940,14 @@ public class TestZencas
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
-		
+
 		private int
 		o_fnLocalBuildlTermWithNullValue( View     vSubtask,
 		                      zVIEW    vQualObject,
 		                      int      lTempInteger_0 )
 		{
 		   int      RESULT = 0;
-		
+
 		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
@@ -3826,7 +3824,7 @@ public class TestZencas
 
 	         return 0;
 		}
-		
+
 		public int
 		testAutoLoadFromParent( View ViewToWindow )
 		{
@@ -3834,14 +3832,14 @@ public class TestZencas
 			zVIEW    mTstClss = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-			
+
 			// When the xod had autoloadforparent=Y but the foreign key in the parent was null, the child was still being created.
 			// It's fixed but I am still adding this.
-			
+
 			o_fnLocalBuildQualTstClass( ViewToWindow, vTempViewVar_0, 776 );
 			RESULT = ActivateObjectInstance( mTstClss, "mTstClss", ViewToWindow, vTempViewVar_0, zSINGLE );
 			Assert.assertEquals("Child entity faculty should be null.", mTstClss.cursor("Faculty").checkExistenceOfEntity(), CursorResult.NULL);
-			
+
 			return 0;
 		}
 
@@ -5659,7 +5657,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
    SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
    */
    return( 0 );
-} 		
+}
 
 		private int
 		o_fnLocalBuildQualTstClass(
@@ -5678,7 +5676,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 			   return( 0 );
-		
+
 		}
 
 	        private int
@@ -6019,7 +6017,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
-		
+
 		private int
 		o_BuildQualmStudent( View     vSubtask,
 		                     zVIEW    vQualObject )
@@ -6061,7 +6059,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "PhiDeltaLambdaFlag" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			   return( 0 );		   
+			   return( 0 );
 		}
 		private int
 		o_BuildQualmStudent2( View     vSubtask,
@@ -6079,7 +6077,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "8" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			   
+
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
@@ -6089,7 +6087,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
-			  
+
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
@@ -6097,7 +6095,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "GeneralNote" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			   return( 0 );		   
+			   return( 0 );
 		}
 
 		private int

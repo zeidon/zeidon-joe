@@ -52,10 +52,14 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             val qual = view.buildQual()
 
             if ( params.contains( "qual" ) ) {
-              qual.fromJson( params( "qual" ) )
+                qual.fromJson( params( "qual" ) )
             }
-            else {
-              qual.rootOnlyMultiple()
+            else
+            if ( params.contains( "qualOi" ) ) {
+                val qualStr = params( "qualOi" )
+                qual.fromSerializedOi( qualStr )
+            } else {
+                qual.rootOnlyMultiple()
             }
 
             qual.activate()

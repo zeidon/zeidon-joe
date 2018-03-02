@@ -233,6 +233,10 @@ class AttributeInstanceImpl implements AttributeInstance
             throw new ZeidonException( "Attribute is defined as read-only" )
                                 .prependAttributeDef( attributeDef );
 
+        if ( ! attributeDef.getEntityDef().isUpdate() )
+            throw new ZeidonException( "Entity may not be udpated." )
+                                .prependAttributeDef( attributeDef );
+
         // If the entity is derived or work, then we do not need to check if the
         // attribute can be updated.
         if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )

@@ -140,7 +140,6 @@ class ViewChooser extends JPanel implements ActionListener
         @Override
         public void actionPerformed( ActionEvent e )
         {
-            System.out.println( "SelectView " + index );
             if ( index >= viewList.getRowCount() )
                 return;
 

@@ -67,12 +67,12 @@ public interface Application
      * @return Domain object.
      */
     Domain getDomain( String name );
- 
+
     /**
      * Returns a list of known LOD names for this application.  Note that this may
      * be an expensive operation because it will search through the entire classpath
      * for matching LODs.
-     * 
+     *
      * @return list of LOD names.
      */
     List<String> getLodNameList( Task task );
@@ -89,6 +89,8 @@ public interface Application
     Collection<? extends View> getAllNamedViews();
     void setNameForView( String name, View view );
     boolean isSystemApp();
+
+    public CacheMap getCacheMap();
 
     /**
      * If true, then this application views null strings equal to empty strings.

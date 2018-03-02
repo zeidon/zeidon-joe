@@ -150,6 +150,19 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         task.addNewView( this );
     }
 
+    /**
+     * Replace the current OI with a new one.
+     *
+     * RESETS THE CURSORS!
+     */
+    void replaceObjectInstance( ObjectInstance newOi )
+    {
+        assert lodDef == newOi.getLodDef();
+        assert task == newOi.getTask();
+        newOi.setActivateOptions( getActivateOptions() );
+        viewCursor = new ViewCursor( this, newOi );
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.TaskQualification#getTask()
      */
