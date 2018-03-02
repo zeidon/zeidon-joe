@@ -68,21 +68,7 @@ public class ViewTest
 
     private View createTestOI()
     {
-        mFASrc = zencas.activateEmptyObjectInstance( "mFASrc" );
-        mFASrc.cursor( "FinAidSource" ).createEntity();
-        for ( int i = 0; i < 2; i++ )
-        {
-            mFASrc.cursor( "Scholarship" ).createEntity(CursorPosition.NEXT,
-                                                        EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS) );
-            mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).setValue(  i  ) ;
-            mFASrc.cursor( "Scholarship" ).getAttribute( "Name" ).setValue(  "ScholarshipName" + i  ) ;
-            for ( int j = 1; j < 3; j++ )
-            {
-                mFASrc.cursor( "Fund" ).createEntity( CursorPosition.NEXT, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS ) )
-                                       .getAttribute( "Name" ).setValue(  "Fund" + Integer.toString( j  ) )
-                                       .getAttribute( "ID" ).setValue(  (100 * j) + i  ) ;
-            }
-        }
+        mFASrc = zencas.deserializeOi().fromFile( "target/test-classes/testdata/ZENCAs/ViewTest1.json" ).activateFirst();
         return mFASrc;
     }
 
@@ -94,20 +80,7 @@ public class ViewTest
      */
     private View createTestOI2()
     {
-        mFASrc = zencas.activateEmptyObjectInstance( "mFASrc" );
-        mFASrc.cursor( "FinAidSource" ).createEntity();
-        for ( int i = 0; i < 10; i++ )
-        {
-            mFASrc.cursor( "Scholarship" ).createEntity(CursorPosition.NEXT, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS) );
-            mFASrc.cursor( "Scholarship" ).getAttribute( "ID" ).setValue(  i  ) ;
-            mFASrc.cursor( "Scholarship" ).getAttribute( "Name" ).setValue(  "ScholarshipName" + i  ) ;
-            for ( int j = 1; j < 4; j++ )
-            {
-                mFASrc.cursor( "Fund" ).createEntity(CursorPosition.NEXT, EnumSet.of( CreateEntityFlags.fIGNORE_MAX_CARDINALITY, CreateEntityFlags.fIGNORE_PERMISSIONS ) )
-                                       .getAttribute( "Name" ).setValue(  "Fund" + Integer.toString( j  ) )
-                                       .getAttribute( "ID" ).setValue(  (100 * j) + i  ) ;
-            }
-        }
+        mFASrc = zencas.deserializeOi().fromFile( "target/test-classes/testdata/ZENCAs/ViewTest2.json" ).activateFirst();
         return mFASrc;
     }
 
@@ -142,60 +115,60 @@ public class ViewTest
             qb.rootOnly();
         qb.activate();
     }
-    
+
     private void runJsonTest( String json )
     {
         runJsonTest( json, true );
     }
-    
+
     @Test
     public void testQualBuilderFromJson() throws IOException
     {
         String json;
-        
-        json = "{\r\n" + 
-                "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"$and\" : [ { \"LastName\": \"Smith\" }, { \"MaidenName\": { \"$neq\": \"Smith\" } } ] } ]\r\n" + 
+
+        json = "{\r\n" +
+                "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"$and\" : [ { \"LastName\": \"Smith\" }, { \"MaidenName\": { \"$neq\": \"Smith\" } } ] } ]\r\n" +
                 "}";
 
         runJsonTest( json );
-        
-        json = "{\r\n" + 
-                "    \"ID\": [10, 11, 12],\r\n" + 
-                "    \"MaidenName\": \"Alice\",\r\n" + 
-                "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"LastName\": \"Smith\" } ],\r\n" + 
-                "    \"DateOfBirth\": { \"$gt\": \"01/01/2001\", \"$lt\": \"01/01/2010\" }\r\n" + 
-                "}"; 
 
-        runJsonTest( json );
-
-        json = "{\r\n" + 
-                "    \"MaidenName\": { \"$neq\": \"Smith\" }\r\n" + 
+        json = "{\r\n" +
+                "    \"ID\": [10, 11, 12],\r\n" +
+                "    \"MaidenName\": \"Alice\",\r\n" +
+                "    \"$or\": [ { \"FirstName\": \"Bob\" }, { \"LastName\": \"Smith\" } ],\r\n" +
+                "    \"DateOfBirth\": { \"$gt\": \"01/01/2001\", \"$lt\": \"01/01/2010\" }\r\n" +
                 "}";
 
         runJsonTest( json );
-        
-        json = "{\r\n" + 
-                "    \"MaidenName\": { \"$neq\": \"Smith\" },\r\n" + 
-                "    \"ID\": [10, 11, 12],\r\n" + 
-                "    \"Address\": { \"Description\": { \"$neq\": \"\" } }\r\n" + 
+
+        json = "{\r\n" +
+                "    \"MaidenName\": { \"$neq\": \"Smith\" }\r\n" +
                 "}";
 
         runJsonTest( json );
-        
-        json = "{\r\n" + 
-                "    \"ID\": [10, 11, 12],\r\n" + 
-                "    \"restricting\": {\r\n" + 
-                "        \"Address\": {\r\n" + 
-                "            \"Description\": { \"<>\": \"\" }\r\n" + 
-                "        }\r\n" + 
-                "    }\r\n" + 
+
+        json = "{\r\n" +
+                "    \"MaidenName\": { \"$neq\": \"Smith\" },\r\n" +
+                "    \"ID\": [10, 11, 12],\r\n" +
+                "    \"Address\": { \"Description\": { \"$neq\": \"\" } }\r\n" +
+                "}";
+
+        runJsonTest( json );
+
+        json = "{\r\n" +
+                "    \"ID\": [10, 11, 12],\r\n" +
+                "    \"restricting\": {\r\n" +
+                "        \"Address\": {\r\n" +
+                "            \"Description\": { \"<>\": \"\" }\r\n" +
+                "        }\r\n" +
+                "    }\r\n" +
                 "}";
 
         runJsonTest( json, false );
-        
+
         System.out.println( "here" );
     }
-    
+
     @Test
     public void testSubobject() throws IOException
     {
