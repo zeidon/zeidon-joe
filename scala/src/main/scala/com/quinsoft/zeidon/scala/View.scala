@@ -160,10 +160,10 @@ class View( val task: Task ) extends Dynamic {
         return this
     }
 
-    def activate( addQual: (QualBuilder) => QualBuilder ): View = {
-      val qb = this.buildQual()
-      addQual( qb )
-      return qb.activate // Same as "return this".
+    def activate(addQual: (QualBuilder) => QualBuilder): View = {
+        val qb = this.buildQual()
+        addQual(qb)
+        return qb.activate // Same as "return this".
     }
 
     /**

@@ -70,8 +70,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     get("/:appName/:lod/:id") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            val view = task.newView( lodName )
-                           .activateWhere( _.root.key = params( "id" ) )
+            val view = task.using( lodName )
+                           .activate( _.root.key = params( "id" ) )
 
             Ok( serializeResponse( view ) )
         }
@@ -80,8 +80,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     delete("/:appName/:lod/:id") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            val view = task.newView( lodName )
-                           .activateWhere( _.root.key = params( "id" ) )
+            val view = task.using( lodName )
+                           .activate( _.root.key = params( "id" ) )
 
             view.root.deleteEntity()
             view.commit()

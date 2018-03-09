@@ -65,6 +65,19 @@ class EntityCursor( private[this]  val view: View,
         this
     }
 
+    /** Creates a new entity instance and sets attributes.
+     *
+     * Creates a new entity instance and then sets all attributes specified in the attributes Map.
+     */
+    def create( attributes: Map[String, AnyRef] ): EntityCursor = {
+        val ei = jentityCursor.createEntity( CursorPosition.NEXT, CreateEntityFlags.DEFAULT )
+        for( (attrName, value ) <- attributes ) {
+            ei.getAttribute( attrName ).setValue( value )
+        }
+
+        this
+    }
+
     def createTemporalEntity( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
         jentityCursor.createTemporalEntity( position )
         this
