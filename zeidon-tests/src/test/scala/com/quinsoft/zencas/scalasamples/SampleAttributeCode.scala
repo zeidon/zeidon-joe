@@ -75,7 +75,7 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
 
         if ( mUser.User.ID in (10, 21, 32 ) )
             println( "ID is 10, 21, or 32" )
-            
+
         // This will compare the attribute using Zeidon domain processing.  If the domain
         // comparison handles nulls then this line will not throw an exception.
         if ( mUser.User.Active @== "Y" )
@@ -91,17 +91,17 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
 
     def dates( mUser : View @basedOn( "mUser" ) ) {
         mUser.User.CreatedDateTime = "NOW"  // Sets attribute to current date.
-        
+
         // Use a context to get a formatted string.
         val formattedDate =  mUser.User.CreatedDateTime.getString( "yyyy-MM-dd" )
-        
+
         // To add milliseconds to a time, use add() or +=
         mUser.User.CreatedDateTime += 1000 // Adds 1000 milliseconds.
-        
+
         // To add time to a date, use the add() method and specify a context.
         mUser.User.CreatedDateTime.add( 1, "YEAR" )
     }
-    
+
     /**
      * Information about an attribute other than its value.
      */
@@ -111,7 +111,7 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
             println( "Attribute has been changed" )
 
         if ( ! mUser.User.ID.isReadOnly )
-            mUser.User.ID = 200
+            mUser.User.UserName = "New Name"
 
         // The AttributeDef has most of the meta information about an attribute.
         val attributeDef = mUser.User.ID.attributeDef
@@ -129,19 +129,19 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
     def attributeInstance( mUser : View @basedOn( "mUser" ) ) {
 
         // Get the AttributeInstance for an attribute
-        val attr = mUser.User.ID
-        val x = attr + 10
+        val attr = mUser.User.UserName
+        val x = attr + " Jr."
 
         // AttributeInstances are automatically converted to strings.
         println( "Value = " + attr ) // attr is automatically converted to a string.
 
         // Explicitly getting the value.
-        val i = 10 + attr.toInt      // attr can be converted to int
+        val s = "Mr." + attr.toString      // attr can be converted to string
 
         // Use setValue to change the attribute value.  "attr = 100" will not work
         // because that will attempt to reassign the attr variable.
-        attr.setValue( 100 )
-        mUser.User.ID = 100 // This works, however.
+        attr.setValue( "New Name" )
+        mUser.User.UserName = "Different Name" // This works, however.
 
         // A gotcha: following code does NOT change the value of mUser.User.Name
         var attr2 = mUser.User.UserName
@@ -151,7 +151,7 @@ class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
     def attributeLists( mUser : View @basedOn( "mUser" ) ) {
         mUser.User.attributes.filter { _.attributeDef.isKey() }.foreach { attr => println( attr ) }
     }
-    
+
     def runAll( mUser: View ) = {
         attributeValues( mUser )
         metaInformation( mUser )

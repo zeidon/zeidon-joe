@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.CommitFlags;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
@@ -236,17 +237,17 @@ class CommitMultipleOIs
      * @param permissionChecker
      * @return
      */
-    private boolean validatePermissionForEi( EntityInstanceImpl ei,
-                                             Set<ObjectInstance> oiSet,
-                                             HasPermission permissionChecker,
-                                             Map<Object, Object> permissionMap )
+    private EntityInstanceImpl validatePermissionForEi( EntityInstanceImpl ei,
+                                                        Set<ObjectInstance> oiSet,
+                                                        HasPermission permissionChecker,
+                                                        Map<Object, Object> permissionMap )
     {
         // Sanity check to make sure dbhLoaded is always off by the time we commit.
         assert ei.dbhLoaded == false : ei.toString() + " still has dbhLoaded flag on";
 
         // Does the EI have permission?
         if ( permissionChecker.hasPermission( ei ) )
-            return true;
+            return ei;
 
         EntityInstanceImpl parent = ei.getParent();
         if ( permissionMap != null && parent != null )
@@ -259,15 +260,15 @@ class CommitMultipleOIs
 
             // Check relationship in one direction.
             if ( permissionMap.get( ei.getUniqueLinkedObject() ) == parent.getUniqueLinkedObject() )
-                return true;
+                return parent;
 
             // Now check the other direction.
             if ( permissionMap.get( parent.getUniqueLinkedObject() ) == ei.getUniqueLinkedObject() )
-                return true;
+                return parent;
 
             // Permission map is defined for includes/excludes.  If we don't have a match
             // then we have a problem.
-            return false;
+            return null;
         }
 
         // If we get here then the EI doesn't have permission to perform its operation.
@@ -290,7 +291,7 @@ class CommitMultipleOIs
         }
 
         if ( linkedEis.size() == 0 )
-            return false;
+            return null;
 
         // First check the simple case.  Do any of the linked EIs have the same parent
         // relationship with permission?
@@ -299,11 +300,11 @@ class CommitMultipleOIs
             if ( permissionChecker.hasPermission( linked ) ) // Does the linked EI have the required authority?
             {
                 // We found a linked instance that has the correct authority.
-                return true;
+                return linked;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -387,7 +388,7 @@ class CommitMultipleOIs
                 if ( ei.isCreated() && ! ei.isDeleted() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isCreate() && ! validatePermissionForEi( ei, oiSet, hasCreatePermission, null ) )
+                    if ( ! entityDef.isCreate() && validatePermissionForEi( ei, oiSet, hasCreatePermission, null ) == null )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have create authority:", view, entityDef.getName() );
@@ -398,7 +399,7 @@ class CommitMultipleOIs
                 if ( ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isDelete() && ! validatePermissionForEi( ei, oiSet, hasDeletePermission, null ) )
+                    if ( ! entityDef.isDelete() && validatePermissionForEi( ei, oiSet, hasDeletePermission, null ) == null )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have delete authority:", view, entityDef.getName() );
@@ -409,18 +410,35 @@ class CommitMultipleOIs
                 if ( ei.isUpdated() && ! ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isUpdate() && ! validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) )
+                    if ( ! entityDef.isUpdate() && validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) == null )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
                         ei.logEntity();
+                    }
+                    if ( entityDef.isUpdate() )
+                    {
+                        // Make sure we can update the attributes.
+                        validateAttributePermission( ei );
+                    }
+                    else
+                    {
+                        EntityInstanceImpl updateableEi = validatePermissionForEi( ei, oiSet, hasUpdatePermission, null );
+                        if (  updateableEi == null )
+                        {
+                            missingPermission = true;
+                            getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
+                            ei.logEntity();
+                        }
+                        else
+                            validateAttributePermission( updateableEi );
                     }
                 }
 
                 if ( ei.isIncluded() && ! ei.isExcluded() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isInclude() && ! validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) )
+                    if ( ! entityDef.isInclude() && validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) == null )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have include authority:", view, entityDef.getName() );
@@ -431,7 +449,7 @@ class CommitMultipleOIs
                 if ( ei.isExcluded() && ! ei.isIncluded() )
                 {
                     ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isExclude() && ! validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) )
+                    if ( ! entityDef.isExclude() && validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) == null )
                     {
                         missingPermission = true;
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have exclude authority:", view, entityDef.getName() );
@@ -443,6 +461,22 @@ class CommitMultipleOIs
 
         if ( missingPermission )
             throw new ZeidonException( "Commit has an entity instance that doesn't have permission.  See log for more." );
+    }
+
+    /**
+     * Validate that this attribute has update authority if it's updated.
+     * TODO: This throws an exception.  Maybe capture the exceptions and return them.
+     */
+    private boolean validateAttributePermission( EntityInstanceImpl ei )
+    {
+        ei.getAttributes();
+        for ( AttributeInstance attr : ei.getAttributes() )
+        {
+            if ( attr.isUpdated() )
+                ((AttributeInstanceImpl) attr).validateUpdateAttribute();
+        }
+
+        return false;
     }
 
     private void executeCommitConstraints()

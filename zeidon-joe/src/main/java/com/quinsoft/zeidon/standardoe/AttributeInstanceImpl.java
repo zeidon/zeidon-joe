@@ -211,13 +211,8 @@ class AttributeInstanceImpl implements AttributeInstance
      *
      * @param attributeDef
      */
-    private void validateUpdateAttribute()
+    void validateUpdateAttribute()
     {
-        // If this EI is versioned they we'll assume that it's ok because the versioning
-        // code should have already verified that none of the other instances are versioned.
-        if ( entityInstance.isVersioned() )
-            return;
-
         // If the attribute is derived or work, then we do not need to check if the
         // attribute can be updated.
         if ( attributeDef.isDerived() )
@@ -229,6 +224,11 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( ! attributeDef.isPersistent() )
             return;
 
+        // If the entity is derived or work, then we do not need to check if the
+        // attribute can be updated.
+        if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
+            return;
+
         if ( ! attributeDef.isUpdate() )
             throw new ZeidonException( "Attribute is defined as read-only" )
                                 .prependAttributeDef( attributeDef );
@@ -237,14 +237,14 @@ class AttributeInstanceImpl implements AttributeInstance
             throw new ZeidonException( "Entity may not be udpated." )
                                 .prependAttributeDef( attributeDef );
 
-        // If the entity is derived or work, then we do not need to check if the
-        // attribute can be updated.
-        if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
-            return;
-
         if ( getObjectInstance().isReadOnly() )
             throw new ZeidonException( "Object Instance is read-only" )
                                 .prependEntityDef( getEntityDef() );
+
+        // Don't allow updates to keys unless the EI is being created.
+        if ( attributeDef.isKey() && ! entityInstance.isCreated() )
+            throw new ZeidonException( "Cannot update key attributes." )
+                            .prependAttributeDef( attributeDef );
 
         for ( EntityInstanceImpl linked : entityInstance.getLinkedInstances() )
         {
