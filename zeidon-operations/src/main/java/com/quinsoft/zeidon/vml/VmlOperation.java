@@ -5448,8 +5448,7 @@ public abstract class VmlOperation
 
    protected void SetViewUpdate( View view )
    {
-      // TODO DG
-      // view.setInstanceUpdated( true );
+       view.setReadOnly( false );
    }
 
    //  RETURNS:    0 or greater  - Number of unhidden Entities.
@@ -7716,6 +7715,8 @@ public abstract class VmlOperation
                CreateEntity( vKZXMLPGO, "DialogWindowList", zPOS_LAST );
                SetAttributeFromString( vKZXMLPGO, "DialogWindowList", "DialogName", stringDlgTag );
                SetAttributeFromString( vKZXMLPGO, "DialogWindowList", "WindowName", stringWndTag );
+               CreateEntity( vKZXMLPGO, "PagePath", zPOS_LAST );
+               SetAttributeFromString( vKZXMLPGO, "PagePath", "LastPageName", vKZXMLPGO.cursor("Session").getAttribute("CurrentPageName").getValue().toString() );
 
                SetAttributeFromString( vKZXMLPGO, "DialogWindowList", "FunctionCall", "StartSubwindow" );
                SetAttributeFromString( vKZXMLPGO, "NextDialogWindow", "FunctionCall", "StartSubwindow" );
