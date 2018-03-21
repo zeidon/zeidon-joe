@@ -21,10 +21,10 @@ module Zeidon
     @@oe = ObjectEngine.new( joe )
   end
 
-  def self.reload_object_engine()
+  def self.reload_object_engine( properties_file = nil )
     @@oe = nil
     JavaObjectEngine.resetInstance()
-    return get_object_engine()
+    return get_object_engine( properties_file )
   end
 
   class ObjectEngine
@@ -347,11 +347,14 @@ module Zeidon
       super
     end
 
+    #java_alias :set_first_by_attr, :set_first, [java.lang.String, java.lang.Object]    
     def set_first( *args, &block )
       if args.length == 1 and args[0].kind_of?( Hash )
         arg_hash = args[0]
         if arg_hash.length == 1
-          return super.setFirst( arg_hash.first.to_s, arg_hash.last )
+          attr = arg_hash.keys.first.to_s
+          val = arg_hash.values.first
+          return java_send :setFirst, [java.lang.String, java.lang.Object], attr, val
         end
       end
 
@@ -360,7 +363,12 @@ module Zeidon
 
     # Simple wrapper for includeSubobject method.
     def include( *args )
-      super.includeSubobject( *args )
+      includeSubobject( *args )
+    end
+    
+    # Simple wrapper for excludeEntity method.
+    def exclude( *args )
+      includeEntity( *args )
     end
     
     def method_missing( id, *args, &block )
