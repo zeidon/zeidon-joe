@@ -110,6 +110,8 @@ public class QualificationBuilderFromJson
 
                     case "$rootonly":
                     case "rootonly":
+                    case "$root_only":
+                    case "root_only":
                         if ( parseBoolean( "rootOnly" ) )
                             qualBuilder.rootOnlyMultiple();
 
@@ -117,6 +119,8 @@ public class QualificationBuilderFromJson
 
                     case "$readonly":
                     case "readonly":
+                    case "$read_only":
+                    case "read_only":
                         if ( parseBoolean( "readOnly" ) )
                             qualBuilder.readOnly();
 

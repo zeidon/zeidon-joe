@@ -1134,7 +1134,7 @@ public class JdbcHandler extends AbstractSqlHandler
         {
             String format = getConfigValue( "DateFormat" );
             if ( StringUtils.isBlank( format ) )
-                format = "yyyy-MM-dd";
+                format = "yyyy-MM-dd|yyyy-MM-dd 00:00:00";
 
             dateFormat = JoeUtils.createDateFormatterFromEditString( format );
         }

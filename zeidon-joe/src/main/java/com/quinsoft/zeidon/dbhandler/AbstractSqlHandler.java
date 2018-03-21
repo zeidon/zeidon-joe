@@ -1578,8 +1578,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 addForeignKeys( stmt, view, qualAttrib.columnAttributeValue.getEntityDef(), entityDef );
         }
 
-        stmt.appendWhere( buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString() );
-        stmt.conjunctionNeeded = true;
+        String qs = buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString();
+        if ( ! StringUtils.isBlank( qs ) )
+        {
+            stmt.appendWhere( qs );
+            stmt.conjunctionNeeded = true;
+        }
     }
 
     protected abstract int executeLoad(View view, EntityDef entityDef, SqlStatement stmt);
