@@ -107,7 +107,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     private void loadZeidonIni( InputStream iniFile )
     {
         if ( iniFile == null )
-            throw new ZeidonException( "Could not find zeidon.ini" );
+            throw new ZeidonException( "Could not find " + iniFileName );
 
         InputStreamReader reader = new InputStreamReader( iniFile );
 
