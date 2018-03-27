@@ -1971,6 +1971,8 @@ public class TestZencas
 		{
 		   zVIEW    mFAProf1      = new zVIEW( );
 		   zVIEW    mFAProf2      = new zVIEW( );
+		   zVIEW    mClass      = new zVIEW( );
+		   zVIEW   vTempViewVar_0 = new zVIEW();
 		   int RESULT=0;
 		   double dAmount=0;
 
@@ -1999,6 +2001,7 @@ public class TestZencas
 	       // Check spawning after Include entity
  		   Assert.assertEquals("mFAProf2.FinAidAwardPeriod not correctly spawned after include.", 0, RESULT );
 
+ 		   
  		   mFAProf1.cursor("FinAidAwardDisbursement").createTemporalEntity();
 	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 234) ;
 	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 432) ;
@@ -2013,6 +2016,30 @@ public class TestZencas
  		   // would be used instead.
 	       RESULT = mFAProf2.cursor("FinAidAwardDisbursement").setFirst("Amount", 234).toInt();
  		   Assert.assertEquals("FinAidAwardDisbursement not correctly spawned after createTemporal.", 0, RESULT);
+ 		   
+ 		   
+           // KJS Adding new test because using createTemporalEntity, after doing an include then cancelSubobject, the
+ 		   // link on the included entity was not broken. At perygrene, we get an error when doing the last createTemporalEntity but
+ 		   // of course here I'm not getting it...
+ 		   mFAProf2.drop();
+	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, 31967 );
+
+	       RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
+	       DropView( vTempViewVar_0 );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+ 		   
+	       mFAProf1.cursor("FinAidAwardDisbursement").createEntity();
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 123) ;
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 321) ;
+		   RESULT = IncludeSubobjectFromSubobject( mFAProf1, "FADisbursementClass", mClass, "Class", zPOS_AFTER );
+
+	       mFAProf1.cursor("FinAidAwardDisbursement").createTemporalEntity();
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 234) ;
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 432) ;
+		   RESULT = IncludeSubobjectFromSubobject( mFAProf1, "FADisbursementClass", mClass, "Class", zPOS_AFTER );
+	       mFAProf1.cursor("FinAidAwardDisbursement").cancelSubobject();
+	       // Aaaarrrrgggghhhh! At perygrene, we have a case where doing the following creates an error. Why do we not get that here???
+	       mFAProf1.cursor("FinAidAwardDisbursement").createTemporalSubobjectVersion();
 
 		   return 0;
 		}
