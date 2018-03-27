@@ -45,6 +45,16 @@ aAPP_SOURCE testdata/ePamms
 aAPP_PACKAGE com.arksoft.epamms
 
 eAPPLICATION 2
+aAPP_NAME  Perygrene
+aAPP_DLL   testdata/perygrene
+aAPP_ADOBIN testdata/perygrene
+aAPP_LOCAL testdata/perygrene
+aAPP_SHARED testdata/perygrene
+aAPP_QLPLR testdata/perygrene
+aAPP_SOURCE testdata/perygrene
+aAPP_PACKAGE com.apex.perygrene
+
+eAPPLICATION 2
 aAPP_NAME  ePammsDon
 aAPP_DLL   testdata/ePammsDon
 aAPP_ADOBIN testdata/ePammsDon
