@@ -263,7 +263,7 @@ public class WriteOisToXmlStream implements StreamWriter
 
             startElement( entityDef.getName(),
                           "created",    yesNull( ei.isCreated() ),
-                          "delete",     yesNull( ei.isDeleted() ),
+                          "deleted",    yesNull( ei.isDeleted() ),
                           "updated",    yesNull( ei.isUpdated() ),
                           "included",   yesNull( ei.isIncluded() ),
                           "excluded",   yesNull( ei.isExcluded() ),

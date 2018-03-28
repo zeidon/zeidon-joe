@@ -183,7 +183,7 @@ public class WriteOisToJsonStream implements StreamWriter
         ActivateOptions options = view.getActivateOptions();
         if ( options == null )
             return;
-        
+
         Pagination paging = options.getPagingOptions();
         if ( paging == null )
             return;

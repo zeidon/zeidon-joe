@@ -894,7 +894,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         if ( getParent() != null )
         {
-            int twinCount = getTwinCount();
+            int twinCount = getTwinCount(false);
 
             // If forAdd is true then we're making sure we can add a twin, so add
             // one to the count to account for the new one.
@@ -2630,6 +2630,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         return new IteratorBuilder(getObjectInstance())
                         .forDirectChildren( this )
+                        .allowHidden( allowHidden )
                         .setLazyLoad( allowLazyLoad )
                         .build();
     }
@@ -3319,20 +3320,21 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
+     * @param includeHidden If true, count hidden.
      * @return The total number of non-hidden twins for this entity, including this one.
      */
-    int getTwinCount()
+    int getTwinCount( boolean includeHidden )
     {
         int count = 0;
         for ( EntityInstanceImpl search = this; search != null; search = search.getNextTwin() )
         {
-            if ( ! search.isHidden() )
+            if ( includeHidden || search.isHidden() == false )
                 count++;
         }
 
         for ( EntityInstanceImpl search = this.getPrevTwin(); search != null; search = search.getPrevTwin() )
         {
-            if ( ! search.isHidden() )
+            if ( includeHidden || search.isHidden() == false )
                 count++;
         }
 

@@ -312,6 +312,11 @@ class EntityCursor( private[this]  val view: View,
     def count = jentityCursor.getEntityCount()
 
     /**
+     * Returns the number of twins for this entity cursor.
+     */
+    def count( includeHidden: Boolean ) = jentityCursor.getEntityCount( includeHidden )
+
+    /**
      * Returns the number of twins that match a predicate.
      *
      * Note: the cursor should be considered undefined after this call.
