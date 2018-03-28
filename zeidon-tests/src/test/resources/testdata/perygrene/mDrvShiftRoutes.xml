@@ -1,0 +1,1704 @@
+<zOI objectName="mDrvShiftRoutes" appName="Perygrene" increFlags="Y" totalRootCount="1">
+  <DriverShift>
+    <ID>12537</ID>
+    <DayOfWeek>Tuesday</DayOfWeek>
+    <ExpectedStartDateTime>20180320163000</ExpectedStartDateTime>
+    <ExpectedEndDateTime>20180321043000</ExpectedEndDateTime>
+    <dDriverTruckName updated="Y">Gary  Bennett** / Truck # 16</dDriverTruckName>
+    <FK_ID_DRIVER>128</FK_ID_DRIVER>
+    <FKC_ID_VEHICLECOMBINATION>5441</FKC_ID_VEHICLECOMBINATION>
+
+    <DeliveryRoute>
+      <ID>27587</ID>
+      <ScheduledDateTime>20180320163000</ScheduledDateTime>
+      <ExpectedStartDateTime>20180320163000</ExpectedStartDateTime>
+      <ExpectedEndDateTime>20180320181700</ExpectedEndDateTime>
+      <SortOrderWithinShift>1</SortOrderWithinShift>
+      <dCurrentOrderNumber updated="Y">1</dCurrentOrderNumber>
+      <dRouteName updated="Y">Order 54513</dRouteName>
+      <dRouteNumber updated="Y">27587</dRouteNumber>
+      <dOrderType updated="Y">FTL</dOrderType>
+      <dOrderStatus updated="Y">Scheduled</dOrderStatus>
+      <dTruckTrailerIdentifier updated="Y">Truck # 16-TRAILER # 116</dTruckTrailerIdentifier>
+      <wChangeOrderNumber updated="Y">1</wChangeOrderNumber>
+      <FK_ID_CARRIER>22</FK_ID_CARRIER>
+      <FK_ID_EMPLOYEESHIFT>12537</FK_ID_EMPLOYEESHIFT>
+      <FK_ID_VEHICLECOMBINATION>5441</FK_ID_VEHICLECOMBINATION>
+      <FK_ID_DRIVER>128</FK_ID_DRIVER>
+
+      <DeliveryLeg>
+        <ID>176114</ID>
+        <Type>H-T</Type>
+        <TripStandardInMinutes>19</TripStandardInMinutes>
+        <DistanceInMiles>10.045111660680776</DistanceInMiles>
+        <ExpectedStartDateTime>20180320163000</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320164900</ExpectedEndDateTime>
+        <SortOrder>1</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Chevron San Diego**, San Diego</dToLocation>
+        <dType updated="Y">H-T</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54513</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>1988</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>1988</ID>
+          <Type>B</Type>
+          <Line1>2351 Harbor Dr</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92113-3637</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.14082</Longitude>
+          <Latitude>32.6936</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <ToDeliveryLegTerminal>
+            <ID>28</ID>
+            <Name>Chevron San Diego**</Name>
+            <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+            <ToDeliveryLegTerminalAdd>
+              <ID>1988</ID>
+              <Line1>2351 Harbor Dr</Line1>
+              <City>San Diego</City>
+            </ToDeliveryLegTerminalAdd>
+          </ToDeliveryLegTerminal>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176115</ID>
+        <Type>T-D</Type>
+        <TripStandardInMinutes>43</TripStandardInMinutes>
+        <DistanceInMiles>34.3</DistanceInMiles>
+        <ExpectedStartDateTime>20180320164900</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320173200</ExpectedEndDateTime>
+        <SortOrder>2</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Chevron San Diego**, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Costco # 1080**, San Marcos</dToLocation>
+        <dType updated="Y">T-D</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">45</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54513</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13812</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>1988</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>1988</ID>
+          <Type>B</Type>
+          <Line1>2351 Harbor Dr</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92113-3637</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.14082</Longitude>
+          <Latitude>32.6936</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <FromDeliveryLegTerminal>
+            <ID>28</ID>
+            <Name>Chevron San Diego**</Name>
+            <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+            <FromDeliveryLegTerminalAdd>
+              <ID>1988</ID>
+              <Line1>2351 Harbor Dr</Line1>
+              <City>San Diego</City>
+            </FromDeliveryLegTerminalAdd>
+          </FromDeliveryLegTerminal>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13812</ID>
+          <Line1>725 Center Dr</Line1>
+          <City>San Marcos</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92069-3536</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.12092</Longitude>
+          <Latitude>33.13471</Latitude>
+
+          <ToDeliveryLegLocation>
+            <ID>11630</ID>
+            <Name>Costco # 1080**</Name>
+            <FKD_ID_ADDRESS>13812</FKD_ID_ADDRESS>
+
+            <ToDeliveryLegLocationAdd>
+              <ID>13812</ID>
+              <Line1>725 Center Dr</Line1>
+              <City>San Marcos</City>
+            </ToDeliveryLegLocationAdd>
+          </ToDeliveryLegLocation>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <FuelStop>
+        <ID>53053</ID>
+        <ExpectedLoadTimeMinutes>0</ExpectedLoadTimeMinutes>
+        <SortOrder>1</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;  Load At: Chevron San Diego**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopAddress updated="Y">2351 Harbor Dr</dFuelStopAddress>
+        <dFuelStopLineCity updated="Y">2351 Harbor Dr, San Diego</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+        <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+
+        <FuelStopTerminal>
+          <ID>28</ID>
+          <Name>Chevron San Diego**</Name>
+          <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+          <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+          <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+          <FuelStopTerminalAddress>
+            <ID>1988</ID>
+            <Line1>2351 Harbor Dr</Line1>
+            <City>San Diego</City>
+          </FuelStopTerminalAddress>
+        </FuelStopTerminal>
+        <FuelRequest>
+          <ID>47712</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25013</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>396</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11630</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25013</ID>
+            <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24513</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24513</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54513</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>396</ID>
+            <LoadingNumber>8301397</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>963</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>1010</FKSUP_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <FuelStop>
+        <ID>53054</ID>
+        <ExpectedUnloadTimeMinutes>45</ExpectedUnloadTimeMinutes>
+        <SortOrder>2</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;  Delivery To: Costco # 1080**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopLineCity updated="Y">725 Center Dr, San Marcos</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+        <FK_ID_DELIVERYLOCATION>11630</FK_ID_DELIVERYLOCATION>
+
+        <FuelStopDeliveryLocation>
+          <ID>11630</ID>
+          <Name>Costco # 1080**</Name>
+          <FKD_ID_ADDRESS>13812</FKD_ID_ADDRESS>
+
+          <FuelStopDeliveryLocationAddress>
+            <ID>13812</ID>
+            <Line1>725 Center Dr</Line1>
+            <City>San Marcos</City>
+          </FuelStopDeliveryLocationAddress>
+        </FuelStopDeliveryLocation>
+        <FuelRequest>
+          <ID>47712</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25013</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>396</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11630</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25013</ID>
+            <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24513</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24513</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54513</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>396</ID>
+            <LoadingNumber>8301397</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>963</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>1010</FKSUP_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <LoadRequest>
+        <ID>25013</ID>
+        <Status>Scheduled</Status>
+        <SpecialDriverInstructions> ****** TEST DATABASE DB2 ******</SpecialDriverInstructions>
+        <FK_ID_DELIVERYROUTE>27587</FK_ID_DELIVERYROUTE>
+        <FK_ID_Z_ORDER>24513</FK_ID_Z_ORDER>
+
+        <Order>
+          <ID>24513</ID>
+          <InternalOrderNumber>54513</InternalOrderNumber>
+          <Type>FTL</Type>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+        </Order>
+      </LoadRequest>
+      <RouteVehicleCombination>
+        <ID>5441</ID>
+        <CombinationDateTime>20180117155820</CombinationDateTime>
+        <FK_ID_VEHICLEPOWERUNIT>110</FK_ID_VEHICLEPOWERUNIT>
+
+        <RouteVehiclePowerUnit>
+          <ID>110</ID>
+          <TruckIdentifier>Truck # 16</TruckIdentifier>
+          <FK_ID_ADDRESS>13702</FK_ID_ADDRESS>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehiclePowerUnit>
+        <RouteVehicleDeliveryTank>
+          <ID>156</ID>
+          <Type>T</Type>
+          <TruckTrailerIdentifier>TRAILER # 116</TruckTrailerIdentifier>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehicleDeliveryTank>
+      </RouteVehicleCombination>
+      <DeliveredByDriver>
+        <ID>128</ID>
+        <Status>A</Status>
+        <DLNumber>U2013514</DLNumber>
+        <FK_ID_PERSON>330</FK_ID_PERSON>
+        <FK_ID_CARRIER>22</FK_ID_CARRIER>
+
+        <DeliveredByDriverPerson>
+          <ID>330</ID>
+          <LastName>Bennett**</LastName>
+          <FirstName>Gary</FirstName>
+        </DeliveredByDriverPerson>
+      </DeliveredByDriver>
+    </DeliveryRoute>
+    <DeliveryRoute>
+      <ID>27594</ID>
+      <ScheduledDateTime>20180320180900</ScheduledDateTime>
+      <ExpectedStartDateTime>20180320181700</ExpectedStartDateTime>
+      <ExpectedEndDateTime>20180320203000</ExpectedEndDateTime>
+      <SortOrderWithinShift>2</SortOrderWithinShift>
+      <dRouteName updated="Y">Order 54515</dRouteName>
+      <dRouteNumber updated="Y">27594</dRouteNumber>
+      <dOrderType updated="Y">FTL</dOrderType>
+      <dOrderStatus updated="Y">Scheduled</dOrderStatus>
+      <dTruckTrailerIdentifier updated="Y">Truck # 16-TRAILER # 116</dTruckTrailerIdentifier>
+      <wChangeOrderNumber updated="Y">2</wChangeOrderNumber>
+      <FK_ID_CARRIER>22</FK_ID_CARRIER>
+      <FK_ID_EMPLOYEESHIFT>12537</FK_ID_EMPLOYEESHIFT>
+      <FK_ID_VEHICLECOMBINATION>5441</FK_ID_VEHICLECOMBINATION>
+      <FK_ID_DRIVER>128</FK_ID_DRIVER>
+
+      <DeliveryLeg>
+        <ID>176116</ID>
+        <TripStandardInMinutes>43</TripStandardInMinutes>
+        <DistanceInMiles>34.3</DistanceInMiles>
+        <ExpectedStartDateTime>20180320181700</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320190000</ExpectedEndDateTime>
+        <SortOrder>1</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;Costco # 1080**, San Marcos</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Chevron San Diego**, San Diego</dToLocation>
+        <dType updated="Y">D-T</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54515</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>1988</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13812</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13812</ID>
+          <Line1>725 Center Dr</Line1>
+          <City>San Marcos</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92069-3536</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.12092</Longitude>
+          <Latitude>33.13471</Latitude>
+
+          <FromDeliveryLegLocation>
+            <ID>11630</ID>
+            <Name>Costco # 1080**</Name>
+            <FKD_ID_ADDRESS>13812</FKD_ID_ADDRESS>
+
+            <FromDeliveryLegLocAddress>
+              <ID>13812</ID>
+              <Line1>725 Center Dr</Line1>
+              <City>San Marcos</City>
+            </FromDeliveryLegLocAddress>
+          </FromDeliveryLegLocation>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>1988</ID>
+          <Type>B</Type>
+          <Line1>2351 Harbor Dr</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92113-3637</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.14082</Longitude>
+          <Latitude>32.6936</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <ToDeliveryLegTerminal>
+            <ID>28</ID>
+            <Name>Chevron San Diego**</Name>
+            <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+            <ToDeliveryLegTerminalAdd>
+              <ID>1988</ID>
+              <Line1>2351 Harbor Dr</Line1>
+              <City>San Diego</City>
+            </ToDeliveryLegTerminalAdd>
+          </ToDeliveryLegTerminal>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176117</ID>
+        <TripStandardInMinutes>27</TripStandardInMinutes>
+        <DistanceInMiles>17.2</DistanceInMiles>
+        <ExpectedStartDateTime>20180320190000</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320192700</ExpectedEndDateTime>
+        <SortOrder>2</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Chevron San Diego**, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Costco #403**, Santee</dToLocation>
+        <dType updated="Y">T-D</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">45</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54515</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>14026</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>1988</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>1988</ID>
+          <Type>B</Type>
+          <Line1>2351 Harbor Dr</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92113-3637</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.14082</Longitude>
+          <Latitude>32.6936</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <FromDeliveryLegTerminal>
+            <ID>28</ID>
+            <Name>Chevron San Diego**</Name>
+            <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+            <FromDeliveryLegTerminalAdd>
+              <ID>1988</ID>
+              <Line1>2351 Harbor Dr</Line1>
+              <City>San Diego</City>
+            </FromDeliveryLegTerminalAdd>
+          </FromDeliveryLegTerminal>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>14026</ID>
+          <Line1>101 Town Center Pkwy</Line1>
+          <City>Santee</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92071-5802</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-116.98832</Longitude>
+          <Latitude>32.83981</Latitude>
+
+          <ToDeliveryLegLocation>
+            <ID>11844</ID>
+            <Name>Costco #403**</Name>
+            <FKD_ID_ADDRESS>14026</FKD_ID_ADDRESS>
+
+            <ToDeliveryLegLocationAdd>
+              <ID>14026</ID>
+              <Line1>101 Town Center Pkwy</Line1>
+              <City>Santee</City>
+            </ToDeliveryLegLocationAdd>
+          </ToDeliveryLegLocation>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176334</ID>
+        <TripStandardInMinutes>18</TripStandardInMinutes>
+        <DistanceInMiles>7.6</DistanceInMiles>
+        <ExpectedStartDateTime>20180320201200</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320203000</ExpectedEndDateTime>
+        <SortOrder>3</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;Costco #403**, Santee</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">D-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54515</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>14026</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>14026</ID>
+          <Line1>101 Town Center Pkwy</Line1>
+          <City>Santee</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92071-5802</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-116.98832</Longitude>
+          <Latitude>32.83981</Latitude>
+
+          <FromDeliveryLegLocation>
+            <ID>11844</ID>
+            <Name>Costco #403**</Name>
+            <FKD_ID_ADDRESS>14026</FKD_ID_ADDRESS>
+
+            <FromDeliveryLegLocAddress>
+              <ID>14026</ID>
+              <Line1>101 Town Center Pkwy</Line1>
+              <City>Santee</City>
+            </FromDeliveryLegLocAddress>
+          </FromDeliveryLegLocation>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176336</ID>
+        <TripStandardInMinutes>0</TripStandardInMinutes>
+        <DistanceInMiles>0.0</DistanceInMiles>
+        <ExpectedStartDateTime>20180320203000</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320203000</ExpectedEndDateTime>
+        <SortOrder>4</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">H-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54515</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176338</ID>
+        <TripStandardInMinutes>0</TripStandardInMinutes>
+        <DistanceInMiles>0.0</DistanceInMiles>
+        <ExpectedStartDateTime>20180320203000</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320203000</ExpectedEndDateTime>
+        <SortOrder>5</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">H-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54515</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <FuelStop>
+        <ID>53067</ID>
+        <ExpectedLoadTimeMinutes>0</ExpectedLoadTimeMinutes>
+        <SortOrder>1</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;  Load At: Chevron San Diego**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopLineCity updated="Y">2351 Harbor Dr, San Diego</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+        <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+
+        <FuelStopTerminal>
+          <ID>28</ID>
+          <Name>Chevron San Diego**</Name>
+          <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+          <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+          <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+          <FuelStopTerminalAddress>
+            <ID>1988</ID>
+            <Line1>2351 Harbor Dr</Line1>
+            <City>San Diego</City>
+          </FuelStopTerminalAddress>
+        </FuelStopTerminal>
+        <FuelRequest>
+          <ID>47714</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25015</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>396</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11844</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25015</ID>
+            <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24515</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24515</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54515</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>396</ID>
+            <LoadingNumber>8301397</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>963</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>1010</FKSUP_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <FuelStop>
+        <ID>53068</ID>
+        <ExpectedUnloadTimeMinutes>45</ExpectedUnloadTimeMinutes>
+        <SortOrder>2</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;  Delivery To: Costco #403**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopLineCity updated="Y">101 Town Center Pkwy, Santee</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+        <FK_ID_DELIVERYLOCATION>11844</FK_ID_DELIVERYLOCATION>
+
+        <FuelStopDeliveryLocation>
+          <ID>11844</ID>
+          <Name>Costco #403**</Name>
+          <FKD_ID_ADDRESS>14026</FKD_ID_ADDRESS>
+
+          <FuelStopDeliveryLocationAddress>
+            <ID>14026</ID>
+            <Line1>101 Town Center Pkwy</Line1>
+            <City>Santee</City>
+          </FuelStopDeliveryLocationAddress>
+        </FuelStopDeliveryLocation>
+        <FuelRequest>
+          <ID>47714</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25015</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>396</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11844</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25015</ID>
+            <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24515</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24515</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54515</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>396</ID>
+            <LoadingNumber>8301397</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>963</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>1010</FKSUP_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <LoadRequest>
+        <ID>25015</ID>
+        <Status>Scheduled</Status>
+        <SpecialDriverInstructions> ****** TEST DATABASE DB2 ******</SpecialDriverInstructions>
+        <FK_ID_DELIVERYROUTE>27594</FK_ID_DELIVERYROUTE>
+        <FK_ID_Z_ORDER>24515</FK_ID_Z_ORDER>
+
+        <Order>
+          <ID>24515</ID>
+          <InternalOrderNumber>54515</InternalOrderNumber>
+          <Type>FTL</Type>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+        </Order>
+      </LoadRequest>
+      <RouteVehicleCombination>
+        <ID>5441</ID>
+        <CombinationDateTime>20180117155820</CombinationDateTime>
+        <FK_ID_VEHICLEPOWERUNIT>110</FK_ID_VEHICLEPOWERUNIT>
+
+        <RouteVehiclePowerUnit>
+          <ID>110</ID>
+          <TruckIdentifier>Truck # 16</TruckIdentifier>
+          <FK_ID_ADDRESS>13702</FK_ID_ADDRESS>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehiclePowerUnit>
+        <RouteVehicleDeliveryTank>
+          <ID>156</ID>
+          <Type>T</Type>
+          <TruckTrailerIdentifier>TRAILER # 116</TruckTrailerIdentifier>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehicleDeliveryTank>
+      </RouteVehicleCombination>
+      <DeliveredByDriver>
+        <ID>128</ID>
+        <Status>A</Status>
+        <DLNumber>U2013514</DLNumber>
+        <FK_ID_PERSON>330</FK_ID_PERSON>
+        <FK_ID_CARRIER>22</FK_ID_CARRIER>
+
+        <DeliveredByDriverPerson>
+          <ID>330</ID>
+          <LastName>Bennett**</LastName>
+          <FirstName>Gary</FirstName>
+        </DeliveredByDriverPerson>
+      </DeliveredByDriver>
+    </DeliveryRoute>
+    <DeliveryRoute>
+      <ID>27606</ID>
+      <ScheduledDateTime>20180320190000</ScheduledDateTime>
+      <ExpectedStartDateTime>20180320203000</ExpectedStartDateTime>
+      <ExpectedEndDateTime>20180320221900</ExpectedEndDateTime>
+      <SortOrderWithinShift>3</SortOrderWithinShift>
+      <dRouteName updated="Y">Order 54504</dRouteName>
+      <dRouteNumber updated="Y">27606</dRouteNumber>
+      <dOrderType updated="Y">FTL</dOrderType>
+      <dOrderStatus updated="Y">Scheduled</dOrderStatus>
+      <dTruckTrailerIdentifier updated="Y">Truck # 4-TRAILER # 40</dTruckTrailerIdentifier>
+      <wChangeOrderNumber updated="Y">3</wChangeOrderNumber>
+      <FK_ID_CARRIER>22</FK_ID_CARRIER>
+      <FK_ID_EMPLOYEESHIFT>12537</FK_ID_EMPLOYEESHIFT>
+      <FK_ID_VEHICLECOMBINATION>5459</FK_ID_VEHICLECOMBINATION>
+      <FK_ID_DRIVER>128</FK_ID_DRIVER>
+
+      <DeliveryLeg>
+        <ID>176118</ID>
+        <TripStandardInMinutes>19</TripStandardInMinutes>
+        <DistanceInMiles>10.045111660680776</DistanceInMiles>
+        <ExpectedStartDateTime>20180320203000</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320204900</ExpectedEndDateTime>
+        <SortOrder>1</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Chevron San Diego**, San Diego</dToLocation>
+        <dType updated="Y">H-T</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54504</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>1988</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>1988</ID>
+          <Type>B</Type>
+          <Line1>2351 Harbor Dr</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92113-3637</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.14082</Longitude>
+          <Latitude>32.6936</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <ToDeliveryLegTerminal>
+            <ID>28</ID>
+            <Name>Chevron San Diego**</Name>
+            <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+            <ToDeliveryLegTerminalAdd>
+              <ID>1988</ID>
+              <Line1>2351 Harbor Dr</Line1>
+              <City>San Diego</City>
+            </ToDeliveryLegTerminalAdd>
+          </ToDeliveryLegTerminal>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176119</ID>
+        <TripStandardInMinutes>27</TripStandardInMinutes>
+        <DistanceInMiles>17.2</DistanceInMiles>
+        <ExpectedStartDateTime>20180320204900</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320211600</ExpectedEndDateTime>
+        <SortOrder>2</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Chevron San Diego**, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Costco #403**, Santee</dToLocation>
+        <dType updated="Y">T-D</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">45</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54504</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>14026</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>1988</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>1988</ID>
+          <Type>B</Type>
+          <Line1>2351 Harbor Dr</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92113-3637</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.14082</Longitude>
+          <Latitude>32.6936</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <FromDeliveryLegTerminal>
+            <ID>28</ID>
+            <Name>Chevron San Diego**</Name>
+            <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+            <FromDeliveryLegTerminalAdd>
+              <ID>1988</ID>
+              <Line1>2351 Harbor Dr</Line1>
+              <City>San Diego</City>
+            </FromDeliveryLegTerminalAdd>
+          </FromDeliveryLegTerminal>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>14026</ID>
+          <Line1>101 Town Center Pkwy</Line1>
+          <City>Santee</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92071-5802</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-116.98832</Longitude>
+          <Latitude>32.83981</Latitude>
+
+          <ToDeliveryLegLocation>
+            <ID>11844</ID>
+            <Name>Costco #403**</Name>
+            <FKD_ID_ADDRESS>14026</FKD_ID_ADDRESS>
+
+            <ToDeliveryLegLocationAdd>
+              <ID>14026</ID>
+              <Line1>101 Town Center Pkwy</Line1>
+              <City>Santee</City>
+            </ToDeliveryLegLocationAdd>
+          </ToDeliveryLegLocation>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176335</ID>
+        <TripStandardInMinutes>18</TripStandardInMinutes>
+        <DistanceInMiles>7.6</DistanceInMiles>
+        <ExpectedStartDateTime>20180320220100</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320221900</ExpectedEndDateTime>
+        <SortOrder>3</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;Costco #403**, Santee</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">D-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54504</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>14026</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>14026</ID>
+          <Line1>101 Town Center Pkwy</Line1>
+          <City>Santee</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92071-5802</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-116.98832</Longitude>
+          <Latitude>32.83981</Latitude>
+
+          <FromDeliveryLegLocation>
+            <ID>11844</ID>
+            <Name>Costco #403**</Name>
+            <FKD_ID_ADDRESS>14026</FKD_ID_ADDRESS>
+
+            <FromDeliveryLegLocAddress>
+              <ID>14026</ID>
+              <Line1>101 Town Center Pkwy</Line1>
+              <City>Santee</City>
+            </FromDeliveryLegLocAddress>
+          </FromDeliveryLegLocation>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176337</ID>
+        <TripStandardInMinutes>0</TripStandardInMinutes>
+        <DistanceInMiles>0.0</DistanceInMiles>
+        <ExpectedStartDateTime>20180320221900</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320221900</ExpectedEndDateTime>
+        <SortOrder>4</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">H-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54504</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176339</ID>
+        <TripStandardInMinutes>0</TripStandardInMinutes>
+        <DistanceInMiles>0.0</DistanceInMiles>
+        <ExpectedStartDateTime>20180320221900</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320221900</ExpectedEndDateTime>
+        <SortOrder>5</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">H-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54504</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <FuelStop>
+        <ID>53091</ID>
+        <ExpectedLoadTimeMinutes>0</ExpectedLoadTimeMinutes>
+        <SortOrder>1</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;  Load At: Chevron San Diego**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopLineCity updated="Y">2351 Harbor Dr, San Diego</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+        <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+
+        <FuelStopTerminal>
+          <ID>28</ID>
+          <Name>Chevron San Diego**</Name>
+          <FK_ID_ORGANIZATION>37</FK_ID_ORGANIZATION>
+          <FK_ID_CUSTOMER>28</FK_ID_CUSTOMER>
+          <FKP_ID_ADDRESS>1988</FKP_ID_ADDRESS>
+
+          <FuelStopTerminalAddress>
+            <ID>1988</ID>
+            <Line1>2351 Harbor Dr</Line1>
+            <City>San Diego</City>
+          </FuelStopTerminalAddress>
+        </FuelStopTerminal>
+        <FuelRequest>
+          <ID>47700</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25004</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>396</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11844</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25004</ID>
+            <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24504</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24504</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54504</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>396</ID>
+            <LoadingNumber>8301397</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>963</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>1010</FKSUP_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <FuelStop>
+        <ID>53092</ID>
+        <ExpectedUnloadTimeMinutes>45</ExpectedUnloadTimeMinutes>
+        <SortOrder>2</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;  Delivery To: Costco #403**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopLineCity updated="Y">101 Town Center Pkwy, Santee</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+        <FK_ID_DELIVERYLOCATION>11844</FK_ID_DELIVERYLOCATION>
+
+        <FuelStopDeliveryLocation>
+          <ID>11844</ID>
+          <Name>Costco #403**</Name>
+          <FKD_ID_ADDRESS>14026</FKD_ID_ADDRESS>
+
+          <FuelStopDeliveryLocationAddress>
+            <ID>14026</ID>
+            <Line1>101 Town Center Pkwy</Line1>
+            <City>Santee</City>
+          </FuelStopDeliveryLocationAddress>
+        </FuelStopDeliveryLocation>
+        <FuelRequest>
+          <ID>47700</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25004</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>396</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11844</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25004</ID>
+            <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24504</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24504</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54504</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>396</ID>
+            <LoadingNumber>8301397</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>963</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>28</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>1010</FKSUP_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <LoadRequest>
+        <ID>25004</ID>
+        <Status>Scheduled</Status>
+        <SpecialDriverInstructions> ****** TEST DATABASE DB2 ******</SpecialDriverInstructions>
+        <FK_ID_DELIVERYROUTE>27606</FK_ID_DELIVERYROUTE>
+        <FK_ID_Z_ORDER>24504</FK_ID_Z_ORDER>
+
+        <Order>
+          <ID>24504</ID>
+          <InternalOrderNumber>54504</InternalOrderNumber>
+          <Type>FTL</Type>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          <FK_ID_ORGANIZATION>963</FK_ID_ORGANIZATION>
+        </Order>
+      </LoadRequest>
+      <RouteVehicleCombination>
+        <ID>5459</ID>
+        <CombinationDateTime>20180117160205</CombinationDateTime>
+        <FK_ID_VEHICLEPOWERUNIT>98</FK_ID_VEHICLEPOWERUNIT>
+
+        <RouteVehiclePowerUnit>
+          <ID>98</ID>
+          <TruckIdentifier>Truck # 4</TruckIdentifier>
+          <FK_ID_ADDRESS>13702</FK_ID_ADDRESS>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehiclePowerUnit>
+        <RouteVehicleDeliveryTank>
+          <ID>144</ID>
+          <Type>T</Type>
+          <TruckTrailerIdentifier>TRAILER # 40</TruckTrailerIdentifier>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehicleDeliveryTank>
+      </RouteVehicleCombination>
+      <DeliveredByDriver>
+        <ID>128</ID>
+        <Status>A</Status>
+        <DLNumber>U2013514</DLNumber>
+        <FK_ID_PERSON>330</FK_ID_PERSON>
+        <FK_ID_CARRIER>22</FK_ID_CARRIER>
+
+        <DeliveredByDriverPerson>
+          <ID>330</ID>
+          <LastName>Bennett**</LastName>
+          <FirstName>Gary</FirstName>
+        </DeliveredByDriverPerson>
+      </DeliveredByDriver>
+    </DeliveryRoute>
+    <DeliveryRoute>
+      <ID>27619</ID>
+      <ScheduledDateTime>20180320195500</ScheduledDateTime>
+      <ExpectedStartDateTime>20180320221900</ExpectedStartDateTime>
+      <ExpectedEndDateTime>20180320235100</ExpectedEndDateTime>
+      <SortOrderWithinShift>4</SortOrderWithinShift>
+      <dCurrentOrderNumber updated="Y">4</dCurrentOrderNumber>
+      <dRouteName updated="Y">Order 54518</dRouteName>
+      <dRouteNumber updated="Y">27619</dRouteNumber>
+      <dOrderType updated="Y">FTL</dOrderType>
+      <dOrderStatus updated="Y">Scheduled</dOrderStatus>
+      <dTruckTrailerIdentifier updated="Y">Truck # 16-TRAILER # 116</dTruckTrailerIdentifier>
+      <wChangeOrderNumber updated="Y">4</wChangeOrderNumber>
+      <FK_ID_CARRIER>22</FK_ID_CARRIER>
+      <FK_ID_EMPLOYEESHIFT>12537</FK_ID_EMPLOYEESHIFT>
+      <FK_ID_VEHICLECOMBINATION>5441</FK_ID_VEHICLECOMBINATION>
+      <FK_ID_DRIVER>128</FK_ID_DRIVER>
+
+      <DeliveryLeg>
+        <ID>176120</ID>
+        <TripStandardInMinutes>8</TripStandardInMinutes>
+        <DistanceInMiles>2.1</DistanceInMiles>
+        <ExpectedStartDateTime>20180320221900</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320222700</ExpectedEndDateTime>
+        <SortOrder>1</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Kinder Morgan Mission Valley**, San Diego</dToLocation>
+        <dType updated="Y">H-T</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54518</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>1984</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13702</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Initial_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Initial_HB_Carrier>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>1984</ID>
+          <Type>B</Type>
+          <Line1>9950 San Diego Mission Rd</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92108-1705</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.11638</Longitude>
+          <Latitude>32.78674</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <ToDeliveryLegTerminal>
+            <ID>23</ID>
+            <Name>Kinder Morgan Mission Valley**</Name>
+            <FK_ID_ORGANIZATION>28</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>19</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1984</FKP_ID_ADDRESS>
+
+            <ToDeliveryLegTerminalAdd>
+              <ID>1984</ID>
+              <Line1>9950 San Diego Mission Rd</Line1>
+              <City>San Diego</City>
+            </ToDeliveryLegTerminalAdd>
+          </ToDeliveryLegTerminal>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176121</ID>
+        <TripStandardInMinutes>18</TripStandardInMinutes>
+        <DistanceInMiles>11.9</DistanceInMiles>
+        <ExpectedStartDateTime>20180320222700</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320224500</ExpectedEndDateTime>
+        <SortOrder>2</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Kinder Morgan Mission Valley**, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;Costco # 401**, San Diego</dToLocation>
+        <dType updated="Y">T-D</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">45</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54518</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13815</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>1984</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>1984</ID>
+          <Type>B</Type>
+          <Line1>9950 San Diego Mission Rd</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>US</Country>
+          <PostalCode>92108-1705</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.11638</Longitude>
+          <Latitude>32.78674</Latitude>
+          <ModifiedDateTime>20171115160039</ModifiedDateTime>
+          <LastModifiedBy>PS System Standardization</LastModifiedBy>
+
+          <FromDeliveryLegTerminal>
+            <ID>23</ID>
+            <Name>Kinder Morgan Mission Valley**</Name>
+            <FK_ID_ORGANIZATION>28</FK_ID_ORGANIZATION>
+            <FK_ID_CUSTOMER>19</FK_ID_CUSTOMER>
+            <FKP_ID_ADDRESS>1984</FKP_ID_ADDRESS>
+
+            <FromDeliveryLegTerminalAdd>
+              <ID>1984</ID>
+              <Line1>9950 San Diego Mission Rd</Line1>
+              <City>San Diego</City>
+            </FromDeliveryLegTerminalAdd>
+          </FromDeliveryLegTerminal>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13815</ID>
+          <Line1>4605 Morena Blvd</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92117-3650</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.22753</Longitude>
+          <Latitude>32.82286</Latitude>
+
+          <ToDeliveryLegLocation>
+            <ID>11633</ID>
+            <Name>Costco # 401**</Name>
+            <FKD_ID_ADDRESS>13815</FKD_ID_ADDRESS>
+
+            <ToDeliveryLegLocationAdd>
+              <ID>13815</ID>
+              <Line1>4605 Morena Blvd</Line1>
+              <City>San Diego</City>
+            </ToDeliveryLegLocationAdd>
+          </ToDeliveryLegLocation>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <DeliveryLeg>
+        <ID>176122</ID>
+        <TripStandardInMinutes>21</TripStandardInMinutes>
+        <DistanceInMiles>13.6</DistanceInMiles>
+        <ExpectedStartDateTime>20180320233000</ExpectedStartDateTime>
+        <ExpectedEndDateTime>20180320235100</ExpectedEndDateTime>
+        <SortOrder>3</SortOrder>
+        <dFromLocation updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;Costco # 401**, San Diego</dFromLocation>
+        <dToLocation updated="Y">&lt;img src=&apos;./images/homebase.png&apos; alt=&apos;Home Base&apos; class=&apos;iconstd&apos;&gt;HB - 6910 Mission Gorge Road, San Diego</dToLocation>
+        <dType updated="Y">D-H</dType>
+        <dLegStatus updated="Y">&lt;img src=&apos;./images/leg_pending.png&apos; alt=&apos;Pending&apos; class=&apos;iconstd&apos;&gt;</dLegStatus>
+        <dLoadUnloadTime updated="Y">0</dLoadUnloadTime>
+        <dAssociatedOrderNumber updated="Y">54518</dAssociatedOrderNumber>
+        <FKTO_ID_ADDRESS>13702</FKTO_ID_ADDRESS>
+        <FKFROM_ID_ADDRESS>13815</FKFROM_ID_ADDRESS>
+        <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+
+        <FromDeliveryLegAddress>
+          <ID>13815</ID>
+          <Line1>4605 Morena Blvd</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>92117-3650</PostalCode>
+          <County>San Diego</County>
+          <Longitude>-117.22753</Longitude>
+          <Latitude>32.82286</Latitude>
+
+          <FromDeliveryLegLocation>
+            <ID>11633</ID>
+            <Name>Costco # 401**</Name>
+            <FKD_ID_ADDRESS>13815</FKD_ID_ADDRESS>
+
+            <FromDeliveryLegLocAddress>
+              <ID>13815</ID>
+              <Line1>4605 Morena Blvd</Line1>
+              <City>San Diego</City>
+            </FromDeliveryLegLocAddress>
+          </FromDeliveryLegLocation>
+        </FromDeliveryLegAddress>
+        <ToDeliveryLegAddress>
+          <ID>13702</ID>
+          <Line1>6910 Mission Gorge Road</Line1>
+          <City>San Diego</City>
+          <StateProvince>CA</StateProvince>
+          <Country>United States</Country>
+          <PostalCode>92120</PostalCode>
+          <Longitude>-117.09406</Longitude>
+          <Latitude>32.80004</Latitude>
+          <ModifiedDateTime>20180116110404</ModifiedDateTime>
+          <LastModifiedBy>admin</LastModifiedBy>
+
+          <Final_HB_Carrier>
+            <ID>22</ID>
+            <FK_ID_ORGANIZATION>962</FK_ID_ORGANIZATION>
+          </Final_HB_Carrier>
+        </ToDeliveryLegAddress>
+      </DeliveryLeg>
+      <FuelStop>
+        <ID>53117</ID>
+        <ExpectedLoadTimeMinutes>0</ExpectedLoadTimeMinutes>
+        <SortOrder>1</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/terminal.png&apos; alt=&apos;Terminal&apos; class=&apos;iconstd&apos;&gt;  Load At: Kinder Morgan Mission Valley**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopAddress updated="Y">9950 San Diego Mission Rd</dFuelStopAddress>
+        <dFuelStopLineCity updated="Y">9950 San Diego Mission Rd, San Diego</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+        <FK_ID_TERMINAL>23</FK_ID_TERMINAL>
+
+        <FuelStopTerminal>
+          <ID>23</ID>
+          <Name>Kinder Morgan Mission Valley**</Name>
+          <FK_ID_ORGANIZATION>28</FK_ID_ORGANIZATION>
+          <FK_ID_CUSTOMER>19</FK_ID_CUSTOMER>
+          <FKP_ID_ADDRESS>1984</FKP_ID_ADDRESS>
+
+          <FuelStopTerminalAddress>
+            <ID>1984</ID>
+            <Line1>9950 San Diego Mission Rd</Line1>
+            <City>San Diego</City>
+          </FuelStopTerminalAddress>
+        </FuelStopTerminal>
+        <FuelRequest>
+          <ID>47717</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25018</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>440</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>23</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11633</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25018</ID>
+            <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24518</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24518</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54518</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>972</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>440</ID>
+            <LoadingNumber>473-94111</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>972</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>23</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>992</FKSUP_ID_ORGANIZATION>
+            <FKCON_ID_ORGANIZATION>972</FKCON_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <FuelStop>
+        <ID>53118</ID>
+        <ExpectedUnloadTimeMinutes>45</ExpectedUnloadTimeMinutes>
+        <SortOrder>2</SortOrder>
+        <dDescription updated="Y">&lt;img src=&apos;./images/deliverysite.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;  Delivery To: Costco # 401**</dDescription>
+        <dFuelStopType updated="Y">&lt;img src=&apos;./images/fs_scheduled.png&apos; alt=&apos;Delivery Site&apos; class=&apos;iconstd&apos;&gt;</dFuelStopType>
+        <dFuelStopLineCity updated="Y">4605 Morena Blvd, San Diego</dFuelStopLineCity>
+        <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+        <FK_ID_DELIVERYLOCATION>11633</FK_ID_DELIVERYLOCATION>
+
+        <FuelStopDeliveryLocation>
+          <ID>11633</ID>
+          <Name>Costco # 401**</Name>
+          <FKD_ID_ADDRESS>13815</FKD_ID_ADDRESS>
+
+          <FuelStopDeliveryLocationAddress>
+            <ID>13815</ID>
+            <Line1>4605 Morena Blvd</Line1>
+            <City>San Diego</City>
+          </FuelStopDeliveryLocationAddress>
+        </FuelStopDeliveryLocation>
+        <FuelRequest>
+          <ID>47717</ID>
+          <RequestedGallonsToDeliver>8800.0</RequestedGallonsToDeliver>
+          <FK_ID_LOADREQUEST>25018</FK_ID_LOADREQUEST>
+          <FK_ID_LOADINGACCOUNT>440</FK_ID_LOADINGACCOUNT>
+          <FK_ID_TERMINAL>23</FK_ID_TERMINAL>
+          <FK_ID_DELIVERYLOCATION>11633</FK_ID_DELIVERYLOCATION>
+          <FK_ID_FUELTYPE>134</FK_ID_FUELTYPE>
+
+          <FuelStopLoadRequest>
+            <ID>25018</ID>
+            <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+            <FK_ID_Z_ORDER>24518</FK_ID_Z_ORDER>
+
+            <FuelStopOrder>
+              <ID>24518</ID>
+              <Type>FTL</Type>
+              <InternalOrderNumber>54518</InternalOrderNumber>
+              <FK_ID_CARRIER>22</FK_ID_CARRIER>
+              <FK_ID_ORGANIZATION>972</FK_ID_ORGANIZATION>
+            </FuelStopOrder>
+          </FuelStopLoadRequest>
+          <FuelType>
+            <ID>134</ID>
+            <TypeName>87</TypeName>
+            <FK_ID_BASICFUELTYPE>5</FK_ID_BASICFUELTYPE>
+            <FK_ID_FUELTYPE>80</FK_ID_FUELTYPE>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </FuelType>
+          <LoadingAccount>
+            <ID>440</ID>
+            <LoadingNumber>473-94111</LoadingNumber>
+            <FKBILL_ID_ORGANIZATION>972</FKBILL_ID_ORGANIZATION>
+            <FK_ID_TERMINAL>23</FK_ID_TERMINAL>
+            <FKSUP_ID_ORGANIZATION>992</FKSUP_ID_ORGANIZATION>
+            <FKCON_ID_ORGANIZATION>972</FKCON_ID_ORGANIZATION>
+            <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          </LoadingAccount>
+        </FuelRequest>
+      </FuelStop>
+      <LoadRequest>
+        <ID>25018</ID>
+        <Status>Scheduled</Status>
+        <SpecialDriverInstructions> ****** TEST DATABASE DB2 ******</SpecialDriverInstructions>
+        <FK_ID_DELIVERYROUTE>27619</FK_ID_DELIVERYROUTE>
+        <FK_ID_Z_ORDER>24518</FK_ID_Z_ORDER>
+
+        <Order>
+          <ID>24518</ID>
+          <InternalOrderNumber>54518</InternalOrderNumber>
+          <Type>FTL</Type>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+          <FK_ID_ORGANIZATION>972</FK_ID_ORGANIZATION>
+        </Order>
+      </LoadRequest>
+      <RouteVehicleCombination>
+        <ID>5441</ID>
+        <CombinationDateTime>20180117155820</CombinationDateTime>
+        <FK_ID_VEHICLEPOWERUNIT>110</FK_ID_VEHICLEPOWERUNIT>
+
+        <RouteVehiclePowerUnit>
+          <ID>110</ID>
+          <TruckIdentifier>Truck # 16</TruckIdentifier>
+          <FK_ID_ADDRESS>13702</FK_ID_ADDRESS>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehiclePowerUnit>
+        <RouteVehicleDeliveryTank>
+          <ID>156</ID>
+          <Type>T</Type>
+          <TruckTrailerIdentifier>TRAILER # 116</TruckTrailerIdentifier>
+          <FK_ID_CARRIER>22</FK_ID_CARRIER>
+        </RouteVehicleDeliveryTank>
+      </RouteVehicleCombination>
+      <DeliveredByDriver>
+        <ID>128</ID>
+        <Status>A</Status>
+        <DLNumber>U2013514</DLNumber>
+        <FK_ID_PERSON>330</FK_ID_PERSON>
+        <FK_ID_CARRIER>22</FK_ID_CARRIER>
+
+        <DeliveredByDriverPerson>
+          <ID>330</ID>
+          <LastName>Bennett**</LastName>
+          <FirstName>Gary</FirstName>
+        </DeliveredByDriverPerson>
+      </DeliveredByDriver>
+    </DeliveryRoute>
+    <Driver>
+      <ID>128</ID>
+      <Status>A</Status>
+      <DLNumber>U2013514</DLNumber>
+      <FK_ID_PERSON>330</FK_ID_PERSON>
+      <FK_ID_CARRIER>22</FK_ID_CARRIER>
+
+      <DriverPerson>
+        <ID>330</ID>
+        <LastName>Bennett**</LastName>
+        <FirstName>Gary</FirstName>
+      </DriverPerson>
+    </Driver>
+    <VehicleCombination>
+      <ID>5441</ID>
+      <CombinationDateTime>20180117155820</CombinationDateTime>
+      <CurrentForSchedulingFlag>Y</CurrentForSchedulingFlag>
+      <FK_ID_VEHICLEPOWERUNIT>110</FK_ID_VEHICLEPOWERUNIT>
+
+      <DeliveryTank>
+        <ID>156</ID>
+        <TruckTrailerIdentifier>TRAILER # 116</TruckTrailerIdentifier>
+        <PlateNumber>4PX2598</PlateNumber>
+        <FK_ID_CARRIER>22</FK_ID_CARRIER>
+      </DeliveryTank>
+      <VehiclePowerUnit>
+        <ID>110</ID>
+        <TruckIdentifier>Truck # 16</TruckIdentifier>
+        <FK_ID_ADDRESS>13702</FK_ID_ADDRESS>
+        <FK_ID_CARRIER>22</FK_ID_CARRIER>
+      </VehiclePowerUnit>
+    </VehicleCombination>
+  </DriverShift>
+</zOI>

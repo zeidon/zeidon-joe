@@ -48,16 +48,6 @@ public class TestPerygrene
 	}
 
 	@Test
-	public void testActivateFile()
-	{
-	    View         testview;
-		testview = perygrene.activateEmptyObjectInstance( "mDrvShiftRoutes" );
-		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
-		tester.testActivateFile( testview );
-        System.out.println("===== Finished testActivateFile ========");
-	}
-
-	@Test
 	public void testCursorLinks()
 	{
 	    View         testview;
@@ -96,23 +86,6 @@ public class TestPerygrene
 		}
 
         public int
-        testActivateFile( View     ViewToWindow)
-        {
-        	   zVIEW    mDrvShiftRoutes = new zVIEW( );
-        	   int      RESULT = 0;
-
-        	 View tmpview = ViewToWindow.getTask().deserializeOi()
-        	 .fromFile( "target/test-classes/testdata//Perygrene/drvshiftbeforedeleting.por" )
-        	 .setLodDef( "mDrvShiftRoutes" )
-        	 //.setFlags(ActivateFlags.IGNORE_ENTITY_ERRORS)
-        	 .activateFirst();
-        	 mDrvShiftRoutes.setView(tmpview); 
-
-
-        	   return 0;
-       }
-
-        public int
         testCursorLinks( View     ViewToWindow)
         {
         	   zVIEW    mDrvShiftRoutes = new zVIEW( );
@@ -139,7 +112,7 @@ public class TestPerygrene
         	   // commit on mDrvShiftRoutes, then it appears that the DeliveryLegs are missing.
 
           	 View tmpview = ViewToWindow.getTask().deserializeOi()
-                	 .fromFile( "target/test-classes/testdata//Perygrene/drvshiftbeforedeleting.por" )
+                	 .fromFile( "target/test-classes/testdata//perygrene/drvshiftbeforedeleting.por" )
                 	 .setLodDef( "mDrvShiftRoutes" )
                 	 //.setFlags(ActivateFlags.IGNORE_ENTITY_ERRORS)
                 	 .activateFirst();
@@ -334,7 +307,7 @@ public class TestPerygrene
     	   // do not get output. In our "real world" case, the browser looks fine (but not the output) until we do a 
     	   // commit on mDrvShiftRoutes, then it appears that the DeliveryLegs are missing.
 
-    	   ActivateOI_FromFile( mDrvShiftRoutes, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//Perygrene/mDrvShiftRoutes.por", zSINGLE );
+    	   ActivateOI_FromFile( mDrvShiftRoutes, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//perygrene/mDrvShiftRoutes.json", zSINGLE );
     	   SetNameForView( mDrvShiftRoutes, "RoutesTEST", null, zLEVEL_TASK );
     	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "DeliveryRoute", "" );
     	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "FuelStop", "" );
@@ -354,8 +327,8 @@ public class TestPerygrene
     	   SetAttributeFromString( mDrvShiftRoutes, "DeliveryLeg", "Type", "T-D" );
     	   SetAttributeFromInteger( mDrvShiftRoutes, "DeliveryLeg", "DistanceInMiles", 18 );
 
-    	   mDrvShiftRoutes.serializeOi().toFile( "target/test-classes/testdata//Perygrene/test2.por" );
-    	   ActivateOI_FromFile( mDrvShiftRoutes2, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//Perygrene/test2.por", zSINGLE );
+    	   mDrvShiftRoutes.serializeOi().toFile( "target/test-classes/testdata//perygrene/test2.json" );
+    	   ActivateOI_FromFile( mDrvShiftRoutes2, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//perygrene/test2.json", zSINGLE );
     	   SetNameForView( mDrvShiftRoutes2, "RoutesTEST2", null, zLEVEL_TASK );
     	   
     	   mDrvShiftRoutes2.cursor("DeliveryRoute").setFirst();
@@ -398,7 +371,7 @@ public class TestPerygrene
         	   // In our "real world" case, the browser looks fine (but not the output) until we do a 
         	   // commit on mDrvShiftRoutes, then it appears that the DeliveryLegs are missing.
 
-        	   ActivateOI_FromFile( mDrvShiftRoutes, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//Perygrene/mDrvShiftRoutes.por", zSINGLE );
+        	   ActivateOI_FromFile( mDrvShiftRoutes, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//perygrene/mDrvShiftRoutes.por", zSINGLE );
         	   SetNameForView( mDrvShiftRoutes, "RoutesTEST", null, zLEVEL_TASK );
         	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "DeliveryRoute", "" );
         	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "FuelStop", "" );
@@ -578,9 +551,9 @@ public class TestPerygrene
         	   DropView( mPreviousLeg );
 
  /********************* END OF ACTUAL CODE ******************************/
-        	   //mDrvShiftRoutes.serializeOi().withIncremental().toFile( "target/test-classes/testdata//Perygrene/test3.por" );
-        	   mDrvShiftRoutes.serializeOi().toFile( "target/test-classes/testdata//Perygrene/test3.por" );
-        	   ActivateOI_FromFile( mDrvShiftRoutes2, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//Perygrene/test3.por", zSINGLE );
+        	   //mDrvShiftRoutes.serializeOi().withIncremental().toFile( "target/test-classes/testdata//perygrene/test3.por" );
+        	   mDrvShiftRoutes.serializeOi().toFile( "target/test-classes/testdata//perygrene/test3.json" );
+        	   ActivateOI_FromFile( mDrvShiftRoutes2, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//perygrene/test3.json", zSINGLE );
         	   SetNameForView( mDrvShiftRoutes2, "RoutesTEST2", null, zLEVEL_TASK );
         	   
         	   mDrvShiftRoutes2.cursor("DeliveryRoute").setFirst();
