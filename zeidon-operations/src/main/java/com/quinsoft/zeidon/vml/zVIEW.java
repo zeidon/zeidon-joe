@@ -783,4 +783,10 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().interpolate( string, variables );
     }
+
+    @Override
+    public Object callObjectOperation( String operationName, Object... args )
+    {
+        return getView().callObjectOperation( operationName, args );
+    }
 }

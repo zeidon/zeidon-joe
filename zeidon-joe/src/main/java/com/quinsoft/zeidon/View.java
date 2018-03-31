@@ -615,6 +615,15 @@ public interface View extends TaskQualification
     Integer getTotalRootCount();
 
     /**
+     * Call an Object Operation by name.
+     *
+     * @param operationName
+     * @param args
+     * @return
+     */
+    Object callObjectOperation( String operationName, Object... args );
+
+    /**
      * Sets the total root count.  Intended to be used by the dbhandler.
      */
     void setTotalRootCount( int totalRootCount );

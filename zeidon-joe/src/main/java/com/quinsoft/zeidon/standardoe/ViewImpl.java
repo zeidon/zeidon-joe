@@ -19,6 +19,8 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1121,5 +1124,69 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         StringInterpolator interpolator = new StringInterpolator();
         interpolator.setView( this ).setVariables( variables );
         return interpolator.interpolate( string );
+    }
+
+    @Override
+    public Object callObjectOperation( String operationName, Object... args )
+    {
+        return null;
+    }
+
+    private static class ObjectOperationMap
+    {
+        private final Map<String, ObjectOperationCaller> callerMap = new ConcurrentHashMap<String, ObjectOperationCaller>();
+
+        private ObjectOperationCaller getObjectOperation( String operationName, LodDef lodDef, Object...args ) throws Exception
+        {
+            String className = lodDef.getSourceFileName();
+            if ( StringUtils.isBlank( className ) )
+                className = lodDef.getApplication().getPackage() + "." + lodDef.getLibraryName();
+
+            String key = className + "." + operationName;
+            if ( ! callerMap.containsKey( key ) )
+                callerMap.putIfAbsent( key, new ObjectOperationCaller( operationName, className, args ) );
+
+            return callerMap.get( key );
+        }
+    }
+
+    private static class ObjectOperationCaller
+    {
+        private final Class<?> clazz;
+        private final Constructor<?> constructor;
+        private Method method;
+
+        public ObjectOperationCaller( String operationName, String className, Object... args ) throws ClassNotFoundException
+        {
+            clazz = Class.forName( className );
+            if ( clazz == null )
+                throw new ZeidonException( "Couldn't load class '%s'", className );
+
+            Constructor<?>[] constructors = clazz.getConstructors();
+            if ( constructors.length != 1 )
+                throw new ZeidonException( "Unexpected number of constructors for %s", className );
+
+            constructor = constructors[0];
+
+            int argLength = args.length;
+
+            for ( Method m : clazz.getMethods() )
+            {
+                if ( m.getName().equals( operationName ) )
+                {
+                    if ( method != null )
+                        throw new ZeidonException( "Found multiple methods '%s' not found in '%s'", operationName, className );
+
+                    method = m;
+                }
+            }
+
+            if ( method == null )
+                throw new ZeidonException( "Method '%s' not found in '%s'", operationName, className );
+
+            if ( method.getParameterTypes().length != args.length )
+                throw new ZeidonException( "Unexpected number of arguments for method.  Expected %d, got %d",
+                                           method.getParameterTypes().length, argLength );
+        }
     }
 }

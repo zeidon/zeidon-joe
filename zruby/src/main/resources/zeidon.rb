@@ -182,6 +182,10 @@ module Zeidon
     def method_missing( id, *args, &block )
       return @jview.send( id, *args, &block ) if @jview.respond_to?( id )
       return @jview.cursor( id.to_s ) if ! @jloddef.getEntityDef( id.to_s, false).nil?
+
+      caller = get_object_operation_caller( id, *args )
+      return caller if caller
+
       super
     end
     
@@ -204,6 +208,13 @@ module Zeidon
     def to_hash
       JSON.parse( self.to_json )
     end
+
+    private
+
+    def get_object_operation_caller
+      
+    end
+
   end # View
   
   class Qualification

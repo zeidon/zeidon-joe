@@ -1059,7 +1059,7 @@ class EntityInstanceImpl implements EntityInstance
             // We didn't find a twin.  Find the last child under parent with a EntityDef
             // index < 'this' -- that will be the prev sibling.  Find the first child
             // with index > 'this' to be the next sibling.
-            for ( EntityInstanceImpl child : parent.getDirectChildren( false, false ) )
+            for ( EntityInstanceImpl child : parent.getDirectChildren( true, false ) )
             {
                 EntityDef ve = child.getEntityDef();
                 if ( ve.getHierIndex() < this.getEntityDef().getHierIndex() )

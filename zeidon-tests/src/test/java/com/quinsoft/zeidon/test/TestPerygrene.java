@@ -63,21 +63,21 @@ public class TestPerygrene
 		{
 			super( view );
 		}
- 
+
         public int
         testCursorLinks( View     ViewToWindow)
         {
      	   zVIEW    mDrvShiftRoutes = new zVIEW( );
     	   zVIEW    mDrvShiftRoutes2 = new zVIEW( );
            int      RESULT = 0;
-    	   
-    	   // The error seems to be when we have two parallel entities (DeliveryLeg, FuelStop). 
-    	   // The second entity: FuelStop, we delete the first instance of. 
-    	   // If I do this and output the object to a file, we see the correct DeliveryLeg, FuelStops 
+
+    	   // The error seems to be when we have two parallel entities (DeliveryLeg, FuelStop).
+    	   // The second entity: FuelStop, we delete the first instance of.
+    	   // If I do this and output the object to a file, we see the correct DeliveryLeg, FuelStops
     	   // under DeliveryRoute.
-    	   // When we delete all DeliveryLegs under DeliveryRoute and then create new ones, 
-    	   // if we output the object to a file, the DeliveryLegs (for the DeliveryRoute we deleted the first FuelStop) 
-    	   // do not get output. In our "real world" case, the browser looks fine (but not the output) until we do a 
+    	   // When we delete all DeliveryLegs under DeliveryRoute and then create new ones,
+    	   // if we output the object to a file, the DeliveryLegs (for the DeliveryRoute we deleted the first FuelStop)
+    	   // do not get output. In our "real world" case, the browser looks fine (but not the output) until we do a
     	   // commit on mDrvShiftRoutes, then it appears that the DeliveryLegs are missing.
 
     	   ActivateOI_FromFile( mDrvShiftRoutes, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//perygrene/mDrvShiftRoutes.json", zSINGLE );
@@ -86,24 +86,25 @@ public class TestPerygrene
     	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "FuelStop", "" );
     	   // Delete the first FuelStop under DeliveryRoute.
     	   RESULT = DeleteEntity( mDrvShiftRoutes, "FuelStop", zPOS_NEXT );
-    	   
+
     	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "DeliveryLeg", "" );
     	   while ( RESULT > zCURSOR_UNCHANGED )
-    	   { 
+    	   {
     	      RESULT = DeleteEntity( mDrvShiftRoutes, "DeliveryLeg", zREPOS_NONE );
     	      RESULT = SetCursorNextEntity( mDrvShiftRoutes, "DeliveryLeg", "" );
-    	   } 
-        	   
-    	   // Create a new DeliveryLeg. 
+    	   }
+
+    	   // Create a new DeliveryLeg.
     	   RESULT = SetCursorFirstEntity( mDrvShiftRoutes, "DeliveryRoute", "" );
     	   RESULT = CreateEntity( mDrvShiftRoutes, "DeliveryLeg", zPOS_AFTER );
     	   SetAttributeFromString( mDrvShiftRoutes, "DeliveryLeg", "Type", "T-D" );
+           SetAttributeFromInteger( mDrvShiftRoutes, "DeliveryLeg", "ID", 9876 );
     	   SetAttributeFromInteger( mDrvShiftRoutes, "DeliveryLeg", "DistanceInMiles", 18 );
 
-    	   mDrvShiftRoutes.serializeOi().toFile( "target/test-classes/testdata//perygrene/test2.json" );
+    	   mDrvShiftRoutes.serializeOi().withIncremental().toFile( "target/test-classes/testdata//perygrene/test2.json" );
     	   ActivateOI_FromFile( mDrvShiftRoutes2, "mDrvShiftRoutes", ViewToWindow, "target/test-classes/testdata//perygrene/test2.json", zSINGLE );
     	   SetNameForView( mDrvShiftRoutes2, "RoutesTEST2", null, zLEVEL_TASK );
-    	   
+
     	   mDrvShiftRoutes2.cursor("DeliveryRoute").setFirst();
 		   RESULT = CheckExistenceOfEntity( mDrvShiftRoutes2, "DeliveryLeg");
  		   Assert.assertEquals("DeliveryLeg should exist but does not.", CursorResult.SET.toInt(), RESULT );
