@@ -23,17 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.AttributeInstance;
-import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.domains.AbstractDomain;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.domains.DomainContext;
 import com.quinsoft.zeidon.domains.TableDomainContext;
 import com.quinsoft.zeidon.domains.TableEntry;
-import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.NullEntityHandler;
@@ -60,9 +56,6 @@ class DomainList
     Domain getDomain( String name )
     {
     	Domain domain = domainMap.get(name);
-        if ( domain instanceof DummyDomain )
-            throw new ZeidonException( "Domain '%s' does not have the JavaClass defined in the .xdm", domain );
-
     	if ( domain == null )
     		throw new ZeidonException( "Domain '%s' does not exist for application %s",
     								   name, application.toString() );
@@ -136,22 +129,13 @@ class DomainList
 	            if ( entityName.equals( "Domain" ) )
 	            {
 	                if ( ! domainProperties.containsKey( "Name" ))
-	                {
-	                    reader.getLogger().error( "Domain doesn't have a name.  Values = " + domainProperties.toString() );
-	                    currentDomain = new DummyDomain( application, domainProperties, task );
-	                }
-	                else
-	                if ( ! domainProperties.containsKey( "JavaClass" ) ) // TODO: Remove this some day?
-	                {
-	                    // This domain doesn't have a java class name specified.  We'll load a dummy
-	                    // domain so we can keep things moving.
-	                    currentDomain = new DummyDomain( application, domainProperties, task );
-	                }
-	                else
-	                {
-	                    currentDomain = loadNewDomain( task );
-	                    domainMap.put( currentDomain.getName(), currentDomain );
-	                }
+	                    throw new ZeidonException( "Domain does not have 'Name' specified" ).appendMessage( "Values = " + domainProperties.toString() );
+
+	                if ( ! domainProperties.containsKey( "JavaClass" ) )
+                        throw new ZeidonException( "Domain does not have 'JavaClass' specified" ).appendMessage( "Domain = %s", domainProperties.get( "Name" ) );
+
+	                currentDomain = loadNewDomain( task );
+                    domainMap.put( currentDomain.getName(), currentDomain );
 	            }
 	            else
 	            if ( entityName.equals( "Context" ) )
@@ -220,30 +204,6 @@ class DomainList
         public int getIndex()
         {
             throw new UnsupportedOperationException( "getIndex() not supported for TableEntryReader");
-        }
-    }
-
-    /**
-     * This is a dummy domain to stand in the place for domains that haven't (yet)
-     * had their java class defined in the .xdm.  This will be used as a marker so
-     * we can tell the user they need to add java class to the .xdm.
-     *
-     * @author DG
-     *
-     */
-    private static class DummyDomain extends AbstractDomain
-    {
-
-        public DummyDomain(Application application, Map<String, Object> domainProperties, Task task )
-        {
-            super( application, domainProperties, task );
-        }
-
-        @Override
-        public Object convertExternalValue( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef,
-                                            String contextName, Object externalValue ) throws InvalidAttributeValueException
-        {
-            throw new ZeidonException( "This should never get called" );
         }
     }
 }
