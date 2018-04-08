@@ -265,7 +265,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             else
             if ( value instanceof GeneratedKey )
             {
-                 GeneratedKey k = (GeneratedKey) value;
+                GeneratedKey k = (GeneratedKey) value;
                 ps.setObject( idx, k.getNativeValue() );
             }
             else
