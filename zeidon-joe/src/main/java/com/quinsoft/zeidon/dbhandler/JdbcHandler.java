@@ -820,7 +820,7 @@ public class JdbcHandler extends AbstractSqlHandler
                     {
                         while ( rs2.next() )
                         {
-                            Integer i = rs2.getInt( 1 );
+                            Object i = rs2.getObject( 1 );
                             generatedKeys.add( i );
                         }
                     }

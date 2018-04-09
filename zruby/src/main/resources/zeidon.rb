@@ -211,8 +211,8 @@ module Zeidon
 
     private
 
-    def get_object_operation_caller
-      
+    def get_object_operation_caller( id, *args )
+      nil
     end
 
   end # View
@@ -380,6 +380,10 @@ module Zeidon
     # Simple wrapper for excludeEntity method.
     def exclude( *args )
       includeEntity( *args )
+    end
+
+    def exists?
+      return has_any      
     end
     
     def method_missing( id, *args, &block )
