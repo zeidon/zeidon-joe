@@ -58,6 +58,12 @@ public class QualEntity
      */
     private boolean keyQualification;
 
+    /**
+     * If not null, specifies custom SQL.
+     */
+    String openSql;
+    List<AttributeDef> openSqlAttributeList = new ArrayList<>();
+
     QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
     {
         super();
@@ -175,5 +181,26 @@ public class QualEntity
     boolean isKeyQualification()
     {
         return keyQualification;
+    }
+
+    void setOpenSqlAttributeList( String attributeList )
+    {
+        if ( StringUtils.isBlank( attributeList ) )
+            throw new ZeidonException( "Using OpenSQL in qualification requires OpenSQL_AttributeList" );
+
+        openSqlAttributeList = new ArrayList<>();
+
+        // Parse it out and create a map of the DataFields.
+        String[] list = attributeList.split( "," );
+        for ( String attrName : list )
+        {
+            attrName = attrName.trim();
+            AttributeDef attributeDef = entityDef.getAttribute( attrName, false );
+            if ( attributeDef == null )
+                throw new ZeidonException( "Attribute %s specified in OpenSQL_AttributeList does not exist in entity %s",
+                                           attrName, entityDef );
+
+            openSqlAttributeList.add( attributeDef );
+        }
     }
 }

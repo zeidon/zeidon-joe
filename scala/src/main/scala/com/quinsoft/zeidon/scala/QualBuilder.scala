@@ -812,6 +812,12 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         return QualBuilder.TERMINATOR
     }
 
+    def usingSql( customizedSql: String, attributeList: String ): QualificationTerminator = {
+        qualBuilder.jqual.setOpenSql( customizedSql, attributeList )
+
+        return QualBuilder.TERMINATOR
+    }
+
     /**
      * This adds qualification on an attribute using another attribute from the same
      * query.  In SQL terms this qualifies a column on using a different column from

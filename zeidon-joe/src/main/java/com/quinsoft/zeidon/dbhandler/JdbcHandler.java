@@ -258,6 +258,10 @@ public class JdbcHandler extends AbstractSqlHandler
      */
     private String getFullKeyValuesForCurrentRow( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
+        // If we're using OpenSQL we'll assume the first column is the unique identifier.
+        if ( stmt.usesOpenSql )
+            return getSqlObject( rs, 1, null, loadedObjects ).toString();
+
         List<String> values = new ArrayList<String>();
 
         // Add the entity name so we can keep track of the keys for multiple entities.
@@ -306,6 +310,10 @@ public class JdbcHandler extends AbstractSqlHandler
      */
     private String getKeyValuesForCurrentEntity( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
+        // If we're using OpenSQL we'll assume the first column is the unique identifier.
+        if ( stmt.usesOpenSql )
+            return getSqlObject( rs, 1, null, loadedObjects ).toString();
+
         KeyStringBuilder builder = new KeyStringBuilder();
 
         DataRecord dataRecord = entityDef.getDataRecord();
@@ -500,10 +508,10 @@ public class JdbcHandler extends AbstractSqlHandler
 
                         // If we're loading all instances of EntityDef then we need to set the parent cursor
                         // to point to the correct entity.
-                        EntityDef parent = entityDef.getParent();
-                        RelRecord relRecord = dataRecord.getRelRecord();
                         if ( selectAllInstances( entityDef ) )
                         {
+                            EntityDef parent = entityDef.getParent();
+                            RelRecord relRecord = dataRecord.getRelRecord();
                             DataField keyField;
                             switch ( relRecord.getRelationshipType() )
                             {

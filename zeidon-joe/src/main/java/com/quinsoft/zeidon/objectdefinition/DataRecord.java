@@ -45,7 +45,7 @@ public class DataRecord implements PortableFileAttributeHandler
     private boolean joinable;
     private boolean activateWithSingleSelect;
 
-    DataRecord( EntityDef entityDef )
+    public DataRecord( EntityDef entityDef )
     {
         this.entityDef = entityDef;
     }

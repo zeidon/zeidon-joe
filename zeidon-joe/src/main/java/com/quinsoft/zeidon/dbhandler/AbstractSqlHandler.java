@@ -505,6 +505,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity qualEntity = new QualEntity( entitySpec, entityDef );
             qualMap.put( entityDef, qualEntity );
 
+            String openSql = entitySpec.getAttribute( "OpenSQL" ).getString();
+            if ( ! StringUtils.isBlank( openSql ) )
+            {
+                qualEntity.openSql = openSql;
+                qualEntity.setOpenSqlAttributeList( entitySpec.getAttribute( "OpenSQL_AttributeList" ).getString() );
+                continue;
+            }
+
             int parenCount = 0;
 
             EntityDef qualAttribDef = entitySpec.getEntityDef().getLodDef().getEntityDef( "QualAttrib" );
@@ -1015,6 +1023,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
         }
 
+        QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity != null )
+        {
+            // Can't join entities that are being loaded via customized SQL.
+            if ( ! StringUtils.isBlank( qualEntity.openSql ) )
+                return false;
+        }
+
         return getEntityDefData( entityDef ).isJoinable( entityDef );
     }
 
@@ -1036,6 +1052,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         List<EntityDef> joinedChildren = getJoinableChildren( entityDef );
 
         QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity != null && ! StringUtils.isBlank( qualEntity.openSql ) )
+        {
+            return useOpenSql( stmt, view, entityDef, qualEntity );
+        }
+
         stmt.appendCmd( "SELECT " );
 
         // If the entity we're loading is not the root of the OD then add parent FKs to WHERE clause.
@@ -1103,6 +1124,29 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // indicates that the joined children will be loaded as part of the
         // parent load and will not need to be loaded separately.
         loadedViewEntities.addAll( joinedChildren );
+        return null;
+    }
+
+    /**
+     * qualEntity has customized SQL specified via OpenSql.  Use this instead of generating SQL.
+     */
+    private Integer useOpenSql( SqlStatement stmt, View view, EntityDef entityDef, QualEntity qualEntity )
+    {
+        stmt.appendCmd( qualEntity.openSql );
+
+        // Create some temporary DataRecords/DataFields to work with the Sql loader.
+        DataRecord dataRecord = new DataRecord( qualEntity.entityDef );
+        List<DataField> dataFields = new ArrayList<>();
+        for ( AttributeDef attributeDef : qualEntity.openSqlAttributeList )
+        {
+            DataField dataField = new DataField().setAttributeDef( attributeDef );
+            dataFields.add( dataField );
+            stmt.columns.put( dataField, stmt.columns.size() + 1 );
+        }
+
+        stmt.dataRecords.put( dataRecord, dataFields );
+        stmt.usesOpenSql = true;
+
         return null;
     }
 
@@ -1204,8 +1248,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         SqlStatement stmt = null;
 
-        DataRecord dataRecord = entityDef.getDataRecord();
-        task.dblog().trace( "Selecting entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
+        // DataRecord could be null if we're using OpenSQL
+        if ( entityDef.getDataRecord() != null )
+            task.dblog().trace( "Selecting entity %s, table name = %s", entityDef.getName(),
+                                entityDef.getDataRecord().getRecordName() );
+        else
+            assert qualEntity.openSql != null;
 
         // Check to see if we've loaded this entityDef already.  This can happen if
         // this entity def was loaded via join or all instances were loaded at once.
@@ -2465,6 +2513,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         boolean containsSubselect;
         boolean qualUsesChildEntity;
+        boolean usesOpenSql;
 
         /**
          * If true, then a conjunction (AND/OR) is needed before the next predicate

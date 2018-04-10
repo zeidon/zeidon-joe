@@ -17,7 +17,7 @@
     Copyright 2009-2015 QuinSoft
  */
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon.objectdefinition;
 
@@ -35,7 +35,7 @@ public class DataField implements PortableFileAttributeHandler
     private String        type;
     private int           token;
     private AttributeDef attributeDef;
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler#setAttribute(com.quinsoft.zeidon.utils.PortableFileReader)
      */
@@ -81,11 +81,12 @@ public class DataField implements PortableFileAttributeHandler
         return attributeDef;
     }
 
-    void setAttributeDef(AttributeDef attributeDef)
+    public DataField setAttributeDef(AttributeDef attributeDef)
     {
         this.attributeDef = attributeDef;
+        return this;
     }
-    
+
     @Override
     public String toString()
     {

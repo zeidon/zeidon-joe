@@ -541,6 +541,14 @@ public class QualificationBuilder
         return this;
     }
 
+    public QualificationBuilder setOpenSql( String sql, String attributeList )
+    {
+        validateEntity();
+        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL" ).setValue( sql ) ;
+        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL_AttributeList" ).setValue( attributeList ) ;
+        return this;
+    }
+
     /**
      * Retroactively insert an opening paren just in front of the current QualAttrib.  Used to
      * wrap some QualAttribs with parens after it is learned that they are needed.
