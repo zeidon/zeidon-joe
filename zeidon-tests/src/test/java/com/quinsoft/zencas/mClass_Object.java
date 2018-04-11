@@ -1110,7 +1110,7 @@ omClass_EnrollmentConstraint( View     mClass,
       case zECE_ACCEPT :
 
          //:nRC = ValidateGrade(  mClass )
-         nRC = omClass_ValidateGrade( mClass );
+         //nRC = omClass_ValidateGrade( mClass );
          //:RETURN nRC
          if(8==8)return( nRC );
 
