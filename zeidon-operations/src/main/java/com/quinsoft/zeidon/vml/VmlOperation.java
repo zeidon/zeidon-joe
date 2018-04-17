@@ -62,6 +62,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
+import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
@@ -4887,30 +4888,38 @@ public abstract class VmlOperation
 		options.setActivateFlags(ACTIVATE_CONTROL.get( control ));
 		options.setQualificationObject(activateQualificationView);
 		//View view2 = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
-		View view = qual.activateObjectInstance(options);
+		   try
+		   {
+				View view = qual.activateObjectInstance(options);
+				
+				LodDef lodDef = view.getLodDef();
+				returnView.setView( view );
+				switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
+				{
+					case 0:
+						nRC = -1;
+						break;
+					
+					case 1:
+						nRC = 0;
+						break;
+					
+					default:
+						// If we have defined a limit on the root, and we activated that limit, then return 2.
+						if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
+							nRC = 2;
+						else
+							nRC = 1;
+						break;
+				}
 		
-		LodDef lodDef = view.getLodDef();
-		returnView.setView( view );
-		switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
-		{
-			case 0:
-				nRC = -1;
-				break;
-			
-			case 1:
-				nRC = 0;
-				break;
-			
-			default:
-				// If we have defined a limit on the root, and we activated that limit, then return 2.
-				if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
-					nRC = 2;
-				else
-					nRC = 1;
-				break;
-		}
+		   }
+		   catch ( PessimisticLockingException e1 )
+		   {
+				   return zLOCK_ERROR;
+		   }
 		
-		TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getLodDef().getName() );
+		
 		// DisplayObjectInstance( view, "", "" );
 		return nRC;
 	}
