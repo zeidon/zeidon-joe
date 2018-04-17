@@ -622,6 +622,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testLocking()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testLocking( testview );
+        System.out.println("===== Finished testIncludeCommit ========");
+	}
+
+	@Test
 	public void testIncludeCommitSubentityError()
 	{
 	    View         testview;
@@ -5079,7 +5089,35 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 
   		   return( 0 );
    		}
+   		public int
+   		testLocking( View     ViewToWindow )
+   		{
+  		   zVIEW    mPersonTST = new zVIEW( );
+ 		   zVIEW    mPersonTST2 = new zVIEW( );
+ 		   zVIEW    vTempViewVar_0 = new zVIEW( );
+ 		   int RESULT=0;
+            StringBuilder sb_Country = new StringBuilder( );
+            zVIEW    ZPLOCKO = new zVIEW( );
 
+            RESULT = ActivateObjectInstance( ZPLOCKO, "ZPLOCKO", ViewToWindow, 0, zMULTIPLE );
+            //:NAME VIEW ZPLOCKO "ZPLOCKO" 
+            SetNameForView( ZPLOCKO, "ZPLOCKO", null, zLEVEL_TASK );
+			RESULT = ZPLOCKO.cursor( "ZeidonLock" ).setFirst().toInt();
+			while ( RESULT > zCURSOR_UNCHANGED )
+			{
+				ZPLOCKO.cursor("ZeidonLock").deleteEntity();
+				RESULT = ZPLOCKO.cursor( "ZeidonLock" ).setNext().toInt();
+			}
+			ZPLOCKO.commit();
+
+ 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+ 		   RESULT = ActivateObjectInstance( mPersonTST, "mPersonTST", ViewToWindow, vTempViewVar_0, zSINGLE_FOR_UPDATE );
+ 		   if ( ActivateObjectInstance( mPersonTST2, "mPersonTST", ViewToWindow, vTempViewVar_0, zSINGLE_FOR_UPDATE ) != zLOCK_ERROR )
+ 			  Assert.assertTrue("Should receive a zLOCK_ERROR.", false);
+ 		   DropView( vTempViewVar_0 );
+   		   return( 0 );
+   		}
+   		
 		//:   VIEW mFAProfO BASED ON LOD mFAProf
 		public int
 		testInclude( View     ViewToWindow )
