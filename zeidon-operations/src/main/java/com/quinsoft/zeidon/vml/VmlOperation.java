@@ -4470,6 +4470,48 @@ public abstract class VmlOperation
       return nRC;
    }
 
+   //  RETURNS: zCURSOR_NULL      - No entity instances exist
+   //           zCURSOR_UNCHANGED - Entity cursor unchanged
+   //           zCURSOR_SET       - Entity position established
+   //           zCALL_ERROR       - Error in call
+   public static int  SetCursorFirstEntityByDecimal( View view, String entityName, String attributeName, double dValue, String scopingEntity )
+   {
+      int nRC;
+      EntityCursor cursor = view.cursor( entityName );
+      if ( cursor.hasAny( scopingEntity ) == false )
+      {
+         nRC = zCURSOR_NULL;
+      }
+      else
+      {
+         nRC = cursor.setFirst( attributeName, dValue, scopingEntity ).toInt();
+      }
+
+      return nRC;
+   }
+
+   //  RETURNS: zCURSOR_NULL          - No entity instances exist
+   //           zCURSOR_UNCHANGED     - Entity cursor unchanged
+   //           zCURSOR_SET           - Entity position established
+   //           zCURSOR_SET_NEWPARENT - Entity position changed within new parent
+   //           zCALL_ERROR           - Error in call
+   public static int  SetCursorNextEntityByDecimal( View view, String entityName, String attributeName, double dValue, String scopingEntity )
+   {
+      // TODO - need setNext using scopingEntity???
+      int nRC;
+      EntityCursor cursor = view.cursor( entityName );
+      if ( cursor.hasAny( scopingEntity ) == false )
+      {
+         nRC = zCURSOR_NULL;
+      }
+      else
+      {
+         nRC = cursor.setNext( attributeName, dValue, scopingEntity ).toInt(); // , scopingEntity );
+      }
+
+      return nRC;
+   }
+
    //  RETURNS:    1 - Attr > string
    //              0 - Attributes are logically equal
    //             -1 - Attr < string
