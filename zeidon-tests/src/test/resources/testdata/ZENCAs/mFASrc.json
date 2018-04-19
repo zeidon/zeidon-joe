@@ -4,7 +4,7 @@
   },
   "OIs" : [ {
     ".oimeta" : {
-      "application" : "nazsis",
+      "application" : "zencas",
       "odName" : "mFASrc",
       "incremental" : true,
       "totalRootCount" : 1

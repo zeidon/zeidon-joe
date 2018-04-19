@@ -5112,7 +5112,7 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
    		   // mFAAdmin has the includable entity DisbCollegeTerm and under that is DisbCollegeYear.
    		   // DisbCollegeYear is marked as "display" not "includable". 
    		   // Because of this, we get an error on Commit of mFAAdmin.
-    	   ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );
+    	   ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
     	   SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
 
     	   RESULT = ExcludeEntity( mFASrc, "Scholarship", zREPOS_AFTER );
