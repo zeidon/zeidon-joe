@@ -647,8 +647,8 @@ public class TestZencas
 	    View         testview;
 		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
 		VmlTester tester = new VmlTester( testview );
-		tester.testIncludeCommitSubentityError( testview );
-        System.out.println("===== Finished testIncludeCommitSubentityError ========");
+		tester.testExcludeSubentityError( testview );
+        System.out.println("===== Finished testExcludeSubentityError ========");
 	}
 
 	@Test
