@@ -25,7 +25,6 @@
       "Description" : "Charles Todd Caldwell Memorial Scholarship\r\n/nAwarded during honors chapel.\r\n/nStacked (follows student)\r\n/n2006-2007 415\r\n/n2007-2008 -639.00  Matt LeBlanc \r\n/n\tSent email to history department. 11/2/2007 sent another email. dlp\r\n/n2008-2009 Frank Kusnir, Chris Morris\r\n/n2008-2009 -675.00\r\n/n2009-2010 Bethany MacPherson\r\n/n",
       "Disbursements" : 1,
       "ScholarshipAidType" : "P",
-      "FK_ID_ADMINISTRATIVEDIVISION" : 1,
       "FK_ID_SCHOLARSHIP" : 1,
       "Scholarship" : [ {
         "ID" : 1,
@@ -33,7 +32,6 @@
         "Description" : "Preference shall be given to a junior or senior.  This scholarship may follow the student throughout their remaining semestewrs at ENC as long as they meet the following criterion.\r\n/n\r\n/nA: The student shall be majoring in history. In light of this, the chairman of the History Department shall be consulted in regard to potential recipients\r\n/n\r\n/nB: The student must demonstrate financial need.",
         "AwardedByDepartment" : "F",
         "FinancialAidCode" : "CTC",
-        "FK_ID_ADMINISTRATIVEDIVISION" : 1,
         "FK_ID_FUND" : 2,
         "Fund" : [ {
           "ID" : 2,

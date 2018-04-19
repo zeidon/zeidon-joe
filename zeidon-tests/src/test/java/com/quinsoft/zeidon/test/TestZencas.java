@@ -5116,6 +5116,8 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
     	   SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
 
     	   RESULT = ExcludeEntity( mFASrc, "Scholarship", zREPOS_AFTER );
+    	   // We excluded Scholarship which has a subentity of Fund. Fund should not exist but it does
+           Assert.assertEquals( mFASrc.cursor("Fund").checkExistenceOfEntity().toInt(), -3 );
 
   		   return( 0 );
    		}
