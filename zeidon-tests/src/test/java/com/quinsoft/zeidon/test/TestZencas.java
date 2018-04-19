@@ -640,6 +640,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testExcludeSubentityError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testIncludeCommitSubentityError( testview );
+        System.out.println("===== Finished testIncludeCommitSubentityError ========");
+	}
+
+	@Test
 	public void testActivateRecurObj()
 	{
 	    View         testview;
@@ -5087,6 +5097,27 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 
   		   return( 0 );
    		}
+
+   		public int
+   		testExcludeSubentityError( View     ViewToWindow )
+   		{
+   		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int      lTempInteger_0 = 0;
+   		   int      RESULT = 0;
+   		   zVIEW    mFASrc = new zVIEW( );
+   		   int      lTempInteger_1 = 0;
+   		   
+   		   // mFAAdmin has the includable entity DisbCollegeTerm and under that is DisbCollegeYear.
+   		   // DisbCollegeYear is marked as "display" not "includable". 
+   		   // Because of this, we get an error on Commit of mFAAdmin.
+    	   ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );
+    	   SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+    	   RESULT = ExcludeEntity( mFASrc, "Scholarship", zREPOS_AFTER );
+
+  		   return( 0 );
+   		}
+
    		public int
    		testLocking( View     ViewToWindow )
    		{
