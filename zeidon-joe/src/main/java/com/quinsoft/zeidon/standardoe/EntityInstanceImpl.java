@@ -2717,8 +2717,14 @@ class EntityInstanceImpl implements EntityInstance
                                        .setLazyLoad( loadLazyEntities )
                                        .build();
 
+        // If we're not including the parent in this iterator, then skip to the next one.
         if ( ! includeParent )
-            iterable.next();
+        {
+            // Edge case: if excludeHidden = true and this.hidden = true then the parent will
+            // already have been skipped over.
+            if ( this.hidden == false )
+                iterable.next();
+        }
 
         return iterable;
     }
