@@ -339,11 +339,13 @@ class CommitMultipleOIs
 
                 if ( ei.isIncluded() && entityDef.isInclude() )
                 {
+                    assert ! includableRelationships.containsKey( ei.getUniqueLinkedObject() );
                     includableRelationships.put( ei.getUniqueLinkedObject(), parent.getUniqueLinkedObject() );
                 }
 
                 if ( ei.isExcluded() && entityDef.isExclude() )
                 {
+                    assert ! excludableRelationships.containsKey( ei.getUniqueLinkedObject() );
                     excludableRelationships.put( ei.getUniqueLinkedObject(), parent.getUniqueLinkedObject() );
                 }
             } // each entityInstance
