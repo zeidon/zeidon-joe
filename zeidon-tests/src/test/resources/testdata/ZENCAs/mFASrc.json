@@ -1,0 +1,55 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "zencas",
+      "odName" : "mFASrc",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "FinAidSource" : [ {
+      "ID" : 4,
+      "wAmountBudgeted" : "0.0",
+      "SourceFootnote" : "This is a test...",
+      "Status" : "A",
+      "Name" : "Charles Todd Caldwell Memorial Scholarship",
+      "AidType" : "G",
+      "SourceType" : "S",
+      "Provider" : "O",
+      "FundedType" : "Endow",
+      "NCAA_ReportingType" : "IGA",
+      "IPEDS_ReportingType" : "Instit",
+      "CDS_ReportingType" : "SchGrInst",
+      "Description" : "Charles Todd Caldwell Memorial Scholarship\r\n/nAwarded during honors chapel.\r\n/nStacked (follows student)\r\n/n2006-2007 415\r\n/n2007-2008 -639.00  Matt LeBlanc \r\n/n\tSent email to history department. 11/2/2007 sent another email. dlp\r\n/n2008-2009 Frank Kusnir, Chris Morris\r\n/n2008-2009 -675.00\r\n/n2009-2010 Bethany MacPherson\r\n/n",
+      "Disbursements" : 1,
+      "ScholarshipAidType" : "P",
+      "FK_ID_SCHOLARSHIP" : 1,
+      "Scholarship" : [ {
+        "ID" : 1,
+        "Name" : "Charles Todd Caldwell Memorial Scholarship  ",
+        "Description" : "Preference shall be given to a junior or senior.  This scholarship may follow the student throughout their remaining semestewrs at ENC as long as they meet the following criterion.\r\n/n\r\n/nA: The student shall be majoring in history. In light of this, the chairman of the History Department shall be consulted in regard to potential recipients\r\n/n\r\n/nB: The student must demonstrate financial need.",
+        "AwardedByDepartment" : "F",
+        "FinancialAidCode" : "CTC",
+        "FK_ID_FUND" : 2,
+        "Fund" : [ {
+          "ID" : 2,
+          "Designation" : "ES",
+          "Name" : "Charles Todd Caldwell Memorial",
+          "Description" : "Charles Todd Caldwell Memorial",
+          "RestrictedType" : "R",
+          "FundNumber" : "ESCTC",
+          "ProjectCode" : "ESH",
+          "ModifiedDateTime" : "2018-04-13T00:00:00.000-05:00",
+          "LastModifiedBy" : "admin"
+        } ]
+      } ],
+      "AdministrativeDivision" : [ {
+        "ID" : 1,
+        "Name" : "Main",
+        "Description" : "Main Location"
+      } ]
+    } ]
+  } ]
+}

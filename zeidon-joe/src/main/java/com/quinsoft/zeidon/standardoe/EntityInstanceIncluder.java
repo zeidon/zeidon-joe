@@ -20,7 +20,6 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.util.EnumSet;
-import java.util.List;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.IncludeFlags;
@@ -173,7 +172,7 @@ class EntityInstanceIncluder
     private EntityInstanceImpl performInclude()
     {
         // Create the root instance and all children.  Sets rootInstance.
-        createIncludedInstance( rootSource, rootTargetEntityDef, rootTargetParent, rootTargetInstance, rootPosition );
+        createIncludedInstance( rootSource, null, rootTargetEntityDef, rootTargetParent, rootTargetInstance, rootPosition );
 
         // If the new entity is updated set OI flag to indicate it.
         // TODO: instance versioned?
@@ -216,7 +215,7 @@ class EntityInstanceIncluder
     private EntityDef findChildIncludeEntityDef(EntityDef targetParentEntityDef, EntityDef sourceEntityDef)
     {
         EntityDef childByToken = null;
-        
+
         for ( EntityDef childTgtEntityDef : targetParentEntityDef.getBaseEntityDef().getChildren() )
         {
             if ( sourceEntityDef.getErEntityToken() == childTgtEntityDef.getErEntityToken() &&
@@ -243,6 +242,7 @@ class EntityInstanceIncluder
      * Creates the new target instance from sourceInstance and all child entity instances.
      */
     private EntityInstanceImpl createIncludedInstance( final EntityInstanceImpl sourceInstance,
+                                                       final EntityInstanceImpl relSourceInstance,
                                                        final EntityDef targetEntityDef,
                                                        final EntityInstanceImpl targetParent,
                                                        final EntityInstanceImpl targetInstance,
@@ -268,6 +268,15 @@ class EntityInstanceIncluder
 
         newInstance.linkInternalInstances( sourceInstance );
         newInstance.copyFlags( sourceInstance );
+        
+        // If the relSourceInstance is specified then we have a situation where we've spawned an
+        // include but the parent-child relationship is reversed in the target subobject.  This means
+        // that we want the include/exclude flags from the child instead of the (usual) parent.
+        if ( relSourceInstance != null )
+        {
+            newInstance.setIncluded( relSourceInstance.isIncluded() );
+            newInstance.setExcluded( relSourceInstance.isExcluded() );
+        }
         newInstance.copyAttributes().setCopyPersistent( false ).from( sourceInstance ); // Copy the work attributes.
 
         // Now loop through source's direct children and see if the need to be
@@ -304,7 +313,7 @@ class EntityInstanceIncluder
 
             // TODO: Check for versioning.
 
-            prevInstance = createIncludedInstance( child, targetChildEntityDef, newInstance, prevInstance, CursorPosition.LAST );
+            prevInstance = createIncludedInstance( child, null, targetChildEntityDef, newInstance, prevInstance, CursorPosition.LAST );
         }
 
         // Now check to see if the parent of the source is a child of the target.  If so,
@@ -344,7 +353,7 @@ class EntityInstanceIncluder
                 continue;
 
             // If we get here then we need to copy C' to C.
-            createIncludedInstance( sourceParent, childEntityDef, newInstance, null, CursorPosition.LAST );
+            createIncludedInstance( sourceParent, sourceInstance, childEntityDef, newInstance, null, CursorPosition.LAST );
 
             // We only need to copy one so we're done.
             break;

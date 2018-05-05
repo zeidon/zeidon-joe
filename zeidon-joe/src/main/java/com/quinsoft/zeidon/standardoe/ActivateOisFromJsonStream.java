@@ -408,22 +408,35 @@ class ActivateOisFromJsonStream implements StreamReader
         assert token == JsonToken.START_OBJECT;
 
         EntityDef entityDef = lodDef.getEntityDef( entityName, true, true );
+        EntityInstanceImpl ei = null;
 
         // Read tokens until we find the token that ends the current list of entities.
         while ( ( token = jp.nextToken() ) != null )
         {
-            twinCount++;
-
             if ( token == JsonToken.END_ARRAY )
                 break;
 
+            if ( ei == null )
+            {
+                ei = (EntityInstanceImpl) view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+                twinCount++;
+            }
+
             if ( token == JsonToken.END_OBJECT )
             {
-                // If we get here then this should indicate an empty OI.  Get the next
-                // token, verify that it's an END_ARRAY, and return.
+                // If we get here then this could indicate an empty EI.  Get the next
+                // token and get out if it's END_ARRAY.  Otherwise it better be the
+                // start of another object.
                 token = jp.nextToken();
-                assert token == JsonToken.END_ARRAY;
-                break;
+                if ( token == JsonToken.END_ARRAY )
+                    break;
+
+                assert token == JsonToken.START_OBJECT;
+                assert entityArray;  // If next token is an object then we better be reading an array.
+
+                // Indicate that we want a new EI created.
+                ei = null;
+                continue;
             }
 
             // If there are multiple twins then the token is START_OBJECT to
@@ -431,11 +444,10 @@ class ActivateOisFromJsonStream implements StreamReader
             if ( token == JsonToken.START_OBJECT )
             {
                 assert twinCount > 1; // Assert that we already created at least one EI.
-                token = jp.nextToken();
+                continue;
             }
 
             assert token == JsonToken.FIELD_NAME;
-            EntityInstanceImpl ei = (EntityInstanceImpl) view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
             List<AttributeMeta> attributeMetas = new ArrayList<>();
 
@@ -560,6 +572,9 @@ class ActivateOisFromJsonStream implements StreamReader
             if ( entityArray == false )
                 break;
 
+            // Indicate that we're done with this entity and we'll want a new one if
+            // we find an OBJECT_START token.
+            ei = null;
         } // while ( ( token = jp.nextToken() ) != null )...
     }
 

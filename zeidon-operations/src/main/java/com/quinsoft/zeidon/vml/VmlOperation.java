@@ -62,6 +62,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
+import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
@@ -4469,6 +4470,48 @@ public abstract class VmlOperation
       return nRC;
    }
 
+   //  RETURNS: zCURSOR_NULL      - No entity instances exist
+   //           zCURSOR_UNCHANGED - Entity cursor unchanged
+   //           zCURSOR_SET       - Entity position established
+   //           zCALL_ERROR       - Error in call
+   public static int  SetCursorFirstEntityByDecimal( View view, String entityName, String attributeName, double dValue, String scopingEntity )
+   {
+      int nRC;
+      EntityCursor cursor = view.cursor( entityName );
+      if ( cursor.hasAny( scopingEntity ) == false )
+      {
+         nRC = zCURSOR_NULL;
+      }
+      else
+      {
+         nRC = cursor.setFirst( attributeName, dValue, scopingEntity ).toInt();
+      }
+
+      return nRC;
+   }
+
+   //  RETURNS: zCURSOR_NULL          - No entity instances exist
+   //           zCURSOR_UNCHANGED     - Entity cursor unchanged
+   //           zCURSOR_SET           - Entity position established
+   //           zCURSOR_SET_NEWPARENT - Entity position changed within new parent
+   //           zCALL_ERROR           - Error in call
+   public static int  SetCursorNextEntityByDecimal( View view, String entityName, String attributeName, double dValue, String scopingEntity )
+   {
+      // TODO - need setNext using scopingEntity???
+      int nRC;
+      EntityCursor cursor = view.cursor( entityName );
+      if ( cursor.hasAny( scopingEntity ) == false )
+      {
+         nRC = zCURSOR_NULL;
+      }
+      else
+      {
+         nRC = cursor.setNext( attributeName, dValue, scopingEntity ).toInt(); // , scopingEntity );
+      }
+
+      return nRC;
+   }
+
    //  RETURNS:    1 - Attr > string
    //              0 - Attributes are logically equal
    //             -1 - Attr < string
@@ -4887,30 +4930,38 @@ public abstract class VmlOperation
 		options.setActivateFlags(ACTIVATE_CONTROL.get( control ));
 		options.setQualificationObject(activateQualificationView);
 		//View view2 = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
-		View view = qual.activateObjectInstance(options);
+		   try
+		   {
+				View view = qual.activateObjectInstance(options);
+				
+				LodDef lodDef = view.getLodDef();
+				returnView.setView( view );
+				switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
+				{
+					case 0:
+						nRC = -1;
+						break;
+					
+					case 1:
+						nRC = 0;
+						break;
+					
+					default:
+						// If we have defined a limit on the root, and we activated that limit, then return 2.
+						if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
+							nRC = 2;
+						else
+							nRC = 1;
+						break;
+				}
 		
-		LodDef lodDef = view.getLodDef();
-		returnView.setView( view );
-		switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
-		{
-			case 0:
-				nRC = -1;
-				break;
-			
-			case 1:
-				nRC = 0;
-				break;
-			
-			default:
-				// If we have defined a limit on the root, and we activated that limit, then return 2.
-				if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
-					nRC = 2;
-				else
-					nRC = 1;
-				break;
-		}
+		   }
+		   catch ( PessimisticLockingException e1 )
+		   {
+				   return zLOCK_ERROR;
+		   }
 		
-		TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getLodDef().getName() );
+		
 		// DisplayObjectInstance( view, "", "" );
 		return nRC;
 	}

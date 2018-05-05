@@ -229,6 +229,10 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
             return;
 
+        // We'll allow updates to autoseq so the dbhandler can change them.
+        if ( attributeDef.isAutoSeq() )
+            return;
+
         if ( ! attributeDef.isUpdate() )
             throw new ZeidonException( "Attribute is defined as read-only" )
                                 .prependAttributeDef( attributeDef );
