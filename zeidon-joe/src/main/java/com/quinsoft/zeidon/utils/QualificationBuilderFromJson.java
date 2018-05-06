@@ -6,6 +6,7 @@ package com.quinsoft.zeidon.utils;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonLocation;
@@ -40,6 +41,7 @@ public class QualificationBuilderFromJson
        {
          status: "A",
          $or: [ { age: { $lt: 30 } }, { type: 1 } ]
+         $orderBy: [ { age: desc } ]
        }
      */
     public void parseJson( String json )
@@ -74,6 +76,15 @@ public class QualificationBuilderFromJson
         }
     }
 
+    /**
+     *
+     * @param qualEntityDef - Entity we are qualifying on (e.g. restricting)
+     * @param entityDef - Entity of value.
+     *
+     * Often these are the same but they could be different, such as when qualifying
+     * an entity using a value from a child entity.
+     *
+     */
     private JsonToken parseEntity( EntityDef qualEntityDef, EntityDef entityDef ) throws JsonParseException, IOException
     {
         // Read the START_OBJECT
@@ -129,6 +140,11 @@ public class QualificationBuilderFromJson
                     case "$pagination":
                     case "pagination":
                         parsePagination();
+                        continue;
+
+                    case "$orderby":
+                    case "orderby":
+                        parseOrderBy( qualEntityDef );
                         continue;
                 }
             }
@@ -276,6 +292,98 @@ public class QualificationBuilderFromJson
 
         token = jp.nextToken();  // Skip past closing }.
         qualBuilder.setPagination( page );
+    }
+
+    /**
+    *
+    * Handles
+      {
+        $orderBy: "age"
+        $orderBy: { age: "desc" }
+        $orderBy: [ { age: "desc" }, { gender: "asc"} ]
+      }
+    */
+    private void parseOrderBy(EntityDef qualEntityDef) throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume "orderBy".
+        switch ( token )
+        {
+            case START_OBJECT:
+                parseOrderByObject( qualEntityDef );
+                break;
+
+            case START_ARRAY:
+                parseOrderByArray( qualEntityDef );
+                break;
+
+            case VALUE_STRING:
+                parseOrderByAttribute( qualEntityDef );
+                break;
+
+            default:
+                throw new ZeidonException( "orderBy: unexpected token %s", token );
+        }
+    }
+
+    /**
+    *
+    * Handles
+      {
+        $orderBy: [ { age: "desc" }, { gender: "asc"} ]
+      }
+    */
+    private void parseOrderByArray( EntityDef orderEntityDef ) throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume start object.
+        while ( token != JsonToken.END_ARRAY )
+        {
+            // TODO: Some day it would be nice to handle [ "attr1", "attr2", ... ] but for now
+            // we only support a list of objects.
+            if ( token != JsonToken.START_OBJECT )
+                throw new ZeidonException( "Unexpected token; expecting FIELD" );
+
+            parseOrderByObject( orderEntityDef );
+        }
+
+        token = jp.nextToken();  // Skip past closing ].
+    }
+
+    /**
+    *
+    * Handles
+      {
+        $orderBy: "age"
+      }
+    */
+    private void parseOrderByAttribute( EntityDef orderEntityDef ) throws JsonParseException, IOException
+    {
+        String attribName = jp.getValueAsString();
+        jp.nextToken();  // Consume value.
+        qualBuilder.addActivateOrdering( orderEntityDef.getName(), attribName, false );
+    }
+
+    /**
+    *
+    * Handles
+      {
+        $orderBy: { age: "desc" }
+      }
+    */
+    private void parseOrderByObject( EntityDef orderEntityDef ) throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume start object.
+        if ( token != JsonToken.FIELD_NAME )
+            throw new ZeidonException( "Unexpected token; expecting FIELD" );
+
+        String attribName = jp.getCurrentName();
+        token = jp.nextToken();  // Consume name.
+        String value = jp.getValueAsString();
+        token = jp.nextToken();  // Consume value.
+
+        boolean descending = ! StringUtils.isBlank( value ) && value.toLowerCase().startsWith( "desc" );
+        qualBuilder.addActivateOrdering( orderEntityDef.getName(), attribName, descending );
+
+        token = jp.nextToken();  // Skip past closing }.
     }
 
     private void parseAttribute( EntityDef qualEntityDef, AttributeDef attributeDef ) throws JsonParseException, IOException
