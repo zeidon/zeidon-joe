@@ -199,6 +199,16 @@ public class TestZencas
 
 
 	@Test
+	public void testEntityLimit()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testEntityLimit( testview );
+        System.out.println("===== Finished testEntityLimit ========");
+	}
+
+	@Test
 	public void testDateTimeCompare()
 	{
 	    View         testview;
@@ -2009,6 +2019,21 @@ public class TestZencas
 		}
 
 		public int
+		testEntityLimit( View ViewToWindow )
+		{
+		   zVIEW    mFAProf1      = new zVIEW( );
+		   zVIEW    mFAProf2      = new zVIEW( );
+		   zVIEW    mClass      = new zVIEW( );
+		   zVIEW   vTempViewVar_0 = new zVIEW();
+		   int RESULT=0;
+		   double dAmount=0;
+
+		   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, 0, zMULTIPLE );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+	       Assert.assertEquals( mClass.cursor( "Class" ).getEntityCount(), 200 );
+		   return 0;
+		}
+		public int
 		testSpawning1( View ViewToWindow )
 		{
 		   zVIEW    mFAProf1      = new zVIEW( );
@@ -2017,6 +2042,9 @@ public class TestZencas
 		   zVIEW   vTempViewVar_0 = new zVIEW();
 		   int RESULT=0;
 		   double dAmount=0;
+
+		   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, 0, zMULTIPLE );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
 
 		   ActivateOI_FromFile( mFAProf1, "mFAProf", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFAProfO.por", zSINGLE );
 		   SetNameForView( mFAProf1, "mFAProf1", null, zLEVEL_TASK );
