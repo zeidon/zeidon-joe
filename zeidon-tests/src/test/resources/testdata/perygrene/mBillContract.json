@@ -1,0 +1,740 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Perygrene",
+      "odName" : "mBillContract",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "BillingContract" : [ {
+      "ID" : 11,
+      "Name" : "Andeavor",
+      "EffectiveDate" : "2016-09-08T00:00:00.000-07:00",
+      "TerminationDate" : "2018-10-01T00:00:00.000-07:00",
+      "SplitFreightAndFeesInvoiceFlag" : "Y",
+      "FK_ID_INVOICETERMS" : 9,
+      "FreightDistanceBillingGroup" : [ {
+        "ID" : 12,
+        "Name" : "Los Angeles",
+        "DefaultBillingContractUseFlag" : "Y",
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_CARRIER" : 22
+      }, {
+        "ID" : 13,
+        "Name" : "San Diego",
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_CARRIER" : 22
+      } ],
+      "ContractedFreightRoute" : [ {
+        "ID" : 27,
+        "ContractedMiles" : 10,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 90,
+        "FK_ID_DELIVERYLOCATION" : 12428,
+        "FromTerminal" : [ {
+          "ID" : 90,
+          "Name" : "Tesoro - San Diego***",
+          "FKP_ID_ADDRESS" : 14729
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12428,
+          "Name" : "Arco Site # 42002***",
+          "FKD_ID_ADDRESS" : 14610
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 53,
+          "PricePerGallon" : 0.0152,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 27,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 28,
+        "ContractedMiles" : 11,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 23,
+        "FK_ID_DELIVERYLOCATION" : 12428,
+        "FromTerminal" : [ {
+          "ID" : 23,
+          "Name" : "KM - Mission Valley***",
+          "FK_ID_ORGANIZATION" : 28,
+          "FK_ID_CUSTOMER" : 19,
+          "FKP_ID_ADDRESS" : 1984
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12428,
+          "Name" : "Arco Site # 42002***",
+          "FKD_ID_ADDRESS" : 14610
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 54,
+          "PricePerGallon" : 0.0184,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 28,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        }, {
+          "ID" : 55,
+          "PricePerGallon" : 0.0164,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 28,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 29,
+        "ContractedMiles" : 105,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 23,
+        "FK_ID_DELIVERYLOCATION" : 12128,
+        "FromTerminal" : [ {
+          "ID" : 23,
+          "Name" : "KM - Mission Valley***",
+          "FK_ID_ORGANIZATION" : 28,
+          "FK_ID_CUSTOMER" : 19,
+          "FKP_ID_ADDRESS" : 1984
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12128,
+          "Name" : "Arco Site # 42005***",
+          "FKD_ID_ADDRESS" : 14310
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 56,
+          "PricePerGallon" : 0.0591,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 29,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        } ]
+      }, {
+        "ID" : 30,
+        "ContractedMiles" : 110,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 90,
+        "FK_ID_DELIVERYLOCATION" : 12128,
+        "FromTerminal" : [ {
+          "ID" : 90,
+          "Name" : "Tesoro - San Diego***",
+          "FKP_ID_ADDRESS" : 14729
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12128,
+          "Name" : "Arco Site # 42005***",
+          "FKD_ID_ADDRESS" : 14310
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 57,
+          "PricePerGallon" : 0.0514,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 30,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 31,
+        "ContractedMiles" : 112,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 90,
+        "FK_ID_DELIVERYLOCATION" : 12177,
+        "FromTerminal" : [ {
+          "ID" : 90,
+          "Name" : "Tesoro - San Diego***",
+          "FKP_ID_ADDRESS" : 14729
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12177,
+          "Name" : "Arco Site # 42007***",
+          "FKD_ID_ADDRESS" : 14359
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 58,
+          "PricePerGallon" : 0.0541,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 31,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 32,
+        "ContractedMiles" : 107,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 23,
+        "FK_ID_DELIVERYLOCATION" : 12177,
+        "FromTerminal" : [ {
+          "ID" : 23,
+          "Name" : "KM - Mission Valley***",
+          "FK_ID_ORGANIZATION" : 28,
+          "FK_ID_CUSTOMER" : 19,
+          "FKP_ID_ADDRESS" : 1984
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12177,
+          "Name" : "Arco Site # 42007***",
+          "FKD_ID_ADDRESS" : 14359
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 59,
+          "PricePerGallon" : 0.061,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 32,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        } ]
+      }, {
+        "ID" : 33,
+        "ContractedMiles" : 8,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 23,
+        "FK_ID_DELIVERYLOCATION" : 12327,
+        "FromTerminal" : [ {
+          "ID" : 23,
+          "Name" : "KM - Mission Valley***",
+          "FK_ID_ORGANIZATION" : 28,
+          "FK_ID_CUSTOMER" : 19,
+          "FKP_ID_ADDRESS" : 1984
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12327,
+          "Name" : "Arco Site # 42009***",
+          "FKD_ID_ADDRESS" : 14509
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 60,
+          "PricePerGallon" : 0.0171,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 33,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        }, {
+          "ID" : 61,
+          "PricePerGallon" : 0.0152,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 33,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 34,
+        "ContractedMiles" : 6,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 90,
+        "FK_ID_DELIVERYLOCATION" : 12327,
+        "FromTerminal" : [ {
+          "ID" : 90,
+          "Name" : "Tesoro - San Diego***",
+          "FKP_ID_ADDRESS" : 14729
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 12327,
+          "Name" : "Arco Site # 42009***",
+          "FKD_ID_ADDRESS" : 14509
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 62,
+          "PricePerGallon" : 0.0152,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 34,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 24,
+        "ContractedMiles" : 15,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 28,
+        "FK_ID_DELIVERYLOCATION" : 11748,
+        "FromTerminal" : [ {
+          "ID" : 28,
+          "Name" : "Chevron - San Diego***",
+          "FK_ID_ORGANIZATION" : 37,
+          "FK_ID_CUSTOMER" : 28,
+          "FKP_ID_ADDRESS" : 1988
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 11748,
+          "Name" : "Usa Site # 63097***",
+          "FKD_ID_ADDRESS" : 13930
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 46,
+          "PricePerGallon" : 0.0184,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 24,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        }, {
+          "ID" : 47,
+          "PricePerGallon" : 0.0164,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 24,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 25,
+        "ContractedMiles" : 13,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 23,
+        "FK_ID_DELIVERYLOCATION" : 11748,
+        "FromTerminal" : [ {
+          "ID" : 23,
+          "Name" : "KM - Mission Valley***",
+          "FK_ID_ORGANIZATION" : 28,
+          "FK_ID_CUSTOMER" : 19,
+          "FKP_ID_ADDRESS" : 1984
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 11748,
+          "Name" : "Usa Site # 63097***",
+          "FKD_ID_ADDRESS" : 13930
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 48,
+          "PricePerGallon" : 0.0184,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 25,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        }, {
+          "ID" : 49,
+          "PricePerGallon" : 0.0164,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 25,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        } ]
+      }, {
+        "ID" : 26,
+        "ContractedMiles" : 15,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_TERMINAL" : 90,
+        "FK_ID_DELIVERYLOCATION" : 11748,
+        "FromTerminal" : [ {
+          "ID" : 90,
+          "Name" : "Tesoro - San Diego***",
+          "FKP_ID_ADDRESS" : 14729
+        } ],
+        "ToDeliveryLocation" : [ {
+          "ID" : 11748,
+          "Name" : "Usa Site # 63097***",
+          "FKD_ID_ADDRESS" : 13930
+        } ],
+        "ContractedFreightRouteFuelType" : [ {
+          "ID" : 51,
+          "PricePerGallon" : 0.0164,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 26,
+          "FK_ID_BASICFUELTYPE" : 5,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 5,
+            "Name" : "Gas"
+          } ]
+        }, {
+          "ID" : 52,
+          "PricePerGallon" : 0.0184,
+          "FK_ID_CONTRACTEDFREIGHTROUTE" : 26,
+          "FK_ID_BASICFUELTYPE" : 2,
+          "ContractedRouteBasicFuelType" : [ {
+            "ID" : 2,
+            "Name" : "Diesel"
+          } ]
+        } ]
+      } ],
+      "BillingContractTransaction" : [ {
+        "ID" : 60,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 50,
+        "BillingTransaction" : [ {
+          "ID" : 50,
+          "Name" : "Standard Freight",
+          "Type" : "A",
+          "UnitOfMeasure" : "Fee/Gal",
+          "FK_ID_BILLINGTRANSACTION" : 8,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 8,
+            "TransactionCode" : "FreightTable"
+          } ]
+        } ]
+      }, {
+        "ID" : 61,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 45,
+        "BillingTransaction" : [ {
+          "ID" : 45,
+          "Name" : "Contracted Route",
+          "Type" : "A",
+          "Description" : "If the Route has only two Fuel Stops and if the Terminal/DeliverySite combination matches a Contracted Route, use that Contracted Route entry to determine price/gallon.\r\nOtherwise, use regular Freight table.",
+          "UnitOfMeasure" : "Fee/Gal",
+          "FK_ID_BILLINGTRANSACTION" : 2,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 2,
+            "TransactionCode" : "ContractedRoute"
+          } ]
+        } ]
+      }, {
+        "ID" : 43,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 46,
+        "BillingTransaction" : [ {
+          "ID" : 46,
+          "Name" : "Demurrage - Loading",
+          "Type" : "A",
+          "Description" : "If the load time at any Terminal is over the \"Maximum Load Time\" below, then a line item is generated for the \"Loading Demurrage Charge\".",
+          "UnitOfMeasure" : "Fee/Unit",
+          "FK_ID_BILLINGTRANSACTION" : 4,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 4,
+            "TransactionCode" : "DemurrageLoading"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 51,
+          "ChargeValue" : 20.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 58,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 43,
+          "BillingTransactionVariable" : [ {
+            "ID" : 58,
+            "Name" : "Demmurage Charge Per Increment ($)",
+            "DefaultAmount" : 20.0,
+            "FK_ID_BILLINGTRANSACTION" : 46,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 5,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 5,
+              "VariableCode" : "ChargePerIncrement",
+              "FK_ID_BILLINGTRANSACTION" : 4
+            } ]
+          } ]
+        }, {
+          "ID" : 52,
+          "ChargeValue" : 45.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 59,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 43,
+          "BillingTransactionVariable" : [ {
+            "ID" : 59,
+            "Name" : "Maximum Loading Time (Min)",
+            "DefaultAmount" : 45.0,
+            "FK_ID_BILLINGTRANSACTION" : 46,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 6,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 6,
+              "VariableCode" : "MaximumLoadingTime",
+              "FK_ID_BILLINGTRANSACTION" : 4
+            } ]
+          } ]
+        }, {
+          "ID" : 53,
+          "ChargeValue" : 15.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 60,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 43,
+          "BillingTransactionVariable" : [ {
+            "ID" : 60,
+            "Name" : "Increment in Minutes (Min)",
+            "DefaultAmount" : 15.0,
+            "FK_ID_BILLINGTRANSACTION" : 46,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 7,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 7,
+              "VariableCode" : "IncrementInMinutes",
+              "FK_ID_BILLINGTRANSACTION" : 4
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : 44,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 47,
+        "BillingTransaction" : [ {
+          "ID" : 47,
+          "Name" : "Demurrage- Unloading",
+          "Type" : "A",
+          "Description" : "If the  unload time at any Delivery Site is over the \"Maximum Unload Time\" below, then a line item is generated for the \"Unloading Demurrage Charge\".",
+          "UnitOfMeasure" : "Fee/Unit",
+          "FK_ID_BILLINGTRANSACTION" : 5,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 5,
+            "TransactionCode" : "DemurrageUnloading"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 54,
+          "ChargeValue" : 45.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 61,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 44,
+          "BillingTransactionVariable" : [ {
+            "ID" : 61,
+            "Name" : "Maximum Unload Time (Min)",
+            "DefaultAmount" : 45.0,
+            "FK_ID_BILLINGTRANSACTION" : 47,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 8,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 8,
+              "VariableCode" : "MaximumUnloadTime",
+              "FK_ID_BILLINGTRANSACTION" : 5
+            } ]
+          } ]
+        }, {
+          "ID" : 55,
+          "ChargeValue" : 20.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 62,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 44,
+          "BillingTransactionVariable" : [ {
+            "ID" : 62,
+            "Name" : "Demurrage Charge Per Increment ($)",
+            "DefaultAmount" : 20.0,
+            "FK_ID_BILLINGTRANSACTION" : 47,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 9,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 9,
+              "VariableCode" : "ChargePerIncrement",
+              "FK_ID_BILLINGTRANSACTION" : 5
+            } ]
+          } ]
+        }, {
+          "ID" : 56,
+          "ChargeValue" : 15.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 63,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 44,
+          "BillingTransactionVariable" : [ {
+            "ID" : 63,
+            "Name" : "Increment in Minutes (Min)",
+            "DefaultAmount" : 15.0,
+            "FK_ID_BILLINGTRANSACTION" : 47,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 10,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 10,
+              "VariableCode" : "IncrementInMinutes",
+              "FK_ID_BILLINGTRANSACTION" : 5
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : 45,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 51,
+        "BillingTransaction" : [ {
+          "ID" : 51,
+          "Name" : "Fuel SurCharge",
+          "Type" : "A",
+          "Description" : "Fuel SurCharge (FSC) generated as a percentage of the freight charges.",
+          "UnitOfMeasure" : "Fee",
+          "FK_ID_BILLINGTRANSACTION" : 9,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 9,
+            "TransactionCode" : "FuelSurCharge"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 57,
+          "ChargeValue" : 11.5,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 66,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 45,
+          "BillingTransactionVariable" : [ {
+            "ID" : 66,
+            "Name" : "Fuel Surcharge (%)",
+            "DefaultAmount" : 11.5,
+            "FK_ID_BILLINGTRANSACTION" : 51,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 13,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 13,
+              "VariableCode" : "FSCPercentage",
+              "FK_ID_BILLINGTRANSACTION" : 9
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : 46,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 55,
+        "BillingTransaction" : [ {
+          "ID" : 55,
+          "Name" : "Split Delivery Fee",
+          "Type" : "A",
+          "Description" : "'Split Delivery Fee' is generated when fuel is being delivered to multiple delivery sites.",
+          "UnitOfMeasure" : "Fee",
+          "FK_ID_BILLINGTRANSACTION" : 15,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 15,
+            "TransactionCode" : "SplitDeliveryFee"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 58,
+          "ChargeValue" : 50.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 70,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 46,
+          "BillingTransactionVariable" : [ {
+            "ID" : 70,
+            "Name" : "Split Delivery Fee ($)",
+            "FK_ID_BILLINGTRANSACTION" : 55,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 19,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 19,
+              "VariableCode" : "SplitDeliveryFee",
+              "FK_ID_BILLINGTRANSACTION" : 15
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : 47,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 56,
+        "BillingTransaction" : [ {
+          "ID" : 56,
+          "Name" : "Split Loading Fee",
+          "Type" : "A",
+          "Description" : "'Split Loading Fee' is generated when fuel is being loaded from multiple Terminal Fuel Stops.",
+          "UnitOfMeasure" : "Fee",
+          "FK_ID_BILLINGTRANSACTION" : 16,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 16,
+            "TransactionCode" : "SplitLoadingFee"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 59,
+          "ChargeValue" : 50.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 71,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 47,
+          "BillingTransactionVariable" : [ {
+            "ID" : 71,
+            "Name" : "Split Loading Fee ($)",
+            "FK_ID_BILLINGTRANSACTION" : 56,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 20,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 20,
+              "VariableCode" : "SplitLoadingFee",
+              "FK_ID_BILLINGTRANSACTION" : 16
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : 48,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 53,
+        "BillingTransaction" : [ {
+          "ID" : 53,
+          "Name" : "Pump Fee",
+          "Type" : "A",
+          "Description" : "Pump Fee is generated when a customer requires a pump to delivery fuel and a Pump Fee Line Item has been defined for the the Contract.",
+          "UnitOfMeasure" : "Fee",
+          "FK_ID_BILLINGTRANSACTION" : 11,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 11,
+            "TransactionCode" : "PumpFee"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 60,
+          "ChargeValue" : 50.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 68,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 48,
+          "BillingTransactionVariable" : [ {
+            "ID" : 68,
+            "Name" : "Pump Fee ($)",
+            "DefaultAmount" : 50.0,
+            "FK_ID_BILLINGTRANSACTION" : 53,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 15,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 15,
+              "VariableCode" : "PumpFee",
+              "FK_ID_BILLINGTRANSACTION" : 11
+            } ]
+          } ]
+        } ]
+      }, {
+        "ID" : 49,
+        "FK_ID_BILLINGCONTRACT" : 11,
+        "FK_ID_BILLINGTRANSACTION" : 48,
+        "BillingTransaction" : [ {
+          "ID" : 48,
+          "Name" : "Diversion Fee",
+          "Type" : "M",
+          "Description" : "A 'Diversion Fee' is generated when a load has to be rerouted from its original route.",
+          "UnitOfMeasure" : "Fee",
+          "FK_ID_BILLINGTRANSACTION" : 6,
+          "FK_ID_CARRIER" : 22,
+          "PrimeBillingTransaction" : [ {
+            "ID" : 6,
+            "TransactionCode" : "DiversionFee"
+          } ]
+        } ],
+        "ContractBillingVariable" : [ {
+          "ID" : 61,
+          "ChargeValue" : 50.0,
+          "FK_ID_BILLINGTRANSACTIONVARIABLE" : 64,
+          "FK_ID_BILLINGCONTRACTTRANSACTION" : 49,
+          "BillingTransactionVariable" : [ {
+            "ID" : 64,
+            "Name" : "Diversion Fee ($)",
+            "FK_ID_BILLINGTRANSACTION" : 48,
+            "FK_ID_BILLINGTRANSACTIONVARIABLE" : 11,
+            "PrimeBillingTransactionVariable" : [ {
+              "ID" : 11,
+              "VariableCode" : "DiversionFee",
+              "FK_ID_BILLINGTRANSACTION" : 6
+            } ]
+          } ]
+        } ]
+      } ],
+      "InvoiceTerms" : [ {
+        "ID" : 9,
+        "Name" : "NET 30",
+        "DueDateIncrementType" : "FromDeliveryDate",
+        "DueDateIncrementInDays" : 30,
+        "FK_ID_CARRIER" : 22
+      } ],
+      "BillToOrganization" : [ {
+        "ID" : 977,
+        "Name" : "Andeavor***",
+        "FK_ID_INVOICETERMS" : 9,
+        "FKOWNS_ID_CARRIER" : 22,
+        "BillToOrganizationAddress" : [ {
+          "ID" : 14822,
+          "Line1" : "19100 Ridgewood Parkway",
+          "City" : "San Antonio",
+          "FK_ID_ORGANIZATION" : 977
+        } ]
+      } ]
+    } ]
+  } ]
+}

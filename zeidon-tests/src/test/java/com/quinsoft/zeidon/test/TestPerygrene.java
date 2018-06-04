@@ -9,6 +9,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
@@ -16,6 +17,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 //import com.quinsoft.zeidon.test.TestSWAU.SwauVmlTester;
 //import com.quinsoft.zeidon.test.TestCheetah2.VmlTester;
+import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
 
@@ -65,6 +67,16 @@ public class TestPerygrene
 		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
 		tester.testCursorLinks3( testview );
         System.out.println("===== Finished testCursorLinks3 ========");
+	}
+
+	@Test
+	public void testActivateOIFromOI()
+	{
+	    View         testview;
+		testview = perygrene.activateEmptyObjectInstance( "mDrvShiftRoutes" );
+		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
+		//tester.testActivateOIFromOI( testview );
+        System.out.println("===== Finished testActivateOIFromOI ========");
 	}
 
 	private class PerygreneVmlTester extends VmlObjectOperations
@@ -348,5 +360,5 @@ public class TestPerygrene
         	   return 0;
        }
 
-	}
+     }
 }
