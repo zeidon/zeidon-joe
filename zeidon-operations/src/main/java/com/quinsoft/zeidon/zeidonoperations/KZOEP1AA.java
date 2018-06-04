@@ -479,7 +479,8 @@ public class KZOEP1AA extends VmlOperation
       char[] line = new char[ bufferLth ];
       int charsRead = reader.read( line );
       sbReturnBuffer.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-      sbReturnBuffer.append( line, 0, charsRead );
+      if (charsRead != -1)
+         sbReturnBuffer.append( line, 0, charsRead );
       return charsRead;
    }
 
