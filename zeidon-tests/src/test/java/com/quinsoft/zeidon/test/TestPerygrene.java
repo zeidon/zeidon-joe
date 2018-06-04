@@ -588,7 +588,8 @@ public class TestPerygrene
     	   // In the following example... if we do a createEntity on FreightBillLineItem then do an  
     	   // include/exclude/include for child BillingContractTransaction, the excluded entity
     	   // is cleaned up and is not marked as hidden.
-    	   // When instead of createEntity, we do a 
+    	   // When instead of createEntity, we do a createTemporalEntity instead of createEntity, 
+    	   // the hidden entity still exists and causes an error in the activateOiFromOi.
 
     	   ActivateOI_FromFile( mFgtBill, "mFgtBill", ViewToWindow, "target/test-classes/testdata//perygrene/mFgtBill.json", zSINGLE );
     	   ActivateOI_FromFile( mBillContract, "mBillContract", ViewToWindow, "target/test-classes/testdata//perygrene/mBillContract.json", zSINGLE );
@@ -608,8 +609,8 @@ public class TestPerygrene
            mFgtBillTmp.drop();
     	   
     	   RESULT = SetCursorLastEntity( mFgtBill, "FreightBillLineItem", "" );
-    	   CreateTemporalEntity( mFgtBill, "FreightBillLineItem", zPOS_AFTER );
-           //cursor.createTemporalEntity( CURSOR_POS.get( zPOS_AFTER ) );
+    	   //CreateTemporalEntity( mFgtBill, "FreightBillLineItem", zPOS_AFTER );
+           mFgtBill.cursor("FreightBillLineItem").createTemporalEntity( CursorPosition.NEXT );
     	   
     	   RESULT = SetCursorFirstEntity( mBillContract, "BillingContractTransaction", "" );
     	   RESULT = IncludeSubobjectFromSubobject( mFgtBill, "BillingContractTransaction", mBillContract, "BillingContractTransaction", zPOS_AFTER );
@@ -617,7 +618,8 @@ public class TestPerygrene
            mBillContract.cursor( "BillingContractTransaction" ).setNext();
     	   RESULT = ExcludeEntity( mFgtBill, "BillingContractTransaction", zREPOS_AFTER );
     	   RESULT = IncludeSubobjectFromSubobject( mFgtBill, "BillingContractTransaction", mBillContract, "BillingContractTransaction", zPOS_AFTER );
-    	   AcceptSubobject( mFgtBill, "FreightBillLineItem" );
+    	   //AcceptSubobject( mFgtBill, "FreightBillLineItem" );
+    	   mFgtBill.cursor("FreightBillLineItem").acceptSubobject();
            // Doesn't work because the AcceptSubobject doesn't clean up the exclude, marked as hidden???
     	   ActivateOI_FromOI( mFgtBillTmp, mFgtBill, zSINGLE );
     	   
