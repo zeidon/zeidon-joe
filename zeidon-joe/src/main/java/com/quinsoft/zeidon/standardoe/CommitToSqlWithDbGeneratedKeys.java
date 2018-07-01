@@ -176,7 +176,7 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
     protected void commitView(ViewImpl view)
     {
         // Set up view to allow the DBhandler to access hidden entities.
-        view.setAllowHiddenEntities( true );
+        boolean oldValue = view.setAllowHiddenEntities( true );
 
         ObjectInstance oi = view.getObjectInstance();
 
@@ -188,6 +188,8 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
         commitDeletes( view, oi, lastEntityInstance );
         commitIncludes( view, oi );
         commitUpdates( view, oi );
+
+        view.setAllowHiddenEntities( oldValue );
     }
 
     @Override

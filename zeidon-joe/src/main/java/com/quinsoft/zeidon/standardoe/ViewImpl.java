@@ -579,6 +579,9 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
               srcEntityInstance != lastSrcEntityInstance;
               srcEntityInstance = srcEntityInstance.getNextHier() )
         {
+            if ( srcEntityInstance.isHidden() )
+                continue;
+
             EntityDef entityDef = srcEntityInstance.getEntityDef();
 
             EntityCursorImpl cursor = view.cursor( entityDef );

@@ -68,7 +68,7 @@ abstract class AbstractCommitToDb implements Committer
     protected void commitView(ViewImpl view)
     {
         // Set up view to allow the DBhandler to access hidden entities.
-        view.setAllowHiddenEntities( true );
+        boolean oldValue = view.setAllowHiddenEntities( true );
 
         ObjectInstance oi = view.getObjectInstance();
 
@@ -81,6 +81,8 @@ abstract class AbstractCommitToDb implements Committer
         commitCreates( view, oi );
         commitIncludes( view, oi );
         commitUpdates( view, oi );
+
+        view.setAllowHiddenEntities( oldValue );
     }
 
     /**
