@@ -20,11 +20,17 @@ package com.quinsoft.zeidon.config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.configuration.HierarchicalINIConfiguration;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
+import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
+import org.apache.commons.configuration2.tree.NodeNameMatchers;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -47,7 +53,13 @@ public class ZeidonIniPreferences implements ZeidonPreferences
 
     private final String        iniFileName;
     private       String        iniFileDesc;
-    private       HierarchicalINIConfiguration iniConfObj;
+    private       INIConfiguration iniConfObj;
+
+    /**
+     * This maps the lower-case section name to the section names in the INI file.
+     * Used to ensure case-insensitivity.
+     */
+    private Map<String,String> sectionNameMap;
 
     private static final StrSubstitutor strSub = new StrSubstitutor( combinePropertiesAndEnvironment(), "${env.", "}" );
 
@@ -70,16 +82,10 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         new JmxZeidonPreferences( this, "com.quinsoft.zeidon:type=ZeidonIniPreferences", jmxAppName, iniFileName );
     }
 
-    public ZeidonIniPreferences( InputStream iniFile )
-    {
-        iniFileName = "input stream";
-        loadZeidonIni( iniFile );
-    }
-
     @Override
     public String get( String groupName, String key, String defaultValue )
     {
-        String str = iniConfObj.getSection( groupName ).getString( key, defaultValue );
+        String str = iniConfObj.getSection( sectionNameMap.get( groupName.toLowerCase() ) ).getString( key, defaultValue );
         return strSub.replace( str );
     }
 
@@ -101,16 +107,27 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     private void loadZeidonIni( InputStream iniFile )
     {
         if ( iniFile == null )
-            throw new ZeidonException( "Could not find zeidon.ini" );
+            throw new ZeidonException( "Could not find " + iniFileName );
 
         InputStreamReader reader = new InputStreamReader( iniFile );
 
         try
         {
+            DefaultExpressionEngine engine = new DefaultExpressionEngine( DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS,
+                                                                          NodeNameMatchers.EQUALS_IGNORE_CASE );
 
-            iniConfObj = new HierarchicalINIConfiguration();
-            iniConfObj.load( reader );
+            Parameters params = new Parameters();
+            FileBasedConfigurationBuilder<INIConfiguration> builder =
+                    new FileBasedConfigurationBuilder<INIConfiguration>( INIConfiguration.class )
+                    .configure( params.hierarchical().setExpressionEngine( engine ) );
+            iniConfObj = builder.getConfiguration();
+
+            iniConfObj.read( reader );
             reader.close();
+
+            sectionNameMap = new HashMap<>();
+            for ( String sectionName : iniConfObj.getSections() )
+                sectionNameMap.put( sectionName.toLowerCase(), sectionName );
         }
         catch ( Exception e )
         {
@@ -166,13 +183,16 @@ public class ZeidonIniPreferences implements ZeidonPreferences
         iniConfObj.setProperty( groupName + "." + key, value );
         return this;
     }
-    
+
     private static Map<String,String> combinePropertiesAndEnvironment()
     {
         Map<String,String> map = new HashMap<>( System.getenv() );
         for (final String name: System.getProperties().stringPropertyNames())
             map.put(name, System.getProperties().getProperty(name));
-        
+
+        if ( LOG.isDebugEnabled() )
+            LOG.debug( "Environment variables = {}", Arrays.toString(map.entrySet().toArray()) );
+
         return map;
     }
 }

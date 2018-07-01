@@ -28,8 +28,7 @@ import com.quinsoft.zeidon.objectdefinition._
  * This class implements methods that are common to both EntityCursor and EntityInstance.  This
  * is where the dynamic methods are implemented for finding cursor/entity and attribute instances.
  */
-abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinition.EntityDef )
-                        extends Dynamic {
+abstract class AbstractEntity( val jentityDef: EntityDef ) extends Dynamic {
 
     /**
      * Subclasses implement this method to get the Java EntityInstance.
@@ -89,7 +88,7 @@ abstract class AbstractEntity( val jentityDef: com.quinsoft.zeidon.objectdefinit
         this.attributes.each( a => map.put(a, a.value ) )
         map
     }
-    
+
     /**
      * Called dynamically to convert an attribute name into a Scala AttributeInstance.
      *

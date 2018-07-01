@@ -1,4 +1,4 @@
-z1000-Zeidon    NORTHWINDTZCMLPLO 07/15/17   00:46:28 1.0a2    
+z1000-Zeidon    NORTHWINDTZCMLPLO 10/08/17   00:06:21 1.0a2    
 eLPLR      1
 aName      Northwind
 aDesc      Zeidon application using Northwind DB
@@ -190,8 +190,8 @@ aCPLR_ZKey 110000478
 aStatus    1
 aUpdateInd 2
 aName      Order
-aLastSyncDate 20151120223241386
-aLastUpdateDate 20151120223241386
+aLastSyncDate 20171008000621215
+aLastUpdateDate 20171008000621215
 
 eW_MetaDef 3
 aCPLR_ZKey 110000448
@@ -548,8 +548,8 @@ aJavaClassName com.quinsoft.zeidon.domains.Base64BlobDomain
 
 i71        25
 i74        28
-i76        33
-i77        32
+i76        32
+i77        33
 i78        31
 i79        36
 i80        34

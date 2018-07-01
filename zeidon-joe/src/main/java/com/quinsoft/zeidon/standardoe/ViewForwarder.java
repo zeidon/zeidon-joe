@@ -665,4 +665,10 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         getView().addViewCleanupWork( work );
     }
+
+    @Override
+    public Object callObjectOperation( String operationName, Object... args )
+    {
+        return getView().callObjectOperation( operationName, args );
+    }
 }

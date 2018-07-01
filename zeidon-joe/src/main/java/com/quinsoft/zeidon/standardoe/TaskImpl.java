@@ -39,6 +39,7 @@ import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.DropTaskCleanup;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskLogger;
@@ -85,6 +86,8 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
     private Map<Application, Map<String, Map<String, String>>> configOverrideMap;
 
     private List<DropTaskCleanup> cleanupWork;
+
+    private final OiSourceSelector oiSourceSelector = new DefaultOiSourceSelector();
 
     TaskImpl(JavaObjectEngine objectEngine, Application app, String taskId)
     {
@@ -227,7 +230,7 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         if ( ! isValid )
             return;
 
-        log().info( "Dropping task %s", taskId );
+        log().debug( "Dropping task %s", taskId );
 
         if ( cleanupWork != null )
         {
@@ -587,5 +590,11 @@ class TaskImpl extends AbstractTaskQualification implements Task, Comparable<Tas
         StringInterpolator interpolator = new StringInterpolator();
         interpolator.setTask( this ).setVariables( variables );
         return interpolator.interpolate( string );
+    }
+
+    @Override
+    public OiSourceSelector getOiSourceSelector()
+    {
+        return oiSourceSelector;
     }
 }

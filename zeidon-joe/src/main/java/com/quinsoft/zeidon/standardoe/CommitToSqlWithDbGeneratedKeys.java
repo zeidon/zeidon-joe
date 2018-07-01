@@ -26,15 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.quinsoft.zeidon.CommitFlags;
+import org.joda.time.DateTime;
+
 import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.dbhandler.DbHandler;
-import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -48,11 +46,8 @@ import com.quinsoft.zeidon.objectdefinition.RelRecord;
  * @author dgc
  *
  */
-class CommitToSqlWithDbGeneratedKeys implements Committer
+class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
 {
-    private List<ViewImpl>       viewList;
-    private DbHandler            dbHandler;
-    private CommitOptions        options;
 
     /**
      * Keeps track of the FK source instances for every EI.
@@ -68,17 +63,7 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
     @Override
     public void init( Task task, List<? extends View> list, CommitOptions options )
     {
-        this.viewList = new ArrayList<ViewImpl>();
-        for ( View v : list )
-            viewList.add( ((InternalView) v).getViewImpl() );
-
-        // Grab the first view to use as a task qualifier and for getting a dbhandler.
-        // TODO: We're using the first view in the list but maybe we should do something different?
-        //       We'd like to some day support commits across multiple DBs.
-        ViewImpl firstView = viewList.get( 0 );
-        this.options = options;
-        JdbcHandlerUtils helper = new JdbcHandlerUtils( this.options, firstView.getLodDef().getDatabase() );
-        dbHandler = helper.getDbHandler();
+        super.init( task, list, options );
     }
 
     @Override
@@ -186,20 +171,12 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         }
     }
 
-    /**
-     * Called after a commit. Reset the entity/attribute update flags to false,
-     * remove deleted entities from the OI.
-     * @param oi
-     */
-    private void cleanupOI(ObjectInstance oi)
-    {
-        CommitHelper.cleanupOI( oi );
-    }
 
-    private void commitView(ViewImpl view)
+    @Override
+    protected void commitView(ViewImpl view)
     {
         // Set up view to allow the DBhandler to access hidden entities.
-        view.setAllowHiddenEntities( true );
+        boolean oldValue = view.setAllowHiddenEntities( true );
 
         ObjectInstance oi = view.getObjectInstance();
 
@@ -211,9 +188,18 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         commitDeletes( view, oi, lastEntityInstance );
         commitIncludes( view, oi );
         commitUpdates( view, oi );
+
+        view.setAllowHiddenEntities( oldValue );
     }
 
-    private void commitExcludes(View view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
+    @Override
+    protected void commitCreates(ViewImpl view, ObjectInstance oi)
+    {
+        // Do nothing here.  Creates were already performed.
+    }
+
+    @Override
+    protected void commitExcludes(View view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
     {
         for ( EntityInstanceImpl ei = lastEntityInstance;
               ei != null;
@@ -274,7 +260,8 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         }
     }
 
-    private void commitDeletes(ViewImpl view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
+    @Override
+    protected void commitDeletes(ViewImpl view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
     {
         for ( EntityInstanceImpl ei = lastEntityInstance;
               ei != null;
@@ -358,7 +345,8 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         return true;
     }
 
-    private void commitIncludes(ViewImpl view, ObjectInstance oi)
+    @Override
+    protected void commitIncludes(ViewImpl view, ObjectInstance oi)
     {
         for ( EntityInstanceImpl ei : oi.getEntities() )
         {
@@ -430,6 +418,8 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
      * EI has been included.  Set any FKs that involve ei to null
      * Note: This may reset some FKs that have already been set.
      *
+     * Not used currently but kept around in case we want it.
+     *
      * @param ei
      */
     private void excludeFksFromParents( EntityInstanceImpl ei, DataRecord dataRecord )
@@ -443,7 +433,8 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         }
     }
 
-    private void commitUpdates(View view, ObjectInstance oi)
+    @Override
+    protected void commitUpdates(View view, ObjectInstance oi)
     {
         for ( EntityInstanceImpl ei : oi.getEntities() )
         {
@@ -474,6 +465,9 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
             // Skip if the entity was created or deleted.
             if ( ei.dbhCreated || ei.dbhDeleted )
                 continue;
+
+            if ( entityDef.getDbUpdatedTimestamp() != null )
+                ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
 
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );
@@ -756,6 +750,19 @@ class CommitToSqlWithDbGeneratedKeys implements Committer
         // We'll retrieve the generated key from the DB after the row has been inserted.
         try
         {
+            if ( entityDef.getDbCreatedTimestamp() != null )
+            {
+                AttributeInstanceImpl timestamp = ei.getAttribute( entityDef.getDbCreatedTimestamp() );
+                if ( timestamp.isNull() )
+                {
+                    DateTime now = new DateTime();
+                    timestamp.setValue( now );
+
+                    if ( entityDef.getDbUpdatedTimestamp() != null )
+                        ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( now );
+                }
+            }
+
             // We need to handle multiple entities being created.
             List<EntityInstance> list = new ArrayList<EntityInstance>();
             list.add( ei );

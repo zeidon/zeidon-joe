@@ -68,7 +68,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Returns the underlying qualification OI.
      */
     def qualOi: View = jqual.getView()
-    
+
     /**
      * Create the qual object from a simple JSON string.
      *
@@ -91,9 +91,14 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      */
     def fromJson( jsonString: String ) : QualBuilder = {
         jqual.loadFromJsonString( jsonString )
-        this    
+        this
     }
-    
+
+    def fromSerializedOi( oiString: String ) : QualBuilder = {
+        jqual.loadFromSerializedString(oiString )
+        this
+    }
+
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
@@ -391,6 +396,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def keysOnly(): QualBuilder = {
+        jqual.keysOnly()
+        this
+    }
+
     /**
      * Activate all roots that match the qualification (and their children).
      */
@@ -420,7 +430,7 @@ class QualBuilder private [scala] ( private [this]  val view: View,
     }
 
     def withPaging( pageSize: Int, page: Int = 1, getTotalCount: Boolean = false ): QualBuilder = {
-        jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setTotalCount( getTotalCount )
+        jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setLoadTotalCount( getTotalCount )
         this
     }
 
@@ -637,9 +647,9 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         val paging = jqual.getPagination(false)
         if ( paging != null ) {
             // Are we getting the total count?
-            if ( paging.isTotalCount() ) {
+            if ( paging.isLoadTotalCount() ) {
                 totalRootCount = view.jview.getTotalRootCount
-                paging.setTotalCount( false ) // Don't get it again.
+                paging.setLoadTotalCount( false ) // Don't get it again.
             }
             else
             // We didn't load the root count as part of the activate.  If we
@@ -683,7 +693,10 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.setPagination( new Pagination().setRollingPagination( true ).setPageSize( pageSize ) )
         this
     }
-    
+
+    def dropLocks() = {
+        jqual.dropLocks()
+    }
     /**
      * Sets the internal qualifcation OI from the seralized JSON string.
      */
@@ -725,6 +738,24 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
             ab.withName( parts(0) )
         }
     }
+
+    /**
+     * Adds support for qualifying an entity using '=':
+    * {{{
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User = UserList.User )
+     * }}}
+      */
+    def updateDynamic( targetEntityName: String)(sourceEntity: AbstractEntity): QualificationTerminator = {
+        val jtargetEntityDef =  EntitySelector.getEntityDef( qualBuilder.jlodDef, targetEntityName )
+        val jsourceEntityDef = sourceEntity.entityDef
+        if ( jtargetEntityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
+            throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
+
+        qualBuilder.jqual.fromEntityKeys( sourceEntity )
+
+        return QualBuilder.TERMINATOR
+    }
 }
 
 /**
@@ -739,6 +770,51 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
 
     def exists : QualificationTerminator = {
         jqual.addAttribQualEntityExists( jentityDef.getName() )
+        return QualBuilder.TERMINATOR
+    }
+
+    /**
+     * Activates entities with attributes that are in all the entities
+     * in the specified cursor.
+     *
+     * The values are converted by domain processing before being added
+     * to the SQL.
+     * {{{
+     *      val mUserList = VIEW basedOn "mUser"...
+     *      val mUser = VIEW basedOn "mUser"
+     *      mUser.activateWhere( _.User in mUserList.User )
+     * }}}
+     */
+    def in ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
+        if ( jentityDef.getKeys().size() > 1 )
+            throw new ZeidonException( "'in' operator currently only supports entities with a single key" )
+
+        jattributeDef = jentityDef.getKeys.get(0)
+        new AttributeQualOperators( this ).in( iter )
+        return QualBuilder.TERMINATOR
+    }
+
+    def in ( selectSet: SelectSet ): QualificationTerminator = {
+        if ( jentityDef.getKeys().size() > 1 )
+            throw new ZeidonException( "'in' operator currently only supports entities with a single key" )
+
+        jattributeDef = jentityDef.getKeys.get(0)
+        new AttributeQualOperators( this ).in( selectSet )
+        return QualBuilder.TERMINATOR
+    }
+
+    def in ( sourceEntity : AbstractEntity ): QualificationTerminator = {
+        val jsourceEntityDef = sourceEntity.entityDef
+        if ( jentityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
+            throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
+
+        qualBuilder.jqual.fromEntityKeys( sourceEntity )
+        return QualBuilder.TERMINATOR
+    }
+
+    def usingSql( customizedSql: String, attributeList: String ): QualificationTerminator = {
+        qualBuilder.jqual.setOpenSql( customizedSql, attributeList )
+
         return QualBuilder.TERMINATOR
     }
 
@@ -1033,13 +1109,13 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID in mUserList.User )
      * }}}
      */
-    def in ( valueCursor: EntityCursor ): QualificationTerminator = {
+    def in ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
         if ( checkNot )
-            return notIn( valueCursor )
+            return notIn( iter )
 
         // Get the list of attribute values.  Note that we use the attr NAME.
         // This allows the user to use a different target entity.
-        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        val attrs = ( for ( e <- iter ) yield e.getAttribute( jattributeDef.getName() ) )
         return in( attrs )
     }
 
@@ -1086,13 +1162,13 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
      *      mUser.activateWhere( _.User.ID notIn mUserList.User )
      * }}}
      */
-    def notIn ( valueCursor: EntityCursor ): QualificationTerminator = {
+    def notIn ( iter: Iterable[EntityInstance] ): QualificationTerminator = {
         if ( checkNot )
-            return in( valueCursor )
+            return in( iter )
 
         // Get the list of attribute values.  Note that we use the attr NAME.
         // This allows the user to use a different target entity.
-        val attrs = ( for ( e <- valueCursor ) yield e.getAttribute( jattributeDef.getName() ) )
+        val attrs = ( for ( e <- iter ) yield e.getAttribute( jattributeDef.getName() ) )
         return notIn( attrs )
     }
 

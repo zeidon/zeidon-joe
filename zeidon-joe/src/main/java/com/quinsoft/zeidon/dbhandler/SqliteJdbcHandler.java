@@ -18,7 +18,15 @@
  */
 package com.quinsoft.zeidon.dbhandler;
 
+import java.util.Properties;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.lang3.StringUtils;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteOpenMode;
+
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
+import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 
 /**
@@ -40,23 +48,34 @@ public class SqliteJdbcHandler extends JdbcHandler
      * insert statement.  This should result in a value of NULL.  Sqlite requires
      * genkeys (i.e. columns that are specified as INTEGER PRIMARY KEY) be set
      * to NULL for insert statements.
+     *
+     * NOTE: was needed for older Sqlite.  Does not appear to be needed anymore
+     * so for now we're returning false (2018-02-17).
      */
     @Override
     protected boolean addGeneratedKeyForInsert()
     {
-        return true;
+        return false;
     }
 
-    /**
-     * Default insert count to 1 if it isn't specified.
-     */
     @Override
-    public Integer getInsertCount()
+    protected void initializeBasicDataSource( BasicDataSource dataSource,
+                                              Task task,
+                                              Application application)
     {
-        Integer ic = super.getInsertCount();
-        if ( ic == null || ic == 0 )
-            return 1;
+        String openModes = getConfigValue( "OpenModes" );
+        if ( ! StringUtils.isBlank( openModes ) )
+        {
+            SQLiteConfig config = new SQLiteConfig();
+            String[] modes = openModes.split( "," );
+            for ( String mode : modes )
+                config.setOpenMode(SQLiteOpenMode.valueOf( mode.trim().toUpperCase() ) );
 
-        return ic;
+            Properties props = config.toProperties();
+            task.log().info( "Sqlite: setting open modes = %s", props );
+
+            for ( Object prop : props.keySet() )
+                dataSource.addConnectionProperty( prop.toString(), props.getProperty( prop.toString() ) );
+        }
     }
 }

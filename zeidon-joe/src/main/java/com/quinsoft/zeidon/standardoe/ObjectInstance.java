@@ -22,12 +22,9 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.util.Iterator;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
@@ -85,7 +82,7 @@ class ObjectInstance
      * This keeps track of attribute hash keys that are global to the OI.  Intended for use
      * by cursor.setFirst() processing.
      */
-    private final AttributeHashKeyMap attributeHashkeyMap;
+    private AttributeHashKeyMap attributeHashkeyMap;
 
     /**
      * This is a weak map of the ViewCursors that refer to this ObjectInstance.
@@ -93,7 +90,7 @@ class ObjectInstance
      * is intended to be used by merge processing for commits that are made on
      * remote servers.
      */
-    private final ConcurrentMap<ViewCursor, Boolean> referringViewCursors;
+    //private final ConcurrentMap<ViewCursor, Boolean> referringViewCursors;
 
     /**
      * This is the total count of root entities.  For OIs loaded with paging this
@@ -108,12 +105,6 @@ class ObjectInstance
         id = task.getObjectEngine().getNextObjectKey();
         uuid = task.getObjectEngine().generateUuid();
         versionedInstances = new AtomicInteger( 0 );
-        attributeHashkeyMap = new AttributeHashKeyMap( this );
-
-        if ( lodDef.hasPhysicalMappings() )
-            referringViewCursors = new MapMaker().concurrencyLevel( 2 ).weakKeys().makeMap();
-        else
-            referringViewCursors = null;
     }
 
     LodDef getLodDef()
@@ -139,15 +130,15 @@ class ObjectInstance
     {
         return rootEntityInstance;
     }
-    
+
     EntityInstanceImpl getLastEntityInstance()
     {
         if ( rootEntityInstance == null )
             return null;
-        
+
         return rootEntityInstance.getLastTwin().getLastChildHier();
     }
-    
+
 
     void setRootEntityInstance(EntityInstanceImpl rootEntityInstance)
     {
@@ -344,8 +335,11 @@ class ObjectInstance
         this.task = task;
     }
 
-    AttributeHashKeyMap getAttributeHashkeyMap()
+    synchronized AttributeHashKeyMap getAttributeHashkeyMap()
     {
+        if ( attributeHashkeyMap == null )
+            attributeHashkeyMap = new AttributeHashKeyMap( this );
+
         return attributeHashkeyMap;
     }
 
@@ -368,17 +362,6 @@ class ObjectInstance
     UUID getUuid()
     {
         return uuid;
-    }
-
-    void addReferringViewCursor( ViewCursor viewCursor )
-    {
-        if ( referringViewCursors != null )
-            referringViewCursors.put( viewCursor, Boolean.TRUE );
-    }
-
-    Set<ViewCursor> getReferringViewCursors()
-    {
-        return referringViewCursors.keySet();
     }
 
     boolean isIgnoreLazyLoadEntities()

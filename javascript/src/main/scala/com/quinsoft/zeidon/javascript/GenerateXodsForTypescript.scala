@@ -19,7 +19,7 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
     val oe = JavaObjectEngine.getInstance
     val application = oe.getSystemTask.getApplication( applicationName )
     var lodDef: LodDef = null
-    
+
     def generate() {
         oe.forTask( applicationName ) ( task => {
             task.log.info("Starting Typescript generation" )
@@ -28,14 +28,13 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
             println( "Done" )
         })
     }
-    
+
     private def generateXod( task: Task, lodName: String ) = {
         lodDef = application.getLodDef( task, lodName )
         printToFile( s"$destinationDir/$lodName.ts" )( writer => {
             writeStartingComment(writer)
             writer.println( s"""
-import * as zeidon from './zeidon';
-import { Observable } from 'rxjs';
+import * as zeidon from '../zeidon';
 import { ${applicationName}_DomainList } from './${applicationName}-DomainList';
 import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainFunctions';
 """ );
@@ -54,11 +53,11 @@ import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainF
 
 */""" )
     }
-    
+
     private def writeObjectInstance( writer: java.io.PrintWriter ) {
         val lodName = lodDef.getName
         val rootName = lodDef.getRoot.getName
-        
+
         writer.println( s"""
 // $lodName LOD.
 export class $lodName extends zeidon.ObjectInstance {
@@ -74,14 +73,17 @@ export class $lodName extends zeidon.ObjectInstance {
         return ${lodName}_LodDef;
     };
 
-    public getDomain( name: string ): zeidon.Domain { 
+    public getDomain( name: string ): zeidon.Domain {
         return ${applicationName}_DomainList[name];
     };
 
-    public getDomainFunctions( name: string ): any { 
-        return ${applicationName}_DomainFunctions[name];
-    }
+    public getDomainFunctions( domain: zeidon.Domain ): zeidon.DomainFunctions {
+        let f = ${applicationName}_DomainFunctions[ domain.class ];
+        if ( f )
+            return new f( domain );
 
+        return undefined;
+    }
 
     get $rootName(): zeidon.EntityArray<${lodName}_${rootName}> {
         return this.roots as zeidon.EntityArray<${lodName}_${rootName}>;
@@ -91,7 +93,14 @@ export class $lodName extends zeidon.ObjectInstance {
         return this.roots.selected() as ${lodName}_${rootName};
     }
 
-    public static activate( qual?: any ): Observable<$lodName> {
+    // Returns the current entity instance if it exists, otherwise returns an instance
+    // that will returned 'undefined' for any property values.  This is the
+    // equivalent to the "elvis operator"
+    get ${rootName}$$$$(): ${lodName}_${rootName} {
+        return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
+    }
+
+    public static activate( qual?: any ): Promise<$lodName> {
         return zeidon.ObjectInstance.activateOi( new $lodName(), qual );
     }
 }
@@ -103,25 +112,25 @@ export class $lodName extends zeidon.ObjectInstance {
         writer.println( s"""
 export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
     public get entityName(): string { return "$entityName" };""" )
-    
+
         entityDef.getAttributes.foreach { writeAttributeInstance( writer, _ ) }
         entityDef.getChildren.foreach { writeChildEntities( writer, _ ) }
-        
+
         writer.println( "}" )
     }
-    
+
     private def writeAttributeInstance( writer: java.io.PrintWriter, attributeDef: AttributeDef ) {
         if ( attributeDef.isHidden() )
             return
-        
+
         val name = attributeDef.getName
         val jsType = javascriptType(attributeDef)
-        
+
         writer.println( s"""
     get $name(): $jsType { return this.getAttribute("$name") };
     set $name(value: $jsType) { this.setAttribute("$name", value) };""" )
     }
-    
+
     private def javascriptType( attributeDef: AttributeDef ) : String = {
         val domain = attributeDef.getDomain
         if ( domain.isInstanceOf[AbstractNumericDomain] )
@@ -129,38 +138,43 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
 
         if ( domain.isInstanceOf[BooleanDomain] )
             return "boolean"
-            
+
         if ( domain.isInstanceOf[BooleanDomain] )
             return "boolean"
-            
+
         if ( domain.isInstanceOf[DateTimeDomain] )
             return "Date"
-            
+
         return "string"
     }
 
     private def writeChildEntities( writer: java.io.PrintWriter, childEntityDef: EntityDef ) {
         val entityName = childEntityDef.getName
         val lodName = lodDef.getName
-        
+
         writer.println( s"""
     get ${entityName}(): zeidon.EntityArray<${lodName}_$entityName> {
         return this.getChildEntityArray("$entityName") as zeidon.EntityArray<${lodName}_$entityName>;
     }
 
+
     get ${entityName}$$(): ${lodName}_$entityName {
         return this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName;
+    }
+
+    get ${entityName}$$$$(): ${lodName}_$entityName {
+        return (this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName) || zeidon.SAFE_INSTANCE;
     }""" )
     }
-    
+
     private def writeEntityPrototypes( writer: java.io.PrintWriter ) {
         writer.println( s"""
 const ${lodDef.getName}EntityPrototypes = {""" )
 
-        lodDef.getEntityDefs.foreach { entityDef => { 
+        lodDef.getEntityDefs.foreach { entityDef => {
             writer.println( s"    ${entityDef.getName}: ${lodDef.getName}_${entityDef.getName}.prototype, " )
         } }
-        
+
         writer.println( s"""}""" )
     }
 
@@ -172,7 +186,7 @@ export const ${lodDef.getName}_LodDef = {
 
        lodDef.getEntityDefs.foreach { writeEntityDef( writer, _ ) }
 
-    
+
         writer.println( "    }" )
         writer.println( "}" )
     }
@@ -180,26 +194,31 @@ export const ${lodDef.getName}_LodDef = {
     private def writeEntityDef( writer: java.io.PrintWriter, entityDef: EntityDef ) {
         val entityName = entityDef.getName
         writer.println( s"""        $entityName: {
-            name:       "$entityName",
-            erToken:    "${entityDef.getErEntityToken}",
-            create:     ${entityDef.isCreate()},
-            cardMax:    ${entityDef.getMaxCardinality},
-            hasInit:    ${entityDef.hasInitializedAttributes()},
-            creatable:  ${entityDef.isDelete()},
-            includable: ${entityDef.isInclude()},
-            deletable:  ${entityDef.isDelete()},
-            excludable: ${entityDef.isExclude()},
-            updatable:  ${entityDef.isUpdate()},
+            name:        "$entityName",
+            erToken:     "${entityDef.getErEntityToken}",""" )
+
+        if ( entityDef.getParent != null )
+            writer.println( s"""            isErRelLink: ${entityDef.isErRelLink},
+            relToken:    "${entityDef.getErRelToken}",""" )
+
+        writer.println( s"""            create:      ${entityDef.isCreate()},
+            cardMax:     ${entityDef.getMaxCardinality},
+            hasInit:     ${entityDef.hasInitializedAttributes()},
+            creatable:   ${entityDef.isDelete()},
+            includable:  ${entityDef.isInclude()},
+            deletable:   ${entityDef.isDelete()},
+            excludable:  ${entityDef.isExclude()},
+            updatable:   ${entityDef.isUpdate()},
             parentDelete: ${entityDef.isParentDelete()},
             childEntities: {""" )
 
         entityDef.getChildren.foreach { writeChildEntityDefs( writer, _ ) }
-    
+
         writer.println( s"""            },
             attributes: {""" )
-            
+
         entityDef.getAttributes.foreach { writeAttributeDef( writer, _ ) }
-            
+
         writer.println( s"""            }
         },
 """ )
@@ -211,7 +230,7 @@ export const ${lodDef.getName}_LodDef = {
 
     private def writeAttributeDef( writer: java.io.PrintWriter, attributeDef: AttributeDef ) {
         val name = attributeDef.getName
-        
+
         writer.println( s"""                $name: {
                     name:         "${name}",
                     hidden:       ${attributeDef.isHidden()},
@@ -221,13 +240,13 @@ export const ${lodDef.getName}_LodDef = {
                     key:          ${attributeDef.isKey},
                     update:       ${attributeDef.isUpdate},
                     foreignKey:   ${attributeDef.isForeignKey()},""" )
-                    
+
         if ( ! StringUtils.isBlank( attributeDef.getInitialValue ) )
           writer.println( s"""                    initialValue: "${attributeDef.getInitialValue}",""" )
-                    
+
         writer.println( s"""                },""" )
     }
-    
+
     private def printToFile(filename: String)(op: java.io.PrintWriter => Unit) {
         val p = new java.io.PrintWriter(new File(filename))
         try { op(p) } finally { p.close() }
@@ -238,5 +257,7 @@ object GenerateXodsForTypescript {
    def main(args: Array[String]) {
        val generator = new GenerateXodsForTypescript( args(0), args(1) )
        generator.generate();
-    }  
+       val xdmGenerator = new GenerateXdmForTypescript( args(0), args(1) )
+       xdmGenerator.generate();
+    }
 }

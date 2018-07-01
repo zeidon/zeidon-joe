@@ -211,13 +211,8 @@ class AttributeInstanceImpl implements AttributeInstance
      *
      * @param attributeDef
      */
-    private void validateUpdateAttribute()
+    void validateUpdateAttribute()
     {
-        // If this EI is versioned they we'll assume that it's ok because the versioning
-        // code should have already verified that none of the other instances are versioned.
-        if ( entityInstance.isVersioned() )
-            return;
-
         // If the attribute is derived or work, then we do not need to check if the
         // attribute can be updated.
         if ( attributeDef.isDerived() )
@@ -229,18 +224,31 @@ class AttributeInstanceImpl implements AttributeInstance
         if ( ! attributeDef.isPersistent() )
             return;
 
-        if ( ! attributeDef.isUpdate() )
-            throw new ZeidonException( "Attribute is defined as read-only" )
-                                .prependAttributeDef( attributeDef );
-
         // If the entity is derived or work, then we do not need to check if the
         // attribute can be updated.
         if ( getEntityDef().isDerived() || getEntityDef().isDerivedPath() )
             return;
 
+        // We'll allow updates to autoseq so the dbhandler can change them.
+        if ( attributeDef.isAutoSeq() )
+            return;
+
+        if ( ! attributeDef.isUpdate() )
+            throw new ZeidonException( "Attribute is defined as read-only" )
+                                .prependAttributeDef( attributeDef );
+
+        if ( ! attributeDef.getEntityDef().isUpdate() )
+            throw new ZeidonException( "Entity may not be udpated." )
+                                .prependAttributeDef( attributeDef );
+
         if ( getObjectInstance().isReadOnly() )
             throw new ZeidonException( "Object Instance is read-only" )
                                 .prependEntityDef( getEntityDef() );
+
+        // Don't allow updates to keys unless the EI is being created.
+        if ( attributeDef.isKey() && ! entityInstance.isCreated() )
+            throw new ZeidonException( "Cannot update key attributes." )
+                            .prependAttributeDef( attributeDef );
 
         for ( EntityInstanceImpl linked : entityInstance.getLinkedInstances() )
         {

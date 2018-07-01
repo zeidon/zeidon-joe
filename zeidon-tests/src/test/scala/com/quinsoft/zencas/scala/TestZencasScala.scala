@@ -6,7 +6,9 @@ import org.junit.Before
 import org.junit.Test
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
+import com.quinsoft.zeidon.scala.DynamicTask
 
 class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
@@ -45,7 +47,7 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
         userList.logOi
     }
-    
+
     @Test
     def testMultipleWhenNull() {
         val userList = new View( task ) basedOn "mAdmDiv"
@@ -56,6 +58,24 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
                 .whenNotNull( adminId, _.restrict { _.Cohort }.to { _.Cohort.ID > adminId } )
                 .whenNotNull( personId, _.restrict { _.Cohort }.to { _.Cohort.ID < personId } )
                 .activate()
-        println( "here" )      
+        println( "here" )
+    }
+
+    @Test
+    def testStringInterpolation() {
+        val classes = new View( task ) basedOn "mClass"
+        classes.activateWhere( _.Class.ID = 118 )
+        var x = classes.interpolate( "${Class.ID}" )
+        assertEquals( "118", x )
+
+        val vars = Map( "class" -> classes )
+        x = classes.interpolate( "${class.Class.ID}", vars )
+        assertEquals( "118", x )
+    }
+
+    @Test
+    def testTaskImplicits() {
+        val dtask = new DynamicTask( task )
+        val userList = dtask.mAdmDiv.activate( _.AdministrativeDivision.ID < 10 )
     }
 }

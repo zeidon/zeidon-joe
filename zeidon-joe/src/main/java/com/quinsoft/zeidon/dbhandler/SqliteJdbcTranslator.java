@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.BooleanDomain;
-import com.quinsoft.zeidon.domains.DateDomain;
+import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
@@ -51,7 +51,7 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
     @Override
     public Object convertDbValue(Domain domain, Object dbValue) throws SQLException
     {
-        if ( domain instanceof DateDomain )
+        if ( domain instanceof DateTimeDomain )
         {
             // Sqlite stores dates as unix times.
             if ( dbValue instanceof Number )

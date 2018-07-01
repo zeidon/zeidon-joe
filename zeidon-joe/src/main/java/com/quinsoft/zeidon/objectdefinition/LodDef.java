@@ -182,84 +182,76 @@ public class LodDef implements PortableFileAttributeHandler
     @Override
     public void setAttribute(PortableFileReader reader)
     {
-        if ( reader.getAttributeName().equals( "NAME" ))
+        switch ( reader.getAttributeName() )
         {
-            if ( ! reader.getAttributeValue().equalsIgnoreCase( name ) )
-                throw new ZeidonException("Name of object from XOD ('%s') doesn't match OD name", reader.getAttributeValue());
+            case "NAME":
+                if ( ! reader.getAttributeValue().equalsIgnoreCase( name ) )
+                    throw new ZeidonException("Name of object from XOD ('%s') doesn't match OD name", reader.getAttributeValue());
 
-            // Override the name used when this object was being created with the one from the .xod file.
-            // We need to do this because names are case-insensitive and the user may have used a different
-            // case than the one from the file.
-            name = reader.getAttributeValue().intern();
-        }
-        else
-        if ( reader.getAttributeName().equals( "ER_DATE" ))
-        {
-            erDate = reader.getAttributeValue().intern();
-        }
-        else
-        if ( reader.getAttributeName().equals( "DATABASE" ) ||
-             reader.getAttributeName().equals( "DFT_DBNAME" ) )
-        {
-            database = reader.getAttributeValue().intern();
-        }
-        else
-        if ( reader.getAttributeName().equals( "DBH_Data" ))
-        {
-            // We don't actually use DBH_Data in JOE but this code is here because we need to
-            // read past the blob data.
-            int lth = Integer.parseInt( reader.getAttributeValue() );
-            byte[] buffer = new byte[ lth ];
-            try
-            {
-                reader.getStreamReader().read( buffer, lth );
-            }
-            catch ( Throwable e )
-            {
-                throw ZeidonException.wrapException( e );
-            }
-        }
-        if ( reader.getAttributeName().equals( "GKHANDLER" ))
-        {
-            genkeyHandler = reader.getAttributeValue().intern();
-        }
-        else
-        if ( reader.getAttributeName().equals( "LOCK" ))
-        {
-            Integer level = Integer.valueOf( reader.getAttributeValue() );
-            lockingLevel = LockingLevel.lookup( level );
-        }
-        else
-        if ( reader.getAttributeName().equals( "OCEOPER" ))
-        {
-            constraintOper = reader.getAttributeValue().intern();
-        }
-        else
-        if ( reader.getAttributeName().equals( "OCACT" ))
-        {
-            activateConstraint = reader.getAttributeValue().startsWith( "Y" );
-        }
-        else
-        if ( reader.getAttributeName().equals( "OCCOM" ))
-        {
-            commitConstraint = reader.getAttributeValue().startsWith( "Y" );
-        }
-        else
-        if ( reader.getAttributeName().equals( "OCSRCFILE" ))
-        {
-            sourceFileName = reader.getAttributeValue();
-            if ( ! sourceFileName.contains( "." ) )
-                sourceFileName = getApplication().getPackage() + "." + sourceFileName;
-        }
-        else
-        if ( reader.getAttributeName().equals( "OCSRCTYPE" ))
-        {
-            sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
-        }
-        else
-        if ( reader.getAttributeName().equals( "OPER_LIBNM" ))
-        {
-                  libraryName = reader.getAttributeValue().intern();
+                // Override the name used when this object was being created with the one from the .xod file.
+                // We need to do this because names are case-insensitive and the user may have used a different
+                // case than the one from the file.
+                name = reader.getAttributeValue().intern();
+                break;
+
+            case "ER_DATE":
+                erDate = reader.getAttributeValue().intern();
+                break;
+
+            case "DATABASE":
+            case "DFT_DBNANME":
+                database = reader.getAttributeValue().intern();
+                break;
+
+            case "DBH_Data":
+                // We don't actually use DBH_Data in JOE but this code is here because we need to
+                // read past the blob data.
+                int lth = Integer.parseInt( reader.getAttributeValue() );
+                byte[] buffer = new byte[ lth ];
+                try
+                {
+                    reader.getStreamReader().read( buffer, lth );
+                }
+                catch ( Throwable e )
+                {
+                    throw ZeidonException.wrapException( e );
+                }
+                break;
+
+            case "GKHANDLER":
+                genkeyHandler = reader.getAttributeValue().intern();
+                break;
+
+            case "LOCK":
+                Integer level = Integer.valueOf( reader.getAttributeValue() );
+                lockingLevel = LockingLevel.lookup( level );
+                break;
+
+            case "OCEOPER":
+                constraintOper = reader.getAttributeValue().intern();
+                break;
+
+            case "OCACT":
+                activateConstraint = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "OCCOM":
+                commitConstraint = reader.getAttributeValue().startsWith( "Y" );
+                break;
+
+            case "OCSRCFILE":
+                sourceFileName = reader.getAttributeValue();
+                if ( ! sourceFileName.contains( "." ) )
+                    sourceFileName = getApplication().getPackage() + "." + sourceFileName;
+                break;
+
+            case "OCSRCTYPE":
+                sourceFileType = SourceFileType.parse( reader.getAttributeValue() );
+                break;
+
+            case "OPER_LIBNM":
+                libraryName = reader.getAttributeValue().intern();
+                break;
         }
     }
 
@@ -522,71 +514,75 @@ public class LodDef implements PortableFileAttributeHandler
         @Override
 		public PortableFileAttributeHandler createEntity( PortableFileReader reader, int level, long flags )
         {
-            if ( reader.getAttributeName().equals( "ATTRIB" ))
+            switch ( reader.getAttributeName() )
             {
-                AttributeDef attrib = new AttributeDef(currentEntityDef);
-                return attrib;
-            }
-            else
-            if ( reader.getAttributeName().equals( "CHILDENTITY" ) ||
-                 reader.getAttributeName().equals( "ENTITY" ))
-            {
-                // Subtract one from level to take into account that the level 1 entity
-                // is the object name.
-                level--;
+                case "ATTRIB":
+                {
+                    AttributeDef attrib = new AttributeDef(currentEntityDef);
+                    return attrib;
+                }
 
-                if ( currentEntityDef != null )
-                    addEntityDef( currentEntityDef );
+                case "CHILDENTITY":
+                case "ENTITY":
+                {
+                    // Subtract one from level to take into account that the level 1 entity
+                    // is the object name.
+                    level--;
 
-                EntityDef entityDef = new EntityDef( lodDef, level );
+                    if ( currentEntityDef != null )
+                        addEntityDef( currentEntityDef );
 
-                if ( level >= parentStack.size() )
-                    parentStack.add( entityDef );
-                else
-                    parentStack.set( level, entityDef );
-                if ( level > 1 )
-                    entityDef.setParent( parentStack.get( level - 1 ) );
+                    EntityDef entityDef = new EntityDef( lodDef, level );
 
-                if ( currentEntityDef != null )
-                    currentEntityDef.setNextHier( entityDef );
-                entityDef.setPrevHier( currentEntityDef );
-                currentEntityDef = entityDef;
-                return entityDef;
+                    if ( level >= parentStack.size() )
+                        parentStack.add( entityDef );
+                    else
+                        parentStack.set( level, entityDef );
+                    if ( level > 1 )
+                        entityDef.setParent( parentStack.get( level - 1 ) );
+
+                    if ( currentEntityDef != null )
+                        currentEntityDef.setNextHier( entityDef );
+                    entityDef.setPrevHier( currentEntityDef );
+                    currentEntityDef = entityDef;
+                    return entityDef;
+                }
+
+                case "DATAFIELD":
+                {
+                    DataField dataField = new DataField();
+                    currentEntityDef.getDataRecord().addDataField( dataField );
+                    return dataField;
+                }
+
+                case "RELFIELD":
+                {
+                    RelField relField = new RelField();
+                    return relField;
+                }
+
+                case "RELRECORD":
+                {
+                    RelRecord relRecord = new RelRecord( currentEntityDef.getDataRecord() );
+                    currentEntityDef.getDataRecord().setRelRecord( relRecord );
+                    return relRecord;
+                }
+
+                case "DATARECORD":
+                {
+                    DataRecord dataRecord = new DataRecord( currentEntityDef );
+                    currentEntityDef.setDataRecord( dataRecord );
+                    return dataRecord;
+                }
+
+                case "OBJECT":
+                {
+                    return lodDef;
+                }
+
+                default:
+                    throw new ZeidonException( "Unknown entity '%s'", reader.getAttributeValue());
             }
-            else
-            if ( reader.getAttributeName().equals( "DATAFIELD" ))
-            {
-                DataField dataField = new DataField();
-                currentEntityDef.getDataRecord().addDataField( dataField );
-                return dataField;
-            }
-            else
-            if ( reader.getAttributeName().equals( "RELFIELD" ))
-            {
-                RelField relField = new RelField();
-                return relField;
-            }
-            else
-            if ( reader.getAttributeName().equals( "RELRECORD" ))
-            {
-                RelRecord relRecord = new RelRecord( currentEntityDef.getDataRecord() );
-                currentEntityDef.getDataRecord().setRelRecord( relRecord );
-                return relRecord;
-            }
-            else
-            if ( reader.getAttributeName().equals( "DATARECORD" ))
-            {
-                DataRecord dataRecord = new DataRecord( currentEntityDef );
-                currentEntityDef.setDataRecord( dataRecord );
-                return dataRecord;
-            }
-            else
-            if ( reader.getAttributeName().equals( "OBJECT" ))
-            {
-                return lodDef;
-            }
-            else
-                throw new ZeidonException( "Unknown entity '%s'", reader.getAttributeValue());
         }
 
         @Override
@@ -609,7 +605,6 @@ public class LodDef implements PortableFileAttributeHandler
 
                 entityDef.setPersistentAttributeCount( persistentCount );
                 entityDef.setWorkAttributeCount( workCount );
-                entityDef.validateEntityDef( reader );
             }
             else
             if ( handler instanceof AttributeDef )
@@ -640,9 +635,7 @@ public class LodDef implements PortableFileAttributeHandler
             for ( EntityDef entityDef : entityList )
             {
                 for ( AttributeDef AttributeDef : entityDef.getAttributes() )
-                {
                     attribMap.put( AttributeDef.getXvaAttrToken(), AttributeDef );
-                }
 
                 DataRecord dataRecord = entityDef.getDataRecord();
                 if ( dataRecord != null )
@@ -655,6 +648,8 @@ public class LodDef implements PortableFileAttributeHandler
                     }
                     dataRecord.setFields( entityDef );
                 }
+
+                entityDef.validateEntityDef();
             }
 
             if ( hasDuplicateInstances() )

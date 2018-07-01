@@ -19,9 +19,13 @@
 
 package com.quinsoft.zeidon.dbhandler;
 
+import java.util.Map;
+
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.DropViewCleanup;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * Specifies the interface for locking OIs using pessimistic locking.
@@ -31,6 +35,8 @@ import com.quinsoft.zeidon.View;
  */
 public interface PessimisticLockingHandler extends DropViewCleanup
 {
+    void initialize( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  );
+
     /**
      * For situations that require it, acquire a global lock that prevents
      * other tasks from performing pessimistic locking on this view.
@@ -40,10 +46,10 @@ public interface PessimisticLockingHandler extends DropViewCleanup
      * @throws PessimisticLockingException
      */
     void acquireGlobalLock( View view ) throws PessimisticLockingException;
-    
+
     /**
      * Release the global locks needed for this view.
-     * 
+     *
      * @param view
      * @throws PessimisticLockingException
      */
@@ -67,9 +73,11 @@ public interface PessimisticLockingHandler extends DropViewCleanup
      *
      * @param view View to lock
      *
+     * @returns true if this OI needs to have its locks released, false otherwise.
+     *
      * @throws PessimisticLockingException
      */
-    void acquireOiLocks( View view ) throws PessimisticLockingException;
+    boolean acquireOiLocks( View view ) throws PessimisticLockingException;
 
     /**
      * Release the pessimistic locks for this view.
@@ -77,4 +85,12 @@ public interface PessimisticLockingHandler extends DropViewCleanup
      * @param view
      */
     void releaseLocks( View view );
+
+    /**
+     * Drops any outstanding locks on OIs specified by the activate options.  Intended to
+     * be used in situations where the OI no longer exists in memory (like REST servers).
+     *
+     * @param activateOptions Qualification for OIs that will have their locks dropped.
+     */
+    void dropOutstandingLocks();
 }

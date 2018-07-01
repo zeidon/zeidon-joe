@@ -28,6 +28,7 @@ import com.quinsoft.zeidon.SubobjectValidationException
 import com.quinsoft.zeidon.Task
 import scala.collection.concurrent.TrieMap
 import org.apache.commons.lang3.StringUtils
+import collection.JavaConversions._
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -52,7 +53,6 @@ class View( val task: Task ) extends Dynamic {
     }
 
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
-    def this( task: com.quinsoft.zeidon.TaskQualification ) = this( task.getTask() )
 
     /**
      * Sets the LOD definition for this View.
@@ -160,12 +160,12 @@ class View( val task: Task ) extends Dynamic {
         return this
     }
 
-    def activate( addQual: (QualBuilder) => QualBuilder ): View = {
-      val qb = this.buildQual()
-      addQual( qb )
-      return qb.activate // Same as "return this".
+    def activate(addQual: (QualBuilder) => QualBuilder): View = {
+        val qb = this.buildQual()
+        addQual(qb)
+        return qb.activate // Same as "return this".
     }
-    
+
     /**
      * Activates all data from the DB for this LOD.  I.e. activates without
      * qualification.  Use carefully.
@@ -391,7 +391,7 @@ class View( val task: Task ) extends Dynamic {
 //        println( s"method '$operationName' called with arguments ${args.mkString( "'", "', '", "'" )}" )
         try {
             validateNonNull
-    
+
             val oe = task.getObjectEngine
             var operMap = oe.getCacheMap().getOrCreate( classOf[ObjectOperationMap] )
             val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
@@ -414,6 +414,13 @@ class View( val task: Task ) extends Dynamic {
            "null " + jlodDef.getName()
        else
            "*undefined*"
+    }
+
+    def interpolate( string: String, variables: Map[String, AnyRef] = null ): String = {
+        if ( variables == null )
+            return jview.interpolate( string )
+        else
+            return jview.interpolate( string, variables )
     }
 
     /**
@@ -448,7 +455,7 @@ object View {
     implicit def view2jview( view: com.quinsoft.zeidon.scala.View ) = view.jview
 
     val ON = new VmlSyntaxFiller
-    
+
     def apply( task: Task ) = {
       new View( task )
     }

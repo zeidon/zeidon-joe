@@ -14,11 +14,6 @@
 
  <dependencies>
     <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-scala</artifactId>
       <version>${project.parent.version}</version>
@@ -27,13 +22,14 @@
       <groupId>org.eclipse.jetty.orbit</groupId>
       <artifactId>javax.servlet</artifactId>
       <version>3.0.0.v201112011016</version>
+      <scope>provided</scope>
     </dependency>
 
     
     <dependency>
       <groupId>org.scalatra</groupId>
-      <artifactId>scalatra_2.11</artifactId>
-      <version>2.3.1</version>
+      <artifactId>scalatra_2.12</artifactId>
+      <version>2.5.0</version>     <!-- Don't upgrade to 2.5.1; bug on CORS support -->
       <exclusions>
 	<exclusion>
 	  <groupId>org.slf4j</groupId>
@@ -50,6 +46,10 @@
 	<exclusion>
 	  <groupId>org.scala-lang</groupId>
 	  <artifactId>scala-library</artifactId>
+	</exclusion>
+	<exclusion>
+	  <groupId>org.apache.commons</groupId>
+	  <artifactId>commons-lang3</artifactId>
 	</exclusion>
       </exclusions>
     </dependency>
@@ -70,7 +70,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.1</version>
 
        <executions>
           <execution>

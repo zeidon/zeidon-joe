@@ -47,6 +47,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.GenKeyHandler;
 import com.quinsoft.zeidon.IncludeFlags;
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -60,6 +61,7 @@ import com.quinsoft.zeidon.objectdefinition.LockingLevel;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
+import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
 import com.quinsoft.zeidon.standardoe.NoOpPessimisticLockingHandler;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
 
@@ -87,7 +89,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     protected static final EnumSet<IncludeFlags> INCLUDE_FLAGS = EnumSet.of(  IncludeFlags.FROM_ACTIVATE );
 
-    private static final long COL_KEYS_ONLY = 0x00000001;
     private static final long COL_FULL_QUAL = 0x00000004;
 
     protected enum SqlCommand
@@ -126,6 +127,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Boolean ignoreJoins;
 
     /**
+     * If true, then surround all SQL names with back-ticks.
+     */
+    private Boolean quoteNames = false;
+
+    /**
      * This is the list of instances that have been loaded.  It is limited to instances
      * that have children that can be loaded in one SELECT.
      *
@@ -150,6 +156,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private Pagination pagingOptions;
 
+    private boolean joinAll1To1 = false;
+
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
@@ -166,6 +174,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected SqlStatement initializeCommand( SqlCommand sqlCommand, View view, EntityDef selectRoot )
     {
+        String useQuotes = getConfigValue( "QuoteNames" );
+        if ( ! StringUtils.isBlank( useQuotes ) )
+            quoteNames = "1ty".contains( useQuotes.substring( 0, 1 ).toLowerCase() );
+
+        String value = getConfigValue( "JoinAll1to1Relationships" );
+        if ( ! StringUtils.isBlank( value ) && "TY1".contains( value.substring( 0, 1 ).toUpperCase() ) ) // Catches "true", "yes", "1".
+            joinAll1To1 = true;
+
         return new SqlStatement( sqlCommand, view, selectRoot );
     }
 
@@ -380,8 +396,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         for ( DataField dataField : dataRecord.dataFields() )
         {
             AttributeDef attributeDef = dataField.getAttributeDef();
-            if ( ( control & COL_KEYS_ONLY ) != 0 && attributeDef.isKey() )
-                continue;
+
+            if ( activateFlags != null )
+            {
+                if ( activateFlags.contains( ActivateFlags.fKEYS_ONLY ) )
+                {
+                    if ( ! attributeDef.isKey() && ! attributeDef.isForeignKey() )
+                        continue;
+                }
+            }
 
             if ( ! attributeDef.isActivate() )
                 continue;
@@ -482,6 +505,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity qualEntity = new QualEntity( entitySpec, entityDef );
             qualMap.put( entityDef, qualEntity );
 
+            String openSql = entitySpec.getAttribute( "OpenSQL" ).getString();
+            if ( ! StringUtils.isBlank( openSql ) )
+            {
+                qualEntity.openSql = openSql;
+                qualEntity.setOpenSqlAttributeList( entitySpec.getAttribute( "OpenSQL_AttributeList" ).getString() );
+                continue;
+            }
+
             int parenCount = 0;
 
             EntityDef qualAttribDef = entitySpec.getEntityDef().getLodDef().getEntityDef( "QualAttrib" );
@@ -520,14 +551,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     {
                         throw new ZeidonException( "Entity " + entityName + " is derived or doesn't have DB information.");
                     }
-
-                    // This entity better be a child of what we are qualifying.
-//                    EntityDef search = qualAttrib.entityDef.getParent();
-//                    while ( search != null && search != entityDef )
-//                        search = search.getParent();
-//                    if ( search == null )
-//                        throw new ZeidonException( "EntityName " + qualEntityName + " for QualAttrib " +
-//                                                   qualEntityName + " is not a child of " + entityName );
                 }
 
                 if ( qualAttrib.oper.equals( "EXISTS" ) || qualAttrib.oper.equals( "NOT EXISTS" ) )
@@ -1000,6 +1023,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
         }
 
+        QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity != null )
+        {
+            // Can't join entities that are being loaded via customized SQL.
+            if ( ! StringUtils.isBlank( qualEntity.openSql ) )
+                return false;
+        }
+
         return getEntityDefData( entityDef ).isJoinable( entityDef );
     }
 
@@ -1021,6 +1052,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         List<EntityDef> joinedChildren = getJoinableChildren( entityDef );
 
         QualEntity qualEntity = qualMap.get( entityDef );
+        if ( qualEntity != null && ! StringUtils.isBlank( qualEntity.openSql ) )
+        {
+            return useOpenSql( stmt, view, entityDef, qualEntity );
+        }
+
         stmt.appendCmd( "SELECT " );
 
         // If the entity we're loading is not the root of the OD then add parent FKs to WHERE clause.
@@ -1070,6 +1106,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 stmt.appendWhere( ")" );
         }
 
+        addVersioningQualification( stmt, view, entityDef );
         addOrdering( entityDef, stmt );
         for ( EntityDef child : joinedChildren )
             addOrdering( child, stmt );
@@ -1088,6 +1125,52 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // parent load and will not need to be loaded separately.
         loadedViewEntities.addAll( joinedChildren );
         return null;
+    }
+
+    /**
+     * qualEntity has customized SQL specified via OpenSql.  Use this instead of generating SQL.
+     */
+    private Integer useOpenSql( SqlStatement stmt, View view, EntityDef entityDef, QualEntity qualEntity )
+    {
+        stmt.appendCmd( qualEntity.openSql );
+
+        // Create some temporary DataRecords/DataFields to work with the Sql loader.
+        DataRecord dataRecord = new DataRecord( qualEntity.entityDef );
+        List<DataField> dataFields = new ArrayList<>();
+        for ( AttributeDef attributeDef : qualEntity.openSqlAttributeList )
+        {
+            DataField dataField = new DataField().setAttributeDef( attributeDef );
+            dataFields.add( dataField );
+            stmt.columns.put( dataField, stmt.columns.size() + 1 );
+        }
+
+        stmt.dataRecords.put( dataRecord, dataFields );
+        stmt.usesOpenSql = true;
+
+        return null;
+    }
+
+    /**
+     * If this entity has automatic versioning then we may need to add qualification so that the older
+     * versions aren't loaded.
+     *
+     */
+    private void addVersioningQualification( SqlStatement stmt, View view, EntityDef entityDef )
+    {
+        EntityDefSqlData data = getEntityDefData( entityDef );
+        if ( ! data.requiresVersioningQualification )
+            return;
+
+        DataField versioningDataField = entityDef.getVersioningDataField();
+        DataRecord dataRecord = entityDef.getDataRecord();
+
+        if ( stmt.conjunctionNeeded )
+            stmt.appendWhere( " AND " );
+        else
+            stmt.conjunctionNeeded = true;
+
+        String col = versioningDataField.getName();
+        stmt.appendWhere( stmt.getTableName( dataRecord ), ".", col, " IS NULL" );
     }
 
     private void addOrdering( EntityDef entityDef, SqlStatement stmt )
@@ -1165,8 +1248,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         SqlStatement stmt = null;
 
-        DataRecord dataRecord = entityDef.getDataRecord();
-        task.dblog().trace( "Selecting entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
+        // DataRecord could be null if we're using OpenSQL
+        if ( entityDef.getDataRecord() != null )
+            task.dblog().trace( "Selecting entity %s, table name = %s", entityDef.getName(),
+                                entityDef.getDataRecord().getRecordName() );
+        else
+            assert qualEntity.openSql != null;
 
         // Check to see if we've loaded this entityDef already.  This can happen if
         // this entity def was loaded via join or all instances were loaded at once.
@@ -1221,7 +1308,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             if ( pagingOptions != null )
             {
-                if ( pagingOptions.isTotalCount() )
+                if ( pagingOptions.isLoadTotalCount() )
                     getTotalCount( view, entityDef, stmt );
             }
             else
@@ -1539,7 +1626,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 addForeignKeys( stmt, view, qualAttrib.columnAttributeValue.getEntityDef(), entityDef );
         }
 
-        stmt.appendWhere( buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString() );
+        String qs = buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString();
+        if ( ! StringUtils.isBlank( qs ) )
+        {
+            stmt.appendWhere( qs );
+            stmt.conjunctionNeeded = true;
+        }
     }
 
     protected abstract int executeLoad(View view, EntityDef entityDef, SqlStatement stmt);
@@ -2232,6 +2324,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         EntityDef entityDef = entityInstance.getEntityDef();
         DataRecord dataRecord = entityDef.getDataRecord();
 
+        copyEntityForVersioning( view, entityInstance );
+
         SqlStatement stmt = initializeCommand( SqlCommand.UPDATE, view );
         task.dblog().debug( "Updating entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
@@ -2298,6 +2392,91 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     }
 
     /**
+     * An entity has been updated.  If it is specified as being versioned, then we
+     * need to copy the current row to a new one.
+     */
+    @Override
+    public int copyEntityForVersioning( View view, EntityInstance entityInstance )
+    {
+        EntityDef entityDef = entityInstance.getEntityDef();
+        DataField versioningDataField = entityDef.getVersioningDataField();
+        if ( versioningDataField == null )
+            return 0;
+
+        DataRecord dataRecord = entityDef.getDataRecord();
+
+        SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
+        task.dblog().debug( "Copying entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
+
+        DataField keyDataField = null;
+
+        stmt.appendCmd( "INSERT INTO ", dataRecord.getRecordName(), "( " );
+        int updateCount = 0;
+        for ( DataField dataField : dataRecord.dataFields() )
+        {
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ! attributeDef.isPersistent() )
+                continue;
+
+            if ( attributeDef.isKey() )
+            {
+                if ( entityInstance.getAttribute( attributeDef ).isUpdated() )
+                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
+
+                if ( entityInstance.getAttribute( attributeDef ).isNull() )
+                    throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
+
+                keyDataField = dataField;
+
+                // If the DB is generating the keys then don't add generated keys to
+                // the list of columns.
+                if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() )
+                    continue;
+            }
+
+            if ( updateCount > 0 )
+                stmt.appendCmd( ", " );
+
+            updateCount++;
+
+            stmt.appendCmd( dataField.getName() );
+        }
+
+        stmt.appendCmd( " )\n SELECT " );
+
+        updateCount = 0;
+        for ( DataField dataField : dataRecord.dataFields() )
+        {
+            AttributeDef attributeDef = dataField.getAttributeDef();
+            if ( ! attributeDef.isPersistent() )
+                continue;
+
+            // If the DB is generating the keys then don't add generated keys to
+            // the list of columns.
+            if ( ! addGeneratedKeyForInsert() && attributeDef.isGenKey() )
+                continue;
+
+            if ( updateCount > 0 )
+                stmt.appendCmd( ", " );
+
+            updateCount++;
+
+            if ( dataField == versioningDataField )
+            {
+                getAttributeValue( stmt, stmt.sqlCmd, keyDataField, entityInstance );
+            }
+            else
+                stmt.appendCmd( dataField.getName() );
+        }
+
+        stmt.appendCmd( "\n FROM ", dataRecord.getRecordName() );
+        stmt.buildWhere( stmt, entityInstance );
+        executeStatement( view, entityDef, entityInstance, stmt );
+
+        return 0;
+    }
+
+    /**
      * This object is used to keep track of the different parts of a SQL statement.
      * Since statements can be nested (e.g. subselect) there can be nested SqlStatements.
      *
@@ -2334,6 +2513,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         boolean containsSubselect;
         boolean qualUsesChildEntity;
+        boolean usesOpenSql;
 
         /**
          * If true, then a conjunction (AND/OR) is needed before the next predicate
@@ -2548,34 +2728,39 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             assert ( source instanceof DataRecord ) || ( source instanceof RelRecord );
 
             // Already exists?
-            String name = tables.get( source );
-            if ( name != null )
-                return name;
-
-            // Is an alias needed?
-            String alias = null;
-            if ( tables.containsValue( tableName ) )
+            String returnName = tables.get( source );
+            if ( returnName == null )
             {
-                // We've got a table listed twice but with different relationships.  We need to create
-                // an alias name.
-                for ( int i = 1; i < 40; i++ )
+                // Is an alias needed?
+                if ( tables.containsValue( tableName ) )
                 {
-                    if ( ! tables.containsValue( tableName + i ) )
+                    // We've got a table listed twice but with different relationships.  We need to create
+                    // an alias name.
+                    for ( int i = 1; i < 40; i++ )
                     {
-                        alias = tableName + i;
-                        break;
+                        if ( ! tables.containsValue( tableName + i ) )
+                        {
+                            returnName = tableName + i;
+                            break;
+                        }
                     }
+
+                    if ( returnName == null )
+                        throw new ZeidonException( "We ran out of alias names.  There's probably an internal error somewhere." );
+
+                    tables.put( source, returnName );
                 }
-
-                if ( alias == null )
-                    throw new ZeidonException( "We ran out of alias names.  There's probably an internal error somewhere." );
-
-                tables.put( source, alias );
+                else
+                {
+                    tables.put( source, tableName );
+                    returnName = tableName;
+                }
             }
-            else
-                tables.put( source, tableName );
 
-            return tables.get( source );
+            if ( quoteNames )
+                returnName = "`" + returnName + "`";
+
+            return returnName;
         }
 
         String getTableName( EntityDef entityDef )
@@ -2624,7 +2809,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
 
             String alias = getTableName( tableName, source );
+            if ( quoteNames )
+                tableName = "`" + tableName + "`";
             from.append( " " ).append( tableName );
+
             if ( ! StringUtils.equals( tableName, alias ) )
                 from.append( " " ).append( alias );
 
@@ -2779,7 +2967,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( data != null )
             return data;
 
-        data = new EntityDefSqlData( entityDef );
+        data = new EntityDefSqlData( entityDef, this );
         data = entityDef.getCacheMap().put( EntityDefSqlData.class, data );
         return data;
     }
@@ -2791,23 +2979,63 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     static class EntityDefSqlData
     {
         private final EntityDef entityDef;
+        private final boolean joinAll1To1;
 
         /**
          * This is the list of children that can be loaded by joining
          * with the parent entityDef.
          */
         private final ImmutableList<EntityDef> joinedChildren;
+        private boolean requiresVersioningQualification;
 
         /**
          * @param entityDef
+         * @param abstractSqlHandler
          */
-        private EntityDefSqlData(EntityDef entityDef)
+        private EntityDefSqlData(EntityDef entityDef, AbstractSqlHandler abstractSqlHandler)
         {
             this.entityDef = entityDef;
 
+            joinAll1To1 = abstractSqlHandler.joinAll1To1;
             Builder<EntityDef> builder = ImmutableList.builder();
             addJoinedChildren( builder, this.entityDef );
             joinedChildren = builder.build();
+            requiresVersioningQualification = computeVersioningQualification();
+        }
+
+        private boolean computeVersioningQualification()
+        {
+            DataField versioningDataField = entityDef.getVersioningDataField();
+            if ( versioningDataField == null )
+                return false;
+
+            // Root always needs the qualification.
+            if ( entityDef.getParent() == null )
+                return true;
+
+            // Check to see if this relationship requires additional qualification to prevent
+            // loading all
+            RelRecord relRecord = entityDef.getDataRecord().getRelRecord();
+            RelationshipType relType = relRecord.getRelationshipType();
+            switch( relType )
+            {
+                case MANY_TO_ONE:
+                    // The FK is stored in the parent table which means there can only be
+                    // one instance found so we don't need qualification.
+                    return false;
+
+                case MANY_TO_MANY:
+                    // We know this requires qualification since it's m-to-m and therefore
+                    // can't be the versioning relationship.
+                    return true;
+
+                case ONE_TO_MANY:
+                    // We will need qualification in all cases except when the rel is the history rel.
+                    // We can determine this by looking at the target dataField.
+                    return relRecord.getRelFields().get( 0 ).getRelDataField() != versioningDataField;
+            }
+
+            return false;
         }
 
         private void addJoinedChildren( Builder<EntityDef> builder, EntityDef parent )
@@ -2857,6 +3085,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // its parent.  In that situation we don't want to join this entity.
                 if ( relRecord.getRelationshipType().isManyToOne() )
                     return false;
+            }
+
+            RelRecord relRecord = dataRecord.getRelRecord();
+            if ( relRecord != null && relRecord.getRelationshipType() != null &&
+                 relRecord.getRelationshipType().isManyToOne() )
+            {
+                if ( joinAll1To1 )
+                    return true;
             }
 
             return dataRecord.isJoinable();
@@ -2920,10 +3156,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // that if debug is on that the user would like to see the SQL statements with the values
             // embedded in the SQL.
             if ( StringUtils.isBlank( value ) )
-                return task.dblog().isDebugEnabled() ? false  // Debug is enabled so don't bind all attributes.
-                                                     : true;  // Debug is off so we'll bind everything.
-
-            isBindAllValues = "TY1".contains( value.substring( 0, 1 ).toUpperCase() );  // Catches "true", "yes", "1".
+                isBindAllValues = true;
+            else
+                isBindAllValues = "TY1".contains( value.substring( 0, 1 ).toUpperCase() );  // Catches "true", "yes", "1".
         }
 
         return isBindAllValues;
@@ -2958,6 +3193,24 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return getConfigValue( "Username" );
     }
 
+    private PessimisticLockingHandler dynamicallyLoadLockingHandler( String lockingHandlerName )
+    {
+        try
+        {
+            ObjectEngine oe = task.getObjectEngine();
+            ClassLoader classLoader = oe.getClassLoader( lockingHandlerName );
+            @SuppressWarnings("unchecked")
+            Class<? extends PessimisticLockingHandler> lockingClass =
+                    (Class<? extends PessimisticLockingHandler>) classLoader.loadClass( lockingHandlerName );
+            return lockingClass.newInstance();
+        }
+        catch ( Throwable t )
+        {
+            throw ZeidonException.prependMessage( t, "Error trying to load PessimisticLockingHandler class = '%s', DB=%s",
+                                                  lockingHandlerName, options.getOiSourceUrl() );
+        }
+    }
+
     @Override
     public PessimisticLockingHandler getPessimisticLockingHandler( ActivateOptions activateOptions , View view  )
     {
@@ -2968,7 +3221,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( lockLevel == LockingLevel.PESSIMISTIC_WITHREAD && activateOptions.isReadOnly() )
             return NOOP_PESSIMISTIC_LOCKING_HANDLER;
 
-        PessimisticLockingHandler lockingHandler = new PessimisticLockingViaDb( activateOptions, qualMap );
+        PessimisticLockingHandler lockingHandler;
+        String lockingHandlerName = getConfigValue( "PessimisticLockingHandler" );
+        if ( StringUtils.isBlank( lockingHandlerName ) )
+           lockingHandler = new PessimisticLockingViaDb();
+        else
+            lockingHandler = dynamicallyLoadLockingHandler( lockingHandlerName );
+
+        lockingHandler.initialize( activateOptions, qualMap );
         view.addViewCleanupWork( lockingHandler );
         return lockingHandler;
     }

@@ -87,9 +87,6 @@ aZKey      1320632
 aName      Dialog Operation Types
 
 eTableEntry 4
-aZKey      92484584
-
-eTableEntry 4
 aZKey      1320633
 aExternalValue Dialog Operation
 aInternalValue D
@@ -109,9 +106,6 @@ aZKey      1320648
 aName      Domain Operation Types
 
 eTableEntry 4
-aZKey      92484585
-
-eTableEntry 4
 aZKey      1320649
 aExternalValue Domain Operation
 aInternalValue M
@@ -124,9 +118,6 @@ aInternalValue L
 eContext   3
 aZKey      1320643
 aName      Global Operation Types
-
-eTableEntry 4
-aZKey      92484586
 
 eTableEntry 4
 aZKey      1320645
@@ -146,9 +137,6 @@ aInternalValue L
 eContext   3
 aZKey      1320636
 aName      Object Operation Types
-
-eTableEntry 4
-aZKey      92484587
 
 eTableEntry 4
 aZKey      1320638
@@ -178,9 +166,6 @@ aInternalValue L
 eContext   3
 aZKey      1320621
 aName      OperationTypesShort
-
-eTableEntry 4
-aZKey      92484588
 
 eTableEntry 4
 aZKey      1320623
@@ -231,9 +216,6 @@ eContext   3
 aZKey      1320609
 aName      ZeidonOperationTypes
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92484589
 
 eTableEntry 4
 aZKey      1320610
@@ -319,9 +301,6 @@ aZKey      90000019
 aName      Default
 
 eTableEntry 4
-aZKey      92484582
-
-eTableEntry 4
 aZKey      90000021
 aExternalValue Default
 aInternalValue Y
@@ -334,9 +313,6 @@ eContext   3
 aZKey      90000015
 aName      Y/N
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92484583
 
 eTableEntry 4
 aZKey      90000017
@@ -450,64 +426,6 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      90000208
-aName      SironDB_Type
-aDesc      For Siron DB Handler, the physical database type
-aDomainType T
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      90000209
-aName      SironDB_Type
-aIsDefault Y
-
-eTableEntry 4
-aZKey      92484541
-
-eTableEntry 4
-aZKey      90000210
-aExternalValue Oracle
-aInternalValue O
-
-eTableEntry 4
-aZKey      90000211
-aExternalValue Informix
-aInternalValue I
-
-eTableEntry 4
-aZKey      90000212
-aExternalValue DB2
-aInternalValue 2
-
-eTableEntry 4
-aZKey      90000213
-aExternalValue Ingres
-aInternalValue G
-
-eTableEntry 4
-aZKey      90000214
-aExternalValue RDB
-aInternalValue R
-
-eTableEntry 4
-aZKey      90000215
-aExternalValue ODBC
-aInternalValue D
-
-eTableEntry 4
-aZKey      90000216
-aExternalValue Flat File
-aInternalValue F
-
-eTableEntry 4
-aZKey      98197965
-aExternalValue SAP R3
-aInternalValue S
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      90026793
 aName      LanguageType
 aDesc      Source language type  - VML or C
@@ -520,9 +438,6 @@ eContext   3
 aZKey      90026794
 aName      LanguageType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110001393
 
 eTableEntry 4
 aZKey      90026795
@@ -558,9 +473,6 @@ eContext   3
 aZKey      90201052
 aName      LOD_DB_DerivedValue
 aIsDefault Y
-
-eTableEntry 4
-aZKey      92484528
 
 eTableEntry 4
 aZKey      90201053
@@ -608,3 +520,157 @@ eContext   3
 aZKey      1165601
 aName      TEXT
 
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      90000089
+aName      DateTime
+aDesc      Basic Timestamp Domain
+aDomainType A
+aDataType  T
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDateTime
+
+eContext   3
+aZKey      90000090
+aName      DateTime
+aEditString YYYYmmddHHMISS999
+aJavaEditString yyyy-MM-dd_HH:mm:ss.SSS
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1320095
+aName      DM_DomainType
+aDesc      Type of Zeidon Domain
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1320102
+aName      Display
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484512
+
+eTableEntry 4
+aZKey      1320104
+aExternalValue Table
+aInternalValue T
+
+eTableEntry 4
+aZKey      1320105
+aExternalValue Expression
+aInternalValue E
+
+eTableEntry 4
+aZKey      1320106
+aExternalValue Algorithm
+aInternalValue A
+
+eTableEntry 4
+aZKey      1320107
+aExternalValue Format
+aInternalValue F
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      1319867
+aName      DataTypeDomain
+aDesc      Zeidon domain datatypes (logical) supported by Core
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      1319868
+aName      DataTypeDomain
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92484501
+
+eTableEntry 4
+aZKey      1319870
+aExternalValue String - Any length
+aInternalValue S
+
+eTableEntry 4
+aZKey      1319871
+aExternalValue Number (±2 billion)
+aInternalValue L
+
+eTableEntry 4
+aZKey      1319872
+aExternalValue Decimal (15 digits)
+aInternalValue M
+
+eTableEntry 4
+aZKey      90024741
+aExternalValue Date
+aInternalValue D
+
+eTableEntry 4
+aZKey      1319873
+aExternalValue Date & Time
+aInternalValue T
+
+eTableEntry 4
+aZKey      90025043
+aExternalValue Time
+aInternalValue I
+
+eTableEntry 4
+aZKey      1319874
+aExternalValue BLOb - Binary Large Object
+aInternalValue B
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90000040
+aName      QSFileName
+aDesc      QuinSoft File Name - 32 chars
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      90000041
+aName      QSFILENAME
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      110003499
+aName      ZKey
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      110003500
+aName      ZKey
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      1158059
+aName      Note
+aDesc      10000 byte string
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      1158060
+aName      Note
+aIsDefault Y

@@ -200,4 +200,10 @@ class ActivateOiFromFileDb implements Activator
     {
         throw new ZeidonException( "Lazy-load activates are not supported by File DB Handler" );
     }
+
+    @Override
+    public void dropOutstandingLocks()
+    {
+        throw new ZeidonException( "Not implemented" );
+    }
 }

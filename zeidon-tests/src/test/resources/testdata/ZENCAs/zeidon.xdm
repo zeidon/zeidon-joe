@@ -16537,20 +16537,6 @@ aExternalValue Financial Problems
 aInternalValue 2
 
 eDomain    2
-aZKey      92551766
-aName      XML_SubentityPosition
-aDesc      Used to position expansion of a subentity within parenet attributes in generating an XML file from an object instance.
-aDomainType E
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-
-eContext   3
-aZKey      92551767
-aName      XML_SubentityPosition
-aIsDefault Y
-
-eDomain    2
 aJavaClass com.quinsoft.altdomain.AltStaticTableDomain
 aZKey      86698020
 aName      Y/N

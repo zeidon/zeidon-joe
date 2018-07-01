@@ -39,9 +39,9 @@ import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.InternalType;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.BufferedBinaryStreamReader;
 import com.quinsoft.zeidon.utils.PortableFileReader;
@@ -208,7 +208,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
     @Override
     public void endFile()
     {
-
+        view.setAllowHiddenEntities( false );
     }
 
     @Override
@@ -245,6 +245,8 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
         if ( view.getLodDef() != lodDef )
             throw new ZeidonException( "LodDef of empty view (%s) does not match LodDef from OI stream (%s)",
                                        view.getLodDef().getName(), lodDef.getName() );
+
+        view.setAllowHiddenEntities( true );
     }
 
     /**

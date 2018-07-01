@@ -7,6 +7,8 @@ import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.scala.QualBuilder
 import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.PessimisticLockingException
+import com.quinsoft.zeidon.ZeidonException
 
 
 /**
@@ -17,9 +19,15 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     def getObjectEngine(): ObjectEngine
 
     error {
+      case e: PessimisticLockingException => {
+          getObjectEngine().getSystemTask.log().debug( "LOD is locked" )
+          Locked( "LOD is locked" )
+      }
+
       case e: Throwable => {
         getObjectEngine().getSystemTask.log().error(e)
         e.printStackTrace();
+        UnprocessableEntity( e.getMessage )
       }
     }
 
@@ -27,7 +35,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     before() {
         contentType = "text/json"
         val systemTask = getObjectEngine().getSystemTask
-        systemTask.log().debug("Body => %s", request.body )
+        systemTask.log().debug("Path   => %s", request.pathInfo )
+        systemTask.log().debug("Params => %s", request.parameters )
+        systemTask.log().debug("Body   => %s", request.body )
     }
 
     get("/:appName") {
@@ -42,40 +52,57 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             val qual = view.buildQual()
 
             if ( params.contains( "qual" ) ) {
-              qual.fromJson( params( "qual" ) )
+                qual.fromJson( params( "qual" ) )
             }
-            else {
-              qual.rootOnlyMultiple()
+            else
+            if ( params.contains( "qualOi" ) ) {
+                val qualStr = params( "qualOi" )
+                qual.fromSerializedOi( qualStr )
+            } else {
+                qual.rootOnlyMultiple()
             }
 
-            qual.withPaging( params.getOrElse("perPage", "20").toInt,
-                             params.getOrElse("page", "1").toInt,
-                             params.getOrElse("getTotal", "false").toBoolean )
-
-            qual.readOnly.activate()
-            serializeResponse( view )
+            qual.activate()
+            Ok( serializeResponse( view ) )
         }
     }
 
     get("/:appName/:lod/:id") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            val view = task.newView( lodName )
-                           .activateWhere( _.root.key = params( "id" ) )
+            val view = task.using( lodName )
+                           .activate( _.root.key = params( "id" ) )
 
-            serializeResponse( view )
+            Ok( serializeResponse( view ) )
         }
     }
 
     delete("/:appName/:lod/:id") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            val view = task.newView( lodName )
-                           .activateWhere( _.root.key = params( "id" ) )
+            val view = task.using( lodName )
+                           .activate( _.root.key = params( "id" ) )
 
             view.root.deleteEntity()
             view.commit()
-            ""
+            Ok("")
+        }
+    }
+
+    post("/:appName/:lod/dropLock") {
+        getObjectEngine().forTask( params( "appName" ) ) { task =>
+            val view = new View( task ) basedOn params( "lod" )
+            val qual = view.buildQual()
+
+            if ( params.contains( "qual" ) ) {
+              qual.fromJson( params( "qual" ) )
+            }
+            else {
+                throw new ZeidonException("dropLock requires qualification")
+            }
+
+            qual.dropLocks()
+            Ok( "Locks dropped" )
         }
     }
 
@@ -94,12 +121,12 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
             val serialized = view.serializeOi.asJson.withIncremental().toString()
             task.log().debug( serialized )
-            serialized
+            Ok(serialized)
         }
     }
 
     get("/echo/:string") {
-        params("string" )
+        Ok( params("string" ) )
     }
 
     get("/:appName/xod/:name") {
@@ -110,15 +137,19 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             // Return it as JSON
             val serialized = xod.serializeOi.asJson.toString()
             task.log().debug( serialized )
-            serialized
+            Ok( serialized )
         }
     }
 
-    protected def serializeResponse( view: View ) : String = {
+    protected def serializeResponse( view: View,
+                                     withIncrementals: Boolean = true ) : String = {
         if ( view.isEmpty )
             return "{}"
 
-        val serialized = view.serializeOi.asJson.withIncremental().toString()
+        val serialized = view.serializeOi
+                             .asJson
+                             .withIncremental( withIncrementals )
+                             .toString()
         view.log().debug(serialized)
         return serialized
     }

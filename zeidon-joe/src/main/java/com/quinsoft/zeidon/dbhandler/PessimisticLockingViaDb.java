@@ -37,6 +37,7 @@ import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonDbException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
@@ -54,9 +55,9 @@ import com.quinsoft.zeidon.utils.KeyStringBuilder;
  */
 public class PessimisticLockingViaDb implements PessimisticLockingHandler
 {
-    private final Task task;
-    private final LodDef lodDef;
-    private final Application application;
+    private Task task;
+    private LodDef lodDef;
+    private Application application;
 
     /**
      * This is the ZPLOCK OI that has the lock entities that will be written to the DB.
@@ -68,12 +69,13 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
      */
     private boolean lockPerformed = false;
     private boolean lockedByQual = false;
-    private final EntityDef rootEntityDef;
-    private final Map<EntityDef, QualEntity> qualMap;
-    private final ActivateOptions activateOptions;
+    private EntityDef rootEntityDef;
+    private Map<EntityDef, QualEntity> qualMap;
+    private ActivateOptions activateOptions;
     private GlobalJavaLock javaLock;
 
-    public PessimisticLockingViaDb( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  ) throws PessimisticLockingException
+    @Override
+    public void initialize( ActivateOptions options, Map<EntityDef, QualEntity> qualMap  )
     {
         task = options.getTask();
         lodDef = options.getLodDef();
@@ -137,8 +139,13 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
         if ( rootQual.qualAttribs.size() != 1 )
             return;
 
-        KeyStringBuilder builder = new KeyStringBuilder();
         QualAttrib qualAttrib = rootQual.qualAttribs.get( 0 );
+
+        // Some day we'd like to handle "IN" but that is not this day.
+        if ( ! StringUtils.equals( qualAttrib.oper, "=" ) )
+            return;
+
+        KeyStringBuilder builder = new KeyStringBuilder();
         builder.appendKey( task, qualAttrib.attributeDef, qualAttrib.value );
 
         lockOi.cursor( "ZeidonLock" ).createEntity()
@@ -343,7 +350,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     private void writeLocks( View view )
     {
         int retryCount = 4;
-        Exception exception = null;
+        ZeidonDbException exception = null;
         for ( int i = 0; i < retryCount; i++ )
         {
             try
@@ -351,7 +358,7 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
                 lockOi.commit();
                 return;
             }
-            catch ( Exception e )
+            catch ( ZeidonDbException e )
             {
                 exception = e;
 
@@ -408,11 +415,12 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     }
 
     @Override
-    public void acquireOiLocks( View view ) throws PessimisticLockingException
+    public boolean acquireOiLocks( View view ) throws PessimisticLockingException
     {
         // This call is for DB handlers that can't have more than one open connection
         // at a time.  For normal processing this doesn't do anything.  Those DB handlers
         // would call acquireLocksFromView( view ) from here.
+        return true;
     }
 
     /* (non-Javadoc)
@@ -421,12 +429,22 @@ public class PessimisticLockingViaDb implements PessimisticLockingHandler
     @Override
     public void releaseLocks( View view )
     {
-        lockCursor.deleteAll();
+        for ( EntityInstance ei : lockCursor.allEntities() )
+            ei.setIncrementalFlags( IncrementalEntityFlags.DELETED );
+
         lockOi.commit();
     }
 
     private static class GlobalJavaLock
     {
         private final Lock lock = new ReentrantLock();
+    }
+
+    @Override
+    public void dropOutstandingLocks(  )
+    {
+        createLockOi( task );
+        addQualLocksToLockOi();
+        releaseLocks( null );
     }
 }

@@ -19,6 +19,7 @@
 package com.quinsoft.zeidon.utils;
 
 import java.beans.FeatureDescriptor;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import javax.el.ValueExpression;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 import de.odysseus.el.ExpressionFactoryImpl;
@@ -139,8 +141,6 @@ public class StringInterpolator
         public Object getValue( ELContext context, Object base, Object propertyObject )
         {
             String property = propertyObject.toString();
-            System.out.println( "getValue " + property );
-
             context.setPropertyResolved( true );
             if ( base == null )
             {
@@ -171,9 +171,32 @@ public class StringInterpolator
                 EntityInstance ei = (EntityInstance) base;
                 return ei.getAttribute( property ).getString();
             }
+            else if ( base.getClass().getName().equals( "com.quinsoft.zeidon.scala.View" ) )
+            {
+                View view = convertScalaViewToJavaView( base );
+                return view.cursor( property );
+            }
 
             context.setPropertyResolved( false );
             return null;
+        }
+
+        /**
+         * Convert the .scala View to a .java View.  We'll do this dynamically so we don't require
+         * the zeidon-scala .jar file be included in the classpath.
+         * 
+         */
+        private View convertScalaViewToJavaView( Object base )
+        {
+            try
+            {
+                Method method = base.getClass().getMethod("jview");
+                return (View) method.invoke( base );
+            } 
+            catch ( Exception e )
+            {
+                throw ZeidonException.wrapException( e );
+            }
         }
 
         @Override

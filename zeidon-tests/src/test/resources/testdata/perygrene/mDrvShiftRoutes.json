@@ -1,0 +1,1446 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Perygrene",
+      "odName" : "mDrvShiftRoutes",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "DriverShift" : [ {
+      "ID" : 12537,
+      "DayOfWeek" : "Tuesday",
+      "ExpectedStartDateTime" : "2018-03-20T16:30:00.000-07:00",
+      "ExpectedEndDateTime" : "2018-03-21T04:30:00.000-07:00",
+      "FK_ID_DRIVER" : 128,
+      "FKC_ID_VEHICLECOMBINATION" : 5441,
+      "DeliveryRoute" : [ {
+        "ID" : 27587,
+        "ScheduledDateTime" : "2018-03-20T16:30:00.000-07:00",
+        "ExpectedStartDateTime" : "2018-03-20T16:30:00.000-07:00",
+        "ExpectedEndDateTime" : "2018-03-20T18:17:00.000-07:00",
+        "SortOrderWithinShift" : 1,
+        "wChangeOrderNumber" : 1,
+        "FK_ID_CARRIER" : 22,
+        "FK_ID_EMPLOYEESHIFT" : 12537,
+        "FK_ID_VEHICLECOMBINATION" : 5441,
+        "FK_ID_DRIVER" : 128,
+        "DeliveryLeg" : [ {
+          "ID" : 176114,
+          "Type" : "H-T",
+          "TripStandardInMinutes" : 19,
+          "DistanceInMiles" : 10.045111660680776,
+          "ExpectedStartDateTime" : "2018-03-20T16:30:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T16:49:00.000-07:00",
+          "SortOrder" : 1,
+          "FKTO_ID_ADDRESS" : 1988,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27587,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 1988,
+            "Type" : "B",
+            "Line1" : "2351 Harbor Dr",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92113-3637",
+            "County" : "San Diego",
+            "Longitude" : -117.14082,
+            "Latitude" : 32.6936,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "ToDeliveryLegTerminal" : [ {
+              "ID" : 28,
+              "Name" : "Chevron San Diego**",
+              "FK_ID_ORGANIZATION" : 37,
+              "FK_ID_CUSTOMER" : 28,
+              "FKP_ID_ADDRESS" : 1988,
+              "ToDeliveryLegTerminalAdd" : [ {
+                "ID" : 1988,
+                "Line1" : "2351 Harbor Dr",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176115,
+          "Type" : "T-D",
+          "TripStandardInMinutes" : 43,
+          "DistanceInMiles" : 34.3,
+          "ExpectedStartDateTime" : "2018-03-20T16:49:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T17:32:00.000-07:00",
+          "SortOrder" : 2,
+          "FKTO_ID_ADDRESS" : 13812,
+          "FKFROM_ID_ADDRESS" : 1988,
+          "FK_ID_DELIVERYROUTE" : 27587,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 1988,
+            "Type" : "B",
+            "Line1" : "2351 Harbor Dr",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92113-3637",
+            "County" : "San Diego",
+            "Longitude" : -117.14082,
+            "Latitude" : 32.6936,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "FromDeliveryLegTerminal" : [ {
+              "ID" : 28,
+              "Name" : "Chevron San Diego**",
+              "FK_ID_ORGANIZATION" : 37,
+              "FK_ID_CUSTOMER" : 28,
+              "FKP_ID_ADDRESS" : 1988,
+              "FromDeliveryLegTerminalAdd" : [ {
+                "ID" : 1988,
+                "Line1" : "2351 Harbor Dr",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13812,
+            "Line1" : "725 Center Dr",
+            "City" : "San Marcos",
+            "StateProvince" : "CA",
+            "PostalCode" : "92069-3536",
+            "County" : "San Diego",
+            "Longitude" : -117.12092,
+            "Latitude" : 33.13471,
+            "ToDeliveryLegLocation" : [ {
+              "ID" : 11630,
+              "Name" : "Costco # 1080**",
+              "FKD_ID_ADDRESS" : 13812,
+              "ToDeliveryLegLocationAdd" : [ {
+                "ID" : 13812,
+                "Line1" : "725 Center Dr",
+                "City" : "San Marcos"
+              } ]
+            } ]
+          } ]
+        } ],
+        "FuelStop" : [ {
+          "ID" : 53053,
+          "ExpectedLoadTimeMinutes" : 0,
+          "SortOrder" : 1,
+          "FK_ID_DELIVERYROUTE" : 27587,
+          "FK_ID_TERMINAL" : 28,
+          "FuelStopTerminal" : [ {
+            "ID" : 28,
+            "Name" : "Chevron San Diego**",
+            "FK_ID_ORGANIZATION" : 37,
+            "FK_ID_CUSTOMER" : 28,
+            "FKP_ID_ADDRESS" : 1988,
+            "FuelStopTerminalAddress" : [ {
+              "ID" : 1988,
+              "Line1" : "2351 Harbor Dr",
+              "City" : "San Diego"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47712,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25013,
+            "FK_ID_LOADINGACCOUNT" : 396,
+            "FK_ID_TERMINAL" : 28,
+            "FK_ID_DELIVERYLOCATION" : 11630,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25013,
+              "FK_ID_DELIVERYROUTE" : 27587,
+              "FK_ID_Z_ORDER" : 24513,
+              "FuelStopOrder" : [ {
+                "ID" : 24513,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54513,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 963
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 396,
+              "LoadingNumber" : "8301397",
+              "FKBILL_ID_ORGANIZATION" : 963,
+              "FK_ID_TERMINAL" : 28,
+              "FKSUP_ID_ORGANIZATION" : 1010,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        }, {
+          "ID" : 53054,
+          "ExpectedUnloadTimeMinutes" : 45,
+          "SortOrder" : 2,
+          "FK_ID_DELIVERYROUTE" : 27587,
+          "FK_ID_DELIVERYLOCATION" : 11630,
+          "FuelStopDeliveryLocation" : [ {
+            "ID" : 11630,
+            "Name" : "Costco # 1080**",
+            "FKD_ID_ADDRESS" : 13812,
+            "FuelStopDeliveryLocationAddress" : [ {
+              "ID" : 13812,
+              "Line1" : "725 Center Dr",
+              "City" : "San Marcos"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47712,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25013,
+            "FK_ID_LOADINGACCOUNT" : 396,
+            "FK_ID_TERMINAL" : 28,
+            "FK_ID_DELIVERYLOCATION" : 11630,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25013,
+              "FK_ID_DELIVERYROUTE" : 27587,
+              "FK_ID_Z_ORDER" : 24513,
+              "FuelStopOrder" : [ {
+                "ID" : 24513,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54513,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 963
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 396,
+              "LoadingNumber" : "8301397",
+              "FKBILL_ID_ORGANIZATION" : 963,
+              "FK_ID_TERMINAL" : 28,
+              "FKSUP_ID_ORGANIZATION" : 1010,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        } ],
+        "LoadRequest" : [ {
+          "ID" : 25013,
+          "Status" : "Scheduled",
+          "SpecialDriverInstructions" : " ****** TEST DATABASE DB2 ******",
+          "FK_ID_DELIVERYROUTE" : 27587,
+          "FK_ID_Z_ORDER" : 24513,
+          "Order" : [ {
+            "ID" : 24513,
+            "InternalOrderNumber" : 54513,
+            "Type" : "FTL",
+            "FK_ID_CARRIER" : 22,
+            "FK_ID_ORGANIZATION" : 963
+          } ]
+        } ],
+        "RouteVehicleCombination" : [ {
+          "ID" : 5441,
+          "CombinationDateTime" : "2018-01-17T15:58:20.980-08:00",
+          "FK_ID_VEHICLEPOWERUNIT" : 110,
+          "RouteVehiclePowerUnit" : [ {
+            "ID" : 110,
+            "TruckIdentifier" : "Truck # 16",
+            "FK_ID_ADDRESS" : 13702,
+            "FK_ID_CARRIER" : 22
+          } ],
+          "RouteVehicleDeliveryTank" : [ {
+            "ID" : 156,
+            "Type" : "T",
+            "TruckTrailerIdentifier" : "TRAILER # 116",
+            "FK_ID_CARRIER" : 22
+          } ]
+        } ],
+        "DeliveredByDriver" : [ {
+          "ID" : 128,
+          "Status" : "A",
+          "DLNumber" : "U2013514",
+          "FK_ID_PERSON" : 330,
+          "FK_ID_CARRIER" : 22,
+          "DeliveredByDriverPerson" : [ {
+            "ID" : 330,
+            "LastName" : "Bennett**",
+            "FirstName" : "Gary"
+          } ]
+        } ]
+      }, {
+        "ID" : 27594,
+        "ScheduledDateTime" : "2018-03-20T18:09:00.000-07:00",
+        "ExpectedStartDateTime" : "2018-03-20T18:17:00.000-07:00",
+        "ExpectedEndDateTime" : "2018-03-20T20:30:00.000-07:00",
+        "SortOrderWithinShift" : 2,
+        "wChangeOrderNumber" : 2,
+        "FK_ID_CARRIER" : 22,
+        "FK_ID_EMPLOYEESHIFT" : 12537,
+        "FK_ID_VEHICLECOMBINATION" : 5441,
+        "FK_ID_DRIVER" : 128,
+        "DeliveryLeg" : [ {
+          "ID" : 176116,
+          "TripStandardInMinutes" : 43,
+          "DistanceInMiles" : 34.3,
+          "ExpectedStartDateTime" : "2018-03-20T18:17:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T19:00:00.000-07:00",
+          "SortOrder" : 1,
+          "FKTO_ID_ADDRESS" : 1988,
+          "FKFROM_ID_ADDRESS" : 13812,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13812,
+            "Line1" : "725 Center Dr",
+            "City" : "San Marcos",
+            "StateProvince" : "CA",
+            "PostalCode" : "92069-3536",
+            "County" : "San Diego",
+            "Longitude" : -117.12092,
+            "Latitude" : 33.13471,
+            "FromDeliveryLegLocation" : [ {
+              "ID" : 11630,
+              "Name" : "Costco # 1080**",
+              "FKD_ID_ADDRESS" : 13812,
+              "FromDeliveryLegLocAddress" : [ {
+                "ID" : 13812,
+                "Line1" : "725 Center Dr",
+                "City" : "San Marcos"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 1988,
+            "Type" : "B",
+            "Line1" : "2351 Harbor Dr",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92113-3637",
+            "County" : "San Diego",
+            "Longitude" : -117.14082,
+            "Latitude" : 32.6936,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "ToDeliveryLegTerminal" : [ {
+              "ID" : 28,
+              "Name" : "Chevron San Diego**",
+              "FK_ID_ORGANIZATION" : 37,
+              "FK_ID_CUSTOMER" : 28,
+              "FKP_ID_ADDRESS" : 1988,
+              "ToDeliveryLegTerminalAdd" : [ {
+                "ID" : 1988,
+                "Line1" : "2351 Harbor Dr",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176117,
+          "TripStandardInMinutes" : 27,
+          "DistanceInMiles" : 17.2,
+          "ExpectedStartDateTime" : "2018-03-20T19:00:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T19:27:00.000-07:00",
+          "SortOrder" : 2,
+          "FKTO_ID_ADDRESS" : 14026,
+          "FKFROM_ID_ADDRESS" : 1988,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 1988,
+            "Type" : "B",
+            "Line1" : "2351 Harbor Dr",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92113-3637",
+            "County" : "San Diego",
+            "Longitude" : -117.14082,
+            "Latitude" : 32.6936,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "FromDeliveryLegTerminal" : [ {
+              "ID" : 28,
+              "Name" : "Chevron San Diego**",
+              "FK_ID_ORGANIZATION" : 37,
+              "FK_ID_CUSTOMER" : 28,
+              "FKP_ID_ADDRESS" : 1988,
+              "FromDeliveryLegTerminalAdd" : [ {
+                "ID" : 1988,
+                "Line1" : "2351 Harbor Dr",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 14026,
+            "Line1" : "101 Town Center Pkwy",
+            "City" : "Santee",
+            "StateProvince" : "CA",
+            "PostalCode" : "92071-5802",
+            "County" : "San Diego",
+            "Longitude" : -116.98832,
+            "Latitude" : 32.83981,
+            "ToDeliveryLegLocation" : [ {
+              "ID" : 11844,
+              "Name" : "Costco #403**",
+              "FKD_ID_ADDRESS" : 14026,
+              "ToDeliveryLegLocationAdd" : [ {
+                "ID" : 14026,
+                "Line1" : "101 Town Center Pkwy",
+                "City" : "Santee"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176334,
+          "TripStandardInMinutes" : 18,
+          "DistanceInMiles" : 7.6,
+          "ExpectedStartDateTime" : "2018-03-20T20:12:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T20:30:00.000-07:00",
+          "SortOrder" : 3,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 14026,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 14026,
+            "Line1" : "101 Town Center Pkwy",
+            "City" : "Santee",
+            "StateProvince" : "CA",
+            "PostalCode" : "92071-5802",
+            "County" : "San Diego",
+            "Longitude" : -116.98832,
+            "Latitude" : 32.83981,
+            "FromDeliveryLegLocation" : [ {
+              "ID" : 11844,
+              "Name" : "Costco #403**",
+              "FKD_ID_ADDRESS" : 14026,
+              "FromDeliveryLegLocAddress" : [ {
+                "ID" : 14026,
+                "Line1" : "101 Town Center Pkwy",
+                "City" : "Santee"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        }, {
+          "ID" : 176336,
+          "TripStandardInMinutes" : 0,
+          "DistanceInMiles" : 0.0,
+          "ExpectedStartDateTime" : "2018-03-20T20:30:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T20:30:00.000-07:00",
+          "SortOrder" : 4,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        }, {
+          "ID" : 176338,
+          "TripStandardInMinutes" : 0,
+          "DistanceInMiles" : 0.0,
+          "ExpectedStartDateTime" : "2018-03-20T20:30:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T20:30:00.000-07:00",
+          "SortOrder" : 5,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        } ],
+        "FuelStop" : [ {
+          "ID" : 53067,
+          "ExpectedLoadTimeMinutes" : 0,
+          "SortOrder" : 1,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FK_ID_TERMINAL" : 28,
+          "FuelStopTerminal" : [ {
+            "ID" : 28,
+            "Name" : "Chevron San Diego**",
+            "FK_ID_ORGANIZATION" : 37,
+            "FK_ID_CUSTOMER" : 28,
+            "FKP_ID_ADDRESS" : 1988,
+            "FuelStopTerminalAddress" : [ {
+              "ID" : 1988,
+              "Line1" : "2351 Harbor Dr",
+              "City" : "San Diego"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47714,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25015,
+            "FK_ID_LOADINGACCOUNT" : 396,
+            "FK_ID_TERMINAL" : 28,
+            "FK_ID_DELIVERYLOCATION" : 11844,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25015,
+              "FK_ID_DELIVERYROUTE" : 27594,
+              "FK_ID_Z_ORDER" : 24515,
+              "FuelStopOrder" : [ {
+                "ID" : 24515,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54515,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 963
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 396,
+              "LoadingNumber" : "8301397",
+              "FKBILL_ID_ORGANIZATION" : 963,
+              "FK_ID_TERMINAL" : 28,
+              "FKSUP_ID_ORGANIZATION" : 1010,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        }, {
+          "ID" : 53068,
+          "ExpectedUnloadTimeMinutes" : 45,
+          "SortOrder" : 2,
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FK_ID_DELIVERYLOCATION" : 11844,
+          "FuelStopDeliveryLocation" : [ {
+            "ID" : 11844,
+            "Name" : "Costco #403**",
+            "FKD_ID_ADDRESS" : 14026,
+            "FuelStopDeliveryLocationAddress" : [ {
+              "ID" : 14026,
+              "Line1" : "101 Town Center Pkwy",
+              "City" : "Santee"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47714,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25015,
+            "FK_ID_LOADINGACCOUNT" : 396,
+            "FK_ID_TERMINAL" : 28,
+            "FK_ID_DELIVERYLOCATION" : 11844,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25015,
+              "FK_ID_DELIVERYROUTE" : 27594,
+              "FK_ID_Z_ORDER" : 24515,
+              "FuelStopOrder" : [ {
+                "ID" : 24515,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54515,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 963
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 396,
+              "LoadingNumber" : "8301397",
+              "FKBILL_ID_ORGANIZATION" : 963,
+              "FK_ID_TERMINAL" : 28,
+              "FKSUP_ID_ORGANIZATION" : 1010,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        } ],
+        "LoadRequest" : [ {
+          "ID" : 25015,
+          "Status" : "Scheduled",
+          "SpecialDriverInstructions" : " ****** TEST DATABASE DB2 ******",
+          "FK_ID_DELIVERYROUTE" : 27594,
+          "FK_ID_Z_ORDER" : 24515,
+          "Order" : [ {
+            "ID" : 24515,
+            "InternalOrderNumber" : 54515,
+            "Type" : "FTL",
+            "FK_ID_CARRIER" : 22,
+            "FK_ID_ORGANIZATION" : 963
+          } ]
+        } ],
+        "RouteVehicleCombination" : [ {
+          "ID" : 5441,
+          "CombinationDateTime" : "2018-01-17T15:58:20.980-08:00",
+          "FK_ID_VEHICLEPOWERUNIT" : 110,
+          "RouteVehiclePowerUnit" : [ {
+            "ID" : 110,
+            "TruckIdentifier" : "Truck # 16",
+            "FK_ID_ADDRESS" : 13702,
+            "FK_ID_CARRIER" : 22
+          } ],
+          "RouteVehicleDeliveryTank" : [ {
+            "ID" : 156,
+            "Type" : "T",
+            "TruckTrailerIdentifier" : "TRAILER # 116",
+            "FK_ID_CARRIER" : 22
+          } ]
+        } ],
+        "DeliveredByDriver" : [ {
+          "ID" : 128,
+          "Status" : "A",
+          "DLNumber" : "U2013514",
+          "FK_ID_PERSON" : 330,
+          "FK_ID_CARRIER" : 22,
+          "DeliveredByDriverPerson" : [ {
+            "ID" : 330,
+            "LastName" : "Bennett**",
+            "FirstName" : "Gary"
+          } ]
+        } ]
+      }, {
+        "ID" : 27606,
+        "ScheduledDateTime" : "2018-03-20T19:00:00.000-07:00",
+        "ExpectedStartDateTime" : "2018-03-20T20:30:00.000-07:00",
+        "ExpectedEndDateTime" : "2018-03-20T22:19:00.000-07:00",
+        "SortOrderWithinShift" : 3,
+        "wChangeOrderNumber" : 3,
+        "FK_ID_CARRIER" : 22,
+        "FK_ID_EMPLOYEESHIFT" : 12537,
+        "FK_ID_VEHICLECOMBINATION" : 5459,
+        "FK_ID_DRIVER" : 128,
+        "DeliveryLeg" : [ {
+          "ID" : 176118,
+          "TripStandardInMinutes" : 19,
+          "DistanceInMiles" : 10.045111660680776,
+          "ExpectedStartDateTime" : "2018-03-20T20:30:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T20:49:00.000-07:00",
+          "SortOrder" : 1,
+          "FKTO_ID_ADDRESS" : 1988,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 1988,
+            "Type" : "B",
+            "Line1" : "2351 Harbor Dr",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92113-3637",
+            "County" : "San Diego",
+            "Longitude" : -117.14082,
+            "Latitude" : 32.6936,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "ToDeliveryLegTerminal" : [ {
+              "ID" : 28,
+              "Name" : "Chevron San Diego**",
+              "FK_ID_ORGANIZATION" : 37,
+              "FK_ID_CUSTOMER" : 28,
+              "FKP_ID_ADDRESS" : 1988,
+              "ToDeliveryLegTerminalAdd" : [ {
+                "ID" : 1988,
+                "Line1" : "2351 Harbor Dr",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176119,
+          "TripStandardInMinutes" : 27,
+          "DistanceInMiles" : 17.2,
+          "ExpectedStartDateTime" : "2018-03-20T20:49:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T21:16:00.000-07:00",
+          "SortOrder" : 2,
+          "FKTO_ID_ADDRESS" : 14026,
+          "FKFROM_ID_ADDRESS" : 1988,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 1988,
+            "Type" : "B",
+            "Line1" : "2351 Harbor Dr",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92113-3637",
+            "County" : "San Diego",
+            "Longitude" : -117.14082,
+            "Latitude" : 32.6936,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "FromDeliveryLegTerminal" : [ {
+              "ID" : 28,
+              "Name" : "Chevron San Diego**",
+              "FK_ID_ORGANIZATION" : 37,
+              "FK_ID_CUSTOMER" : 28,
+              "FKP_ID_ADDRESS" : 1988,
+              "FromDeliveryLegTerminalAdd" : [ {
+                "ID" : 1988,
+                "Line1" : "2351 Harbor Dr",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 14026,
+            "Line1" : "101 Town Center Pkwy",
+            "City" : "Santee",
+            "StateProvince" : "CA",
+            "PostalCode" : "92071-5802",
+            "County" : "San Diego",
+            "Longitude" : -116.98832,
+            "Latitude" : 32.83981,
+            "ToDeliveryLegLocation" : [ {
+              "ID" : 11844,
+              "Name" : "Costco #403**",
+              "FKD_ID_ADDRESS" : 14026,
+              "ToDeliveryLegLocationAdd" : [ {
+                "ID" : 14026,
+                "Line1" : "101 Town Center Pkwy",
+                "City" : "Santee"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176335,
+          "TripStandardInMinutes" : 18,
+          "DistanceInMiles" : 7.6,
+          "ExpectedStartDateTime" : "2018-03-20T22:01:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T22:19:00.000-07:00",
+          "SortOrder" : 3,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 14026,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 14026,
+            "Line1" : "101 Town Center Pkwy",
+            "City" : "Santee",
+            "StateProvince" : "CA",
+            "PostalCode" : "92071-5802",
+            "County" : "San Diego",
+            "Longitude" : -116.98832,
+            "Latitude" : 32.83981,
+            "FromDeliveryLegLocation" : [ {
+              "ID" : 11844,
+              "Name" : "Costco #403**",
+              "FKD_ID_ADDRESS" : 14026,
+              "FromDeliveryLegLocAddress" : [ {
+                "ID" : 14026,
+                "Line1" : "101 Town Center Pkwy",
+                "City" : "Santee"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        }, {
+          "ID" : 176337,
+          "TripStandardInMinutes" : 0,
+          "DistanceInMiles" : 0.0,
+          "ExpectedStartDateTime" : "2018-03-20T22:19:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T22:19:00.000-07:00",
+          "SortOrder" : 4,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        }, {
+          "ID" : 176339,
+          "TripStandardInMinutes" : 0,
+          "DistanceInMiles" : 0.0,
+          "ExpectedStartDateTime" : "2018-03-20T22:19:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T22:19:00.000-07:00",
+          "SortOrder" : 5,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        } ],
+        "FuelStop" : [ {
+          "ID" : 53091,
+          "ExpectedLoadTimeMinutes" : 0,
+          "SortOrder" : 1,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FK_ID_TERMINAL" : 28,
+          "FuelStopTerminal" : [ {
+            "ID" : 28,
+            "Name" : "Chevron San Diego**",
+            "FK_ID_ORGANIZATION" : 37,
+            "FK_ID_CUSTOMER" : 28,
+            "FKP_ID_ADDRESS" : 1988,
+            "FuelStopTerminalAddress" : [ {
+              "ID" : 1988,
+              "Line1" : "2351 Harbor Dr",
+              "City" : "San Diego"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47700,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25004,
+            "FK_ID_LOADINGACCOUNT" : 396,
+            "FK_ID_TERMINAL" : 28,
+            "FK_ID_DELIVERYLOCATION" : 11844,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25004,
+              "FK_ID_DELIVERYROUTE" : 27606,
+              "FK_ID_Z_ORDER" : 24504,
+              "FuelStopOrder" : [ {
+                "ID" : 24504,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54504,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 963
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 396,
+              "LoadingNumber" : "8301397",
+              "FKBILL_ID_ORGANIZATION" : 963,
+              "FK_ID_TERMINAL" : 28,
+              "FKSUP_ID_ORGANIZATION" : 1010,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        }, {
+          "ID" : 53092,
+          "ExpectedUnloadTimeMinutes" : 45,
+          "SortOrder" : 2,
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FK_ID_DELIVERYLOCATION" : 11844,
+          "FuelStopDeliveryLocation" : [ {
+            "ID" : 11844,
+            "Name" : "Costco #403**",
+            "FKD_ID_ADDRESS" : 14026,
+            "FuelStopDeliveryLocationAddress" : [ {
+              "ID" : 14026,
+              "Line1" : "101 Town Center Pkwy",
+              "City" : "Santee"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47700,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25004,
+            "FK_ID_LOADINGACCOUNT" : 396,
+            "FK_ID_TERMINAL" : 28,
+            "FK_ID_DELIVERYLOCATION" : 11844,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25004,
+              "FK_ID_DELIVERYROUTE" : 27606,
+              "FK_ID_Z_ORDER" : 24504,
+              "FuelStopOrder" : [ {
+                "ID" : 24504,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54504,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 963
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 396,
+              "LoadingNumber" : "8301397",
+              "FKBILL_ID_ORGANIZATION" : 963,
+              "FK_ID_TERMINAL" : 28,
+              "FKSUP_ID_ORGANIZATION" : 1010,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        } ],
+        "LoadRequest" : [ {
+          "ID" : 25004,
+          "Status" : "Scheduled",
+          "SpecialDriverInstructions" : " ****** TEST DATABASE DB2 ******",
+          "FK_ID_DELIVERYROUTE" : 27606,
+          "FK_ID_Z_ORDER" : 24504,
+          "Order" : [ {
+            "ID" : 24504,
+            "InternalOrderNumber" : 54504,
+            "Type" : "FTL",
+            "FK_ID_CARRIER" : 22,
+            "FK_ID_ORGANIZATION" : 963
+          } ]
+        } ],
+        "RouteVehicleCombination" : [ {
+          "ID" : 5459,
+          "CombinationDateTime" : "2018-01-17T16:02:05.297-08:00",
+          "FK_ID_VEHICLEPOWERUNIT" : 98,
+          "RouteVehiclePowerUnit" : [ {
+            "ID" : 98,
+            "TruckIdentifier" : "Truck # 4",
+            "FK_ID_ADDRESS" : 13702,
+            "FK_ID_CARRIER" : 22
+          } ],
+          "RouteVehicleDeliveryTank" : [ {
+            "ID" : 144,
+            "Type" : "T",
+            "TruckTrailerIdentifier" : "TRAILER # 40",
+            "FK_ID_CARRIER" : 22
+          } ]
+        } ],
+        "DeliveredByDriver" : [ {
+          "ID" : 128,
+          "Status" : "A",
+          "DLNumber" : "U2013514",
+          "FK_ID_PERSON" : 330,
+          "FK_ID_CARRIER" : 22,
+          "DeliveredByDriverPerson" : [ {
+            "ID" : 330,
+            "LastName" : "Bennett**",
+            "FirstName" : "Gary"
+          } ]
+        } ]
+      }, {
+        "ID" : 27619,
+        "ScheduledDateTime" : "2018-03-20T19:55:00.000-07:00",
+        "ExpectedStartDateTime" : "2018-03-20T22:19:00.000-07:00",
+        "ExpectedEndDateTime" : "2018-03-20T23:51:00.000-07:00",
+        "SortOrderWithinShift" : 4,
+        "wChangeOrderNumber" : 4,
+        "FK_ID_CARRIER" : 22,
+        "FK_ID_EMPLOYEESHIFT" : 12537,
+        "FK_ID_VEHICLECOMBINATION" : 5441,
+        "FK_ID_DRIVER" : 128,
+        "DeliveryLeg" : [ {
+          "ID" : 176120,
+          "TripStandardInMinutes" : 8,
+          "DistanceInMiles" : 2.1,
+          "ExpectedStartDateTime" : "2018-03-20T22:19:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T22:27:00.000-07:00",
+          "SortOrder" : 1,
+          "FKTO_ID_ADDRESS" : 1984,
+          "FKFROM_ID_ADDRESS" : 13702,
+          "FK_ID_DELIVERYROUTE" : 27619,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Initial_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 1984,
+            "Type" : "B",
+            "Line1" : "9950 San Diego Mission Rd",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92108-1705",
+            "County" : "San Diego",
+            "Longitude" : -117.11638,
+            "Latitude" : 32.78674,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "ToDeliveryLegTerminal" : [ {
+              "ID" : 23,
+              "Name" : "Kinder Morgan Mission Valley**",
+              "FK_ID_ORGANIZATION" : 28,
+              "FK_ID_CUSTOMER" : 19,
+              "FKP_ID_ADDRESS" : 1984,
+              "ToDeliveryLegTerminalAdd" : [ {
+                "ID" : 1984,
+                "Line1" : "9950 San Diego Mission Rd",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176121,
+          "TripStandardInMinutes" : 18,
+          "DistanceInMiles" : 11.9,
+          "ExpectedStartDateTime" : "2018-03-20T22:27:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T22:45:00.000-07:00",
+          "SortOrder" : 2,
+          "FKTO_ID_ADDRESS" : 13815,
+          "FKFROM_ID_ADDRESS" : 1984,
+          "FK_ID_DELIVERYROUTE" : 27619,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 1984,
+            "Type" : "B",
+            "Line1" : "9950 San Diego Mission Rd",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "US",
+            "PostalCode" : "92108-1705",
+            "County" : "San Diego",
+            "Longitude" : -117.11638,
+            "Latitude" : 32.78674,
+            "ModifiedDateTime" : "2017-11-15T16:00:39.000-08:00",
+            "LastModifiedBy" : "PS System Standardization",
+            "FromDeliveryLegTerminal" : [ {
+              "ID" : 23,
+              "Name" : "Kinder Morgan Mission Valley**",
+              "FK_ID_ORGANIZATION" : 28,
+              "FK_ID_CUSTOMER" : 19,
+              "FKP_ID_ADDRESS" : 1984,
+              "FromDeliveryLegTerminalAdd" : [ {
+                "ID" : 1984,
+                "Line1" : "9950 San Diego Mission Rd",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13815,
+            "Line1" : "4605 Morena Blvd",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "PostalCode" : "92117-3650",
+            "County" : "San Diego",
+            "Longitude" : -117.22753,
+            "Latitude" : 32.82286,
+            "ToDeliveryLegLocation" : [ {
+              "ID" : 11633,
+              "Name" : "Costco # 401**",
+              "FKD_ID_ADDRESS" : 13815,
+              "ToDeliveryLegLocationAdd" : [ {
+                "ID" : 13815,
+                "Line1" : "4605 Morena Blvd",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ]
+        }, {
+          "ID" : 176122,
+          "TripStandardInMinutes" : 21,
+          "DistanceInMiles" : 13.6,
+          "ExpectedStartDateTime" : "2018-03-20T23:30:00.000-07:00",
+          "ExpectedEndDateTime" : "2018-03-20T23:51:00.000-07:00",
+          "SortOrder" : 3,
+          "FKTO_ID_ADDRESS" : 13702,
+          "FKFROM_ID_ADDRESS" : 13815,
+          "FK_ID_DELIVERYROUTE" : 27619,
+          "FromDeliveryLegAddress" : [ {
+            "ID" : 13815,
+            "Line1" : "4605 Morena Blvd",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "PostalCode" : "92117-3650",
+            "County" : "San Diego",
+            "Longitude" : -117.22753,
+            "Latitude" : 32.82286,
+            "FromDeliveryLegLocation" : [ {
+              "ID" : 11633,
+              "Name" : "Costco # 401**",
+              "FKD_ID_ADDRESS" : 13815,
+              "FromDeliveryLegLocAddress" : [ {
+                "ID" : 13815,
+                "Line1" : "4605 Morena Blvd",
+                "City" : "San Diego"
+              } ]
+            } ]
+          } ],
+          "ToDeliveryLegAddress" : [ {
+            "ID" : 13702,
+            "Line1" : "6910 Mission Gorge Road",
+            "City" : "San Diego",
+            "StateProvince" : "CA",
+            "Country" : "United States",
+            "PostalCode" : "92120",
+            "Longitude" : -117.09406,
+            "Latitude" : 32.80004,
+            "ModifiedDateTime" : "2018-01-16T11:04:04.683-08:00",
+            "LastModifiedBy" : "admin",
+            "Final_HB_Carrier" : [ {
+              "ID" : 22,
+              "FK_ID_ORGANIZATION" : 962
+            } ]
+          } ]
+        } ],
+        "FuelStop" : [ {
+          "ID" : 53117,
+          "ExpectedLoadTimeMinutes" : 0,
+          "SortOrder" : 1,
+          "FK_ID_DELIVERYROUTE" : 27619,
+          "FK_ID_TERMINAL" : 23,
+          "FuelStopTerminal" : [ {
+            "ID" : 23,
+            "Name" : "Kinder Morgan Mission Valley**",
+            "FK_ID_ORGANIZATION" : 28,
+            "FK_ID_CUSTOMER" : 19,
+            "FKP_ID_ADDRESS" : 1984,
+            "FuelStopTerminalAddress" : [ {
+              "ID" : 1984,
+              "Line1" : "9950 San Diego Mission Rd",
+              "City" : "San Diego"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47717,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25018,
+            "FK_ID_LOADINGACCOUNT" : 440,
+            "FK_ID_TERMINAL" : 23,
+            "FK_ID_DELIVERYLOCATION" : 11633,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25018,
+              "FK_ID_DELIVERYROUTE" : 27619,
+              "FK_ID_Z_ORDER" : 24518,
+              "FuelStopOrder" : [ {
+                "ID" : 24518,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54518,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 972
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 440,
+              "LoadingNumber" : "473-94111",
+              "FKBILL_ID_ORGANIZATION" : 972,
+              "FK_ID_TERMINAL" : 23,
+              "FKSUP_ID_ORGANIZATION" : 992,
+              "FKCON_ID_ORGANIZATION" : 972,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        }, {
+          "ID" : 53118,
+          "ExpectedUnloadTimeMinutes" : 45,
+          "SortOrder" : 2,
+          "FK_ID_DELIVERYROUTE" : 27619,
+          "FK_ID_DELIVERYLOCATION" : 11633,
+          "FuelStopDeliveryLocation" : [ {
+            "ID" : 11633,
+            "Name" : "Costco # 401**",
+            "FKD_ID_ADDRESS" : 13815,
+            "FuelStopDeliveryLocationAddress" : [ {
+              "ID" : 13815,
+              "Line1" : "4605 Morena Blvd",
+              "City" : "San Diego"
+            } ]
+          } ],
+          "FuelRequest" : [ {
+            "ID" : 47717,
+            "RequestedGallonsToDeliver" : 8800.0,
+            "FK_ID_LOADREQUEST" : 25018,
+            "FK_ID_LOADINGACCOUNT" : 440,
+            "FK_ID_TERMINAL" : 23,
+            "FK_ID_DELIVERYLOCATION" : 11633,
+            "FK_ID_FUELTYPE" : 134,
+            "FuelStopLoadRequest" : [ {
+              "ID" : 25018,
+              "FK_ID_DELIVERYROUTE" : 27619,
+              "FK_ID_Z_ORDER" : 24518,
+              "FuelStopOrder" : [ {
+                "ID" : 24518,
+                "Type" : "FTL",
+                "InternalOrderNumber" : 54518,
+                "FK_ID_CARRIER" : 22,
+                "FK_ID_ORGANIZATION" : 972
+              } ]
+            } ],
+            "FuelType" : [ {
+              "ID" : 134,
+              "TypeName" : "87",
+              "FK_ID_BASICFUELTYPE" : 5,
+              "FK_ID_FUELTYPE" : 80,
+              "FK_ID_CARRIER" : 22
+            } ],
+            "LoadingAccount" : [ {
+              "ID" : 440,
+              "LoadingNumber" : "473-94111",
+              "FKBILL_ID_ORGANIZATION" : 972,
+              "FK_ID_TERMINAL" : 23,
+              "FKSUP_ID_ORGANIZATION" : 992,
+              "FKCON_ID_ORGANIZATION" : 972,
+              "FK_ID_CARRIER" : 22
+            } ]
+          } ]
+        } ],
+        "LoadRequest" : [ {
+          "ID" : 25018,
+          "Status" : "Scheduled",
+          "SpecialDriverInstructions" : " ****** TEST DATABASE DB2 ******",
+          "FK_ID_DELIVERYROUTE" : 27619,
+          "FK_ID_Z_ORDER" : 24518,
+          "Order" : [ {
+            "ID" : 24518,
+            "InternalOrderNumber" : 54518,
+            "Type" : "FTL",
+            "FK_ID_CARRIER" : 22,
+            "FK_ID_ORGANIZATION" : 972
+          } ]
+        } ],
+        "RouteVehicleCombination" : [ {
+          "ID" : 5441,
+          "CombinationDateTime" : "2018-01-17T15:58:20.980-08:00",
+          "FK_ID_VEHICLEPOWERUNIT" : 110,
+          "RouteVehiclePowerUnit" : [ {
+            "ID" : 110,
+            "TruckIdentifier" : "Truck # 16",
+            "FK_ID_ADDRESS" : 13702,
+            "FK_ID_CARRIER" : 22
+          } ],
+          "RouteVehicleDeliveryTank" : [ {
+            "ID" : 156,
+            "Type" : "T",
+            "TruckTrailerIdentifier" : "TRAILER # 116",
+            "FK_ID_CARRIER" : 22
+          } ]
+        } ],
+        "DeliveredByDriver" : [ {
+          "ID" : 128,
+          "Status" : "A",
+          "DLNumber" : "U2013514",
+          "FK_ID_PERSON" : 330,
+          "FK_ID_CARRIER" : 22,
+          "DeliveredByDriverPerson" : [ {
+            "ID" : 330,
+            "LastName" : "Bennett**",
+            "FirstName" : "Gary"
+          } ]
+        } ]
+      } ],
+      "Driver" : [ {
+        "ID" : 128,
+        "Status" : "A",
+        "DLNumber" : "U2013514",
+        "FK_ID_PERSON" : 330,
+        "FK_ID_CARRIER" : 22,
+        "DriverPerson" : [ {
+          "ID" : 330,
+          "LastName" : "Bennett**",
+          "FirstName" : "Gary"
+        } ]
+      } ],
+      "VehicleCombination" : [ {
+        "ID" : 5441,
+        "CombinationDateTime" : "2018-01-17T15:58:20.980-08:00",
+        "CurrentForSchedulingFlag" : "Y",
+        "FK_ID_VEHICLEPOWERUNIT" : 110,
+        "DeliveryTank" : [ {
+          "ID" : 156,
+          "TruckTrailerIdentifier" : "TRAILER # 116",
+          "PlateNumber" : "4PX2598",
+          "FK_ID_CARRIER" : 22
+        } ],
+        "VehiclePowerUnit" : [ {
+          "ID" : 110,
+          "TruckIdentifier" : "Truck # 16",
+          "FK_ID_ADDRESS" : 13702,
+          "FK_ID_CARRIER" : 22
+        } ]
+      } ]
+    } ]
+  } ]
+}

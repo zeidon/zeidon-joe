@@ -22,15 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.Committer;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.GenKeyHandler;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.dbhandler.DbHandler;
-import com.quinsoft.zeidon.dbhandler.JdbcHandlerUtils;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -45,14 +44,10 @@ import com.quinsoft.zeidon.objectdefinition.RelRecord;
  * @author dgc
  *
  */
-class CommitToDbUsingGenkeyHandler implements Committer
+class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
 {
-    private List<ViewImpl>       viewList;
-    private Task                 task;
     private View                 genKeyObj;
-    private DbHandler            dbHandler;
     private GenKeyHandler        genkeyHandler;
-    private CommitOptions        options;
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.Committer#init(com.quinsoft.zeidon.standardoe.TaskImpl, java.util.List)
@@ -60,17 +55,7 @@ class CommitToDbUsingGenkeyHandler implements Committer
     @Override
     public void init( Task task, List<? extends View> list, CommitOptions options )
     {
-        this.task = task;
-        this.viewList = new ArrayList<ViewImpl>();
-        for ( View v : list )
-            viewList.add( ((InternalView) v).getViewImpl() );
-        this.options = options;
-        // Grab the first view to use as a task qualifier and for getting a dbhandler.
-        // TODO: We're using the first view in the list but maybe we should do something different?
-        //       We'd like to some day support commits across multiple DBs.
-        ViewImpl firstView = viewList.get( 0 );
-        JdbcHandlerUtils helper = new JdbcHandlerUtils( this.options, firstView.getLodDef().getDatabase() );
-        dbHandler = helper.getDbHandler();
+        super.init( task, list, options );
         genkeyHandler = helper.getGenKeyHandler();
     }
 
@@ -154,35 +139,8 @@ class CommitToDbUsingGenkeyHandler implements Committer
     }
 
 
-    /**
-     * Called after a commit. Reset the entity/attribute update flags to false,
-     * remove deleted entities from the OI.
-     * @param oi
-     */
-    private void cleanupOI(ObjectInstance oi)
-    {
-        CommitHelper.cleanupOI( oi );
-    }
-
-    private void commitView(ViewImpl view)
-    {
-        // Set up view to allow the DBhandler to access hidden entities.
-        view.setAllowHiddenEntities( true );
-
-        ObjectInstance oi = view.getObjectInstance();
-
-        // TODO: implement optimistic locking check.
-
-        EntityInstanceImpl lastEntityInstance = oi.getLastEntityInstance();
-
-        commitExcludes( view, oi, lastEntityInstance );
-        commitDeletes( view, oi, lastEntityInstance );
-        commitCreates( view, oi );
-        commitIncludes( view, oi );
-        commitUpdates( view, oi );
-    }
-
-    private void commitExcludes(View view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
+    @Override
+    protected void commitExcludes(View view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
     {
         // Start from the back so that we don't exclude the parent of another exclude.
         for ( EntityInstanceImpl ei = lastEntityInstance;
@@ -220,7 +178,8 @@ class CommitToDbUsingGenkeyHandler implements Committer
         }
     }
 
-    private void commitDeletes(ViewImpl view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
+    @Override
+    protected void commitDeletes(ViewImpl view, ObjectInstance oi, EntityInstanceImpl lastEntityInstance)
     {
         for ( EntityInstanceImpl ei = lastEntityInstance;
               ei != null;
@@ -293,7 +252,8 @@ class CommitToDbUsingGenkeyHandler implements Committer
         return true;
     }
 
-    private void commitCreates(ViewImpl view, ObjectInstance oi)
+    @Override
+    protected void commitCreates(ViewImpl view, ObjectInstance oi)
     {
         for ( EntityInstanceImpl ei : oi.getEntities() )
         {
@@ -311,14 +271,30 @@ class CommitToDbUsingGenkeyHandler implements Committer
                     instances.add( twin );
             }
 
+            EntityDef entityDef = ei.getEntityDef();
+            if ( entityDef.getDbCreatedTimestamp() != null )
+            {
+                for ( EntityInstanceImpl tempEi : instances )
+                {
+                    AttributeInstanceImpl timestamp = tempEi.getAttribute( entityDef.getDbCreatedTimestamp() );
+                    if ( timestamp.isNull() )
+                    {
+                        DateTime now = new DateTime();
+                        timestamp.setValue( now );
+
+                        if ( entityDef.getDbUpdatedTimestamp() != null )
+                            tempEi.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( now );
+                    }
+                }
+            }
+
             try
             {
                 dbHandler.insertEntity( view, instances );
             }
             catch ( Exception e )
             {
-                throw ZeidonException.wrapException( e )
-                                     .prependEntityInstance( ei );
+                throw ZeidonException.wrapException( e ).prependEntityInstance( ei );
             }
 
             // Flag all linked entities (including 'ei') as having been created.
@@ -339,7 +315,8 @@ class CommitToDbUsingGenkeyHandler implements Committer
         }
     }
 
-    private void commitIncludes(ViewImpl view, ObjectInstance oi)
+    @Override
+    protected void commitIncludes(ViewImpl view, ObjectInstance oi)
     {
         for ( EntityInstanceImpl ei : oi.getEntities() )
         {
@@ -369,7 +346,8 @@ class CommitToDbUsingGenkeyHandler implements Committer
         }
     }
 
-    private void commitUpdates(View view, ObjectInstance oi)
+    @Override
+    protected void commitUpdates(View view, ObjectInstance oi)
     {
         for ( EntityInstanceImpl ei : oi.getEntities() )
         {
@@ -390,6 +368,9 @@ class CommitToDbUsingGenkeyHandler implements Committer
             // Skip if the entity was created or deleted.
             if ( ei.dbhCreated || ei.dbhDeleted )
                 continue;
+
+            if ( entityDef.getDbUpdatedTimestamp() != null )
+                ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
 
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );

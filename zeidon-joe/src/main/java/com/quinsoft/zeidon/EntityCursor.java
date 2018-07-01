@@ -477,6 +477,14 @@ public interface EntityCursor extends EntityInstance
     int getEntityCount() throws NullCursorException;
 
     /**
+     * Returns the number of twin entities for the current cursor.  Can count hidden entities.
+     *
+     * @return
+     * @throws NullCursorException
+     */
+    int getEntityCount( boolean includeHidden ) throws NullCursorException;
+
+    /**
      * Move an entity instance to a new position under its parent and potentially change
      * the current cursor.
      *

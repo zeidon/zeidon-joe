@@ -23,13 +23,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCache;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Pagination;
+import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
@@ -187,10 +190,16 @@ public class QualificationBuilder
      */
     public QualificationBuilder loadFromSerializedString( String qualString )
     {
+        // We'll take a guess and if the string starts with a "<" we'll assume it's XML,
+        // otherwise it's json.
+        StreamFormat format = StreamFormat.JSON;
+        if ( qualString.startsWith( "<" ) )
+            format = StreamFormat.XML;
+
         LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
         qualView = task.deserializeOi()
                        .setLodDef( qualLodDef )
-                       .asJson()
+                       .setFormat( format )
                        .setVersion( "1" )
                        .fromString( qualString )
                        .activateFirst();
@@ -249,6 +258,11 @@ public class QualificationBuilder
     public QualificationBuilder readOnly()
     {
         return setFlag( ActivateFlags.fREAD_ONLY );
+    }
+
+    public QualificationBuilder keysOnly()
+    {
+        return setFlag( ActivateFlags.fKEYS_ONLY );
     }
 
     public QualificationBuilder multipleRoots()
@@ -527,6 +541,14 @@ public class QualificationBuilder
         return this;
     }
 
+    public QualificationBuilder setOpenSql( String sql, String attributeList )
+    {
+        validateEntity();
+        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL" ).setValue( sql ) ;
+        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL_AttributeList" ).setValue( attributeList ) ;
+        return this;
+    }
+
     /**
      * Retroactively insert an opening paren just in front of the current QualAttrib.  Used to
      * wrap some QualAttribs with parens after it is learned that they are needed.
@@ -699,6 +721,17 @@ public class QualificationBuilder
 
         isEntityCache = true;
         return this;
+    }
+
+    /**
+     * This will drop any DB locks on OIs specified by the qualification.
+     */
+    public void dropLocks()
+    {
+        final OiSourceSelector selector = getTask().getOiSourceSelector();
+        final Activator activator = selector.getActivator( getTask(), application, activateOptions );
+        activator.init( getTask(), null, activateOptions );
+        activator.dropOutstandingLocks();
     }
 
     public View activate()

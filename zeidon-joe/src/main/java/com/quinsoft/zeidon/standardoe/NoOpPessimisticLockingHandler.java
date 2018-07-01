@@ -18,9 +18,14 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.Map;
+
+import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
+import com.quinsoft.zeidon.dbhandler.QualEntity;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
  * A locking handler that does nothing.
@@ -28,6 +33,11 @@ import com.quinsoft.zeidon.dbhandler.PessimisticLockingHandler;
  */
 public class NoOpPessimisticLockingHandler implements PessimisticLockingHandler
 {
+    @Override
+    public void initialize( ActivateOptions options, Map<EntityDef, QualEntity> qualMap )
+    {
+    }
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.DropViewCleanup#viewDropped(com.quinsoft.zeidon.View)
      */
@@ -69,7 +79,13 @@ public class NoOpPessimisticLockingHandler implements PessimisticLockingHandler
     }
 
     @Override
-    public void acquireOiLocks( View view ) throws PessimisticLockingException
+    public boolean acquireOiLocks( View view ) throws PessimisticLockingException
+    {
+        return false;
+    }
+
+    @Override
+    public void dropOutstandingLocks()
     {
     }
 }

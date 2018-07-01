@@ -108,6 +108,7 @@ class EntityInstanceImpl implements EntityInstance
      *      Key = ER Attribute token
      */
     private Map<String, AttributeValue> persistentAttributes;
+    private Object uniqueLinkedObject = new Object();
 
     /**
      * Map of work attributes. Every entity, even linked ones, will have their
@@ -893,7 +894,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         if ( getParent() != null )
         {
-            int twinCount = getTwinCount();
+            int twinCount = getTwinCount(false);
 
             // If forAdd is true then we're making sure we can add a twin, so add
             // one to the count to account for the new one.
@@ -1058,7 +1059,7 @@ class EntityInstanceImpl implements EntityInstance
             // We didn't find a twin.  Find the last child under parent with a EntityDef
             // index < 'this' -- that will be the prev sibling.  Find the first child
             // with index > 'this' to be the next sibling.
-            for ( EntityInstanceImpl child : parent.getDirectChildren( false, false ) )
+            for ( EntityInstanceImpl child : parent.getDirectChildren( true, false ) )
             {
                 EntityDef ve = child.getEntityDef();
                 if ( ve.getHierIndex() < this.getEntityDef().getHierIndex() )
@@ -1474,7 +1475,10 @@ class EntityInstanceImpl implements EntityInstance
                 {
                     // Make all the linked entities share the new source attributes.
                     for ( EntityInstanceImpl ei : newInstance.linkedInstances.keySet() )
+                    {
                         ei.persistentAttributes = persistentAttributes;
+                        ei.uniqueLinkedObject = uniqueLinkedObject;
+                    }
 
                     linkedInstances = newInstance.linkedInstances;
                     linkedInstances.putIfAbsent( this, Boolean.TRUE );
@@ -1496,6 +1500,7 @@ class EntityInstanceImpl implements EntityInstance
             linkedInstances.putIfAbsent( newInstance, Boolean.TRUE );
             newInstance.linkedInstances = linkedInstances;
             newInstance.persistentAttributes = persistentAttributes;
+            newInstance.uniqueLinkedObject = uniqueLinkedObject;
 
             assert assertLinkedInstances() : "Error with linked instances";
         }
@@ -1764,6 +1769,7 @@ class EntityInstanceImpl implements EntityInstance
                     // attribute list.
                     linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
                     linked.persistentAttributes = persistentAttributes;
+                    linked.uniqueLinkedObject = uniqueLinkedObject;
                     linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
 
                     // The spawn logic should have correctly set most of the flags.  The only one we have to
@@ -2624,6 +2630,7 @@ class EntityInstanceImpl implements EntityInstance
     {
         return new IteratorBuilder(getObjectInstance())
                         .forDirectChildren( this )
+                        .allowHidden( allowHidden )
                         .setLazyLoad( allowLazyLoad )
                         .build();
     }
@@ -2710,8 +2717,14 @@ class EntityInstanceImpl implements EntityInstance
                                        .setLazyLoad( loadLazyEntities )
                                        .build();
 
+        // If we're not including the parent in this iterator, then skip to the next one.
         if ( ! includeParent )
-            iterable.next();
+        {
+            // Edge case: if excludeHidden = true and this.hidden = true then the parent will
+            // already have been skipped over.
+            if ( this.hidden == false )
+                iterable.next();
+        }
 
         return iterable;
     }
@@ -3308,24 +3321,26 @@ class EntityInstanceImpl implements EntityInstance
      */
     Object getUniqueLinkedObject()
     {
-        return persistentAttributes;
+
+        return uniqueLinkedObject;
     }
 
     /**
+     * @param includeHidden If true, count hidden.
      * @return The total number of non-hidden twins for this entity, including this one.
      */
-    int getTwinCount()
+    int getTwinCount( boolean includeHidden )
     {
         int count = 0;
         for ( EntityInstanceImpl search = this; search != null; search = search.getNextTwin() )
         {
-            if ( ! search.isHidden() )
+            if ( includeHidden || search.isHidden() == false )
                 count++;
         }
 
         for ( EntityInstanceImpl search = this.getPrevTwin(); search != null; search = search.getPrevTwin() )
         {
-            if ( ! search.isHidden() )
+            if ( includeHidden || search.isHidden() == false )
                 count++;
         }
 

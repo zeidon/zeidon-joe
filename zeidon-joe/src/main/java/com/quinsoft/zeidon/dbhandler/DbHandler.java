@@ -74,6 +74,7 @@ public interface DbHandler
     int deleteAllChildren( View view, EntityInstance parent );
     int deleteRelationship( View view, EntityInstance entityInstance );
     int updateEntity( View view, EntityInstance entityInstance );
+    int copyEntityForVersioning( View view, EntityInstance entityInstance );
 
     /**
      * Returns any new keys created by the DB as part of an insert.  Ignored by

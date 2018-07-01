@@ -1,9 +1,9 @@
 package com.quinsoft.zeidon.scala
 
+import com.quinsoft.zeidon.DeserializeOi
+import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.Task
-import com.quinsoft.zeidon.ObjectEngine
-import com.quinsoft.zeidon.DeserializeOi
 import com.typesafe.scalalogging.Logger
 
 /**
@@ -31,7 +31,7 @@ object Implicits {
         def selectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.select(ei, true)
         def deselectSubobject( ei: com.quinsoft.zeidon.EntityInstance ) = selectSet.deselect(ei, true)
 
-        def each( looper: => Unit ) = {
+        def each[T]( looper: => T ): T = {
             val iter = new EntityInstanceIterator( selectSet.eachEntity )
             iter.each( looper )
         }
@@ -53,22 +53,34 @@ object Implicits {
          */
         def getView( viewName: String ): View = new View( task.getViewByName( viewName ) )
         def id = task.getTaskId
-        
+
         /**
          * Creates a Scala wrapper around the Zeidon Logger.  It is occasionally useful
          * to avoid ambiguous method errors.
          */
         def slog = Logger( task.log() )
-        
-        def activate( lodName: String, addQual: (QualBuilder) => Unit ): View = {
-          val view = new View( task ) basedOn lodName
-          val qb = view.buildQual()
-          addQual( qb )
-          qb.activate
+
+        def activate(lodName: String, addQual: (QualBuilder) => QualBuilder): View = {
+            val view = new View(task) basedOn lodName
+            val qb = view.buildQual()
+            addQual(qb)
+            qb.activate
         }
-        
+
+        def activate(lodName: String): TaskActivator = {
+            new TaskActivator(task, lodName)
+        }
+
+        def dropLocks(lodName: String, addQual: (QualBuilder) => Unit): Unit = {
+            val view = new View(task) basedOn lodName
+            val qb = view.buildQual()
+            addQual(qb)
+            qb.dropLocks
+        }
+
         def newView( lodName: String ): View = new View( task ) basedOn lodName
     }
+
 
     implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
 
@@ -86,8 +98,8 @@ object Implicits {
          * }}}
          */
         def forTask( appName : String ) : TaskRunner = {
-            val task = oe.createTask( appName );
-            TaskRunner( task )
+            val dtask = new DynamicTask( oe.createTask( appName ) )
+            TaskRunner( dtask )
         }
     }
 
@@ -102,14 +114,40 @@ object Implicits {
     /**
      * Convenience class for ScalaObjectEngine.forTask
      */
-    case class TaskRunner( val task: Task ) {
-        def apply[T]( runTask: Task => T ): T = {
+    case class TaskRunner( val dtask: DynamicTask ) {
+        def apply[T]( runTask: DynamicTask => T ): T = {
             try {
-                runTask( task )
+                runTask( dtask )
             }
             finally {
-                task.dropTask()
+                dtask.dropTask()
             }
+        }
+    }
+
+    case class TaskActivator( val task: Task, val lodName: String ) {
+        val view: View = task.newView(lodName)
+
+        def apply( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
+            val builder = new QualBuilder( view, view.lodDef )
+            addQual( builder.entityQualBuilder )
+            return builder.activate
+        }
+
+        def using(addQual: (QualBuilder) => QualBuilder): View = {
+            val qb = view.buildQual()
+            addQual(qb)
+            qb.activate
+        }
+
+        def all() : View = view.activateAll()
+
+        def empty() : View = view.activateEmpty
+
+        def activate( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
+            val builder = new QualBuilder( view, view.lodDef )
+            addQual( builder.entityQualBuilder )
+            return builder.activate
         }
     }
 }

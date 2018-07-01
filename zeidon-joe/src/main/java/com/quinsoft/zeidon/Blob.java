@@ -45,7 +45,11 @@ public final class Blob implements Comparable<Object>, Serializable
         
         if ( o == null )
             return 1;
-        
+
+        // When o == "", then compare = (byte[]) o fails.
+        if ( o instanceof String && ((String) o).isEmpty() )
+        		return 1;
+
         if ( o instanceof Blob )
             compare = ((Blob)o).getBytes();
         else

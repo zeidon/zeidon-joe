@@ -21,7 +21,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<scala.version>2.11.8</scala.version>
+	<scala.version>2.12.3</scala.version>
 	<!-- Following is needed to avoid interpolation warnings -->
 	<jar.version>${project.version}</jar.version>
     </properties>
@@ -68,7 +68,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -105,7 +105,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.5</version>
             </plugin>
 
             <plugin>
@@ -127,14 +127,14 @@
 	    <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
-              <version>2.10</version>
+              <version>3.0.2</version>
 	    </plugin>
 
             <!-- For deploying to OSSRH repo -->            
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
+                <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -171,12 +171,12 @@
         <module>scala</module>
         <module>object-browser</module>
 	<module>jconsole-plugin</module>
-	<module>jasper-reports</module>
         <module>zeidon-operations</module>
         <module>rest-servers/rest-easy</module>
         <module>rest-servers/scalatra</module>
         <module>zruby</module>
         <module>javascript</module>
+        <module>jasper-reports</module>
         <module>android</module>
     </modules>
 
@@ -234,7 +234,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -247,7 +247,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>2.10.4</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>

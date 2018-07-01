@@ -10,8 +10,21 @@ java_import 'com.quinsoft.zeidon.CursorResult'
 module Zeidon
   @@oe = nil
 
-  def self.get_object_engine( joe = nil )
-    return @@oe || @@oe = ObjectEngine.new( joe || JavaObjectEngine.getInstance() )
+  def self.get_object_engine( properties_file = nil )
+    return @@oe if @@oe
+
+    if properties_file
+      joe = JavaObjectEngine.getInstance( properties_file )
+    else
+      joe = JavaObjectEngine.getInstance( )
+    end
+    @@oe = ObjectEngine.new( joe )
+  end
+
+  def self.reload_object_engine( properties_file = nil )
+    @@oe = nil
+    JavaObjectEngine.resetInstance()
+    return get_object_engine( properties_file )
   end
 
   class ObjectEngine
@@ -91,7 +104,7 @@ module Zeidon
       @jtask = jtask
     end
   
-    def activate view_od, qual_hash = nil, &block
+    def activate view_od, qual_hash = nil
       qual = Qualification.new( @jtask, view_od )
       qual.add_qual( qual_hash ) if qual_hash
       yield qual if block_given?
@@ -120,9 +133,39 @@ module Zeidon
 
     def method_missing( id, *args, &block )
       return @jtask.send( id, *args, &block ) if @jtask.respond_to?( id )
+      return ViewDef.new( self, id ) if is_lod_name?( id )
       super
     end
+
+    private
+
+    def is_lod_name?( str )
+      begin
+        @jtask.getApplication.getLodDef( @jtask, str )
+        return true
+      rescue Exception => e
+        return false
+      end
+    end
   end # Task
+
+  class ViewDef
+    attr_reader :task, :lod_name
+
+    def initialize( task, lod_name )
+      @task = task
+      @lod_name = lod_name.to_s
+    end
+
+    def activate qual_hash
+      task.activate( lod_name, qual_hash )
+    end
+
+    def activate_empty
+      task.activate_empty( lod_name )
+    end
+    
+  end
   
   class View
     attr_reader :jview
@@ -139,6 +182,10 @@ module Zeidon
     def method_missing( id, *args, &block )
       return @jview.send( id, *args, &block ) if @jview.respond_to?( id )
       return @jview.cursor( id.to_s ) if ! @jloddef.getEntityDef( id.to_s, false).nil?
+
+      caller = get_object_operation_caller( id, *args )
+      return caller if caller
+
       super
     end
     
@@ -149,6 +196,25 @@ module Zeidon
     def copy_view
       return View.new( @jview.newView )
     end
+
+    def to_s
+      @jview.toString
+    end
+
+    def to_json
+      @jview.serializeOi.compressed.asJson.toString
+    end
+
+    def to_hash
+      JSON.parse( self.to_json )
+    end
+
+    private
+
+    def get_object_operation_caller( id, *args )
+      nil
+    end
+
   end # View
   
   class Qualification
@@ -211,6 +277,22 @@ module Zeidon
       list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
       return list
     end
+
+    def to_hash
+      Hash[ attributes.map do |attr|
+        [attr.name, attr.getValue]
+      end ]
+    end
+    
+    def attributes=( attribute_hash )
+      attribute_hash.each do |name, value|
+        if has_attribute( name )
+          attrib = getAttribute( name.to_s )
+          attrib.setValue( value )
+        end
+      end
+      return self
+    end
     
     def each_attrib( options = {} )
       list = attributes( options )
@@ -238,8 +320,23 @@ module Zeidon
       getAttribute( entity_def.keys[ 0 ] )
     end
     
-    def create( position = CursorPosition::NEXT )
-      createEntity( position )
+    def create( *args )
+      position = CursorPosition::NEXT
+      attribute_hash = nil
+      
+      args.each do |arg|
+        if arg.kind_of?( CursorPosition )
+          position = arg
+        elsif arg.kind_of?( Hash )
+          attribute_hash = arg
+        else
+          raise "Unknown argument type for create(): #{arg.class}"
+        end
+      end
+      
+      rc = createEntity( position )
+      self.attributes = attribute_hash if attribute_hash
+      return rc
     end
 
     # Loop through the child *cursors* of this cursor. 
@@ -259,6 +356,34 @@ module Zeidon
       end
   
       super
+    end
+
+    #java_alias :set_first_by_attr, :set_first, [java.lang.String, java.lang.Object]    
+    def set_first( *args, &block )
+      if args.length == 1 and args[0].kind_of?( Hash )
+        arg_hash = args[0]
+        if arg_hash.length == 1
+          attr = arg_hash.keys.first.to_s
+          val = arg_hash.values.first
+          return java_send :setFirst, [java.lang.String, java.lang.Object], attr, val
+        end
+      end
+
+      super
+    end
+
+    # Simple wrapper for includeSubobject method.
+    def include( *args )
+      includeSubobject( *args )
+    end
+    
+    # Simple wrapper for excludeEntity method.
+    def exclude( *args )
+      includeEntity( *args )
+    end
+
+    def exists?
+      return has_any      
     end
     
     def method_missing( id, *args, &block )

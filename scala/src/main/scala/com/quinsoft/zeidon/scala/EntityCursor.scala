@@ -65,6 +65,19 @@ class EntityCursor( private[this]  val view: View,
         this
     }
 
+    /** Creates a new entity instance and sets attributes.
+     *
+     * Creates a new entity instance and then sets all attributes specified in the attributes Map.
+     */
+    def create( attributes: Map[String, AnyRef] ): EntityCursor = {
+        val ei = jentityCursor.createEntity( CursorPosition.NEXT, CreateEntityFlags.DEFAULT )
+        for( (attrName, value ) <- attributes ) {
+            ei.getAttribute( attrName ).setValue( value )
+        }
+
+        this
+    }
+
     def createTemporalEntity( position: CursorPosition = CursorPosition.NEXT ): EntityCursor = {
         jentityCursor.createTemporalEntity( position )
         this
@@ -297,6 +310,11 @@ class EntityCursor( private[this]  val view: View,
      * Returns the number of twins for this entity cursor.
      */
     def count = jentityCursor.getEntityCount()
+
+    /**
+     * Returns the number of twins for this entity cursor.
+     */
+    def count( includeHidden: Boolean ) = jentityCursor.getEntityCount( includeHidden )
 
     /**
      * Returns the number of twins that match a predicate.
@@ -562,7 +580,7 @@ class EntityCursor( private[this]  val view: View,
     /**
      * Loop through all entities of a single type in the OI
      */
-    def all( looper: => Any ) = {
+    def all[T]( looper: => T ): T = {
         val iter = new EntityInstanceIterator( jentityCursor.allEntities() ).setCursor( this )
         iter.each( looper )
     }

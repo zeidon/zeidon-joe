@@ -1,0 +1,5349 @@
+z1000-Zeidon    ZEIDON   TZDMXGPO 03/06/18   09:03:36 1.0a2    
+eDomainGroup 1
+aName      Perygrene
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054391
+aName      ActiveInactiveStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054392
+aName      ActiveInactiveStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054393
+aExternalValue Active
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054394
+aExternalValue Inactive
+aInternalValue I
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054199
+aName      AddressType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054200
+aName      AddressType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054201
+aExternalValue Business
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054202
+aExternalValue Home
+aInternalValue H
+
+eTableEntry 4
+aZKey      228054203
+aExternalValue Work
+aInternalValue W
+
+eTableEntry 4
+aZKey      228054204
+aExternalValue Mailing
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90422280
+aName      AlphaNumeric
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+aDecimalFormat 1234
+
+eContext   3
+aZKey      90422281
+aName      ALPHANUMERIC
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420648
+aName      AlphaNumericUpperStrip
+aDesc      Strip all non-alphanumerics and upper case all characters
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  domainc
+aOperName  AlphaNumericUpperStrip
+
+eContext   3
+aZKey      90420649
+aName      AlphaNumericUpperStrip
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054172
+aName      AttachmentType
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054173
+aName      AttachmentType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054174
+aExternalValue Bill of Lading
+aInternalValue BOL
+
+eTableEntry 4
+aZKey      228054344
+aExternalValue Offloading BOL
+aInternalValue OBOL
+
+eTableEntry 4
+aZKey      228054175
+aExternalValue Other
+aInternalValue O
+
+eTableEntry 4
+aZKey      228054343
+aExternalValue Veeder Route
+aInternalValue VRT
+
+eTableEntry 4
+aZKey      228054619
+aExternalValue Meter Reading
+aInternalValue MR
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054176
+aName      BillingLineItemType
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054177
+aName      BillingLineItemType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054178
+aExternalValue Fuel Charge
+aInternalValue Fuel
+
+eTableEntry 4
+aZKey      228054179
+aExternalValue Billing Fee
+aInternalValue BF
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054541
+aName      BillingTransactionType
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054542
+aName      BillingTransactionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054543
+aExternalValue Freight Auto
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054544
+aExternalValue Freight Manual
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.BlobDomain
+aZKey      90420460
+aName      Blob
+aDesc      A do nothing domain for blobs
+aDomainType E
+aDataType  B
+aContextRestriction N
+
+eContext   3
+aZKey      90420461
+aName      BLOB
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054627
+aName      BrandClassification
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054628
+aName      BrandClassification
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054629
+aExternalValue Branded
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054630
+aExternalValue Unbranded
+aInternalValue U
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92743263
+aName      BroadcastMessageType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      92743264
+aName      BroadcastMessageType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92743265
+aExternalValue All Users
+aInternalValue A
+
+eTableEntry 4
+aZKey      92743266
+aExternalValue User Group
+aInternalValue U
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054140
+aName      BusinessPartnerStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054141
+aName      BusinessPartnerStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054142
+aExternalValue Active
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054143
+aExternalValue Inactive
+aInternalValue I
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054123
+aName      BusinessPartnerType
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+
+eContext   3
+aZKey      228054124
+aName      BusinessPartnerType
+
+eTableEntry 4
+aZKey      228054125
+aExternalValue Carrier
+aInternalValue Car
+
+eTableEntry 4
+aZKey      228054126
+aExternalValue Vendor
+aInternalValue Ven
+
+eTableEntry 4
+aZKey      228054127
+aExternalValue Customer
+aInternalValue Cus
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054221
+aName      Combobox30MinTime
+aDomainType T
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+
+eContext   3
+aZKey      228054222
+aName      Combobox30MinTime
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054223
+aExternalValue 12:00 AM
+aInternalValue 12:00 AM
+
+eTableEntry 4
+aZKey      228054224
+aExternalValue 12:30 AM
+aInternalValue 12:30 AM
+
+eTableEntry 4
+aZKey      228054225
+aExternalValue 01:00 AM
+aInternalValue 01:00 AM
+
+eTableEntry 4
+aZKey      228054226
+aExternalValue 01:30 AM
+aInternalValue 01:30 AM
+
+eTableEntry 4
+aZKey      228054227
+aExternalValue 02:00 AM
+aInternalValue 02:00 AM
+
+eTableEntry 4
+aZKey      228054228
+aExternalValue 02:30 AM
+aInternalValue 02:30 AM
+
+eTableEntry 4
+aZKey      228054229
+aExternalValue 03:00 AM
+aInternalValue 03:00 AM
+
+eTableEntry 4
+aZKey      228054230
+aExternalValue 03:30 AM
+aInternalValue 03:30 AM
+
+eTableEntry 4
+aZKey      228054231
+aExternalValue 04:00 AM
+aInternalValue 04:00 AM
+
+eTableEntry 4
+aZKey      228054232
+aExternalValue 04:30 AM
+aInternalValue 04:30 AM
+
+eTableEntry 4
+aZKey      228054233
+aExternalValue 05:00 AM
+aInternalValue 05:00 AM
+
+eTableEntry 4
+aZKey      228054234
+aExternalValue 05:30 AM
+aInternalValue 05:30 AM
+
+eTableEntry 4
+aZKey      228054235
+aExternalValue 06:00 AM
+aInternalValue 06:00 AM
+
+eTableEntry 4
+aZKey      228054236
+aExternalValue 06:30 AM
+aInternalValue 06:30 AM
+
+eTableEntry 4
+aZKey      228054237
+aExternalValue 07:00 AM
+aInternalValue 07:00 AM
+
+eTableEntry 4
+aZKey      228054238
+aExternalValue 07:30 AM
+aInternalValue 07:30 AM
+
+eTableEntry 4
+aZKey      228054240
+aExternalValue 08:00 AM
+aInternalValue 08:00 AM
+
+eTableEntry 4
+aZKey      228054241
+aExternalValue 08:30 AM
+aInternalValue 08:30 AM
+
+eTableEntry 4
+aZKey      228054242
+aExternalValue 09:00 AM
+aInternalValue 09:00 AM
+
+eTableEntry 4
+aZKey      228054243
+aExternalValue 09:30 AM
+aInternalValue 09:30 AM
+
+eTableEntry 4
+aZKey      228054244
+aExternalValue 10:00 AM
+aInternalValue 10:00 AM
+
+eTableEntry 4
+aZKey      228054245
+aExternalValue 10:30 AM
+aInternalValue 10:30 AM
+
+eTableEntry 4
+aZKey      228054246
+aExternalValue 11:00 AM
+aInternalValue 11:00 AM
+
+eTableEntry 4
+aZKey      228054247
+aExternalValue 11:30 AM
+aInternalValue 11:30 AM
+
+eTableEntry 4
+aZKey      228054248
+aExternalValue 12:00 PM
+aInternalValue 12:00 PM
+
+eTableEntry 4
+aZKey      228054249
+aExternalValue 12:30 PM
+aInternalValue 12:30 PM
+
+eTableEntry 4
+aZKey      228054250
+aExternalValue 01:00 PM
+aInternalValue 01:00 PM
+
+eTableEntry 4
+aZKey      228054251
+aExternalValue 01:30 PM
+aInternalValue 01:30 PM
+
+eTableEntry 4
+aZKey      228054252
+aExternalValue 02:00 PM
+aInternalValue 02:00 PM
+
+eTableEntry 4
+aZKey      228054253
+aExternalValue 02:30 PM
+aInternalValue 02:30 PM
+
+eTableEntry 4
+aZKey      228054254
+aExternalValue 03:00 PM
+aInternalValue 03:00 PM
+
+eTableEntry 4
+aZKey      228054255
+aExternalValue 03:30 PM
+aInternalValue 03:30 PM
+
+eTableEntry 4
+aZKey      228054256
+aExternalValue 04:00 PM
+aInternalValue 04:00 PM
+
+eTableEntry 4
+aZKey      228054257
+aExternalValue 04:30 PM
+aInternalValue 04:30 PM
+
+eTableEntry 4
+aZKey      228054258
+aExternalValue 05:00 PM
+aInternalValue 05:00 PM
+
+eTableEntry 4
+aZKey      228054259
+aExternalValue 05:30 PM
+aInternalValue 05:30 PM
+
+eTableEntry 4
+aZKey      228054260
+aExternalValue 06:00 PM
+aInternalValue 06:00 PM
+
+eTableEntry 4
+aZKey      228054261
+aExternalValue 06:30 PM
+aInternalValue 06:30 PM
+
+eTableEntry 4
+aZKey      228054262
+aExternalValue 07:00 PM
+aInternalValue 07:00 PM
+
+eTableEntry 4
+aZKey      228054263
+aExternalValue 07:30 PM
+aInternalValue 07:30 PM
+
+eTableEntry 4
+aZKey      228054264
+aExternalValue 08:00 PM
+aInternalValue 08:00 PM
+
+eTableEntry 4
+aZKey      228054265
+aExternalValue 08:30 PM
+aInternalValue 08:30 PM
+
+eTableEntry 4
+aZKey      228054266
+aExternalValue 09:00 PM
+aInternalValue 09:00 PM
+
+eTableEntry 4
+aZKey      228054267
+aExternalValue 09:30 PM
+aInternalValue 09:30 PM
+
+eTableEntry 4
+aZKey      228054268
+aExternalValue 10:00 PM
+aInternalValue 10:00 PM
+
+eTableEntry 4
+aZKey      228054269
+aExternalValue 10:30 PM
+aInternalValue 10:30 PM
+
+eTableEntry 4
+aZKey      228054270
+aExternalValue 11:00 PM
+aInternalValue 11:00 PM
+
+eTableEntry 4
+aZKey      228054271
+aExternalValue 11:30 PM
+aInternalValue 11:30 PM
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054319
+aName      ComboBoxAMPM
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      228054320
+aName      ComboBoxAMPM
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054322
+aExternalValue AM
+aInternalValue AM
+
+eTableEntry 4
+aZKey      228054323
+aExternalValue PM
+aInternalValue PM
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054272
+aName      ComboBoxHours
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      228054273
+aName      ComboBoxHours
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054274
+aExternalValue 0 hrs
+aInternalValue 0
+
+eTableEntry 4
+aZKey      228054282
+aExternalValue 1 hr
+aInternalValue 1
+
+eTableEntry 4
+aZKey      228054275
+aExternalValue 2 hrs
+aInternalValue 2
+
+eTableEntry 4
+aZKey      228054276
+aExternalValue 3 hrs
+aInternalValue 3
+
+eTableEntry 4
+aZKey      228054277
+aExternalValue 4 hrs
+aInternalValue 4
+
+eTableEntry 4
+aZKey      228054278
+aExternalValue 5 hrs
+aInternalValue 5
+
+eTableEntry 4
+aZKey      228054279
+aExternalValue 6 hrs
+aInternalValue 6
+
+eTableEntry 4
+aZKey      228054280
+aExternalValue 7 hrs
+aInternalValue 7
+
+eTableEntry 4
+aZKey      228054281
+aExternalValue 8 hrs
+aInternalValue 8
+
+eTableEntry 4
+aZKey      228054316
+aExternalValue 9 hrs
+aInternalValue 9
+
+eTableEntry 4
+aZKey      228054317
+aExternalValue 10 hrs
+aInternalValue 10
+
+eTableEntry 4
+aZKey      228054318
+aExternalValue 11 hrs
+aInternalValue 11
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054283
+aName      ComboBoxMinutes
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      228054284
+aName      ComboBoxMinutes
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054285
+aExternalValue 5 Mins
+aInternalValue 5
+
+eTableEntry 4
+aZKey      228054286
+aExternalValue 10 Mins
+aInternalValue 10
+
+eTableEntry 4
+aZKey      228054287
+aExternalValue 15 Mins
+aInternalValue 15
+
+eTableEntry 4
+aZKey      228054288
+aExternalValue 20 Mins
+aInternalValue 20
+
+eTableEntry 4
+aZKey      228054289
+aExternalValue 25 Mins
+aInternalValue 25
+
+eTableEntry 4
+aZKey      228054290
+aExternalValue 30 Mins
+aInternalValue 30
+
+eTableEntry 4
+aZKey      228054291
+aExternalValue 35 Mins
+aInternalValue 35
+
+eTableEntry 4
+aZKey      228054292
+aExternalValue 40 Mins
+aInternalValue 40
+
+eTableEntry 4
+aZKey      228054293
+aExternalValue 45 Mins
+aInternalValue 45
+
+eTableEntry 4
+aZKey      228054294
+aExternalValue 50 Mins
+aInternalValue 50
+
+eTableEntry 4
+aZKey      228054295
+aExternalValue 55 Mins
+aInternalValue 55
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054144
+aName      ContactPersonType
+aDomainType T
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+
+eContext   3
+aZKey      228054145
+aName      ContactPersonType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054147
+aExternalValue Billing Contact
+aInternalValue Billing
+
+eTableEntry 4
+aZKey      228054148
+aExternalValue Delivery Contact
+aInternalValue Delivery
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90422105
+aName      Country
+aDesc      Country
+aDomainType T
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      90422106
+aName      Country
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986479
+aExternalValue US
+aInternalValue US
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      90000052
+aName      Date
+aDesc      This domain manipulates the date portion of DateTime
+aDomainType A
+aDataType  T
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDate
+
+eContext   3
+aZKey      90000053
+aName      Date
+aEditString YYYYmmdd
+aJavaEditString yyyyMMdd
+
+eContext   3
+aZKey      90000068
+aName      Day
+aEditString Dddd
+aJavaEditString dddd
+
+eContext   3
+aZKey      90000074
+aName      DayOfMonth
+aEditString D
+aJavaEditString d
+
+eContext   3
+aZKey      90000073
+aName      DayOfWeek
+aEditString Dddd
+aJavaEditString EEEE
+
+eContext   3
+aZKey      90000075
+aName      DayOfYear
+aEditString jjj
+aJavaEditString D
+
+eContext   3
+aZKey      90000058
+aName      DD.MM.YYYY
+aEditString dd.mm.YYYY
+aJavaEditString dd.MM.yyyy
+
+eContext   3
+aZKey      354026001
+aName      DD/MM/YYYY
+aJavaEditString dd/MM/yyyy
+
+eContext   3
+aZKey      90000063
+aName      DDMonthYYYY
+aEditString dd Mmmm YYYY
+aJavaEditString dd MMMM yyyy
+
+eContext   3
+aZKey      90000065
+aName      DDMonYYYY
+aEditString dd Mmm YYYY
+aJavaEditString dd MMM yyyy
+
+eContext   3
+aZKey      123033213
+aName      FreeForm
+aEditString *
+aJavaEditString *
+
+eContext   3
+aZKey      90000056
+aName      MM-DD-YYYY
+aEditString mm-dd-YYYY
+aJavaEditString MM-dd-yyyy
+
+eContext   3
+aZKey      354026008
+aName      MM/DD/YY
+aEditString mm/dd/YY
+aJavaEditString MM/dd/yy
+
+eContext   3
+aZKey      90000054
+aName      MM/DD/YYYY
+aEditString mm/dd/YYYY
+aJavaEditString MM/dd/yyyy
+aIsDefault Y
+
+eContext   3
+aZKey      90000064
+aName      MonDDYYYY
+aEditString Mmm dd, YYYY
+aJavaEditString MMM dd, yyyy
+
+eContext   3
+aZKey      90000069
+aName      Month
+
+eContext   3
+aZKey      90000062
+aName      MonthDDYYYY
+aEditString Mmmm dd, YYYY
+aJavaEditString MMMM dd, yyyy
+
+eContext   3
+aZKey      90000077
+aName      MonthOfYear
+aEditString Mmmm
+aJavaEditString MMMM
+
+eContext   3
+aZKey      90000066
+aName      MSWindowsLongSetting
+
+eContext   3
+aZKey      90000067
+aName      MSWindowsShortSetting
+
+eContext   3
+aZKey      90000076
+aName      WeekOfYear
+
+eContext   3
+aZKey      90000070
+aName      Year
+
+eContext   3
+aZKey      90000071
+aName      YYYY
+aEditString YYYY
+aJavaEditString yyyy
+
+eContext   3
+aZKey      1077348
+aName      YYYY.MM.DD
+aEditString YYYY.mm.dd
+aJavaEditString yyyy.MM.dd
+
+eContext   3
+aZKey      90000061
+aName      YYYYJJJ
+aEditString YYYYjjj
+aJavaEditString yyyyD
+
+eContext   3
+aZKey      4662461
+aName      yyyyMMdd
+aEditString yyyyMMdd
+aJavaEditString yyyyMMdd
+
+eContext   3
+aZKey      1077347
+aName      YYYYMonDD
+aEditString YYYY Mon dd
+aJavaEditString yyyy MMM dd
+
+eContext   3
+aZKey      1077346
+aName      YYYYMonthDD
+aEditString YYYY Mmmm dd
+aJavaEditString yyyy MMMM dd
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateTimeDomain
+aZKey      90000089
+aName      DateTime
+aDesc      Basic Timestamp Domain
+aDomainType A
+aDataType  T
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDateTime
+
+eContext   3
+aZKey      90000091
+aName      Date
+aEditString YYYYmmdd
+aJavaEditString yyyyMMdd
+
+eContext   3
+aZKey      90000090
+aName      DateTime
+aEditString YYYYmmddHHMISS999
+aJavaEditString yyyyMMddHHmmssSSS
+
+eContext   3
+aZKey      90000109
+aName      Day
+
+eContext   3
+aZKey      90000115
+aName      DayOfMonth
+aEditString D
+aJavaEditString d
+
+eContext   3
+aZKey      90000114
+aName      DayOfWeek
+aEditString Dddd
+aJavaEditString EEEE
+
+eContext   3
+aZKey      90000116
+aName      DayOfYear
+aEditString jjj
+aJavaEditString D
+
+eContext   3
+aZKey      90000098
+aName      DD.MM.YYYY
+aEditString dd.mm.YYYY
+aJavaEditString dd.MM.yyyy
+
+eContext   3
+aZKey      127021331
+aName      DD.MM.YYYY HH:MM
+aEditString dd.mm.YYYY HH:MI
+aJavaEditString dd.MM.yyyy HH:mm
+
+eContext   3
+aZKey      90000126
+aName      DD.MM.YYYY HH:MM:SS
+aEditString dd.mm.YYYY HH:MI:SS
+aJavaEditString dd.MM.yyyy HH:mm:ss
+
+eContext   3
+aZKey      90000103
+aName      DDMonthYYYY
+aEditString dd Mmmm, YYYY
+aJavaEditString dd MMMM, yyyy
+
+eContext   3
+aZKey      90000105
+aName      DDMonYYYY
+aEditString dd Mmm YYYY
+aJavaEditString dd MMM yyyy
+
+eContext   3
+aZKey      127021332
+aName      HH:MM
+aEditString HH:MI
+aJavaEditString HH:mm
+
+eContext   3
+aZKey      354026007
+aName      HH:MM AM
+aJavaEditString hh:mm a
+
+eContext   3
+aZKey      127021333
+aName      HH:MM:SS
+aEditString HH:MI:SS
+aJavaEditString HH:mm:ss
+
+eContext   3
+aZKey      90000120
+aName      HH:MM:SS.S
+aEditString HH:MI:SS.9
+aJavaEditString HH:mm:ss.S
+
+eContext   3
+aZKey      90000119
+aName      HH:MM:SS.S AM
+aEditString HH:MI:SS.9 AM
+aJavaEditString HH:mm:ss.S a
+
+eContext   3
+aZKey      90000121
+aName      Hour
+aEditString HH
+aJavaEditString HH
+
+eContext   3
+aZKey      90000093
+aName      ListDisplayNumeric
+aEditString YYYY/MM/DD - HH:MI
+aJavaEditString yyyy/MM/dd - HH:mm
+
+eContext   3
+aZKey      90000122
+aName      Minute
+aEditString MI
+aJavaEditString mm
+
+eContext   3
+aZKey      90000096
+aName      MM-DD-YYYY
+aEditString mm-dd-YYYY
+aJavaEditString MM-dd-yyyy
+
+eContext   3
+aZKey      90000094
+aName      MM/DD/YYYY
+aEditString mm/dd/YYYY
+aJavaEditString  MM/dd/yyyy
+
+eContext   3
+aZKey      354026005
+aName      MM/DD/YYYY HH:MM AM
+aEditString mm/dd/YYYY HH:MI AM
+aJavaEditString MM/dd/yyyy hh:mm a
+aIsDefault Y
+
+eContext   3
+aZKey      354026006
+aName      MM/DD/YYYY HH:MM:SS
+aEditString mm/dd/YYYY HH:MI:SS
+aJavaEditString MM/dd/yyyy HH:mm:ss
+
+eContext   3
+aZKey      90000125
+aName      MM/DD/YYYY HH:MM:SS.S
+aEditString mm/dd/YYYY HH:MI:SS.9
+aJavaEditString MM/dd/yyyy HH:mm:ss.S
+
+eContext   3
+aZKey      90000124
+aName      MM/DD/YYYY HH:MM:SS.S AM
+aEditString mm/dd/YYYY HH:MI:SS.9 AM
+aJavaEditString MM/dd/yyyy hh:mm:ss.s a
+
+eContext   3
+aZKey      90000104
+aName      MonDDYYYY
+aEditString Mmm dd, YYYY
+aJavaEditString MMM dd, yyyy
+
+eContext   3
+aZKey      90000110
+aName      Month
+
+eContext   3
+aZKey      90000102
+aName      MonthDDYYYY
+aEditString Mmmm dd, YYYY
+aJavaEditString MMMM dd, yyyy
+
+eContext   3
+aZKey      90000118
+aName      MonthOfYear
+aEditString Mmmm
+aJavaEditString MMMM
+
+eContext   3
+aZKey      90000106
+aName      MSWindowsLongSetting
+
+eContext   3
+aZKey      90000108
+aName      MSWindowsSetting
+
+eContext   3
+aZKey      90000107
+aName      MSWindowsShortSetting
+
+eContext   3
+aZKey      90000123
+aName      Second
+aEditString SS
+aJavaEditString SS
+
+eContext   3
+aZKey      90000092
+aName      Time
+aEditString HHMISS999
+aJavaEditString HHmmssSSS
+
+eContext   3
+aZKey      123030441
+aName      UserFriendlyGerman
+
+eContext   3
+aZKey      90000117
+aName      WeekOfYear
+
+eContext   3
+aZKey      90000111
+aName      Year
+
+eContext   3
+aZKey      90000112
+aName      YYYY
+aEditString YYYY
+aJavaEditString yyyy
+
+eContext   3
+aZKey      354026009
+aName      YYYY-MM-DD HH:MM:SS
+aEditString YYYY-mm-dd HH:MI:SS
+aJavaEditString yyyy-MM-dd HH:mm:ss
+
+eContext   3
+aZKey      90000101
+aName      YYYYJJJ
+aEditString YYYYjjj
+aJavaEditString yyyyD
+
+eContext   3
+aZKey      354026004
+aName      YYYYMMDDHHMMSSS
+aEditString YYYYmmddHHMISS9
+aJavaEditString yyyyMMddHHmmssS
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      90422286
+aName      Day
+aDesc      Number of day in month
+aDomainType A
+aDataType  L
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+
+eContext   3
+aZKey      90422287
+aName      Day
+aEditString <= 31
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90421975
+aName      DayOfWeek
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      90421976
+aName      DayOfWeek
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92972218
+
+eTableEntry 4
+aZKey      90421977
+aExternalValue Sunday
+aInternalValue 1
+
+eTableEntry 4
+aZKey      90421978
+aExternalValue Monday
+aInternalValue 2
+
+eTableEntry 4
+aZKey      90421979
+aExternalValue Tuesday
+aInternalValue 3
+
+eTableEntry 4
+aZKey      90421980
+aExternalValue Wednesday
+aInternalValue 4
+
+eTableEntry 4
+aZKey      90421981
+aExternalValue Thursday
+aInternalValue 5
+
+eTableEntry 4
+aZKey      90421982
+aExternalValue Friday
+aInternalValue 6
+
+eTableEntry 4
+aZKey      90421983
+aExternalValue Saturday
+aInternalValue 7
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422307
+aName      Decimal
+aDesc      Characters '0-9' precision ( 0.00 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422308
+aName      DECIMAL
+aDecimalFormat 2
+aJavaEditString ####.#############
+
+eContext   3
+aZKey      90422309
+aName      DECIMAL0
+aDecimalFormat 0
+aJavaEditString ####.
+
+eContext   3
+aZKey      90422310
+aName      DECIMAL1
+aDecimalFormat 1
+aJavaEditString ####.0
+
+eContext   3
+aZKey      90422311
+aName      DECIMAL2
+aDecimalFormat 2
+aJavaEditString ####.00
+aIsDefault Y
+
+eContext   3
+aZKey      90422312
+aName      DECIMAL3
+aDecimalFormat 3
+aJavaEditString ####.000
+
+eContext   3
+aZKey      90422313
+aName      DECIMAL4
+aDecimalFormat 4
+aJavaEditString ####.0000
+
+eContext   3
+aZKey      90422314
+aName      DecimalComma
+aDecimalFormat -1
+aJavaEditString #,###.#############
+
+eContext   3
+aZKey      90422315
+aName      DecimalComma0
+aDecimalFormat 0
+aJavaEditString #,###
+
+eContext   3
+aZKey      90422316
+aName      DecimalComma1
+aDecimalFormat 1
+aJavaEditString #,###.0
+
+eContext   3
+aZKey      90422317
+aName      DecimalComma2
+aDecimalFormat 2
+aJavaEditString #,###.00
+
+eContext   3
+aZKey      90422318
+aName      DecimalComma3
+aDecimalFormat 3
+aJavaEditString #,###.000
+
+eContext   3
+aZKey      90422319
+aName      DecimalComma4
+aJavaEditString #,###.0000
+
+eContext   3
+aZKey      90422320
+aName      DecimalFraction
+
+eContext   3
+aZKey      90422321
+aName      DecimalInteger
+
+eContext   3
+aZKey      90422322
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90422323
+aName      DecimalKey2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422324
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422325
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422326
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422327
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422328
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422329
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422330
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422448
+aName      Decimal0
+aDesc      Characters '0-9' precision ( 0 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422449
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422450
+aName      DECIMAL0
+aDecimalFormat 0
+aIsDefault Y
+
+eContext   3
+aZKey      90422451
+aName      DECIMAL1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422452
+aName      DECIMAL2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422453
+aName      DECIMAL3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422454
+aName      DECIMAL4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422455
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422456
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422457
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422458
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422459
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422460
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422461
+aName      DecimalFraction
+
+eContext   3
+aZKey      90422462
+aName      DecimalInteger
+
+eContext   3
+aZKey      90422463
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90422464
+aName      DecimalKey0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422465
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422466
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422467
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422468
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422469
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422470
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422471
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422424
+aName      Decimal1
+aDesc      Characters '0-9' precision ( 0.0 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422425
+aName      DECIMAL
+aDecimalFormat 2
+aJavaEditString ####.#############
+
+eContext   3
+aZKey      90422426
+aName      DECIMAL0
+aDecimalFormat 0
+aJavaEditString ####
+
+eContext   3
+aZKey      90422427
+aName      DECIMAL1
+aDecimalFormat 1
+aJavaEditString ####.0
+aIsDefault Y
+
+eContext   3
+aZKey      90422428
+aName      DECIMAL2
+aDecimalFormat 2
+aJavaEditString ####.00
+
+eContext   3
+aZKey      90422429
+aName      DECIMAL3
+aDecimalFormat 3
+aJavaEditString ####.000
+
+eContext   3
+aZKey      90422430
+aName      DECIMAL4
+aDecimalFormat 4
+aJavaEditString ####.0000
+
+eContext   3
+aZKey      90422431
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422432
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422433
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422434
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422435
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422436
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422437
+aName      DecimalFraction
+
+eContext   3
+aZKey      90422438
+aName      DecimalInteger
+
+eContext   3
+aZKey      90422439
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90422440
+aName      DecimalKey1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422441
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422442
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422443
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422444
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422445
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422446
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422447
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422400
+aName      Decimal2
+aDesc      Characters '0-9' precision ( 0.00 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422401
+aName      DECIMAL
+aDecimalFormat 2
+aJavaEditString ####.#############
+
+eContext   3
+aZKey      90422402
+aName      DECIMAL0
+aDecimalFormat 0
+aJavaEditString ####
+
+eContext   3
+aZKey      90422403
+aName      DECIMAL1
+aDecimalFormat 1
+aJavaEditString ####.0
+
+eContext   3
+aZKey      90422404
+aName      DECIMAL2
+aDecimalFormat 2
+aJavaEditString ####.00
+aIsDefault Y
+
+eContext   3
+aZKey      90422405
+aName      DECIMAL3
+aDecimalFormat 3
+aJavaEditString ####.000
+
+eContext   3
+aZKey      90422406
+aName      DECIMAL4
+aDecimalFormat 4
+aJavaEditString ####.0000
+
+eContext   3
+aZKey      90422407
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422408
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422409
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422410
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422411
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422412
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422413
+aName      DecimalFraction
+
+eContext   3
+aZKey      90422414
+aName      DecimalInteger
+
+eContext   3
+aZKey      90422415
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90422416
+aName      DecimalKey2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422417
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422418
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422419
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422420
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422421
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422422
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422423
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422376
+aName      Decimal3
+aDesc      Characters '0-9' precision ( 0.000 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422377
+aName      DECIMAL
+aDecimalFormat 2
+aJavaEditString ####.#############
+
+eContext   3
+aZKey      90422378
+aName      DECIMAL0
+aDecimalFormat 0
+aJavaEditString ####
+
+eContext   3
+aZKey      90422379
+aName      DECIMAL1
+aDecimalFormat 1
+aJavaEditString ####.0
+
+eContext   3
+aZKey      90422380
+aName      DECIMAL2
+aDecimalFormat 2
+aJavaEditString ####.00
+
+eContext   3
+aZKey      90422381
+aName      DECIMAL3
+aDecimalFormat 3
+aJavaEditString ####.000
+aIsDefault Y
+
+eContext   3
+aZKey      90422382
+aName      DECIMAL4
+aDecimalFormat 4
+aJavaEditString ####.0000
+
+eContext   3
+aZKey      90422383
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422384
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422385
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422386
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422387
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422388
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422389
+aName      DecimalFraction
+
+eContext   3
+aZKey      90422390
+aName      DecimalInteger
+
+eContext   3
+aZKey      90422391
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90422392
+aName      DecimalKey3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422393
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422394
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422395
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422396
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422397
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422398
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422399
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422352
+aName      Decimal4
+aDesc      Characters '0-9' precision ( 0.0000 )
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422353
+aName      DECIMAL
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422354
+aName      DECIMAL0
+aDecimalFormat 0
+aJavaEditString ####
+
+eContext   3
+aZKey      90422355
+aName      DECIMAL1
+aDecimalFormat 1
+aJavaEditString ####.0
+
+eContext   3
+aZKey      90422356
+aName      DECIMAL2
+aDecimalFormat 2
+aJavaEditString ####.00
+
+eContext   3
+aZKey      90422357
+aName      DECIMAL3
+aDecimalFormat 3
+aJavaEditString ####.000
+
+eContext   3
+aZKey      90422358
+aName      DECIMAL4
+aDecimalFormat 4
+aJavaEditString ####.0000
+aIsDefault Y
+
+eContext   3
+aZKey      90422359
+aName      DecimalComma
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422360
+aName      DecimalComma0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422361
+aName      DecimalComma1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422362
+aName      DecimalComma2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422363
+aName      DecimalComma3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422364
+aName      DecimalComma4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422365
+aName      DecimalFraction
+
+eContext   3
+aZKey      90422366
+aName      DecimalInteger
+
+eContext   3
+aZKey      90422367
+aName      DecimalIntegerRounded
+
+eContext   3
+aZKey      90422368
+aName      DecimalKey4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422369
+aName      DecimalPoint
+aDecimalFormat -1
+
+eContext   3
+aZKey      90422370
+aName      DecimalPoint0
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422371
+aName      DecimalPoint1
+aDecimalFormat 1
+
+eContext   3
+aZKey      90422372
+aName      DecimalPoint2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422373
+aName      DecimalPoint3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422374
+aName      DecimalPoint4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422375
+aName      MSWindowsSetting
+aDecimalFormat 2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422346
+aName      Decimal5
+aDesc      Characters '0-9' precision ( 0.00000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 5
+
+eContext   3
+aZKey      90422347
+aName      Decimal2
+aDecimalFormat 2
+
+eContext   3
+aZKey      90422348
+aName      Decimal3
+aDecimalFormat 3
+
+eContext   3
+aZKey      90422349
+aName      Decimal4
+aDecimalFormat 4
+
+eContext   3
+aZKey      90422350
+aName      Decimal5
+aDecimalFormat 5
+aIsDefault Y
+
+eContext   3
+aZKey      90422351
+aName      DecimalKey5
+aDecimalFormat 5
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422343
+aName      Decimal6
+aDesc      Characters '0-9' precision ( 0.000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 6
+
+eContext   3
+aZKey      90422344
+aName      Decimal6
+aDecimalFormat 6
+aIsDefault Y
+
+eContext   3
+aZKey      90422345
+aName      DecimalKey6
+aDecimalFormat 6
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422340
+aName      Decimal7
+aDesc      Characters '0-9' precision ( 0.0000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 7
+
+eContext   3
+aZKey      90422341
+aName      Decimal7
+aDecimalFormat 7
+aIsDefault Y
+
+eContext   3
+aZKey      90422342
+aName      DecimalKey7
+aDecimalFormat 7
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422337
+aName      Decimal8
+aDesc      Characters '0-9' precision ( 0.00000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 8
+
+eContext   3
+aZKey      90422338
+aName      Decimal8
+aDecimalFormat 8
+aIsDefault Y
+
+eContext   3
+aZKey      90422339
+aName      DecimalKey8
+aDecimalFormat 8
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422334
+aName      Decimal9
+aDesc      Characters '0-9' precision ( 0.000000000 )  Max 15 digits
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 9
+
+eContext   3
+aZKey      90422335
+aName      Decimal9
+aDecimalFormat 9
+aIsDefault Y
+
+eContext   3
+aZKey      90422336
+aName      DecimalKey9
+aDecimalFormat 9
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90422332
+aName      DecimalKey0
+aDesc      Decimal used as integer
+aDomainType A
+aDataType  M
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422333
+aName      DecimalKey0
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054327
+aName      DeliveryLegType
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+
+eContext   3
+aZKey      228054328
+aName      DeliveryLegType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054430
+aExternalValue H-T
+aInternalValue H-T
+
+eTableEntry 4
+aZKey      228054431
+aExternalValue T-T
+aInternalValue T-T
+
+eTableEntry 4
+aZKey      228054432
+aExternalValue T-D
+aInternalValue T-D
+
+eTableEntry 4
+aZKey      228054433
+aExternalValue D-D
+aInternalValue D-D
+
+eTableEntry 4
+aZKey      228054436
+aExternalValue D-T
+aInternalValue D-T
+
+eTableEntry 4
+aZKey      228054434
+aExternalValue D-H
+aInternalValue D-H
+
+eContext   3
+aZKey      228054437
+aName      Icon
+
+eTableEntry 4
+aZKey      228054438
+aExternalValue <img src='./images/tanker_HT.png' alt='H-T'>
+aInternalValue H-T
+
+eTableEntry 4
+aZKey      228054439
+aExternalValue <img src='./images/tanker_TT.png' alt='T-T'>
+aInternalValue T-T
+
+eTableEntry 4
+aZKey      228054440
+aExternalValue <img src='./images/tanker_TD.png' alt='T-D'>
+aInternalValue T-D
+
+eTableEntry 4
+aZKey      228054441
+aExternalValue <img src='./images/tanker_DD.png' alt='D-D'>
+aInternalValue D-D
+
+eTableEntry 4
+aZKey      228054442
+aExternalValue <img src='./images/tanker_DT.png' alt='D-T'>
+aInternalValue D-T
+
+eTableEntry 4
+aZKey      228054443
+aExternalValue <img src='./images/tanker_DH.png' alt='D-H'>
+aInternalValue D-H
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054189
+aName      DeliveryLocationType
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      228054190
+aName      DeliveryLocationType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054191
+aExternalValue Gas Station
+aInternalValue GS
+
+eTableEntry 4
+aZKey      228054192
+aExternalValue Terminal
+aInternalValue T
+
+eTableEntry 4
+aZKey      228054210
+aExternalValue Commercial and Industrial
+aInternalValue CI
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054476
+aName      DeliveryRouteStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      228054477
+aName      DeliveryRouteStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054478
+aExternalValue Scheduled
+aInternalValue Scheduled
+
+eTableEntry 4
+aZKey      228054479
+aExternalValue Pick Up in Progress
+aInternalValue Pick Up
+
+eTableEntry 4
+aZKey      228054480
+aExternalValue Delivery in Progress
+aInternalValue Delivery
+
+eTableEntry 4
+aZKey      228054481
+aExternalValue Completed
+aInternalValue Completed
+
+eTableEntry 4
+aZKey      228054482
+aExternalValue Route to HB in Progress
+aInternalValue Route to HB
+
+eContext   3
+aZKey      228054529
+aName      Icon
+
+eTableEntry 4
+aZKey      228054530
+aExternalValue <img src='./images/scheduled.png' alt='Scheduled'>
+aInternalValue Scheduled
+
+eTableEntry 4
+aZKey      228054531
+aExternalValue <img src='./images/pickup.png' alt='Scheduled'>
+aInternalValue Pick Up
+
+eTableEntry 4
+aZKey      228054532
+aExternalValue <img src='./images/inprocess.png' alt='Delivery In Process'>
+aInternalValue Delivery
+
+eTableEntry 4
+aZKey      228054533
+aExternalValue <img src='./images/delivered.png' alt='Delivered'>
+aInternalValue Completed
+
+eTableEntry 4
+aZKey      228054534
+aExternalValue <img src='./images/homebase.png' alt='Route to HB'>
+aInternalValue Route to HB
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054167
+aName      DeliveryVehicleType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054168
+aName      DeliveryVehicleType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054169
+aExternalValue Semi Trailer
+aInternalValue S
+
+eTableEntry 4
+aZKey      228054170
+aExternalValue Bobtail
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054171
+aExternalValue Bobtail Trailer
+aInternalValue T
+
+eTableEntry 4
+aZKey      228054507
+aExternalValue Light Vehicle
+aInternalValue L
+
+eContext   3
+aZKey      228054517
+aName      Icon
+
+eTableEntry 4
+aZKey      228054518
+aExternalValue <img src='./images/semitrailer.png' alt='Semi Trailer'>
+aInternalValue S
+
+eTableEntry 4
+aZKey      228054519
+aExternalValue <img src='./images/bobtail.png' alt='Bobtail'>
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054520
+aExternalValue <img src='./images/btraileronly.png' alt='Bobtail Trailer'>
+aInternalValue T
+
+eTableEntry 4
+aZKey      228054521
+aExternalValue <img src='./images/lightvehicle.png' alt='Open'>
+aInternalValue L
+
+eContext   3
+aZKey      228054526
+aName      TrailerTankType
+
+eTableEntry 4
+aZKey      228054527
+aExternalValue Semi Trailer
+aInternalValue S
+
+eTableEntry 4
+aZKey      228054528
+aExternalValue Bobtail Trailer
+aInternalValue T
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054358
+aName      DocumentType
+aDesc      Vapor Certification, Registration, Insurance, Other etc
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054599
+aName      DocumentCorp
+
+eTableEntry 4
+aZKey      228054604
+aExternalValue IFTA
+aInternalValue IFTA
+
+eTableEntry 4
+aZKey      228054605
+aExternalValue Liability Insurance
+aInternalValue LI
+
+eTableEntry 4
+aZKey      228054608
+aExternalValue Non-Expiring Motor Permit
+aInternalValue NEMCP
+
+eTableEntry 4
+aZKey      228054610
+aExternalValue Policy & Procedures
+aInternalValue PP
+
+eTableEntry 4
+aZKey      228054613
+aExternalValue Training
+aInternalValue TR
+
+eTableEntry 4
+aZKey      228054615
+aExternalValue US DOT Hazmat Certificate
+aInternalValue HC
+
+eTableEntry 4
+aZKey      228054617
+aExternalValue Other
+aInternalValue OTH
+
+eContext   3
+aZKey      228054559
+aName      DocumentDriver
+
+eTableEntry 4
+aZKey      228054563
+aExternalValue Driver's License
+aInternalValue DL
+
+eTableEntry 4
+aZKey      228054566
+aExternalValue Medical Card
+aInternalValue MC
+
+eTableEntry 4
+aZKey      228054579
+aExternalValue MVR
+aInternalValue MVR
+
+eTableEntry 4
+aZKey      228054574
+aExternalValue TWIC Card
+aInternalValue TC
+
+eTableEntry 4
+aZKey      228054577
+aExternalValue Other
+aInternalValue OTH
+
+eContext   3
+aZKey      228054580
+aName      DocumentTruck
+
+eTableEntry 4
+aZKey      228054618
+aExternalValue Apportioned Reg Cab Card
+aInternalValue ARCC
+
+eTableEntry 4
+aZKey      228054590
+aExternalValue Perm Trailer ID Card
+aInternalValue PTID
+
+eTableEntry 4
+aZKey      228054592
+aExternalValue Registration
+aInternalValue RG
+
+eTableEntry 4
+aZKey      228054593
+aExternalValue Repair Receipts
+aInternalValue RR
+
+eTableEntry 4
+aZKey      228054597
+aExternalValue Vapor Recovery Certificate
+aInternalValue VC
+
+eTableEntry 4
+aZKey      228054598
+aExternalValue Other
+aInternalValue OTH
+
+eContext   3
+aZKey      228054359
+aName      DocumentType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054407
+aExternalValue Apportioned Reg Cab Card
+aInternalValue ARCC
+
+eTableEntry 4
+aZKey      228054492
+aExternalValue BIT Inspection
+aInternalValue BIT
+
+eTableEntry 4
+aZKey      228054408
+aExternalValue CA Hazmat Certificate
+aInternalValue CATL
+
+eTableEntry 4
+aZKey      228054402
+aExternalValue Driver's License
+aInternalValue DL
+
+eTableEntry 4
+aZKey      228054405
+aExternalValue IFTA
+aInternalValue IFTA
+
+eTableEntry 4
+aZKey      228054401
+aExternalValue Liability Insurance
+aInternalValue LI
+
+eTableEntry 4
+aZKey      228054410
+aExternalValue Medical Card
+aInternalValue MC
+
+eTableEntry 4
+aZKey      228054558
+aExternalValue MVR
+aInternalValue MVR
+
+eTableEntry 4
+aZKey      228054404
+aExternalValue Non-Expiring Motor Permit
+aInternalValue NEMCP
+
+eTableEntry 4
+aZKey      228054406
+aExternalValue Perm Trailer ID Card
+aInternalValue PTID
+
+eTableEntry 4
+aZKey      228054556
+aExternalValue Policy & Procedures
+aInternalValue PP
+
+eTableEntry 4
+aZKey      228054396
+aExternalValue Registration
+aInternalValue RG
+
+eTableEntry 4
+aZKey      228054555
+aExternalValue Repair Receipts
+aInternalValue RR
+
+eTableEntry 4
+aZKey      228054557
+aExternalValue Training
+aInternalValue TR
+
+eTableEntry 4
+aZKey      228054411
+aExternalValue TWIC Card
+aInternalValue TC
+
+eTableEntry 4
+aZKey      228054403
+aExternalValue US DOT Hazmat Certificate
+aInternalValue HC
+
+eTableEntry 4
+aZKey      228054395
+aExternalValue Vapor Recovery Certificate
+aInternalValue VC
+
+eTableEntry 4
+aZKey      228054409
+aExternalValue Other
+aInternalValue OTH
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054155
+aName      DriverAuthorizationStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054156
+aName      DriverAuthorizationStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054157
+aExternalValue Approved
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054158
+aExternalValue Locked-Out
+aInternalValue L
+
+eTableEntry 4
+aZKey      228054159
+aExternalValue Expired
+aInternalValue E
+
+eTableEntry 4
+aZKey      228054160
+aExternalValue In Training
+aInternalValue T
+
+eTableEntry 4
+aZKey      228054216
+aExternalValue Pending
+aInternalValue P
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054468
+aName      DriverStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054469
+aName      DriverStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054470
+aExternalValue Active
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054471
+aExternalValue Inactive
+aInternalValue I
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054545
+aName      DueDateIncrementType
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      228054546
+aName      DueDateIncrementType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054547
+aExternalValue From Invoice Date
+aInternalValue FromInvoiceDate
+
+eTableEntry 4
+aZKey      228054548
+aExternalValue From Delivery Date
+aInternalValue FromDeliveryDate
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054296
+aName      EffortTypeType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054297
+aName      EffortTypeType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054298
+aExternalValue Universal
+aInternalValue U
+
+eTableEntry 4
+aZKey      228054299
+aExternalValue Customer
+aInternalValue C
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      228054138
+aName      EIN
+aDomainType E
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      228054139
+aName      EIN
+aEditString 99-99999999
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.EmailAddressDomain
+aZKey      90420618
+aName      EMailAddress
+aDomainType E
+aDataType  S
+aMaxStringLth 128
+aContextRestriction N
+
+eContext   3
+aZKey      90420619
+aName      EMailAddress
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      92743272
+aName      ExecutionTimeIntervalMinutes
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      92743273
+aName      ExecutionTimeIntervalMinutes
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92743274
+aExternalValue Per 10 Mins
+aInternalValue 10
+
+eTableEntry 4
+aZKey      92743275
+aExternalValue Per Hour
+aInternalValue 60
+
+eTableEntry 4
+aZKey      92743276
+aExternalValue Per Day
+aInternalValue 1440
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054360
+aName      ExpirationInterval
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      228054361
+aName      ExpirationInterval
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054363
+aExternalValue 1 Year
+aInternalValue 1
+
+eTableEntry 4
+aZKey      228054364
+aExternalValue No Expiration
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420608
+aName      FirstName
+aDesc      Person's First Name
+aDomainType E
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      90420609
+aName      FirstName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054508
+aName      FuelTransactionAdjustmentReason
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      228054509
+aName      FuelTransactionAdjustmentReason
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054510
+aExternalValue DonT1
+aInternalValue DonT1
+
+eTableEntry 4
+aZKey      228054511
+aExternalValue DonT2
+aInternalValue DonT2
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054493
+aName      FuelTransactionType
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      228054494
+aName      FuelTransactionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054495
+aExternalValue Load
+aInternalValue Load
+
+eTableEntry 4
+aZKey      228054496
+aExternalValue Unload
+aInternalValue Unload
+
+eTableEntry 4
+aZKey      228054497
+aExternalValue Adjustment
+aInternalValue Adjust
+
+eTableEntry 4
+aZKey      228054499
+aExternalValue Transfer to Holding Tank
+aInternalValue TransferToHT
+
+eTableEntry 4
+aZKey      228054500
+aExternalValue Transfer from Holding Tank
+aInternalValue TransferFromHT
+
+eTableEntry 4
+aZKey      228054501
+aExternalValue Holding Tank Adjustment
+aInternalValue AdjustHT
+
+eTableEntry 4
+aZKey      228054540
+aExternalValue Manual Unload
+aInternalValue UnloadMn
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420623
+aName      Gender
+aDesc      (Male/Female)
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90420624
+aName      Gender
+aIsDefault Y
+
+eTableEntry 4
+aZKey      90420625
+aExternalValue Female
+aInternalValue F
+
+eTableEntry 4
+aZKey      90420626
+aExternalValue Male
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420630
+aName      GeneralName_Address
+aDesc      General Text (names, streets, cities, etc.)
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      90420631
+aName      GeneralName_Address
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      228054377
+aName      IdentifierNbr
+aDomainType F
+aDataType  S
+aMaxStringLth 16
+aContextRestriction N
+
+eContext   3
+aZKey      228054378
+aName      IdentifierNbr
+aEditString 9999999999999999
+aJavaEditString 9999999999999999
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      90422290
+aName      Integer
+aDesc      Integer numbers from -lots to +lots
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+aDecimalFormat 0
+
+eContext   3
+aZKey      90422291
+aName      Hex
+
+eContext   3
+aZKey      90422292
+aName      INTEGER
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.PasswordDomain
+aZKey      93174301
+aName      JavaPassword
+aDesc      Password for logging into Web Java
+aDomainType A
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmPassword
+
+eContext   3
+aZKey      93174302
+aName      JavaPassword
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420610
+aName      LastName
+aDesc      Person's Last Name
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      90420611
+aName      LastName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054381
+aName      LicenseClass
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      228054382
+aName      LicenseClass
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054383
+aExternalValue A
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054385
+aExternalValue B
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054386
+aExternalValue C
+aInternalValue C
+
+eTableEntry 4
+aZKey      228054387
+aExternalValue D
+aInternalValue D
+
+eTableEntry 4
+aZKey      228054388
+aExternalValue M
+aInternalValue M
+
+eTableEntry 4
+aZKey      228054389
+aExternalValue V
+aInternalValue V
+
+eTableEntry 4
+aZKey      228054390
+aExternalValue CDL
+aInternalValue CDL
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054149
+aName      LoadRequestStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      228054421
+aName      Icon
+
+eTableEntry 4
+aZKey      228054422
+aExternalValue <img src='./images/open.png' alt='Open'>
+aInternalValue Open
+
+eTableEntry 4
+aZKey      228054423
+aExternalValue <img src='./images/ready.png' alt='Ready'>
+aInternalValue Ready
+
+eTableEntry 4
+aZKey      228054424
+aExternalValue <img src='./images/scheduled.png' alt='Scheduled'>
+aInternalValue Scheduled
+
+eTableEntry 4
+aZKey      228054425
+aExternalValue <img src='./images/inprocess.png' alt=In Process'>
+aInternalValue InProcess
+
+eTableEntry 4
+aZKey      228054446
+aExternalValue <img src='./images/pickup.png' alt=Pickup>
+aInternalValue Pickup
+
+eTableEntry 4
+aZKey      228054426
+aExternalValue <img src='./images/delivered.png' alt='Delivered'>
+aInternalValue Delivered
+
+eTableEntry 4
+aZKey      228054427
+aExternalValue <img src='./images/reviewed.png' alt='Reviewed'>
+aInternalValue Reviewed
+
+eTableEntry 4
+aZKey      228054428
+aExternalValue <img src='./images/closed.png' alt='Closed'>
+aInternalValue Closed
+
+eTableEntry 4
+aZKey      228054429
+aExternalValue <img src='./images/canceled.png' alt='Canceled'>
+aInternalValue Canceled
+
+eContext   3
+aZKey      228054150
+aName      LoadRequestStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054153
+aExternalValue Open
+aInternalValue Open
+
+eTableEntry 4
+aZKey      228054400
+aExternalValue Ready
+aInternalValue Ready
+
+eTableEntry 4
+aZKey      228054301
+aExternalValue Scheduled
+aInternalValue Scheduled
+
+eTableEntry 4
+aZKey      228054302
+aExternalValue Delivery in Process
+aInternalValue InProcess
+
+eTableEntry 4
+aZKey      228054445
+aExternalValue Pickup in Process
+aInternalValue Pickup
+
+eTableEntry 4
+aZKey      228054303
+aExternalValue Delivered
+aInternalValue Delivered
+
+eTableEntry 4
+aZKey      228054304
+aExternalValue Reviewed
+aInternalValue Reviewed
+
+eTableEntry 4
+aZKey      228054154
+aExternalValue Closed
+aInternalValue Closed
+
+eTableEntry 4
+aZKey      228054313
+aExternalValue Canceled
+aInternalValue Canceled
+
+eContext   3
+aZKey      228054454
+aName      OrderCreateUpdate
+
+eTableEntry 4
+aZKey      228054455
+aExternalValue Open
+aInternalValue Open
+
+eTableEntry 4
+aZKey      228054456
+aExternalValue Canceled
+aInternalValue Canceled
+
+eContext   3
+aZKey      228054458
+aName      OrderStatusSubcarrier
+
+eTableEntry 4
+aZKey      228054459
+aExternalValue Open
+aInternalValue Open
+
+eTableEntry 4
+aZKey      228054460
+aExternalValue Closed
+aInternalValue Closed
+
+eTableEntry 4
+aZKey      228054461
+aExternalValue Canceled
+aInternalValue Canceled
+
+eContext   3
+aZKey      228054462
+aName      Reviewable
+
+eTableEntry 4
+aZKey      228054463
+aExternalValue Reviewed
+aInternalValue Reviewed
+
+eTableEntry 4
+aZKey      228054465
+aExternalValue Delivered
+aInternalValue Delivered
+
+eTableEntry 4
+aZKey      228054466
+aExternalValue Closed
+aInternalValue Closed
+
+eContext   3
+aZKey      228054329
+aName      StatusShortName
+
+eTableEntry 4
+aZKey      228054330
+aExternalValue O
+aInternalValue Open
+
+eTableEntry 4
+aZKey      228054448
+aExternalValue P
+aInternalValue Pickup
+
+eTableEntry 4
+aZKey      228054332
+aExternalValue S
+aInternalValue Scheduled
+
+eTableEntry 4
+aZKey      228054333
+aExternalValue P
+aInternalValue InProcess
+
+eTableEntry 4
+aZKey      228054334
+aExternalValue D
+aInternalValue Delivered
+
+eTableEntry 4
+aZKey      228054335
+aExternalValue R
+aInternalValue Reviewed
+
+eTableEntry 4
+aZKey      228054336
+aExternalValue C
+aInternalValue Closed
+
+eTableEntry 4
+aZKey      228054337
+aExternalValue Canceled
+aInternalValue Canceled
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90422098
+aName      MaritalStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90422099
+aName      MaritalStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92972228
+
+eTableEntry 4
+aZKey      90422100
+aExternalValue Married
+aInternalValue M
+
+eTableEntry 4
+aZKey      90422101
+aExternalValue Single
+aInternalValue S
+
+eTableEntry 4
+aZKey      90422102
+aExternalValue Divorced
+aInternalValue D
+
+eTableEntry 4
+aZKey      90422103
+aExternalValue Separated
+aInternalValue E
+
+eTableEntry 4
+aZKey      90422104
+aExternalValue Widow/er
+aInternalValue W
+
+eTableEntry 4
+aZKey      70682797
+aExternalValue Single Parent
+aInternalValue P
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420606
+aName      MiddleName
+aDesc      Person's middle name or initial
+aDomainType E
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      90420607
+aName      MiddleName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90422068
+aName      Month
+aDesc      Number of month in year (ex., November is 11)
+aDomainType T
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      90422069
+aName      Month
+aIsDefault Y
+
+eTableEntry 4
+aZKey      90422070
+aExternalValue January
+aInternalValue 1
+
+eTableEntry 4
+aZKey      90422071
+aExternalValue February
+aInternalValue 2
+
+eTableEntry 4
+aZKey      90422072
+aExternalValue March
+aInternalValue 3
+
+eTableEntry 4
+aZKey      90422073
+aExternalValue April
+aInternalValue 4
+
+eTableEntry 4
+aZKey      90422074
+aExternalValue May
+aInternalValue 5
+
+eTableEntry 4
+aZKey      90422075
+aExternalValue June
+aInternalValue 6
+
+eTableEntry 4
+aZKey      90422076
+aExternalValue July
+aInternalValue 7
+
+eTableEntry 4
+aZKey      90422077
+aExternalValue August
+aInternalValue 8
+
+eTableEntry 4
+aZKey      90422078
+aExternalValue September
+aInternalValue 9
+
+eTableEntry 4
+aZKey      90422079
+aExternalValue October
+aInternalValue 10
+
+eTableEntry 4
+aZKey      90422080
+aExternalValue November
+aInternalValue 11
+
+eTableEntry 4
+aZKey      90422081
+aExternalValue December
+aInternalValue 12
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      110001943
+aName      MonthDay
+aDomainType F
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      110001944
+aName      MonthDay
+aEditString 99/99
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420616
+aName      Note
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      90420617
+aName      Note
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054193
+aName      OrderPriority
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054194
+aName      OrderPriority
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054195
+aExternalValue Low
+aInternalValue L
+
+eTableEntry 4
+aZKey      228054197
+aExternalValue Medium
+aInternalValue M
+
+eTableEntry 4
+aZKey      228054198
+aExternalValue High
+aInternalValue H
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054472
+aName      OrderType
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+
+eContext   3
+aZKey      228054486
+aName      DisplayAsFTL_LTL
+
+eTableEntry 4
+aZKey      228054487
+aExternalValue FTL
+aInternalValue RFT
+
+eTableEntry 4
+aZKey      228054488
+aExternalValue LTL
+aInternalValue RLT
+
+eTableEntry 4
+aZKey      228054489
+aExternalValue LTL
+aInternalValue LTL
+
+eTableEntry 4
+aZKey      228054490
+aExternalValue FTL
+aInternalValue FTL
+
+eContext   3
+aZKey      228054620
+aName      FTL_LTL
+
+eTableEntry 4
+aZKey      228054621
+aExternalValue FTL
+aInternalValue FTL
+
+eTableEntry 4
+aZKey      228054622
+aExternalValue LTL
+aInternalValue LTL
+
+eContext   3
+aZKey      228054473
+aName      OrderType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054474
+aExternalValue LTL
+aInternalValue LTL
+
+eTableEntry 4
+aZKey      228054475
+aExternalValue FTL
+aInternalValue FTL
+
+eTableEntry 4
+aZKey      228054484
+aExternalValue RLT
+aInternalValue RLT
+
+eTableEntry 4
+aZKey      228054485
+aExternalValue RFT
+aInternalValue RFT
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054365
+aName      OwnedRented
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054366
+aName      OwnedRented
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054367
+aExternalValue Owned
+aInternalValue O
+
+eTableEntry 4
+aZKey      228054368
+aExternalValue Rented
+aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.PasswordDomain
+aZKey      90422284
+aName      Password
+aDomainType A
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmPassword
+
+eContext   3
+aZKey      90422285
+aName      Password
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90422282
+aName      PasswordUL
+aDesc      Password in Upper and Lower case
+aDomainType A
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmPasswordUL
+
+eContext   3
+aZKey      90422283
+aName      PasswordUL
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      90422054
+aName      PersonalSalutation
+aDesc      Personal Salutation (Mr., Ms., Mrs.)
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      90422055
+aName      PersonalSalutation
+aIsDefault Y
+
+eTableEntry 4
+aZKey      90422057
+aExternalValue Mr.
+aInternalValue Mr.
+
+eTableEntry 4
+aZKey      90422058
+aExternalValue Mr.
+aInternalValue Mr
+
+eTableEntry 4
+aZKey      90422059
+aExternalValue Ms.
+aInternalValue Ms.
+
+eTableEntry 4
+aZKey      90422060
+aExternalValue Ms.
+aInternalValue Ms
+
+eTableEntry 4
+aZKey      90422061
+aExternalValue Mrs.
+aInternalValue Mrs
+
+eTableEntry 4
+aZKey      90422062
+aExternalValue Mrs.
+aInternalValue Mrs.
+
+eTableEntry 4
+aZKey      90422063
+aExternalValue Rev.
+aInternalValue Rev
+
+eTableEntry 4
+aZKey      90422064
+aExternalValue Rev.
+aInternalValue Rev.
+
+eTableEntry 4
+aZKey      90422065
+aExternalValue Miss
+aInternalValue Miss
+
+eTableEntry 4
+aZKey      90422066
+aExternalValue Dr.
+aInternalValue Dr.
+
+eTableEntry 4
+aZKey      90422067
+aExternalValue Dr.
+aInternalValue Dr
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.PhoneDomain
+aZKey      90420627
+aName      PhoneNumber
+aDesc      Any phone number.  Requires flexible format for foreign numbers.
+aDomainType F
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      90420628
+aName      PhoneNumber
+aEditString 999-999-9999
+aJavaEditString 999-999-9999
+aIsDefault Y
+
+eContext   3
+aZKey      90420629
+aName      PhoneNumberNoDashes
+aEditString 9999999999
+aJavaEditString 9999999999
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054502
+aName      PowerUnitType
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      228054522
+aName      Icon
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054523
+aExternalValue <img src='./images/semitrailer.png' alt='Semi Trailer'>
+aInternalValue S
+
+eTableEntry 4
+aZKey      228054524
+aExternalValue <img src='./images/bobtail.png' alt='Bobtail'>
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054525
+aExternalValue <img src='./images/lighttruck.png' alt='Bobtail'>
+aInternalValue L
+
+eContext   3
+aZKey      228054503
+aName      PowerUnitType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054504
+aExternalValue Semi
+aInternalValue S
+
+eTableEntry 4
+aZKey      228054505
+aExternalValue Bobtail
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054506
+aExternalValue Light Truck
+aInternalValue L
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054217
+aName      PriorFuelRequirementRuleType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054218
+aName      PriorFuelRequirementRuleType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054219
+aExternalValue Prior Type Has To Be
+aInternalValue O
+
+eTableEntry 4
+aZKey      228054220
+aExternalValue Prior Type Cannot Be
+aInternalValue P
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DynamicTableDomain
+aZKey      90421984
+aName      PublicMessageType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      90421985
+aName      PublicMessageType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054134
+aName      PumpLocation
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054135
+aName      PumpLocation
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054136
+aExternalValue Above Ground
+aInternalValue Above
+
+eTableEntry 4
+aZKey      228054137
+aExternalValue Under Ground
+aInternalValue Under
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420953
+aName      QueryBreakpointSummationType
+aDesc      Type of summation for the selected Attribute (SUM, AVG, etc.)
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      90420954
+aName      QueryBreakpointSummationType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986479
+
+eTableEntry 4
+aZKey      90420956
+aExternalValue SUM
+aInternalValue SUM
+
+eTableEntry 4
+aZKey      90420957
+aExternalValue AVG
+aInternalValue AVG
+
+eTableEntry 4
+aZKey      90420958
+aExternalValue MAX
+aInternalValue MAX
+
+eTableEntry 4
+aZKey      90420959
+aExternalValue MIN
+aInternalValue MIN
+
+eTableEntry 4
+aZKey      90420960
+aExternalValue COUNT
+aInternalValue COUNT
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420947
+aName      QueryBreakpointType
+aDesc      Type of Breadkpoint (ex., Page, Paragraph)
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90420948
+aName      QueryBreakpointType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986483
+
+eTableEntry 4
+aZKey      90420950
+aExternalValue Page
+aInternalValue P
+
+eTableEntry 4
+aZKey      90420951
+aExternalValue Paragraph
+aInternalValue H
+
+eTableEntry 4
+aZKey      90420952
+aExternalValue Report
+aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420942
+aName      QueryDataType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90420943
+aName      QueryDataType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986478
+
+eTableEntry 4
+aZKey      90420945
+aExternalValue String
+aInternalValue S
+
+eTableEntry 4
+aZKey      90420946
+aExternalValue Numeric
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420961
+aName      QueryPivotFunction
+aDesc      Query Pivot Function (SUM, AVG, etc.)
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      90420962
+aName      QueryPivotFunction
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986481
+
+eTableEntry 4
+aZKey      90420964
+aExternalValue SUM
+aInternalValue SUM
+
+eTableEntry 4
+aZKey      90420965
+aExternalValue AVG
+aInternalValue AVG
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420915
+aName      QueryResultType
+aDesc      Type of result to be formatted by a Query
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90420916
+aName      GeneralQuery
+
+eTableEntry 4
+aZKey      92986487
+
+eTableEntry 4
+aZKey      90420918
+aExternalValue Printed Report
+aInternalValue P
+
+eTableEntry 4
+aZKey      90420919
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      90420920
+aExternalValue CSV File Sparse
+aInternalValue S
+
+eTableEntry 4
+aZKey      90420921
+aExternalValue Result Set List
+aInternalValue L
+
+eContext   3
+aZKey      90420922
+aName      mAnalDResultSetOptions
+
+eTableEntry 4
+aZKey      92986488
+
+eTableEntry 4
+aZKey      90420924
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      90420925
+aExternalValue CSV File Sparse
+aInternalValue S
+
+eTableEntry 4
+aZKey      90420926
+aExternalValue XML Document
+aInternalValue X
+
+eContext   3
+aZKey      90420927
+aName      QueryResultType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986489
+
+eTableEntry 4
+aZKey      90420929
+aExternalValue Printed Report
+aInternalValue P
+
+eTableEntry 4
+aZKey      90420930
+aExternalValue Preview Report
+aInternalValue R
+
+eTableEntry 4
+aZKey      90420931
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      90420932
+aExternalValue CSV File Sparse
+aInternalValue S
+
+eTableEntry 4
+aZKey      90420933
+aExternalValue Result Set List
+aInternalValue L
+
+eTableEntry 4
+aZKey      90420934
+aExternalValue XML Document
+aInternalValue X
+
+eContext   3
+aZKey      90420935
+aName      ResultSetOptions
+
+eTableEntry 4
+aZKey      92986490
+
+eTableEntry 4
+aZKey      90420937
+aExternalValue Printed Report
+aInternalValue P
+
+eTableEntry 4
+aZKey      90420938
+aExternalValue Preview Report
+aInternalValue R
+
+eTableEntry 4
+aZKey      90420939
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      90420940
+aExternalValue CSV File Sparse
+aInternalValue S
+
+eTableEntry 4
+aZKey      90420941
+aExternalValue XML Document
+aInternalValue X
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420984
+aName      QuerySearchType
+aDesc      Query Search Type (eg., contains, <>, >=)
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      90420985
+aName      FinAidContext
+
+eTableEntry 4
+aZKey      92986484
+
+eTableEntry 4
+aZKey      90420987
+aExternalValue between
+aInternalValue between
+
+eTableEntry 4
+aZKey      90420988
+aExternalValue Exists
+aInternalValue exists
+
+eTableEntry 4
+aZKey      90420989
+aExternalValue Does Not Exist
+aInternalValue notexist
+
+eTableEntry 4
+aZKey      90420990
+aExternalValue >
+aInternalValue >
+
+eTableEntry 4
+aZKey      90420991
+aExternalValue >=
+aInternalValue >=
+
+eTableEntry 4
+aZKey      90420992
+aExternalValue <
+aInternalValue <
+
+eTableEntry 4
+aZKey      90420993
+aExternalValue <=
+aInternalValue <=
+
+eTableEntry 4
+aZKey      90420994
+aExternalValue <>
+aInternalValue <>
+
+eTableEntry 4
+aZKey      90420995
+aExternalValue =
+aInternalValue =
+
+eContext   3
+aZKey      90420996
+aName      LimitedSearchType
+
+eTableEntry 4
+aZKey      92986485
+
+eTableEntry 4
+aZKey      90420998
+aExternalValue <>
+aInternalValue <>
+
+eTableEntry 4
+aZKey      90420999
+aExternalValue =
+aInternalValue =
+
+eTableEntry 4
+aZKey      90421000
+aExternalValue >
+aInternalValue >
+
+eTableEntry 4
+aZKey      90421001
+aExternalValue >=
+aInternalValue >=
+
+eTableEntry 4
+aZKey      90421002
+aExternalValue <
+aInternalValue <
+
+eTableEntry 4
+aZKey      90421003
+aExternalValue <=
+aInternalValue <=
+
+eContext   3
+aZKey      90421004
+aName      QuerySearchType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986486
+
+eTableEntry 4
+aZKey      90421006
+aExternalValue contains
+aInternalValue contains
+
+eTableEntry 4
+aZKey      90421007
+aExternalValue subselect
+aInternalValue subselect
+
+eTableEntry 4
+aZKey      90421008
+aExternalValue <>
+aInternalValue <>
+
+eTableEntry 4
+aZKey      90421009
+aExternalValue =
+aInternalValue =
+
+eTableEntry 4
+aZKey      90421010
+aExternalValue >
+aInternalValue >
+
+eTableEntry 4
+aZKey      90421011
+aExternalValue >=
+aInternalValue >=
+
+eTableEntry 4
+aZKey      90421012
+aExternalValue <
+aInternalValue <
+
+eTableEntry 4
+aZKey      90421013
+aExternalValue <=
+aInternalValue <=
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420975
+aName      QuerySubgroupSelectType
+aDesc      Query subgroup select type (eg., SUM, AVG, ALL)
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      90420976
+aName      QuerySubgroupSelectType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986480
+
+eTableEntry 4
+aZKey      90420977
+aExternalValue SUM
+aInternalValue SUM
+
+eTableEntry 4
+aZKey      90420978
+aExternalValue AVG
+aInternalValue AVG
+
+eTableEntry 4
+aZKey      90420979
+aExternalValue MAX
+aInternalValue MAX
+
+eTableEntry 4
+aZKey      90420980
+aExternalValue MIN
+aInternalValue MIN
+
+eTableEntry 4
+aZKey      90420981
+aExternalValue COUNT
+aInternalValue COUNT
+
+eTableEntry 4
+aZKey      90420982
+aExternalValue ANY
+aInternalValue ANY
+
+eTableEntry 4
+aZKey      90420983
+aExternalValue ALL
+aInternalValue ALL
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      90420639
+aName      Revenue
+aDesc      Dollar amounts, etc.
+aDomainType E
+aDataType  M
+aContextRestriction N
+aDLL_Name  domainc
+aOperName  Revenue
+aDecimalFormat 2
+
+eContext   3
+aZKey      90420640
+aName      Revenue
+aDecimalFormat 2
+aJavaEditString #,###.00
+aIsDefault Y
+
+eContext   3
+aZKey      90420641
+aName      RevenueText
+aDecimalFormat 2
+
+eContext   3
+aZKey      90420642
+aName      RevenueWithDollarSign
+aDecimalFormat 2
+aJavaEditString $#,###.00
+
+eContext   3
+aZKey      90420643
+aName      RevenueWithDollarSignCR
+aDecimalFormat 2
+aJavaEditString $#,###.00CR
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054623
+aName      SecurityFunctionalAreaType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054624
+aName      SecurityFunctionalAreaType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054625
+aExternalValue Removed Functions for Carrier
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054626
+aExternalValue User Group Access Functions
+aInternalValue B
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420614
+aName      ShortDescription
+aDomainType E
+aDataType  S
+aMaxStringLth 30
+aContextRestriction N
+
+eContext   3
+aZKey      90420615
+aName      ShortDescription
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.SSNDomain
+aZKey      90422475
+aName      SocialSecurityNumber
+aDomainType A
+aDataType  S
+aMaxStringLth 9
+aContextRestriction N
+aDLL_Name  domainc
+aOperName  SocialSecurityNumber
+
+eContext   3
+aZKey      92913539
+aName      SocialSecurityNumber
+aEditString 999-99-9999
+aJavaEditString 999-99-9999
+aIsDefault Y
+
+eContext   3
+aZKey      92913540
+aName      SSN_NoDashes
+aEditString 999999999
+aJavaEditString 999999999
+
+eContext   3
+aZKey      92913542
+aName      SSN_SecurityDisplay
+aEditString 999999999
+aJavaEditString *****9999
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420970
+aName      SortOrderAscendingType
+aDesc      Asc - Sorting is in ascending order; Des - Sorting is in descending order.
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90420971
+aName      SortOrderAscendingType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986482
+
+eTableEntry 4
+aZKey      90420973
+aExternalValue Asc
+aInternalValue A
+
+eTableEntry 4
+aZKey      90420974
+aExternalValue Desc
+aInternalValue D
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054549
+aName      SplitDeliveryAutogenType
+aDomainType T
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      228054550
+aName      SplitDeliveryAutogenType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054551
+aExternalValue Apportion Unit Price Evenly
+aInternalValue Evenly
+
+eTableEntry 4
+aZKey      228054552
+aExternalValue Apportion Unit Price by Distance
+aInternalValue ByDistance
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054324
+aName      StandardTravelLegType
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      228054325
+aName      StandardTravelLegType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054326
+aExternalValue H-T
+aInternalValue H-T
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90421579
+aName      State
+aDesc      US States and Canadian Provinces
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      90421580
+aName      State
+aIsDefault Y
+
+eTableEntry 4
+aZKey      90421582
+aExternalValue AA
+aInternalValue AA
+
+eTableEntry 4
+aZKey      90421583
+aExternalValue AB Canada
+aInternalValue AB
+
+eTableEntry 4
+aZKey      90421584
+aExternalValue AE
+aInternalValue AE
+
+eTableEntry 4
+aZKey      90421585
+aExternalValue AK
+aInternalValue AK
+
+eTableEntry 4
+aZKey      90421586
+aExternalValue AL
+aInternalValue AL
+
+eTableEntry 4
+aZKey      90421587
+aExternalValue AP
+aInternalValue AP
+
+eTableEntry 4
+aZKey      90421588
+aExternalValue AR
+aInternalValue AR
+
+eTableEntry 4
+aZKey      90421589
+aExternalValue AZ
+aInternalValue AZ
+
+eTableEntry 4
+aZKey      90421590
+aExternalValue BC Canada
+aInternalValue BC
+
+eTableEntry 4
+aZKey      90421591
+aExternalValue CA
+aInternalValue CA
+
+eTableEntry 4
+aZKey      90421592
+aExternalValue CO
+aInternalValue CO
+
+eTableEntry 4
+aZKey      90421593
+aExternalValue CT
+aInternalValue CT
+
+eTableEntry 4
+aZKey      90421594
+aExternalValue DC
+aInternalValue DC
+
+eTableEntry 4
+aZKey      90421595
+aExternalValue DE
+aInternalValue DE
+
+eTableEntry 4
+aZKey      90421596
+aExternalValue FL
+aInternalValue FL
+
+eTableEntry 4
+aZKey      90421597
+aExternalValue GA
+aInternalValue GA
+
+eTableEntry 4
+aZKey      90421598
+aExternalValue Guam
+aInternalValue GU
+
+eTableEntry 4
+aZKey      90421599
+aExternalValue HI
+aInternalValue HI
+
+eTableEntry 4
+aZKey      90421600
+aExternalValue IA
+aInternalValue IA
+
+eTableEntry 4
+aZKey      90421601
+aExternalValue ID
+aInternalValue ID
+
+eTableEntry 4
+aZKey      90421602
+aExternalValue IL
+aInternalValue IL
+
+eTableEntry 4
+aZKey      90421603
+aExternalValue IN
+aInternalValue IN
+
+eTableEntry 4
+aZKey      90421604
+aExternalValue KS
+aInternalValue KS
+
+eTableEntry 4
+aZKey      90421605
+aExternalValue KY
+aInternalValue KY
+
+eTableEntry 4
+aZKey      90421606
+aExternalValue LA
+aInternalValue LA
+
+eTableEntry 4
+aZKey      90421607
+aExternalValue MA
+aInternalValue MA
+
+eTableEntry 4
+aZKey      90421608
+aExternalValue MB Canada
+aInternalValue MB
+
+eTableEntry 4
+aZKey      90421609
+aExternalValue MD
+aInternalValue MD
+
+eTableEntry 4
+aZKey      90421610
+aExternalValue ME
+aInternalValue ME
+
+eTableEntry 4
+aZKey      90421611
+aExternalValue MI
+aInternalValue MI
+
+eTableEntry 4
+aZKey      90421612
+aExternalValue MN
+aInternalValue MN
+
+eTableEntry 4
+aZKey      90421613
+aExternalValue MO
+aInternalValue MO
+
+eTableEntry 4
+aZKey      90421614
+aExternalValue MS
+aInternalValue MS
+
+eTableEntry 4
+aZKey      90421615
+aExternalValue MT
+aInternalValue MT
+
+eTableEntry 4
+aZKey      90421616
+aExternalValue NB Canada
+aInternalValue NB
+
+eTableEntry 4
+aZKey      90421617
+aExternalValue NC
+aInternalValue NC
+
+eTableEntry 4
+aZKey      90421618
+aExternalValue ND
+aInternalValue ND
+
+eTableEntry 4
+aZKey      90421619
+aExternalValue NE
+aInternalValue NE
+
+eTableEntry 4
+aZKey      90421620
+aExternalValue NF Canada
+aInternalValue NF
+
+eTableEntry 4
+aZKey      90421621
+aExternalValue NH
+aInternalValue NH
+
+eTableEntry 4
+aZKey      90421622
+aExternalValue NJ
+aInternalValue NJ
+
+eTableEntry 4
+aZKey      90421623
+aExternalValue NM
+aInternalValue NM
+
+eTableEntry 4
+aZKey      90421624
+aExternalValue NS Canada
+aInternalValue NS
+
+eTableEntry 4
+aZKey      90421625
+aExternalValue NT Canada
+aInternalValue NT
+
+eTableEntry 4
+aZKey      90421626
+aExternalValue NV
+aInternalValue NV
+
+eTableEntry 4
+aZKey      90421627
+aExternalValue NY
+aInternalValue NY
+
+eTableEntry 4
+aZKey      90421628
+aExternalValue OH
+aInternalValue OH
+
+eTableEntry 4
+aZKey      90421629
+aExternalValue OK
+aInternalValue OK
+
+eTableEntry 4
+aZKey      90421630
+aExternalValue ON Canada
+aInternalValue ON
+
+eTableEntry 4
+aZKey      90421631
+aExternalValue OR
+aInternalValue OR
+
+eTableEntry 4
+aZKey      90421632
+aExternalValue PA
+aInternalValue PA
+
+eTableEntry 4
+aZKey      90421633
+aExternalValue PE Canada
+aInternalValue PE
+
+eTableEntry 4
+aZKey      90421634
+aExternalValue QC Canada
+aInternalValue QC
+
+eTableEntry 4
+aZKey      90421635
+aExternalValue Puerto Rico
+aInternalValue PR
+
+eTableEntry 4
+aZKey      90421636
+aExternalValue RI
+aInternalValue RI
+
+eTableEntry 4
+aZKey      90421637
+aExternalValue SC
+aInternalValue SC
+
+eTableEntry 4
+aZKey      90421638
+aExternalValue SD
+aInternalValue SD
+
+eTableEntry 4
+aZKey      90421639
+aExternalValue SK Canada
+aInternalValue SK
+
+eTableEntry 4
+aZKey      90421640
+aExternalValue TN
+aInternalValue TN
+
+eTableEntry 4
+aZKey      90421641
+aExternalValue TX
+aInternalValue TX
+
+eTableEntry 4
+aZKey      90421642
+aExternalValue UT
+aInternalValue UT
+
+eTableEntry 4
+aZKey      90421643
+aExternalValue VA
+aInternalValue VA
+
+eTableEntry 4
+aZKey      90421644
+aExternalValue Error for Convert (vt)
+aInternalValue VI
+
+eTableEntry 4
+aZKey      90421645
+aExternalValue VT
+aInternalValue VT
+
+eTableEntry 4
+aZKey      90421646
+aExternalValue WA
+aInternalValue WA
+
+eTableEntry 4
+aZKey      90421647
+aExternalValue WI
+aInternalValue WI
+
+eTableEntry 4
+aZKey      90421648
+aExternalValue WV
+aInternalValue WV
+
+eTableEntry 4
+aZKey      90421649
+aExternalValue WY
+aInternalValue WY
+
+eTableEntry 4
+aZKey      90421650
+aExternalValue YK Canada
+aInternalValue YK
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054205
+aName      SubcarrierStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054206
+aName      SubcarrierStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054207
+aExternalValue Active
+aInternalValue A
+
+eTableEntry 4
+aZKey      228054208
+aExternalValue Inactive
+aInternalValue I
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054161
+aName      TankAccessType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054162
+aName      TankAccessType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054163
+aExternalValue PIN
+aInternalValue P
+
+eTableEntry 4
+aZKey      228054164
+aExternalValue Key
+aInternalValue K
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      228054165
+aName      TankPIN_Number
+aDomainType E
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      228054166
+aName      TankPIN_Number
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054128
+aName      TerminalStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 6
+aContextRestriction N
+
+eContext   3
+aZKey      228054129
+aName      TerminalStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054130
+aExternalValue Active
+aInternalValue Active
+
+eTableEntry 4
+aZKey      228054131
+aExternalValue Locked Out
+aInternalValue Locked
+
+eTableEntry 4
+aZKey      228054132
+aExternalValue Out of Service
+aInternalValue OutOfS
+
+eTableEntry 4
+aZKey      228054133
+aExternalValue Closed
+aInternalValue Closed
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90422288
+aName      Text
+aDesc      Any Character String
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      90422289
+aName      TEXT
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.TimeDomain
+aZKey      90000078
+aName      Time
+aDomainType A
+aDataType  T
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmTime
+
+eContext   3
+aZKey      123033214
+aName      FreeForm
+aEditString *
+aJavaEditString *
+
+eContext   3
+aZKey      354026002
+aName      H:MM AM
+aJavaEditString h:mm a
+
+eContext   3
+aZKey      127021328
+aName      HH:MM
+aEditString HH:MI
+aJavaEditString HH:mm
+
+eContext   3
+aZKey      354025999
+aName      HH:MM AM
+aEditString HH:Mi AM
+aJavaEditString hh:mm a
+aIsDefault Y
+
+eContext   3
+aZKey      127021329
+aName      HH:MM:SS
+aEditString HH:MI:SS
+aJavaEditString HH:mm:ss
+
+eContext   3
+aZKey      90000081
+aName      HH:MM:SS.S
+aEditString HH:MI:SS.9
+aJavaEditString HH:mm:ss.S
+
+eContext   3
+aZKey      90000080
+aName      HH:MM:SS.S AM
+aEditString HH:MI:SS.9 AM
+aJavaEditString HH:mm:ss.S a
+
+eContext   3
+aZKey      90000084
+aName      Hour
+aEditString HH
+aJavaEditString HH
+
+eContext   3
+aZKey      90000085
+aName      Minute
+aEditString MI
+aJavaEditString MM
+
+eContext   3
+aZKey      90000082
+aName      MSWindowsSetting
+
+eContext   3
+aZKey      90000087
+aName      Second
+aEditString SS
+aJavaEditString ss
+
+eContext   3
+aZKey      90000079
+aName      Time
+aEditString HHMISS999
+aJavaEditString HHmmssSSS
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054351
+aName      UserGroupFunctionalAreaType
+aDesc      What kind of data permissions a User Group has for a Functional Area
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      228054352
+aName      UserGroupFunctionalAreaType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054353
+aExternalValue Update
+aInternalValue Update
+
+eTableEntry 4
+aZKey      228054354
+aExternalValue Read Only
+aInternalValue ReadOnly
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      71118445
+aName      UserLoginAuthenticationType
+aDesc      How a User is authenticated during login.
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      71118446
+aName      UserLoginAuthenticationType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92972234
+
+eTableEntry 4
+aZKey      71118448
+aExternalValue Internal
+aInternalValue Internal
+
+eTableEntry 4
+aZKey      71118449
+aExternalValue Active Directory
+aInternalValue AD
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90421687
+aName      UserStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90421688
+aName      UserStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      90421690
+aExternalValue Active
+aInternalValue A
+
+eTableEntry 4
+aZKey      90421691
+aExternalValue Inactive
+aInternalValue I
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      71118450
+aName      UserTaskStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      71118451
+aName      UserTaskStatus
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92972235
+
+eTableEntry 4
+aZKey      71118453
+aExternalValue Open
+aInternalValue O
+
+eTableEntry 4
+aZKey      71118454
+aExternalValue Completed
+aInternalValue C
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054373
+aName      VehicleCondition
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054374
+aName      VehicleCondition
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054375
+aExternalValue New
+aInternalValue N
+
+eTableEntry 4
+aZKey      228054376
+aExternalValue Used
+aInternalValue U
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054369
+aName      VehicleFuelType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054370
+aName      VehicleFuelType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054371
+aExternalValue Gas
+aInternalValue G
+
+eTableEntry 4
+aZKey      228054372
+aExternalValue Diesel
+aInternalValue D
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      228054535
+aName      VehicleTankValidationType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      228054536
+aName      VehicleTankValidationType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      228054537
+aExternalValue Begin Route
+aInternalValue B
+
+eTableEntry 4
+aZKey      228054538
+aExternalValue End Route
+aInternalValue E
+
+eTableEntry 4
+aZKey      228054539
+aExternalValue During Route
+aInternalValue D
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90421656
+aName      WebUserMessageType
+aDesc      Type of web user messages, such as "Broadcast" or "Group"
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90421657
+aName      WebUserMessageType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      92986477
+
+eTableEntry 4
+aZKey      90421659
+aExternalValue Broadcast
+aInternalValue B
+
+eTableEntry 4
+aZKey      90421660
+aExternalValue Group
+aInternalValue G
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92743260
+aName      XML_SubentityPosition
+aDesc      Used to position expansion of a subentity within parenet attributes in generating an XML file from an object instance.
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      92743261
+aName      XML_SubentityPosition
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      90420462
+aName      Y/N
+aDesc      Yes or No
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      90420463
+aName      Default
+
+eTableEntry 4
+aZKey      41142210
+
+eTableEntry 4
+aZKey      90420465
+aExternalValue Default
+aInternalValue Y
+
+eTableEntry 4
+aZKey      90420466
+aInternalValue N
+
+eContext   3
+aZKey      90420467
+aName      Y/N
+aIsDefault Y
+
+eTableEntry 4
+aZKey      41142211
+
+eTableEntry 4
+aZKey      90420469
+aExternalValue Y
+aInternalValue Y
+
+eTableEntry 4
+aZKey      90420470
+aExternalValue N
+aInternalValue N
+
+eContext   3
+aZKey      41142207
+aName      Yes/No
+
+eTableEntry 4
+aZKey      41142212
+
+eTableEntry 4
+aZKey      41142208
+aExternalValue Yes
+aInternalValue Y
+
+eTableEntry 4
+aZKey      41142209
+aExternalValue No
+aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      228054379
+aName      Year
+aDomainType F
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      228054380
+aName      Year
+aEditString 9999
+aJavaEditString 9999
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      110002614
+aName      YearMonth
+aDesc      Year and Month of the form: YYYYMM
+aDomainType F
+aDataType  S
+aMaxStringLth 6
+aContextRestriction N
+
+eContext   3
+aZKey      110002615
+aName      YearMonth
+aEditString 999999
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420968
+aName      ZeidonEntityName
+aDesc      Zeidon Entity/Attribute Name
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eContext   3
+aZKey      90420969
+aName      ZeidonEntityName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420966
+aName      ZeidonMetaName
+aDesc      Zeidon Meta  Name
+aDomainType E
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+
+eContext   3
+aZKey      90420967
+aName      ZeidonMetaName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      90420620
+aName      ZipCode
+aDesc      US Zip Code
+aDomainType E
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      90420621
+aName      ZipCode
+aEditString 99999
+aIsDefault Y
+
+eContext   3
+aZKey      90420622
+aName      ZipCode10
+aEditString 99999-9999
+

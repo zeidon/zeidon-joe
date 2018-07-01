@@ -37,7 +37,7 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef;
 /**
  * Keeps track of qualification information for an entity.
  */
-class QualEntity
+public class QualEntity
 {
     boolean                usesChildQualification;
     boolean                exclude;
@@ -57,6 +57,12 @@ class QualEntity
      * keys and the opers are all '='.
      */
     private boolean keyQualification;
+
+    /**
+     * If not null, specifies custom SQL.
+     */
+    String openSql;
+    List<AttributeDef> openSqlAttributeList = new ArrayList<>();
 
     QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
     {
@@ -97,11 +103,19 @@ class QualEntity
         }
 
         // Are we qualifying using a key?
-        if ( qualAttrib.attributeDef != null &&
-             ( ! qualAttrib.attributeDef.isKey() || ! StringUtils.equals( qualAttrib.oper, "=" ) ) )
+        if ( qualAttrib.attributeDef != null && ! qualAttrib.attributeDef.isKey() )
         {
-            // No.
-            keyQualification = false;
+            switch ( qualAttrib.oper )
+            {
+                // Following operations are key operations.
+                case "=":
+                case "IN":
+                    break;
+
+                // All other operations are not exact key qualifications.
+                default:
+                    keyQualification = false;
+            }
         }
     }
 
@@ -167,5 +181,26 @@ class QualEntity
     boolean isKeyQualification()
     {
         return keyQualification;
+    }
+
+    void setOpenSqlAttributeList( String attributeList )
+    {
+        if ( StringUtils.isBlank( attributeList ) )
+            throw new ZeidonException( "Using OpenSQL in qualification requires OpenSQL_AttributeList" );
+
+        openSqlAttributeList = new ArrayList<>();
+
+        // Parse it out and create a map of the DataFields.
+        String[] list = attributeList.split( "," );
+        for ( String attrName : list )
+        {
+            attrName = attrName.trim();
+            AttributeDef attributeDef = entityDef.getAttribute( attrName, false );
+            if ( attributeDef == null )
+                throw new ZeidonException( "Attribute %s specified in OpenSQL_AttributeList does not exist in entity %s",
+                                           attrName, entityDef );
+
+            openSqlAttributeList.add( attributeDef );
+        }
     }
 }

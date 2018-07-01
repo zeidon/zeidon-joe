@@ -16,6 +16,20 @@
 
     <description>LOD server for Zeidon Test applications.</description>
 
+    <build>
+      <plugins>
+          <plugin>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>enforce-versions</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>

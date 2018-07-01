@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,12 +29,11 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
@@ -43,7 +43,6 @@ import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.ZeidonRestException;
 
 /**
  * @author dgc
@@ -56,7 +55,7 @@ class CommitToRestServer implements Committer
      */
     private final static SerializeOi JSON_WRITE_OPTIONS = new SerializeOi().withIncremental();
 
-    private Set<ViewImpl>  viewList;
+    private List<ViewImpl>  viewList;
     private Task           task;
     private CommitOptions  options;
     private Application    application;
@@ -95,8 +94,9 @@ class CommitToRestServer implements Committer
     public void init( Task task, List<? extends View> list, CommitOptions options )
     {
         this.task = task;
-        this.viewList = new HashSet<ViewImpl>();
+        this.viewList = new ArrayList<ViewImpl>();
         this.options = options;
+        this.application = options.getApplication();
 
         originalList = list;
         originalOiSet = new HashSet<ObjectInstance>();
@@ -114,8 +114,13 @@ class CommitToRestServer implements Committer
             }
         }
 
+        if ( viewList.size() != 1 )
+            throw new ZeidonException( "Committing via http currently only supports a single view at a time." );
+
         serverUrl = options.getOiSourceUrl();
-        url = String.format( "%s/commit?application=%s", serverUrl, application.getName() );
+        url = String.format( "%s/%s/%s", serverUrl, application.getName(), viewList.get( 0 ).getLodDef().getName() );
+        getTask().log().debug( "Committing to REST URL: %s", url );
+        assert serverUrl.startsWith( "http://" ) || serverUrl.startsWith( "https://" ) : "Unexpected oiSourceUrl " + serverUrl;
     }
 
     @Override
@@ -123,14 +128,18 @@ class CommitToRestServer implements Committer
     {
         try
         {
-            copyEntityKeysToTags();
+//            copyEntityKeysToTags();
 
             String json = task.serializeOi().asJson().withIncremental().addViews( viewList ).toStringWriter().toString();
             List<View> views = makePostCall( json );
-            View restRc = views.get( 0 );
-            views.remove( 0 ); // Remove the RC from the list of views.
 
-            supersedeEis( views );
+            if ( views.size() != 1 )
+                throw new ZeidonException( "Something went wrong: we have the wrong number of views" );
+
+            ViewImpl internalView = ((InternalView) views.get( 0 )).getViewImpl();
+            viewList.get( 0 ).replaceObjectInstance( internalView.getObjectInstance() );
+
+//            supersedeEis( views );
             return originalList;
         }
         catch ( Exception e )
@@ -237,20 +246,16 @@ class CommitToRestServer implements Committer
     private List<View> makePostCall( String json )
     {
         String stringResponse = null;
+        CloseableHttpResponse response = null;
 
         try
         {
-            assert serverUrl.startsWith( "http://" ) || serverUrl.startsWith( "https://" ) : "Unexpected oiSourceUrl " + serverUrl;
-
-            getTask().log().debug( "Committing to REST URL: %s", url );
-            HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost( url );
-
             StringEntity entity = new StringEntity( json );
             post.setEntity( entity );
             post.setHeader( "Content-Type", "application/json" );
 
-            HttpResponse response = client.execute( post );
+            response = ZeidonHttpClient.getClient( task, application ).callPost( post );
             InputStream stream = response.getEntity().getContent();
             StatusLine status = response.getStatusLine();
             task.log().info( "Status from http activate = %s", status );
@@ -273,15 +278,6 @@ class CommitToRestServer implements Committer
                                         .asJson()
                                         .fromInputStream( stream )
                                         .activate();
-            View restRc = views.get( 0 );
-            restRc.logObjectInstance();
-            Integer rc = restRc.cursor( "RestResponse" ).getAttribute( "ReturnCode" ).getInteger();
-            if ( rc != 0 )
-            {
-                String errorMsg = restRc.cursor( "RestResponse" ).getAttribute( "ErrorMessage" ).getString();
-                throw new ZeidonRestException( "Error activating OI from REST server %d", rc )
-                                                .appendMessage( "%s", errorMsg );
-            }
 
             return views;
         }
@@ -289,6 +285,14 @@ class CommitToRestServer implements Committer
         {
             throw ZeidonException.wrapException( e ).appendMessage( "web URL = %s", url );
 
+        }
+        finally
+        {
+            if ( response != null )
+            {
+                EntityUtils.consumeQuietly(response.getEntity());
+                IOUtils.closeQuietly( response );
+            }
         }
 
     }

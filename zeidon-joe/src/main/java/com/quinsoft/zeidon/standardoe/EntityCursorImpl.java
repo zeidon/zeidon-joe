@@ -1950,7 +1950,17 @@ class EntityCursorImpl implements EntityCursor
         if ( ei == null )
             return 0;
 
-        return ei.getTwinCount();
+        return ei.getTwinCount(false);
+    }
+
+    @Override
+    public int getEntityCount( boolean includeHidden ) throws NullCursorException
+    {
+        EntityInstanceImpl ei = getEntityInstance(); // Establishes the cursor if necessary.
+        if ( ei == null )
+            return 0;
+
+        return ei.getTwinCount( includeHidden );
     }
 
     @Override

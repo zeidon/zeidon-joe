@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.DbUtils;
@@ -46,6 +48,7 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonDbException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -173,6 +176,13 @@ public class JdbcHandler extends AbstractSqlHandler
         return connectionPool;
     }
 
+    protected void initializeBasicDataSource( BasicDataSource dataSource,
+                                              Task task,
+                                              Application application)
+    {
+        // By default do nothing but give other handlers a chance to do something.
+    }
+
     @Override
     protected void getSqlValue(SqlStatement stmt, Domain domain, AttributeDef attributeDef, StringBuilder buffer, Object value)
     {
@@ -248,6 +258,10 @@ public class JdbcHandler extends AbstractSqlHandler
      */
     private String getFullKeyValuesForCurrentRow( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
+        // If we're using OpenSQL we'll assume the first column is the unique identifier.
+        if ( stmt.usesOpenSql )
+            return getSqlObject( rs, 1, null, loadedObjects ).toString();
+
         List<String> values = new ArrayList<String>();
 
         // Add the entity name so we can keep track of the keys for multiple entities.
@@ -296,6 +310,10 @@ public class JdbcHandler extends AbstractSqlHandler
      */
     private String getKeyValuesForCurrentEntity( EntityDef entityDef, ResultSet rs, SqlStatement stmt, Map<Integer,Object> loadedObjects )
     {
+        // If we're using OpenSQL we'll assume the first column is the unique identifier.
+        if ( stmt.usesOpenSql )
+            return getSqlObject( rs, 1, null, loadedObjects ).toString();
+
         KeyStringBuilder builder = new KeyStringBuilder();
 
         DataRecord dataRecord = entityDef.getDataRecord();
@@ -490,10 +508,10 @@ public class JdbcHandler extends AbstractSqlHandler
 
                         // If we're loading all instances of EntityDef then we need to set the parent cursor
                         // to point to the correct entity.
-                        EntityDef parent = entityDef.getParent();
-                        RelRecord relRecord = dataRecord.getRelRecord();
                         if ( selectAllInstances( entityDef ) )
                         {
+                            EntityDef parent = entityDef.getParent();
+                            RelRecord relRecord = dataRecord.getRelRecord();
                             DataField keyField;
                             switch ( relRecord.getRelationshipType() )
                             {
@@ -810,7 +828,7 @@ public class JdbcHandler extends AbstractSqlHandler
                     {
                         while ( rs2.next() )
                         {
-                            Integer i = rs2.getInt( 1 );
+                            Object i = rs2.getObject( 1 );
                             generatedKeys.add( i );
                         }
                     }
@@ -828,12 +846,17 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 // This should be getting the count.
                 rs = ps.executeQuery();
+                rs.next();
                 return rs.getInt( 1 );
             }
             else
             {
                 ps.execute();
             }
+        }
+        catch ( SQLException e )
+        {
+            throw new ZeidonDbException( view, e ).appendMessage( generateErrorMessageWithBoundAttributes( sql, entityDef, stmt ) );
         }
         catch ( Exception e )
         {
@@ -978,6 +1001,8 @@ public class JdbcHandler extends AbstractSqlHandler
             return connection;
         }
 
+        private static final Pattern JDBC_FINDER = Pattern.compile( "^jdbc:([a-zA-Z]*):.*" );
+
         private String getDriver( String url, Task task, JdbcHandler handler )
         {
             String driver = handler.getDrivers();
@@ -985,19 +1010,36 @@ public class JdbcHandler extends AbstractSqlHandler
             {
                 // Drivers wasn't specified in the config, so if possible we'll guess
                 // by using the transaction string.
-                if ( url.startsWith( "jdbc:mysql:" ) )
-                    driver = "com.mysql.jdbc.Driver";
-                else
-                if ( url.startsWith( "jdbc:sqlite:" ) )
-                    driver = "org.sqlite.JDBC";
-                else
-                if ( url.startsWith( "jdbc:odbc:" ) )
-                    driver = "sun.jdbc.odbc.JdbcOdbcDriver";
-                else
-                if ( url.startsWith( "jdbc:sqlserver:" ) )
-                    driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-                else
-                    throw new ZeidonException( "JDBC Driver wasn't specified in config for %s", url );
+                Matcher matcher = JDBC_FINDER.matcher( url );
+                if ( matcher.matches() )
+                {
+                    String driverName = matcher.group( 1 );
+                    switch ( driverName )
+                    {
+                        case "mysql":
+                            driver = "com.mysql.jdbc.Driver";
+                            break;
+
+                        case "odbc":
+                            driver = "sun.jdbc.odbc.JdbcOdbcDriver";
+                            break;
+
+                        case "postgresql":
+                            driver = "org.postgresql.Driver";
+                            break;
+
+                        case "sqlite":
+                            driver = "org.sqlite.JDBC";
+                            break;
+
+                        case "sqlserver":
+                            driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+                            break;
+
+                        default:
+                            throw new ZeidonException( "JDBC Driver wasn't specified in config for %s", url );
+                     }
+                }
             }
 
             return driver;
@@ -1025,6 +1067,7 @@ public class JdbcHandler extends AbstractSqlHandler
                     pool.setUrl( url );
                     pool.setTestOnBorrow( true );
                     pool.setValidationQuery( "select 1" );
+                    handler.initializeBasicDataSource( pool, task, application );
                     poolMap.putIfAbsent( url, pool );
 
                     // It's even less likely that two threads created their own transaction
@@ -1064,10 +1107,14 @@ public class JdbcHandler extends AbstractSqlHandler
                 if ( ! StringUtils.isBlank( connStr ) )
                 {
                     if ( connStr.contains( "sqlite" ) )
-                        return new SqliteJdbcTranslator( task, this );
+                    {
+                        translator = new SqliteJdbcTranslator( task, this );
+                        return translator;
+                    }
                 }
 
-                return new StandardJdbcTranslator( task, this );
+                translator = new StandardJdbcTranslator( task, this );
+                return translator;
             }
 
             try
@@ -1095,7 +1142,7 @@ public class JdbcHandler extends AbstractSqlHandler
         {
             String format = getConfigValue( "DateFormat" );
             if ( StringUtils.isBlank( format ) )
-                format = "yyyy-MM-dd";
+                format = "yyyy-MM-dd|yyyy-MM-dd 00:00:00";
 
             dateFormat = JoeUtils.createDateFormatterFromEditString( format );
         }

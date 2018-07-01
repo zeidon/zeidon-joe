@@ -12,7 +12,7 @@
     <description>Use Zeidon Objects in JasperReports</description>
 
     <properties>
-        <jasperReport.version>6.1.0</jasperReport.version>
+        <jasperReport.version>6.4.1</jasperReport.version>
     </properties>
 
     <dependencies>
@@ -40,6 +40,10 @@
                 <exclusion>
                     <artifactId>commons-beanutils</artifactId>
                     <groupId>commons-beanutils</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-collections</artifactId>
+                    <groupId>commons-collections</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>jackson-core</artifactId>

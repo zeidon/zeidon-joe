@@ -1,0 +1,508 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "ZENCAs",
+      "odName" : "mFASrc",
+      "incremental" : true
+    },
+    "FinAidSource" : [ {
+      ".meta" : {
+        "incrementals" : "C"
+      },
+      "Scholarship" : [ {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 0,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName0",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 100,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 200,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 300,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 1,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName1",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 101,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 201,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 301,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 2,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName2",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 102,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 202,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 302,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 3,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName3",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 103,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 203,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 303,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 4,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName4",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 104,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 204,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 304,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 5,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName5",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 105,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 205,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 305,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 6,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName6",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 106,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 206,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 306,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 7,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName7",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 107,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 207,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 307,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 8,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName8",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 108,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 208,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 308,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 9,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName9",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 109,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 209,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 309,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund3",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}

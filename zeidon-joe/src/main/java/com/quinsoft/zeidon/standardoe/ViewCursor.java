@@ -111,8 +111,6 @@ class ViewCursor
             objectInstance = new ObjectInstance(task, lodDef);
             resetRecursiveParent();
         }
-
-        objectInstance.addReferringViewCursor( this );
     }
 
     void copyRecursiveSettings( ViewCursor sourceViewCursor )

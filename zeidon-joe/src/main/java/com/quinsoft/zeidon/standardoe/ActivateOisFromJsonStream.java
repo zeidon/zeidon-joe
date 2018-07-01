@@ -60,8 +60,6 @@ class ActivateOisFromJsonStream implements StreamReader
                                                                                CreateEntityFlags.fDONT_UPDATE_OI,
                                                                                CreateEntityFlags.fDONT_INITIALIZE_ATTRIBUTES,
                                                                                CreateEntityFlags.fIGNORE_PERMISSIONS );
-    private static final EntityMeta DEFAULT_ENTITY_META = new EntityMeta();
-
     private Task                    task;
     private InputStream             stream;
 
@@ -90,6 +88,8 @@ class ActivateOisFromJsonStream implements StreamReader
      */
     private List<EntityInstanceImpl> selectedInstances;
 
+    private Map<EntityInstanceImpl, EntityMeta> entityMetas = new HashMap<>();
+
     /**
      * If true then mark the OI that is being read as readonly.
      */
@@ -99,6 +99,7 @@ class ActivateOisFromJsonStream implements StreamReader
      * If trure then mark the view as readonly.
      */
     private boolean readOnly;
+    private boolean locked;
     private Integer totalRootCount;
 
     /**
@@ -297,6 +298,28 @@ class ActivateOisFromJsonStream implements StreamReader
             token = jp.nextToken();
         }
 
+        // Now that we've updated everything, set the flags.
+        if ( incremental )
+        {
+            for ( EntityInstanceImpl ei : entityMetas.keySet() )
+            {
+                EntityMeta entityMeta = entityMetas.get( ei );
+                ei.setCreated( entityMeta.created );
+                ei.setUpdated( entityMeta.updated );
+                ei.setDeleted( entityMeta.deleted );
+                ei.setIncluded( entityMeta.included );
+                ei.setExcluded( entityMeta.excluded );
+                if ( entityMeta.incomplete )
+                    ei.setIncomplete( null );
+                if ( entityMeta.lazyLoaded != null )
+                {
+                    String[] names = entityMeta.lazyLoaded.split( "," );
+                    for ( String name: names )
+                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name, true, true ) );
+                }
+            }
+        }
+
         if ( selectedInstances.size() > 0 )
             setCursors();
         else
@@ -305,8 +328,12 @@ class ActivateOisFromJsonStream implements StreamReader
         if ( token != JsonToken.END_OBJECT )
             throw new ZeidonException( "OI JSON stream doesn't end with object." );
 
+        ObjectInstance oi = ((InternalView) view).getViewImpl().getObjectInstance();
         if ( readOnlyOi )
-            ((InternalView) view).getViewImpl().getObjectInstance().setReadOnly( true );
+            oi.setReadOnly( true );
+
+        if ( locked )
+            oi.setLocked( true );
 
         if ( readOnly )
             view.setReadOnly( true );
@@ -381,22 +408,35 @@ class ActivateOisFromJsonStream implements StreamReader
         assert token == JsonToken.START_OBJECT;
 
         EntityDef entityDef = lodDef.getEntityDef( entityName, true, true );
+        EntityInstanceImpl ei = null;
 
         // Read tokens until we find the token that ends the current list of entities.
         while ( ( token = jp.nextToken() ) != null )
         {
-            twinCount++;
-
             if ( token == JsonToken.END_ARRAY )
                 break;
 
+            if ( ei == null )
+            {
+                ei = (EntityInstanceImpl) view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+                twinCount++;
+            }
+
             if ( token == JsonToken.END_OBJECT )
             {
-                // If we get here then this should indicate an empty OI.  Get the next
-                // token, verify that it's an END_ARRAY, and return.
+                // If we get here then this could indicate an empty EI.  Get the next
+                // token and get out if it's END_ARRAY.  Otherwise it better be the
+                // start of another object.
                 token = jp.nextToken();
-                assert token == JsonToken.END_ARRAY;
-                break;
+                if ( token == JsonToken.END_ARRAY )
+                    break;
+
+                assert token == JsonToken.START_OBJECT;
+                assert entityArray;  // If next token is an object then we better be reading an array.
+
+                // Indicate that we want a new EI created.
+                ei = null;
+                continue;
             }
 
             // If there are multiple twins then the token is START_OBJECT to
@@ -404,16 +444,15 @@ class ActivateOisFromJsonStream implements StreamReader
             if ( token == JsonToken.START_OBJECT )
             {
                 assert twinCount > 1; // Assert that we already created at least one EI.
-                token = jp.nextToken();
+                continue;
             }
 
             assert token == JsonToken.FIELD_NAME;
-            EntityInstanceImpl ei = (EntityInstanceImpl) view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
 
             List<AttributeMeta> attributeMetas = new ArrayList<>();
 
             // Read tokens until we find the token that ends the current entity.
-            EntityMeta entityMeta = DEFAULT_ENTITY_META;
+            EntityMeta entityMeta = null;
             while ( ( token = jp.nextToken() ) != JsonToken.END_OBJECT )
             {
                 String fieldName = jp.getCurrentName();
@@ -522,22 +561,10 @@ class ActivateOisFromJsonStream implements StreamReader
             for ( AttributeMeta am : attributeMetas )
                 am.apply( ei );
 
-            // Now that we've updated everything, set the flags.
-            if ( incremental )
+            if ( entityMeta == null )
             {
-                ei.setCreated( entityMeta.created );
-                ei.setUpdated( entityMeta.updated );
-                ei.setDeleted( entityMeta.deleted );
-                ei.setIncluded( entityMeta.included );
-                ei.setExcluded( entityMeta.excluded );
-                if ( entityMeta.incomplete )
-                    ei.setIncomplete( null );
-                if ( entityMeta.lazyLoaded != null )
-                {
-                    String[] names = entityMeta.lazyLoaded.split( "," );
-                    for ( String name: names )
-                        ei.getEntitiesLoadedLazily().add( lodDef.getEntityDef( name, true, true ) );
-                }
+                ei.setCreated( false );
+                ei.setUpdated( false );
             }
 
             // If the entity list didn't start with a [ then there is only one entity
@@ -545,6 +572,9 @@ class ActivateOisFromJsonStream implements StreamReader
             if ( entityArray == false )
                 break;
 
+            // Indicate that we're done with this entity and we'll want a new one if
+            // we find an OBJECT_START token.
+            ei = null;
         } // while ( ( token = jp.nextToken() ) != null )...
     }
 
@@ -603,6 +633,7 @@ class ActivateOisFromJsonStream implements StreamReader
             }
         }
 
+        entityMetas.put( ei, meta );
         return meta;
     }
 
@@ -622,6 +653,7 @@ class ActivateOisFromJsonStream implements StreamReader
         String odName = null;
         readOnlyOi = false;
         readOnly   = false;
+        locked     = false;
         totalRootCount = null;
 
         jp.nextToken();
@@ -636,6 +668,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 case "incremental": incremental = jp.getValueAsBoolean(); break;
                 case "readOnlyOi":  readOnlyOi = jp.getValueAsBoolean(); break;
                 case "readOnly":    readOnly = jp.getValueAsBoolean(); break;
+                case "locked":      locked = jp.getValueAsBoolean(); break;
                 case "totalRootCount": totalRootCount = jp.getValueAsInt(); break;
 
                 default: task.log().warn( "Unknown .oimeta fieldname %s", fieldName ); break;

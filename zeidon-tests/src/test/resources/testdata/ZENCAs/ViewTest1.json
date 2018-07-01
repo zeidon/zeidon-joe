@@ -1,0 +1,92 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "ZENCAs",
+      "odName" : "mFASrc",
+      "incremental" : true
+    },
+    "FinAidSource" : [ {
+      ".meta" : {
+        "incrementals" : "C"
+      },
+      "Scholarship" : [ {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 0,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName0",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 100,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 200,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "ID" : 1,
+        ".ID" : {
+          "updated" : "true"
+        },
+        "Name" : "ScholarshipName1",
+        ".Name" : {
+          "updated" : "true"
+        },
+        "Fund" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 101,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund1",
+          ".Name" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "ID" : 201,
+          ".ID" : {
+            "updated" : "true"
+          },
+          "Name" : "Fund2",
+          ".Name" : {
+            "updated" : "true"
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}
