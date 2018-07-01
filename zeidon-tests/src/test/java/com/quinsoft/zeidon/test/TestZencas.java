@@ -1226,6 +1226,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void mFAProfPermissionIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfPermissionIssue( testview );
+        System.out.println("===== Finished mFAProfPermissionIssue ========");
+	}
+
+	@Test
 	public void testUsingJacob()
 	{
 
@@ -1309,6 +1319,78 @@ public class TestZencas
 			super( qual );
 		}
 
+		public int
+		mFAProfPermissionIssue( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    mAdmDiv = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );			
+			
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   //RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+			
+	    	//ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   //RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+		   //xxxx
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+            /*
+			o_fnLocalBuildmAdmDiv( ViewToWindow, vTempViewVar_0, 1 );
+		    RESULT = ActivateObjectInstance( mAdmDiv, "mAdmDiv", ViewToWindow, vTempViewVar_0, zSINGLE );
+	   		DropView( vTempViewVar_0 );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+			*/
+
+			RESULT = CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+		    
+		    //FinAidAwardDisbursement
+			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
+		    
+		    
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "PerPeriodFinAidAwardDisbursement", mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    
+	   	    RESULT = CommitObjectInstance( mFAProf );
+			
+		    //mFAProf.cursor("").getAttribute("").setValue("G");
+		    //mFAProf.cursor("").getAttribute("").setValue("G");
+		   
+		   return 0;
+		}
+		
 		public int
 		activateRootOnly( View ViewToWindow )
 		{
@@ -6243,6 +6325,25 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   return( 0 );
 		}
 
+
+		private int
+		o_fnLocalBuildQualmFASrc( View     vSubtask,
+		                       zVIEW    vQualObject,
+		                       int      lTempInteger_0 )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidSource" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "FinAidSource" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
+		
 		private int
 		o_BuildQualmStudent( View     vSubtask,
 		                     zVIEW    vQualObject )
