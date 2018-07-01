@@ -108,7 +108,6 @@ class EntityInstanceImpl implements EntityInstance
      *      Key = ER Attribute token
      */
     private Map<String, AttributeValue> persistentAttributes;
-    private Object uniqueLinkedObject = new Object();
 
     /**
      * Map of work attributes. Every entity, even linked ones, will have their
@@ -1475,10 +1474,7 @@ class EntityInstanceImpl implements EntityInstance
                 {
                     // Make all the linked entities share the new source attributes.
                     for ( EntityInstanceImpl ei : newInstance.linkedInstances.keySet() )
-                    {
                         ei.persistentAttributes = persistentAttributes;
-                        ei.uniqueLinkedObject = uniqueLinkedObject;
-                    }
 
                     linkedInstances = newInstance.linkedInstances;
                     linkedInstances.putIfAbsent( this, Boolean.TRUE );
@@ -1500,7 +1496,6 @@ class EntityInstanceImpl implements EntityInstance
             linkedInstances.putIfAbsent( newInstance, Boolean.TRUE );
             newInstance.linkedInstances = linkedInstances;
             newInstance.persistentAttributes = persistentAttributes;
-            newInstance.uniqueLinkedObject = uniqueLinkedObject;
 
             assert assertLinkedInstances() : "Error with linked instances";
         }
@@ -1769,7 +1764,6 @@ class EntityInstanceImpl implements EntityInstance
                     // attribute list.
                     linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
                     linked.persistentAttributes = persistentAttributes;
-                    linked.uniqueLinkedObject = uniqueLinkedObject;
                     linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
 
                     // The spawn logic should have correctly set most of the flags.  The only one we have to
@@ -3308,21 +3302,7 @@ class EntityInstanceImpl implements EntityInstance
             return false;
 
         EntityInstanceImpl otherInstance = (EntityInstanceImpl) ei.getEntityInstance();
-        return getUniqueLinkedObject() == otherInstance.getUniqueLinkedObject();
-    }
-
-    /**
-     * This returns an object that can be used to compare two EIs to see if they
-     * are linked.  E.g. ei1 and ei2 are linked if:
-     *
-     *      ei1.getUniqueLinkedObject() == ei2.getUniqueLinkedObject()
-     *
-     *  This can be used to create hashmaps.
-     */
-    Object getUniqueLinkedObject()
-    {
-
-        return uniqueLinkedObject;
+        return persistentAttributes == otherInstance.persistentAttributes;
     }
 
     /**

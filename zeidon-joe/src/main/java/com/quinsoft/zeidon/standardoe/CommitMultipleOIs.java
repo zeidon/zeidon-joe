@@ -19,11 +19,9 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.quinsoft.zeidon.ActivateOptions;
@@ -58,13 +56,13 @@ class CommitMultipleOIs
      * This will hold the pairings of all the includes that
      * have explicit authority to do the include for all the OIs.
      */
-    private Map<Object,Object> includableRelationships;
+    private Set<String> includableRelationships;
 
     /**
      * This will hold the pairings of all the excludes that
      * have explicit authority to do the exclude for all the OIs.
      */
-    private Map<Object,Object> excludableRelationships;
+    private Set<String> excludableRelationships;
 
     /**
      * This is used to determine where an OI is activated from.
@@ -240,7 +238,7 @@ class CommitMultipleOIs
     private EntityInstanceImpl validatePermissionForEi( EntityInstanceImpl ei,
                                                         Set<ObjectInstance> oiSet,
                                                         HasPermission permissionChecker,
-                                                        Map<Object, Object> permissionMap )
+                                                        Set<String> permissionMap )
     {
         // Sanity check to make sure dbhLoaded is always off by the time we commit.
         assert ei.dbhLoaded == false : ei.toString() + " still has dbhLoaded flag on";
@@ -250,6 +248,7 @@ class CommitMultipleOIs
             return ei;
 
         EntityInstanceImpl parent = ei.getParent();
+        EntityDef entityDef = ei.getEntityDef();
         if ( permissionMap != null && parent != null )
         {
             // permissionMap has a pairing of all includes/excludes that have explicit
@@ -259,11 +258,7 @@ class CommitMultipleOIs
             // that does have permission.
 
             // Check relationship in one direction.
-            if ( permissionMap.get( ei.getUniqueLinkedObject() ) == parent.getUniqueLinkedObject() )
-                return parent;
-
-            // Now check the other direction.
-            if ( permissionMap.get( parent.getUniqueLinkedObject() ) == ei.getUniqueLinkedObject() )
+            if ( permissionMap.contains( entityDef.getErRelToken() ) )
                 return parent;
 
             // Permission map is defined for includes/excludes.  If we don't have a match
@@ -317,8 +312,8 @@ class CommitMultipleOIs
      */
     private void accumulatePermissionMaps()
     {
-        includableRelationships = new HashMap<>();
-        excludableRelationships = new HashMap<>();
+        includableRelationships = new HashSet<>();
+        excludableRelationships = new HashSet<>();
 
         for ( ViewImpl view : viewList )
         {
@@ -338,16 +333,10 @@ class CommitMultipleOIs
                     continue;
 
                 if ( ei.isIncluded() && entityDef.isInclude() )
-                {
-                    assert ! includableRelationships.containsKey( ei.getUniqueLinkedObject() );
-                    includableRelationships.put( ei.getUniqueLinkedObject(), parent.getUniqueLinkedObject() );
-                }
+                    includableRelationships.add( entityDef.getErRelToken() );  // Rel is includable.
 
                 if ( ei.isExcluded() && entityDef.isExclude() )
-                {
-                    assert ! excludableRelationships.containsKey( ei.getUniqueLinkedObject() );
-                    excludableRelationships.put( ei.getUniqueLinkedObject(), parent.getUniqueLinkedObject() );
-                }
+                    excludableRelationships.add( entityDef.getErRelToken() );  // Rel is excludable.
             } // each entityInstance
         } // each view
 
