@@ -1236,6 +1236,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void mFAProfPermissionIssueTemporal()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfPermissionIssueTemporal( testview );
+        System.out.println("===== Finished mFAProfPermissionIssue ========");
+	}
+
+	@Test
 	public void testUsingJacob()
 	{
 
@@ -1325,11 +1335,18 @@ public class TestZencas
 		   zVIEW    mPerson = new zVIEW( );
 		   zVIEW    mFAProf = new zVIEW( );
 		   zVIEW    mFASrc = new zVIEW( );
-		   zVIEW    mAdmDiv = new zVIEW( );
 		   zVIEW    lTermLST = new zVIEW( );
 		   zVIEW    wXferO = new zVIEW( );
 		   zVIEW    vTempViewVar_0 = new zVIEW( );
 		   int RESULT=0;
+		   
+		   // KJS 07/02/18 - I have two tests that are similar, this one does NOT use temporal entity.
+		   // The other test mFAProfPermissionIssueTemporal uses CreateTemporal... 
+		   // I had been getting an assert error when committing.
+		   
+		   // ALSO... a different error... When I do a delete of FinAidAward and then do a commit, I get a permission error
+		   // because a subentity is marked as "excluded" instead of "deleted". See comment before the last commit.
+		   
 
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
 		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
@@ -1352,6 +1369,75 @@ public class TestZencas
 		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
 		   DropView( vTempViewVar_0 );
 	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+			CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+		    //mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+		    
+		    //FinAidAwardDisbursement
+			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+
+			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
+		    //AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	    
+		    
+		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
+	   	    RESULT = CommitObjectInstance( mFAProf );
+	   	    
+	   	    // There is an error that when I delete FinAidAward, the entity FinAidAwardDisbursement (which has permission Delete and
+	   	    // parent delete behavior is "delete") is marked as "excluded" and so we get a permission error on FinAidAwardDisbursement when 
+	   	    // trying to commit.
+	   	    RESULT = DeleteEntity( mFAProf, "FinAidAward", zREPOS_NONE );					   
+	   	    RESULT = CommitObjectInstance( mFAProf );
+		   return 0;
+		}
+
+		public int
+		mFAProfPermissionIssueTemporal( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+		   
+		   // KJS 07/02/18 - This test uses CreateTemporalEntity. Depending on when I call the CreateTemporal... I get
+		   // permission errors on the commit of mFAProf. Please see comments further down.
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );			
+			
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+			
+	    	//ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
 		   //xxxx
 
 		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
@@ -1359,35 +1445,31 @@ public class TestZencas
 		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
 			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
 
-            /*
-			o_fnLocalBuildmAdmDiv( ViewToWindow, vTempViewVar_0, 1 );
-		    RESULT = ActivateObjectInstance( mAdmDiv, "mAdmDiv", ViewToWindow, vTempViewVar_0, zSINGLE );
-	   		DropView( vTempViewVar_0 );
-			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
-			*/
-
-			RESULT = CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+			CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
 		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
 		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
-		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
 			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
 		    
 		    //FinAidAwardDisbursement
 			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
-		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
-		    
-		    
+			// *********** READ COMMENT ********
+            // If I uncomment this CreateTemporal... and comment out the next CreateTemporal...
+			// we DO NOT get any permission error on commit.
+			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+			
 			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
 		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
 		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
 		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
-			RESULT = IncludeSubobjectFromSubobject( mFAProf, "PerPeriodFinAidAwardDisbursement", mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+
+			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
+		    AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	    
 		    
+		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
 	   	    RESULT = CommitObjectInstance( mFAProf );
-			
-		    //mFAProf.cursor("").getAttribute("").setValue("G");
-		    //mFAProf.cursor("").getAttribute("").setValue("G");
-		   
+					   
 		   return 0;
 		}
 		
