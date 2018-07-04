@@ -146,6 +146,13 @@ public class QualificationBuilderFromJson
                     case "orderby":
                         parseOrderBy( qualEntityDef );
                         continue;
+
+                    case "$sql":
+                    case "sql":
+                    case "$usingsql":
+                    case "usingsql":
+                        parseOpenSql( fieldName, qualEntityDef );
+                        continue;
                 }
             }
 
@@ -383,6 +390,62 @@ public class QualificationBuilderFromJson
         boolean descending = ! StringUtils.isBlank( value ) && value.toLowerCase().startsWith( "desc" );
         qualBuilder.addActivateOrdering( orderEntityDef.getName(), attribName, descending );
 
+        token = jp.nextToken();  // Skip past closing }.
+    }
+
+    /**
+    *
+    *   Parameter 'command' is the string used to invoke this object (e.g. "usingSql").
+    * Handles
+      {
+        $usingSql: {
+          sql: "select id, name from users where ....",
+          attributes: "Id, Name"
+        }
+      }
+    */
+    private void parseOpenSql( String command, EntityDef qualEntityDef ) throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume "usingSql".
+        if ( token != JsonToken.START_OBJECT )
+            throw new ZeidonException( "%s: expecting '{' but got %s", command, token );
+
+        String sql = null;
+        String attrList = null;
+
+        token = jp.nextToken(); // Consume "{".
+        while ( token != JsonToken.END_OBJECT )
+        {
+            if ( token != JsonToken.FIELD_NAME )
+                throw new ZeidonException( "%s: Unexpected token; expecting FIELD but got %s", command, token );
+
+            String param = jp.getCurrentName();
+            token = jp.nextToken();  // Consume param name.
+            String value = jp.getValueAsString();
+            token = jp.nextToken();  // Consume value.
+
+            switch( param.toLowerCase() )
+            {
+                case "sql":
+                    sql = value;
+                    break;
+
+                case "attributes":
+                    attrList = value;
+                    break;
+
+                default:
+                    throw new ZeidonException( "Unknown %s param name '%s'", command, param );
+            }
+        }
+
+        if ( StringUtils.isBlank( sql ) )
+            throw new ZeidonException( "%s: SQL string not set", command );
+
+        if ( StringUtils.isBlank( attrList ) )
+            throw new ZeidonException( "%s: Attributes list not set", command );
+
+        qualBuilder.setOpenSql( sql, attrList );
         token = jp.nextToken();  // Skip past closing }.
     }
 
