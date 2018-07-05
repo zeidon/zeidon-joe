@@ -5923,20 +5923,6 @@ omFAProf_ValidateFinAidAward( View     mFAProf,
       //:/* end zECE_CREATE */
       //:OF zECE_DELETE:
       case zECE_DELETE :
-         //:FOR EACH mFAProf.DisbFinAidAwardAssigned WITHIN mFAProf.FinAidProfile  
-         //:      WHERE mFAProf.DisbFinAidAwardAssigned.ID = mFAProf.FinAidAward.ID 
-         {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
-                   GetIntegerFromAttribute( mi_lTempInteger_0, mFAProf, "FinAidAward", "ID" );
-         lTempInteger_0 = mi_lTempInteger_0.intValue( );}
-         RESULT = mFAProf.cursor( "DisbFinAidAwardAssigned" ).setFirst( "ID", lTempInteger_0, "FinAidProfile" ).toInt();
-         while ( RESULT > zCURSOR_UNCHANGED )
-         { 
-            //:DELETE ENTITY mFAProf.PerPeriodFinAidAwardDisbursement
-            RESULT = DeleteEntity( mFAProf, "PerPeriodFinAidAwardDisbursement", zPOS_NEXT );
-            RESULT = mFAProf.cursor( "DisbFinAidAwardAssigned" ).setNextContinue().toInt();;
-         } 
-
-         //:END
          break ;
       //:/* end zECE_DELETE */
       //:OF   zECE_EXCLUDE:
