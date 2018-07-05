@@ -1460,6 +1460,11 @@ public class TestZencas
 		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
 		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
 			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
 		    
 		    //FinAidAwardDisbursement
 			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
@@ -1468,15 +1473,13 @@ public class TestZencas
 			// we DO NOT get any permission error on commit.
 			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
 			
-			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
-		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
-		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
-		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
 		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+  	        //Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
 
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
 		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
 		    AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	    
+  	        Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
 		    
 		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
 	   	    RESULT = CommitObjectInstance( mFAProf );
@@ -1564,17 +1567,22 @@ public class TestZencas
 		    //FinAidAwardDisbursement
 			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
 		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
+  	        Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
 
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+  	        Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
 		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		
 		    // After doing the AcceptSubobject, we lose the links to the linked entities.
-		    AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	    
+		    AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	 
+  	        Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
 
 		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("OriginalAmountExpected").setValue("1000");
 		    
 		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
 		    mFAProf.cursor("FinAidAward").getAttribute("LastModifiedBy").setValue("KJS");
 		    AcceptSubobject( mFAProf, "FinAidAward" );	    
+		    mFAProf.cursor("FinAidAwardDisbursement").isLinked(null);
 	   	    RESULT = CommitObjectInstance( mFAProf );
 					   
 		   return 0;
