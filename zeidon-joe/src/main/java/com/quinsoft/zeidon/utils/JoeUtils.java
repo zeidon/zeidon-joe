@@ -621,6 +621,28 @@ public class JoeUtils
                                  .appendMessage( "Bean class = %s", bean.getClass().getName() );
 
         }
+    }
 
+    /**
+     * A generic utility for converting different values to an Integer.
+     *
+     * @param obj
+     * @return
+     */
+    public static Integer convertObjectToInteger( Object obj )
+    {
+       if ( obj == null )
+           return null;
+
+       if ( obj instanceof Integer )
+           return (Integer) obj;
+
+       if ( obj instanceof CharSequence )
+           return Integer.parseInt( obj.toString() );
+
+       if ( obj instanceof Number )
+           return ((Number) obj).intValue();
+
+       throw new ZeidonException( "Don't know how to convert %s (class=%s)", obj, obj.getClass().getName() );
     }
 }

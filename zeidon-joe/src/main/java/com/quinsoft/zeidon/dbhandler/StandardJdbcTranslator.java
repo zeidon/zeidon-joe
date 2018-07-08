@@ -117,7 +117,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     {
         if ( bindAllValues )
         {
-            stmt.addBoundAttribute( buffer, value );
+            Object dbValue = domain.convertValueForDb( task, attributeDef, value );
+            stmt.addBoundAttribute( buffer, dbValue );
             return true;
         }
 

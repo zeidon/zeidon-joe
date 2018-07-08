@@ -50,10 +50,10 @@ public interface Domain
     /**
      * Takes an external value and converts it into a value used internally value using domain processing.
      *
-     * @param task TODO
+     * @param task Zeidon task
      * @param attributeInstance If not null, the is the target attribute.  May be null; this can happen
      * when converting a value to be used in generated SQL.
-     * @param attributeDef TODO
+     * @param attributeDef AttributeDef of value being converted.
      * @param contextName - Context name.
      * @param externalValue - External value
      * @return internal value.
@@ -63,6 +63,18 @@ public interface Domain
                                  AttributeDef      attributeDef,
                                  String            contextName,
                                  Object            externalValue ) throws InvalidAttributeValueException;
+
+    /**
+     * Converts a value to be used with the DB.  By default this just returns value.
+     *
+     * @param task Zeidon task
+     * @param attributeDef AttributeDef of value being converted.
+     * @param value value
+     * @return value usable by DB.
+     */
+    Object convertValueForDb( Task         task,
+                              AttributeDef attributeDef,
+                              Object       value );
 
     /**
      * Takes a value that is an internal value but may may be of a different type and converts it

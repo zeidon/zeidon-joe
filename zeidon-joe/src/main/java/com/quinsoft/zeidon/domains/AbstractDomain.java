@@ -88,6 +88,12 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
+    public Object convertValueForDb( Task task, AttributeDef attributeDef, Object value )
+    {
+        return value;
+    }
+
+    @Override
     public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue)
     {
         if ( internalValue == null )
