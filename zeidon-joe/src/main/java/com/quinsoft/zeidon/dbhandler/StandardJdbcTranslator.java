@@ -240,7 +240,11 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( domain instanceof BlobDomain )
         	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();
         else
+        {
         	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getValue();
+        	value = domain.convertValueForDb( getTask(), attributeDef, value );
+        }
+
         value = AbstractSqlHandler.convertEmptyStringValue( value, attributeDef );
 
         try

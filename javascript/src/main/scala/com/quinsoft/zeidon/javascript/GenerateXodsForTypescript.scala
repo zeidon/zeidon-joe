@@ -61,7 +61,7 @@ import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainF
         writer.println( s"""
 // $lodName LOD.
 export class $lodName extends zeidon.ObjectInstance {
-    protected rootEntityName(): string { return "$lodName" };
+    protected rootEntityName(): string { return "$rootName" };
 
     public getApplicationName(): String { return "$applicationName" };
 
