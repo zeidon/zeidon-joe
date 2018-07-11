@@ -1772,9 +1772,10 @@ class EntityInstanceImpl implements EntityInstance
                         linked.setUpdated( true );
 
                     assert this.isDeleted() == linked.isDeleted()   : "acceptSubobject flag logic is wrong";
-                    assert this.isExcluded() == linked.isExcluded() : "acceptSubobject flag logic is wrong";
+                    assert this.isCreated() == linked.isCreated() : "acceptSubobject flag logic is wrong";
                     assert this.isUpdated() == linked.isUpdated()   : "acceptSubobject flag logic is wrong";
-                    assert this.isIncluded() == linked.isIncluded() : "acceptSubobject flag logic is wrong";
+                    //assert this.isIncluded() == linked.isIncluded() : "acceptSubobject flag logic is wrong";
+                    //assert this.isExcluded() == linked.isExcluded() : "acceptSubobject flag logic is wrong";
 
                     // Update the version number so that the linked instance has the same value.
                     linked.versionNumber = this.versionNumber;
@@ -1783,7 +1784,7 @@ class EntityInstanceImpl implements EntityInstance
                         linked.getObjectInstance().setUpdated( true );
                 }
 
-                prevVersion.mergeLinkedInstances( this );
+                mergeLinkedInstances( prevVersion );
             }
 
             // DON'T null out prevVersion.nextVersion.  That will allow any cursors pointing to the
@@ -1824,7 +1825,10 @@ class EntityInstanceImpl implements EntityInstance
             return;
 
         for ( EntityInstanceImpl linked : source.linkedInstances.keySet() )
-            addLinkedInstance( linked );
+        {
+            if ( linked != source )
+                addLinkedInstance( linked );
+        }
 
         assert assertLinkedInstances() : "Error with linked instances";
     }
