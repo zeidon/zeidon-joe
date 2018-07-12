@@ -2402,6 +2402,19 @@ public abstract class VmlOperation
       return 0;
    }
 
+   protected static final int IsNumeric( String string )
+   {
+	   try  
+	   {  
+	     int d = Integer.parseInt(string);  
+  	     return d;  
+	   }  
+	   catch(NumberFormatException nfe)  
+	   {  
+	     return -1;  
+	   }  
+   }
+
    protected static final int zatol( String string )
    {
       return Integer.parseInt( string );
@@ -5101,8 +5114,8 @@ public abstract class VmlOperation
       return 0;
    }
 
-   protected String SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
-                                    View srcView, String srcEntity, String srcAttribute, int control )
+   protected int SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
+                                 View srcView, String srcEntity, String srcAttribute, int control )
    {
       StringBuilder sb = new StringBuilder( 256 );
 
@@ -5111,11 +5124,13 @@ public abstract class VmlOperation
       int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
       if ( rc < 0 )
       {
-         return null;
+         //return null;
+    	  return -1;
       }
       else
       {
-         return sb.toString( );
+         //return sb.toString( );
+    	  return 0;
       }
    }
 
