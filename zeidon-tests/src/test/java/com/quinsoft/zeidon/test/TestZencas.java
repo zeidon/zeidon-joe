@@ -1585,6 +1585,18 @@ public class TestZencas
 		    mFAProf.cursor("FinAidAwardDisbursement").isLinked(null);
 	   	    RESULT = CommitObjectInstance( mFAProf );
 
+	   	    // We are getting an error when saving because we set an attribute in FinAidAwardDisbursement
+	   	    // that is not in the linked attribute PerPeriodFinAidAwardDisbursement.
+	   	    // Thought it might have to do with temporal entities, but I still get error even when taking
+	   	    // it out.
+			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("OriginalAmountExpected").setValue("1000");
+		    //AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );
+		    //AcceptSubobject( mFAProf, "FinAidAward" );
+	   	    RESULT = CommitObjectInstance( mFAProf );
+
 		   return 0;
 		}
 
