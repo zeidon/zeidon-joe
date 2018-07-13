@@ -410,7 +410,7 @@ class CommitMultipleOIs
                     if ( entityDef.isUpdate() )
                     {
                         // Make sure we can update the attributes.
-                        validateAttributePermission( ei );
+                        validateAttributePermission( oiSet, ei );
                     }
                     else
                     {
@@ -422,7 +422,7 @@ class CommitMultipleOIs
                             ei.logEntity();
                         }
                         else
-                            validateAttributePermission( updateableEi );
+                            validateAttributePermission( oiSet, updateableEi );
                     }
                 }
 
@@ -457,14 +457,15 @@ class CommitMultipleOIs
     /**
      * Validate that this attribute has update authority if it's updated.
      * TODO: This throws an exception.  Maybe capture the exceptions and return them.
+     * @param oiSet
      */
-    private boolean validateAttributePermission( EntityInstanceImpl ei )
+    private boolean validateAttributePermission( Set<ObjectInstance> oiSet, EntityInstanceImpl ei )
     {
         ei.getAttributes();
         for ( AttributeInstance attr : ei.getAttributes() )
         {
             if ( attr.isUpdated() )
-                ((AttributeInstanceImpl) attr).validateUpdateAttribute();
+                ((AttributeInstanceImpl) attr).validateUpdateAttribute( oiSet );
         }
 
         return false;

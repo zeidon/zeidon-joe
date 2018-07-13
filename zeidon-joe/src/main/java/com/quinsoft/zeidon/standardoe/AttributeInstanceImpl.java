@@ -18,6 +18,8 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
@@ -213,6 +215,16 @@ class AttributeInstanceImpl implements AttributeInstance
      */
     void validateUpdateAttribute()
     {
+        validateUpdateAttribute( null );
+    }
+
+    /**
+     * Makes sure the attribute can be updated.
+     * @param oiSet If non-null, then permission can be found in a linked attribute in the oiSet.
+     * @param attributeDef
+     */
+    void validateUpdateAttribute(Set<ObjectInstance> oiSet)
+    {
         // If the attribute is derived or work, then we do not need to check if the
         // attribute can be updated.
         if ( attributeDef.isDerived() )
@@ -234,8 +246,11 @@ class AttributeInstanceImpl implements AttributeInstance
             return;
 
         if ( ! attributeDef.isUpdate() )
-            throw new ZeidonException( "Attribute is defined as read-only" )
-                                .prependAttributeDef( attributeDef );
+        {
+            if ( oiSet == null || linkedInstanceHasUpdateAttribute( oiSet ) == false )
+                throw new ZeidonException( "Attribute is defined as read-only" )
+                                    .prependAttributeDef( attributeDef );
+        }
 
         if ( ! attributeDef.getEntityDef().isUpdate() )
             throw new ZeidonException( "Entity may not be udpated." )
@@ -256,6 +271,26 @@ class AttributeInstanceImpl implements AttributeInstance
                 throw new TemporalEntityException( entityInstance,
                             "Attempting to update an entity that is linked to a versioned instance" );
         }
+    }
+
+    private boolean linkedInstanceHasUpdateAttribute( Set<ObjectInstance> oiSet )
+    {
+        for ( EntityInstanceImpl linked : entityInstance.getLinkedInstances() )
+        {
+            if ( ! oiSet.contains( linked.getObjectInstance() ) )
+                continue;
+
+            EntityDef linkedEntityDef = linked.getEntityDef();
+            AttributeDef linkedAttributeDef = linkedEntityDef.getAttributeByErToken( attributeDef.getErAttributeToken() );
+            if ( linkedAttributeDef == null )
+                continue;
+
+            if ( linkedAttributeDef.isUpdate() )
+                return true;
+        }
+
+        // If we get here we never found an attribute with update authority.
+        return false;
     }
 
     /**
