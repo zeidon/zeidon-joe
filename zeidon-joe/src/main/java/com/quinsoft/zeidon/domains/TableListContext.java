@@ -97,14 +97,20 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object value ) throws InvalidAttributeValueException
     {
         String string = (String) stringConverter.convertExternalValue( task, null, attributeDef, null, value );
-        if ( externalMap.containsKey( string ) )
+
+        // If attribute isn't required we can return if string is either null or "".
+        if ( StringUtils.isBlank( string ) )
+        {
+            if ( attributeDef.isRequired() )
+                throw new InvalidAttributeValueException( attributeDef, value, "Invalid table domain value." );
+
+            return;
+        }
+
+        if ( externalMap.containsKey( string.toLowerCase() ) )
             return;
 
         if ( internalMap.containsKey( string ) )
-            return;
-
-        // If attribute isn't required we can return if string is either null or "".
-        if ( ! attributeDef.isRequired() && StringUtils.isBlank( string ) )
             return;
 
         throw new InvalidAttributeValueException( attributeDef, value, "Invalid table domain value." );
@@ -116,8 +122,8 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
         String string = (String) stringConverter.convertExternalValue( task, null, attributeDef, null, value );
         validateInternalValue( task, attributeDef, string );
 
-        if ( externalMap.containsKey( string ) )
-            return externalMap.get( string ).getInternalValue();
+        if ( externalMap.containsKey( string.toLowerCase() ) )
+            return externalMap.get( string.toLowerCase() ).getInternalValue();
 
         TableEntry tableEntry = internalMap.get( string );
 
@@ -137,6 +143,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
 
         ImmutableTableEntry tableEntry = new ImmutableTableEntry( entryList.size(), internalValue, externalValue );
         internalMap.put( tableEntry.getInternalValue(), tableEntry );
+        // Insert external table entries as lower-case so we can be case-insensitive when converting external values.
         externalMap.put( tableEntry.getExternalValue(), tableEntry );
         entryList.add( tableEntry );
     }
