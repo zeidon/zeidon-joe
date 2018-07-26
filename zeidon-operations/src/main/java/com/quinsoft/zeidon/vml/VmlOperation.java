@@ -5013,11 +5013,22 @@ public abstract class VmlOperation
       return 0;
    }
 
-   protected int ActivateOI_FromXML_File( zVIEW view, String lodDefName, View viewToWindow, String fileName, int control )
+   protected int ActivateOI_FromXML_File( zVIEW view, String lodDefName, View qualView, String fileName, int control )
    {
-      // TODO Auto-generated method stub
-      int nRC = 0; // view.activateOiFromXML_File( view, lodDefName, viewToWindow, fileName, control );
-      return nRC;
+	   try
+	   {
+	       view.setView( task.deserializeOi()
+	                         .fromFile( fileName )
+	                         .setLodDef( lodDefName )
+	                         .setFlags( control )
+	                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+	                         .activateFirst() );
+	   }
+	   catch( Exception e )
+	   {
+	      return -1;   
+	   }
+      return 0;
    }
 
    protected int ActivateOI_FromOI( zVIEW returnView, View view, int control )
