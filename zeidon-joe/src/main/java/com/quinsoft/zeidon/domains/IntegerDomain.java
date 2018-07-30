@@ -82,6 +82,8 @@ public class IntegerDomain extends AbstractNumericDomain
                     else
                         return new BetweenLeLe( lowerBound, upperBound );
             }
+	    
+	    throw new ZeidonException("Unknown BETWEEN comparitors '%s/%s' for IntegerDomain", lowerCompare, upperCompare );
         }
 
         m = RANGE.matcher( config );

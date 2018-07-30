@@ -144,7 +144,7 @@ public class TableListContext extends BaseDomainContext implements TableDomainCo
         ImmutableTableEntry tableEntry = new ImmutableTableEntry( entryList.size(), internalValue, externalValue );
         internalMap.put( tableEntry.getInternalValue(), tableEntry );
         // Insert external table entries as lower-case so we can be case-insensitive when converting external values.
-        externalMap.put( tableEntry.getExternalValue(), tableEntry );
+        externalMap.put( tableEntry.getExternalValue().toLowerCase(), tableEntry );
         entryList.add( tableEntry );
     }
 
