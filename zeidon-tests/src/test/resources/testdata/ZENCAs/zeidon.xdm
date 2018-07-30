@@ -16537,6 +16537,16 @@ aExternalValue Financial Problems
 aInternalValue 2
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      92743260
+aName      XML_SubentityPosition
+aDesc      Used to position expansion of a subentity within parenet attributes in generating an XML file from an object instance.
+aDomainType E
+aDataType  S
+aMaxStringLth 32
+aContextRestriction N
+
+eDomain    2
 aJavaClass com.quinsoft.altdomain.AltStaticTableDomain
 aZKey      86698020
 aName      Y/N

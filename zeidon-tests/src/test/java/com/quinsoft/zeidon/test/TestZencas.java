@@ -947,6 +947,17 @@ public class TestZencas
         System.out.println("===== Finished testActivatingDomains ========");
 	}
 	@Test
+	public void testCODXMLImport()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mStudent" );
+		VmlTester tester = new VmlTester( testview );
+		// I am having a problem running MyENC with sqlite.  This is not a problem
+		// when I run with access db.
+		tester.testCODXMLImport( testview );
+        System.out.println("===== Finished testCODXMLImport ========");
+	}
+	@Test
 	public void testSQL2()
 	{
 	    View         testview;
@@ -5410,6 +5421,27 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 
   		   return( 0 );
    		}
+
+
+   		public int
+   		testCODXMLImport( View     ViewToWindow )
+   		{
+   		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int      lTempInteger_0 = 0;
+   		   int      RESULT = 0;
+   		   zVIEW    xCOD2 = new zVIEW( );
+   		   int      lTempInteger_1 = 0;
+
+   		   // mFAAdmin has the includable entity DisbCollegeTerm and under that is DisbCollegeYear.
+   		   // DisbCollegeYear is marked as "display" not "includable".
+   		   // Because of this, we get an error on Commit of mFAAdmin.
+    	   ActivateOI_FromFile( xCOD2, "xCOD2", ViewToWindow, "target/test-classes/testdata//ZENCAs/CODImport.xml", zSINGLE );//src/test/resources/testdata/ZENCAs
+     	   SetNameForView( xCOD2, "xCOD2", null, zLEVEL_TASK );
+           //Assert.assertEquals( mFASrc.cursor("Fund").checkExistenceOfEntity().toInt(), -3 );
+
+  		   return( 0 );
+   		}
+
 
    		public int
    		testLocking( View     ViewToWindow )
