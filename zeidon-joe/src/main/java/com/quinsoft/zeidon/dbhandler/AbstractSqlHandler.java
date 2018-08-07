@@ -267,6 +267,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected abstract String getConfigValue( String key );
 
+    /**
+     * Converts a value from an internal attribute value to one that can be used directly with the DB.
+     * @param attributeDef
+     * @param value
+     * @return
+     */
+    protected abstract Object convertValueForDb( AttributeDef attributeDef, Object value );
+
     @Override
     public void setDbGenerateKeys( boolean set )
     {
@@ -339,6 +347,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
             // value instead of the data field.
             Object value = entityInstance.getAttribute( attributeDef ).getValue();
+            value = convertValueForDb( attributeDef, value );
             value = convertEmptyStringValue( value, attributeDef );
 
             stmt.addBoundAttribute( buffer, value );

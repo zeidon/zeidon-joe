@@ -451,6 +451,14 @@ public class JdbcHandler extends AbstractSqlHandler
         assert ! entityInstance.getAttribute( attributeDef ).isUpdated() : "Attribute is updated " + attributeDef.toString();
     }
 
+    @Override
+    protected Object convertValueForDb( AttributeDef attributeDef, Object value )
+    {
+        Domain domain = attributeDef.getDomain();
+        Object convertedValue = domain.convertValueForDb( getTask(), attributeDef, value );
+        return convertedValue;
+    }
+
     /**
      * This will load all the attributes for a row in the ResultSet.  This will
      * potentially create entities.
