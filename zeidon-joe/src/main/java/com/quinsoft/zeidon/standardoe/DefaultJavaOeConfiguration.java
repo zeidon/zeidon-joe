@@ -119,6 +119,10 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     {
         if ( zeidonPreferencesFactory == null )
         {
+            // preferencesFilename is blank then see if it's specified as an env var.
+            if ( StringUtils.isBlank( preferencesFilename ) )
+                preferencesFilename = JoeUtils.getEnvProperty( "ZEIDON_INI" );
+
             if ( StringUtils.isBlank( preferencesFilename ) )
             {
                 ZeidonIniPreferences iniPref = new ZeidonIniPreferences( getHomeDirectory(), getJmxAppName() );
