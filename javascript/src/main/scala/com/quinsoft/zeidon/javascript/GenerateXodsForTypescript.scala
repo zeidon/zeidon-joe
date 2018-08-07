@@ -100,6 +100,10 @@ export class $lodName extends zeidon.ObjectInstance {
         return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
     }
 
+    get ${rootName}$$_(): ${lodName}_${rootName} {
+        return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
+    }
+
     public static activate( qual?: any ): Promise<$lodName> {
         return zeidon.ObjectInstance.activateOi( new $lodName(), qual );
     }
@@ -163,6 +167,10 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
     }
 
     get ${entityName}$$$$(): ${lodName}_$entityName {
+        return (this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName) || zeidon.SAFE_INSTANCE;
+    }
+
+    get ${entityName}$$_(): ${lodName}_$entityName {
         return (this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName) || zeidon.SAFE_INSTANCE;
     }""" )
     }
