@@ -46,6 +46,8 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
     private String       erAttributeToken;
     private InternalType type = InternalType.STRING;
     private Integer      length;
+    private String       xmlName;
+    private String       xmlExtName;
 
     /**
      * Used to match up DATARECORDS with CHILDENTITY lines in the XOD.
@@ -212,6 +214,14 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
 
             case "NAME":
                 setName( reader.getAttributeValue().intern() );
+                break;
+                
+            case "XML_SIMPLE_NAME":
+                xmlName = reader.getAttributeValue().intern();
+                break;
+                
+            case "XML_NAME_EXTERNAL":
+                xmlExtName = reader.getAttributeValue().intern();
                 break;
 
             case "PERSIST":
