@@ -60,6 +60,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.PessimisticLockingException;
@@ -3003,7 +3004,10 @@ public abstract class VmlOperation
                                                int    maxCopy,
                                                int    maxTargetLth )
    {
-      if ( sourceIdx > 0 )
+	  if ( source == null || source.isEmpty() )
+	      return sbTarget;
+
+	  if ( sourceIdx > 0 )
       {
          sbTarget.append( source.substring( sourceIdx - 1 ) );
       }
@@ -4539,8 +4543,15 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.getAttribute( attributeName ).compare( value );
-         return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 try
+    	 {
+            int nRC = cursor.getAttribute( attributeName ).compare( value );
+            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 }
+    	 catch( InvalidAttributeValueException e )
+    	 {
+    		 return -1;
+    	 }
       }
    }
 
@@ -4553,8 +4564,15 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
-         return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 try
+    	 {
+            int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
+            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 }
+    	 catch( InvalidAttributeValueException e )
+    	 {
+    		 return -1;
+    	 }
       }
    }
 
