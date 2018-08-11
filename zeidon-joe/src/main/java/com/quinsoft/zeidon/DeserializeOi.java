@@ -68,6 +68,7 @@ public class DeserializeOi
     private Application application;
     private StreamReader streamReader;
     private String       version;
+    private SerializationMapping serializationMapper = SerializationMapping.NOOP_MAPPING;
 
     /**
      * This is a set of ViewEntities that we will allow to create dynamic
@@ -348,7 +349,7 @@ public class DeserializeOi
     }
 
     /**
-     * Sets the LOD definition by name using the supplied application name to 
+     * Sets the LOD definition by name using the supplied application name to
      * find the LOD def.
      *
      * @param lodDefName name of the LOD.
@@ -405,6 +406,17 @@ public class DeserializeOi
     {
         this.format = StreamFormat.valueOf( format );
         return this;
+    }
+
+    public DeserializeOi withMappings( View serializationMappings )
+    {
+        this.serializationMapper = SerializationMapping.fromOi( serializationMappings );
+        return this;
+    }
+
+    public SerializationMapping getSerializationMapping()
+    {
+        return this.serializationMapper;
     }
 
     /**

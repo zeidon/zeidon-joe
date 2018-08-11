@@ -39,6 +39,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -90,6 +91,7 @@ class ActivateOisFromXmlStream implements StreamReader
      * stream.  Cursors will be set afterwards.
      */
     private List<EntityInstanceImpl> selectedInstances;
+    private SerializationMapping mapper;
 
     /**
      * Keeps track of current location in SAX parser.
@@ -181,9 +183,9 @@ class ActivateOisFromXmlStream implements StreamReader
             throw new ZeidonException("zOI element does not specify appName" );
 
         application = task.getApplication( appName );
-        String odName = attributes.getValue( "objectName" );
+        String odName = attributes.getValue( "recordName" );
         if ( StringUtils.isBlank( odName ) )
-            throw new ZeidonException("zOI element does not specify objectName" );
+            throw new ZeidonException("zOI element does not specify recordName" );
 
         lodDef = application.getLodDef( task, odName );
         view = (ViewImpl) task.activateEmptyObjectInstance( lodDef );
@@ -202,9 +204,9 @@ class ActivateOisFromXmlStream implements StreamReader
     }
 
 
-    private void createEntity( String entityName, Attributes attributes )
+    private void createEntity( EntityDef entityDef, Attributes attributes )
     {
-        currentEntityDef = lodDef.getEntityDef( entityName );
+        currentEntityDef = entityDef;
         currentEntityStack.push( currentEntityDef );
         EntityCursorImpl cursor = view.cursor( currentEntityDef );
         cursor.createEntity( CursorPosition.LAST, CREATE_FLAGS );
@@ -262,9 +264,10 @@ class ActivateOisFromXmlStream implements StreamReader
             }
 
             // Is the element name an entity name?
-            if ( lodDef.getEntityDef( qName, false ) != null )
+            EntityDef entityDef = mapper.getEntityFromRecord( qName, currentEntityStack.peek(), lodDef );
+            if ( entityDef != null )
             {
-                createEntity( qName, attributes );
+                createEntity( entityDef, attributes );
                 return;
             }
 
@@ -316,13 +319,14 @@ class ActivateOisFromXmlStream implements StreamReader
             }
 
             // Is the element name an entity name?
-            if ( lodDef.getEntityDef( qName, false ) != null )
+            EntityDef entityDef = mapper.getEntityFromRecord( qName, currentEntityDef.getParent(), lodDef );
+            if ( entityDef != null )
             {
-                assert qName.equals( currentEntityDef.getName() ) : "Mismatching entity names in XML";
+                assert entityDef == currentEntityDef : "Mismatching entity names in XML";
 
                 if ( incremental )
                 {
-                    EntityInstanceImpl ei = view.cursor( qName ).getEntityInstance();
+                    EntityInstanceImpl ei = view.cursor( entityDef ).getEntityInstance();
                     Attributes attributes = entityAttributes.pop();
 
                     ei.setUpdated( isYes( attributes.getValue( "updated" ) ) );
@@ -382,6 +386,8 @@ class ActivateOisFromXmlStream implements StreamReader
         this.inputStream = options.getInputStream();;
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
+         mapper = options.getSerializationMapping();
+
         read();
         return viewList;
     }

@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.EntityCursor.CursorStatus;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
@@ -54,11 +55,13 @@ public class WriteOisToXmlStream implements StreamWriter
 
     private int currentIndent;
     private SerializeOi options;
+    private SerializationMapping mapper;
 
     @Override
     public void writeToStream( SerializeOi options, Writer writer )
     {
         List<View> viewList = options.getViewList();
+        mapper = options.getSerializationMapping();
 
         // Create a set of all the OIs and turn off the record owner flag.  The record owner
         // flag will be used to determine if a linked EI has been written to the stream.
@@ -261,7 +264,7 @@ public class WriteOisToXmlStream implements StreamWriter
                 lazyLoaded.deleteCharAt( 0 );
             }
 
-            startElement( entityDef.getName(),
+            startElement( mapper.entityToRecord( entityDef ),
                           "created",    yesNull( ei.isCreated() ),
                           "deleted",    yesNull( ei.isDeleted() ),
                           "updated",    yesNull( ei.isUpdated() ),
@@ -275,7 +278,7 @@ public class WriteOisToXmlStream implements StreamWriter
                           "lazyLoaded", lazyLoaded.toString() );
         }
         else
-            startElement( entityDef.getName() );
+            startElement( mapper.entityToRecord( entityDef ) );
 
         currentIndent++;
         Object[] attrIncr = new Object[] { "updated", null };
@@ -324,7 +327,7 @@ public class WriteOisToXmlStream implements StreamWriter
             rootSelectSet = sets.get( currentView.getOiId() );
 
 //        write( "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" );
-        startElement( "zOI", "objectName", currentView.getLodDef().getName(),
+        startElement( "zOI", "recordName", currentView.getLodDef().getName(),
                              "appName", currentView.getApplication().getName(),
                              "increFlags", yesNo( incremental ),
                              "locked", yesNo( currentView.getObjectInstance().isLocked() ),

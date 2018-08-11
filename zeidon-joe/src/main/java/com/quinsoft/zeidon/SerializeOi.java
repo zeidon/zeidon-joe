@@ -58,6 +58,7 @@ public class SerializeOi
     private boolean writeDerivedAttributes = false;
     private boolean writeTotalRootCount = false;
     private boolean writeCursors = false;
+    private SerializationMapping serializationMapper = SerializationMapping.NOOP_MAPPING;
 
     public SerializeOi()
     {
@@ -406,6 +407,17 @@ public class SerializeOi
             return setFlags( (EnumSet<WriteOiFlags>) null );
 
         return setFlags( WriteOiFlags.convertLongFlags( control ) );
+    }
+
+    public SerializeOi withMappings( View serializationMappings )
+    {
+        this.serializationMapper = SerializationMapping.fromOi( serializationMappings );
+        return this;
+    }
+
+    public SerializationMapping getSerializationMapping()
+    {
+        return this.serializationMapper;
     }
 
     public SerializeOi withIncremental()
