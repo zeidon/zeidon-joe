@@ -20,7 +20,9 @@ package com.quinsoft.zeidon.standardoe;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -82,7 +84,7 @@ class ActivateOisFromXmlStream implements StreamReader
     private boolean                  incremental = false;
     private final Stack<Attributes>  entityAttributes = new Stack<Attributes>();
     private final Stack<Attributes>  attributeAttributes = new Stack<Attributes>();
-    private final Stack<EntityDef>   currentEntityStack = new Stack<EntityDef>();
+    private final Deque<EntityDef>   currentEntityStack = new LinkedList<EntityDef>();
     private EntityDef                currentEntityDef;
     private StringBuilder            characterBuffer;
 
@@ -264,7 +266,7 @@ class ActivateOisFromXmlStream implements StreamReader
             }
 
             // Is the element name an entity name?
-            EntityDef entityDef = mapper.getEntityFromRecord( qName, currentEntityStack.peek(), lodDef );
+            EntityDef entityDef = mapper.getEntityFromRecord( qName, currentEntityStack.peekFirst(), lodDef );
             if ( entityDef != null )
             {
                 createEntity( entityDef, attributes );
@@ -386,7 +388,7 @@ class ActivateOisFromXmlStream implements StreamReader
         this.inputStream = options.getInputStream();;
         ignoreInvalidEntityNames = control.contains( ActivateFlags.fIGNORE_ENTITY_ERRORS );
         ignoreInvalidAttributeNames = control.contains( ActivateFlags.fIGNORE_ATTRIB_ERRORS );
-         mapper = options.getSerializationMapping();
+        mapper = options.getSerializationMapping();
 
         read();
         return viewList;

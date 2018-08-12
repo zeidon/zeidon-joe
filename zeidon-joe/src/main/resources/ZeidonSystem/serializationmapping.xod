@@ -1,4 +1,4 @@
-z1000-Zeidon    SERIALIZATZZOXODO 08/10/18   10:05:10 1.0a2    
+z1000-Zeidon    SERIALIZATZZOXODO 08/11/18   14:01:48 1.0a2    
 eOBJECT    1
 aNAME      SerializationMapping
 aZKey      810095955
@@ -7,7 +7,7 @@ aER_DATE   20130123203322140
 
 eENTITY    2
 aNAME      SerializationMapping
-aMAX_LTH   0
+aMAX_LTH   2
 aERENT_TOK 810095956
 aFULLPERSIST Y
 aCREATE    Y
@@ -16,6 +16,17 @@ aPDELETE   D
 aUPDATE    Y
 aDERIVED   Y
 aINCLSRC   Y
+
+eATTRIB    3
+aNAME      IgnoreCase
+aERATT_TOK 810095974
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 1
 
 eCHILDENTITY 3
 aNAME      Entity
@@ -30,7 +41,7 @@ aPDELETE   D
 aUPDATE    Y
 aDERIVED   Y
 aINCLSRC   Y
-aMAX_LTH   1258
+aMAX_LTH   1260
 
 eATTRIB    4
 aNAME      EntityName
@@ -41,7 +52,7 @@ aTYPE      S
 aLTH       256
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 1
+aXVAATT_TOK 2
 
 eATTRIB    4
 aNAME      RecordName
@@ -52,7 +63,18 @@ aTYPE      S
 aLTH       1000
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 2
+aXVAATT_TOK 3
+
+eATTRIB    4
+aNAME      Ignore
+aERATT_TOK 810095970
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 4
 
 eCHILDENTITY 4
 aNAME      Attribute
@@ -67,5 +89,49 @@ aPDELETE   D
 aUPDATE    Y
 aDERIVED   Y
 aINCLSRC   Y
-aMAX_LTH   0
+aMAX_LTH   1134
+
+eATTRIB    5
+aNAME      AttributeName
+aERATT_TOK 810095964
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       128
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 5
+
+eATTRIB    5
+aNAME      FieldName
+aERATT_TOK 810095966
+aAPDM_TOK  90000032
+aDOMAIN    Text
+aTYPE      S
+aLTH       1000
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 6
+
+eATTRIB    5
+aNAME      IsXmlAttribute
+aERATT_TOK 810095968
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 7
+
+eATTRIB    5
+aNAME      Ignore
+aERATT_TOK 810095972
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 8
 

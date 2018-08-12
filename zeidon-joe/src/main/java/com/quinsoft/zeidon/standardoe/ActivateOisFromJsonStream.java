@@ -37,6 +37,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CreateEntityFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.DeserializeOi;
+import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.StreamReader;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -101,6 +102,7 @@ class ActivateOisFromJsonStream implements StreamReader
     private boolean readOnly;
     private boolean locked;
     private Integer totalRootCount;
+    private SerializationMapping mapper;
 
     /**
      * A JSON stream will have a version.  Once the version is read from the stream a
@@ -121,6 +123,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
     public List<View> read()
     {
+        mapper = options.getSerializationMapping();
         try
         {
             JsonFactory jsonFactory = new JsonFactory();
@@ -174,10 +177,10 @@ class ActivateOisFromJsonStream implements StreamReader
                     throw new ZeidonException( "JSON stream appears to start with the root entity name (%s)" +
                                                " but the LodDef has not been specified.", fieldName );
 
-                String rootName = lodDef.getRoot().getName();
-                if ( ! fieldName.equalsIgnoreCase( rootName ) )
-                    throw new ZeidonException( "The first field in the JSON stream must be the root entity name" +
-                                               " (%s) or '.meta' but was %s.", rootName, fieldName );
+                EntityDef entityDef = mapper.getEntityFromRecord( fieldName, null, lodDef );
+                if ( entityDef == null )
+                    throw new ZeidonException( "The first field in the JSON stream must be the root entity" +
+                                               " or '.meta' but was %s.", fieldName );
 
                 view = task.activateEmptyObjectInstance( lodDef );
                 returnList.add( view );
@@ -290,11 +293,12 @@ class ActivateOisFromJsonStream implements StreamReader
         if ( token != JsonToken.END_OBJECT )
         {
             fieldName = jp.getCurrentName();
-            if ( !StringUtils.equalsIgnoreCase( fieldName, lodDef.getRoot().getName() ) )
+            EntityDef entityDef = mapper.getEntityFromRecord( fieldName, null, lodDef );
+            if ( entityDef == null )
                 throw new ZeidonException( "First entity specified in OI (%s) is not the root (%s)", fieldName,
                                            lodDef.getRoot().getName() );
 
-            readEntity( fieldName );
+            readEntity( fieldName, null ); // Null means we're loading the root.
             token = jp.nextToken();
         }
 
@@ -372,7 +376,6 @@ class ActivateOisFromJsonStream implements StreamReader
         String fieldName = jp.getCurrentName();
 
         assert token == JsonToken.FIELD_NAME;
-        assert lodDef.getRoot().getName().equalsIgnoreCase( fieldName );
 
         // If the token after reading the .oimeta is END_OBJECT then the OI is empty.
         if ( token != JsonToken.END_OBJECT )
@@ -380,7 +383,7 @@ class ActivateOisFromJsonStream implements StreamReader
             // readEntity expects the current token to be the opening { or [.
             // Skip over the field name.
             token = jp.nextToken();
-            readEntity( fieldName );
+            readEntity( fieldName, null );
             token = jp.nextToken();
         }
 
@@ -390,7 +393,7 @@ class ActivateOisFromJsonStream implements StreamReader
         return true;  // Keep looking for OIs in the stream.
     }
 
-    private void readEntity( String entityName ) throws Exception
+    private void readEntity( String entityName, EntityDef parent ) throws Exception
     {
         // Keeps track of whether the entity list starts with a [ or not.  If there
         // is no [ then we are done reading entities of this type when we find the
@@ -407,7 +410,7 @@ class ActivateOisFromJsonStream implements StreamReader
 
         assert token == JsonToken.START_OBJECT;
 
-        EntityDef entityDef = lodDef.getEntityDef( entityName, true, true );
+        EntityDef entityDef = mapper.getEntityFromRecord( entityName, parent, lodDef, true );
         EntityInstanceImpl ei = null;
 
         // Read tokens until we find the token that ends the current list of entities.
@@ -487,7 +490,7 @@ class ActivateOisFromJsonStream implements StreamReader
                     boolean recursiveChild = false;
 
                     // Validate that the entity name is valid.
-                    EntityDef childEntity = lodDef.getEntityDef( fieldName, true, true );
+                    EntityDef childEntity = mapper.getEntityFromRecord( fieldName, entityDef, lodDef, true );
                     if ( childEntity.getParent() != entityDef )
                     {
                         // Check to see the childEntity is a recursive child.
@@ -501,7 +504,7 @@ class ActivateOisFromJsonStream implements StreamReader
                                                        entityName );
                     }
 
-                    readEntity( fieldName );
+                    readEntity( fieldName, entityDef );
 
                     if ( recursiveChild )
                         view.resetSubobject();
