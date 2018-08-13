@@ -1466,12 +1466,18 @@ public abstract class VmlOperation
 
    protected static final int ZeidonStringFind( StringBuilder sbTarget, int tgtIdx, String searchString )
    {
-      return sbTarget.toString( ).lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
+	   // at the beginning of the line.
+	   //return sbTarget.toString( ).lastIndexOf( searchString, tgtIdx - 1 );
+	   return sbTarget.toString( ).indexOf( searchString, tgtIdx - 1 );
    }
 
    protected static final int ZeidonStringFind( String tgtString, int tgtIdx, String searchString )
    {
-      return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
+	   // at the beginning of the line.
+	   //return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   return tgtString.indexOf( searchString, tgtIdx - 1 );
    }
 
    protected int SetNameForView( View view, String name, TaskQualification taskQual, int level )
@@ -2771,6 +2777,13 @@ public abstract class VmlOperation
       int  nRC;
       int nbrToCopy;
       int lth;
+      
+      // KJS 08/08/18 - I have run into problems when I do a ZeidonStringFind and string is found at position 0, then we come here
+      // and we fail with sourceIdx being 0. So put in a fix for this...
+      if ( targetIdx == 0 )
+    	  targetIdx = 1;
+      if ( sourceIdx == 0 )
+    	  sourceIdx = 1;
 
       if ( sbTarget == null || sbSource == null ||     // gotta have strings
            targetIdx == 0 || sourceIdx == 0 )          // 1-based index
