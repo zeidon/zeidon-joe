@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -238,7 +239,10 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         Domain domain = attributeDef.getDomain();
         Object value;
         if ( domain instanceof BlobDomain )
-        	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();
+        {
+        	//value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();  // When we are setting the blob as a string.
+        	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getBlob();
+        }
         else
         {
         	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getValue();
@@ -262,6 +266,13 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     {
         try
         {
+            if ( value instanceof Blob )
+            {
+                Blob blob = (Blob) value;
+                ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
+                //ps.setObject( idx, new String( blob.getBytes() ) );  // If blob is string
+            }
+            else
             if ( value instanceof DateTime )
             {
                 DateTime d = (DateTime) value;
