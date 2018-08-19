@@ -22,6 +22,7 @@ package com.quinsoft.zeidon.dbhandler;
 import java.sql.Clob;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -242,6 +243,15 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         {
         	//value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();  // When we are setting the blob as a string.
         	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getBlob();
+        	 try {
+        		 if ( value == null )
+        		 {
+        			 ps.setObject( idx, value, Types.LONGVARBINARY, -1 );
+        			 return "<null>";
+        		 }
+			} catch (SQLException e) {
+	            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
+			}
         }
         else
         {

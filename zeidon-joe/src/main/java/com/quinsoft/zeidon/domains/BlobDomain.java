@@ -61,7 +61,8 @@ public class BlobDomain extends AbstractDomain
         {
         	// If externalValue = "" then return "".
         	if ( ((String) externalValue).isEmpty() )
-        		return externalValue;
+        		return null;
+    		    //return externalValue;
             return new Blob( ((String) externalValue).getBytes() );
         }
 
