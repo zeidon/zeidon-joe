@@ -96,7 +96,7 @@ public abstract class AbstractDomain implements Domain
     @Override
     public Blob convertToBlob(Task task, AttributeDef attributeDef, Object internalValue)
     {
-        if ( internalValue == null )
+        if ( internalValue == null || internalValue.equals(""))
             return null;
 
         if ( internalValue instanceof Blob )
