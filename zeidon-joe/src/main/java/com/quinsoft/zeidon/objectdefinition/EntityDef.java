@@ -73,6 +73,7 @@ public class EntityDef implements PortableFileAttributeHandler
     private ArrayList<AttributeDef> activateOrdering;
     private Integer    activateLimit;
     private EntityDefLinkInfo linkInfo;
+    private String     xmlName;
 
     /**
      * List of the attributes in the order they are defined in the XOD file.
@@ -312,6 +313,10 @@ public class EntityDef implements PortableFileAttributeHandler
 
             case "NAME":
                 name = reader.getAttributeValue().intern();
+                break;
+
+            case "XML_NAME":
+                xmlName = reader.getAttributeValue().intern();
                 break;
 
             case "PDELETE":
