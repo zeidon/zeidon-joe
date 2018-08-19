@@ -449,6 +449,16 @@ public class QualificationBuilderFromJson
         token = jp.nextToken();  // Skip past closing }.
     }
 
+    /**
+    *
+    *   Parse attribute value.
+    * Handles
+      {
+        attr: "scalor-value",
+        attr: [ "v1", "v2", "v3" ],
+        attr: { $lt: 30, $gt: 10 }
+      }
+    */
     private void parseAttribute( EntityDef qualEntityDef, AttributeDef attributeDef ) throws JsonParseException, IOException
     {
         JsonToken token = jp.nextToken(); // Move to attribute value.
@@ -535,6 +545,16 @@ public class QualificationBuilderFromJson
                 case "<>":
                 case "$neq":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "!=", value );
+                    break;
+
+                case "like":
+                case "$like":
+                    qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "LIKE", value );
+
+                case "ilike":
+                case "$ilike":
+                    qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "ILIKE", value );
+
                     break;
 
                 default:
