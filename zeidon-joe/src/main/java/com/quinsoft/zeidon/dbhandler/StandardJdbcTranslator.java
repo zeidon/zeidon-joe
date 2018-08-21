@@ -242,19 +242,6 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         Object value;
         if ( domain instanceof BlobDomain )
         {
-<<<<<<< HEAD
-        	//value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();  // When we are setting the blob as a string.
-        	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getBlob();
-        	 try {
-        		 if ( value == null )
-        		 {
-        			 ps.setObject( idx, value, Types.LONGVARBINARY, -1 );
-        			 return "<null>";
-        		 }
-			} catch (SQLException e) {
-	            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
-			}
-=======
             value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getBlob();
             try
             {
@@ -268,7 +255,6 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             {
                 throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
             }
->>>>>>> test-blob-change
         }
         else
         {
@@ -296,13 +282,6 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         Object value = data.value;
         try
         {
-<<<<<<< HEAD
-            if ( value instanceof Blob )
-            {
-                Blob blob = (Blob) value;
-                ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
-                //ps.setObject( idx, new String( blob.getBytes() ) );  // If blob is string
-=======
             if ( domain instanceof BlobDomain )
             {
                 if ( value == null )
@@ -312,7 +291,6 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                 }
                 Blob blob = (Blob) value;
                 ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
->>>>>>> test-blob-change
             }
             else
             if ( value instanceof DateTime )

@@ -5,11 +5,7 @@
     <parent>
         <artifactId>zeidon</artifactId>
         <groupId>com.quinsoft.zeidon</groupId>
-<<<<<<< HEAD
-        <version>1.5.1</version>
-=======
         <version>1.5.1-SNAPSHOT</version>
->>>>>>> test-blob-change
     </parent>
 
     <artifactId>zeidon-tests</artifactId>
