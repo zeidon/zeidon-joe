@@ -349,8 +349,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             Object value = entityInstance.getAttribute( attributeDef ).getValue();
             value = convertValueForDb( attributeDef, value );
             value = convertEmptyStringValue( value, attributeDef );
+            BoundAttributeData data = new BoundAttributeData( dataField, value );
 
-            stmt.addBoundAttribute( buffer, value );
+            stmt.addBoundAttribute( buffer, data );
             return;
         }
 
