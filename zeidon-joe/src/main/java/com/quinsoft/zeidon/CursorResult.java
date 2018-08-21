@@ -20,7 +20,7 @@ package com.quinsoft.zeidon;
 
 /**
  * @author DG
- * 
+ *
  */
 public enum CursorResult
 {
@@ -36,36 +36,45 @@ public enum CursorResult
      * to be used by the VML generator.
      */
     private final int coeCode;
-    
+
     private CursorResult( int vmlCode )
     {
         this.coeCode = vmlCode;
     }
-    
+
     /**
      * Returns true if the cursor is set to a value, regardless if
      * it's set under a new parent.
-     * 
+     *
      * @return
      */
     public boolean isSet()
     {
         return coeCode >= 0;
     }
-    
+
+    /**
+     * Used to check the return of checkExistenceOfEntity.
+     * @return true if there is no entity specified for the cursor.
+     */
+    public boolean isEmpty()
+    {
+        return coeCode < 0;
+    }
+
     public boolean isSetNewParent()
     {
         return coeCode >= 1;
     }
-    
+
     public boolean isSetRecursiveChild()
     {
         return coeCode >= 2;
     }
-    
+
     /**
      * Return the C OE equivalent integer value.
-     * 
+     *
      * @return
      */
     public int toInt()

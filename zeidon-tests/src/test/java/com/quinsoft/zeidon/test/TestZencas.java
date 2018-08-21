@@ -946,9 +946,13 @@ public class TestZencas
 		tester.testActivatingDomains( testview );
         System.out.println("===== Finished testActivatingDomains ========");
 	}
-	@Test
+
+	//@Test
 	public void testCODXMLImport()
 	{
+        View         mapping;
+        mapping = zeidonSystem.activateEmptyObjectInstance( "SerializationMapping" );
+
 	    View         testview;
 		testview = zencas.activateEmptyObjectInstance( "mStudent" );
 		VmlTester tester = new VmlTester( testview );

@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
@@ -59,6 +60,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
     private EnumSet<WriteOiFlags> flags;
     private SerializeOi options;
     private JsonGenerator jg;
+    private SerializationMapping mapper;
 
     @Override
     public void writeToStream( SerializeOi options, Writer writer )
@@ -72,6 +74,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             throw new ZeidonException( "This JSON stream writer not intended for writing incremental." );
 
         this.options = options;
+        mapper = options.getSerializationMapping();
 
         JsonFactory jsonF = new JsonFactory();
         try
@@ -105,7 +108,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             jg.writeNumberField( "totalRootCount", rootCount );
 
         EntityDef rootEntityDef = view.getLodDef().getRoot();
-        jg.writeArrayFieldStart( camelCaseName( rootEntityDef.getName() ) );
+        jg.writeArrayFieldStart( objectName( rootEntityDef ) );
         if ( ! view.isEmpty() )
         {
             jg.writeStartObject();
@@ -124,6 +127,23 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
             jg.writeEndObject();
         }
         jg.writeEndArray();
+    }
+
+    /**
+     * Convert the name of the EntityDef to the object name used in JSON.
+     * @param entityDef
+     * @return
+     */
+    private String objectName( EntityDef entityDef )
+    {
+        String objectName = mapper.entityToRecord( entityDef );
+        return camelCaseName( objectName );
+    }
+
+    private String fieldName( AttributeDef attributeDef )
+    {
+        String fieldName = mapper.attributeToField( attributeDef );
+        return camelCaseName( fieldName );
     }
 
     private String camelCaseName( String name )
@@ -163,7 +183,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                     continue;
 
                 Domain domain = attributeDef.getDomain();
-                String jsonName = camelCaseName( attributeDef.getName() );
+                String jsonName = fieldName( attributeDef );
                 if ( domain instanceof IntegerDomain )
                     jg.writeNumberField( jsonName, attrib.getInteger() );
                 else
@@ -186,7 +206,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                     // (i.e. explicitly set to null).  Since we aren't writing incrementals
                     // we don't want those so check for null.
                     if ( ! StringUtils.isBlank( value ) )
-                        jg.writeStringField( camelCaseName( attrib.getAttributeDef().getName() ), value );
+                        jg.writeStringField( fieldName( attrib.getAttributeDef() ), value );
                 }
             }
 
@@ -198,11 +218,11 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 {
                     if ( childEntityDef.getMaxCardinality() > 1 )
                     {
-                        jg.writeArrayFieldStart( camelCaseName( childEntityDef.getName() ) );
+                        jg.writeArrayFieldStart( objectName( childEntityDef ) );
                         jg.writeStartObject();
                     }
                     else
-                        jg.writeObjectFieldStart( camelCaseName( childEntityDef.getName() ) );
+                        jg.writeObjectFieldStart( objectName( childEntityDef ) );
                 }
                 else
                     jg.writeStartObject();

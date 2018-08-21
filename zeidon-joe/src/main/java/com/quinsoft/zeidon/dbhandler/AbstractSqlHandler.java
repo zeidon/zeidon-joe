@@ -267,6 +267,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected abstract String getConfigValue( String key );
 
+    /**
+     * Converts a value from an internal attribute value to one that can be used directly with the DB.
+     * @param attributeDef
+     * @param value
+     * @return
+     */
+    protected abstract Object convertValueForDb( AttributeDef attributeDef, Object value );
+
     @Override
     public void setDbGenerateKeys( boolean set )
     {
@@ -339,9 +347,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // There can be multiple INSERT statements for a single SQL command.  We need to bind the attribute
             // value instead of the data field.
             Object value = entityInstance.getAttribute( attributeDef ).getValue();
+            value = convertValueForDb( attributeDef, value );
             value = convertEmptyStringValue( value, attributeDef );
+            BoundAttributeData data = new BoundAttributeData( dataField, value );
 
-            stmt.addBoundAttribute( buffer, value );
+            stmt.addBoundAttribute( buffer, data );
             return;
         }
 
@@ -525,7 +535,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     throw new ZeidonException( "QualAttrib for " + entityName + " is missing Oper" );
 
                 QualAttrib qualAttrib = new QualAttrib( qualAttribInstance.getAttribute( "Oper" ).getString() );
-                if ( qualAttrib.oper.equals( "EXCLUDE" ) )
+                if ( StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "EXCLUDE" ) )
                 {
                     qualEntity.exclude = true;
                     continue;
@@ -553,13 +563,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     }
                 }
 
-                if ( qualAttrib.oper.equals( "EXISTS" ) || qualAttrib.oper.equals( "NOT EXISTS" ) )
+                if ( StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "EXISTS" ) ||
+                     StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "NOT EXISTS" ) )
                 {
                     if ( qualAttrib.entityDef == null )
                         throw new ZeidonException("Oper 'EXISTS'/'NOT EXISTS' requires an entity specification");
 
                     // Change the oper to =/!=
-                    if ( qualAttrib.oper.equals( "EXISTS" ) )
+                    if ( StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "EXISTS" ) )
                         qualAttrib.oper = "!=";
                     else
                     {
@@ -613,7 +624,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     }
                 }
 
-                if ( qualAttrib.oper.equals( "ORDERBY" ) )
+                if ( StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "ORDERBY" ) )
                 {
                     if ( qualAttrib.attributeDef == null )
                         throw new ZeidonException("Using Order By in qualification requires an attribute name" );
@@ -640,7 +651,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
                     String value = qualAttribInstance.getAttribute( "Value" ).getString();
 
-                    if ( qualAttrib.oper.equals( "LIKE" ) )
+                    if ( StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "LIKE" ) ||
+                         StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "ILIKE" ) )
                     {
                         // If oper is "LIKE" then a qualification value that is invalid for the domain
                         // is possible.  E.g. "(617)%' is valid qualification for a phone number.  We'll
@@ -655,6 +667,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                         Domain domain = qualAttrib.attributeDef.getDomain();
                         qualAttrib.value = domain.convertExternalValue( task, null, qualAttrib.attributeDef, null, value );
                     }
+                }
+                else
+                {
+                    // Value is null.  If we have a LIKE oper then set it to '%'; we'll assume a NULL 'like'
+                    // means we want everything.
+                    if ( StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "LIKE" ) ||
+                         StringUtils.equalsAnyIgnoreCase( qualAttrib.oper, "ILIKE" ) )
+                        qualAttrib.value = "%";
                 }
 
                 //

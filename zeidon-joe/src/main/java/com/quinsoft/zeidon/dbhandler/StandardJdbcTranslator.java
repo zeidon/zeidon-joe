@@ -120,7 +120,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( bindAllValues )
         {
             Object dbValue = domain.convertValueForDb( task, attributeDef, value );
-            stmt.addBoundAttribute( buffer, dbValue );
+            DataField dataField = attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef );
+            stmt.addBoundAttribute( buffer, new BoundAttributeData( dataField, dbValue ) );
             return true;
         }
 
@@ -241,6 +242,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         Object value;
         if ( domain instanceof BlobDomain )
         {
+<<<<<<< HEAD
         	//value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getString();  // When we are setting the blob as a string.
         	value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getBlob();
         	 try {
@@ -252,6 +254,21 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
 			} catch (SQLException e) {
 	            throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
 			}
+=======
+            value = view.cursor( attributeDef.getEntityDef() ).getAttribute( attributeDef ).getBlob();
+            try
+            {
+                if ( value == null )
+                {
+                    ps.setObject( idx, value, Types.LONGVARBINARY, -1 );
+                    return "<null>";
+                }
+            }
+            catch ( SQLException e )
+            {
+                throw ZeidonException.wrapException( e ).prependAttributeDef( attributeDef );
+            }
+>>>>>>> test-blob-change
         }
         else
         {
@@ -263,7 +280,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
 
         try
         {
-            return bindAttributeValue( ps, value, idx );
+            return bindAttributeValue( ps, new BoundAttributeData( dataField, value ), idx );
         }
         catch ( Exception e )
         {
@@ -272,15 +289,30 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     }
 
     @Override
-    public String bindAttributeValue( PreparedStatement ps, Object value, int idx )
+    public String bindAttributeValue( PreparedStatement ps, BoundAttributeData data, int idx )
     {
+        final AttributeDef attributeDef = data.dataField.getAttributeDef();
+        Domain domain = attributeDef.getDomain();
+        Object value = data.value;
         try
         {
+<<<<<<< HEAD
             if ( value instanceof Blob )
             {
                 Blob blob = (Blob) value;
                 ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
                 //ps.setObject( idx, new String( blob.getBytes() ) );  // If blob is string
+=======
+            if ( domain instanceof BlobDomain )
+            {
+                if ( value == null )
+                {
+                    ps.setObject( idx, value, Types.LONGVARBINARY, -1 );
+                    return "<null>";
+                }
+                Blob blob = (Blob) value;
+                ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
+>>>>>>> test-blob-change
             }
             else
             if ( value instanceof DateTime )

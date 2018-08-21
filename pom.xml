@@ -7,7 +7,11 @@
     <groupId>com.quinsoft.zeidon</groupId>
     <artifactId>zeidon</artifactId>
     <packaging>pom</packaging>
+<<<<<<< HEAD
     <version>1.5.1</version>
+=======
+    <version>1.5.1-SNAPSHOT</version>
+>>>>>>> test-blob-change
 
     <url>https://github.com/DeegC/zeidon-joe</url>
     <licenses>

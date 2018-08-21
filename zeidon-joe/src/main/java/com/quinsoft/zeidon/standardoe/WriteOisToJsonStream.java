@@ -39,6 +39,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Pagination;
 import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.StreamWriter;
 import com.quinsoft.zeidon.View;
@@ -69,12 +70,14 @@ public class WriteOisToJsonStream implements StreamWriter
     private JsonGenerator jg;
     private View currentView;
     private final LinkedHashMap<String, Object> linkedMap = new LinkedHashMap<>(5);
+    private SerializationMapping mapper;
 
     @Override
     public void writeToStream( SerializeOi options, Writer writer )
     {
         this.viewList = options.getViewList();
         this.options = options;
+        mapper = options.getSerializationMapping();
         if ( options.getFlags() == null )
             flags = EnumSet.noneOf( WriteOiFlags.class );
         else
@@ -202,6 +205,23 @@ public class WriteOisToJsonStream implements StreamWriter
         jg.writeEndObject();
     }
 
+    /**
+     * Convert the name of the EntityDef to the object name used in JSON.
+     * @param entityDef
+     * @return
+     */
+    private String objectName( EntityDef entityDef )
+    {
+        String objectName = mapper.entityToRecord( entityDef );
+        return camelCaseName( objectName );
+    }
+
+    private String fieldName( AttributeDef attributeDef )
+    {
+        String fieldName = mapper.attributeToField( attributeDef );
+        return camelCaseName( fieldName );
+    }
+
     private String camelCaseName( String name )
     {
         if ( ! options.isCamelCase() )
@@ -231,7 +251,7 @@ public class WriteOisToJsonStream implements StreamWriter
                     jg.writeEndArray();
 
                 lastEntityDef = entityDef;
-                jg.writeArrayFieldStart( camelCaseName( entityDef.getName() ) );
+                jg.writeArrayFieldStart( objectName( entityDef ) );
             }
 
             jg.writeStartObject();
@@ -255,7 +275,7 @@ public class WriteOisToJsonStream implements StreamWriter
                 // Check for integer, double, or boolean so that it gets written without quotes.
                 // TODO: Do this more dynamically.
                 Domain domain = attributeDef.getDomain();
-                String jsonName = camelCaseName( attributeDef.getName() );
+                String jsonName = fieldName( attributeDef );
                 if ( domain instanceof IntegerDomain )
                     jg.writeNumberField( jsonName, attrib.getInteger() );
                 else
@@ -309,7 +329,7 @@ public class WriteOisToJsonStream implements StreamWriter
         if ( ! attrib.isUpdated() )
             return;
 
-        jg.writeObjectFieldStart( "." + camelCaseName( attributeDef.getName() ) );
+        jg.writeObjectFieldStart( "." + fieldName( attributeDef ) );
         jg.writeStringField( "updated", "true" );
         jg.writeEndObject();
     }

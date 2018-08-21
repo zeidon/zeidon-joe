@@ -1891,9 +1891,6 @@ class EntityCursorImpl implements EntityCursor
         if ( search == null )
             return CursorResult.NULL;
 
-        // Search points to a non-hidden entity.  Reset the cursor to the new entity
-        // and return SET.
-//        setEntityInstance( search );
         return CursorResult.UNDEFINED;
     }
 

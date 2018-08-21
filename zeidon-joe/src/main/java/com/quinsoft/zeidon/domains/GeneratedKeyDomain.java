@@ -92,10 +92,15 @@ public class GeneratedKeyDomain extends AbstractDomain
         DataRecord dataRecord = attributeDef.getEntityDef().getDataRecord();
         DataField  dataField = dataRecord.getDataField( attributeDef );
 
-        if ( dataField.getType().equals( "L" ) )
-            return JoeUtils.convertObjectToInteger( key.getNativeValue() );
+        switch ( dataField.getType() )
+        {
+            case "A":
+            case "L":
+                return JoeUtils.convertObjectToInteger( key.getNativeValue() );
 
-        return key.getNativeValue();
+            default:
+                return key.getNativeValue();
+        }
     }
 
     @Override
