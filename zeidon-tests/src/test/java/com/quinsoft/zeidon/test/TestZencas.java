@@ -208,6 +208,16 @@ public class TestZencas
 	}
 	
 	@Test
+	public void testAcceptSubobjectNoUpdate()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAcceptSubobjectNoUpdate( testview );
+        System.out.println("===== Finished testAcceptSubobjectNoUpdate ========");
+	}
+	
+	@Test
 	public void testDateTimeCompare()
 	{
 	    View         testview;
@@ -2953,84 +2963,68 @@ public class TestZencas
 		       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_1, 31967 );
 			   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_1, zSINGLE );
 			   DropView( vTempViewVar_1 );
-			   //:NAME VIEW mClass "mClass"
 			   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
 
-			   //:FOR EACH mClass.GradeEnrollment 
+               // This is set up... so that we know the FinalGrade starts out as null
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+				  SetAttributeFromString( mClass, "Enrollment", "FinalGrade", "" );
+			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+			   } 
+			   mClass.commit();
+
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
-			      //:EXCLUDE mClass.GradeEnrollment NONE  
 			      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
 			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
 			   } 
 
-			   //:END
-			   //:FOR EACH mClass.Enrollment 
 			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
-			      //:IF mClass.Enrollment.Status = "T" OR mClass.Enrollment.Status = "C"
 			      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
 			      { 
-			         //:INCLUDE mClass.GradeEnrollment FROM mClass.Enrollment 
 			         RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
-			         //:mClass.GradeEnrollment.wEnteredGrade = mClass.Enrollment.FinalGrade
 			         SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
 			      } 
 
 			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
-			      //:END
 			   } 
 
-			   //:END
-			   //:mClass.Class.wEnterGradesType = "F"
 			   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
-			   //:SET CURSOR FIRST mClass.GradeEnrollment
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
-			   //:CreateTemporalSubobjectVersion( mClass, "Class" )
 			   CreateTemporalSubobjectVersion( mClass, "Class" );
 
-			   //:FOR EACH mClass.GradeEnrollment 
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
-			      //:mClass.GradeEnrollment.wEnteredGrade = "C"
 			      SetAttributeFromString( mClass, "GradeEnrollment", "wEnteredGrade", "C" );
 			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
 			   } 
 
-			   //:END
-
-			   //:FOR EACH mClass.GradeEnrollment 
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
 			      int lTempInteger_4 = 0;
-				//:       SET CURSOR FIRST mClass.Enrollment
-			      //:                  WHERE mClass.Enrollment.ID = mClass.GradeEnrollment.ID 
 			      {MutableInt mi_lTempInteger_4 = new MutableInt( lTempInteger_4 );
 			             GetIntegerFromAttribute( mi_lTempInteger_4, mClass, "GradeEnrollment", "ID" );
 			      lTempInteger_4 = mi_lTempInteger_4.intValue( );}
 			      RESULT = SetCursorFirstEntityByInteger( mClass, "Enrollment", "ID", lTempInteger_4, "" );
-			      //:IF RESULT >= zCURSOR_SET
 			      if ( RESULT >= zCURSOR_SET )
 			      { 
-			         //:mClass.Enrollment.FinalGrade = mClass.GradeEnrollment.wEnteredGrade 
 			         SetAttributeFromAttribute( mClass, "Enrollment", "FinalGrade", mClass, "GradeEnrollment", "wEnteredGrade" );
 			      } 
 
 			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
-			      //:END
 			   } 
 
-			   //:END
-			   //://FOR EACH mClass.Enrollment 
-			   //://   ValidateGrade( mClass )
-			   //://END
-			   //: //
-			   //:AcceptSubobject( mClass, "Class" )
 			   AcceptSubobject( mClass, "Class" );
+			   
+			   String szGrade = mClass.cursor("Enrollment").getAttribute( "FinalGrade" ).getString();			   
+   			   Assert.assertEquals("Class should be 'C'.", "C", szGrade);
+			   
 			return 0;
 		}
 
@@ -3040,7 +3034,7 @@ public class TestZencas
 			zVIEW    mUser = new zVIEW( );
 			zVIEW    mBatch = new zVIEW( );
 			zVIEW    mPerson = new zVIEW( );
-			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
 
 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
