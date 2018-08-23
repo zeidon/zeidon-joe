@@ -208,6 +208,16 @@ public class TestZencas
 	}
 	
 	@Test
+	public void testAcceptSubobjectNoUpdate()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAcceptSubobjectNoUpdate( testview );
+        System.out.println("===== Finished testAcceptSubobjectNoUpdate ========");
+	}
+	
+	@Test
 	public void testDateTimeCompare()
 	{
 	    View         testview;
@@ -2940,6 +2950,86 @@ public class TestZencas
 			return 0;
 
 		}
+<<<<<<< HEAD
+=======
+		
+		public int
+		testAcceptSubobjectNoUpdate( View ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mClass = new zVIEW( );
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_1 = new zVIEW( );
+			int RESULT=0;
+			
+		       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_1, 31967 );
+			   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_1, zSINGLE );
+			   DropView( vTempViewVar_1 );
+			   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+
+               // This is set up... so that we know the FinalGrade starts out as null
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+				  SetAttributeFromString( mClass, "Enrollment", "FinalGrade", "" );
+			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+			   } 
+			   mClass.commit();
+
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
+			      { 
+			         RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
+			         SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
+			      } 
+
+			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+			   } 
+
+			   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   CreateTemporalSubobjectVersion( mClass, "Class" );
+
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      SetAttributeFromString( mClass, "GradeEnrollment", "wEnteredGrade", "C" );
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      int lTempInteger_4 = 0;
+			      {MutableInt mi_lTempInteger_4 = new MutableInt( lTempInteger_4 );
+			             GetIntegerFromAttribute( mi_lTempInteger_4, mClass, "GradeEnrollment", "ID" );
+			      lTempInteger_4 = mi_lTempInteger_4.intValue( );}
+			      RESULT = SetCursorFirstEntityByInteger( mClass, "Enrollment", "ID", lTempInteger_4, "" );
+			      if ( RESULT >= zCURSOR_SET )
+			      { 
+			         SetAttributeFromAttribute( mClass, "Enrollment", "FinalGrade", mClass, "GradeEnrollment", "wEnteredGrade" );
+			      } 
+
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   AcceptSubobject( mClass, "Class" );
+			   
+			   String szGrade = mClass.cursor("Enrollment").getAttribute( "FinalGrade" ).getString();			   
+   			   Assert.assertEquals("Class should be 'C'.", "C", szGrade);
+			   
+			return 0;
+		}
+>>>>>>> e7e732a9... finishing my test testAcceptSubobjectNoUpdate
 
 		public int
 		testAttributeReadOnlyError( View ViewToWindow )
@@ -2947,7 +3037,7 @@ public class TestZencas
 			zVIEW    mUser = new zVIEW( );
 			zVIEW    mBatch = new zVIEW( );
 			zVIEW    mPerson = new zVIEW( );
-			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
 
 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
