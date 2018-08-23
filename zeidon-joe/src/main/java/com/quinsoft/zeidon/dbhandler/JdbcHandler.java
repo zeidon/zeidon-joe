@@ -746,7 +746,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 }
                 else
                 {
-                    valueAsString = getTranslator().bindAttributeValue( ps, boundValue, idx );
+                    valueAsString = getTranslator().bindAttributeValue( ps, (BoundAttributeData) boundValue, idx );
                 }
 
                 if ( task.dblog().isDebugEnabled() )
