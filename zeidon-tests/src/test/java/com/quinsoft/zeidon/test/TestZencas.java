@@ -3047,30 +3047,30 @@ public class TestZencas
 	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
 
-   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
-   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
-   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
-   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
-   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
-
-   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
-
-   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
-   RESULT = CommitObjectInstance( mUser );
-
-   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
-   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
-   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
-
-   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
-
-   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
-   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
-   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
-
-
-   RESULT = CommitObjectInstance( mBatch );
-   RESULT = CommitObjectInstance( mUser );
+		   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
+		
+		   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
+		
+		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
+		   RESULT = CommitObjectInstance( mUser );
+		
+		   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
+		   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
+		   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
+		
+		   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
+		
+		   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
+		   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
+		   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
+		
+		
+		   RESULT = CommitObjectInstance( mBatch );
+		   RESULT = CommitObjectInstance( mUser );
 			return 0;
 		}
 		
