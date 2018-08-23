@@ -2940,6 +2940,99 @@ public class TestZencas
 			return 0;
 
 		}
+		
+		public int
+		testAcceptSubobjectNoUpdate( View ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mClass = new zVIEW( );
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_1 = new zVIEW( );
+			int RESULT=0;
+			
+		       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_1, 31967 );
+			   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_1, zSINGLE );
+			   DropView( vTempViewVar_1 );
+			   //:NAME VIEW mClass "mClass"
+			   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+
+			   //:FOR EACH mClass.GradeEnrollment 
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      //:EXCLUDE mClass.GradeEnrollment NONE  
+			      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   //:END
+			   //:FOR EACH mClass.Enrollment 
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      //:IF mClass.Enrollment.Status = "T" OR mClass.Enrollment.Status = "C"
+			      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
+			      { 
+			         //:INCLUDE mClass.GradeEnrollment FROM mClass.Enrollment 
+			         RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
+			         //:mClass.GradeEnrollment.wEnteredGrade = mClass.Enrollment.FinalGrade
+			         SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
+			      } 
+
+			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+			      //:END
+			   } 
+
+			   //:END
+			   //:mClass.Class.wEnterGradesType = "F"
+			   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
+			   //:SET CURSOR FIRST mClass.GradeEnrollment
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   //:CreateTemporalSubobjectVersion( mClass, "Class" )
+			   CreateTemporalSubobjectVersion( mClass, "Class" );
+
+			   //:FOR EACH mClass.GradeEnrollment 
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      //:mClass.GradeEnrollment.wEnteredGrade = "C"
+			      SetAttributeFromString( mClass, "GradeEnrollment", "wEnteredGrade", "C" );
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   //:END
+
+			   //:FOR EACH mClass.GradeEnrollment 
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      int lTempInteger_4 = 0;
+				//:       SET CURSOR FIRST mClass.Enrollment
+			      //:                  WHERE mClass.Enrollment.ID = mClass.GradeEnrollment.ID 
+			      {MutableInt mi_lTempInteger_4 = new MutableInt( lTempInteger_4 );
+			             GetIntegerFromAttribute( mi_lTempInteger_4, mClass, "GradeEnrollment", "ID" );
+			      lTempInteger_4 = mi_lTempInteger_4.intValue( );}
+			      RESULT = SetCursorFirstEntityByInteger( mClass, "Enrollment", "ID", lTempInteger_4, "" );
+			      //:IF RESULT >= zCURSOR_SET
+			      if ( RESULT >= zCURSOR_SET )
+			      { 
+			         //:mClass.Enrollment.FinalGrade = mClass.GradeEnrollment.wEnteredGrade 
+			         SetAttributeFromAttribute( mClass, "Enrollment", "FinalGrade", mClass, "GradeEnrollment", "wEnteredGrade" );
+			      } 
+
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			      //:END
+			   } 
+
+			   //:END
+			   //://FOR EACH mClass.Enrollment 
+			   //://   ValidateGrade( mClass )
+			   //://END
+			   //: //
+			   //:AcceptSubobject( mClass, "Class" )
+			   AcceptSubobject( mClass, "Class" );
+			return 0;
+		}
 
 		public int
 		testAttributeReadOnlyError( View ViewToWindow )
@@ -2959,31 +3052,31 @@ public class TestZencas
 	        DropView( vTempViewVar_0 );
 	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
-
-   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
-   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
-   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
-   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
-   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
-
-   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
-
-   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
-   RESULT = CommitObjectInstance( mUser );
-
-   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
-   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
-   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
-
-   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
-
-   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
-   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
-   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
-
-
-   RESULT = CommitObjectInstance( mBatch );
-   RESULT = CommitObjectInstance( mUser );
+		
+		   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
+		
+		   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
+		
+		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
+		   RESULT = CommitObjectInstance( mUser );
+		
+		   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
+		   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
+		   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
+		
+		   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
+		
+		   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
+		   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
+		   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
+		
+		
+		   RESULT = CommitObjectInstance( mBatch );
+		   RESULT = CommitObjectInstance( mUser );
 			return 0;
 		}
 		
