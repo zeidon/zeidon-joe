@@ -25,13 +25,13 @@ import java.sql.SQLException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.Domain;
-import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DataField;
 
 /**
  * This interface is used by the JdbcHandler to convert attribute values to values that
  * can be stored in a JDBC database.
- * 
+ *
  * @author DG
  *
  */
@@ -48,14 +48,14 @@ public interface JdbcDomainTranslator
      * @return
      */
     boolean appendSqlValue(SqlStatement stmt, StringBuilder buffer, Domain domain, AttributeDef attributeDef, Object value);
-    
+
     /**
      * Converts a value from the DB to something the domain can handle.
      * @param dbValue TODO
      * @return
      */
     Object convertDbValue( Domain domain, Object dbValue ) throws SQLException;
-    
+
     String bindAttributeValue( PreparedStatement ps, View view, DataField dataField, int idx );
-    String bindAttributeValue( PreparedStatement ps, Object value, int idx );
+    String bindAttributeValue( PreparedStatement ps, BoundAttributeData value, int idx );
 }
