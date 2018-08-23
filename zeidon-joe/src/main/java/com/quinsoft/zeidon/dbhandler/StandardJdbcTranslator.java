@@ -119,7 +119,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     {
         if ( bindAllValues )
         {
-            stmt.addBoundAttribute( buffer, value );
+            DataField dataField = attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef );
+            stmt.addBoundAttribute( buffer, new BoundAttributeData( dataField, value ) );
             return true;
         }
 
