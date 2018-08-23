@@ -196,8 +196,17 @@ public class TestZencas
 		tester.testBlobs( testview );
         System.out.println("===== Finished testBlobs ========");
 	}
-
-
+	
+	@Test
+	public void testAttributeReadOnlyError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAttributeReadOnlyError( testview );
+        System.out.println("===== Finished testAttributeReadOnlyError ========");
+	}
+	
 	@Test
 	public void testDateTimeCompare()
 	{
@@ -2932,6 +2941,52 @@ public class TestZencas
 
 		}
 
+		public int
+		testAttributeReadOnlyError( View ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mBatch = new zVIEW( );
+			zVIEW    mPerson = new zVIEW( );
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+
+
+   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
+   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
+   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
+   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
+   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
+
+   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
+
+   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
+   RESULT = CommitObjectInstance( mUser );
+
+   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
+   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
+   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
+
+   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
+
+   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
+   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
+   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
+
+
+   RESULT = CommitObjectInstance( mBatch );
+   RESULT = CommitObjectInstance( mUser );
+			return 0;
+		}
+		
 		public int
 		testzGetNextEntityAttributeName( View ViewToWindow )
 		{
