@@ -2950,8 +2950,6 @@ public class TestZencas
 			return 0;
 
 		}
-<<<<<<< HEAD
-=======
 		
 		public int
 		testAcceptSubobjectNoUpdate( View ViewToWindow )
@@ -3029,7 +3027,6 @@ public class TestZencas
 			   
 			return 0;
 		}
->>>>>>> e7e732a9... finishing my test testAcceptSubobjectNoUpdate
 
 		public int
 		testAttributeReadOnlyError( View ViewToWindow )
