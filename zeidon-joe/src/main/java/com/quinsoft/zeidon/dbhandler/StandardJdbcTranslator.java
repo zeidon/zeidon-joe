@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -288,8 +289,10 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                     ps.setObject( idx, value, Types.LONGVARBINARY, -1 );
                     return "<null>";
                 }
+                Blob blob = (Blob) value;
+                ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
             }
-
+            else
             if ( value instanceof DateTime )
             {
                 DateTime d = (DateTime) value;

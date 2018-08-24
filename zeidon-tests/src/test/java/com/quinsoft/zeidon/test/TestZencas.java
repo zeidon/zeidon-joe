@@ -3074,6 +3074,7 @@ public class TestZencas
 			return 0;
 		}
 		
+		
 		public int
 		testzGetNextEntityAttributeName( View ViewToWindow )
 		{
