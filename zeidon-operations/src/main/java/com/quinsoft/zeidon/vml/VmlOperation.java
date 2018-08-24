@@ -60,6 +60,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.PessimisticLockingException;
@@ -4532,17 +4533,24 @@ public abstract class VmlOperation
    //            -16 - Error in call
    protected int CompareAttributeToString( View view, String entityName, String attributeName, String value )
    {
-      EntityCursor cursor = view.cursor( entityName );
+	      EntityCursor cursor = view.cursor( entityName );
 
-      if ( cursor.isNull() )
-      {
-         return zCURSOR_NULL;
-      }
-      else
-      {
-         int nRC = cursor.getAttribute( attributeName ).compare( value );
-         return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
-      }
+	      if ( cursor.isNull() )
+	      {
+	         return zCURSOR_NULL;
+	      }
+	      else
+	      {
+	    	 try
+	    	 {
+	            int nRC = cursor.getAttribute( attributeName ).compare( value );
+	            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+	    	 }
+	    	 catch( InvalidAttributeValueException e )
+	    	 {
+	    		 return -5;
+	    	 }
+	      }
    }
 
    protected int CompareAttributeToString( View view, String entityName, String attributeName, StringBuilder sbValue )
@@ -4554,8 +4562,15 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
-         return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 try
+    	 {
+             int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
+             return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 }
+    	 catch( InvalidAttributeValueException e )
+    	 {
+    		 return -5;
+    	 }
       }
    }
 
