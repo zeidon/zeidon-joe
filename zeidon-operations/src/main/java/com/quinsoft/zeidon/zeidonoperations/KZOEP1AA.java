@@ -265,14 +265,20 @@ public class KZOEP1AA extends VmlOperation
    public int SysWriteFile( TaskQualification taskView, int file, String fileBuffer, int nLth ) throws IOException
    {
       BufferedWriter writer = getWriterFromInt( taskView.getTask( ), file );
-      writer.write( fileBuffer.substring( 0, nLth ) );
+      if ( fileBuffer.length() < nLth )
+    	  writer.write( fileBuffer );
+      else
+    	  writer.write( fileBuffer.substring( 0, nLth ) );
       return 0;
    }
 
    public int SysWriteLineLth( TaskQualification taskView, int file, String fileBuffer, int nLth ) throws IOException
    {
       BufferedWriter writer = getWriterFromInt( taskView.getTask( ), file );
-      writer.write( fileBuffer.substring( 0, nLth ) );
+      if ( fileBuffer.length() < nLth )
+    	  writer.write( fileBuffer );
+      else
+    	  writer.write( fileBuffer.substring( 0, nLth ) );
       writer.newLine();
       return 0;
    }
@@ -480,7 +486,7 @@ public class KZOEP1AA extends VmlOperation
       int charsRead = reader.read( line );
       sbReturnBuffer.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       if (charsRead != -1)
-         sbReturnBuffer.append( line, 0, charsRead );
+          sbReturnBuffer.append( line, 0, charsRead );
       return charsRead;
    }
 

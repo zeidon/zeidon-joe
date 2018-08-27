@@ -1466,12 +1466,18 @@ public abstract class VmlOperation
 
    protected static final int ZeidonStringFind( StringBuilder sbTarget, int tgtIdx, String searchString )
    {
-      return sbTarget.toString( ).lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
+	   // at the beginning of the line.
+	   //return sbTarget.toString( ).lastIndexOf( searchString, tgtIdx - 1 );
+	   return sbTarget.toString( ).indexOf( searchString, tgtIdx - 1 );
    }
 
    protected static final int ZeidonStringFind( String tgtString, int tgtIdx, String searchString )
    {
-      return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
+	   // at the beginning of the line.
+	   //return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   return tgtString.indexOf( searchString, tgtIdx - 1 );
    }
 
    protected int SetNameForView( View view, String name, TaskQualification taskQual, int level )
@@ -2403,7 +2409,6 @@ public abstract class VmlOperation
       return 0;
    }
 
-
    protected static final int IsNumeric( String string )
    {
 	   try  
@@ -2416,7 +2421,7 @@ public abstract class VmlOperation
 	     return -1;  
 	   }  
    }
-   
+
    protected static final int zatol( String string )
    {
       return Integer.parseInt( string );
@@ -2772,6 +2777,13 @@ public abstract class VmlOperation
       int  nRC;
       int nbrToCopy;
       int lth;
+      
+      // KJS 08/08/18 - I have run into problems when I do a ZeidonStringFind and string is found at position 0, then we come here
+      // and we fail with sourceIdx being 0. So put in a fix for this...
+      if ( targetIdx == 0 )
+    	  targetIdx = 1;
+      if ( sourceIdx == 0 )
+    	  sourceIdx = 1;
 
       if ( sbTarget == null || sbSource == null ||     // gotta have strings
            targetIdx == 0 || sourceIdx == 0 )          // 1-based index
@@ -3005,7 +3017,10 @@ public abstract class VmlOperation
                                                int    maxCopy,
                                                int    maxTargetLth )
    {
-      if ( sourceIdx > 0 )
+	  if ( source == null || source.isEmpty() )
+	      return sbTarget;
+
+	  if ( sourceIdx > 0 )
       {
          sbTarget.append( source.substring( sourceIdx - 1 ) );
       }
@@ -4533,24 +4548,24 @@ public abstract class VmlOperation
    //            -16 - Error in call
    protected int CompareAttributeToString( View view, String entityName, String attributeName, String value )
    {
-	      EntityCursor cursor = view.cursor( entityName );
+      EntityCursor cursor = view.cursor( entityName );
 
-	      if ( cursor.isNull() )
-	      {
-	         return zCURSOR_NULL;
-	      }
-	      else
-	      {
-	    	 try
-	    	 {
-	            int nRC = cursor.getAttribute( attributeName ).compare( value );
-	            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
-	    	 }
-	    	 catch( InvalidAttributeValueException e )
-	    	 {
-	    		 return -5;
-	    	 }
-	      }
+      if ( cursor.isNull() )
+      {
+         return zCURSOR_NULL;
+      }
+      else
+      {
+    	 try
+    	 {
+            int nRC = cursor.getAttribute( attributeName ).compare( value );
+            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 }
+    	 catch( InvalidAttributeValueException e )
+    	 {
+    		 return -5;
+    	 }
+      }
    }
 
    protected int CompareAttributeToString( View view, String entityName, String attributeName, StringBuilder sbValue )
@@ -4564,8 +4579,8 @@ public abstract class VmlOperation
       {
     	 try
     	 {
-             int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
-             return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+            int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
+            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
     	 }
     	 catch( InvalidAttributeValueException e )
     	 {
@@ -5029,11 +5044,22 @@ public abstract class VmlOperation
       return 0;
    }
 
-   protected int ActivateOI_FromXML_File( zVIEW view, String lodDefName, View viewToWindow, String fileName, int control )
+   protected int ActivateOI_FromXML_File( zVIEW view, String lodDefName, View qualView, String fileName, int control )
    {
-      // TODO Auto-generated method stub
-      int nRC = 0; // view.activateOiFromXML_File( view, lodDefName, viewToWindow, fileName, control );
-      return nRC;
+	   try
+	   {
+	       view.setView( task.deserializeOi()
+	                         .fromFile( fileName )
+	                         .setLodDef( lodDefName )
+	                         .setFlags( control )
+	                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+	                         .activateFirst() );
+	   }
+	   catch( Exception e )
+	   {
+	      return -1;   
+	   }
+      return 0;
    }
 
    protected int ActivateOI_FromOI( zVIEW returnView, View view, int control )
@@ -5150,8 +5176,7 @@ public abstract class VmlOperation
       }
    }
 
-
-      // Not sure why but we have a lot of calls to SetOI_FromBlob where the lodDefName is
+   // Not sure why but we have a lot of calls to SetOI_FromBlob where the lodDefName is
    // 0. We never seem to use this value... So I am adding this override.
    //SetOI_FromBlob( mPerson, 0, mChurch, mChurch, "ACR_BatchItem", "BlobOI", zSINGLE );
    protected String SetOI_FromBlob( zVIEW returnView, int lodDefName, TaskQualification qualView,
