@@ -215,11 +215,11 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
             case "NAME":
                 setName( reader.getAttributeValue().intern() );
                 break;
-                
+
             case "XML_SIMPLE_NAME":
                 xmlName = reader.getAttributeValue().intern();
                 break;
-                
+
             case "XML_NAME_EXTERNAL":
                 xmlExtName = reader.getAttributeValue().intern();
                 break;
@@ -271,7 +271,16 @@ public class AttributeDef implements PortableFileAttributeHandler, Serializable
         // If this attribute is automatically set by the OE then it isn't required to be
         // set before commit.
         if ( entityDef.getDbCreatedTimestamp() == this || entityDef.getDbUpdatedTimestamp() == this )
+        {
             required = false;
+
+            // If the entity is updatable then we'll force this attribute to be updateable even
+            // if it's a hidden attribute.  This will allow us to update it later.
+            if ( entityDef.isUpdate() || entityDef.isCreate() )
+            {
+                update = true;
+            }
+        }
 
         // Persistent, non-hidden attributes should always be activated.
         setActivate( persistent && ( ! hidden || isKey() || isForeignKey() || isAutoSeq() ) );
