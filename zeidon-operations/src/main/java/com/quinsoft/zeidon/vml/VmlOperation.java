@@ -4019,12 +4019,15 @@ public abstract class VmlOperation
       }
       else
       {
-         s = cursor.getAttribute( attributeName ).getString( context );
-
-         // Because in our vml code we compare a null to "", we should return a "" instead of null.
-         if ( s == null )
-         {
-            s = "";
+     	 try{
+             s = cursor.getAttribute( attributeName ).getString( context );
+             if ( s == null )
+             {
+                s = "";
+             }
+         }
+         catch( Exception e ){
+        	 s = "";
          }
       }
 
@@ -4036,6 +4039,7 @@ public abstract class VmlOperation
                                                             String context, int maxLength )
    {
       int nRC;
+      String s = "";
       EntityCursor cursor = view.cursor( entityName );
       if ( cursor.isNull() )
       {
@@ -4044,7 +4048,11 @@ public abstract class VmlOperation
       }
       else
       {
-         String s = cursor.getAttribute( attributeName ).getString( context );
+    	 try {
+         s = cursor.getAttribute( attributeName ).getString( context );
+    	 }catch( Exception e ) {
+    		 s = "";
+    	 }
          if ( s == null )
          {
             s = "";
