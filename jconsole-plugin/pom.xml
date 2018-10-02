@@ -45,12 +45,5 @@
             <artifactId>object-browser</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-         <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>jconsole</artifactId>
-            <version>1.7</version>
-            <scope>system</scope>
-            <systemPath>${env.JAVA_HOME}/lib/jconsole.jar</systemPath>
-        </dependency>
     </dependencies>
 </project>
