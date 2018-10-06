@@ -87,6 +87,11 @@ public class QualificationBuilder
     private boolean isEntityCache;
 
     /**
+     * Open SQL can be a real security risk so it is disallowed by default.
+     */
+    private boolean allowOpenSql = false;
+
+    /**
      * Creates an empty qualification object.
      * @param task
      */
@@ -148,6 +153,20 @@ public class QualificationBuilder
     public QualificationBuilder setLodDef( String lodDefName )
     {
         return setLodDef( application.getLodDef( task, lodDefName ) );
+    }
+
+    public boolean isAllowOpenSql()
+    {
+        return allowOpenSql;
+    }
+
+    /**
+     * Open SQL can be a real security risk so it is disallowed by default.
+     */
+    public QualificationBuilder setAllowOpenSql( boolean allowOpenSql )
+    {
+        this.allowOpenSql = allowOpenSql;
+        return this;
     }
 
     /**
@@ -543,6 +562,9 @@ public class QualificationBuilder
 
     public QualificationBuilder setOpenSql( String sql, String attributeList )
     {
+        if ( ! allowOpenSql )
+            throw new ZeidonException( "OpenSQL is not allowed for this query" );
+
         validateEntity();
         qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL" ).setValue( sql ) ;
         qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL_AttributeList" ).setValue( attributeList ) ;

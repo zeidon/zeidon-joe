@@ -63,6 +63,7 @@ class View( val task: Task ) extends Dynamic {
      * Sets the LOD definition for this View.
      */
     def basedOn( lodName: String ) = setLod( lodName )
+    def basedOn( applicationName: String, lodName: String ) = setLod( lodName, applicationName )
     def basedOn( lodDef : LodDef ) = { jlodDef = lodDef; this }
 
     /**
