@@ -2,6 +2,7 @@ package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
 import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.objectdefinition.LodDef
 
 class DynamicTask( val task : Task ) extends Dynamic {
 
@@ -30,6 +31,8 @@ class DynamicTask( val task : Task ) extends Dynamic {
             qb.activate
         }
 
+        def buildQual() : QualBuilder = view.buildQual()
+
         def all() : View = view.activateAll()
 
         def empty() : View = view.activateEmpty
@@ -39,6 +42,8 @@ class DynamicTask( val task : Task ) extends Dynamic {
             addQual( builder.entityQualBuilder )
             return builder.activate
         }
+
+        def getLodDef : LodDef = view.lodDef
     }
 }
 

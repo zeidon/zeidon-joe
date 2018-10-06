@@ -9,6 +9,7 @@ import com.quinsoft.zeidon.scala.QualBuilder
 import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.PessimisticLockingException
 import com.quinsoft.zeidon.ZeidonException
+import org.apache.commons.lang3.StringUtils
 
 
 /**
@@ -16,7 +17,12 @@ import com.quinsoft.zeidon.ZeidonException
  */
 trait ZeidonRestScalatra extends ScalatraServlet {
 
+    val lodWhitelist = scala.collection.mutable.Map[String, String]()
+    val lodBlacklist = scala.collection.mutable.Set[String]()
+
     def getObjectEngine(): ObjectEngine
+    def getSystemTask = getObjectEngine().getSystemTask()
+    def logger = getSystemTask.log()
 
     error {
       case e: PessimisticLockingException => {
@@ -35,9 +41,14 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     before() {
         contentType = "text/json"
         val systemTask = getObjectEngine().getSystemTask
-        systemTask.log().debug("Path   => %s", request.pathInfo )
-        systemTask.log().debug("Params => %s", request.parameters )
-        systemTask.log().debug("Body   => %s", request.body )
+        logger.debug("Path   => %s", request.pathInfo )
+        logger.debug("Params => %s", request.parameters )
+        logger.debug("Body   => %s", request.body )
+    }
+
+    after() {
+        val systemTask = getObjectEngine().getSystemTask
+        logger.debug("request %s %s returned with status code %s", request.getMethod, request.getRequestURL, response.getStatus.toString)
     }
 
     get("/:appName") {
@@ -48,7 +59,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
     get("/:appName/:lod") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
-            val view = new View( task ) basedOn params( "lod" )
+            val lodName = params( "lod" )
+            validateLodName( task, lodName )
+            val view = new View( task ) basedOn lodName
             val qual = view.buildQual()
 
             if ( params.contains( "qual" ) ) {
@@ -70,6 +83,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     get("/:appName/:lod/:id") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
+            validateLodName( task, lodName )
             val view = task.using( lodName )
                            .activate( _.root.key = params( "id" ) )
 
@@ -80,6 +94,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     delete("/:appName/:lod/:id") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
+            validateLodName( task, lodName )
             val view = task.using( lodName )
                            .activate( _.root.key = params( "id" ) )
 
@@ -91,7 +106,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
     post("/:appName/:lod/dropLock") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
-            val view = new View( task ) basedOn params( "lod" )
+            val lodName = params( "lod" )
+            validateLodName( task, lodName )
+            val view = new View( task ) basedOn lodName
             val qual = view.buildQual()
 
             if ( params.contains( "qual" ) ) {
@@ -109,9 +126,10 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     // POST action will save the OI passed via the body.
     post("/:appName/:lod") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
-            task.log().debug( request.body )
+            val lodName = params( "lod" )
+            validateLodName( task, lodName )
             val view = task.deserializeOi()
-                           .setLodDef( params( "lod") )
+                           .setLodDef( lodName )
                            .setVersion("1")
                            .fromString( request.body )
                            .asJson()
@@ -152,5 +170,18 @@ trait ZeidonRestScalatra extends ScalatraServlet {
                              .toString()
         view.log().debug(serialized)
         return serialized
+    }
+
+    protected def validateLodName( task: Task, lodName: String ) {
+        if ( StringUtils.isBlank( lodName ) )
+            halt( 422, "Missing LOD name" )
+
+        if ( lodBlacklist.contains( lodName ) )
+            halt( 403 ) // Forbidden.
+
+        if ( lodWhitelist.size > 0 ) {
+            if ( ! lodWhitelist.contains( lodName ) )
+                halt( 403 ) // Forbidden.
+        }
     }
 }

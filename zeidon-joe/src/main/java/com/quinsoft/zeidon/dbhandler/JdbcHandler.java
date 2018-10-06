@@ -1070,8 +1070,16 @@ public class JdbcHandler extends AbstractSqlHandler
                     String username = handler.getUserName();
                     String password = handler.getPassword();
 
-                    pool.setUsername( username );
-                    pool.setPassword( password );
+		    if ( StringUtils.isBlank( username ) )
+		    {
+			task.log().info( "No username specifed in Zeidon configuration; assuming it is specified in the URL" );
+		    }
+		    else
+		    {
+			pool.setUsername( username );
+			pool.setPassword( password );
+		    }
+		    
                     pool.setUrl( url );
                     pool.setTestOnBorrow( true );
                     pool.setValidationQuery( "select 1" );
