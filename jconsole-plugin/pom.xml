@@ -46,4 +46,24 @@
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+      <!-- Java8 profile is activated by parent POM.  We need to explicitly include
+	   jconsole.jar for Java 8. Later versions of Java have it built in.
+      -->
+      <profile>
+	<id>Java8</id>
+        <dependencies>
+         <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>jconsole</artifactId>
+            <version>1.7</version>
+            <scope>system</scope>
+            <systemPath>${env.JAVA_HOME}/lib/jconsole.jar</systemPath>
+	    <optional>true</optional>
+        </dependency>
+        </dependencies>
+      </profile>
+    </profiles>
+    
 </project>

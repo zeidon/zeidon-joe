@@ -142,27 +142,6 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin> 
-
-	    <!-- Parses the mvn version into properties:
-		 parsedVersion.majorVersion
-		 parsedVersion.minorVersion
-		 parsedVersion.incrementalVersion
-		 parsedVersion.qualifier
-		 parsedVersion.buildNumber
-	    <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>build-helper-maven-plugin</artifactId>
-              <version>1.9.1</version>
-              <executions>
-		<execution>
-		  <id>parse-version</id>
-		  <goals>
-		    <goal>parse-version</goal>
-		  </goals>
-		</execution>
-              </executions>
-	    </plugin>
-	    -->
        </plugins>
     </build>
 
@@ -208,22 +187,19 @@
 		<module>sinatra-server</module>
             </modules>
         </profile>
- 
-        <!-- The sinatra server only needs to be built once per release because 
-             it doesn't include any Zeidon code. It is a convenience .jar for LOD servers.
-        <profile>
-            <id>sinatra-server</id>
+
+	<!-- We have some special dependencies for Java 8.  We'll assume that if jconsole.jar
+	     exists then we're using Java 8.  It's a hack but it works.
+	-->
+         <profile>
+            <id>Java8</id>
             <activation>
                 <file>
-                    <missing>sinatra-server/target/zeidon-sinatra-server-${jar.version}.jar</missing>
+                    <exists>${env.JAVA_HOME}/lib/jconsole.jar</exists>
                 </file>
             </activation>
-            <modules>
-                <module>sinatra-server</module>
-            </modules>
         </profile>
-        -->
- 
+	
         <!-- 
             Builds required objects for deploying to OSSRH
          -->
