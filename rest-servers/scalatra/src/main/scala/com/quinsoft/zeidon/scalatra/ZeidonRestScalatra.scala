@@ -40,7 +40,6 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     // Before every action runs, set the content type to be in JSON format.
     before() {
         contentType = "text/json"
-        val systemTask = getObjectEngine().getSystemTask
         logger.debug("Path   => %s", request.pathInfo )
         logger.debug("Params => %s", request.parameters )
         logger.debug("Body   => %s", request.body )
