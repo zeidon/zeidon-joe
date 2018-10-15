@@ -92,6 +92,7 @@ public class ZeidonIniPreferences implements ZeidonPreferences
     private void loadZeidonIni()
     {
         LOG.info( "Opening Preferences: " + iniFileName );
+        System.out.println( "Opening Preferences: " + iniFileName );
         ZeidonInputStream iniFile = JoeUtils.getInputStream( null, iniFileName, getClass().getClassLoader() );
         try
         {

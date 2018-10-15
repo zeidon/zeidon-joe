@@ -99,6 +99,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def allowOpenSql( allow: Boolean ) : QualBuilder = {
+        jqual.setAllowOpenSql( allow )
+        this
+    }
+
     /**
      * Add qualification after adding an 'AND' conjunction to the existing qualification.
      * {{{
@@ -812,6 +817,10 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
         return QualBuilder.TERMINATOR
     }
 
+    /**
+     * Use OpenSQL to activate this entity.  Note that QualBuilder.allowOpenSql( true ) must be
+     * explicitly called.
+     */
     def usingSql( customizedSql: String, attributeList: String ): QualificationTerminator = {
         qualBuilder.jqual.setOpenSql( customizedSql, attributeList )
 
@@ -1352,14 +1361,18 @@ class QualificationTerminator {
  * A class to indicate that qualification has been correctly specified.
  */
 class OrderByTerminator( val builder : AttributeOrderByBuilder ) {
-    def DESC = {
-        builder.descending = true
+    def DESC( descending: Boolean = true ) = {
+        builder.descending = descending
         this
     }
 
     def ASC = {
         builder.descending = false
         this
+    }
+
+    def direction( dir: String ) = {
+        builder.descending = "desc".equals( dir.toLowerCase )
     }
 }
 

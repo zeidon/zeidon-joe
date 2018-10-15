@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import com.quinsoft.zeidon.View;
@@ -129,10 +130,10 @@ public class EntityListPanel extends JPanel
 
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) jtree.getModel().getRoot();
         @SuppressWarnings("unchecked")
-        Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
+        Enumeration<TreeNode> e = root.depthFirstEnumeration();
         while ( e.hasMoreElements() )
         {
-            DefaultMutableTreeNode node = e.nextElement();
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
             if ( node.toString().equalsIgnoreCase( name ) )
             {
                 TreePath path = new TreePath( node.getPath() );
