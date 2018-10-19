@@ -43,32 +43,13 @@ public class ActiveDirectory
     }
      	
     public int ActiveDirectorySetPassword( String stringADPathname, String stringADAdminUserName, String stringADAdminPassword,
-	            String stringADUserName, String stringADPassword )
+	            String stringADUserName, String stringADPassword, String stringADContext )
 	{
     	int nRC;
     	try
     	{
 	    	ldapAdminBind ctx = new ldapAdminBind(stringADPathname, stringADAdminUserName, stringADAdminPassword );
-	    	nRC = ctx.updatePassword(stringADUserName, stringADPassword);
-	    	if ( nRC < 0 )
-	    		return -1;
-    	}
-    	catch (Exception e)
-    	{
-               System.out.println(e);
-               return -1;
-     	}    
-    	return 0;
-	}
-	
-    public int ActiveDirectoryChangePassword( String stringADPathname, String stringADAdminUserName, String stringADAdminPassword,
-	               String stringADUserName, String stringADOldPassword, String stringADNewPassword )
-	{
-    	int nRC;
-    	try
-    	{
-	    	ldapAdminBind ctx = new ldapAdminBind(stringADPathname, stringADAdminUserName, stringADAdminPassword );
-	    	nRC = ctx.updatePassword(stringADUserName, stringADNewPassword);
+	    	nRC = ctx.updatePassword(stringADUserName, stringADPassword, stringADContext);
 	    	if ( nRC < 0 )
 	    		return -1;
     	}
