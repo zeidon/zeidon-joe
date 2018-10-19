@@ -44,8 +44,6 @@ public class ldapAdminBind
 			ldapEnv.put(Context.SECURITY_AUTHENTICATION, "simple");
 			ldapEnv.put(Context.SECURITY_PRINCIPAL, strAdminUser);
 			ldapEnv.put(Context.SECURITY_CREDENTIALS, strAdminPassword);
-			//ldapEnv.put(Context.SECURITY_PRINCIPAL, "enc-ad\\zmail");
-			//ldapEnv.put(Context.SECURITY_CREDENTIALS, "F82b7mk,9j");
 			//ldapEnv.put(Context.SECURITY_PROTOCOL, "ssl");
 			ldapContext = new InitialDirContext(ldapEnv);
 		}
@@ -59,7 +57,7 @@ public class ldapAdminBind
 		}
 	}
 	
-    public int updatePassword(String username, String password) {
+    public int updatePassword(String username, String password, String context) {
         try {
             String quotedPassword = "\"" + password + "\"";
             char unicodePwd[] = quotedPassword.toCharArray();
@@ -76,7 +74,8 @@ public class ldapAdminBind
             String filter = "(&(objectCategory=Person)(objectclass=User)(sAMAccountName=" + username + "))";
 
             // Search for the object using the username (sAMAccountName), under the following path.
-            NamingEnumeration answer = ldapContext.search("DC=AD,DC=SWAU,DC=EDU", filter, ctls);
+            // At SWAU this was "DC=AD,DC=SWAU,DC=EDU"
+            NamingEnumeration answer = ldapContext.search(context, filter, ctls);
             if (answer.hasMore()) {
                 SearchResult sr = (SearchResult) answer.next();
                 Attributes attrs = sr.getAttributes();
