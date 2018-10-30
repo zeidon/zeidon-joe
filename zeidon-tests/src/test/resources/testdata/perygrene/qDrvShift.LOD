@@ -1,0 +1,1341 @@
+z1000-Zeidon    QDRVSHIFTTZZOLODO 02/20/17   12:18:27 1.0a2    
+eLOD       1
+aZKey      220121246
+aNextZKeyToAssign 220121360
+aName      qDrvShift
+
+eLOD_EntityParent 2
+aName      DriverShift
+aIndentName DriverShift
+aIndentLvl 0
+aZKey      220121247
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave -
+aDupEntityInstance N
+aDupRelationshipInstance N
+aDesc      Period during which a driver is "logged on""
+
+eLOD_EntityChild 3
+aName      Driver
+aIndentName    Driver
+aIndentLvl 3
+aZKey      220121285
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave R
+aRelLinkIndicator H
+
+eLOD_EntityChild 4
+aName      DriverPerson
+aIndentName       DriverPerson
+aIndentLvl 6
+aZKey      220121299
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave R
+aDupEntityInstance N
+aDupRelationshipInstance N
+aRelLinkIndicator H
+
+eLOD_AttributeRec 5
+aZKey      220121300
+
+eER_AttributeRec 6
+aName      ID
+aZKey      110000043
+aNotNull   Y
+
+eDomainRec 7
+aZKey      90422290
+aName      Integer
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aDecimalFormat 0
+aDesc      Integer numbers from -lots to +lots
+aContextRestriction N
+
+eLOD_AttributeRec 5
+aZKey      220121301
+
+eER_AttributeRec 6
+aName      LastName
+aZKey      110000183
+aDesc      Contact's last Name
+
+eDomainRec 7
+aZKey      90420630
+aName      GeneralName_Address
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aDesc      General Text (names, streets, cities, etc.)
+aContextRestriction N
+
+eLOD_AttributeRec 5
+aZKey      220121302
+
+eER_AttributeRec 6
+aName      FirstName
+aZKey      110000184
+aDesc      Contact first Name
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121303
+
+eER_AttributeRec 6
+aName      MiddleName
+aZKey      110000185
+aDesc      Contact middle name or initial
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121304
+
+eER_AttributeRec 6
+aName      Suffix
+aZKey      110000186
+aDesc      suffix (Jr. III etc.)
+
+eDomainRec 7
+
+eER_EntityRec 5
+aName      Person
+aZKey      110000015
+aPurpose   F
+aER_DiagramPosX 1
+aER_DiagramPosY 20
+
+eER_RelLinkRec 5
+aName      for
+aAutoSeq   N
+aHangingForeignKeyEntity N
+aZKey      110000018
+aCardMin   1
+aCardMax   1
+aTE_NoForeignKeyPrefix N
+
+eER_RelTypeRec 6
+aZKey      110000016
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 5
+aER_DiagramBendPosY 16
+aER_DiagramE1PosX 5
+aER_DiagramE1PosY 19
+aER_DiagramE2PosX 26
+aER_DiagramE2PosY 16
+
+ePOD_Entity 5
+aSQL_JoinWithParent Y
+
+eTE_DBMS_SourceForEntity 6
+aName      Perygrene
+aZKey      79855
+aParadigm  R
+aDBMS      SQLServer via ODBC
+aGenerateExecutable kzhsqlsb
+aExecutable kzhsqloa
+aGenKeyExecutable kzhgenky
+aDisplayOwner Y
+aDisplayDBMS_ID N
+
+eLOD_EntityChild 4
+aName      Carrier
+aIndentName       Carrier
+aIndentLvl 6
+aZKey      220121349
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave R
+aRelLinkIndicator H
+
+eLOD_AttributeRec 5
+aZKey      220121350
+
+eER_AttributeRec 6
+aName      ID
+aZKey      110000044
+aNotNull   Y
+
+eDomainRec 7
+
+eER_EntityRec 5
+aName      Carrier
+aZKey      110000004
+aPurpose   F
+aER_DiagramPosX 14
+aER_DiagramPosY 38
+
+eER_RelLinkRec 5
+aName      for
+aAutoSeq   N
+aHangingForeignKeyEntity N
+aZKey      110000032
+aCardMin   0
+aCardMax   1
+aTE_NoForeignKeyPrefix N
+
+eER_RelTypeRec 6
+aZKey      110000030
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 18
+aER_DiagramBendPosY 18
+aER_DiagramE1PosX 18
+aER_DiagramE1PosY 37
+aER_DiagramE2PosX 26
+aER_DiagramE2PosY 18
+
+ePOD_Entity 5
+aSQL_JoinWithParent Y
+
+eTE_DBMS_SourceForEntity 6
+
+eLOD_AttributeRec 4
+aZKey      220121286
+
+eER_AttributeRec 5
+aName      ID
+aZKey      110000014
+aNotNull   Y
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121287
+
+eER_AttributeRec 5
+aName      Status
+aZKey      110001753
+
+eDomainRec 6
+aZKey      228054468
+aName      DriverStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121288
+
+eER_AttributeRec 5
+aName      DLNumber
+aZKey      110000802
+aDesc      Driver's License
+
+eDomainRec 6
+aZKey      90422288
+aName      Text
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aDesc      Any Character String
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121289
+
+eER_AttributeRec 5
+aName      DLExpirationDate
+aZKey      110000803
+
+eDomainRec 6
+aZKey      90000052
+aName      Date
+aDomainType A
+aDataType  T
+aDesc      This domain manipulates the date portion of DateTime
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121290
+
+eER_AttributeRec 5
+aName      DLState
+aZKey      110000804
+
+eDomainRec 6
+aZKey      90421579
+aName      State
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aDesc      US States and Canadian Provinces
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121291
+
+eER_AttributeRec 5
+aName      PumpCertificationFlag
+aZKey      110000373
+
+eDomainRec 6
+aZKey      90420462
+aName      Y/N
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aDesc      Yes or No
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121292
+
+eER_AttributeRec 5
+aName      IsTrainer
+aZKey      110001008
+aDesc      Is the Driver a trainer? Y/N Flag
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121293
+
+eER_AttributeRec 5
+aName      MedicalCardExpirationDate
+aZKey      110000934
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121294
+
+eER_AttributeRec 5
+aName      TWICExpirationDate
+aZKey      110000935
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121295
+
+eER_AttributeRec 5
+aName      LicenseClass
+aZKey      110001726
+
+eDomainRec 6
+aZKey      228054381
+aName      LicenseClass
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121296
+
+eER_AttributeRec 5
+aName      ActiveInactiveStatus
+aZKey      110001727
+
+eDomainRec 6
+aZKey      228054391
+aName      ActiveInactiveStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eER_EntityRec 4
+aName      Driver
+aZKey      110000002
+aPurpose   F
+aER_DiagramPosX 27
+aER_DiagramPosY 14
+
+eER_RelLinkRec 4
+aName      for
+aAutoSeq   N
+aHangingForeignKeyEntity N
+aZKey      110000172
+aCardMin   0
+aCardMax   1
+aTE_NoForeignKeyPrefix N
+
+eER_RelTypeRec 5
+aZKey      110000170
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 31
+aER_DiagramE1PosY 19
+aER_DiagramE2PosX 31
+aER_DiagramE2PosY 24
+
+ePOD_Entity 4
+aSQL_JoinWithParent Y
+
+eTE_DBMS_SourceForEntity 5
+
+eLOD_EntityChild 3
+aName      DeliveryRoute
+aIndentName    DeliveryRoute
+aIndentLvl 3
+aZKey      220121325
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave R
+aRelLinkIndicator L
+
+eLOD_EntityChild 4
+aName      DeliveryLeg
+aIndentName       DeliveryLeg
+aIndentLvl 6
+aZKey      220121335
+aCreate    N
+aDelete    N
+aUpdate    N
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave R
+aRelLinkIndicator L
+
+eLOD_AttributeRec 5
+aZKey      220121336
+
+eER_AttributeRec 6
+aName      ID
+aZKey      110000850
+aNotNull   Y
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121337
+
+eER_AttributeRec 6
+aName      Type
+aZKey      110001172
+aLth       3
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121338
+
+eER_AttributeRec 6
+aName      TripStandardInMinutes
+aZKey      110000851
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121339
+
+eER_AttributeRec 6
+aName      DistanceInMiles
+aZKey      110000852
+
+eDomainRec 7
+aZKey      90422424
+aName      Decimal1
+aDomainType E
+aDataType  M
+aDecimalFormat 1
+aDesc      Characters '0-9' precision ( 0.0 )
+aContextRestriction N
+
+eLOD_AttributeRec 5
+aZKey      220121340
+
+eER_AttributeRec 6
+aName      ExpectedStartDateTime
+aZKey      110000853
+
+eDomainRec 7
+aZKey      90000089
+aName      DateTime
+aDomainType A
+aDataType  T
+aMaxStringLth 20
+aDesc      Basic Timestamp Domain
+aContextRestriction N
+
+eLOD_AttributeRec 5
+aZKey      220121341
+
+eER_AttributeRec 6
+aName      ExpectedEndDateTime
+aZKey      110000854
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121342
+
+eER_AttributeRec 6
+aName      ActualStartDateTime
+aZKey      110000855
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121343
+
+eER_AttributeRec 6
+aName      ActualEndDateTime
+aZKey      110000856
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121344
+
+eER_AttributeRec 6
+aName      ExpectedLoadTimeMinutes
+aZKey      110000936
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121345
+
+eER_AttributeRec 6
+aName      ExpectedUnloadTimeMinutes
+aZKey      110000937
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121346
+
+eER_AttributeRec 6
+aName      ActualLoadTimeMinutes
+aZKey      110000944
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121347
+
+eER_AttributeRec 6
+aName      ActualUnloadTimeMinutes
+aZKey      110000945
+
+eDomainRec 7
+
+eLOD_AttributeRec 5
+aZKey      220121348
+
+eER_AttributeRec 6
+aName      SortOrder
+aZKey      110001738
+
+eDomainRec 7
+
+eER_EntityRec 5
+aName      DeliveryLeg
+aZKey      110000834
+aPurpose   A
+aER_DiagramPosX 52
+aER_DiagramPosY 42
+
+eER_RelLinkRec 5
+aName      has
+aZKey      110000836
+aCardMin   0
+aCardMax   m
+
+eER_RelTypeRec 6
+aZKey      110000835
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 52
+aER_DiagramE1PosY 32
+aER_DiagramE2PosX 52
+aER_DiagramE2PosY 41
+
+eLOD_AttributeRec 4
+aZKey      220121326
+
+eER_AttributeRec 5
+aName      ID
+aZKey      110000045
+aNotNull   Y
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121327
+
+eER_AttributeRec 5
+aName      Status
+aZKey      110001816
+
+eDomainRec 6
+aZKey      228054476
+aName      DeliveryRouteStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      220121328
+
+eER_AttributeRec 5
+aName      ScheduledDateTime
+aZKey      110001860
+aDesc      265
+The ExpectedStartDateTime value when the Route is first created or when the Routes for a Shift are resorted. It is used to sort the Routes within a Shift, because the ExpectedStartDateTime value gets altered with ActualStartDateTime during driver route processing. 
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121329
+
+eER_AttributeRec 5
+aName      ExpectedStartDateTime
+aZKey      110000424
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121330
+
+eER_AttributeRec 5
+aName      ExpectedEndDateTime
+aZKey      110000425
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121331
+
+eER_AttributeRec 5
+aName      ActualStartDateTime
+aZKey      110000402
+
+eDomainRec 6
+
+eLOD_AttributeRec 4
+aZKey      220121332
+
+eER_AttributeRec 5
+aName      ActualEndDateTime
+aZKey      110000403
+
+eDomainRec 6
+
+eER_EntityRec 4
+aName      DeliveryRoute
+aZKey      110000006
+aPurpose   S
+aER_DiagramPosX 45
+aER_DiagramPosY 27
+
+eER_RelLinkRec 4
+aName      has
+aZKey      110000422
+aCardMin   0
+aCardMax   m
+
+eER_RelTypeRec 5
+aZKey      110000421
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 37
+aER_DiagramE1PosY 27
+aER_DiagramE2PosX 44
+aER_DiagramE2PosY 27
+
+eLOD_AttributeRec 3
+aZKey      220121248
+
+eER_AttributeRec 4
+aName      ID
+aZKey      110000176
+aNotNull   Y
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      220121249
+
+eER_AttributeRec 4
+aName      DayOfWeek
+aZKey      110000420
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      220121250
+
+eER_AttributeRec 4
+aName      ExpectedStartDateTime
+aZKey      110000177
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      220121251
+
+eER_AttributeRec 4
+aName      ExpectedEndDateTime
+aZKey      110000178
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      220121252
+
+eER_AttributeRec 4
+aName      ActualStartDateTime
+aZKey      110000179
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      220121253
+
+eER_AttributeRec 4
+aName      ActualEndDateTime
+aZKey      110000180
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      220121254
+
+eER_AttributeRec 4
+aName      ClockOutNote
+aZKey      110001280
+aDesc      Employee Clock Out Note visible to the employee and HR.
+
+eDomainRec 5
+aZKey      90420616
+aName      Note
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eLOD_AttributeRec 3
+aZKey      220121255
+
+eER_AttributeRec 4
+aName      ClockOutManagerNote
+aZKey      110001282
+aDesc      Manager/Internal notes related to the employee shift. Only visible to the management.
+
+eDomainRec 5
+
+eER_EntityRec 3
+aName      EmployeeShift
+aZKey      110000169
+aPurpose   A
+aDesc      Period during which a driver is "logged on""
+aER_DiagramPosX 28
+aER_DiagramPosY 25
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 8
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 13
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 8
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 9
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 10
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 11
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 13
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 3
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 9
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 13
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 8
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 9
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 10
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 11
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 12
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 13
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+ePOD       2
+aNAME      qDrvShift
+aZKey      220121360
+aTE_SourceZKey 79855
+
+eTE_DB_Environ 3
+aName      Perygrene
+aZKey      79853
+aDesc      Apex Fuels Perygrene Application
+aType      P
+
+eTE_DBMS_Source 4
+
+i12        9
+i15        9
+i18        9
+i27        6
+i32        23
+i35        6
+i53        50
+i56        44
+i59        44
+i70        23
+i75        6
+i78        41
+i81        6
+i90        87
+i93        87
+i96        87
+i99        6
+i102       6
+i105       6
+i108       6
+i111       6
+i117       6
+i123       87
+i126       87
+i129       87
+i132       87
+i135       87
+i141       6
+i144       41
+i147       87
+i150       87
+i153       87
+i156       87
+i162       159
+i164       1
+i165       139
+i166       140
+i167       6
+i168       142
+i169       143
+i170       41
+i171       145
+i172       146
+i173       87
+i174       148
+i175       149
+i176       87
+i177       151
+i178       152
+i179       87
+i180       154
+i181       155
+i182       87
+i183       157
+i184       158
+i185       159
+i186       160
+i187       161
+i188       159
+i189       163
+i190       2
+i191       33
+i192       34
+i193       6
+i194       36
+i195       37
+i196       38
+i197       39
+i198       40
+i199       41
+i200       42
+i201       43
+i202       44
+i203       45
+i204       46
+i205       47
+i206       48
+i207       49
+i208       50
+i209       51
+i210       52
+i211       50
+i212       54
+i213       55
+i214       44
+i215       57
+i216       58
+i217       44
+i218       60
+i219       61
+i220       62
+i221       63
+i222       64
+i223       65
+i224       66
+i225       67
+i226       68
+i227       3
+i228       4
+i229       5
+i230       6
+i231       7
+i232       8
+i233       9
+i234       10
+i235       11
+i236       9
+i237       13
+i238       14
+i239       9
+i240       16
+i241       17
+i242       9
+i243       19
+i244       20
+i245       21
+i246       24
+i247       25
+i248       26
+i249       6
+i250       28
+i251       29
+i252       30
+i253       71
+i254       115
+i255       116
+i256       6
+i257       118
+i258       119
+i259       120
+i260       121
+i261       122
+i262       87
+i263       124
+i264       125
+i265       87
+i266       127
+i267       128
+i268       87
+i269       130
+i270       131
+i271       87
+i272       133
+i273       134
+i274       87
+i275       136
+i276       137
+i277       138
+i278       72
+i279       73
+i280       74
+i281       6
+i282       76
+i283       77
+i284       41
+i285       79
+i286       80
+i287       6
+i288       82
+i289       83
+i290       84
+i291       85
+i292       86
+i293       87
+i294       88
+i295       89
+i296       87
+i297       91
+i298       92
+i299       87
+i300       94
+i301       95
+i302       87
+i303       97
+i304       98
+i305       6
+i306       100
+i307       101
+i308       6
+i309       103
+i310       104
+i311       6
+i312       106
+i313       107
+i314       6
+i315       109
+i316       110
+i317       6
+i318       112
+i319       113
+i320       114
+i323       23
