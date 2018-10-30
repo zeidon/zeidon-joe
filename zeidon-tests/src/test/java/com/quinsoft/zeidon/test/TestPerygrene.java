@@ -90,6 +90,17 @@ public class TestPerygrene
         System.out.println("===== Finished testActivateOIFromOI ========");
 	}
 
+	@Test
+	public void testRecursive()
+	{
+	    View         testview;
+		testview = perygrene.activateEmptyObjectInstance( "qDrvShift" );
+		testview.setName("qDrvShift");
+		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
+		tester.testRecursive( testview );
+        System.out.println("===== Finished testRecursive ========");
+	}
+
 	private class PerygreneVmlTester extends VmlObjectOperations
 	{
 		public PerygreneVmlTester( View view )
@@ -625,6 +636,338 @@ public class TestPerygrene
     	   
  		   return 0;
        }
+
+        public int
+        testRecursive( View     ViewToWindow)
+        {
+        	   zVIEW    zqFrame = new zVIEW( );
+        	   //:VIEW zqFrameHier BASED ON LOD  zqFrame
+        	   zVIEW    zqFrameHier = new zVIEW( );
+        	   //:VIEW vLOD
+        	   zVIEW    vLOD = new zVIEW( );
+        	   //:STRING ( 400 ) szFileName
+        	   String   szFileName = null;
+        	   //:STRING ( 32 )  szEntityType
+        	   String   szEntityType = null;
+        	   //:STRING ( 32 )  szEntityName
+        	   String   szEntityName = null;
+        	   //:SHORT          nRC
+        	   int      nRC = 0;
+        	   //:INTEGER HierarchicalLevel
+        	   int      HierarchicalLevel = 0;
+        	   int      RESULT = 0;
+        	   String   szTempString_0 = null;
+        	   String   szTempString_1 = null;
+        	   String   szTempString_2 = null;
+        	   String   szTempString_3 = null;
+        	   String   szTempString_4 = null;
+        	   String   szTempString_5 = null;
+        	   String   szTempString_6 = null;
+        	   String   szTempString_7 = null;
+        	   String   szTempString_8 = null;
+        	   int      lTempInteger_0 = 0;
+        	   String   szTempString_9 = null;
+        	   String   szTempString_10 = null;
+        	   int      lTempInteger_1 = 0;
+        	   String   szTempString_11 = null;
+        	   String   szTempString_12 = null;
+        	   String   szTempString_13 = null;
+        	   int      lTempInteger_2 = 0;
+        	   String   szTempString_14 = null;
+        	   String   szTempString_15 = null;
+        	   int      lTempInteger_3 = 0;
+        	   String   szTempString_16 = null;
+        	   String   szTempString_17 = null;
+        	   String   szTempString_18 = null;
+        	   String   szTempString_19 = null;
+        	   int      lTempInteger_4 = 0;
+        	   String   szTempString_20 = null;
+
+
+        	   //:// Activate the LOD.
+        	   nRC = SfActivateSysOI_FromFile( vLOD, "TZZOLODO", ViewToWindow, "target/test-classes/testdata/perygrene/qDrvShift.LOD", zSINGLE );
+        	   SetNameForView( vLOD, "qDrvShiftTest", null, zLEVEL_TASK );
+
+        	   RESULT = ActivateEmptyObjectInstance( zqFrame, "zqFrame", ViewToWindow, zSINGLE );
+        	   RESULT = CreateEntity( zqFrame, "zqFrame", zPOS_AFTER );
+        	   SetNameForView( zqFrame, "zqFrame", null, zLEVEL_TASK );
+        	   SetAttributeFromAttribute( zqFrame, "zqFrame", "QueryObjectName", vLOD, "LOD", "Name" );
+        	   SetAttributeFromAttribute( zqFrame, "zqFrame", "QueryObjectRootEntityName", vLOD, "LOD_EntityParent", "Name" );
+        	   TraceLineS( "Building zqFrame subobject ", "" );
+        	   TraceLineS( " ", "" );
+        	   //:TraceLineS( "Top LOD Entity: ", vLOD.LOD_EntityParent.Name )
+        	   TraceLineS( "Top LOD Entity: ", vLOD.cursor("LOD_EntityParent").getAttribute("Name" ).getString() );
+
+        	   //:// Create recursive ParentEntity subobject structure.
+        	   nRC = o_TestCodeRecurs1( vLOD, zqFrame, 1 );
+        	   TraceLineS( " ", "" );
+
+        	   //:TraceLineS( "Top Parent Entity 1: ", zqFrame.ParentEntity.EntityName )
+        	   TraceLineS( "Top Parent Entity 1: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString());
+        	   ResetViewFromSubobjectTop( zqFrame );
+        	   TraceLineS( "Top Parent Entity 2: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   RESULT = SetCursorFirstEntity( zqFrame, "ParentEntity", "" );
+        	   //:TraceLineS( "Top Parent Entity 3: ", zqFrame.ParentEntity.EntityName ) 
+        	   TraceLineS( "Top Parent Entity 3: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+
+        	   CreateViewFromView( zqFrameHier, zqFrame );
+        	   SetNameForView( zqFrameHier, "zqFrameHier", null, zLEVEL_TASK );
+        	   DefineHierarchicalCursor( zqFrameHier, "ParentEntity" );
+
+        	   //:// Process zqFrame hierarchically.
+        	   //:TraceLineS( " ", "" )
+        	   TraceLineS( " ", "" );
+        	   //:TraceLineS( "Process zqFrame Hierarchically ", "" )
+        	   TraceLineS( "Process zqFrame Hierarchically ", "" );
+        	   //:TraceLineS( "Root Entity: ", zqFrameHier.ParentEntity.EntityName )
+        	   TraceLineS( "Root Entity: ", zqFrameHier.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   //:nRC = SetCursorNextEntityHierarchical( HierarchicalLevel, szEntityType, zqFrameHier ) 
+        	   {StringBuilder sb_szEntityType;
+        	   if ( szEntityType == null )
+        	      sb_szEntityType = new StringBuilder( 32 );
+        	   else
+        	      sb_szEntityType = new StringBuilder( szEntityType );
+        	   MutableInt mi_HierarchicalLevel = new MutableInt( HierarchicalLevel );
+        	       nRC = SetCursorNextEntityHierarchical( mi_HierarchicalLevel, sb_szEntityType, zqFrameHier );
+        	   szEntityType = sb_szEntityType.toString( );
+        	   HierarchicalLevel = mi_HierarchicalLevel.intValue( );}
+        	   //:LOOP WHILE nRC >= 0 
+        	   while ( nRC >= 0 )
+        	   { 
+        	      //:TraceLineS( "...", "" )
+        	      TraceLineS( "...", "" );
+        	      //:TraceLineS( "Type: ", szEntityType )
+        	      TraceLineS( "Type: ", szEntityType );
+        	      //:GetStringFromAttribute( szEntityName, zqFrameHier, szEntityType, "EntityName" )
+        	      szEntityName = zqFrameHier.cursor(szEntityType).getAttribute("EntityName" ).getString();
+        	      TraceLineS( "Entity: ", szEntityName );
+        	      TraceLineI( "Level: ", HierarchicalLevel );
+        	      //:TraceLineS( "Parent Entity: ", zqFrameHier.ParentEntity.EntityName )
+        	      TraceLineS( "Parent Entity: ", zqFrameHier.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	      //:IF szEntityType = "ChildEntity"
+        	      if ( ZeidonStringCompare( szEntityType, 1, 0, "ChildEntity", 1, 0, 33 ) == 0 )
+        	      { 
+        	         //:TraceLineS( "Child Entity: ", zqFrameHier.ChildEntity.EntityName )
+        	         TraceLineS( "Child Entity: ", zqFrameHier.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	      } 
+       	      
+        	      //:nRC = SetCursorNextEntityHierarchical( HierarchicalLevel, szEntityName, zqFrameHier )   
+        	      {StringBuilder sb_szEntityName;
+        	      if ( szEntityName == null )
+        	         sb_szEntityName = new StringBuilder( 32 );
+        	      else
+        	         sb_szEntityName = new StringBuilder( szEntityName );
+        	      MutableInt mi_HierarchicalLevel = new MutableInt( HierarchicalLevel );
+        	             nRC = SetCursorNextEntityHierarchical( mi_HierarchicalLevel, sb_szEntityName, zqFrameHier );
+        	      szEntityName = sb_szEntityName.toString( );
+        	      HierarchicalLevel = mi_HierarchicalLevel.intValue( );}
+        	   } 
+
+        	   
+
+        	   //:// Test Find recursive Entity by Name.
+        	   //:// The TestCodeRecurs2 operation crashes by going into an eternal loop.
+        	   //://TestCodeRecurs2( zqFrame, "DeliveryLeg" )
+
+
+        	   //:// Test of Recursive Error.
+
+        	   TraceLineS( "... ", "" );
+        	   TraceLineS( "... ", "" );
+        	   TraceLineS( "Recursive Error Test ", "" );
+        	   TraceLineS( "... ", "" );
+
+        	   //:// Step down from DriverShift to Driver.
+        	   //:TraceLineS( "Parent DriverShift: ", zqFrame.ParentEntity.EntityName )
+        	   TraceLineS( "Parent DriverShift: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   //:TraceLineS( "Child Driver: ", zqFrame.ChildEntity.EntityName )
+        	   TraceLineS( "Child Driver: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   //:IF zqFrame.ChildEntity EXISTS
+        	   if ( CheckExistenceOfEntity( zqFrame, "ChildEntity" ) == 0 )
+        	   { 
+        	      TraceLineS( "ChildEntity Exists: ", "(Correct)" );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "No ChildEntity  ", "(Incorrect)" );
+                  Assert.assertEquals(  CheckExistenceOfEntity( zqFrame, "ChildEntity" ), 0 );
+        	   } 
+
+        	   
+        	   SetViewToSubobject( zqFrame, "ChildEntity" );
+        	   TraceLineS( "(SetViewToSubobject) ", "" );
+        	   //:TraceLineS( "New Parent Driver: ", zqFrame.ParentEntity.EntityName )
+        	   TraceLineS( "New Parent Driver: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   //:TraceLineS( "New Child DriverPerson: ", zqFrame.ChildEntity.EntityName )
+        	   TraceLineS( "New Child DriverPerson: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   //:IF zqFrame.ChildEntity EXISTS
+        	   if ( CheckExistenceOfEntity( zqFrame, "ChildEntity" ) == 0 )
+        	   { 
+        	      //:TraceLineS( "ChildEntity Exists: ", zqFrame.ChildEntity.EntityName )
+        	      TraceLineS( "ChildEntity Exists: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "No ChildEntity  ", "(Incorrect)" );
+                  Assert.assertEquals(  CheckExistenceOfEntity( zqFrame, "ChildEntity" ), 0 );
+        	   } 
+        	   
+        	   TraceLineS( "... ", "" );
+
+        	   //:// Step down from Driver to DriverPerson
+        	   //:TraceLineS( "Parent Driver: ", zqFrame.ParentEntity.EntityName )
+        	   TraceLineS( "Parent Driver: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   //:TraceLineS( "Child DriverPerson: ", zqFrame.ChildEntity.EntityName )
+        	   TraceLineS( "Child DriverPerson: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   SetViewToSubobject( zqFrame, "ChildEntity" );
+        	   TraceLineS( "(SetViewToSubobject) ", "" );
+        	   //:IF zqFrame.ParentEntity EXISTS
+        	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
+        	   { 
+        	      TraceLineS( "ParentEntity Exists: ", "(Correct)" );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "No ParentEntity  ", "(Incorrect)" );
+                  Assert.assertEquals(  CheckExistenceOfEntity( zqFrame, "ParentEntity" ), 0 );
+        	   } 
+
+        	   
+        	   //:TraceLineS( "New Parent DriverPerson: ", zqFrame.ParentEntity.EntityName )
+        	   TraceLineS( "New Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   //:TraceLineS( "New Child Null: ", zqFrame.ChildEntity.EntityName )
+        	   TraceLineS( "New Child Null: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   //:IF zqFrame.ChildEntity EXISTS
+        	   if ( CheckExistenceOfEntity( zqFrame, "ChildEntity" ) == 0 )
+        	   { 
+        	      //:TraceLineS( "ChildEntity Exists: ", zqFrame.ChildEntity.EntityName )
+        	      TraceLineS( "ChildEntity Exists: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "No ChildEntity  ", "" );
+        	   } 
+
+        	   //:// Check SET CURSOR NEXT on DriverPerson/Carrier.
+        	   TraceLineS( "... ", "" );
+        	   TraceLineS( "(SET CURSOR NEXT DriverPerson) ", "" );
+        	   RESULT = SetCursorNextEntity( zqFrame, "ParentEntity", "" );
+        	   if ( RESULT >= zCURSOR_SET )
+        	   { 
+        	      TraceLineS( "Next Parent Exists ", "(Correct)" );
+        	      TraceLineS( "Parent Carrier: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "Next Parent NOT exist", "(Incorrect)" );
+                  Assert.assertTrue( "Next Parent does NOT exist", RESULT >= zCURSOR_SET );
+        	   } 
+
+        	   TraceLineS( "... ", "" );
+
+        	   //:// Step down from DriverPerson to Null.
+        	   //:TraceLineS( "Parent DriverPerson: ", zqFrame.ParentEntity.EntityName )
+        	   TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   //:TraceLineS( "Child Null: ", zqFrame.ChildEntity.EntityName )
+        	   TraceLineS( "Child Null: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   SetViewToSubobject( zqFrame, "ChildEntity" );
+        	   TraceLineS( "(SetViewToSubobject) ", "" );
+        	   //:IF zqFrame.ParentEntity EXISTS
+        	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
+        	   { 
+        	      TraceLineS( "ParentEntity Exists: ", "" );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "No ParentEntity  ", "(Correct)" );
+        	   } 
+
+        	   //:// Check SET CURSOR NEXT on DriverPerson again after Reset.
+        	   TraceLineS( "... ", "" );
+        	   ResetViewFromSubobject( zqFrame );
+        	   TraceLineS( "(ResetViewFromSubobject) ", "" );
+        	   TraceLineS( "(SET CURSOR NEXT after reset) ", "" );
+        	   RESULT = SetCursorNextEntity( zqFrame, "ParentEntity", "" );
+        	   if ( RESULT >= zCURSOR_SET )
+        	   { 
+        	      TraceLineS( "Next Parent Exists ", "(Correct)" );
+        	      //:TraceLineS( "Parent Carrier: ", zqFrame.ParentEntity.EntityName )
+        	      TraceLineS( "Parent Carrier: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "Next Parent does NOT exist ", "(Incorrect)" );
+                  Assert.assertTrue( "Next Parent does NOT exist", RESULT >= zCURSOR_SET );
+        	   } 
+    	   
+ 		   return 0;
+        }
+        
+        private int 
+        o_TestCodeRecurs1( View     vLOD,
+                           View     zqFrame,
+                           int      HierArchicalLevel )
+        {
+           String   szRecursiveEntityName = null;
+           //:INTEGER NewHierArchicalLevel
+           int      NewHierArchicalLevel = 0;
+           //:INTEGER nRC
+           int      nRC = 0;
+           int      RESULT = 0;
+           int      lTempInteger_0 = 0;
+           String   szTempString_0 = null;
+           String   szTempString_1 = null;
+           String   szTempString_2 = null;
+
+           //:// Create zqFrame.ParentEntity subobject under parent
+
+           RESULT = CreateEntity( zqFrame, "ParentEntity", zPOS_AFTER );
+           szRecursiveEntityName = vLOD.cursor("LOD_EntityParent").getAttribute("Name" ).getString();
+           //:zqFrame.ParentEntity.EntityName = szRecursiveEntityName
+           SetAttributeFromString( zqFrame, "ParentEntity", "EntityName", szRecursiveEntityName );
+           TraceLineS( "... ", "" );
+           //:TraceLineS( "Entity Created: ", zqFrame.ParentEntity.EntityName )
+           TraceLineS( "Entity Created: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+           TraceLineI( "Hier Level: ", HierArchicalLevel );
+           TraceLineS( "... ", "" );
+
+           //:// Create rest of recursive structure.
+           //:// If the following IF statement is added so that we don't do a SetView.. / ResetView.. on a null LOD_EntityChild
+           //:// entity, then the next zqFrame Reset crashes. (The vLOD reset is fine.)
+           //://IF vLOD.LOD_EntityChild EXISTS
+           SetViewToSubobject( vLOD, "LOD_EntityChild" );
+           SetViewToSubobject( zqFrame, "ChildEntity" );
+           TraceLineS( "(After SetViewToSubobject)", "" );
+           NewHierArchicalLevel = HierArchicalLevel + 1;
+           //:FOR EACH vLOD.LOD_EntityParent
+           RESULT = SetCursorFirstEntity( vLOD, "LOD_EntityParent", "" );
+           while ( RESULT > zCURSOR_UNCHANGED )
+           { 
+              nRC = o_TestCodeRecurs1( vLOD, zqFrame, NewHierArchicalLevel );
+              RESULT = SetCursorNextEntity( vLOD, "LOD_EntityParent", "" );
+           } 
+
+           
+           vLOD.resetSubobject();
+           zqFrame.resetSubobject();
+
+           TraceLineS( "(After ResetViewFromSubobject)", "" );
+           
+
+           //:TraceLineS( "Return vLOD Parent: ", vLOD.LOD_EntityParent.Name )
+           TraceLineS( "Return vLOD Parent: ", vLOD.cursor("LOD_EntityParent").getAttribute("Name" ).getString() );
+           //:TraceLineS( "Return zqFrame Parent: ", zqFrame.ParentEntity.EntityName )
+           TraceLineS( "Return zqFrame Parent: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+           //:IF vLOD.LOD_EntityParent.Name != zqFrame.ParentEntity.EntityName
+           if ( CompareAttributeToAttribute( vLOD, "LOD_EntityParent", "Name", zqFrame, "ParentEntity", "EntityName" ) != 0 )
+           { 
+               TraceLineS( "(Error: No match on reset Parents)", "" );
+               //Assert.assertEquals( vLOD.cursor( "LOD_EntityParent" ).getAttribute( "Name" ).getString(),
+		       //                     zqFrame.cursor( "ParentEntity" ).getAttribute( "EntityName" ).getString() );
+           } 
+           
+           return( 0 );
+        } 
 
      }
 }
