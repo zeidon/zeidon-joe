@@ -5974,62 +5974,6 @@ public class ZGlobal1_Operation extends VmlOperation
 
    } // CheckForTableAttribute
 
-   public int
-   AD_TestAdmin( )
-   {
-      String ldapurl = "ldap://10.150.0.10";
-      String stringADUserName = "";
-      String szAD_Password = "";
-      // This is using fastbind.
-      return m_ActiveDirectory.ActiveDirectoryLoginAuthentication( ldapurl, "enc-ad\\zmail", "F82b7mk,9j" );
-   }
-
-   public int
-   AD_TestAdminNotFast( )
-   {
-      String ldapurl = "ldap://10.150.0.10";
-      String stringADUserName = "";
-      String szAD_Password = "";
-      // Try binding w/o fastbind.
-      return m_ActiveDirectory.ActiveDirectoryLoginAuthenticationNF( ldapurl, "enc-ad\\zmail", "F82b7mk,9j" );
-      //IsAuthenticated = ctx.Authenticate("enc-ad\\zmailxx","F82b7mk,9jssss");
-   }
-
-   public int
-   AD_TestUserNotFast( )
-   {
-      String ldapurl = "ldap://10.150.0.10";
-      String stringADUserName = "";
-      String szAD_Password = "";
-      // Try binding w/o fastbind.
-      return m_ActiveDirectory.ActiveDirectoryLoginAuthenticationNF( ldapurl, stringADUserName, szAD_Password );
-   }
-
-   public int
-   AD_TestUser( )
-   {
-      String ldapurl = "ldap://10.150.0.10";
-      String stringADUserName = "";
-      String szAD_Password = "";
-      // This is using fastbind.
-      return m_ActiveDirectory.ActiveDirectoryLoginAuthentication( ldapurl, stringADUserName, szAD_Password );
-   }
-
-   public int
-   AD_TestChangePassword( )
-   {
-      String ldapurl = "ldap://10.150.0.10";
-      String stringADAdminUserName = "enc-ad\\zmail";
-      String stringADAdminPassword = "F82b7mk,9j";
-      String stringADUserName = "";
-      String stringADOldPassword = "";
-      String stringADNewPassword = "";
-      int nRC;
-
-      nRC = m_ActiveDirectory.ActiveDirectoryChangePassword( ldapurl, stringADAdminUserName,
-                                                             stringADAdminPassword, stringADUserName, stringADOldPassword, stringADNewPassword );
-      return 0;
-   }
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
    //
@@ -6097,16 +6041,7 @@ public class ZGlobal1_Operation extends VmlOperation
                           String stringAD_OldPassword,
                           String stringAD_NewPassword )
    {
-      // In the "c" world this is "LDAP://DC=ENC-AD,DC=ENC,DC=EDU"
-      // But I couldn't get a connection using that in java, so I am using the
-      // ldap server id.
-      stringAD_Pathname = "ldap://10.150.0.10";
-      // Also, in "c" we store password on the database but I need to do some
-      // work with that because we are using different encyrption right now for java and
-      // I can't decrypt a password.
-      stringAD_LoginUserName = "enc-ad\\zmail";
-      stringAD_LoginPassword = "F82b7mk,9j";
-      return m_ActiveDirectory.ActiveDirectoryChangePassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_OldPassword, stringAD_NewPassword );
+      return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_OldPassword, stringAD_NewPassword );
    } // AD_ChangeUserPassword
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -6122,7 +6057,7 @@ public class ZGlobal1_Operation extends VmlOperation
                    String stringAD_UserName,
                    String stringAD_Password )
    {
-      return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_Password );
+      return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_Password,"" );
    }
 
    // AD_SetPassword
