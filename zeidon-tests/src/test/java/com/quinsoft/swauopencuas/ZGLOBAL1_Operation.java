@@ -5325,15 +5325,6 @@ public class ZGLOBAL1_Operation extends VmlOperation
     AD_TestChangePassword( )
     {
 		String ldapurl = "ldap://198.136.234.202"; // or 198.136.234.196
-		String stringADAdminUserName = "sAMAccountName\\portalrest";
-		String stringADAdminPassword = "Exo47egm2j83whv";
-		String stringADUserName = "";
-		String stringADOldPassword = "";
-		String stringADNewPassword = "";
-    	int nRC;
-
-    	nRC = m_ActiveDirectory.ActiveDirectoryChangePassword(ldapurl, stringADAdminUserName,
-    			stringADAdminPassword, stringADUserName, stringADOldPassword, stringADNewPassword);
     	return 0;
     }
 
@@ -5417,16 +5408,8 @@ public class ZGLOBAL1_Operation extends VmlOperation
                            String stringAD_NewPassword )
     {
     	// In the "c" world this is "LDAP://DC=ENC-AD,DC=ENC,DC=EDU"
-    	// But I couldn't get a connection using that in java, so I am using the
-    	// ldap server id.
-    	stringAD_Pathname = "ldap://198.136.234.196"; //or 198.136.234.202
-    	// Also, in "c" we store password on the database but I need to do some
-    	// work with that because we are using different encyrption right now for java and
-    	// I can't decrypt a password.
-		stringAD_LoginUserName = "sAMAccountName\\portalrest"; //portalrest
-		stringAD_LoginPassword = "Exo47egm2j83whv";
-    	return m_ActiveDirectory.ActiveDirectoryChangePassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_OldPassword, stringAD_NewPassword );
-    } // AD_ChangeUserPassword
+    	return 0;
+     } // AD_ChangeUserPassword
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -5441,7 +5424,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
                     String stringAD_UserName,
                     String stringAD_Password )
     {
-       return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_Password );
+    	return 0;
     }
 
     // AD_SetPassword

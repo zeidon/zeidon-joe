@@ -5961,7 +5961,12 @@ public abstract class VmlOperation
    protected int zGetFirstAttributeNameForEntity( View view, String entityName, StringBuilder sbAttribName )
    {
       EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
+      // If this entity has no attributes return.
+      if ( entityDef.getAttributeCount() == 0 )
+    	  return -1;
+      
       AttributeDef AttributeDef = entityDef.getAttribute( 0 );
+      
       if ( AttributeDef == null )
           return -1;
 

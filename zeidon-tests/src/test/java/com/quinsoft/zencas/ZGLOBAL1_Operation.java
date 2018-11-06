@@ -5314,8 +5314,8 @@ public class ZGLOBAL1_Operation extends VmlOperation
 		String stringADNewPassword = "";
     	int nRC;
     	
-    	nRC = m_ActiveDirectory.ActiveDirectoryChangePassword(ldapurl, stringADAdminUserName, 
-    			stringADAdminPassword, stringADUserName, stringADOldPassword, stringADNewPassword);
+    	//nRC = m_ActiveDirectory.ActiveDirectoryChangePassword(ldapurl, stringADAdminUserName, 
+    	//		stringADAdminPassword, stringADUserName, stringADOldPassword, stringADNewPassword);
     	return 0;
     }
     
@@ -5385,16 +5385,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
                            String stringAD_OldPassword,
                            String stringAD_NewPassword )
     {
-    	// In the "c" world this is "LDAP://DC=ENC-AD,DC=ENC,DC=EDU"
-    	// But I couldn't get a connection using that in java, so I am using the
-    	// ldap server id.
-    	stringAD_Pathname = "ldap://10.150.0.10";
-    	// Also, in "c" we store password on the database but I need to do some
-    	// work with that because we are using different encyrption right now for java and
-    	// I can't decrypt a password.
-		stringAD_LoginUserName = "enc-ad\\zmail";
-		stringAD_LoginPassword = "F82b7mk,9j";
-    	return m_ActiveDirectory.ActiveDirectoryChangePassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_OldPassword, stringAD_NewPassword );
+    	return 0;
     } // AD_ChangeUserPassword
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5410,7 +5401,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
                     String stringAD_UserName,
                     String stringAD_Password )
     {
-       return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_Password );
+    	return 0;
     }
 
     // AD_SetPassword
