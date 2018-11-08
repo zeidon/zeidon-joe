@@ -4636,8 +4636,11 @@ public abstract class VmlOperation
 
    protected int DropObjectInstance( View view )
    {
-      view.drop();
-   // view = null;
+	  try{
+          view.drop();
+	  } catch(Exception e){
+		  return -1;  // KJS 11/08/18 - Added try/catch so that DropObjectInstance can be called even if view doesn't exist so we don't always have to do a check.
+	  }
       return 0;
    }
 
@@ -5348,7 +5351,11 @@ public abstract class VmlOperation
 
    protected int DropView( View view )
    {
-      view.drop( );
+	  try{
+          view.drop();
+	  } catch(Exception e){
+		  return -1;  // KJS 11/08/18 - Added try/catch so that DropObjectInstance can be called even if view doesn't exist so we don't always have to do a check.
+	  }
       return 0;
    }
 
