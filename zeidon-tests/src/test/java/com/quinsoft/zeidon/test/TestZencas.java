@@ -196,8 +196,27 @@ public class TestZencas
 		tester.testBlobs( testview );
         System.out.println("===== Finished testBlobs ========");
 	}
-
-
+	
+	@Test
+	public void testAttributeReadOnlyError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAttributeReadOnlyError( testview );
+        System.out.println("===== Finished testAttributeReadOnlyError ========");
+	}
+	
+	@Test
+	public void testAcceptSubobjectNoUpdate()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAcceptSubobjectNoUpdate( testview );
+        System.out.println("===== Finished testAcceptSubobjectNoUpdate ========");
+	}
+	
 	@Test
 	public void testDateTimeCompare()
 	{
@@ -946,9 +965,13 @@ public class TestZencas
 		tester.testActivatingDomains( testview );
         System.out.println("===== Finished testActivatingDomains ========");
 	}
-	@Test
+
+	//@Test
 	public void testCODXMLImport()
 	{
+        View         mapping;
+        mapping = zeidonSystem.activateEmptyObjectInstance( "SerializationMapping" );
+
 	    View         testview;
 		testview = zencas.activateEmptyObjectInstance( "mStudent" );
 		VmlTester tester = new VmlTester( testview );
@@ -2927,7 +2950,144 @@ public class TestZencas
 			return 0;
 
 		}
+		
+		public int
+		testAcceptSubobjectNoUpdate( View ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mClass = new zVIEW( );
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_1 = new zVIEW( );
+			int RESULT=0;
+			
+			// In this test we update FinalGrade attribute from included entities, but after the AcceptSubobject FinalGrade appears empty.
+			
+		       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_1, 31967 );
+			   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_1, zSINGLE );
+			   DropView( vTempViewVar_1 );
+			   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
 
+               // This is set up... so that we know the FinalGrade starts out as null
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+				  SetAttributeFromString( mClass, "Enrollment", "FinalGrade", "" );
+			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+			   } 
+			   mClass.commit();
+
+			   // Exclude all GradeEnrollments if any exist
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   // Now include GradeEnrollment for all Enrollment entries that are not dropped (taking now or completed).
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
+			      { 
+			         RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
+			         SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
+			      } 
+
+			      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+			   } 
+
+			   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   
+			   CreateTemporalSubobjectVersion( mClass, "Class" );
+
+			   // Set all included GradeEnrollment entries to a grade of "C"
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      SetAttributeFromString( mClass, "GradeEnrollment", "wEnteredGrade", "C" );
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   // Now update all Enrollment entries where FinalGrade = GradeEnrollment.wEnteredGrade.
+			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   while ( RESULT > zCURSOR_UNCHANGED )
+			   { 
+			      RESULT = SetCursorFirstEntityByInteger( mClass, "Enrollment", "ID", mClass.cursor("GradeEnrollment").getAttribute("ID").getInteger(), "" );
+			      if ( RESULT >= zCURSOR_SET )
+			      { 
+			         SetAttributeFromAttribute( mClass, "Enrollment", "FinalGrade", mClass, "GradeEnrollment", "wEnteredGrade" );
+			      } 
+
+			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+			   } 
+
+			   // After AcceptSubobject the Enrollment.FinalGrades are empty.
+			   AcceptSubobject( mClass, "Class" );
+			   
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+			   String szGrade = mClass.cursor("Enrollment").getAttribute( "FinalGrade" ).getString();			   
+   			   Assert.assertEquals("Class should be 'C'.", "C", szGrade);
+			   
+			return 0;
+		}
+
+		public int
+		testAttributeReadOnlyError( View ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mBatch = new zVIEW( );
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+
+			// In this test we include mBatch.OnlineCreatingUser from mUser.User.
+			// Then we update mUser.User. When we commit mBatch we get:
+			// Entity instance in view: 1081 ZENCAs.mBatch  entity: OnlineCreatingUser  does not have update authority:
+			// It is true that OnlineCreatingUser is marked as incl/excl but not marked for "update". Should it be??
+			// We are not updating OnlineCreatingUser, we are updating the original mUser.User.
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+
+
+		   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
+		   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
+		
+		   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
+		
+		   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
+		   RESULT = CommitObjectInstance( mUser );
+		
+		   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
+		   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
+		   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
+		
+		   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
+		
+		   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
+		   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
+		   // Update mUser.User attribute
+		   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
+		
+		   // We get an error:
+		   // Entity instance in view: 1081 ZENCAs.mBatch  entity: OnlineCreatingUser  does not have update authority:
+		   // It is true that OnlineCreatingUser is marked as incl/excl but not marked for "update". Should it be??
+		   RESULT = CommitObjectInstance( mBatch );
+		   RESULT = CommitObjectInstance( mUser );
+			return 0;
+		}
+		
+		
 		public int
 		testzGetNextEntityAttributeName( View ViewToWindow )
 		{
