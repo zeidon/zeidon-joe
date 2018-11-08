@@ -60,6 +60,7 @@ import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
 import com.quinsoft.zeidon.PessimisticLockingException;
@@ -1465,12 +1466,18 @@ public abstract class VmlOperation
 
    protected static final int ZeidonStringFind( StringBuilder sbTarget, int tgtIdx, String searchString )
    {
-      return sbTarget.toString( ).lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
+	   // at the beginning of the line.
+	   //return sbTarget.toString( ).lastIndexOf( searchString, tgtIdx - 1 );
+	   return sbTarget.toString( ).indexOf( searchString, tgtIdx - 1 );
    }
 
    protected static final int ZeidonStringFind( String tgtString, int tgtIdx, String searchString )
    {
-      return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
+	   // at the beginning of the line.
+	   //return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   return tgtString.indexOf( searchString, tgtIdx - 1 );
    }
 
    protected int SetNameForView( View view, String name, TaskQualification taskQual, int level )
@@ -2770,6 +2777,13 @@ public abstract class VmlOperation
       int  nRC;
       int nbrToCopy;
       int lth;
+      
+      // KJS 08/08/18 - I have run into problems when I do a ZeidonStringFind and string is found at position 0, then we come here
+      // and we fail with sourceIdx being 0. So put in a fix for this...
+      if ( targetIdx == 0 )
+    	  targetIdx = 1;
+      if ( sourceIdx == 0 )
+    	  sourceIdx = 1;
 
       if ( sbTarget == null || sbSource == null ||     // gotta have strings
            targetIdx == 0 || sourceIdx == 0 )          // 1-based index
@@ -3003,7 +3017,10 @@ public abstract class VmlOperation
                                                int    maxCopy,
                                                int    maxTargetLth )
    {
-      if ( sourceIdx > 0 )
+	  if ( source == null || source.isEmpty() )
+	      return sbTarget;
+
+	  if ( sourceIdx > 0 )
       {
          sbTarget.append( source.substring( sourceIdx - 1 ) );
       }
@@ -4002,12 +4019,15 @@ public abstract class VmlOperation
       }
       else
       {
-         s = cursor.getAttribute( attributeName ).getString( context );
-
-         // Because in our vml code we compare a null to "", we should return a "" instead of null.
-         if ( s == null )
-         {
-            s = "";
+     	 try{
+             s = cursor.getAttribute( attributeName ).getString( context );
+             if ( s == null )
+             {
+                s = "";
+             }
+         }
+         catch( Exception e ){
+        	 s = "";
          }
       }
 
@@ -4019,6 +4039,7 @@ public abstract class VmlOperation
                                                             String context, int maxLength )
    {
       int nRC;
+      String s = "";
       EntityCursor cursor = view.cursor( entityName );
       if ( cursor.isNull() )
       {
@@ -4027,7 +4048,11 @@ public abstract class VmlOperation
       }
       else
       {
-         String s = cursor.getAttribute( attributeName ).getString( context );
+    	 try {
+         s = cursor.getAttribute( attributeName ).getString( context );
+    	 }catch( Exception e ) {
+    		 s = "";
+    	 }
          if ( s == null )
          {
             s = "";
@@ -4539,8 +4564,15 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.getAttribute( attributeName ).compare( value );
-         return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 try
+    	 {
+            int nRC = cursor.getAttribute( attributeName ).compare( value );
+            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 }
+    	 catch( InvalidAttributeValueException e )
+    	 {
+    		 return -5;
+    	 }
       }
    }
 
@@ -4553,8 +4585,15 @@ public abstract class VmlOperation
       }
       else
       {
-         int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
-         return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 try
+    	 {
+            int nRC = cursor.getAttribute( attributeName ).compare( sbValue.toString( ) );
+            return nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
+    	 }
+    	 catch( InvalidAttributeValueException e )
+    	 {
+    		 return -5;
+    	 }
       }
    }
 
