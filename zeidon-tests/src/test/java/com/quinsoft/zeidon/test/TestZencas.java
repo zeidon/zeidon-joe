@@ -2960,6 +2960,8 @@ public class TestZencas
 			zVIEW    vTempViewVar_1 = new zVIEW( );
 			int RESULT=0;
 			
+			// In this test we update FinalGrade attribute from included entities, but after the AcceptSubobject FinalGrade appears empty.
+			
 		       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_1, 31967 );
 			   RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_1, zSINGLE );
 			   DropView( vTempViewVar_1 );
@@ -2974,6 +2976,7 @@ public class TestZencas
 			   } 
 			   mClass.commit();
 
+			   // Exclude all GradeEnrollments if any exist
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
@@ -2981,6 +2984,7 @@ public class TestZencas
 			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
 			   } 
 
+			   // Now include GradeEnrollment for all Enrollment entries that are not dropped (taking now or completed).
 			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
@@ -2995,8 +2999,10 @@ public class TestZencas
 
 			   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+			   
 			   CreateTemporalSubobjectVersion( mClass, "Class" );
 
+			   // Set all included GradeEnrollment entries to a grade of "C"
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
@@ -3004,14 +3010,11 @@ public class TestZencas
 			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
 			   } 
 
+			   // Now update all Enrollment entries where FinalGrade = GradeEnrollment.wEnteredGrade.
 			   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 			   while ( RESULT > zCURSOR_UNCHANGED )
 			   { 
-			      int lTempInteger_4 = 0;
-			      {MutableInt mi_lTempInteger_4 = new MutableInt( lTempInteger_4 );
-			             GetIntegerFromAttribute( mi_lTempInteger_4, mClass, "GradeEnrollment", "ID" );
-			      lTempInteger_4 = mi_lTempInteger_4.intValue( );}
-			      RESULT = SetCursorFirstEntityByInteger( mClass, "Enrollment", "ID", lTempInteger_4, "" );
+			      RESULT = SetCursorFirstEntityByInteger( mClass, "Enrollment", "ID", mClass.cursor("GradeEnrollment").getAttribute("ID").getInteger(), "" );
 			      if ( RESULT >= zCURSOR_SET )
 			      { 
 			         SetAttributeFromAttribute( mClass, "Enrollment", "FinalGrade", mClass, "GradeEnrollment", "wEnteredGrade" );
@@ -3020,8 +3023,10 @@ public class TestZencas
 			      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
 			   } 
 
+			   // After AcceptSubobject the Enrollment.FinalGrades are empty.
 			   AcceptSubobject( mClass, "Class" );
 			   
+			   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
 			   String szGrade = mClass.cursor("Enrollment").getAttribute( "FinalGrade" ).getString();			   
    			   Assert.assertEquals("Class should be 'C'.", "C", szGrade);
 			   
@@ -3037,6 +3042,11 @@ public class TestZencas
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
 
+			// In this test we include mBatch.OnlineCreatingUser from mUser.User.
+			// Then we update mUser.User. When we commit mBatch we get:
+			// Entity instance in view: 1081 ZENCAs.mBatch  entity: OnlineCreatingUser  does not have update authority:
+			// It is true that OnlineCreatingUser is marked as incl/excl but not marked for "update". Should it be??
+			// We are not updating OnlineCreatingUser, we are updating the original mUser.User.
 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 		   DropView( vTempViewVar_0 );
@@ -3046,7 +3056,7 @@ public class TestZencas
 	        DropView( vTempViewVar_0 );
 	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
-		
+
 		   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
 		   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
 		   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
@@ -3066,13 +3076,17 @@ public class TestZencas
 		
 		   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
 		   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
+		   // Update mUser.User attribute
 		   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
 		
-		
+		   // We get an error:
+		   // Entity instance in view: 1081 ZENCAs.mBatch  entity: OnlineCreatingUser  does not have update authority:
+		   // It is true that OnlineCreatingUser is marked as incl/excl but not marked for "update". Should it be??
 		   RESULT = CommitObjectInstance( mBatch );
 		   RESULT = CommitObjectInstance( mUser );
 			return 0;
 		}
+		
 		
 		public int
 		testzGetNextEntityAttributeName( View ViewToWindow )
