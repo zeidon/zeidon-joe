@@ -1,0 +1,339 @@
+<zOI objectName="mSAProf" appName="nazsis" increFlags="Y" totalRootCount="1">
+  <StudentAccountProfile incomplete="Y" readonly="Y">
+    <ID>363</ID>
+    <AccountBalance>175.0</AccountBalance>
+    <dBalance updated="Y">175.0</dBalance>
+    <dClassCharges updated="Y">175.0</dClassCharges>
+    <dTotalCharges updated="Y">175.0</dTotalCharges>
+    <dTotalCreditHours updated="Y">0.0</dTotalCreditHours>
+    <dPayTotalWithFee updated="Y">0.0</dPayTotalWithFee>
+    <dPayAmountFee updated="Y">0.0</dPayAmountFee>
+    <dTotalSACredits updated="Y">0.0</dTotalSACredits>
+    <Cleared>N</Cleared>
+    <dDateOfLastActivity updated="Y">20181109</dDateOfLastActivity>
+    <FK_ID_ADMINISTRATIVEDIVISION>1</FK_ID_ADMINISTRATIVEDIVISION>
+    <FK_ID_STUDENT>11016</FK_ID_STUDENT>
+
+    <Student readonly="Y">
+      <ID>11016</ID>
+      <Status>A</Status>
+      <CurrentLevel>0</CurrentLevel>
+      <ResidencyStatus>T</ResidencyStatus>
+      <dCurrentRoomAssignment updated="Y">(Nonresident Student)</dCurrentRoomAssignment>
+      <FK_ID_ADMINISTRATIVEDIVISION>1</FK_ID_ADMINISTRATIVEDIVISION>
+      <FK_ID_CAMPUSLOCATION>23</FK_ID_CAMPUSLOCATION>
+      <FK_ID_PERSON>10794</FK_ID_PERSON>
+
+      <Person readonly="Y">
+        <ID>10794</ID>
+        <LastName>Cade</LastName>
+        <FirstName>Joel</FirstName>
+        <MiddleName>W</MiddleName>
+        <CampusID>660010794</CampusID>
+        <Gender>M</Gender>
+        <FK_ID_ADDRESS>75009</FK_ID_ADDRESS>
+
+        <Address readonly="Y">
+          <ID>75009</ID>
+          <FK_ID_PERSON>10794</FK_ID_PERSON>
+        </Address>
+        <Prospect readonly="Y">
+          <ID>14633</ID>
+          <Type>5</Type>
+          <Status>S</Status>
+          <FK_ID_ADMINISTRATIVEDIVISION>1</FK_ID_ADMINISTRATIVEDIVISION>
+          <FK_ID_ADMISSIONTRACK>1</FK_ID_ADMISSIONTRACK>
+          <FK_ID_CAMPUSLOCATION>23</FK_ID_CAMPUSLOCATION>
+          <FK_ID_COLLEGE>2</FK_ID_COLLEGE>
+          <FK_ID_PERSON>10794</FK_ID_PERSON>
+        </Prospect>
+        <Demographics readonly="Y">
+          <ID>18879</ID>
+          <FK_ID_PERSON>10794</FK_ID_PERSON>
+        </Demographics>
+      </Person>
+      <AdministrativeDivision readonly="Y">
+        <ID>1</ID>
+        <Name>Main</Name>
+        <Description>Main Location</Description>
+      </AdministrativeDivision>
+    </Student>
+    <StudentAccountTransApplied readonly="Y" isLinkedSource="Y" entityKey="10109">
+      <ID>3590</ID>
+      <Description>Payment</Description>
+      <DateEntered>20181109</DateEntered>
+      <Amount>50.0</Amount>
+      <TransactionDate>20181109</TransactionDate>
+      <FK_ID_BILLINGPERIOD>64</FK_ID_BILLINGPERIOD>
+      <DEBITID_GLCHARTENTRY>1</DEBITID_GLCHARTENTRY>
+      <CREDITID_GLCHARTENTRY>37</CREDITID_GLCHARTENTRY>
+      <FK_ID_SATRANSACTIONCODE>15</FK_ID_SATRANSACTIONCODE>
+      <FK_ID_STUDENTACCOUNTPROFILE>363</FK_ID_STUDENTACCOUNTPROFILE>
+
+      <SATransactionCode readonly="Y" isLinkedSource="Y" entityKey="10110">
+        <ID>15</ID>
+        <Type>R</Type>
+        <Description>Payment</Description>
+        <BillType>C</BillType>
+        <TransactionCode>PAYMENT</TransactionCode>
+        <ActiveFlag>Y</ActiveFlag>
+        <FK_ID_ADMINISTRATIVEDIVISION>1</FK_ID_ADMINISTRATIVEDIVISION>
+        <FK_ID_GLCHARTENTRY>1</FK_ID_GLCHARTENTRY>
+        <CRID_GLCHARTENTRY>37</CRID_GLCHARTENTRY>
+      </SATransactionCode>
+      <DebitGLChartEntry readonly="Y" isLinkedSource="Y" entityKey="10111">
+        <ID>1</ID>
+        <ChartEntryCode>11015</ChartEntryCode>
+        <EntryDescription>Receivable Account</EntryDescription>
+        <FK_ID_GLACCOUNTS>2</FK_ID_GLACCOUNTS>
+        <FK_ID_GLCHARTOFACCOUNTS>2</FK_ID_GLCHARTOFACCOUNTS>
+        <FK_ID_GLCOSTCENTER>3</FK_ID_GLCOSTCENTER>
+        <FK_ID_GLFUND>3</FK_ID_GLFUND>
+      </DebitGLChartEntry>
+      <CreditGLChartEntry readonly="Y" isLinkedSource="Y" entityKey="10112">
+        <ID>37</ID>
+        <ChartEntryCode>11099</ChartEntryCode>
+        <EntryDescription>Payments</EntryDescription>
+        <FK_ID_GLACCOUNTS>5</FK_ID_GLACCOUNTS>
+        <FK_ID_GLCHARTOFACCOUNTS>2</FK_ID_GLCHARTOFACCOUNTS>
+        <FK_ID_GLCOSTCENTER>3</FK_ID_GLCOSTCENTER>
+        <FK_ID_GLFUND>3</FK_ID_GLFUND>
+      </CreditGLChartEntry>
+      <AppliedBillingPeriod readonly="Y" isLinkedSource="Y" entityKey="10117">
+        <ID>64</ID>
+        <PeriodDesignator>2018-2019 Fall</PeriodDesignator>
+        <BeginDate>20180820</BeginDate>
+        <EndDate>20181206</EndDate>
+        <FK_ID_STUDENTACCOUNTPROFILE>363</FK_ID_STUDENTACCOUNTPROFILE>
+
+        <AppliedBillingPeriodTerm readonly="Y" isLinkedSource="Y" entityKey="10118">
+          <ID>348</ID>
+          <AddDropDeadlineDate>20180907</AddDropDeadlineDate>
+          <CollegeYearSemesterOrder>1</CollegeYearSemesterOrder>
+          <CourseEndDate>20181206</CourseEndDate>
+          <CourseStartDate>20180820</CourseStartDate>
+          <CurrentForStudentAccounts>Y</CurrentForStudentAccounts>
+          <CurrentResidencyTermFlag>Y</CurrentResidencyTermFlag>
+          <CurrentTermFlag>Y</CurrentTermFlag>
+          <FullTimeMinCredits>9.0</FullTimeMinCredits>
+          <HalfTimeMinCredits>5.0</HalfTimeMinCredits>
+          <LS_Term>B18Q</LS_Term>
+          <OpenForClassScheduling>Y</OpenForClassScheduling>
+          <OpenForFacultyFlag>Y</OpenForFacultyFlag>
+          <OpenForRegistrarFlag>Y</OpenForRegistrarFlag>
+          <OverloadMinCredits>15.0</OverloadMinCredits>
+          <PartTimeMinCredits>0.0</PartTimeMinCredits>
+          <Semester>01</Semester>
+          <YearSemester>2018-2019 Fall</YearSemester>
+          <FK_ID_COLLEGEYEAR>74</FK_ID_COLLEGEYEAR>
+        </AppliedBillingPeriodTerm>
+      </AppliedBillingPeriod>
+    </StudentAccountTransApplied>
+    <StudentAccountTransApplied readonly="Y" isLinkedSource="Y" entityKey="9621">
+      <ID>3587</ID>
+      <Description>Audit Fee</Description>
+      <DateEntered>20181025</DateEntered>
+      <Amount>100.0</Amount>
+      <TransactionDate>20181025</TransactionDate>
+      <FK_ID_BILLINGPERIOD>64</FK_ID_BILLINGPERIOD>
+      <DEBITID_GLCHARTENTRY>1</DEBITID_GLCHARTENTRY>
+      <CREDITID_GLCHARTENTRY>38</CREDITID_GLCHARTENTRY>
+      <FK_ID_SATRANSACTIONCODE>1</FK_ID_SATRANSACTIONCODE>
+      <FK_ID_STUDENTACCOUNTPROFILE>363</FK_ID_STUDENTACCOUNTPROFILE>
+
+      <SATransactionCode readonly="Y" isLinkedSource="Y" entityKey="9661">
+        <ID>1</ID>
+        <Type>C</Type>
+        <Description>Audit Fee</Description>
+        <DefaultAmount>100.0</DefaultAmount>
+        <BillType>T</BillType>
+        <TransactionCode>TUIT AUD</TransactionCode>
+        <FK_ID_ADMINISTRATIVEDIVISION>1</FK_ID_ADMINISTRATIVEDIVISION>
+        <FK_ID_GLCHARTENTRY>1</FK_ID_GLCHARTENTRY>
+        <CRID_GLCHARTENTRY>38</CRID_GLCHARTENTRY>
+        <FK_ID_STUDENTACCOUNTRULESET02>3</FK_ID_STUDENTACCOUNTRULESET02>
+      </SATransactionCode>
+      <DebitGLChartEntry readonly="Y" isLinkedSource="Y" entityKey="9662">
+        <ID>1</ID>
+        <ChartEntryCode>11015</ChartEntryCode>
+        <EntryDescription>Receivable Account</EntryDescription>
+        <SubAccountCode>000000</SubAccountCode>
+        <Active>Y</Active>
+        <FK_ID_GLACCOUNTS>2</FK_ID_GLACCOUNTS>
+        <FK_ID_GLCHARTOFACCOUNTS>2</FK_ID_GLCHARTOFACCOUNTS>
+        <FK_ID_GLCOSTCENTER>3</FK_ID_GLCOSTCENTER>
+        <FK_ID_GLFUND>3</FK_ID_GLFUND>
+      </DebitGLChartEntry>
+      <CreditGLChartEntry readonly="Y" isLinkedSource="Y" entityKey="9663">
+        <ID>38</ID>
+        <ChartEntryCode>40505</ChartEntryCode>
+        <EntryDescription>Tuition</EntryDescription>
+        <SubAccountCode>110000</SubAccountCode>
+        <Active>Y</Active>
+        <FK_ID_GLACCOUNTS>6</FK_ID_GLACCOUNTS>
+        <FK_ID_GLCHARTOFACCOUNTS>2</FK_ID_GLCHARTOFACCOUNTS>
+        <FK_ID_GLCOSTCENTER>3</FK_ID_GLCOSTCENTER>
+        <FK_ID_GLFUND>2</FK_ID_GLFUND>
+      </CreditGLChartEntry>
+      <AppliedBillingPeriod readonly="Y" entityKey="9664">
+
+        <AppliedBillingPeriodTerm readonly="Y" isLinkedSource="Y" entityKey="9665">
+          <ID>348</ID>
+          <FK_ID_COLLEGEYEAR>74</FK_ID_COLLEGEYEAR>
+        </AppliedBillingPeriodTerm>
+        <AppliedBillingPeriodTerm readonly="Y">
+          <ID>348</ID>
+          <FK_ID_COLLEGEYEAR>74</FK_ID_COLLEGEYEAR>
+        </AppliedBillingPeriodTerm>
+      </AppliedBillingPeriod>
+    </StudentAccountTransApplied>
+    <StudentAccountTransApplied readonly="Y" isLinkedSource="Y" entityKey="9620">
+      <ID>3586</ID>
+      <Description>Late Registration Fee</Description>
+      <DateEntered>20181025</DateEntered>
+      <Amount>25.0</Amount>
+      <TransactionDate>20181025</TransactionDate>
+      <FK_ID_BILLINGPERIOD>64</FK_ID_BILLINGPERIOD>
+      <DEBITID_GLCHARTENTRY>1</DEBITID_GLCHARTENTRY>
+      <CREDITID_GLCHARTENTRY>39</CREDITID_GLCHARTENTRY>
+      <FK_ID_SATRANSACTIONCODE>5</FK_ID_SATRANSACTIONCODE>
+      <FK_ID_STUDENTACCOUNTPROFILE>363</FK_ID_STUDENTACCOUNTPROFILE>
+
+      <SATransactionCode readonly="Y" isLinkedSource="Y" entityKey="9622">
+        <ID>5</ID>
+        <Type>C</Type>
+        <Description>Late Registration Fee</Description>
+        <DefaultAmount>25.0</DefaultAmount>
+        <BillType>F</BillType>
+        <TransactionCode>LATE REG</TransactionCode>
+        <FK_ID_ADMINISTRATIVEDIVISION>1</FK_ID_ADMINISTRATIVEDIVISION>
+        <FK_ID_GLCHARTENTRY>1</FK_ID_GLCHARTENTRY>
+        <CRID_GLCHARTENTRY>39</CRID_GLCHARTENTRY>
+      </SATransactionCode>
+      <DebitGLChartEntry readonly="Y" entityKey="9657">
+      </DebitGLChartEntry>
+      <CreditGLChartEntry readonly="Y" isLinkedSource="Y" entityKey="9658">
+        <ID>39</ID>
+        <ChartEntryCode>41090</ChartEntryCode>
+        <EntryDescription>Fees</EntryDescription>
+        <SubAccountCode>110000</SubAccountCode>
+        <Active>Y</Active>
+        <FK_ID_GLACCOUNTS>7</FK_ID_GLACCOUNTS>
+        <FK_ID_GLCHARTOFACCOUNTS>2</FK_ID_GLCHARTOFACCOUNTS>
+        <FK_ID_GLCOSTCENTER>3</FK_ID_GLCOSTCENTER>
+        <FK_ID_GLFUND>2</FK_ID_GLFUND>
+      </CreditGLChartEntry>
+      <AppliedBillingPeriod readonly="Y" entityKey="9659">
+
+        <AppliedBillingPeriodTerm readonly="Y" entityKey="9660">
+        </AppliedBillingPeriodTerm>
+      </AppliedBillingPeriod>
+    </StudentAccountTransApplied>
+    <BillingPeriod readonly="Y" entityKey="9667">
+
+      <PeriodCollegeTerm readonly="Y" entityKey="9670">
+
+        <PeriodCollegeYear readonly="Y">
+          <ID>74</ID>
+          <Year>2018-2019</Year>
+          <BeginDate>20180820</BeginDate>
+          <EndDate>20190818</EndDate>
+        </PeriodCollegeYear>
+      </PeriodCollegeTerm>
+      <PeriodTransApplied readonly="Y" entityKey="9673">
+
+        <PeriodSATransactionCode readonly="Y" entityKey="9677">
+        </PeriodSATransactionCode>
+        <PeriodDebitGLChartEntry readonly="Y" entityKey="9678">
+        </PeriodDebitGLChartEntry>
+        <PeriodCreditGLChartEntry readonly="Y" entityKey="9679">
+        </PeriodCreditGLChartEntry>
+      </PeriodTransApplied>
+      <PeriodTransApplied readonly="Y" entityKey="9672">
+
+        <PeriodSATransactionCode readonly="Y" entityKey="9674">
+        </PeriodSATransactionCode>
+        <PeriodDebitGLChartEntry readonly="Y" entityKey="9675">
+        </PeriodDebitGLChartEntry>
+        <PeriodCreditGLChartEntry readonly="Y" entityKey="9676">
+        </PeriodCreditGLChartEntry>
+      </PeriodTransApplied>
+      <PeriodTransApplied readonly="Y" entityKey="10119">
+
+        <PeriodSATransactionCode readonly="Y" entityKey="10120">
+        </PeriodSATransactionCode>
+        <PeriodDebitGLChartEntry readonly="Y" entityKey="10121">
+        </PeriodDebitGLChartEntry>
+        <PeriodCreditGLChartEntry readonly="Y" entityKey="10122">
+        </PeriodCreditGLChartEntry>
+      </PeriodTransApplied>
+    </BillingPeriod>
+    <BillingPeriod readonly="Y">
+      <ID>65</ID>
+      <PeriodDesignator>2018-2019 Spring</PeriodDesignator>
+      <BeginDate>20190114</BeginDate>
+      <EndDate>20190502</EndDate>
+      <dTotalChargesPerPeriod updated="Y">0.0</dTotalChargesPerPeriod>
+      <FK_ID_STUDENTACCOUNTPROFILE>363</FK_ID_STUDENTACCOUNTPROFILE>
+
+      <PeriodCollegeTerm readonly="Y">
+        <ID>123</ID>
+        <Semester>03</Semester>
+        <YearSemester>2018-2019 Spring</YearSemester>
+        <CurrentTermFlag>N</CurrentTermFlag>
+        <CourseStartDate>20190114</CourseStartDate>
+        <CourseEndDate>20190502</CourseEndDate>
+        <CollegeYearSemesterOrder>4</CollegeYearSemesterOrder>
+        <OpenForClassScheduling>Y</OpenForClassScheduling>
+        <dBillingPeriodCredits updated="Y">0.0</dBillingPeriodCredits>
+        <dCreditsEnrolledCompleted updated="Y">0.0</dCreditsEnrolledCompleted>
+        <LS_Term>B19C</LS_Term>
+        <FullTimeMinCredits>9.0</FullTimeMinCredits>
+        <PartTimeMinCredits>0.0</PartTimeMinCredits>
+        <HalfTimeMinCredits>5.0</HalfTimeMinCredits>
+        <FK_ID_COLLEGEYEAR>74</FK_ID_COLLEGEYEAR>
+
+        <PeriodCollegeYear readonly="Y">
+          <ID>74</ID>
+          <Year>2018-2019</Year>
+          <BeginDate>20180820</BeginDate>
+          <EndDate>20190818</EndDate>
+        </PeriodCollegeYear>
+      </PeriodCollegeTerm>
+    </BillingPeriod>
+    <BillingPeriod readonly="Y">
+      <ID>66</ID>
+      <PeriodDesignator>2018-2019 Summer</PeriodDesignator>
+      <BeginDate>20190506</BeginDate>
+      <EndDate>20190818</EndDate>
+      <dTotalChargesPerPeriod updated="Y">0.0</dTotalChargesPerPeriod>
+      <FK_ID_STUDENTACCOUNTPROFILE>363</FK_ID_STUDENTACCOUNTPROFILE>
+
+      <PeriodCollegeTerm readonly="Y">
+        <ID>349</ID>
+        <Semester>04</Semester>
+        <YearSemester>2018-2019 Summer</YearSemester>
+        <CurrentTermFlag>N</CurrentTermFlag>
+        <CourseStartDate>20190506</CourseStartDate>
+        <CourseEndDate>20190818</CourseEndDate>
+        <CollegeYearSemesterOrder>5</CollegeYearSemesterOrder>
+        <dBillingPeriodCredits updated="Y">0.0</dBillingPeriodCredits>
+        <dCreditsEnrolledCompleted updated="Y">0.0</dCreditsEnrolledCompleted>
+        <LS_Term>B19L</LS_Term>
+        <FK_ID_COLLEGEYEAR>74</FK_ID_COLLEGEYEAR>
+
+        <PeriodCollegeYear readonly="Y">
+          <ID>74</ID>
+          <Year>2018-2019</Year>
+          <BeginDate>20180820</BeginDate>
+          <EndDate>20190818</EndDate>
+        </PeriodCollegeYear>
+      </PeriodCollegeTerm>
+    </BillingPeriod>
+    <ProfileAdministrativeDivision readonly="Y">
+      <ID>1</ID>
+      <Name>Main</Name>
+      <Description>Main Location</Description>
+    </ProfileAdministrativeDivision>
+  </StudentAccountProfile>
+</zOI>
