@@ -26,6 +26,16 @@ aAPP_SOURCE testdata/SWAU
 aAPP_PACKAGE com.quinsoft.zencas
 
 eAPPLICATION 2
+aAPP_NAME  IBOE
+aAPP_DLL   testdata/IBOE
+aAPP_ADOBIN testdata/IBOE
+aAPP_LOCAL testdata/IBOE
+aAPP_SHARED testdata/IBOE
+aAPP_QLPLR testdata/IBOE
+aAPP_SOURCE testdata/IBOE
+aAPP_PACKAGE com.quinsoft.zencas
+
+eAPPLICATION 2
 aAPP_NAME  Cheetah
 aAPP_DLL   testdata/Cheetah
 aAPP_ADOBIN testdata/Cheetah
