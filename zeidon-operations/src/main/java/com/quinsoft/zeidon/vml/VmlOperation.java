@@ -4636,7 +4636,11 @@ public abstract class VmlOperation
 
    protected int DropObjectInstance( View view )
    {
-      view.drop();
+	  try{
+		  view.drop();
+	  } catch ( Exception e ){
+		  return -1;
+	  }
    // view = null;
       return 0;
    }
@@ -5348,7 +5352,11 @@ public abstract class VmlOperation
 
    protected int DropView( View view )
    {
-      view.drop( );
+	  try{
+		  view.drop( );
+	  } catch ( Exception e ){
+		  return -1;
+	  }
       return 0;
    }
 
