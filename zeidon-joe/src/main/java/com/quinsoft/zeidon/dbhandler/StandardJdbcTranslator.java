@@ -83,15 +83,18 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         return task;
     }
 
-    protected boolean appendString( SqlStatement stmt, StringBuilder buffer, Object value )
+    protected boolean appendString( SqlStatement stmt, StringBuilder buffer, AttributeDef attributeDef, Object value )
     {
         String str = value.toString();
         if ( str.length() > MAX_INLINE_STRING_LENGTH || bindAllValues)
         {
             if ( getTask().dblog().isTraceEnabled() )
                 getTask().dblog().trace( "Bound string: length = %d, value = %s...", str.length(), StringUtils.substring( str, 0, 50 ) );
+            
+            DataField dataField = attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef );
+            stmt.addBoundAttribute( buffer, new BoundAttributeData( dataField, value ) );
 
-            stmt.addBoundAttribute( buffer, value );
+            //stmt.addBoundAttribute( buffer, value );
         }
         else
         {
@@ -144,7 +147,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             // Convert the value (likely a string) to a date.
             Object v = domain.convertExternalValue( task, null, attributeDef, null, value );
             String str = dateTimeFormatter.print( (DateTime) v );
-            return appendString( stmt, buffer, str );
+            return appendString( stmt, buffer, attributeDef, str );
         }
 
         if ( domain instanceof DateDomain )
@@ -152,7 +155,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             // Convert the value (likely a string) to a date.
             Object v = domain.convertExternalValue( task, null, attributeDef, null, value );
             String str = dateFormatter.print( (DateTime) v );
-            return appendString( stmt, buffer, str );
+            return appendString( stmt, buffer, attributeDef, str );
         }
 
         if ( domain instanceof AbstractNumericDomain )
@@ -170,11 +173,11 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         if ( domain instanceof BlobDomain )
         {
             String s = domain.convertToString( task, attributeDef, value );
-            return appendString( stmt, buffer, s );
+            return appendString( stmt, buffer, attributeDef, s );
         }
 
 //        String string = domain.convertToString( task, attributeDef, value );
-        return appendString( stmt, buffer, value.toString() );
+        return appendString( stmt, buffer, attributeDef, value.toString() );
     }
 
     /**
