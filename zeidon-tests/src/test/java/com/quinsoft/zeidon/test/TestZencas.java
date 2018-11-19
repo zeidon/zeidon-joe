@@ -361,6 +361,16 @@ public class TestZencas
 		tester.testActivateControls( testview );
         System.out.println("===== Finished testActivateControls ========");
 	}
+
+	@Test
+	public void testLongStringWBindFalse()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testLongStringWBindFalse( testview );
+        System.out.println("===== Finished testLongStringWBindFalse ========");
+	}
 	@Test
 	public void testCheckExistenceWithRecursiveEnt()
 	{
@@ -3828,6 +3838,35 @@ public class TestZencas
 	         RESULT = lAdvisee.cursor("AdviseeStudentTrack").checkExistenceOfEntity().toInt();
    			 Assert.assertEquals("AdviseeStudentTrack was not correctly activated when BindAllValues=true.", 0, RESULT);
  			DropView( lAdvisee );
+
+			return 0;
+		}
+
+		public int
+		testLongStringWBindFalse( View     ViewToWindow )
+		{
+			View    mPerson = new zVIEW( );
+			zVIEW   vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+
+			// The following activate does not work properly when BindAllValues=true.  AdviseeStudentTrack is
+			// null.  If BindAllValues=false then it works correctly.
+			// Is there a way to set BindAllValues here so it doesn't matter what zeidon.ini is set to?
+
+			 o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+
+	         ActivateOptions options = new ActivateOptions( ViewToWindow.getTask() );
+	         options.overrideConfigValue( "BindAllValues", "false" );
+	         options.setActivateFlags( ActivateFlags.MULTIPLE );
+	         mPerson = ViewToWindow.activateObjectInstance( "mPerson", vTempViewVar_0, options );
+	         DropView( vTempViewVar_0 );
+	         mPerson.cursor("Person").getAttribute("EmergencyContactNote").setValue("");
+	         mPerson.commit();
+
+	         mPerson.cursor("Person").getAttribute("EmergencyContactNote").setValue("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	         mPerson.commit();
+   			 //Assert.assertEquals("AdviseeStudentTrack was not correctly activated when BindAllValues=true.", 0, RESULT);
+ 			 DropView( mPerson );
 
 			return 0;
 		}
