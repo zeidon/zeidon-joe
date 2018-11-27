@@ -79,10 +79,30 @@ public class TestIBOE
 			  zVIEW    sHost = new zVIEW( );
 		      int      nRC = 0;
 		      //:STRING ( 256 ) szFileName
-		      String   szFileName = null;
 		      int      RESULT = 0;
 		      int      iCnt1 = 0;
 		      int      iCnt2 = 0;
+		      
+		      /*
+		       * There is a problem when deleting the first StudentAccountTransApplied (id 3590) in mSAProf. This entity is linked under "BillingPeriod" as well.
+		       * On the mSAProf.commit we run cleanupOI
+		       * This seems to incorrectly set a prevHierInstance for the second StudentAccountTransApplied (id 3587).
+		       * It actually seems to set the prevHierInstance correctly for StudentAccountTransApplied (id 3587) and it's linked entity "PeriodTransApplied" under "BillingPeriod"
+		       * but then when looping through the linked entities in cleanupOI we set the prevHierInstance again for StudentAccountTransApplied, this time incorrectly.
+		       * If you set a breakpoint in EntityInstanceImpl line 497 (set it before you do the mSAProf.commit) you will see what I mean.
+		       * Or you can set the breakpoint in AbstractCommitToDb line 104 (linked.dropEntity()).
+		       * 
+		       * I can't tell if the problem originates with the .deleteEntity or if the problem is in cleanupOI. I just know on the third time we get to linked.dropEntity
+		       * I don't think we should get there (because that third time, when I do a link.parent() the parent is the StudentAccountTransApplied that was
+		       * deleted (3590), it's like looping through getAllLinkedInstances is incorrect.
+		       * 
+		       *  The reason I noticed the incorrect prevHierInstance is because when we call mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
+		       *  We fail on assert, line 938 in EntityInstanceImpl - assert assertNoTwin( parent, prevInstance ) : "Internal error: calling code hasn't found a twin";
+		       *  
+		       *  In the test code here I have tried looping through mSAProf2.getHierEntityList(). This always seems correct.
+		       */
+		      
+		      
 
               // Creating wXferO and sHost simply to keep from getting errors when looking at mSAProf in the browser.
 			  RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
@@ -94,54 +114,42 @@ public class TestIBOE
 			  if ( sHost.cursor("Host").checkExistenceOfEntity().toInt() != 0 )
 				  sHost.cursor("Host").createEntity();
 
-		      //:szFileName = "c:\temp\mSAProf.por"
-		       {StringBuilder sb_szFileName;
-		      if ( szFileName == null )
-		         sb_szFileName = new StringBuilder( 32 );
-		      else
-		         sb_szFileName = new StringBuilder( szFileName );
-		         ZeidonStringCopy( sb_szFileName, 1, 0, "target/test-classes/testdata//IBOE/mSAProf.por", 1, 0, 257 );
-		      szFileName = sb_szFileName.toString( );}
-		      //:nRC = ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, szFileName, zMULTIPLE )
-		      nRC = ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, szFileName, zMULTIPLE );
-		      //:NAME VIEW mSAProf "mSAProfTEST"
+		      nRC = ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, "target/test-classes/testdata//IBOE/mSAProf.por", zMULTIPLE );
 		      SetNameForView( mSAProf, "mSAProf", null, zLEVEL_TASK );
-		      mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
+		      
+		      //mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
 		      CreateViewFromView( mSAProf2, mSAProf );		      
 		      SetNameForView( mSAProf2, "mSAProf2", null, zLEVEL_TASK );
 		      
 		      RESULT = SetCursorFirstEntity( mSAProf, "StudentAccountTransApplied", "" );
-              ViewToWindow.log().info("before delete");
               /*
+              ViewToWindow.log().info("before delete");
               for (EntityInstance ei : mSAProf2.getHierEntityList()) {
             	  ViewToWindow.log().info(ei.getEntityDef().getName() + " " + ei.getKeyString()); 
               } */
               
-              ViewToWindow.log().info("after delete/before commit");
-		      //RESULT = SetCursorLastEntity( mSAProf, "StudentAccountTransApplied", "" );
-		      //RESULT = DeleteEntity( mSAProf, "StudentAccountTransApplied", zPOS_NEXT );
 		      mSAProf.cursor("StudentAccountTransApplied").deleteEntity( CursorPosition.NEXT );
-		      /*
+		      // EntityInstanceImpl prevHier = firstInstance.getPrevHier();
+              /*
+              ViewToWindow.log().info("after delete/before commit");
               for (EntityInstance ei : mSAProf2.getHierEntityList()) {
             	  ViewToWindow.log().info(ei.getEntityDef().getName() + " " + ei.getKeyString()); 
               } */
-              ViewToWindow.log().info("after commit");
-		      // CHECK SQL AND SEE IF WE GET TWO DELETE
-		      //:COMMIT mSAProf
-		      RESULT = CommitObjectInstance( mSAProf );
+		      mSAProf.commit();
 		      /*
+              ViewToWindow.log().info("after commit");
               for (EntityInstance ei : mSAProf2.getHierEntityList()) {
                 	  ViewToWindow.log().info(ei.getEntityDef().getName() + " " + ei.getKeyString()); 
               } */
 		      mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
-		      //OrderEntityForView( mSAProf, "StudentAccountTransApplied", "TransactionDate D" );
+		      
+		      // This was just for testing.
 		      iCnt1 = 0;
               for ( EntityInstance ei : mSAProf.cursor( "StudentAccountProfile" ).getChildren( "StudentAccountTransApplied"))
               {
             	  iCnt1++;
               }
 		      return( 0 );
-		   // END
 		   } 
 
    }
