@@ -56,7 +56,7 @@ omSAProf_dChargeOrCredit( View     mSAProf,
 {
    String   szCredit = null;
 
-
+/*
    //:szCredit = ""
     {StringBuilder sb_szCredit;
    if ( szCredit == null )
@@ -88,12 +88,11 @@ omSAProf_dChargeOrCredit( View     mSAProf,
          //:                    InternalAttribStructure, szCredit )
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szCredit );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
 
    //:      /* end zDERIVED_SET */
    //:END   /* case */
@@ -766,6 +765,7 @@ omSAProf_dPayTotalWithFee( View     mSAProf,
    double  dTempDecimal_0 = 0.0;
    double  dTempDecimal_1 = 0.0;
 
+/*   
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -784,13 +784,12 @@ omSAProf_dPayTotalWithFee( View     mSAProf,
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szAmount, 0 );
          break ;
 
-      //:  /* end zDERIVED_GET */
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
@@ -819,7 +818,7 @@ omSAProf_dTotalPerPeriodRegApp( View     mSAProf,
    int      RESULT = 0;
    int      lTempInteger_0 = 0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -862,13 +861,12 @@ omSAProf_dTotalPerPeriodRegApp( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:/* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
@@ -897,7 +895,7 @@ omSAProf_dPotentialCashDiscount( View     mSAProf,
    //:DECIMAL dTotalEligibleCharges
    double  dTotalEligibleCharges = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -922,50 +920,17 @@ omSAProf_dPotentialCashDiscount( View     mSAProf,
          { 
          } 
 
-         //:   // Activate the Discount Rate for the Term.
-         //:/*      ACTIVATE mSAChrgT WHERE mSAChrgT.SATransactionCode.TransactionCode = "CASHDISC"
-         //:        RESTRICTING mSAChrgT.SATransactionTerm TO mSAChrgT.CollegeTerm.ID = mSAProf.PeriodCollegeTerm.ID 
-         //:   NAME VIEW mSAChrgT "mSAChrgTDiscount"
-         //:   IF mSAChrgT.SATransactionTerm DOES NOT EXIST
-         //:      DropObjectInstance( mSAChrgT )
-         //:      RETURN 2
-         //:   END
-         //:   dDiscountRate = mSAChrgT.SATransactionTerm.Amount
-         //:   
-         //:   // Activate list of Transactions for the current BillingPeriod that are eligible for a discount.
-         //:   ACTIVATE lSATrnSh Multiple WHERE lSATrnSh.BillingPeriod.ID = mSAProf.BillingPeriod.ID 
-         //:                                AND lSATrnSh.SATransactionCode.EligibleForCashDiscount = "Y"
-         //:   NAME VIEW lSATrnSh "lSATrnSh"
-         //:   dTotalEligibleCharges = 0
-         //:   FOR EACH lSATrnSh.StudentAccountTransApplied 
-         //:      dTotalEligibleCharges = dTotalEligibleCharges + lSATrnSh.StudentAccountTransApplied.Amount 
-         //:   END
-         //:               
-         //:   // Cash Discount is (Total Eligible Transactions - Approved Aid) * .03
-         //:   dCashDiscount = ( dTotalEligibleCharges - mSAProf.BillingPeriod.dRegistrationDisbAmountApproved ) * dDiscountRate
-         //:   IF dCashDiscount < 0
-         //:      dCashDiscount = 0
-         //:   END
-         //:   
-         //:   // Save it in case it is recomputed.
-         //:   mSAProf.BillingPeriod.wPotentialCashDiscount = dCashDiscount
-         //:   
-         //:   DropObjectInstance( lSATrnSh )
-         //:   DropObjectInstance( mSAChrgT )*/
-         //:END
-
-         //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
+          //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
          //:                    InternalAttribStructure, dCashDiscount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dCashDiscount, 0 );
          break ;
       //:   
-      //:   /* end zDERIVED_GET */
 
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
    //:   /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -1068,7 +1033,7 @@ omSAProf_dTermCredits( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -1105,13 +1070,12 @@ omSAProf_dTermCredits( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -1138,7 +1102,7 @@ omSAProf_dTermCharges( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -1174,13 +1138,12 @@ omSAProf_dTermCharges( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -1440,7 +1403,7 @@ omSAProf_dTermBalance( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -1480,13 +1443,12 @@ omSAProf_dTermBalance( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
 
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
    //:   /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -1924,7 +1886,7 @@ omSAProf_dSATransactionCode( View     mSAProf,
    String   szString = null;
    int      lTempInteger_0 = 0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -1944,13 +1906,12 @@ omSAProf_dSATransactionCode( View     mSAProf,
          //:                    InternalAttribStructure, szString )
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szString );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2108,7 +2069,7 @@ omSAProf_dClassIsIndStudy( View     mSAProf,
    //:               STRING ( 32 ) InternalEntityStructure,
    //:               STRING ( 32 ) InternalAttribStructure,
    //:               SHORT GetOrSetFlag )
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2127,13 +2088,12 @@ omSAProf_dClassIsIndStudy( View     mSAProf,
          break ;
 
 
-      //:  /* end zDERIVED_GET */
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
@@ -2154,7 +2114,7 @@ omSAProf_dClassIsDirectedStudy( View     mSAProf,
    //:                    STRING ( 32 ) InternalEntityStructure,
    //:                    STRING ( 32 ) InternalAttribStructure,
    //:                    SHORT GetOrSetFlag )
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2171,12 +2131,11 @@ omSAProf_dClassIsDirectedStudy( View     mSAProf,
          szTempString_0 = sb_szTempString_0.toString( );}
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szTempString_0 );
          break ;
-      //:  /* end zDERIVED_GET */
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
 
    //:     /* end zDERIVED_SET */
    //:END  /* case */
@@ -2204,7 +2163,7 @@ omSAProf_dTotalSACharges( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2252,13 +2211,12 @@ omSAProf_dTotalSACharges( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2285,7 +2243,7 @@ omSAProf_dClassCharges( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2314,13 +2272,12 @@ omSAProf_dClassCharges( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2347,7 +2304,7 @@ omSAProf_dBalance( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2381,30 +2338,18 @@ omSAProf_dBalance( View     mSAProf,
             //:END
          } 
 
-
-         //:   /*ACTIVATE mSAProfB
-         //:      WHERE mSAProfB.StudentAccountProfile.ID = mSAProf.StudentAccountProfile.ID 
-         //:   IF RESULT >= 0  
-         //:      dAmount = mSAProfB.StudentAccountProfile.BalanceForward 
-         //:      FOR EACH mSAProfB.StudentAccountTransApplied  
-         //:         dAmount = dAmount + mSAProfB.StudentAccountTransApplied.Amount 
-         //:      END 
-         //:      DropObjectInstance( mSAProfB ) 
-         //:   END*/
-         //:END
          //:DropObjectInstance( mSAProf2 ) 
          DropObjectInstance( mSAProf2 );
          //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
          //:                     InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2429,7 +2374,7 @@ omSAProf_dTotalChargesPerPeriod( View     mSAProf,
    double  dAmount = 0.0;
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
-
+/*
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
@@ -2464,13 +2409,12 @@ omSAProf_dTotalChargesPerPeriod( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
 
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
    //:   /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2496,7 +2440,7 @@ omSAProf_dTotalCredits( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2531,12 +2475,11 @@ omSAProf_dTotalCredits( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
 
    //:      /* end zDERIVED_SET */
    //:END   /* case */
@@ -2564,7 +2507,7 @@ omSAProf_dCreditsEnComp( View     mSAProf,
    double  dTempDecimal_0 = 0.0;
    double  dTempDecimal_1 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2623,13 +2566,12 @@ omSAProf_dCreditsEnComp( View     mSAProf,
          //:                    InternalAttribStructure, dTotalCredits, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dTotalCredits, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2656,7 +2598,7 @@ omSAProf_dCreditsDirectedStudy( View     mSAProf,
    double  dTempDecimal_0 = 0.0;
    double  dTempDecimal_1 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2721,12 +2663,11 @@ omSAProf_dCreditsDirectedStudy( View     mSAProf,
          //:                    InternalAttribStructure, dTotalCredits, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dTotalCredits, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
-      //:OF zDERIVED_SET:
+       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
 
    //:      /* end zDERIVED_SET */
    //:END   /* case */
@@ -2752,7 +2693,7 @@ omSAProf_dClassesDirectedStudy( View     mSAProf,
    int      TotalClasses = 0;
    int      RESULT = 0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2811,13 +2752,12 @@ omSAProf_dClassesDirectedStudy( View     mSAProf,
          //:                    InternalAttribStructure, TotalClasses, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, TotalClasses, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2842,7 +2782,7 @@ omSAProf_dClassesAudited( View     mSAProf,
    int      TotalClasses = 0;
    int      RESULT = 0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2901,13 +2841,12 @@ omSAProf_dClassesAudited( View     mSAProf,
          //:                    InternalAttribStructure, TotalClasses, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, TotalClasses, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -2934,7 +2873,7 @@ omSAProf_dCreditsInternship( View     mSAProf,
    double  dTempDecimal_0 = 0.0;
    double  dTempDecimal_1 = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -2999,12 +2938,11 @@ omSAProf_dCreditsInternship( View     mSAProf,
          //:                    InternalAttribStructure, dTotalCredits, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dTotalCredits, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
 
    //:      /* end zDERIVED_SET */
    //:END   /* case */
@@ -3560,7 +3498,7 @@ omSAProf_dTotalCreditsPerDisb( View     mSAProf,
 {
    double  dAmount = 0.0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -3574,12 +3512,11 @@ omSAProf_dTotalCreditsPerDisb( View     mSAProf,
          //:                    InternalAttribStructure, dAmount, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
 
    //:      /* end zDERIVED_SET */
    //:END   /* case */
@@ -3689,6 +3626,7 @@ omSAProf_dDormExtension( View     mSAProf,
    int      lTempInteger_1 = 0;
    int      lTempInteger_2 = 0;
 
+/*
    RESULT = GetViewByName( wXferO, "wXferO", mSAProf, zLEVEL_TASK );
 
    //:CASE GetOrSetFlag
@@ -3763,13 +3701,12 @@ omSAProf_dDormExtension( View     mSAProf,
          //:                     InternalAttribStructure, szPhone )
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szPhone );
          break ;
-      //:   /* end zDERIVED_GET */
 
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
+*/
    //:   /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -4306,7 +4243,7 @@ omSAProf_dDisplayAccountName( View     mSAProf,
    String   szAccountName = null;
    int      lTempInteger_0 = 0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -4328,13 +4265,12 @@ omSAProf_dDisplayAccountName( View     mSAProf,
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szAccountName );
          break ;
 
-      //:  /* end zDERIVED_GET */
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
@@ -4547,7 +4483,7 @@ omSAProf_dDateOfLastPayment( View     mSAProf,
    int      RESULT = 0;
    int      lTempInteger_0 = 0;
 
-
+/*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -4604,13 +4540,12 @@ omSAProf_dDateOfLastPayment( View     mSAProf,
          //:                    InternalAttribStructure, szDate )
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szDate );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
 
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -4636,8 +4571,8 @@ omSAProf_dDateOfLastActivity( View     mSAProf,
    String   szDate = null;
    int      RESULT = 0;
    int      lTempInteger_0 = 0;
-
-
+   
+   /*
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
    { 
@@ -4683,13 +4618,11 @@ omSAProf_dDateOfLastActivity( View     mSAProf,
          //:                    InternalAttribStructure, szDate )
          StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szDate );
          break ;
-      //:   /* end zDERIVED_GET */
       //:OF zDERIVED_SET:
       case zDERIVED_SET :
          break ;
    } 
-
-
+*/
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -4756,59 +4689,6 @@ omSAProf_dTotalSACredits( View     mSAProf,
    int      RESULT = 0;
    double  dTempDecimal_0 = 0.0;
 
-
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF zDERIVED_GET:
-      case zDERIVED_GET :
-         //:CreateViewFromView ( mSAProf2, mSAProf )
-         CreateViewFromView( mSAProf2, mSAProf );
-         //:IF mSAProf2.StudentAccountProfile.BalanceForward < 0 
-         if ( CompareAttributeToInteger( mSAProf2, "StudentAccountProfile", "BalanceForward", 0 ) < 0 )
-         { 
-            //:dAmount = mSAProf2.StudentAccountProfile.BalanceForward 
-            {MutableDouble md_dAmount = new MutableDouble( dAmount );
-                         GetDecimalFromAttribute( md_dAmount, mSAProf2, "StudentAccountProfile", "BalanceForward" );
-            dAmount = md_dAmount.doubleValue( );}
-            //:ELSE 
-         } 
-         else
-         { 
-            //:dAmount = 0
-            dAmount = 0;
-         } 
-
-         //:END
-         //:FOR EACH mSAProf2.StudentAccountTransApplied  
-         //:      WHERE mSAProf2.StudentAccountTransApplied.Amount < 0
-         RESULT = SetCursorFirstEntity( mSAProf2, "StudentAccountTransApplied", "" );
-         while ( RESULT > zCURSOR_UNCHANGED )
-         { 
-            if ( CompareAttributeToInteger( mSAProf2, "StudentAccountTransApplied", "Amount", 0 ) < 0 )
-            { 
-               //:dAmount = dAmount + mSAProf2.StudentAccountTransApplied.Amount 
-               {MutableDouble md_dTempDecimal_0 = new MutableDouble( dTempDecimal_0 );
-                               GetDecimalFromAttribute( md_dTempDecimal_0, mSAProf2, "StudentAccountTransApplied", "Amount" );
-               dTempDecimal_0 = md_dTempDecimal_0.doubleValue( );}
-               dAmount = dAmount + dTempDecimal_0;
-            } 
-
-            RESULT = SetCursorNextEntity( mSAProf2, "StudentAccountTransApplied", "" );
-         } 
-
-         //:END 
-         //:DropObjectInstance( mSAProf2 ) 
-         DropObjectInstance( mSAProf2 );
-         //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
-         //:                    InternalAttribStructure, dAmount, 0 )
-         StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
-         break ;
-      //:   /* end zDERIVED_GET */
-      //:OF zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
 
 
    //:      /* end zDERIVED_SET */
@@ -5199,50 +5079,6 @@ omSAProf_dSubAccountBalance( View     mSAProf,
    int      RESULT = 0;
 
 
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF zDERIVED_GET:
-      case zDERIVED_GET :
-         //:dAmount = 0
-         dAmount = 0;
-         //:IF mSAProf.SASubAccount.ClosedDate = "" 
-         if ( CompareAttributeToString( mSAProf, "SASubAccount", "ClosedDate", "" ) == 0 )
-         { 
-            //:ACTIVATE mSASubAL WHERE mSASubAL.SASubAccount.ID = mSAProf.SASubAccount.ID 
-            {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
-                         GetIntegerFromAttribute( mi_lTempInteger_0, mSAProf, "SASubAccount", "ID" );
-            lTempInteger_0 = mi_lTempInteger_0.intValue( );}
-            omSAProf_fnLocalBuildQual_12( mSAProf, vTempViewVar_0, lTempInteger_0 );
-            RESULT = ActivateObjectInstance( mSASubAL, "mSASubAL", mSAProf, vTempViewVar_0, zSINGLE );
-            DropView( vTempViewVar_0 );
-            //:IF RESULT >= 0
-            if ( RESULT >= 0 )
-            { 
-               //:dAmount = mSASubAL.SASubAccount.dCurrentBalance 
-               {MutableDouble md_dAmount = new MutableDouble( dAmount );
-                               GetDecimalFromAttribute( md_dAmount, mSASubAL, "SASubAccount", "dCurrentBalance" );
-               dAmount = md_dAmount.doubleValue( );}
-            } 
-
-            //:END
-            //:DropObjectInstance( mSASubAL )
-            DropObjectInstance( mSASubAL );
-         } 
-
-         //:END
-
-         //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
-         //:                    InternalAttribStructure, dAmount, 0 )
-         StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, dAmount, 0 );
-         break ;
-
-      //:/* end zDERIVED_GET */
-      //:OF zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
-
 
    //:   /* end zDERIVED_SET */
    //:END  /* case */
@@ -5270,75 +5106,6 @@ omSAProf_dLatestRoomAssignment( View     mSAProf,
    String   szTempString_0 = null;
    int      lTempInteger_1 = 0;
 
-
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF   zDERIVED_GET:
-      case zDERIVED_GET :
-
-         //:// Display the latest Dorm room information, if there is any.
-         //:szRoomAssignment = ""
-          {StringBuilder sb_szRoomAssignment;
-         if ( szRoomAssignment == null )
-            sb_szRoomAssignment = new StringBuilder( 32 );
-         else
-            sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                  ZeidonStringCopy( sb_szRoomAssignment, 1, 0, "", 1, 0, 101 );
-         szRoomAssignment = sb_szRoomAssignment.toString( );}
-         //:IF mSAProf.TermOfResidence EXISTS
-         lTempInteger_0 = CheckExistenceOfEntity( mSAProf, "TermOfResidence" );
-         if ( lTempInteger_0 == 0 )
-         { 
-            //:// Make sure residence is sorted in reverse date order.
-            //:OrderEntityForView( mSAProf, "TermOfResidence", "BeginDate D" )
-            OrderEntityForView( mSAProf, "TermOfResidence", "BeginDate D" );
-            //:SET CURSOR FIRST mSAProf.TermOfResidence 
-            RESULT = SetCursorFirstEntity( mSAProf, "TermOfResidence", "" );
-            //:szRoomAssignment = mSAProf.Building.Name + " Room " + mSAProf.Room.Number 
-            {StringBuilder sb_szRoomAssignment;
-            if ( szRoomAssignment == null )
-               sb_szRoomAssignment = new StringBuilder( 32 );
-            else
-               sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                         GetStringFromAttribute( sb_szRoomAssignment, mSAProf, "Building", "Name" );
-            szRoomAssignment = sb_szRoomAssignment.toString( );}
-             {StringBuilder sb_szRoomAssignment;
-            if ( szRoomAssignment == null )
-               sb_szRoomAssignment = new StringBuilder( 32 );
-            else
-               sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                        ZeidonStringConcat( sb_szRoomAssignment, 1, 0, " Room ", 1, 0, 101 );
-            szRoomAssignment = sb_szRoomAssignment.toString( );}
-            {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
-            StringBuilder sb_szTempString_0;
-            if ( szTempString_0 == null )
-               sb_szTempString_0 = new StringBuilder( 32 );
-            else
-               sb_szTempString_0 = new StringBuilder( szTempString_0 );
-                         GetVariableFromAttribute( sb_szTempString_0, mi_lTempInteger_1, 'S', 255, mSAProf, "Room", "Number", "", 0 );
-            lTempInteger_1 = mi_lTempInteger_1.intValue( );
-            szTempString_0 = sb_szTempString_0.toString( );}
-             {StringBuilder sb_szRoomAssignment;
-            if ( szRoomAssignment == null )
-               sb_szRoomAssignment = new StringBuilder( 32 );
-            else
-               sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                        ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szTempString_0, 1, 0, 101 );
-            szRoomAssignment = sb_szRoomAssignment.toString( );}
-         } 
-
-         //:END
-         //:StoreStringInRecord ( mSAProf,
-         //:                   InternalEntityStructure, InternalAttribStructure, szRoomAssignment )
-         StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szRoomAssignment );
-         break ;
-
-      //:/* end zDERIVED_GET */
-      //:OF   zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
 
 
    //:   /* end zDERIVED_SET */
@@ -5374,240 +5141,7 @@ omSAProf_dCurrentRoomAssignment( View     mSAProf,
    int      lTempInteger_1 = 0;
    String   szTempString_1 = null;
    int      lTempInteger_2 = 0;
-
-   RESULT = GetViewByName( wXferO, "wXferO", mSAProf, zLEVEL_TASK );
-   //:  
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF   zDERIVED_GET:
-      case zDERIVED_GET :
-
-         //:// Display the latest Dorm room information, if there is any.
-         //:// (This operation is the same as that in mStudent.)
-         //:szRoomAssignment = ""
-          {StringBuilder sb_szRoomAssignment;
-         if ( szRoomAssignment == null )
-            sb_szRoomAssignment = new StringBuilder( 32 );
-         else
-            sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                  ZeidonStringCopy( sb_szRoomAssignment, 1, 0, "", 1, 0, 101 );
-         szRoomAssignment = sb_szRoomAssignment.toString( );}
-         //:IF mSAProf.Student.ResidencyStatus = "R"
-         if ( CompareAttributeToString( mSAProf, "Student", "ResidencyStatus", "R" ) == 0 )
-         { 
-            //:szCurrentDate = wXferO.Root.dCurrentDate
-            {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
-            StringBuilder sb_szCurrentDate;
-            if ( szCurrentDate == null )
-               sb_szCurrentDate = new StringBuilder( 32 );
-            else
-               sb_szCurrentDate = new StringBuilder( szCurrentDate );
-                         GetVariableFromAttribute( sb_szCurrentDate, mi_lTempInteger_0, 'S', 9, wXferO, "Root", "dCurrentDate", "", 0 );
-            lTempInteger_0 = mi_lTempInteger_0.intValue( );
-            szCurrentDate = sb_szCurrentDate.toString( );}
-            //:SET CURSOR FIRST mSAProf.TermOfResidence 
-            //:     WHERE mSAProf.TermOfResidence.BeginDate <= szCurrentDate
-            //:       AND mSAProf.TermOfResidence.EndDate   >= szCurrentDate 
-            RESULT = SetCursorFirstEntity( mSAProf, "TermOfResidence", "" );
-            if ( RESULT > zCURSOR_UNCHANGED )
-            { 
-               while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToString( mSAProf, "TermOfResidence", "BeginDate", szCurrentDate ) > 0 || CompareAttributeToString( mSAProf, "TermOfResidence", "EndDate", szCurrentDate ) < 0 ) )
-               { 
-                  RESULT = SetCursorNextEntity( mSAProf, "TermOfResidence", "" );
-               } 
-
-            } 
-
-            //:IF RESULT >= zCURSOR_SET
-            if ( RESULT >= zCURSOR_SET )
-            { 
-               //:GetTextConv(szLangConv,mSAProf,"Room","")
-               {StringBuilder sb_szRoomAssignment;
-               if ( szRoomAssignment == null )
-                  sb_szRoomAssignment = new StringBuilder( 32 );
-               else
-                  sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                               GetStringFromAttribute( sb_szRoomAssignment, mSAProf, "Building", "Name" );
-               szRoomAssignment = sb_szRoomAssignment.toString( );}
-                {StringBuilder sb_szRoomAssignment;
-               if ( szRoomAssignment == null )
-                  sb_szRoomAssignment = new StringBuilder( 32 );
-               else
-                  sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                              ZeidonStringConcat( sb_szRoomAssignment, 1, 0, " ", 1, 0, 101 );
-               szRoomAssignment = sb_szRoomAssignment.toString( );}
-                {StringBuilder sb_szRoomAssignment;
-               if ( szRoomAssignment == null )
-                  sb_szRoomAssignment = new StringBuilder( 32 );
-               else
-                  sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                              ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szLangConv, 1, 0, 101 );
-               szRoomAssignment = sb_szRoomAssignment.toString( );}
-                {StringBuilder sb_szRoomAssignment;
-               if ( szRoomAssignment == null )
-                  sb_szRoomAssignment = new StringBuilder( 32 );
-               else
-                  sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                              ZeidonStringConcat( sb_szRoomAssignment, 1, 0, " ", 1, 0, 101 );
-               szRoomAssignment = sb_szRoomAssignment.toString( );}
-               {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
-               StringBuilder sb_szTempString_0;
-               if ( szTempString_0 == null )
-                  sb_szTempString_0 = new StringBuilder( 32 );
-               else
-                  sb_szTempString_0 = new StringBuilder( szTempString_0 );
-                               GetVariableFromAttribute( sb_szTempString_0, mi_lTempInteger_1, 'S', 255, mSAProf, "Room", "Number", "", 0 );
-               lTempInteger_1 = mi_lTempInteger_1.intValue( );
-               szTempString_0 = sb_szTempString_0.toString( );}
-                {StringBuilder sb_szRoomAssignment;
-               if ( szRoomAssignment == null )
-                  sb_szRoomAssignment = new StringBuilder( 32 );
-               else
-                  sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                              ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szTempString_0, 1, 0, 101 );
-               szRoomAssignment = sb_szRoomAssignment.toString( );}
-               //:ELSE
-            } 
-            else
-            { 
-               //:SET CURSOR FIRST mSAProf.TermOfResidence WHERE mSAProf.TermOfResidence.BeginDate > szCurrentDate
-               RESULT = SetCursorFirstEntity( mSAProf, "TermOfResidence", "" );
-               if ( RESULT > zCURSOR_UNCHANGED )
-               { 
-                  while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToString( mSAProf, "TermOfResidence", "BeginDate", szCurrentDate ) <= 0 ) )
-                  { 
-                     RESULT = SetCursorNextEntity( mSAProf, "TermOfResidence", "" );
-                  } 
-
-               } 
-
-               //:IF RESULT >= zCURSOR_SET
-               if ( RESULT >= zCURSOR_SET )
-               { 
-                  //:GetTextConv(szLangConv,mSAProf,"Room","")
-                  //:szRoomAssignment = mSAProf.Building.Name + " " + szLangConv + " " + mSAProf.Room.Number 
-                  {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                     GetStringFromAttribute( sb_szRoomAssignment, mSAProf, "Building", "Name" );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringConcat( sb_szRoomAssignment, 1, 0, " ", 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szLangConv, 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringConcat( sb_szRoomAssignment, 1, 0, " ", 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                  {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
-                  StringBuilder sb_szTempString_1;
-                  if ( szTempString_1 == null )
-                     sb_szTempString_1 = new StringBuilder( 32 );
-                  else
-                     sb_szTempString_1 = new StringBuilder( szTempString_1 );
-                                     GetVariableFromAttribute( sb_szTempString_1, mi_lTempInteger_2, 'S', 255, mSAProf, "Room", "Number", "", 0 );
-                  lTempInteger_2 = mi_lTempInteger_2.intValue( );
-                  szTempString_1 = sb_szTempString_1.toString( );}
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szTempString_1, 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                  //:ELSE
-               } 
-               else
-               { 
-                  //:GetTextConv(szLangConv,mSAProf,"No Room Assignment","")
-                  //:szRoomAssignment = "(" + szLangConv+")"
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringCopy( sb_szRoomAssignment, 1, 0, "(", 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szLangConv, 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-                   {StringBuilder sb_szRoomAssignment;
-                  if ( szRoomAssignment == null )
-                     sb_szRoomAssignment = new StringBuilder( 32 );
-                  else
-                     sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                                    ZeidonStringConcat( sb_szRoomAssignment, 1, 0, ")", 1, 0, 101 );
-                  szRoomAssignment = sb_szRoomAssignment.toString( );}
-               } 
-
-               //:END
-            } 
-
-            //:END
-            //:ELSE
-         } 
-         else
-         { 
-            //:GetTextConv(szLangConv,mSAProf,"Nonresident Student","")
-            //:szRoomAssignment = "(" + szLangConv+")"
-             {StringBuilder sb_szRoomAssignment;
-            if ( szRoomAssignment == null )
-               sb_szRoomAssignment = new StringBuilder( 32 );
-            else
-               sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                        ZeidonStringCopy( sb_szRoomAssignment, 1, 0, "(", 1, 0, 101 );
-            szRoomAssignment = sb_szRoomAssignment.toString( );}
-             {StringBuilder sb_szRoomAssignment;
-            if ( szRoomAssignment == null )
-               sb_szRoomAssignment = new StringBuilder( 32 );
-            else
-               sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                        ZeidonStringConcat( sb_szRoomAssignment, 1, 0, szLangConv, 1, 0, 101 );
-            szRoomAssignment = sb_szRoomAssignment.toString( );}
-             {StringBuilder sb_szRoomAssignment;
-            if ( szRoomAssignment == null )
-               sb_szRoomAssignment = new StringBuilder( 32 );
-            else
-               sb_szRoomAssignment = new StringBuilder( szRoomAssignment );
-                        ZeidonStringConcat( sb_szRoomAssignment, 1, 0, ")", 1, 0, 101 );
-            szRoomAssignment = sb_szRoomAssignment.toString( );}
-         } 
-
-         //:END
-
-         //:StoreStringInRecord ( mSAProf,
-         //:                InternalEntityStructure, InternalAttribStructure, szRoomAssignment )
-         StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szRoomAssignment );
-         break ;
-
-      //:  /* end zDERIVED_GET */
-      //:OF   zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
-
-
-   //:     /* end zDERIVED_SET */
+ //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
 // END
@@ -5636,86 +5170,6 @@ omSAProf_dCurrentMealPlan( View     mSAProf,
    int      lTempInteger_0 = 0;
    int      lTempInteger_1 = 0;
 
-   RESULT = GetViewByName( wXferO, "wXferO", mSAProf, zLEVEL_TASK );
-
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF   zDERIVED_GET:
-      case zDERIVED_GET :
-
-         //:// Display the latest Dorm room information, if there is any.
-         //:szMealPlan = ""
-          {StringBuilder sb_szMealPlan;
-         if ( szMealPlan == null )
-            sb_szMealPlan = new StringBuilder( 32 );
-         else
-            sb_szMealPlan = new StringBuilder( szMealPlan );
-                  ZeidonStringCopy( sb_szMealPlan, 1, 0, "", 1, 0, 101 );
-         szMealPlan = sb_szMealPlan.toString( );}
-         //:szCurrentDate = wXferO.Root.dCurrentDate
-         {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
-         StringBuilder sb_szCurrentDate;
-         if ( szCurrentDate == null )
-            sb_szCurrentDate = new StringBuilder( 32 );
-         else
-            sb_szCurrentDate = new StringBuilder( szCurrentDate );
-                   GetVariableFromAttribute( sb_szCurrentDate, mi_lTempInteger_0, 'S', 9, wXferO, "Root", "dCurrentDate", "", 0 );
-         lTempInteger_0 = mi_lTempInteger_0.intValue( );
-         szCurrentDate = sb_szCurrentDate.toString( );}
-
-         //:SET CURSOR FIRST mSAProf.TermOfMealPlan  
-         //:     WHERE mSAProf.TermOfMealPlan.BeginDate <= szCurrentDate
-         //:       AND mSAProf.TermOfMealPlan.EndDate   >= szCurrentDate 
-         RESULT = SetCursorFirstEntity( mSAProf, "TermOfMealPlan", "" );
-         if ( RESULT > zCURSOR_UNCHANGED )
-         { 
-            while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToString( mSAProf, "TermOfMealPlan", "BeginDate", szCurrentDate ) > 0 || CompareAttributeToString( mSAProf, "TermOfMealPlan", "EndDate", szCurrentDate ) < 0 ) )
-            { 
-               RESULT = SetCursorNextEntity( mSAProf, "TermOfMealPlan", "" );
-            } 
-
-         } 
-
-         //:IF RESULT >= zCURSOR_SET
-         if ( RESULT >= zCURSOR_SET )
-         { 
-            //:szMealPlan = mSAProf.MealPlan.Name 
-            {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
-            StringBuilder sb_szMealPlan;
-            if ( szMealPlan == null )
-               sb_szMealPlan = new StringBuilder( 32 );
-            else
-               sb_szMealPlan = new StringBuilder( szMealPlan );
-                         GetVariableFromAttribute( sb_szMealPlan, mi_lTempInteger_1, 'S', 101, mSAProf, "MealPlan", "Name", "", 0 );
-            lTempInteger_1 = mi_lTempInteger_1.intValue( );
-            szMealPlan = sb_szMealPlan.toString( );}
-            //:ELSE
-         } 
-         else
-         { 
-            //:szMealPlan = "No current meal plan"
-             {StringBuilder sb_szMealPlan;
-            if ( szMealPlan == null )
-               sb_szMealPlan = new StringBuilder( 32 );
-            else
-               sb_szMealPlan = new StringBuilder( szMealPlan );
-                        ZeidonStringCopy( sb_szMealPlan, 1, 0, "No current meal plan", 1, 0, 101 );
-            szMealPlan = sb_szMealPlan.toString( );}
-         } 
-
-         //:END
-
-         //:StoreStringInRecord ( mSAProf,
-         //:                InternalEntityStructure, InternalAttribStructure, szMealPlan )
-         StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szMealPlan );
-         break ;
-
-      //:  /* end zDERIVED_GET */
-      //:OF   zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
 
 
    //:     /* end zDERIVED_SET */
@@ -6033,125 +5487,6 @@ omSAProf_GenerateSwapTrans( View     mSAProf,
                             View     mFASrcAwarded,
                             double  dSwappableAmount )
 {
-   zVIEW    mSAProfT = new zVIEW( );
-   //:DECIMAL ReverseAmount
-   double  ReverseAmount = 0.0;
-   int      lTempInteger_0 = 0;
-   int      lTempInteger_1 = 0;
-   String   szTempString_0 = null;
-   int      RESULT = 0;
-   int      lTempInteger_2 = 0;
-   int      lTempInteger_3 = 0;
-   String   szTempString_1 = null;
-   int      lTempInteger_4 = 0;
-
-
-   //:// Generate the two transactions for swapping awards from institutional awards to scholarships.
-   //:// The first transaction assigns the moneys to the new Fin Aid Source and the second transaction
-   //:// adjusts the moneys from the original institutional award.
-
-   //:// There are two FinAidAward entries involved in this operation:
-   //:// View mFAProfOrigAward is positioned on the original award (the Institutional Aid award that is being swapped.)
-   //:// View mFAProf is positioned on the new swapped award.
-
-   //:// SA TRANSACTION FOR NEW AMOUNT
-   //:// Generate the SA Transaction entry in mSAProf for the AMOUNT SWAPPED TO NEW FINAID SOURCE and the Transaction Code of the FinAid Source.
-   //:ReverseAmount = 0 - dSwappableAmount
-   ReverseAmount = 0 - dSwappableAmount;
-   //:GenerateCharge( mSAProf, 
-   //:                mFAProfOrigAward.FinAidAwardPeriodTerm.ID,    // The College Term for the new Disbursement is same as the original.
-   //:                mFASrcAwarded.SATransactionCode.ID,           // Transaction Code from the FinAid Source, determining the type of Transaction.
-   //:                ReverseAmount, "N",                           // Amount to Swap as entered by User.
-   //:                mFASrcAwarded.FinAidSource.Name )             // Name of the FinAid Source, whioch will become the description of the Transaction.
-   {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
-       GetIntegerFromAttribute( mi_lTempInteger_0, mFAProfOrigAward, "FinAidAwardPeriodTerm", "ID" );
-   lTempInteger_0 = mi_lTempInteger_0.intValue( );}
-   {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
-       GetIntegerFromAttribute( mi_lTempInteger_1, mFASrcAwarded, "SATransactionCode", "ID" );
-   lTempInteger_1 = mi_lTempInteger_1.intValue( );}
-   {StringBuilder sb_szTempString_0;
-   if ( szTempString_0 == null )
-      sb_szTempString_0 = new StringBuilder( 32 );
-   else
-      sb_szTempString_0 = new StringBuilder( szTempString_0 );
-       GetStringFromAttribute( sb_szTempString_0, mFASrcAwarded, "FinAidSource", "Name" );
-   szTempString_0 = sb_szTempString_0.toString( );}
-   omSAProf_GenerateCharge( mSAProf, lTempInteger_0, lTempInteger_1, ReverseAmount, "N", szTempString_0 );
-   //:AcceptSubobject( mSAProf, "StudentAccountTransApplied" )      // The generate creates a termporal subobject.
-   AcceptSubobject( mSAProf, "StudentAccountTransApplied" );
-   //:INCLUDE mSAProf.FinAidAwardDisbursement FROM mFAProf.FinAidAwardDisbursement
-   RESULT = IncludeSubobjectFromSubobject( mSAProf, "FinAidAwardDisbursement", mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
-   //:mSAProf.StudentAccountTransApplied.NoShowOnBill = "Y"
-   SetAttributeFromString( mSAProf, "StudentAccountTransApplied", "NoShowOnBill", "Y" );
-
-
-   //:// SA TRANSACTION FOR MODIFICATION TO PRIOR AMOUNT
-   //:// Generate the SA Transaction entry in mSAProf for the AMOUNT DECREMENTED FROM ORIGINAL AWARD and associated FinAid Source.
-   //:// Note that mFAProfOrigAward is pointing to the original Disbursement and FinAid Source in mFAProf.
-   //:GenerateCharge( mSAProf, 
-   //:                mFAProfOrigAward.FinAidAwardPeriodTerm.ID,    // The College Term for the new Disbursement is same as the original.
-   //:                mFAProfOrigAward.SATransactionCode.ID,        // Transaction Code from the orig FinAid Source, determining the type of Transaction.
-   //:                dSwappableAmount, "N",                        // Negative of Amount to Swap.
-   //:                mFAProfOrigAward.FinAidSource.Name  )         // Name of the orig FinAid Source, whioch will become the description of the Transaction.
-   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
-       GetIntegerFromAttribute( mi_lTempInteger_2, mFAProfOrigAward, "FinAidAwardPeriodTerm", "ID" );
-   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
-   {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
-       GetIntegerFromAttribute( mi_lTempInteger_3, mFAProfOrigAward, "SATransactionCode", "ID" );
-   lTempInteger_3 = mi_lTempInteger_3.intValue( );}
-   {StringBuilder sb_szTempString_1;
-   if ( szTempString_1 == null )
-      sb_szTempString_1 = new StringBuilder( 32 );
-   else
-      sb_szTempString_1 = new StringBuilder( szTempString_1 );
-       GetStringFromAttribute( sb_szTempString_1, mFAProfOrigAward, "FinAidSource", "Name" );
-   szTempString_1 = sb_szTempString_1.toString( );}
-   omSAProf_GenerateCharge( mSAProf, lTempInteger_2, lTempInteger_3, dSwappableAmount, "N", szTempString_1 );
-   //:AcceptSubobject( mSAProf, "StudentAccountTransApplied" )      // The generate creates a termporal subobject.
-   AcceptSubobject( mSAProf, "StudentAccountTransApplied" );
-   //:INCLUDE mSAProf.FinAidAwardDisbursement FROM mFAProfOrigAward.FinAidAwardDisbursement
-   RESULT = IncludeSubobjectFromSubobject( mSAProf, "FinAidAwardDisbursement", mFAProfOrigAward, "FinAidAwardDisbursement", zPOS_AFTER );
-   //:mSAProf.StudentAccountTransApplied.NoShowOnBill = "Y"
-   SetAttributeFromString( mSAProf, "StudentAccountTransApplied", "NoShowOnBill", "Y" );
-   //:   
-
-   //:// Tie the SA Transaction just created to the original SA Transaction that it modifies. This makes the new transaction an adjustment
-   //:// to the original transaction.
-   //:CreateViewFromView( mSAProfT,  mSAProf )
-   CreateViewFromView( mSAProfT, mSAProf );
-
-   //:// Position on the original transaction to be adjusted. We need to make sure that the original transaction exists, as older entries
-   //:// did not make the tie between disbursement and SA transaction.
-   //:// We will also order the original transactions by ID and position on oldest, in case the original Transaction has already been adjusted by a Disbursement.
-   //:OrderEntityForView( mFAProfOrigAward, "FinAidAwardTransApplied", "ID A" )
-   OrderEntityForView( mFAProfOrigAward, "FinAidAwardTransApplied", "ID A" );
-   //:SET CURSOR FIRST mFAProfOrigAward.FinAidAwardTransApplied WHERE mFAProfOrigAward.FinAidAwardTransApplied.ID != ""
-   RESULT = SetCursorFirstEntity( mFAProfOrigAward, "FinAidAwardTransApplied", "" );
-   if ( RESULT > zCURSOR_UNCHANGED )
-   { 
-      while ( RESULT > zCURSOR_UNCHANGED && ( CompareAttributeToString( mFAProfOrigAward, "FinAidAwardTransApplied", "ID", "" ) == 0 ) )
-      { 
-         RESULT = SetCursorNextEntity( mFAProfOrigAward, "FinAidAwardTransApplied", "" );
-      } 
-
-   } 
-
-   //:IF RESULT >= zCURSOR_SET
-   if ( RESULT >= zCURSOR_SET )
-   { 
-      //:SET CURSOR FIRST mSAProfT.StudentAccountTransApplied WHERE mSAProfT.StudentAccountTransApplied.ID = mFAProfOrigAward.FinAidAwardTransApplied.ID 
-      {MutableInt mi_lTempInteger_4 = new MutableInt( lTempInteger_4 );
-             GetIntegerFromAttribute( mi_lTempInteger_4, mFAProfOrigAward, "FinAidAwardTransApplied", "ID" );
-      lTempInteger_4 = mi_lTempInteger_4.intValue( );}
-      RESULT = SetCursorFirstEntityByInteger( mSAProfT, "StudentAccountTransApplied", "ID", lTempInteger_4, "" );
-      //:// mSAProfT points to the original transaction and mSAProf to the new transaction just created.
-      //:INCLUDE mSAProf.AdjustedSATransApplied FROM mSAProfT.StudentAccountTransApplied 
-      RESULT = IncludeSubobjectFromSubobject( mSAProf, "AdjustedSATransApplied", mSAProfT, "StudentAccountTransApplied", zPOS_AFTER );
-   } 
-
-   //:END
-   //:DropObjectInstance( mSAProfT )
-   DropObjectInstance( mSAProfT );
    return( 0 );
 // END
 } 
@@ -6202,94 +5537,6 @@ omSAProf_dSATransFA_Period( View     mSAProf,
    int      lTempInteger_5 = 0;
 
 
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF zDERIVED_GET:
-      case zDERIVED_GET :
-
-         //:// This is the FA Period from either a FA Transaction or the Class enrolled entry.
-         //:szPeriod = ""
-          {StringBuilder sb_szPeriod;
-         if ( szPeriod == null )
-            sb_szPeriod = new StringBuilder( 32 );
-         else
-            sb_szPeriod = new StringBuilder( szPeriod );
-                  ZeidonStringCopy( sb_szPeriod, 1, 0, "", 1, 0, 19 );
-         szPeriod = sb_szPeriod.toString( );}
-         //:IF mSAProf.FinAidAwardPeriod EXISTS
-         lTempInteger_0 = CheckExistenceOfEntity( mSAProf, "FinAidAwardPeriod" );
-         if ( lTempInteger_0 == 0 )
-         { 
-            //:szPeriod = mSAProf.FinAidAwardPeriod.PeriodDesignator 
-            {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
-            StringBuilder sb_szPeriod;
-            if ( szPeriod == null )
-               sb_szPeriod = new StringBuilder( 32 );
-            else
-               sb_szPeriod = new StringBuilder( szPeriod );
-                         GetVariableFromAttribute( sb_szPeriod, mi_lTempInteger_1, 'S', 19, mSAProf, "FinAidAwardPeriod", "PeriodDesignator", "", 0 );
-            lTempInteger_1 = mi_lTempInteger_1.intValue( );
-            szPeriod = sb_szPeriod.toString( );}
-            //:ELSE
-         } 
-         else
-         { 
-            //:IF mSAProf.TransForClass EXISTS
-            lTempInteger_2 = CheckExistenceOfEntity( mSAProf, "TransForClass" );
-            if ( lTempInteger_2 == 0 )
-            { 
-               //:CreateViewFromView( mSAProf2, mSAProf )
-               CreateViewFromView( mSAProf2, mSAProf );
-               //:SET CURSOR FIRST mSAProf2.Class WITHIN mSAProf2.Student 
-               //:           WHERE mSAProf2.Class.ID = mSAProf.TransForClass.ID  
-               {MutableInt mi_lTempInteger_3 = new MutableInt( lTempInteger_3 );
-                               GetIntegerFromAttribute( mi_lTempInteger_3, mSAProf, "TransForClass", "ID" );
-               lTempInteger_3 = mi_lTempInteger_3.intValue( );}
-               RESULT = SetCursorFirstEntityByInteger( mSAProf2, "Class", "ID", lTempInteger_3, "Student" );
-               //:IF RESULT >= zCURSOR_SET
-               if ( RESULT >= zCURSOR_SET )
-               { 
-                  //:IF mSAProf2.EnrolledFinAidAwardPeriod EXISTS 
-                  lTempInteger_4 = CheckExistenceOfEntity( mSAProf2, "EnrolledFinAidAwardPeriod" );
-                  if ( lTempInteger_4 == 0 )
-                  { 
-                     //:szPeriod = mSAProf2.EnrolledFinAidAwardPeriod.PeriodDesignator 
-                     {MutableInt mi_lTempInteger_5 = new MutableInt( lTempInteger_5 );
-                     StringBuilder sb_szPeriod;
-                     if ( szPeriod == null )
-                        sb_szPeriod = new StringBuilder( 32 );
-                     else
-                        sb_szPeriod = new StringBuilder( szPeriod );
-                                           GetVariableFromAttribute( sb_szPeriod, mi_lTempInteger_5, 'S', 19, mSAProf2, "EnrolledFinAidAwardPeriod", "PeriodDesignator", "", 0 );
-                     lTempInteger_5 = mi_lTempInteger_5.intValue( );
-                     szPeriod = sb_szPeriod.toString( );}
-                  } 
-
-                  //:END
-               } 
-
-               //:END
-               //:DropObjectInstance( mSAProf2 )
-               DropObjectInstance( mSAProf2 );
-            } 
-
-            //:END
-         } 
-
-         //:END
-
-         //:StoreStringInRecord( mSAProf, InternalEntityStructure, 
-         //:                    InternalAttribStructure, szPeriod )
-         StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szPeriod );
-         break ;
-      //:   /* end zDERIVED_GET */
-      //:OF zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
-
-
    //:      /* end zDERIVED_SET */
    //:END   /* case */
    return( 0 );
@@ -6311,49 +5558,6 @@ omSAProf_dIsDevelopingCountry( View     mSAProf,
 {
    String   szString = null;
    String   szTempString_0 = null;
-
-
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF   zDERIVED_GET:
-      case zDERIVED_GET :
-         //:TraceLineS("in is developing country",mSAProf.Demographics.NationOfCitizenship)
-         {StringBuilder sb_szTempString_0;
-         if ( szTempString_0 == null )
-            sb_szTempString_0 = new StringBuilder( 32 );
-         else
-            sb_szTempString_0 = new StringBuilder( szTempString_0 );
-                   GetStringFromAttribute( sb_szTempString_0, mSAProf, "Demographics", "NationOfCitizenship" );
-         szTempString_0 = sb_szTempString_0.toString( );}
-         TraceLineS( "in is developing country", szTempString_0 );
-         //://     GetStringFromAttributeByContext(szString,mSAProf,"Demographics","NationOfCitizenship","DevelopingCountry",100)
-         //:GetStrFromAttrByContext(szString,100,mSAProf,"Demographics","NationOfCitizenship","DevelopingCountry")
-
-         //:TraceLineS("in is developing country country:",szString)  
-         TraceLineS( "in is developing country country:", szString );
-         //:IF (szString != "")
-         if ( ZeidonStringCompare( szString, 1, 0, "", 1, 0, 101 ) != 0 )
-         { 
-            //:StoreStringInRecord ( mSAProf, InternalEntityStructure, InternalAttribStructure, "Y" )
-            StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, "Y" );
-            //:ELSE
-         } 
-         else
-         { 
-            //:StoreStringInRecord ( mSAProf, InternalEntityStructure, InternalAttribStructure, "N" )
-            StoreStringInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, "N" );
-         } 
-
-         //:END
-         break ;
-      //:  /* end zDERIVED_GET */
-      //:OF   zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
-
-
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
@@ -6380,40 +5584,6 @@ omSAProf_dPayAmountFee( View     mSAProf,
    double  szFeeAmount = 0.0;
    double  dTempDecimal_0 = 0.0;
    double  dTempDecimal_1 = 0.0;
-
-   RESULT = GetViewByName( sHost, "sHost", mSAProf, zLEVEL_TASK );
-   //:CASE GetOrSetFlag
-   switch( GetOrSetFlag )
-   { 
-      //:OF   zDERIVED_GET:
-      case zDERIVED_GET :
-
-         //:IF sHost.PaymentLocation.FeePercent  > 0
-         if ( CompareAttributeToInteger( sHost, "PaymentLocation", "FeePercent", 0 ) > 0 )
-         { 
-            //:szFeeAmount=mSAProf.StudentAccountProfile.wPayAmountEntered * (sHost.PaymentLocation.FeePercent * .01)
-            {MutableDouble md_dTempDecimal_0 = new MutableDouble( dTempDecimal_0 );
-                         GetDecimalFromAttribute( md_dTempDecimal_0, sHost, "PaymentLocation", "FeePercent" );
-            dTempDecimal_0 = md_dTempDecimal_0.doubleValue( );}
-            {MutableDouble md_dTempDecimal_1 = new MutableDouble( dTempDecimal_1 );
-                         GetDecimalFromAttribute( md_dTempDecimal_1, mSAProf, "StudentAccountProfile", "wPayAmountEntered" );
-            dTempDecimal_1 = md_dTempDecimal_1.doubleValue( );}
-            szFeeAmount = dTempDecimal_1 * ( dTempDecimal_0 * .01 );
-         } 
-
-         //:END
-
-         //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
-         //:                    InternalAttribStructure, szFeeAmount, 0 )
-         StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, szFeeAmount, 0 );
-         break ;
-
-      //:  /* end zDERIVED_GET */
-      //:OF   zDERIVED_SET:
-      case zDERIVED_SET :
-         break ;
-   } 
-
 
    //:     /* end zDERIVED_SET */
    //:END  /* case */
