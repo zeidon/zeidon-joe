@@ -188,19 +188,7 @@
             </modules>
         </profile>
 
-	<!-- We have some special dependencies for Java 8.  We'll assume that if jconsole.jar
-	     exists then we're using Java 8.  It's a hack but it works.
-	-->
-         <profile>
-            <id>Java8</id>
-            <activation>
-                <file>
-                    <exists>${env.JAVA_HOME}/lib/jconsole.jar</exists>
-                </file>
-            </activation>
-        </profile>
-	
-        <!-- 
+       <!-- 
             Builds required objects for deploying to OSSRH
          -->
         <profile>
