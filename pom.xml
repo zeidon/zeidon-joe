@@ -168,11 +168,11 @@
 
     <modules>
         <module>zeidon-joe</module>
-        <module>scala</module>
+        <module>zeidon-operations</module>
         <module>object-browser</module>
+        <module>scala</module>
 	<module>jconsole-plugin</module>
 	<module>jasper-reports</module>
-        <module>zeidon-operations</module>
         <module>rest-servers/rest-easy</module>
         <module>rest-servers/scalatra</module>
         <module>zruby</module>

@@ -9,6 +9,7 @@ import org.junit.Assert;
 
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
@@ -71,14 +72,27 @@ public class TestIBOE
 		      zVIEW    mSAStu = new zVIEW( );
 		      //:VIEW mSAProf  BASED ON LOD mSAProf  
 		      zVIEW    mSAProf = new zVIEW( );
+		      zVIEW    mSAProf2 = new zVIEW( );
 		      //:VIEW dSATrans BASED ON LOD  dSATrans
 		      zVIEW    dSATrans = new zVIEW( );
-		      //:SHORT nRC
+			  zVIEW    wXferO = new zVIEW( );
+			  zVIEW    sHost = new zVIEW( );
 		      int      nRC = 0;
 		      //:STRING ( 256 ) szFileName
 		      String   szFileName = null;
 		      int      RESULT = 0;
+		      int      iCnt1 = 0;
+		      int      iCnt2 = 0;
 
+              // Creating wXferO and sHost simply to keep from getting errors when looking at mSAProf in the browser.
+			  RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+			  RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+			  SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+
+			  RESULT = ActivateObjectInstance( sHost, "sHost", ViewToWindow, 0, zSINGLE );
+			  SetNameForView( sHost, "sHost", null, zLEVEL_TASK );
+			  if ( sHost.cursor("Host").checkExistenceOfEntity().toInt() != 0 )
+				  sHost.cursor("Host").createEntity();
 
 		      //:szFileName = "c:\temp\mSAProf.por"
 		       {StringBuilder sb_szFileName;
@@ -91,21 +105,41 @@ public class TestIBOE
 		      //:nRC = ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, szFileName, zMULTIPLE )
 		      nRC = ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, szFileName, zMULTIPLE );
 		      //:NAME VIEW mSAProf "mSAProfTEST"
-		      SetNameForView( mSAProf, "mSAProfTEST", null, zLEVEL_TASK );
-
-		      //:SET CURSOR FIRST mSAProf.StudentAccountTransApplied 
+		      SetNameForView( mSAProf, "mSAProf", null, zLEVEL_TASK );
+		      mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
+		      CreateViewFromView( mSAProf2, mSAProf );		      
+		      SetNameForView( mSAProf2, "mSAProf2", null, zLEVEL_TASK );
+		      
 		      RESULT = SetCursorFirstEntity( mSAProf, "StudentAccountTransApplied", "" );
-		      //:/*
-		      //:SET CURSOR FIRST mSAProf.PeriodTransApplied
-		      //:               WHERE mSAProf.PeriodTransApplied.ID = mSAProf.StudentAccountTransApplied.ID 
-		      //:IF RESULT >= zCURSOR_SET 
-		      //:         DropEntity( mSAProf, "PeriodTransApplied", zREPOS_NONE )
-		      //:END */
-		      //:DELETE ENTITY  mSAProf.StudentAccountTransApplied
-		      RESULT = DeleteEntity( mSAProf, "StudentAccountTransApplied", zPOS_NEXT );
-
+              ViewToWindow.log().info("before delete");
+              /*
+              for (EntityInstance ei : mSAProf2.getHierEntityList()) {
+            	  ViewToWindow.log().info(ei.getEntityDef().getName() + " " + ei.getKeyString()); 
+              } */
+              
+              ViewToWindow.log().info("after delete/before commit");
+		      //RESULT = SetCursorLastEntity( mSAProf, "StudentAccountTransApplied", "" );
+		      //RESULT = DeleteEntity( mSAProf, "StudentAccountTransApplied", zPOS_NEXT );
+		      mSAProf.cursor("StudentAccountTransApplied").deleteEntity( CursorPosition.NEXT );
+		      /*
+              for (EntityInstance ei : mSAProf2.getHierEntityList()) {
+            	  ViewToWindow.log().info(ei.getEntityDef().getName() + " " + ei.getKeyString()); 
+              } */
+              ViewToWindow.log().info("after commit");
+		      // CHECK SQL AND SEE IF WE GET TWO DELETE
 		      //:COMMIT mSAProf
 		      RESULT = CommitObjectInstance( mSAProf );
+		      /*
+              for (EntityInstance ei : mSAProf2.getHierEntityList()) {
+                	  ViewToWindow.log().info(ei.getEntityDef().getName() + " " + ei.getKeyString()); 
+              } */
+		      mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
+		      //OrderEntityForView( mSAProf, "StudentAccountTransApplied", "TransactionDate D" );
+		      iCnt1 = 0;
+              for ( EntityInstance ei : mSAProf.cursor( "StudentAccountProfile" ).getChildren( "StudentAccountTransApplied"))
+              {
+            	  iCnt1++;
+              }
 		      return( 0 );
 		   // END
 		   } 
