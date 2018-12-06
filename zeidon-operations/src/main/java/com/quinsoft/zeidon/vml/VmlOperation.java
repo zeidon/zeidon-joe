@@ -3017,9 +3017,31 @@ public abstract class VmlOperation
                                                int    maxCopy,
                                                int    maxTargetLth )
    {
+	  
 	  if ( source == null || source.isEmpty() )
 	      return sbTarget;
-
+	  
+      String szTemp = "";
+      String szOrig = sbTarget.toString();
+      
+      if ( maxCopy == 0 )
+		  szTemp = source.substring( sourceIdx - 1);
+      else 
+      {
+    	 if ( maxCopy > (source.length() - (sourceIdx - 1 )))  
+    	    szTemp = source.substring(sourceIdx - 1);
+    	 else
+    		szTemp = source.substring(sourceIdx - 1, (sourceIdx - 1) + maxCopy);
+      }
+      szOrig = szOrig + szTemp;
+	  if ( szOrig.length() > maxTargetLth - 1 )
+	  {
+		  szOrig = szOrig.substring(0, maxTargetLth - 1);
+	  }
+	  sbTarget.setLength( 0 );
+	  sbTarget.append(szOrig);
+	  //sbTarget.append( szTemp );
+	  /*
 	  if ( sourceIdx > 0 )
       {
          sbTarget.append( source.substring( sourceIdx - 1 ) );
@@ -3028,7 +3050,7 @@ public abstract class VmlOperation
       {
          sbTarget.append( source );
       }
-
+      */
    // RESULT = sbTarget.length( );
       return sbTarget;
    }
