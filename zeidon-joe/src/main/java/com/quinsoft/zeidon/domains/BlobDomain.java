@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import com.quinsoft.zeidon.Application;
@@ -60,7 +61,12 @@ public class BlobDomain extends AbstractDomain
         	if ( ((String) externalValue).isEmpty() )
         		return null;
     		    //return externalValue;
-            return new Blob( ((String) externalValue).getBytes() );
+            try {
+				return new Blob( ((String) externalValue).getBytes("UTF8") );
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+        		return null;
+			}
         }
 
         throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Blob", externalValue.getClass().getName() );
@@ -73,7 +79,11 @@ public class BlobDomain extends AbstractDomain
             return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
         Blob blob = (Blob) internalValue;
-        return new String( blob.getBytes() );
+        try {
+			return new String( blob.getBytes(), "UTF8" );
+		} catch (UnsupportedEncodingException e) {
+	        return new String( "" );
+		}
     }
 
     @Override
