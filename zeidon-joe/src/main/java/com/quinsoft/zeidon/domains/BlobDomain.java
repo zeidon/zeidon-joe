@@ -19,16 +19,14 @@
 
 package com.quinsoft.zeidon.domains;
 
-import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import com.google.common.io.Files;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
@@ -50,7 +48,7 @@ public class BlobDomain extends AbstractDomain
 
         if ( externalValue == null )
         	return null;
-
+        
         if ( externalValue instanceof byte[] )
             return new Blob( (byte[]) externalValue );
 
@@ -63,21 +61,12 @@ public class BlobDomain extends AbstractDomain
         	if ( ((String) externalValue).isEmpty() )
         		return null;
     		    //return externalValue;
-            return new Blob( ((String) externalValue).getBytes() );
-        }
-
-        if ( externalValue instanceof File )
-        {
-            File file = (File) externalValue;
-            try
-            {
-                byte[] bytes = Files.toByteArray(file);
-                return new Blob( bytes );
-            }
-            catch ( Exception e )
-            {
-                ZeidonException.wrapException( e ).appendMessage( "File = %s", file.getAbsolutePath() );
-            }
+            try {
+				return new Blob( ((String) externalValue).getBytes("UTF8") );
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+        		return null;
+			}
         }
 
         throw new InvalidAttributeValueException( attributeDef, externalValue, "Can't convert '%s' to Blob", externalValue.getClass().getName() );
@@ -90,7 +79,11 @@ public class BlobDomain extends AbstractDomain
             return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
         Blob blob = (Blob) internalValue;
-        return new String( blob.getBytes() );
+        try {
+			return new String( blob.getBytes(), "UTF8" );
+		} catch (UnsupportedEncodingException e) {
+	        return new String( "" );
+		}
     }
 
     @Override
