@@ -20,6 +20,7 @@
 package com.quinsoft.zeidon;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 
 /**
  * A simple wrapper around byte[] so that it can be treated as a comparable object.
@@ -96,7 +97,13 @@ public final class Blob implements Comparable<Object>, Serializable
     @Override
     public String toString()
     {
-        String data = new String( bytes, 0, Math.min( bytes.length, 10 ) );
-        return String.format( "Blob data: %d bytes (%s)", bytes.length, data );
+        String data;
+		try {
+			data = new String( bytes, 0, Math.min( bytes.length, 10 ), "" );
+	        return String.format( "Blob data: %d bytes (%s)", bytes.length, data );
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
     }
 }
