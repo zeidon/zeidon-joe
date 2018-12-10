@@ -75,7 +75,7 @@ public class BufferedBinaryStreamReader implements Closeable
             buffer[ bufferLth++ ] = b[0];
             if ( bufferLth == BUFFER_SIZE )
             {
-                String s = new String(buffer);
+                String s = new String(buffer, "UTF8" );
                 str.append( s );
                 bufferLth = 0;
             }
@@ -83,7 +83,7 @@ public class BufferedBinaryStreamReader implements Closeable
 
         if ( bufferLth > 0 )
         {
-            String s = new String(buffer, 0, bufferLth );
+            String s = new String(buffer, 0, bufferLth, "UTF8" );
             str.append( s );
         }
 
