@@ -99,7 +99,7 @@ public final class Blob implements Comparable<Object>, Serializable
     {
         String data;
 		try {
-			data = new String( bytes, 0, Math.min( bytes.length, 10 ), "" );
+			data = new String( bytes, 0, Math.min( bytes.length, 10 ), "UTF8" );
 	        return String.format( "Blob data: %d bytes (%s)", bytes.length, data );
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
