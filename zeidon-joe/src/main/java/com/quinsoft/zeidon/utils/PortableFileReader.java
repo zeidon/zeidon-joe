@@ -257,7 +257,7 @@ public class PortableFileReader
                                     {
                                         int read = reader.read( attributeValueBytes, length );
                                         assert read == length;
-                                        attributeValue = new String( attributeValueBytes );
+                                        attributeValue = new String( attributeValueBytes, "UTF8" );
                                     }
                                     catch ( IOException e )
                                     {

@@ -1,0 +1,471 @@
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:        return sb.toString();
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:                    String entityName = qualAttrib.getAttribute( "EntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:                    String attribName = qualAttrib.getAttribute( "AttributeName" ).getString();
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:                    String oper = qualAttrib.getAttribute( "Oper" ).getString();
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:                    String value = qualAttrib.getAttribute( "Value" ).getString();
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:            qualificationName = builder.toString();
+src\main\java\com\quinsoft\zeidon\Application.java:    boolean nullStringEqualsEmptyString();
+src\main\java\com\quinsoft\zeidon\AttributeInstance.java: * String strValue = myAttr.getString();
+src\main\java\com\quinsoft\zeidon\AttributeInstance.java:     * to convert the string.  If you want to use the default context call getString( "" )
+src\main\java\com\quinsoft\zeidon\AttributeInstance.java:    String getString();
+src\main\java\com\quinsoft\zeidon\AttributeInstance.java:    String getString( String contextName );
+src\main\java\com\quinsoft\zeidon\Blob.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\Blob.java:			data = new String( bytes, 0, Math.min( bytes.length, 10 ), "UTF8" );
+src\main\java\com\quinsoft\zeidon\config\HomeDirectoryFromString.java:    public HomeDirectoryFromString(String homeDirectory)
+src\main\java\com\quinsoft\zeidon\config\ZeidonIniPreferences.java:        String str = iniConfObj.getSection( groupName ).getString( key, defaultValue );
+src\main\java\com\quinsoft\zeidon\config\ZeidonIniPreferences.java:            return builder.toString();
+src\main\java\com\quinsoft\zeidon\config\ZeidonPropertyPreferences.java:            builder.append( key ).append( "=" ).append( properties.getProperty( key.toString() ) ).append( "\n" );
+src\main\java\com\quinsoft\zeidon\config\ZeidonPropertyPreferences.java:        return builder.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:             attributeDef.getDomain().getApplication().nullStringEqualsEmptyString() )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            String entityName = entitySpec.getAttribute( "EntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                QualAttrib qualAttrib = new QualAttrib( qualAttribInstance.getAttribute( "Oper" ).getString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                    String qualEntityName = qualAttribInstance.getAttribute( "EntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                        String attribName = qualAttribInstance.getAttribute( "AttributeName" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                        String str = qualAttribInstance.getAttribute( "Value"  ).getString().toLowerCase();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                    String value = qualAttribInstance.getAttribute( "Value" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                        value = kl.getAttribute( "StringValue" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                        value = kl.getAttribute( "IntegerValue" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                if ( qualAttrib.isNullAndEmptyString() )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                    addCheckForNullAndEmptyString( qualEntity, qualAttrib );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:    private void addCheckForNullAndEmptyString( QualEntity qualEntity, QualAttrib qualAttrib )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        String srcEntityName = qualAttribInstance.getAttribute( "SourceEntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        String srcAttributeName = qualAttribInstance.getAttribute( "SourceAttributeName" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                task.dblog().trace( "FK was null--skipping load entity for SQL statement:\n%s", stmt.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        // Create the key string.  We need to match what entityInstance.getKeyString().
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        String keyString = view.cursor( entityDef.getParent() ).getAttribute( parentAttributeFk ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        String keyString = getKeyString(view, entityDef);
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:    String getKeyString( View view, EntityDef entityDef )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        return view.cursor( entityDef ).getKeyString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:    private StringBuilder buildQualString(SqlStatement stmt, View view, EntityDef entityDef, boolean conjunctionNeeded )
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                    qualString.append( buffer.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                qualString.append( qualAttrib.oper ).append( " " ).append( buffer.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        stmt.appendWhere( buildQualString( stmt, view, entityDef, stmt.conjunctionNeeded ).toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                String tableName = genkey.getAttribute( "TableName" ).getString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                genkeyValues.put( kzgkhwob.cursor( "Genkey" ).getAttribute( "EntityID" ).getString(),
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            StringBuilder sb = buildQualString( stmt, view, entityDef, true );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                    throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:        public String toString()
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            return str.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:            logSql( sql.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:                String str = value.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:     * Internal note: We want this to produce the same output as EntityInstance.getKeyString()
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:            String str = value.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        return builder.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        assert ! entityInstance.getAttribute( attributeDef ).isUpdated() : "Attribute is updated " + attributeDef.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:            String parentKeyString = ei.getKeyString();
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        return sb.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        public String toString()
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:            return entityDef.toString() + " " + commandType.toString() + " " + StringUtils.substring( sql, 0, 50 );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:        public String toString()
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:            dateFormat = JoeUtils.createDateFormatterFromEditString( format );
+src\main\java\com\quinsoft\zeidon\dbhandler\JdbcHandler.java:            dateTimeFormat = JoeUtils.createDateFormatterFromEditString( format );
+src\main\java\com\quinsoft\zeidon\dbhandler\PessimisticLockingViaDb.java:                                     .getAttribute( "KeyValue" ).setValue ( builder.toString() )
+src\main\java\com\quinsoft\zeidon\dbhandler\PessimisticLockingViaDb.java:                      .getAttribute( "KeyValue" ).setValue ( ei.getKeyString() )
+src\main\java\com\quinsoft\zeidon\dbhandler\PessimisticLockingViaDb.java:            sb.append( element.toString() ).append( "\n" );
+src\main\java\com\quinsoft\zeidon\dbhandler\PessimisticLockingViaDb.java:        cursor.getAttribute( "CallStack" ).setValue( sb.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\PessimisticLockingViaDb.java:                      .getAttribute( "KeyValue" ).setValue( ei.getKeyString() )
+src\main\java\com\quinsoft\zeidon\dbhandler\QualAttrib.java:    public boolean isNullAndEmptyString()
+src\main\java\com\quinsoft\zeidon\dbhandler\QualAttrib.java:       if ( ! app.nullStringEqualsEmptyString() )
+src\main\java\com\quinsoft\zeidon\dbhandler\QualAttrib.java:       return value == null || StringUtils.isBlank( value.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\QualAttrib.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\dbhandler\QualAttrib.java:        return sb.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\dbhandler\QualEntity.java:        return sb.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:    protected boolean appendString( SqlStatement stmt, StringBuilder buffer, AttributeDef attributeDef, Object value )
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:        String str = value.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            buffer.append( value.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            buffer.append( ((GeneratedKey) value).getString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            return appendString( stmt, buffer, attributeDef, str );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            return appendString( stmt, buffer, attributeDef, str );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            String s = domain.convertToString( task, attributeDef, value );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            return appendString( stmt, buffer, attributeDef, s );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java://        String string = domain.convertToString( task, attributeDef, value );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:        return appendString( stmt, buffer, attributeDef, value.toString() );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            return clob.getSubString( 1L, (int) clob.length() );
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:                String date = dbValue.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:                String date = dbValue.toString();
+src\main\java\com\quinsoft\zeidon\dbhandler\StandardJdbcTranslator.java:            return value.toString();
+src\main\java\com\quinsoft\zeidon\DeserializeOi.java:        return fromString( attribute.getString() );
+src\main\java\com\quinsoft\zeidon\DeserializeOi.java:    public DeserializeOi fromString( String inputString )
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s to Blob", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:            String lower = internalValue.toString().toLowerCase();
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert %s to Boolean", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s to Date", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:            return new Double( internalValue.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:            throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s (%s) to Double", internalValue.toString(), attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:            return new Integer( internalValue.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:            throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s (%s) to Integer", internalValue.toString(), attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:        return internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:        return context.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\domains\AbstractDomain.java:             attributeDef.getEntityDef().getLodDef().getApplication().nullStringEqualsEmptyString() &&
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:        public void setEditString( String editString )
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:                super.setEditString( editString.substring( 1 ) );
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:                return formatter.parse( value.toString() );
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:            if ( getEditString() != null )
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:                return String.format( getEditString(), internalValue );
+src\main\java\com\quinsoft\zeidon\domains\AbstractNumericDomain.java:            return internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\AbstractTableDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\AbstractTableDomain.java:        return context.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\AbstractTableDomain.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java: * A version of the Blob domain that uses Base64 for getString()
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java:            return new Blob( Base64.decodeBase64( externalValue.toString() ) );
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java:        return convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java:            return Base64.encodeBase64String( blob.getBytes() );
+src\main\java\com\quinsoft\zeidon\domains\Base64BlobDomain.java:        return super.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:    protected void setEditString( String editString )
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:    public String getEditString()
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:            case "JavaEditString": setEditString( reader.getAttributeValue() ); break;
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:    	return internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\domains\BaseDomainContext.java:        return domain.toString() + " Context: " + getName();
+src\main\java\com\quinsoft\zeidon\domains\BigDecimalDomain.java:            return new BigDecimal( externalValue.toString() );
+src\main\java\com\quinsoft\zeidon\domains\BigDecimalDomain.java:            return new BigDecimal( externalValue.toString() );
+src\main\java\com\quinsoft\zeidon\domains\BlobDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\BlobDomain.java:            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+src\main\java\com\quinsoft\zeidon\domains\BlobDomain.java:			return new String( blob.getBytes(), "UTF8" );
+src\main\java\com\quinsoft\zeidon\domains\BlobDomain.java:	        return new String( "" );
+src\main\java\com\quinsoft\zeidon\domains\BooleanDomain.java:            String lower = externalValue.toString().toLowerCase();
+src\main\java\com\quinsoft\zeidon\domains\CaseAwareStringDomain.java:        String s1 = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\CaseAwareStringDomain.java:        String s2 = checkNullString( value );
+src\main\java\com\quinsoft\zeidon\domains\DateDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\DateDomain.java:            return super.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            if ( externalValue.toString().equals( "NOW" ) )
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            return context.convertExternalValue( task, attributeDef, externalValue.toString() );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:        if ( internalValue.toString().isEmpty())
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            return internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:        dateContext.setEditString( contextName );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:        return context.convertToString( task, attributeDef, new DateTime() );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue) throws ZeidonException
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:                return StringDomain.checkNullString(task.getApplication(), null);
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            if ( internalValue.toString().isEmpty())
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:                return internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:                throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:                return JoeUtils.parseStandardDateString( s );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:                throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:                                     .appendMessage( "Format string = %s", getEditString() )
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:        protected void setEditString( String editString )
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            super.setEditString( editString );
+src\main\java\com\quinsoft\zeidon\domains\DateTimeDomain.java:            formatter = JoeUtils.createDateFormatterFromEditString( editString );
+src\main\java\com\quinsoft\zeidon\domains\Domain.java:    String   convertToString( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+src\main\java\com\quinsoft\zeidon\domains\Domain.java:    String   convertToString( Task task, AttributeDef attributeDef, Object internalValue );
+src\main\java\com\quinsoft\zeidon\domains\DomainContext.java:    String getEditString();
+src\main\java\com\quinsoft\zeidon\domains\DomainContext.java:    String   convertToString( Task task, AttributeDef attributeDef, Object internalValue );
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:                                            .appendMessage( "Domain = %s", this.toString() );
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:        return context.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:                String str = externalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:        protected void setEditString( String editString )
+src\main\java\com\quinsoft\zeidon\domains\DoubleDomain.java:            super.setEditString( editString );
+src\main\java\com\quinsoft\zeidon\domains\DynamicTableDomain.java:            throw new ZeidonException( "Dynamic domain '%s' has no values in the DB", this.toString() );
+src\main\java\com\quinsoft\zeidon\domains\DynamicTableDomain.java:            String internalValue = entity.getAttribute( "InternalStringValue" ).getString();
+src\main\java\com\quinsoft\zeidon\domains\DynamicTableDomain.java:                internalValue = entity.getAttribute( "InternalIntegerValue" ).getString();
+src\main\java\com\quinsoft\zeidon\domains\DynamicTableDomain.java:            String externalValue = entity.getAttribute( "ExternalDescription" ).getString();
+src\main\java\com\quinsoft\zeidon\domains\DynamicTableDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\DynamicTableDomain.java:        return super.convertToString( task, attributeDef, internalValue, contextName );
+src\main\java\com\quinsoft\zeidon\domains\EmailAddressDomain.java:        String string = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\EmailAddressDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue )
+src\main\java\com\quinsoft\zeidon\domains\EmailAddressDomain.java:        return convertToString( task, attributeDef, internalValue, "" );
+src\main\java\com\quinsoft\zeidon\domains\EmailAddressDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\EmailAddressDomain.java:        String string = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        return ((GeneratedKey) internalValue).getString();
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:    public String convertToString( Task task, AttributeDef attributeDef, Object internalValue, String contextName )
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        return ((GeneratedKey) internalValue).getString();
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert GeneratedKeyDomain to Blob", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert GeneratedKeyDomain to Double", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert GeneratedKeyDomain to Integer", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        throw new InvalidAttributeConversionException( attributeDef, "Cannot convert GeneratedKeyDomain to Boolean", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\domains\GeneratedKeyDomain.java:        return internalKey.getString().compareTo( externalKey.getString() );
+src\main\java\com\quinsoft\zeidon\domains\IntegerDomain.java:        		num = Integer.parseInt( externalValue.toString().trim() );
+src\main\java\com\quinsoft\zeidon\domains\IntegerDomain.java:        intContext.setEditString( contextName );
+src\main\java\com\quinsoft\zeidon\domains\LongDomain.java:        		num = Long.parseLong( ((CharSequence) externalValue ).toString() );
+src\main\java\com\quinsoft\zeidon\domains\LongDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\LongDomain.java:     	return internalValue.toString();	
+src\main\java\com\quinsoft\zeidon\domains\PasswordDomain.java:        String password = externalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\PasswordDomain.java:            String hash = attr.getString();
+src\main\java\com\quinsoft\zeidon\domains\PasswordDomain.java:            if ( hash.compareTo( encyrptedHash.toString() ) == 0 )
+src\main\java\com\quinsoft\zeidon\domains\PasswordDomain.java:        if ( encryptor.checkPassword( plaintextPassword.toString(), encyrptedHash.toString() ) )
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        String phone = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        String phone = externalValue.toString( );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        String phone = internalValue.toString( );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue )
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:            return(internalValue.toString( ));
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:    		return StringDomain.checkNullString(task.getApplication(), null);
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        if ( ! StringUtils.isBlank( contextName ) && ! StringUtils.isBlank( internalValue.toString() ) )
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:            //return newValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:            return context.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:            String phone = internalValue.toString( );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        //return checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        		return StringDomain.checkNullString(task.getApplication(), null);
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        	if ( getEditString() == null )
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        	    throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        	int formatLength = getEditString().length();
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:        	String internalString = internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:            	if ( getEditString().charAt(i) != '9' )
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:                    tempCharArray[i] = getEditString().charAt(i);
+src\main\java\com\quinsoft\zeidon\domains\PhoneDomain.java:            return (new String(tempCharArray));
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:        String string = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:        return context.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:	        String string = checkNullString( value );
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:	            throw new InvalidAttributeValueException( attributeDef, value, "Input value does not match regular expression %s", getEditString() );
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:        protected void setEditString( String editString )
+src\main\java\com\quinsoft\zeidon\domains\RegularExpressionDomain.java:            super.setEditString( editString );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        String strSSN = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        String SSN = externalValue.toString( );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue )
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:                return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            return(internalValue.toString( ));
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:    		return StringDomain.checkNullString(task.getApplication(), null);
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:    	if ( ! StringUtils.isBlank( contextName ) && ! StringUtils.isBlank( internalValue.toString() ) )
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            //return newValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            return context.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            return internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        //return checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        		return StringDomain.checkNullString(task.getApplication(), null);
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        	if ( getEditString() == null )
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        	    throw new ZeidonException( "JavagetEditString() is not set for context %s", this.toString() );
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        	int formatLength = getEditString().length();
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:        	String internalString = internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            if ( getEditString().equals("*****9999"))
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:		                        getEditString().charAt(i);
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:	            // Look at the JavagetEditString() (getEditString()) and wherever there is a '9', replace it with
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:	            	if ( getEditString().charAt(i) != '9' )
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:	                        getEditString().charAt(i);
+src\main\java\com\quinsoft\zeidon\domains\SSNDomain.java:            return (new String(tempCharArray));
+src\main\java\com\quinsoft\zeidon\domains\StaticTableDomain.java:            String value2 = internalValue.toString();
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:    public static String checkNullString( Application app, Object string )
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:            return app.nullStringEqualsEmptyString() ? EMPTY_STRING : null;
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        return string.toString();
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:    public String checkNullString( Object string )
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        return checkNullString( getApplication(), string );
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        return checkNullString( externalValue );
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        String string = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        return checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        String s1 = checkNullString( internalValue );
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        String s2 = checkNullString( value );
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:             attributeDef.getEntityDef().getLodDef().getApplication().nullStringEqualsEmptyString() &&
+src\main\java\com\quinsoft\zeidon\domains\StringDomain.java:        String str = checkNullString( value );
+src\main\java\com\quinsoft\zeidon\domains\TableDomain.java:        public String toString()
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:        put( "DomainType", DomainType.FORMAT.toString() );
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:        put( "DataType", InternalType.STRING.toString() );
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:        throw new ZeidonException( "Internal Error: Table value '%s' is invalid for %s", internalValue, toString() );
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:        internalValue = StringDomain.checkNullString( getApplication(), internalValue );
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:        externalValue = StringDomain.checkNullString( getApplication(), externalValue );
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\domains\TableListContext.java:        return entryList.toString();
+src\main\java\com\quinsoft\zeidon\domains\TimeDomain.java:    public String convertToString(Task task, AttributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\TimeDomain.java:            return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
+src\main\java\com\quinsoft\zeidon\domains\TimeDomain.java:        public String convertToString(Task task, attributeDef attributeDef, Object internalValue)
+src\main\java\com\quinsoft\zeidon\domains\TimeDomain.java:        		return StringDomain.checkNullString(task.getApplication(), null);
+src\main\java\com\quinsoft\zeidon\EntityCache.java:                            .appendMessage( "Cache view = %s", cacheView.toString() );
+src\main\java\com\quinsoft\zeidon\EntityInstance.java:    String getKeyString();
+src\main\java\com\quinsoft\zeidon\GeneratedKey.java:     * @return the value of the key as a string.  This is different from toString() in
+src\main\java\com\quinsoft\zeidon\GeneratedKey.java:    String getString();
+src\main\java\com\quinsoft\zeidon\jmx\JmxObjectEngineMonitor.java:                    map.put( "oiId", Long.toString( v.getOiId() ) );
+src\main\java\com\quinsoft\zeidon\jmx\JmxObjectEngineMonitor.java:        EventInfo info = getEventInfo( lodDef.toString() );
+src\main\java\com\quinsoft\zeidon\jmx\JmxObjectEngineMonitor.java:        EventInfo info = getEventInfo( app.toString() );
+src\main\java\com\quinsoft\zeidon\jmx\JmxObjectEngineMonitor.java:        return view.serializeOi().asJson().withIncremental().compressed().toStringWriter().toString();
+src\main\java\com\quinsoft\zeidon\objectdefinition\AttributeDef.java:        erAttributeToken = ( entityDef.toString() + "." + getName() ).intern() ;
+src\main\java\com\quinsoft\zeidon\objectdefinition\AttributeDef.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\AttributeDef.java:        return entityDef.toString() + "." + name;
+src\main\java\com\quinsoft\zeidon\objectdefinition\AttributeDef.java:                                                  derivedOperationClassName, derivedOperationName, toString() );
+src\main\java\com\quinsoft\zeidon\objectdefinition\AttributeDef.java:        public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\DataField.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\DataField.java:        return attributeDef.toString() + "/" + name;
+src\main\java\com\quinsoft\zeidon\objectdefinition\DataRecord.java:                                                      this.toString(), dataRecord.toString() );
+src\main\java\com\quinsoft\zeidon\objectdefinition\DataRecord.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\DataRecord.java:        return entityDef.toString() + "/" + recordName;
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\EntityDef.java:        return lodDef.toString() + "." + name;
+src\main\java\com\quinsoft\zeidon\objectdefinition\LazyLoadConfig.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\LazyLoadConfig.java:        return flags.toString();
+src\main\java\com\quinsoft\zeidon\objectdefinition\LodDef.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\LodDef.java:        return getApplication().toString() + "." + name;
+src\main\java\com\quinsoft\zeidon\objectdefinition\LodDef.java:                String type = domain == null ? attrib.getType().toString() : domain.getName();
+src\main\java\com\quinsoft\zeidon\objectdefinition\RelField.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\RelRecord.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\objectdefinition\RelRecord.java:        return dataRecord.toString() + ":" + recordName;
+src\main\java\com\quinsoft\zeidon\SerializeOi.java:        attribute.setValue( writer.toString() );
+src\main\java\com\quinsoft\zeidon\SerializeOi.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\SerializeOi.java:        return toStringWriter().toString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:        String entityName = entitySpec.getAttribute( "EntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:        entityName = qualAttrib.getAttribute( "EntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:        String attribName = qualAttrib.getAttribute( "AttributeName" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:        String oper = qualAttrib.getAttribute( "Oper" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:        qualValue = qualAttrib.getAttribute( "Value" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromRestServer.java:            String qualStr = qual.serializeOi().asJson().withIncremental().toStringWriter().toString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromRestServer.java:                stringResponse = writer.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromRestServer.java:                String errorMsg = restRc.cursor( "RestResponse" ).getAttribute( "ErrorMessage" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromJsonStream.java:                    version = jp.getValueAsString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromJsonStream.java:                    version = jp.getValueAsString();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromJsonStream.java:                case "application": application = task.getApplication( jp.getValueAsString() ); break;
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromJsonStream.java:                case "odName":      odName = jp.getValueAsString(); break; // Save OD name for later.
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromXmlStream.java:                    ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), ! attributeDef.isKey() ) ;
+src\main\java\com\quinsoft\zeidon\standardoe\ApplicationImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\ApplicationImpl.java:     * @see com.quinsoft.zeidon.Application#nullStringEqualsEmptyString()
+src\main\java\com\quinsoft\zeidon\standardoe\ApplicationImpl.java:    public boolean nullStringEqualsEmptyString()
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeHashKeyMap.java:                                    .appendMessage( "HashKey value = %s", value.toString() )
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeHashKeyMap.java:                                    .appendMessage( "Wrong EI = %s", hashEi.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:     * @see com.quinsoft.zeidon.AttributeInstance#getString()
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:    public String getString()
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:        return attributeValue.getString( getTask(), attributeDef );
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:     * @see com.quinsoft.zeidon.AttributeInstance#getString(java.lang.String)
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:    public String getString( String contextName )
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:        return attributeValue.getString( getTask(), attributeDef, contextName );
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:        return attributeDef.toString() + ": " + getValue();
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeInstanceImpl.java:        return isEmpty() || StringUtils.isBlank( getString() );
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeValue.java:    String getString( Task task, AttributeDef attributeDef, String contextName )
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeValue.java:        return domain.convertToString( task, attributeDef, getInternalValue(), contextName );
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeValue.java:    String getString( Task task, AttributeDef attributeDef )
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeValue.java:        return domain.convertToString( task, attributeDef, getInternalValue() );
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeValue.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\AttributeValue.java:        return attributeValue == null ? "NULL" : attributeValue.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\CommitMultipleOIs.java:        assert ei.dbhLoaded == false : ei.toString() + " still has dbhLoaded flag on";
+src\main\java\com\quinsoft\zeidon\standardoe\CommitToRestServer.java:            String json = task.serializeOi().asJson().withIncremental().addViews( viewList ).toStringWriter().toString();
+src\main\java\com\quinsoft\zeidon\standardoe\CommitToRestServer.java:                stringResponse = writer.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\CommitToRestServer.java:                String errorMsg = restRc.cursor( "RestResponse" ).getAttribute( "ErrorMessage" ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\CommitToRestServer.java:                ei.setTag( Long.toString( ei.getEntityKey() ) );
+src\main\java\com\quinsoft\zeidon\standardoe\DefaultJavaOeConfiguration.java:                homeDirectory = new HomeDirectoryFromString( "" );
+src\main\java\com\quinsoft\zeidon\standardoe\DomainList.java:    								   name, application.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\DomainList.java:	                    reader.getLogger().error( "Domain doesn't have a name.  Values = " + domainProperties.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:                	String value1 = cei1.getAttribute(key.attributeDef ).getString( key.context );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:                	String value2 = cei2.getAttribute(key.attributeDef ).getString( key.context );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:        // establish the cursor.  We don't want toString() changing anything.
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:            builder.append( entityInstance.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:        return builder.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:     * @see com.quinsoft.zeidon.EntityInstance#getKeyString()
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public String getKeyString()
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:        return getExistingInstance().getKeyString();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:        view.dblog().debug( "Lazy-loading %s for parent %s", childEntityDef.getName(), this.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:        String key1 = this.getKeyString();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:            String key2 = s.getKeyString();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                          .appendMessage( "Temporal root: %s", ei.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                              .appendMessage( "Temporal root: %s", ei.toString() )
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                              .appendMessage( "Linked instance: %s", linked.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:            JoeUtils.sysMessageBox( "Debug Incremental", "Changing update flag for " + toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:    public String getKeyString()
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:        return builder.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:        builder.append( getEntityDef().toString() ).append( " Keys: " );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:            builder.append( getInternalAttribute( key ).toString() ).append( "; " );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:        return builder.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:            String value = attrib.getString( null );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                                   .appendMessage( "Target instance = %s", this.toString() )
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:                                   .appendMessage( "Source instance = %s", sourceInstance.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\FileDbUtils.java:        String value = view.cursor( root ).getAttribute( key ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\GeneratedKeyImpl.java:    public String getString()
+src\main\java\com\quinsoft\zeidon\standardoe\GeneratedKeyImpl.java:            stringValue = nativeValue.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\GeneratedKeyImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\GeneratedKeyImpl.java:            stringValue = nativeValue.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\GeneratedKeyImpl.java:            return getString().equals( ((GeneratedKey) obj ).getString() );
+src\main\java\com\quinsoft\zeidon\standardoe\GeneratedKeyImpl.java:            return getString().compareTo( ((GeneratedKeyImpl) o).getString() );
+src\main\java\com\quinsoft\zeidon\standardoe\JavaObjectEngine.java:        id = uuidGenerator.generate().toString();
+src\main\java\com\quinsoft\zeidon\standardoe\JavaObjectEngine.java:            return classpath.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\JavaObjectEngine.java:            taskId = Long.toString( counter );
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstance.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstance.java:        return lodDef.toString();
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstanceComparer.java:                    + tl.toString() + "</td><td style='vertical-align:top;'>"
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstanceComparer.java:                    + tr.toString() + "</td></tr></table></html>" );
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstanceComparer.java:            list.add( ei.toString() + entityFlags( ei ) );
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstanceComparer.java:                                                            ei.getAttribute( attributeDef ).getString(),
+src\main\java\com\quinsoft\zeidon\standardoe\OiRelinker.java:                String entityKeyString = ei.getKeyString();
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:                String attribValue = lastEi.getAttribute( prevAttr ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:            String attribValue = lastEi.getAttribute( attributeDef ).getString();
+src\main\java\com\quinsoft\zeidon\standardoe\SystemApplication.java:     * @see com.quinsoft.zeidon.Application#nullStringEqualsEmptyString()
+src\main\java\com\quinsoft\zeidon\standardoe\SystemApplication.java:    public boolean nullStringEqualsEmptyString()
+src\main\java\com\quinsoft\zeidon\standardoe\TaskImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\ViewImpl.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\standardoe\ViewImpl.java:        log().info( "Entities = " + entities.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\ViewNameList.java:                                      viewName, v.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\ViewNameList.java:            s = v.getTask().toString();
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToJsonStream.java:                jg.writeStringField( "datetime", new LocalDateTime().toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToJsonStream.java:                    String value = attribValue.getString( ei.getTask(), attributeDef );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToJsonStream.java:            linkedMap.put( "lazyLoaded", sb.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToJsonStream.java:                linkedMap.put( "entityKey", Long.toString( ei.getEntityKey() ) );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToJsonStream.java:                linkedMap.put( "linkedSource", Long.toString( recordOwner.getEntityKey() ));
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToXmlStream.java:                String esc = StringEscapeUtils.escapeXml( attributes[ i + 1 ].toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToXmlStream.java:                    entityKey = Long.toString( ei.getEntityKey() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToXmlStream.java:                    entityKey = Long.toString( ei.getEntityKey() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToXmlStream.java:                          "lazyLoaded", lazyLoaded.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOisToXmlStream.java:                value = attrib.getString( currentView.getTask(), attributeDef );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOiToPorStream.java:                        tag = Integer.toHexString( ei.hashCode() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOiToPorStream.java:                        write( bytes.toString() );
+src\main\java\com\quinsoft\zeidon\standardoe\WriteOiToPorStream.java:                        String value = ei.getAttribute( AttributeDef ).getString();
+src\main\java\com\quinsoft\zeidon\SubobjectValidationException.java:        appendMessage( "%d) %s", exceptions.size(), exception.toString() );
+src\main\java\com\quinsoft\zeidon\TaskLogger.java:                    + "Logger level = {}, new logger level = {}, logger class = {}", parentLoggerLevel.toString(), 
+src\main\java\com\quinsoft\zeidon\TaskLogger.java:                    newLevel.toString(), this.logger.getClass().getSimpleName() );
+src\main\java\com\quinsoft\zeidon\TaskLogger.java:        String message = sb.toString();
+src\main\java\com\quinsoft\zeidon\utils\BufferedBinaryStreamReader.java:                String s = new String(buffer, "UTF8" );
+src\main\java\com\quinsoft\zeidon\utils\BufferedBinaryStreamReader.java:            String s = new String(buffer, 0, bufferLth, "UTF8" );
+src\main\java\com\quinsoft\zeidon\utils\BufferedBinaryStreamReader.java:        return str.toString();
+src\main\java\com\quinsoft\zeidon\utils\EventStackTrace.java:        logger.info( "Event notification: %s", notification.toString() );
+src\main\java\com\quinsoft\zeidon\utils\EventStackTrace.java:        logger.info( "Stack trace:\n%s", bytes.toString() );
+src\main\java\com\quinsoft\zeidon\utils\JoeUtils.java:    public static DateTimeFormatter createDateFormatterFromEditString( String editString )
+src\main\java\com\quinsoft\zeidon\utils\JoeUtils.java:    public static DateTime parseStandardDateString( String str )
+src\main\java\com\quinsoft\zeidon\utils\JoeUtils.java:        return writer.toString();
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:    private KeyStringBuilder appendString( String str )
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:        return appendString( str );
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:        String str = domain.convertToString( task, attributeDef, internalValue );
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:        return appendString( str );
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:        return appendString( attr.getString() );
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:     * @see java.lang.Object#toString()
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\utils\KeyStringBuilder.java:        return keyString.toString();
+src\main\java\com\quinsoft\zeidon\utils\PortableFileReader.java:                                        attributeValue = new String( attributeValueBytes );
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:    public QualificationBuilder loadFromSerializedString( String qualString )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:                       .fromString( qualString )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:    public QualificationBuilder loadFromJsonString( String json )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:            String oper = qa.getAttribute( OPER ).getString();
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        String currentEntity = qualView.cursor( ENTITYSPEC ).getAttribute( "EntityName" ).getString();
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "=", attribValue );
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "=", attribValue );
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, oper, attribValue );
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:                                     .getAttribute( VALUE ).setValue( attribValue == null ? null : attribValue.toString() ) ;
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:            addAttribQual( key.getName(), source.getAttribute( key ).getString() );
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        qual.forEntity( lodDef.getRoot().getName() ).addAttribQual( attributeName, value.toString() );
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilderFromJson.java:        if ( token.asString().equals( "true" ) )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilderFromJson.java:        if ( ! token.asString().equals( "false" ) )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilderFromJson.java:            String value = jp.getValueAsString();
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilderFromJson.java:            String value = jp.getValueAsString();
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilderFromJson.java:            String value = jp.getValueAsString();
+src\main\java\com\quinsoft\zeidon\utils\RestServerImplementation.java:                                    .fromString( postContent )
+src\main\java\com\quinsoft\zeidon\utils\RestServerImplementation.java:            return writer.toString();
+src\main\java\com\quinsoft\zeidon\utils\RestServerImplementation.java:            return writer.toString();
+src\main\java\com\quinsoft\zeidon\utils\Timer.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\utils\Timer.java:    public String toString( String header )
+src\main\java\com\quinsoft\zeidon\utils\Timer.java:        return header + " took " + toString() + " seconds.";
+src\main\java\com\quinsoft\zeidon\utils\WriteOisToJsonStreamNoIncrementals.java:                    String value = attrib.getString( null );
+src\main\java\com\quinsoft\zeidon\utils\ZeidonInputStream.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\utils\ZeidonInputStream.java:        return new ZeidonInputStream ( url.openStream(), url.toString() );
+src\main\java\com\quinsoft\zeidon\utils\ZeidonInputStream.java:        String desc = String.format( "Resource '%s' from classLoader %s", resource, classLoader.toString() );
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        this.message = t.toString();
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        return toString();
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:    public String toString()
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        ZeidonException ze = new ZeidonException( t, t.toString() );
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        return prependMessage( "AttributeDef = %s", attributeDef.toString() );
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        return prependMessage( "EntityDef  = %s", entityDef.toString() );
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        return prependMessage( "LodDef  = %s", lodDef.toString() );
+src\main\java\com\quinsoft\zeidon\ZeidonException.java:        return prependMessage( "EI  = %s", entityInstance.toString() );
