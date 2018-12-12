@@ -247,7 +247,7 @@ public class WriteOiToPorStream implements StreamWriter
                         if ( AttributeDef.getType() == InternalType.STRING &&
                              ( value.length() > 254 || specialChars.matcher( value ).matches() ) )
                         {
-                            writeln("%c%d", PortableFileReader.STRING_STORED_AS_BLOB, value.length() );
+                            writeln("%c%d", PortableFileReader.STRING_STORED_AS_BLOB, value.length() + 2 );
                         }
 
                         writeln("%s", value );
