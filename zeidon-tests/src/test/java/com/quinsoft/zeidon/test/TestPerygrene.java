@@ -683,7 +683,18 @@ public class TestPerygrene
         	   int      lTempInteger_4 = 0;
         	   String   szTempString_20 = null;
 
+/*
+ * I think dad said there might be a couple of errors he encountered. But the one I first encountered is that he is  
+ * creating an object recursively (zqFrame) based on a LOD loaded in tzzolodo.xod.
+ * After setViewSubobject a couple of times, we then resetfromsubobject and zqFrame does no reset properly. 
+ * zqFrame resets to the wrong parent (Driver instead of DriverPerson). 
+ * Whereas the tzzolodo object resets correctly. I'm wondering if it has to do with the fact that in zqFrame,  
+ * there are no keys because we are creating and haven't committed...  ??
 
+   FYI... I activate qDrvShift.LOD (so it's in the browser), this is the object that gets loaded into tzzolodo. 
+   This way we can view it's structure to see how zqFrame should be being built.
+   
+ */
         	   //:// Activate the LOD.
         	   nRC = SfActivateSysOI_FromFile( vLOD, "TZZOLODO", ViewToWindow, "target/test-classes/testdata/perygrene/qDrvShift.LOD", zSINGLE );
         	   SetNameForView( vLOD, "qDrvShiftTest", null, zLEVEL_TASK );
@@ -731,6 +742,7 @@ public class TestPerygrene
         	       nRC = SetCursorNextEntityHierarchical( mi_HierarchicalLevel, sb_szEntityType, zqFrameHier );
         	   szEntityType = sb_szEntityType.toString( );
         	   HierarchicalLevel = mi_HierarchicalLevel.intValue( );}
+        	   
         	   //:LOOP WHILE nRC >= 0 
         	   while ( nRC >= 0 )
         	   { 
@@ -759,7 +771,7 @@ public class TestPerygrene
         	         sb_szEntityName = new StringBuilder( szEntityName );
         	      MutableInt mi_HierarchicalLevel = new MutableInt( HierarchicalLevel );
         	             nRC = SetCursorNextEntityHierarchical( mi_HierarchicalLevel, sb_szEntityName, zqFrameHier );
-        	      szEntityName = sb_szEntityName.toString( );
+        	      szEntityType = sb_szEntityName.toString( );
         	      HierarchicalLevel = mi_HierarchicalLevel.intValue( );}
         	   } 
 
@@ -799,7 +811,6 @@ public class TestPerygrene
         	   //:TraceLineS( "New Parent Driver: ", zqFrame.ParentEntity.EntityName )
         	   TraceLineS( "New Parent Driver: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	   //:TraceLineS( "New Child DriverPerson: ", zqFrame.ChildEntity.EntityName )
-        	   TraceLineS( "New Child DriverPerson: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
         	   //:IF zqFrame.ChildEntity EXISTS
         	   if ( CheckExistenceOfEntity( zqFrame, "ChildEntity" ) == 0 )
         	   { 
@@ -808,26 +819,26 @@ public class TestPerygrene
         	   } 
         	   else
         	   { 
-        	      TraceLineS( "No ChildEntity  ", "(Incorrect)" );
+        	      TraceLineS( "No ChildEntity (should be DriverPerson)  ", "(Incorrect)" );
+        	      // When we get here, it looks like there are two ParentEntity(s) Driver/DriverPerson but DriverPerson should be the child.
                   Assert.assertEquals(  CheckExistenceOfEntity( zqFrame, "ChildEntity" ), 0 );
         	   } 
         	   
         	   TraceLineS( "... ", "" );
 
         	   //:// Step down from Driver to DriverPerson
-        	   //:TraceLineS( "Parent Driver: ", zqFrame.ParentEntity.EntityName )
-        	   TraceLineS( "Parent Driver: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
-        	   //:TraceLineS( "Child DriverPerson: ", zqFrame.ChildEntity.EntityName )
-        	   TraceLineS( "Child DriverPerson: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   TraceLineS( "Child DriverPerson: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString());
         	   SetViewToSubobject( zqFrame, "ChildEntity" );
         	   TraceLineS( "(SetViewToSubobject) ", "" );
         	   //:IF zqFrame.ParentEntity EXISTS
         	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
         	   { 
+            	  TraceLineS( "Parent Driver: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	      TraceLineS( "ParentEntity Exists: ", "(Correct)" );
         	   } 
         	   else
         	   { 
+             	   TraceLineS( "Parent Driver: ", "" );
         	      TraceLineS( "No ParentEntity  ", "(Incorrect)" );
                   Assert.assertEquals(  CheckExistenceOfEntity( zqFrame, "ParentEntity" ), 0 );
         	   } 
@@ -836,15 +847,16 @@ public class TestPerygrene
         	   //:TraceLineS( "New Parent DriverPerson: ", zqFrame.ParentEntity.EntityName )
         	   TraceLineS( "New Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	   //:TraceLineS( "New Child Null: ", zqFrame.ChildEntity.EntityName )
-        	   TraceLineS( "New Child Null: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
         	   //:IF zqFrame.ChildEntity EXISTS
         	   if ( CheckExistenceOfEntity( zqFrame, "ChildEntity" ) == 0 )
         	   { 
+            	   TraceLineS( "New Child Null: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
         	      //:TraceLineS( "ChildEntity Exists: ", zqFrame.ChildEntity.EntityName )
         	      TraceLineS( "ChildEntity Exists: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
         	   } 
         	   else
         	   { 
+            	   TraceLineS( "New Child Null: ", "" );
         	      TraceLineS( "No ChildEntity  ", "" );
         	   } 
 
@@ -867,7 +879,6 @@ public class TestPerygrene
 
         	   //:// Step down from DriverPerson to Null.
         	   //:TraceLineS( "Parent DriverPerson: ", zqFrame.ParentEntity.EntityName )
-        	   TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	   //:TraceLineS( "Child Null: ", zqFrame.ChildEntity.EntityName )
         	   TraceLineS( "Child Null: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
         	   SetViewToSubobject( zqFrame, "ChildEntity" );
@@ -875,10 +886,12 @@ public class TestPerygrene
         	   //:IF zqFrame.ParentEntity EXISTS
         	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
         	   { 
+            	   TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	      TraceLineS( "ParentEntity Exists: ", "" );
         	   } 
         	   else
         	   { 
+            	   TraceLineS( "Parent DriverPerson: ", "" );
         	      TraceLineS( "No ParentEntity  ", "(Correct)" );
         	   } 
 
@@ -961,9 +974,11 @@ public class TestPerygrene
            //:IF vLOD.LOD_EntityParent.Name != zqFrame.ParentEntity.EntityName
            if ( CompareAttributeToAttribute( vLOD, "LOD_EntityParent", "Name", zqFrame, "ParentEntity", "EntityName" ) != 0 )
            { 
+        	   // At this point vLOD has reset back to "DriverPerson" but zqFrame has set back ot the parent of "DriverPerson" which is "Driver"
+        	   // Is this because zqFrame doesn't have any keys??
                TraceLineS( "(Error: No match on reset Parents)", "" );
-               //Assert.assertEquals( vLOD.cursor( "LOD_EntityParent" ).getAttribute( "Name" ).getString(),
-		       //                     zqFrame.cursor( "ParentEntity" ).getAttribute( "EntityName" ).getString() );
+               Assert.assertEquals( vLOD.cursor( "LOD_EntityParent" ).getAttribute( "Name" ).getString(),
+		                            zqFrame.cursor( "ParentEntity" ).getAttribute( "EntityName" ).getString() );
            } 
            
            return( 0 );
