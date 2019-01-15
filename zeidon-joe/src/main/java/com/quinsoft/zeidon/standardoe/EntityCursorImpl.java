@@ -384,13 +384,20 @@ class EntityCursorImpl implements EntityCursor
         // one we're about to create.  If it is then we are creating the child of a recursive
         // relationship.  If the EntityDef is the recursive parent then the LodDef of
         // the new instance should be the recursive child.
-        if ( parent != null &&
-            newInstanceEntityDef == parent.getEntityDef() && // Recursive relationship?
-            newInstanceEntityDef.isRecursiveParent() )        // EntityDef is recursive parent?
+        if ( parent != null )
         {
-            // Change the EntityDef of the instance we're about to create to be the child
-            // of the recursive relationship.
-            newInstanceEntityDef = newInstanceEntityDef.getRecursiveChild();
+            EntityDef parentEntityDef = parent.getEntityDef();
+
+            if ( newInstanceEntityDef == parentEntityDef && // Recursive relationship?
+                 newInstanceEntityDef.isRecursiveParent() )        // EntityDef is recursive parent?
+            {
+                // Change the EntityDef of the instance we're about to create to be the child
+                // of the recursive relationship.
+                newInstanceEntityDef = newInstanceEntityDef.getRecursiveChild();
+            }
+            else
+            if ( newInstanceEntityDef.getRecursiveChild() == parentEntityDef )
+                newInstanceEntityDef = newInstanceEntityDef.getRecursiveChild();
         }
 
         // Create a new instance and initialize the attributes.
