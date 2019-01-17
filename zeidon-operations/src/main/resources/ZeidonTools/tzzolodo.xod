@@ -1148,9 +1148,6 @@ aLTH       1
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 96
-aDERIVEDF  oTZZOLODO_DeriveKey
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      DIL_Text
@@ -1174,9 +1171,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 98
-aDERIVEDF  oTZZOLODO_DIL_TextMsg
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      DIL_Inherited
@@ -1188,9 +1182,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 99
-aDERIVEDF  oTZZOLODO_DIL_Inherited
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      SeqNo_LOD_Entity
@@ -1579,9 +1570,6 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aXVAATT_TOK 131
-aDERIVEDF  oTZDMSRCO_DeriveDomName
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      DerivedDataType
@@ -1592,9 +1580,6 @@ aTYPE      S
 aLTH       1
 aSEQ_AD    A
 aXVAATT_TOK 132
-aDERIVEDF  oTZDMSRCO_DeriveDomDataType
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      DerivedMaxStringLth
@@ -1605,9 +1590,6 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    A
 aXVAATT_TOK 133
-aDERIVEDF  oTZDMSRCO_DeriveDomStringLth
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      DerivedDecimalFormat
@@ -1618,9 +1600,6 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    A
 aXVAATT_TOK 134
-aDERIVEDF  oTZDMSRCO_DeriveDomDecFormat
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      Name
@@ -1835,9 +1814,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 151
-aDERIVEDF  oTZZOLODO_DerivedGenName
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    6
 aNAME      GenerationType
@@ -2792,9 +2768,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 226
-aDERIVEDF  oTZZOLODO_ECOPERGenName
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      GenerationType
@@ -3668,13 +3641,8 @@ aDELETE    Y
 aPDELETE   D
 aUPDATE    Y
 aINCLSRC   Y
-aECEOPER   oTZZOLODO_AttributeConstraints
-aECDEL     Y
-aECACC     Y
 aMAX_LTH   1645
 aHANG_FK   N
-aECESRCFILE com.quinsoft.zeidon.zeidontools.TZZOLO2O_Object
-aECESRCTYPE VML
 
 eATTRIB    5
 aNAME      ZKey
@@ -3765,9 +3733,6 @@ aLTH       1
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 306
-aDERIVEDF  oTZZOLODO_DeriveKey
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      DIL_Text
@@ -3791,9 +3756,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 308
-aDERIVEDF  oTZZOLODO_DIL_TextMsg
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      DIL_Inherited
@@ -3805,9 +3767,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 309
-aDERIVEDF  oTZZOLODO_DIL_Inherited
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      SeqNo_LOD_Entity
@@ -3831,8 +3790,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 311
-aDERIVEDF  oTZZOLODO_DIL_NLS_Text
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.TZZOLO2O_Object
 aDRSRCTYPE VML
 
 eATTRIB    5
@@ -3923,9 +3880,6 @@ aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 319
-aDERIVEDF  oTZZOLODO_dAttributeTextMapName
-aDERIVEDC  com.quinsoft.zeidon.zeidontools.TZZOLO2O_Object
-aDRSRCTYPE VML
 
 eCHILDENTITY 5
 aNAME      ER_Attribute
@@ -4244,9 +4198,6 @@ aTYPE      S
 aLTH       32
 aSEQ_AD    A
 aXVAATT_TOK 345
-aDERIVEDF  oTZDMSRCO_DeriveDomName
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      DerivedDataType
@@ -4257,9 +4208,6 @@ aTYPE      S
 aLTH       1
 aSEQ_AD    A
 aXVAATT_TOK 346
-aDERIVEDF  oTZDMSRCO_DeriveDomDataType
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      DerivedMaxStringLth
@@ -4270,9 +4218,6 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    A
 aXVAATT_TOK 347
-aDERIVEDF  oTZDMSRCO_DeriveDomStringLth
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      DerivedDecimalFormat
@@ -4283,9 +4228,6 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    A
 aXVAATT_TOK 348
-aDERIVEDF  oTZDMSRCO_DeriveDomDecFormat
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    7
 aNAME      Name
@@ -5813,9 +5755,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 469
-aDERIVEDF  oTZZOLODO_OperationGenName
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    5
 aNAME      DoNotMergeFlag
@@ -6602,9 +6541,6 @@ aLTH       254
 aSEQ_AD    A
 aUPDATE    Y
 aXVAATT_TOK 531
-aDERIVEDF  oTZZOLODO_OCOPERGenName
-aDERIVEDC  TZZOLODO
-aDRSRCTYPE C
 
 eATTRIB    4
 aNAME      DoNotMergeFlag

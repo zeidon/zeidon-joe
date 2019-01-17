@@ -833,7 +833,7 @@ public class TestPerygrene
         	   //:IF zqFrame.ParentEntity EXISTS
         	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
         	   { 
-            	  TraceLineS( "Parent Driver: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+            	  TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	      TraceLineS( "ParentEntity Exists: ", "(Correct)" );
         	   } 
         	   else
@@ -880,18 +880,20 @@ public class TestPerygrene
         	   //:// Step down from DriverPerson to Null.
         	   //:TraceLineS( "Parent DriverPerson: ", zqFrame.ParentEntity.EntityName )
         	   //:TraceLineS( "Child Null: ", zqFrame.ChildEntity.EntityName )
-        	   TraceLineS( "Child Null: ", zqFrame.cursor("ChildEntity").getAttribute("EntityName" ).getString() );
+        	   RESULT = SetCursorFirstEntity( zqFrame, "ParentEntity", "" );
+        	   TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   TraceLineS( "Child Null: ", "" );
         	   SetViewToSubobject( zqFrame, "ChildEntity" );
         	   TraceLineS( "(SetViewToSubobject) ", "" );
         	   //:IF zqFrame.ParentEntity EXISTS
         	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
         	   { 
-            	   TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+            	  TraceLineS( "Parent DriverPerson: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
         	      TraceLineS( "ParentEntity Exists: ", "" );
         	   } 
         	   else
         	   { 
-            	   TraceLineS( "Parent DriverPerson: ", "" );
+            	  TraceLineS( "Parent DriverPerson: ", "" );
         	      TraceLineS( "No ParentEntity  ", "(Correct)" );
         	   } 
 
@@ -912,7 +914,53 @@ public class TestPerygrene
         	      TraceLineS( "Next Parent does NOT exist ", "(Incorrect)" );
                   Assert.assertTrue( "Next Parent does NOT exist", RESULT >= zCURSOR_SET );
         	   } 
-    	   
+        	   
+        	   ResetViewFromSubobject( zqFrame );
+        	   TraceLineS( "(ResetViewFromSubobject) ", " now on Driver" );
+        	   TraceLineS( "(SET CURSOR NEXT after reset) ", "" );
+        	   RESULT = SetCursorNextEntity( zqFrame, "ParentEntity", "" );
+        	   if ( RESULT >= zCURSOR_SET )
+        	   { 
+        	      TraceLineS( "Next Parent DeliveryRoute Exists (Correct) ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "Next Parent does NOT exist ", "(Incorrect)" );
+                  Assert.assertTrue( "Next Parent Existx", RESULT >= zCURSOR_SET );
+        	   } 
+        	   
+        	   SetViewToSubobject( zqFrame, "ChildEntity" );
+        	   TraceLineS( "(SetViewToSubobject) ", "" );
+        	   //:IF zqFrame.ParentEntity EXISTS
+        	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
+        	   { 
+            	  TraceLineS( "Parent DeliveryLeg: ", zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+        	      TraceLineS( "ParentEntity Exists: ", "" );
+        	   } 
+        	   else
+        	   { 
+        	      TraceLineS( "No ParentEntity DeliveryLeg  ", "(Incorrect)" );
+        	   } 
+        	   SetViewToSubobject( zqFrame, "ChildEntity" );
+        	   TraceLineS( "(SetViewToSubobject) now should be null", "" );
+        	   if ( CheckExistenceOfEntity( zqFrame, "ParentEntity" ) == 0 )
+        	   { 
+         	      TraceLineS( "ParentEntity Exists  ", "(Incorrect)" );
+        	   } 
+        	   else
+        	   { 
+             	  TraceLineS( "No ParentEntity Should exist (Correct) ", "");
+        	   } 
+
+        	   ResetViewFromSubobject( zqFrame );
+        	   TraceLineS( "(ResetViewFromSubobject) now on DeliveryLeg: ",  zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+
+        	   ResetViewFromSubobject( zqFrame );
+        	   TraceLineS( "(ResetViewFromSubobject) now on DeliveryRoute: ",  zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+
+        	   ResetViewFromSubobject( zqFrame );
+        	   TraceLineS( "(ResetViewFromSubobject) now on DriverShift: ",  zqFrame.cursor("ParentEntity").getAttribute("EntityName" ).getString() );
+
  		   return 0;
         }
         

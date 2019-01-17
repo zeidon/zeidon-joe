@@ -185,9 +185,6 @@ aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 15
-aDERIVEDF  ozqFrame_dDisplayBooleanValue
-aDERIVEDC  com.apex.perygrene.zqFrame_Object
-aDRSRCTYPE VML
 
 eATTRIB    3
 aNAME      wSubgroupValue
@@ -677,9 +674,6 @@ aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 58
-aDERIVEDF  ozqFrame_dFinalParameterValue
-aDERIVEDC  com.apex.perygrene.zqFrame_Object
-aDRSRCTYPE VML
 
 eATTRIB    4
 aNAME      wBooleanConditionName
@@ -750,9 +744,6 @@ aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 63
-aDERIVEDF  ozqFrame_dFinalParameterValue
-aDERIVEDC  com.apex.perygrene.zqFrame_Object
-aDRSRCTYPE VML
 
 eCHILDENTITY 3
 aNAME      PostActivateQual
@@ -2130,9 +2121,6 @@ aLTH       254
 aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 163
-aDERIVEDF  ozqFrame_dFinalParameterValue
-aDERIVEDC  com.apex.perygrene.zqFrame_Object
-aDRSRCTYPE VML
 
 eCHILDENTITY 3
 aNAME      DisplaySelectionSubCriteria
