@@ -667,7 +667,16 @@ public class TestZencas
 		tester.testIncludeCommitSubentityError( testview );
         System.out.println("===== Finished testIncludeCommitSubentityError ========");
 	}
-
+	
+	@Test
+	public void mPersonProspectSaveAttribute()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mPersonProspectSaveAttribute( testview );
+        System.out.println("===== Finished mPersonProspectSaveAttribute ========");
+	}
 	@Test
 	public void testExcludeSubentityError()
 	{
@@ -1383,6 +1392,70 @@ public class TestZencas
 			super( qual );
 		}
 
+		public int
+		mPersonProspectSaveAttribute( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mProspct = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int      ViewCluster = 0;
+		   int RESULT=0;
+
+		   // KJS 02/13/19 - We have two objects Prospect and Person, I create mProspct.Prospect and
+		   // include mPerson.Person into it. If I save mPerson first, it does the "INSERT INTO Prospect" but we
+		   // lose some of the attributes of Prospect because mPerson.Prospect does not contain all of the attributes of 
+		   // Prospect. While in this situation, it is more proper to save mProspct first (which solves the problem), 
+		   // we think that it should work correctly when saving mPerson first. 
+
+		   RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		   SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		   fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+		   if ( CheckExistenceOfEntity( mPerson, "Prospect") == 0 )
+		   {
+			   DeleteEntity( mPerson, "Prospect", zREPOS_NONE );
+			   mPerson.commit();
+		   }
+		   RESULT = ActivateEmptyObjectInstance( mProspct, "mProspct", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( mProspct, "Prospect", zPOS_AFTER );
+		   mProspct.cursor("Prospect").getAttribute("Type").setValue("5");
+		   mProspct.cursor("Prospect").getAttribute("AcceptanceStatus").setValue("A");
+		   mProspct.cursor("Prospect").getAttribute("PriorityStatus").setValue("V");
+		   mProspct.cursor("Prospect").getAttribute("Status").setValue("S");
+		   mProspct.cursor("Person").includeSubobject(mPerson.cursor( "Person" ), CursorPosition.NEXT);
+		   if ( mPerson.cursor( "Person" ).getAttribute("Gender").getString().equals("M") )
+			   mPerson.cursor("Person").getAttribute("Gender").setValue("F");
+		   else
+			   mPerson.cursor("Person").getAttribute("Gender").setValue("M");
+		   {MutableInt mi_ViewCluster = new MutableInt( ViewCluster );
+	       CreateViewCluster( ViewToWindow, mi_ViewCluster );
+	       ViewCluster = mi_ViewCluster.intValue( );}
+	       AddToViewCluster( ViewCluster, mPerson, 0 );
+	       AddToViewCluster( ViewCluster, mProspct, 0 );
+	       {MutableInt mi_Ignore = new MutableInt( 0 );
+	       RESULT = CommitMultipleObjectInstances( ViewCluster, mi_Ignore );} 
+	       int iPropectID = mProspct.cursor("Prospect").getAttribute("ID").getInteger();
+		   DropView( mProspct );
+		   mProspct.setView(new QualificationBuilder( zencas )
+                    .setLodDef( "mProspct" )
+                    .addAttribQual( "ID", iPropectID )
+                    .activate());
+		   // After the save of first mPerson, then mProspct, we have lost the AcceptanceStatus and
+		   // ProspectPriority because they are hidden in mPerson.Prospect.
+		   if ( mProspct.cursor("Prospect").getAttribute("AcceptanceStatus").getString().equals("") && 
+				mProspct.cursor("Prospect").getAttribute("PriorityStatus").getString().equals(""))
+	  	        Assert.assertTrue( "Error when saving mPerson before mProspct, some attributes are null when they should have values!! ", false );
+	       		   
+		   return 0;
+		}
+		
 		public int
 		mFAProfPermissionIssue( View ViewToWindow )
 		{
