@@ -62,6 +62,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.InvalidViewException;
 import com.quinsoft.zeidon.ObjectConstraintException;
+import com.quinsoft.zeidon.PessimisticLockingException;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
@@ -2401,6 +2402,20 @@ public abstract class VmlOperation
       return 0;
    }
 
+
+   protected static final int IsNumeric( String string )
+   {
+	   try  
+	   {  
+	     int d = Integer.parseInt(string);  
+  	     return d;  
+	   }  
+	   catch(NumberFormatException nfe)  
+	   {  
+	     return -1;  
+	   }  
+   }
+   
    protected static final int zatol( String string )
    {
       return Integer.parseInt( string );
@@ -2561,7 +2576,7 @@ public abstract class VmlOperation
                                       int    strTwoMaxCompare,
                                       int    maxCompareLth )
    {
-      int  nRC;
+      int  nRC = 0;
 
       // Ensure all parms sync up and that strOneIdx + strOneMaxReceive is less than maxCompareLth.
       if ( maxCompareLth <= 0 )
@@ -2613,6 +2628,9 @@ public abstract class VmlOperation
 
       String string1 = null;
       String string2 = null;
+      try
+      {
+      
 
       if ( strOneMaxCompare <= 0 )
       {
@@ -2666,6 +2684,12 @@ public abstract class VmlOperation
 //          nRC = zstrncmp( string1, string2, nbrToCompare );
 //       else
              nRC = zstrcmp( string1, string2 );
+      }
+      }
+      catch( Exception e )
+      {
+         TraceLineS("ZeidonStringCompare Error: ", e.getMessage()); 	  
+         return -1;
       }
 
       nRC = nRC == 0 ? 0 : nRC > 0 ? 1 : -1;
@@ -4460,6 +4484,48 @@ public abstract class VmlOperation
       return nRC;
    }
 
+   //  RETURNS: zCURSOR_NULL      - No entity instances exist
+   //           zCURSOR_UNCHANGED - Entity cursor unchanged
+   //           zCURSOR_SET       - Entity position established
+   //           zCALL_ERROR       - Error in call
+   public static int  SetCursorFirstEntityByDecimal( View view, String entityName, String attributeName, double dValue, String scopingEntity )
+   {
+      int nRC;
+      EntityCursor cursor = view.cursor( entityName );
+      if ( cursor.hasAny( scopingEntity ) == false )
+      {
+         nRC = zCURSOR_NULL;
+      }
+      else
+      {
+         nRC = cursor.setFirst( attributeName, dValue, scopingEntity ).toInt();
+      }
+
+      return nRC;
+   }
+
+   //  RETURNS: zCURSOR_NULL          - No entity instances exist
+   //           zCURSOR_UNCHANGED     - Entity cursor unchanged
+   //           zCURSOR_SET           - Entity position established
+   //           zCURSOR_SET_NEWPARENT - Entity position changed within new parent
+   //           zCALL_ERROR           - Error in call
+   public static int  SetCursorNextEntityByDecimal( View view, String entityName, String attributeName, double dValue, String scopingEntity )
+   {
+      // TODO - need setNext using scopingEntity???
+      int nRC;
+      EntityCursor cursor = view.cursor( entityName );
+      if ( cursor.hasAny( scopingEntity ) == false )
+      {
+         nRC = zCURSOR_NULL;
+      }
+      else
+      {
+         nRC = cursor.setNext( attributeName, dValue, scopingEntity ).toInt(); // , scopingEntity );
+      }
+
+      return nRC;
+   }
+
    //  RETURNS:    1 - Attr > string
    //              0 - Attributes are logically equal
    //             -1 - Attr < string
@@ -4878,30 +4944,38 @@ public abstract class VmlOperation
 		options.setActivateFlags(ACTIVATE_CONTROL.get( control ));
 		options.setQualificationObject(activateQualificationView);
 		//View view2 = qual.activateObjectInstance( lodDefName, activateQualificationView, ACTIVATE_CONTROL.get( control ) );
-		View view = qual.activateObjectInstance(options);
+		   try
+		   {
+				View view = qual.activateObjectInstance(options);
+				
+				LodDef lodDef = view.getLodDef();
+				returnView.setView( view );
+				switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
+				{
+					case 0:
+						nRC = -1;
+						break;
+					
+					case 1:
+						nRC = 0;
+						break;
+					
+					default:
+						// If we have defined a limit on the root, and we activated that limit, then return 2.
+						if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
+							nRC = 2;
+						else
+							nRC = 1;
+						break;
+				}
 		
-		LodDef lodDef = view.getLodDef();
-		returnView.setView( view );
-		switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
-		{
-			case 0:
-				nRC = -1;
-				break;
-			
-			case 1:
-				nRC = 0;
-				break;
-			
-			default:
-				// If we have defined a limit on the root, and we activated that limit, then return 2.
-				if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
-					nRC = 2;
-				else
-					nRC = 1;
-				break;
-		}
+		   }
+		   catch ( PessimisticLockingException e1 )
+		   {
+				   return zLOCK_ERROR;
+		   }
 		
-		TraceLineS( "Display object instance from ActivateObjectInstance for OD: ", view.getLodDef().getName() );
+		
 		// DisplayObjectInstance( view, "", "" );
 		return nRC;
 	}
@@ -4924,12 +4998,19 @@ public abstract class VmlOperation
 
    public int ActivateOI_FromFile( zVIEW view, String lodDefName, View qualView, String fileName, int control )
    {
-       view.setView( task.deserializeOi()
-                         .fromFile( fileName )
-                         .setLodDef( lodDefName )
-                         .setFlags( control )
-                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
-                         .activateFirst() );
+	   try
+	   {
+	       view.setView( task.deserializeOi()
+	                         .fromFile( fileName )
+	                         .setLodDef( lodDefName )
+	                         .setFlags( control )
+	                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+	                         .activateFirst() );
+	   }
+	   catch( Exception e )
+	   {
+	      return -1;   
+	   }
       return 0;
    }
 
@@ -5034,8 +5115,8 @@ public abstract class VmlOperation
       return 0;
    }
 
-   protected String SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
-                                    View srcView, String srcEntity, String srcAttribute, int control )
+   protected int SetOI_FromBlob( zVIEW returnView, String lodDefName, TaskQualification qualView,
+                                 View srcView, String srcEntity, String srcAttribute, int control )
    {
       StringBuilder sb = new StringBuilder( 256 );
 
@@ -5044,15 +5125,18 @@ public abstract class VmlOperation
       int rc = SetOI_FromBlob( returnView, sb, qualView, srcView, srcEntity, srcAttribute, control );
       if ( rc < 0 )
       {
-         return null;
+         //return null;
+    	  return -1;
       }
       else
       {
-         return sb.toString( );
+         //return sb.toString( );
+    	  return 0;
       }
    }
 
-   // Not sure why but we have a lot of calls to SetOI_FromBlob where the lodDefName is
+
+      // Not sure why but we have a lot of calls to SetOI_FromBlob where the lodDefName is
    // 0. We never seem to use this value... So I am adding this override.
    //SetOI_FromBlob( mPerson, 0, mChurch, mChurch, "ACR_BatchItem", "BlobOI", zSINGLE );
    protected String SetOI_FromBlob( zVIEW returnView, int lodDefName, TaskQualification qualView,
@@ -5432,8 +5516,7 @@ public abstract class VmlOperation
 
    protected void SetViewUpdate( View view )
    {
-      // TODO DG
-      // view.setInstanceUpdated( true );
+       view.setReadOnly( false );
    }
 
    //  RETURNS:    0 or greater  - Number of unhidden Entities.
@@ -7700,6 +7783,8 @@ public abstract class VmlOperation
                CreateEntity( vKZXMLPGO, "DialogWindowList", zPOS_LAST );
                SetAttributeFromString( vKZXMLPGO, "DialogWindowList", "DialogName", stringDlgTag );
                SetAttributeFromString( vKZXMLPGO, "DialogWindowList", "WindowName", stringWndTag );
+               CreateEntity( vKZXMLPGO, "PagePath", zPOS_LAST );
+               SetAttributeFromString( vKZXMLPGO, "PagePath", "LastPageName", vKZXMLPGO.cursor("Session").getAttribute("CurrentPageName").getValue().toString() );
 
                SetAttributeFromString( vKZXMLPGO, "DialogWindowList", "FunctionCall", "StartSubwindow" );
                SetAttributeFromString( vKZXMLPGO, "NextDialogWindow", "FunctionCall", "StartSubwindow" );

@@ -196,8 +196,17 @@ public class TestZencas
 		tester.testBlobs( testview );
         System.out.println("===== Finished testBlobs ========");
 	}
-
-
+	
+	@Test
+	public void testAttributeReadOnlyError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testAttributeReadOnlyError( testview );
+        System.out.println("===== Finished testAttributeReadOnlyError ========");
+	}
+	
 	@Test
 	public void testDateTimeCompare()
 	{
@@ -405,8 +414,6 @@ public class TestZencas
                             .addAttribQual( "ID", 50 )
                             .activate();
 
-        stud.cursor( "Student" ).getAttribute( "eMailAddress" ).setValue( "xxx@comcast.net" );
-
         SerializeOi options = new SerializeOi();
         options.withIncremental();
         new SerializeOi().withIncremental().useCamelCase().addView( stud, person ).toTempDir( "stud.json" );
@@ -609,6 +616,46 @@ public class TestZencas
 		VmlTester tester = new VmlTester( testview );
 		tester.testzGetNextEntityAttributeName( testview );
         System.out.println("===== Finished testzGetNextEntityAttributeName ========");
+	}
+
+	@Test
+	public void testIncludeCommit()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testIncludeCommit( testview );
+        System.out.println("===== Finished testIncludeCommit ========");
+	}
+
+	@Test
+	public void testLocking()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testLocking( testview );
+        System.out.println("===== Finished testIncludeCommit ========");
+	}
+
+	@Test
+	public void testIncludeCommitSubentityError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testIncludeCommitSubentityError( testview );
+        System.out.println("===== Finished testIncludeCommitSubentityError ========");
+	}
+
+	@Test
+	public void testExcludeSubentityError()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testExcludeSubentityError( testview );
+        System.out.println("===== Finished testExcludeSubentityError ========");
 	}
 
 	@Test
@@ -1188,6 +1235,26 @@ public class TestZencas
 	}
 
 	@Test
+	public void mFAProfPermissionIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfPermissionIssue( testview );
+        System.out.println("===== Finished mFAProfPermissionIssue ========");
+	}
+
+	@Test
+	public void mFAProfPermissionIssueTemporal()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfPermissionIssueTemporal( testview );
+        System.out.println("===== Finished mFAProfPermissionIssue ========");
+	}
+
+	@Test
 	public void testUsingJacob()
 	{
 
@@ -1272,6 +1339,150 @@ public class TestZencas
 		}
 
 		public int
+		mFAProfPermissionIssue( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+		   
+		   // KJS 07/02/18 - I have two tests that are similar, this one does NOT use temporal entity.
+		   // The other test mFAProfPermissionIssueTemporal uses CreateTemporal... 
+		   // I had been getting an assert error when committing.
+		   
+		   // ALSO... a different error... When I do a delete of FinAidAward and then do a commit, I get a permission error
+		   // because a subentity is marked as "excluded" instead of "deleted". See comment before the last commit.
+		   
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );			
+			
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   //RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+			
+	    	//ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   //RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+			CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+		    //mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+		    
+		    //FinAidAwardDisbursement
+			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+
+			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
+		    //AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	    
+		    
+		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
+	   	    RESULT = CommitObjectInstance( mFAProf );
+	   	    
+	   	    // There is an error that when I delete FinAidAward, the entity FinAidAwardDisbursement (which has permission Delete and
+	   	    // parent delete behavior is "delete") is marked as "excluded" and so we get a permission error on FinAidAwardDisbursement when 
+	   	    // trying to commit.
+	   	    RESULT = DeleteEntity( mFAProf, "FinAidAward", zREPOS_NONE );					   
+	   	    RESULT = CommitObjectInstance( mFAProf );
+		   return 0;
+		}
+
+		public int
+		mFAProfPermissionIssueTemporal( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+		   
+		   // KJS 07/02/18 - This test uses CreateTemporalEntity. Depending on when I call the CreateTemporal... I get
+		   // permission errors on the commit of mFAProf. Please see comments further down.
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );			
+			
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+			
+	    	//ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+		   //xxxx
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+			CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+		    
+		    //FinAidAwardDisbursement
+			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+			// *********** READ COMMENT ********
+            // If I uncomment this CreateTemporal... and comment out the next CreateTemporal...
+			// we DO NOT get any permission error on commit.
+			//CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+			
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+
+			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");		    
+		    AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );	    
+		    
+		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
+	   	    RESULT = CommitObjectInstance( mFAProf );
+					   
+		   return 0;
+		}
+		
+		public int
 		activateRootOnly( View ViewToWindow )
 		{
 		   zVIEW    mPerson = new zVIEW( );
@@ -1333,7 +1544,7 @@ public class TestZencas
             * But DG changed SystemApplication.nullStringEqualsEmptyString to true and now
             * this works correctly. So I took my change out and put his in.
 		   */
-           
+
             // These are views that need to get created in order to be able to activate
             // mStudent.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
@@ -1931,7 +2142,7 @@ public class TestZencas
 		                      int      lTempInteger_0 )
 		{
 		   int      RESULT = 0;
-		
+
 		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
@@ -1942,14 +2153,14 @@ public class TestZencas
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
-		
+
 		private int
 		o_fnLocalBuildlTermWithNullValue( View     vSubtask,
 		                      zVIEW    vQualObject,
 		                      int      lTempInteger_0 )
 		{
 		   int      RESULT = 0;
-		
+
 		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeTerm" );
@@ -1973,6 +2184,8 @@ public class TestZencas
 		{
 		   zVIEW    mFAProf1      = new zVIEW( );
 		   zVIEW    mFAProf2      = new zVIEW( );
+		   zVIEW    mClass      = new zVIEW( );
+		   zVIEW   vTempViewVar_0 = new zVIEW();
 		   int RESULT=0;
 		   double dAmount=0;
 
@@ -2001,6 +2214,7 @@ public class TestZencas
 	       // Check spawning after Include entity
  		   Assert.assertEquals("mFAProf2.FinAidAwardPeriod not correctly spawned after include.", 0, RESULT );
 
+ 		   
  		   mFAProf1.cursor("FinAidAwardDisbursement").createTemporalEntity();
 	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 234) ;
 	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 432) ;
@@ -2015,6 +2229,30 @@ public class TestZencas
  		   // would be used instead.
 	       RESULT = mFAProf2.cursor("FinAidAwardDisbursement").setFirst("Amount", 234).toInt();
  		   Assert.assertEquals("FinAidAwardDisbursement not correctly spawned after createTemporal.", 0, RESULT);
+ 		   
+ 		   
+           // KJS Adding new test because using createTemporalEntity, after doing an include then cancelSubobject, the
+ 		   // link on the included entity was not broken. At perygrene, we get an error when doing the last createTemporalEntity but
+ 		   // of course here I'm not getting it...
+ 		   mFAProf2.drop();
+	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, 31967 );
+
+	       RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
+	       DropView( vTempViewVar_0 );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+ 		   
+	       mFAProf1.cursor("FinAidAwardDisbursement").createEntity();
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 123) ;
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 321) ;
+		   RESULT = IncludeSubobjectFromSubobject( mFAProf1, "FADisbursementClass", mClass, "Class", zPOS_AFTER );
+
+	       mFAProf1.cursor("FinAidAwardDisbursement").createTemporalEntity();
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 234) ;
+	       mFAProf1.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 432) ;
+		   RESULT = IncludeSubobjectFromSubobject( mFAProf1, "FADisbursementClass", mClass, "Class", zPOS_AFTER );
+	       mFAProf1.cursor("FinAidAwardDisbursement").cancelSubobject();
+	       // Aaaarrrrgggghhhh! At perygrene, we have a case where doing the following creates an error. Why do we not get that here???
+	       mFAProf1.cursor("FinAidAwardDisbursement").createTemporalSubobjectVersion();
 
 		   return 0;
 		}
@@ -2561,6 +2799,52 @@ public class TestZencas
 
 		}
 
+		public int
+		testAttributeReadOnlyError( View ViewToWindow )
+		{
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    mBatch = new zVIEW( );
+			zVIEW    mPerson = new zVIEW( );
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+
+
+   RESULT = ActivateEmptyObjectInstance( mBatch, "mBatch", ViewToWindow, zSINGLE );
+   RESULT = CreateEntity( mBatch, "DataEntryBatch", zPOS_AFTER );
+   SetAttributeFromString( mBatch, "DataEntryBatch", "Name", "WebOnlineApp" );
+   SetAttributeFromString( mBatch, "DataEntryBatch", "Type", "P" );
+   SetAttributeFromString( mBatch, "DataEntryBatch", "OnlineOrManualEntryType", "O" );
+
+   SetNameForView( mBatch, "mBatch", null, zLEVEL_TASK );
+
+   SetBlobFromOI( mUser, "User", "ProspectInitialApplicationPerson", mPerson, 0 );
+   RESULT = CommitObjectInstance( mUser );
+
+   RESULT = CreateEntity( mBatch, "BatchItem", zPOS_AFTER );
+   SetAttributeFromString( mBatch, "BatchItem", "InquiryOrApplicationType", "A" );
+   RESULT = IncludeSubobjectFromSubobject( mBatch, "OnlineCreatingUser", mUser, "User", zPOS_AFTER );
+
+   SetBlobFromOI( mBatch, "BatchItem", "BlobOI", mPerson, 0 );
+
+   SetAttributeFromString( mBatch, "BatchItem", "wCopyMergeStatus", "" );
+   SetAttributeFromString( mBatch, "BatchItem", "wPotentialDuplicateFlag", "" );
+   SetAttributeFromString( mUser, "User", "ProspectInitialApplicationPerson", "" );
+
+
+   RESULT = CommitObjectInstance( mBatch );
+   RESULT = CommitObjectInstance( mUser );
+			return 0;
+		}
+		
 		public int
 		testzGetNextEntityAttributeName( View ViewToWindow )
 		{
@@ -3826,7 +4110,7 @@ public class TestZencas
 
 	         return 0;
 		}
-		
+
 		public int
 		testAutoLoadFromParent( View ViewToWindow )
 		{
@@ -3834,14 +4118,14 @@ public class TestZencas
 			zVIEW    mTstClss = new zVIEW( );
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
-			
+
 			// When the xod had autoloadforparent=Y but the foreign key in the parent was null, the child was still being created.
 			// It's fixed but I am still adding this.
-			
+
 			o_fnLocalBuildQualTstClass( ViewToWindow, vTempViewVar_0, 776 );
 			RESULT = ActivateObjectInstance( mTstClss, "mTstClss", ViewToWindow, vTempViewVar_0, zSINGLE );
 			Assert.assertEquals("Child entity faculty should be null.", mTstClss.cursor("Faculty").checkExistenceOfEntity(), CursorResult.NULL);
-			
+
 			return 0;
 		}
 
@@ -4944,6 +5228,146 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
   		   return( 0 );
    		}
 
+   		public int
+   		testIncludeCommit( View     ViewToWindow )
+   		{
+   		   zVIEW    mStudent = new zVIEW( );
+   		   zVIEW    lCategry = new zVIEW( );
+   		   zVIEW    mClass = new zVIEW( );
+   		   zVIEW    mCourse = new zVIEW( );
+   		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   zVIEW    mUser = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   int      lTempInteger_0 = 0;
+   		   int      RESULT = 0;
+   		   
+   		   // There is an error on commit that we get after doing an include.
+   		   // I set up this test case to show that error but at the moment I am not getting
+   		   // an error here. I will keep this for now because I think I will make changes
+   		   // to recreate the error.
+   		   
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_APPLICATION );
+   		   
+
+	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, 31967 );
+	       RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
+	       DropView( vTempViewVar_0 );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+		   
+	       o_fnLocalBuildmCourse( ViewToWindow, vTempViewVar_0, 657 );
+	       RESULT = ActivateObjectInstance( mCourse, "mCourse", ViewToWindow, vTempViewVar_0, zSINGLE );
+	       DropView( vTempViewVar_0 );
+		   SetNameForView( mCourse, "mCourse", null, zLEVEL_TASK );
+
+   	       RESULT = ExcludeEntity( mClass, "Course", zREPOS_AFTER );
+   		   RESULT = IncludeSubobjectFromSubobject( mClass, "Course", mCourse, "Course", zPOS_AFTER );
+		   
+		   SetAttributeFromString( mCourse, "Course", "Note", "This is a course test" );
+   		   RESULT = CommitObjectInstance( mCourse );
+		   
+		   SetAttributeFromString( mClass, "Class", "Note", "This is a class test" );
+		   SetAttributeFromString( mClass, "Course", "Description", "This is a course 2 test" );
+   		   RESULT = CommitObjectInstance( mClass );
+
+   		   TraceLineS(" *** AFTER commit mClass ", "");
+  		   return( 0 );
+   		}
+
+   		public int
+   		testIncludeCommitSubentityError( View     ViewToWindow )
+   		{
+   		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   zVIEW    mUser = new zVIEW( );
+		   int      lTempInteger_0 = 0;
+   		   int      RESULT = 0;
+   		   zVIEW    mFAAdmin = new zVIEW( );
+   		   zVIEW    mYearLST = new zVIEW( );
+   		   int      lTempInteger_1 = 0;
+   		   
+   		   // mFAAdmin has the includable entity DisbCollegeTerm and under that is DisbCollegeYear.
+   		   // DisbCollegeYear is marked as "display" not "includable". 
+   		   // Because of this, we get an error on Commit of mFAAdmin.
+
+   		   RESULT = ActivateEmptyObjectInstance( mFAAdmin, "mFAAdmin", ViewToWindow, zSINGLE );
+   		   RESULT = CreateEntity( mFAAdmin, "FinAidAdmin", zPOS_AFTER );
+   		   SetNameForView( mFAAdmin, "mFAAdmin", null, zLEVEL_TASK );
+
+   		   RESULT = ActivateObjectInstance( mYearLST, "mYear", ViewToWindow, 0, zMULTIPLE );
+   		   SetNameForView( mYearLST, "mYearLST", null, zLEVEL_TASK );
+   		   mYearLST.cursor("CollegeYear").setFirst("ID", 38);
+  		   RESULT = IncludeSubobjectFromSubobject( mFAAdmin, "CollegeYear", mYearLST, "CollegeYear", zPOS_AFTER );
+  		   
+	        o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
+	        RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+	        DropView( vTempViewVar_0 );
+	        SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
+
+	        RESULT = CreateEntity( mFAAdmin, "FinAidAwardPeriod", zPOS_AFTER );
+	        SetAttributeFromAttribute( mFAAdmin, "FinAidAwardPeriod", "PeriodDesignator", mFAAdmin, "CollegeYear", "Year" );
+	        SetAttributeFromAttribute( mFAAdmin, "FinAidAwardPeriod", "BeginDate", mFAAdmin, "CollegeYear", "BeginDate" );
+            SetAttributeFromAttribute( mFAAdmin, "FinAidAwardPeriod", "EndDate", mFAAdmin, "CollegeYear", "EndDate" );
+            RESULT = SetCursorFirstEntity( mFAAdmin, "CollegeTerm", "FinAidAdmin" );
+            RESULT = IncludeSubobjectFromSubobject( mFAAdmin, "DisbCollegeTerm", mFAAdmin, "CollegeTerm", zPOS_AFTER );
+    		RESULT = CommitObjectInstance( mFAAdmin );
+
+  		   return( 0 );
+   		}
+
+   		public int
+   		testExcludeSubentityError( View     ViewToWindow )
+   		{
+   		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int      lTempInteger_0 = 0;
+   		   int      RESULT = 0;
+   		   zVIEW    mFASrc = new zVIEW( );
+   		   int      lTempInteger_1 = 0;
+   		   
+   		   // mFAAdmin has the includable entity DisbCollegeTerm and under that is DisbCollegeYear.
+   		   // DisbCollegeYear is marked as "display" not "includable". 
+   		   // Because of this, we get an error on Commit of mFAAdmin.
+    	   ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
+    	   SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+    	   RESULT = ExcludeEntity( mFASrc, "Scholarship", zREPOS_AFTER );
+    	   // We excluded Scholarship which has a subentity of Fund. Fund should not exist but it does
+           Assert.assertEquals( mFASrc.cursor("Fund").checkExistenceOfEntity().toInt(), -3 );
+
+  		   return( 0 );
+   		}
+
+   		public int
+   		testLocking( View     ViewToWindow )
+   		{
+  		   zVIEW    mPersonTST = new zVIEW( );
+ 		   zVIEW    mPersonTST2 = new zVIEW( );
+ 		   zVIEW    vTempViewVar_0 = new zVIEW( );
+ 		   int RESULT=0;
+            StringBuilder sb_Country = new StringBuilder( );
+            zVIEW    ZPLOCKO = new zVIEW( );
+
+            RESULT = ActivateObjectInstance( ZPLOCKO, "ZPLOCKO", ViewToWindow, 0, zMULTIPLE );
+            //:NAME VIEW ZPLOCKO "ZPLOCKO" 
+            SetNameForView( ZPLOCKO, "ZPLOCKO", null, zLEVEL_TASK );
+			RESULT = ZPLOCKO.cursor( "ZeidonLock" ).setFirst().toInt();
+			while ( RESULT > zCURSOR_UNCHANGED )
+			{
+				ZPLOCKO.cursor("ZeidonLock").deleteEntity();
+				RESULT = ZPLOCKO.cursor( "ZeidonLock" ).setNext().toInt();
+			}
+			ZPLOCKO.commit();
+
+ 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+ 		   RESULT = ActivateObjectInstance( mPersonTST, "mPersonTST", ViewToWindow, vTempViewVar_0, zSINGLE_FOR_UPDATE );
+ 		   if ( ActivateObjectInstance( mPersonTST2, "mPersonTST", ViewToWindow, vTempViewVar_0, zSINGLE_FOR_UPDATE ) != zLOCK_ERROR )
+ 			  Assert.assertTrue("Should receive a zLOCK_ERROR.", false);
+ 		   DropView( vTempViewVar_0 );
+   		   return( 0 );
+   		}
+   		
 		//:   VIEW mFAProfO BASED ON LOD mFAProf
 		public int
 		testInclude( View     ViewToWindow )
@@ -5659,7 +6083,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
    SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
    */
    return( 0 );
-} 		
+}
 
 		private int
 		o_fnLocalBuildQualTstClass(
@@ -5678,7 +6102,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 			   return( 0 );
-		
+
 		}
 
 	        private int
@@ -5875,6 +6299,24 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		}
 
 		private int
+		o_fnLocalBuildmCourse( View     vSubtask,
+		                      zVIEW    vQualObject,
+		                      int      lTempInteger_1 )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Course" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Course" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_1 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
+
+		private int
 		o_fnLocalBuildmUser( View     vSubtask,
 		                       zVIEW    vQualObject,
 		                       String   szTempString_0 )
@@ -6019,6 +6461,25 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
+
+
+		private int
+		o_fnLocalBuildQualmFASrc( View     vSubtask,
+		                       zVIEW    vQualObject,
+		                       int      lTempInteger_0 )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidSource" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "FinAidSource" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
 		
 		private int
 		o_BuildQualmStudent( View     vSubtask,
@@ -6061,7 +6522,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "PhiDeltaLambdaFlag" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			   return( 0 );		   
+			   return( 0 );
 		}
 		private int
 		o_BuildQualmStudent2( View     vSubtask,
@@ -6079,7 +6540,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "8" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			   
+
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "OR" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
@@ -6089,7 +6550,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ")" );
-			  
+
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
 			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
@@ -6097,7 +6558,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "GeneralNote" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
-			   return( 0 );		   
+			   return( 0 );
 		}
 
 		private int

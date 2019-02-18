@@ -1,0 +1,169 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Perygrene",
+      "odName" : "mFgtBill",
+      "incremental" : true
+    },
+    "FreightBill" : [ {
+      ".meta" : {
+        "incrementals" : "UC"
+      },
+      "GeneratedDateTime" : "2018-06-01T15:00:41.488-07:00",
+      ".GeneratedDateTime" : {
+        "updated" : "true"
+      },
+      "DeliveryRoute" : [ {
+        ".meta" : {
+          "incrementals" : "I"
+        },
+        "ID" : 35728,
+        "ScheduledDateTime" : "2018-05-22T23:42:39.637-07:00",
+        "ExpectedStartDateTime" : "2018-05-23T00:18:23.110-07:00",
+        "ExpectedEndDateTime" : "2018-05-23T03:44:40.640-07:00",
+        "ActualStartDateTime" : "2018-05-23T00:18:23.110-07:00",
+        "ActualEndDateTime" : "2018-05-23T03:44:40.640-07:00",
+        "FTL_OrderCompleteDateTime" : "2018-05-23T02:51:40.160-07:00",
+        "TotalFuelStopLoadTimeMinutes" : 19,
+        "TotalFuelStopUnloadTimeMinutes" : 22,
+        "TotalFuelStopLoadUnloadTime" : 41,
+        "TotalTerminalFuelStops" : 1,
+        "TotalDeliveryFuelStops" : 1,
+        "TotalLoadedDistanceMiles" : 34.2,
+        "TotalAllLegDistanceMiles" : 100.6,
+        "TotalLoadedLegTimeMinutes" : 53,
+        "TotalAllLegTimeMinutes" : 157,
+        "FK_ID_CARRIER" : 22,
+        "FK_ID_EMPLOYEESHIFT" : 14765,
+        "FK_ID_VEHICLECOMBINATION" : 5486,
+        "FK_ID_DRIVER" : 136,
+        "LoadRequest" : [ {
+          "ID" : 31521,
+          "Status" : "Reviewed",
+          "ActualDeliveryDateTime" : "2018-05-23T02:51:40.160-07:00",
+          "RequestedDeliveryDateTimeBegin" : "2018-05-22T16:30:00.000-07:00",
+          "RequestedDeliveryDateTimeEnd" : "2018-05-22T23:30:00.000-07:00",
+          "CreatedDateTime" : "2018-05-22T17:39:50.323-07:00",
+          "SpecialDriverInstructions" : " ****** TEST DATABASE DB3 ******",
+          "LastModifiedDateTime" : "2018-05-22T17:39:50.340-07:00",
+          "LastModifiedBy" : "rshaffstall",
+          "FK_ID_DELIVERYROUTE" : 35728,
+          "FK_ID_Z_ORDER" : 30965,
+          "Order" : [ {
+            "ID" : 30965,
+            "Type" : "FTL",
+            "InternalOrderNumber" : 60965,
+            "ExternalOrderNumber" : "1933424",
+            "FK_ID_CARRIER" : 22,
+            "FK_ID_ORGANIZATION" : 977
+          } ]
+        } ]
+      } ],
+      "FreightBillLineItem" : [ {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "Description" : "Demurrage - Loading",
+        ".Description" : {
+          "updated" : "true"
+        },
+        "Amount" : "45.0",
+        ".Amount" : {
+          "updated" : "true"
+        },
+        "UnitOfMeasure" : "Fee/Unit",
+        ".UnitOfMeasure" : {
+          "updated" : "true"
+        },
+        "BillingContractTransaction" : [ {
+          ".meta" : {
+            "incrementals" : "I"
+          },
+          "ID" : 43,
+          "FK_ID_BILLINGCONTRACT" : 11,
+          "FK_ID_BILLINGTRANSACTION" : 46,
+          "BillingTransaction" : [ {
+            "ID" : 46,
+            "Name" : "Demurrage - Loading",
+            "Type" : "A",
+            "Description" : "If the load time at any Terminal is over the \"Maximum Load Time\" below, then a line item is generated for the \"Loading Demurrage Charge\".",
+            "UnitOfMeasure" : "Fee/Unit",
+            "FK_ID_BILLINGTRANSACTION" : 4,
+            "FK_ID_CARRIER" : 22,
+            "PrimeBillingTransaction" : [ {
+              "ID" : 4,
+              "TransactionCode" : "DemurrageLoading"
+            } ]
+          } ]
+        } ]
+      } ],
+      "SourceBillingContract" : [ {
+        ".meta" : {
+          "incrementals" : "I"
+        },
+        "ID" : 11,
+        "Name" : "Andeavor",
+        "EffectiveDate" : "2016-09-08T00:00:00.000-07:00",
+        "TerminationDate" : "2018-10-01T00:00:00.000-07:00",
+        "SplitFreightAndFeesInvoiceFlag" : "Y",
+        "FK_ID_INVOICETERMS" : 9
+      } ],
+      "AR_Invoice" : [ {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "InvoiceDate" : "2018-06-01T00:00:00.000-07:00",
+        ".InvoiceDate" : {
+          "updated" : "true"
+        },
+        "Carrier" : [ {
+          ".meta" : {
+            "incrementals" : "I"
+          },
+          "ID" : 22,
+          "ActiveInactiveStatus" : "A",
+          "IsRegisteredCarrierFlag" : "Y",
+          "LogInCarrierCode" : "MTI",
+          "SCACCode" : "MHXQ",
+          "OrderNumberBaseNumber" : 30000,
+          "TravelTimeComputationErrFactor" : 1.2,
+          "FK_ID_ORGANIZATION" : 962
+        } ],
+        "BillToOrganization" : [ {
+          ".meta" : {
+            "incrementals" : "I"
+          },
+          "ID" : 977,
+          "Name" : "Andeavor***",
+          "EmailAddress" : "AP-Freight@andeavor.com",
+          "PhoneNumber" : "5628064176",
+          "MaxFreeLoadTimeMinutes" : 45,
+          "MaxFreeUnloadTimeMinutes" : 45,
+          "FK_ID_INVOICETERMS" : 9,
+          "FKOWNS_ID_CARRIER" : 22
+        } ],
+        "BillToDeliveryLocation" : [ {
+          ".meta" : {
+            "incrementals" : "I"
+          },
+          "ID" : 11696,
+          "Name" : "Arco Site # 42899***",
+          "SpecialInstructions" : " ****** TEST DATABASE  DB3******",
+          "FKD_ID_ADDRESS" : 13878,
+          "BillToDeliveryLocationAddress" : [ {
+            "ID" : 13878,
+            "Line1" : "2015 E Valley Pkwy",
+            "City" : "Escondido",
+            "StateProvince" : "CA",
+            "PostalCode" : "92027-2709",
+            "Longitude" : -117.05093,
+            "Latitude" : 33.13781
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}
