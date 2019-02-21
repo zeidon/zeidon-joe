@@ -100,6 +100,16 @@ public class TestPerygrene
 		tester.testRecursive( testview );
         System.out.println("===== Finished testRecursive ========");
 	}
+	@Test
+	public void testRecursive2()
+	{
+	    View         testview;
+		testview = perygrene.activateEmptyObjectInstance( "qDrvShift" );
+		testview.setName("qDrvShift");
+		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
+		tester.Test_Code2( testview );
+        System.out.println("===== Finished testRecursive ========");
+	}
 
 	private class PerygreneVmlTester extends VmlObjectOperations
 	{
@@ -108,6 +118,49 @@ public class TestPerygrene
 			super( view );
 		}
 
+		public int 
+		Test_Code2( View     ViewToWindow )
+		{
+		   zVIEW    zqFrame = new zVIEW( );
+		   int      RESULT = 0;
+
+
+		   //:ACTIVATE zqFrame EMPTY 
+		   RESULT = ActivateEmptyObjectInstance( zqFrame, "zqFrame", ViewToWindow, zSINGLE );
+		   //:NAME VIEW zqFrame "zqFrame" 
+		   SetNameForView( zqFrame, "zqFrame", null, zLEVEL_TASK );
+		   //:CREATE ENTITY zqFrame.zqFrame 
+		   RESULT = CreateEntity( zqFrame, "zqFrame", zPOS_AFTER );
+		   //:CREATE ENTITY zqFrame.ParentEntity 
+		   RESULT = CreateEntity( zqFrame, "ParentEntity", zPOS_AFTER );
+		   //:zqFrame.ParentEntity.EntityName = "DeliveryRoute"
+		   SetAttributeFromString( zqFrame, "ParentEntity", "EntityName", "DeliveryRoute" );
+		   //:SetViewToSubobject( zqFrame, "ChildEntity" )
+		   SetViewToSubobject( zqFrame, "ChildEntity" );
+		   //:CREATE ENTITY zqFrame.ParentEntity 
+		   RESULT = CreateEntity( zqFrame, "ParentEntity", zPOS_AFTER );
+		   //:zqFrame.ParentEntity.EntityName = "LoadRequest"
+		   SetAttributeFromString( zqFrame, "ParentEntity", "EntityName", "LoadRequest" );
+		   //:SetViewToSubobject( zqFrame, "ChildEntity" )
+		   SetViewToSubobject( zqFrame, "ChildEntity" );
+		   //:CREATE ENTITY zqFrame.ParentEntity 
+		   RESULT = CreateEntity( zqFrame, "ParentEntity", zPOS_AFTER );
+		   //:zqFrame.ParentEntity.EntityName = "Order"
+		   SetAttributeFromString( zqFrame, "ParentEntity", "EntityName", "Order" );
+		   //:TraceLineS( "@@@@ Before Reset 1", "" )
+		   TraceLineS( "@@@@ Before Reset 1", "" );
+		   //:ResetViewFromSubobject( zqFrame )
+		   ResetViewFromSubobject( zqFrame );
+		   //:TraceLineS( "@@@@ Before Reset 2", "" )
+		   TraceLineS( "@@@@ Before Reset 2", "" );
+		   //:ResetViewFromSubobject( zqFrame )
+		   ResetViewFromSubobject( zqFrame );
+		   //:TraceLineS( "@@@@ After Reset 2", "" )
+		   TraceLineS( "@@@@ After Reset 2", "" );
+		   return( 0 );
+		// END
+		} 
+		
         public int
         testCursorLinks( View     ViewToWindow)
         {
