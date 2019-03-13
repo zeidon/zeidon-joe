@@ -111,6 +111,17 @@ public class TestPerygrene
         System.out.println("===== Finished testRecursive ========");
 	}
 
+	@Test
+	public void SetCursorFirstHierError()
+	{
+	    View         testview;
+		testview = perygrene.activateEmptyObjectInstance( "qDrvShift" );
+		testview.setName("qDrvShift");
+		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
+		tester.SetCursorFirstHierError( testview );
+        System.out.println("===== Finished SetCursorFirstHierError ========");
+	}
+
 	private class PerygreneVmlTester extends VmlObjectOperations
 	{
 		public PerygreneVmlTester( View view )
@@ -118,6 +129,54 @@ public class TestPerygrene
 			super( view );
 		}
 
+		public int 
+		SetCursorFirstHierError( View     ViewToWindow )
+		{
+		   zVIEW    vLOD = new zVIEW( );
+		   //:INTEGER nRC
+		   int      nRC = 0;
+		   //:STRING ( 32 ) szEntityName
+		   String   szEntityName = null;
+		   int      RESULT = 0;
+		   int      lTempInteger_0 = 0;
+		   int      lTempInteger_1 = 0;
+
+		   // Don is trying to do a set cursor first on recursive object. It seems to be positioning on the entity furthest down the chain "DriverPerson", as
+		   // opposed to the top entity "DriverShift".
+		   // FYI... I activate qDrvShift.LOD (so it's in the browser), This way we can view it's structure. 
+
+		   // Activate the Query LOD (Query View).
+    	   nRC = SfActivateSysOI_FromFile( vLOD, "TZZOLODO", ViewToWindow, "target/test-classes/testdata/perygrene/qDrvShift.LOD", zSINGLE );
+		   if ( nRC < 0 )
+		      return( 2 );
+
+		   SetNameForView( vLOD, "vLOD_Test", null, zLEVEL_TASK );
+
+		   RESULT = SetCursorFirstEntity( vLOD, "LOD", "" );
+		   //:SET CURSOR FIRST vLOD.LOD_Attribute WHERE vLOD.LOD_Attribute.ZKey = 220121248   // Positions Correctly
+		   RESULT = SetCursorFirstEntityByInteger( vLOD, "LOD_Attribute", "ZKey", 220121248, "" );
+		   szEntityName = vLOD.cursor("LOD_Entity").getAttribute("Name").getString();
+		   if ( !szEntityName.equals("DriverShift") )
+		   { 
+	 		   Assert.assertEquals("After SetCursorFirst, LOD_Entity should be 'DriverShift'.", szEntityName.equals("DriverShift"), true );
+		   } 
+
+		   //SET CURSOR FIRST vLOD.ER_AttributeRec WITHIN vLOD.LOD_EntityParent
+		   //           WHERE vLOD.ER_AttributeRec.ZKey =  110000176                     // Positions in Error
+		   //RESULT = SetCursorFirstEntityByInteger( vLOD, "ER_AttributeRec", "ZKey", 110000176, "LOD_EntityParent" );
+
+		   //SET CURSOR FIRST vLOD.ER_AttributeRec WITHIN vLOD.LOD_EntityParent
+		   //           WHERE vLOD.ER_AttributeRec.Name = "ID"                      // Positions in Error
+		   RESULT = SetCursorFirstEntityByString( vLOD, "ER_AttributeRec", "Name", "ID", "LOD_EntityParent" );
+		   szEntityName = vLOD.cursor("LOD_EntityParent").getAttribute("Name").getString();
+		   if (  !szEntityName.equals("DriverShift") )
+		   { 
+	 		   Assert.assertEquals("After SetCursorFirst, LOD_EntityParent should be 'DriverShift'.", szEntityName.equals("DriverShift"), true );
+		   } 
+
+		   return( 0 );
+		} 		
+		
 		public int 
 		Test_Code2( View     ViewToWindow )
 		{
