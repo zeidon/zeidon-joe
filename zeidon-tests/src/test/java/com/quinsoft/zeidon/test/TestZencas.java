@@ -1474,6 +1474,9 @@ public class TestZencas
 		   // ALSO... a different error... When I do a delete of FinAidAward and then do a commit, I get a permission error
 		   // because a subentity is marked as "excluded" instead of "deleted". See comment before the last commit.
 
+		   // KJS 04/04/19 - We get a permission error on mFAProf if we update mPerson.Prospect and include mPerson into mFAProf.
+		   // This is because mFAProf.Prospect, is "display only", no update permission. We think we should ignore the update on mFAProf.Prospect.
+		   
 
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
 		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
@@ -1488,6 +1491,13 @@ public class TestZencas
 		   //RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 		   DropView( vTempViewVar_0 );
+		   
+		   if (mPerson.cursor("Prospect").checkExistenceOfEntity().toInt() != 0)
+			   mPerson.cursor("Prospect").createEntity();
+		   
+		   // We get a permission error on mFAProf if we update mPerson.Prospect and include mPerson into mFAProf.
+		   // We should ignore the update on mFAProf.Prospect.
+		   mPerson.cursor("Prospect").getAttribute("ExpectedEntryYear").setValue("2019");
 
 
 	    	//ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
