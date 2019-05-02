@@ -7679,28 +7679,36 @@ public abstract class VmlOperation
 
    protected int zLodContainsEntity( View view, String entityName )
    {
-      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
-      if ( ve != null )
-      {
-         return 1;
-      }
-      else
-      {
-         return -1;
-      }
+	  try {
+	      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
+	      if ( ve != null )
+	      {
+	         return 1;
+	      }
+	      else
+	      {
+	         return -1;
+	      }
+	  }catch( Exception e) {
+		  return -1;
+	  }
    }
 
    protected int zLodContainsAttribute( View view, String entityName, String attribName )
    {
-      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
-      if ( ve.getAttribute( attribName ) != null )
-      {
-         return 1;
-      }
-      else
-      {
-         return -1;
-      }
+	  try {
+	      EntityDef ve = view.getLodDef( ).getEntityDef( entityName );
+	      if ( ve.getAttribute( attribName ) != null )
+	      {
+	         return 1;
+	      }
+	      else
+	      {
+	         return -1;
+	      }
+	  }catch( Exception e) {
+		  return -1;
+	  }
    }
 
    //./ ADD NAME=GetWebRedirection
