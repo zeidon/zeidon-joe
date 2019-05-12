@@ -217,6 +217,7 @@ export const ${lodDef.getName}_LodDef = {
             deletable:   ${entityDef.isDelete()},
             excludable:  ${entityDef.isExclude()},
             updatable:   ${entityDef.isUpdate()},
+            derived:     ${entityDef.isDerived()},
             parentDelete: ${entityDef.isParentDelete()},
             childEntities: {""" )
 
