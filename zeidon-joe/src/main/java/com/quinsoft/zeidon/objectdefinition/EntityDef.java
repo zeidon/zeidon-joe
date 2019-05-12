@@ -116,6 +116,13 @@ public class EntityDef implements PortableFileAttributeHandler
     private boolean    update  = false;
     private boolean    includeSrc = false;
 
+    /**
+     * If true than this entity can only be included/excluded AND none of its children can
+     * be updated in any way.  This means that during a commit we won't attempt to commit
+     * any of its children.
+     */
+    private boolean    readOnlySubobjectRoot = false;
+
     private final List<AttributeDef> keys;
     private AttributeDef genKey;
     private AttributeDef autoSeq;
@@ -372,7 +379,7 @@ public class EntityDef implements PortableFileAttributeHandler
     }
 
     /**
-     * This is called after the entity def has been completely loaded.  We'll validate that
+     * This is called after all entity defs have been loaded.  We'll validate that
      * the entity def is configured correctly.
      *
      */
@@ -383,39 +390,67 @@ public class EntityDef implements PortableFileAttributeHandler
         {
             // Make sure SINGLE SELECT is configured properly.
             if ( childRecord.isActivateWithSingleSelect() )
-            {
-                if ( childRecord.isJoinable() )
-                    throw new ZeidonException( "EntityDef shouldn't be JOIN and ACTIVATONE" );
-
-                RelRecord relRecord = childRecord.getRelRecord();
-                RelationshipType relType = relRecord.getRelationshipType();
-
-                // We don't support m-to-1 relationships because it is too hard
-                // to figure out where the children go.  In most cases this doesn't
-                // matter because m-to-1 children should be joined with the parent.
-                if ( relType.isManyToOne() )
-                    throw new ZeidonException( "m-to-1 relationships not supported in a single select." );
-
-                // We can only handle it if there is a single key between child
-                // and parent.
-                if ( relType.isOneToMany() && relRecord.getRelFields().size() > 1 )
-                    throw new ZeidonException( "Only single keys supported in a single select." );
-
-                if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
-                    throw new ZeidonException( "Only single keys supported in a single select." );
-
-                // Can't load children of recursive entities.
-                for ( EntityDef ve = this; ve != null; ve = ve.getParent() )
-                {
-                    if ( ve.isRecursive() )
-                        throw new ZeidonException( "Recursive entities not supported in a single select." );
-                }
-            }
+                validateSingleSelect( childRecord );
         }
+
+        checkForRelationshipRoot();
 
         // Everything looks good.  Lets check to see if there's a versioning relationship.
         if ( versioningAttributeTok != null )
             setVersioningRel();
+    }
+
+    private void checkForRelationshipRoot()
+    {
+        if ( getChildCount() == 0 )
+            return;
+
+        if ( create || delete || update )
+            return;
+
+        // If we can't include or exclude there's no point.
+        if ( ! ( include || exclude ) )
+            return;
+
+        // Now verify that all children are display only.
+        for ( EntityDef child : getChildrenHier() )
+        {
+            if ( ! child.isDisplayOnly() )
+                return;
+        }
+
+        readOnlySubobjectRoot = true;
+    }
+
+    private void validateSingleSelect( DataRecord childRecord )
+    {
+        if ( childRecord.isJoinable() )
+            throw new ZeidonException( "EntityDef shouldn't be JOIN and ACTIVATONE" );
+
+        RelRecord relRecord = childRecord.getRelRecord();
+        RelationshipType relType = relRecord.getRelationshipType();
+
+        // We don't support m-to-1 relationships because it is too hard
+        // to figure out where the children go.  In most cases this doesn't
+        // matter because m-to-1 children should be joined with the parent.
+        if ( relType.isManyToOne() )
+            throw new ZeidonException( "m-to-1 relationships not supported in a single select." );
+
+        // We can only handle it if there is a single key between child
+        // and parent.
+        if ( relType.isOneToMany() && relRecord.getRelFields().size() > 1 )
+            throw new ZeidonException( "Only single keys supported in a single select." );
+
+        if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
+            throw new ZeidonException( "Only single keys supported in a single select." );
+
+        // Can't load children of recursive entities.
+        for ( EntityDef ve = this; ve != null; ve = ve.getParent() )
+        {
+            if ( ve.isRecursive() )
+                throw new ZeidonException( "Recursive entities not supported in a single select." );
+        }
+
     }
 
     private void setVersioningRel()
@@ -854,6 +889,11 @@ public class EntityDef implements PortableFileAttributeHandler
     public boolean isUpdate()
     {
         return update;
+    }
+
+    public boolean isDisplayOnly()
+    {
+        return ! ( update || create || delete || include || exclude );
     }
 
     void setGenKey(AttributeDef attributeDef)
@@ -1407,6 +1447,19 @@ public class EntityDef implements PortableFileAttributeHandler
     public DataField getVersioningDataField()
     {
         return versioningDataField;
+    }
+
+    /**
+     * If true than this entity can only be included/excluded AND none of its children can
+     * be updated in any way.  This means that during a commit we won't attempt to commit
+     * any of its children.
+     *
+     * @return true if this entity is only include/exclude AND all child entities are display-only.
+     *
+     */
+    public boolean isReadOnlySubobjectRoot()
+    {
+        return readOnlySubobjectRoot;
     }
 
     public enum LinkValidation
