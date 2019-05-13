@@ -1277,17 +1277,6 @@ public class TestZencas
 		tester.testAutoLoadFromParent( testview );
         System.out.println("===== Finished testAutoLoadFromParent ========");
 	}
-
-	@Test
-	public void mFAProfPermissionIssue()
-	{
-	    View         testview;
-		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
-		VmlTester tester = new VmlTester( testview );
-		tester.mFAProfPermissionIssue( testview );
-        System.out.println("===== Finished mFAProfPermissionIssue ========");
-	}
-
 	@Test
 	public void mFAProfPermissionIssueTemporal()
 	{
@@ -1307,6 +1296,17 @@ public class TestZencas
 		tester.mFAProfPermissionIssueTemporal2( testview );
         System.out.println("===== Finished mFAProfPermissionIssueTemporal2 ========");
 	}
+
+	@Test
+	public void mFAProfTemporalLinkIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfTemporalLinkIssue( testview );
+        System.out.println("===== Finished mFAProfTemporalLinkIssue ========");
+	}
+	
 
 	@Test
 	public void testUsingJacob()
@@ -1726,6 +1726,227 @@ public class TestZencas
 
 		   return 0;
 		}
+
+		public int
+		mFAProfTemporalLinkIssue( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    lFACOAYr = new zVIEW( );
+		   zVIEW    mFACOAYr = new zVIEW( );
+		   zVIEW    mYear = new zVIEW( );
+		   zVIEW    lFANdProLST = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   zVIEW    vTempViewVar_1 = new zVIEW( );
+		   int RESULT=0;
+		   int nRC=0;
+
+		   // KJS 05/13/19 - This test creates a TemporalSubobject for the root entity FinAidProfile. Then we create/delete/create the
+		   // sub entity FinAidCOAItemAssigned. After the delete/create, we try to do a create TemporalSubobject on FinAidCOAItemAssigned and we
+		   // receive a TemporalEntityException: Attempting to create a temporal subobject for an entity that has a child entity linked to another
+		   // temporal entity.
+		   // We do not get an error unless we've created the temporal on the root FinAidProfile.
+
+		   RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		   SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+
+		   RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		   SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		   RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+		   RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+	   	   RESULT = CommitObjectInstance( mFAProf );
+   	    
+	   	   CreateTemporalSubobjectVersion( mFAProf, "FinAidProfile" );
+	   	    
+	   	   //:ACTIVATE  mYear  WHERE mYear.CollegeYear.ID = 44
+	   	   o_fnLocalBuildQualmYear( ViewToWindow, vTempViewVar_1 );
+	   	   RESULT = ActivateObjectInstance( mYear, "mYear", ViewToWindow, vTempViewVar_1, zSINGLE );
+	   	   DropView( vTempViewVar_1 );
+	   	   SetNameForView( mYear, "mYear", null, zLEVEL_TASK );
+	   	   
+	   	   // This next piece of code is only to make sure that we have some FInAidCOAItemForYear entitites exist so we can
+	   	   // use them for creating mFAProf.FinAidCOAItemAssigned
+	   	   
+	   	   //:ACTIVATE  lFANdProLST Multiple WHERE lFANdProLST.AdministrativeDivision.ID = 1 AND lFANdProLST.FinAidCOA.ID = 2
+	   	   //:         RESTRICTING lFANdProLST.FinAidCOAItemForYear TO lFANdProLST.CollegeYear.ID = 44 
+	   	   o_fnLocalBuildQuallFANdProLST2( ViewToWindow, vTempViewVar_0 );
+	   	   RESULT = ActivateObjectInstance( lFANdProLST, "mFANdPro", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+	   	   DropView( vTempViewVar_0 );
+	   	   SetNameForView( lFANdProLST, "lFANdProLST", null, zLEVEL_TASK );
+	   	   RESULT = SetCursorFirstEntity( lFANdProLST, "FinAidCOAItem", "" );
+	   	   while ( RESULT > zCURSOR_UNCHANGED )
+	   	   { 
+	   	      if ( CheckExistenceOfEntity( lFANdProLST, "FinAidCOAItemForYear" ) != 0 )
+	   	      { 
+	   	         RESULT = ActivateEmptyObjectInstance( mFACOAYr, "mFACOAYr", ViewToWindow, zSINGLE );
+	   	         SetNameForView( mFACOAYr, "mFACOAYr", null, zLEVEL_TASK );
+	   	         RESULT = CreateEntity( mFACOAYr, "FinAidCOAItemForYear", zPOS_AFTER );
+	   	         SetAttributeFromInteger( mFACOAYr, "FinAidCOAItemForYear", "RevenueAmount", 1500 );
+	   	         SetAttributeFromInteger( mFACOAYr, "FinAidCOAItemForYear", "FirstTermRevenueAmount", 500 );
+	   	         SetAttributeFromInteger( mFACOAYr, "FinAidCOAItemForYear", "SecondTermRevenueAmount", 500 );
+	   	         SetAttributeFromInteger( mFACOAYr, "FinAidCOAItemForYear", "ThirdTermRevenueAmount", 500 );
+	   	         RESULT = IncludeSubobjectFromSubobject( mFACOAYr, "FinAidCOAItem", lFANdProLST, "FinAidCOAItem", zPOS_AFTER );
+	   	         RESULT = IncludeSubobjectFromSubobject( mFACOAYr, "CollegeYear", mYear, "CollegeYear", zPOS_AFTER );
+	   	         RESULT = CommitObjectInstance( mFACOAYr );
+	   	         DropObjectInstance( mFACOAYr );
+	   	      } 
+
+	   	      RESULT = SetCursorNextEntity( lFANdProLST, "FinAidCOAItem", "" );
+	   	   } 
+	   	    
+ 	       DropObjectInstance( lFANdProLST );
+ 	       // END of making sure FinAidCOAItemForYear exists
+ 	       
+ 	       // CREATE FinAidCOAItemAssigned 
+	   	   o_fnLocalBuildQuallFANdProLST2( ViewToWindow, vTempViewVar_0 );
+	   	   RESULT = ActivateObjectInstance( lFANdProLST, "mFANdPro", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+	   	   DropView( vTempViewVar_0 );
+	   	   SetNameForView( lFANdProLST, "lFANdProLST", null, zLEVEL_TASK );
+	   	   RESULT = SetCursorFirstEntity( lFANdProLST, "FinAidCOAItem", "" );
+	   	   while ( RESULT > zCURSOR_UNCHANGED )
+	   	   { 
+	   	      RESULT = CreateEntity( mFAProf, "FinAidCOAItemAssigned", zPOS_AFTER );
+	   	      RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidCOAItemForYear", lFANdProLST, "FinAidCOAItemForYear", zPOS_AFTER );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "RevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "RevenueAmount" );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "FirstTermRevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "FirstTermRevenueAmount" );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "SecondTermRevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "SecondTermRevenueAmount" );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "ThirdTermRevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "ThirdTermRevenueAmount" );
+	   	      RESULT = SetCursorNextEntity( lFANdProLST, "FinAidCOAItem", "" );
+	   	   } 
+
+ 	       // DELETE FinAidCOAItemAssigned 
+	   	   RESULT = SetCursorFirstEntity( mFAProf, "FinAidCOAItemAssigned", "" );
+	   	   while ( RESULT > zCURSOR_UNCHANGED )
+	   	   { 
+   	          RESULT = DeleteEntity( mFAProf, "FinAidCOAItemAssigned", zREPOS_NONE );
+	   	      RESULT = SetCursorNextEntity( mFAProf, "FinAidCOAItemAssigned", "" );
+	   	   } 
+	   	   
+ 	       // CREATE FinAidCOAItemAssigned again
+	   	   RESULT = SetCursorFirstEntity( lFANdProLST, "FinAidCOAItem", "" );
+	   	   while ( RESULT > zCURSOR_UNCHANGED )
+	   	   { 
+	   	      RESULT = CreateEntity( mFAProf, "FinAidCOAItemAssigned", zPOS_AFTER );
+	   	      RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidCOAItemForYear", lFANdProLST, "FinAidCOAItemForYear", zPOS_AFTER );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "RevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "RevenueAmount" );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "FirstTermRevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "FirstTermRevenueAmount" );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "SecondTermRevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "SecondTermRevenueAmount" );
+	   	      SetAttributeFromAttribute( mFAProf, "FinAidCOAItemAssigned", "ThirdTermRevenueAmount", lFANdProLST, "FinAidCOAItemForYear", "ThirdTermRevenueAmount" );
+	   	      RESULT = SetCursorNextEntity( lFANdProLST, "FinAidCOAItem", "" );
+	   	   } 
+
+	   	   // We receive a TemporalEntityExcption on this.
+	   	   // We only get this when we've done a CreateTemporalSubobjectVersion( mFAProf, "FinAidProfile" )
+			CreateTemporalSubobjectVersion( mFAProf, "FinAidCOAItemAssigned" );
+
+		   return 0;
+		}
+
+
+private int 
+o_fnLocalBuildQualmYear( View     vSubtask,
+                       zVIEW    vQualObject )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "CollegeYear" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeYear" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "44" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+} 
+
+private int 
+o_fnLocalBuildQuallFANdProLST2( View     vSubtask,
+                       zVIEW    vQualObject )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidCOA" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "AdministrativeDivision" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "1" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "FinAidCOA" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "2" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidCOAItemForYear" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeYear" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "44" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+}		
+private int 
+o_fnLocalBuildQuallFANdProLST1( View     vSubtask,
+                       zVIEW    vQualObject )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidCOA" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "AdministrativeDivision" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "1" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "AND" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "FinAidCOA" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "2" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+} 
+
+private int 
+o_fnLocalBuildQuallFANdProLST( View     vSubtask,
+                       zVIEW    vQualObject,
+                       int      lTempInteger_2,
+                       int      lTempInteger_3 )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidCOA" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "AdministrativeDivision" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_2 );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidCOAItemForYear" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "CollegeYear" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_3 );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+} 
 
 		public int
 		activateRootOnly( View ViewToWindow )

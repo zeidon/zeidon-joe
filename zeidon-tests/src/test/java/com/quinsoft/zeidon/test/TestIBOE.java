@@ -109,11 +109,6 @@ public class TestIBOE
 			  RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
 			  SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
 
-			  RESULT = ActivateObjectInstance( sHost, "sHost", ViewToWindow, 0, zSINGLE );
-			  SetNameForView( sHost, "sHost", null, zLEVEL_TASK );
-			  if ( sHost.cursor("Host").checkExistenceOfEntity().toInt() != 0 )
-				  sHost.cursor("Host").createEntity();
-
 		      nRC = ActivateOI_FromFile( mSAProf, "mSAProf", ViewToWindow, "target/test-classes/testdata//IBOE/mSAProf.por", zMULTIPLE );
 		      SetNameForView( mSAProf, "mSAProf", null, zLEVEL_TASK );
 		      
