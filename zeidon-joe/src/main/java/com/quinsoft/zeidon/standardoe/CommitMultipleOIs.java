@@ -424,9 +424,9 @@ class CommitMultipleOIs
 
                 if ( ei.isUpdated() && ! ei.isDeleted() && ! ei.isCreated() )
                 {
-                    ei.dbhNeedsCommit = true;
                     if ( entityDef.isUpdate() )
                     {
+                        ei.dbhNeedsCommit = true;
                         // Make sure we can update the attributes.
                         validateAttributePermission( oiSet, ei );
                     }
@@ -436,11 +436,20 @@ class CommitMultipleOIs
                         EntityInstanceImpl updateableEi = validatePermissionForEi( ei, oiSet, hasUpdatePermission, null );
                         if (  updateableEi == null )
                         {
-                            // No linked EI has authority either.  Last check: are we included?  If ei or an ancestor is included
-                            // (and not created) then we'll allow the commit to continue but we won't update ei or any of its children.
-                            missingPermission = true;
-                            getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
-                            ei.logEntity();
+                            // No linked EI has update authority.  One last check: is the ei the root of a read-only
+                            // subobject?  If so then we'll perform include/exclude but we'll ignore the update.
+                            if ( entityDef.isReadOnlySubobjectRoot() )
+                            {
+                                // Reset the flag to indicate we don't want to update this entity as part of this commit.
+                                // Don't reset the flag in linked EIs.
+                                ei.setUpdated( false, false, false );
+                            }
+                            else
+                            {
+                                missingPermission = true;
+                                getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
+                                ei.logEntity();
+                            }
                         }
                         else
                             validateAttributePermission( oiSet, updateableEi );

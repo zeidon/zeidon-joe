@@ -393,16 +393,19 @@ public class EntityDef implements PortableFileAttributeHandler
                 validateSingleSelect( childRecord );
         }
 
-        checkForRelationshipRoot();
+        checkForReadOnlySubjectRoot();
 
         // Everything looks good.  Lets check to see if there's a versioning relationship.
         if ( versioningAttributeTok != null )
             setVersioningRel();
     }
 
-    private void checkForRelationshipRoot()
+    private void checkForReadOnlySubjectRoot()
     {
         if ( getChildCount() == 0 )
+            return;
+
+        if ( getDataRecord() == null )
             return;
 
         if ( create || delete || update )
@@ -415,10 +418,14 @@ public class EntityDef implements PortableFileAttributeHandler
         // Now verify that all children are display only.
         for ( EntityDef child : getChildrenHier() )
         {
+            if ( child.getDataRecord() == null )
+                continue;
+
             if ( ! child.isDisplayOnly() )
                 return;
         }
 
+        // If we get there then 'this' is the root of a read-only subobject.
         readOnlySubobjectRoot = true;
     }
 
