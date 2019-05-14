@@ -363,11 +363,13 @@ class CommitMultipleOIs
             if ( activateOptions != null && activateOptions.isSingleTransaction() )
                 options.setSingleTransaction( true );
 
-            for ( EntityInstanceImpl ei : oi.getEntities( true ) )
+            for ( EntityInstanceImpl ei = oi.getRootEntityInstance();
+                  ei != null;
+                  ei = ei.getNextHier() )
             {
                 EntityDef entityDef = ei.getEntityDef();
 
-                // Unless we learn otherwise, assume this entity needs to be committed.
+                // Unless we learn otherwise, assume this does not need to be committed.
                 ei.dbhNeedsCommit = false;
 
                 if ( entityDef.isDerivedPath() )
@@ -375,6 +377,28 @@ class CommitMultipleOIs
 
                 if ( entityDef.getDataRecord() == null )
                     continue;
+
+                if ( ei.isIncluded() && ! ei.isExcluded() )
+                {
+                    ei.dbhNeedsCommit = true;
+                    if ( ! entityDef.isInclude() && validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) == null )
+                    {
+                        missingPermission = true;
+                        getTask().log().error( "Entity instance in view: %s  entity: %s  does not have include authority:", view, entityDef.getName() );
+                        ei.logEntity();
+                    }
+                }
+
+                if ( ei.isExcluded() && ! ei.isIncluded() )
+                {
+                    ei.dbhNeedsCommit = true;
+                    if ( ! entityDef.isExclude() && validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) == null )
+                    {
+                        missingPermission = true;
+                        getTask().log().error( "Entity instance in view: %s  entity: %s  does not have exclude authority:", view, entityDef.getName() );
+                        ei.logEntity();
+                    }
+                }
 
                 if ( ei.isCreated() && ! ei.isDeleted() )
                 {
@@ -400,53 +424,45 @@ class CommitMultipleOIs
 
                 if ( ei.isUpdated() && ! ei.isDeleted() && ! ei.isCreated() )
                 {
-                    ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isUpdate() && validatePermissionForEi( ei, oiSet, hasUpdatePermission, null ) == null )
-                    {
-                        missingPermission = true;
-                        getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
-                        ei.logEntity();
-                    }
                     if ( entityDef.isUpdate() )
                     {
+                        ei.dbhNeedsCommit = true;
                         // Make sure we can update the attributes.
                         validateAttributePermission( oiSet, ei );
                     }
                     else
                     {
+                        // We don't have update authority.  Does a linked instance have update authority?
                         EntityInstanceImpl updateableEi = validatePermissionForEi( ei, oiSet, hasUpdatePermission, null );
                         if (  updateableEi == null )
                         {
-                            missingPermission = true;
-                            getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
-                            ei.logEntity();
+                            // No linked EI has update authority.  One last check: is the ei the root of a read-only
+                            // subobject?  If so then we'll perform include/exclude but we'll ignore the update.
+                            if ( entityDef.isReadOnlySubobjectRoot() )
+                            {
+                                // Reset the flag to indicate we don't want to update this entity as part of this commit.
+                                // Don't reset the flag in linked EIs.
+                                ei.setUpdated( false, false, false );
+                            }
+                            else
+                            {
+                                missingPermission = true;
+                                getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
+                                ei.logEntity();
+                            }
                         }
                         else
                             validateAttributePermission( oiSet, updateableEi );
                     }
                 }
 
-                if ( ei.isIncluded() && ! ei.isExcluded() )
-                {
-                    ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isInclude() && validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) == null )
-                    {
-                        missingPermission = true;
-                        getTask().log().error( "Entity instance in view: %s  entity: %s  does not have include authority:", view, entityDef.getName() );
-                        ei.logEntity();
-                    }
+                // We have the necessary permission for this entity.  If the root of a read-only suboject then
+                // we won't check the permissions of the children (nor will we attempt to commit them).
+                if ( entityDef.isReadOnlySubobjectRoot() ) {
+                    ei = ei.getLastChildHier();
+                    getTask().log().debug(  "Skipping commit of children under %s because it is flagged as readOnlyRelationshipRoot", entityDef.getName() );
                 }
 
-                if ( ei.isExcluded() && ! ei.isIncluded() )
-                {
-                    ei.dbhNeedsCommit = true;
-                    if ( ! entityDef.isExclude() && validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) == null )
-                    {
-                        missingPermission = true;
-                        getTask().log().error( "Entity instance in view: %s  entity: %s  does not have exclude authority:", view, entityDef.getName() );
-                        ei.logEntity();
-                    }
-                }
             } // each entityInstance
         } // each view
 
