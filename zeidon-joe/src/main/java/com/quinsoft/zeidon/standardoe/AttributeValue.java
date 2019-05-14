@@ -48,6 +48,7 @@ class AttributeValue
     private final AttributeDef createAttribute;
     private final Domain        domain;
     private boolean             updated;     // Updated?
+    private boolean             isSet = false;
     private volatile Object     attributeValue;
 
     AttributeValue( AttributeDef attributeDef )
@@ -146,6 +147,7 @@ class AttributeValue
     boolean setInternalValue( TaskImpl task, AttributeDef attributeDef, Object newValue, boolean setIncremental )
     {
         assert createAttribute.getErAttributeToken() == attributeDef.getErAttributeToken();
+        isSet = true;
 
         if ( areEqual( task, attributeDef, newValue ) )
             return false;
@@ -190,6 +192,7 @@ class AttributeValue
         Object o;
         try
         {
+            //TODO: Shouldn't convertExternalValue handle nulls?  It doesn't appear that we do but it should.
             if ( newValue == null )
                 o = null;
             else
@@ -231,6 +234,17 @@ class AttributeValue
     boolean isUpdated()
     {
         return updated;
+    }
+
+    /**
+     * Indicates that we've attempted to set the value of this attribute, even if it's null.
+     * This is different from isUpdated() in that isUpdated will be false if the attribute
+     * is persistent and hasn't been changed from its DB value.
+     *
+     */
+    boolean isSet()
+    {
+        return isSet;
     }
 
     long getAttributeFlags()

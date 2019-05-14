@@ -681,7 +681,7 @@ class EntityInstanceImpl implements EntityInstance
      * @param AttributeDef
      * @return
      */
-    AttributeValue getInternalAttribute(AttributeDef attributeDef )
+    AttributeValue getInternalAttribute( AttributeDef attributeDef )
     {
         AttributeDef va = validateMatchingEntities( attributeDef );
 
@@ -1474,10 +1474,10 @@ class EntityInstanceImpl implements EntityInstance
             {
                 if ( newInstance.linkedInstances != null )
                 {
-                    // Make all the linked entities share the new source attributes.
-                    for ( EntityInstanceImpl ei : newInstance.linkedInstances.keySet() )
-                        ei.persistentAttributes = persistentAttributes;
-
+                    // Copy any attributes in 'this' that are not in the persistentAttributes of the
+                    // linked EI.
+                    addMissingAttributes( persistentAttributes, newInstance.persistentAttributes );
+                    persistentAttributes = newInstance.persistentAttributes;
                     linkedInstances = newInstance.linkedInstances;
                     linkedInstances.putIfAbsent( this, Boolean.TRUE );
                     return;
@@ -1497,6 +1497,7 @@ class EntityInstanceImpl implements EntityInstance
 
             linkedInstances.putIfAbsent( newInstance, Boolean.TRUE );
             newInstance.linkedInstances = linkedInstances;
+            addMissingAttributes( persistentAttributes, newInstance.persistentAttributes );
             newInstance.persistentAttributes = persistentAttributes;
 
             assert assertLinkedInstances() : "Error with linked instances";
@@ -2579,6 +2580,59 @@ class EntityInstanceImpl implements EntityInstance
         }
 
         return null;
+    }
+
+    private boolean assertAttributesEqual( AttributeValue sourceValue, AttributeValue targetValue )
+    {
+        // Check to see if sourceValue has been set.  If not then we can't compare it because it wasn't set!
+        if ( ! sourceValue.isSet() )
+            return true;
+
+        Object source = sourceValue.getInternalValue();
+        Object target = targetValue.getInternalValue();
+
+        boolean match;
+        if ( source == null )
+            match = target == null;
+        else
+            match = source.equals( target );
+
+        if ( ! match )
+        {
+            getTask().log().error( "Source = %s", sourceValue );
+        }
+        return match;
+    }
+
+    /**
+     * Add all attributes that are in sourceAttributes but not targetAttributes
+     * @return
+     *
+     */
+    private boolean addMissingAttributes( Map<String, AttributeValue> targetAttributes, Map<String, AttributeValue> sourceAttributes )
+    {
+        if ( sourceAttributes == null )
+            return false;
+
+        // Keep track of whether any attributes we add are updated.
+        boolean attributeUpdated = false;
+
+        for ( String erToken: sourceAttributes.keySet() )
+        {
+            AttributeValue sourceValue = sourceAttributes.get( erToken );
+            AttributeValue targetValue = targetAttributes.get( erToken );
+            if ( targetValue == null || ! targetValue.isSet() )
+            {
+                targetAttributes.put( erToken, sourceValue );
+                attributeUpdated = attributeUpdated || sourceValue.isUpdated();
+            }
+            else
+            {
+                assert assertAttributesEqual( sourceValue, targetValue ) : "The same attribute in two linked instances don't match!";
+            }
+        }
+
+        return attributeUpdated;
     }
 
     void copyAttributes(EntityInstanceImpl sourceInstance, boolean copyPersist, boolean copyUpdateFlags)
