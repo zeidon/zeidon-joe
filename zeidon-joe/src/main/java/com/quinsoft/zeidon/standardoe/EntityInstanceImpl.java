@@ -1748,47 +1748,7 @@ class EntityInstanceImpl implements EntityInstance
         // created and therefore won't have a prevVersion.
         if ( prevVersion != null )
         {
-            Collection<EntityInstanceImpl> linkedInstances = prevVersion.getLinkedInstances();
-            if ( linkedInstances.size() > 0 ) // If size = 0 then 'this' is only linked with itself.
-            {
-                // Update the persistent attributes for each of the linked instances.
-                for ( EntityInstanceImpl linked : linkedInstances )
-                {
-                    // We only care about instances that *don't* have a next version.  If they
-                    // have a next version then they better be part of the current temporal
-                    // subobject that we're accepting, which means we've handled it already.
-                    if ( linked.nextVersion != null )
-                    {
-                        assert linked.versionNumber == prevVersion.versionNumber : "Version numbers don't match";
-                        continue;
-                    }
-
-                    // Update the attribute values of the linked instance to point to the new
-                    // attribute list.
-                    linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
-                    linked.persistentAttributes = persistentAttributes;
-                    linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
-
-                    // The spawn logic should have correctly set most of the flags.  The only one we have to
-                    // copy is the update flag.
-                    if ( this.isUpdated() )
-                        linked.setUpdated( true );
-
-                    assert this.isDeleted() == linked.isDeleted()   : "acceptSubobject flag logic is wrong";
-                    assert this.isCreated() == linked.isCreated() : "acceptSubobject flag logic is wrong";
-                    assert this.isUpdated() == linked.isUpdated()   : "acceptSubobject flag logic is wrong";
-                    //assert this.isIncluded() == linked.isIncluded() : "acceptSubobject flag logic is wrong";
-                    //assert this.isExcluded() == linked.isExcluded() : "acceptSubobject flag logic is wrong";
-
-                    // Update the version number so that the linked instance has the same value.
-                    linked.versionNumber = this.versionNumber;
-
-                    if ( linked.isChanged() )
-                        linked.getObjectInstance().setUpdated( true );
-                }
-
-                mergeLinkedInstances( prevVersion );
-            }
+            updateLinkedInstancesOutsideTemporalSuboject();
 
             // DON'T null out prevVersion.nextVersion.  That will allow any cursors pointing to the
             // superseded version to find the new one.  The GC will eventually clean up.
@@ -1816,23 +1776,80 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
+     * We're in the middle of an accept.  If there are no other outstanding versions then we
+     * need to go through linked instances OUTSIDE the subobject and update them to match the
+     * new values.
+     */
+    private void updateLinkedInstancesOutsideTemporalSuboject()
+    {
+        if ( prevVersion.prevVersion != null )
+            return; // We still have outstanding versions.
+
+        Collection<EntityInstanceImpl> linkedInstances = prevVersion.getLinkedInstances();
+        if ( linkedInstances.size() == 0 )
+            return;  // If size = 0 then 'this' is only linked with itself.
+
+        // Update the persistent attributes for each of the linked instances.
+        for ( EntityInstanceImpl linked : linkedInstances )
+        {
+            // We only care about instances that *don't* have a next version.  If they
+            // have a next version then they better be part of the current temporal
+            // subobject that we're accepting, which means we'll handle it separately.
+            if ( linked.nextVersion != null )
+            {
+                assert linked.versionNumber == prevVersion.versionNumber : "Version numbers don't match";
+                continue;
+            }
+
+            // Update the attribute values of the linked instance to point to the new
+            // attribute list.
+            linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
+            addMissingAttributes( persistentAttributes, linked.persistentAttributes );
+            linked.persistentAttributes = persistentAttributes;
+            linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
+
+            // The spawn logic should have correctly set most of the flags.  The only one we have to
+            // copy is the update flag.
+            if ( this.isUpdated() )
+                linked.setUpdated( true );
+
+            assert this.isDeleted() == linked.isDeleted()   : "acceptSubobject flag logic is wrong";
+            assert this.isCreated() == linked.isCreated() : "acceptSubobject flag logic is wrong";
+            assert this.isUpdated() == linked.isUpdated()   : "acceptSubobject flag logic is wrong";
+            //assert this.isIncluded() == linked.isIncluded() : "acceptSubobject flag logic is wrong";
+            //assert this.isExcluded() == linked.isExcluded() : "acceptSubobject flag logic is wrong";
+
+            if ( linked.isChanged() )
+                linked.getObjectInstance().setUpdated( true );
+        }
+    }
+
+    /**
      * Add the linked instances from source to 'this'. Intended to be used by
      * Accept logic for merging linked instances from a new, accepted, entity.
      *
-     * @param source
+     * @param prevVersion
      */
-    private void mergeLinkedInstances( EntityInstanceImpl source )
+    private void mergeLinkedInstances( EntityInstanceImpl prevVersion )
     {
         // If source doesn't have any linkedInstances than there's nothing to do.
-        if ( source.linkedInstances == null )
+        if ( prevVersion.linkedInstances == null )
             return;
 
-        for ( EntityInstanceImpl linked : source.linkedInstances.keySet() )
+        if ( linkedInstances == null )
         {
-            if ( linked != source )
-                addLinkedInstance( linked );
+            linkedInstances = prevVersion.linkedInstances;
+            linkedInstances.putIfAbsent( this, Boolean.TRUE );
+        }
+        else
+        {
+            for ( EntityInstanceImpl linked : prevVersion.linkedInstances.keySet() )
+            {
+                linkedInstances.putIfAbsent( linked, Boolean.TRUE );
+            }
         }
 
+        prevVersion.persistentAttributes = persistentAttributes;
         assert assertLinkedInstances() : "Error with linked instances";
     }
 
@@ -2341,7 +2358,7 @@ class EntityInstanceImpl implements EntityInstance
 
         for ( EntityInstanceImpl ei : linkedInstances.keySet() )
         {
-            if ( ei == null )
+            if ( ei == null )  // This can happen if the EI is garbage collected.
                 continue;
 
             assert ei.isLinked( this ): "Linked EIs have different persistentAttributes";
@@ -2397,7 +2414,7 @@ class EntityInstanceImpl implements EntityInstance
             list.add( ei );
         }
 
-        assert list.size() > 0  : "getLinkedInstances returned empty list";
+//        assert list.size() > 0  : "getLinkedInstances returned empty list";
         return list;
     }
 

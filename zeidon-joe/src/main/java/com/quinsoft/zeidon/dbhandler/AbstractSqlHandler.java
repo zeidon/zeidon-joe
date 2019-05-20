@@ -418,9 +418,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             if ( stmt.commandType == SqlCommand.INSERT )
             {
-                // We'll insert any non-null attribute, even if it's hidden.  This allows us to commit linked
+                // We'll insert all attributes, even if it's hidden.  This allows us to commit linked
                 // instances using any EntityDef.
-                if ( entityInstance.getAttribute( attributeDef ).isNull() )
+                if ( ! attributeDef.isPersistent() )
                     continue;
             }
             else
