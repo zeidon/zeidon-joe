@@ -1748,7 +1748,8 @@ class EntityInstanceImpl implements EntityInstance
         // created and therefore won't have a prevVersion.
         if ( prevVersion != null )
         {
-            updateLinkedInstancesOutsideTemporalSuboject();
+            if ( newStatus == VersionStatus.NONE )
+                updateLinkedInstancesOutsideTemporalSuboject();
 
             // DON'T null out prevVersion.nextVersion.  That will allow any cursors pointing to the
             // superseded version to find the new one.  The GC will eventually clean up.
@@ -1785,12 +1786,12 @@ class EntityInstanceImpl implements EntityInstance
         if ( prevVersion.prevVersion != null )
             return; // We still have outstanding versions.
 
-        Collection<EntityInstanceImpl> linkedInstances = prevVersion.getLinkedInstances();
-        if ( linkedInstances.size() == 0 )
+        Collection<EntityInstanceImpl> prevLinkedInstances = prevVersion.getLinkedInstances();
+        if ( prevLinkedInstances.size() == 0 )
             return;  // If size = 0 then 'this' is only linked with itself.
 
         // Update the persistent attributes for each of the linked instances.
-        for ( EntityInstanceImpl linked : linkedInstances )
+        for ( EntityInstanceImpl linked : prevLinkedInstances )
         {
             // We only care about instances that *don't* have a next version.  If they
             // have a next version then they better be part of the current temporal
@@ -1801,11 +1802,18 @@ class EntityInstanceImpl implements EntityInstance
                 continue;
             }
 
+            // If linkedInstances match then
+            if ( linked.linkedInstances == this.linkedInstances )
+            {
+                // linkedInstances has already been updated; we just need to update persistentAttributes.
+                linked.persistentAttributes = this.persistentAttributes;
+                continue;
+            }
+
             // Update the attribute values of the linked instance to point to the new
             // attribute list.
             linked.removeAllHashKeyAttributes();  // If linked has attr hashkeys, remove them.
-            addMissingAttributes( persistentAttributes, linked.persistentAttributes );
-            linked.persistentAttributes = persistentAttributes;
+            mergeLinkedInstances( linked );
             linked.addAllHashKeyAttributes(); // TODO: We could limit this to only EIs that have been updated.
 
             // The spawn logic should have correctly set most of the flags.  The only one we have to
@@ -1822,6 +1830,8 @@ class EntityInstanceImpl implements EntityInstance
             if ( linked.isChanged() )
                 linked.getObjectInstance().setUpdated( true );
         }
+
+//        assert assertLinkedInstances() : "Error with linked instances";
     }
 
     /**
@@ -1832,10 +1842,8 @@ class EntityInstanceImpl implements EntityInstance
      */
     private void mergeLinkedInstances( EntityInstanceImpl prevVersion )
     {
-        // If source doesn't have any linkedInstances than there's nothing to do.
-        if ( prevVersion.linkedInstances == null )
-            return;
-
+        // If 'this' (the entity we're accepting) doesn't have any linked instances then
+        // we can just copy the one from prevVersion and then remove prevVersion.
         if ( linkedInstances == null )
         {
             linkedInstances = prevVersion.linkedInstances;
@@ -1843,14 +1851,10 @@ class EntityInstanceImpl implements EntityInstance
         }
         else
         {
-            for ( EntityInstanceImpl linked : prevVersion.linkedInstances.keySet() )
-            {
-                linkedInstances.putIfAbsent( linked, Boolean.TRUE );
-            }
+            linkedInstances.putIfAbsent( prevVersion, Boolean.TRUE );
         }
 
         prevVersion.persistentAttributes = persistentAttributes;
-        assert assertLinkedInstances() : "Error with linked instances";
     }
 
     void validateSubobject( View view, Collection<ZeidonException> list )
@@ -2359,6 +2363,9 @@ class EntityInstanceImpl implements EntityInstance
         for ( EntityInstanceImpl ei : linkedInstances.keySet() )
         {
             if ( ei == null )  // This can happen if the EI is garbage collected.
+                continue;
+
+            if ( ei.isDropped() )
                 continue;
 
             assert ei.isLinked( this ): "Linked EIs have different persistentAttributes";
@@ -3127,26 +3134,41 @@ class EntityInstanceImpl implements EntityInstance
             // Create temporal entities for the root and all its children.
             final EntityInstanceImpl newRoot = createTemporalEntity( root );
             newRoot.setVersionStatus( VersionStatus.UNACCEPTED_ROOT );
+
+            // Create a new version for all children.
             for ( final EntityInstanceImpl ei : root.getChildrenHier( false, true, true ) )
                 createTemporalEntity( ei );
-
-            // We've created all the new entity versions but their prev/next pointers
-            // are pointing to the original instances.  Go through them all and set
-            // their pointers to the new ones.
-
-            // Now set the original EI's to have a new version.
-            for ( final EntityInstanceImpl ei : newInstanceList )
-            {
-                EntityInstanceImpl prevVsn = ei.prevVersion;
-                prevVsn.setNextVersion( ei );
-                assert prevVsn.getEntityDef() == ei.getEntityDef();
-            }
 
             // Now we can use getLatestVersion to set the other pointers.
             for ( EntityInstanceImpl ei : newInstanceList )
             {
                 // Each of the 'get' methods (ie. getNextHier) will use getLatestVersion to get the latest version.
                 ei.copyAllPointers( ei );
+
+                // We now need to copy attribute values from prevVersion and set up linkedInstances.
+                // If linkedInstances is set then we've already handled this ei below.
+                if ( ei.linkedInstances != null )
+                    continue;
+
+                // Copy attributes values from previous version.
+                ei.newTemporalAttributeList( ei.getPrevVersion(), null );
+
+                EntityInstanceImpl prevVsn = ei.getPrevVersion();
+                if ( prevVsn.linkedInstances != null )
+                {
+                    // If we get here then prevVersion has linked instances.  Go through all the
+                    // linked instances and set the attribute values for the new versions.
+                    for ( EntityInstanceImpl linked : prevVsn.getLinkedInstances() )
+                    {
+                        if ( linked.nextVersion == null )
+                            continue; // This entity is not part of the temporal subobject.
+
+                        assert linked.nextVersion.nextVersion == null : "Unexpected versions";
+                        assert linked.nextVersion.versionNumber == version : "Unexpected version number";
+
+                        linked.nextVersion.newTemporalAttributeList( linked, ei );
+                    }
+                }
             }
 
             return newRoot;
@@ -3186,22 +3208,8 @@ class EntityInstanceImpl implements EntityInstance
             newInstance.copyAllPointers( prevVersionEi );
             newInstance.prevVersion = prevVersionEi;
             newInstance.copyFlags( prevVersionEi );
+            prevVersionEi.setNextVersion( newInstance );
 
-            // Check to see if this instance is linked to another instance that
-            // is versioned.  If one is found we'll copy its persistent attributes to newInstance.
-            // We can do this by checking to see if any linked instances have the same version number.
-            EntityInstanceImpl linkedSourceInstance = null;
-            for ( EntityInstanceImpl linked : prevVersionEi.getLinkedInstances() )
-            {
-                if ( linked.versionNumber == version )
-                {
-                    linkedSourceInstance = linked;
-                    break;
-                }
-            }
-
-            // This adds the newInstance to the linked instances list.
-            newInstance.newTemporalAttributeList( prevVersionEi, linkedSourceInstance );
             return newInstance;
         }
     } // private static class TemporalVersionCreator
@@ -3235,6 +3243,7 @@ class EntityInstanceImpl implements EntityInstance
         else
         {
             linkedSourceInstance.addLinkedInstance( this );
+            this.addAllHashKeyAttributes();
 
             // Copy just work attributes.
             copyAttributes( sourceInstance, false, true );
@@ -3378,10 +3387,24 @@ class EntityInstanceImpl implements EntityInstance
         if ( ei == null )
             return false;
 
+        if ( getEntityDef().getErEntityToken() != ei.getEntityDef().getErEntityToken() )
+            return false;
+
         EntityInstanceImpl otherInstance = (EntityInstanceImpl) ei.getEntityInstance();
-        return persistentAttributes == otherInstance.persistentAttributes;
+        if ( persistentAttributes == otherInstance.persistentAttributes )
+            return true;
+
+        return this.getFirstVersion().persistentAttributes == otherInstance.getFirstVersion().persistentAttributes;
     }
 
+    private EntityInstanceImpl getFirstVersion()
+    {
+        EntityInstanceImpl temp = this;
+        while ( temp.getPrevVersion() != null )
+            temp = temp.getPrevVersion();
+
+        return temp;
+    }
     /**
      * @param includeHidden If true, count hidden.
      * @return The total number of non-hidden twins for this entity, including this one.
