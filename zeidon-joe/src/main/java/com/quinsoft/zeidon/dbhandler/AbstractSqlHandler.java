@@ -416,8 +416,18 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 }
             }
 
-            if ( ! attributeDef.isActivate() )
-                continue;
+            if ( stmt.commandType == SqlCommand.INSERT )
+            {
+                // We'll insert all attributes, even if it's hidden.  This allows us to commit linked
+                // instances using any EntityDef.
+                if ( ! attributeDef.isPersistent() )
+                    continue;
+            }
+            else
+            {
+                if ( ! attributeDef.isActivate() )
+                    continue;
+            }
 
             // If the attribute is an Auto Seq attribute and the relationship
             // is many-to-many then the attribute is stored in the corresponding
