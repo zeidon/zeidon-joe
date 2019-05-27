@@ -717,7 +717,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
         for ( EntityInstanceImpl ei = getObjectInstance().getRootEntityInstance(); ei != null; ei = ei.getNextHier() )
         {
             ei.countAllVersions( allEntities );
-            for ( EntityInstanceImpl linked : ei.getAllLinkedInstances( true ) )
+            for ( EntityInstanceImpl linked : ei.getAllDroppedLinkedInstances( ) )
             {
                 if ( ! allEntities.contains( linked ) )
                     linked.countAllVersions( allEntities );
