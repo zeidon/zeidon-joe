@@ -2108,9 +2108,12 @@ class EntityInstanceImpl implements EntityInstance
             newVersionNumber = getParent().versionNumber;
         }
 
+        // Set status/number for all children.  This will allow us to spawn changes.
+        // This needs to be down before we spawn so that we'll spawn the changes
+        // out to linked entities with versionNumbers that match newVersionNumber.
         for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
         {
-            this.versionNumber = newVersionNumber;
+            ei.versionNumber = newVersionNumber;
             ei.setVersionStatus( newVersionStatus );
         }
 
