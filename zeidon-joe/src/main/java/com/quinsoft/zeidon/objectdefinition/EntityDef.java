@@ -402,9 +402,6 @@ public class EntityDef implements PortableFileAttributeHandler
 
     private void checkForReadOnlySubjectRoot()
     {
-        if ( getChildCount() == 0 )
-            return;
-
         if ( getDataRecord() == null )
             return;
 

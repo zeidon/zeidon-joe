@@ -72,6 +72,7 @@ public class TestZencas
 	@Before
 	public void setUp() throws Exception
 	{
+	    JavaObjectEngine.resetInstance();
         oe = JavaObjectEngine.getInstance();
         zencas = oe.createTask( "ZENCAs" );
 		zeidonSystem = oe.getSystemTask();
@@ -1694,26 +1695,24 @@ public class TestZencas
 		    //FinAidAwardDisbursement
 			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
 		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
-		    boolean areLinked = mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
-  	        Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", areLinked );
 
-            areLinked = mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
+		    boolean areLinked;
+            //boolean areLinked = mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
-            areLinked = mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
-  	        //Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
 		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue("1000");
 		    // After doing the AcceptSubobject, we lose the links to the linked entities.
 		    AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );
-		    areLinked = mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
-//  	        Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", areLinked);
 
 		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("OriginalAmountExpected").setValue("1000");
 
 		    mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
 		    mFAProf.cursor("FinAidAward").getAttribute("LastModifiedBy").setValue("KJS");
 		    AcceptSubobject( mFAProf, "FinAidAward" );
-		    mFAProf.cursor("FinAidAwardDisbursement").isLinked(null);
-//	   	    RESULT = CommitObjectInstance( mFAProf );
+
+            areLinked = mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement"));
+            Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
+
+            //	   	    RESULT = CommitObjectInstance( mFAProf );
 
 	   	    // We are getting an error when saving because we set an attribute in FinAidAwardDisbursement
 	   	    // that is not in the linked attribute PerPeriodFinAidAwardDisbursement.
