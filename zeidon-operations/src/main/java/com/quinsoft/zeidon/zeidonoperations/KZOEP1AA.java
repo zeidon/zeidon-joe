@@ -488,7 +488,7 @@ public class KZOEP1AA extends VmlOperation
       if (charsRead != -1)
           sbReturnBuffer.append( line, 0, charsRead );
       return charsRead;
-   }
+   }  // To read a block of data from an opened file.
 
    public int SysGetFileSize( TaskQualification qual, int fileHandle )
    {
