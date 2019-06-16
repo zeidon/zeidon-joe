@@ -590,13 +590,7 @@ public class QualificationBuilder
     public QualificationBuilder addAttribQual( String attribName, Object attribValue )
     {
         validateEntity();
-        String oper = "=";
-        // KJS - If we are using a keylist in the qualifier from what I can see we get here at attribValue is null.
-        // At the moment I am not seeing any other time this is so. When this is the case the operator needs to be "in" so that
-        // we have "someattrib in (...)".
-        if (attribValue == null)
-        	oper = "in";
-        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, oper, attribValue );
+        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "=", attribValue );
     }
 
     @Deprecated // use addAttribQual instead.
