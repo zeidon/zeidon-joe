@@ -22,8 +22,13 @@ import com.quinsoft.zeidon.ActivateFlags;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -370,7 +375,7 @@ public class KZOEP1AA extends VmlOperation
                return -1;
             }
 
-            bufferedReader = new BufferedReader( new FileReader( file ) );
+            bufferedReader = new BufferedReader( new InputStreamReader(new FileInputStream(file), "UTF8"));
             break;
 
          case COREFILE_WRITE:
@@ -383,13 +388,13 @@ public class KZOEP1AA extends VmlOperation
             }
 
             file.createNewFile( );
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 
-            bufferedWriter = new BufferedWriter( new FileWriter( file ) );
-            break;
+             break;
 
          case COREFILE_APPEND:
          case COREFILE_UPDATE:
-            bufferedWriter = new BufferedWriter( new FileWriter( file, true ) );
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8));
             break;
 
          case COREFILE_DELETE:

@@ -232,10 +232,6 @@ class EntityCursorImpl implements EntityCursor
        if ( ! viewCursor.isCursorInScope( this ) )
            throw new ZeidonException( "Cursor %s is out of scope", getEntityDef() );
 
-       // Sanity checking--make sure that the existing instance has at least one linked instance,
-       // which is itself.
-       assert ei.getAllLinkedInstances( allowHidden ).contains( ei ) : "Entity doesn't have itself in linked instances";
-
        return ei;
     }
 
