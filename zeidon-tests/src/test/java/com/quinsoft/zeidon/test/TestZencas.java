@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1307,6 +1308,15 @@ public class TestZencas
 		tester.mFAProfPermissionIssueTemporal2( testview );
         System.out.println("===== Finished mFAProfPermissionIssueTemporal2 ========");
 	}
+	@Test
+	public void testExclInclOrderEntities()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testExclInclOrderEntities( testview );
+        System.out.println("===== Finished testExclInclOrderEntities ========");
+	}
 
 	@Test
 	public void testUsingJacob()
@@ -2422,6 +2432,44 @@ public class TestZencas
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
+		}
+		
+		public int
+		testExclInclOrderEntities( View ViewToWindow )
+		{
+		   zVIEW    mConListTest = new zVIEW( );
+		   zVIEW    mConListTest2 = new zVIEW( );
+		   zVIEW    mSAProf      = new zVIEW( );
+		   int      RESULT = 0;
+		   
+		   // KJS - After we exclude and include the entity Class in mConList, when we try do do the OrderEntityForView on a
+		   // derived attribute, in the derived attribute code, we receive the following error:
+		   // com.quinsoft.zeidon.NullCursorException: Cursor for entity is null
+		   // EntityDef  = ZENCAs.mConList.ClassCourse
+		   // I loop through the entities, also do other order entities, which are all ok. Only the ordering of dName causes issue.
+
+		   ActivateOI_FromFile( mConListTest, "mConList", ViewToWindow, "target/test-classes/testdata//ZENCAs/mConListL.por", zSINGLE );
+		   ActivateOI_FromFile( mConListTest2, "mConList", ViewToWindow, "target/test-classes/testdata//ZENCAs/mConListL.por", zSINGLE );
+		   //:NAME VIEW mSAProfEList "mSAProfEList"
+		   SetNameForView( mConListTest, "mConListTest", null, zLEVEL_TASK );
+		   SetNameForView( mConListTest2, "mConListTest2", null, zLEVEL_TASK );
+		   RESULT= mConListTest.cursor("Class").setFirst( "ID", 3601 ).toInt();
+		   RESULT= mConListTest2.cursor("Class").setFirst( "ID", 3601 ).toInt();
+		   OrderEntityForView( mConListTest, "Class", "dName A" ); //CourseTitle
+		   RESULT = ExcludeEntity( mConListTest, "Class", zREPOS_AFTER );
+		   RESULT = IncludeSubobjectFromSubobject( mConListTest, "Class", mConListTest2, "Class", zPOS_AFTER );
+		   RESULT = mConListTest.cursor("Class").setFirst().toInt();
+      		while ( RESULT > zCURSOR_UNCHANGED ) 
+      		{      		
+      			String str1 =  mConListTest2.cursor("ClassCourse").getAttribute("Title").getString();
+      			String str2 =  mConListTest2.cursor("Class").getAttribute("dName").getString();
+		        RESULT = mConListTest.cursor("Class").setNext().toInt();
+      		}
+ 		   OrderEntityForView( mConListTest, "Class", "ClassCourse.Title A" ); 
+		   OrderEntityForView( mConListTest, "Class", "CourseTitle A" );
+		   // All of above code seems fine, but we crash in the derived attribute code of dName.
+		   OrderEntityForView( mConListTest, "Class", "dName A" ); 
+			return 0;
 		}
 
 		public int
