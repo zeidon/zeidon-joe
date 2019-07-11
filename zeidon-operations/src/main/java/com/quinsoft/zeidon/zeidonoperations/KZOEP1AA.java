@@ -461,7 +461,46 @@ public class KZOEP1AA extends VmlOperation
    public int SysReadLine( TaskQualification taskView, StringBuilder sbReturnBuffer, int file ) throws IOException
    {
       BufferedReader reader = getReaderFromInt( taskView.getTask( ), file );
-      String str = reader.readLine( );
+      byte buffer[] = new byte[5000];      
+      int c = 0;
+      int bufferLth = 0;
+      boolean buildingStr = true;
+      
+      // KJS 07/10/19 - We used to simply do a "String str = reader.readLine( );" but then DonC was trying to read in csv files
+      // where some of the text contained line feeds (without the carriage return so not the end of the line). 
+      // Because of this we are reading in one byte at a time looking for the \n\r at the end. 
+      // Eliminate the final \n\r since that can also cause problems and if we write this out SysWriteLine includes the \n\r.
+      
+	  while ( buildingStr && bufferLth < 5000 && (c = reader.read()) != -1 )
+	  {
+		   //if ( c == 65279 )
+		   // This is the BOM (byte order mark), if exists, skip. Gets entered when using UTF8 supposedly...
+		   if ( c == 0xFEFF )
+			   c = reader.read( );
+		   // 13 is carriage return.
+	   	   if ( c == 13 )
+	   	   {
+	   		   buildingStr = false;
+	   		   c = reader.read( );
+	   	   }
+	   	   // 10 is line feed. 10 always comes after 13 (so it seems).
+   		   // Sometimes we might come across 10 line feed that didn't have a carriage return... if so, we have not actually come to the end of 
+   		   // the line so we include this as part of the string...
+	   	   if ( c == 10  ) 
+	   	   {
+	   		   if ( buildingStr )
+	   		   {
+	   	           buffer[ bufferLth++ ] = (byte) c;
+	   			   c = reader.read( );			  
+	   		   }
+		   }
+   		   if ( buildingStr )
+   	           buffer[ bufferLth++ ] = (byte) c;
+	  }
+
+	  String str = null;
+	  if ( bufferLth > 0 )
+		  str = new String(buffer, 0, bufferLth, "UTF8" );
       sbReturnBuffer.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
       if ( str == null )
       {
