@@ -4775,7 +4775,15 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         cursor.getAttribute( attributeName ).setValue( value, contextName );
+         try
+         {
+            cursor.getAttribute( attributeName ).setValue( value, contextName );
+         }
+         catch( Exception e )
+         {
+        	// Error happened. Most likely this is a domain error so can't set.
+            return -1;
+         }
       }
 
       return nRC;
