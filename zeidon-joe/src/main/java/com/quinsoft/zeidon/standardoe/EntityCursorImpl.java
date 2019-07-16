@@ -1640,6 +1640,17 @@ class EntityCursorImpl implements EntityCursor
         {
             assert ei1.getEntityDef() == ei2.getEntityDef();
 
+            if ( ei1.isHidden() )
+            {
+                if ( ei2.isHidden() )
+                    return 0;  // Two hidden EIs are considered equal.
+                else
+                    return 1;  // A hidden EI is considered greater than non-hidden to put it at the end.
+            }
+            else
+            if ( ei2.isHidden() )
+                return -1;
+
             for ( SortKey key : sortAttribs )
             {
                 // Since we might be performing the compare on a child entity instance,
