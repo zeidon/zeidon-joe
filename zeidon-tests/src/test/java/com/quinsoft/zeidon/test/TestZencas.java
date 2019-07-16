@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +37,7 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
@@ -2656,7 +2656,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
-		
+
 		public int
 		testExclInclOrderEntities( View ViewToWindow )
 		{
@@ -2664,7 +2664,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   zVIEW    mConListTest2 = new zVIEW( );
 		   zVIEW    mSAProf      = new zVIEW( );
 		   int      RESULT = 0;
-		   
+
 		   // KJS - After we exclude and include the entity Class in mConList, when we try do do the OrderEntityForView on a
 		   // derived attribute, in the derived attribute code, we receive the following error:
 		   // com.quinsoft.zeidon.NullCursorException: Cursor for entity is null
@@ -2682,16 +2682,16 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   RESULT = ExcludeEntity( mConListTest, "Class", zREPOS_AFTER );
 		   RESULT = IncludeSubobjectFromSubobject( mConListTest, "Class", mConListTest2, "Class", zPOS_AFTER );
 		   RESULT = mConListTest.cursor("Class").setFirst().toInt();
-      		while ( RESULT > zCURSOR_UNCHANGED ) 
-      		{      		
+      		while ( RESULT > zCURSOR_UNCHANGED )
+      		{
       			String str1 =  mConListTest2.cursor("ClassCourse").getAttribute("Title").getString();
       			String str2 =  mConListTest2.cursor("Class").getAttribute("dName").getString();
 		        RESULT = mConListTest.cursor("Class").setNext().toInt();
       		}
- 		   OrderEntityForView( mConListTest, "Class", "ClassCourse.Title A" ); 
+ 		   OrderEntityForView( mConListTest, "Class", "ClassCourse.Title A" );
 		   OrderEntityForView( mConListTest, "Class", "CourseTitle A" );
 		   // All of above code seems fine, but we crash in the derived attribute code of dName.
-		   OrderEntityForView( mConListTest, "Class", "dName A" ); 
+		   OrderEntityForView( mConListTest, "Class", "dName A" );
 			return 0;
 		}
 
@@ -3813,8 +3813,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 	        long l2 = Long.parseLong(s, 16);
 
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                throw ZeidonException.wrapException( e );
 			}
 
 			// I had code that was comparing two dates and it wasn't working correctly.

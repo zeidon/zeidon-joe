@@ -20,45 +20,52 @@ package com.quinsoft.zeidon.zeidonoperations;
 
 /**
  * ldapbind.java
- * 
+ *
  * Sample JNDI application to use Active Directory LDAP_SERVER_FAST_BIND connection control
- * 
+ *
  * got this data from
  * http://jeftek.com/222/using-java-code-with-active-directory/
  * also saw this...
  * http://stackoverflow.com/questions/11493742/fastbind-for-authentication-against-active-directory-using-spring-ldap
  */
- 
+
 //https://forums.oracle.com/forums/thread.jspa?threadID=1155584&tstart=0
 
 import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
-import javax.naming.*;
-import javax.naming.ldap.*;
-import javax.naming.directory.*;
+
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
+import javax.naming.directory.ModificationItem;
+import javax.naming.ldap.Control;
+
+import com.quinsoft.zeidon.ZeidonException;
 
 
-public class ldapBind 
+public class ldapBind
 {
 	public Hashtable<String, String> env = null;
 	//public LdapContext ctx = null;
 	public DirContext ctx = null;
 	public Control[] connCtls = null;
- 
-	public ldapBind(String ldapurl) 
+
+	public ldapBind(String ldapurl)
 	{
 		env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.SECURITY_AUTHENTICATION,"simple");
 		env.put(Context.PROVIDER_URL,ldapurl);
-  
+
 	}
 	public boolean Authenticate(String username, String password) {
 			//ctx.addToEnvironment(Context.SECURITY_PRINCIPAL,username);
 			//ctx.addToEnvironment(Context.SECURITY_CREDENTIALS,password);
 			env.put(Context.SECURITY_PRINCIPAL,username);
 			env.put(Context.SECURITY_CREDENTIALS,password);
-			try 
+			try
 			{
 				//ctx = new InitialLdapContext(env,connCtls);
 				ctx = new InitialDirContext(env);
@@ -82,7 +89,7 @@ public class ldapBind
 			System.out.println("Context close failure " + e);
 		}
 	}
-	public void changePassword(String username, String password) 
+	public void changePassword(String username, String password)
 	{
         ModificationItem[] mods = new ModificationItem[1];
         String newQuotedPassword = "\"" + password + "\"";
@@ -91,6 +98,7 @@ public class ldapBind
                 newUnicodePassword = newQuotedPassword.getBytes("UTF-16LE");
         } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+                throw ZeidonException.wrapException( e );
         }
         mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("unicodePwd", newUnicodePassword));
         try {
@@ -100,6 +108,6 @@ public class ldapBind
         } catch (NamingException e) {
                 System.out.println("Error changing password for '" + username + "': " + e.getMessage());
                 e.printStackTrace();
-        }                       
+        }
 }
 }

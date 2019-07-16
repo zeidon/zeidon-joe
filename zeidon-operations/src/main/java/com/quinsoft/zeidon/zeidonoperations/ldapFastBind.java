@@ -20,56 +20,68 @@ package com.quinsoft.zeidon.zeidonoperations;
 
 /**
  * ldapfastbind.java
- * 
+ *
  * Sample JNDI application to use Active Directory LDAP_SERVER_FAST_BIND connection control
- * 
+ *
  * got this data from
  * http://jeftek.com/222/using-java-code-with-active-directory/
  * also saw this...
  * http://stackoverflow.com/questions/11493742/fastbind-for-authentication-against-active-directory-using-spring-ldap
  */
- 
+
 //https://forums.oracle.com/forums/thread.jspa?threadID=1155584&tstart=0
 
 import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
-import javax.naming.*;
-import javax.naming.ldap.*;
-import javax.naming.directory.*;
 
-class FastBindConnectionControl implements Control 
+import javax.naming.AuthenticationException;
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
+import javax.naming.ldap.Control;
+import javax.naming.ldap.InitialLdapContext;
+import javax.naming.ldap.LdapContext;
+
+import com.quinsoft.zeidon.ZeidonException;
+
+class FastBindConnectionControl implements Control
 {
-	public byte[] getEncodedValue() {
+	@Override
+    public byte[] getEncodedValue() {
         	return null;
 	}
-  	public String getID() {
+  	@Override
+    public String getID() {
 		return "1.2.840.113556.1.4.1781";
 	}
- 	public boolean isCritical() {
+ 	@Override
+    public boolean isCritical() {
 		return true;
 	}
 }
 
- 
-public class ldapFastBind 
+
+public class ldapFastBind
 {
 	public Hashtable<String, String> env = null;
 	public LdapContext ctx = null;
 	public Control[] connCtls = null;
- 
-	public ldapFastBind(String ldapurl) 
+
+	public ldapFastBind(String ldapurl)
 	{
 		env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.SECURITY_AUTHENTICATION,"simple");
 		env.put(Context.PROVIDER_URL,ldapurl);
- 
+
 		connCtls = new Control[] {new FastBindConnectionControl()};
- 
+
 		//first time we initialize the context, no credentials are supplied
-		//therefore it is an anonymous bind.		
- 
-		try 
+		//therefore it is an anonymous bind.
+
+		try
 		{
 			ctx = new InitialLdapContext(env,connCtls);
 		}
@@ -86,7 +98,7 @@ public class ldapFastBind
 			System.out.println(username + " is authenticated");
 			return true;
 		}
- 
+
 		catch (AuthenticationException e) {
 			System.out.println(username + " is not authenticated");
 			return false;
@@ -105,7 +117,7 @@ public class ldapFastBind
 			System.out.println("Context close failure " + e);
 		}
 	}
-	public void changePassword(String username, String password) 
+	public void changePassword(String username, String password)
 	{
 		// here is a sample from the web:
 		// How To Change a Windows 2008 User's Password Through LDAP
@@ -119,6 +131,7 @@ public class ldapFastBind
                 newUnicodePassword = newQuotedPassword.getBytes("UTF-16LE");
         } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+                throw ZeidonException.wrapException( e );
         }
         mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute("unicodePwd", newUnicodePassword));
         try {
@@ -128,6 +141,6 @@ public class ldapFastBind
         } catch (NamingException e) {
                 System.out.println("Error changing password for '" + username + "': " + e.getMessage());
                 e.printStackTrace();
-        }                       
+        }
 }
 }
