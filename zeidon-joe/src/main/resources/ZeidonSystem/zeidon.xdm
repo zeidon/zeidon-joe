@@ -39,41 +39,6 @@ aInternalValue M
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      1160237
-aName      WD_MapDefType
-aDesc      Mapping definition type for PE defined MapDef
-aDomainType T
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-
-eContext   3
-aZKey      1160238
-aName      WD_MapDefType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      1160239
-aExternalValue Entity
-aInternalValue E
-
-eTableEntry 4
-aZKey      1160242
-aExternalValue Scoping Entity
-aInternalValue S
-
-eTableEntry 4
-aZKey      1160240
-aExternalValue Attribute
-aInternalValue A
-
-eTableEntry 4
-aZKey      1160241
-aExternalValue Multiple Attributes
-aInternalValue M
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      1320608
 aName      ZeidonOperationTypes
 aDesc      types of operations that can be defined for Zeidon (VML)
