@@ -5446,6 +5446,7 @@ public abstract class VmlOperation
       {
          nRC = 0;
          cursor.orderEntities( orderKeys );
+         cursor.setFirst();
       }
 
       return nRC;
