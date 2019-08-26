@@ -144,6 +144,10 @@ export class StaticTableDomainFunctions extends BaseDomainFunctions {
 
     convertExternalValue( externalValue: any, attributeDef: any, context? : string ): any {
         this.checkForRequiredValue( externalValue, attributeDef );
+
+        if ( externalValue === null || externalValue === undefined )
+            return undefined;
+
         let entries = this.getEntries( context );
 
         // If externalValue maps to key in entries then externalValue is actually
@@ -216,13 +220,15 @@ export class DateDomainFunctions extends DateTimeDomainFunctions {
     }
 }
 
-// Dummy class for copying.
 export class Base64BlobDomainFunctions extends BaseDomainFunctions {
     convertExternalValue( value: any, attributeDef: any, context?: any ): any {
         this.checkForRequiredValue( value, attributeDef );
 
         if ( typeof value === 'string' )
             return value;
+
+        if ( value === undefined || value === null )
+            return undefined;
 
         throw new AttributeValueError( `Invalid value for Base64 Blob: must be an encoded string`, attributeDef );
     }

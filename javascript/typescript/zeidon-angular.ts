@@ -2,7 +2,7 @@
  * Classes for dealing specifically with Angular 2+ apps.
  */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { OnInit, SimpleChanges, OnChanges, EventEmitter } from '@angular/core';
+import { OnInit, SimpleChanges, OnChanges, EventEmitter, Attribute } from '@angular/core';
 import { Input } from '@angular/core';
 import { ElementRef, Renderer2, ViewContainerRef, Output } from '@angular/core';
 import { Directive } from '@angular/core';
@@ -16,16 +16,27 @@ import 'rxjs/add/operator/map'
 import { ZeidonConfiguration } from './zeidon';
 import { ZeidonRestValues, RestActivator, RestCommitter } from './zeidon-rest-client';
 
+/**
+ * WIP: An attempt to automatically use contexts with attributes by using a directive.
+ */
 @Directive( {
     selector: '[attributeContext]',
 } )
-export class AttributeContextDirective implements OnChanges {
+export class AttributeContextDirective implements OnChanges, OnInit {
     @Input( "attributeContext" ) context: any;
 
     constructor( private el: ElementRef,
                  private ngControl: NgControl,
                  private renderer: Renderer2,
                  private viewContainer: ViewContainerRef ) {
+    }
+
+    ngOnInit() {
+        let select = this.renderer.createElement( 'option' );
+        this.renderer.setProperty( select, "value", "xxx" )
+        let text = this.renderer.createText( 'YYY' );
+        this.renderer.appendChild( select, text );
+        this.renderer.appendChild( this.el.nativeElement, select );
     }
 
     ngOnChanges( changes: SimpleChanges ) {
@@ -47,11 +58,12 @@ export class AttributeContextDirective implements OnChanges {
         if ( control.zeidonContext )
             return;
 
+        control.zeidonContext = this.context;
+
         let ei = control.entityInstance;
         let attributeDef = control.attributeDef;
         let value = ei.getAttribute( attributeDef.name, this.context );
         control.setValue( value );
-        control.zeidonContext = this.context;
         control.root.controlsWithContext.push(control);
     }
 }
@@ -172,6 +184,9 @@ export interface ZeidonFormBuilderOptions {
 export class ZeidonFormBuilder {
     public group( ei: EntityInstance,
                   options?: ZeidonFormBuilderOptions ): FormGroup {
+        if ( ! ei )
+            throw "Entity instance is null";
+
         return this.buildForms( ei, ei.oi.getLodDef(), ei.entityDef, options, undefined );
     }
 
@@ -201,7 +216,7 @@ export class ZeidonFormBuilder {
             if ( attributeDef.hidden )
                 continue;
 
-            let value = ei ? ei.getAttribute( attrName) : undefined;
+            let value = ei ? ei.getAttribute( attrName ) : undefined;
             let formControl = new FormControl( value, domainValidator( entityDef, attributeDef ) );
 
             // Add entityDef and attributeDef to the control so it can be used later to add to the class.
@@ -217,10 +232,17 @@ export class ZeidonFormBuilder {
                 formControl.disable();
 
             form.addControl( attrName, formControl );
+            if ( ei && ei.isAttributeUpdated( attrName ) ) {
+                form.markAsDirty();
+                formControl.markAsDirty();
+            }
         };
 
         if ( ! ei )
             return form;
+
+        if ( ei.touched )
+            form.markAsDirty();
 
         // Add the fingerprint so we can match up EIs later.
         form.addControl( "fingerprint", new FormControl( ei.fingerprint ) );
@@ -235,13 +257,19 @@ export class ZeidonFormBuilder {
             if ( childEntityDef.cardMax === 1 ) {
                 let formGroup = this.buildForms( entities[ 0 ], lodDef, childEntityDef, options );
                 form.addControl( entityName, formGroup );
+                if ( formGroup.dirty )
+                    form.markAsDirty();
             } else {
                 let formArray = new FormArray([]);
                 for ( let child of entities ) {
                     let formGroup = this.buildForms( child, lodDef, childEntityDef, options );
                     formArray.push( formGroup );
+                    if ( formGroup.dirty )
+                        formArray.markAsDirty();
                 }
                 form.addControl( entityName, formArray );
+                if ( formArray.dirty )
+                    form.markAsDirty();
             }
         }
 
@@ -268,9 +296,45 @@ export class ZeidonFormReader {
             }
         }
 
-        oi.root.selected().update( form.value );
+        let dirtyValues = this.getDirtyValues( form );
+        oi.root.selected().update( dirtyValues );
     }
 
+    getDirtyValues( form: any ) {
+        let dirtyValues = {};
+
+        Object.keys( form.controls )
+            .forEach( key => {
+                let currentControl = form.controls[ key ];
+
+                if ( currentControl.controls ) {
+                    if ( currentControl instanceof FormArray ) {
+                        let children = [];
+                        Object.keys( currentControl.controls ).forEach( child => {
+                            let dirtyChild = this.getDirtyValues( currentControl.controls[ child ] );
+                            if ( Object.keys( dirtyChild ).length > 0 )
+                                children.push( dirtyChild );
+                        } );
+                        dirtyValues[ key ] = children;
+                    } else
+                        if ( currentControl instanceof FormGroup )  {
+                            let dirtyChild = this.getDirtyValues( currentControl );
+                            if ( Object.keys( dirtyChild ).length > 0 )
+                                dirtyValues[ key ] = dirtyChild;
+                    }
+                    else
+                    {
+                        dirtyValues[ key ] = this.getDirtyValues( currentControl );
+                    }
+                }
+                else
+                if ( currentControl.dirty || key === "fingerprint" ) {
+                    dirtyValues[ key ] = currentControl.value;
+                }
+            } );
+
+        return dirtyValues;
+    }
 }
 
 /**

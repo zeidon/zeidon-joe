@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -679,6 +680,7 @@ public class TestZencas
 		tester.mPersonProspectSaveAttribute( testview );
         System.out.println("===== Finished mPersonProspectSaveAttribute ========");
 	}
+
 	@Test
 	public void testExcludeSubentityError()
 	{
@@ -688,6 +690,27 @@ public class TestZencas
 		tester.testExcludeSubentityError( testview );
         System.out.println("===== Finished testExcludeSubentityError ========");
 	}
+
+	/**
+	 * Verify that if we try to update an attribute that is hidden we won't allow it unless
+	 * it is linked to an entity that has the attribute visible.
+	 */
+    @Test
+    public void testUpdatingHiddenAttribute()
+    {
+        View view = new DeserializeOi( zencas )
+                .asJson()
+                .fromFile( "target/test-classes/testdata/ZENCAs/mFASrc-update-hidden.json" )
+                .activateFirst();
+
+        try {
+            view.commit();
+            Assert.fail("Expected an ZeidonException to be thrown");
+        } catch (ZeidonException e) {
+            Assert.assertThat(e.getMessage(), CoreMatchers.containsString("Attribute is defined as read-only"));
+        }
+
+    }
 
 	@Test
 	public void testActivateRecurObj()

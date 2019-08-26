@@ -1,6 +1,5 @@
-import { ObjectInstance } from './zeidon';
+import { ObjectInstance, Activator } from './zeidon';
 import { Committer, CommitOptions, ActivateLockError } from './zeidon';
-import { RxHttpRequest } from 'rx-http-request';
 
 /**
  * Interface for wrapping different HTTP clients into a form that can be used by Zeidon.
@@ -14,10 +13,12 @@ export interface HttpClient {
     post( url: string, body: string, headers: Object ): Promise<Response>;
 }
 
-export class RestActivator {
-    constructor( private values: ZeidonRestValues, private http: HttpClient ) { }
+export class RestActivator extends Activator {
+    constructor( private values: ZeidonRestValues, private http: HttpClient ) { super(); }
 
     activateOi<T extends ObjectInstance>( oi: T, qual?: any ): Promise<T> {
+        this.executePreActivateHooks( oi, qual );
+
         if ( qual == undefined )
             qual = { rootOnly: true };
 
@@ -30,10 +31,18 @@ export class RestActivator {
             if ( response.body === undefined )
                 throw "response.body is undefined";
 
-            return oi.createFromJson( response.body, { incrementalsSpecified: true } ) as T;
+            let newOi = oi.createFromJson( response.body, { incrementalsSpecified: true } );
+            this.executePostActivateHooks( oi, qual );
+
+            return newOi as T;
         }
 
-        let url = `${this.values.restUrl}/${lodName}?qual=${encodeURIComponent( JSON.stringify( qual ) )}`;
+        // If qualifcation consists of a single check for id then use the path form of activate.
+        // Otherwise pass in the whole
+        let url = ( Object.keys( qual ).length === 1 && qual.id ) ?
+            `${this.values.restUrl}/${lodName}/${qual.id}` :
+            `${this.values.restUrl}/${lodName}?qual=${encodeURIComponent( JSON.stringify( qual ) )}`;
+
         return this.http.get( url )
             .then( response => mapResponse( response ) );
     }
@@ -46,16 +55,18 @@ export class ZeidonRestValues {
     restUrl: string;
 }
 
-export class RestCommitter implements Committer {
-    constructor( private values: ZeidonRestValues, private http: HttpClient ) { }
+export class RestCommitter extends Committer {
+    constructor( private values: ZeidonRestValues, private http: HttpClient ) { super(); }
 
     commitOi( oi: ObjectInstance, options?: CommitOptions ): Promise<ObjectInstance> {
+        this.executePreCommitHooks( oi, options );
+
         let lodName = oi.getLodDef().name;
         let body = JSON.stringify( oi.toZeidonMeta() );
         let url = `${this.values.restUrl}/${lodName}`;
 
         return this.http.post( url, body, { 'Content-Type': 'application/json' } )
-            .then( response => this.parseCommitResponse( oi, response ) );
+            .then( response => this.parseCommitResponse( oi, response, options ) );
     }
 
     dropOi( oi: ObjectInstance, options?: CommitOptions ) {
@@ -74,40 +85,16 @@ export class RestCommitter implements Committer {
             .then( response => console.log( "DropOi response = " + response.body ) );
     }
 
-    parseCommitResponse( oi: ObjectInstance, response ): ObjectInstance {
+    parseCommitResponse( oi: ObjectInstance, response, options?: CommitOptions ): ObjectInstance {
+        let newOi: ObjectInstance = undefined;
         if ( response.body === "{}" )
-            return oi.createFromJson( undefined );
+            newOi = oi.createFromJson( undefined );
+        else
+            newOi = oi.createFromJson( response.body, { incrementalsSpecified: true } );
 
-        return oi.createFromJson( response.body, { incrementalsSpecified: true } );
-    }
-}
+        this.executePostCommitHooks( newOi, options );
 
-/**
- * A simple wrapper around the standard node HTTP module that returns Promises.
- */
-export class RxHttpWrapper {
-    get( url: string ): Promise<Response> {
-        return RxHttpRequest.get( url )
-            .map( response => {
-                return {
-                    "body": response.body,
-                    "statusCode": response.response.statusCode
-                };
-            } );
-    }
-
-    post( url: string, body: string, headers: Object ): Promise<any> {
-        const options = {
-            body: body
-        };
-
-        return RxHttpRequest.post( url, options )
-            .map( response => {
-                return {
-                    "body": response.body,
-                    "statusCode": response.response.statusCode
-                };
-            } );
+        return newOi;
     }
 }
 
