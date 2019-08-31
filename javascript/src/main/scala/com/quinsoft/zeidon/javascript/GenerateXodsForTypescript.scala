@@ -61,28 +61,9 @@ import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainF
         writer.println( s"""
 // $lodName LOD.
 export class $lodName extends zeidon.ObjectInstance {
-    protected rootEntityName(): string { return "$rootName" };
 
-    public getApplicationName(): String { return "$applicationName" };
-
-    getPrototype(entityName: string): any {
-        return ${lodName}EntityPrototypes[entityName];
-    }
-
-    public getLodDef() {
-        return ${lodName}_LodDef;
-    };
-
-    public getDomain( name: string ): zeidon.Domain {
-        return ${applicationName}_DomainList[name];
-    };
-
-    public getDomainFunctions( domain: zeidon.Domain ): zeidon.DomainFunctions {
-        let f = ${applicationName}_DomainFunctions[ domain.class ];
-        if ( f )
-            return new f( domain );
-
-        return undefined;
+    constructor( initialize = undefined, options: zeidon.CreateOptions = undefined ) {
+        super( ${lodName}_LodDef, initialize, options );
     }
 
     get $rootName(): zeidon.EntityArray<${lodName}_${rootName}> {
@@ -95,7 +76,7 @@ export class $lodName extends zeidon.ObjectInstance {
 
     // Returns the current entity instance if it exists, otherwise returns an instance
     // that will returned 'undefined' for any property values.  This is the
-    // equivalent to the "elvis operator"
+    // safe navigation operator.
     get ${rootName}$$$$(): ${lodName}_${rootName} {
         return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
     }
@@ -104,11 +85,44 @@ export class $lodName extends zeidon.ObjectInstance {
         return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
     }
 
+    // Following allow accessing of child entity instances directly from the OI,
+    // similar to Zeidon Views.
+""" )
+
+        lodDef.getEntityDefs.foreach { writeTopLevelEntityAccesors( writer, _ ) }
+
+        writer.println( s"""
     public static activate( qual?: any ): Promise<$lodName> {
         return zeidon.ObjectInstance.activateOi( new $lodName(), qual );
     }
 }
 """ )
+    }
+
+    private def writeTopLevelEntityAccesors( writer: java.io.PrintWriter, entityDef: EntityDef ) {
+        val lodName = lodDef.getName
+
+        // Don't create one for the root.
+        if ( entityDef.getParent() == null )
+            return
+
+        val sb = new java.lang.StringBuilder();
+        var entity = entityDef
+        while ( entity != null ) {
+            if ( sb.toString() != "" )
+                sb.insert( 0, "." )
+
+            sb.insert( 0, "$$" )
+            sb.insert( 0, entity.getName )
+
+            entity = entity.getParent
+        }
+
+        writer.println( s"""
+    get ${entityDef.getName}$$$$(): ${lodName}_${entityDef.getName} {
+        return this.${sb.toString()};
+    }""" )
+
     }
 
     private def writeEntityInstance( writer: java.io.PrintWriter, entityDef: EntityDef ) {
@@ -187,16 +201,22 @@ const ${lodDef.getName}EntityPrototypes = {""" )
     }
 
     private def writeLodDef( writer: java.io.PrintWriter ) {
+        val lodDefName = lodDef.getName
+        val appName = lodDef.getApplication.getName
         writer.println( s"""
-export const ${lodDef.getName}_LodDef = {
-    name: "${lodDef.getName}",
+export const ${lodDefName}_LodDefStructure = {
+    name: "${lodDefName}",
+    root: "${lodDef.getRoot.getName}",
+    applicationName: "${appName}",
     entities: {""" )
 
        lodDef.getEntityDefs.foreach { writeEntityDef( writer, _ ) }
 
-
         writer.println( "    }" )
-        writer.println( "}" )
+        writer.println( s"""}
+
+export const ${lodDefName}_LodDef = new zeidon.LodDef( ${lodDefName}_LodDefStructure, ${lodDefName}EntityPrototypes, ${appName}_DomainList, ${appName}_DomainFunctions );
+        """ )
     }
 
     private def writeEntityDef( writer: java.io.PrintWriter, entityDef: EntityDef ) {
