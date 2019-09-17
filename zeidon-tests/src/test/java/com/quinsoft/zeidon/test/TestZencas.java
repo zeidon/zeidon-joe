@@ -199,6 +199,17 @@ public class TestZencas
 		tester.testBlobs( testview );
         System.out.println("===== Finished testBlobs ========");
 	}
+	
+
+	@Test
+	public void CreateTemporalDerivedEntityWorkAttributeIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.CreateTemporalDerivedEntityWorkAttributeIssue( testview );
+        System.out.println("===== Finished CreateTemporalDerivedEntityWorkAttributeIssue ========");
+	}
 
 	@Test
 	public void testAttributeReadOnlyError()
@@ -1882,6 +1893,69 @@ public class TestZencas
 	   	   // We only get this when we've done a CreateTemporalSubobjectVersion( mFAProf, "FinAidProfile" )
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidCOAItemAssigned" );
 
+		   return 0;
+		}
+
+		public int
+		CreateTemporalDerivedEntityWorkAttributeIssue( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    mClass = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+
+		   // KJS 09/16/19
+		   // Issue: After a CreateTemporalSubobjectVersion, derived entity work attributes are blank.
+		   // We create derived entity GradeEnrollment from entity Enrollment and set a work attribute (GradeEnrollment.wEnteredGrade).
+		   // After CreateTemporalSubobjectVersion on the root entity Class the work attribute in GradeEnrollment is blank.
+		   // Work attributes in the original entity Enrollment are fine.
+		   // ER attributes in the derived entity GradeEnrollment are fine.
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+			int testClass = 2560;
+			
+	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, testClass );  
+
+	       RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
+	       DropView( vTempViewVar_0 );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+
+		   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+		   while ( RESULT > zCURSOR_UNCHANGED )
+		   { 
+		      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
+		      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+		   } 
+
+		   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+		   while ( RESULT > zCURSOR_UNCHANGED )
+		   { 
+		      SetAttributeFromAttribute( mClass, "Enrollment", "wOriginalFinalGrade", mClass, "Enrollment", "FinalGrade" );
+		      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
+		      { 
+		    	  RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
+		    	  SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
+		      }
+
+		      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+		   } 
+		   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
+		   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+		   CreateTemporalSubobjectVersion( mClass, "Class" );
+           Assert.assertTrue( "After ", !mClass.cursor("GradeEnrollment").getAttribute("wEnteredGrade").getString().equals("") );
+           		   
 		   return 0;
 		}
 
