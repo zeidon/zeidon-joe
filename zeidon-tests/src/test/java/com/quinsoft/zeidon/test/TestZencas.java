@@ -1810,9 +1810,11 @@ public class TestZencas
 		   // 4. acceptSubobject( FinAidAward )
 		   // Receive Error
 		   //
-		   // In the first instance in acceptSubobject( FinAidAwardDisbursement ), we set all child entities to UNACCEPTED_ENTITY 
-		   // In the second instance in acceptSubobject( FinAidAwardDisbursement ), we set all child entities to UNACCEPTED_ROOT, which
-		   // then throws the exception when doing acceptSubobject( FinAidAward ).
+		   // In the first instance of acceptSubobject( FinAidAwardDisbursement ) (this is after we did a createTemporal on FinAidAward), we set all 
+		   // child entities to parent version status UNACCEPTED_ENTITY
+		   // In the second instance of acceptSubobject( FinAidAwardDisbursement ), we set all child entities to parent version status UNACCEPTED_ROOT, which
+		   // then throws the exception when doing acceptSubobject( FinAidAward ).		
+		   
 		   
 		    // Set up code.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
