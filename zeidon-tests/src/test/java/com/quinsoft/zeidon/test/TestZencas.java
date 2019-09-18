@@ -1344,6 +1344,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( testview );
+        System.out.println("===== Finished mFAProfTemporalIssue3 ========");
+	}
+//mFAProfTemporalTest
+	@Test
 	public void mFAProfTemporalLinkIssue()
 	{
 	    View         testview;
@@ -1866,6 +1876,97 @@ public class TestZencas
 		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
 		    mFAProf.cursor("FinAidAward").acceptSubobject();
 
+		   return 0;
+		}
+
+		public int
+		mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+		   
+		   // KJS 09/18/19 - at the moment this gives the same error as the test mFAProfTemporalIssue3,
+		   // but when that test gets fixed, I want to make sure that the values in PerPeriodFinAidAwardDisbursement, down the 
+		   // PerProfileFinAidAwardPeriod path show the same values as the original FinAidAwardDisbursement entity under FinAidAward.
+		   // The PerProfileFinAidAwardPeriod path is the "included" path.
+		   
+		    // Set up code.
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+		    // End of set up code...
+
+		    // This works
+			CreateTemporalEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+
+			CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 500) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 500) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+		    
+	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 500 ).toInt();
+	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 500 ).toInt();
+ 		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 500.", 0, RESULT, 0.0);
+
+ 		    // Another test
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement");
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 300) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 300) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 300 ).toInt();
+	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 300 ).toInt();
+ 		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 300.", 0, RESULT, 0.0);
+
+ 		    // This does not work.
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+			CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 100) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 100) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+
+	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
+	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
+ 		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 100.", 0, RESULT, 0.0);
+		    
 		   return 0;
 		}
 
