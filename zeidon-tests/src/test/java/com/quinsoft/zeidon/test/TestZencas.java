@@ -199,7 +199,7 @@ public class TestZencas
 		tester.testBlobs( testview );
         System.out.println("===== Finished testBlobs ========");
 	}
-	
+
 
 	@Test
 	public void CreateTemporalDerivedEntityWorkAttributeIssue()
@@ -1807,7 +1807,7 @@ public class TestZencas
 		   // KJS 09/18/19 - Getting the following error:
 		   // com.quinsoft.zeidon.TemporalEntityException: Entity has children that are unaccepted version roots
 		   // EntityDef  = ZENCAs.mFAProf.FinAidAward
-		   // If we 
+		   // If we
 		   // 1. createTemporalEntity on root FinAidAward then
 		   // 2. createTemporalEntity on child FinAidAwardDisbursement
 		   // 3. acceptSubobject( FinAidAwardDisbursement )
@@ -1820,12 +1820,12 @@ public class TestZencas
 		   // 4. acceptSubobject( FinAidAward )
 		   // Receive Error
 		   //
-		   // In the first instance of acceptSubobject( FinAidAwardDisbursement ) (this is after we did a createTemporal on FinAidAward), we set all 
+		   // In the first instance of acceptSubobject( FinAidAwardDisbursement ) (this is after we did a createTemporal on FinAidAward), we set all
 		   // child entities to parent version status UNACCEPTED_ENTITY
 		   // In the second instance of acceptSubobject( FinAidAwardDisbursement ), we set all child entities to parent version status UNACCEPTED_ROOT, which
-		   // then throws the exception when doing acceptSubobject( FinAidAward ).		
-		   
-		   
+		   // then throws the exception when doing acceptSubobject( FinAidAward ).
+
+
 		    // Set up code.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
 		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
@@ -1858,6 +1858,7 @@ public class TestZencas
 		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
 		    // End of set up code...
 
+
 		    // This works
 			CreateTemporalEntity( mFAProf, "FinAidAward", zPOS_AFTER );
 		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
@@ -1889,12 +1890,12 @@ public class TestZencas
 		   zVIEW    wXferO = new zVIEW( );
 		   zVIEW    vTempViewVar_0 = new zVIEW( );
 		   int RESULT=0;
-		   
+
 		   // KJS 09/18/19 - at the moment this gives the same error as the test mFAProfTemporalIssue3,
-		   // but when that test gets fixed, I want to make sure that the values in PerPeriodFinAidAwardDisbursement, down the 
+		   // but when that test gets fixed, I want to make sure that the values in PerPeriodFinAidAwardDisbursement, down the
 		   // PerProfileFinAidAwardPeriod path show the same values as the original FinAidAwardDisbursement entity under FinAidAward.
 		   // The PerProfileFinAidAwardPeriod path is the "included" path.
-		   
+
 		    // Set up code.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
 		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
@@ -1938,7 +1939,7 @@ public class TestZencas
 		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 500) ;
 		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
 		    mFAProf.cursor("FinAidAward").acceptSubobject();
-		    
+
 	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 500 ).toInt();
 	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 500 ).toInt();
  		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 500.", 0, RESULT, 0.0);
@@ -1966,7 +1967,7 @@ public class TestZencas
 	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
 	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
  		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 100.", 0, RESULT, 0.0);
-		    
+
 		   return 0;
 		}
 
@@ -2122,8 +2123,8 @@ public class TestZencas
 			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
 
 			int testClass = 2560;
-			
-	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, testClass );  
+
+	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, testClass );
 
 	       RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
 	       DropView( vTempViewVar_0 );
@@ -2131,28 +2132,30 @@ public class TestZencas
 
 		   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
 		   while ( RESULT > zCURSOR_UNCHANGED )
-		   { 
+		   {
 		      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
 		      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
-		   } 
+		   }
 
 		   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
 		   while ( RESULT > zCURSOR_UNCHANGED )
-		   { 
+		   {
 		      SetAttributeFromAttribute( mClass, "Enrollment", "wOriginalFinalGrade", mClass, "Enrollment", "FinalGrade" );
 		      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
-		      { 
+		      {
 		    	  RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
 		    	  SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
 		      }
 
 		      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
-		   } 
+		   }
 		   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
 		   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+		   String grade = mClass.cursor("GradeEnrollment").getAttribute("wEnteredGrade").getString();
+           Assert.assertTrue( "Before ", ! grade.equals("") );
 		   CreateTemporalSubobjectVersion( mClass, "Class" );
            Assert.assertTrue( "After ", !mClass.cursor("GradeEnrollment").getAttribute("wEnteredGrade").getString().equals("") );
-           		   
+
 		   return 0;
 		}
 
