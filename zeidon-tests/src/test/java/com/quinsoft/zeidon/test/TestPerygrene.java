@@ -91,6 +91,15 @@ public class TestPerygrene
 	}
 
 	@Test
+	public void testWorkTemporalSubobjectIssue()
+	{
+	    View         testview;
+		testview = perygrene.activateEmptyObjectInstance( "mDrvShiftRoutes" );
+		PerygreneVmlTester tester = new PerygreneVmlTester( testview );
+		tester.testWorkTemporalSubobjectIssue( testview );
+        System.out.println("===== Finished testWorkTemporalSubobjectIssue ========");
+	}
+	@Test
 	public void testRecursive()
 	{
 	    View         testview;
@@ -748,6 +757,69 @@ public class TestPerygrene
     	   
  		   return 0;
        }
+        public int
+        testWorkTemporalSubobjectIssue( View     ViewToWindow)
+        {
+        	   zVIEW    zqFrame = new zVIEW( );
+               int      RESULT = 0;
+               
+               // We do a Create Temporal on an Entity (SelectionCriteria)
+               // Then create child entities (SelectionCriteriaSubParameter)
+               // When we CancelSubobject on the parent entity, the child entities still exist.
+               // I try this on work/derived/database entitites, to see if they work any differently.
+               // Don C says this should work even though the child entities were created without Temporal...
+        	   
+        	   RESULT = ActivateEmptyObjectInstance( zqFrame, "zqFrame", ViewToWindow, zSINGLE );
+        	   RESULT = CreateEntity( zqFrame, "zqFrame", zPOS_AFTER );
+        	   SetNameForView( zqFrame, "zqFrame", null, zLEVEL_TASK );
+        	   
+        	   // Work Entities
+        	   CreateTemporalEntity( zqFrame, "SelectionCriteria", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteria", "Value", "Value1" );
+
+    		   RESULT = CreateEntity( zqFrame, "SelectionCriteriaSubParameter", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteriaSubParameter", "Value", "Parm1" );
+    		   RESULT = CreateEntity( zqFrame, "SelectionCriteriaSubParameter", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteriaSubParameter", "Value", "Parm2" );
+    		   RESULT = CreateEntity( zqFrame, "SelectionCriteriaSubParameter", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteriaSubParameter", "Value", "Parm3" );
+         	   
+    		   CancelSubobject( zqFrame, "SelectionCriteria" );
+    		   RESULT = SetCursorFirstEntity( zqFrame, "SelectionCriteriaSubParameter", "" );
+               Assert.assertTrue( "Subentity SelectionCriteriaSubParameter EXISTS after CancelSubobject on Parent ", RESULT < zCURSOR_SET );
+        	   
+        	   // Derived Entity.
+        	   CreateTemporalEntity( zqFrame, "QueryDisplayEntity", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "QueryDisplayEntity", "Name", "Value1" );
+
+    		   RESULT = CreateEntity( zqFrame, "QueryDisplaySubEntity", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "QueryDisplaySubEntity", "Name", "Parm1" );
+    		   RESULT = CreateEntity( zqFrame, "QueryDisplaySubEntity", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "QueryDisplaySubEntity", "Name", "Parm2" );
+    		   RESULT = CreateEntity( zqFrame, "QueryDisplaySubEntity", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "QueryDisplaySubEntity", "Name", "Parm3" );
+         	   
+    		   CancelSubobject( zqFrame, "QueryDisplayEntity" );
+    		   RESULT = SetCursorFirstEntity( zqFrame, "QueryDisplayEntity", "" );
+    		   RESULT = SetCursorFirstEntity( zqFrame, "QueryDisplaySubEntity", "" );
+               Assert.assertTrue( "Subentity SelectionCriteriaSubParameter EXISTS after CancelSubobject on Parent ", RESULT < zCURSOR_SET );
+
+               // Database Entity
+        	   zVIEW    mBillContract = new zVIEW( );
+        	   RESULT = ActivateEmptyObjectInstance( mBillContract, "mBillContract", ViewToWindow, zSINGLE );
+        	   RESULT = CreateEntity( mBillContract, "BillingContract", zPOS_AFTER );
+        	   SetNameForView( mBillContract, "mBillContract", null, zLEVEL_TASK );
+        	   CreateTemporalEntity( mBillContract, "ContractedFreightRoute", zPOS_AFTER );
+    		   SetAttributeFromString( mBillContract, "ContractedFreightRoute", "Note", "Value1" );
+
+    		   RESULT = CreateEntity( mBillContract, "ContractedFreightRouteFuelType", zPOS_AFTER );
+    		   SetAttributeFromInteger( mBillContract, "ContractedFreightRouteFuelType", "MinimumGallons", 20 );
+    		   CancelSubobject( mBillContract, "ContractedFreightRoute" );
+    		   RESULT = SetCursorFirstEntity( mBillContract, "ContractedFreightRouteFuelType", "" );
+               Assert.assertTrue( "Subentity ContractedFreightRouteFuelType EXISTS after CancelSubobject on Parent ", RESULT < zCURSOR_SET );
+              
+        	   return(0);
+        }
 
         public int
         testRecursive( View     ViewToWindow)
@@ -1145,4 +1217,5 @@ public class TestPerygrene
         } 
 
      }
-}
+
+ }

@@ -4086,7 +4086,10 @@ public abstract class VmlOperation
          }
 
          sbReturn.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
-         sbReturn.append( s );
+         if ( s.length() <= maxLength )
+        	 sbReturn.append( s );
+         else
+        	 sbReturn.append( s.substring(0,  maxLength) );
 
       }
 

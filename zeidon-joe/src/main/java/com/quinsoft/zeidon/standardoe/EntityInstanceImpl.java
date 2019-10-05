@@ -2104,8 +2104,10 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( getParent() != null )
         {
-            newVersionStatus = getParent().versionStatus;
             newVersionNumber = getParent().versionNumber;
+            newVersionStatus = getParent().versionStatus;
+            if ( newVersionStatus == VersionStatus.UNACCEPTED_ROOT )
+                newVersionStatus = VersionStatus.UNACCEPTED;
         }
 
         // Set status/number for all children.  This will allow us to spawn changes.
@@ -3090,12 +3092,12 @@ class EntityInstanceImpl implements EntityInstance
                 // We now need to copy attribute values from prevVersion and set up linkedInstances.
 
                 // Copy attributes values from previous version.
-                ei.newTemporalAttributeList( ei.getPrevVersion(), null );
-
                 EntityInstanceImpl prevVsn = ei.getPrevVersion();
+                ei.newTemporalAttributeList( prevVsn, null );
+
                 ei.linkedInstances2.stream( ei ).forEach( linked -> {
                     if ( linked.persistentAttributes == null )
-                        linked.newTemporalAttributeList( linked, ei );
+                        linked.newTemporalAttributeList( linked.getPrevVersion(), ei );
                 });
             }
 
@@ -3146,8 +3148,8 @@ class EntityInstanceImpl implements EntityInstance
 
     /**
      * Creates a new AttributeListInstance for a temporal entity. The work
-     * attributes are copied from prevInstanceAttributeList. Persistent
-     * attributes are copied from prevInstanceAttributeList unless
+     * attributes are copied from sourceInstance. Persistent
+     * attributes are copied from sourceInstance unless
      * linkedAttributeList is not null.
      *
      * If linkedAttributeList is not null then temporalInstance is linked to
@@ -3164,6 +3166,8 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( linkedSourceInstance == null )
         {
+            assert sourceInstance != this;
+
             sourceInstance.addLinkedInstance( this );
             persistentAttributes = new HashMap<>( entityDef.getPersistentAttributeCount() );
 
@@ -3176,6 +3180,7 @@ class EntityInstanceImpl implements EntityInstance
             persistentAttributes = linkedSourceInstance.persistentAttributes;
 
             // Copy just work attributes.
+            assert sourceInstance.getEntityDef().getName() == this.getEntityDef().getName();
             copyAttributes( sourceInstance, false, true );
             this.addAllHashKeyAttributes();
         }
