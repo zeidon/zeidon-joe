@@ -1743,9 +1743,6 @@ class EntityInstanceImpl implements EntityInstance
                 if ( linked == this )
                     return;
 
-                if ( linked.getEntityDef().getName().equals( "FinAidAwardDisbursement" ))
-                    System.out.println( "here" );
-
                 assert linked.versionNumber == 0 || linked.versionNumber == this.versionNumber;
 
                 // If there is a version, then we'll eventually accept it so skip it.
@@ -2318,8 +2315,6 @@ class EntityInstanceImpl implements EntityInstance
         for ( final EntityInstanceImpl ei : getChildrenHier( true, true ) )
         {
              ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                 if ( ! linked.isLinked( ei ) )
-                     System.out.println( "here" );
                  assert linked.isLinked( ei );
              } );
         }
