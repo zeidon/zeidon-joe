@@ -1,16 +1,18 @@
 /**
- * 
+ *
  */
 package com.quinsoft.zeidon;
 
 import java.sql.SQLException;
 
 /**
- * @author dgc
+ * Thrown when committing a new root entity triggers a duplicate key error.
  *
  */
 public class DuplicateRootException extends ZeidonDbException
 {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * @param view
@@ -19,7 +21,6 @@ public class DuplicateRootException extends ZeidonDbException
     public DuplicateRootException( View view, SQLException causedBy )
     {
         super( view, causedBy );
-        // TODO Auto-generated constructor stub
     }
 
 }

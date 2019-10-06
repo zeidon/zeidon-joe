@@ -43,14 +43,6 @@
             </exclusions>
     </dependency>
 
-    <!-- Test -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
- 
     <!-- For running mvn scala:console
     <dependency>
       <groupId>org.scala-lang</groupId>

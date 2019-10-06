@@ -42,6 +42,7 @@ import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.DuplicateRootException;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -864,7 +865,7 @@ public class JdbcHandler extends AbstractSqlHandler
         }
         catch ( SQLException e )
         {
-            throw new ZeidonDbException( view, e ).appendMessage( generateErrorMessageWithBoundAttributes( sql, entityDef, stmt ) );
+            handleSqlException( sql, e, view, entityDef, ps, stmt );
         }
         catch ( Exception e )
         {
@@ -876,6 +877,27 @@ public class JdbcHandler extends AbstractSqlHandler
         }
 
         return 0;
+    }
+
+    protected void handleSqlException( String sql,
+                                       SQLException e,
+                                       View view,
+                                       EntityDef entityDef,
+                                       PreparedStatement ps,
+                                       SqlStatement stmt )
+    {
+        String type = e.getSQLState();
+        switch ( type )
+        {
+            case "23505":
+                if ( entityDef.getParent() == null )
+                    throw new DuplicateRootException( view, e ).appendMessage( "Root entity: %s", entityDef.getName() );
+
+                break;
+        }
+
+        // If we get here just throw the normal exception.
+        throw new ZeidonDbException( view, e ).appendMessage( generateErrorMessageWithBoundAttributes( sql, entityDef, stmt ) );
     }
 
     /**
@@ -1079,7 +1101,7 @@ public class JdbcHandler extends AbstractSqlHandler
 			pool.setUsername( username );
 			pool.setPassword( password );
 		    }
-		    
+
                     pool.setUrl( url );
                     pool.setTestOnBorrow( true );
                     pool.setValidationQuery( "select 1" );

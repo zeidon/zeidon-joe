@@ -10,6 +10,7 @@ import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.PessimisticLockingException
 import com.quinsoft.zeidon.ZeidonException
 import org.apache.commons.lang3.StringUtils
+import com.quinsoft.zeidon.DuplicateRootException
 
 
 /**
@@ -28,6 +29,11 @@ trait ZeidonRestScalatra extends ScalatraServlet {
       case e: PessimisticLockingException => {
           getObjectEngine().getSystemTask.log().debug( "LOD is locked" )
           Locked( "LOD is locked" )
+      }
+
+      case e: DuplicateRootException => {
+          getObjectEngine().getSystemTask.log().error(e)
+          BadRequest( "Duplicate key" )
       }
 
       case e: Throwable => {
