@@ -1,13 +1,13 @@
 package com.quinsoft.northwind.scala
 
-import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._
 import org.junit.Before
 import org.junit.Test
-import com.quinsoft.zeidon.scala.ZeidonOperations
-import com.quinsoft.zeidon.scala.View
+import org.scalatest.junit.AssertionsForJUnit
+
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
+import com.quinsoft.zeidon.scala.View
 
 class TestNorthwind extends AssertionsForJUnit {
 
@@ -26,6 +26,27 @@ class TestNorthwind extends AssertionsForJUnit {
         assertTrue( order.Customer.exists )
         assertTrue( order.Shipper.exists )
         order.logObjectInstance
+    }
+
+    @Test
+    def testCreateDeleteEntity() {
+        val order = task.using( "Order" ).empty()
+        order.Order.create()
+        order.Order.OrderDate = "NOW"
+
+        val customer = task.using( "Customer" ).activate( _.Customer.CustomerId = "BLAUS" )
+        order.Customer include customer.Customer
+
+        val empl = task.using( "Employee" ).activate( _.Employee.EmployeeId = 1 )
+        order.Employee include empl.Employee
+
+        val shipper = task.using( "Shipper" ).activate( _.Shipper.ShipperId = 1 )
+        order.Shipper include shipper.Shipper
+
+        order.commit()
+
+        order.Order.delete()
+        order.commit()
     }
 
     @Test

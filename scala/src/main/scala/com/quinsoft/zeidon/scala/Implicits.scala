@@ -79,6 +79,11 @@ object Implicits {
         }
 
         def newView( lodName: String ): View = new View( task ) basedOn lodName
+
+        def using( lodName: String ): DynamicTaskActivator = {
+            new DynamicTaskActivator( task, lodName )
+        }
+
     }
 
 
