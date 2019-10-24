@@ -152,15 +152,14 @@ class EntitySpawner
             return;
 
         final EntityInstanceImpl parentInstance = entityInstance.getParent();
-        for ( EntityInstanceImpl linked : parentInstance.getLinkedInstances() )
-        {
+        parentInstance.linkedInstanceStream().forEach( linked -> {
             // If linked is hidden then it's been deleted so don't bother spawning.
             if ( linked.isHidden() )
-                continue;
+                return;
 
             // If they aren't the same version then skip it.
             if ( ! linked.temporalVersionMatch( parentInstance ) )
-                continue;
+                return;
 
             // Go through the
             // child entity types of the linked parent and see if one exists which
@@ -235,7 +234,7 @@ class EntitySpawner
                                                          spawnPosition );
                 newInstance.linkInternalInstances( entityInstance );
             }
-        }
+        } );
     }
 
     void spawnInclude()
@@ -255,8 +254,9 @@ class EntitySpawner
         if ( entityInstance.getParent() == null || entityDef.isDerived() )
             return;
 
-        performSpawnPass( entityDef, entityInstance, entityInstance.getParent(), true );
-        performSpawnPass( entityDef, entityInstance.getParent(), entityInstance, false );
+        EntityInstanceImpl parentInstance = entityInstance.getParent();
+        performSpawnPass( entityDef, entityInstance, parentInstance, true );
+        performSpawnPass( entityDef, parentInstance, entityInstance, false );
     }
 
     private void performSpawnPass( EntityDef         rootEntityDef,

@@ -1352,6 +1352,16 @@ public class TestZencas
 		tester.mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( testview );
         System.out.println("===== Finished mFAProfTemporalIssue3 ========");
 	}
+
+
+    @Test
+    public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest2()
+    {
+        View testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+        VmlTester tester = new VmlTester( testview );
+        tester.mFAProfTemporalPerProfileFinAidAwardPeriodPathTest2( testview );
+    }
+
 //mFAProfTemporalTest
 	@Test
 	public void mFAProfTemporalLinkIssue()
@@ -1970,6 +1980,30 @@ public class TestZencas
 
 		   return 0;
 		}
+
+
+        public int
+        mFAProfTemporalPerProfileFinAidAwardPeriodPathTest2( View ViewToWindow )
+        {
+            View mFAProf = new DeserializeOi( zencas )
+                    .fromFile( "target/test-classes/testdata/ZENCAs/mFAProf-PathTest.json" )
+                    .activateFirst();
+
+            // This does not work.
+            CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+            CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+            int RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+            mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 100) ;
+            mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 100) ;
+            mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+            mFAProf.cursor("FinAidAward").acceptSubobject();
+
+            RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
+            RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
+            Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 100.", 0, RESULT, 0.0);
+
+            return 0;
+        }
 
 		public int
 		mFAProfTemporalLinkIssue( View ViewToWindow )

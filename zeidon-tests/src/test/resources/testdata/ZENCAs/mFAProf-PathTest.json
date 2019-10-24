@@ -1,0 +1,181 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "ZENCAs",
+      "odName" : "mFAProf",
+      "incremental" : true
+    },
+    "FinAidProfile" : [ {
+      ".meta" : {
+        "incrementals" : "C"
+      },
+      "Person" : [ {
+        ".meta" : {
+          "incrementals" : "I"
+        },
+        "ID" : 18808,
+        "LastName" : "Hardee",
+        "FirstName" : "Megan",
+        "MiddleName" : "R",
+        "Gender" : "F",
+        "CampusID" : "182018808",
+        "SSN" : "234234234",
+        "DateOfBirth" : "1990-01-01T00:00:00.000-05:00",
+        "eMailAddress" : "personemail@provider.net",
+        "HomePhone" : "2342342342",
+        "MobilePhone" : "5455454544",
+        "EmergencyContactAddressCity" : "Oklahoma City",
+        "EmergencyContactAddressLine1" : "9213 Knightsbridge Rd",
+        "EmergencyContactAddressState" : "OK",
+        "EmergencyContactAddressZipCode" : "12345-6757",
+        "EmergencyContactHomePhone" : "222-222-2222",
+        "EmergencyContactMobilePhone" : "(405) 664-9166",
+        "EmergencyContactName" : "Laura Hardee",
+        "EmergencyContactNote" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "EmergencyContactRelationship" : "Mother",
+        "Extension" : "1111",
+        "Fax" : "4444444444",
+        "MaritalStatus" : "S",
+        "MasterPromissorySignedDate" : "2009-11-02T00:00:00.000-05:00",
+        "WorkPhone" : "2222222222",
+        "CreatedBy" : "Admin",
+        "CreatedDateTime" : "2003-10-03T14:06:56.000-04:00",
+        "ModifiedDateTime" : "2019-10-09T22:10:53.585-04:00",
+        "LastModifiedBy" : "Admin",
+        "EmergencyContactLastUpdDateTime" : "2014-05-05T12:00:00.000-04:00",
+        "Prospect" : [ {
+          "ID" : 98414,
+          "Type" : "5",
+          "Status" : "S"
+        } ],
+        "Student" : [ {
+          "ID" : 16406,
+          "Status" : "I",
+          "CurrentLevel" : "3"
+        } ],
+        "Demographics" : [ {
+          "ID" : 16471,
+          "PlaceOfBirthCity" : "Glendale",
+          "PlaceOfBirthStateProvince" : "CA",
+          "CitizenshipCode" : "US",
+          "PrimaryLanguage" : "EN",
+          "Ethnicity" : "W",
+          "NationOfCitizenship" : "US",
+          "SpecialCircumstances" : "Y",
+          "CreatedDateTime" : "2003-10-03T14:06:56.000-04:00",
+          "CreatedBy" : "Admin",
+          "IPEDS_Ethnicity" : "White",
+          "NewEthnicityRace" : "White",
+          "EthnicityHispanic" : "N",
+          "EthnicityWhite" : "Y",
+          "EthnicityOptionGiven" : "Y"
+        } ]
+      } ],
+      "FinAidAward" : [ {
+        ".meta" : {
+          "incrementals" : "UC",
+          "isLinkedSource" : true,
+          "entityKey" : "1397"
+        },
+        "AwardType" : "G",
+        ".AwardType" : {
+          "updated" : "true"
+        },
+        "AwardStatus" : "A",
+        ".AwardStatus" : {
+          "updated" : "true"
+        },
+        "FinAidSource" : [ {
+          ".meta" : {
+            "incrementals" : "I",
+            "isLinkedSource" : true,
+            "entityKey" : "1398"
+          },
+          "ID" : 348,
+          "Name" : "Charles Todd Caldwell Memorial Scholarship",
+          "AidType" : "G",
+          "SourceType" : "S",
+          "Provider" : "I",
+          "CDS_ReportingType" : "SchGrInst",
+          "NCAA_ReportingType" : "IGA",
+          "IPEDS_ReportingType" : "Instit",
+          "IsNeedBased" : "Y",
+          "FundedType" : "Endow",
+          "Status" : "A",
+          "RequiresCertification" : "Y",
+          "Description" : "Charles Todd Caldwell Memorial Scholarship\r\nAwarded during honors chapel.\r\nStacked (follows student)\r\n2006-2007 415\r\n2007-2008 -639.00  Matt LeBlanc \r\n\tSent email to history department. 11/2/2007 sent another email. dlp\r\n2008-2009 Frank Kusnir, Chris Morris\r\n2008-2009 -675.00\r\n2009-2010 Bethany MacPherson\r\n",
+          "Disbursements" : 1,
+          "FundID" : "CTCS",
+          "StateClassification" : "80",
+          "ModifiedDateTime" : "2009-10-26T11:00:53.000-04:00",
+          "LastModifiedBy" : "rousta",
+          "FK_ID_SCHOLARSHIP" : 302,
+          "FK_ID_STOREDQUERY" : 13809,
+          "FKIDSATRANSACTIONC" : 502,
+          "FKIDADMINISTRATIVE" : 1
+        } ],
+        "FinAidAwardDisbursement" : [ {
+          ".meta" : {
+            "incrementals" : "UC",
+            "isLinkedSource" : true,
+            "entityKey" : "1401"
+          },
+          "Amount" : "300.0",
+          ".Amount" : {
+            "updated" : "true"
+          },
+          "AmountExpected" : "300.0",
+          ".AmountExpected" : {
+            "updated" : "true"
+          },
+          "FinAidAwardPeriod" : [ {
+            ".meta" : {
+              "incrementals" : "UCI",
+              "isLinkedSource" : true,
+              "entityKey" : "1402"
+            },
+            "PeriodDesignator" : "2016-2017 Fall",
+            ".PeriodDesignator" : {
+              "updated" : "true"
+            },
+            "BeginDate" : "2016-08-04T00:00:00.000-04:00",
+            ".BeginDate" : {
+              "updated" : "true"
+            },
+            "EndDate" : "2017-05-15T00:00:00.000-04:00",
+            ".EndDate" : {
+              "updated" : "true"
+            }
+          } ]
+        } ]
+      } ],
+      "PerProfileFinAidAwardPeriod" : [ {
+        ".meta" : {
+          "incrementals" : "UC",
+          "linkedSource" : "1402"
+        },
+        "PerPeriodFinAidAwardDisbursement" : [ {
+          ".meta" : {
+            "incrementals" : "UCI",
+            "linkedSource" : "1401"
+          },
+          "DisbFinAidAwardAssigned" : [ {
+            ".meta" : {
+              "incrementals" : "UC",
+              "linkedSource" : "1397"
+            },
+            "DisbFinAidSource" : [ {
+              ".meta" : {
+                "incrementals" : "I",
+                "linkedSource" : "1398"
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}

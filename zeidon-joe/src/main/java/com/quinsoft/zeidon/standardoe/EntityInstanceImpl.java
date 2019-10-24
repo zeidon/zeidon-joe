@@ -2276,6 +2276,9 @@ class EntityInstanceImpl implements EntityInstance
     /**
      * Returns the linked instances.  Note this includes 'this'.
      *
+     * If 'this' is versioned, then this returns only instances with the same
+     * version.
+     *
      * @return
      */
     Collection<EntityInstanceImpl> getAllLinkedInstances()
@@ -2287,6 +2290,9 @@ class EntityInstanceImpl implements EntityInstance
      * Returns an iterable list of entities linked with 'this'.  If there
      * are no linked entities it will return an empty list.
      * Does NOT include 'this'.
+     *
+     * If 'this' is versioned, then this returns only instances with the same
+     * version.
      *
      * @return
      */
@@ -2358,6 +2364,16 @@ class EntityInstanceImpl implements EntityInstance
             stream = stream.filter( ei -> ei != this );
 
         return stream.collect( Collectors.toList() );
+    }
+
+    /**
+     * Return the stream of linked instances, including those that don't have the
+     * same version.
+     *
+     */
+    Stream<EntityInstanceImpl> linkedInstanceStream()
+    {
+        return linkedInstances2.stream();
     }
 
     /**
