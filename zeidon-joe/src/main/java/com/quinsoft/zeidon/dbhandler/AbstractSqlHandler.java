@@ -158,6 +158,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     private boolean joinAll1To1 = false;
 
+    /**
+     * If true, then qualification is defined using the new ActivateQual LOD.
+     */
+    private boolean newQualLod;
+
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
@@ -525,12 +530,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity qualEntity = new QualEntity( entitySpec, entityDef );
             qualMap.put( entityDef, qualEntity );
 
-            String openSql = entitySpec.getAttribute( "OpenSQL" ).getString();
-            if ( ! StringUtils.isBlank( openSql ) )
+            if ( newQualLod )
             {
-                qualEntity.openSql = openSql;
-                qualEntity.setOpenSqlAttributeList( entitySpec.getAttribute( "OpenSQL_AttributeList" ).getString() );
-                continue;
+                EntityCursor customQuery = qual.cursor( "CustomQuery" );
+                if ( customQuery.checkExistenceOfEntity().isSet() )
+                {
+                    String openSql = customQuery.getAttribute( "SQL" ).getString();
+                    qualEntity.openSql = openSql;
+                    qualEntity.setOpenSqlAttributeList( qual.cursor( "CustomQueryAttribute" ) );
+                    continue;
+                }
+
+            }
+            else
+            {
+                String openSql = entitySpec.getAttribute( "OpenSQL" ).getString();
+                if ( ! StringUtils.isBlank( openSql ) )
+                {
+                    qualEntity.openSql = openSql;
+                    qualEntity.setOpenSqlAttributeList( entitySpec.getAttribute( "OpenSQL_AttributeList" ).getString() );
+                    continue;
+                }
             }
 
             int parenCount = 0;
@@ -852,6 +872,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     public int beginActivate( View view, View qual, EnumSet<ActivateFlags> control )
     {
         this.qual = qual;
+        convertOldQualToNew();
+
         this.activateFlags = control;
         activateOptions = (ActivateOptions) options;
         pagingOptions = activateOptions.getPagingOptions();
@@ -863,6 +885,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         return 0;
     }
+
+    private void convertOldQualToNew()
+    {
+        if ( qual == null )
+            newQualLod = true;
+        else
+            newQualLod = qual.getLodDef().getName().equals( "ActivateQual" );
+    }
+
 
     /**
      * This determines what ViewEntities can be loaded in a single SELECT statement.

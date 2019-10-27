@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
@@ -198,6 +199,25 @@ public class QualEntity
             AttributeDef attributeDef = entityDef.getAttribute( attrName, false );
             if ( attributeDef == null )
                 throw new ZeidonException( "Attribute %s specified in OpenSQL_AttributeList does not exist in entity %s",
+                                           attrName, entityDef );
+
+            openSqlAttributeList.add( attributeDef );
+        }
+    }
+
+    void setOpenSqlAttributeList( EntityCursor attributeList )
+    {
+        if ( attributeList.checkExistenceOfEntity().isSet() )
+            throw new ZeidonException( "Using CustomQuery in qualification requires Attribute list" );
+
+        openSqlAttributeList = new ArrayList<>();
+
+        for ( EntityInstance attributeEi : attributeList.eachEntity() )
+        {
+            String attrName = attributeEi.getAttribute( "Name" ).getString().trim();
+            AttributeDef attributeDef = entityDef.getAttribute( attrName, false );
+            if ( attributeDef == null )
+                throw new ZeidonException( "Attribute %s specified in CustomQuery Attribute list does not exist in entity %s",
                                            attrName, entityDef );
 
             openSqlAttributeList.add( attributeDef );

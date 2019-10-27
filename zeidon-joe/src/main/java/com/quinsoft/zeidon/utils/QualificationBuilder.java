@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.utils;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
@@ -51,7 +52,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  */
 public class QualificationBuilder
 {
-    public static final String QUAL_XOD_NAME = "kzdbhqua";
+    public static final String QUAL_XOD_NAME = "ActivateQual";
     public static final String ENTITYSPEC    = "EntitySpec";
     public static final String ENTITYNAME    = "EntityName";
     public static final String QUALATTRIB    = "QualAttrib";
@@ -67,12 +68,6 @@ public class QualificationBuilder
     private       int         entitySpecCount;
     private       String      cacheViewName;
     private final ActivateOptions activateOptions;
-
-    /**
-     * EntityInstance of the EntitySpec that qualifies the
-     * root of the target LodDef.
-     */
-    private EntityInstance rootInstance;
 
     /**
      * When doing the activate we will synchronize using this object.  May be changed
@@ -101,6 +96,7 @@ public class QualificationBuilder
         cacheTask = task;
         application = task.getApplication();
         qualView = task.activateEmptyObjectInstance( QUAL_XOD_NAME, task.getSystemTask().getApplication() );
+        qualView.cursor( "ActivateQual" ).createEntity();
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
         entitySpecCount = 0;
@@ -196,10 +192,21 @@ public class QualificationBuilder
 
     public QualificationBuilder loadFile( String filename )
     {
-        LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
-        qualView = task.deserializeOi().setLodDef( qualLodDef ).fromResource( filename ).activateFirst();
+        qualView = task.deserializeOi().fromResource( filename ).activateFirst();
+        if ( ! qualView.getLodDef().getName().equals( QUAL_XOD_NAME ) )
+        {
+            // We must have the old qualification object (kzdbhqua).  Convert
+            // to the new.
+            convertOldOiToNew();
+        }
+
         activateOptions.setQualificationObject( qualView );
         return this;
+    }
+
+    private void convertOldOiToNew()
+    {
+        throw new NotImplementedException( "Need to convert old to new" );
     }
 
     /**
@@ -215,13 +222,19 @@ public class QualificationBuilder
         if ( qualString.startsWith( "<" ) )
             format = StreamFormat.XML;
 
-        LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
         qualView = task.deserializeOi()
-                       .setLodDef( qualLodDef )
                        .setFormat( format )
                        .setVersion( "1" )
                        .fromString( qualString )
                        .activateFirst();
+
+        if ( ! qualView.getLodDef().getName().equals( QUAL_XOD_NAME ) )
+        {
+            // We must have the old qualification object (kzdbhqua).  Convert
+            // to the new.
+            convertOldOiToNew();
+        }
+
         activateOptions.setQualificationObject( qualView );
         return this;
     }
@@ -471,20 +484,7 @@ public class QualificationBuilder
      */
     private EntityInstance getRootInstance()
     {
-        if ( rootInstance == null )
-        {
-            String rootName = getLodDef().getRoot().getName();
-
-            if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", rootName ) != CursorResult.SET )
-            {
-                entitySpecCount++;
-                qualView.cursor( ENTITYSPEC ).createEntity( CursorPosition.LAST ).getAttribute( "EntityName" ).setValue( rootName );
-            }
-
-            rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
-        }
-
-        return rootInstance;
+        return qualView.cursor( "ActivateQual" ).getEntityInstance();
     }
 
     public QualificationBuilder forEntity( String entityName )
@@ -496,10 +496,6 @@ public class QualificationBuilder
         {
             entitySpecCount++;
             qualView.cursor( ENTITYSPEC ).createEntity( CursorPosition.LAST ).getAttribute( "EntityName").setValue( entityName );
-
-            // If this is the root then get the cursor.
-            if ( rootInstance == null && getLodDef().getRoot().getName().equals( entityName ) )
-                rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
         }
 
         return this;
@@ -880,7 +876,6 @@ public class QualificationBuilder
 
     public static View activateFromFile( Task task, String filename )
     {
-        LodDef qual = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
-        return task.deserializeOi().fromFile( filename ).setLodDef( qual ).activateFirst();
+        return task.deserializeOi().fromFile( filename ).activateFirst();
     }
 }
