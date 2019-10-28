@@ -106,6 +106,10 @@ object Implicits {
             val dtask = new DynamicTask( oe.createTask( appName ) )
             TaskRunner( dtask )
         }
+
+        def createScalaTask( appName : String ) : DynamicTask = {
+            return new DynamicTask( oe.createTask( appName ) )
+        }
     }
 
     implicit class ScalaDeserializeOi( val deserializer: DeserializeOi ) {

@@ -84,7 +84,7 @@ public class QualificationBuilder
     /**
      * Open SQL can be a real security risk so it is disallowed by default.
      */
-    private boolean allowOpenSql = false;
+    private boolean allowCustomQuery = false;
 
     /**
      * Creates an empty qualification object.
@@ -153,15 +153,24 @@ public class QualificationBuilder
 
     public boolean isAllowOpenSql()
     {
-        return allowOpenSql;
+        return allowCustomQuery;
     }
 
+    @Deprecated
     /**
-     * Open SQL can be a real security risk so it is disallowed by default.
+     * Use setAllowCustomQuery instead.
      */
     public QualificationBuilder setAllowOpenSql( boolean allowOpenSql )
     {
-        this.allowOpenSql = allowOpenSql;
+        return setAllowCustomQuery( allowOpenSql );
+    }
+
+    /**
+     * Custom Query can be a real security risk so it is disallowed by default.
+     */
+    public QualificationBuilder setAllowCustomQuery( boolean allowCustomQuery )
+    {
+        this.allowCustomQuery = allowCustomQuery;
         return this;
     }
 
@@ -556,14 +565,38 @@ public class QualificationBuilder
         return this;
     }
 
+    @Deprecated
+    /**
+     * Use setCustomQuery instead.
+     */
     public QualificationBuilder setOpenSql( String sql, String attributeList )
     {
-        if ( ! allowOpenSql )
+        return setCustomQuery( sql, attributeList );
+    }
+
+    public QualificationBuilder setCustomQuery( String sql, String attributeList )
+    {
+        if ( ! allowCustomQuery )
             throw new ZeidonException( "OpenSQL is not allowed for this query" );
 
         validateEntity();
-        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL" ).setValue( sql ) ;
-        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL_AttributeList" ).setValue( attributeList ) ;
+
+        EntityCursor customQuery = qualView.cursor( "CustomQuery" );
+        if ( customQuery.checkExistenceOfEntity().isEmpty() )
+            customQuery.createEntity();
+
+        customQuery.getAttribute( "SQL" ).setValue( sql ) ;
+
+
+        String[] list = attributeList.split( "," );
+        for ( String attrName : list )
+        {
+            attrName = attrName.trim();
+            qualView.cursor( "CustomQueryAttribute" )
+                    .createEntity()
+                    .getAttribute( "Name" ).setValue( attrName );
+        }
+
         return this;
     }
 

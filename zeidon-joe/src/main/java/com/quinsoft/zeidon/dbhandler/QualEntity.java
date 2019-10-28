@@ -31,6 +31,7 @@ import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -64,6 +65,7 @@ public class QualEntity
      */
     String openSql;
     List<AttributeDef> openSqlAttributeList = new ArrayList<>();
+    List<String> openSqlQueryValues = new ArrayList<>();
 
     QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
     {
@@ -205,9 +207,10 @@ public class QualEntity
         }
     }
 
-    void setOpenSqlAttributeList( EntityCursor attributeList )
+    void setOpenSqlAttributeList( View qual )
     {
-        if ( attributeList.checkExistenceOfEntity().isSet() )
+        EntityCursor attributeList = qual.cursor( "CustomQueryAttribute" );
+        if ( attributeList.checkExistenceOfEntity().isEmpty() )
             throw new ZeidonException( "Using CustomQuery in qualification requires Attribute list" );
 
         openSqlAttributeList = new ArrayList<>();
@@ -221,6 +224,14 @@ public class QualEntity
                                            attrName, entityDef );
 
             openSqlAttributeList.add( attributeDef );
+        }
+
+        EntityCursor queryValue = qual.cursor( "CustomQueryValue" );
+        if ( queryValue.checkExistenceOfEntity().isSet() )
+        {
+            openSqlQueryValues = new ArrayList<>();
+            for ( EntityInstance value : queryValue.eachEntity() )
+                openSqlQueryValues.add( value.getAttribute( "Value" ).getString() );
         }
     }
 }

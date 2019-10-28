@@ -537,7 +537,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 {
                     String openSql = customQuery.getAttribute( "SQL" ).getString();
                     qualEntity.openSql = openSql;
-                    qualEntity.setOpenSqlAttributeList( qual.cursor( "CustomQueryAttribute" ) );
+                    qualEntity.setOpenSqlAttributeList( qual );
                     continue;
                 }
 
@@ -1114,9 +1114,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null && ! StringUtils.isBlank( qualEntity.openSql ) )
-        {
             return useOpenSql( stmt, view, entityDef, qualEntity );
-        }
 
         stmt.appendCmd( "SELECT " );
 
@@ -1206,6 +1204,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         stmt.dataRecords.put( dataRecord, dataFields );
+
+        if ( qualEntity.openSqlQueryValues != null )
+        {
+            for ( String value : qualEntity.openSqlQueryValues )
+                stmt.getBoundValues().add( value );
+        }
+
         stmt.usesOpenSql = true;
 
         return null;

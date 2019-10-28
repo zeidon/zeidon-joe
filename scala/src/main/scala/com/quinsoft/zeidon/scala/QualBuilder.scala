@@ -99,8 +99,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
-    def allowOpenSql( allow: Boolean ) : QualBuilder = {
-        jqual.setAllowOpenSql( allow )
+    def allowCustomQuery( allow: Boolean ) : QualBuilder = {
+        jqual.setAllowCustomQuery( allow )
         this
     }
 
@@ -822,7 +822,7 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
      * explicitly called.
      */
     def usingSql( customizedSql: String, attributeList: String ): QualificationTerminator = {
-        qualBuilder.jqual.setOpenSql( customizedSql, attributeList )
+        qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
 
         return QualBuilder.TERMINATOR
     }
