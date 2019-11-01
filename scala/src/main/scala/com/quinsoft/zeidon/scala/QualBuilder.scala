@@ -19,13 +19,14 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-import scala.collection.JavaConversions.asScalaIterator
+import collection.JavaConversions._
 
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import org.apache.commons.lang3.StringUtils
-
+import collection.mutable.ArrayBuffer
+import collection.immutable.List
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -818,11 +819,25 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 
     /**
-     * Use OpenSQL to activate this entity.  Note that QualBuilder.allowOpenSql( true ) must be
+     * Use custom SQL to activate this entity.  Note that QualBuilder.allowOpenSql( true ) must be
      * explicitly called.
      */
     def usingSql( customizedSql: String, attributeList: String ): QualificationTerminator = {
         qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
+
+        return QualBuilder.TERMINATOR
+    }
+
+    def usingSql( customizedSql: String, attributeList: String, customValue: String ): QualificationTerminator = {
+        qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
+        qualBuilder.jqual.setCustomQueryValues( ArrayBuffer( customValue ) )
+
+        return QualBuilder.TERMINATOR
+    }
+
+    def usingSql( customizedSql: String, attributeList: String, customValues: List[String] ): QualificationTerminator = {
+        qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
+        qualBuilder.jqual.setCustomQueryValues( customValues )
 
         return QualBuilder.TERMINATOR
     }

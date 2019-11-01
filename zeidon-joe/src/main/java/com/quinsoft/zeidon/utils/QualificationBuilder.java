@@ -577,7 +577,7 @@ public class QualificationBuilder
     public QualificationBuilder setCustomQuery( String sql, String attributeList )
     {
         if ( ! allowCustomQuery )
-            throw new ZeidonException( "OpenSQL is not allowed for this query" );
+            throw new ZeidonException( "CustomQuery is not allowed for this query" );
 
         validateEntity();
 
@@ -587,7 +587,6 @@ public class QualificationBuilder
 
         customQuery.getAttribute( "SQL" ).setValue( sql ) ;
 
-
         String[] list = attributeList.split( "," );
         for ( String attrName : list )
         {
@@ -595,6 +594,21 @@ public class QualificationBuilder
             qualView.cursor( "CustomQueryAttribute" )
                     .createEntity()
                     .getAttribute( "Name" ).setValue( attrName );
+        }
+
+        return this;
+    }
+
+    public QualificationBuilder setCustomQueryValues( Iterable<String> variables )
+    {
+        if ( ! allowCustomQuery )
+            throw new ZeidonException( "CustomQuery is not allowed for this query" );
+
+        for ( String value : variables )
+        {
+            qualView.cursor( "CustomQueryValue" )
+                    .createEntity()
+                    .getAttribute( "Value" ).setValue( value );
         }
 
         return this;
