@@ -79,6 +79,11 @@ object Implicits {
         }
 
         def newView( lodName: String ): View = new View( task ) basedOn lodName
+
+        def using( lodName: String ): DynamicTaskActivator = {
+            new DynamicTaskActivator( task, lodName )
+        }
+
     }
 
 
@@ -100,6 +105,10 @@ object Implicits {
         def forTask( appName : String ) : TaskRunner = {
             val dtask = new DynamicTask( oe.createTask( appName ) )
             TaskRunner( dtask )
+        }
+
+        def createScalaTask( appName : String ) : DynamicTask = {
+            return new DynamicTask( oe.createTask( appName ) )
         }
     }
 

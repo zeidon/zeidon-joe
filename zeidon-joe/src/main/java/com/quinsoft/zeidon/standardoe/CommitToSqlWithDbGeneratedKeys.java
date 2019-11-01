@@ -776,7 +776,7 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                     throw new ZeidonException("Unexpected number of keys found: %s", keys );
 
                 AttributeDef keyAttrib = entityDef.getKeys().get( 0 );
-                ei.getAttribute( keyAttrib ).setValue( keys.get( 0 ) );
+                ei.getAttribute( keyAttrib ).setInternalValue( keys.get( 0 ), false );
             }
 
             // Set the dbhCreated flag for ei and all its linked instances.  This

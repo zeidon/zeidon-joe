@@ -29,7 +29,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateOptions.ActivateOrder;
 import com.quinsoft.zeidon.AttributeInstance;
+import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
@@ -63,6 +65,7 @@ public class QualEntity
      */
     String openSql;
     List<AttributeDef> openSqlAttributeList = new ArrayList<>();
+    List<String> openSqlQueryValues = new ArrayList<>();
 
     QualEntity(EntityInstance qualEntityInstance, EntityDef entityDef)
     {
@@ -201,6 +204,34 @@ public class QualEntity
                                            attrName, entityDef );
 
             openSqlAttributeList.add( attributeDef );
+        }
+    }
+
+    void setOpenSqlAttributeList( View qual )
+    {
+        EntityCursor attributeList = qual.cursor( "CustomQueryAttribute" );
+        if ( attributeList.checkExistenceOfEntity().isEmpty() )
+            throw new ZeidonException( "Using CustomQuery in qualification requires Attribute list" );
+
+        openSqlAttributeList = new ArrayList<>();
+
+        for ( EntityInstance attributeEi : attributeList.eachEntity() )
+        {
+            String attrName = attributeEi.getAttribute( "Name" ).getString().trim();
+            AttributeDef attributeDef = entityDef.getAttribute( attrName, false );
+            if ( attributeDef == null )
+                throw new ZeidonException( "Attribute %s specified in CustomQuery Attribute list does not exist in entity %s",
+                                           attrName, entityDef );
+
+            openSqlAttributeList.add( attributeDef );
+        }
+
+        EntityCursor queryValue = qual.cursor( "CustomQueryValue" );
+        if ( queryValue.checkExistenceOfEntity().isSet() )
+        {
+            openSqlQueryValues = new ArrayList<>();
+            for ( EntityInstance value : queryValue.eachEntity() )
+                openSqlQueryValues.add( value.getAttribute( "Value" ).getString() );
         }
     }
 }
