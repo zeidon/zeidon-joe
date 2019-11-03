@@ -893,6 +893,10 @@ public class JdbcHandler extends AbstractSqlHandler
                                        SqlStatement stmt )
     {
         String type = e.getSQLState();
+        if ( StringUtils.isBlank( type ) )
+            throw new ZeidonDbException( view, e )
+                    .appendMessage( generateErrorMessageWithBoundAttributes( sql, entityDef, stmt ) );
+
         switch ( type )
         {
             case "23505":
