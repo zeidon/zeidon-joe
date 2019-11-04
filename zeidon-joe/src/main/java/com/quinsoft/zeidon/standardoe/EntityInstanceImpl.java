@@ -50,6 +50,7 @@ import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.EventNotification;
 import com.quinsoft.zeidon.HiddenAttributeException;
 import com.quinsoft.zeidon.MaxCardinalityException;
+import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
@@ -104,6 +105,11 @@ class EntityInstanceImpl implements EntityInstance
     private boolean hidden   = false;
     private boolean excluded = false;
     private boolean dropped  = false;
+
+    /**
+     * Will be true if any child entity has been updated.
+     */
+    private boolean childUpdated = false;
 
     /**
      * Map of persistent attributes. Linked entities will reference the same
@@ -1478,6 +1484,12 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
+    public boolean isChildUpdated() throws NullCursorException
+    {
+        return childUpdated;
+    }
+
+    @Override
     public boolean isDeleted()
     {
         return deleted;
@@ -1607,12 +1619,28 @@ class EntityInstanceImpl implements EntityInstance
  */
 
         if ( ( flags & ( FLAG_CREATED | FLAG_UPDATED | FLAG_DELETED | FLAG_EXCLUDED | FLAG_HIDDEN) ) != 0 )
+        {
             getObjectInstance().setUpdated( true );
+            setChildUpdateForParents();
+        }
     }
 
     void setUpdated(boolean isUpdated )
     {
         setUpdated( isUpdated, true, true );
+    }
+
+    private void setChildUpdateForParents()
+    {
+        if ( getEntityDef().isDerived() )
+            return;
+
+        for ( EntityInstanceImpl parent = getParent();
+              parent != null && ! parent.isChildUpdated();
+              parent = parent.getParent() )
+        {
+            parent.childUpdated = true;
+        }
     }
 
     /**
@@ -1637,6 +1665,9 @@ class EntityInstanceImpl implements EntityInstance
         // We don't replicate the updated flag if it's being turned off.
         if ( isUpdated )
         {
+            if ( setPersistent )
+                setChildUpdateForParents();
+
             if ( setLinked )
             {
                 linkedInstances2.stream( this ).forEach( linked -> {
@@ -1756,7 +1787,10 @@ class EntityInstanceImpl implements EntityInstance
                 linked.updated = this.updated;
                 linked.deleted = this.deleted;
                 if ( isChanged() )
+                {
                     linked.getObjectInstance().setUpdated( true );
+                    linked.setChildUpdateForParents();
+                }
             } );
         }
 
@@ -1764,7 +1798,10 @@ class EntityInstanceImpl implements EntityInstance
 
         // If this entity has been changed then set the flag for the OI.
         if ( isChanged() && newStatus == VersionStatus.NONE )
+        {
             getObjectInstance().setUpdated( true );
+            setChildUpdateForParents();
+        }
     }
 
     void validateSubobject( View view, Collection<ZeidonException> list )
@@ -2121,6 +2158,7 @@ class EntityInstanceImpl implements EntityInstance
             EntitySpawner spawner = new EntitySpawner( this );
             spawner.spawnCreate();
             getObjectInstance().setUpdated( true );
+            setChildUpdateForParents();
         }
     }
 

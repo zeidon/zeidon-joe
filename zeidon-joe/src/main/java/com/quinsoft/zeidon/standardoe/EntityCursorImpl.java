@@ -1009,6 +1009,12 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
+    public boolean isChildUpdated() throws NullCursorException
+    {
+        return getExistingInstance().isChildUpdated();
+    }
+
+    @Override
     public boolean isVersioned()
     {
         return getExistingInstance().isVersioned();

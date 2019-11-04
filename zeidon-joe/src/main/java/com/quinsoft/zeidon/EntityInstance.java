@@ -51,6 +51,14 @@ public interface EntityInstance
     boolean isUpdated();
 
     /**
+     * Returns true if any of child entity of this entity has been updated in any way
+     * that changes persistence.  This includes deleted/excluded entities.
+     *
+     * @return true if entity child instance has been updated.
+     */
+    boolean isChildUpdated();
+
+    /**
      * Returns true if this entity instance has been deleted.  This is intended to be used
      * just by DB handlers.
      *
