@@ -752,6 +752,25 @@ public class QualificationBuilder
         return this;
     }
 
+    public QualificationBuilder fromEntityList( EntityCursor source )
+    {
+        EntityDef entityDef = source.getEntityDef();
+
+        // Find the key.
+        AttributeDef key = null;
+        if ( entityDef.getKeys().size() > 1 )
+            throw new ZeidonException("fromEntityList only supports single keys" );
+
+        key = entityDef.getKeys().get(0);
+
+        validateEntity();
+        addAttribQual( key.getName(), null );
+        for ( EntityInstance ei : source.eachEntity() )
+            newEntityKey( ei.getAttribute( key ).getString() );
+
+        return this;
+    }
+
     /**
      * Activate using the specified locking level.
      *

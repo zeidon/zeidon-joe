@@ -8,11 +8,13 @@ import org.scalatest.junit.AssertionsForJUnit
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.scala.DynamicTask
+import com.quinsoft.zeidon.objectdefinition.KeyValidator
 
 class TestNorthwind extends AssertionsForJUnit {
 
     val oe = JavaObjectEngine.getInstance()
-    var task = oe.createTask("northwind")
+    var task = oe.createScalaTask("northwind")
 
     @Before
     def initialize() {
@@ -47,6 +49,14 @@ class TestNorthwind extends AssertionsForJUnit {
 
         order.Order.delete()
         order.commit()
+    }
+
+
+    @Test
+    def testKeyValidator() {
+        val order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering.json").unpickle
+        val validator = new KeyValidator( order )
+        validator.validate()
     }
 
     @Test

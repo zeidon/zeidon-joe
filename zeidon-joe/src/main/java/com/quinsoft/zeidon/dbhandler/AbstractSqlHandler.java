@@ -1333,7 +1333,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( selectAllInstances( entityDef ) )
             loadedViewEntities.add( entityDef );
 
-        if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
+        if ( autoloadFromParent( view, entityDef) )
             return DbHandler.LOAD_DONE;
 
         if ( entityDef.isDuplicateEntity() && loadFromDuplicateCache( view, entityDef ) )
@@ -1481,37 +1481,65 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     /**
      * The only attribute(s) in entityDef are keys and this entity can be
      * loaded by retrieving the key from the parent.
+     *
+     * Returns true if the entity was loaded from the parent.
      */
     private boolean autoloadFromParent( View view, EntityDef entityDef )
     {
-        assert entityDef.getParent() != null;
-        DataRecord dataRecord = entityDef.getDataRecord();
-        RelRecord  relRecord  = dataRecord.getRelRecord();
-
-        // Autoload is only valid if the key is contained in the parent.
-        // TODO: We only handle many-to-one relationships.  We could also handle
-        // m-to-m relationships by loading just the correspondence table.
-        if ( ! relRecord.getRelationshipType().isManyToOne() )
-            return false;
-
-        EntityInstance entityInstance = null;
-        EntityCursor parent = view.cursor( entityDef.getParent() );
-        for ( RelField relField : relRecord.getRelFields() )
+        if ( entityDef.isAutoloadFromParent() || activateFlags.contains( ActivateFlags.fKEYS_ONLY ) )
         {
-            AttributeInstance sourceAttr = parent.getAttribute( relField.getRelDataField().getAttributeDef() );
-            if ( sourceAttr.isNull() )
-                continue;
+            if ( entityDef.getParent() == null )
+                return false;
 
-            if ( entityInstance == null )
-                entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+            DataRecord dataRecord = entityDef.getDataRecord();
+            RelRecord  relRecord  = dataRecord.getRelRecord();
 
-            entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
+            // Autoload is only valid if the key is contained in the parent.
+            // TODO: We only handle many-to-one relationships.  We could also handle
+            // m-to-m relationships by loading just the correspondence table.
+            if ( ! relRecord.getRelationshipType().isManyToOne() )
+                return false;
+
+            if ( ! entityDef.isAutoloadFromParent() )
+            {
+                // If we get there then we don't have an auto-load-from-parent entity, which
+                // must mean we only loading keys.  We can't load from the parent if there are
+                // child entities that have a many-to-one relationship with this entity because
+                // we have to load the foreign key.
+                for ( EntityDef child : entityDef.getChildren() )
+                {
+                    if ( child.isDerived() )
+                        continue;
+
+                    if ( child.getDataRecord() == null )
+                        continue;
+
+                    if ( ! child.getDataRecord().getRelRecord().getRelationshipType().isOneToMany() )
+                        return false;
+                }
+            }
+
+            EntityInstance entityInstance = null;
+            EntityCursor parent = view.cursor( entityDef.getParent() );
+            for ( RelField relField : relRecord.getRelFields() )
+            {
+                AttributeInstance sourceAttr = parent.getAttribute( relField.getRelDataField().getAttributeDef() );
+                if ( sourceAttr.isNull() )
+                    continue;
+
+                if ( entityInstance == null )
+                    entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+
+                entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
+            }
+
+            if ( entityInstance != null )
+                getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
+
+            return true;
         }
 
-        if ( entityInstance != null )
-            getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
-
-        return true;
+        return false;
     }
 
     /**
