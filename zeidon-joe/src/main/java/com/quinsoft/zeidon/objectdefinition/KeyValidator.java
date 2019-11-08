@@ -18,8 +18,12 @@
  */
 package com.quinsoft.zeidon.objectdefinition;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
+import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.dbhandler.DbHandler;
+import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -31,9 +35,11 @@ import com.quinsoft.zeidon.utils.QualificationBuilder;
 public class KeyValidator
 {
     private final View sourceView;
-    private       View compareView;
+    private       View persistentView;
 
     private final QualificationBuilder qualBuilder;
+    private HashMap<String, String> parentKeys;
+    private HashSet<EntityDef> excludedEntities;
 
     /**
      * @return The qualification view for this validation.  We're making it public to
@@ -65,12 +71,18 @@ public class KeyValidator
     public void validate() throws KeyValidationError
     {
         excludeEntities();
-        compareView = qualBuilder.activate();
+        persistentView = qualBuilder.activate();
+        loadKeys();
+        validateKeys();
         System.out.println( "here" );
     }
 
+    /**
+     * Do some analysis on the incoming OI.  We can skip loading some entities.
+     */
     private void excludeEntities()
     {
+        excludedEntities = new HashSet<EntityDef>();
         for ( EntityDef entityDef = sourceView.getLodDef().getRoot();
                 entityDef != null;
                 entityDef = entityDef.getNextHier() )
@@ -82,8 +94,49 @@ public class KeyValidator
 
     private EntityDef excludeEntity( EntityDef entityDef )
     {
+        excludedEntities.add( entityDef );
         qualBuilder.excludeEntity( entityDef.getName() );
         return entityDef.getLastChildHier();
+    }
+
+    private void loadKeys()
+    {
+        parentKeys = new HashMap<String, String>();
+        for ( EntityInstance ei : persistentView.getHierEntityList() )
+        {
+            if ( ei.getParent() == null )
+                continue;
+
+            parentKeys.put( ei.toString(), ei.getParent().toString() );
+        }
+    }
+
+    private void validateKeys() throws KeyValidationError
+    {
+        for ( EntityInstance ei : sourceView.getHierEntityList() )
+        {
+            if ( ei.getParent() == null )
+                continue;
+
+            EntityDef entityDef = ei.getEntityDef();
+            if ( excludedEntities.contains( entityDef ) )
+                continue;
+
+            // New entities won't be in the DB so nothing to compare.
+            if ( ei.isCreated() || ei.isIncluded() )
+                continue;
+
+            // Skip entities that haven't been changed and have no children that have changed..
+            if ( ! ei.isDeleted() && ! ei.isExcluded() && ! ei.isUpdated() && ! ei.isChildUpdated() )
+                continue;
+
+            String parentKey = parentKeys.get( ei.toString() );
+            if ( parentKey == null )
+                throw new KeyValidationError( "Key does not exist in persistent view: " + ei.toString() );
+
+            if ( ! parentKey.equals( ei.getParent().toString() ) )
+                throw new KeyValidationError( "Key does not match expected value: " + parentKey );
+        }
     }
 
     /**
