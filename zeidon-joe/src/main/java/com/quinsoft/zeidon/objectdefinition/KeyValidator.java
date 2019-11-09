@@ -23,7 +23,6 @@ import java.util.HashSet;
 
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
 /**
@@ -39,7 +38,7 @@ public class KeyValidator
 
     private final QualificationBuilder qualBuilder;
     private HashMap<String, String> parentKeys;
-    private HashSet<EntityDef> excludedEntities;
+    private HashSet<EntityDef> skipEntities;
 
     /**
      * @return The qualification view for this validation.  We're making it public to
@@ -74,7 +73,6 @@ public class KeyValidator
         persistentView = qualBuilder.activate();
         loadKeys();
         validateKeys();
-        System.out.println( "here" );
     }
 
     /**
@@ -82,7 +80,7 @@ public class KeyValidator
      */
     private void excludeEntities()
     {
-        excludedEntities = new HashSet<EntityDef>();
+        skipEntities = new HashSet<EntityDef>();
         for ( EntityDef entityDef = sourceView.getLodDef().getRoot();
                 entityDef != null;
                 entityDef = entityDef.getNextHier() )
@@ -94,7 +92,7 @@ public class KeyValidator
 
     private EntityDef excludeEntity( EntityDef entityDef )
     {
-        excludedEntities.add( entityDef );
+        skipEntities.add( entityDef );
         qualBuilder.excludeEntity( entityDef.getName() );
         return entityDef.getLastChildHier();
     }
@@ -119,7 +117,10 @@ public class KeyValidator
                 continue;
 
             EntityDef entityDef = ei.getEntityDef();
-            if ( excludedEntities.contains( entityDef ) )
+            if ( skipEntities.contains( entityDef ) )
+                continue;
+
+            if ( entityDef.isDerived() )
                 continue;
 
             // New entities won't be in the DB so nothing to compare.

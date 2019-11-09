@@ -10,6 +10,7 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.DynamicTask
 import com.quinsoft.zeidon.objectdefinition.KeyValidator
+import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
 
 class TestNorthwind extends AssertionsForJUnit {
 
@@ -54,9 +55,28 @@ class TestNorthwind extends AssertionsForJUnit {
 
     @Test
     def testKeyValidator() {
-        val order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering.json").unpickle
-        val validator = new KeyValidator( order )
+        var order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering.json").unpickle
+        var validator = new KeyValidator( order )
         validator.validate()
+
+        try {
+            order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering2.json").unpickle
+            validator = new KeyValidator( order )
+            validator.validate()
+            fail()
+        } catch {
+            case e: KeyValidationError => // Expected
+        }
+
+        try {
+            order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering3.json").unpickle
+            order.OrderDetail.Quantity = 11
+            validator = new KeyValidator( order )
+            validator.validate()
+            fail()
+        } catch {
+            case e: KeyValidationError => // Expected
+        }
     }
 
     @Test
