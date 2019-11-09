@@ -11,6 +11,8 @@ import com.quinsoft.zeidon.PessimisticLockingException
 import com.quinsoft.zeidon.ZeidonException
 import org.apache.commons.lang3.StringUtils
 import com.quinsoft.zeidon.DuplicateRootException
+import com.quinsoft.zeidon.objectdefinition.KeyValidator
+import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
 
 
 /**
@@ -132,6 +134,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
                            .asJson()
                            .unpickle
 
+            validateViewForUpdate( task, view )
             view.commit
 
             val serialized = view.serializeOi.asJson.withIncremental().toString()
@@ -169,6 +172,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         return serialized
     }
 
+    /**
+     * Verifies that the server can activate/commit the LOD.
+     */
     protected def validateLodName( task: Task, lodName: String ) {
         if ( StringUtils.isBlank( lodName ) )
             halt( 422, "Missing LOD name" )
@@ -178,6 +184,23 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
         if ( lodWhitelist.size > 0 ) {
             if ( ! lodWhitelist.contains( lodName ) )
+                halt( 403 ) // Forbidden.
+        }
+    }
+
+    /**
+     * Verifies that the data in the OI hasn't been tampered with other than in the
+     * expected ways.  For example, makes sure the keys match up with the OIs on the DB.
+     */
+    protected def validateViewForUpdate( task: Task, view: View ) {
+        val keyValidator = new KeyValidator( view )
+        try {
+            keyValidator.validate()
+        } catch {
+            case e: KeyValidationError =>
+                // Somebody is apparently trying to update a LOD but with edited keys.  Log an
+                // error but don't return the message because it could contain sensitive key info.
+                task.log().error( e.getMessage() )
                 halt( 403 ) // Forbidden.
         }
     }
