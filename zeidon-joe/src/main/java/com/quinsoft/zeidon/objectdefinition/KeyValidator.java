@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 
@@ -39,6 +40,7 @@ public class KeyValidator
     private final QualificationBuilder qualBuilder;
     private HashMap<String, String> parentKeys;
     private HashSet<EntityDef> skipEntities;
+    private boolean onlyCheckUpdatedRoots = true;
 
     /**
      * @return The qualification view for this validation.  We're making it public to
@@ -55,12 +57,7 @@ public class KeyValidator
     public KeyValidator( View sourceView )
     {
         this.sourceView = sourceView;
-
-        // Load what's on the DB.  Load just keys for efficiency.
-        qualBuilder = new QualificationBuilder( sourceView )
-                .setLodDef( sourceView.getLodDef() )
-                .fromEntityList( sourceView.root() )
-                .keysOnly();
+        qualBuilder = new QualificationBuilder( sourceView );
     }
 
     /**
@@ -69,6 +66,34 @@ public class KeyValidator
      */
     public void validate() throws KeyValidationError
     {
+        SelectSet updatedRoots = null;
+
+        if ( onlyCheckUpdatedRoots )
+        {
+            if ( ! sourceView.isUpdated() )
+                return;  // Nothing updated, so nothing to check.
+
+            updatedRoots = sourceView.createSelectSet();
+            for ( EntityInstance root : sourceView.root().eachEntity() )
+            {
+                // If the root has been created don't bother because there's nothing to compare
+                // with on the DB.
+                if ( root.isCreated() )
+                    continue;
+
+                // If the root and none of its children have been updated, skip it.
+                if ( ! root.isChildUpdated() && ! root.isUpdated() )
+                    continue;
+
+                updatedRoots.add( root );
+            }
+        }
+
+        // Load what's on the DB.  Load just keys for efficiency.
+        qualBuilder.setLodDef( sourceView.getLodDef() )
+                   .fromEntityList( sourceView.root(), updatedRoots )
+                   .keysOnly();
+
         excludeEntities();
         persistentView = qualBuilder.activate();
         loadKeys();
@@ -138,6 +163,11 @@ public class KeyValidator
             if ( ! parentKey.equals( ei.getParent().toString() ) )
                 throw new KeyValidationError( "Key does not match expected value: " + parentKey );
         }
+    }
+
+    public void setOnlyCheckUpdatedRoots( boolean onlyCheckUpdatedRoots )
+    {
+        this.onlyCheckUpdatedRoots = onlyCheckUpdatedRoots;
     }
 
     /**

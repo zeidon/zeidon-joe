@@ -33,6 +33,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Pagination;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -754,6 +755,11 @@ public class QualificationBuilder
 
     public QualificationBuilder fromEntityList( EntityCursor source )
     {
+        return fromEntityList( source, null );
+    }
+
+    public QualificationBuilder fromEntityList( EntityCursor source, SelectSet rootSelectSet )
+    {
         EntityDef entityDef = source.getEntityDef();
 
         // Find the key.
@@ -766,7 +772,10 @@ public class QualificationBuilder
         validateEntity();
         addAttribQual( key.getName(), null );
         for ( EntityInstance ei : source.eachEntity() )
-            newEntityKey( ei.getAttribute( key ).getString() );
+        {
+            if ( rootSelectSet == null || rootSelectSet.isSelected( ei ) )
+                newEntityKey( ei.getAttribute( key ).getString() );
+        }
 
         return this;
     }
