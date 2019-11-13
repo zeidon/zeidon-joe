@@ -999,10 +999,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // If the child has qualification on one of its children then it can't
             // be joined.
             QualEntity childQualEntity = qualMap.get( child );
-            if ( childQualEntity != null && childQualEntity.usesChildQualification )
+            if ( childQualEntity != null )
             {
-                notJoinable.add( child );
-                continue;
+                if ( childQualEntity.usesChildQualification || childQualEntity.exclude )
+                {
+                    notJoinable.add( child );
+                    continue;
+                }
             }
 
             // We can't join a child if that child is used to qualify an entityDef
