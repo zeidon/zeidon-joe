@@ -341,7 +341,7 @@ class AttributeInstanceImpl implements AttributeInstance
         Object internalValue = attributeDef.getDomain().convertInternalValue( getTask(), this, value );
         if ( attributeValue.setInternalValue( getTask(), attributeDef, internalValue, setIncremental ) )
         {
-            if ( ! attributeDef.isDerived() )
+            if ( ! attributeDef.isDerived() && setIncremental )
                 entityInstance.setUpdated( true, true, attributeDef.isPersistent() );
 
             entityInstance.updateHashKeyAttributeToMap( attributeDef, oldValue );

@@ -303,7 +303,7 @@ class ActivateOisFromXmlStream implements StreamReader
                 else
                 {
                     EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
-                    ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), ! attributeDef.isKey() ) ;
+                    ei.getAttribute( attributeDef ).setInternalValue( characterBuffer.toString(), false ) ;
 
                     characterBuffer = null; // Indicates we've read the attribute.
 

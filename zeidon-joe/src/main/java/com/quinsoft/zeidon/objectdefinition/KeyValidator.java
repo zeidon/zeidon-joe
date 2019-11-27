@@ -66,38 +66,46 @@ public class KeyValidator
      */
     public void validate() throws KeyValidationError
     {
+        sourceView.log().debug( "Start: key validation" );
         SelectSet updatedRoots = null;
 
-        if ( onlyCheckUpdatedRoots )
+        try
         {
-            if ( ! sourceView.isUpdated() )
-                return;  // Nothing updated, so nothing to check.
-
-            updatedRoots = sourceView.createSelectSet();
-            for ( EntityInstance root : sourceView.root().eachEntity() )
+            if ( onlyCheckUpdatedRoots )
             {
-                // If the root has been created don't bother because there's nothing to compare
-                // with on the DB.
-                if ( root.isCreated() )
-                    continue;
+                if ( ! sourceView.isUpdated() )
+                    sourceView.log().debug( "Done: key validation" );
 
-                // If the root and none of its children have been updated, skip it.
-                if ( ! root.isChildUpdated() && ! root.isUpdated() )
-                    continue;
+                updatedRoots = sourceView.createSelectSet();
+                for ( EntityInstance root : sourceView.root().eachEntity() )
+                {
+                    // If the root has been created don't bother because there's nothing to compare
+                    // with on the DB.
+                    if ( root.isCreated() )
+                        continue;
 
-                updatedRoots.add( root );
+                    // If the root and none of its children have been updated, skip it.
+                    if ( ! root.isChildUpdated() && ! root.isUpdated() )
+                        continue;
+
+                    updatedRoots.add( root );
+                }
             }
+
+            // Load what's on the DB.  Load just keys for efficiency.
+            qualBuilder.setLodDef( sourceView.getLodDef() )
+                       .fromEntityList( sourceView.root(), updatedRoots )
+                       .keysOnly();
+
+            excludeEntities();
+            persistentView = qualBuilder.activate();
+            loadKeys();
+            validateKeys();
         }
-
-        // Load what's on the DB.  Load just keys for efficiency.
-        qualBuilder.setLodDef( sourceView.getLodDef() )
-                   .fromEntityList( sourceView.root(), updatedRoots )
-                   .keysOnly();
-
-        excludeEntities();
-        persistentView = qualBuilder.activate();
-        loadKeys();
-        validateKeys();
+        finally
+        {
+            sourceView.log().debug( "Done: key validation" );
+        }
     }
 
     /**

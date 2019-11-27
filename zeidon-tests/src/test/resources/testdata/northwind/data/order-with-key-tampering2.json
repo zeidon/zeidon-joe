@@ -25,8 +25,14 @@
       "CUSTOMERID" : "HANAR",
       "SHIPPERID" : "2",
       "OrderDetail" : [ {
+        ".meta" : {
+          "incrementals" : "U"
+        },
         "UnitPrice" : 7.7,
         "Quantity" : 10,
+        ".Quantity" : {
+          "updated" : "true"
+        },
         "Discount" : 0.0,
         "PRODUCTID" : "41",
         "ORDERID" : "9",
