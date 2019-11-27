@@ -530,27 +530,22 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity qualEntity = new QualEntity( entitySpec, entityDef );
             qualMap.put( entityDef, qualEntity );
 
+            // We only allow OpenSql with the new Qual LOD.  This is so we can check the
+            // allowCustomQuery value.
             if ( newQualLod )
             {
                 EntityCursor customQuery = qual.cursor( "CustomQuery" );
                 if ( customQuery.checkExistenceOfEntity().isSet() )
                 {
+                    if ( qual.cursor( "ActivateQual" ).getAttribute( "AllowCustomQuery" ).compare( "N" ) == 0 )
+                        throw new ZeidonException( "CustomQuery is not allowed for this query" );
+
                     String openSql = customQuery.getAttribute( "SQL" ).getString();
                     qualEntity.openSql = openSql;
                     qualEntity.setOpenSqlAttributeList( qual );
                     continue;
                 }
 
-            }
-            else
-            {
-                String openSql = entitySpec.getAttribute( "OpenSQL" ).getString();
-                if ( ! StringUtils.isBlank( openSql ) )
-                {
-                    qualEntity.openSql = openSql;
-                    qualEntity.setOpenSqlAttributeList( entitySpec.getAttribute( "OpenSQL_AttributeList" ).getString() );
-                    continue;
-                }
             }
 
             int parenCount = 0;

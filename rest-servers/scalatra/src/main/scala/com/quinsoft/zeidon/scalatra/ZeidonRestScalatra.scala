@@ -74,6 +74,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
                 qual.rootOnlyMultiple()
             }
 
+            // By default don't allow Custom Queries.
+            qual.allowCustomQuery( false )
             qual.activate()
             Ok( serializeResponse( view ) )
         }

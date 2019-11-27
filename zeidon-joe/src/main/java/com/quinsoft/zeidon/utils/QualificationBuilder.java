@@ -83,9 +83,9 @@ public class QualificationBuilder
     private boolean isEntityCache;
 
     /**
-     * Open SQL can be a real security risk so it is disallowed by default.
+     * Open SQL can be a real security risk so have a way to turn it off.
      */
-    private boolean allowCustomQuery = false;
+    private boolean allowCustomQuery = true;
 
     /**
      * Creates an empty qualification object.
@@ -152,7 +152,16 @@ public class QualificationBuilder
         return setLodDef( application.getLodDef( task, lodDefName ) );
     }
 
+    @Deprecated
+    /**
+     * Use isAllowCustomQuery instead.
+     */
     public boolean isAllowOpenSql()
+    {
+        return allowCustomQuery;
+    }
+
+    public boolean isAllowCustomQuery()
     {
         return allowCustomQuery;
     }
@@ -167,11 +176,17 @@ public class QualificationBuilder
     }
 
     /**
-     * Custom Query can be a real security risk so it is disallowed by default.
+     * Custom Query can be a real security risk; this call makes it easy to disallow them
+     * for a server.
      */
     public QualificationBuilder setAllowCustomQuery( boolean allowCustomQuery )
     {
         this.allowCustomQuery = allowCustomQuery;
+        if ( allowCustomQuery )
+            qualView.cursor( "ActivateQual" ).getAttribute( "AllowCustomQuery" ).setValue( "Y" );
+        else
+            qualView.cursor( "ActivateQual" ).getAttribute( "AllowCustomQuery" ).setValue( "N" );
+
         return this;
     }
 
@@ -509,6 +524,11 @@ public class QualificationBuilder
         }
 
         return this;
+    }
+
+    public QualificationBuilder forEntity( EntityDef entityDef )
+    {
+        return forEntity( entityDef.getName() );
     }
 
     private void validateEntity()

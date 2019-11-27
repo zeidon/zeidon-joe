@@ -1,4 +1,4 @@
-z1000-Zeidon    ACTIVATEQTZZOXODO 10/26/19   21:41:32 1.0a2    
+z1000-Zeidon    ACTIVATEQTZZOXODO 11/27/19   10:00:06 1.0a2    
 eOBJECT    1
 aNAME      ActivateQual
 aZKey      26111952
@@ -7,7 +7,7 @@ aER_DATE   20130123203322140
 
 eENTITY    2
 aNAME      ActivateQual
-aMAX_LTH   259
+aMAX_LTH   261
 aERENT_TOK 26111953
 aFULLPERSIST Y
 aCREATE    Y
@@ -50,6 +50,17 @@ aSEQ_AD    Y
 aUPDATE    Y
 aXVAATT_TOK 3
 
+eATTRIB    3
+aNAME      AllowCustomQuery
+aERATT_TOK 26112014
+aAPDM_TOK  90000014
+aDOMAIN    Y/N
+aTYPE      S
+aLTH       1
+aSEQ_AD    Y
+aUPDATE    Y
+aXVAATT_TOK 4
+
 eCHILDENTITY 3
 aNAME      EntitySpec
 aERENT_TOK 1321534
@@ -75,7 +86,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 4
+aXVAATT_TOK 5
 
 eATTRIB    4
 aNAME      ActivateLimit
@@ -86,7 +97,7 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 5
+aXVAATT_TOK 6
 
 eATTRIB    4
 aNAME      Options
@@ -97,7 +108,7 @@ aTYPE      S
 aLTH       1000
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 6
+aXVAATT_TOK 7
 
 eCHILDENTITY 4
 aNAME      QualAttrib
@@ -123,7 +134,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 7
+aXVAATT_TOK 8
 
 eATTRIB    5
 aNAME      AttributeName
@@ -135,7 +146,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 8
+aXVAATT_TOK 9
 
 eATTRIB    5
 aNAME      Value
@@ -146,7 +157,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       500
 aUPDATE    Y
-aXVAATT_TOK 9
+aXVAATT_TOK 10
 
 eATTRIB    5
 aNAME      Oper
@@ -157,7 +168,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       20
 aUPDATE    Y
-aXVAATT_TOK 10
+aXVAATT_TOK 11
 
 eATTRIB    5
 aNAME      SourceEntityName
@@ -168,7 +179,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 11
+aXVAATT_TOK 12
 
 eATTRIB    5
 aNAME      SourceAttributeName
@@ -179,7 +190,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 12
+aXVAATT_TOK 13
 
 eATTRIB    5
 aNAME      SourceViewID
@@ -190,7 +201,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 13
+aXVAATT_TOK 14
 
 eATTRIB    5
 aNAME      SourceViewName
@@ -201,7 +212,7 @@ aTYPE      S
 aLTH       255
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 14
+aXVAATT_TOK 15
 
 eCHILDENTITY 5
 aNAME      SubQualAttrib
@@ -227,7 +238,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 15
+aXVAATT_TOK 16
 
 eATTRIB    6
 aNAME      AttributeName
@@ -239,7 +250,7 @@ aTYPE      S
 aLTH       32
 aKEY       Y
 aUPDATE    Y
-aXVAATT_TOK 16
+aXVAATT_TOK 17
 
 eATTRIB    6
 aNAME      Value
@@ -250,7 +261,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       500
 aUPDATE    Y
-aXVAATT_TOK 17
+aXVAATT_TOK 18
 
 eATTRIB    6
 aNAME      Oper
@@ -261,7 +272,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       20
 aUPDATE    Y
-aXVAATT_TOK 18
+aXVAATT_TOK 19
 
 eATTRIB    6
 aNAME      SourceEntityName
@@ -272,7 +283,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 19
+aXVAATT_TOK 20
 
 eATTRIB    6
 aNAME      SourceAttributeName
@@ -283,7 +294,7 @@ aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aUPDATE    Y
-aXVAATT_TOK 20
+aXVAATT_TOK 21
 
 eATTRIB    6
 aNAME      SourceViewID
@@ -294,7 +305,7 @@ aDOMAIN    Integer
 aTYPE      L
 aLTH       4
 aUPDATE    Y
-aXVAATT_TOK 21
+aXVAATT_TOK 22
 
 eCHILDENTITY 5
 aNAME      KeyList
@@ -320,7 +331,7 @@ aTYPE      L
 aLTH       4
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 22
+aXVAATT_TOK 23
 
 eATTRIB    6
 aNAME      StringValue
@@ -331,7 +342,7 @@ aTYPE      S
 aLTH       255
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 23
+aXVAATT_TOK 24
 
 eATTRIB    6
 aNAME      IntegerList
@@ -342,7 +353,7 @@ aTYPE      B
 aLTH       7
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 24
+aXVAATT_TOK 25
 
 eCHILDENTITY 4
 aNAME      CustomQuery
@@ -368,7 +379,7 @@ aTYPE      S
 aLTH       32000
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 25
+aXVAATT_TOK 26
 
 eCHILDENTITY 5
 aNAME      CustomQueryAttribute
@@ -394,7 +405,7 @@ aTYPE      S
 aLTH       256
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 26
+aXVAATT_TOK 27
 
 eCHILDENTITY 5
 aNAME      CustomQueryValue
@@ -420,5 +431,5 @@ aTYPE      S
 aLTH       1000
 aSEQ_AD    Y
 aUPDATE    Y
-aXVAATT_TOK 27
+aXVAATT_TOK 28
 
