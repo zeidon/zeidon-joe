@@ -1192,4 +1192,16 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
                                            method.getParameterTypes().length, argLength );
         }
     }
+
+    @Override
+    public String toJson()
+    {
+        return serializeOi().asJson().withIncremental().toString();
+    }
+
+    @Override
+    public String toJson( boolean incrementals )
+    {
+        return serializeOi().asJson().withIncremental( incrementals ).toString();
+    }
 }

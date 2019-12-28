@@ -2,13 +2,10 @@ package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
 import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.objectdefinition.LodDef
 
-class DynamicTask( val task : Task ) extends Dynamic {
-
-    def using( lodName: String ): DynamicTaskActivator = {
-        new DynamicTaskActivator( task, lodName )
-    }
+class DynamicTask( task : Task ) extends ScalaTask( task ) with Dynamic {
 
     /**
      * Called dynamically to convert an lod name into a empty View.

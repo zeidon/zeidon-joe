@@ -84,6 +84,7 @@ object Implicits {
             new DynamicTaskActivator( task, lodName )
         }
 
+        def viewFromJson( json: String ): View = task.deserializeOi.asJson.fromString( json ).unpickle
     }
 
 

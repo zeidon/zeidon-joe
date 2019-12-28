@@ -671,4 +671,16 @@ public abstract class ViewForwarder extends AbstractTaskQualification implements
     {
         return getView().callObjectOperation( operationName, args );
     }
+
+    @Override
+    public String toJson()
+    {
+        return getView().toJson();
+    }
+
+    @Override
+    public String toJson( boolean incrementals )
+    {
+        return getView().toJson( incrementals );
+    }
 }

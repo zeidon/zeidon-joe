@@ -329,6 +329,14 @@ class View( val task: Task ) extends Dynamic {
     def serializeOi = { validateNonNull; jview.serializeOi() }
 
     /**
+     * Convenience method that is the same as:
+     *   view.serializeOi().asJson().withIncremental( incrementals ).toString()
+     *
+     * @return view as JSON string.
+     */
+    def toJson( incrementals : Boolean = true ) = jview.toJson( incrementals )
+
+    /**
      * Creates a SelectSet for this View.
      */
     def createSelectSet() = { validateNonNull; jview.createSelectSet() }
