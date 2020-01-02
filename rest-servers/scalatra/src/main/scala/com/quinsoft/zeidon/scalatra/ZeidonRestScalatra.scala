@@ -129,12 +129,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
             validateLodName( task, lodName )
-            val view = task.deserializeOi()
-                           .setLodDef( lodName )
-                           .setVersion("1")
-                           .fromString( request.body )
-                           .asJson()
-                           .unpickle
+            val view = task.viewFromJson( request.body )
+            if ( StringUtils.compare( view.lodName, lodName ) != 0 )
+                throw new ZeidonException( "View name in JSON does not match expected value of %s", lodName )
 
             validateViewForUpdate( task, view )
             view.commit
