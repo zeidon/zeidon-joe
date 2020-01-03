@@ -474,7 +474,7 @@ module Zeidon
     end
 
     def operators( op, value )
-  #      puts "Op = #{op.to_s} value = #{value.to_s}"
+      #puts "Op = #{op.to_s} value = #{value.to_s}"
       return self.to_i.send( op, value ) if value.kind_of? Fixnum
       return self.to_f.send( op, value ) if value.kind_of? Float
       return self.to_s.send( op, value.to_s )
@@ -497,7 +497,11 @@ module Zeidon
     end
 
     def ==( value )
-      return operators( :==, value )
+      return self.equals( value )
+    end
+
+    def !=( value )
+      return ! self.equals( value )
     end
 
     def <( value )
