@@ -108,8 +108,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     post("/:appName/:lod/dropLock") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            validateLodName( task, lodName )
             val view = new View( task ) basedOn lodName
+            validateLodName( task, lodName )
             val qual = view.buildQual()
 
             if ( params.contains( "qual" ) ) {
@@ -128,12 +128,12 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     post("/:appName/:lod") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            validateLodName( task, lodName )
             val view = task.viewFromJson( request.body )
+            validateLodName( task, lodName )
             if ( StringUtils.compare( view.lodName, lodName ) != 0 )
                 throw new ZeidonException( "View name in JSON does not match expected value of %s", lodName )
 
-            validateViewForUpdate( task, view )
+            validateViewForUpdate( task, view, lodName )
             view.commit
 
             val serialized = view.serializeOi.asJson.withIncremental().toString()
@@ -174,16 +174,20 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     /**
      * Verifies that the server can activate/commit the LOD.
      */
-    protected def validateLodName( task: Task, lodName: String ) {
-        if ( StringUtils.isBlank( lodName ) )
+    protected def validateLodName( task: Task, expectedLodName: String ) {
+        if ( StringUtils.isBlank( expectedLodName ) )
             halt( 422, "Missing LOD name" )
 
-        if ( lodBlacklist.contains( lodName ) )
+        if ( lodBlacklist.contains( expectedLodName ) ) {
+            task.log().error(s"Lod ${expectedLodName} is black-listed")
             halt( 403 ) // Forbidden.
+        }
 
         if ( lodWhitelist.size > 0 ) {
-            if ( ! lodWhitelist.contains( lodName ) )
+            if ( ! lodWhitelist.contains( expectedLodName ) ) {
+                task.log().error(s"Lod ${expectedLodName} is not white-listed")
                 halt( 403 ) // Forbidden.
+            }
         }
     }
 
@@ -191,7 +195,13 @@ trait ZeidonRestScalatra extends ScalatraServlet {
      * Verifies that the data in the OI hasn't been tampered with other than in the
      * expected ways.  For example, makes sure the keys match up with the OIs on the DB.
      */
-    protected def validateViewForUpdate( task: Task, view: View ) {
+    protected def validateViewForUpdate( task: Task, view: View, expectedLodName: String ) {
+        // Make sure the LOD name of the view matches the expected LOD name.
+        if ( view != null && StringUtils.compare( expectedLodName, view.lodDef.getName ) != 0 ) {
+            view.log().error(s"Expected Lod ${expectedLodName} does not match passed LOD ${view.lodDef.getName}")
+            halt( 403 ) // Forbidden.
+        }
+
         val keyValidator = new KeyValidator( view )
         try {
             keyValidator.validate()
