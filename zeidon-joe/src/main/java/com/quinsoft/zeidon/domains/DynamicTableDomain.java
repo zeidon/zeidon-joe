@@ -68,9 +68,7 @@ public class DynamicTableDomain extends AbstractTableDomain
                                             .addAttribQual( "Name", context.getName() )
                                             .multipleRoots()
                                             .activate();
-        if ( view.cursor( "Domain" ).getEntityCount() == 0 )
-            throw new ZeidonException( "Dynamic domain '%s' has no values in the DB", this.toString() );
-
+        
         return view;
     }
 
@@ -180,6 +178,20 @@ public class DynamicTableDomain extends AbstractTableDomain
     public void validateInternalValue(Task task, AttributeDef attributeDef, Object internalValue)
             throws InvalidAttributeValueException
     {
+    	// Sometimes an internal domain value is too long for the domain. Give an error.
+        String string = internalValue.toString();
+
+        if ( string != null )
+        {
+            // If the max length is specified for the attribute, use it instead of the domain.
+            if ( attributeDef.getLength() != null )
+            {
+                if ( string.length() > attributeDef.getLength() )
+                     throw new InvalidAttributeValueException( attributeDef, internalValue,
+                                                                "%s max length of %d exceeded. Trying to set with value '%s' which has length of %d.",
+                                                                attributeDef.getName(), attributeDef.getLength(), string, string.length() );
+            }
+        }
         loadDomainView( task, getContext( task, null ) );
         super.validateInternalValue( task, attributeDef, internalValue );
     }

@@ -62,6 +62,7 @@ public abstract class AbstractDomain implements Domain
     private final String        description;
     private final String        constraintRule;
     private       Map<String, String>  constraintRuleMap;
+    private int                 maxLength = 0;
 
     public AbstractDomain( Application app, Map<String, Object> domainProperties, Task task )
     {
@@ -71,6 +72,8 @@ public abstract class AbstractDomain implements Domain
         dataType = InternalType.mapCode( (String) domainProperties.get( "DataType" ) );
         description = (String) domainProperties.get( "Desc" );
         constraintRule = (String) domainProperties.get( "ConstraintRule" );
+        if ( domainProperties.containsKey( "MaxStringLth" )) 
+        	maxLength = Integer.parseInt(domainProperties.get("MaxStringLth").toString());        
     }
 
     /**
@@ -324,6 +327,12 @@ public abstract class AbstractDomain implements Domain
         return name;
     }
 
+    @Override
+    public int getLength()
+    {
+        return maxLength;
+    }
+    
     /**
      * Looks for the context in contextList.  Returns null if it isn't found.
      * @param contextName

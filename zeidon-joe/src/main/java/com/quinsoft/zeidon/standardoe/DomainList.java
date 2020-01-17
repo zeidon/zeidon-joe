@@ -128,7 +128,7 @@ class DomainList
         	{
 	            if ( entityName.equals( "Domain" ) )
 	            {
-	                if ( ! domainProperties.containsKey( "Name" ))
+	                if ( ! domainProperties.containsKey( "Name" )) 
 	                    throw new ZeidonException( "Domain does not have 'Name' specified" ).appendMessage( "Values = " + domainProperties.toString() );
 
 	                if ( ! domainProperties.containsKey( "JavaClass" ) )
