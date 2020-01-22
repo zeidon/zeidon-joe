@@ -328,7 +328,7 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
-    public int getLength()
+    public int getMaxLength()
     {
         return maxLength;
     }

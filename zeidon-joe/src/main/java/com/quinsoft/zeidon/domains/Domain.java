@@ -46,7 +46,7 @@ public interface Domain
     DomainContext getContext(Task task, String contextName);
     DomainContext getContext(Task task, String contextName, boolean required );
     String getName();
-    int getLength();
+    int getMaxLength();
 
     /**
      * Takes an external value and converts it into a value used internally value using domain processing.

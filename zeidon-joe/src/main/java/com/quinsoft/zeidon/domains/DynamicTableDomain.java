@@ -68,6 +68,8 @@ public class DynamicTableDomain extends AbstractTableDomain
                                             .addAttribQual( "Name", context.getName() )
                                             .multipleRoots()
                                             .activate();
+        if ( view.cursor( "Domain" ).getEntityCount() == 0 )
+            throw new ZeidonException( "Dynamic domain '%s' has no values in the DB", this.toString() );
         
         return view;
     }

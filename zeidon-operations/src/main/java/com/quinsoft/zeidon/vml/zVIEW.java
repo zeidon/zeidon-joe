@@ -799,6 +799,6 @@ public class zVIEW extends VmlOperation implements View
 	@Override
 	public String toJson(boolean incrementals) {
 		// TODO Auto-generated method stub
-		return null;
+		return getView().toJson( incrementals );
 	}
 }
