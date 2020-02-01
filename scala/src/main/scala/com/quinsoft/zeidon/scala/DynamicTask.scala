@@ -46,4 +46,5 @@ case class DynamicTaskActivator( val task: Task, val lodName: String ) {
 
 object DynamicTask {
     implicit def dynamicTask2Task( dtask: DynamicTask ) = dtask.task
+    implicit def Task2DynamicTask( task: Task ) = new DynamicTask( task )
 }
