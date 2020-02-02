@@ -7,7 +7,7 @@
     <groupId>com.quinsoft.zeidon</groupId>
     <artifactId>zeidon</artifactId>
     <packaging>pom</packaging>
-    <version>1.3.10-SNAPSHOT</version>
+    <version>1.3.10</version>
 
     <url>https://github.com/DeegC/zeidon-joe</url>
     <licenses>
@@ -119,12 +119,10 @@
         <module>zeidon-joe</module>
         <module>scala</module>
         <module>object-browser</module>
-	<module>jconsole-plugin</module>
 	<module>jasper-reports</module>
         <module>zeidon-operations</module>
         <module>restserver</module>
         <module>zruby</module>
-        <module>android</module>
     </modules>
 
     <profiles>
@@ -145,23 +143,7 @@
                 <module>zeidon-tests</module>
                 <module>zeidon-tests/rest-server</module>
                 <module>zeidon-tests/lod-server</module>
-                <module>zeidon-tests/jconsole</module>
                 <module>zeidon-tests/ruby</module>
-            </modules>
-        </profile>
- 
-        <!-- The sinatra server only needs to be built once per release because 
-             it doesn't include any Zeidon code. It is a convenience .jar for LOD servers.
-         -->
-        <profile>
-            <id>sinatra-server</id>
-            <activation>
-                <file>
-                    <missing>sinatra-server/target/zeidon-sinatra-server-${version}.jar</missing>
-                </file>
-            </activation>
-            <modules>
-                <module>sinatra-server</module>
             </modules>
         </profile>
  
