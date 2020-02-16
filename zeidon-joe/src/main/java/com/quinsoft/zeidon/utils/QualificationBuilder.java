@@ -335,6 +335,23 @@ public class QualificationBuilder
         return setFlag( ActivateFlags.fMULTIPLE );
     }
 
+    public Integer getLimit()
+    {
+        return qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).getInteger();
+    }
+
+    public QualificationBuilder rootLimit( int limit )
+    {
+        forEntity( getLodDef().getRoot() );
+        return limitCountTo( limit );
+    }
+
+    public Integer getRootLimit()
+    {
+        forEntity( getLodDef().getRoot() );
+        return getLimit();
+    }
+
     public QualificationBuilder setAsynchronous()
     {
         return asynchronous();

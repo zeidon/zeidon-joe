@@ -412,6 +412,9 @@ public class EntityDef implements PortableFileAttributeHandler
         if ( ! ( include || exclude ) )
             return;
 
+        if ( getChildrenHier().size() == 0 )
+            return;
+
         // Now verify that all children are display only.
         for ( EntityDef child : getChildrenHier() )
         {

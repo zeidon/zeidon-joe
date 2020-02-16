@@ -435,6 +435,15 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def getLimit = jqual.getLimit()
+
+    def rootLimit( limit: Integer ): QualBuilder = {
+        jqual.rootLimit(limit)
+        this
+    }
+
+    def getRootLimit = jqual.getRootLimit()
+
     def withPaging( pageSize: Int, page: Int = 1, getTotalCount: Boolean = false ): QualBuilder = {
         jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setLoadTotalCount( getTotalCount )
         this

@@ -20,7 +20,7 @@ import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
  */
 trait ZeidonRestScalatra extends ScalatraServlet {
 
-    val lodWhitelist = scala.collection.mutable.Map[String, String]()
+    val lodWhitelist = scala.collection.mutable.Map[String, Any]()
     val lodBlacklist = scala.collection.mutable.Set[String]()
 
     def getObjectEngine(): ObjectEngine
@@ -76,6 +76,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
 
             // By default don't allow Custom Queries.
             qual.allowCustomQuery( false )
+            validateQualification( task, qual, lodName )
             qual.activate()
             Ok( serializeResponse( view ) )
         }
@@ -189,6 +190,10 @@ trait ZeidonRestScalatra extends ScalatraServlet {
                 halt( 403 ) // Forbidden.
             }
         }
+    }
+
+    protected def validateQualification( task: Task, qual: QualBuilder, lodName: String ) {
+        // By default do nothing.
     }
 
     /**
