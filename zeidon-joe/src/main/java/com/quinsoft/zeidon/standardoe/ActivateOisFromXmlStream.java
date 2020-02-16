@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -105,6 +106,9 @@ class ActivateOisFromXmlStream implements StreamReader
         try
         {
             SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
             SAXParser saxParser = factory.newSAXParser();
             DefaultHandler handler = new SaxParserHandler();
             saxParser.parse( inputStream, handler );
@@ -299,7 +303,7 @@ class ActivateOisFromXmlStream implements StreamReader
                 else
                 {
                     EntityInstanceImpl ei = view.cursor( attributeDef.getEntityDef() ).getEntityInstance();
-                    ei.getAttribute( attributeDef).setInternalValue( characterBuffer.toString(), ! attributeDef.isKey() ) ;
+                    ei.getAttribute( attributeDef ).setInternalValue( characterBuffer.toString(), false ) ;
 
                     characterBuffer = null; // Indicates we've read the attribute.
 

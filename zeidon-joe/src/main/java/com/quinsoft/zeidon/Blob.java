@@ -30,9 +30,9 @@ import java.io.UnsupportedEncodingException;
 public final class Blob implements Comparable<Object>, Serializable
 {
     private static final long serialVersionUID = 1L;
-    
+
     private final byte[] bytes;
-    
+
     public Blob(byte[] bytes)
     {
         super();
@@ -43,7 +43,7 @@ public final class Blob implements Comparable<Object>, Serializable
     public int compareTo(Object o)
     {
         byte[] compare;
-        
+
         if ( o == null )
             return 1;
 
@@ -61,20 +61,20 @@ public final class Blob implements Comparable<Object>, Serializable
         {
             if ( bytes[i] < compare[i] )
                 return -1;
-            
+
             if ( bytes[i] > compare[i] )
                 return 1;
         }
-        
+
         if ( bytes.length == compare.length )
             return 0;
-        
+
         if ( bytes.length > compare.length )
             return 1;
 
         return -1;
     }
-    
+
     @Override
     public boolean equals( Object o )
     {
@@ -85,7 +85,7 @@ public final class Blob implements Comparable<Object>, Serializable
     {
         return bytes;
     }
-    
+
     public long getSize()
     {
         if ( bytes == null )
@@ -93,7 +93,7 @@ public final class Blob implements Comparable<Object>, Serializable
 
         return bytes.length;
     }
-    
+
     @Override
     public String toString()
     {
@@ -102,8 +102,7 @@ public final class Blob implements Comparable<Object>, Serializable
 			data = new String( bytes, 0, Math.min( bytes.length, 10 ), "UTF8" );
 	        return String.format( "Blob data: %d bytes (%s)", bytes.length, data );
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			return null;
+            throw ZeidonException.wrapException( e );
 		}
     }
 }

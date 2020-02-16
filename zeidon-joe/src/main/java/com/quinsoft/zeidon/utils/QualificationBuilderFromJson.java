@@ -139,7 +139,7 @@ public class QualificationBuilderFromJson
 
                     case "$pagination":
                     case "pagination":
-                        parsePagination();
+                        parsePagination( qualEntityDef );
                         continue;
 
                     case "$orderby":
@@ -152,6 +152,11 @@ public class QualificationBuilderFromJson
                     case "$usingsql":
                     case "usingsql":
                         parseOpenSql( fieldName, qualEntityDef );
+                        continue;
+
+                    case "$limit":
+                    case "limit":
+                        parseLimit( qualEntityDef );
                         continue;
                 }
             }
@@ -194,6 +199,18 @@ public class QualificationBuilderFromJson
         return token;
     }
 
+    private void parseLimit( EntityDef qualEntityDef ) throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume "limit".
+        if ( ! token.isNumeric() )
+            throw new ZeidonException( "Expecting integer for 'limit' value.  Found %s", token );
+
+        qualBuilder.forEntity( qualEntityDef );
+        int limit = jp.getIntValue();
+        qualBuilder.limitCountTo( limit );
+        token = jp.nextToken(); // Consume integer.
+    }
+
     private boolean parseBoolean( String paramName ) throws JsonParseException, IOException
     {
         JsonToken token = jp.nextToken(); // Consume "rootOnly".
@@ -233,6 +250,8 @@ public class QualificationBuilderFromJson
             qualBuilder.forEntity( entityName );
             parseEntity( childEntityDef, childEntityDef );
         }
+
+        token = jp.nextToken();  // Skip past closing }.
     }
 
     /**
@@ -248,13 +267,15 @@ public class QualificationBuilderFromJson
      * @throws JsonParseException
      * @throws IOException
      */
-    private void parsePagination() throws JsonParseException, IOException
+    private void parsePagination( EntityDef qualEntityDef ) throws JsonParseException, IOException
     {
         Pagination page = new Pagination();
 
         JsonToken token = jp.nextToken(); // Consume "pagination".
         if ( token != JsonToken.START_OBJECT )
             throw new ZeidonException( "'pagination' value doesn't start with object.  Found %s", token );
+
+        qualBuilder.forEntity( qualEntityDef );
 
         token = jp.nextToken(); // Consume open '{'.
         while ( ( token = jp.getCurrentToken() ) != JsonToken.END_OBJECT )
@@ -313,6 +334,7 @@ public class QualificationBuilderFromJson
     private void parseOrderBy(EntityDef qualEntityDef) throws JsonParseException, IOException
     {
         JsonToken token = jp.nextToken(); // Consume "orderBy".
+        qualBuilder.forEntity( qualEntityDef );
         switch ( token )
         {
             case START_OBJECT:

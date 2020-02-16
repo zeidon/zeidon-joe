@@ -10,6 +10,9 @@ import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.PessimisticLockingException
 import com.quinsoft.zeidon.ZeidonException
 import org.apache.commons.lang3.StringUtils
+import com.quinsoft.zeidon.DuplicateRootException
+import com.quinsoft.zeidon.objectdefinition.KeyValidator
+import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
 
 
 /**
@@ -17,7 +20,7 @@ import org.apache.commons.lang3.StringUtils
  */
 trait ZeidonRestScalatra extends ScalatraServlet {
 
-    val lodWhitelist = scala.collection.mutable.Map[String, String]()
+    val lodWhitelist = scala.collection.mutable.Map[String, Any]()
     val lodBlacklist = scala.collection.mutable.Set[String]()
 
     def getObjectEngine(): ObjectEngine
@@ -28,6 +31,11 @@ trait ZeidonRestScalatra extends ScalatraServlet {
       case e: PessimisticLockingException => {
           getObjectEngine().getSystemTask.log().debug( "LOD is locked" )
           Locked( "LOD is locked" )
+      }
+
+      case e: DuplicateRootException => {
+          getObjectEngine().getSystemTask.log().error(e)
+          BadRequest( "Duplicate key" )
       }
 
       case e: Throwable => {
@@ -66,6 +74,9 @@ trait ZeidonRestScalatra extends ScalatraServlet {
                 qual.rootOnlyMultiple()
             }
 
+            // By default don't allow Custom Queries.
+            qual.allowCustomQuery( false )
+            validateQualification( task, qual, lodName )
             qual.activate()
             Ok( serializeResponse( view ) )
         }
@@ -98,8 +109,8 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     post("/:appName/:lod/dropLock") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
-            validateLodName( task, lodName )
             val view = new View( task ) basedOn lodName
+            validateLodName( task, lodName )
             val qual = view.buildQual()
 
             if ( params.contains( "qual" ) ) {
@@ -118,14 +129,12 @@ trait ZeidonRestScalatra extends ScalatraServlet {
     post("/:appName/:lod") {
         getObjectEngine().forTask( params( "appName" ) ) { task =>
             val lodName = params( "lod" )
+            val view = task.viewFromJson( request.body )
             validateLodName( task, lodName )
-            val view = task.deserializeOi()
-                           .setLodDef( lodName )
-                           .setVersion("1")
-                           .fromString( request.body )
-                           .asJson()
-                           .unpickle
+            if ( StringUtils.compare( view.lodName, lodName ) != 0 )
+                throw new ZeidonException( "View name in JSON does not match expected value of %s", lodName )
 
+            validateViewForUpdate( task, view, lodName )
             view.commit
 
             val serialized = view.serializeOi.asJson.withIncremental().toString()
@@ -163,15 +172,49 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         return serialized
     }
 
-    protected def validateLodName( task: Task, lodName: String ) {
-        if ( StringUtils.isBlank( lodName ) )
+    /**
+     * Verifies that the server can activate/commit the LOD.
+     */
+    protected def validateLodName( task: Task, expectedLodName: String ) {
+        if ( StringUtils.isBlank( expectedLodName ) )
             halt( 422, "Missing LOD name" )
 
-        if ( lodBlacklist.contains( lodName ) )
+        if ( lodBlacklist.contains( expectedLodName ) ) {
+            task.log().error(s"Lod ${expectedLodName} is black-listed")
             halt( 403 ) // Forbidden.
+        }
 
         if ( lodWhitelist.size > 0 ) {
-            if ( ! lodWhitelist.contains( lodName ) )
+            if ( ! lodWhitelist.contains( expectedLodName ) ) {
+                task.log().error(s"Lod ${expectedLodName} is not white-listed")
+                halt( 403 ) // Forbidden.
+            }
+        }
+    }
+
+    protected def validateQualification( task: Task, qual: QualBuilder, lodName: String ) {
+        // By default do nothing.
+    }
+
+    /**
+     * Verifies that the data in the OI hasn't been tampered with other than in the
+     * expected ways.  For example, makes sure the keys match up with the OIs on the DB.
+     */
+    protected def validateViewForUpdate( task: Task, view: View, expectedLodName: String ) {
+        // Make sure the LOD name of the view matches the expected LOD name.
+        if ( view != null && StringUtils.compare( expectedLodName, view.lodDef.getName ) != 0 ) {
+            view.log().error(s"Expected Lod ${expectedLodName} does not match passed LOD ${view.lodDef.getName}")
+            halt( 403 ) // Forbidden.
+        }
+
+        val keyValidator = new KeyValidator( view )
+        try {
+            keyValidator.validate()
+        } catch {
+            case e: KeyValidationError =>
+                // Somebody is apparently trying to update a LOD but with edited keys.  Log an
+                // error but don't return the message because it could contain sensitive key info.
+                task.log().error( e.getMessage() )
                 halt( 403 ) // Forbidden.
         }
     }

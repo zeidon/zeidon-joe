@@ -158,6 +158,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     private boolean joinAll1To1 = false;
 
+    /**
+     * If true, then qualification is defined using the new ActivateQual LOD.
+     */
+    private boolean newQualLod;
+
     protected AbstractSqlHandler( Task task, AbstractOptionsConfiguration options )
     {
         this.task = task;
@@ -525,12 +530,22 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity qualEntity = new QualEntity( entitySpec, entityDef );
             qualMap.put( entityDef, qualEntity );
 
-            String openSql = entitySpec.getAttribute( "OpenSQL" ).getString();
-            if ( ! StringUtils.isBlank( openSql ) )
+            // We only allow OpenSql with the new Qual LOD.  This is so we can check the
+            // allowCustomQuery value.
+            if ( newQualLod )
             {
-                qualEntity.openSql = openSql;
-                qualEntity.setOpenSqlAttributeList( entitySpec.getAttribute( "OpenSQL_AttributeList" ).getString() );
-                continue;
+                EntityCursor customQuery = qual.cursor( "CustomQuery" );
+                if ( customQuery.checkExistenceOfEntity().isSet() )
+                {
+                    if ( qual.cursor( "ActivateQual" ).getAttribute( "AllowCustomQuery" ).compare( "N" ) == 0 )
+                        throw new ZeidonException( "CustomQuery is not allowed for this query" );
+
+                    String openSql = customQuery.getAttribute( "SQL" ).getString();
+                    qualEntity.openSql = openSql;
+                    qualEntity.setOpenSqlAttributeList( qual );
+                    continue;
+                }
+
             }
 
             int parenCount = 0;
@@ -852,6 +867,8 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     public int beginActivate( View view, View qual, EnumSet<ActivateFlags> control )
     {
         this.qual = qual;
+        convertOldQualToNew();
+
         this.activateFlags = control;
         activateOptions = (ActivateOptions) options;
         pagingOptions = activateOptions.getPagingOptions();
@@ -863,6 +880,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         return 0;
     }
+
+    private void convertOldQualToNew()
+    {
+        if ( qual == null )
+            newQualLod = true;
+        else
+            newQualLod = qual.getLodDef().getName().equals( "ActivateQual" );
+    }
+
 
     /**
      * This determines what ViewEntities can be loaded in a single SELECT statement.
@@ -968,10 +994,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // If the child has qualification on one of its children then it can't
             // be joined.
             QualEntity childQualEntity = qualMap.get( child );
-            if ( childQualEntity != null && childQualEntity.usesChildQualification )
+            if ( childQualEntity != null )
             {
-                notJoinable.add( child );
-                continue;
+                if ( childQualEntity.usesChildQualification || childQualEntity.exclude )
+                {
+                    notJoinable.add( child );
+                    continue;
+                }
             }
 
             // We can't join a child if that child is used to qualify an entityDef
@@ -1083,9 +1112,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null && ! StringUtils.isBlank( qualEntity.openSql ) )
-        {
             return useOpenSql( stmt, view, entityDef, qualEntity );
-        }
 
         stmt.appendCmd( "SELECT " );
 
@@ -1175,6 +1202,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         stmt.dataRecords.put( dataRecord, dataFields );
+
+        if ( qualEntity.openSqlQueryValues != null )
+        {
+            for ( String value : qualEntity.openSqlQueryValues )
+                stmt.getBoundValues().add( value );
+        }
+
         stmt.usesOpenSql = true;
 
         return null;
@@ -1297,7 +1331,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( selectAllInstances( entityDef ) )
             loadedViewEntities.add( entityDef );
 
-        if ( entityDef.isAutoloadFromParent() && autoloadFromParent( view, entityDef) )
+        if ( autoloadFromParent( view, entityDef) )
             return DbHandler.LOAD_DONE;
 
         if ( entityDef.isDuplicateEntity() && loadFromDuplicateCache( view, entityDef ) )
@@ -1445,37 +1479,65 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     /**
      * The only attribute(s) in entityDef are keys and this entity can be
      * loaded by retrieving the key from the parent.
+     *
+     * Returns true if the entity was loaded from the parent.
      */
     private boolean autoloadFromParent( View view, EntityDef entityDef )
     {
-        assert entityDef.getParent() != null;
-        DataRecord dataRecord = entityDef.getDataRecord();
-        RelRecord  relRecord  = dataRecord.getRelRecord();
-
-        // Autoload is only valid if the key is contained in the parent.
-        // TODO: We only handle many-to-one relationships.  We could also handle
-        // m-to-m relationships by loading just the correspondence table.
-        if ( ! relRecord.getRelationshipType().isManyToOne() )
-            return false;
-
-        EntityInstance entityInstance = null;
-        EntityCursor parent = view.cursor( entityDef.getParent() );
-        for ( RelField relField : relRecord.getRelFields() )
+        if ( entityDef.isAutoloadFromParent() || activateFlags.contains( ActivateFlags.fKEYS_ONLY ) )
         {
-            AttributeInstance sourceAttr = parent.getAttribute( relField.getRelDataField().getAttributeDef() );
-            if ( sourceAttr.isNull() )
-                continue;
+            if ( entityDef.getParent() == null )
+                return false;
 
-            if ( entityInstance == null )
-                entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+            DataRecord dataRecord = entityDef.getDataRecord();
+            RelRecord  relRecord  = dataRecord.getRelRecord();
 
-            entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
+            // Autoload is only valid if the key is contained in the parent.
+            // TODO: We only handle many-to-one relationships.  We could also handle
+            // m-to-m relationships by loading just the correspondence table.
+            if ( ! relRecord.getRelationshipType().isManyToOne() )
+                return false;
+
+            if ( ! entityDef.isAutoloadFromParent() )
+            {
+                // If we get there then we don't have an auto-load-from-parent entity, which
+                // must mean we only loading keys.  We can't load from the parent if there are
+                // child entities that have a many-to-one relationship with this entity because
+                // we have to load the foreign key.
+                for ( EntityDef child : entityDef.getChildren() )
+                {
+                    if ( child.isDerived() )
+                        continue;
+
+                    if ( child.getDataRecord() == null )
+                        continue;
+
+                    if ( ! child.getDataRecord().getRelRecord().getRelationshipType().isOneToMany() )
+                        return false;
+                }
+            }
+
+            EntityInstance entityInstance = null;
+            EntityCursor parent = view.cursor( entityDef.getParent() );
+            for ( RelField relField : relRecord.getRelFields() )
+            {
+                AttributeInstance sourceAttr = parent.getAttribute( relField.getRelDataField().getAttributeDef() );
+                if ( sourceAttr.isNull() )
+                    continue;
+
+                if ( entityInstance == null )
+                    entityInstance = view.cursor( entityDef ).createEntity( CursorPosition.LAST, CREATE_FLAGS );
+
+                entityInstance.getAttribute( relField.getSrcDataField().getAttributeDef() ).setInternalValue( sourceAttr, false );
+            }
+
+            if ( entityInstance != null )
+                getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
+
+            return true;
         }
 
-        if ( entityInstance != null )
-            getTask().dblog().trace( "Auto Loaded %s from parent keys", entityDef.getName() );
-
-        return true;
+        return false;
     }
 
     /**

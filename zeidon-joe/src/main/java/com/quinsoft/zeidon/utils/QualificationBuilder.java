@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.utils;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quinsoft.zeidon.ActivateFlags;
@@ -32,6 +33,7 @@ import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Pagination;
+import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
@@ -51,7 +53,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  */
 public class QualificationBuilder
 {
-    public static final String QUAL_XOD_NAME = "kzdbhqua";
+    public static final String QUAL_XOD_NAME = "ActivateQual";
     public static final String ENTITYSPEC    = "EntitySpec";
     public static final String ENTITYNAME    = "EntityName";
     public static final String QUALATTRIB    = "QualAttrib";
@@ -69,12 +71,6 @@ public class QualificationBuilder
     private final ActivateOptions activateOptions;
 
     /**
-     * EntityInstance of the EntitySpec that qualifies the
-     * root of the target LodDef.
-     */
-    private EntityInstance rootInstance;
-
-    /**
      * When doing the activate we will synchronize using this object.  May be changed
      * by cachedAs().  Defaults to the QualificationBuilder.
      */
@@ -87,9 +83,9 @@ public class QualificationBuilder
     private boolean isEntityCache;
 
     /**
-     * Open SQL can be a real security risk so it is disallowed by default.
+     * Open SQL can be a real security risk so have a way to turn it off.
      */
-    private boolean allowOpenSql = false;
+    private boolean allowCustomQuery = true;
 
     /**
      * Creates an empty qualification object.
@@ -101,6 +97,7 @@ public class QualificationBuilder
         cacheTask = task;
         application = task.getApplication();
         qualView = task.activateEmptyObjectInstance( QUAL_XOD_NAME, task.getSystemTask().getApplication() );
+        qualView.cursor( "ActivateQual" ).createEntity();
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
         entitySpecCount = 0;
@@ -155,17 +152,41 @@ public class QualificationBuilder
         return setLodDef( application.getLodDef( task, lodDefName ) );
     }
 
+    @Deprecated
+    /**
+     * Use isAllowCustomQuery instead.
+     */
     public boolean isAllowOpenSql()
     {
-        return allowOpenSql;
+        return allowCustomQuery;
     }
 
+    public boolean isAllowCustomQuery()
+    {
+        return allowCustomQuery;
+    }
+
+    @Deprecated
     /**
-     * Open SQL can be a real security risk so it is disallowed by default.
+     * Use setAllowCustomQuery instead.
      */
     public QualificationBuilder setAllowOpenSql( boolean allowOpenSql )
     {
-        this.allowOpenSql = allowOpenSql;
+        return setAllowCustomQuery( allowOpenSql );
+    }
+
+    /**
+     * Custom Query can be a real security risk; this call makes it easy to disallow them
+     * for a server.
+     */
+    public QualificationBuilder setAllowCustomQuery( boolean allowCustomQuery )
+    {
+        this.allowCustomQuery = allowCustomQuery;
+        if ( allowCustomQuery )
+            qualView.cursor( "ActivateQual" ).getAttribute( "AllowCustomQuery" ).setValue( "Y" );
+        else
+            qualView.cursor( "ActivateQual" ).getAttribute( "AllowCustomQuery" ).setValue( "N" );
+
         return this;
     }
 
@@ -196,10 +217,21 @@ public class QualificationBuilder
 
     public QualificationBuilder loadFile( String filename )
     {
-        LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
-        qualView = task.deserializeOi().setLodDef( qualLodDef ).fromResource( filename ).activateFirst();
+        qualView = task.deserializeOi().fromResource( filename ).activateFirst();
+        if ( ! qualView.getLodDef().getName().equals( QUAL_XOD_NAME ) )
+        {
+            // We must have the old qualification object (kzdbhqua).  Convert
+            // to the new.
+            convertOldOiToNew();
+        }
+
         activateOptions.setQualificationObject( qualView );
         return this;
+    }
+
+    private void convertOldOiToNew()
+    {
+        throw new NotImplementedException( "Need to convert old to new" );
     }
 
     /**
@@ -215,13 +247,19 @@ public class QualificationBuilder
         if ( qualString.startsWith( "<" ) )
             format = StreamFormat.XML;
 
-        LodDef qualLodDef = task.getSystemTask().getApplication().getLodDef( task, QUAL_XOD_NAME );
         qualView = task.deserializeOi()
-                       .setLodDef( qualLodDef )
                        .setFormat( format )
                        .setVersion( "1" )
                        .fromString( qualString )
                        .activateFirst();
+
+        if ( ! qualView.getLodDef().getName().equals( QUAL_XOD_NAME ) )
+        {
+            // We must have the old qualification object (kzdbhqua).  Convert
+            // to the new.
+            convertOldOiToNew();
+        }
+
         activateOptions.setQualificationObject( qualView );
         return this;
     }
@@ -295,6 +333,23 @@ public class QualificationBuilder
         validateEntity();
         qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).setValue( limit );
         return setFlag( ActivateFlags.fMULTIPLE );
+    }
+
+    public Integer getLimit()
+    {
+        return qualView.cursor( ENTITYSPEC ).getAttribute( "ActivateLimit" ).getInteger();
+    }
+
+    public QualificationBuilder rootLimit( int limit )
+    {
+        forEntity( getLodDef().getRoot() );
+        return limitCountTo( limit );
+    }
+
+    public Integer getRootLimit()
+    {
+        forEntity( getLodDef().getRoot() );
+        return getLimit();
     }
 
     public QualificationBuilder setAsynchronous()
@@ -471,20 +526,7 @@ public class QualificationBuilder
      */
     private EntityInstance getRootInstance()
     {
-        if ( rootInstance == null )
-        {
-            String rootName = getLodDef().getRoot().getName();
-
-            if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", rootName ) != CursorResult.SET )
-            {
-                entitySpecCount++;
-                qualView.cursor( ENTITYSPEC ).createEntity( CursorPosition.LAST ).getAttribute( "EntityName" ).setValue( rootName );
-            }
-
-            rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
-        }
-
-        return rootInstance;
+        return qualView.cursor( "ActivateQual" ).getEntityInstance();
     }
 
     public QualificationBuilder forEntity( String entityName )
@@ -496,13 +538,14 @@ public class QualificationBuilder
         {
             entitySpecCount++;
             qualView.cursor( ENTITYSPEC ).createEntity( CursorPosition.LAST ).getAttribute( "EntityName").setValue( entityName );
-
-            // If this is the root then get the cursor.
-            if ( rootInstance == null && getLodDef().getRoot().getName().equals( entityName ) )
-                rootInstance = qualView.cursor( ENTITYSPEC ).getEntityInstance();
         }
 
         return this;
+    }
+
+    public QualificationBuilder forEntity( EntityDef entityDef )
+    {
+        return forEntity( entityDef.getName() );
     }
 
     private void validateEntity()
@@ -560,14 +603,52 @@ public class QualificationBuilder
         return this;
     }
 
+    @Deprecated
+    /**
+     * Use setCustomQuery instead.
+     */
     public QualificationBuilder setOpenSql( String sql, String attributeList )
     {
-        if ( ! allowOpenSql )
-            throw new ZeidonException( "OpenSQL is not allowed for this query" );
+        return setCustomQuery( sql, attributeList );
+    }
+
+    public QualificationBuilder setCustomQuery( String sql, String attributeList )
+    {
+        if ( ! allowCustomQuery )
+            throw new ZeidonException( "CustomQuery is not allowed for this query" );
 
         validateEntity();
-        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL" ).setValue( sql ) ;
-        qualView.cursor( ENTITYSPEC ).getAttribute( "OpenSQL_AttributeList" ).setValue( attributeList ) ;
+
+        EntityCursor customQuery = qualView.cursor( "CustomQuery" );
+        if ( customQuery.checkExistenceOfEntity().isEmpty() )
+            customQuery.createEntity();
+
+        customQuery.getAttribute( "SQL" ).setValue( sql ) ;
+
+        String[] list = attributeList.split( "," );
+        for ( String attrName : list )
+        {
+            attrName = attrName.trim();
+            qualView.cursor( "CustomQueryAttribute" )
+                    .createEntity()
+                    .getAttribute( "Name" ).setValue( attrName );
+        }
+
+        return this;
+    }
+
+    public QualificationBuilder setCustomQueryValues( Iterable<String> variables )
+    {
+        if ( ! allowCustomQuery )
+            throw new ZeidonException( "CustomQuery is not allowed for this query" );
+
+        for ( String value : variables )
+        {
+            qualView.cursor( "CustomQueryValue" )
+                    .createEntity()
+                    .getAttribute( "Value" ).setValue( value );
+        }
+
         return this;
     }
 
@@ -590,13 +671,7 @@ public class QualificationBuilder
     public QualificationBuilder addAttribQual( String attribName, Object attribValue )
     {
         validateEntity();
-        String oper = "=";
-        // KJS - If we are using a keylist in the qualifier from what I can see we get here at attribValue is null.
-        // At the moment I am not seeing any other time this is so. When this is the case the operator needs to be "in" so that
-        // we have "someattrib in (...)".
-        if (attribValue == null)
-        	oper = "in";
-        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, oper, attribValue );
+        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "=", attribValue );
     }
 
     @Deprecated // use addAttribQual instead.
@@ -710,6 +785,33 @@ public class QualificationBuilder
                 		                   "with a linked source instance.  Use fromEntityKeys(..., false)." );
 
             sourceEntityInstance = source;
+        }
+
+        return this;
+    }
+
+    public QualificationBuilder fromEntityList( EntityCursor source )
+    {
+        return fromEntityList( source, null );
+    }
+
+    public QualificationBuilder fromEntityList( EntityCursor source, SelectSet rootSelectSet )
+    {
+        EntityDef entityDef = source.getEntityDef();
+
+        // Find the key.
+        AttributeDef key = null;
+        if ( entityDef.getKeys().size() > 1 )
+            throw new ZeidonException("fromEntityList only supports single keys" );
+
+        key = entityDef.getKeys().get(0);
+
+        validateEntity();
+        addAttribQual( key.getName(), null );
+        for ( EntityInstance ei : source.eachEntity() )
+        {
+            if ( rootSelectSet == null || rootSelectSet.isSelected( ei ) )
+                newEntityKey( ei.getAttribute( key ).getString() );
         }
 
         return this;
@@ -886,7 +988,6 @@ public class QualificationBuilder
 
     public static View activateFromFile( Task task, String filename )
     {
-        LodDef qual = task.getSystemTask().getApplication().getLodDef( task, "kzdbhqua" );
-        return task.deserializeOi().fromFile( filename ).setLodDef( qual ).activateFirst();
+        return task.deserializeOi().fromFile( filename ).activateFirst();
     }
 }

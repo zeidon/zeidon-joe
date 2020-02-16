@@ -50,6 +50,7 @@ import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.EventNotification;
 import com.quinsoft.zeidon.HiddenAttributeException;
 import com.quinsoft.zeidon.MaxCardinalityException;
+import com.quinsoft.zeidon.NullCursorException;
 import com.quinsoft.zeidon.RequiredAttributeException;
 import com.quinsoft.zeidon.RequiredEntityMissingException;
 import com.quinsoft.zeidon.SetMatchingFlags;
@@ -104,6 +105,11 @@ class EntityInstanceImpl implements EntityInstance
     private boolean hidden   = false;
     private boolean excluded = false;
     private boolean dropped  = false;
+
+    /**
+     * Will be true if any child entity has been updated.
+     */
+    private boolean childUpdated = false;
 
     /**
      * Map of persistent attributes. Linked entities will reference the same
@@ -1478,6 +1484,12 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     @Override
+    public boolean isChildUpdated() throws NullCursorException
+    {
+        return childUpdated;
+    }
+
+    @Override
     public boolean isDeleted()
     {
         return deleted;
@@ -1607,12 +1619,28 @@ class EntityInstanceImpl implements EntityInstance
  */
 
         if ( ( flags & ( FLAG_CREATED | FLAG_UPDATED | FLAG_DELETED | FLAG_EXCLUDED | FLAG_HIDDEN) ) != 0 )
+        {
             getObjectInstance().setUpdated( true );
+            setChildUpdateForParents();
+        }
     }
 
     void setUpdated(boolean isUpdated )
     {
         setUpdated( isUpdated, true, true );
+    }
+
+    private void setChildUpdateForParents()
+    {
+        if ( getEntityDef().isDerived() )
+            return;
+
+        for ( EntityInstanceImpl parent = getParent();
+              parent != null && ! parent.isChildUpdated();
+              parent = parent.getParent() )
+        {
+            parent.childUpdated = true;
+        }
     }
 
     /**
@@ -1637,6 +1665,9 @@ class EntityInstanceImpl implements EntityInstance
         // We don't replicate the updated flag if it's being turned off.
         if ( isUpdated )
         {
+            if ( setPersistent )
+                setChildUpdateForParents();
+
             if ( setLinked )
             {
                 linkedInstances2.stream( this ).forEach( linked -> {
@@ -1743,9 +1774,6 @@ class EntityInstanceImpl implements EntityInstance
                 if ( linked == this )
                     return;
 
-                if ( linked.getEntityDef().getName().equals( "FinAidAwardDisbursement" ))
-                    System.out.println( "here" );
-
                 assert linked.versionNumber == 0 || linked.versionNumber == this.versionNumber;
 
                 // If there is a version, then we'll eventually accept it so skip it.
@@ -1759,7 +1787,10 @@ class EntityInstanceImpl implements EntityInstance
                 linked.updated = this.updated;
                 linked.deleted = this.deleted;
                 if ( isChanged() )
+                {
                     linked.getObjectInstance().setUpdated( true );
+                    linked.setChildUpdateForParents();
+                }
             } );
         }
 
@@ -1767,7 +1798,10 @@ class EntityInstanceImpl implements EntityInstance
 
         // If this entity has been changed then set the flag for the OI.
         if ( isChanged() && newStatus == VersionStatus.NONE )
+        {
             getObjectInstance().setUpdated( true );
+            setChildUpdateForParents();
+        }
     }
 
     void validateSubobject( View view, Collection<ZeidonException> list )
@@ -2104,8 +2138,10 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( getParent() != null )
         {
-            newVersionStatus = getParent().versionStatus;
             newVersionNumber = getParent().versionNumber;
+            newVersionStatus = getParent().versionStatus;
+            if ( newVersionStatus == VersionStatus.UNACCEPTED_ROOT )
+                newVersionStatus = VersionStatus.UNACCEPTED;
         }
 
         // Set status/number for all children.  This will allow us to spawn changes.
@@ -2122,6 +2158,7 @@ class EntityInstanceImpl implements EntityInstance
             EntitySpawner spawner = new EntitySpawner( this );
             spawner.spawnCreate();
             getObjectInstance().setUpdated( true );
+            setChildUpdateForParents();
         }
     }
 
@@ -2316,8 +2353,6 @@ class EntityInstanceImpl implements EntityInstance
         for ( final EntityInstanceImpl ei : getChildrenHier( true, true ) )
         {
              ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                 if ( ! linked.isLinked( ei ) )
-                     System.out.println( "here" );
                  assert linked.isLinked( ei );
              } );
         }
@@ -3090,12 +3125,12 @@ class EntityInstanceImpl implements EntityInstance
                 // We now need to copy attribute values from prevVersion and set up linkedInstances.
 
                 // Copy attributes values from previous version.
-                ei.newTemporalAttributeList( ei.getPrevVersion(), null );
-
                 EntityInstanceImpl prevVsn = ei.getPrevVersion();
+                ei.newTemporalAttributeList( prevVsn, null );
+
                 ei.linkedInstances2.stream( ei ).forEach( linked -> {
                     if ( linked.persistentAttributes == null )
-                        linked.newTemporalAttributeList( linked, ei );
+                        linked.newTemporalAttributeList( linked.getPrevVersion(), ei );
                 });
             }
 
@@ -3146,8 +3181,8 @@ class EntityInstanceImpl implements EntityInstance
 
     /**
      * Creates a new AttributeListInstance for a temporal entity. The work
-     * attributes are copied from prevInstanceAttributeList. Persistent
-     * attributes are copied from prevInstanceAttributeList unless
+     * attributes are copied from sourceInstance. Persistent
+     * attributes are copied from sourceInstance unless
      * linkedAttributeList is not null.
      *
      * If linkedAttributeList is not null then temporalInstance is linked to
@@ -3164,6 +3199,8 @@ class EntityInstanceImpl implements EntityInstance
 
         if ( linkedSourceInstance == null )
         {
+            assert sourceInstance != this;
+
             sourceInstance.addLinkedInstance( this );
             persistentAttributes = new HashMap<>( entityDef.getPersistentAttributeCount() );
 
@@ -3176,6 +3213,7 @@ class EntityInstanceImpl implements EntityInstance
             persistentAttributes = linkedSourceInstance.persistentAttributes;
 
             // Copy just work attributes.
+            assert sourceInstance.getEntityDef().getName() == this.getEntityDef().getName();
             copyAttributes( sourceInstance, false, true );
             this.addAllHashKeyAttributes();
         }

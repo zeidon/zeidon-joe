@@ -50,7 +50,7 @@ import com.quinsoft.zeidon.vml.zVIEW;
 //import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.zeidonoperations.ZDRVROPR;
 import com.quinsoft.zeidon.zeidonoperations.KZOEP1AA;
-import com.quinsoft.zeidon.zeidonoperations.ActiveDirectory;
+//import com.quinsoft.zeidon.zeidonoperations.ActiveDirectory;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -67,14 +67,14 @@ public class ZGlobal1_Operation extends VmlOperation
 {
    private final ZDRVROPR m_ZDRVROPR;
    private final KZOEP1AA m_KZOEP1AA;
-   private final ActiveDirectory m_ActiveDirectory;
+   //private final ActiveDirectory m_ActiveDirectory;
    //public ZGLOBAL1_Operation( TaskQualification taskQual )
    public ZGlobal1_Operation( View view )
    {
       super( view );
       m_ZDRVROPR = new ZDRVROPR( view );
       m_KZOEP1AA = new KZOEP1AA( view );
-      m_ActiveDirectory = new ActiveDirectory( );
+      //m_ActiveDirectory = new ActiveDirectory( );
       //private final KZOEP1AA m_KZOEP1AA;
    }
 
@@ -5990,7 +5990,7 @@ public class ZGlobal1_Operation extends VmlOperation
       // But I couldn't get a connection using that in java, so I am using the
       // ldap server id.
       szAD_Pathname = "ldap://10.150.0.10";
-      return m_ActiveDirectory.ActiveDirectoryLoginAuthentication( szAD_Pathname, szAD_UserName, szAD_Password );
+      return -1; //m_ActiveDirectory.ActiveDirectoryLoginAuthentication( szAD_Pathname, szAD_UserName, szAD_Password );
 
    } // AD_AuthenticateUserPassword
 
@@ -6007,7 +6007,7 @@ public class ZGlobal1_Operation extends VmlOperation
                        String stringUserName,
                        String stringUserPassword )
    {
-      return m_ActiveDirectory.ActiveDirectoryAddUser( stringServerName, stringServerPort, stringOrganization, stringUserName, stringUserPassword );
+      return -1; //m_ActiveDirectory.ActiveDirectoryAddUser( stringServerName, stringServerPort, stringOrganization, stringUserName, stringUserPassword );
 
    } // AD_AddUserPassword
 
@@ -6023,7 +6023,7 @@ public class ZGlobal1_Operation extends VmlOperation
                           String stringOrganization,
                           String stringUserName )
    {
-      return m_ActiveDirectory.ActiveDirectoryRemoveUser( stringServerName, stringServerPort, stringOrganization, stringUserName );
+      return -1; //m_ActiveDirectory.ActiveDirectoryRemoveUser( stringServerName, stringServerPort, stringOrganization, stringUserName );
 
    } // AD_RemoveUserPassword
 
@@ -6041,7 +6041,7 @@ public class ZGlobal1_Operation extends VmlOperation
                           String stringAD_OldPassword,
                           String stringAD_NewPassword )
    {
-      return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_OldPassword, stringAD_NewPassword );
+      return -1; //m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_OldPassword, stringAD_NewPassword );
    } // AD_ChangeUserPassword
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -6057,7 +6057,7 @@ public class ZGlobal1_Operation extends VmlOperation
                    String stringAD_UserName,
                    String stringAD_Password )
    {
-      return m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_Password,"" );
+      return -1; //m_ActiveDirectory.ActiveDirectorySetPassword( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_UserName, stringAD_Password,"" );
    }
 
    // AD_SetPassword
@@ -6075,7 +6075,7 @@ public class ZGlobal1_Operation extends VmlOperation
                   String stringAD_NewUserName,
                   String stringAD_NewUserPassword )
    {
-      return m_ActiveDirectory.ActiveDirectoryAddUser( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_NewUserName, stringAD_NewUserPassword );
+      return -1; //m_ActiveDirectory.ActiveDirectoryAddUser( stringAD_Pathname, stringAD_LoginUserName, stringAD_LoginPassword, stringAD_NewUserName, stringAD_NewUserPassword );
 
    }  // AD_AddNewUser
 
@@ -6092,7 +6092,7 @@ public class ZGlobal1_Operation extends VmlOperation
                        String stringAD_Property,
                        StringBuilder stringReturnProperty )
    {
-      return m_ActiveDirectory.ActiveDirectoryGetProperty( stringAD_Pathname, stringAD_UserName, stringAD_Password, stringAD_Property, stringReturnProperty );
+      return -1; //m_ActiveDirectory.ActiveDirectoryGetProperty( stringAD_Pathname, stringAD_UserName, stringAD_Password, stringAD_Property, stringReturnProperty );
 
    } // AD_GetUserProperty
 
@@ -6271,8 +6271,8 @@ public class ZGlobal1_Operation extends VmlOperation
    {
       int nRC;
 
-      nRC = m_ActiveDirectory.ActiveDirectorySetProperty( stringAD_Pathname, stringAD_AdminName, stringAD_AdminPassword,
-                                                          stringAD_UserName, stringAD_PropertyName, stringAD_PropertyValue );
+      nRC = -1; //m_ActiveDirectory.ActiveDirectorySetProperty( stringAD_Pathname, stringAD_AdminName, stringAD_AdminPassword,
+                //                                          stringAD_UserName, stringAD_PropertyName, stringAD_PropertyValue );
       return nRC;
 
    } // AD_SetUserProperty

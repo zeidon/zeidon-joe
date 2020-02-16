@@ -45,7 +45,7 @@ class AttributeValue
      * The AttributeDef that created this AttributeInstance.  This is used *only* for
      * debugging and to supply the ER attribute token.
      */
-    private final AttributeDef createAttribute;
+    private final AttributeDef  createAttribute;
     private final Domain        domain;
     private boolean             updated;     // Updated?
     private boolean             isSet = false;

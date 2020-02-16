@@ -19,13 +19,14 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-import scala.collection.JavaConversions.asScalaIterator
+import collection.JavaConversions._
 
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import org.apache.commons.lang3.StringUtils
-
+import collection.mutable.ArrayBuffer
+import collection.immutable.List
 
 /**
  * Used to build qualification for Scala code and then activate the OI.  A typical
@@ -99,8 +100,8 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
-    def allowOpenSql( allow: Boolean ) : QualBuilder = {
-        jqual.setAllowOpenSql( allow )
+    def allowCustomQuery( allow: Boolean ) : QualBuilder = {
+        jqual.setAllowCustomQuery( allow )
         this
     }
 
@@ -433,6 +434,15 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         jqual.limitCountTo(limit)
         this
     }
+
+    def getLimit = jqual.getLimit()
+
+    def rootLimit( limit: Integer ): QualBuilder = {
+        jqual.rootLimit(limit)
+        this
+    }
+
+    def getRootLimit = jqual.getRootLimit()
 
     def withPaging( pageSize: Int, page: Int = 1, getTotalCount: Boolean = false ): QualBuilder = {
         jqual.getPagination().setPageSize(pageSize).setPageNumber( page ).setLoadTotalCount( getTotalCount )
@@ -818,11 +828,25 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
     }
 
     /**
-     * Use OpenSQL to activate this entity.  Note that QualBuilder.allowOpenSql( true ) must be
+     * Use custom SQL to activate this entity.  Note that QualBuilder.allowOpenSql( true ) must be
      * explicitly called.
      */
     def usingSql( customizedSql: String, attributeList: String ): QualificationTerminator = {
-        qualBuilder.jqual.setOpenSql( customizedSql, attributeList )
+        qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
+
+        return QualBuilder.TERMINATOR
+    }
+
+    def usingSql( customizedSql: String, attributeList: String, customValue: String ): QualificationTerminator = {
+        qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
+        qualBuilder.jqual.setCustomQueryValues( ArrayBuffer( customValue ) )
+
+        return QualBuilder.TERMINATOR
+    }
+
+    def usingSql( customizedSql: String, attributeList: String, customValues: List[String] ): QualificationTerminator = {
+        qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
+        qualBuilder.jqual.setCustomQueryValues( customValues )
 
         return QualBuilder.TERMINATOR
     }

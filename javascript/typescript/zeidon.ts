@@ -36,6 +36,15 @@ export class ObjectInstance {
     public getDomain( name: string ): Domain { throw "getDomain() must be overriden" };
     public getEntityDef( name: string ): any { return this.getLodDef().entities[ name ] }
 
+    public _isUpdatedNonPersist: boolean = false;
+
+    /**
+     * Returns true if this OI has any updates to persistent or non-persistent (i.e. work) data.
+     */
+    get isUpdatedNonPersist(): boolean {
+        return this.isUpdated || this._isUpdatedNonPersist;
+    }
+
     public getDomainFunctions( domain: Domain ): DomainFunctions {
         // Can be overwritten but not necessary.
         return undefined;
@@ -57,6 +66,12 @@ export class ObjectInstance {
         let json = {};
         json[ this.rootEntityName() ] = jarray;
         return json;
+    }
+
+    public visitEntityInstances( visitor: EntityInstanceVisitor ) {
+        for ( let ei of this.roots.allEntities() ) {
+            ei.visit( visitor );
+        };
     }
 
     get root(): EntityArray<EntityInstance> {
@@ -121,6 +136,20 @@ export class ObjectInstance {
     public reset() {
         this.roots = new EntityArray<EntityInstance>( this.rootEntityName(), this, undefined );
         this.isUpdated = false;
+        this._isUpdatedNonPersist = false;
+    }
+
+    /**
+     * Resets all incremental flags and reset isUpdated to false.
+     */
+    public resetIncrementals() {
+        this.visitEntityInstances( {
+            visit( ei: EntityInstance ) {
+                ei.resetIncrementals();
+            }
+        } );
+        this.isUpdated = false;
+        this._isUpdatedNonPersist = false;
     }
 
     public reload(): Promise<this> {
@@ -176,40 +205,46 @@ export class ObjectInstance {
         }
 
         this.reset();
-        if ( !initialize ) {
+        if ( !initialize || Object.keys( initialize ).length  === 0 ) {
+            return this;  // Nothing to initialize so just return an empty OI.
+        }
+
+        // if OIs is specified then this has the full Zeidon meta.
+        if ( initialize.OIs ) {
+            // TODO: Someday we should handle multiple return OIs but for now
+            // we'll assume just one and hardcode '[0]'.
+            let oimeta = initialize.OIs[ 0 ][ ".oimeta" ];
+            if ( oimeta )
+                this.loadOiMetaFromJson( oimeta, options );
+
+            let root = initialize.OIs[ 0 ][ this.rootEntityName() ];
+            if ( root ) {
+                for ( let i of initialize.OIs[ 0 ][ this.rootEntityName() ] ) {
+                    this.roots.create( i, options );
+                }
+            }
+
             return this;
         }
-        else
-            if ( initialize.OIs ) {
-                // TODO: Someday we should handle multiple return OIs for for now
-                // we'll assume just one and hardcode '[0]'.
-                let oimeta = initialize.OIs[ 0 ][ ".oimeta" ];
-                if ( oimeta )
-                    this.loadOiMetaFromJson( oimeta, options );
 
+        if ( initialize.constructor === Array ) {
+            for ( let i of initialize ) {
+                this.roots.create( i, options );
+            }
 
-                let root = initialize.OIs[ 0 ][ this.rootEntityName() ];
-                if ( root ) {
-                    for ( let i of initialize.OIs[ 0 ][ this.rootEntityName() ] ) {
-                        this.roots.create( i, options );
-                    }
-                }
-            } else
-                if ( initialize.constructor === Array ) {
-                    for ( let i of initialize ) {
-                        this.roots.create( i, options );
-                    }
-                } else
-                    if ( initialize[ this.rootEntityName() ] && initialize[ this.rootEntityName() ].constructor === Array ) {
-                        for ( let i of initialize[ this.rootEntityName() ] ) {
-                            this.roots.create( i, options );
-                        }
-                    } else
-                        if ( initialize != {} ) {
-                            // Ignore version for now.
-                            delete initialize.version;
-                            this.roots.create( initialize, options );
-                        }
+            return this;
+        }
+
+        if ( initialize[ this.rootEntityName() ] && initialize[ this.rootEntityName() ].constructor === Array ) {
+            for ( let i of initialize[ this.rootEntityName() ] ) {
+                this.roots.create( i, options );
+            }
+
+            return this;
+        }
+
+        delete initialize.version;  // Ignore version for now.
+        this.roots.create( initialize, options );
 
         return this;
     }
@@ -260,7 +295,10 @@ export class EntityInstance {
     public get deleted() { return this.incrementals.deleted };
     public get included() { return this.incrementals.included };
     public get excluded() { return this.incrementals.excluded };
-    public get updated() { return this.incrementals.updated || this.attributes[ ANY_ATTRIBUTE_UPDATED ] };
+    public get updated() { return this.incrementals.updated || this.attributes[ ANY_ATTRIBUTE_UPDATED ] === true };
+
+    public get touched() { return this.updated || this.created || this.deleted || this.excluded || this.included };
+
 
     /**
      * Returns true if this EI is linked with another.
@@ -277,6 +315,14 @@ export class EntityInstance {
         }
 
         this.incrementals[ flag ] = v;
+    }
+
+    resetIncrementals() {
+        this.incrementals = new Incrementals();
+        if ( this.parentArray ) {
+            this.parentArray.delegate.hiddenEntities = [];
+        }
+
     }
 
     public set created( v: boolean ) { this.setIncremental( v, "created" ) }
@@ -386,7 +432,7 @@ export class EntityInstance {
                 continue;
 
             // If the attribute is already set, skip it.
-            if ( this.getAttribute( attributeName ) )
+            if ( this.getAttribute( attributeName ) != undefined )
                 continue;
 
             this.setAttribute( attributeName, attributeDef.initialValue );
@@ -435,7 +481,10 @@ export class EntityInstance {
 
         if ( attributeDef.persistent ) {
             this.updated = true;
+            this.oi.isUpdated = true;
             this.attributes[ ANY_ATTRIBUTE_UPDATED ] = true;
+        } else {
+            this.oi._isUpdatedNonPersist = true;
         }
     }
 
@@ -614,7 +663,7 @@ export class EntityInstance {
             // Do we have a fingerprint for every child entity?
             if ( Object.keys( childFingerprints ).length < eiChildren.length ) {
                 // No.  Delete all child entities that are missing from the list of fingerprints.
-                eiChildren.deleteAll(( ei ) => !childFingerprints[ ei.fingerprint ] );
+                eiChildren.deleteAll( { filter: ( ei ) => !childFingerprints[ ei.fingerprint ] } );
             }
         }
     }
@@ -639,7 +688,7 @@ export class EntityInstance {
 
         for ( let attrName in this.entityDef.attributes ) {
             let attrValue = this.getAttribute( attrName );
-            if ( attrValue )
+            if ( attrValue !== undefined && attrValue !== null )
                 json[ attrName ] = attrValue;
 
             if ( options.meta && this.isAttributeUpdated( attrName ) ) {
@@ -672,7 +721,29 @@ export class EntityInstance {
 
         return json;
     }
+
+    visit( visitor : EntityInstanceVisitor ) {
+        visitor.visit( this );
+
+        for ( let entityName in this.entityDef.childEntities ) {
+            let entities: EntityArray<EntityInstance> = this.childEntityInstances[ entityName ];
+            if ( entities === undefined || entities.length === 0 )
+                continue;
+
+            for ( let ei of entities ) {
+                ei.visit( visitor );
+            }
+        }
+
+        if ( visitor.visitPostChildren )
+            visitor.visitPostChildren( this );
+    }
 };
+
+export interface EntityInstanceVisitor {
+    visit( ei: EntityInstance ): any;
+    visitPostChildren?( ei: EntityInstance ): any;
+}
 
 export interface UpdateOptions {
     ignoreUnknownAttributeErrors?: boolean
@@ -828,7 +899,7 @@ class ArrayDelegate<T extends EntityInstance> {
         return this.hiddenEntities;
     }
 
-    create( initialize: Object = {}, options: CreateOptions = DEFAULT_CREATE_OPTIONS ): EntityInstance {
+    create( initialize: object = {}, options: CreateOptions = DEFAULT_CREATE_OPTIONS ): EntityInstance {
         options = options || {};  // Make sure options is at least an empty object.
 
         if ( !this.entityDef.create && !options.incrementalsSpecified )
@@ -1111,7 +1182,7 @@ export class EntityArray<T extends EntityInstance> extends Array<T> {
         } );
 
         // Add all the functions to EntityArray.
-        _arr.create = function ( initialize: Object = {}, options: CreateOptions = DEFAULT_CREATE_OPTIONS ): T {
+        _arr.create = function ( initialize: object = {}, options: CreateOptions = DEFAULT_CREATE_OPTIONS ): T {
             return this.delegate.create( initialize, options );
         }
         _arr.include = function ( sourceEi: EntityInstance, options?: IncludeOptions ): T {
@@ -1131,7 +1202,7 @@ export class EntityArray<T extends EntityInstance> extends Array<T> {
         return _arr;
     }
 
-    create: ( initialize?: Object, options?: CreateOptions ) => T;
+    create: ( initialize?: object, options?: CreateOptions ) => T;
     excludeAll: ( options? : ExcludeAllOptions ) => void;
     deleteAll: ( options? : DeleteAllOptions ) => void;
     delete: ( options?: DeleteOptions ) => void;
@@ -1150,7 +1221,7 @@ export class EntityArray<T extends EntityInstance> extends Array<T> {
 }
 
 // Used to create SAFE_INSTANCE.
-var handler = {
+var safeInstanceHandler = {
     get: function ( target, key ) {
         if ( key.endsWith( '$$' ) )
             return target;
@@ -1160,7 +1231,7 @@ var handler = {
 };
 
 /**
-    This is the Zeidon equivalent to the "elvis operator".  It allows code to reference
+    This is the Zeidon equivalent to safe navigation.  It allows code to reference
     a lower-level entity without blowing up if a mid-tier element doesn't exist.
 
     Example: assume that Configuration entity is empty (e.g. undefined).  The following
@@ -1168,11 +1239,11 @@ var handler = {
 
             newConfig.Configuration$.ThermometerConfig$.AlarmHigh
 
-    Using Elvis ('$$' instead of '$') will return 'undefined':
+    Using safe navigation ('$$' instead of '$') will return 'undefined':
 
             newConfig.Configuration$$.ThermometerConfig$$.AlarmHigh
 */
-export const SAFE_INSTANCE = new Proxy( {}, handler );
+export const SAFE_INSTANCE = new Proxy( {}, safeInstanceHandler );
 
 export interface CreateOptions {
     incrementalsSpecified?: boolean;
@@ -1186,7 +1257,7 @@ export interface DeleteOptions {
 }
 
 export interface DeleteAllOptions extends DeleteOptions {
-    filter?: ( EntityInstance ) => boolean;
+    filter?: ( entityInstance: EntityInstance ) => boolean;
 }
 
 export interface ExcludeOptions {
@@ -1196,7 +1267,7 @@ export interface ExcludeOptions {
 }
 
 export interface ExcludeAllOptions extends ExcludeOptions {
-    filter?: ( EntityInstance ) => boolean;
+    filter?: ( entityInstance: EntityInstance ) => boolean;
 }
 
 const DEFAULT_CREATE_OPTIONS = {
@@ -1205,8 +1276,31 @@ const DEFAULT_CREATE_OPTIONS = {
 };
 
 export class Activator {
+    preActivateHooks: { ( oi: ObjectInstance, options?: any ): void }[] = [];
+    postActivateHooks: { ( oi: ObjectInstance, options?: any ): void }[] = [];
+
     activateOi<T extends ObjectInstance>( oi: T, options?: any ): Promise<T> {
         throw "activateOi has not been implemented"
+    }
+
+    registerPreActivateHook( fn: ( oi: ObjectInstance, options?: any ) => void ) {
+        this.preActivateHooks.push( fn );
+    }
+
+    registerPostActivateHook( fn: ( oi: ObjectInstance, options?: any ) => void ) {
+        this.postActivateHooks.push( fn );
+    }
+
+    executePreActivateHooks( oi: ObjectInstance, options?: any ) {
+        this.preActivateHooks.forEach( ( fn ) => {
+            fn( oi, options );
+        } );
+    }
+
+    executePostActivateHooks( oi: ObjectInstance, options?: any ) {
+        this.postActivateHooks.forEach( ( fn ) => {
+            fn( oi, options );
+        } );
     }
 
     // Error handler called if there is an error.
@@ -1214,12 +1308,35 @@ export class Activator {
 }
 
 export class Committer {
+    preCommitHooks: { ( oi: ObjectInstance, options?: CommitOptions ) : void } [] = [];
+    postCommitHooks: { ( oi: ObjectInstance, options?: CommitOptions ): void }[] = [];
+
     commitOi( oi: ObjectInstance, options?: CommitOptions ): Promise<ObjectInstance> {
         throw "commitOi has not been implemented"
     }
 
     dropOi( oi: ObjectInstance, options?: CommitOptions ) {
         throw "dropOi has not been implemented"
+    }
+
+    registerPreCommitHook( fn: ( oi: ObjectInstance, options?: CommitOptions) => void ) {
+        this.preCommitHooks.push( fn );
+    }
+
+    registerPostCommitHook( fn: ( oi: ObjectInstance, options?: CommitOptions ) => void ) {
+        this.postCommitHooks.push( fn );
+    }
+
+    executePreCommitHooks( oi: ObjectInstance, options?: CommitOptions ) {
+        this.preCommitHooks.forEach( (fn) => {
+            fn( oi, options );
+        });
+    }
+
+    executePostCommitHooks( oi: ObjectInstance, options?: CommitOptions ) {
+        this.postCommitHooks.forEach( ( fn ) => {
+            fn( oi, options );
+        } );
     }
 
     // Error handler called if there is an error.
@@ -1238,15 +1355,40 @@ export class ZeidonConfiguration {
 
     getActivator(): Activator { return this.activator; }
     getCommitter(): Committer { return this.committer; }
+
+    registerPreCommitHook( fn: ( oi: ObjectInstance, options?: CommitOptions ) => void ) {
+        this.getCommitter().registerPreCommitHook( fn );
+    }
+
+    registerPostCommitHook( fn: ( oi: ObjectInstance, options?: CommitOptions ) => void ) {
+        this.getCommitter().registerPostCommitHook( fn );
+    }
+
+    registerPreActivateHook( fn: ( oi: ObjectInstance, options?: any ) => void ) {
+        this.getActivator().registerPreActivateHook( fn );
+    }
+
+    registerPostActivateHook( fn: ( oi: ObjectInstance, options?: any ) => void ) {
+        this.getActivator().registerPostActivateHook( fn );
+    }
+
+}
+
+export interface PaginationOptions {
+    currentPage?: number;  // Initial page.  Default = 1.
+    pageSize?:    number;  // Initial page size.  Default = 20.
 }
 
 export class Pagination {
-    currentPage: number = 1;
+    currentPage: number;
     totalPages: number = null;
     totalCount: number = null;
-    pageSize: number = 20;
+    pageSize: number;
 
-    constructor() { }
+    constructor( options: PaginationOptions = {} ) {
+        this.currentPage = options.currentPage || 1;
+        this.pageSize = options.pageSize || 20;
+    }
 
     incrementPage( rootList: ObjectInstance = undefined ) {
         let currentPage = Math.min( this.currentPage + 1, this.totalPages || 9999 );

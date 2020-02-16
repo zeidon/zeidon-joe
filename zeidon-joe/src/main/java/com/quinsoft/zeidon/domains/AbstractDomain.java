@@ -21,9 +21,13 @@ package com.quinsoft.zeidon.domains;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hjson.JsonObject;
+import org.hjson.JsonObject.Member;
+import org.hjson.JsonValue;
 import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
@@ -57,6 +61,8 @@ public abstract class AbstractDomain implements Domain
     private final InternalType  dataType;
     private final String        description;
     private final String        constraintRule;
+    private       Map<String, String>  constraintRuleMap;
+    private int                 maxLength = 0;
 
     public AbstractDomain( Application app, Map<String, Object> domainProperties, Task task )
     {
@@ -66,6 +72,56 @@ public abstract class AbstractDomain implements Domain
         dataType = InternalType.mapCode( (String) domainProperties.get( "DataType" ) );
         description = (String) domainProperties.get( "Desc" );
         constraintRule = (String) domainProperties.get( "ConstraintRule" );
+        if ( domainProperties.containsKey( "MaxStringLth" )) 
+        	maxLength = Integer.parseInt(domainProperties.get("MaxStringLth").toString());        
+    }
+
+    /**
+     * Called by a subclass to parse the constraint rule string as relaxed JSON.
+     */
+    protected void parseConstraintRuleJson()
+    {
+        constraintRuleMap = new HashMap<>();
+
+        String json = constraintRule.trim();
+        if ( StringUtils.isBlank( json ) )
+            return;
+
+        // For convenience, handle strings without wrapping {}.
+        if ( ! json.startsWith( "{" ) )
+            json = "{" + json + "}";
+
+        JsonObject values = JsonValue.readHjson( constraintRule ).asObject();
+
+        Iterator<Member> iter = values.iterator();
+        while ( iter.hasNext() )
+        {
+            Member member = iter.next();
+            JsonValue value = member.getValue();
+            constraintRuleMap.put( member.getName().toLowerCase(), value.toString() );
+        }
+    }
+
+    protected String constraintRuleValue( String name, String defaultValue )
+    {
+        String value = constraintRuleMap.get( name.toLowerCase() );
+        if ( StringUtils.isBlank( value ) )
+            value = defaultValue;
+
+        return value;
+    }
+
+    protected int constraintRuleInt( String name, String defaultValue )
+    {
+        String value = constraintRuleValue( name, defaultValue );
+        try
+        {
+            return Integer.parseInt( value );
+        }
+        catch( NumberFormatException e )
+        {
+            throw ZeidonException.wrapException( e ).appendMessage( "Name = %s, Value = %s", name, value );
+        }
     }
 
     /* (non-Javadoc)
@@ -271,6 +327,12 @@ public abstract class AbstractDomain implements Domain
         return name;
     }
 
+    @Override
+    public int getMaxLength()
+    {
+        return maxLength;
+    }
+    
     /**
      * Looks for the context in contextList.  Returns null if it isn't found.
      * @param contextName

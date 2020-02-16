@@ -342,6 +342,19 @@ class CommitMultipleOIs
 
     }
 
+    private boolean assertChildUpdatedSetForParents( EntityInstanceImpl ei )
+    {
+        for ( EntityInstanceImpl parent = ei.getParent();
+              parent != null && ! parent.isChildUpdated();
+              parent = parent.getParent() )
+        {
+            if ( parent.isChildUpdated() )
+                return false;
+        }
+
+        return true;
+    }
+
     /**
      * For each entity instance that has been changed in all the OIs, make sure that
      * one of the OI's has the permission to create/delete/update/etc.
@@ -381,6 +394,7 @@ class CommitMultipleOIs
                 if ( ei.isIncluded() && ! ei.isExcluded() )
                 {
                     ei.dbhNeedsCommit = true;
+                    assert assertChildUpdatedSetForParents( ei );
                     if ( ! entityDef.isInclude() && validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) == null )
                     {
                         missingPermission = true;
@@ -392,6 +406,7 @@ class CommitMultipleOIs
                 if ( ei.isExcluded() && ! ei.isIncluded() )
                 {
                     ei.dbhNeedsCommit = true;
+                    assert assertChildUpdatedSetForParents( ei );
                     if ( ! entityDef.isExclude() && validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) == null )
                     {
                         missingPermission = true;
@@ -403,6 +418,7 @@ class CommitMultipleOIs
                 if ( ei.isCreated() && ! ei.isDeleted() )
                 {
                     ei.dbhNeedsCommit = true;
+                    assert assertChildUpdatedSetForParents( ei );
                     if ( ! entityDef.isCreate() && validatePermissionForEi( ei, oiSet, hasCreatePermission, null ) == null )
                     {
                         missingPermission = true;
@@ -414,6 +430,7 @@ class CommitMultipleOIs
                 if ( ei.isDeleted() && ! ei.isCreated() )
                 {
                     ei.dbhNeedsCommit = true;
+                    assert assertChildUpdatedSetForParents( ei );
                     if ( ! entityDef.isDelete() && validatePermissionForEi( ei, oiSet, hasDeletePermission, null ) == null )
                     {
                         missingPermission = true;
@@ -427,6 +444,8 @@ class CommitMultipleOIs
                     if ( entityDef.isUpdate() )
                     {
                         ei.dbhNeedsCommit = true;
+                        assert assertChildUpdatedSetForParents( ei );
+
                         // Make sure we can update the attributes.
                         validateAttributePermission( oiSet, ei );
                     }

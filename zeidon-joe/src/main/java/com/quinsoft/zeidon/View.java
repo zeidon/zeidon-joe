@@ -634,4 +634,20 @@ public interface View extends TaskQualification
      * Get the CacheMap for the View.
      */
     public CacheMap getCacheMap();
+
+    /**
+     * Convenience method that is the same as:
+     *   view.serializeOi().asJson().withIncremental().toString()
+     *
+     * @return view as JSON string with incrementals.
+     */
+    public String toJson();
+
+    /**
+     * Convenience method that is the same as:
+     *   view.serializeOi().asJson().withIncremental( incrementals ).toString()
+     *
+     * @return view as JSON string.
+     */
+    public String toJson( boolean incrementals );
 }

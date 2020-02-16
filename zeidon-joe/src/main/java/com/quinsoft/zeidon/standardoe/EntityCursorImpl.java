@@ -1009,6 +1009,12 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
+    public boolean isChildUpdated() throws NullCursorException
+    {
+        return getExistingInstance().isChildUpdated();
+    }
+
+    @Override
     public boolean isVersioned()
     {
         return getExistingInstance().isVersioned();
@@ -1639,6 +1645,17 @@ class EntityCursorImpl implements EntityCursor
         public int compare(EntityInstanceImpl ei1, EntityInstanceImpl ei2 )
         {
             assert ei1.getEntityDef() == ei2.getEntityDef();
+
+            if ( ei1.isHidden() )
+            {
+                if ( ei2.isHidden() )
+                    return 0;  // Two hidden EIs are considered equal.
+                else
+                    return 1;  // A hidden EI is considered greater than non-hidden to put it at the end.
+            }
+            else
+            if ( ei2.isHidden() )
+                return -1;
 
             for ( SortKey key : sortAttribs )
             {

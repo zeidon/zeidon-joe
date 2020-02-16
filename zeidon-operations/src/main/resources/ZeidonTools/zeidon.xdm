@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 01/11/18   10:14:08 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 12/12/19   10:41:11 1.0a2    
 eDomainGroup 1
 aName      Zeidon9B
 
@@ -6865,9 +6865,14 @@ aExternalValue Show/Hide Toggle2
 aInternalValue Show/Hide Toggle2
 
 eTableEntry 4
-aZKey      68544987
-aExternalValue File Transfer to Server
-aInternalValue File Transfer to Server
+aZKey      130069849
+aExternalValue File Upload with DateTime
+aInternalValue File Upload with DateTime
+
+eTableEntry 4
+aZKey      130069850
+aExternalValue File Upload w/o DateTime
+aInternalValue File Upload w/o DateTime
 
 eTableEntry 4
 aZKey      68304372
@@ -6949,6 +6954,11 @@ aZKey      68304369
 aExternalValue Scrollable
 aInternalValue Scrollable
 
+eTableEntry 4
+aZKey      68544987
+aExternalValue File Transfer to Server
+aInternalValue File Transfer to Server
+
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      130001474
@@ -6977,6 +6987,16 @@ eTableEntry 4
 aZKey      130001478
 aExternalValue No Positioning
 aInternalValue N
+
+eTableEntry 4
+aZKey      130069851
+aExternalValue Bootstrap
+aInternalValue B
+
+eTableEntry 4
+aZKey      130069852
+aExternalValue jMobile
+aInternalValue J
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain

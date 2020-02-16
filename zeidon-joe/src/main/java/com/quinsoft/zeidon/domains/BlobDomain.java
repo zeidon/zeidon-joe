@@ -27,6 +27,7 @@ import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
 /**
@@ -48,7 +49,7 @@ public class BlobDomain extends AbstractDomain
 
         if ( externalValue == null )
         	return null;
-        
+
         if ( externalValue instanceof byte[] )
             return new Blob( (byte[]) externalValue );
 
@@ -64,8 +65,7 @@ public class BlobDomain extends AbstractDomain
             try {
 				return new Blob( ((String) externalValue).getBytes("UTF8") );
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-        		return null;
+			    throw ZeidonException.wrapException( e );
 			}
         }
 
@@ -82,7 +82,7 @@ public class BlobDomain extends AbstractDomain
         try {
 			return new String( blob.getBytes(), "UTF8" );
 		} catch (UnsupportedEncodingException e) {
-	        return new String( "" );
+            throw ZeidonException.wrapException( e );
 		}
     }
 

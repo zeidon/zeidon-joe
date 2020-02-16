@@ -789,4 +789,16 @@ public class zVIEW extends VmlOperation implements View
     {
         return getView().callObjectOperation( operationName, args );
     }
+
+	@Override
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return getView().toJson();
+	}
+
+	@Override
+	public String toJson(boolean incrementals) {
+		// TODO Auto-generated method stub
+		return getView().toJson( incrementals );
+	}
 }

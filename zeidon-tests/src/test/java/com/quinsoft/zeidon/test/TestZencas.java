@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ import com.quinsoft.zeidon.SetMatchingFlags;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
@@ -197,6 +199,17 @@ public class TestZencas
 		VmlTester tester = new VmlTester( testview );
 		tester.testBlobs( testview );
         System.out.println("===== Finished testBlobs ========");
+	}
+
+
+	@Test
+	public void CreateTemporalDerivedEntityWorkAttributeIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.CreateTemporalDerivedEntityWorkAttributeIssue( testview );
+        System.out.println("===== Finished CreateTemporalDerivedEntityWorkAttributeIssue ========");
 	}
 
 	@Test
@@ -679,6 +692,7 @@ public class TestZencas
 		tester.mPersonProspectSaveAttribute( testview );
         System.out.println("===== Finished mPersonProspectSaveAttribute ========");
 	}
+
 	@Test
 	public void testExcludeSubentityError()
 	{
@@ -688,6 +702,27 @@ public class TestZencas
 		tester.testExcludeSubentityError( testview );
         System.out.println("===== Finished testExcludeSubentityError ========");
 	}
+
+	/**
+	 * Verify that if we try to update an attribute that is hidden we won't allow it unless
+	 * it is linked to an entity that has the attribute visible.
+	 */
+    @Test
+    public void testUpdatingHiddenAttribute()
+    {
+        View view = new DeserializeOi( zencas )
+                .asJson()
+                .fromFile( "target/test-classes/testdata/ZENCAs/mFASrc-update-hidden.json" )
+                .activateFirst();
+
+        try {
+            view.commit();
+            Assert.fail("Expected an ZeidonException to be thrown");
+        } catch (ZeidonException e) {
+            Assert.assertThat(e.getMessage(), CoreMatchers.containsString("Attribute is defined as read-only"));
+        }
+
+    }
 
 	@Test
 	public void testActivateRecurObj()
@@ -1300,6 +1335,26 @@ public class TestZencas
 	}
 
 	@Test
+	public void mFAProfTemporalIssue3()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfTemporalIssue3( testview );
+        System.out.println("===== Finished mFAProfTemporalIssue3 ========");
+	}
+
+	@Test
+	public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( testview );
+        System.out.println("===== Finished mFAProfTemporalIssue3 ========");
+	}
+//mFAProfTemporalTest
+	@Test
 	public void mFAProfTemporalLinkIssue()
 	{
 	    View         testview;
@@ -1740,6 +1795,184 @@ public class TestZencas
 		}
 
 		public int
+		mFAProfTemporalIssue3( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+
+		   // KJS 09/18/19 - Getting the following error:
+		   // com.quinsoft.zeidon.TemporalEntityException: Entity has children that are unaccepted version roots
+		   // EntityDef  = ZENCAs.mFAProf.FinAidAward
+		   // If we
+		   // 1. createTemporalEntity on root FinAidAward then
+		   // 2. createTemporalEntity on child FinAidAwardDisbursement
+		   // 3. acceptSubobject( FinAidAwardDisbursement )
+		   // 4. acceptSubobject( FinAidAward )
+		   // Works without error
+		   // If we
+		   // 1. createTemporalSubobjectVersion on root FinAidAward then
+		   // 2. createTemporalEntity on child FinAidAwardDisbursement
+		   // 3. acceptSubobject( FinAidAwardDisbursement )
+		   // 4. acceptSubobject( FinAidAward )
+		   // Receive Error
+		   //
+		   // In the first instance of acceptSubobject( FinAidAwardDisbursement ) (this is after we did a createTemporal on FinAidAward), we set all
+		   // child entities to parent version status UNACCEPTED_ENTITY
+		   // In the second instance of acceptSubobject( FinAidAwardDisbursement ), we set all child entities to parent version status UNACCEPTED_ROOT, which
+		   // then throws the exception when doing acceptSubobject( FinAidAward ).
+
+
+		    // Set up code.
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+		   //xxxx
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+		    // End of set up code...
+
+
+		    // This works
+			CreateTemporalEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+
+			CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+
+		    // This does not work.
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+			CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+
+		   return 0;
+		}
+
+		public int
+		mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+
+		   // KJS 09/18/19 - at the moment this gives the same error as the test mFAProfTemporalIssue3,
+		   // but when that test gets fixed, I want to make sure that the values in PerPeriodFinAidAwardDisbursement, down the
+		   // PerProfileFinAidAwardPeriod path show the same values as the original FinAidAwardDisbursement entity under FinAidAward.
+		   // The PerProfileFinAidAwardPeriod path is the "included" path.
+
+		    // Set up code.
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+
+			RESULT = CreateEntity( mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("PeriodDesignator").setValue("2016-2017 Fall");  //2016-2017 Fall
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("BeginDate").setValue("20160804");
+		    mFAProf.cursor("PerProfileFinAidAwardPeriod").getAttribute("EndDate").setValue("20170515");
+		    // End of set up code...
+
+		    // This works
+			CreateTemporalEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+
+			CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 500) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 500) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+
+	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 500 ).toInt();
+	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 500 ).toInt();
+ 		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 500.", 0, RESULT, 0.0);
+
+ 		    // Another test
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement");
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 300) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 300) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 300 ).toInt();
+	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 300 ).toInt();
+ 		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 300.", 0, RESULT, 0.0);
+
+ 		    // This does not work.
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+			CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+		    RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod",   mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("Amount").setValue( 100) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue( 100) ;
+		    mFAProf.cursor("FinAidAwardDisbursement").acceptSubobject();
+		    mFAProf.cursor("FinAidAward").acceptSubobject();
+
+	        RESULT= mFAProf.cursor("FinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
+	        RESULT= mFAProf.cursor("PerPeriodFinAidAwardDisbursement").setFirst( "Amount", 100 ).toInt();
+ 		    Assert.assertEquals("PerPeriodFinAidAwardDisbursement entity doesn't exist for amount 100.", 0, RESULT, 0.0);
+
+		   return 0;
+		}
+
+		public int
 		mFAProfTemporalLinkIssue( View ViewToWindow )
 		{
 		   zVIEW    mPerson = new zVIEW( );
@@ -1858,6 +2091,71 @@ public class TestZencas
 	   	   // We receive a TemporalEntityExcption on this.
 	   	   // We only get this when we've done a CreateTemporalSubobjectVersion( mFAProf, "FinAidProfile" )
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidCOAItemAssigned" );
+
+		   return 0;
+		}
+
+		public int
+		CreateTemporalDerivedEntityWorkAttributeIssue( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    mClass = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+
+		   // KJS 09/16/19
+		   // Issue: After a CreateTemporalSubobjectVersion, derived entity work attributes are blank.
+		   // We create derived entity GradeEnrollment from entity Enrollment and set a work attribute (GradeEnrollment.wEnteredGrade).
+		   // After CreateTemporalSubobjectVersion on the root entity Class the work attribute in GradeEnrollment is blank.
+		   // Work attributes in the original entity Enrollment are fine.
+		   // ER attributes in the derived entity GradeEnrollment are fine.
+
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+			int testClass = 2560;
+
+	       o_fnLocalBuildmClass( ViewToWindow, vTempViewVar_0, testClass );
+
+	       RESULT = ActivateObjectInstance( mClass, "mClass", ViewToWindow, vTempViewVar_0, zSINGLE );
+	       DropView( vTempViewVar_0 );
+		   SetNameForView( mClass, "mClass", null, zLEVEL_TASK );
+
+		   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+		   while ( RESULT > zCURSOR_UNCHANGED )
+		   {
+		      RESULT = ExcludeEntity( mClass, "GradeEnrollment", zREPOS_NONE );
+		      RESULT = SetCursorNextEntity( mClass, "GradeEnrollment", "" );
+		   }
+
+		   RESULT = SetCursorFirstEntity( mClass, "Enrollment", "" );
+		   while ( RESULT > zCURSOR_UNCHANGED )
+		   {
+		      SetAttributeFromAttribute( mClass, "Enrollment", "wOriginalFinalGrade", mClass, "Enrollment", "FinalGrade" );
+		      if ( CompareAttributeToString( mClass, "Enrollment", "Status", "T" ) == 0 || CompareAttributeToString( mClass, "Enrollment", "Status", "C" ) == 0 )
+		      {
+		    	  RESULT = IncludeSubobjectFromSubobject( mClass, "GradeEnrollment", mClass, "Enrollment", zPOS_AFTER );
+		    	  SetAttributeFromAttribute( mClass, "GradeEnrollment", "wEnteredGrade", mClass, "Enrollment", "FinalGrade" );
+		      }
+
+		      RESULT = SetCursorNextEntity( mClass, "Enrollment", "" );
+		   }
+		   SetAttributeFromString( mClass, "Class", "wEnterGradesType", "F" );
+		   RESULT = SetCursorFirstEntity( mClass, "GradeEnrollment", "" );
+		   String grade = mClass.cursor("GradeEnrollment").getAttribute("wEnteredGrade").getString();
+           Assert.assertTrue( "Before ", ! grade.equals("") );
+		   CreateTemporalSubobjectVersion( mClass, "Class" );
+           Assert.assertTrue( "After ", !mClass.cursor("GradeEnrollment").getAttribute("wEnteredGrade").getString().equals("") );
 
 		   return 0;
 		}
@@ -2692,6 +2990,44 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   OrderEntityForView( mConListTest, "Class", "CourseTitle A" );
 		   // All of above code seems fine, but we crash in the derived attribute code of dName.
 		   OrderEntityForView( mConListTest, "Class", "dName A" ); 
+			return 0;
+		}
+
+		public int
+		testExclInclOrderEntities( View ViewToWindow )
+		{
+		   zVIEW    mConListTest = new zVIEW( );
+		   zVIEW    mConListTest2 = new zVIEW( );
+		   zVIEW    mSAProf      = new zVIEW( );
+		   int      RESULT = 0;
+
+		   // KJS - After we exclude and include the entity Class in mConList, when we try do do the OrderEntityForView on a
+		   // derived attribute, in the derived attribute code, we receive the following error:
+		   // com.quinsoft.zeidon.NullCursorException: Cursor for entity is null
+		   // EntityDef  = ZENCAs.mConList.ClassCourse
+		   // I loop through the entities, also do other order entities, which are all ok. Only the ordering of dName causes issue.
+
+		   ActivateOI_FromFile( mConListTest, "mConList", ViewToWindow, "target/test-classes/testdata//ZENCAs/mConListL.por", zSINGLE );
+		   ActivateOI_FromFile( mConListTest2, "mConList", ViewToWindow, "target/test-classes/testdata//ZENCAs/mConListL.por", zSINGLE );
+		   //:NAME VIEW mSAProfEList "mSAProfEList"
+		   SetNameForView( mConListTest, "mConListTest", null, zLEVEL_TASK );
+		   SetNameForView( mConListTest2, "mConListTest2", null, zLEVEL_TASK );
+		   RESULT= mConListTest.cursor("Class").setFirst( "ID", 3601 ).toInt();
+		   RESULT= mConListTest2.cursor("Class").setFirst( "ID", 3601 ).toInt();
+		   OrderEntityForView( mConListTest, "Class", "dName A" ); //CourseTitle
+		   RESULT = ExcludeEntity( mConListTest, "Class", zREPOS_AFTER );
+		   RESULT = IncludeSubobjectFromSubobject( mConListTest, "Class", mConListTest2, "Class", zPOS_AFTER );
+		   RESULT = mConListTest.cursor("Class").setFirst().toInt();
+      		while ( RESULT > zCURSOR_UNCHANGED )
+      		{
+      			String str1 =  mConListTest2.cursor("ClassCourse").getAttribute("Title").getString();
+      			String str2 =  mConListTest2.cursor("Class").getAttribute("dName").getString();
+		        RESULT = mConListTest.cursor("Class").setNext().toInt();
+      		}
+ 		   OrderEntityForView( mConListTest, "Class", "ClassCourse.Title A" );
+		   OrderEntityForView( mConListTest, "Class", "CourseTitle A" );
+		   // All of above code seems fine, but we crash in the derived attribute code of dName.
+		   OrderEntityForView( mConListTest, "Class", "dName A" );
 			return 0;
 		}
 
@@ -3813,8 +4149,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 	        long l2 = Long.parseLong(s, 16);
 
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                throw ZeidonException.wrapException( e );
 			}
 
 			// I had code that was comparing two dates and it wasn't working correctly.

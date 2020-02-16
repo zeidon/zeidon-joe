@@ -28,7 +28,7 @@ module Zeidon
   end
 
   class ObjectEngine
-    
+
     def initialize joe
       @joe = joe
       @applications = {}
@@ -45,7 +45,7 @@ module Zeidon
     def respond_to?( id )
       @joe.respond_to?( id ) || @applications[id.to_s] || super
     end
-    
+
     def method_missing( id, *args, &block )
       return @joe.send( id, *args, &block ) if @joe.respond_to?( id )
       return @applications[id.to_s] if @applications[id.to_s]
@@ -57,7 +57,7 @@ module Zeidon
     end
 
   end # ObjectEngine
-  
+
   class Application
     attr_reader :japp, :oe
 
@@ -65,22 +65,22 @@ module Zeidon
       @oe   = oe
       @japp = japp
     end
-    
+
     def create_task
-      return Task.new( self, @oe.createTask( @japp.getName ) )  
+      return Task.new( self, @oe.createTask( @japp.getName ) )
     end
 
     def respond_to?( id )
       @japp.respond_to?( id ) || super
     end
-    
+
     def method_missing( id, *args, &block )
       return @japp.send( id, *args, &block ) if @japp.respond_to?( id )
       super
     end
 
     def get_loddef_list
-      xoddir = @japp.getBinDir 
+      xoddir = @japp.getBinDir
       files = Dir.glob("#{xoddir}/*.xod", File::FNM_CASEFOLD)
       if files.length == 0
         # We didn't find any?  Hmm...that's odd.  Let's try prepending ZEIDON_HOME
@@ -94,7 +94,7 @@ module Zeidon
       return @japp.toString
     end
   end # Application
-  
+
   class Task
     java_import "com.quinsoft.zeidon.ActivateFlags"
     attr_reader :jtask
@@ -103,24 +103,20 @@ module Zeidon
       @app = app
       @jtask = jtask
     end
-  
+
     def activate view_od, qual_hash = nil
       qual = Qualification.new( @jtask, view_od )
       qual.add_qual( qual_hash ) if qual_hash
       yield qual if block_given?
-      jview = qual.activate
-      return View.new jview
+      return qual.activate
     end
 
     def activate_empty view_od
-      jview = @jtask.activateEmptyObjectInstance( view_od )
-      return View.new jview
+      return @jtask.activateEmptyObjectInstance( view_od )
     end
 
     def get_view( view_name )
-      jview = @jtask.getViewByName( view_name )
-      return nil if jview.nil?
-      return View.new jview
+      return @jtask.getViewByName( view_name )
     end
 
     def respond_to?( id )
@@ -164,45 +160,33 @@ module Zeidon
     def activate_empty
       task.activate_empty( lod_name )
     end
-    
+
   end
-  
-  class View
-    attr_reader :jview
 
-    def initialize jview
-      @jview = jview
-      @jloddef = @jview.getLodDef
-    end
-
+  class Java::ComQuinsoftZeidonStandardoe::ViewImpl
     def respond_to?( id )
-      return @jview.respond_to?( id ) || ! @jloddef.getEntityDef( id, false).nil? || super
+      return ! getLodDef().getEntityDef( id, false).nil? || super
     end
-    
+
     def method_missing( id, *args, &block )
-      return @jview.send( id, *args, &block ) if @jview.respond_to?( id )
-      return @jview.cursor( id.to_s ) if ! @jloddef.getEntityDef( id.to_s, false).nil?
+      return self.cursor( id.to_s ) unless getLodDef().getEntityDef( id.to_s, false).nil?
 
       caller = get_object_operation_caller( id, *args )
       return caller if caller
 
       super
     end
-    
-    def cursor entity_name
-      return @jview.cursor( entity_name )
-    end
 
     def copy_view
-      return View.new( @jview.newView )
+      return self.newView
     end
 
     def to_s
-      @jview.toString
+      self.toString
     end
 
     def to_json
-      @jview.serializeOi.compressed.asJson.toString
+      self.serializeOi.compressed.asJson.toString
     end
 
     def to_hash
@@ -216,10 +200,10 @@ module Zeidon
     end
 
   end # View
-  
+
   class Qualification
     java_import "com.quinsoft.zeidon.utils.QualificationBuilder"
-    
+
     def initialize(jtask, view_od_name)
       @jqual = QualificationBuilder.new( jtask )
       @jqual.setLodDef( view_od_name )
@@ -230,7 +214,7 @@ module Zeidon
         @entities[ name ] = QualEntity.new( @jqual, ve )
       end
     end
-    
+
     def add_qual( qual )
       return if qual.nil?  # Nothing to add.
       return if qual.size == 0
@@ -265,11 +249,11 @@ module Zeidon
     def name
       return entity_def.name
     end
-  
+
     def has_attribute( attr_name )
       return ! getEntityDef.getAttribute( attr_name.to_s, false ).nil?
     end
-  
+
     def attributes( options = {} )
       include_null_attributes = options.fetch( :include_null, true )
       include_hidden_attributes = options.fetch( :include_hidden, false )
@@ -283,7 +267,7 @@ module Zeidon
         [attr.name, attr.getValue]
       end ]
     end
-    
+
     def attributes=( attribute_hash )
       attribute_hash.each do |name, value|
         if has_attribute( name )
@@ -293,14 +277,14 @@ module Zeidon
       end
       return self
     end
-    
+
     def each_attrib( options = {} )
       list = attributes( options )
       list.each do |attrib|
         yield attrib
       end
     end
-    
+
     # Loop through each sibling for this cursor.  Sets the cursor.
     def each( args = {} )
       scoping = args[:scope] || args[:scoping] || args[:under] || ""
@@ -314,16 +298,16 @@ module Zeidon
         yield iter.next
       end
     end
-    
+
     def get_key
       # We assume one and-only-one key.
       getAttribute( entity_def.keys[ 0 ] )
     end
-    
+
     def create( *args )
       position = CursorPosition::NEXT
       attribute_hash = nil
-      
+
       args.each do |arg|
         if arg.kind_of?( CursorPosition )
           position = arg
@@ -333,33 +317,45 @@ module Zeidon
           raise "Unknown argument type for create(): #{arg.class}"
         end
       end
-      
+
       rc = createEntity( position )
       self.attributes = attribute_hash if attribute_hash
       return rc
     end
 
-    # Loop through the child *cursors* of this cursor. 
+    # Loop through the child *cursors* of this cursor.
     def each_child
       getEntityDef.getChildren.each do |jve|
         yield getView.cursor( jve.getName )
       end
     end
-    
+
     def respond_to?( id )
       return true if has_attribute( id )
-      
+
       # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
       if id.to_s =~ /(.*)=/
         name = $1
         return true if has_attribute( name )
       end
-  
+
       super
     end
 
-    #java_alias :set_first_by_attr, :set_first, [java.lang.String, java.lang.Object]    
-    def set_first( *args, &block )
+    def set( scoping: nil, &block )
+      iter = scoping ? eachEntity( scoping ) : eachEntity()
+      while iter.hasNext
+        ei = iter.next
+        if yield ei, getView
+          return ei
+        end
+      end
+
+      return false
+    end
+
+    #java_alias :set_first_by_attr, :set_first, [java.lang.String, java.lang.Object]
+    def set_firstx( *args, &block )
       if args.length == 1 and args[0].kind_of?( Hash )
         arg_hash = args[0]
         if arg_hash.length == 1
@@ -376,43 +372,43 @@ module Zeidon
     def include( *args )
       includeSubobject( *args )
     end
-    
+
     # Simple wrapper for excludeEntity method.
     def exclude( *args )
       includeEntity( *args )
     end
 
     def exists?
-      return has_any      
+      return has_any
     end
-    
+
     def method_missing( id, *args, &block )
       return getAttribute( id.to_s ) if has_attribute( id )
-      
+
       # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
       if id.to_s =~ /(.*)=/
         name = $1
         if has_attribute( name )
           attrib = getAttribute( name )
           attrib.setValue( args[0] )
-          return attrib 
+          return attrib
         end
       end
-      
+
       super
     end
   end # EntityCursorImpl
-  
+
   class Java::ComQuinsoftZeidonStandardoe::EntityInstanceImpl
-  
+
     def name
       return entity_def.name
     end
-  
+
     def has_attribute( attr_name )
       return ! getEntityDef.getAttribute( attr_name.to_s, false ).nil?
     end
-  
+
     def attributes( options = {} )
       include_null_attributes = options.fetch( :include_null, true )
       include_hidden_attributes = options.fetch( :include_hidden, false )
@@ -420,51 +416,51 @@ module Zeidon
       list = list.reject{ |a| a.attribute_def.hidden? } if ! include_hidden_attributes
       return list
     end
-    
+
     def each_attrib( options = {} )
       list = attributes( options )
       list.each do |attrib|
         yield attrib
       end
     end
-    
+
     def get_key
       # We assume one and-only-one key.
       attribute( entity_def.keys[ 0 ] )
     end
-    
+
     def respond_to?( id )
       return true if has_attribute( id )
-      
+
       # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
       if id.to_s =~ /(.*)=/
         name = $1
         return true if has_attribute( name )
       end
-  
+
       super
     end
-    
+
     def method_missing( id, *args, &block )
       return getAttribute( id.to_s ) if has_attribute( id )
-      
+
       # Check to see if it's an assignment (e.g. view.Entity.Attr = value )
       if id.to_s =~ /(.*)=/
         name = $1
         if has_attribute( name )
           attrib = getAttribute( name )
           attrib.setValue( args[0] )
-          return attrib 
+          return attrib
         end
       end
-      
+
       super
     end
   end # EntityInstanceImpl
 
   # Re-open AttributeInstanceImpl definition and add some Ruby stuff
   class Java::ComQuinsoftZeidonStandardoe::AttributeInstanceImpl
-    
+
     def entity_name
        return getAttributeDef.getEntityDef.getName
      end
@@ -472,50 +468,54 @@ module Zeidon
      def to_f
       getDouble().to_f
     end
-  
+
     def internal_value
       getValue()
     end
-  
+
     def operators( op, value )
-  #      puts "Op = #{op.to_s} value = #{value.to_s}"
+      #puts "Op = #{op.to_s} value = #{value.to_s}"
       return self.to_i.send( op, value ) if value.kind_of? Fixnum
       return self.to_f.send( op, value ) if value.kind_of? Float
       return self.to_s.send( op, value.to_s )
     end
-  
+
     def +( value )
       return operators( :+, value )
     end
-    
+
     def *( value )
       return operators( :*, value )
     end
-    
+
     def -( value )
       return operators( :-, value )
     end
-    
+
     def /( value )
       return operators( :/, value )
     end
-    
+
     def ==( value )
-      return operators( :==, value )
+      return self.equals( value )
     end
-  
+
+    def !=( value )
+      return ! self.equals( value )
+    end
+
     def <( value )
       return operators( :<, value )
     end
-  
+
     def >( value )
       return operators( :>, value )
     end
-  
+
     def <=( value )
       return operators( :<=, value )
     end
-  
+
     def >=( value )
       return operators( :>=, value )
     end
@@ -529,14 +529,14 @@ module Zeidon
                when other.kind_of?( Fixnum )
                    [other,self.to_i]
                when other.kind_of?( String )
-                   [other,self.to_s] 
+                   [other,self.to_s]
                else
                    raise "Can't convert"
              end
     end
-  
+
     # Override the toString() method.
-    java_signature 'String toString()'  
+    java_signature 'String toString()'
     def to_s
       return getString("") || ""
     end
@@ -544,7 +544,7 @@ module Zeidon
     def respond_to?( id )
       return getAttributeDef.respond_to?( id ) || super
     end
-    
+
     def method_missing( id, *args, &block )
       return getAttributeDef.send( id, *args, &block ) if getAttributeDef.respond_to?( id )
       super

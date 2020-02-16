@@ -543,7 +543,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 Domain domain = attributeDef.getDomain();
                 Object internalValue = domain.convertExternalValue( task, ei.getAttribute( attributeDef ),
                                                                     attributeDef, null, jp.getText() );
-                ei.getAttribute( attributeDef ).setInternalValue( internalValue, ! attributeDef.isKey() );
+                ei.getAttribute( attributeDef ).setInternalValue( internalValue, false );
                 if ( incremental )
                 {
                     // Since incremental flags are set, assume the attribute hasn't been
