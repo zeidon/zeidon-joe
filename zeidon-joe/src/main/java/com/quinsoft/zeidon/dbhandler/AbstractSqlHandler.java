@@ -2553,6 +2553,20 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             updateCount++;
 
+            if ( attributeDef.isKey() )
+            {
+                // If we get here then the key better have an initial value, otherwise
+                // we'll be creating a new entity with the same key.
+                if ( StringUtils.isAllBlank( attributeDef.getInitialValue() ) )
+                    throw new ZeidonException( "Key attribute needs to have an initial value to be used in versioning" )
+                        .prependAttributeDef( attributeDef );
+
+                Domain domain = attributeDef.getDomain();
+                Object internalValue = domain.convertExternalValue( getTask(), null, attributeDef, null,
+                                                                    attributeDef.getInitialValue() );
+                getSqlValue( stmt, domain, attributeDef, stmt.sqlCmd, internalValue );
+            }
+            else
             if ( dataField == versioningDataField )
             {
                 getAttributeValue( stmt, stmt.sqlCmd, keyDataField, entityInstance );
