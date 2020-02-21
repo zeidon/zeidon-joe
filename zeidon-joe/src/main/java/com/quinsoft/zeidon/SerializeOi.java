@@ -56,6 +56,7 @@ public class SerializeOi
     private boolean writeDate = false;
     private boolean useCamelCase = false;
     private boolean writeDerivedAttributes = false;
+    private boolean writeHiddenAttributes = true;
     private boolean writeTotalRootCount = false;
     private boolean writeCursors = false;
     private SerializationMapping serializationMapper = SerializationMapping.NOOP_MAPPING;
@@ -533,6 +534,17 @@ public class SerializeOi
     public SerializeOi setWriteTotalRootCount( boolean writeTotalRootCount )
     {
         this.writeTotalRootCount = writeTotalRootCount;
+        return this;
+    }
+
+    public boolean isWriteHiddenAttributes()
+    {
+        return writeHiddenAttributes;
+    }
+
+    public SerializeOi setWriteHiddenAttributes( boolean writeHiddenAttributes )
+    {
+        this.writeHiddenAttributes = writeHiddenAttributes;
         return this;
     }
 }

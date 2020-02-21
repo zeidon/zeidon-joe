@@ -172,10 +172,10 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
 
             for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                if ( attributeDef.isHidden() )
+                if ( attributeDef.isHidden() && ! options.isWriteHiddenAttributes() )
                     continue;
 
-                if ( attributeDef.isDerived() && ! options.isWriteDerivedAttributes() )
+                if ( attributeDef.isDerived() )
                     continue;
 
                 AttributeInstance attrib = ei.getAttribute( attributeDef );

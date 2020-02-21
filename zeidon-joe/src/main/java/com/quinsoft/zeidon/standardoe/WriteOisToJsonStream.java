@@ -258,12 +258,15 @@ public class WriteOisToJsonStream implements StreamWriter
             boolean writePersistent = writeEntityMeta( ei );
             for ( AttributeDef attributeDef : entityDef.getAttributes() )
             {
-                // If the attribute is not persistent and we're only writing persisten
+                // If the attribute is not persistent and we're only writing persistent
                 // then go to the next one.
                 if ( attributeDef.isPersistent() && ! writePersistent )
                     continue;
 
-                if ( attributeDef.isDerived() )
+                if ( attributeDef.isDerived() && ! options.isWriteDerivedAttributes() )
+                    continue;
+
+                if ( attributeDef.isHidden() && ! options.isWriteHiddenAttributes() )
                     continue;
 
                 AttributeInstanceImpl attrib = ei.getAttribute( attributeDef );

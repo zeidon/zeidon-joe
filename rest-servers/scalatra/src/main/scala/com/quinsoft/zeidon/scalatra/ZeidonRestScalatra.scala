@@ -167,6 +167,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
         val serialized = view.serializeOi
                              .asJson
                              .withIncremental( withIncrementals )
+                             .setWriteHiddenAttributes( false )
                              .toString()
         view.log().debug(serialized)
         return serialized

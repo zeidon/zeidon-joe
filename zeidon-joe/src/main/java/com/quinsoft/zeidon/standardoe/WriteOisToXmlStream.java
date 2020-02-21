@@ -286,6 +286,12 @@ public class WriteOisToXmlStream implements StreamWriter
         {
             for ( AttributeDef attributeDef : ei.getNonNullAttributeList() )
             {
+                if ( attributeDef.isDerived() && ! options.isWriteDerivedAttributes() )
+                    continue;
+
+                if ( attributeDef.isHidden() && ! options.isWriteHiddenAttributes() )
+                    continue;
+
                 AttributeValue attrib = ei.getInternalAttribute( attributeDef );
                 String value;
                 value = attrib.getString( currentView.getTask(), attributeDef );
