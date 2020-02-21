@@ -174,8 +174,12 @@ public class JavaObjectEngine implements ObjectEngine
         String version = _package.getImplementationVersion();
         String builtDate = _package.getImplementationTitle();
         logger.info( "Zeidon JOE Version: %s  Build Date: %s", version, builtDate );
-        logger.info( "classpath = %s", getClassPath( logger ) );
+        version = System.getProperty("java.version");
         logger.info(  "User.dir = %s", System.getProperty("user.dir") );
+
+        // Print classpath for older versions (1.8 and prior).
+        if( version.startsWith( "1." ) )
+            logger.info( "classpath = %s", getClassPath( logger ) );
 
         // Generate a UUID as a task ID.
         id = uuidGenerator.generate().toString();
