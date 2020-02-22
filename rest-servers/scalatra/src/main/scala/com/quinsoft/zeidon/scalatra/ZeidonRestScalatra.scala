@@ -137,7 +137,7 @@ trait ZeidonRestScalatra extends ScalatraServlet {
             validateViewForUpdate( task, view, lodName )
             view.commit
 
-            val serialized = view.serializeOi.asJson.withIncremental().toString()
+            val serialized = serializeResponse( view )
             task.log().debug( serialized )
             Ok(serialized)
         }
