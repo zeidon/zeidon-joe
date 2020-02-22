@@ -28,6 +28,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.EntityIterator;
+import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.AttributeHashKeyType;
@@ -50,7 +51,7 @@ import com.quinsoft.zeidon.standardoe.EntityTraverser.NextTwinTraverser;
  * @author DG
  *
  */
-class IteratorBuilder
+public class IteratorBuilder
 {
     private final static EntityComparator  s_nonHiddenComparator = new NonHiddenComparator();
     private final static EntityComparator  s_hiddenComparator    = new AlwaysTrueComparator();
@@ -87,9 +88,14 @@ class IteratorBuilder
     private boolean noMatchForHashMapAttribute = false;
     private boolean usingAttributeHashKey = false;
 
-    IteratorBuilder(ObjectInstance oi)
+    public IteratorBuilder(ObjectInstance oi)
     {
         objectInstance = oi;
+    }
+
+    public IteratorBuilder(View view)
+    {
+        this( ((InternalView)view).getViewImpl().getObjectInstance() );
     }
 
     private LazyLoadInfo determineIfLazyLoadNeeded()
@@ -253,7 +259,7 @@ class IteratorBuilder
      *
      * @return
      */
-    EntityIterator<EntityInstanceImpl> build()
+    public EntityIterator<EntityInstanceImpl> build()
     {
         // If noMatch is true, then user attempted to find a match using a hashkey attribute but no
         // match was found.  Return an empty iterator to indicate this.
@@ -429,7 +435,7 @@ class IteratorBuilder
         return this;
     }
 
-    IteratorBuilder withOiScoping( ObjectInstance oi )
+    public IteratorBuilder withOiScoping( ObjectInstance oi )
     {
         if ( scopingInstance != null )
             throw new ZeidonException("Mixing OI scoping with normal entity scoping" );
@@ -437,6 +443,11 @@ class IteratorBuilder
         scopeOi = true;
         initialInstance = oi.getRootEntityInstance();
         return this;
+    }
+
+    public IteratorBuilder withOiScoping( View view )
+    {
+        return withOiScoping( ((InternalView)view).getViewImpl().getObjectInstance() );
     }
 
     /**
@@ -623,7 +634,7 @@ class IteratorBuilder
             attributeValueList = new ArrayList<IteratorBuilder.AttributeValue>();
 
         Object convertedValue = attributeDef.getDomain()
-                                            .convertExternalValue( objectInstance.getTask(), 
+                                            .convertExternalValue( objectInstance.getTask(),
                                                                    null, attributeDef, null, value );
         attributeValueList.add( new AttributeValue( attributeDef, convertedValue ) );
 

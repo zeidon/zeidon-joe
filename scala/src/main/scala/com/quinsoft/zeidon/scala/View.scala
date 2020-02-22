@@ -29,6 +29,8 @@ import com.quinsoft.zeidon.Task
 import scala.collection.concurrent.TrieMap
 import org.apache.commons.lang3.StringUtils
 import collection.JavaConversions._
+import scala.collection.JavaConverters._
+import com.quinsoft.zeidon.standardoe.IteratorBuilder
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -340,6 +342,14 @@ class View( val task: Task ) extends Dynamic {
      * Creates a SelectSet for this View.
      */
     def createSelectSet() = { validateNonNull; jview.createSelectSet() }
+
+    def allEntityInstances = {
+        val iter = new IteratorBuilder( jview )
+                .withOiScoping( jview )
+                .build();
+
+        new EntityInstanceIterator( iter )
+    }
 
     /**
      * Returns an EntityCursor for the entity specified by entityDef.
