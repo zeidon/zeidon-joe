@@ -533,7 +533,7 @@ public class IteratorBuilder
      * @param lazyLoad
      * @return
      */
-    IteratorBuilder setLazyLoad( boolean lazyLoad )
+    public IteratorBuilder setLazyLoad( boolean lazyLoad )
     {
         loadLazyEntities = lazyLoad;
         return this;

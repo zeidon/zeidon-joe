@@ -343,9 +343,14 @@ class View( val task: Task ) extends Dynamic {
      */
     def createSelectSet() = { validateNonNull; jview.createSelectSet() }
 
-    def allEntityInstances = {
+    /**
+     * Loop through all entity instances.  If loadLazyLoad is true, then automatically load
+     * any lazy-loaded entities that haven't been loaded yet.
+     */
+    def allEntityInstances( loadLazyLoad: Boolean = false ) = {
         val iter = new IteratorBuilder( jview )
                 .withOiScoping( jview )
+                .setLazyLoad( loadLazyLoad )
                 .build();
 
         new EntityInstanceIterator( iter )
