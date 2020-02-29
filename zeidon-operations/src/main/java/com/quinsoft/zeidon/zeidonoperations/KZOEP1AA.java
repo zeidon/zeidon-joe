@@ -56,7 +56,6 @@ import com.quinsoft.zeidon.vml.VmlOperation;
 import com.quinsoft.zeidon.vml.DriverApplication;
 import com.quinsoft.zeidon.vml.zVIEW;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 //import org.apache.fop.datatypes.Length;
 //import se.mbaeumer.fxmessagebox.MessageBox;
 
@@ -6700,9 +6699,7 @@ public class KZOEP1AA extends VmlOperation
          nRC = SetCursorFirstEntityByString( vCM_List, "W_MetaDef", "Name", pchName, "" );
          if ( nRC != zCURSOR_SET )
          {
-            Logger logger = Logger.getLogger( KZOEP1AA.class );
             vCM_List.logObjectInstance();
-            logger.debug( "Cannot find W_MetaDef by name: " + pchName );
             EntityCursor cursorMetaType = vCM_List.cursor( "W_MetaType" );
             cursorMetaType.logEntity( true );
             pvMOI.setView( null );

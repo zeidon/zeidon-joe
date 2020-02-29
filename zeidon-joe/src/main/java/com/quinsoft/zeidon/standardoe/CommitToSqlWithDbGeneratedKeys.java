@@ -379,11 +379,6 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
             if ( ! entityDef.isInclude() && relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY)
                 continue;
 
-            // Since all new entities have been created by now there should be no problems
-            // setting FKs.
-            if ( ! setForeignKeys( ei ) )
-                throw new ZeidonException( "Internal error: FKs for include were not set.  This should never happen" );
-
             // setForeignKeys only copies keys for created instances.  Do another copy
             // to set keys for instances that were included only.
             if ( relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY )
