@@ -119,6 +119,11 @@ public class QualificationBuilderFromJson
                         parseRestricting();
                         continue;
 
+                    case "$exclude":
+                    case "exclude":
+                        parseExclude();
+                        continue;
+
                     case "$rootonly":
                     case "rootonly":
                     case "$root_only":
@@ -252,6 +257,18 @@ public class QualificationBuilderFromJson
         }
 
         token = jp.nextToken();  // Skip past closing }.
+    }
+
+    private void parseExclude() throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume "exclude".
+        if ( ! token.isScalarValue() )
+            throw new ZeidonException( "Expecting entity name for 'exclude' value.  Found %s", token );
+
+        String entityName = jp.getValueAsString();
+        qualBuilder.excludeEntity( entityName );
+
+        token = jp.nextToken(); // Consume entity name.
     }
 
     /**
