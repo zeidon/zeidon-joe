@@ -335,7 +335,7 @@ class AttributeInstanceImpl implements AttributeInstance
     }
 
     @Override
-    public EntityInstanceImpl setInternalValue( Object value, boolean setIncremental )
+    public boolean setInternalValue( Object value, boolean setIncremental )
     {
         Object oldValue = attributeValue.getInternalValue();
         Object internalValue = attributeDef.getDomain().convertInternalValue( getTask(), this, value );
@@ -345,9 +345,10 @@ class AttributeInstanceImpl implements AttributeInstance
                 entityInstance.setUpdated( true, true, attributeDef.isPersistent() );
 
             entityInstance.updateHashKeyAttributeToMap( attributeDef, oldValue );
+            return true;
         }
-
-        return entityInstance;
+        else
+            return false;
     }
 
     @Override
@@ -375,7 +376,8 @@ class AttributeInstanceImpl implements AttributeInstance
     @Override
     public EntityInstance setDerivedValue( Object value )
     {
-        return setInternalValue( value, false );
+        setInternalValue( value, false );
+        return entityInstance;
     }
 
     @Override

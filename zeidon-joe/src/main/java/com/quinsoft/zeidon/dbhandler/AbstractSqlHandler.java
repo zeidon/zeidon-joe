@@ -2421,6 +2421,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         SqlStatement stmt = initializeCommand( SqlCommand.UPDATE, view );
         task.dblog().debug( "Updating entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
+        // TODO: initialize this to dbhSeqUpdated so that we update autoseq for m-to-m
         boolean updateCorrespondenceTable = false;
 
         stmt.appendCmd( "UPDATE ", dataRecord.getRecordName(), "\nSET    " );  // Extra spaces after SET to match indentation.

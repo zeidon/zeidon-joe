@@ -357,20 +357,26 @@ class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
             if ( ! ei.dbhNeedsCommit )
                 continue;
 
-            // Can't update an entity that wasn't updated...
-            if ( !ei.isUpdated() )
-                continue;
+            // If isDbhSeqUpdated is set we need to update the entity.
+            // (Unless it was created/deleted; see below).
+            if ( ! ei.isDbhSeqUpdated() )
+            {
+                // Can't update an entity that wasn't updated.  isDbhSeqUpdated will be set
+                // for child entities of m-to-m relationships with autoseq.
+                if ( !ei.isUpdated() )
+                    continue;
 
-            // Skip it if the entity was already updated via a linked instance.
-            if ( ei.dbhUpdated )
-                continue;
+                // Skip it if the entity was already updated via a linked instance.
+                if ( ei.dbhUpdated )
+                    continue;
+
+                if ( entityDef.getDbUpdatedTimestamp() != null )
+                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
+            }
 
             // Skip if the entity was created or deleted.
             if ( ei.dbhCreated || ei.dbhDeleted )
                 continue;
-
-            if ( entityDef.getDbUpdatedTimestamp() != null )
-                ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
 
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );
@@ -378,6 +384,8 @@ class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
             // Flag all linked entities (including 'ei') as having been updated.
             for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
                 linked.dbhUpdated = true;
+
+            ei.dbhSeqUpdated = false;
         }
     }
 

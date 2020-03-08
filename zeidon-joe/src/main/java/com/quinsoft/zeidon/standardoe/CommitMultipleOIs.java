@@ -35,8 +35,10 @@ import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
+import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.utils.Timer;
 
 /**
@@ -147,13 +149,22 @@ class CommitMultipleOIs
             if ( ei.getPrevTwin() == null && // Must be first twin
                  ei.getNextTwin() != null )  // Don't bother if only one twin.
             {
+                DataRecord dataRecord = entityDef.getDataRecord();
+                RelRecord relRecord = dataRecord.getRelRecord();
+
+                // Setting the autoseq for the child of a m-to-m relationship results in an update to
+                // the m-to-m table, not the entity table.  Since we aren't really updating the record
+                // we won't set the incremental flag.
+                boolean setIncremental = (relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY);
+
                 int seq = 1;
                 for ( EntityInstanceImpl twin = ei; twin != null; twin = twin.getNextTwin() )
                 {
                     if ( twin.isHidden() )
                         continue;
 
-                    twin.getAttribute( autoSeq ).setInternalValue( seq++, true );
+                    if ( twin.getAttribute( autoSeq ).setInternalValue( seq++, setIncremental ) )
+                        twin.dbhSeqUpdated = true;
 
                     // Turn off the bDBHUpdated flag (if it's on) so that we
                     // make sure the entity is updated. If the entity instance
@@ -162,9 +173,6 @@ class CommitMultipleOIs
                     twin.dbhUpdated = false;
                 }
             }
-
-            if ( entityDef.getName().equals( "xxx" ) )
-                autoSeq.setDebugChange( true );
         }
     }
 

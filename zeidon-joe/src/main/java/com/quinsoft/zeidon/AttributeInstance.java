@@ -241,9 +241,9 @@ public interface AttributeInstance
      *
      * @param value
      * @param setIncremental if 'false' then don't update attribute/entity update flags.
-     * @return this
+     * @return true if the value was updated, false if it wasn't (i.e. current value matches value).
      */
-    EntityInstance setInternalValue( Object value, boolean setIncremental );
+    boolean setInternalValue( Object value, boolean setIncremental );
 
     /**
      * Compares the attribute to 'value'.  This will using domain processing to convert
