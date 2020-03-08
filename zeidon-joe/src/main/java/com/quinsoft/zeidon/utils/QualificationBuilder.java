@@ -979,7 +979,8 @@ public class QualificationBuilder
         QualificationBuilder qual = new QualificationBuilder( sourceView )
                                             .setLodDef( sourceView.getLodDef() )
                                             .forEntity( DbHandler.ROOT_ENTITY )
-                                            .addAttribQual( key.getName(), null );
+                                            .addAttribQual( DbHandler.ROOT_ENTITY, key.getName(), "IN", null );
+        //.addAttribQual( key.getName(), null );
         for ( EntityInstance ei : cursor.eachEntity() )
             qual.newEntityKey( ei.getAttribute( key ).getInteger() );
 
