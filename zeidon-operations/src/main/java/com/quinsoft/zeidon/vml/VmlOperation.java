@@ -4895,6 +4895,22 @@ public abstract class VmlOperation
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
+         if ( contextName.equals( "Minute" ))
+         {
+            int nMins = ((Number) value).intValue();
+            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            DateTime date2 = date.plusMinutes(nMins);
+            view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
+         }
+         else
+         if ( contextName.equals( "Year" ))
+         {
+            int nYears = ((Number) value).intValue();
+            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            DateTime date2 = date.plusYears(nYears);
+            view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
+         }
+         else
          {
             cursor.getAttribute( attributeName ).add( value );
          }
