@@ -767,6 +767,7 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
         if ( jtargetEntityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
             throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
 
+        qualBuilder.jqual.forEntity( jtargetEntityDef )
         qualBuilder.jqual.fromEntityKeys( sourceEntity )
 
         return QualBuilder.TERMINATOR
