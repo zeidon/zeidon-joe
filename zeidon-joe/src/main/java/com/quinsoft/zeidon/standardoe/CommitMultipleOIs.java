@@ -155,7 +155,7 @@ class CommitMultipleOIs
                 // Setting the autoseq for the child of a m-to-m relationship results in an update to
                 // the m-to-m table, not the entity table.  Since we aren't really updating the record
                 // we won't set the incremental flag.
-                boolean setIncremental = (relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY);
+                boolean setIncremental = (relRecord == null || relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY);
 
                 int seq = 1;
                 for ( EntityInstanceImpl twin = ei; twin != null; twin = twin.getNextTwin() )
