@@ -1477,6 +1477,12 @@ public abstract class VmlOperation
 	   // KJS 08/09/18 - Why would we use lastIndexOf, not working if we are trying to find something not
 	   // at the beginning of the line.
 	   //return tgtString.lastIndexOf( searchString, tgtIdx - 1 );
+	   // KJS 03/06/20 - In c version... this would return 1 if string found at first position as opposed to 0.
+	   // So this code is off "-1" from how c worked. Talked to Don... we should probably change this although it
+	   // doesn't seem like it was used much in old code so we think this should probably NOT be changed.
+	   // If we did chane this, we should probably still return -1 when not found even though the original c code would
+	   // have returned 0 when not found.
+	   // Simply adding this note so when this comes up again I realize we have discussed it...
 	   return tgtString.indexOf( searchString, tgtIdx - 1 );
    }
 
@@ -4892,6 +4898,22 @@ public abstract class VmlOperation
             int nDays = ((Number) value).intValue();
             DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
             DateTime date2 = date.plusDays(nDays);
+            view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
+         }
+         else
+         if ( contextName.equals( "Minute" ))
+         {
+            int nMins = ((Number) value).intValue();
+            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            DateTime date2 = date.plusMinutes(nMins);
+            view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
+         }
+         else
+         if ( contextName.equals( "Year" ))
+         {
+            int nYears = ((Number) value).intValue();
+            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            DateTime date2 = date.plusYears(nYears);
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
