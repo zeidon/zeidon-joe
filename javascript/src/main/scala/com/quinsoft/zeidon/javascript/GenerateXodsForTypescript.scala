@@ -74,17 +74,6 @@ export class $lodName extends zeidon.ObjectInstance {
         return this.roots.selected() as ${lodName}_${rootName};
     }
 
-    // Returns the current entity instance if it exists, otherwise returns an instance
-    // that will returned 'undefined' for any property values.  This is the
-    // safe navigation operator.
-    get ${rootName}$$$$(): ${lodName}_${rootName} {
-        return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
-    }
-
-    get ${rootName}$$_(): ${lodName}_${rootName} {
-        return (this.roots.selected() as ${lodName}_${rootName}) || zeidon.SAFE_INSTANCE;
-    }
-
     // Following allow accessing of child entity instances directly from the OI,
     // similar to Zeidon Views.
 """ )
@@ -112,14 +101,17 @@ export class $lodName extends zeidon.ObjectInstance {
             if ( sb.toString() != "" )
                 sb.insert( 0, "." )
 
-            sb.insert( 0, "$$" )
+            sb.insert( 0, "$?" )
             sb.insert( 0, entity.getName )
 
             entity = entity.getParent
         }
 
+        // Remove the trailing ? since we don't want it for the last entityt.
+        sb.setLength(sb.length() - 1);
+
         writer.println( s"""
-    get ${entityDef.getName}$$$$(): ${lodName}_${entityDef.getName} {
+    get ${entityDef.getName}$$(): ${lodName}_${entityDef.getName} {
         return this.${sb.toString()};
     }""" )
 
@@ -178,14 +170,6 @@ export class ${lodDef.getName}_${entityName} extends zeidon.EntityInstance {
 
     get ${entityName}$$(): ${lodName}_$entityName {
         return this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName;
-    }
-
-    get ${entityName}$$$$(): ${lodName}_$entityName {
-        return (this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName) || zeidon.SAFE_INSTANCE;
-    }
-
-    get ${entityName}$$_(): ${lodName}_$entityName {
-        return (this.getChildEntityArray("$entityName").selected() as ${lodName}_$entityName) || zeidon.SAFE_INSTANCE;
     }""" )
     }
 
