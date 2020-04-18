@@ -108,11 +108,15 @@ export class $lodName extends zeidon.ObjectInstance {
         }
 
         // Remove the trailing ? since we don't want it for the last entityt.
-        sb.setLength(sb.length() - 1);
+        sb.setLength(sb.length() - 2);
 
         writer.println( s"""
-    get ${entityDef.getName}$$(): ${lodName}_${entityDef.getName} {
+    get ${entityDef.getName}(): zeidon.EntityArray<${lodName}_${entityDef.getName}> {
         return this.${sb.toString()};
+    }
+
+    get ${entityDef.getName}$$(): ${lodName}_${entityDef.getName} {
+        return this.${sb.toString()}$$;
     }""" )
 
     }
