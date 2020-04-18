@@ -147,6 +147,11 @@ public class QualificationBuilderFromJson
                         parsePagination( qualEntityDef );
                         continue;
 
+                    case "$exists":
+                    case "exists":
+                        parseExists( entityDef );
+                        continue;
+
                     case "$orderby":
                     case "orderby":
                         parseOrderBy( qualEntityDef );
@@ -337,6 +342,29 @@ public class QualificationBuilderFromJson
 
         token = jp.nextToken();  // Skip past closing }.
         qualBuilder.setPagination( page );
+    }
+
+    /**
+    *
+    * Handles
+      {
+        exists: true
+        $exists: false
+      }
+    */
+    private void parseExists( EntityDef entityDef ) throws JsonParseException, IOException
+    {
+        JsonToken token = jp.nextToken(); // Consume "exists".
+        if ( ! token.isBoolean() )
+            throw new ZeidonException( "Expecting 'true' for 'exists' value.  Found %s", token );
+
+        boolean b = jp.getValueAsBoolean();
+        if ( b == false )
+            throw new ZeidonException( "Currently only 'true' is implemented for exists clause" );
+
+        qualBuilder.addAttribQualEntityExists(  entityDef.getName() );
+
+        token = jp.nextToken(); // Consume boolean.
     }
 
     /**
