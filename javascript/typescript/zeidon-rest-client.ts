@@ -22,7 +22,7 @@ export class RestActivator extends Activator {
         if ( qual == undefined )
             qual = { rootOnly: true };
 
-        let lodName = oi.getLodDef().name;
+        let lodName = oi.lodDef.lodName;
 
         let mapResponse = ( response ): T => {
             if ( response.statusCode === 423 )
@@ -59,18 +59,25 @@ export class RestCommitter extends Committer {
     constructor( private values: ZeidonRestValues, private http: HttpClient ) { super(); }
 
     commitOi( oi: ObjectInstance, options?: CommitOptions ): Promise<ObjectInstance> {
-        this.executePreCommitHooks( oi, options );
+        let newOi = oi;
+        try {
+            if ( this.executePreCommitHooks( oi, options ) ) {
 
-        let lodName = oi.getLodDef().name;
-        let body = JSON.stringify( oi.toZeidonMeta() );
-        let url = `${this.values.restUrl}/${lodName}`;
+                let lodName = oi.lodDef.lodName;
+                let body = JSON.stringify( oi.toZeidonMeta() );
+                let url = `${this.values.restUrl}/${lodName}`;
 
-        return this.http.post( url, body, { 'Content-Type': 'application/json' } )
-            .then( response => this.parseCommitResponse( oi, response, options ) );
+                return this.http.post( url, body, { 'Content-Type': 'application/json' } )
+                    .then( response => newOi = this.parseCommitResponse( oi, response, options ) );
+            }
+        }
+        finally {
+            this.executePostCommitHooks( newOi, options );
+        }
     }
 
     dropOi( oi: ObjectInstance, options?: CommitOptions ) {
-        let lodName = oi.getLodDef().name;
+        let lodName = oi.lodDef.lodName;
         if ( oi.root.length != 1 )
             throw "The only currently supported option for dropOi is a single root OI."
 
@@ -91,8 +98,6 @@ export class RestCommitter extends Committer {
             newOi = oi.createFromJson( undefined );
         else
             newOi = oi.createFromJson( response.body, { incrementalsSpecified: true } );
-
-        this.executePostCommitHooks( newOi, options );
 
         return newOi;
     }

@@ -1,11 +1,10 @@
 /**
  * Classes for dealing specifically with Angular 2+ apps.
  */
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { OnInit, SimpleChanges, OnChanges, EventEmitter, Attribute } from '@angular/core';
-import { Input } from '@angular/core';
+import { Input, Directive } from '@angular/core';
 import { ElementRef, Renderer2, ViewContainerRef, Output } from '@angular/core';
-import { Directive } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
 import { ObjectInstance, EntityInstance, Pagination } from './zeidon';
 import { FormGroup, FormControl, FormArray, NgControl } from '@angular/forms';
@@ -161,6 +160,7 @@ let domainValidator = function( entityDef: any, attributeDef ) {
  * TODO: We don't currently do anything with rootList.  Some day we'll add logic
  *       so the server can be more efficient than using LIMIT and OFFSET.
  */
+@Directive()
 export class ZeidonPaginationComponent {
     @Input() pagination: Pagination;
     @Input() rootList: ObjectInstance;
@@ -187,7 +187,7 @@ export class ZeidonFormBuilder {
         if ( ! ei )
             throw "Entity instance is null";
 
-        return this.buildForms( ei, ei.oi.getLodDef(), ei.entityDef, options, undefined );
+        return this.buildForms( ei, ei.oi.lodDef, ei.entityDef, options, undefined );
     }
 
     private buildForms( ei        : EntityInstance,
@@ -216,7 +216,7 @@ export class ZeidonFormBuilder {
             if ( attributeDef.hidden )
                 continue;
 
-            let value = ei ? ei.getAttribute( attrName ) : undefined;
+            let value = ei?.getAttribute( attrName );
             let formControl = new FormControl( value, domainValidator( entityDef, attributeDef ) );
 
             // Add entityDef and attributeDef to the control so it can be used later to add to the class.
@@ -253,7 +253,7 @@ export class ZeidonFormBuilder {
             }
 
             let entities = ei.getChildEntityArray( entityName );
-            let childEntityDef = lodDef.entities[ entityName ];
+            let childEntityDef = lodDef.entityDef( entityName );
             if ( childEntityDef.cardMax === 1 ) {
                 let formGroup = this.buildForms( entities[ 0 ], lodDef, childEntityDef, options );
                 form.addControl( entityName, formGroup );
@@ -281,7 +281,7 @@ export interface ZeidonFormReaderOptions {
 }
 
 export class ZeidonFormReader {
-    public readForm( oi: ObjectInstance,
+    public readForm( target: ObjectInstance | EntityInstance,
                      form: FormGroup,
                      options?: ZeidonFormReaderOptions ) {
 
@@ -297,7 +297,10 @@ export class ZeidonFormReader {
         }
 
         let dirtyValues = this.getDirtyValues( form );
-        oi.root.selected().update( dirtyValues );
+        if ( ( (target as ObjectInstance).root ) )
+            target = (target as ObjectInstance).root.selected();
+
+        (target as EntityInstance).update( dirtyValues );
     }
 
     getDirtyValues( form: any ) {
@@ -375,7 +378,8 @@ class HttpWrapper {
 
     post( url: string, body: string, headers?: string | { [ name: string]: string | string[]; } ) : Promise<any> {
         return this.http.post( url, body, { headers: new HttpHeaders( headers ) } )
-                        .map( response => { return { body: response } } ).toPromise();
+                        .map( response => { return { body: response } } )
+                        .toPromise();
     }
 }
 
@@ -401,7 +405,7 @@ export class ZeidonRestService {
      */
     deleteRoot( root: EntityInstance ) {
         let oi = root.oi;
-        let lodName = oi.getLodDef().name;
+        let lodName = oi.lodDef.lodName;
         let url = `${this.values.restUrl}/${lodName}/${root.key}`;
         this.http.delete( url )
             .toPromise()
@@ -415,7 +419,7 @@ export class ZeidonRestService {
         if ( oi.root.length != 1 )
             throw ( "deleteOi may only be called on OI with a single root." );
 
-        let lodName = oi.getLodDef().name;
+        let lodName = oi.lodDef.lodName;
         let url = `${this.values.restUrl}/${lodName}/${oi.root[ 0 ].key}`;
         this.http.delete( url )
             .toPromise()

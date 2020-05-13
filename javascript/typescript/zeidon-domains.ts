@@ -1,4 +1,4 @@
-import { Domain, DomainFunctions } from "./zeidon"
+import { Domain, DomainFunctions, TableDomainEntry } from "./zeidon"
 import { ZeidonError, AttributeValueError } from "./zeidon"
 
 export class BaseDomainFunctions implements DomainFunctions {
@@ -176,8 +176,16 @@ export class StaticTableDomainFunctions extends BaseDomainFunctions {
         return internalValue;
     }
 
-    getTableEntries?( context?: string ): any {
-        return this.getEntries( context );
+    /**
+     *
+     * Returns the table domain entries as a list of external/internal values.
+     */
+    getTableEntries?( context?: string ): Array<TableDomainEntry> {
+        // Returns an object where the keys = internalValue, values = externalValue.
+        let entries = this.getEntries( context );
+        const keys = Object.keys( entries );
+        const tables = keys.map( ( k ) => ( { internalValue: k, externalValue: entries[ k ] } ) );
+        return tables;
     }
 
     getTableValues?( context?: string ): Array<string> {
@@ -215,7 +223,7 @@ export class DateTimeDomainFunctions extends BaseDomainFunctions {
 export class DateDomainFunctions extends DateTimeDomainFunctions {
     convertExternalValue( value: any, attributeDef: any, context? : any ): any {
         let date = super.convertExternalValue( value, attributeDef ) as Date;
-        date.setUTCHours( 0, 0, 0, 0 );
+        date.setHours( 0, 0, 0, 0 );
         return date;
     }
 }
