@@ -20,7 +20,7 @@
 package com.quinsoft.zeidon.domains;
 
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -135,14 +135,14 @@ public interface Domain
     String   convertToString( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
     Integer  convertToInteger( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
     Double   convertToDouble( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
-    DateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
+    ZonedDateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
     Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
     Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue, String contextName );
 
     String   convertToString( Task task, AttributeDef attributeDef, Object internalValue );
     Integer  convertToInteger( Task task, AttributeDef attributeDef, Object internalValue );
     Double   convertToDouble( Task task, AttributeDef attributeDef, Object internalValue );
-    DateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
+    ZonedDateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
     Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue );
     Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
 

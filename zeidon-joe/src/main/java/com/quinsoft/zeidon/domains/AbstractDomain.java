@@ -19,6 +19,8 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +30,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hjson.JsonObject;
 import org.hjson.JsonObject.Member;
 import org.hjson.JsonValue;
-import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -72,8 +73,8 @@ public abstract class AbstractDomain implements Domain
         dataType = InternalType.mapCode( (String) domainProperties.get( "DataType" ) );
         description = (String) domainProperties.get( "Desc" );
         constraintRule = (String) domainProperties.get( "ConstraintRule" );
-        if ( domainProperties.containsKey( "MaxStringLth" )) 
-        	maxLength = Integer.parseInt(domainProperties.get("MaxStringLth").toString());        
+        if ( domainProperties.containsKey( "MaxStringLth" ))
+        	maxLength = Integer.parseInt(domainProperties.get("MaxStringLth").toString());
     }
 
     /**
@@ -197,16 +198,16 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
-    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
+    public ZonedDateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
     {
     	if ( internalValue == null )
     		return null;
 
-    	if ( internalValue instanceof DateTime )
-            return (DateTime) internalValue;
+    	if ( internalValue instanceof ZonedDateTime )
+            return (ZonedDateTime) internalValue;
 
         if ( internalValue instanceof Date )
-            return new DateTime( internalValue );
+            return ZonedDateTime.ofInstant( ((Date) internalValue).toInstant(), ZoneId.systemDefault() );
 
         throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s to Date", attributeDef.toString() );
     }
@@ -271,7 +272,7 @@ public abstract class AbstractDomain implements Domain
     }
 
     @Override
-    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+    public ZonedDateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         return convertToDate( task, attributeDef, internalValue );
     }
@@ -332,7 +333,7 @@ public abstract class AbstractDomain implements Domain
     {
         return maxLength;
     }
-    
+
     /**
      * Looks for the context in contextList.  Returns null if it isn't found.
      * @param contextName

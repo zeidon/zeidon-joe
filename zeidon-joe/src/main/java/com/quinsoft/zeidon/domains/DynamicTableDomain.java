@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -149,7 +149,7 @@ public class DynamicTableDomain extends AbstractTableDomain
     }
 
     @Override
-    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
+    public ZonedDateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue, String contextName)
     {
         loadDomainView( task, getContext( task, contextName ) );
         return super.convertToDate( task, attributeDef, internalValue, contextName );

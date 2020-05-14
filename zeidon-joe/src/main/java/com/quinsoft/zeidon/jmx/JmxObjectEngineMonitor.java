@@ -27,7 +27,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
@@ -295,7 +295,7 @@ public class JmxObjectEngineMonitor implements JmxObjectEngineMonitorMBean, Obje
         if ( task == null )
             return "Unknown TaskId";
 
-        task.log().info( "Logging views for task %s (%s)", taskId, new DateTime() );
+        task.log().info( "Logging views for task %s (%s)", taskId, ZonedDateTime.now() );
         for ( View view : task.getViewList() )
         {
             Collection<String> nameList = view.getNameList();

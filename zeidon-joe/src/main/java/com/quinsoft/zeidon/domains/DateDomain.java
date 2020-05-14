@@ -19,11 +19,10 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -37,7 +36,7 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  */
 public class DateDomain extends DateTimeDomain
 {
-    protected DateTimeFormatter defaultDateFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT );
+    protected DateTimeFormatter defaultDateFormatter = DateTimeFormatter.ofPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT );
 
     public DateDomain(Application application, Map<String, Object> domainProperties, Task task)
     {
@@ -47,12 +46,12 @@ public class DateDomain extends DateTimeDomain
     @Override
     public Object convertExternalValue(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, String contextName, Object externalValue)
     {
-        DateTime dt = (DateTime) super.convertExternalValue( task, attributeInstance, attributeDef, contextName, externalValue );
+        ZonedDateTime dt = (ZonedDateTime) super.convertExternalValue( task, attributeInstance, attributeDef, contextName, externalValue );
         if ( dt != null )
-            dt = dt.withMillisOfDay( 0 );
+            dt = dt.truncatedTo( ChronoUnit.DAYS );
 
         return dt;
-        	
+
     }
 
     @Override
@@ -61,6 +60,6 @@ public class DateDomain extends DateTimeDomain
         if ( internalValue == null )
             return super.convertToString( task, attributeDef, internalValue );
 
-        return defaultDateFormatter.print( (DateTime) internalValue );
+        return defaultDateFormatter.format( (ZonedDateTime) internalValue );
     }
 }

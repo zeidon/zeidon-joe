@@ -21,6 +21,7 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -29,9 +30,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -108,7 +106,7 @@ public class WriteOisToJsonStream implements StreamWriter
             jg.writeObjectFieldStart( ".meta" );
             jg.writeStringField( "version", VERSION );
             if ( options.isWriteDate() )
-                jg.writeStringField( "datetime", new LocalDateTime().toString() );
+                jg.writeObjectField( "datetime", ZonedDateTime.now() );
             jg.writeEndObject();
 
             jg.writeArrayFieldStart( "OIs" );
@@ -295,7 +293,7 @@ public class WriteOisToJsonStream implements StreamWriter
                     jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
                 else
                 if ( domain instanceof DateTimeDomain )
-                    jg.writeStringField( jsonName, ISODateTimeFormat.dateTime().print( (DateTime) attrib.getValue() ) );
+                    jg.writeObjectField( jsonName, attrib.getValue() );
                 else
                 {
                     String value = attribValue.getString( ei.getTask(), attributeDef );

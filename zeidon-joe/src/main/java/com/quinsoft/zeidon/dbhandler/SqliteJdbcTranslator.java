@@ -20,8 +20,9 @@
 package com.quinsoft.zeidon.dbhandler;
 
 import java.sql.SQLException;
-
-import org.joda.time.DateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
@@ -57,8 +58,10 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
             if ( dbValue instanceof Number )
             {
                 long time = ((Number) dbValue).longValue();
+                Instant i = Instant.ofEpochSecond( time );
 
-                return new DateTime( time );
+                ZonedDateTime z = ZonedDateTime.ofInstant(i, ZoneId.systemDefault());
+                return z;
             }
         }
         return super.convertDbValue( domain, dbValue );

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.EntityInstance;
@@ -455,7 +455,7 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                     continue;
 
                 if ( entityDef.getDbUpdatedTimestamp() != null )
-                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
+                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( ZonedDateTime.now() );
             }
 
             // Skip if the entity was created or deleted.
@@ -748,7 +748,7 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                 AttributeInstanceImpl timestamp = ei.getAttribute( entityDef.getDbCreatedTimestamp() );
                 if ( timestamp.isNull() )
                 {
-                    DateTime now = new DateTime();
+                    ZonedDateTime now = ZonedDateTime.now();
                     timestamp.setValue( now );
 
                     if ( entityDef.getDbUpdatedTimestamp() != null )

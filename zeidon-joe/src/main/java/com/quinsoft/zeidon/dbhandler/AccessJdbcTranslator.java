@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.dbhandler;
 
 
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
@@ -70,7 +70,7 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
         {
             // Convert the value (likely a string) to a date.
             Object v = domain.convertExternalValue( getTask(), null, attributeDef, null, value );
-            String str = dateTimeFormatter.print( (DateTime) v );
+            String str = dateTimeFormatter.format( (ZonedDateTime) v );
             buffer.append( "#" ).append( str ).append( "#" );
             return true;
         }
@@ -79,7 +79,7 @@ public class AccessJdbcTranslator extends StandardJdbcTranslator
         {
             // Convert the value (likely a string) to a date.
             Object v = domain.convertExternalValue( getTask(), null, attributeDef, null, value );
-            String str = dateFormatter.print( (DateTime) v );
+            String str = dateFormatter.format( (ZonedDateTime) v );
             buffer.append( "#" ).append( str ).append( "#" );
             return true;
         }

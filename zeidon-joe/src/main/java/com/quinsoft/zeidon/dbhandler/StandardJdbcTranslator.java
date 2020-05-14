@@ -23,11 +23,12 @@ import java.sql.Clob;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.GeneratedKey;
@@ -90,7 +91,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         {
             if ( getTask().dblog().isTraceEnabled() )
                 getTask().dblog().trace( "Bound string: length = %d, value = %s...", str.length(), StringUtils.substring( str, 0, 50 ) );
-            
+
             DataField dataField = attributeDef.getEntityDef().getDataRecord().getDataField( attributeDef );
             stmt.addBoundAttribute( buffer, new BoundAttributeData( dataField, value ) );
 
@@ -146,7 +147,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         {
             // Convert the value (likely a string) to a date.
             Object v = domain.convertExternalValue( task, null, attributeDef, null, value );
-            String str = dateTimeFormatter.print( (DateTime) v );
+            String str = dateTimeFormatter.format( (ZonedDateTime) v );
             return appendString( stmt, buffer, attributeDef, str );
         }
 
@@ -154,7 +155,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         {
             // Convert the value (likely a string) to a date.
             Object v = domain.convertExternalValue( task, null, attributeDef, null, value );
-            String str = dateFormatter.print( (DateTime) v );
+            String str = dateFormatter.format( (ZonedDateTime) v );
             return appendString( stmt, buffer, attributeDef, str );
         }
 
@@ -199,7 +200,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                 String date = dbValue.toString();
                 try
                 {
-                    return this.dateFormatter.parseDateTime( date );
+                    return this.dateFormatter.parse( date );
                 }
                 catch ( IllegalArgumentException e )
                 {
@@ -210,7 +211,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             else
             if ( dbValue instanceof Date )
             {
-                return new DateTime( dbValue );
+                return ZonedDateTime.ofInstant( ((Date) dbValue).toInstant(), ZoneId.systemDefault() );
             }
         }
 
@@ -221,7 +222,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                 String date = dbValue.toString();
                 try
                 {
-                    return dateTimeFormatter.parseDateTime( date );
+                    return dateTimeFormatter.parse( date );
                 }
                 catch ( IllegalArgumentException e )
                 {
@@ -296,10 +297,11 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                 ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
             }
             else
-            if ( value instanceof DateTime )
+            if ( value instanceof ZonedDateTime )
             {
-                DateTime d = (DateTime) value;
-                ps.setTimestamp( idx, new java.sql.Timestamp( d.getMillis() ) );
+                ZonedDateTime d = (ZonedDateTime) value;
+                java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(d.toLocalDateTime());
+                ps.setTimestamp( idx, timestamp );
             }
             else
             if ( value instanceof GeneratedKey )

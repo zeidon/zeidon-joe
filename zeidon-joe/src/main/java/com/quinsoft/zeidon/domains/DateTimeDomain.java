@@ -19,13 +19,13 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -42,7 +42,7 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  */
 public class DateTimeDomain extends AbstractDomain
 {
-    protected DateTimeFormatter defaultDateTimeFormatter = DateTimeFormat.forPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT + "HHmmss");
+    protected DateTimeFormatter defaultDateTimeFormatter = DateTimeFormatter.ofPattern( ObjectEngine.INTERNAL_DATE_STRING_FORMAT + "HHmmss");
 
     public DateTimeDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
@@ -62,11 +62,11 @@ public class DateTimeDomain extends AbstractDomain
         if ( externalValue == null )
             return null;
 
-        if ( externalValue instanceof DateTime )
+        if ( externalValue instanceof ZonedDateTime )
             return externalValue;
 
         if ( externalValue instanceof Date )
-            return new DateTime( externalValue );
+            return ZonedDateTime.ofInstant( ((Date) externalValue).toInstant(), ZoneId.systemDefault() );
 
         // VML operations use "" as synonymous with null.
         if ( externalValue instanceof String && StringUtils.isBlank( (String) externalValue ) )
@@ -76,7 +76,7 @@ public class DateTimeDomain extends AbstractDomain
         {
             // If string is "NOW" then we'll use current datetime.
             if ( externalValue.toString().equals( "NOW" ) )
-                return new DateTime();
+                return ZonedDateTime.now();
 
             DomainContext context = getContext( task, contextName );
             return context.convertExternalValue( task, attributeDef, externalValue.toString() );
@@ -96,7 +96,7 @@ public class DateTimeDomain extends AbstractDomain
         if ( internalValue.toString().isEmpty())
             return internalValue.toString();
 
-        return defaultDateTimeFormatter.print( (DateTime) internalValue );
+        return defaultDateTimeFormatter.format( (ZonedDateTime) internalValue );
     }
 
     /**
@@ -123,10 +123,10 @@ public class DateTimeDomain extends AbstractDomain
     @Override
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
-      if ( internalValue instanceof DateTime )
+      if ( internalValue instanceof ZonedDateTime )
             return;
 
-        throw new InvalidAttributeValueException( attributeDef, internalValue, "Internal value must be Joda DateTime, not %s",
+        throw new InvalidAttributeValueException( attributeDef, internalValue, "Internal value must be Joda ZonedDateTime, not %s",
                                                   internalValue.getClass().getName() );
     }
 
@@ -136,7 +136,7 @@ public class DateTimeDomain extends AbstractDomain
     @Override
     public Object addToAttribute( Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object currentValue, Object addValue )
     {
-        DateTime date1 = (DateTime) convertExternalValue( task, attributeInstance, attributeDef, null, currentValue );
+        ZonedDateTime date1 = (ZonedDateTime) convertExternalValue( task, attributeInstance, attributeDef, null, currentValue );
         if ( date1 == null )
             throw new ZeidonException( "Target attribute for add is NULL" )
                             .prependAttributeDef( attributeDef );
@@ -146,8 +146,8 @@ public class DateTimeDomain extends AbstractDomain
 
         if ( addValue instanceof Number )
         {
-            int millis = ((Number) addValue).intValue();
-            return date1.plusMillis( millis );
+            int nanos = ((Number) addValue).intValue() * 1000000;
+            return date1.plusNanos( nanos );
         }
 
         throw new ZeidonException( "Value type of %s not supported for add to DateDomain", addValue.getClass().getName() );
@@ -188,13 +188,13 @@ public class DateTimeDomain extends AbstractDomain
 
         if ( ! ( operand instanceof Integer ) && ! ( operand instanceof Long ) )
         {
-            throw new ZeidonException( "When adding to DateTime with a context, operand must be integer or long value.  " +
+            throw new ZeidonException( "When adding to ZonedDateTime with a context, operand must be integer or long value.  " +
                                        "Type of operand = %s", operand.getClass().getName() )
                             .prependAttributeDef( attributeDef );
         }
 
         int value = ((Number) operand).intValue();
-        DateTime dt = (DateTime) currentValue;
+        ZonedDateTime dt = (ZonedDateTime) currentValue;
 
         switch ( contextName.toLowerCase() )
         {
@@ -214,7 +214,8 @@ public class DateTimeDomain extends AbstractDomain
             case "millis":
             case "millisecond":
             case "milliseconds":
-                return dt.plus( ((Number) operand).longValue() );
+                long nanos = ((Number) operand).longValue() * 1000000;
+                return dt.plusNanos( nanos );
 
             case "month":
             case "months":
@@ -234,7 +235,7 @@ public class DateTimeDomain extends AbstractDomain
         }
 
         // TODO Auto-generated method stub
-        throw new ZeidonException( "Unknown context name '%s' for DateTime domain", contextName )
+        throw new ZeidonException( "Unknown context name '%s' for ZonedDateTime domain", contextName )
                         .prependAttributeDef( attributeDef );
     }
 
@@ -258,7 +259,7 @@ public class DateTimeDomain extends AbstractDomain
     public Object generateRandomTestValue( Task task, AttributeDef attributeDef, EntityInstance entityInstance )
     {
         DomainContext context = getDefaultContext();
-        return context.convertToString( task, attributeDef, new DateTime() );
+        return context.convertToString( task, attributeDef, ZonedDateTime.now() );
     }
 
     private class DateContext extends BaseDomainContext
@@ -287,7 +288,7 @@ public class DateTimeDomain extends AbstractDomain
             if ( formatter == null )
                 throw new ZeidonException( "JavaEditString is not set for context %s", this.toString() );
 
-            return formatter.print( (DateTime) internalValue );
+            return formatter.format( (ZonedDateTime) internalValue );
         }
 
         /**
@@ -319,7 +320,7 @@ public class DateTimeDomain extends AbstractDomain
 
             try
             {
-                return formatter.parseDateTime( s );
+                return formatter.parse( s );
             }
             catch ( Exception e )
             {

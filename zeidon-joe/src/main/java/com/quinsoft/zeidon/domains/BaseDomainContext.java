@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.domains;
 
 import java.util.Comparator;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Blob;
@@ -131,7 +131,7 @@ public class BaseDomainContext implements DomainContext
     }
 
     @Override
-    public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
+    public ZonedDateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
     {
         throw new UnsupportedOperationException();
     }
