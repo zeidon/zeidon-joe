@@ -368,7 +368,16 @@ public class JoeUtils
     {
         String str1 = editString.replaceAll( "[|]", "][" );
         String formatStr = "[" + str1 + "][yyyy-MM-dd]";
-        return DateTimeFormatter.ofPattern( formatStr );
+        try
+        {
+            return DateTimeFormatter.ofPattern( formatStr );
+        }
+        catch ( Exception e )
+        {
+            LOG.error( "Format string to parse = " + formatStr );
+            throw ZeidonException.wrapException( e )
+                .appendMessage( "Format string = %s", editString );
+        }
     }
 
     /**

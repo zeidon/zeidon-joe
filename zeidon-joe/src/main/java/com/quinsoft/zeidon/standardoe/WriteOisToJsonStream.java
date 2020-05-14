@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -292,8 +293,11 @@ public class WriteOisToJsonStream implements StreamWriter
                 if ( domain instanceof BigDecimalDomain )
                     jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
                 else
-                if ( domain instanceof DateTimeDomain )
-                    jg.writeObjectField( jsonName, attrib.getValue() );
+                if ( domain instanceof DateTimeDomain ) {
+                    ZonedDateTime date = (ZonedDateTime) attrib.getValue();
+                    String str = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( date );
+                    jg.writeStringField( jsonName, str );
+                }
                 else
                 {
                     String value = attribValue.getString( ei.getTask(), attributeDef );

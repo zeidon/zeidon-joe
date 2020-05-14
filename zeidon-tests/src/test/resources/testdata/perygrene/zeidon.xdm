@@ -1306,7 +1306,7 @@ eContext   3
 aZKey      90000068
 aName      Day
 aEditString Dddd
-aJavaEditString dddd
+aJavaEditString EEEE
 
 eContext   3
 aZKey      90000074
