@@ -29,6 +29,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.CharBuffer;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -45,9 +47,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -2417,15 +2416,15 @@ public abstract class VmlOperation
 
    protected static final int IsNumeric( String string )
    {
-	   try  
-	   {  
-	     int d = Integer.parseInt(string);  
-  	     return d;  
-	   }  
-	   catch(NumberFormatException nfe)  
-	   {  
-	     return -1;  
-	   }  
+	   try
+	   {
+	     int d = Integer.parseInt(string);
+  	     return d;
+	   }
+	   catch(NumberFormatException nfe)
+	   {
+	     return -1;
+	   }
    }
 
    protected static final int zatol( String string )
@@ -2642,7 +2641,7 @@ public abstract class VmlOperation
       String string2 = null;
       try
       {
-      
+
 
       if ( strOneMaxCompare <= 0 )
       {
@@ -2700,7 +2699,7 @@ public abstract class VmlOperation
       }
       catch( Exception e )
       {
-         TraceLineS("ZeidonStringCompare Error: ", e.getMessage()); 	  
+         TraceLineS("ZeidonStringCompare Error: ", e.getMessage());
          return -1;
       }
 
@@ -2783,7 +2782,7 @@ public abstract class VmlOperation
       int  nRC;
       int nbrToCopy;
       int lth;
-      
+
       // KJS 08/08/18 - I have run into problems when I do a ZeidonStringFind and string is found at position 0, then we come here
       // and we fail with sourceIdx being 0. So put in a fix for this...
       if ( targetIdx == 0 )
@@ -3023,18 +3022,18 @@ public abstract class VmlOperation
                                                int    maxCopy,
                                                int    maxTargetLth )
    {
-	  
+
 	  if ( source == null || source.isEmpty() )
 	      return sbTarget;
-	  
+
       String szTemp = "";
       String szOrig = sbTarget.toString();
-      
+
       if ( maxCopy == 0 )
 		  szTemp = source.substring( sourceIdx - 1);
-      else 
+      else
       {
-    	 if ( maxCopy > (source.length() - (sourceIdx - 1 )))  
+    	 if ( maxCopy > (source.length() - (sourceIdx - 1 )))
     	    szTemp = source.substring(sourceIdx - 1);
     	 else
     		szTemp = source.substring(sourceIdx - 1, (sourceIdx - 1) + maxCopy);
@@ -4442,7 +4441,7 @@ public abstract class VmlOperation
       else
       {
          nRC = 0;
-         //if ( value instanceof DateTime )
+         //if ( value instanceof ZonedDateTime )
          //    return externalValue;
          cursor.getAttribute( attributeName ).setValue( value );
       }
@@ -4888,32 +4887,32 @@ public abstract class VmlOperation
          if ( contextName.equals( "Month" ))
          {
             int nMonths = ((Number) value).intValue();
-            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
-            DateTime date2 = date.plusMonths(nMonths);
+            ZonedDateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            ZonedDateTime date2 = date.plusMonths(nMonths);
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
          if ( contextName.equals( "Day" ))
          {
             int nDays = ((Number) value).intValue();
-            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
-            DateTime date2 = date.plusDays(nDays);
+            ZonedDateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            ZonedDateTime date2 = date.plusDays(nDays);
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
          if ( contextName.equals( "Minute" ))
          {
             int nMins = ((Number) value).intValue();
-            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
-            DateTime date2 = date.plusMinutes(nMins);
+            ZonedDateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            ZonedDateTime date2 = date.plusMinutes(nMins);
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
          if ( contextName.equals( "Year" ))
          {
             int nYears = ((Number) value).intValue();
-            DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
-            DateTime date2 = date.plusYears(nYears);
+            ZonedDateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+            ZonedDateTime date2 = date.plusYears(nYears);
             view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
          }
          else
@@ -5029,14 +5028,14 @@ public abstract class VmlOperation
            View activateQualificationView, int control )
    {
 		int nRC = 0;
-		
+
 		// if ( control == 0 )
 		//     control = zASYNCHRONOUS;
 		// A couple of times in Windows vml we have an activate with zSINGLE + zLEVE_APPLICATION. That is not
 		// applicable in the JOE so ignore and just use zSINGLE.
 		if ( control == 4 )
 			control = 0;
-		ActivateOptions options = new ActivateOptions( qual );	       
+		ActivateOptions options = new ActivateOptions( qual );
 		options.setLodDef(qual, lodDefName);
 		options.setActivateFlags(ACTIVATE_CONTROL.get( control ));
 		options.setQualificationObject(activateQualificationView);
@@ -5044,7 +5043,7 @@ public abstract class VmlOperation
 		   try
 		   {
 				View view = qual.activateObjectInstance(options);
-				
+
 				LodDef lodDef = view.getLodDef();
 				returnView.setView( view );
 				switch ( view.cursor( lodDef.getRoot().getName() ).getEntityCount() )
@@ -5052,11 +5051,11 @@ public abstract class VmlOperation
 					case 0:
 						nRC = -1;
 						break;
-					
+
 					case 1:
 						nRC = 0;
 						break;
-					
+
 					default:
 						// If we have defined a limit on the root, and we activated that limit, then return 2.
 						if (lodDef.getRoot().getActivateLimit() != null && view.cursor( lodDef.getRoot().getName() ).getEntityCount() >= lodDef.getRoot().getActivateLimit()  )
@@ -5065,18 +5064,18 @@ public abstract class VmlOperation
 							nRC = 1;
 						break;
 				}
-		
+
 		   }
 		   catch ( PessimisticLockingException e1 )
 		   {
 				   return zLOCK_ERROR;
 		   }
-		
-		
+
+
 		// DisplayObjectInstance( view, "", "" );
 		return nRC;
 	}
-   
+
    protected int ActivateObjectInstance( zVIEW returnView, String lodDefName, TaskQualification qual,
                                          View activateQualificationView, int control )
    {
@@ -5106,7 +5105,7 @@ public abstract class VmlOperation
 	   }
 	   catch( Exception e )
 	   {
-	      return -1;   
+	      return -1;
 	   }
       return 0;
    }
@@ -5124,7 +5123,7 @@ public abstract class VmlOperation
 	   }
 	   catch( Exception e )
 	   {
-	      return -1;   
+	      return -1;
 	   }
       return 0;
    }
@@ -6067,9 +6066,9 @@ public abstract class VmlOperation
       // If this entity has no attributes return.
       if ( entityDef.getAttributeCount() == 0 )
     	  return -1;
-      
+
       AttributeDef AttributeDef = entityDef.getAttribute( 0 );
-      
+
       if ( AttributeDef == null )
           return -1;
 
@@ -6414,7 +6413,7 @@ public abstract class VmlOperation
    protected static final int usDayTable[ ] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
    protected static final int usLeapDayTable[ ] = { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 };
 
-   // Internal DateTime structure
+   // Internal ZonedDateTime structure
    public static class DateTimeRecord
    {
       private long ulDateMinutes;    // Minutes since year zero
@@ -6608,7 +6607,7 @@ public abstract class VmlOperation
    //
    // FUNCTION:   UfStringToDateTime
    //
-   // PARAMETERS: lpDateTime       - pointer to the DateTime data
+   // PARAMETERS: lpDateTime       - pointer to the ZonedDateTime data
    //              cpcDateTimeString - a date-time string (YYYYMMDDHHmmSSTht)
    //                                 contains one of the following formats:
    //                                    YYYYMMDDHHmmSSTht
@@ -6628,12 +6627,12 @@ public abstract class VmlOperation
    //                                        h    - hundredths of seconds
    //                                        t    - thousandths of seconds
    //
-   // PURPOSE:    To convert a string to a DateTime (T) attribute type
+   // PURPOSE:    To convert a string to a ZonedDateTime (T) attribute type
    //              The string is checked for correct values (e.g. 19960100
    //              results in zCALL_ERROR, but 00000000112233 is valid,
    //              because this is just a time).
    //
-   // RETURNS:    0 - String converted, info set in DateTime area
+   // RETURNS:    0 - String converted, info set in ZonedDateTime area
    //    zCALL_ERROR - Error in call
    //
    /////////////////////////////////////////////////////////////////////////////
@@ -6660,7 +6659,7 @@ public abstract class VmlOperation
 
       lpDTInternal = lpDateTime;
 
-      // Null string will set the DateTime to 'NULL'
+      // Null string will set the ZonedDateTime to 'NULL'
       if ( StringUtils.isBlank( cpcDateTimeString ) )
       {
          lpDTInternal.ulDateMinutes = lNullInteger;
@@ -6938,13 +6937,13 @@ public abstract class VmlOperation
    //
    // FUNCTION:   UfDateTimeToString
    //
-   // PARAMETERS: lpDateTime       - pointer to the DateTime data
+   // PARAMETERS: lpDateTime       - pointer to the ZonedDateTime data
    //              pchReturnString  - pointer to area to return string
    //              nMaxLth          - length of pchReturnString (including
    //                                 null terminator.)
    //
-   // PURPOSE:    To convert a DateTime (T) attribute type into a string.
-   //              If the DateTime attribute is 'NULL', a null string will
+   // PURPOSE:    To convert a ZonedDateTime (T) attribute type into a string.
+   //              If the ZonedDateTime attribute is 'NULL', a null string will
    //              be returned.
    //
    // RETURNS:    0 - String returned.
@@ -7313,10 +7312,10 @@ public abstract class VmlOperation
    protected int UfFormatDateTime( StringBuilder sbDayOfWeek, String szDate, String strFormat )
    {
       //TODO: This is slow.  Do we need to improve it?
-      DateTime date = JoeUtils.parseStandardDateString( szDate );
+      ZonedDateTime date = JoeUtils.parseStandardDateString( szDate );
       String javaFormat = JoeUtils.convertZeidonDateFormatToJavaFormat( strFormat );
-      DateTimeFormatter formatter = DateTimeFormat.forPattern( javaFormat );
-      sbDayOfWeek.append( formatter.print( date ) );
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern( javaFormat );
+      sbDayOfWeek.append( formatter.format( date ) );
       return 0;
    }
 
