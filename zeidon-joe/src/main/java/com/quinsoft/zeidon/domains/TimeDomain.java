@@ -60,6 +60,20 @@ public class TimeDomain extends DateTimeDomain
             return;
     }
 
+    static public int compareZonedDateTime( ZonedDateTime thisTime, ZonedDateTime thatTime )
+    {
+        if ( thisTime.getSecond() != thatTime.getSecond() )
+            return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
+
+        if ( thisTime.getMinute() != thatTime.getMinute() )
+            return Integer.compare( thisTime.getMinute(), thatTime.getMinute() );
+
+        if ( thisTime.getSecond() != thatTime.getSecond() )
+            return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
+
+        return Integer.compare( thisTime.getNano(), thatTime.getNano() );
+    }
+
     @Override
     public int compare(Task task, AttributeInstance attributeInstance, AttributeDef attributeDef, Object internalValue, Object externalValue)
     {
@@ -72,17 +86,7 @@ public class TimeDomain extends DateTimeDomain
 
             ZonedDateTime thisTime = (ZonedDateTime) internalValue;
             ZonedDateTime thatTime = (ZonedDateTime) value;
-
-            if ( thisTime.getSecond() != thatTime.getSecond() )
-                return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
-
-            if ( thisTime.getMinute() != thatTime.getMinute() )
-                return Integer.compare( thisTime.getMinute(), thatTime.getMinute() );
-
-            if ( thisTime.getSecond() != thatTime.getSecond() )
-                return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
-
-            return Integer.compare( thisTime.getNano(), thatTime.getNano() );
+            return compareZonedDateTime( thisTime, thatTime );
         }
         catch ( Throwable t )
         {

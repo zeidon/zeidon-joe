@@ -4860,7 +4860,7 @@ ozqFrame_FormatDisplayRecur( View     zqFrame,
                   //:IF DataType = "M" OR DataType = "T" OR DataType = "D"
                   if ( ZeidonStringCompare( DataType, 1, 0, "M", 1, 0, 2 ) == 0 || ZeidonStringCompare( DataType, 1, 0, "T", 1, 0, 2 ) == 0 || ZeidonStringCompare( DataType, 1, 0, "D", 1, 0, 2 ) == 0 )
                   { 
-                     //:// Decimal, DateTime or Date
+                     //:// Decimal, ZonedDateTime or Date
                      //:Length = 15
                      Length = 15;
                      //:ELSE
@@ -10361,7 +10361,7 @@ ozqFrame_BuildPostQualEntry( View     zqFrame )
    //:IF DataType = "D" OR DataType = "T"
    if ( ZeidonStringCompare( DataType, 1, 0, "D", 1, 0, 2 ) == 0 || ZeidonStringCompare( DataType, 1, 0, "T", 1, 0, 2 ) == 0 )
    { 
-      //:// For Date or DateTime, convert the Value.
+      //:// For Date or ZonedDateTime, convert the Value.
       //:DateString = zqFrame.PostActivateQual.Value
       {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
       StringBuilder sb_DateString;
@@ -10407,7 +10407,7 @@ ozqFrame_BuildPostQualEntry( View     zqFrame )
          //:IF DataType = "D" OR DataType = "T"
          if ( ZeidonStringCompare( DataType, 1, 0, "D", 1, 0, 2 ) == 0 || ZeidonStringCompare( DataType, 1, 0, "T", 1, 0, 2 ) == 0 )
          { 
-            //:// For Date or DateTime, convert the Value.
+            //:// For Date or ZonedDateTime, convert the Value.
             //:DateString = zqFrame.PostActivateQualSub.Value
             {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
             StringBuilder sb_DateString;
@@ -12000,8 +12000,8 @@ ozqFrame_PositionOnSourceCtrl( View     qBaseR_Source,
          if ( ZeidonStringCompare( DataType, 1, 0, "T", 1, 0, 2 ) == 0 )
          { 
             //:// Type is datetime.
-            //:SET CURSOR FIRST qBaseR_Source.Control WHERE qBaseR_Source.Control.Tag = "DateTime"
-            RESULT = SetCursorFirstEntityByString( qBaseR_Source, "Control", "Tag", "DateTime", "" );
+            //:SET CURSOR FIRST qBaseR_Source.Control WHERE qBaseR_Source.Control.Tag = "ZonedDateTime"
+            RESULT = SetCursorFirstEntityByString( qBaseR_Source, "Control", "Tag", "ZonedDateTime", "" );
             //:ELSE
          } 
          else

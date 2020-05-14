@@ -19,8 +19,6 @@
 
 package com.quinsoft.epamms;
 
-//import java.io.File;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,33 +26,26 @@ import java.io.IOException;
 //import java.text.NumberFormat;
 //import java.util.*;
 import java.nio.CharBuffer;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.LinkedList;
 
 import org.apache.commons.lang3.StringUtils;
 //import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.joda.time.Days;
-import java.util.Date;
-import org.joda.time.DateTime;
-//import org.joda.time.Days;
 
 //import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.CursorPosition;
 import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
-import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.vml.VmlOperation;
 import com.quinsoft.zeidon.vml.zVIEW;
-//import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.zeidonoperations.ZDRVROPR;
 import com.quinsoft.zeidon.zeidonoperations.KZOEP1AA;
 //import com.quinsoft.zeidon.zeidonoperations.ActiveDirectory;
-
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ArrayList;
+//import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.zeidonoperations.ZDRVROPR;
 
 
 /**
@@ -97,7 +88,8 @@ public class ZGlobal1_Operation extends VmlOperation
    // .Detail description
    //
    /////////////////////////////////////////////////////////////////////////////////////////////////////
-   public int
+   @Override
+public int
    SetAttributeFromCurrentDateTime( View   View,
                                     String entityName,
                                     String attributeName )
@@ -374,7 +366,7 @@ public class ZGlobal1_Operation extends VmlOperation
    {
       int nCode = 0;
 
-      nCode = (int) stringStr.charAt( 0 );
+      nCode = stringStr.charAt( 0 );
       return nCode;
    }
 
@@ -397,14 +389,14 @@ public class ZGlobal1_Operation extends VmlOperation
       //stringSourceDate = GetStringFromAttribute( stringSourceDate, srcView, srcEntityName, srcAttributeName );
       //stringTargetDate = GetStringFromAttribute( stringTargetDate, tgtView, tgtEntityName, tgtAttributeName );
 
-      DateTime BeginDate = srcView.cursor(srcEntityName).getAttribute(srcAttributeName).getDateTime();
-      DateTime EndDate = tgtView.cursor(tgtEntityName).getAttribute(tgtAttributeName).getDateTime();
+      ZonedDateTime BeginDate = srcView.cursor(srcEntityName).getAttribute(srcAttributeName).getDateTime();
+      ZonedDateTime EndDate = tgtView.cursor(tgtEntityName).getAttribute(tgtAttributeName).getDateTime();
 
-      //DateTime BeginDate = new DateTime(stringSourceDate);
-      //DateTime EndDate = new DateTime(stringTargetDate);
+      //ZonedDateTime BeginDate = new ZonedDateTime(stringSourceDate);
+      //ZonedDateTime EndDate = new ZonedDateTime(stringTargetDate);
 
       //int days = Days.daysBetween( BeginDate, EndDate).getDays();
-      int days = Days.daysBetween( EndDate, BeginDate).getDays();
+      long days = ChronoUnit.DAYS.between( EndDate, BeginDate);
       /*
       UfStringToDateTime( stringSourceDate, SourceDate );
       UfStringToDateTime( stringTargetDate, TargetDate );
@@ -1096,7 +1088,7 @@ public class ZGlobal1_Operation extends VmlOperation
    {
       StringBuilder sb = new StringBuilder( ulNumberOfDecimals > 0 ? ulNumberOfDecimals + 5 : 25 );
 
-      SysConvertDecimalToString( pdDecimalValue, sb, (int) ulNumberOfDecimals );
+      SysConvertDecimalToString( pdDecimalValue, sb, ulNumberOfDecimals );
       MutableDouble d = new MutableDouble( pdDecimalValue );
       SysConvertStringToDecimal( sb.toString( ), d );
       return d.toDouble( );
@@ -3872,7 +3864,7 @@ public class ZGlobal1_Operation extends VmlOperation
 
       lEntityCnt = CountEntitiesForView( vResult, entityName );
       ulAttributeLth = GetAttributeDisplayLength( ulAttributeLth, vResult, entityName, attributeName, contextName );
-      lTotalSize = lEntityCnt * (int) ulAttributeLth;  // a starting point
+      lTotalSize = lEntityCnt * ulAttributeLth;  // a starting point
       CharBuffer cbMemory = CharBuffer.allocate( lTotalSize + 1 );
    // DrAllocTaskMemory( cbMemory, lTotalSize + 1 );
 
@@ -3905,12 +3897,12 @@ public class ZGlobal1_Operation extends VmlOperation
          if ( lRC > zCURSOR_UNCHANGED )
          {
          // lLth = zstrlen( stringMemory );
-            if ( lTotalSize - lLth < (int) ulAttributeLth )
+            if ( lTotalSize - lLth < ulAttributeLth )
             {
                s = cbMemory.toString( );
 
                 lEntityCnt *= 2;
-                lTotalSize = lEntityCnt * (int) ulAttributeLth;
+                lTotalSize = lEntityCnt * ulAttributeLth;
                 cbMemory = CharBuffer.allocate( lTotalSize + 1 );
                 zstrcpy( cbMemory, 0, s );
             }
@@ -4729,7 +4721,7 @@ public class ZGlobal1_Operation extends VmlOperation
       int      closeBracePos;
       int      traverse = 1;
       int      count;
-            
+
       // Insert Keyword text items into a position in szStringArea that is identified by the Keyword.
       // The entries inserted will be separated by one or more characters as identified by the variable szSeparatorCharacters.
       // After determining the position of the insertion, we will loop through Keyword entries, formatting each entry as we go.
@@ -4845,7 +4837,7 @@ public class ZGlobal1_Operation extends VmlOperation
 
       return( 0 );
    }
-   
+
    public int
    InsertKeywordsIntoString( View     mSPLDef,
                              StringBuilder sbTextToModify,
@@ -4980,7 +4972,7 @@ public class ZGlobal1_Operation extends VmlOperation
          szOpenBrace = "{";
       else
          szOpenBrace = "";
-      
+
    // Food [{{}}] areas
    // preparation storage
    // Automobile [{{}}]
@@ -5078,7 +5070,7 @@ public class ZGlobal1_Operation extends VmlOperation
       }
 
       // This product {{{{when used as directed}} {{can be used}} {{is formulated to {{{{disinfect}} {{clean}} {{sanitize}} {{deodorize}}}}}} {{is formulated for use}}}} on {{washable}} hard, non-porous surfaces such as: (insert surface)
-      //          1         2         3         4         5         6         7         8         9        10        11        12        13        14        15        16        17        18        19        20        21    
+      //          1         2         3         4         5         6         7         8         9        10        11        12        13        14        15        16        17        18        19        20        21
       // 123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890  << lth = 205
       // This product [{when used as directed} {can be used} {is formulated to [{disinfect} {clean} {sanitize} {deodorize}] {is formulated for use}] on {washable} hard, non-porous surfaces such as: (insert surface)
 
@@ -5121,7 +5113,7 @@ public class ZGlobal1_Operation extends VmlOperation
          }
 
       // TraceLine( "### Build Value: %s   level: %d   scrunch: %s", text, level, scrunch );
-         return statement;   
+         return statement;
       }
 
       // This product [{when used as directed} {can be used} {is formulated to [{disinfect} {clean} {sanitize} {deodorize}] {is formulated for use}] on {washable} hard, non-porous surfaces such as: (insert surface)
@@ -5130,7 +5122,7 @@ public class ZGlobal1_Operation extends VmlOperation
          String statement = "";
          String keyword;
          String keywordValue;
- 
+
          // At the root.
          for ( TreeNode tnode : children ) {
             if ( tnode.type == 'T' ) {
@@ -5175,8 +5167,8 @@ public class ZGlobal1_Operation extends VmlOperation
       //    behind and under sinks and counters, and storage areas {and other {hard, non-porous} surfaces} where bacterial growth can cause malodors.}
       // Is great for use [{on} {in the}] [{kitchen}, {bathroom}, {floors} {and} {other household areas}].
       // Is effective against household [{germs} {bacteria}].
-      // 0.75 oz. of this product per 4 gal. of water {(0.19 oz. per gal. of water)} {(150 ppm active quat)}{(or equivalent use dilution)} 
-      //          1         2         3         4         5         6         7         8         9        10        11        12        13        14        15        16        17        18        19        20        21    
+      // 0.75 oz. of this product per 4 gal. of water {(0.19 oz. per gal. of water)} {(150 ppm active quat)}{(or equivalent use dilution)}
+      //          1         2         3         4         5         6         7         8         9        10        11        12        13        14        15        16        17        18        19        20        21
       // 123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890  << lth = 205
       // This product [{when used as directed} {can be used} {is formulated to [{disinfect} {clean} {sanitize} {deodorize}] {is formulated for use}] on {washable} hard, non-porous surfaces such as: (insert surface)
       for ( k = pos; k < statement.length(); k++ ) {
@@ -5220,7 +5212,7 @@ public class ZGlobal1_Operation extends VmlOperation
       }
       return statement.length();
    }
-   
+
    public int
    ParseStatementForKeywords( View     mMasLC,
                               String   entity,

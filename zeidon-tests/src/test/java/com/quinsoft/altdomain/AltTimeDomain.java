@@ -19,10 +19,8 @@
 
 package com.quinsoft.altdomain;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -80,10 +78,9 @@ public class AltTimeDomain extends TimeDomain
             if ( rc != null )
                 return rc;
 
-            assert internalValue instanceof DateTime;
-            assert value instanceof DateTime;
-
-            return DateTimeComparator.getTimeOnlyInstance().compare( internalValue, value );
+            ZonedDateTime thisTime = (ZonedDateTime) internalValue;
+            ZonedDateTime thatTime = (ZonedDateTime) value;
+            return compareZonedDateTime( thisTime, thatTime );
         }
         catch ( Throwable t )
         {

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
@@ -234,7 +234,7 @@ public class AdminDivisionDynamicTableDomain extends DynamicTableDomain
         }
 
         @Override
-        public DateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
+        public ZonedDateTime convertToDate(Task task, AttributeDef attributeDef, Object internalValue)
         {
             return getTaskContext( task, this ).convertToDate( task, attributeDef, internalValue );
         }
