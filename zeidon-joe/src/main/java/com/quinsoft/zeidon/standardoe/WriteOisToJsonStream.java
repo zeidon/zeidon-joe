@@ -71,6 +71,9 @@ public class WriteOisToJsonStream implements StreamWriter
     private final LinkedHashMap<String, Object> linkedMap = new LinkedHashMap<>(5);
     private SerializationMapping mapper;
 
+    // 2018-05-23T00:18:23.110-07:00
+    private static final DateTimeFormatter JSON_DATE_FORMATTER = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss.Sxxx" );
+
     @Override
     public void writeToStream( SerializeOi options, Writer writer )
     {
@@ -295,7 +298,7 @@ public class WriteOisToJsonStream implements StreamWriter
                 else
                 if ( domain instanceof DateTimeDomain ) {
                     ZonedDateTime date = (ZonedDateTime) attrib.getValue();
-                    String str = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( date );
+                    String str = JSON_DATE_FORMATTER.format( date );
                     jg.writeStringField( jsonName, str );
                 }
                 else

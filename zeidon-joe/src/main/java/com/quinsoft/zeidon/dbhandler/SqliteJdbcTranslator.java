@@ -58,7 +58,7 @@ public class SqliteJdbcTranslator extends StandardJdbcTranslator
             if ( dbValue instanceof Number )
             {
                 long time = ((Number) dbValue).longValue();
-                Instant i = Instant.ofEpochSecond( time );
+                Instant i = Instant.ofEpochMilli( time );
 
                 ZonedDateTime z = ZonedDateTime.ofInstant(i, ZoneId.systemDefault());
                 return z;

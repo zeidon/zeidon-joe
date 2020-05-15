@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
-import java.time.format.DateTimeFormatter;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
@@ -52,6 +51,7 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonDbException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DomainDateTimeFormatter;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
@@ -86,8 +86,8 @@ public class JdbcHandler extends AbstractSqlHandler
 
     private final String configGroupName;
     private JdbcDomainTranslator translator;
-    private DateTimeFormatter dateFormat;
-    private DateTimeFormatter dateTimeFormat;
+    private DomainDateTimeFormatter dateFormat;
+    private DomainDateTimeFormatter dateTimeFormat;
     private String drivers;
 
     /**
@@ -1184,7 +1184,7 @@ public class JdbcHandler extends AbstractSqlHandler
         return translator;
     }
 
-    public DateTimeFormatter getDateFormatter()
+    public DomainDateTimeFormatter getDateFormatter()
     {
         if ( dateFormat == null )
         {
@@ -1198,7 +1198,7 @@ public class JdbcHandler extends AbstractSqlHandler
         return dateFormat;
     }
 
-    public DateTimeFormatter getDateTimeFormatter()
+    public DomainDateTimeFormatter getDateTimeFormatter()
     {
         if ( dateTimeFormat == null )
         {

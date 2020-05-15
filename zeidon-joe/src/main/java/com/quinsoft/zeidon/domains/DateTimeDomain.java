@@ -274,7 +274,7 @@ public class DateTimeDomain extends AbstractDomain
             super( domain );
         }
 
-        private DateTimeFormatter formatter;
+        private DomainDateTimeFormatter formatter;
 
         @Override
         public String convertToString(Task task, AttributeDef attributeDef, Object internalValue) throws ZeidonException

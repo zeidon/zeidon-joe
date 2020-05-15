@@ -36,7 +36,9 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
+import com.quinsoft.zencas.scalasamples.SampleActivates;
 import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
+import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
 import com.quinsoft.zencas.scalasamples.SampleViewManipulations;
 
 /**
@@ -874,11 +876,11 @@ public class ViewTest
     @Test
     public void testScalaSamples()
     {
-//        SampleActivates sampleActivates = new SampleActivates( zencas );
-//        com.quinsoft.zeidon.scala.View mUser = sampleActivates.runAll();
-//
-//        SampleCursorManipulation sampleCursor = new SampleCursorManipulation( zencas );
-//        sampleCursor.runAll( mUser );
+        SampleActivates sampleActivates = new SampleActivates( zencas );
+        com.quinsoft.zeidon.scala.View mUser = sampleActivates.runAll();
+
+        SampleCursorManipulation sampleCursor = new SampleCursorManipulation( zencas );
+        sampleCursor.runAll( mUser );
 
         SampleViewManipulations sampleView = new SampleViewManipulations( zencas );
         sampleView.runAll( mUser );

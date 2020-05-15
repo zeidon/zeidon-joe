@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +41,7 @@ import com.quinsoft.zeidon.domains.BooleanDomain;
 import com.quinsoft.zeidon.domains.DateDomain;
 import com.quinsoft.zeidon.domains.DateTimeDomain;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DomainDateTimeFormatter;
 import com.quinsoft.zeidon.domains.GeneratedKeyDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
@@ -59,8 +59,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     /**
      * Thread-safe formatter for converting to string.
      **/
-    protected final DateTimeFormatter dateFormatter;
-    protected final DateTimeFormatter dateTimeFormatter;
+    protected final DomainDateTimeFormatter dateFormatter;
+    protected final DomainDateTimeFormatter dateTimeFormatter;
 
     private final Task        task;
 
@@ -198,15 +198,7 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             if ( dbValue instanceof CharSequence )
             {
                 String date = dbValue.toString();
-                try
-                {
-                    return this.dateFormatter.parse( date );
-                }
-                catch ( IllegalArgumentException e )
-                {
-                    throw ZeidonException.prependMessage( e, "Invalid date format.  Got '%s' but expected format '%s'",
-                                                          date, dateFormatter );
-                }
+                return dateTimeFormatter.parse( date );
             }
             else
             if ( dbValue instanceof Date )
@@ -220,15 +212,8 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
             if ( dbValue instanceof CharSequence )
             {
                 String date = dbValue.toString();
-                try
-                {
-                    return dateTimeFormatter.parse( date );
-                }
-                catch ( IllegalArgumentException e )
-                {
-                    throw ZeidonException.prependMessage( e, "Invalid datetime format.  Got '%s' but expected format '%s'",
-                                                          date, dateTimeFormatter );
-                }
+                ZonedDateTime dt = dateTimeFormatter.parse( date );
+                return dt;
             }
         }
 
