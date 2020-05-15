@@ -1659,7 +1659,7 @@ eContext   3
 aZKey      68568153
 aName      DD/MM/YYYY HH:MM:SS.S AM
 aEditString dd/mm/YYYY HH:MI:SS.9 AM
-aJavaEditString dd/MM/yyyy HH:mm:ss:SSS aa
+aJavaEditString dd/MM/yyyy HH:mm:ss:SSS a
 
 eContext   3
 aZKey      68568154
@@ -1683,7 +1683,7 @@ eContext   3
 aZKey      68568157
 aName      HH:MM:SS.S AM
 aEditString HH:MI:SS.9 AM
-aJavaEditString HH:mm:ss:S aa
+aJavaEditString HH:mm:ss:S a
 
 eContext   3
 aZKey      68568158
@@ -1772,8 +1772,8 @@ aJavaEditString MMMM
 eContext   3
 aZKey      68568173
 aName      MSWindowsLongSetting
-aEditString dd/MM/yyyy HH:mm:ss:SSS aa
-aJavaEditString dd/MM/yyyy HH:mm:ss:SSS aa
+aEditString dd/MM/yyyy HH:mm:ss:SSS a
+aJavaEditString dd/MM/yyyy HH:mm:ss:SSS a
 
 eContext   3
 aZKey      68568174
@@ -1839,7 +1839,7 @@ eContext   3
 aZKey      68568167
 aName      YYYY/MM/DD HH:MM:SS.S AM
 aEditString YYYY/mm/dd HH:MI:SS.9 AM
-aJavaEditString yyyy/MM/dd HH:mm:ss:SSS aa
+aJavaEditString yyyy/MM/dd HH:mm:ss:SSS a
 aIsDefault Y
 
 eContext   3
