@@ -335,7 +335,7 @@ public class DateTimeDomain extends AbstractDomain
         protected void setEditString( String editString )
         {
             super.setEditString( editString );
-            formatter = JoeUtils.createDateFormatterFromEditString( editString );
+            formatter = new DomainDateTimeFormatter( editString );
         }
     }
 }

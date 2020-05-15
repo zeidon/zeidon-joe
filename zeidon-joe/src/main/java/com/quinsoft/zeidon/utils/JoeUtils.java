@@ -25,13 +25,8 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
@@ -55,7 +50,6 @@ import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.domains.DomainDateTimeFormatter;
 
 /**
  * A collection of static utility methods.
@@ -356,79 +350,6 @@ public class JoeUtils
         }
 
         return true;
-    }
-
-    /**
-     * Returns a DomainDateTimeFormatter that can parse and print dates in the format of
-     * editString.  There can be multiple edit strings which are separated by a "|"
-     * character.  If there are more than one then the first one is considered to
-     * be the "print" format.
-     *
-     * NOTE: Automatically adds ISO 8601 parser: 2016-11-29T05:41:02+00:00
-     *
-     * @param editString
-     * @return
-     */
-    public static DomainDateTimeFormatter createDateFormatterFromEditString( String editString )
-    {
-        try
-        {
-            String[] formats = editString.split( "[|]" );
-            DateTimeFormatter printer = DateTimeFormatter.ofPattern( formats[0] );
-
-            String str1 = editString.replaceAll( "[|]", "][" );
-            String formatStr = "[" + str1 + "][yyyy-MM-dd[['T'][ ]HH:mm:ss.S[S[S]]xxx]]";
-            DateTimeFormatter parser = DateTimeFormatter.ofPattern( formatStr );
-            return new DomainDateTimeFormatter( parser, printer, formatStr );
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e )
-                .appendMessage( "Format string = %s", editString );
-        }
-    }
-
-    /**
-     * Tries to return a ZonedDateTime from a parsed string.
-     *
-     * @param dateTimeFormatter
-     * @param dateString
-     * @return
-     */
-    public static ZonedDateTime parseDateTimeString( DateTimeFormatter dateTimeFormatter, String dateString )
-    {
-        TemporalAccessor ta;
-        try
-        {
-            ta = dateTimeFormatter.parseBest( dateString,
-                                              ZonedDateTime::from,
-                                              LocalDateTime::from,
-                                              LocalDate::from );
-        }
-        catch ( DateTimeParseException e )
-        {
-            throw ZeidonException.prependMessage( e, "Invalid datetime format.  Got '%s' but expected format '%s'",
-                                                  dateString, dateTimeFormatter );
-        }
-
-        if ( ta instanceof ZonedDateTime) {
-            return (ZonedDateTime) ta;
-        }
-
-        if ( ta instanceof LocalDateTime) {
-            LocalDateTime lt = LocalDateTime.from( ta );
-            ZonedDateTime dt = ZonedDateTime.of( lt, ZoneId.systemDefault());
-            return dt;
-        }
-
-        if ( ta instanceof LocalDate ) {
-            LocalDate ld = (LocalDate) ta;
-            ZonedDateTime dt = ld.atStartOfDay(ZoneId.systemDefault());
-            return dt;
-        }
-
-        ZonedDateTime dt = ZonedDateTime.from( ta );
-        return dt;
     }
 
     /**

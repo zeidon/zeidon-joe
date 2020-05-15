@@ -58,7 +58,6 @@ import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
-import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.KeyStringBuilder;
 
 /**
@@ -1192,7 +1191,7 @@ public class JdbcHandler extends AbstractSqlHandler
             if ( StringUtils.isBlank( format ) )
                 format = "yyyy-MM-dd|yyyy-MM-dd 00:00:00";
 
-            dateFormat = JoeUtils.createDateFormatterFromEditString( format );
+            dateFormat = new DomainDateTimeFormatter( format );
         }
 
         return dateFormat;
@@ -1212,7 +1211,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 format = format + " HH:mm:ss.SSS|" + format + " HH:mm:ss";
             }
 
-            dateTimeFormat = JoeUtils.createDateFormatterFromEditString( format );
+            dateTimeFormat = new DomainDateTimeFormatter( format );
         }
 
         return dateTimeFormat;

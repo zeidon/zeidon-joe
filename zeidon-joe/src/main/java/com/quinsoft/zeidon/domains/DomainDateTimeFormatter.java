@@ -18,10 +18,17 @@
  */
 package com.quinsoft.zeidon.domains;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
 
-import com.quinsoft.zeidon.utils.JoeUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.quinsoft.zeidon.ZeidonException;
 
 /**
  * A DateTime class for parsing strings into ZonedDateTime and formatting ZonedDateTime
@@ -33,26 +40,85 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  */
 public class DomainDateTimeFormatter
 {
-    private final DateTimeFormatter parser;
-    private final DateTimeFormatter formatter;
+    private final DateTimeFormatter[] formatters;
     private final String formatString;
 
-    public DomainDateTimeFormatter( DateTimeFormatter parser, DateTimeFormatter formatter, String fmt )
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd[['T'][ ]HH:mm:ss[.SSS][.S][xxx][X]]";
+
+    public DomainDateTimeFormatter( String editString )
     {
-        super();
-        this.parser = parser;
-        this.formatter = formatter;
-        this.formatString = fmt;
+        try
+        {
+            if ( StringUtils.isBlank( editString ) )
+                throw new ZeidonException( "EditString required for DomainDateTimeFormatter" );
+
+            String[] formats = editString.split( "[|]" );
+            formatters = new DateTimeFormatter[ formats.length + 1 ];
+            for ( int i = 0; i < formats.length; i++ )
+                formatters[ i ] = DateTimeFormatter.ofPattern( formats[ i ].trim() );
+
+            formatters[ formats.length ] = DateTimeFormatter.ofPattern( DEFAULT_DATE_FORMAT );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e )
+                .appendMessage( "Format string = %s", editString );
+        }
+
+        this.formatString = editString + " | " + DEFAULT_DATE_FORMAT;
     }
 
     public String format( ZonedDateTime date )
     {
-        return formatter.format( date );
+        return formatters[0].format( date );
     }
 
+    /**
+     * Try parsing dateString with all the formatters until we find one that works.
+     */
     public ZonedDateTime parse( String dateString )
     {
-        return JoeUtils.parseDateTimeString( parser, dateString );
+        for ( DateTimeFormatter parser : formatters )
+        {
+            try
+            {
+                return parseDateTimeString( parser, dateString );
+            }
+            catch ( DateTimeParseException e )
+            {
+                // Do nothing here.  We'll try parsing with the next formatter.
+            }
+        }
+
+        throw new ZeidonException( "Invalid datetime format.  Got '%s' but expected format '%s'",  dateString, this.formatString );
+    }
+
+
+    private ZonedDateTime parseDateTimeString( DateTimeFormatter dateTimeFormatter, String dateString )
+    {
+        TemporalAccessor ta = dateTimeFormatter.parseBest( dateString,
+                                                           ZonedDateTime::from,
+                                                           LocalDateTime::from,
+                                                           LocalDate::from );
+
+        if ( ta instanceof ZonedDateTime) {
+            return (ZonedDateTime) ta;
+        }
+
+        if ( ta instanceof LocalDateTime) {
+            LocalDateTime lt = LocalDateTime.from( ta );
+            ZonedDateTime dt = ZonedDateTime.of( lt, ZoneId.systemDefault());
+            return dt;
+        }
+
+        if ( ta instanceof LocalDate ) {
+            LocalDate ld = (LocalDate) ta;
+            ZonedDateTime dt = ld.atStartOfDay(ZoneId.systemDefault());
+            return dt;
+        }
+
+        ZonedDateTime dt = ZonedDateTime.from( ta );
+        return dt;
     }
 
     @Override
