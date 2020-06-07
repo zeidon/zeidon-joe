@@ -84,9 +84,13 @@ object Implicits {
             new DynamicTaskActivator( task, lodName )
         }
 
-        def viewFromJson( json: String ): View = task.deserializeOi.asJson.fromString( json ).unpickle
+        def viewFromJson( json: String, lodName: String = null ): View = {
+            if ( lodName == null )
+                return task.deserializeOi.asJson.fromString( json ).unpickle
+            else
+                return task.deserializeOi.asJson.setLodDef( lodName ).fromString( json ).unpickle
+        }
     }
-
 
     implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
 
