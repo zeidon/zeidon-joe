@@ -2332,45 +2332,6 @@ omSAProf_dBillDaysInResidence( View     mSAProf,
       case zDERIVED_GET :
          //:nDays = 0
          nDays = 0;
-         //:IF  mSAProf.BillingTermOfResidence EXISTS 
-         lTempInteger_0 = CheckExistenceOfEntity( mSAProf, "BillingTermOfResidence" );
-         if ( lTempInteger_0 == 0 )
-         { 
-            //:IF  mSAProf.BillingTermOfResidence.WithdrawalDate = "" 
-            if ( CompareAttributeToString( mSAProf, "BillingTermOfResidence", "WithdrawalDate", "" ) == 0 )
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingTermOfResidence", "BeginDate",
-               //:                                 mSAProf, "BillingTermOfResidence", "EndDate" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingTermOfResidence", "BeginDate", mSAProf, "BillingTermOfResidence", "EndDate" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-               //:ELSE 
-            } 
-            else
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingTermOfResidence", "BeginDate",
-               //:                                 mSAProf, "BillingTermOfResidence", "WithdrawalDate" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingTermOfResidence", "BeginDate", mSAProf, "BillingTermOfResidence", "WithdrawalDate" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-            } 
-
-            //:END
-         } 
-
-         //:END
-         //:nDays = nDays * -1
-         nDays = nDays * -1;
          //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
          //:                    InternalAttribStructure, nDays, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, nDays, 0 );
@@ -2417,45 +2378,6 @@ omSAProf_dBillDaysInMealPlan( View     mSAProf,
       case zDERIVED_GET :
          //:nDays = 0
          nDays = 0;
-         //:IF mSAProf.BillingTermOfMealPlan EXISTS 
-         lTempInteger_0 = CheckExistenceOfEntity( mSAProf, "BillingTermOfMealPlan" );
-         if ( lTempInteger_0 == 0 )
-         { 
-            //:IF mSAProf.BillingTermOfMealPlan.WithdrawalDate = "" 
-            if ( CompareAttributeToString( mSAProf, "BillingTermOfMealPlan", "WithdrawalDate", "" ) == 0 )
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingTermOfMealPlan", "BeginDate",
-               //:                                 mSAProf, "BillingTermOfMealPlan", "EndDate" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingTermOfMealPlan", "BeginDate", mSAProf, "BillingTermOfMealPlan", "EndDate" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-               //:ELSE 
-            } 
-            else
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingTermOfMealPlan", "BeginDate",
-               //:                                 mSAProf, "BillingTermOfMealPlan", "WithdrawalDate" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingTermOfMealPlan", "BeginDate", mSAProf, "BillingTermOfMealPlan", "WithdrawalDate" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-            } 
-
-            //:END
-         } 
-
-         //:END
-         //:nDays = nDays * -1
-         nDays = nDays * -1;
          //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
          //:                    InternalAttribStructure, nDays, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, nDays, 0 );
@@ -2502,45 +2424,6 @@ omSAProf_dBillDaysTerm( View     mSAProf,
       case zDERIVED_GET :
          //:nDays = 0
          nDays = 0;
-         //:IF mSAProf.BillingPeriod EXISTS  
-         lTempInteger_0 = CheckExistenceOfEntity( mSAProf, "BillingPeriod" );
-         if ( lTempInteger_0 == 0 )
-         { 
-            //:IF mSAProf.Student.DateOfDeparture != "" 
-            if ( CompareAttributeToString( mSAProf, "Student", "DateOfDeparture", "" ) != 0 )
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingPeriod", "BeginDate",
-               //:                                 mSAProf, "Student", "DateOfDeparture" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingPeriod", "BeginDate", mSAProf, "Student", "DateOfDeparture" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-               //:ELSE 
-            } 
-            else
-            { 
-               //:GetDateAttributeDifferenceInDays( nDays, 
-               //:                                 mSAProf, "BillingPeriod", "BeginDate",
-               //:                                 mSAProf, "BillingPeriod", "EndDate" )
-               {
-                ZGLOBAL1_Operation m_ZGLOBAL1_Operation = new ZGLOBAL1_Operation( mSAProf );
-                {MutableInt mi_nDays = new MutableInt( nDays );
-                               m_ZGLOBAL1_Operation.GetDateAttributeDifferenceInDays( mi_nDays, mSAProf, "BillingPeriod", "BeginDate", mSAProf, "BillingPeriod", "EndDate" );
-               nDays = mi_nDays.intValue( );}
-                // m_ZGLOBAL1_Operation = null;  // permit gc  (unnecessary)
-               }
-            } 
-
-            //:END
-         } 
-
-         //:END
-         //:nDays = nDays * -1
-         nDays = nDays * -1;
          //:StoreValueInRecord( mSAProf, InternalEntityStructure, 
          //:                    InternalAttribStructure, nDays, 0 )
          StoreValueInRecord( mSAProf, InternalEntityStructure, InternalAttribStructure, nDays, 0 );
