@@ -8,4 +8,5 @@ tmp/
 .settings
 .project
 .classpath
+.vscode/
 bin

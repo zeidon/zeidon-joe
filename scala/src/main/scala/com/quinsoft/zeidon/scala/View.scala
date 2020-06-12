@@ -218,6 +218,12 @@ class View( val task: Task ) extends Dynamic {
         new View( cloned )
     }
 
+    def cloneOi: View = {
+        validateNonNull
+        val cloned = jview.activateOiFromOi( ActivateFlags.fMULTIPLE )
+        new View( cloned )
+    }
+
     /**
      * Creates a new view, potentially with a different owning task.
      */

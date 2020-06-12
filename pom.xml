@@ -21,7 +21,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<scala.version>2.12.3</scala.version>
+	<scala.version>2.12.11</scala.version>
 	<!-- Following is needed to avoid interpolation warnings -->
 	<jar.version>${project.version}</jar.version>
     </properties>
