@@ -384,6 +384,9 @@ class EntityInstanceImpl implements EntityInstance
             ei = ei.nextVersion;
         }
 
+        if ( ei.versionStatus == VersionStatus.CANCELED )
+            return null;
+
         return ei;
     }
 
@@ -2179,9 +2182,21 @@ class EntityInstanceImpl implements EntityInstance
         if ( versionStatus != VersionStatus.UNACCEPTED_ENTITY )
             throw new TemporalEntityException(this, "Entity is not the root of a temporal entity" );
 
-        setVersionStatus( VersionStatus.CANCELED );
+        for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
+        {
+            if ( ei.versionStatus != VersionStatus.CANCELED )
+            {
+                ei.setVersionStatus( VersionStatus.CANCELED );
 
-        // The only thing we have to do is drop the entity.
+                // For all linked instances, copy the persistentAttributes if they have
+                // the same versionNumber.
+                ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                    linked.setVersionStatus( VersionStatus.CANCELED );
+                } );
+            }
+        }
+
+
         dropEntity();
 
         return CursorResult.UNCHANGED;
