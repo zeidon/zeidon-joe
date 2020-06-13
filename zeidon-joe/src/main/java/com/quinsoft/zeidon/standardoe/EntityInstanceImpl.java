@@ -2151,6 +2151,12 @@ class EntityInstanceImpl implements EntityInstance
         {
             ei.versionNumber = newVersionNumber;
             ei.setVersionStatus( newVersionStatus );
+
+            // For all linked instances, copy the persistentAttributes if they have
+            // the same versionNumber.
+            ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                linked.persistentAttributes = this.persistentAttributes;
+            } );
         }
 
         if ( newVersionStatus == VersionStatus.NONE )
@@ -2160,6 +2166,8 @@ class EntityInstanceImpl implements EntityInstance
             getObjectInstance().setUpdated( true );
             setChildUpdateForParents();
         }
+
+        assert assertLinkedInstances();
     }
 
     /* (non-Javadoc)
@@ -2352,9 +2360,10 @@ class EntityInstanceImpl implements EntityInstance
     {
         for ( final EntityInstanceImpl ei : getChildrenHier( true, true ) )
         {
-             ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                 assert linked.isLinked( ei );
-             } );
+            ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                if ( ! linked.isLinked( ei ) )
+                    assert false;
+            } );
         }
 
         return true;
