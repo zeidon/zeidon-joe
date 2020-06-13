@@ -103,7 +103,7 @@ class EntitySpawner
 
             if ( child.isIncluded() )
                 spawnInclude( child );
-            else
+
             if ( child.isCreated() )
                 spawnCreate( child );
         }
