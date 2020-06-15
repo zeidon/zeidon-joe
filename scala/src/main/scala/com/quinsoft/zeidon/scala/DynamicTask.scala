@@ -35,6 +35,12 @@ case class DynamicTaskActivator( val task: Task, val lodName: String ) {
 
     def empty() : View = view.activateEmpty
 
+    def createRoot() : View = {
+        view.activateEmpty
+        view.root.create()
+        return view
+    }
+
     def activate( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         val builder = new QualBuilder( view, view.lodDef )
         addQual( builder.entityQualBuilder )
