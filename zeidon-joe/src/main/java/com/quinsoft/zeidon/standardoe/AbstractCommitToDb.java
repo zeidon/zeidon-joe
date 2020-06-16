@@ -19,10 +19,12 @@
 package com.quinsoft.zeidon.standardoe;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
+import com.quinsoft.zeidon.EntityIterator;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
@@ -97,10 +99,23 @@ abstract class AbstractCommitToDb implements Committer
               ei != null;
               ei = ei.getNextHier() )
         {
-            for ( EntityInstanceImpl linked : ei.getAllLinkedInstances() )
+            Collection<EntityInstanceImpl> linkedInstances = ei.getAllLinkedInstances();
+            for ( EntityInstanceImpl linked : linkedInstances )
             {
                 if ( linked.dbhDeleted || linked.dbhExcluded )
                 {
+                    // Turn off the flags so if we come to these again (via other linked
+                    // instances) we don't do it again.
+                    EntityIterator<EntityInstanceImpl> linkedChildren = linked.getChildrenHier( true, false );
+                    for ( EntityInstanceImpl linkedChild : linkedChildren )
+                        linkedChild.dbhDeleted = linkedChild.dbhExcluded = false;
+
+                    // We're going to remove 'linked' and its children from the OI.  If
+                    // 'linked' is also ei then reset ei so we don't bother trying to
+                    // drop any of its children.
+                    if ( linked == ei )
+                        ei = ei.getLastChildHier();
+
                     linked.dropEntity();  // Remove the ei from the chain.
                     continue;
                 }
