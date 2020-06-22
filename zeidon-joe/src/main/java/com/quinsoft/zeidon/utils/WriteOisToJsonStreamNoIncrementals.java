@@ -84,7 +84,7 @@ public class WriteOisToJsonStreamNoIncrementals implements StreamWriter
                 jg.useDefaultPrettyPrinter();
             jg.writeStartObject();
 
-            jg.writeStringField( "version", VERSION );
+//            jg.writeStringField( "version", VERSION );
 
             for ( View view : viewList )
                 writeOi( view );
