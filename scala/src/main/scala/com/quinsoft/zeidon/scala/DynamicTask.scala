@@ -43,10 +43,16 @@ case class DynamicTaskActivator( val task: Task, val lodName: String ) {
 
     def activate( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         val builder = new QualBuilder( view, view.lodDef )
+        builder.jqual.forEntity( view.lodDef.getRoot )
+
         addQual( builder.entityQualBuilder )
         return builder.activate
     }
 
+    def fromJson( json: String ) : View = {
+        return task.deserializeOi.asJson.setLodDef( view.lodDef ).fromString( json ).unpickle
+    }
+    
     def getLodDef : LodDef = view.lodDef
 }
 
