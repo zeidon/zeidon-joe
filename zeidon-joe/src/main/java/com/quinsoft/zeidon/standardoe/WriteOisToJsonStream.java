@@ -108,7 +108,7 @@ public class WriteOisToJsonStream implements StreamWriter
 
             // Write meta info for entire JSON object.
             jg.writeObjectFieldStart( ".meta" );
-//            jg.writeStringField( "version", VERSION );
+            jg.writeStringField( "version", VERSION );
             if ( options.isWriteDate() )
                 jg.writeObjectField( "datetime", ZonedDateTime.now() );
             jg.writeEndObject();
