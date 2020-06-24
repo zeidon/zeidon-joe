@@ -17,17 +17,10 @@
     Copyright 2009-2010 QuinSoft
 **/
 
-package org.nazarene.nazsis;
+package com.quinsoft.nazsis;
 
-import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.vml.zVIEW;
-import org.apache.commons.lang3.mutable.MutableDouble;
-import org.apache.commons.lang3.mutable.MutableInt;
+import com.quinsoft.zeidon.vml.VmlObjectOperations;
 
 /**
    @author QuinSoft
@@ -48,7 +41,7 @@ public class lTermLST_Object extends VmlObjectOperations
 //:               SHORT GetOrSetFlag )
 
 //:   STRING ( 50 ) szSemester
-public int 
+public int
 olTermLST_dYearSemester( View     lTermLST,
                          String InternalEntityStructure,
                          String InternalAttribStructure,
@@ -61,7 +54,7 @@ olTermLST_dYearSemester( View     lTermLST,
 
    //:CASE GetOrSetFlag
    switch( GetOrSetFlag )
-   { 
+   {
       //:OF   zDERIVED_GET:
       case zDERIVED_GET :
 
@@ -106,14 +99,14 @@ olTermLST_dYearSemester( View     lTermLST,
       //:OF   zDERIVED_SET:
       case zDERIVED_SET :
          break ;
-   } 
+   }
 
 
    //:     /* end zDERIVED_SET */
    //:END  /* case */
    return( 0 );
 // END
-} 
+}
 
 
 

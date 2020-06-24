@@ -384,6 +384,9 @@ class EntityInstanceImpl implements EntityInstance
             ei = ei.nextVersion;
         }
 
+        if ( ei.versionStatus == VersionStatus.CANCELED )
+            return null;
+
         return ei;
     }
 
@@ -2151,6 +2154,12 @@ class EntityInstanceImpl implements EntityInstance
         {
             ei.versionNumber = newVersionNumber;
             ei.setVersionStatus( newVersionStatus );
+
+            // For all linked instances, copy the persistentAttributes if they have
+            // the same versionNumber.
+            ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                linked.persistentAttributes = this.persistentAttributes;
+            } );
         }
 
         if ( newVersionStatus == VersionStatus.NONE )
@@ -2160,6 +2169,8 @@ class EntityInstanceImpl implements EntityInstance
             getObjectInstance().setUpdated( true );
             setChildUpdateForParents();
         }
+
+        assert assertLinkedInstances();
     }
 
     /* (non-Javadoc)
@@ -2171,9 +2182,21 @@ class EntityInstanceImpl implements EntityInstance
         if ( versionStatus != VersionStatus.UNACCEPTED_ENTITY )
             throw new TemporalEntityException(this, "Entity is not the root of a temporal entity" );
 
-        setVersionStatus( VersionStatus.CANCELED );
+        for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
+        {
+            if ( ei.versionStatus != VersionStatus.CANCELED )
+            {
+                ei.setVersionStatus( VersionStatus.CANCELED );
 
-        // The only thing we have to do is drop the entity.
+                // For all linked instances, copy the persistentAttributes if they have
+                // the same versionNumber.
+                ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                    linked.setVersionStatus( VersionStatus.CANCELED );
+                } );
+            }
+        }
+
+
         dropEntity();
 
         return CursorResult.UNCHANGED;
@@ -2352,9 +2375,10 @@ class EntityInstanceImpl implements EntityInstance
     {
         for ( final EntityInstanceImpl ei : getChildrenHier( true, true ) )
         {
-             ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                 assert linked.isLinked( ei );
-             } );
+            ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                if ( ! linked.isLinked( ei ) )
+                    assert false;
+            } );
         }
 
         return true;
