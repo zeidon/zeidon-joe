@@ -7897,6 +7897,8 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
  // It's the opposite of what happens here. I don't suppose that matters.
  // If we do a CreateEntity (not temporal) all is fine.
 
+ // Assuming that this issue is related to mFAProfTemporalPerProfileFinAidAwardPeriodPathTest test since both of these object are complicated and have
+ // specific entities down two paths in the object.
    
    //:// Code to test commit of new TransApplied entries when Billing Period has been added.
    //:// We will use any mSAProf example with SA Transactions as a base to create the new entry.
