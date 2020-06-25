@@ -1,11 +1,10 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.objectdefinition.LodDef
 
-class DynamicTask( task : Task ) extends ScalaTask( task ) with Dynamic {
+class Taskx( task : com.quinsoft.zeidon.Task ) extends ScalaTask( task ) with Dynamic {
 
     /**
      * Called dynamically to convert an lod name into a empty View.
@@ -20,7 +19,22 @@ class DynamicTask( task : Task ) extends ScalaTask( task ) with Dynamic {
     }
 }
 
-case class DynamicTaskActivator( val task: Task, val lodName: String ) {
+class DynamicTask( task : com.quinsoft.zeidon.Task ) extends ScalaTask( task ) with Dynamic {
+
+    /**
+     * Called dynamically to convert an lod name into a empty View.
+     *
+     * This allows the dynamic use of an LODs.
+     * {{{
+     * val attr = task.User.activate(....)
+     * }}}
+     */
+    def selectDynamic( lodName: String): DynamicTaskActivator = {
+        new DynamicTaskActivator( task, lodName )
+    }
+}
+
+case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName: String ) {
     val view: View = new View( task ) basedOn lodName
 
     def activateWith( addQual: (QualBuilder) => QualBuilder): View = {
@@ -58,5 +72,10 @@ case class DynamicTaskActivator( val task: Task, val lodName: String ) {
 
 object DynamicTask {
     implicit def dynamicTask2Task( dtask: DynamicTask ) = dtask.task
-    implicit def Task2DynamicTask( task: Task ) = new DynamicTask( task )
+    implicit def Task2DynamicTask( task: com.quinsoft.zeidon.Task ) = new DynamicTask( task )
+}
+
+object Taskx {
+    implicit def dynamicTask2Task( dtask: DynamicTask ) = dtask.task
+    implicit def Task2DynamicTask( task: com.quinsoft.zeidon.Task ) = new DynamicTask( task )
 }

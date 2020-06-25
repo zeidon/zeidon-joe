@@ -3,7 +3,6 @@ package com.quinsoft.zeidon.scala
 import com.quinsoft.zeidon.DeserializeOi
 import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.SelectSet
-import com.quinsoft.zeidon.Task
 import com.typesafe.scalalogging.Logger
 
 /**
@@ -47,7 +46,7 @@ object Implicits {
         }
     }
 
-    implicit class ScalaTask( val task : Task ) {
+    implicit class ScalaTask( val task : com.quinsoft.zeidon.Task ) {
         /**
          * Get a view by name in the task.
          */
@@ -139,7 +138,7 @@ object Implicits {
         }
     }
 
-    case class TaskActivator( val task: Task, val lodName: String ) {
+    case class TaskActivator( val task: com.quinsoft.zeidon.Task, val lodName: String ) {
         val view: View = task.newView(lodName)
 
         def apply( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
