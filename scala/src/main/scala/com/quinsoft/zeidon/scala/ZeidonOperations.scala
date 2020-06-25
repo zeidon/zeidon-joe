@@ -35,7 +35,7 @@ trait ZeidonOperations {
     val LAST = CursorPosition.LAST
     val zCURSOR_SET = com.quinsoft.zeidon.CursorResult.SET.toInt()
 
-    var task: Task
+    var task: com.quinsoft.zeidon.Task
 
     def REGISTERED = new Register
 

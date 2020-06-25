@@ -25,7 +25,6 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.SubobjectValidationException
-import com.quinsoft.zeidon.Task
 import scala.collection.concurrent.TrieMap
 import org.apache.commons.lang3.StringUtils
 import collection.JavaConversions._
@@ -36,7 +35,7 @@ import com.quinsoft.zeidon.standardoe.IteratorBuilder
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
  */
-class View( val jtask: Task ) extends Dynamic {
+class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
 
     /**
      * The underlying EntityDef for this View.  May be null.
@@ -48,7 +47,7 @@ class View( val jtask: Task ) extends Dynamic {
      */
     var jview: com.quinsoft.zeidon.View = null
 
-    val task = new DynamicTask( jtask )
+    val task = new Task( jtask )
 
     def this( jv: com.quinsoft.zeidon.View ) = {
         this( jv.getTask() )
@@ -229,7 +228,7 @@ class View( val jtask: Task ) extends Dynamic {
     /**
      * Creates a new view, potentially with a different owning task.
      */
-    def newView( task: Task = this.jtask ) = { validateNonNull; new View( task ).from( this ) }
+    def newView( task: com.quinsoft.zeidon.Task = this.jtask ) = { validateNonNull; new View( task ).from( this ) }
 
     /**
      * Sets the name of this view in its owning task.
@@ -488,7 +487,7 @@ object View {
 
     val ON = new VmlSyntaxFiller
 
-    def apply( task: Task ) = {
+    def apply( task: com.quinsoft.zeidon.Task ) = {
       new View( task )
     }
 }

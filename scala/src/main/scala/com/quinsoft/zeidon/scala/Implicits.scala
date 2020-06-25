@@ -107,12 +107,12 @@ object Implicits {
          * }}}
          */
         def forTask( appName : String ) : TaskRunner = {
-            val dtask = new DynamicTask( oe.createTask( appName ) )
+            val dtask = new Task( oe.createTask( appName ) )
             TaskRunner( dtask )
         }
 
-        def createScalaTask( appName : String ) : DynamicTask = {
-            return new DynamicTask( oe.createTask( appName ) )
+        def createScalaTask( appName : String ) : Task = {
+            return new Task( oe.createTask( appName ) )
         }
     }
 
@@ -127,8 +127,8 @@ object Implicits {
     /**
      * Convenience class for ScalaObjectEngine.forTask
      */
-    case class TaskRunner( val dtask: DynamicTask ) {
-        def apply[T]( runTask: DynamicTask => T ): T = {
+    case class TaskRunner( val dtask: Task ) {
+        def apply[T]( runTask: Task => T ): T = {
             try {
                 runTask( dtask )
             }

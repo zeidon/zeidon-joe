@@ -22,7 +22,6 @@ import scala.collection.concurrent.TrieMap
 
 import org.apache.commons.lang3.StringUtils
 
-import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.LodDef
 
@@ -34,7 +33,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
  */
 trait ObjectOperations extends ZeidonOperations {
     val view: View
-    var task: Task = view.task
+    var task: com.quinsoft.zeidon.Task = view.jtask
 }
 
 /**
