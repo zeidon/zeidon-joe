@@ -19,6 +19,13 @@ class Task( task : com.quinsoft.zeidon.Task ) extends ScalaTask( task ) with Dyn
     }
 }
 
+/**
+ * Use com.quinsoft.zeidon.scala.Task instead.
+ */
+@deprecated
+class DynamicTask( task : com.quinsoft.zeidon.Task ) extends Task( task ) {
+}
+
 case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName: String ) {
     val view: View = new View( task.asInstanceOf[com.quinsoft.zeidon.Task] ) basedOn lodName
 
@@ -58,4 +65,10 @@ case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName
 object Task {
     implicit def dynamicTask2Task( dtask: Task ) = dtask.task
     implicit def Task2DynamicTask( task: com.quinsoft.zeidon.Task ) = new Task( task )
+}
+
+object DynamicTask {
+    implicit def dynamicTask2Task( dtask: DynamicTask ) = dtask.task
+    implicit def Task2DynamicTask( task: com.quinsoft.zeidon.Task ) = new DynamicTask( task )
+    implicit def ScalaTask2DynamicTask( task: Task ) = new DynamicTask( task.task )
 }

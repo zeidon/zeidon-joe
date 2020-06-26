@@ -18,7 +18,6 @@
   */
 package com.quinsoft.zeidon.scala
 
-import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 import com.quinsoft.zeidon.objectdefinition.LodDef
 

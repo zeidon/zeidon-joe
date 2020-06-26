@@ -33,7 +33,7 @@ import com.quinsoft.zeidon.objectdefinition.LodDef
  */
 trait ObjectOperations extends ZeidonOperations {
     val view: View
-    var task: com.quinsoft.zeidon.Task = view.jtask
+    var task: Task = view.task
 }
 
 /**

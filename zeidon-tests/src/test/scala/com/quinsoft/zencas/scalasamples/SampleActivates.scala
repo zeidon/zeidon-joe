@@ -2,13 +2,15 @@ package com.quinsoft.zencas.scalasamples
 
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.ObjectEngine
-import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
  * Examples of how to execute Zeidon activates using Scala.
  */
 class SampleActivates( var task: Task ) extends ZeidonOperations {
+
+    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
 
     /**
      * This method shows how to execute a simple activate.  The activate uses the
@@ -212,22 +214,22 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
         // Conditional qualification--only adds a qualification if a predicate
         // is true.
         val id = 10
-             
+
         mUser.buildQual( _.User.ID > 0 )
-             .when( id > 0, _.and( _.User.ID < id ), 
+             .when( id > 0, _.and( _.User.ID < id ),
                             _.and( _.User.ID > id ) )
              .rootOnlyMultiple()
              .activate()
-             
+
         mUser.buildQual( _.User.ID > 0 )
-             .when( id > 0, _.and( _.User.ID < id ) ) 
+             .when( id > 0, _.and( _.User.ID < id ) )
              .rootOnlyMultiple()
              .activate()
-             
+
         mUser.buildQual( _.User.ID in (1,2,3,4) ).rootOnly().activate()
         mUser.buildQual( _.User.ID not() in (1,2,3,4) ).and( _.User.ID < 10 ).rootOnly().activate()
         mUser.buildQual( _.User.UserName in ( "ABC", "xyz") ).rootOnly().activate()
-        
+
         mUser.activate{ _.fromJson( """{ "ID": 10 } """) }
     }
 

@@ -8,7 +8,7 @@ import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
-import com.quinsoft.zeidon.scala.DynamicTask
+import com.quinsoft.zeidon.scala.Task
 
 class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
@@ -75,7 +75,7 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
 
     @Test
     def testTaskImplicits() {
-        val dtask = new DynamicTask( task )
+        val dtask = new Task( task )
         val userList = dtask.mAdmDiv.activate( _.AdministrativeDivision.ID < 10 )
     }
 }

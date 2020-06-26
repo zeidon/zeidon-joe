@@ -22,13 +22,15 @@ import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.scala.basedOn
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.ObjectEngine
-import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
  * Sample code for dealing with Zeidon attributes in Scala.
  */
 class SampleAttributeCode( var task: Task ) extends ZeidonOperations {
+
+    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
 
     def attributeValues( mUser : View @basedOn( "mUser" ) ) {
 

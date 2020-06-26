@@ -19,7 +19,7 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-import com.quinsoft.zeidon._
+import com.quinsoft.zeidon.CursorPosition
 import util.control.Breaks._
 import com.quinsoft.zeidon.scala.Nexts._
 
@@ -35,7 +35,7 @@ trait ZeidonOperations {
     val LAST = CursorPosition.LAST
     val zCURSOR_SET = com.quinsoft.zeidon.CursorResult.SET.toInt()
 
-    var task: com.quinsoft.zeidon.Task
+    var task: Task
 
     def REGISTERED = new Register
 
