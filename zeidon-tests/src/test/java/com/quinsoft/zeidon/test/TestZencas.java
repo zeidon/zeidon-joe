@@ -434,7 +434,7 @@ public class TestZencas
 		tester.TEST_TemporalSaveIssuemSAProf( testview );
         System.out.println("===== Finished TEST_TemporalSaveIssuemSAProf ========");
 	}
-
+	
 	@Test
 	public void testXpg()
 	{
@@ -7867,198 +7867,158 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 }
 
 
-        public int TEST_TemporalSaveIssuemSAProf( View ViewToWindow )
-        {
-            zVIEW mSAChrgILST = new zVIEW();
-            // :VIEW mSAProfS BASED ON LOD mSAProf
-            zVIEW mSAProfS = new zVIEW();
-            // :VIEW mSAProf BASED ON LOD mSAProf
-            zVIEW mSAProf = new zVIEW();
-            // :VIEW mTermLST BASED ON LOD mTerm
-            zVIEW mTermLST = new zVIEW();
-            // :VIEW mTerm BASED ON LOD mTerm
-            zVIEW mTerm = new zVIEW();
-            // :INTEGER SAProfID
-            int SAProfID = 0;
-            zVIEW vTempViewVar_0 = new zVIEW();
-            int RESULT = 0;
-            int lTempInteger_0 = 0;
-            zVIEW vTempViewVar_1 = new zVIEW();
-            int lTempInteger_1 = 0;
-            zVIEW vTempViewVar_2 = new zVIEW();
-            int lTempInteger_2 = 0;
-            zVIEW vTempViewVar_3 = new zVIEW();
+public int 
+TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
+{
+   zVIEW    mSAChrgILST = new zVIEW( );
+   //:VIEW mSAProfS    BASED ON LOD mSAProf
+   zVIEW    mSAProfS = new zVIEW( );
+   //:VIEW mSAProf     BASED ON LOD mSAProf
+   zVIEW    mSAProf = new zVIEW( );
+   //:VIEW mTermLST    BASED ON LOD mTerm
+   zVIEW    mTermLST = new zVIEW( );
+   //:VIEW mTerm       BASED ON LOD mTerm
+   zVIEW    mTerm = new zVIEW( );
+   //:INTEGER SAProfID
+   int      SAProfID = 0;
+   zVIEW    vTempViewVar_0 = new zVIEW( );
+   int      RESULT = 0;
+   int      lTempInteger_0 = 0;
+   zVIEW    vTempViewVar_1 = new zVIEW( );
+   int      lTempInteger_1 = 0;
+   zVIEW    vTempViewVar_2 = new zVIEW( );
+   int      lTempInteger_2 = 0;
+   zVIEW    vTempViewVar_3 = new zVIEW( );
 
-            // After the commit, even though mSAProf.BillingPeriod is created,
-            // mSAProf.AppliedBillingPeriod is missing AND
-            // BillingPeriod is NOT created in the database.
-            // Also, interestingly... at IBOE, when I run this code, it creates
-            // the BillingPeriod correctly but the foreign key in
-            // StudentAccountTransApplied is missing.
-            // It's the opposite of what happens here. I don't suppose that
-            // matters.
-            // If we do a CreateEntity (not temporal) all is fine.
+   
+ // After the commit, even though mSAProf.BillingPeriod is created, mSAProf.AppliedBillingPeriod is missing AND
+ // BillingPeriod is NOT created in the database.
+ // Also, interestingly... at IBOE, when I run this code, it creates the BillingPeriod correctly but the foreign key in StudentAccountTransApplied is missing.
+ // It's the opposite of what happens here. I don't suppose that matters.
+ // If we do a CreateEntity (not temporal) all is fine.
 
-            // :// Code to test commit of new TransApplied entries when Billing
-            // Period has been added.
-            // :// We will use any mSAProf example with SA Transactions as a
-            // base to create the new entry.
+ // Assuming that this issue is related to mFAProfTemporalPerProfileFinAidAwardPeriodPathTest test since both of these object are complicated and have
+ // specific entities down two paths in the object.
+   
+   //:// Code to test commit of new TransApplied entries when Billing Period has been added.
+   //:// We will use any mSAProf example with SA Transactions as a base to create the new entry.
 
-            // :// Activate list of College Terms for adding BillingPeriod and
-            // position on last, for which the mSAprof is probably missing..
-            // :ACTIVATE mTermLST Multiple
-            // : RESTRICTING mTermLST.Class TO mTermLST.Class.ID = 0
-            RESULT = ActivateObjectInstance( mTermLST, "lTermLST", ViewToWindow, 0, zMULTIPLE );
-            DropView( vTempViewVar_0 );
-            SetNameForView( mTermLST, "lTermLST", null, zLEVEL_TASK );
-            OrderEntityForView( mTermLST, "CollegeTerm", "YearSemester D" );
-            RESULT = SetCursorFirstEntity( mTermLST, "CollegeTerm", "" );
+   //:// Activate list of College Terms for adding BillingPeriod and position on last, for which the mSAprof is probably missing..
+   //:ACTIVATE mTermLST Multiple
+   //:     RESTRICTING mTermLST.Class TO mTermLST.Class.ID = 0
+   RESULT = ActivateObjectInstance( mTermLST, "lTermLST", ViewToWindow, 0, zMULTIPLE );
+   DropView( vTempViewVar_0 );
+   SetNameForView( mTermLST, "lTermLST", null, zLEVEL_TASK );
+   OrderEntityForView( mTermLST, "CollegeTerm", "YearSemester D" );
+   RESULT = SetCursorFirstEntity( mTermLST, "CollegeTerm", "" );
 
-            // :// Activate any mSAProf as our base.
-            // :ACTIVATE mSAProfS WHERE mSAProfS.StudentAccountTransApplied
-            // EXISTS
-            // : RESTRICTING mSAProfS.BillingPeriod TO
-            // mSAProfS.PeriodCollegeTerm.ID = mTermLST.CollegeTerm.ID
-            {
-                MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
-                GetIntegerFromAttribute( mi_lTempInteger_0, mTermLST, "CollegeTerm", "ID" );
-                lTempInteger_0 = mi_lTempInteger_0.intValue();
-            }
-            o_fnLocalBuildQual_3x( ViewToWindow, vTempViewVar_1, lTempInteger_0 );
-            RESULT = ActivateObjectInstance( mSAProfS, "mSAProf", ViewToWindow, vTempViewVar_1, zSINGLE );
-            DropView( vTempViewVar_1 );
-            SetNameForView( mSAProfS, "mSAProfS", null, zLEVEL_TASK );
+   //:// Activate any mSAProf as our base.
+   //:ACTIVATE mSAProfS WHERE mSAProfS.StudentAccountTransApplied EXISTS
+   //:      RESTRICTING mSAProfS.BillingPeriod TO mSAProfS.PeriodCollegeTerm.ID = mTermLST.CollegeTerm.ID 
+   {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
+       GetIntegerFromAttribute( mi_lTempInteger_0, mTermLST, "CollegeTerm", "ID" );
+   lTempInteger_0 = mi_lTempInteger_0.intValue( );}
+   o_fnLocalBuildQual_3x( ViewToWindow, vTempViewVar_1, lTempInteger_0 );
+   RESULT = ActivateObjectInstance( mSAProfS, "mSAProf", ViewToWindow, vTempViewVar_1, zSINGLE );
+   DropView( vTempViewVar_1 );
+   SetNameForView( mSAProfS, "mSAProfS", null, zLEVEL_TASK );
 
-            // :// Delete any current Billing Term entry for the College Term on
-            // which we're positioned.
-            // :IF mSAProfS.BillingPeriod EXISTS
-            lTempInteger_1 = CheckExistenceOfEntity( mSAProfS, "BillingPeriod" );
-            if ( lTempInteger_1 == 0 )
-            {
-                // :// There are entries for the Term, so delete them all.
-                // :FOR EACH mSAProfS.StudentAccountTransApplied
-                RESULT = SetCursorFirstEntity( mSAProfS, "StudentAccountTransApplied", "" );
-                while ( RESULT > zCURSOR_UNCHANGED )
-                {
-                    // :IF mSAProfS.AppliedBillingPeriod.ID =
-                    // mSAProfS.BillingPeriod.ID
-                    if ( CompareAttributeToAttribute( mSAProfS, "AppliedBillingPeriod", "ID", mSAProfS, "BillingPeriod",
-                                                      "ID" ) == 0 )
-                    {
-                        RESULT = DeleteEntity( mSAProfS, "StudentAccountTransApplied", zREPOS_NONE );
-                    }
+   //:// Delete any current Billing Term entry for the College Term on which we're positioned.
+   //:IF mSAProfS.BillingPeriod EXISTS
+   lTempInteger_1 = CheckExistenceOfEntity( mSAProfS, "BillingPeriod" );
+   if ( lTempInteger_1 == 0 )
+   { 
+      //:// There are entries for the Term, so delete them all.
+      //:FOR EACH mSAProfS.StudentAccountTransApplied 
+      RESULT = SetCursorFirstEntity( mSAProfS, "StudentAccountTransApplied", "" );
+      while ( RESULT > zCURSOR_UNCHANGED )
+      { 
+         //:IF mSAProfS.AppliedBillingPeriod.ID = mSAProfS.BillingPeriod.ID 
+         if ( CompareAttributeToAttribute( mSAProfS, "AppliedBillingPeriod", "ID", mSAProfS, "BillingPeriod", "ID" ) == 0 )
+         { 
+            RESULT = DeleteEntity( mSAProfS, "StudentAccountTransApplied", zREPOS_NONE );
+         } 
 
-                    RESULT = SetCursorNextEntity( mSAProfS, "StudentAccountTransApplied", "" );
-                }
+         RESULT = SetCursorNextEntity( mSAProfS, "StudentAccountTransApplied", "" );
+      } 
 
-                RESULT = CommitObjectInstance( mSAProfS );
-                RESULT = DeleteEntity( mSAProfS, "BillingPeriod", zPOS_NEXT );
-                RESULT = CommitObjectInstance( mSAProfS );
-                {
-                    MutableInt mi_SAProfID = new MutableInt( SAProfID );
-                    GetIntegerFromAttribute( mi_SAProfID, mSAProfS, "StudentAccountProfile", "ID" );
-                    SAProfID = mi_SAProfID.intValue();
-                }
-                DropObjectInstance( mSAProfS );
+      RESULT = CommitObjectInstance( mSAProfS );
+      RESULT = DeleteEntity( mSAProfS, "BillingPeriod", zPOS_NEXT );
+      RESULT = CommitObjectInstance( mSAProfS );
+      {MutableInt mi_SAProfID = new MutableInt( SAProfID );
+             GetIntegerFromAttribute( mi_SAProfID, mSAProfS, "StudentAccountProfile", "ID" );
+      SAProfID = mi_SAProfID.intValue( );}
+      DropObjectInstance( mSAProfS );
 
-                // :// Get a fresh start.
-                // :ACTIVATE mSAProfS WHERE mSAProfS.StudentAccountTransApplied
-                // EXISTS
-                o_fnLocalBuildQual_4( ViewToWindow, vTempViewVar_2 );
-                RESULT = ActivateObjectInstance( mSAProfS, "mSAProf", ViewToWindow, vTempViewVar_2, zSINGLE );
-                DropView( vTempViewVar_2 );
-                SetNameForView( mSAProfS, "mSAProfS", null, zLEVEL_TASK );
-            }
+      //:// Get a fresh start.
+      //:ACTIVATE mSAProfS WHERE mSAProfS.StudentAccountTransApplied EXISTS
+      o_fnLocalBuildQual_4( ViewToWindow, vTempViewVar_2 );
+      RESULT = ActivateObjectInstance( mSAProfS, "mSAProf", ViewToWindow, vTempViewVar_2, zSINGLE );
+      DropView( vTempViewVar_2 );
+      SetNameForView( mSAProfS, "mSAProfS", null, zLEVEL_TASK );
+   } 
 
-            // :END
+   //:END
 
-            // :// Position on a StudentAccountTransApplied for the source of
-            // the create transaction.
-            CreateViewFromView( mSAProf, mSAProfS );
-            SetNameForView( mSAProf, "mSAProfCopy", null, zLEVEL_TASK );
-            RESULT = SetCursorFirstEntity( mSAProf, "StudentAccountTransApplied", "" );
-            RESULT = SetCursorLastEntity( mSAProfS, "StudentAccountTransApplied", "" );
+   //:// Position on a StudentAccountTransApplied for the source of the create transaction.
+   CreateViewFromView( mSAProf, mSAProfS );
+   SetNameForView( mSAProf, "mSAProfCopy", null, zLEVEL_TASK );
+   RESULT = SetCursorFirstEntity( mSAProf, "StudentAccountTransApplied", "" );
+   RESULT = SetCursorLastEntity( mSAProfS, "StudentAccountTransApplied", "" );
 
-            // :// Add a BillingPeriod for CollegeTerm and add two
-            // StudentAccountTransApplied entries.
-            RESULT = CreateEntity( mSAProfS, "BillingPeriod", zPOS_AFTER );
-            RESULT = IncludeSubobjectFromSubobject( mSAProfS, "PeriodCollegeTerm", mTermLST, "CollegeTerm",
-                                                    zPOS_AFTER );
-            // :mSAProfS.BillingPeriod.PeriodDesignator =
-            // mTermLST.CollegeTerm.YearSemester
-            SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "PeriodDesignator", mTermLST, "CollegeTerm",
-                                       "YearSemester" );
-            // :mSAProfS.BillingPeriod.BeginDate =
-            // mSAProf.PeriodCollegeTerm.CourseStartDate
-            SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "BeginDate", mSAProf, "PeriodCollegeTerm",
-                                       "CourseStartDate" );
-            // :mSAProfS.BillingPeriod.EndDate =
-            // mSAProf.PeriodCollegeTerm.CourseEndDate
-            SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "EndDate", mSAProf, "PeriodCollegeTerm",
-                                       "CourseEndDate" );
+   //:// Add a BillingPeriod for CollegeTerm and add two StudentAccountTransApplied entries.
+   RESULT = CreateEntity( mSAProfS, "BillingPeriod", zPOS_AFTER );
+   RESULT = IncludeSubobjectFromSubobject( mSAProfS, "PeriodCollegeTerm", mTermLST, "CollegeTerm", zPOS_AFTER );
+   //:mSAProfS.BillingPeriod.PeriodDesignator = mTermLST.CollegeTerm.YearSemester 
+   SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "PeriodDesignator", mTermLST, "CollegeTerm", "YearSemester" );
+   //:mSAProfS.BillingPeriod.BeginDate        = mSAProf.PeriodCollegeTerm.CourseStartDate 
+   SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "BeginDate", mSAProf, "PeriodCollegeTerm", "CourseStartDate" );
+   //:mSAProfS.BillingPeriod.EndDate          = mSAProf.PeriodCollegeTerm.CourseEndDate 
+   SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "EndDate", mSAProf, "PeriodCollegeTerm", "CourseEndDate" );
 
-            CreateTemporalEntity( mSAProfS, "StudentAccountTransApplied", zPOS_AFTER );
-            // CreateEntity( mSAProfS, "StudentAccountTransApplied", zPOS_AFTER
-            // );
-            RESULT = IncludeSubobjectFromSubobject( mSAProfS, "SATransactionCode", mSAProf, "SATransactionCode",
-                                                    zPOS_AFTER );
-            RESULT = IncludeSubobjectFromSubobject( mSAProfS, "DebitGLChartEntry", mSAProf, "DebitGLChartEntry",
-                                                    zPOS_AFTER );
-            RESULT = IncludeSubobjectFromSubobject( mSAProfS, "CreditGLChartEntry", mSAProf, "CreditGLChartEntry",
-                                                    zPOS_AFTER );
-            RESULT = IncludeSubobjectFromSubobject( mSAProfS, "AppliedBillingPeriod", mSAProfS, "BillingPeriod",
-                                                    zPOS_AFTER );
-            SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Description", mSAProf,
-                                       "StudentAccountTransApplied", "Description" );
-            SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Instrument", mSAProf,
-                                       "StudentAccountTransApplied", "Instrument" );
-            SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "DateEntered", mSAProf,
-                                       "StudentAccountTransApplied", "DateEntered" );
-            SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Amount", mSAProf,
-                                       "StudentAccountTransApplied", "Amount" );
-            SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Source", mSAProf,
-                                       "StudentAccountTransApplied", "Source" );
-            AcceptSubobject( mSAProfS, "StudentAccountTransApplied" );
+   CreateTemporalEntity( mSAProfS, "StudentAccountTransApplied", zPOS_AFTER );
+   //CreateEntity( mSAProfS, "StudentAccountTransApplied", zPOS_AFTER );
+   RESULT = IncludeSubobjectFromSubobject( mSAProfS, "SATransactionCode", mSAProf, "SATransactionCode", zPOS_AFTER );
+   RESULT = IncludeSubobjectFromSubobject( mSAProfS, "DebitGLChartEntry", mSAProf, "DebitGLChartEntry", zPOS_AFTER );
+   RESULT = IncludeSubobjectFromSubobject( mSAProfS, "CreditGLChartEntry", mSAProf, "CreditGLChartEntry", zPOS_AFTER );
+   RESULT = IncludeSubobjectFromSubobject( mSAProfS, "AppliedBillingPeriod", mSAProfS, "BillingPeriod", zPOS_AFTER );
+   SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Description", mSAProf, "StudentAccountTransApplied", "Description" );
+   SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Instrument", mSAProf, "StudentAccountTransApplied", "Instrument" );
+   SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "DateEntered", mSAProf, "StudentAccountTransApplied", "DateEntered" );
+   SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Amount", mSAProf, "StudentAccountTransApplied", "Amount" );
+   SetAttributeFromAttribute( mSAProfS, "StudentAccountTransApplied", "Source", mSAProf, "StudentAccountTransApplied", "Source" );
+   AcceptSubobject( mSAProfS, "StudentAccountTransApplied" );
 
-            DropView( mSAProf );
+   DropView( mSAProf );
 
-            RESULT = CommitObjectInstance( mSAProfS );
+   RESULT = CommitObjectInstance( mSAProfS );
+     
+   // After the commit, even though mSAProf.BillingPeriod is created, mSAProf.AppliedBillingPeriod is missing AND
+   // BillingPeriod is NOT created in the database.
+   // Also, interestingly... at IBOE, when I run this code, it creates the BillingPeriod correctly but the foreign key in StudentAccountTransApplied is missing.
+   // It's the opposite of what happens here. I don't suppose that matters.
+   // If we do a CreateEntity (not temporal) all is fine.
+   Assert.assertTrue( "ERROR! After commit AppliedBillingPeriod.ID is missing.", mSAProfS.cursor("AppliedBillingPeriod").getAttribute("ID").getValue() != null );	   
+   Assert.assertTrue( "ERROR! After commit BillingPeriod.ID is missing.", mSAProfS.cursor("BillingPeriod").getAttribute("ID").getValue() != null );	   
 
-            // After the commit, even though mSAProf.BillingPeriod is created,
-            // mSAProf.AppliedBillingPeriod is missing AND
-            // BillingPeriod is NOT created in the database.
-            // Also, interestingly... at IBOE, when I run this code, it creates
-            // the BillingPeriod correctly but the foreign key in
-            // StudentAccountTransApplied is missing.
-            // It's the opposite of what happens here. I don't suppose that
-            // matters.
-            // If we do a CreateEntity (not temporal) all is fine.
-            Assert.assertTrue( "ERROR! After commit AppliedBillingPeriod.ID is missing.",
-                               mSAProfS.cursor( "AppliedBillingPeriod" ).getAttribute( "ID" ).getValue() != null );
-            Assert.assertTrue( "ERROR! After commit BillingPeriod.ID is missing.",
-                               mSAProfS.cursor( "BillingPeriod" ).getAttribute( "ID" ).getValue() != null );
-
-            // :ACTIVATE mSAProf WHERE mSAProf.StudentAccountProfile.ID =
-            // mSAProfS.StudentAccountProfile.ID
-            {
-                MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
-                GetIntegerFromAttribute( mi_lTempInteger_2, mSAProfS, "StudentAccountProfile", "ID" );
-                lTempInteger_2 = mi_lTempInteger_2.intValue();
-            }
-            o_fnLocalBuildQual_5( ViewToWindow, vTempViewVar_3, lTempInteger_2 );
-            RESULT = ActivateObjectInstance( mSAProf, "mSAProf", ViewToWindow, vTempViewVar_3, zSINGLE );
-            DropView( vTempViewVar_3 );
-            SetNameForView( mSAProf, "mSAProfVerify", null, zLEVEL_TASK );
-            return ( 0 );
-        }
-
-	private int
+   //:ACTIVATE mSAProf WHERE mSAProf.StudentAccountProfile.ID = mSAProfS.StudentAccountProfile.ID 
+   {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
+       GetIntegerFromAttribute( mi_lTempInteger_2, mSAProfS, "StudentAccountProfile", "ID" );
+   lTempInteger_2 = mi_lTempInteger_2.intValue( );}
+   o_fnLocalBuildQual_5( ViewToWindow, vTempViewVar_3, lTempInteger_2 );
+   RESULT = ActivateObjectInstance( mSAProf, "mSAProf", ViewToWindow, vTempViewVar_3, zSINGLE );
+   DropView( vTempViewVar_3 );
+   SetNameForView( mSAProf, "mSAProfVerify", null, zLEVEL_TASK );
+   return( 0 );
+} 
+	
+	private int 
 	o_fnLocalBuildQual_5( View     vSubtask,
 	                      zVIEW    vQualObject,
 	                      int      lTempInteger_2 )
 	{
 	   int      RESULT = 0;
-
+	
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -8068,14 +8028,14 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_2 );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	   return( 0 );
-	}
+	} 
 
-	private int
+	private int 
 	o_fnLocalBuildQual_4( View     vSubtask,
 	                      zVIEW    vQualObject )
 	{
 	   int      RESULT = 0;
-
+	
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -8085,15 +8045,15 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "EXISTS" );
 	   return( 0 );
-	}
+	} 
 
-	private int
+	private int 
 	o_fnLocalBuildQual_3x( View     vSubtask,
 	                      zVIEW    vQualObject,
 	                      int      lTempInteger_0 )
 	{
 	   int      RESULT = 0;
-
+	
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -8110,14 +8070,14 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	   return( 0 );
-	}
+	} 
 
-	private int
+	private int 
 	o_fnLocalBuildQual_2( View     vSubtask,
 	                      zVIEW    vQualObject )
 	{
 	   int      RESULT = 0;
-
+	
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Class" );
@@ -8127,7 +8087,7 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "0" );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	   return( 0 );
-	}
+	} 
 
 
    }
