@@ -457,6 +457,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def setFlag( flag: ActivateFlags ): QualBuilder = {
+        jqual.setFlag( flag )
+        this
+    }
+
     /**
      * Activates children that match the qualification; i.e. this restricts what
      * children are loaded.
