@@ -338,12 +338,16 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
     def serializeOi = { validateNonNull; jview.serializeOi() }
 
     /**
-     * Convenience method that is the same as:
-     *   view.serializeOi().asJson().withIncremental( incrementals ).toString()
+     * Convenience method for converting to JSON
      *
      * @return view as JSON string.
      */
-    def toJson( incrementals : Boolean = true ) = jview.toJson( incrementals )
+    def toJson( incrementals : Boolean = true, prettyPrint : Boolean = false ) = 
+        jview.serializeOi()
+             .asJson()
+             .withIncremental( incrementals )
+             .setCompressed( !prettyPrint )
+             .toString();
 
     /**
      * Creates a SelectSet for this View.
