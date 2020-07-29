@@ -460,7 +460,8 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
 
             // Skip if the entity was created or deleted.
             if ( ei.dbhCreated || ei.dbhDeleted )
-                continue;
+                if ( ei.dbhForeignKey == false ) // But only if it doesn't need a fk set.
+                    continue;
 
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );

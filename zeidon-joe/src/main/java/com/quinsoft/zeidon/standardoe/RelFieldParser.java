@@ -88,5 +88,8 @@ class RelFieldParser
     {
         Object value = srcInstance.getAttribute( srcAttributeDef ).getValue();
         relInstance.getAttribute( relAttributeDef ).setInternalValue( value, true );
+        
+        // Set flag to indicate that we need to update the target instance.
+        relInstance.dbhForeignKey = true;
     }
 }
