@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,8 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.EntityInstance;
@@ -772,6 +771,9 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                 AttributeDef keyAttrib = entityDef.getKeys().get( 0 );
                 ei.getAttribute( keyAttrib ).setInternalValue( keys.get( 0 ), false );
             }
+
+            // Indicate that--for now--we won't need to update later because of a FK.
+            ei.dbhForeignKey = false;
 
             // Set the dbhCreated flag for ei and all its linked instances.  This
             // will prevent us from trying to insert it again.
