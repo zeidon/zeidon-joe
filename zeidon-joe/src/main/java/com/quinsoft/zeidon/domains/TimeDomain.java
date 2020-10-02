@@ -19,12 +19,9 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -40,7 +37,7 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
  */
 public class TimeDomain extends DateTimeDomain
 {
-    protected DateTimeFormatter defaultTimeFormatter = DateTimeFormat.forPattern("HHmmssS a");
+    protected DateTimeFormatter defaultTimeFormatter = DateTimeFormatter.ofPattern("HHmmssS a");
 
     public TimeDomain(Application application, Map<String, Object> domainProperties, Task task )
     {
@@ -53,7 +50,7 @@ public class TimeDomain extends DateTimeDomain
         if ( internalValue == null )
             return StringDomain.checkNullString( attributeDef.getDomain().getApplication(), null );
 
-        return defaultTimeFormatter.print( (DateTime) internalValue );
+        return defaultTimeFormatter.format( (ZonedDateTime) internalValue );
     }
 
 
@@ -61,6 +58,20 @@ public class TimeDomain extends DateTimeDomain
     public void validateInternalValue( Task task, AttributeDef attributeDef, Object internalValue ) throws InvalidAttributeValueException
     {
             return;
+    }
+
+    static public int compareZonedDateTime( ZonedDateTime thisTime, ZonedDateTime thatTime )
+    {
+        if ( thisTime.getSecond() != thatTime.getSecond() )
+            return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
+
+        if ( thisTime.getMinute() != thatTime.getMinute() )
+            return Integer.compare( thisTime.getMinute(), thatTime.getMinute() );
+
+        if ( thisTime.getSecond() != thatTime.getSecond() )
+            return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
+
+        return Integer.compare( thisTime.getNano(), thatTime.getNano() );
     }
 
     @Override
@@ -73,10 +84,9 @@ public class TimeDomain extends DateTimeDomain
             if ( rc != null )
                 return rc;
 
-            assert internalValue instanceof DateTime;
-            assert value instanceof DateTime;
-
-            return DateTimeComparator.getTimeOnlyInstance().compare( internalValue, value );
+            ZonedDateTime thisTime = (ZonedDateTime) internalValue;
+            ZonedDateTime thatTime = (ZonedDateTime) value;
+            return compareZonedDateTime( thisTime, thatTime );
         }
         catch ( Throwable t )
         {
@@ -91,13 +101,13 @@ public class TimeDomain extends DateTimeDomain
     	if ( externalValue == null )
     		return null;
     	//
-    	// Is there any chance that I want to use the instanceof DateTime not to do a return but to
-    	// make sure that the externalValue is a DateTime so that I know I can get the time from it???
-        //if ( externalValue instanceof DateTime )
+    	// Is there any chance that I want to use the instanceof ZonedDateTime not to do a return but to
+    	// make sure that the externalValue is a ZonedDateTime so that I know I can get the time from it???
+        //if ( externalValue instanceof ZonedDateTime )
         //    return externalValue;
 
         //if ( externalValue instanceof Date )
-        //    return new DateTime( externalValue );
+        //    return new ZonedDateTime( externalValue );
         //
 
         // VML operations use "" as synonymous with null.
@@ -105,7 +115,7 @@ public class TimeDomain extends DateTimeDomain
             return null;
 
         //if ( externalValue instanceof CharSequence )
-        if ( externalValue instanceof DateTime )
+        if ( externalValue instanceof ZonedDateTime )
         {
             DomainContext context = getContext( task, contextName );
             return context.convertExternalValue( task, attributeDef, externalValue );
@@ -138,7 +148,7 @@ public class TimeDomain extends DateTimeDomain
         	if ( internalValue == null )
         		return StringDomain.checkNullString(task.getApplication(), null);
 
-            return formatter.print( (DateTime) internalValue );
+            return formatter.format( (ZonedDateTime) internalValue );
         }
 
         @Override
@@ -153,7 +163,7 @@ public class TimeDomain extends DateTimeDomain
         	//if ( StringUtils.isBlank( s ) )
         		//return null;
 
-            return formatter.print( (DateTime) value );
+            return formatter.format( (ZonedDateTime) value );
         }
 
         @Override
@@ -162,7 +172,7 @@ public class TimeDomain extends DateTimeDomain
             case "JavaEditString" ) )
             {
                 editString = reader.getAttributeValue();
-                formatter = DateTimeFormat.forPattern( editString );
+                formatter = DateTimeFormatter.ofPattern( editString );
             }
             else
                 super.setAttribute( reader );

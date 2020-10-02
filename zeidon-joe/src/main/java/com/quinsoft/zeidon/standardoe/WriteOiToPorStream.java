@@ -24,14 +24,13 @@ package com.quinsoft.zeidon.standardoe;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.SerializeOi;
@@ -53,7 +52,7 @@ public class WriteOiToPorStream implements StreamWriter
     private static final long META_OI_LOCKED =   0x00000001;
     private static final long META_OI_READONLY = 0x00000002;
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     private ViewImpl              view;
     private Writer                writer;
@@ -129,7 +128,7 @@ public class WriteOiToPorStream implements StreamWriter
         String header = String.format( "z%s%s%s%s%sZeidon    %8s %s %s",
                                         erDate, incremental, compressed, optimisticOIs, attribFlags,
                                         name, view.getLodDef().getName(),
-                                        DATE_FORMATTER.print( new DateTime() ) );
+                                        DATE_FORMATTER.format( ZonedDateTime.now() ) );
         try
         {
             writeln( header );

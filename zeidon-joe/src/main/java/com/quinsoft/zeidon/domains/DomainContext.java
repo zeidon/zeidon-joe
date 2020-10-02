@@ -19,7 +19,7 @@
 
 package com.quinsoft.zeidon.domains;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.InvalidAttributeValueException;
@@ -56,7 +56,7 @@ public interface DomainContext extends PortableFileAttributeHandler
     String   convertToString( Task task, AttributeDef attributeDef, Object internalValue );
     Integer  convertToInteger( Task task, AttributeDef attributeDef, Object internalValue );
     Double   convertToDouble( Task task, AttributeDef attributeDef, Object internalValue );
-    DateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
+    ZonedDateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
     Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue );
     Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
 }

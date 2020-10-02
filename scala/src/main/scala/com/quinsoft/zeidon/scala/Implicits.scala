@@ -3,7 +3,6 @@ package com.quinsoft.zeidon.scala
 import com.quinsoft.zeidon.DeserializeOi
 import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.SelectSet
-import com.quinsoft.zeidon.Task
 import com.typesafe.scalalogging.Logger
 
 /**
@@ -47,7 +46,7 @@ object Implicits {
         }
     }
 
-    implicit class ScalaTask( val task : Task ) {
+    implicit class ScalaTask( val task : com.quinsoft.zeidon.Task ) {
         /**
          * Get a view by name in the task.
          */
@@ -84,9 +83,13 @@ object Implicits {
             new DynamicTaskActivator( task, lodName )
         }
 
-        def viewFromJson( json: String ): View = task.deserializeOi.asJson.fromString( json ).unpickle
+        def viewFromJson( json: String, lodName: String = null ): View = {
+            if ( lodName == null )
+                return task.deserializeOi.asJson.fromString( json ).unpickle
+            else
+                return task.deserializeOi.asJson.setLodDef( lodName ).fromString( json ).unpickle
+        }
     }
-
 
     implicit class ScalaObjectEngine( val oe : ObjectEngine ) {
 
@@ -104,12 +107,12 @@ object Implicits {
          * }}}
          */
         def forTask( appName : String ) : TaskRunner = {
-            val dtask = new DynamicTask( oe.createTask( appName ) )
+            val dtask = new Task( oe.createTask( appName ) )
             TaskRunner( dtask )
         }
 
-        def createScalaTask( appName : String ) : DynamicTask = {
-            return new DynamicTask( oe.createTask( appName ) )
+        def createScalaTask( appName : String ) : Task = {
+            return new Task( oe.createTask( appName ) )
         }
     }
 
@@ -124,8 +127,8 @@ object Implicits {
     /**
      * Convenience class for ScalaObjectEngine.forTask
      */
-    case class TaskRunner( val dtask: DynamicTask ) {
-        def apply[T]( runTask: DynamicTask => T ): T = {
+    case class TaskRunner( val dtask: Task ) {
+        def apply[T]( runTask: Task => T ): T = {
             try {
                 runTask( dtask )
             }
@@ -135,7 +138,7 @@ object Implicits {
         }
     }
 
-    case class TaskActivator( val task: Task, val lodName: String ) {
+    case class TaskActivator( val task: com.quinsoft.zeidon.Task, val lodName: String ) {
         val view: View = task.newView(lodName)
 
         def apply( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {

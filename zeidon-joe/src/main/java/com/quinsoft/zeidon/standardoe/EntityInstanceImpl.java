@@ -3669,7 +3669,7 @@ class EntityInstanceImpl implements EntityInstance
             if ( getInternalAttribute( targetAttr ).isNull( getTask(), targetAttr ) && sourceInstance.getAttribute( sourceAttr ).isNull() )
                 continue;
 
-            if ( flags.isCopyNulls() )
+            if ( ! flags.isCopyNulls() )
             {
                 // User doesn't want NULL source attributes to be copied.
                 if ( sourceInstance.getAttribute( sourceAttr ).isNull() )

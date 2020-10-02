@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,8 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.EntityInstance;
@@ -455,12 +454,13 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                     continue;
 
                 if ( entityDef.getDbUpdatedTimestamp() != null )
-                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
+                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( ZonedDateTime.now() );
             }
 
             // Skip if the entity was created or deleted.
             if ( ei.dbhCreated || ei.dbhDeleted )
-                continue;
+                if ( ei.dbhForeignKey == false ) // But only if it doesn't need a fk set.
+                    continue;
 
             view.cursor( entityDef ).setCursor( ei );
             dbHandler.updateEntity( view, ei );
@@ -748,7 +748,7 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                 AttributeInstanceImpl timestamp = ei.getAttribute( entityDef.getDbCreatedTimestamp() );
                 if ( timestamp.isNull() )
                 {
-                    DateTime now = new DateTime();
+                    ZonedDateTime now = ZonedDateTime.now();
                     timestamp.setValue( now );
 
                     if ( entityDef.getDbUpdatedTimestamp() != null )
@@ -771,6 +771,9 @@ class CommitToSqlWithDbGeneratedKeys extends AbstractCommitToDb
                 AttributeDef keyAttrib = entityDef.getKeys().get( 0 );
                 ei.getAttribute( keyAttrib ).setInternalValue( keys.get( 0 ), false );
             }
+
+            // Indicate that--for now--we won't need to update later because of a FK.
+            ei.dbhForeignKey = false;
 
             // Set the dbhCreated flag for ei and all its linked instances.  This
             // will prevent us from trying to insert it again.

@@ -18,9 +18,9 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import com.quinsoft.zeidon.objectdefinition.RelField;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.RelField;
 
 /**
  * A helper class with some logic for parsing a RelField and determining
@@ -87,6 +87,8 @@ class RelFieldParser
     void copySrcToRel()
     {
         Object value = srcInstance.getAttribute( srcAttributeDef ).getValue();
-        relInstance.getAttribute( relAttributeDef ).setInternalValue( value, true );
+        if ( relInstance.getAttribute( relAttributeDef ).setInternalValue( value, true ) )
+            // Set flag to indicate that we need to update the target instance.
+            relInstance.dbhForeignKey = true;
     }
 }

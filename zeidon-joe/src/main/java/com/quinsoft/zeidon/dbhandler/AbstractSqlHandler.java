@@ -387,9 +387,12 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     boolean getAttributeValueEquality(SqlStatement stmt, StringBuilder buffer, DataField dataField, EntityInstance entityInstance)
     {
+        // Check if value is null.  We still need to add the qualification to the buffer
+        // because sometimes we're actually doing a search where a value is null.
+        boolean isNull = entityInstance.getAttribute( dataField.getAttributeDef() ).isNull();
         if ( ! isBindAllValues() )
         {
-            if ( entityInstance.getAttribute( dataField.getAttributeDef() ).isNull() )
+            if ( isNull )
             {
                 buffer.append( " IS null" );
                 return false;
@@ -398,7 +401,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         buffer.append( " = " );
         getAttributeValue( stmt, buffer, dataField, entityInstance );
-        return true;
+        return ! isNull;
     }
 
     private void addColumnList(SqlStatement   stmt,
@@ -2207,7 +2210,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 DataRecord    relDataRecord = relEntityDef.getDataRecord();
 
 
-                if ( rootEntity ) // DGC 2011-11-14: Is this necessary?  Isn't rootEntity always false?
+                if ( rootEntity )
                 {
                     if ( stmt.conjunctionNeeded )
                         stmt.appendWhere( " AND " );

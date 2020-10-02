@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
@@ -52,13 +51,13 @@ import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonDbException;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.domains.Domain;
+import com.quinsoft.zeidon.domains.DomainDateTimeFormatter;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 import com.quinsoft.zeidon.objectdefinition.DataRecord;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.utils.IntegerLinkedHashMap;
-import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.KeyStringBuilder;
 
 /**
@@ -86,8 +85,8 @@ public class JdbcHandler extends AbstractSqlHandler
 
     private final String configGroupName;
     private JdbcDomainTranslator translator;
-    private DateTimeFormatter dateFormat;
-    private DateTimeFormatter dateTimeFormat;
+    private DomainDateTimeFormatter dateFormat;
+    private DomainDateTimeFormatter dateTimeFormat;
     private String drivers;
 
     /**
@@ -1184,7 +1183,7 @@ public class JdbcHandler extends AbstractSqlHandler
         return translator;
     }
 
-    public DateTimeFormatter getDateFormatter()
+    public DomainDateTimeFormatter getDateFormatter()
     {
         if ( dateFormat == null )
         {
@@ -1192,13 +1191,13 @@ public class JdbcHandler extends AbstractSqlHandler
             if ( StringUtils.isBlank( format ) )
                 format = "yyyy-MM-dd|yyyy-MM-dd 00:00:00";
 
-            dateFormat = JoeUtils.createDateFormatterFromEditString( format );
+            dateFormat = new DomainDateTimeFormatter( format );
         }
 
         return dateFormat;
     }
 
-    public DateTimeFormatter getDateTimeFormatter()
+    public DomainDateTimeFormatter getDateTimeFormatter()
     {
         if ( dateTimeFormat == null )
         {
@@ -1212,7 +1211,7 @@ public class JdbcHandler extends AbstractSqlHandler
                 format = format + " HH:mm:ss.SSS|" + format + " HH:mm:ss";
             }
 
-            dateTimeFormat = JoeUtils.createDateFormatterFromEditString( format );
+            dateTimeFormat = new DomainDateTimeFormatter( format );
         }
 
         return dateTimeFormat;

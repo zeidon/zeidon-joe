@@ -21,7 +21,7 @@ package com.quinsoft.zeidon.standardoe;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
@@ -110,7 +110,7 @@ class AttributeInstanceImpl implements AttributeInstance
      * @see com.quinsoft.zeidon.AttributeInstance#getDate()
      */
     @Override
-    public DateTime getDateTime()
+    public ZonedDateTime getDateTime()
     {
         executeDerivedOper();
         return attributeValue.getDateTime( getTask(), attributeDef );
@@ -140,7 +140,7 @@ class AttributeInstanceImpl implements AttributeInstance
      * @see com.quinsoft.zeidon.AttributeInstance#getDate(java.lang.String)
      */
     @Override
-    public DateTime getDateTime( String contextName )
+    public ZonedDateTime getDateTime( String contextName )
     {
         executeDerivedOper();
         return attributeValue.getDateTime( getTask(), attributeDef, contextName );

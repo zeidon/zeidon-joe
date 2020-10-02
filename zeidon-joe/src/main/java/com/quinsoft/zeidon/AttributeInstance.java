@@ -18,7 +18,7 @@
  */
 package com.quinsoft.zeidon;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 
@@ -77,15 +77,15 @@ public interface AttributeInstance
     Integer getInteger();
 
     /**
-     * Returns the attribute value as a DateTime if possible.  Otherwise throws
+     * Returns the attribute value as a ZonedDateTime if possible.  Otherwise throws
      * InvalidAttributeValueException.  Note that no context is used
-     * to convert the DateTime.  If you want to use the default context call getDateTime( "" )
+     * to convert the ZonedDateTime.  If you want to use the default context call getDateTime( "" )
      * instead.
      *
-     * @return the attribute value as a DateTime.
+     * @return the attribute value as a ZonedDateTime.
      * @throws InvalidAttributeValueException
      */
-    DateTime getDateTime();
+    ZonedDateTime getDateTime();
 
     /**
      * Returns the attribute value as an double if possible.  Otherwise throws
@@ -126,15 +126,15 @@ public interface AttributeInstance
     Integer getInteger( String contextName );
 
     /**
-     * Returns the attribute value as a DateTime if possible.  Otherwise throws
+     * Returns the attribute value as a ZonedDateTime if possible.  Otherwise throws
      * InvalidAttributeValueException.  The supplied contextName
      * will be used to convert the value.  To specify the default context use ""
      * (empty string).
      *
-     * @return the attribute value as a DateTime.
+     * @return the attribute value as a ZonedDateTime.
      * @throws InvalidAttributeValueException
      */
-    DateTime getDateTime( String contextName );
+    ZonedDateTime getDateTime( String contextName );
 
     /**
      * Returns the attribute value as an double if possible.  Otherwise throws

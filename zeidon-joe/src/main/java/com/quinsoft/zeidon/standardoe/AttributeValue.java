@@ -21,7 +21,7 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.AttributeInstance;
 import com.quinsoft.zeidon.Blob;
@@ -109,12 +109,12 @@ class AttributeValue
         return domain.convertToBoolean( task, attributeDef, getInternalValue() );
     }
 
-    DateTime getDateTime( Task task, AttributeDef attributeDef, String contextName )
+    ZonedDateTime getDateTime( Task task, AttributeDef attributeDef, String contextName )
     {
         return domain.convertToDate( task, attributeDef, getInternalValue(), contextName );
     }
 
-    DateTime getDateTime( Task task, AttributeDef attributeDef )
+    ZonedDateTime getDateTime( Task task, AttributeDef attributeDef )
     {
         return domain.convertToDate( task, attributeDef, getInternalValue() );
     }

@@ -18,19 +18,11 @@
  */
 package com.quinsoft.zeidon.jasperreports;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRDataSourceProvider;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRQuery;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JRDesignField;
-
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.ObjectEngine;
@@ -48,6 +40,14 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.standardoe.DefaultJavaOeConfiguration;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRDataSourceProvider;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 /**
  *
@@ -132,7 +132,7 @@ public abstract class JRViewDataSourceProvider implements JRDataSourceProvider
                 field.setValueClass( Double.class );
             else
             if ( domain instanceof DateTimeDomain )
-                field.setValueClass( DateTime.class );
+                field.setValueClass( ZonedDateTime.class );
             else
             if ( domain instanceof BooleanDomain )
                 field.setValueClass( Boolean.class );

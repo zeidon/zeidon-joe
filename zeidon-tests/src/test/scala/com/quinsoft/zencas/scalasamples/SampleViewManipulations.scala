@@ -21,7 +21,7 @@ package com.quinsoft.zencas.scalasamples
 import scala.collection.JavaConversions._
 
 import com.quinsoft.zeidon.ObjectEngine
-import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.EntityInstance
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.Implicits._
@@ -34,6 +34,8 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine
  * see SampleCursorManipulation.
  */
 class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
+
+    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
 
     def creatingViews = {
         /*

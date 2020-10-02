@@ -162,6 +162,21 @@ abstract class AbstractEntity( val jentityDef: EntityDef ) extends Dynamic {
     }
 
     /**
+     * Copies attributes by name.  Normal invocation is:
+     * {{{
+     * tgtView.Entity.copyAttributes( srcView.Entity )
+     * }}}
+     * 
+     * Use the CopyAttributesBuilder if you need to specify what/how attributes are copied:
+     * {{{
+     * tgtView.Entity.copyAttributes.from( srcView.Entity )
+     * }}}
+     */
+    def copyAttributes( entity: AbstractEntity ): Int = {
+        return getEntityInstance.copyAttributes().from( entity.getEntityInstance )
+    }
+
+    /**
      * Returns an iterator that will iterate through all the child entities of 'this'
      * in hierarchical order.  Does not include 'this'.
      */

@@ -19,7 +19,7 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-import com.quinsoft.zeidon._
+import com.quinsoft.zeidon.CursorPosition
 import util.control.Breaks._
 import com.quinsoft.zeidon.scala.Nexts._
 

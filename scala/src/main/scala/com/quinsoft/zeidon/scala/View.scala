@@ -25,7 +25,6 @@ import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.SubobjectValidationException
-import com.quinsoft.zeidon.Task
 import scala.collection.concurrent.TrieMap
 import org.apache.commons.lang3.StringUtils
 import collection.JavaConversions._
@@ -36,7 +35,7 @@ import com.quinsoft.zeidon.standardoe.IteratorBuilder
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
  * users to write code using VML-like view.entity.attribute syntax.
  */
-class View( val task: Task ) extends Dynamic {
+class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
 
     /**
      * The underlying EntityDef for this View.  May be null.
@@ -47,6 +46,8 @@ class View( val task: Task ) extends Dynamic {
      * The underlying Java view for this Scala View.  May be null.
      */
     var jview: com.quinsoft.zeidon.View = null
+
+    val task = new Task( jtask )
 
     def this( jv: com.quinsoft.zeidon.View ) = {
         this( jv.getTask() )
@@ -80,9 +81,9 @@ class View( val task: Task ) extends Dynamic {
 
     private def setLod( lodName: String, appName: String = null ): View = {
         if ( appName == null )
-            jlodDef = task.getApplication().getLodDef( task, lodName )
+            jlodDef = jtask.getApplication().getLodDef( jtask, lodName )
         else
-            jlodDef = task.getApplication( appName ).getLodDef( task, lodName )
+            jlodDef = jtask.getApplication( appName ).getLodDef( jtask, lodName )
 
         if ( jview != null && jview.getLodDef() != jlodDef )
             throw new ZeidonException( "LodDef set by basedOnLod doesn't match view." )
@@ -136,13 +137,13 @@ class View( val task: Task ) extends Dynamic {
      * Creates an empty OI for this view.  The LOD must have been previously
      * specified with basedOn.
      * {{{
-     *      val mUser = new View( task ) basedOn "mUser"
+     *      val mUser = new View( jtask ) basedOn "mUser"
      *      mUser activateEmpty()
      * }}}
      */
     def activateEmpty() = {
         validateLodDef
-        jview = task.activateEmptyObjectInstance( jlodDef )
+        jview = jtask.activateEmptyObjectInstance( jlodDef )
         this
     }
 
@@ -218,10 +219,16 @@ class View( val task: Task ) extends Dynamic {
         new View( cloned )
     }
 
+    def cloneOi: View = {
+        validateNonNull
+        val cloned = jview.activateOiFromOi( ActivateFlags.fMULTIPLE )
+        new View( cloned )
+    }
+
     /**
      * Creates a new view, potentially with a different owning task.
      */
-    def newView( task: Task = this.task ) = { validateNonNull; new View( task ).from( this ) }
+    def newView( task: com.quinsoft.zeidon.Task = this.jtask ) = { validateNonNull; new View( task ).from( this ) }
 
     /**
      * Sets the name of this view in its owning task.
@@ -331,12 +338,16 @@ class View( val task: Task ) extends Dynamic {
     def serializeOi = { validateNonNull; jview.serializeOi() }
 
     /**
-     * Convenience method that is the same as:
-     *   view.serializeOi().asJson().withIncremental( incrementals ).toString()
+     * Convenience method for converting to JSON
      *
      * @return view as JSON string.
      */
-    def toJson( incrementals : Boolean = true ) = jview.toJson( incrementals )
+    def toJson( incrementals : Boolean = true, prettyPrint : Boolean = false ) = 
+        jview.serializeOi()
+             .asJson()
+             .withIncremental( incrementals )
+             .setCompressed( !prettyPrint )
+             .toString();
 
     /**
      * Creates a SelectSet for this View.
@@ -416,7 +427,7 @@ class View( val task: Task ) extends Dynamic {
         try {
             validateNonNull
 
-            val oe = task.getObjectEngine
+            val oe = jtask.getObjectEngine
             var operMap = oe.getCacheMap().getOrCreate( classOf[ObjectOperationMap] )
             val oper = operMap.getObjectOperation( operationName, jlodDef, args: _* )
             val value = oper.invokeOperation( this, args: _* )
@@ -480,7 +491,7 @@ object View {
 
     val ON = new VmlSyntaxFiller
 
-    def apply( task: Task ) = {
+    def apply( task: com.quinsoft.zeidon.Task ) = {
       new View( task )
     }
 }

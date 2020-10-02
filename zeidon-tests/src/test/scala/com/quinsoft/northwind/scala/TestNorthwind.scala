@@ -8,7 +8,6 @@ import org.scalatest.junit.AssertionsForJUnit
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 import com.quinsoft.zeidon.scala.View
-import com.quinsoft.zeidon.scala.DynamicTask
 import com.quinsoft.zeidon.objectdefinition.KeyValidator
 import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
 

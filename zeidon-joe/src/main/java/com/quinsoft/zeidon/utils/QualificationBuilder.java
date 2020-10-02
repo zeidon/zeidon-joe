@@ -759,6 +759,11 @@ public class QualificationBuilder
      */
     public QualificationBuilder fromEntityKeys( EntityInstance source, boolean linkEntities )
     {
+        return fromEntityKeys( null, source, linkEntities );
+    }
+    
+    public QualificationBuilder fromEntityKeys( EntityDef targetEntityDef, EntityInstance source, boolean linkEntities )
+    {
         EntityDef entityDef = source.getEntityDef();
 
         if ( entityDef.getKeys().size() > 1 )
@@ -772,7 +777,10 @@ public class QualificationBuilder
             else
                 addAttribQual( " AND " );
 
-            addAttribQual( key.getName(), source.getAttribute( key ).getString() );
+            if ( targetEntityDef == null )
+                addAttribQual( key.getName(), source.getAttribute( key ).getString() );
+            else
+                addAttribQual( targetEntityDef.getName(), key.getName(), "=", source.getAttribute( key ).getString() );
         }
 
         if ( entityDef.getKeys().size() > 1 )

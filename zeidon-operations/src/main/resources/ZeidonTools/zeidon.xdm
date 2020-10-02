@@ -1239,7 +1239,7 @@ eContext   3
 aZKey      90000073
 aName      DayOfWeek
 aEditString Dddd
-aJavaEditString dddd
+aJavaEditString EEEE
 
 eContext   3
 aZKey      90000075
@@ -1396,7 +1396,7 @@ eContext   3
 aZKey      90000109
 aName      Day
 aEditString Dddd
-aJavaEditString dddd
+aJavaEditString EEEE
 
 eContext   3
 aZKey      90000115
@@ -1408,7 +1408,7 @@ eContext   3
 aZKey      90000114
 aName      DayOfWeek
 aEditString Dddd
-aJavaEditString dddd
+aJavaEditString EEEE
 
 eContext   3
 aZKey      90000116

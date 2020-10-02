@@ -1,11 +1,10 @@
 package com.quinsoft.zeidon.scala
 
 import scala.language.dynamics
-import com.quinsoft.zeidon.Task
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.objectdefinition.LodDef
 
-class DynamicTask( task : Task ) extends ScalaTask( task ) with Dynamic {
+class Task( task : com.quinsoft.zeidon.Task ) extends ScalaTask( task ) with Dynamic {
 
     /**
      * Called dynamically to convert an lod name into a empty View.
@@ -20,8 +19,15 @@ class DynamicTask( task : Task ) extends ScalaTask( task ) with Dynamic {
     }
 }
 
-case class DynamicTaskActivator( val task: Task, val lodName: String ) {
-    val view: View = new View( task ) basedOn lodName
+/**
+ * Use com.quinsoft.zeidon.scala.Task instead.
+ */
+@deprecated
+class DynamicTask( task : com.quinsoft.zeidon.Task ) extends Task( task ) {
+}
+
+case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName: String ) {
+    val view: View = new View( task.asInstanceOf[com.quinsoft.zeidon.Task] ) basedOn lodName
 
     def activateWith( addQual: (QualBuilder) => QualBuilder): View = {
         val qb = view.buildQual()
@@ -35,16 +41,34 @@ case class DynamicTaskActivator( val task: Task, val lodName: String ) {
 
     def empty() : View = view.activateEmpty
 
+    def createRoot() : View = {
+        view.activateEmpty
+        view.root.create()
+        return view
+    }
+
     def activate( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         val builder = new QualBuilder( view, view.lodDef )
+        builder.jqual.forEntity( view.lodDef.getRoot )
+
         addQual( builder.entityQualBuilder )
         return builder.activate
     }
 
+    def fromJson( json: String ) : View = {
+        return task.deserializeOi.asJson.setLodDef( view.lodDef ).fromString( json ).unpickle
+    }
+    
     def getLodDef : LodDef = view.lodDef
+}
+
+object Task {
+    implicit def dynamicTask2Task( dtask: Task ) = dtask.task
+    implicit def Task2DynamicTask( task: com.quinsoft.zeidon.Task ) = new Task( task )
 }
 
 object DynamicTask {
     implicit def dynamicTask2Task( dtask: DynamicTask ) = dtask.task
-    implicit def Task2DynamicTask( task: Task ) = new DynamicTask( task )
+    implicit def Task2DynamicTask( task: com.quinsoft.zeidon.Task ) = new DynamicTask( task )
+    implicit def ScalaTask2DynamicTask( task: Task ) = new DynamicTask( task.task )
 }

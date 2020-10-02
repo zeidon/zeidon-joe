@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
@@ -40,13 +42,6 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
-import org.joda.time.format.DateTimePrinter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -358,55 +353,15 @@ public class JoeUtils
     }
 
     /**
-     * Returns a DateTimeFormatter that can parse and print dates in the format of
-     * editString.  There can be multiple edit strings which are separated by a "|"
-     * character.  If there are more than one then the first one is considered to
-     * be the "print" format.
-     *
-     * NOTE: Automatically adds ISO 8601 parser: 2016-11-29T05:41:02+00:00
-     *
-     * @param editString
-     * @return
-     */
-    public static DateTimeFormatter createDateFormatterFromEditString( String editString )
-    {
-        String[] strings = editString.split( "\\|" );
-        DateTimeParser list[] = new DateTimeParser[ strings.length + 1];
-        DateTimePrinter printer = null;
-        for ( int i = 0; i < strings.length; i++ )
-        {
-            try
-            {
-                DateTimeFormatter f = DateTimeFormat.forPattern( strings[i] );
-                if ( printer == null )
-                    printer = f.getPrinter();
-
-                list[ i ] = f.getParser();
-            }
-            catch ( Exception e )
-            {
-                throw ZeidonException.wrapException( e ).appendMessage( "Format string = %s", strings[i] );
-            }
-        }
-
-        list[ strings.length ] = ISODateTimeFormat.dateTimeParser().getParser();
-
-        DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
-        builder.append( printer, list );
-        DateTimeFormatter formatter = builder.toFormatter();
-        return formatter;
-    }
-
-    /**
      * Converts a string in the standard Zeidon internal format (yyyyMMddHHmmssSSS) into a
-     * DateTime.
+     * ZonedDateTime.
      *
      * NOTE: For sake of speed this method does no validation on the input string.
      *
      * @param str
      * @return
      */
-    public static DateTime parseStandardDateString( String str )
+    public static ZonedDateTime parseStandardDateString( String str )
     {
         assert str.length() >= ObjectEngine.INTERNAL_DATE_STRING_FORMAT.length();
 
@@ -422,7 +377,7 @@ public class JoeUtils
         int day = Integer.parseInt( t );
 
         if ( str.length() == ObjectEngine.INTERNAL_DATE_STRING_FORMAT.length() )
-            return new DateTime( year, month, day, 0, 0, 0, 0 );
+            return ZonedDateTime.of( year, month, day, 0, 0, 0, 0, ZoneId.systemDefault() );
 
         int hour = 0, minute = 0, seconds = 0, millis = 0;
         switch ( str.length() )
@@ -455,7 +410,10 @@ public class JoeUtils
                 throw new ZeidonException( "Invalid length for date string" );
         }
 
-        return new DateTime( year, month, day, hour, minute, seconds, millis );
+        int nano = millis * 1000000;
+        return ZonedDateTime.of( year, month, day, hour, minute, seconds, nano,
+                                 ZoneId.systemDefault() );
+
     }
 
     /**

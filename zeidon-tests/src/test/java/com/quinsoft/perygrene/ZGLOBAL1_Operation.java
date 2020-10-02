@@ -26,44 +26,22 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 //import java.lang.Math;
 //import java.text.NumberFormat;
 //import java.util.*;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
-import java.util.Date;
 //import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.TimeZone;
-
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.NoSuchProviderException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.SendFailedException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang3.StringUtils;
 //import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.joda.time.DateTime;
-//import org.joda.time.Days;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Days;
 
 // This is for PdfWriter.
 //import java.io.FileOutputStream;
@@ -87,13 +65,8 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 */
 
 import com.quinsoft.zeidon.ActivateFlags;
-//import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.CursorResult;
 import com.quinsoft.zeidon.EntityCursor;
-import com.quinsoft.zeidon.EntityInstance;
-import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.vml.VmlOperation;
 import com.quinsoft.zeidon.vml.zVIEW;
 //import com.quinsoft.zeidon.zeidonoperations.ActiveDirectory;
@@ -113,7 +86,7 @@ import com.quinsoft.zeidon.zeidonoperations.ZDRVROPR;
 
 public class ZGLOBAL1_Operation extends VmlOperation
 {
-	
+
 	   /**
 	    * A map to convert C-style activate flags (int) to JOE-style (enum).
 	    */
@@ -131,12 +104,12 @@ public class ZGLOBAL1_Operation extends VmlOperation
 	       put( zSINGLE_FOR_UPDATE, ActivateFlags.SINGLE );
 	       put( zIGNORE_JOINS, ActivateFlags.IGNORE_JOINS );
 	       put( zASYNCHRONOUS, ActivateFlags.ASYNCHRONOUS );
-	       
+
 	       // Ignore zAPPLICATION whan paired with SINGLE
 	       put( zSINGLE + zAPPLICATION, ActivateFlags.SINGLE );
 	   }} );
-	
-	
+
+
     private final ZDRVROPR m_ZDRVROPR;
     private final KZOEP1AA m_KZOEP1AA;
     //private final ActiveDirectory m_ActiveDirectory;
@@ -149,7 +122,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
        //m_ActiveDirectory = new ActiveDirectory( );
        //private final KZOEP1AA m_KZOEP1AA;
    }
-    
+
     public int SetLatLngFromAddress( View view, String entityName )
     {
     	// We are going to assume at the moment the entity attribute names.
@@ -157,20 +130,20 @@ public class ZGLOBAL1_Operation extends VmlOperation
       }
     public int GetDistanceTimeBetweenAddresses( View viewStart, String entityStart, View viewEnd, String entityEnd, MutableDouble dDistance, MutableInt lTime )
     {
-    	
+
          return ( 0 );
       }
-   
+
     public int GetDistanceTimeBetweenAddresses( View viewStart, String entityStart, View viewEnd, String entityEnd, String dateTime, MutableDouble dDistance, MutableInt lTime )
     {
-        
+
         return ( 0 );
       }
-    
+
 
     public int ActivateSysOI_FromFile( zVIEW view, String viewOdName, View qualView, String fileName, int control )
     {
-    	
+
        if ( qualView != null )
        {
            //view.setView( task.activateOiFromFile( viewOdName, qualView.getTask().getSystemTask(), fileName, ActivateFlags.SINGLE ) );
@@ -182,7 +155,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
 
        return 0;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // .Function Name: >>>SetAttributeFromCurrentDateTime
@@ -202,6 +175,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
     // .Detail description
     //
     /////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
     public int
     SetAttributeFromCurrentDateTime( View   View,
                                      String entityName,
@@ -213,7 +187,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
       stringTimeStamp = KZOEP1AA.SysGetDateTime( stringTimeStamp );
       StringBuilder sb_szDate = new StringBuilder( 32 );
       KZOEP1AA.SysGetDateTime( sb_szDate );
-      
+
       rc = SetAttributeFromString( View, entityName, attributeName, stringTimeStamp );
       return rc;
     }
@@ -283,10 +257,10 @@ public class ZGLOBAL1_Operation extends VmlOperation
                              String stringContext )
     {
  	  int lValueInt = 0;
- 	  	  
+
  	  lValueInt = GetVariableFromAttribute( lValueInt, 0, zTYPE_INTEGER, 0,
                                              view, stringEntity, stringAttribute, stringContext, 0 );
- 	  
+
  	  lValue.setValue(lValueInt);
        return lValue.intValue();
     }
@@ -426,10 +400,10 @@ public class ZGLOBAL1_Operation extends VmlOperation
     {
  	   if ( stringStr == null )
  		   return 0.0;
- 	   
+
  	   if ( stringStr.equals("") )
  		   return 0.0;
- 	   
+
        return Double.valueOf( stringStr );
     }
 
@@ -484,7 +458,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
     {
        int nCode = 0;
 
-       nCode = (int) stringStr.charAt( 0 );
+       nCode = stringStr.charAt( 0 );
        return nCode;
     }
 
@@ -506,15 +480,15 @@ public class ZGLOBAL1_Operation extends VmlOperation
        // read the attributes
        //stringSourceDate = GetStringFromAttribute( stringSourceDate, srcView, srcEntityName, srcAttributeName );
        //stringTargetDate = GetStringFromAttribute( stringTargetDate, tgtView, tgtEntityName, tgtAttributeName );
-       
-       DateTime BeginDate = srcView.cursor(srcEntityName).getAttribute(srcAttributeName).getDateTime();
-       DateTime EndDate = tgtView.cursor(tgtEntityName).getAttribute(tgtAttributeName).getDateTime();
-       
-       //DateTime BeginDate = new DateTime(stringSourceDate);
-       //DateTime EndDate = new DateTime(stringTargetDate);
 
-       //int days = Days.daysBetween( BeginDate, EndDate).getDays();       
-       int days = Days.daysBetween( EndDate, BeginDate).getDays();       
+       ZonedDateTime BeginDate = srcView.cursor(srcEntityName).getAttribute(srcAttributeName).getDateTime();
+       ZonedDateTime EndDate = tgtView.cursor(tgtEntityName).getAttribute(tgtAttributeName).getDateTime();
+
+       //ZonedDateTime BeginDate = new ZonedDateTime(stringSourceDate);
+       //ZonedDateTime EndDate = new ZonedDateTime(stringTargetDate);
+
+       //int days = Days.daysBetween( BeginDate, EndDate).getDays();
+       long days = ChronoUnit.DAYS.between( EndDate, BeginDate);
        /*
        UfStringToDateTime( stringSourceDate, SourceDate );
        UfStringToDateTime( stringTargetDate, TargetDate );
@@ -522,10 +496,10 @@ public class ZGLOBAL1_Operation extends VmlOperation
        // subtract the values
        lDaysTmp = lDays.intValue();
        lDaysTmp = UfDateTimeDiff( lDaysTmp, TargetDate, SourceDate, zDT_DAY );
-       
+
        lDays.setValue(lDaysTmp);
        */
-       
+
        lDays.setValue(days);
 
        return lDays;
@@ -653,8 +627,8 @@ public class ZGLOBAL1_Operation extends VmlOperation
                                          zTYPE_INTEGER, 0, "Month" );
        return nRC;
     } // AddDaysToDate
-    
-    public int 
+
+    public int
     AddMinutesToDateTime( View     view,
                           String   entityName,
                           String   attributeName,
@@ -670,8 +644,8 @@ public class ZGLOBAL1_Operation extends VmlOperation
           nRC = zCALL_ERROR;
        }
        int nMinutes = ((Number) Minutes).intValue();
-       DateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
-       DateTime date2 = date.plusMinutes(nMinutes);
+       ZonedDateTime date = view.cursor(entityName).getAttribute(attributeName).getDateTime();
+       ZonedDateTime date2 = date.plusMinutes(nMinutes);
        view.cursor(entityName).getAttribute(attributeName).setValue( date2 );
 
        return nRC;
@@ -895,9 +869,9 @@ public class ZGLOBAL1_Operation extends VmlOperation
        String stringZipCodeFormatted = null;
        String stringCountry = null;
        StringBuilder stringSep = new StringBuilder();      // set to /r/n or "; "
-              
+
        // NEED TO FIX THIS CAUSE I GET TOO MANY ERRORS MAINLY WITH IsValidAttribute
-       //return "";   
+       //return "";
 
        entityName = zstrcpy( entityName, stringInternalEntityStructure );
        stringAttribName = zstrcpy( stringAttribName, stringInternalAttribStructure );
@@ -994,7 +968,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
        stringReturnText = ZeidonStringCopy( stringReturnText, 1, 0, stringMultiLineAddress, 1, 0, 255 );
 
        return stringReturnText;
-       
+
     } // fnAdressLabelText
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1025,7 +999,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
                             stringInternalAttribStructure, stringMultiLineAddress );
 
        return 0;
-       
+
     } // dAdressLabel
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1232,7 +1206,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
     {
        StringBuilder sb = new StringBuilder( ulNumberOfDecimals > 0 ? ulNumberOfDecimals + 5 : 25 );
 
-       SysConvertDecimalToString( pdDecimalValue, sb, (int) ulNumberOfDecimals );
+       SysConvertDecimalToString( pdDecimalValue, sb, ulNumberOfDecimals );
        MutableDouble d = new MutableDouble( pdDecimalValue );
        SysConvertStringToDecimal( sb.toString( ), d );
        return d.toDouble( );
@@ -2920,7 +2894,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
 
        return lDocumentLth;
     }
-    
+
     public int
     ParseBooleanExpression( View zqFrame )
     {
@@ -3389,11 +3363,11 @@ public class ZGLOBAL1_Operation extends VmlOperation
 
     } // InsertOI_DataIntoEmailTemplate
 
-    public int 
-    InsertOI_DataIntoTemplateFileNew(View view, 
-    		              View workView, 
-     		              String toFile, 
-       		              String fromFile, 
+    public int
+    InsertOI_DataIntoTemplateFileNew(View view,
+    		              View workView,
+     		              String toFile,
+       		              String fromFile,
      		              String stringRootEntityName) throws IOException
 {
     	BufferedWriter bw;
@@ -3403,43 +3377,43 @@ public class ZGLOBAL1_Operation extends VmlOperation
     	StringBuilder sbAttributeBuffer;
     	String swapString = null;
     	String stringStart  = "{";
-    	String stringEnd    = "}";	
-    	String szTmp    = null;	
+    	String stringEnd    = "}";
+    	String szTmp    = null;
     	int nRC = 0;
     	int lSelectedCount = 0;
     	int lTemplateLth = 0;
-    	
+
     	try
     	{
-    		
+
     	nRC = SetCursorFirstEntity(workView, stringRootEntityName, "");
     	while(nRC > zCURSOR_UNCHANGED)
     	{
     		lSelectedCount++;
     		nRC = SetCursorNextEntity(workView, stringRootEntityName, "");
     	}
-    	
+
     	if (lSelectedCount <= 0)
     		return 0;
-    	
+
     	lTemplateLth = ReadFileDataIntoMemory(workView, fromFile, lTemplateLth, sbRawTemplate);
-    	
+
     	if (lTemplateLth > Integer.MAX_VALUE)
     		return 0;
-    	
+
     	// File not found.
     	if (lTemplateLth < 0)
     		return -1;
-   	
+
     	swapString = sbRawTemplate.substring(1, (lTemplateLth - 1));
     	lTemplateLth = swapString.length();
     	sbRawTemplate = new StringBuilder();
-    	
+
     	nRC = SetCursorFirstEntity(workView, stringRootEntityName, "");
     	while(nRC > zCURSOR_UNCHANGED)
     	{
     		sbRawTemplate.insert(0, swapString);
-    		
+
     		for(int i = 0; i < sbRawTemplate.length(); i++)
     		{
     			sbEntityBuffer = new StringBuilder();
@@ -3450,37 +3424,37 @@ public class ZGLOBAL1_Operation extends VmlOperation
     				i += 2;
     				while(sbRawTemplate.charAt(++i) != '.')
     					sbEntityBuffer.append(sbRawTemplate.charAt(i));
-    				
+
     				while(sbRawTemplate.charAt(++i) != ']')
     					sbAttributeBuffer.append(sbRawTemplate.charAt(i));
-    				
+
     				i++;
     				szTmp = sbRawTemplate.substring(j, i + 10).toString();
-    				sbRawTemplate.replace(j, i, GetStringFromAttribute(workView, 
-    																   sbEntityBuffer.toString(), 
+    				sbRawTemplate.replace(j, i, GetStringFromAttribute(workView,
+    																   sbEntityBuffer.toString(),
     																   sbAttributeBuffer.toString()));
     				szTmp = sbRawTemplate.substring(j, j+12).toString();
-    				
+
     			}
     		}
-    		
+
     		sbInsertTemplate.append(sbRawTemplate);
     		//szTmp = sbInsertTemplate.substring(87284, 87296).toString();
-    		sbRawTemplate = new StringBuilder();		
+    		sbRawTemplate = new StringBuilder();
     		nRC = SetCursorNextEntity(workView, stringRootEntityName, "");
     	}
-    	
+
     	sbInsertTemplate.insert(0, stringStart);
     	sbInsertTemplate.append(stringEnd);
 		//szTmp = sbInsertTemplate.substring(87285, 87297).toString();
 		szTmp = sbInsertTemplate.substring(13917, 13929).toString();
-    	
+
     	//bw.write(sbInsertTemplate.toString());
     	szTmp = sbInsertTemplate.toString();
     	lTemplateLth= szTmp.length();
-    	
+
     	CopyFileToPDFNew(workView, szTmp, toFile);
-    	
+
     	/* This is the old way to create the rtf file...
     	bw = new BufferedWriter(new FileWriter(toFile));
     	bw.write(szTmp);
@@ -3492,22 +3466,22 @@ public class ZGLOBAL1_Operation extends VmlOperation
     	{
     		return -1;
     	}
-    	
-    	return 0;	
-    }
-    
 
-    public int 
-    InsertOI_DataIntoTemplateFileNew(View view, 
-    		              zVIEW workView, 
-     		              String toFile, 
-       		              String fromFile, 
+    	return 0;
+    }
+
+
+    public int
+    InsertOI_DataIntoTemplateFileNew(View view,
+    		              zVIEW workView,
+     		              String toFile,
+       		              String fromFile,
        		              String altFile,
      		              String stringRootEntityName) throws IOException
      {
     	return (InsertOI_DataIntoTemplateFileNew(view, workView.getView(), toFile, fromFile, stringRootEntityName));
      }
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     //  Method Name: InsertOI_DataIntoTemplateFile
@@ -3515,11 +3489,11 @@ public class ZGLOBAL1_Operation extends VmlOperation
     //    Insert OI variable data in Template File
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public int 
-    InsertOI_DataIntoTemplateFile(View view, 
-    		              View workView, 
-     		              String toFile, 
-       		              String fromFile, 
+    public int
+    InsertOI_DataIntoTemplateFile(View view,
+    		              View workView,
+     		              String toFile,
+       		              String fromFile,
      		              String stringRootEntityName) throws IOException
 {
     	BufferedWriter bw;
@@ -3529,43 +3503,43 @@ public class ZGLOBAL1_Operation extends VmlOperation
     	StringBuilder sbAttributeBuffer;
     	String swapString = null;
     	String stringStart  = "{";
-    	String stringEnd    = "}";	
-    	String szTmp    = null;	
+    	String stringEnd    = "}";
+    	String szTmp    = null;
     	int nRC = 0;
     	int lSelectedCount = 0;
     	int lTemplateLth = 0;
-    	
+
     	try
     	{
-    		
+
     	nRC = SetCursorFirstEntity(workView, stringRootEntityName, "");
     	while(nRC > zCURSOR_UNCHANGED)
     	{
     		lSelectedCount++;
     		nRC = SetCursorNextEntity(workView, stringRootEntityName, "");
     	}
-    	
+
     	if (lSelectedCount <= 0)
     		return 0;
-    	
+
     	lTemplateLth = ReadFileDataIntoMemory(workView, fromFile, lTemplateLth, sbRawTemplate);
-    	
+
     	if (lTemplateLth > Integer.MAX_VALUE)
     		return 0;
-    	
+
     	// File not found.
     	if (lTemplateLth < 0)
     		return -1;
-   	
+
     	swapString = sbRawTemplate.substring(1, (lTemplateLth - 1));
     	lTemplateLth = swapString.length();
     	sbRawTemplate = new StringBuilder();
-    	
+
     	nRC = SetCursorFirstEntity(workView, stringRootEntityName, "");
     	while(nRC > zCURSOR_UNCHANGED)
     	{
     		sbRawTemplate.insert(0, swapString);
-    		
+
     		for(int i = 0; i < sbRawTemplate.length(); i++)
     		{
     			sbEntityBuffer = new StringBuilder();
@@ -3576,36 +3550,36 @@ public class ZGLOBAL1_Operation extends VmlOperation
     				i += 2;
     				while(sbRawTemplate.charAt(++i) != '.')
     					sbEntityBuffer.append(sbRawTemplate.charAt(i));
-    				
+
     				while(sbRawTemplate.charAt(++i) != ']')
     					sbAttributeBuffer.append(sbRawTemplate.charAt(i));
-    				
+
     				i++;
     				szTmp = sbRawTemplate.substring(j, i + 10).toString();
-    				sbRawTemplate.replace(j, i, GetStringFromAttribute(workView, 
-    																   sbEntityBuffer.toString(), 
+    				sbRawTemplate.replace(j, i, GetStringFromAttribute(workView,
+    																   sbEntityBuffer.toString(),
     																   sbAttributeBuffer.toString()));
     				szTmp = sbRawTemplate.substring(j, j+12).toString();
-    				
+
     			}
     		}
-    		
+
     		sbInsertTemplate.append(sbRawTemplate);
     		//szTmp = sbInsertTemplate.substring(87284, 87296).toString();
-    		sbRawTemplate = new StringBuilder();		
+    		sbRawTemplate = new StringBuilder();
     		nRC = SetCursorNextEntity(workView, stringRootEntityName, "");
     	}
-    	
+
     	sbInsertTemplate.insert(0, stringStart);
     	sbInsertTemplate.append(stringEnd);
 		//szTmp = sbInsertTemplate.substring(87285, 87297).toString();
 		szTmp = sbInsertTemplate.substring(13917, 13929).toString();
-    	
+
     	//bw.write(sbInsertTemplate.toString());
     	szTmp = sbInsertTemplate.toString();
     	lTemplateLth= szTmp.length();
-    
-    	
+
+
     	//* This is the old way to create the rtf file...
     	bw = new BufferedWriter(new FileWriter(toFile));
     	bw.write(szTmp);
@@ -3617,22 +3591,22 @@ public class ZGLOBAL1_Operation extends VmlOperation
     	{
     		return -1;
     	}
-    	
-    	return 0;	
+
+    	return 0;
     }
 
-    public int 
-    InsertOI_DataIntoTemplateFile(View view, 
-    		              zVIEW workView, 
-     		              String toFile, 
-       		              String fromFile, 
+    public int
+    InsertOI_DataIntoTemplateFile(View view,
+    		              zVIEW workView,
+     		              String toFile,
+       		              String fromFile,
        		              String altFile,
      		              String stringRootEntityName) throws IOException
      {
     	return (InsertOI_DataIntoTemplateFile(view, workView.getView(), toFile, fromFile, stringRootEntityName));
      }
-    
-    
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     //  Method Name: InsertOI_DataIntoTemplateFile
@@ -3787,7 +3761,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
                   int    FileHandle ) throws IOException
     {
        int nRC = 0;
-       
+
        nRC = m_KZOEP1AA.SysReadLine( ViewToWindow, sbLineBuffer, FileHandle );
        if ( sbLineBuffer.length( ) == 0 )
           return 0;
@@ -4145,7 +4119,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
 
        lEntityCnt = CountEntitiesForView( vResult, entityName );
        ulAttributeLth = GetAttributeDisplayLength( ulAttributeLth, vResult, entityName, attributeName, contextName );
-       lTotalSize = lEntityCnt * (int) ulAttributeLth;  // a starting point
+       lTotalSize = lEntityCnt * ulAttributeLth;  // a starting point
        CharBuffer cbMemory = CharBuffer.allocate( lTotalSize + 1 );
     // DrAllocTaskMemory( cbMemory, lTotalSize + 1 );
 
@@ -4178,12 +4152,12 @@ public class ZGLOBAL1_Operation extends VmlOperation
           if ( lRC > zCURSOR_UNCHANGED )
           {
           // lLth = zstrlen( stringMemory );
-             if ( lTotalSize - lLth < (int) ulAttributeLth )
+             if ( lTotalSize - lLth < ulAttributeLth )
              {
             	 s = cbMemory.toString( );
 
                  lEntityCnt *= 2;
-                 lTotalSize = lEntityCnt * (int) ulAttributeLth;
+                 lTotalSize = lEntityCnt * ulAttributeLth;
                  cbMemory = CharBuffer.allocate( lTotalSize + 1 );
                  zstrcpy( cbMemory, 0, s );
              }
@@ -5646,12 +5620,12 @@ public class ZGLOBAL1_Operation extends VmlOperation
 		String stringADOldPassword = "";
 		String stringADNewPassword = "";
     	int nRC;
-    	
-    	//nRC = m_ActiveDirectory.ActiveDirectoryChangePassword(ldapurl, stringADAdminUserName, 
+
+    	//nRC = m_ActiveDirectory.ActiveDirectoryChangePassword(ldapurl, stringADAdminUserName,
     	//		stringADAdminPassword, stringADUserName, stringADOldPassword, stringADNewPassword);
     	return 0;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     //  Method Name: AD_AuthenticateUserPassword
@@ -6162,28 +6136,28 @@ public class ZGLOBAL1_Operation extends VmlOperation
        return 0;
     }
 
-    public int CopyFileToPDFwPDFWriter( View vMapObject, 
+    public int CopyFileToPDFwPDFWriter( View vMapObject,
             String szFileToCopy,
             String szPDFName )
     {
 
     	return (0);
     }
-    
-   public int CopyFileToPDFNew( View vMapObject, 
+
+   public int CopyFileToPDFNew( View vMapObject,
 		                        String szFileToCopy,
 		                        String szPDFName )
    {
-	
+
 	    return ( 0 );
    }
 
 	public void convertFromRTFToPDF(String oRTFText,
 			OutputStream oOutputStream) {
 		try {
-			
+
 /*
- 
+
     	lTemplateLth = ReadFileDataIntoMemory(workView, fromFile, lTemplateLth, sbRawTemplate);
 
     	bw = new BufferedWriter(new FileWriter(toFile));
@@ -6193,11 +6167,11 @@ public class ZGLOBAL1_Operation extends VmlOperation
     	bw.write(szTmp);
     	bw.flush();
     	bw.close();
-			
+
  */
-			
-			/* TESTING CODE??? 
-			
+
+			/* TESTING CODE???
+
 			DocumentFormat inputDocumentFormat = new DocumentFormat("HTML",
 					DocumentFamily.TEXT, "text/html", "html");
 			inputDocumentFormat.setExportFilter(DocumentFamily.TEXT,
@@ -6217,7 +6191,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
 			// TODO: handle exception
 		}
 	}
-	
+
 	public int RunScheduledQueries( View tempview, String queryInterval, String carrierCode )
 	{
 	    zVIEW    mUser = new zVIEW( );
@@ -6235,11 +6209,11 @@ public class ZGLOBAL1_Operation extends VmlOperation
 		SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "SummaryReportDefinition" );
 		SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ExecutionInterval" );
 		SetAttributeFromString( vQualObject, "QualAttrib", "Value", "10" );
-		SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );	    
+		SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	    RESULT = ActivateObjectInstance( mSumRptDef, "mSumRptDef", tempview, vQualObject, zMULTIPLE );
 	    DropView( vQualObject );
-	    
-	    
+
+
 		return (0);
 	}
 

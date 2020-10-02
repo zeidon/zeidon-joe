@@ -25,6 +25,8 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
@@ -56,7 +58,6 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  */
 public class DefaultJavaOeConfiguration implements JavaOeConfiguration
 {
-
     protected HomeDirectory homeDirectory;
     protected DomainClassLoader domainClassLoader;
     protected ZeidonLogger zeidonLogger;
@@ -119,9 +120,20 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     {
         if ( zeidonPreferencesFactory == null )
         {
-            // preferencesFilename is blank then see if it's specified as an env var.
-            if ( StringUtils.isBlank( preferencesFilename ) )
-                preferencesFilename = JoeUtils.getEnvProperty( "ZEIDON_INI" );
+            // By default the value of ZEIDON_INI overrides all.  This allows test environments to set up
+            // their own configuration.
+            String envvar = JoeUtils.getEnvProperty( "ZEIDON_INI" );
+            if ( ! StringUtils.isBlank( envvar ) )
+            {
+                if ( ! StringUtils.isBlank( preferencesFilename ) )
+                {
+                    Logger LOG = LoggerFactory.getLogger( DefaultJavaOeConfiguration.class );
+                    LOG.info( "Overriding " + preferencesFilename + " with ZEIDON_INI=" + envvar );
+                    System.out.println( "Overriding " + preferencesFilename + " with ZEIDON_INI=" + envvar );
+                }
+
+                preferencesFilename = envvar;
+            }
 
             if ( StringUtils.isBlank( preferencesFilename ) )
             {

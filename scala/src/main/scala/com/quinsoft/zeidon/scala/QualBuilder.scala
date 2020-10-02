@@ -457,6 +457,11 @@ class QualBuilder private [scala] ( private [this]  val view: View,
         this
     }
 
+    def setFlag( flag: ActivateFlags ): QualBuilder = {
+        jqual.setFlag( flag )
+        this
+    }
+
     /**
      * Activates children that match the qualification; i.e. this restricts what
      * children are loaded.
@@ -767,8 +772,7 @@ class EntityQualBuilder private[scala] ( val qualBuilder: QualBuilder ) extends 
         if ( jtargetEntityDef.getErEntityToken() != jsourceEntityDef.getErEntityToken() )
             throw new ZeidonException( s"Entities must be the same ER entity.  Source entity = ${jsourceEntityDef}" )
 
-        qualBuilder.jqual.forEntity( jtargetEntityDef )
-        qualBuilder.jqual.fromEntityKeys( sourceEntity )
+        qualBuilder.jqual.fromEntityKeys( jtargetEntityDef, sourceEntity, false )
 
         return QualBuilder.TERMINATOR
     }

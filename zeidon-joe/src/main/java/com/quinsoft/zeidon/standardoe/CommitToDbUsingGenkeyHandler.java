@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.EntityCursor;
@@ -279,7 +279,7 @@ class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
                     AttributeInstanceImpl timestamp = tempEi.getAttribute( entityDef.getDbCreatedTimestamp() );
                     if ( timestamp.isNull() )
                     {
-                        DateTime now = new DateTime();
+                        ZonedDateTime now = ZonedDateTime.now();
                         timestamp.setValue( now );
 
                         if ( entityDef.getDbUpdatedTimestamp() != null )
@@ -371,7 +371,7 @@ class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
                     continue;
 
                 if ( entityDef.getDbUpdatedTimestamp() != null )
-                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( new DateTime() );
+                    ei.getAttribute( entityDef.getDbUpdatedTimestamp() ).setValue( ZonedDateTime.now() );
             }
 
             // Skip if the entity was created or deleted.

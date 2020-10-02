@@ -26,7 +26,7 @@ import com.quinsoft.zeidon.scala.AbstractEntity
 import com.quinsoft.zeidon.scala.EntityCursor
 import com.quinsoft.zeidon.scala.EntityInstance
 import com.quinsoft.zeidon.ObjectEngine
-import com.quinsoft.zeidon.Task
+import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 
 /**
@@ -35,6 +35,8 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine
  *  When appropriate both ways will be shown.
  */
 class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
+
+    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
 
     /**
      * Simple SET CURSOR FIRST
@@ -292,11 +294,11 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         // To delete all
         mUser.Staff.deleteAll()
     }
-    
+
     def usingFilter( mUser: View ) = {
         val list = mUser.Report.filter { _.ID > 0 }.foreach( e => println( e ) )
     }
-    
+
     def countEntities( mUser: View ) = {
         val count = mUser.Report.count
         val count2 = mUser.Report.count( _.ID >< (338, 400) )

@@ -27,13 +27,13 @@ import java.io.IOException;
 //import java.text.NumberFormat;
 //import java.util.*;
 import java.nio.CharBuffer;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.apache.commons.lang3.StringUtils;
 //import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.vml.VmlOperation;
@@ -384,11 +384,11 @@ public class ZGLOBAL1_Operation extends VmlOperation
         String          stringTargetDate = null;
         int             lDaysTmp;
 
-        DateTime BeginDate = srcView.cursor(srcEntityName).getAttribute(srcAttributeName).getDateTime();
-        DateTime EndDate = tgtView.cursor(tgtEntityName).getAttribute(tgtAttributeName).getDateTime();
+        ZonedDateTime BeginDate = srcView.cursor(srcEntityName).getAttribute(srcAttributeName).getDateTime();
+        ZonedDateTime EndDate = tgtView.cursor(tgtEntityName).getAttribute(tgtAttributeName).getDateTime();
 
         //int days = Days.daysBetween( BeginDate, EndDate).getDays();
-        int days = Days.daysBetween( EndDate, BeginDate).getDays();
+        long days = ChronoUnit.DAYS.between( EndDate, BeginDate);
 
         lDays.setValue(days);
 
@@ -5281,7 +5281,7 @@ public class ZGLOBAL1_Operation extends VmlOperation
     } // CheckForTableAttribute
 
 
-  
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     //  Method Name: AD_AuthenticateUserPassword

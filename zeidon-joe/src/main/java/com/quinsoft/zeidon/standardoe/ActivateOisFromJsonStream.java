@@ -160,7 +160,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 else
                 if ( StringUtils.isBlank( options.getVersion() ) )
                 {
-                    throw new ZeidonException( "First field must be version" );
+                    version = "1";
                 }
 
                 totalRootCount = null;
