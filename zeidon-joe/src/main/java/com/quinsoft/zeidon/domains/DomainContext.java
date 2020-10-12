@@ -34,9 +34,10 @@ import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler
 public interface DomainContext extends PortableFileAttributeHandler
 {
     String getName();
+    public Domain getDomain();
     boolean isDefault();
     String getEditString();
-    
+
     /**
      * Takes an external value and converts it into an internal value using domain processing.
      * @param task
@@ -59,4 +60,5 @@ public interface DomainContext extends PortableFileAttributeHandler
     ZonedDateTime convertToDate( Task task, AttributeDef attributeDef, Object internalValue );
     Blob     convertToBlob( Task task, AttributeDef attributeDef, Object internalValue );
     Boolean  convertToBoolean( Task task, AttributeDef attributeDef, Object internalValue );
+
 }

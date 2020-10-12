@@ -40,7 +40,7 @@ public class BaseDomainContext implements DomainContext
     private boolean isDefault;
     private Domain domain;
     private String editString;
-    
+
 
     public BaseDomainContext(Domain domain)
     {
@@ -52,7 +52,7 @@ public class BaseDomainContext implements DomainContext
     {
         this.name = name;
     }
-    
+
     protected void setIsDefault( boolean isDefault )
     {
         this.isDefault = isDefault;
@@ -62,7 +62,7 @@ public class BaseDomainContext implements DomainContext
     {
         this.editString = editString;
     }
-    
+
     @Override
     public String getEditString()
     {
@@ -75,6 +75,7 @@ public class BaseDomainContext implements DomainContext
         return name;
     }
 
+    @Override
     public Domain getDomain()
     {
         return domain;
