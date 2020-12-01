@@ -19,7 +19,7 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * Updates a QualifcationBuilder from a JSON string.
+ * Creates a QualifcationBuilder from a JSON string.
  *
  */
 public class QualificationBuilderFromJson
