@@ -12,7 +12,7 @@
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>
-				com.quinsoft.zeidon.webserver.ZeidonJaxRsApp
+				com.quinsoft.zeidon.jaxrs.ZeidonJaxRsApp
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>

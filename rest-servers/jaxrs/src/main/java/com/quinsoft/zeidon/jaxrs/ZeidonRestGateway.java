@@ -16,7 +16,7 @@
 
     Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon.webserver;
+package com.quinsoft.zeidon.jaxrs;
 
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;

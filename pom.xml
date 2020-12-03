@@ -123,14 +123,14 @@
 	        <nohelp>true</nohelp>
 	      </configuration>
 	    </plugin>
-	    
+
 	    <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
               <version>3.0.2</version>
 	    </plugin>
 
-            <!-- For deploying to OSSRH repo -->            
+            <!-- For deploying to OSSRH repo -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -141,7 +141,7 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
-            </plugin> 
+            </plugin>
        </plugins>
     </build>
 
@@ -149,9 +149,9 @@
         <module>zeidon-joe</module>
         <module>scala</module>
         <module>object-browser</module>
-	<module>jconsole-plugin</module>
+	    <module>jconsole-plugin</module>
         <module>zeidon-operations</module>
-        <module>rest-servers/rest-easy</module>
+        <module>rest-servers/jaxrs</module>
         <module>rest-servers/scalatra</module>
         <module>zruby</module>
         <module>javascript</module>
@@ -188,7 +188,7 @@
             </modules>
         </profile>
 
-       <!-- 
+       <!--
             Builds required objects for deploying to OSSRH
          -->
         <profile>
