@@ -18,31 +18,22 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.InputStream;
-import java.io.StringWriter;
+import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.Committer;
+import com.quinsoft.zeidon.SerializeOi;
+import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.standardoe.ZeidonHttpClient.ZeidonHttpClientResponse;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
-
-import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.Committer;
-import com.quinsoft.zeidon.DeserializeOi;
-import com.quinsoft.zeidon.SerializeOi;
-import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.ZeidonException;
 
 /**
  * @author dgc
@@ -98,6 +89,9 @@ class CommitToRestServer implements Committer
         this.options = options;
         this.application = options.getApplication();
 
+        if ( list.size() > 1 )
+            throw new ZeidonException( "Only 1 view is supported for commiting via REST" );
+
         originalList = list;
         originalOiSet = new HashSet<ObjectInstance>();
         for ( View v : list )
@@ -130,8 +124,7 @@ class CommitToRestServer implements Committer
         {
 //            copyEntityKeysToTags();
 
-            String json = task.serializeOi().asJson().withIncremental().addViews( viewList ).toStringWriter().toString();
-            List<View> views = makePostCall( json );
+            List<View> views = makePostCall( viewList );
 
             if ( views.size() != 1 )
                 throw new ZeidonException( "Something went wrong: we have the wrong number of views" );
@@ -243,58 +236,19 @@ class CommitToRestServer implements Committer
         }
     }
 
-    private List<View> makePostCall( String json )
+    private List<View> makePostCall( List<? extends View> viewList )
     {
-        String stringResponse = null;
-        CloseableHttpResponse response = null;
+        View view = viewList.get( 0 );  // We currently only support one view.
 
-        try
-        {
-            HttpPost post = new HttpPost( url );
-            StringEntity entity = new StringEntity( json );
-            post.setEntity( entity );
-            post.setHeader( "Content-Type", "application/json" );
+        ZeidonHttpClientResponse response = ZeidonHttpClient
+                    .getClient( view )
+                    .setUrl( url )
+                    .callPost();
 
-            response = ZeidonHttpClient.getClient( task, application ).callPost( post );
-            InputStream stream = response.getEntity().getContent();
-            StatusLine status = response.getStatusLine();
-            task.log().info( "Status from http activate = %s", status );
-            int statusCode = status.getStatusCode();
+        if ( response.getStatusCode() != 200 )
+            throw new ZeidonException( "http activate failed with status %s", response.getStatusCode() );
 
-            // If we're in debug mode, print out the results.
-            if ( task.log().isDebugEnabled() || statusCode != 200 )
-            {
-                StringWriter writer = new StringWriter();
-                IOUtils.copy(stream, writer, "UTF-8");
-                stringResponse = writer.toString();
-                task.log().debug( "REST response: %s", stringResponse );
-                stream = IOUtils.toInputStream(stringResponse, "UTF-8");
-            }
-
-            if ( statusCode != 200 )
-                throw new ZeidonException( "http activate failed with status %s", status );
-
-            List<View> views = new DeserializeOi( getTask() )
-                                        .asJson()
-                                        .fromInputStream( stream )
-                                        .activate();
-
-            return views;
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e ).appendMessage( "web URL = %s", url );
-
-        }
-        finally
-        {
-            if ( response != null )
-            {
-                EntityUtils.consumeQuietly(response.getEntity());
-                IOUtils.closeQuietly( response );
-            }
-        }
-
+        return List.of( response.getResponseView() );
     }
     /**
      * Copy the EntityKeys to the tag.  We'll use these to merge the OIs returned from the server.
