@@ -19,13 +19,20 @@
 package com.quinsoft.zeidon.jaxrs;
 
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.StreamFormat;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/zeidon-api")
@@ -54,10 +61,11 @@ public class ZeidonRestGateway
     @Produces({"application/xml", "application/json"})
     public Response activate( @PathParam("applicationName") String applicationName,
                               @PathParam("lodName")         String lodName,
+                              @HeaderParam("content-type")  String contentType,
                               @QueryParam("qual")           String jsonQual,
                               @QueryParam("qualOi")         String qualOi )
     {
-        return restEngine.activate( applicationName, lodName, jsonQual, qualOi );
+        return restEngine.activate( applicationName, lodName, jsonQual, qualOi, interpretContentType( contentType ) );
     }
 
     @GET
@@ -65,10 +73,41 @@ public class ZeidonRestGateway
     @Produces({"application/xml", "application/json"})
     public Response activateByKey( @PathParam("applicationName") String applicationName,
                                    @PathParam("lodName")         String lodName,
+                                   @HeaderParam("content-type")  String contentType,
                                    @PathParam("key")             String key )
     {
         oe.getSystemTask().log().debug( "ActivateKey %s", applicationName );
         String jsonQual = "{\root\": {\"key\": \"" + key + "\"}}";
-        return restEngine.activate( applicationName, lodName, jsonQual, null );
+        return restEngine.activate( applicationName, lodName, jsonQual, null, interpretContentType( contentType ) );
+    }
+
+    @POST
+    @Path("/{applicationName}")
+    @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
+    public Response commit( @PathParam("applicationName") String applicationName,
+                            @HeaderParam("content-type") String contentType,
+                            String body )
+    {
+        oe.getSystemTask().log().debug( "Commit %s", applicationName );
+        return restEngine.commit( applicationName, body, interpretContentType( contentType ) );
+    }
+
+    private StreamFormat interpretContentType( String contentType )
+    {
+        if ( StringUtils.isBlank( contentType ) )
+            return null;
+
+        switch ( contentType )
+        {
+            case MediaType.APPLICATION_XML:
+                return StreamFormat.XML;
+
+            case MediaType.APPLICATION_JSON:
+                return StreamFormat.JSON;
+
+            default:
+                throw new ZeidonException( "Unsupported content-type: %s", contentType );
+        }
     }
 }

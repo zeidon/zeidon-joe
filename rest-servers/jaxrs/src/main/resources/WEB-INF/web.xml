@@ -9,12 +9,20 @@
 		<servlet-class>
 			org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet
 		</servlet-class>
+<!-- Example using Application.
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>
 				com.quinsoft.zeidon.jaxrs.ZeidonJaxRsApp
 			</param-value>
 		</init-param>
+-->
+		<init-param>
+			<param-name>jaxrs.serviceClasses</param-name>
+			<param-value>
+				com.quinsoft.zeidon.jaxrs.ZeidonRestGateway
+			</param-value>
+			</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 

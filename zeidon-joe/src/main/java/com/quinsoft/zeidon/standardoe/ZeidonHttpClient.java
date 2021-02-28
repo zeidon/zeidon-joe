@@ -24,7 +24,9 @@ import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import difflib.StringUtills;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -135,6 +137,12 @@ class ZeidonHttpClient
 
     CloseableHttpResponse callGet()
     {
+        if ( sourceView != null )
+            throw new ZeidonException( "SourceView is not allowed for GET" );
+
+        if ( StringUtils.isBlank( url ) )
+            throw new ZeidonException( "URL is required for GET" );
+
         try
         {
             URI urlObject = new URI( url );
@@ -151,6 +159,12 @@ class ZeidonHttpClient
 
     ZeidonHttpClientResponse callPost()
     {
+        if ( sourceView == null )
+            throw new ZeidonException( "SourceView is required for POST" );
+
+        if ( StringUtils.isBlank( url ) )
+            throw new ZeidonException( "URL is required for POST" );
+
         try
         {
             sourceView.log().debug( "Sending POST to url %s", url );

@@ -31,14 +31,19 @@ import org.apache.commons.lang3.StringUtils;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.Map;
+
 /**
  *
  *
  */
 public class ZeidonRestEngine
 {
-    private final ObjectEngine oe;
+    private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = Map.of(
+            StreamFormat.JSON, MediaType.APPLICATION_JSON,
+            StreamFormat.XML, MediaType.APPLICATION_XML );
 
+    private final ObjectEngine oe;
     private StreamFormat defaultResponseType = StreamFormat.JSON;
 
     public ZeidonRestEngine( ObjectEngine oe )
@@ -57,9 +62,11 @@ public class ZeidonRestEngine
     public Response activate( String applicationName,
                               String lodName,
                               String jsonQual,
-                              String qualOi )
+                              String qualOi,
+                              StreamFormat format )
     {
         Task task = null;
+        format = determineFormat( format );
         try {
             task = oe.createTask( applicationName );
             task.log().debug( "Task created ======================" );
@@ -72,12 +79,11 @@ public class ZeidonRestEngine
 
             View view = qual.activate();
             validateActivateResult( view );
-            String serialized = view.serializeOi().setFormat( defaultResponseType ).toString();
+            String serialized = view.serializeOi().setFormat( format ).toString();
             return Response
                     .ok( serialized )
-                    .type( defaultResponseType == StreamFormat.XML ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON )
+                    .type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) )
                     .build();
-
         }
         catch ( Exception e )
         {
@@ -103,7 +109,17 @@ public class ZeidonRestEngine
         return; // Nothing to do by default.
     }
 
+    void validateCommit( View view )
+    {
+        return; // Nothing to do by default.
+    }
+
     void validateActivateResult( View view )
+    {
+        return; // Nothing to do by default.
+    }
+
+    void validateCommitResult( View view )
     {
         return; // Nothing to do by default.
     }
@@ -113,22 +129,64 @@ public class ZeidonRestEngine
         return Response.status( 500 ).build();
     }
 
+    private StreamFormat determineFormat( StreamFormat clientFormat )
+    {
+        if ( clientFormat == null )
+            return defaultResponseType;
+
+        return clientFormat;
+    }
+
     private QualificationBuilder instantiateQual( Task task, LodDef lodDef, String jsonQual, String qualOi )
     {
         QualificationBuilder qual = new QualificationBuilder( task );
-        qual.setLodDef(lodDef);
+        qual.setLodDef( lodDef );
 
         if ( StringUtils.isNotBlank( jsonQual ) )
         {
             if ( StringUtils.isNotBlank( qualOi ) )
                 throw new ZeidonRestException( "JSON and qualOi both specified for qualification" );
 
-            qual.loadFromJsonString(jsonQual);
+            qual.loadFromJsonString( jsonQual );
         }
 
         if ( StringUtils.isNotBlank( qualOi ) )
             qual.loadFromSerializedString( qualOi );
 
         return qual;
+    }
+
+    public Response commit( String applicationName, String body, StreamFormat format )
+    {
+        Task task = null;
+        format = determineFormat( format );
+        try {
+            task = oe.createTask( applicationName );
+            task.log().debug( "Task created ======================" );
+            Application app = task.getApplication();
+            validateApplication( task, app );
+
+            View view = task.deserializeOi().setFormat( format ).fromString( body ).activateFirst();
+            validateCommit( view );
+            view.commit();
+            validateCommitResult( view );
+            String serialized = view.serializeOi().setFormat( format ).toString();
+            return Response
+                    .ok( serialized )
+                    .type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) )
+                    .build();
+        }
+        catch ( Exception e )
+        {
+            if ( task != null )
+                task.log().error( e );
+
+            return responseFromException(e);
+        }
+        finally
+        {
+            if ( task != null )
+                task.dropTask();;
+        }
     }
 }
