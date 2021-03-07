@@ -24,6 +24,7 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -32,6 +33,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -59,13 +61,19 @@ public class ZeidonRestGateway
     @GET
     @Path("/{applicationName}/{lodName}")
     @Produces({"application/xml", "application/json"})
-    public Response activate( @PathParam("applicationName") String applicationName,
+    public Response activate( @Context HttpServletRequest request,
+                              @PathParam("applicationName") String applicationName,
                               @PathParam("lodName")         String lodName,
-                              @HeaderParam("content-type")  String contentType,
                               @QueryParam("qual")           String jsonQual,
                               @QueryParam("qualOi")         String qualOi )
     {
-        return restEngine.activate( applicationName, lodName, jsonQual, qualOi, interpretContentType( contentType ) );
+        request.setAttribute("applicationName", applicationName );
+        request.setAttribute( "lodName", lodName );
+
+        return restEngine.withTask(request, (task, engine) -> {
+            return engine.activate();
+        } );
+//        return restEngine.activate( applicationName, lodName, jsonQual, qualOi, interpretContentType( contentType ) );
     }
 
     @GET

@@ -28,15 +28,12 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import java.util.Map;
 
-/**
- *
- *
- */
 public class ZeidonRestEngine
 {
     private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = Map.of(
@@ -49,6 +46,35 @@ public class ZeidonRestEngine
     public ZeidonRestEngine( ObjectEngine oe )
     {
         this.oe = oe;
+    }
+
+    public Response withTask( HttpServletRequest request, RestEngineCallback callback )
+    {
+        Task task = null;
+        try
+        {
+            String applicationName = request.getParameter( "applicationName" );
+            if ( StringUtils.isBlank( applicationName ) )
+                applicationName = (String) request.getAttribute( "applicationName" );
+
+            if ( StringUtils.isBlank( applicationName ) )
+                throw new HttpErrorMessage( "applicationName is required as param or attribute" );
+
+            task = oe.createTask( applicationName );
+            Application app = task.getApplication();
+            validateApplication( task, app );
+
+            return callback.process( task, new RestEngineTask( task, request ) );
+        }
+        catch ( Exception e )
+        {
+            return responseFromException(task, e);
+        }
+        finally
+        {
+            if ( task != null )
+                task.dropTask();;
+        }
     }
 
     /**
@@ -87,10 +113,7 @@ public class ZeidonRestEngine
         }
         catch ( Exception e )
         {
-            if ( task != null )
-                task.log().error( e );
-
-            return responseFromException(e);
+            return responseFromException( task, e );
         }
         finally
         {
@@ -124,8 +147,17 @@ public class ZeidonRestEngine
         return; // Nothing to do by default.
     }
 
-    Response responseFromException( Exception e )
+    Response responseFromException( Task task, Exception e )
     {
+        if ( e instanceof HttpErrorMessage )
+        {
+            HttpErrorMessage error = (HttpErrorMessage) e;
+            return Response
+                    .status( error.getStatusCode() )
+                    .entity( error.getMessage() )
+                    .build();
+        }
+
         return Response.status( 500 ).build();
     }
 
@@ -135,6 +167,24 @@ public class ZeidonRestEngine
             return defaultResponseType;
 
         return clientFormat;
+    }
+
+    private StreamFormat interpretContentType( String contentType )
+    {
+        if ( StringUtils.isBlank( contentType ) )
+            return StreamFormat.JSON;
+
+        switch ( contentType )
+        {
+            case MediaType.APPLICATION_XML:
+                return StreamFormat.XML;
+
+            case MediaType.APPLICATION_JSON:
+                return StreamFormat.JSON;
+
+            default:
+                throw new HttpErrorMessage( "Unsupported content-type: %s", contentType );
+        }
     }
 
     private QualificationBuilder instantiateQual( Task task, LodDef lodDef, String jsonQual, String qualOi )
@@ -160,7 +210,8 @@ public class ZeidonRestEngine
     {
         Task task = null;
         format = determineFormat( format );
-        try {
+        try
+        {
             task = oe.createTask( applicationName );
             task.log().debug( "Task created ======================" );
             Application app = task.getApplication();
@@ -171,22 +222,79 @@ public class ZeidonRestEngine
             view.commit();
             validateCommitResult( view );
             String serialized = view.serializeOi().setFormat( format ).toString();
+            return Response.ok( serialized ).type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) ).build();
+        }
+        catch ( Exception e )
+        {
+            return responseFromException( task, e );
+        }
+        finally
+        {
+            if ( task != null )
+                task.dropTask();
+            ;
+        }
+    }
+
+    @FunctionalInterface
+    public interface RestEngineCallback
+    {
+        Response process( Task task, RestEngineTask restEngineTask );
+    }
+
+    public class RestEngineTask
+    {
+        private final Task task;
+        private final HttpServletRequest request;
+        private final StreamFormat       format;
+
+        private RestEngineTask( Task task, HttpServletRequest request )
+        {
+            this.task = task;
+            this.request = request;
+            this.format = interpretContentType( request.getHeader( "Content-Type" ) );
+        }
+
+        private String getParam( String name )
+        {
+            return getParam( name, false );
+        }
+
+        private String getRequiredParam( String name )
+        {
+            return getParam( name, true );
+        }
+
+        private String getParam( String name, boolean required )
+        {
+            String param = request.getParameter( name );
+            if ( StringUtils.isBlank( param ) )
+                param = (String) request.getAttribute( name );
+
+            if ( required && StringUtils.isBlank( param ) )
+                throw new HttpErrorMessage( name + " is required as param or attribute" );
+
+            return param;
+        }
+
+        public Response activate()
+        {
+            String lodName = getRequiredParam( "lodName" );
+            LodDef lodDef = task.getApplication().getLodDef( task, lodName );
+
+            String jsonQual = getParam( "qual" );
+            String qualOi = getParam( "qualOi" );
+            QualificationBuilder qual = instantiateQual( task, lodDef, jsonQual, qualOi );
+            validateActivate( qual );
+
+            View view = qual.activate();
+            validateActivateResult( view );
+            String serialized = view.serializeOi().setFormat( format ).toString();
             return Response
                     .ok( serialized )
                     .type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) )
                     .build();
         }
-        catch ( Exception e )
-        {
-            if ( task != null )
-                task.log().error( e );
 
-            return responseFromException(e);
-        }
-        finally
-        {
-            if ( task != null )
-                task.dropTask();;
-        }
     }
 }

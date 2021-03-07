@@ -1,22 +1,29 @@
 /**
-    This file is part of the Zeidon Java Object Engine (Zeidon JOE).
-
-    Zeidon JOE is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Zeidon JOE is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public License
-    along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
-
-    Copyright 2009-2015 QuinSoft
+ * This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+ *
+ * Zeidon JOE is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * Zeidon JOE is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Zeidon JOE. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2009-2015 QuinSoft
  */
 package com.quinsoft.zeidon;
+
+import com.quinsoft.zeidon.objectdefinition.KeyValidator;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.utils.JoeUtils;
+import com.quinsoft.zeidon.utils.ZeidonInputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,72 +35,81 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.quinsoft.zeidon.objectdefinition.LodDef;
-import com.quinsoft.zeidon.utils.JoeUtils;
-import com.quinsoft.zeidon.utils.ZeidonInputStream;
-
 /**
- * Encapsulates all options available for activating OI's from streams and offers
- * convenience methods activate() and activateFirst().  Can deserialize an OI
- * from different sources and formats.  The standard example looks like:
+ * Encapsulates all options available for activating OI's from streams and
+ * offers convenience methods activate() and activateFirst(). Can deserialize an
+ * OI from different sources and formats. The standard example looks like:
  *
- * <pre><code>
+ * <pre>
+ * <code>
  *       View stud2 = zencas.deserializeOi()
  *                           .fromResource( "/tmp/stud2.json" )
  *                           .setLodDef( "lStudDpt" )
  *                           .asJson()
  *                           .activateFirst();
- * </code></pre>
+ * </code>
+ * </pre>
  *
  * Some configuration values can be implied from the other values or from the
- * the serialized stream.  The above sample can be simplified:
- * <pre><code>
+ * the serialized stream. The above sample can be simplified:
+ *
+ * <pre>
+ * <code>
  *       View stud2 = zencas.deserializeOi()
  *                           .fromResource( "/tmp/stud2.json" )
  *                           .activateFirst();
- * </code></pre>
+ * </code>
+ * </pre>
  */
 public class DeserializeOi
 {
-    private final Task task;
+    private final Task             task;
 
-    private LodDef      lodDef;
-    private InputStream inputStream;
-    private String      resourceName;
-    private EnumSet<ActivateFlags> flags = ActivateFlags.MULTIPLE;
-    private StreamFormat format;
-    private Application application;
-    private StreamReader streamReader;
-    private String       version;
-    private SerializationMapping serializationMapper = SerializationMapping.NOOP_MAPPING;
+    private LodDef                 lodDef;
+    private InputStream            inputStream;
+    private String                 resourceName;
+    private StreamFormat           format;
+    private Application            application;
+    private StreamReader           streamReader;
+    private EnumSet<ActivateFlags> flags               = ActivateFlags.MULTIPLE;
+    private String                 version;
+    private boolean                validateKeys        = false;
+    private SerializationMapping   serializationMapper = SerializationMapping.NOOP_MAPPING;
 
     /**
-     * This is a set of ViewEntities that we will allow to create dynamic
-     * work entities if an attribute in the stream does not exist in the
-     * entity.
+     * This is a set of ViewEntities that we will allow to create dynamic work
+     * entities if an attribute in the stream does not exist in the entity.
      */
-    private Set<String> allowDynamicAttributes;
+    private Set<String>            allowDynamicAttributes;
 
     /**
-     * If true, then automatically close the stream after activating.
-     * We will assume it's true unless the user explicitly sets the stream.
+     * If true, then automatically close the stream after activating. We will assume
+     * it's true unless the user explicitly sets the stream.
      */
-    private boolean closeStream = true;
+    private boolean                closeStream         = true;
 
-    private String inputString;
+    private String                 inputString;
 
     /**
-     * Create a deserializer.  Client apps should use task.deserializeOi() instead
-     * of creating one directly.
+     * Create a deserializer. Client apps should use task.deserializeOi() instead of
+     * creating one directly.
      *
      * @param task
      */
     public DeserializeOi( TaskQualification task )
     {
         this.task = task.getTask();
+    }
+
+    public boolean isValidateKeys()
+    {
+        return validateKeys;
+    }
+
+    public DeserializeOi withKeyValidation()
+    {
+        this.validateKeys = true;
+        return this;
     }
 
     /**
@@ -291,7 +307,17 @@ public class DeserializeOi
     {
         try
         {
-            return task.activateOisFromStream( this );
+            List<View> viewList = task.activateOisFromStream( this );
+            if ( validateKeys )
+            {
+                for ( View view : viewList )
+                {
+                    KeyValidator keyValidator = new KeyValidator( view );
+                    keyValidator.validate();
+                }
+            }
+
+            return viewList;
         }
         catch ( Exception e )
         {
