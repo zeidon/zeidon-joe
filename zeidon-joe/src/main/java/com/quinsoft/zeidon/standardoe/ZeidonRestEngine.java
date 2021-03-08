@@ -16,7 +16,7 @@
 
     Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon.jaxrs;
+package com.quinsoft.zeidon.standardoe;
 
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.Application;

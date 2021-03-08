@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.jaxrs;
 
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.standardoe.ZeidonRestEngine;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
