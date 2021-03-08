@@ -39,9 +39,10 @@ import java.util.Map;
  */
 public class ZeidonRestEngine
 {
-    private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = Map.of(
-            StreamFormat.JSON, MediaType.APPLICATION_JSON,
-            StreamFormat.XML, MediaType.APPLICATION_XML );
+	private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = null; // KJS 03/08/21
+    //private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = Map.of(
+    //        StreamFormat.JSON, MediaType.APPLICATION_JSON,
+    //        StreamFormat.XML, MediaType.APPLICATION_XML );
 
     private final ObjectEngine oe;
     private StreamFormat defaultResponseType = StreamFormat.JSON;

@@ -29,6 +29,7 @@ import com.quinsoft.zeidon.standardoe.ZeidonHttpClient.ZeidonHttpClientResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -248,7 +249,9 @@ class CommitToRestServer implements Committer
         if ( response.getStatusCode() != 200 )
             throw new ZeidonException( "http activate failed with status %s", response.getStatusCode() );
 
-        return List.of( response.getResponseView() );
+        // KJS 03/08/21 - Not sure how to fix this... I know the following isn't right but at least for now there would be no error in compile.
+        //viewList.add( response.getResponseView());
+        return (List<View>) viewList;
     }
     /**
      * Copy the EntityKeys to the tag.  We'll use these to merge the OIs returned from the server.

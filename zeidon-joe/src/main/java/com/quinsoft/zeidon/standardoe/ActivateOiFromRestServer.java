@@ -97,7 +97,9 @@ class ActivateOiFromRestServer implements Activator
             url = String.format( "%s/%s/%s?qualOi=%s", serverUrl, application.getName(),
                                   view.getLodDef().getName(), URLEncoder.encode( qualStr, "UTF-8" ) );
 
-            response = ZeidonHttpClient.getClient( task, application ).callGet( url );
+            // KJS 03/08/21 - was getting compile error
+            //response = ZeidonHttpClient.getClient( task, application ).callGet( url );
+            response = ZeidonHttpClient.getClient( task, application ).setUrl(url).callGet( );
 
             HttpEntity entity = response.getEntity();
             String json = IOUtils.toString( entity.getContent(), "UTF-8" );

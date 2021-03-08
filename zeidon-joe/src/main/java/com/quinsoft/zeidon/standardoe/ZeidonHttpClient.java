@@ -220,7 +220,7 @@ class ZeidonHttpClient
                 returnView = new DeserializeOi( sourceView.getTask() )
                         .setFormat( format )
                         .fromInputStream( stream )
-                        .activateFirst()
+                        .activateFirst();
             }
             catch ( Exception e )
             {
