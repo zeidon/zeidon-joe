@@ -18,13 +18,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.net.URLEncoder;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.util.EntityUtils;
-
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
@@ -78,57 +71,14 @@ class ActivateOiFromRestServer implements Activator
     {
         LodDef lodDef = view.getLodDef();
         Application application = lodDef.getApplication();
-
         View qual = activateOptions.getQualificationObject();
-        String qualStr = qual.serializeOi().asJson().compressed().withIncremental().toStringWriter().toString();
-        String url = "";
-        CloseableHttpResponse response = null;
+        String url = String.format("%s/%s/%s", serverUrl, application.getName(), view.getLodDef().getName());
 
-        // The underlying HTTP connection is still held by the response object
-        // to allow the response content to be streamed directly from the network socket.
-        // In order to ensure correct deallocation of system resources
-        // the user MUST call CloseableHttpResponse#close() from a finally clause.
-        // Please note that if response content is not fully consumed the underlying
-        // connection cannot be safely re-used and will be shut down and discarded
-        // by the connection manager.
-
-        try
-        {
-            url = String.format( "%s/%s/%s?qualOi=%s", serverUrl, application.getName(),
-                                  view.getLodDef().getName(), URLEncoder.encode( qualStr, "UTF-8" ) );
-
-            response = ZeidonHttpClient.getClient( task, application ).callGet( url );
-
-            HttpEntity entity = response.getEntity();
-            String json = IOUtils.toString( entity.getContent(), "UTF-8" );
-
-            int status = response.getStatusLine().getStatusCode();
-            task.log().debug( "HTTP activate status = %d", status );
-            if ( status != 200 )
-            {
-                qual.logObjectInstance();
-                throw new ZeidonException( "Status error when activating from HTTP server.  Status = %d", status )
-                                .appendMessage( "URL = %s", url )
-                                .appendMessage( "Response = %s", json );
-            }
-
-            return getTask().deserializeOi()
-                            .asJson()
-                            .fromString( json )
-                            .activateFirst();
-        }
-        catch ( Exception e )
-        {
-            throw ZeidonException.wrapException( e );
-        }
-        finally
-        {
-            if ( response != null )
-            {
-                EntityUtils.consumeQuietly(response.getEntity());
-                IOUtils.closeQuietly( response );
-            }
-        }
+        return ZeidonHttpClient.getClient(task)
+                .setUrl(url)
+                .setQualParam( qual )
+                .callGet()
+                .getResponseView();
     }
 
     /* (non-Javadoc)

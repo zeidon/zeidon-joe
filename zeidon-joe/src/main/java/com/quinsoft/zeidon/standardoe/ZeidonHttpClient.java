@@ -24,7 +24,6 @@ import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import difflib.StringUtills;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.StatusLine;
@@ -38,6 +37,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+
 import java.io.InputStream;
 import java.net.URI;
 
@@ -48,20 +50,24 @@ import java.net.URI;
  */
 class ZeidonHttpClient
 {
-    private final RequestConfig       requestConfig;
+    private final RequestConfig requestConfig;
+    private final Task                task;
     private final CloseableHttpClient httpClient;
     private String                    url;
     private View                      sourceView;
     private StreamFormat              format = StreamFormat.JSON;
+    private View                      qualOi;
 
-    static ZeidonHttpClient getClient( Task task, Application application )
+    static ZeidonHttpClient getClient( Task task )
     {
+        Application application = task.getApplication();
+
         synchronized ( application )
         {
             ZeidonHttpClient client = application.getCacheMap().get( ZeidonHttpClient.class );
             if ( client == null )
             {
-                client = new ZeidonHttpClient( task, application );
+                client = new ZeidonHttpClient( task );
                 application.getCacheMap().put( client );
             }
 
@@ -71,7 +77,7 @@ class ZeidonHttpClient
 
     static ZeidonHttpClient getClient( View sourceView )
     {
-        ZeidonHttpClient client = getClient( sourceView.getTask(), sourceView.getApplication() );
+        ZeidonHttpClient client = getClient( sourceView.getTask() );
         return client;
     }
 
@@ -93,11 +99,19 @@ class ZeidonHttpClient
         return this;
     }
 
+    public ZeidonHttpClient setQualParam( View qualOi )
+    {
+        this.qualOi = qualOi;
+        return this;
+    }
+
     /**
      * Creates a connection pool for each Application.
      */
-    private ZeidonHttpClient( Task task, Application application )
+    private ZeidonHttpClient( Task task )
     {
+        this.task = task;
+        Application application = task.getApplication();
         String group = application.getName() + ".Http";
         int timeout;
         try
@@ -135,21 +149,33 @@ class ZeidonHttpClient
         httpClient = HttpClients.custom().setConnectionManager( cm ).build();
     }
 
-    CloseableHttpResponse callGet()
+    ZeidonHttpClientResponse callGet()
     {
         if ( sourceView != null )
             throw new ZeidonException( "SourceView is not allowed for GET" );
 
         if ( StringUtils.isBlank( url ) )
-            throw new ZeidonException( "URL is required for GET" );
+            throw new ZeidonException("URL is required for GET");
+
+        UriBuilder builder = UriBuilder.fromUri(url);
+
+        if ( qualOi != null )
+        {
+            String qualStr = qualOi.serializeOi().asJson().compressed().withIncremental().toString();
+            builder.queryParam( "qualOi", qualStr );
+        }
+
+        URI uri = builder.build();
+        CloseableHttpResponse response = null;
 
         try
         {
-            URI urlObject = new URI( url );
-            HttpGet httpGet = new HttpGet( urlObject );
-            httpGet.setConfig( requestConfig );
+            HttpGet httpGet = new HttpGet( uri );
+            httpGet.setConfig(requestConfig);
+            httpGet.setHeader("Content-type", MediaType.APPLICATION_JSON);
 
-            return httpClient.execute( httpGet );
+            response = httpClient.execute( httpGet );
+            return new ZeidonHttpClientResponse( task, response, StreamFormat.JSON );
         }
         catch ( Exception e )
         {
@@ -196,7 +222,7 @@ class ZeidonHttpClient
 
             httpPost.setConfig( requestConfig );
             CloseableHttpResponse response = httpClient.execute( httpPost );
-            return new ZeidonHttpClientResponse( sourceView, response, format );
+            return new ZeidonHttpClientResponse( task, response, format );
         }
         catch ( Exception e )
         {
@@ -209,7 +235,7 @@ class ZeidonHttpClient
         private final int  statusCode;
         private final View returnView;
 
-        private ZeidonHttpClientResponse( View sourceView, CloseableHttpResponse response, StreamFormat format )
+        private ZeidonHttpClientResponse( Task task, CloseableHttpResponse response, StreamFormat format )
         {
             try
             {
@@ -217,10 +243,10 @@ class ZeidonHttpClient
                 StatusLine status = response.getStatusLine();
                 statusCode = status.getStatusCode();
 
-                returnView = new DeserializeOi( sourceView.getTask() )
+                returnView = new DeserializeOi( task )
                         .setFormat( format )
                         .fromInputStream( stream )
-                        .activateFirst()
+                        .activateFirst();
             }
             catch ( Exception e )
             {

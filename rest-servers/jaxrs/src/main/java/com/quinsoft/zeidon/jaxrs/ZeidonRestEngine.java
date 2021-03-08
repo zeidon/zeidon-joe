@@ -18,12 +18,15 @@
  */
 package com.quinsoft.zeidon.jaxrs;
 
+import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonRestException;
+import com.quinsoft.zeidon.objectdefinition.KeyValidator;
+import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -36,12 +39,13 @@ import java.util.Map;
 
 public class ZeidonRestEngine
 {
-    private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = Map.of(
-            StreamFormat.JSON, MediaType.APPLICATION_JSON,
-            StreamFormat.XML, MediaType.APPLICATION_XML );
+    private final static Map<StreamFormat, String> STREAM_FORMAT_TO_CONTENT_TYPE = ImmutableMap
+            .of( StreamFormat.JSON, MediaType.APPLICATION_JSON,
+                 StreamFormat.XML, MediaType.APPLICATION_XML );
 
     private final ObjectEngine oe;
-    private StreamFormat defaultResponseType = StreamFormat.JSON;
+
+    private StreamFormat defaultStream = StreamFormat.JSON;
 
     public ZeidonRestEngine( ObjectEngine oe )
     {
@@ -64,52 +68,7 @@ public class ZeidonRestEngine
             Application app = task.getApplication();
             validateApplication( task, app );
 
-            return callback.process( task, new RestEngineTask( task, request ) );
-        }
-        catch ( Exception e )
-        {
-            return responseFromException(task, e);
-        }
-        finally
-        {
-            if ( task != null )
-                task.dropTask();;
-        }
-    }
-
-    /**
-     *
-     * @param applicationName
-     * @param lodName
-     * @param jsonQual - Qualification as simple JSON.
-     * @param qualOi   - Qualification as ActivateQual LOD.
-     * @return
-     */
-    public Response activate( String applicationName,
-                              String lodName,
-                              String jsonQual,
-                              String qualOi,
-                              StreamFormat format )
-    {
-        Task task = null;
-        format = determineFormat( format );
-        try {
-            task = oe.createTask( applicationName );
-            task.log().debug( "Task created ======================" );
-            Application app = task.getApplication();
-            validateApplication( task, app );
-
-            LodDef lodDef = app.getLodDef( task, lodName );
-            QualificationBuilder qual = instantiateQual( task, lodDef, jsonQual, qualOi );
-            validateActivate( qual );
-
-            View view = qual.activate();
-            validateActivateResult( view );
-            String serialized = view.serializeOi().setFormat( format ).toString();
-            return Response
-                    .ok( serialized )
-                    .type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) )
-                    .build();
+            return callback.process( new RestEngineHandler( task, request ) );
         }
         catch ( Exception e )
         {
@@ -118,7 +77,8 @@ public class ZeidonRestEngine
         finally
         {
             if ( task != null )
-                task.dropTask();;
+                task.dropTask();
+            ;
         }
     }
 
@@ -149,30 +109,20 @@ public class ZeidonRestEngine
 
     Response responseFromException( Task task, Exception e )
     {
+        task.log().error(e);
         if ( e instanceof HttpErrorMessage )
         {
             HttpErrorMessage error = (HttpErrorMessage) e;
-            return Response
-                    .status( error.getStatusCode() )
-                    .entity( error.getMessage() )
-                    .build();
+            return Response.status( error.getStatusCode() ).entity( error.getMessage() ).build();
         }
 
         return Response.status( 500 ).build();
     }
 
-    private StreamFormat determineFormat( StreamFormat clientFormat )
-    {
-        if ( clientFormat == null )
-            return defaultResponseType;
-
-        return clientFormat;
-    }
-
     private StreamFormat interpretContentType( String contentType )
     {
         if ( StringUtils.isBlank( contentType ) )
-            return StreamFormat.JSON;
+            return defaultStream;
 
         switch ( contentType )
         {
@@ -206,49 +156,19 @@ public class ZeidonRestEngine
         return qual;
     }
 
-    public Response commit( String applicationName, String body, StreamFormat format )
-    {
-        Task task = null;
-        format = determineFormat( format );
-        try
-        {
-            task = oe.createTask( applicationName );
-            task.log().debug( "Task created ======================" );
-            Application app = task.getApplication();
-            validateApplication( task, app );
-
-            View view = task.deserializeOi().setFormat( format ).fromString( body ).activateFirst();
-            validateCommit( view );
-            view.commit();
-            validateCommitResult( view );
-            String serialized = view.serializeOi().setFormat( format ).toString();
-            return Response.ok( serialized ).type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) ).build();
-        }
-        catch ( Exception e )
-        {
-            return responseFromException( task, e );
-        }
-        finally
-        {
-            if ( task != null )
-                task.dropTask();
-            ;
-        }
-    }
-
     @FunctionalInterface
     public interface RestEngineCallback
     {
-        Response process( Task task, RestEngineTask restEngineTask );
+        Response process( RestEngineHandler restEngineTask );
     }
 
-    public class RestEngineTask
+    public class RestEngineHandler
     {
-        private final Task task;
+        private final Task               task;
         private final HttpServletRequest request;
         private final StreamFormat       format;
 
-        private RestEngineTask( Task task, HttpServletRequest request )
+        private RestEngineHandler( Task task, HttpServletRequest request )
         {
             this.task = task;
             this.request = request;
@@ -277,6 +197,38 @@ public class ZeidonRestEngine
             return param;
         }
 
+        public Task getTask()
+        {
+            return task;
+        }
+
+        public View getViewFromBody( String body )
+        {
+            try
+            {
+                View view = task
+                        .deserializeOi()
+                        .setFormat( format )
+                        .fromString( body )
+                        .activateFirst();
+
+                KeyValidator keyValidator = new KeyValidator( view );
+                keyValidator.validate();
+                return view;
+            }
+            catch ( KeyValidationError e )
+            {
+                throw new HttpErrorMessage(e.getMessage() ).withStatusCode( 403 );
+            }
+        }
+
+        public Response activate( String key )
+        {
+            String jsonQual = "{\root\": {\"key\": \"" + key + "\"}}";
+            request.setAttribute( "qual", jsonQual );
+            return activate();
+        }
+
         public Response activate()
         {
             String lodName = getRequiredParam( "lodName" );
@@ -296,5 +248,18 @@ public class ZeidonRestEngine
                     .build();
         }
 
+        public Response commit( String body )
+        {
+            View view = getViewFromBody( body );
+            validateCommit( view );
+            view.commit();
+            validateCommitResult( view );
+
+            String serialized = view.serializeOi().setFormat( format ).toString();
+            return Response
+                    .ok( serialized )
+                    .type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) )
+                    .build();
+        }
     }
 }

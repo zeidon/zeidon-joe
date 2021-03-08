@@ -29,6 +29,7 @@ import com.quinsoft.zeidon.standardoe.ZeidonHttpClient.ZeidonHttpClientResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -248,7 +249,7 @@ class CommitToRestServer implements Committer
         if ( response.getStatusCode() != 200 )
             throw new ZeidonException( "http activate failed with status %s", response.getStatusCode() );
 
-        return List.of( response.getResponseView() );
+        return Arrays.asList( response.getResponseView() );
     }
     /**
      * Copy the EntityKeys to the tag.  We'll use these to merge the OIs returned from the server.
