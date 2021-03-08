@@ -20,6 +20,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.HttpErrorMessage;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;

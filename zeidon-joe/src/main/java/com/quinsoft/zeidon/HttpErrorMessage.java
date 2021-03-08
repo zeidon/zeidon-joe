@@ -16,9 +16,7 @@
  *
  * Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon.jaxrs;
-
-import com.quinsoft.zeidon.ZeidonException;
+package com.quinsoft.zeidon;
 
 public class HttpErrorMessage extends ZeidonException
 {
