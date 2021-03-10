@@ -18,13 +18,14 @@
  */
 package com.quinsoft.zeidon.objectdefinition;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import com.quinsoft.zeidon.EntityInstance;
 import com.quinsoft.zeidon.SelectSet;
 import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Used to validate keys for an OI that originates from an unknown client.  It is
@@ -57,9 +58,21 @@ public class KeyValidator
     public KeyValidator( View sourceView )
     {
         this.sourceView = sourceView;
-        qualBuilder = new QualificationBuilder( sourceView );
+        qualBuilder = new QualificationBuilder(sourceView);
     }
 
+    /**
+     * Convenience method for calling the key validator on a view.
+     * @param view
+     * @return the view.
+     * @throws KeyValidationError
+     */
+    public static View validate( View view ) throws KeyValidationError
+    {
+        KeyValidator validator = new KeyValidator( view );
+        validator.validate();
+        return view;
+    }
     /**
      * Validates the keys with what's currently on the DB.  Will throw an exception if there
      * is an error.
@@ -183,7 +196,7 @@ public class KeyValidator
      * client because it potentially exposes to the client that we know they're fooling with keys.
      *
      */
-    public static class KeyValidationError extends Exception
+    public static class KeyValidationError extends ZeidonException
     {
         private static final long serialVersionUID = 1L;
 

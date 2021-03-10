@@ -310,11 +310,8 @@ public class DeserializeOi
             List<View> viewList = task.activateOisFromStream( this );
             if ( validateKeys )
             {
-                for ( View view : viewList )
-                {
-                    KeyValidator keyValidator = new KeyValidator( view );
-                    keyValidator.validate();
-                }
+                for (View view : viewList)
+                    KeyValidator.validate(view);
             }
 
             return viewList;

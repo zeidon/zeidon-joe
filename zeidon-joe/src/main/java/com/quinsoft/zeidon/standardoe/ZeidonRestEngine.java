@@ -207,15 +207,12 @@ public class ZeidonRestEngine
         {
             try
             {
-                View view = task
+                return task
                         .deserializeOi()
                         .setFormat( format )
-                        .fromString( body )
+                        .fromString(body)
+                        .withKeyValidation()
                         .activateFirst();
-
-                KeyValidator keyValidator = new KeyValidator( view );
-                keyValidator.validate();
-                return view;
             }
             catch ( KeyValidationError e )
             {
