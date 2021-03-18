@@ -548,6 +548,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testIncludePersonCommit()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testIncludePersonCommit( testview );
+        System.out.println("===== Finished testInclude ========");
+	}
+
+	@Test
 	public void testInclude()
 	{
 	    View         testview;
@@ -6331,6 +6341,104 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
    		   return( 0 );
    		}
 
+		//:   VIEW mFAProfO BASED ON LOD mFAProf
+		public int
+		testIncludePersonCommit( View     ViewToWindow )
+		{
+			   zVIEW    mPers2 = new zVIEW( );
+			   zVIEW    mPers1 = new zVIEW( );
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			   int      RESULT = 0;
+			   int      ID1 = 0;
+			   int      ID2 = 0;
+			   
+			   // Activate mPers1
+			   // Activate mPers2 (where Person.ID is not mPers1.Person.ID)
+			   // Include mPers1.MailingPerson from mPers2.Person.
+			   // Include mPers2.MailingPerson from mPers1.Person.
+			   // Commit mPers1/mPers2 and re-activate both views.
+			   // ERROR - mPers2.MailingPerson does not exist after activate.
+
+			   // ACTIVATE  mPers1
+			   RESULT = ActivateObjectInstance( mPers1, "mPersTst", ViewToWindow, 0, zSINGLE );
+			   SetNameForView( mPers1, "mPers1", null, zLEVEL_TASK );
+			   if ( mPers1.cursor("MailingPerson").checkExistenceOfEntity().isSet())
+			   {
+				   // If MailingPerson exists exclude and save.
+				   mPers1.cursor("MailingPerson").excludeEntity();
+				   mPers1.commit();
+			   }
+			   // ACTIVATE  mPers2  WHERE mPers2.Person.ID != mPers1.Person.ID
+			   ID1 = mPers1.cursor("Person").getAttribute("ID").getInteger();
+			   o_BuildPersonNoID( ViewToWindow, vTempViewVar_0, mPers1.cursor("Person").getAttribute("ID").getInteger() );
+			   RESULT = ActivateObjectInstance( mPers2, "mPersTst", ViewToWindow, vTempViewVar_0, zSINGLE );
+			   DropView( vTempViewVar_0 );
+			   ID2 = mPers2.cursor("Person").getAttribute("ID").getInteger();
+			   SetNameForView( mPers2, "mPers2", null, zLEVEL_TASK );
+			   if ( mPers2.cursor("MailingPerson").checkExistenceOfEntity().isSet())
+			   {
+				   // If MailingPerson exists exclude and save.
+				   mPers2.cursor("MailingPerson").excludeEntity();
+				   mPers2.commit();
+			   }
+			   // Include MailingPerson from each other.
+			   RESULT = IncludeSubobjectFromSubobject( mPers1, "MailingPerson", mPers2, "Person", zPOS_AFTER );
+			   RESULT = IncludeSubobjectFromSubobject( mPers2, "MailingPerson", mPers1, "Person", zPOS_AFTER );
+			   mPers1.commit();
+			   mPers2.commit();
+			   DropView( mPers1 );
+			   DropView( mPers2 );
+			   
+			   // Activate mPers1/mPers2 again.
+			   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, ID1 );
+			   RESULT = ActivateObjectInstance( mPers1, "mPersTst", ViewToWindow, vTempViewVar_0, zSINGLE );
+			   DropView( vTempViewVar_0 );
+			   SetNameForView( mPers1, "mPers1", null, zLEVEL_TASK );
+			   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, ID2 );
+			   RESULT = ActivateObjectInstance( mPers2, "mPersTst", ViewToWindow, vTempViewVar_0, zSINGLE );
+			   DropView( vTempViewVar_0 );
+			   SetNameForView( mPers2, "mPers2", null, zLEVEL_TASK );
+			   
+			   // Check if MailingPerson exists for each view.
+			   if ( !mPers1.cursor("MailingPerson").checkExistenceOfEntity().isSet())
+		 			  Assert.assertTrue("mPers1 MailingPerson should exist after commit but does not.", false);
+
+			   if ( !mPers2.cursor("MailingPerson").checkExistenceOfEntity().isSet())
+		 			  Assert.assertTrue("mPers2 MailingPerson should exist after commit but does not.", false);
+			   
+			   // Exclude MailingPerson for both views for cleanup for next time... even though we do a check above.
+			   if ( mPers1.cursor("MailingPerson").checkExistenceOfEntity().isSet())
+			   {
+				   mPers1.cursor("MailingPerson").excludeEntity();
+				   mPers1.commit();
+			   }
+			   if ( mPers2.cursor("MailingPerson").checkExistenceOfEntity().isSet())
+			   {
+				   mPers2.cursor("MailingPerson").excludeEntity();
+				   mPers2.commit();
+			   }
+
+			   return 0;
+		}
+
+		private int 
+		o_BuildPersonNoID( View     vSubtask,
+		                      zVIEW    vQualObject,
+		                      int      lTempInteger_0 )
+		{
+		   int      RESULT = 0;
+		
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Person" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "!=" );
+		   return( 0 );
+		} 
+		
 		//:   VIEW mFAProfO BASED ON LOD mFAProf
 		public int
 		testInclude( View     ViewToWindow )
