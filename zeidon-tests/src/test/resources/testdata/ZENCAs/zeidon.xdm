@@ -15935,6 +15935,12 @@ aEditString HH:MI:SS.9 AM
 aJavaEditString HH:mm:ss.S a
 
 eContext   3
+aZKey      354025999
+aName      HH:MM AM
+aEditString HH:Mi AM
+aJavaEditString hh:mm a
+
+eContext   3
 aZKey      90019559
 aName      Hour
 aEditString HH

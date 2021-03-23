@@ -3379,6 +3379,11 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		       RESULT = mCRStdPLST2.cursor( "ClassRoomSession" ).setFirst( "ID","2069", "ClassRoomStandardSchedule").toInt();
 			   RESULT = CompareAttributeToAttribute( mCRStdPLST2, "ClassRoomSession", "StartTime", mCRStdPLST, "ClassRoomSession", "StartTime" );
 	   		   Assert.assertEquals("Error comparing times do not equal ", 0, RESULT);
+	   		   // Set StartTime 
+	   		   mCRStdPLST2.cursor("ClassRoomSession").getAttribute("StartTime").setValue("08:05 AM", "HH:MM AM");
+			   szTime = mCRStdPLST2.cursor("ClassRoomSession").getAttribute("StartTime").getString("HH:MM AM");
+	   		   mCRStdPLST2.cursor("ClassRoomSession").getAttribute("StartTime").setValue("01:45 PM", "HH:MM AM");
+			   mCRStdPLST2.commit();
 			return 0;
 		}
 
@@ -4908,11 +4913,16 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 	         SetAttributeFromString( mUser, "User", "LastLoginDateTime", szDate );
 	         SetAttributeFromString( mUser, "User", "OnlineProspectInitialCreatedDate", szDate );
 
-	         szDate = mUser.cursor("User").getAttribute("LastLoginDateTime").getString();
+	         szDate = mUser.cursor("User").getAttribute("LastLoginDateTime").getString(); 
+	         Assert.assertEquals("Error with datetime string length", 14, szDate.length());
 	         szDate = mUser.cursor("User").getAttribute("OnlineProspectInitialCreatedDate").getString();
+	         Assert.assertEquals("Error with datetime string length", 8, szDate.length());
+
+	         mUser.cursor("User").getAttribute("OnlineProspectInitialCreatedDate").setValue("11/11/2021", "DD/MM/YYYY");
+	         mUser.cursor("User").getAttribute("LastLoginDateTime").setValue("11/11/2021", "DD/MM/YYYY");
 
 	         //:COMMIT mUser
-	         //RESULT = CommitObjectInstance( mUser );
+	         RESULT = CommitObjectInstance( mUser );
 	         DropView( mUser );
 
 	         testTimeFormatting( ViewToWindow );
