@@ -2014,9 +2014,11 @@ public class TestZencas
 		   int RESULT=0;
 
 		   // KJS 03/23/21 
-		   // but when that test gets fixed, I want to make sure that the values in PerPeriodFinAidAwardDisbursement, down the
-		   // PerProfileFinAidAwardPeriod path show the same values as the original FinAidAwardDisbursement entity under FinAidAward.
-		   // The PerProfileFinAidAwardPeriod path is the "included" path.
+		   // Create Temporal Subobject for FinAidAward
+		   // Include FinAidSource
+		   // Add FinAidAwardDisbursements
+		   // Accept FinAidAward
+		   // FinAidSource is missing all values (and mFASrc doesn't look right as well).
 
 		    // Set up code.
 		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
