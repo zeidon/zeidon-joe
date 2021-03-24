@@ -18,17 +18,17 @@
  */
 package com.quinsoft.zeidon.domains;
 
+import com.quinsoft.zeidon.ZeidonException;
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.quinsoft.zeidon.ZeidonException;
 
 /**
  * A DateTime class for parsing strings into ZonedDateTime and formatting ZonedDateTime
@@ -87,6 +87,7 @@ public class DomainDateTimeFormatter
             catch ( DateTimeParseException e )
             {
                 // Do nothing here.  We'll try parsing with the next formatter.
+                System.out.println(e.getMessage());
             }
         }
 
@@ -99,7 +100,8 @@ public class DomainDateTimeFormatter
         TemporalAccessor ta = dateTimeFormatter.parseBest( dateString,
                                                            ZonedDateTime::from,
                                                            LocalDateTime::from,
-                                                           LocalDate::from );
+                                                           LocalDate::from,
+                                                           LocalTime::from );
 
         if ( ta instanceof ZonedDateTime) {
             return (ZonedDateTime) ta;
@@ -114,6 +116,12 @@ public class DomainDateTimeFormatter
         if ( ta instanceof LocalDate ) {
             LocalDate ld = (LocalDate) ta;
             ZonedDateTime dt = ld.atStartOfDay(ZoneId.systemDefault());
+            return dt;
+        }
+
+        if ( ta instanceof LocalTime ) {
+            LocalTime lt = (LocalTime) ta;
+            ZonedDateTime dt = ZonedDateTime.of(LocalDate.now().atTime(lt), ZoneId.systemDefault());
             return dt;
         }
 
