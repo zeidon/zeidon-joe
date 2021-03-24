@@ -26,7 +26,6 @@ import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonRestException;
-import com.quinsoft.zeidon.objectdefinition.KeyValidator;
 import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -46,7 +45,7 @@ public class ZeidonRestEngine
 
     private final ObjectEngine oe;
 
-    private StreamFormat defaultStream = StreamFormat.JSON;
+    private StreamFormat defaultStreamFormat = StreamFormat.JSON;
 
     public ZeidonRestEngine( ObjectEngine oe )
     {
@@ -56,31 +55,35 @@ public class ZeidonRestEngine
     public Response withTask( HttpServletRequest request, RestEngineCallback callback )
     {
         Task task = null;
-        try
-        {
-            String applicationName = request.getParameter( "applicationName" );
-            if ( StringUtils.isBlank( applicationName ) )
-                applicationName = (String) request.getAttribute( "applicationName" );
+        try {
+            String applicationName = request.getParameter("applicationName");
+            if (StringUtils.isBlank(applicationName))
+                applicationName = (String) request.getAttribute("applicationName");
 
-            if ( StringUtils.isBlank( applicationName ) )
-                throw new HttpErrorMessage( "applicationName is required as param or attribute" );
+            if (StringUtils.isBlank(applicationName))
+                throw new HttpErrorMessage("applicationName is required as param or attribute");
 
-            task = oe.createTask( applicationName );
+            task = oe.createTask(applicationName);
             Application app = task.getApplication();
-            validateApplication( task, app );
+            validateApplication(task, app);
 
-            return callback.process( new RestEngineHandler( task, request ) );
-        }
-        catch ( Exception e )
-        {
-            return responseFromException( task, e );
-        }
-        finally
-        {
-            if ( task != null )
+            return callback.process(new RestEngineHandler(task, request));
+        } catch (Exception e) {
+            return responseFromException(task, e);
+        } finally {
+            if (task != null)
                 task.dropTask();
             ;
         }
+    }
+
+    public StreamFormat getDefaultStreamFormat() {
+        return defaultStreamFormat;
+    }
+
+    public ZeidonRestEngine setDefaultStreamFormat(StreamFormat defaultStreamFormat) {
+        this.defaultStreamFormat = defaultStreamFormat;
+        return this;
     }
 
     void validateApplication( Task task, Application application )
@@ -123,7 +126,7 @@ public class ZeidonRestEngine
     private StreamFormat interpretContentType( String contentType )
     {
         if ( StringUtils.isBlank( contentType ) )
-            return defaultStream;
+            return defaultStreamFormat;
 
         switch ( contentType )
         {
@@ -203,6 +206,10 @@ public class ZeidonRestEngine
             return task;
         }
 
+        /**
+         * Deserialize the HTTP body.  The body is assumed to have full incrementals.
+         * Use getViewFromBody( lodName, body ) to deserialize non incremental bodies.
+         */
         public View getViewFromBody( String body )
         {
             try
@@ -216,7 +223,30 @@ public class ZeidonRestEngine
             }
             catch ( KeyValidationError e )
             {
-                throw new HttpErrorMessage(e.getMessage() ).withStatusCode( 403 );
+                task.log().error( e );
+                throw new HttpErrorMessage( "Invalid request" ).withStatusCode( 403 );
+            }
+        }
+
+        /**
+         * Deserialize the HTTP body.  The body is assumed to have full incrementals.
+         */
+        public View getViewFromBody( String lodName, String body )
+        {
+            try
+            {
+                return task
+                        .deserializeOi()
+                        .setFormat( format )
+                        .setLodDef( lodName )
+                        .fromString(body)
+                        .withKeyValidation()
+                        .activateFirst();
+            }
+            catch ( KeyValidationError e )
+            {
+                task.log().error( e );
+                throw new HttpErrorMessage( "Invalid request" ).withStatusCode( 403 );
             }
         }
 

@@ -106,6 +106,13 @@ public class DeserializeOi
         return validateKeys;
     }
 
+    /**
+     * After deserialization verify that the keys of child entities match the DB.
+     * This should be done as part of deserializing any stream that is untrusted.
+     * Requires DB access.
+     *
+     * @return
+     */
     public DeserializeOi withKeyValidation()
     {
         this.validateKeys = true;
