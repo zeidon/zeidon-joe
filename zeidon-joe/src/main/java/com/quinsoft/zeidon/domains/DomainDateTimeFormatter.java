@@ -121,7 +121,7 @@ public class DomainDateTimeFormatter
 
         if ( ta instanceof LocalTime ) {
             LocalTime lt = (LocalTime) ta;
-            ZonedDateTime dt = ZonedDateTime.of(LocalDate.now().atTime(lt), ZoneId.systemDefault());
+            ZonedDateTime dt = ZonedDateTime.of(LocalDate.of(1970, 1, 1).atTime(lt), ZoneId.systemDefault());
             return dt;
         }
 
