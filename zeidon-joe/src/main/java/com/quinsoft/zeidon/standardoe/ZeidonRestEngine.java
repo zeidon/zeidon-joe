@@ -268,7 +268,12 @@ public class ZeidonRestEngine
             validateActivate( qual );
 
             View view = qual.activate();
-            validateActivateResult( view );
+            validateActivateResult(view);
+            return returnObjectInstance(view);
+        }
+
+        public Response returnObjectInstance( View view )
+        {
             String serialized = view.serializeOi().setFormat( format ).toString();
             return Response
                     .ok( serialized )

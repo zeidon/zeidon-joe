@@ -77,7 +77,7 @@ class ZeidonHttpClient
 
     static ZeidonHttpClient getClient( View sourceView )
     {
-        ZeidonHttpClient client = getClient( sourceView.getTask() );
+        ZeidonHttpClient client = getClient( sourceView.getTask() ).setSourceView(sourceView);
         return client;
     }
 
