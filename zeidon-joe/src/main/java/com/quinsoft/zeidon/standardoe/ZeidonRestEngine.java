@@ -34,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import java.util.Map;
 
@@ -52,6 +53,28 @@ public class ZeidonRestEngine
         this.oe = oe;
     }
 
+    /**
+     * A request wrapper that creates a task and supplies a REST handler for performing
+     * common REST tasks.
+     *
+     * Note: It is assumed that the application name has been specified as either a
+     *       parameter or attribute in the request object.
+     *
+     * <pre>
+     * {@code
+     *
+     *   request.setAttribute("applicationName", applicationName );
+     *
+     *   return restEngine.withTask(request, (handler) -> {
+     *       return handler.commit( body );
+     *   } );
+     * }
+     * </pre>
+     *
+     * @param request servlet request created by Java container.
+     * @param callback Lambda code called by withTask after creating task.
+     * @return Response object with serialized View or error.
+     */
     public Response withTask( HttpServletRequest request, RestEngineCallback callback )
     {
         Task task = null;
@@ -181,21 +204,17 @@ public class ZeidonRestEngine
 
         private String getParam( String name )
         {
-            return getParam( name, false );
-        }
-
-        private String getRequiredParam( String name )
-        {
-            return getParam( name, true );
-        }
-
-        private String getParam( String name, boolean required )
-        {
             String param = request.getParameter( name );
             if ( StringUtils.isBlank( param ) )
                 param = (String) request.getAttribute( name );
 
-            if ( required && StringUtils.isBlank( param ) )
+            return param;
+        }
+
+        private String getRequiredParam( String name )
+        {
+            String param = getParam( name );
+            if ( StringUtils.isBlank( param ) )
                 throw new HttpErrorMessage( name + " is required as param or attribute" );
 
             return param;
@@ -229,7 +248,7 @@ public class ZeidonRestEngine
         }
 
         /**
-         * Deserialize the HTTP body.  The body is assumed to have full incrementals.
+         * Deserialize the HTTP body from a string without incrementals.
          */
         public View getViewFromBody( String lodName, String body )
         {
@@ -250,6 +269,11 @@ public class ZeidonRestEngine
             }
         }
 
+        /**
+         * Activates an OI with root key equal to key param.
+
+         * @return Response object with serialized OI and status code = 200
+         */
         public Response activate( String key )
         {
             String jsonQual = "{\root\": {\"key\": \"" + key + "\"}}";
@@ -257,6 +281,12 @@ public class ZeidonRestEngine
             return activate();
         }
 
+        /**
+         * Activates an OI using the qualification specified in either the
+         * qual or qualOi query params.
+
+         * @return Response object with serialized OI and status code = 200
+         */
         public Response activate()
         {
             String lodName = getRequiredParam( "lodName" );
@@ -269,10 +299,10 @@ public class ZeidonRestEngine
 
             View view = qual.activate();
             validateActivateResult(view);
-            return returnObjectInstance(view);
+            return viewToResponse(view);
         }
 
-        public Response returnObjectInstance( View view )
+        public Response viewToResponse( View view )
         {
             String serialized = view.serializeOi().setFormat( format ).toString();
             return Response
@@ -281,6 +311,11 @@ public class ZeidonRestEngine
                     .build();
         }
 
+        /**
+         * Commits the OI specified in the body.
+         * @param body the OI deserialized as JSON/XML.  Must have incrementals.
+         * @return Response object with the resulting OI and status code = 201
+         */
         public Response commit( String body )
         {
             View view = getViewFromBody( body );
@@ -291,6 +326,7 @@ public class ZeidonRestEngine
             String serialized = view.serializeOi().setFormat( format ).toString();
             return Response
                     .ok( serialized )
+                    .status(Status.CREATED)
                     .type( STREAM_FORMAT_TO_CONTENT_TYPE.get( format ) )
                     .build();
         }

@@ -97,7 +97,6 @@ public class ZeidonRestGateway
                             @PathParam("applicationName") String applicationName,
                             String body )
     {
-        oe.getSystemTask().log().debug( "Commit ====================== " + applicationName );
         // Since these are path params and not query params these need to be added to the attributes.
         request.setAttribute("applicationName", applicationName );
 
