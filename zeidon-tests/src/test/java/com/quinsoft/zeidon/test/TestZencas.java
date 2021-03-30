@@ -233,6 +233,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void IncludeExcludeMaxCardinalityIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.IncludeExcludeMaxCardinalityIssue( testview );
+        System.out.println("===== Finished IncludeExcludeMaxCardinalityIssue ========");
+	}
+	
+	@Test
 	public void testDateTimeCompare()
 	{
 	    View         testview;
@@ -1881,6 +1891,72 @@ public class TestZencas
 		   return 0;
 		}
 
+		public void
+		IncludeExcludeMaxCardinalityIssue( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mPersonTST = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;	
+		   
+		   // Two objects that have some same entities.
+		   // Relink Person between two
+		   // Exclude/Include in one object
+		   // Try to commit second object and get a max cardinality error.
+		   // It's like the "include" happens in both objects but the "exclude" is only in one object.
+
+		   // Set up person, make sure they have values...
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+		   if ( mPerson.cursor("Address").checkExistenceOfEntity().isEmpty() || !mPerson.cursor("Address").setFirst("StateProvince", "MA").isSet() )
+		   {
+			   mPerson.cursor("Address").getAttribute("Line1").setValue("1 Main St");
+			   mPerson.cursor("Address").getAttribute("City").setValue("Quincy");
+			   mPerson.cursor("Address").getAttribute("StateProvince").setValue("MA");
+			   mPerson.cursor("Address").getAttribute("PostalCode").setValue("02170");
+		   }
+		    if ( !mPerson.cursor("Address").setFirst("StateProvince", "OK").isSet() )
+		    {
+			   mPerson.cursor("Address").getAttribute("Line1").setValue("1 Main St");
+			   mPerson.cursor("Address").getAttribute("City").setValue("Oklahoma City");
+			   mPerson.cursor("Address").getAttribute("StateProvince").setValue("OK");
+			   mPerson.cursor("Address").getAttribute("PostalCode").setValue("73132");
+		    }
+			mPerson.cursor("Address").setFirst("StateProvince", "MA");
+			if ( mPerson.cursor("PrimaryAddress").checkExistenceOfEntity().isEmpty() )
+			{
+			   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));
+			}
+			else
+			{
+			   mPerson.cursor("PrimaryAddress").excludeEntity();
+			   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));   
+			}
+			mPerson.commit();
+			mPerson.drop();
+			
+			o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+			RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
+			int AddressID = mPerson.cursor("PrimaryAddress").getAttribute("ID").getInteger();
+			
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPersonTST, "mPerson2", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+		   SetNameForView( mPersonTST, "mPersonTST", null, zLEVEL_TASK );
+		   RelinkInstanceToInstance( mPersonTST, "Person", mPerson, "Person" );	
+		   
+		   // Exclude Primary address
+		   mPerson.cursor("PrimaryAddress").excludeEntity();
+		   mPerson.cursor("Address").setFirst("StateProvince", "OK");
+		   // Include new Primary Address
+		   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));	
+		   // Save on other object causes a max cardinality because it looks like it has two PrimaryAddress.
+		   mPersonTST.commit();
+
+		}
 		public int
 		mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( View ViewToWindow )
 		{
