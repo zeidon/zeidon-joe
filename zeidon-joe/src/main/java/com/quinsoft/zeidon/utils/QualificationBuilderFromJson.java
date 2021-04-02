@@ -19,8 +19,8 @@ import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 
 /**
- * Creates a QualifcationBuilder from a JSON string.
- *
+ * Creates a QualifcationBuilder from a simpler JSON format.
+ * See https://github.com/zeidon/zeidon-joe/wiki/Simple-JSON-Activate-Qualification
  */
 public class QualificationBuilderFromJson
 {
@@ -583,33 +583,39 @@ public class QualificationBuilderFromJson
             switch ( oper.toLowerCase().trim() )
             {
                 case "<":
+                case "lt":
                 case "$lt":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "<", value );
                     break;
 
                 case "<=":
+                case "lte":
                 case "$lte":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "<=", value );
                     break;
 
                 case ">":
+                case "gt":
                 case "$gt":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), ">", value );
                     break;
 
                 case ">=":
+                case "gte":
                 case "$gte":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), ">=", value );
                     break;
 
                 case "=":
                 case "==":
+                case "eq":
                 case "$eq":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "=", value );
                     break;
 
                 case "!=":
                 case "<>":
+                case "neq":
                 case "$neq":
                     qualBuilder.addAttribQual( attributeDef.getEntityDef().getName(), attributeDef.getName(), "!=", value );
                     break;
