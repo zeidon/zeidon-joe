@@ -200,7 +200,7 @@ public class JavaObjectEngine implements ObjectEngine
             // Log a message in case the ENVVAR overrides the value from zeidon.ini
             logger.info( "startBrowser indicator is from zeidon.start.browser: %s", startBrowser );
 
-        if ( ! StringUtils.isBlank( startBrowser ) && startBrowser.toUpperCase().startsWith( "Y" ) )
+        if ( !StringUtils.isBlank( startBrowser ) && startBrowser.toUpperCase().startsWith( "Y" ) )
             startBrowser();
 
         assert logAssertMessage( systemTask ); // Write a message to the log if assertions are on.
@@ -249,6 +249,8 @@ public class JavaObjectEngine implements ObjectEngine
         String browserClassName = "com.quinsoft.zeidon.objectbrowser.Starter";
         try
         {
+            getSystemTask().log().info( "Starting browser...." );
+
             // Load browser class dynamically so we don't have to have the browser to compile.
             ClassLoader classLoader = getClassLoader( browserClassName );
             Class<BrowserStarter> starterClass;
@@ -261,6 +263,10 @@ public class JavaObjectEngine implements ObjectEngine
         {
             systemTask.log().error( "Couldn't find browser class %s", e, browserClassName );
             return false;
+        }
+        finally
+        {
+            getSystemTask().log().info( "Done starting browser...." );
         }
     }
 

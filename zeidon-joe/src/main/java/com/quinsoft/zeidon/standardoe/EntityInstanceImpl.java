@@ -2158,7 +2158,7 @@ class EntityInstanceImpl implements EntityInstance
             // For all linked instances, copy the persistentAttributes if they have
             // the same versionNumber.
             ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                linked.persistentAttributes = this.persistentAttributes;
+                linked.persistentAttributes = ei.persistentAttributes;
             } );
         }
 
