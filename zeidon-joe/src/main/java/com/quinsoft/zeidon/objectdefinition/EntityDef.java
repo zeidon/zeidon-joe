@@ -495,6 +495,12 @@ public class EntityDef implements PortableFileAttributeHandler
         return erEntityToken;
     }
 
+    public boolean erEntityTokensMatch( EntityDef other )
+    {
+        // We get use == because the value is interned.
+        return getErEntityToken() == other.getErEntityToken();
+    }
+
     public LodDef getLodDef()
     {
         return lodDef;
@@ -1075,7 +1081,7 @@ public class EntityDef implements PortableFileAttributeHandler
      */
     public boolean isAttributeSuperset( EntityDef otherEntity )
     {
-    	if ( getErEntityToken() != otherEntity.getErEntityToken() )
+    	if ( ! erEntityTokensMatch( otherEntity ) )
     		throw new ZeidonException( "Entities do not have matching ER Entity Tokens." )
     						.prependEntityDef(this)
     						.prependMessage("Other entity = %s", otherEntity );
@@ -1355,7 +1361,7 @@ public class EntityDef implements PortableFileAttributeHandler
      */
     public LinkValidation validateLinking( EntityDef source )
     {
-        assert getErEntityToken() == source.getErEntityToken() : "Trying to link mismatching ER tokens";
+        assert erEntityTokensMatch( source ) : "Trying to link mismatching ER tokens";
 
         if ( this == source )
             return LinkValidation.SOURCE_OK;

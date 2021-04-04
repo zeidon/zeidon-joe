@@ -490,10 +490,10 @@ class EntityInstanceImpl implements EntityInstance
     {
         this.parentInstance = getLatestVersion( parent );
         assert assertParent();
-        assert getEntityDef().getParent().getErEntityToken() == parent.getEntityDef().getErEntityToken();
+        assert getEntityDef().getParent().erEntityTokensMatch( parent.getEntityDef() );
 
         // We match by ER entity token to handle recursive cases.
-        assert parentInstance.getEntityDef().getErEntityToken() == parent.getEntityDef().getErEntityToken() :
+        assert parentInstance.erEntityTokensMatch( parent ) :
             "Setting parent to mismatching EntityDef.  Parent = " + parent.getEntityDef() + ", child = " + getEntityDef();
     }
 
@@ -1376,7 +1376,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( source == this )
             return false;
 
-        if ( entityDef.getErEntityToken() != source.getEntityDef().getErEntityToken() )
+        if ( ! erEntityTokensMatch( source ) )
             throw new ZeidonException("Unmatched ER tokens").appendMessage( "Target = %s\nSource = %s", entityDef, source.getEntityDef() );
 
         EntityInstanceImpl s = (EntityInstanceImpl) source.getEntityInstance();
@@ -1412,7 +1412,8 @@ class EntityInstanceImpl implements EntityInstance
     {
         assert sourceInstance != null;
         assert sourceInstance != this;
-        assert entityDef.getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken();
+        assert entityDef.erEntityTokensMatch( sourceInstance.getEntityDef() )
+                : "Attempting to link view entities that are not the same ER entity";
 
         LinkValidation valid = getEntityDef().validateLinking( sourceInstance.getEntityDef() );
         if ( valid != LinkValidation.SOURCE_OK )
@@ -1422,7 +1423,6 @@ class EntityInstanceImpl implements EntityInstance
             throw new ZeidonException( "Internal error.  validateLinking returned something invalid." );
         }
 
-        assert getEntityDef().getErEntityToken() == sourceInstance.getEntityDef().getErEntityToken() : "Attempting to link view entities that are not the same ER entity";
         sourceInstance.addLinkedInstance( this );
 
         if ( sourceInstance.versionNumber == this.versionNumber )
@@ -1433,6 +1433,17 @@ class EntityInstanceImpl implements EntityInstance
             // Copy work and persistent attributes.
             copyAttributes( sourceInstance, true, true );
         }
+    }
+
+    private void setPersistentAttributes( EntityInstanceImpl source )
+    {
+        assert erEntityTokensMatch( source );
+        persistentAttributes = source.persistentAttributes;
+    }
+
+    private boolean erEntityTokensMatch( EntityInstance other )
+    {
+        return other.getEntityDef().erEntityTokensMatch( this.getEntityDef() );
     }
 
     /**
@@ -1786,7 +1797,7 @@ class EntityInstanceImpl implements EntityInstance
                 // This is a linked instance without a version.  This means we must be accepting
                 // the final version so we want to update any linked instances outside the
                 // temporal subobject.
-                linked.persistentAttributes = this.persistentAttributes;
+                linked.setPersistentAttributes( this );
                 linked.updated = this.updated;
                 linked.deleted = this.deleted;
                 if ( isChanged() )
@@ -2158,7 +2169,7 @@ class EntityInstanceImpl implements EntityInstance
             // For all linked instances, copy the persistentAttributes if they have
             // the same versionNumber.
             ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                linked.persistentAttributes = ei.persistentAttributes;
+                linked.setPersistentAttributes( ei );
             } );
         }
 
@@ -3234,7 +3245,7 @@ class EntityInstanceImpl implements EntityInstance
         else
         {
             linkedSourceInstance.addLinkedInstance( this );
-            persistentAttributes = linkedSourceInstance.persistentAttributes;
+            setPersistentAttributes( linkedSourceInstance );
 
             // Copy just work attributes.
             assert sourceInstance.getEntityDef().getName() == this.getEntityDef().getName();
@@ -3380,7 +3391,7 @@ class EntityInstanceImpl implements EntityInstance
         if ( ei == null )
             return false;
 
-        if ( getEntityDef().getErEntityToken() != ei.getEntityDef().getErEntityToken() )
+        if ( ! erEntityTokensMatch( ei ) )
             return false;
 
         EntityInstanceImpl otherInstance = (EntityInstanceImpl) ei.getEntityInstance();
@@ -3829,7 +3840,7 @@ class EntityInstanceImpl implements EntityInstance
             ei1.linkedInstances2.linkedInstances.putAll( ei2.linkedInstances2.linkedInstances );
             ei2.linkedInstances2.stream().forEach( linked -> {
                 linked.linkedInstances2 = ei1.linkedInstances2;
-                linked.persistentAttributes = ei1.persistentAttributes;
+                linked.setPersistentAttributes( ei1 );
             });
         }
 
