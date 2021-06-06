@@ -434,7 +434,7 @@ public class TestZencas
 		tester.TEST_TemporalSaveIssuemSAProf( testview );
         System.out.println("===== Finished TEST_TemporalSaveIssuemSAProf ========");
 	}
-	
+
 	@Test
 	public void testXpg()
 	{
@@ -1566,8 +1566,8 @@ public class TestZencas
 		   zVIEW    mPerson = new zVIEW( );
 		   zVIEW    mPersonTST = new zVIEW( );
 		   zVIEW    vTempViewVar_0 = new zVIEW( );
-		   int RESULT=0;	
-		   
+		   int RESULT=0;
+
 		   // Two objects that have some same entities.
 		   // Relink Person between two
 		   // Exclude/Include in one object
@@ -1600,28 +1600,29 @@ public class TestZencas
 			else
 			{
 			   mPerson.cursor("PrimaryAddress").excludeEntity();
-			   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));   
+			   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));
 			}
 			mPerson.commit();
 			mPerson.drop();
-			
+
 			o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
 			RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 			DropView( vTempViewVar_0 );
 			SetNameForView( mPerson, "mPerson", null, zLEVEL_TASK );
 			int AddressID = mPerson.cursor("PrimaryAddress").getAttribute("ID").getInteger();
-			
+
 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
 		   RESULT = ActivateObjectInstance( mPersonTST, "mPerson2", ViewToWindow, vTempViewVar_0, zSINGLE );
 		   DropView( vTempViewVar_0 );
 		   SetNameForView( mPersonTST, "mPersonTST", null, zLEVEL_TASK );
-		   RelinkInstanceToInstance( mPersonTST, "Person", mPerson, "Person" );	
-		   
+		   RelinkInstanceToInstance( mPersonTST, "Person", mPerson, "Person" );
+		   RelinkInstanceToInstance( mPersonTST, "PrimaryAddress", mPerson, "PrimaryAddress" );
+
 		   // Exclude Primary address
 		   mPerson.cursor("PrimaryAddress").excludeEntity();
 		   mPerson.cursor("Address").setFirst("StateProvince", "OK");
 		   // Include new Primary Address
-		   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));	
+		   mPerson.cursor("PrimaryAddress").includeSubobject(mPerson.cursor("Address"));
 		   // Save on other object causes a max cardinality because it looks like it has two PrimaryAddress.
 		   mPersonTST.commit();
 
@@ -2089,7 +2090,7 @@ public class TestZencas
 		   zVIEW    vTempViewVar_0 = new zVIEW( );
 		   int RESULT=0;
 
-		   // KJS 03/23/21 
+		   // KJS 03/23/21
 		   // Create Temporal Subobject for FinAidAward
 		   // Include FinAidSource
 		   // Add FinAidAwardDisbursements
@@ -2133,9 +2134,9 @@ public class TestZencas
 	        Assert.assertTrue( "FinAidSource entity exists but is empty after acceptSubobject", mFAProf.cursor("FinAidSource").getAttribute("ID").getString().length() > 0 );
 
 		    return 0;
- 		 
+
 		}
-		
+
 		public int
 		mFAProfTemporalLinkIssue( View ViewToWindow )
 		{
@@ -3543,7 +3544,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		       RESULT = mCRStdPLST2.cursor( "ClassRoomSession" ).setFirst( "ID","2069", "ClassRoomStandardSchedule").toInt();
 			   RESULT = CompareAttributeToAttribute( mCRStdPLST2, "ClassRoomSession", "StartTime", mCRStdPLST, "ClassRoomSession", "StartTime" );
 	   		   Assert.assertEquals("Error comparing times do not equal ", 0, RESULT);
-	   		   // Set StartTime 
+	   		   // Set StartTime
 	   		   mCRStdPLST2.cursor("ClassRoomSession").getAttribute("StartTime").setValue("08:05 AM", "HH:MM AM");
 			   szTime = mCRStdPLST2.cursor("ClassRoomSession").getAttribute("StartTime").getString("HH:MM AM");
 	   		   mCRStdPLST2.cursor("ClassRoomSession").getAttribute("StartTime").setValue("01:45 PM", "HH:MM AM");
@@ -5077,7 +5078,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 	         SetAttributeFromString( mUser, "User", "LastLoginDateTime", szDate );
 	         SetAttributeFromString( mUser, "User", "OnlineProspectInitialCreatedDate", szDate );
 
-	         szDate = mUser.cursor("User").getAttribute("LastLoginDateTime").getString(); 
+	         szDate = mUser.cursor("User").getAttribute("LastLoginDateTime").getString();
 	         Assert.assertEquals("Error with datetime string length", 14, szDate.length());
 	         szDate = mUser.cursor("User").getAttribute("OnlineProspectInitialCreatedDate").getString();
 	         Assert.assertEquals("Error with datetime string length", 8, szDate.length());
@@ -6504,7 +6505,7 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 			   int      RESULT = 0;
 			   int      ID1 = 0;
 			   int      ID2 = 0;
-			   
+
 			   // Activate mPers1
 			   // Activate mPers2 (where Person.ID is not mPers1.Person.ID)
 			   // Include mPers1.MailingPerson from mPers2.Person.
@@ -6541,7 +6542,7 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 			   mPers2.commit();
 			   DropView( mPers1 );
 			   DropView( mPers2 );
-			   
+
 			   // Activate mPers1/mPers2 again.
 			   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, ID1 );
 			   RESULT = ActivateObjectInstance( mPers1, "mPersTst", ViewToWindow, vTempViewVar_0, zSINGLE );
@@ -6551,14 +6552,14 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 			   RESULT = ActivateObjectInstance( mPers2, "mPersTst", ViewToWindow, vTempViewVar_0, zSINGLE );
 			   DropView( vTempViewVar_0 );
 			   SetNameForView( mPers2, "mPers2", null, zLEVEL_TASK );
-			   
+
 			   // Check if MailingPerson exists for each view.
 			   if ( !mPers1.cursor("MailingPerson").checkExistenceOfEntity().isSet())
 		 			  Assert.assertTrue("mPers1 MailingPerson should exist after commit but does not.", false);
 
 			   if ( !mPers2.cursor("MailingPerson").checkExistenceOfEntity().isSet())
 		 			  Assert.assertTrue("mPers2 MailingPerson should exist after commit but does not.", false);
-			   
+
 			   // Exclude MailingPerson for both views for cleanup for next time... even though we do a check above.
 			   if ( mPers1.cursor("MailingPerson").checkExistenceOfEntity().isSet())
 			   {
@@ -6574,13 +6575,13 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 			   return 0;
 		}
 
-		private int 
+		private int
 		o_BuildPersonNoID( View     vSubtask,
 		                      zVIEW    vQualObject,
 		                      int      lTempInteger_0 )
 		{
 		   int      RESULT = 0;
-		
+
 		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
@@ -6590,8 +6591,8 @@ o_fnLocalBuildQual_Humpty( View     vSubtask,
 		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "!=" );
 		   return( 0 );
-		} 
-		
+		}
+
 		//:   VIEW mFAProfO BASED ON LOD mFAProf
 		public int
 		testInclude( View     ViewToWindow )
@@ -8128,7 +8129,7 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 }
 
 
-public int 
+public int
 TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 {
    zVIEW    mSAChrgILST = new zVIEW( );
@@ -8151,7 +8152,7 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
    int      lTempInteger_2 = 0;
    zVIEW    vTempViewVar_3 = new zVIEW( );
 
-   
+
  // After the commit, even though mSAProf.BillingPeriod is created, mSAProf.AppliedBillingPeriod is missing AND
  // BillingPeriod is NOT created in the database.
  // Also, interestingly... at IBOE, when I run this code, it creates the BillingPeriod correctly but the foreign key in StudentAccountTransApplied is missing.
@@ -8160,7 +8161,7 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 
  // Assuming that this issue is related to mFAProfTemporalPerProfileFinAidAwardPeriodPathTest test since both of these object are complicated and have
  // specific entities down two paths in the object.
-   
+
    //:// Code to test commit of new TransApplied entries when Billing Period has been added.
    //:// We will use any mSAProf example with SA Transactions as a base to create the new entry.
 
@@ -8175,7 +8176,7 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 
    //:// Activate any mSAProf as our base.
    //:ACTIVATE mSAProfS WHERE mSAProfS.StudentAccountTransApplied EXISTS
-   //:      RESTRICTING mSAProfS.BillingPeriod TO mSAProfS.PeriodCollegeTerm.ID = mTermLST.CollegeTerm.ID 
+   //:      RESTRICTING mSAProfS.BillingPeriod TO mSAProfS.PeriodCollegeTerm.ID = mTermLST.CollegeTerm.ID
    {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
        GetIntegerFromAttribute( mi_lTempInteger_0, mTermLST, "CollegeTerm", "ID" );
    lTempInteger_0 = mi_lTempInteger_0.intValue( );}
@@ -8188,20 +8189,20 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
    //:IF mSAProfS.BillingPeriod EXISTS
    lTempInteger_1 = CheckExistenceOfEntity( mSAProfS, "BillingPeriod" );
    if ( lTempInteger_1 == 0 )
-   { 
+   {
       //:// There are entries for the Term, so delete them all.
-      //:FOR EACH mSAProfS.StudentAccountTransApplied 
+      //:FOR EACH mSAProfS.StudentAccountTransApplied
       RESULT = SetCursorFirstEntity( mSAProfS, "StudentAccountTransApplied", "" );
       while ( RESULT > zCURSOR_UNCHANGED )
-      { 
-         //:IF mSAProfS.AppliedBillingPeriod.ID = mSAProfS.BillingPeriod.ID 
+      {
+         //:IF mSAProfS.AppliedBillingPeriod.ID = mSAProfS.BillingPeriod.ID
          if ( CompareAttributeToAttribute( mSAProfS, "AppliedBillingPeriod", "ID", mSAProfS, "BillingPeriod", "ID" ) == 0 )
-         { 
+         {
             RESULT = DeleteEntity( mSAProfS, "StudentAccountTransApplied", zREPOS_NONE );
-         } 
+         }
 
          RESULT = SetCursorNextEntity( mSAProfS, "StudentAccountTransApplied", "" );
-      } 
+      }
 
       RESULT = CommitObjectInstance( mSAProfS );
       RESULT = DeleteEntity( mSAProfS, "BillingPeriod", zPOS_NEXT );
@@ -8217,7 +8218,7 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
       RESULT = ActivateObjectInstance( mSAProfS, "mSAProf", ViewToWindow, vTempViewVar_2, zSINGLE );
       DropView( vTempViewVar_2 );
       SetNameForView( mSAProfS, "mSAProfS", null, zLEVEL_TASK );
-   } 
+   }
 
    //:END
 
@@ -8230,11 +8231,11 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
    //:// Add a BillingPeriod for CollegeTerm and add two StudentAccountTransApplied entries.
    RESULT = CreateEntity( mSAProfS, "BillingPeriod", zPOS_AFTER );
    RESULT = IncludeSubobjectFromSubobject( mSAProfS, "PeriodCollegeTerm", mTermLST, "CollegeTerm", zPOS_AFTER );
-   //:mSAProfS.BillingPeriod.PeriodDesignator = mTermLST.CollegeTerm.YearSemester 
+   //:mSAProfS.BillingPeriod.PeriodDesignator = mTermLST.CollegeTerm.YearSemester
    SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "PeriodDesignator", mTermLST, "CollegeTerm", "YearSemester" );
-   //:mSAProfS.BillingPeriod.BeginDate        = mSAProf.PeriodCollegeTerm.CourseStartDate 
+   //:mSAProfS.BillingPeriod.BeginDate        = mSAProf.PeriodCollegeTerm.CourseStartDate
    SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "BeginDate", mSAProf, "PeriodCollegeTerm", "CourseStartDate" );
-   //:mSAProfS.BillingPeriod.EndDate          = mSAProf.PeriodCollegeTerm.CourseEndDate 
+   //:mSAProfS.BillingPeriod.EndDate          = mSAProf.PeriodCollegeTerm.CourseEndDate
    SetAttributeFromAttribute( mSAProfS, "BillingPeriod", "EndDate", mSAProf, "PeriodCollegeTerm", "CourseEndDate" );
 
    CreateTemporalEntity( mSAProfS, "StudentAccountTransApplied", zPOS_AFTER );
@@ -8253,16 +8254,16 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
    DropView( mSAProf );
 
    RESULT = CommitObjectInstance( mSAProfS );
-     
+
    // After the commit, even though mSAProf.BillingPeriod is created, mSAProf.AppliedBillingPeriod is missing AND
    // BillingPeriod is NOT created in the database.
    // Also, interestingly... at IBOE, when I run this code, it creates the BillingPeriod correctly but the foreign key in StudentAccountTransApplied is missing.
    // It's the opposite of what happens here. I don't suppose that matters.
    // If we do a CreateEntity (not temporal) all is fine.
-   Assert.assertTrue( "ERROR! After commit AppliedBillingPeriod.ID is missing.", mSAProfS.cursor("AppliedBillingPeriod").getAttribute("ID").getValue() != null );	   
-   Assert.assertTrue( "ERROR! After commit BillingPeriod.ID is missing.", mSAProfS.cursor("BillingPeriod").getAttribute("ID").getValue() != null );	   
+   Assert.assertTrue( "ERROR! After commit AppliedBillingPeriod.ID is missing.", mSAProfS.cursor("AppliedBillingPeriod").getAttribute("ID").getValue() != null );
+   Assert.assertTrue( "ERROR! After commit BillingPeriod.ID is missing.", mSAProfS.cursor("BillingPeriod").getAttribute("ID").getValue() != null );
 
-   //:ACTIVATE mSAProf WHERE mSAProf.StudentAccountProfile.ID = mSAProfS.StudentAccountProfile.ID 
+   //:ACTIVATE mSAProf WHERE mSAProf.StudentAccountProfile.ID = mSAProfS.StudentAccountProfile.ID
    {MutableInt mi_lTempInteger_2 = new MutableInt( lTempInteger_2 );
        GetIntegerFromAttribute( mi_lTempInteger_2, mSAProfS, "StudentAccountProfile", "ID" );
    lTempInteger_2 = mi_lTempInteger_2.intValue( );}
@@ -8271,15 +8272,15 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
    DropView( vTempViewVar_3 );
    SetNameForView( mSAProf, "mSAProfVerify", null, zLEVEL_TASK );
    return( 0 );
-} 
-	
-	private int 
+}
+
+	private int
 	o_fnLocalBuildQual_5( View     vSubtask,
 	                      zVIEW    vQualObject,
 	                      int      lTempInteger_2 )
 	{
 	   int      RESULT = 0;
-	
+
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -8289,14 +8290,14 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 	   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_2 );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	   return( 0 );
-	} 
+	}
 
-	private int 
+	private int
 	o_fnLocalBuildQual_4( View     vSubtask,
 	                      zVIEW    vQualObject )
 	{
 	   int      RESULT = 0;
-	
+
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -8306,15 +8307,15 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "" );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "EXISTS" );
 	   return( 0 );
-	} 
+	}
 
-	private int 
+	private int
 	o_fnLocalBuildQual_3x( View     vSubtask,
 	                      zVIEW    vQualObject,
 	                      int      lTempInteger_0 )
 	{
 	   int      RESULT = 0;
-	
+
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "StudentAccountProfile" );
@@ -8331,14 +8332,14 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 	   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_0 );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	   return( 0 );
-	} 
+	}
 
-	private int 
+	private int
 	o_fnLocalBuildQual_2( View     vSubtask,
 	                      zVIEW    vQualObject )
 	{
 	   int      RESULT = 0;
-	
+
 	   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 	   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 	   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Class" );
@@ -8348,7 +8349,7 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "0" );
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 	   return( 0 );
-	} 
+	}
 
 
    }
