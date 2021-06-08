@@ -16,7 +16,7 @@ Object engine:
     <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-joe</artifactId>
-      <version>1.7.0</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
 ```
 
@@ -26,7 +26,7 @@ Scala DSL:
     <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-scala</artifactId>
-      <version>1.7.0</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
 ```
 
@@ -34,16 +34,16 @@ Scala DSL:
 
 ```
 dependencies {
-    compile 'com.quinsoft.zeidon:zeidon-joe:1.7.0'
-    compile 'com.quinsoft.zeidon:zeidon-scala:1.7.0'
+    compile 'com.quinsoft.zeidon:zeidon-joe:2.0.0-SNAPSHOT'
+    compile 'com.quinsoft.zeidon:zeidon-scala:2.0.0-SNAPSHOT'
 }
 ```
 
 ## Javadoc/Scaladoc (current dev)
 
-* Scala: http://zeidon.github.io/zeidon-joe/javadoc/1.5/scala/
-* JOE: http://zeidon.github.io/zeidon-joe/javadoc/1.5/joe/
-* Android: http://zeidon.github.io/zeidon-joe/javadoc/1.5/android/
+* Scala: http://zeidon.github.io/zeidon-joe/javadoc/2.0/scala/
+* JOE: http://zeidon.github.io/zeidon-joe/javadoc/2.0/joe/
+* Android: http://zeidon.github.io/zeidon-joe/javadoc/2.0/android/
 
 ## Build Zeidon
 
