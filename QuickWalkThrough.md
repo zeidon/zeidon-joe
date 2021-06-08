@@ -36,15 +36,22 @@ Loading data from the DB is called an "activate" in Zeidon.  An activate will in
 To load the data for order # 10250 you would use the following code written in Scala:
 
 ```scala
-val myOrder = View( task ) basedOn "Order"
-myOrder activateWhere( _.Order.OrderId = 10250 )
+val myOrder = task.Order.activate( _.Order.OrderId = 10250 )
 ```
 
-The first line creates an empty View that is based on the LOD "Order" shown above.  The second line loads all the data from the entities (i.e. SQL tables) that make up the Order LOD.  The qualification is specified as `_.Order.OrderId = 10250` which means "load the Orders with OrderId = 10250".  Since the data in a LOD is instantiated as a tree it can easily be serialized as JSON (as well as XML).  The following code writes the OI as JSON to a file:
+In TypeScript this would look like:
+
+```javascript
+this.myOrder = await Order.activate(
+    {
+        OrderId: 10250
+    } );
+```
+
+This loads all the data from the entities (i.e. SQL tables) that make up the Order LOD.  The qualification is specified as `_.Order.OrderId = 10250` which means "load the Orders with OrderId = 10250".  Since the data in a LOD is instantiated as a tree it can easily be serialized as JSON (as well as XML).  The following code writes the OI as JSON to a file:
 
 ```scala
-val myOrder = View( task ) basedOn "Order"
-myOrder activateWhere( _.Order.OrderId = 10250 )
+val myOrder = task.Order.activate( _.Order.OrderId = 10250 )
 myOrder.serializeOi.toTempDir( "order.json" )
 ```
 
@@ -159,6 +166,13 @@ println( "Order ShipName = " + myOrder.Order.ShipName )
 println( "Employee Name = " + myOrder.Employee.FirstName + " " + myOrder.Employee.LastName )
 ```
 
+TypeScript:
+
+```javascript
+println( "Order ShipName = " + myOrder.Order$.ShipName );
+println( "Employee Name = " + myOrder.Employee$.FirstName + " " + myOrder.Employee$.LastName );
+```
+
 Results in:
 
 ```console
@@ -195,6 +209,14 @@ println( "New quantity = " + myOrder.OrderDetail.Quantity )
 myOrder.commit()
 ```
 
+TypeScript:
+
+```javascript
+myOrder.OrderDetail$.Quantity += 1;
+console.log( "New quantity = " + myOrder.OrderDetail$.Quantity );
+this.myOrder = await myOrder.commit();
+```
+
 The output from running this is
 
 ```console
@@ -217,6 +239,16 @@ myOrder.OrderDetail create()
 myOrder.OrderDetail.UnitPrice = 10.0
 myOrder.OrderDetail.Quantity = 5
 myOrder.OrderDetail.Discount = 0.0
+```
+
+TypeScript:
+
+```javascript
+myOrder.OrderDetail create( {
+    UnitPrice: 10.0,
+    Quantity: 5,
+    Discount: 0.0
+} )
 ```
 
 To save this, call `commit()` again.  However, with just this change the commit will trigger an error:
@@ -274,12 +306,17 @@ Note that run-time permissions Create, Delete, and Update are turned off.  Howev
 Creating a relationship between two entities is called "including" an entity.  To perform an include we first need to activate the entity we want to include.  This is where the Product LOD comes in:
 
 ```scala
-val product = View( task ) basedOn "Product"
-product.activateWhere( _.Product.ProductId = 48 )
-
+val product = task.Product.activate( _.Product.ProductId = 48 )
 myOrder.Product include product.Product
-
 myOrder.commit()
+```
+
+TypeScript:
+
+```javascript
+var product = await Product.activate( { ProductId: 48 } );
+myOrder.Product.include( product.Product$ );
+myOrder.commit();
 ```
 
 This will activate product 48 from the DB, include the Product entity from the product view into myOrder, and then commit the change.  The SQL that gets executed to perform the commit is:
@@ -293,8 +330,9 @@ INSERT INTO orderdetails ( UNITPRICE, QUANTITY, DISCOUNT, PRODUCTID, ORDERID  ) 
 The above code works fine but it could be better.  If we create a lot of OrderDetails we'll have to activate each Product separately, even if we use the same Product multiple times.  Instead we'd like to load the Products into a cache and choose the correct product from the cache.  Zeidon makes this easy with more advanced qualification:
 
 ```scala
-val products = View( task ) basedOn "Product"
-products.buildQual( _.Product.Discontinued = false )
+val products = task.Product
+        .buildQual()
+        .where( _.Product.Discontinued = false )
         .cachedAs( "ProductsList" )
         .activate()
 
@@ -316,6 +354,13 @@ Call the `delete()` method on an entity to delete an entity instance:
 myOrder.OrderDetail setFirst()
 myOrder.OrderDetail delete()
 myOrder commit()
+```
+
+TypeScript:
+
+```javascript
+myOrder.OrderDetail[0].delete();
+myOrder = await myOrder.commit();
 ```
 
 Calling `delete()` will delete the first entity and remove its children from the OI.  If the above line is called on the first OrderDetail in our example, the OI now looks like this (there are now only two OrderDetails):
@@ -425,8 +470,8 @@ Under "Parent Delete Behavior" is says "Exclude".  This indicates that when the 
 Let's contrast that with what happens if we delete the root entity, Order:
 
 ```scala
-        myOrder.Order delete()
-        myOrder commit()
+myOrder.Order delete()
+myOrder commit()
 ```
 
 Results in the following SQL:
@@ -459,8 +504,13 @@ A LOD is designed directly from the ERM and thus it knows about the relationship
 For example, the following query loads all orders that contain a discontinued product:
 
 ```scala
-val myOrders = View( task ) basedOn "Order"
-myOrders.activateWhere( _.Product.Discontinued = true )
+val myOrders = task.Order.activate( _.Product.Discontinued = true )
+```
+
+TypeScript:
+
+```javascript
+var myOrders = await Order.activate( { Discontinued: true } );
 ```
 
 Since the Order/OrderDetail/Product path is part of the LOD Zeidon knows what tables to join.  This will generate the following SQL to load the orders:
@@ -478,9 +528,20 @@ WHERE products.DISCONTINUED = 1;
 Note that by default qualification is for the root of the LOD.  The above activate will load only orders that contain discontinued products but it will load all the products for those orders.  If you want to load just discontinued products you need to add a "restricting" filter:
 
 ```scala
-myOrders.buildQual( _.Product.Discontinued = true )
+val myOrders = task.Order.buildQual()
+        .where( _.Product.Discontinued = true )
         .restrict( _.OrderDetail ).to( _.Product.Discontinued = true )
         .activate()
+```
+
+TypeScript:
+
+```javascript
+var myOrders = await Order.activate( {
+        Discontinued: true,
+        restrict: {
+            OrderDetail: {
+                Product: { Discontinued: true } } } } );
 ```
 
 The `.restrict()` filter specifies that only OrderDetails with discontinued products should be loaded.  The SQL for loading the orders is the same as above but when loading OrderDetail the SQL is:
@@ -496,10 +557,22 @@ WHERE (orderdetails.ORDERID = 10248 AND ( products.DISCONTINUED = 1));
 Qualification can reference multiple entities in the LOD and any of the attributes, like this:
 
 ```scala
-myOrders.buildQual( _.Order.OrderDate > "2015-01-01" )
+val myOrders = task.Order.buildQual()
+        .where( _.Order.OrderDate > "2015-01-01" )
         .and( _.Employee.LastName = "Smith" )
         .and( _.Product.Discontinued = true )
       .  activate()
+```
+
+TypeScript:
+
+```javascript
+var myOrders = await Order.activate( {
+        OrderDate: { gt: "2015-01-01" },
+        Employee: {
+            LastName: "Smith" },
+        Product: {
+            Discontinued: true } } );
 ```
 
 Zeidon generates:
@@ -534,7 +607,7 @@ To make the ordering example more rubust we need to subtract the quantity ordere
 Non-exclusive locking allows allows other threads to activate the LOD for read-only; exclusive locking doesn't allow even this.  With the locking set, activating the LOD creates a locking record in the ZEIDONLOCKING table:
 
 ```scala
-val product = View( task ) basedOn "Product"
+val product = task.Product.empty()
 try {
     // This will activate the OI with pessimistic locking.
     product.activateWhere( _.Product.ProductId = 10 )
