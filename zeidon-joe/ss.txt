@@ -1,0 +1,54 @@
+src\main\java\com\quinsoft\zeidon\ActivateOptions.java:                v.cursor( "EntitySpec" ).setFirst();
+src\main\java\com\quinsoft\zeidon\dbhandler\AbstractSqlHandler.java:                CursorResult rc = cursor.setFirst( "TableName", tableName );
+src\main\java\com\quinsoft\zeidon\dbhandler\PessimisticLockingViaDb.java:            lockCursor.setFirst();
+src\main\java\com\quinsoft\zeidon\EntityCache.java:        if ( ! cacheView.cursor( root ).setFirst( key, keyValue ).isSet() )
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst();
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst( String scopingEntityName );
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst( EntityDef scopingEntity );
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst( String attributeName, Object value );
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst( String attributeName, Object value, String scopingEntityName );
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst( AttributeDef attribute, Object value );
+src\main\java\com\quinsoft\zeidon\EntityCursor.java:    CursorResult setFirst( AttributeDef attribute, Object value, EntityDef scopingEntity );
+src\main\java\com\quinsoft\zeidon\objectdefinition\AttributeHashKeyType.java:     * fast look-up map for cursor.setFirst() processing.
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromDB.java:        if ( ! parentCursor.setFirst().isSet() )
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromDB.java:        // We don't want to use setFirst()/setNext() because it has performance issues, so we'll
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:        entitySpec.setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromFileDb.java:            if ( v.cursor( lodDef.getRoot() ).setFirst( qualAttributeDef, qualValue ) == CursorResult.SET )
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromPorStream.java:            rootCursor.setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOiFromPorStream.java:            rootCursor.setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromXmlStream.java:                rootCursor.setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\ActivateOisFromXmlStream.java:                rootCursor.setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\CommitToDbUsingGenkeyHandler.java:                    if ( ! genKeyCursor.setFirst( "EntityID", entityDef.getErEntityToken() ).isSet() )
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:                    return setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:                        return setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst()
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst(String scopingEntityName)
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:            return setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:        return setFirst( getLodDef().getEntityDef( scopingEntityName ) );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst(EntityDef scopingEntity)
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:            return setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:            return setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst(String attributeName, Object value)
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:        return setFirst( getEntityDef().getAttribute( attributeName ), value );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst(AttributeDef attribute, Object value)
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst(String attributeName, Object value, String scopingEntityName)
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:            return setFirst( attributeName, value );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:        return setFirst( getEntityDef().getAttribute( attributeName ), value, scopingEntity );
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    public CursorResult setFirst(AttributeDef attribute, Object value, EntityDef scopingEntity)
+src\main\java\com\quinsoft\zeidon\standardoe\EntityCursorImpl.java:    	 setFirst();
+src\main\java\com\quinsoft\zeidon\standardoe\EntityInstanceImpl.java:     * by cursor.setFirst() processing.
+src\main\java\com\quinsoft\zeidon\standardoe\ObjectInstance.java:     * by cursor.setFirst() processing.
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(java.lang.String)
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:    public CursorResult setFirst( String scopingEntityName )
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(com.quinsoft.zeidon.objectdefinition.EntityDef)
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:    public CursorResult setFirst( EntityDef scopingEntity )
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(java.lang.String, java.lang.Object)
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:    public CursorResult setFirst( String attributeName, Object value )
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object)
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:    public CursorResult setFirst( AttributeDef attribute, Object value )
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(java.lang.String, java.lang.Object, java.lang.String)
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:    public CursorResult setFirst( String attributeName, Object value, String scopingEntityName )
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:     * @see com.quinsoft.zeidon.standardoe.EntityCursorImpl#setFirst(com.quinsoft.zeidon.objectdefinition.AttributeDef, java.lang.Object, com.quinsoft.zeidon.objectdefinition.EntityDef)
+src\main\java\com\quinsoft\zeidon\standardoe\RollingPaginationEntityCursorImpl.java:    public CursorResult setFirst( AttributeDef attribute, Object value, EntityDef scopingEntity )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        if ( qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", entityName ) != CursorResult.SET )
+src\main\java\com\quinsoft\zeidon\utils\QualificationBuilder.java:        qualView.cursor( ENTITYSPEC ).setFirst( "EntityName", currentEntity );
