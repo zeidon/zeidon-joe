@@ -1,4 +1,4 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 12/12/19   10:41:11 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 06/10/20   18:13:41 1.0a2    
 eDomainGroup 1
 aName      Zeidon9B
 
@@ -5811,6 +5811,11 @@ eTableEntry 4
 aZKey      130069821
 aExternalValue Start Jasper XLS File
 aInternalValue 49
+
+eTableEntry 4
+aZKey      130069853
+aExternalValue Process ReportStreamInfo
+aInternalValue 50
 
 eTableEntry 4
 aZKey      4847905
