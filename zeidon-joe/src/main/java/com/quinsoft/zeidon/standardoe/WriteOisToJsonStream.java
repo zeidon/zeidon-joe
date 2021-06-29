@@ -292,7 +292,8 @@ public class WriteOisToJsonStream implements StreamWriter
                     jg.writeNumberField( jsonName, (BigDecimal) attrib.getValue() );
                 else
                 if ( domain instanceof DateTimeDomain )
-                    jg.writeStringField( jsonName, ISODateTimeFormat.dateTime().print( (DateTime) attrib.getValue() ) );
+                    jg.writeStringField( jsonName, attrib.getString() );
+                //jg.writeStringField( jsonName, ISODateTimeFormat.dateTime().print( (DateTime) attrib.getValue() ) );
                 else
                 {
                     String value = attribValue.getString( ei.getTask(), attributeDef );
