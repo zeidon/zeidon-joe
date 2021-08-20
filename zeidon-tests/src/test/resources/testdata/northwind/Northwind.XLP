@@ -1,4 +1,4 @@
-z1000-Zeidon    NORTHWINDTZCMLPLO 10/08/17   00:06:21 1.0a2    
+z1000-Zeidon    NORTHWINDTZCMLPLO 08/27/21   22:44:41 1.0a2    
 eLPLR      1
 aName      Northwind
 aDesc      Zeidon application using Northwind DB
@@ -6,7 +6,7 @@ aZKey      92726746
 aPgmSrcDir c:\zeidon\zapp\northwind
 aExecDir   c:\zeidon\zapp\northwind\bin
 aMetaSrcDir c:\zeidon\zapp\northwind
-aTaskUseCount 1
+aTaskUseCount 0
 aLastBuildDate 20150822003426535
 aLPLR_Type 2
 aTempDesc  Zeidon application using Northwind DB
@@ -148,8 +148,8 @@ aStatus    1
 aUpdateInd 2
 aName      Northwind
 aDesc      Zeidon application using Northwind DB
-aLastSyncDate 20160326212857910
-aLastUpdateDate 20160326212857910
+aLastSyncDate 20180317000338116
+aLastUpdateDate 20180317000338116
 
 eW_MetaType 2
 aType      5
@@ -163,8 +163,8 @@ aStatus    1
 aUpdateInd 2
 aName      Northwind
 aDesc      Zeidon application using Northwind DB
-aLastSyncDate 20150915235051571
-aLastUpdateDate 20150915235051571
+aLastSyncDate 20171025225228775
+aLastUpdateDate 20171025225228775
 
 eW_MetaType 2
 aType      7
@@ -190,8 +190,8 @@ aCPLR_ZKey 110000478
 aStatus    1
 aUpdateInd 2
 aName      Order
-aLastSyncDate 20171008000621215
-aLastUpdateDate 20171008000621215
+aLastSyncDate 20171016234452463
+aLastUpdateDate 20171016234452463
 
 eW_MetaDef 3
 aCPLR_ZKey 110000448
@@ -216,6 +216,14 @@ aUpdateInd 2
 aName      Shipper
 aLastSyncDate 20150905151545594
 aLastUpdateDate 20150905151545594
+
+eW_MetaDef 3
+aCPLR_ZKey 228235002
+aStatus    1
+aUpdateInd 2
+aName      Supplier
+aLastSyncDate 20180228235040586
+aLastUpdateDate 20180228235040586
 
 eW_MetaDef 3
 aCPLR_ZKey 110000719
@@ -285,6 +293,15 @@ aName      Shipper
 aDesc      VOR automatically built from LOD Dialog
 aLastSyncDate 20150905144709928
 aLastUpdateDate 20150905144709928
+
+eW_MetaDef 3
+aCPLR_ZKey 228235041
+aStatus    1
+aUpdateInd 2
+aName      Supplier
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180228235040652
+aLastUpdateDate 20180228235040652
 
 eW_MetaDef 3
 aCPLR_ZKey 110000728
@@ -451,11 +468,15 @@ eW_MetaDef 3
 
 eW_MetaDef 3
 
+eW_MetaDef 3
+
 eW_MetaType 2
 aType      2008
 
 eW_MetaType 2
 aType      2009
+
+eW_MetaDef 3
 
 eW_MetaDef 3
 
@@ -546,21 +567,23 @@ aJavaClassName com.quinsoft.zeidon.domains.RegularExpressionDomain
 eDomainJavaClass 2
 aJavaClassName com.quinsoft.zeidon.domains.Base64BlobDomain
 
-i71        25
-i74        28
-i76        32
-i77        33
-i78        31
-i79        36
-i80        34
-i81        35
-i82        30
-i85        42
-i86        45
-i87        43
-i88        44
-i89        40
-i90        39
-i91        41
-i96        50
-i97        51
+i73        25
+i76        28
+i78        36
+i79        32
+i80        33
+i81        31
+i82        37
+i83        34
+i84        35
+i85        30
+i88        43
+i89        46
+i90        47
+i91        44
+i92        45
+i93        41
+i94        40
+i95        42
+i100       52
+i101       53

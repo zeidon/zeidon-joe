@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -13,20 +12,20 @@
     <description>Zeidon JUnit tests.  This is in a separate package because it requires ZeidonOperations and application files.</description>
 
     <build>
-      <plugins>
-	
-          <!-- Turn off dependency enforcer because fop has too many dependency errors -->
-	  <plugin>
-	    <artifactId>maven-enforcer-plugin</artifactId>
-	    <executions>
-	      <execution>
-		<id>enforce-versions</id>
-		<phase>none</phase>
-	      </execution>
-	    </executions>
-	  </plugin>
-	  
-          <plugin>
+        <plugins>
+
+            <!-- Turn off dependency enforcer because fop has too many dependency errors -->
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.3.1</version>
@@ -64,7 +63,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <!-- Following plugin causes a .jar file to be created for the test classes. This is necessary 
+            <!-- Following plugin causes a .jar file to be created for the test classes. This is necessary
                 for the Test lod-server -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -78,7 +77,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Following is necessary to force maven to write .sqlite files for every build --> 
+            <!-- Following is necessary to force maven to write .sqlite files for every build -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
@@ -96,10 +95,10 @@
                         <goals>
                             <goal>testResources</goal>
                         </goals>
-                           <configuration>
-                                <overwrite>true</overwrite>
-                            </configuration>
-                     </execution>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
@@ -114,6 +113,11 @@
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
             <artifactId>zeidon-scala</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>javascript</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -158,10 +162,10 @@
             </exclusions>
         </dependency>
         <dependency>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-core</artifactId>
-          <version>2.13.2</version>
-          <scope>compile</scope>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.13.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -170,14 +174,14 @@
         </dependency>
     </dependencies>
 
-    <!-- We can only run Zencas tests if we have the Sqlite test DB on the local system. We'll default 
+    <!-- We can only run Zencas tests if we have the Sqlite test DB on the local system. We'll default
         to excluding them. Later we'll run them if we have the DB. -->
     <properties>
-        <exclude.zencas.tests>%regex[(.*TestZencas.*)|(.*ViewTest.*)|(.*TestSWAU.*)|(.*TestLazyLoad.*)]</exclude.zencas.tests>
+        <exclude.zencas.tests>%regex[(.*TestZencas.*)|(.*ViewTest.*)|(.*TestSWAU.*)|(.*TestLazyLoad.*)|(.*TestIBOE.*)]</exclude.zencas.tests>
     </properties>
 
     <profiles>
-        <!-- If env var ZENCAS_SQLITE_DIR is specified, then run the Zencas JUnit test. ZENCAS_SQLITE_DIR 
+        <!-- If env var ZENCAS_SQLITE_DIR is specified, then run the Zencas JUnit test. ZENCAS_SQLITE_DIR
             should point to directory containing Zencas sqlite test DB. -->
         <profile>
             <id>RunZencasTest</id>

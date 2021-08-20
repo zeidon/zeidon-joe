@@ -1,19 +1,19 @@
 /**
- * Classes for dealing specifically with Angular 2+ apps.
+ * Classes for dealing specifically with Angular apps.
  */
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { OnInit, SimpleChanges, OnChanges, EventEmitter, Attribute } from '@angular/core';
 import { Input, Directive } from '@angular/core';
 import { ElementRef, Renderer2, ViewContainerRef, Output } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
-import { ObjectInstance, EntityInstance, Pagination } from './zeidon';
+import { ObjectInstance, EntityInstance, Pagination } from '@zeidon/core';
 import { FormGroup, FormControl, FormArray, NgControl } from '@angular/forms';
 import { CanDeactivate } from '@angular/router';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map'
+import { map } from "rxjs/operators";
 
-import { ZeidonConfiguration } from './zeidon';
-import { ZeidonRestValues, RestActivator, RestCommitter } from './zeidon-rest-client';
+import { ZeidonConfiguration } from '@zeidon/core';
+import { ZeidonRestValues, RestActivator, RestCommitter } from '@zeidon/rest-client';
 
 /**
  * WIP: An attempt to automatically use contexts with attributes by using a directive.
@@ -373,12 +373,14 @@ class HttpWrapper {
     constructor( private http: HttpClient ) {}
 
     get( url: string ) : Promise<any> {
-        return this.http.get( url ).map( response => { return { body: response } } ).toPromise();
+        return this.http.get( url )
+            .pipe( map( response => { return { body: response } } ) )
+            .toPromise();
     }
 
     post( url: string, body: string, headers?: string | { [ name: string]: string | string[]; } ) : Promise<any> {
         return this.http.post( url, body, { headers: new HttpHeaders( headers ) } )
-                        .map( response => { return { body: response } } )
+                        .pipe( map( response => { return { body: response } } ) )
                         .toPromise();
     }
 }

@@ -1,0 +1,17 @@
+{
+  // Extended by packages.
+  // NOTE: any relative paths are relative to THIS FILE.
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "lib": [ "dom", "ESNext" ], // ESNext is needed for WeakRef; someday should be ES2021
+  },
+  "paths": {
+    "@zeidon": ["./packages"]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@zeidon/angular",
+  "version": "2.1.0",
+  "description": "Zeidon support for Angular framework",
+  "main": "dist/angular.js",
+  "license": "LGPL2.1",
+  "scripts": {
+    "clean": "rm -f dist/*",
+    "clean-all": "rm -rf dist/* node_modules",
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "echo 'Nothing to do'"
+  },
+  "dependencies": {
+    "@zeidon/core": "2.1.0",
+    "@zeidon/rest-client": "2.1.0",
+    "@angular/common": "^9.1.12",
+    "@angular/core": "^9.1.12",
+    "@angular/forms": "^9.1.12",
+    "@angular/platform-browser": "^9.1.12",
+    "@angular/platform-browser-dynamic": "^9.1.12",
+    "@angular/router": "^9.1.12",
+    "@angular/service-worker": "^9.1.12",
+    "rxjs": "^6.6.2",
+    "tslib": "^1.13.0"
+  }
+}

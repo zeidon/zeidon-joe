@@ -21,18 +21,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.apache.commons.io.IOUtils;
-
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.Task;
@@ -45,6 +33,22 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author DG
@@ -109,9 +113,10 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
             return;
 
         String value = reader.getAttributeValue();
-        if ( value.startsWith( "." ) )
-            value = zeidonRootDir + value.substring( 1 );
-
+        if ( attName.equalsIgnoreCase("APP_ADOBIN") && StringUtils.isNotBlank(zeidonRootDir) )
+        {
+            value = FileSystems.getDefault().getPath( zeidonRootDir + "/" + value ).normalize().toAbsolutePath().toString();
+        }
         attributes.put( attName, value );
     }
 
@@ -221,8 +226,26 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     {
         ClassLoader loader = this.getClass().getClassLoader();
         final String resourceDir = getObjectDir() + "/";
-
         Pattern pattern = Pattern.compile( "(.*)(\\.xod$)", Pattern.CASE_INSENSITIVE );
+
+        File file = new File( resourceDir );
+        if ( file.exists() )
+        {
+            try
+            {
+                return Files.list( file.toPath() )
+                    .map( resourceName -> pattern.matcher( resourceName.toString() ) ) // Create a matcher
+                    .filter( matcher -> matcher.matches() )                 // Keep only ones that match.
+                    .map( matcher -> matcher.group( 1 ) ) // Get the base filename.
+                    .map( path -> FilenameUtils.getBaseName(path) )
+                    .collect( Collectors.toList() );
+            }
+            catch ( Exception e )
+            {
+                throw ZeidonException.wrapException( e );
+            }
+        }
+
         try
         {
             return IOUtils.readLines( loader.getResourceAsStream( resourceDir ), StandardCharsets.UTF_8)

@@ -1,0 +1,18 @@
+{
+  "name": "zeidon",
+  "private": true,
+  "scripts": {
+    "build": "lerna bootstrap",
+    "list": "lerna list",
+    "clean": "rm -rf dist && lerna run --parallel clean",
+    "clean-all": "lerna run --parallel clean-all",
+    "test": "lerna run test",
+    "release": "lerna publish"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "lerna": "^4.0.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.2.4"
+  }
+}

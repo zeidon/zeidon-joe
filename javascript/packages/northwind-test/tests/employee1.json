@@ -1,0 +1,71 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Northwind",
+      "odName" : "Employee",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "Employee" : [ {
+      "EmployeeId" : "1",
+      "LastName" : "Davolio",
+      "FirstName" : "Nancy",
+      "Title" : "Sales Representative",
+      "TitleOfCourtesy" : "Ms.",
+      "BirthDate" : "1948-12-08 00:00:00.0-05:00",
+      "HireDate" : "1992-05-01 00:00:00.0-04:00",
+      "HomePhone" : "(206) 555-9857",
+      "Address" : "507 - 20th Ave. E.Apt. 2A",
+      "City" : "Seattle",
+      "Region" : "WA",
+      "PostalCode" : "98122",
+      "Country" : "USA",
+      "Extension" : "5467",
+      "Notes" : "Education includes a BA in psychology from Colorado State University in 1970.  She also completed \"The Art of the Cold Call.\"  Nancy is a member of Toastmasters International.",
+      "Photo" : "0JFIF000d0d000Ducky00000N000Adobe0d0000000000000000000000000000000000000000000000000000010245A30000001AQaq2BrRb3Cst0S4u0000000000000PAa0000001AQaq00000DlAGd7BYv5RVlF10vZo+U8UEI/A==",
+      "PhotoPath" : "http://accweb/emmployees/davolio.bmp",
+      "Salary" : 2954.55,
+      "ReportsTo" : "2",
+      "Supervisor" : [ {
+        "EmployeeId" : "2",
+        "LastName" : "Fuller",
+        "FirstName" : "Andrew",
+        "Title" : "Vice President, Sales",
+        "TitleOfCourtesy" : "Dr.",
+        "BirthDate" : "1952-02-19 00:00:00.0-05:00",
+        "HireDate" : "1992-08-14 00:00:00.0-04:00",
+        "HomePhone" : "(206) 555-9482",
+        "Address" : "908 W. Capital Way",
+        "City" : "Tacoma",
+        "Region" : "WA",
+        "PostalCode" : "98401",
+        "Country" : "USA",
+        "Extension" : "3457",
+        "Notes" : "Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",
+        "Photo" : "0JFIF000d0d000Ducky00000P000Adobe0d0000000000000000000000000000000000000000000000000000102AB3540000001AQaq2B0Rr3sbCc4Dt00000000000001PpAq000000001AQaq000003qIVmNTZ+nB3OfWKUkk3FdM0Hs8ukbZjU76p0eSbH/9bUDIOm+eZ30L3U83tZOjtY4220LDqhV+Wn07QuKreZM5OC1/JEonmZ/OUMXr1wZj3vzszNOyQsU9oC57telE5h3lKUT/vgUpdoQ0E=",
+        "PhotoPath" : "http://accweb/emmployees/fuller.bmp",
+        "Salary" : 2254.49
+      } ],
+      "Territory" : [ {
+        "TerritoryId" : "06897",
+        "TerritoryDescription" : "Wilton                                            ",
+        "REGIONID" : "1",
+        "Region" : [ {
+          "RegionId" : "1",
+          "RegionDescription" : "Eastern                                           "
+        } ]
+      }, {
+        "TerritoryId" : "19713",
+        "TerritoryDescription" : "Neward                                            ",
+        "REGIONID" : "1",
+        "Region" : [ {
+          "RegionId" : "1",
+          "RegionDescription" : "Eastern                                           "
+        } ]
+      } ]
+    } ]
+  } ]
+}

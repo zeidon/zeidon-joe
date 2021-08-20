@@ -104,4 +104,22 @@ public class ZeidonRestGateway
             return handler.commit( body );
         } );
     }
+
+    @POST
+    @Path("/{applicationName}/{lodName}")
+    @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
+    public Response commit2( @Context HttpServletRequest request,
+                             @PathParam("applicationName") String applicationName,
+                             @PathParam("lodName")         String lodName,
+                             String body )
+    {
+        // Since these are path params and not query params these need to be added to the attributes.
+        request.setAttribute("applicationName", applicationName );
+        request.setAttribute( "lodName", lodName );
+
+        return restEngine.withTask(request, (handler) -> {
+            return handler.commit( body );
+        } );
+    }
 }

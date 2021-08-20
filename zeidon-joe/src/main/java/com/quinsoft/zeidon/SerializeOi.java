@@ -416,6 +416,12 @@ public class SerializeOi
         return this;
     }
 
+    public SerializeOi withMappings( SerializationMapping serializationMapping )
+    {
+        this.serializationMapper = serializationMapping;
+        return this;
+    }
+
     public SerializationMapping getSerializationMapping()
     {
         return this.serializationMapper;

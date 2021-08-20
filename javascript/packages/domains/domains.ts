@@ -1,8 +1,29 @@
-import { Domain, DomainFunctions, TableDomainEntry } from "./zeidon"
-import { ZeidonError, AttributeValueError } from "./zeidon"
+import { Domain, DomainFunctions, TableDomainEntry } from "@zeidon/core"
+import { ZeidonError, AttributeValueError } from  "@zeidon/core"
+
+export const DefaultDomainFunctions = {
+    "com.quinsoft.zeidon.domains.BooleanDomain":
+        function ( domain: Domain ): DomainFunctions { return new BooleanDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.DateDomain":
+        function ( domain: Domain ): DomainFunctions { return new DateDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.DateTimeDomain":
+        function ( domain: Domain ): DomainFunctions { return new DateTimeDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.IntegerDomain":
+        function ( domain: Domain ): DomainFunctions { return new IntegerDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.StringDomain":
+        function ( domain: Domain ): DomainFunctions { return new StringDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.DoubleDomain":
+        function ( domain: Domain ): DomainFunctions { return new DoubleDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.StaticTableDomain":
+        function ( domain: Domain ): DomainFunctions { return new StaticTableDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.GeneratedKeyDomain":
+        function ( domain: Domain ): DomainFunctions { return new GeneratedKeyDomainFunctions( domain ) },
+    "com.quinsoft.zeidon.domains.Base64BlobDomain":
+        function ( domain: Domain ): DomainFunctions { return new Base64BlobDomainFunctions( domain ) },
+}
 
 export class BaseDomainFunctions implements DomainFunctions {
-    domain: Domain;
+    protected domain: Domain;
 
     constructor( domain: Domain ) { this.domain = domain }
 
@@ -16,13 +37,13 @@ export class BaseDomainFunctions implements DomainFunctions {
         return value;
     }
 
-    convertToJsType( value: any, attributeDef: any, context = undefined ): any {
-        return value;
+    convertToJsType( internalValue: any, attributeDef: any, context = undefined ): any {
+        return internalValue;
     }
 }
 
 /**
- * User-written code to process domains.
+ * Default functions for handling Zeidon domains.
  */
 export class StringDomainFunctions extends BaseDomainFunctions {
     convertExternalValue( value: any, attributeDef: any, context? : any ): any {
@@ -42,6 +63,12 @@ export class StringDomainFunctions extends BaseDomainFunctions {
 
         return str;
     }
+}
+
+/**
+ * For now generated keys are handled like strings in Javascript
+ */
+export class GeneratedKeyDomainFunctions extends StringDomainFunctions {
 }
 
 export class IntegerDomainFunctions extends BaseDomainFunctions {

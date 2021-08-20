@@ -1,0 +1,18 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Northwind",
+      "odName" : "Shipper",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "Shipper" : [ {
+      "ShipperId" : "1",
+      "CompanyName" : "Speedy Express",
+      "Phone" : "(503) 555-9831"
+    } ]
+  } ]
+}

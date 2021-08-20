@@ -20,9 +20,12 @@ package com.quinsoft.zeidon.standardoe;
 
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.HttpErrorMessage;
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.StreamFormat;
+import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonRestException;
@@ -44,7 +47,12 @@ public class ZeidonRestEngine
             .of( StreamFormat.JSON, MediaType.APPLICATION_JSON,
                  StreamFormat.XML, MediaType.APPLICATION_XML );
 
-    private final ObjectEngine oe;
+    private final static SerializationMapping JSON_ERROR_MAPPING = new SerializationMapping()
+            .addEntityMapping( "RestResponse", "errors" )
+            .addAttributeMapping( "RestResponse", "ErrorCode", "error_code" )
+            .addAttributeMapping( "RestResponse", "ErrorMessage", "error_message" );
+
+    private final ObjectEngine                     oe;
 
     private StreamFormat defaultStreamFormat = StreamFormat.JSON;
 
@@ -78,7 +86,8 @@ public class ZeidonRestEngine
     public Response withTask( HttpServletRequest request, RestEngineCallback callback )
     {
         Task task = null;
-        try {
+        try
+        {
             String applicationName = request.getParameter("applicationName");
             if (StringUtils.isBlank(applicationName))
                 applicationName = (String) request.getAttribute("applicationName");
@@ -91,9 +100,12 @@ public class ZeidonRestEngine
             validateApplication(task, app);
 
             return callback.process(new RestEngineHandler(task, request));
-        } catch (Exception e) {
-            return responseFromException(task, e);
-        } finally {
+        }
+        catch ( Exception e )
+        {
+            return responseFromException( task, e );
+        }
+        finally {
             if (task != null)
                 task.dropTask();
             ;
@@ -136,14 +148,52 @@ public class ZeidonRestEngine
 
     Response responseFromException( Task task, Exception e )
     {
-        task.log().error(e);
+        task.log().error( e );
+        String errorMessage = e.getMessage();
+        int statusCode = 500;
         if ( e instanceof HttpErrorMessage )
         {
             HttpErrorMessage error = (HttpErrorMessage) e;
-            return Response.status( error.getStatusCode() ).entity( error.getMessage() ).build();
+            statusCode = error.getStatusCode();
+        }
+        else if ( e instanceof SubobjectValidationException )
+        {
+            return subobjectValidationError( task, (SubobjectValidationException) e );
         }
 
-        return Response.status( 500 ).build();
+        View errors = task.getSystemTask().activateEmptyObjectInstance( "kzrestresponse" );
+        EntityCursor response = errors.cursor( "RestResponse" );
+        response.createEntity()
+                .getAttribute( "ErrorCode" ).setValue( e.getClass() )
+                .getAttribute( "ErrorMessage" ).setValue( errorMessage );
+
+        String str = errors
+                .serializeOi()
+                .setFormat( defaultStreamFormat )
+                .withMappings( JSON_ERROR_MAPPING )
+                .compressed().toString();
+
+        return Response.status( statusCode ).entity( str ).build();
+    }
+
+    private Response subobjectValidationError( Task task, SubobjectValidationException e )
+    {
+        View errors = task.getSystemTask().activateEmptyObjectInstance( "kzrestresponse" );
+        EntityCursor response = errors.cursor( "RestResponse" );
+        e.getChildExceptions().forEach( ( validationException ) -> {
+            response.createEntity()
+                    .getAttribute( "ErrorCode" ).setValue( "validation" )
+                    .getAttribute( "ErrorMessage" ).setValue( validationException.getMessage() );
+
+        } );
+
+        String str = errors
+                .serializeOi()
+                .setFormat( defaultStreamFormat )
+                .withMappings( JSON_ERROR_MAPPING )
+                .compressed().toString();
+
+        return Response.status( 500 ).entity( str ).build();
     }
 
     private StreamFormat interpretContentType( String contentType )

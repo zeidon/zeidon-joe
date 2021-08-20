@@ -1,0 +1,19 @@
+{
+  "name": "@zeidon/rest-client-browser",
+  "version": "2.1.0",
+  "description": "Support for making Zeidon calls to REST server from browser code.",
+  "main": "dist/rest-client-browser.js",
+  "scripts": {
+    "clean": "rm -f dist/*",
+    "clean-all": "rm -rf dist/* node_modules",
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "echo 'Nothing to do'"
+  },
+  "license": "LGPL2.1",
+  "dependencies": {
+    "ky": "^0.28.5",
+    "@zeidon/core": "2.1.0",
+    "@zeidon/rest-client": "2.1.0"
+  }
+}
