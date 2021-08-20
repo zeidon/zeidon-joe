@@ -45,7 +45,7 @@ export class LodDef {
 
         if ( ! domain.domainFunctionsWarning ) {
             domain.domainFunctionsWarning = true;
-            console.warn( `Domain functions for ${domainName} (class=${domain.class}) not found.  You need to add it to the DomainFunctions.ts` );
+            console.warn( `Domain functions for ${domainName} (class=${domain.class}) not found.  You need to add it to the *DomainFunctions.ts` );
         }
     }
 
@@ -202,23 +202,10 @@ export class ObjectInstance {
                 error( "ZeidonConfiguration not properly initiated." )
 
             config.getCommitter().dropOi( this );
-
         }
     }
 
     private loadOiMetaFromJson( oimeta, options: CreateOptions ) {
-        // If incrementals are set then set the constructor option to
-        // not set the update flag when the attribute value is set.  The
-        // flags will be set by the incrementals.
-        if ( oimeta.incremental ) {
-            if ( options.incrementalsSpecified === undefined ) {
-                // We're going to change the options so create a new one so we
-                // don't override the original one.
-                options = Object.assign( {}, options );
-                options.incrementalsSpecified = true;
-            }
-        }
-
         if ( oimeta.pagination && oimeta.pagination.totalCount ) {
             let p = this.activateQual.pagination;
             p.totalCount = oimeta.pagination.totalCount;
@@ -250,8 +237,12 @@ export class ObjectInstance {
             // TODO: Someday we should handle multiple return OIs but for now
             // we'll assume just one and hardcode '[0]'.
             let oimeta = initialize.OIs[ 0 ][ ".oimeta" ];
-            if ( oimeta )
+            if ( oimeta ) {
+                if ( options.incrementalsSpecified === undefined )
+                    options.incrementalsSpecified = true;
+
                 this.loadOiMetaFromJson( oimeta, options );
+            }
 
             let root = initialize.OIs[ 0 ][ this.lodDef.rootEntityName ];
             if ( root ) {
@@ -302,7 +293,7 @@ class Incrementals {
  * This is all information shared between linked entity instances, like attributes.
  */
 class LinkedEntitiesInfo {
-    _linkedEntities = new Set<EntityInstance>();
+    private _linkedEntities = new Array<WeakRef<EntityInstance>>();
 
     // The persistent attribute values stored as a hash (aka Object).  They key is
     // the attribute name, the value is the attribute value.  The flag indicating
@@ -316,16 +307,41 @@ class LinkedEntitiesInfo {
     attributesUpdated = false;
 
     constructor( ei: EntityInstance ) {
-        this._linkedEntities.add( ei );
+        this._linkedEntities.push( new WeakRef( ei ) );
         this._erToken = ei.entityDef.erToken;
         this._oi = ei.oi;
+    }
+
+    /**
+     * Loops through all the linked EIs and calls 'func'.  Skips EIs that have been
+     * garbage-collected.  If skipThis is defined, then that EI will be skipped;
+     * intended to be used by and EI to loop through all <other> linked EIs.
+     * @param func
+     */
+    public forEach(func: (ei: EntityInstance) => void) {
+        this._linkedEntities.filter( wr => wr.deref() ); // Remove all the objects collected by the GC.
+        this._linkedEntities.forEach( wr => {
+            func( wr.deref() );
+        });
+    }
+
+    public isLinked( search: EntityInstance ): EntityInstance {
+        this._linkedEntities.filter( wr => wr.deref() ); // Remove all the objects collected by the GC.
+        this._linkedEntities.forEach( wr => {
+            let ei = wr.deref();
+            if ( ei === search )
+                return ei;
+        });
+
+        return undefined;
     }
 
     public addLinkedEntity( newLinkedEntity: EntityInstance, options: CreateOptions ) {
         if ( newLinkedEntity.entityDef.erToken !== this._erToken )
             throw "Mismatching ER entity tokens";
 
-        if ( this._linkedEntities.has( newLinkedEntity ) )
+        // If the entity is already linked then skip it.
+        if ( this.isLinked( newLinkedEntity ) )
             return;
 
         let otherLinkedInfo = newLinkedEntity._linkedInstances;
@@ -338,35 +354,20 @@ class LinkedEntitiesInfo {
                                            otherLinkedInfo._persistentAttributes[ attrName ],
                                            undefined, options );
             }
-        })
+        });
 
         let ei: EntityInstance = this._linkedEntities.keys().next().value;
         if ( ei.updated || ei.created ) {
-            otherLinkedInfo._linkedEntities.forEach( ( linked ) => {
+            otherLinkedInfo.forEach( ( linked ) => {
                 linked.updated = ( linked.updated || ei.updated );
                 linked.created = ( linked.created || ei.created );
             } );
         }
 
-        // To prevent memory leaks we won't share linked instances if they are in different
-        // OIs.  If/when we support WeakRef we can keep them all together.
-        if ( newLinkedEntity.oi !== this._oi ) {
-            otherLinkedInfo._persistentAttributes = this._persistentAttributes;
-            return;
-        }
-
-        this._linkedEntities = new Set( [ ...this._linkedEntities, ...otherLinkedInfo._linkedEntities ] );
-        otherLinkedInfo._linkedEntities.forEach( (linked) => {
+        this._linkedEntities = [ ...this._linkedEntities, ...otherLinkedInfo._linkedEntities ];
+        otherLinkedInfo.forEach( (linked) => {
             linked._linkedInstances = this;
         });
-    }
-
-    public isLinked( ei: EntityInstance ) {
-        return this._linkedEntities.size > 1;
-    }
-
-    public areLinked( ei1: EntityInstance, ei2: EntityInstance ) {
-        return this._linkedEntities.has( ei1 ) && this._linkedEntities.has( ei2 );
     }
 
     public setInternalAttribute( attrName: string,
@@ -381,6 +382,7 @@ class LinkedEntitiesInfo {
 
         attribs[ attrName ] = value;
 
+        // Don't set update flags if incrementals are specified.
         if ( options.incrementalsSpecified )
             return true;
 
@@ -395,7 +397,7 @@ class LinkedEntitiesInfo {
             return true;
 
         this.attributesUpdated = true;
-        this._linkedEntities.forEach( (linked) => {
+        this.forEach( (linked) => {
             linked.updated = true;
             linked.oi.isUpdated = true;
         } );
@@ -455,7 +457,7 @@ export class EntityInstance {
     get isLinked() { return this._linkedInstances.isLinked( this ); }
 
     isLinkedWith( otherEi: EntityInstance ): boolean {
-        return this._linkedInstances.areLinked( this, otherEi )
+        return this._linkedInstances.isLinked( otherEi ) !== undefined;
     }
 
     private setIncremental( v: boolean, flag: string ) {
@@ -510,17 +512,10 @@ export class EntityInstance {
     }
 
     get keyAttributeDef(): any {
-        let attributeDefs = this.entityDef.attributes;
-        let keyDefs = [];
-        for ( let attrName in attributeDefs ) {
-            if ( attributeDefs[ attrName ].key )
-                keyDefs.push( attributeDefs[ attrName ] );
-        }
-
-        if ( keyDefs.length != 1 )
+        if ( this.entityDef.keys.length != 1 )
             error( `keyAttributeDef can only be called for entities with a single key. Entity = ${this.entityName}` );
 
-        return keyDefs[ 0 ];
+        return this.getAttributeDef( this.entityDef.keys[ 0 ] );
     };
 
     get key(): string {
@@ -581,6 +576,17 @@ export class EntityInstance {
             throw new ZeidonError( `oi is undefined!` );
     }
 
+    public keysMatch( otherEi: EntityInstance ): boolean {
+        this.entityDef.keys.forEach(keyName => {
+            let value1 = this.getAttribute( keyName );
+            let value2 = otherEi.getAttribute( keyName );
+            if ( value1 !== value2 )
+                return false;
+        });
+
+        return true;
+    }
+
     private setDefaultAttributeValues() {
         let entityDef = this.entityDef;
         if ( !entityDef.hasInit )
@@ -609,14 +615,18 @@ export class EntityInstance {
         // Perform some validations unless incrementals are specified.
         if ( !options.incrementalsSpecified ) {
             if ( !attributeDef.update ) {
-                throw new ZeidonError( `Attribute ${this.entityDef.name}.${attrName} is read only` );
+                throw new ZeidonError( `Attribute '${this.entityDef.name}.${attrName}' is read only` );
+            }
+
+            if ( !this.entityDef.updatable ) {
+                throw new ZeidonError( `Entity '${this.entityDef.name}' is not updatable for LOD '${this.oi.lodDef.lodName}'` );
             }
 
             if ( this.oi.readOnly )
                 throw new ZeidonError( "This OI is read-only." );
 
             if ( this.deleted || this.excluded )
-                throw new ZeidonError( `Can't set attribute for hidden EntityInstance: ${this.entityDef.name}.${attrName}` );
+                throw new ZeidonError( `Can't set attribute for hidden EntityInstance: '${this.entityDef.name}.${attrName}'` );
         }
 
         // If we can find the domain function then convert the value using the domain.
@@ -1025,7 +1035,7 @@ class Relinker {
     private validateLink( targetEntityDef ) {
         let sourceEntityDef = this.sourceEi.entityDef;
         if ( sourceEntityDef.erToken !== targetEntityDef.erToken )
-            throw new ZeidonError( `Entities ${targetEntityDef.name} and ${sourceEntityDef.name} are not the same ER entity.` );
+            throw new ZeidonError( `Entities '${targetEntityDef.name}' and '${sourceEntityDef.name}' are not the same ER entity.` );
     }
 
     private validateInclude( targetArr: EntityArray<EntityInstance> ) {
@@ -1039,7 +1049,7 @@ class Relinker {
         }
 
         if ( targetArr.length >= targetEntityDef.cardMax )
-            throw new ZeidonError( `Including a new instance for ${targetEntityDef.name} voilates max cardinality.` );
+            throw new ZeidonError( `Including a new instance for '${targetEntityDef.name}' voilates max cardinality.` );
 
         if ( !targetEntityDef.includable )
             throw new ZeidonError( `Entity ${targetEntityDef.name} is not includable.` );
@@ -1078,7 +1088,7 @@ export class EntityArray<T extends EntityInstance> extends Array<T> {
         options = options || {};  // Make sure options is at least an empty object.
 
         if ( !this.entityDef.create && !options.incrementalsSpecified )
-            throw new ZeidonError( `Entity ${this.entityDef.name} does not have create authority.` );
+            throw new ZeidonError( `Entity '${this.entityDef.name}' does not have create authority.` );
 
         if ( this.oi.readOnly && !options.incrementalsSpecified )
             throw new ZeidonError( "This OI is read-only." );
@@ -1133,7 +1143,7 @@ export class EntityArray<T extends EntityInstance> extends Array<T> {
     include( sourceEi: EntityInstance, options: IncludeOptions = {} ): EntityInstance {
         // Allow includes if this is the root.
         if ( !this.entityDef.includable && this.parentEi )
-            throw new ZeidonError( `Entity ${this.entityDef.name} does not have include authority.` );
+            throw new ZeidonError( `Entity '${this.entityDef.name}' does not have include authority.` );
 
         if ( this.oi.readOnly && !options.incrementalsSpecified )
             throw new ZeidonError( "This OI is read-only." );
@@ -1309,8 +1319,8 @@ export class EntityArray<T extends EntityInstance> extends Array<T> {
 
     setSelected( value: number | EntityInstance ): EntityInstance {
         if ( value instanceof EntityInstance ) {
-            this.currentlySelected = this.findIndex( ei => (
-                value === ei || ( value.key !== undefined && value.key === ei.key ) )
+            this.currentlySelected = this.findIndex( ei =>
+                value === ei || value.keysMatch( ei )
             );
 
             return this.selected();
@@ -1427,7 +1437,7 @@ export interface ExcludeAllOptions extends ExcludeOptions {
 }
 
 const DEFAULT_CREATE_OPTIONS = {
-    incrementalsSpecified: false,
+    incrementalsSpecified: undefined,
     position: Position.Last
 };
 
@@ -1636,8 +1646,24 @@ export interface TableDomainEntry {
 }
 
 export interface DomainFunctions {
+    /**
+     * Converts any value into the internal value stored by a domain.  Will throw
+     * an exception if the type of the value can't be converted.
+     * @param value any external value.
+     * @param attributeDef the AttributeDef of the domain being converted.
+     * @param context the context, if any.
+     */
     convertExternalValue( value: any, attributeDef: any, context?: any ): any;
+
+    /**
+     * Converts an internal attribute value into a value for writing to a JSON stream.
+     * Most of the time this can just return the internalValue.
+     * @param internalValue internal value of the attribute
+     * @param attributeDef the AttributeDef of the domain being converted.
+     * @param context the context, if any.
+     */
     convertToJsType( value: any, attributeDef: any, context?: string ): any;
+
     getTableEntries?( context?: string ): Array<TableDomainEntry>;
     getTableValues?( context?: string ): Array<string>;
 }
@@ -1673,6 +1699,29 @@ export class ActivateLockError extends ActivateError {
         // Set the prototype explicitly.
         Object.setPrototypeOf( this, ActivateLockError.prototype );
     }
+}
+
+export interface CommitErrorFormat {
+    error_code: string,
+    error_message: string
+}
+export class CommitError extends ZeidonError {
+    private _errors: any;
+    private _statusCode: number;
+
+    constructor( errors: CommitErrorFormat[], statusCode?: number ) {
+        super( "Commit error" );
+
+        // Set the prototype explicitly.
+        Object.setPrototypeOf( this, CommitError.prototype );
+
+        this._errors = errors;
+        this._statusCode = statusCode;
+    }
+
+    get statusCode(): number { return this._statusCode }
+
+    get errors(): CommitErrorFormat[] { return this._errors }
 }
 
 export class AttributeValueError extends ZeidonError {

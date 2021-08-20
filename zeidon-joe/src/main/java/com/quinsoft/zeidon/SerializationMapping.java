@@ -125,7 +125,31 @@ public class SerializationMapping
         if ( entityMapping == null )
             return attributeDef.getName();
 
-        return entityMapping.recordName;
+        AttributeMapping attributeMapping = entityMapping.attributeMappings.get( decase( attributeDef.getName() ) );
+        if ( attributeMapping == null )
+            return attributeDef.getName();
+
+        return attributeMapping.fieldName;
+    }
+
+    public SerializationMapping addEntityMapping( String entityName, String recordName )
+    {
+        EntityMapping emap = new EntityMapping();
+        emap.entityName = entityName;
+        emap.recordName = recordName;
+        addEntityMapping( emap );
+        return this;
+    }
+
+    public SerializationMapping addAttributeMapping( String entityName, String attributeName, String fieldName )
+    {
+        EntityMapping emap = entityMappings.get( decase( entityName ) );
+        AttributeMapping amap = new AttributeMapping();
+        amap.attributeName = attributeName;
+        amap.fieldName = fieldName;
+        emap.attributeMappings.put( decase( amap.attributeName ), amap );
+        emap.fieldMappings.put( decase( amap.fieldName ), amap );
+        return this;
     }
 
     private SerializationMapping addEntityMapping( EntityMapping entityMapping )
@@ -170,17 +194,11 @@ public class SerializationMapping
         private String recordName;
         private boolean ignore;
 
-        private Map<String, AttributeMapping> attributeMappings;
-        private Map<String, AttributeMapping> fieldMappings;
+        private Map<String, AttributeMapping> attributeMappings = new HashMap<>();
+        private Map<String, AttributeMapping> fieldMappings = new HashMap<>();
 
         private void addAttributeMapping( SerializationMapping mapping, EntityInstance attribute )
         {
-            if ( attributeMappings == null )
-            {
-                attributeMappings = new HashMap<>();
-                fieldMappings = new HashMap<>();
-            }
-
             AttributeMapping amap = new AttributeMapping();
             amap.attributeName = attribute.getAttribute( "AttributeName" ).getString();
             amap.fieldName = attribute.getAttribute( "FieldName" ).getString();

@@ -1,0 +1,42 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Northwind",
+      "odName" : "Product",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "Product" : [ {
+      "ProductId" : "1",
+      "ProductName" : "Chai",
+      "ReorderLevel" : 10,
+      "QuantityPerUnit" : "10 boxes x 20 bags",
+      "Discontinued" : false,
+      "UnitPrice" : 18.0,
+      "UnitsInStock" : 39,
+      "UnitsOnOrder" : 0,
+      "SUPPLIERID" : "1",
+      "CATEGORYID" : "1",
+      "Supplier" : [ {
+        "SupplierId" : "1",
+        "CompanyName" : "Exotic Liquids",
+        "ContactName" : "Charlotte Cooper",
+        "ContactTitle" : "Purchasing Manager",
+        "Phone" : "(171) 555-2222",
+        "Address" : "49 Gilbert St.",
+        "City" : "London",
+        "PostalCode" : "EC1 4SD",
+        "Country" : "UK"
+      } ],
+      "Category" : [ {
+        "CategoryId" : "1",
+        "CategoryName" : "Beverages",
+        "Description" : "Soft drinks, coffees, teas, beers, and ales",
+        "Picture" : "0JFIF000d0d000Ducky00000P000Adobe0d000000c0000000000n00000000000000000000000000000000000102A3400000001AQq2aBRbr304C00000000000001PA2a00000001AQaq00000ffOvM/HSJjxSrh2ovIFa5h8u/klJ8jBy7Te2OneL+6FJoHqUUX09nL2L+lXrcTQoZvIQdc6PF2Q+noW7PJlSH8"
+      } ]
+    } ]
+  } ]
+}

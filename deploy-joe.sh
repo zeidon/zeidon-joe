@@ -3,6 +3,8 @@
 # Deploys JOE to the remote OSSHR repos. Exludes the test projects.
 if [[ "$1" == "release" ]]; then
     mvn -P !test-projects,release clean install deploy -DskipTests=true | tee /tmp/deploy.log
+    echo "https://oss.sonatype.org/#nexus-search;quick~zeidon-joe"
+    echo "https://oss.sonatype.org/service/local/repositories/comquinsoft-1051/content/com/quinsoft/zeidon/zeidon-joe/"
 else
     mvn -P !test-projects         clean install deploy -DskipTests=true | tee /tmp/deploy.log
     echo "https://oss.sonatype.org/content/repositories/snapshots/com/quinsoft/zeidon/zeidon-joe/"

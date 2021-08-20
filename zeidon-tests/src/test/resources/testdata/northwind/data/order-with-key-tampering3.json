@@ -23,7 +23,7 @@
       "ShipCountry" : "Brazil",
       "EMPLOYEEID" : "4",
       "CUSTOMERID" : "HANAR",
-      "SHIPPERID" : "2",
+      "ShipVia" : "2",
       "OrderDetail" : [ {
         "UnitPrice" : 7.7,
         "Quantity" : 10,

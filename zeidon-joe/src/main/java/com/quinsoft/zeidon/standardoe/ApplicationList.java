@@ -19,17 +19,6 @@
 
 package com.quinsoft.zeidon.standardoe;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
@@ -41,6 +30,18 @@ import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.NullEntityHandler;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author DG
@@ -95,7 +96,7 @@ class ApplicationList
                     logger.info( "No zeidon.app found via ZEIDON_HOME." );
                 else
                 {
-                    logger.info( "Loading apps using ZEIDON_HOME (%s)/zeidon.app", home.getHomeDirectory() );
+                    logger.info( "Loading apps using ZEIDON_HOME %s/zeidon.app", home.getHomeDirectory() );
                     ApplicationHandler appHandler = new ApplicationHandler( apps );
                     PortableFileReader.ReadPortableFile( inputStream, logger, appHandler );
                 }
@@ -160,7 +161,7 @@ class ApplicationList
             if ( appMap.containsKey( appKey ) && ! ObjectEngine.ZEIDON_SYSTEM_APP_NAME.equals( app.getName() ) )
                 throw new ZeidonException( "Application '%s' is defined multiple times", app.getName() );
 
-            appMap.put( app.getName().toLowerCase(), app );
+            appMap.put( appKey, app );
         }
     }
 }

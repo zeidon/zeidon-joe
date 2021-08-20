@@ -1,0 +1,17 @@
+{
+  "name": "@zeidon/core",
+  "version": "2.1.0",
+  "description": "Main Zeidon module.",
+  "main": "dist/zeidon.js",
+  "types": "dist/zeidon.d.ts",
+  "scripts": {
+    "clean": "rm -f dist/*",
+    "clean-all": "rm -rf dist/* node_modules",
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "echo 'Nothing to do'"
+  },
+  "license": "LGPL2.1",
+  "devDependencies": {
+  }
+}

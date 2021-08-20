@@ -67,7 +67,7 @@ public class ZeidonException extends RuntimeException
     public ZeidonException( String format, Object...strings )
     {
         super(format( format, strings ));
-        this.message = getClass().getName() + ": " + format( format, strings );
+        this.message = format( format, strings );
         runHandler();
     }
 
@@ -87,7 +87,11 @@ public class ZeidonException extends RuntimeException
     @Override
     public String getMessage()
     {
-        return toString();
+        StringBuilder builder = new StringBuilder( message );
+        if ( additionalInfo.size() > 0 )
+            builder.append( "\n" ).append( StringUtils.join( additionalInfo, "\n" ) );
+
+        return builder.toString();
     }
 
     private void runHandler()
@@ -141,7 +145,8 @@ public class ZeidonException extends RuntimeException
     @Override
     public String toString()
     {
-        return message + "\n" + StringUtils.join( additionalInfo, "\n" );
+        StringBuilder builder = new StringBuilder( getClass().getName() ).append( ": " ).append( getMessage() );
+        return builder.toString();
     }
 
     /**

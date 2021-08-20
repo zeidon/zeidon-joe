@@ -1,5 +1,5 @@
-import { ObjectInstance, Activator } from './zeidon';
-import { Committer, CommitOptions, ActivateLockError } from './zeidon';
+import { ObjectInstance, Activator, ZeidonConfiguration } from '@zeidon/core';
+import { Committer, CommitOptions, ActivateLockError, CommitError } from '@zeidon/core';
 
 /**
  * Interface for wrapping different HTTP clients into a form that can be used by Zeidon.
@@ -68,7 +68,18 @@ export class RestCommitter extends Committer {
                 let url = `${this.values.restUrl}/${lodName}`;
 
                 return this.http.post( url, body, { 'Content-Type': 'application/json' } )
-                    .then( response => newOi = this.parseCommitResponse( oi, response, options ) );
+                    .then( response => newOi = this.parseCommitResponse( oi, response, options ) )
+                    .catch( error => {
+                        if ( error.response.body ) {
+                            let errors = JSON.parse( error.response.body );
+                            if ( errors.errors ) {
+                                let exception = new CommitError( errors.errors, error.response.statusCode );
+                                throw exception;
+                            }
+                        }
+
+                        throw error;
+                    } );
             }
         }
         finally {

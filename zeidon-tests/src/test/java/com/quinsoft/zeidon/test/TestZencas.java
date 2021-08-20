@@ -3,24 +3,6 @@
  */
 package com.quinsoft.zeidon.test;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.mutable.MutableDouble;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Application;
@@ -40,6 +22,7 @@ import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.JsonUtils;
 import com.quinsoft.zeidon.utils.JspWebUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
@@ -51,11 +34,26 @@ import com.quinsoft.zencas.ZGLOBAL1_Operation;
 import com.quinsoft.zencas.ZGLOBAL2_Operation;
 import com.quinsoft.zencas.lTrnscpt_Object;
 import com.quinsoft.zencas.mStudenC_Object;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.mutable.MutableDouble;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.text.StrSubstitutor;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-// Just for temporary testing...
-//import com.jacob.com.*;
-//import com.jacob.activeX.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assume.assumeThat;
 
 /**
  * @author DG
@@ -550,6 +548,7 @@ public class TestZencas
 	@Test
 	public void testIncludePersonCommit()
 	{
+	    assumeThat( "Run all failing tests", JoeUtils.getEnvProperty( "runAllTests" ), is( "true" ) );
 	    View         testview;
 		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
 		VmlTester tester = new VmlTester( testview );

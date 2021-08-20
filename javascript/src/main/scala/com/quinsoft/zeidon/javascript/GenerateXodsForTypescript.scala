@@ -22,7 +22,7 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
 
     def generate() {
         oe.forTask( applicationName ) ( task => {
-            task.log.info("Starting Typescript generation" )
+            task.log.info("Starting Typescript generation for application %s => %s", applicationName, destinationDir, "" )
             new File( destinationDir ).mkdir()
             application.getLodNameList(task).foreach( generateXod( task, _ ) )
             println( "Done" )
@@ -34,7 +34,7 @@ class GenerateXodsForTypescript( val applicationName: String, val destinationDir
         printToFile( s"$destinationDir/$lodName.ts" )( writer => {
             writeStartingComment(writer)
             writer.println( s"""
-import * as zeidon from '../zeidon';
+import * as zeidon from '@zeidon/core';
 import { ${applicationName}_DomainList } from './${applicationName}-DomainList';
 import { ${applicationName}_DomainFunctions } from './${applicationName}-DomainFunctions';
 """ );
@@ -231,7 +231,12 @@ export const ${lodDefName}_LodDef = new zeidon.LodDef( ${lodDefName}_LodDefStruc
 
         entityDef.getChildren.foreach { writeChildEntityDefs( writer, _ ) }
 
-        writer.println( s"""            },
+        writer.print( s"""            },
+            keys: [""" )
+
+        entityDef.getAttributes.foreach { writeAttributeKey( writer, _ ) }
+
+        writer.println( s""" ],
             attributes: {""" )
 
         entityDef.getAttributes.foreach { writeAttributeDef( writer, _ ) }
@@ -243,6 +248,12 @@ export const ${lodDefName}_LodDef = new zeidon.LodDef( ${lodDefName}_LodDefStruc
 
     private def writeChildEntityDefs( writer: java.io.PrintWriter, childEntityDef: EntityDef ) {
         writer.println( s"""                ${childEntityDef.getName}: {},""" )
+    }
+
+    private def writeAttributeKey( writer: java.io.PrintWriter, attributeDef: AttributeDef ) {
+        if ( attributeDef.isKey ) {
+            writer.print( s""" "${attributeDef.getName}", """ )
+        }
     }
 
     private def writeAttributeDef( writer: java.io.PrintWriter, attributeDef: AttributeDef ) {

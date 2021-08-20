@@ -1,0 +1,188 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "Northwind",
+      "odName" : "Customer",
+      "incremental" : true,
+      "totalRootCount" : 1
+    },
+    "Customer" : [ {
+      "CustomerId" : "ALFKI",
+      "CompanyName" : "Alfreds Futterkiste",
+      "ContactName" : "Maria Anders",
+      "ContactTitle" : "Sales Representative",
+      "Address" : "Obere Str. 57",
+      "City" : "Berlin",
+      "PostalCode" : "12209",
+      "Country" : "Germany",
+      "Phone" : "030-0074321",
+      "Fax" : "030-0076545",
+      "Order" : [ {
+        "OrderId" : "10643",
+        "OrderDate" : "1997-08-25 00:00:00.0-04:00",
+        "ShippedDate" : "1997-09-02 00:00:00.0-04:00",
+        "RequiredDate" : "1997-09-22 00:00:00.0-04:00",
+        "Freight" : 29.46,
+        "ShipName" : "Alfreds Futterkiste",
+        "ShipAddress" : "Obere Str. 57",
+        "ShipCity" : "Berlin",
+        "ShipPostalCode" : "12209",
+        "ShipCountry" : "Germany",
+        "EMPLOYEEID" : "6",
+        "CUSTOMERID" : "ALFKI",
+        "ShipVia" : "1",
+        "OrderDetail" : [ {
+          "UnitPrice" : 45.6,
+          "Quantity" : 15,
+          "Discount" : 0.0,
+          "PRODUCTID" : "28",
+          "ORDERID" : "10643"
+        }, {
+          "UnitPrice" : 18.0,
+          "Quantity" : 21,
+          "Discount" : 0.0,
+          "PRODUCTID" : "39",
+          "ORDERID" : "10643"
+        }, {
+          "UnitPrice" : 12.0,
+          "Quantity" : 2,
+          "Discount" : 0.0,
+          "PRODUCTID" : "46",
+          "ORDERID" : "10643"
+        } ]
+      }, {
+        "OrderId" : "10692",
+        "OrderDate" : "1997-10-03 00:00:00.0-04:00",
+        "ShippedDate" : "1997-10-13 00:00:00.0-04:00",
+        "RequiredDate" : "1997-10-31 00:00:00.0-05:00",
+        "Freight" : 61.02,
+        "ShipName" : "Alfred-s Futterkiste",
+        "ShipAddress" : "Obere Str. 57",
+        "ShipCity" : "Berlin",
+        "ShipPostalCode" : "12209",
+        "ShipCountry" : "Germany",
+        "EMPLOYEEID" : "4",
+        "CUSTOMERID" : "ALFKI",
+        "ShipVia" : "2",
+        "OrderDetail" : [ {
+          "UnitPrice" : 43.9,
+          "Quantity" : 20,
+          "Discount" : 0.0,
+          "PRODUCTID" : "63",
+          "ORDERID" : "10692"
+        } ]
+      }, {
+        "OrderId" : "10702",
+        "OrderDate" : "1997-10-13 00:00:00.0-04:00",
+        "ShippedDate" : "1997-10-21 00:00:00.0-04:00",
+        "RequiredDate" : "1997-11-24 00:00:00.0-05:00",
+        "Freight" : 23.94,
+        "ShipName" : "Alfred-s Futterkiste",
+        "ShipAddress" : "Obere Str. 57",
+        "ShipCity" : "Berlin",
+        "ShipPostalCode" : "12209",
+        "ShipCountry" : "Germany",
+        "EMPLOYEEID" : "4",
+        "CUSTOMERID" : "ALFKI",
+        "ShipVia" : "1",
+        "OrderDetail" : [ {
+          "UnitPrice" : 10.0,
+          "Quantity" : 6,
+          "Discount" : 0.0,
+          "PRODUCTID" : "3",
+          "ORDERID" : "10702"
+        }, {
+          "UnitPrice" : 18.0,
+          "Quantity" : 15,
+          "Discount" : 0.0,
+          "PRODUCTID" : "76",
+          "ORDERID" : "10702"
+        } ]
+      }, {
+        "OrderId" : "10835",
+        "OrderDate" : "1998-01-15 00:00:00.0-05:00",
+        "ShippedDate" : "1998-01-21 00:00:00.0-05:00",
+        "RequiredDate" : "1998-02-12 00:00:00.0-05:00",
+        "Freight" : 69.53,
+        "ShipName" : "Alfred-s Futterkiste",
+        "ShipAddress" : "Obere Str. 57",
+        "ShipCity" : "Berlin",
+        "ShipPostalCode" : "12209",
+        "ShipCountry" : "Germany",
+        "EMPLOYEEID" : "1",
+        "CUSTOMERID" : "ALFKI",
+        "ShipVia" : "3",
+        "OrderDetail" : [ {
+          "UnitPrice" : 55.0,
+          "Quantity" : 15,
+          "Discount" : 0.0,
+          "PRODUCTID" : "59",
+          "ORDERID" : "10835"
+        }, {
+          "UnitPrice" : 13.0,
+          "Quantity" : 2,
+          "Discount" : 0.0,
+          "PRODUCTID" : "77",
+          "ORDERID" : "10835"
+        } ]
+      }, {
+        "OrderId" : "10952",
+        "OrderDate" : "1998-03-16 00:00:00.0-05:00",
+        "ShippedDate" : "1998-03-24 00:00:00.0-05:00",
+        "RequiredDate" : "1998-04-27 00:00:00.0-04:00",
+        "Freight" : 40.42,
+        "ShipName" : "Alfred-s Futterkiste",
+        "ShipAddress" : "Obere Str. 57",
+        "ShipCity" : "Berlin",
+        "ShipPostalCode" : "12209",
+        "ShipCountry" : "Germany",
+        "EMPLOYEEID" : "1",
+        "CUSTOMERID" : "ALFKI",
+        "ShipVia" : "1",
+        "OrderDetail" : [ {
+          "UnitPrice" : 25.0,
+          "Quantity" : 16,
+          "Discount" : 0.0,
+          "PRODUCTID" : "6",
+          "ORDERID" : "10952"
+        }, {
+          "UnitPrice" : 45.6,
+          "Quantity" : 2,
+          "Discount" : 0.0,
+          "PRODUCTID" : "28",
+          "ORDERID" : "10952"
+        } ]
+      }, {
+        "OrderId" : "11011",
+        "OrderDate" : "1998-04-09 00:00:00.0-04:00",
+        "ShippedDate" : "1998-04-13 00:00:00.0-04:00",
+        "RequiredDate" : "1998-05-07 00:00:00.0-04:00",
+        "Freight" : 1.21,
+        "ShipName" : "Alfred-s Futterkiste",
+        "ShipAddress" : "Obere Str. 57",
+        "ShipCity" : "Berlin",
+        "ShipPostalCode" : "12209",
+        "ShipCountry" : "Germany",
+        "EMPLOYEEID" : "3",
+        "CUSTOMERID" : "ALFKI",
+        "ShipVia" : "1",
+        "OrderDetail" : [ {
+          "UnitPrice" : 13.25,
+          "Quantity" : 40,
+          "Discount" : 0.0,
+          "PRODUCTID" : "58",
+          "ORDERID" : "11011"
+        }, {
+          "UnitPrice" : 21.5,
+          "Quantity" : 20,
+          "Discount" : 0.0,
+          "PRODUCTID" : "71",
+          "ORDERID" : "11011"
+        } ]
+      } ]
+    } ]
+  } ]
+}
