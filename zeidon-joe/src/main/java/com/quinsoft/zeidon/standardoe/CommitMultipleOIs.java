@@ -392,6 +392,7 @@ class CommitMultipleOIs
 
                 // Unless we learn otherwise, assume this does not need to be committed.
                 ei.dbhNeedsCommit = false;
+                ei.dbhUpdateForeignKeysOnly = false;
 
                 if ( entityDef.isDerivedPath() )
                     continue;
@@ -467,9 +468,9 @@ class CommitMultipleOIs
                             // subobject?  If so then we'll perform include/exclude but we'll ignore the update.
                             if ( entityDef.isReadOnlySubobjectRoot() )
                             {
-                                // Reset the flag to indicate we don't want to update this entity as part of this commit.
-                                // Don't reset the flag in linked EIs.
-                                ei.setUpdated( false, false, false );
+                                // Indicate that we only want to update FKs because they are part of the include/exclude
+                                // but we don't have authority to update other values.
+                                ei.dbhUpdateForeignKeysOnly = true;
                             }
                             else
                             {

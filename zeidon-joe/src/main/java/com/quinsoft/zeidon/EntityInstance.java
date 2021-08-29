@@ -462,6 +462,7 @@ public interface EntityInstance
     boolean isDbhGenKeyNeeded();
     boolean isDbhNoGenKey();
     boolean isDbhForeignKey();
+    boolean isDbhUpdateForeignKeysOnly();
 
     /**
      * Returns the position of the entity in the OI using heiarchical order.  Excludes

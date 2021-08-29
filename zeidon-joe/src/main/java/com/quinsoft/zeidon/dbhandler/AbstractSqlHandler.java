@@ -2419,8 +2419,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         EntityDef entityDef = entityInstance.getEntityDef();
         DataRecord dataRecord = entityDef.getDataRecord();
 
-        copyEntityForVersioning( view, entityInstance );
-
         SqlStatement stmt = initializeCommand( SqlCommand.UPDATE, view );
         task.dblog().debug( "Updating entity %s, table name = %s", entityDef.getName(), dataRecord.getRecordName() );
 
@@ -2445,6 +2443,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             }
 
             if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
+                continue;
+
+            if ( entityInstance.isDbhUpdateForeignKeysOnly() && !attributeDef.isForeignKey() )
                 continue;
 
             // If this is an autosequencing attribute then we need to check to see if the
@@ -2472,6 +2473,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // If there were no attributes found to need updating then there's nothing to do.
         if ( updateCount > 0 )
         {
+            copyEntityForVersioning( view, entityInstance );
             stmt.buildWhere( stmt, entityInstance );
             executeStatement( view, entityDef, entityInstance, stmt );
         }

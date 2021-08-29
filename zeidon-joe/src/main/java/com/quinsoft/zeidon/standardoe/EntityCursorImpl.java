@@ -2105,6 +2105,12 @@ class EntityCursorImpl implements EntityCursor
     }
 
     @Override
+    public boolean isDbhUpdateForeignKeysOnly()
+    {
+        return getExistingInstance().isDbhUpdateForeignKeysOnly();
+    }
+
+    @Override
     public long getEntityKey()
     {
         return getExistingInstance().getEntityKey();

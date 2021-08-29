@@ -32,25 +32,37 @@ class TestNorthwind extends AssertionsForJUnit {
 
     @Test
     def testCreateDeleteEntity() {
-        val order = task.using( "Order" ).empty()
+        val order = task.Order.empty()
         order.Order.create()
         order.Order.OrderDate = "NOW"
 
-        val customer = task.using( "Customer" ).activate( _.Customer.CustomerId = "BLAUS" )
+        val customer = task.Customer.activate( _.Customer.CustomerId = "BLAUS" )
         order.Customer include customer.Customer
 
-        val empl = task.using( "Employee" ).activate( _.Employee.EmployeeId = 1 )
+        assertFalse( "Customer shouldn't be updated", customer.Customer.isUpdated )
+        assertFalse( "Customer shouldn't be updated", order.Customer.isUpdated )
+
+        val companyName: String = customer.Customer.CompanyName
+        customer.Customer.CompanyName = "New name"
+        assertEquals( order.Customer.CompanyName, customer.Customer.CompanyName )
+
+        assertTrue( "Customer should be updated", customer.Customer.isUpdated )
+        assertTrue( "Customer should be updated", order.Customer.isUpdated )
+
+        val empl = task.Employee.activate( _.Employee.EmployeeId = 1 )
         order.Employee include empl.Employee
 
-        val shipper = task.using( "Shipper" ).activate( _.Shipper.ShipperId = 1 )
+        val shipper = task.Shipper.activate( _.Shipper.ShipperId = 1 )
         order.Shipper include shipper.Shipper
 
         order.commit()
 
+        val customer2 = task.Customer.activate( _.Customer.CustomerId = "BLAUS" )
+        assertEquals( companyName, customer2.Customer.CompanyName.getString() )
+
         order.Order.delete()
         order.commit()
     }
-
 
     @Test
     def testKeyValidator() {

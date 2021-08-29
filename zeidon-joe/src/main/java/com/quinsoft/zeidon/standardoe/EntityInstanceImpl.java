@@ -206,6 +206,7 @@ class EntityInstanceImpl implements EntityInstance
     boolean dbhNoGenKey;
     boolean dbhForeignKey;
     boolean dbhNeedsCommit;
+    boolean dbhUpdateForeignKeysOnly;
     boolean dbhLoaded;  // True if this EI was just loaded by the DBHandler.
 
     /**
@@ -3015,6 +3016,12 @@ class EntityInstanceImpl implements EntityInstance
         return dbhForeignKey;
     }
 
+    @Override
+    public boolean isDbhUpdateForeignKeysOnly()
+    {
+        return dbhUpdateForeignKeysOnly;
+    }
+
     /**
      * Validate the context name.  If the context name is null or "", returns the default context.
      * @param attributeDef
@@ -3850,5 +3857,4 @@ class EntityInstanceImpl implements EntityInstance
             return linkedInstances.toString();
         }
     }
-
 }
