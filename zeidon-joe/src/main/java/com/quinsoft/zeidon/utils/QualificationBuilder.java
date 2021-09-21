@@ -668,6 +668,12 @@ public class QualificationBuilder
         return this;
     }
 
+    public QualificationBuilder addAttribQualForKeyList( String attribName, Object attribValue )
+    {
+        validateEntity();
+        return addAttribQual( qualView.cursor( ENTITYSPEC ).getAttribute( ENTITYNAME ).getString(), attribName, "IN", attribValue );
+    }
+
     public QualificationBuilder addAttribQual( String attribName, Object attribValue )
     {
         validateEntity();
@@ -979,7 +985,7 @@ public class QualificationBuilder
         QualificationBuilder qual = new QualificationBuilder( sourceView )
                                             .setLodDef( sourceView.getLodDef() )
                                             .forEntity( DbHandler.ROOT_ENTITY )
-                                            .addAttribQual( key.getName(), null );
+                                            .addAttribQualForKeyList( key.getName(), null );
         for ( EntityInstance ei : cursor.eachEntity() )
             qual.newEntityKey( ei.getAttribute( key ).getInteger() );
 
