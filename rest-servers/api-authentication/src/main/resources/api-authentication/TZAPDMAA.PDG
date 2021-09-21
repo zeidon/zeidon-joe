@@ -1,0 +1,92 @@
+z1000-Zeidon    TZAPDMAA TZDGSRCO 09/20/21   21:33:27 1.0a2    
+eDomainGroup 1
+aZKey      920213328
+aNextZKeyToAssign 920213338
+aName      TZAPDMAA
+aExtension C
+aLanguageType C
+aDomainAndGlobalOpGroupName TZAPDMAA
+aWorkNumeric 12
+
+eDomain    2
+aZKey      920213332
+aName      AlphaNumeric
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.RegularExpressionDomain
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDecimalFormat 1234
+
+eContext   3
+aZKey      920213333
+aName      ALPHANUMERIC
+aJavaEditString [\w]*
+
+eSelectedOperation 3
+aName      zdmText
+aZKey      920213331
+aDesc      Text Algorithm
+aType      M
+aReturnDataType N
+
+eDomain    2
+aZKey      920213334
+aName      Text
+aDesc      Any Character String
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      920213335
+aName      Text
+
+eSelectedOperation 3
+
+eDomain    2
+aZKey      920213336
+aName      Integer
+aDesc      Integer numbers from -lots to +lots
+aDomainType E
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+aDecimalFormat 0
+
+eContext   3
+aZKey      920213337
+aDesc      0-F ( only Hex digits)
+aName      Hex
+
+eContext   3
+aZKey      920213338
+aName      INTEGER
+aIsDefault Y
+aDIL_Text  Integer > 32K
+
+eSelectedOperation 3
+aName      zdmInteger
+aZKey      920213329
+aDesc      Integer Algorithm
+aType      M
+aReturnDataType N
+
+eOperation 2
+
+eOperation 2
+aName      zdmQSNameLJNS
+aZKey      920213330
+aDesc      QuinSoft Name - left justified, no spaces
+aType      M
+aReturnDataType N
+
+eOperation 2
+
+i6         3
+i11        10
+i13        3

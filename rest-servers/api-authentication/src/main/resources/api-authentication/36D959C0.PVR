@@ -1,0 +1,11 @@
+z1000-Zeidon    36D959C0 TZWDVORO 09/20/21   21:39:51 1.0a2    
+eViewObjRef 1
+aZKey      920213952
+aNextZKeyToAssign 920213952
+aName      ClientAuthentication
+aDesc      VOR automatically built from LOD Dialog
+
+eLOD       2
+aZKey      920213948
+aName      ClientAuthentication
+

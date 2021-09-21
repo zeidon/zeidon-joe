@@ -1,56 +1,55 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>zeidon</artifactId>
-        <groupId>com.quinsoft.zeidon</groupId>
-        <version>2.1.0-SNAPSHOT</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>zeidon</artifactId>
+    <groupId>com.quinsoft.zeidon</groupId>
+    <version>2.1.0-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>zeidon-operations</artifactId>
-    <name>zeidon-operations</name>
-    <description>Zeidon wrapper code and helper functions for using with code generated from VML.</description>
+  <artifactId>zeidon-operations</artifactId>
+  <name>zeidon-operations</name>
+  <description>Zeidon wrapper code and helper functions for using with code generated from VML.</description>
 
-    <build>
-      <plugins>
-	<!-- Turn off dependency enforcer because fop has too many dependency errors -->
-	<plugin>
-	  <artifactId>maven-enforcer-plugin</artifactId>
-	  <executions>
-	    <execution>
-	      <id>enforce-versions</id>
-	      <phase>none</phase>
-	    </execution>
-	  </executions>
-	</plugin>
-      </plugins>
-    </build>
-    
-    <dependencies>
-        <dependency>
-            <groupId>com.quinsoft.zeidon</groupId>
-            <artifactId>zeidon-joe</artifactId>
-            <version>${project.parent.version}</version>  
-        </dependency>
-        <dependency>
-            <groupId>net.htmlparser.jericho</groupId>
-            <artifactId>jericho-html</artifactId>
-            <version>3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>fop</artifactId>
-            <version>1.0</version>
-	</dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.5</version>
-        </dependency>
-    </dependencies>
+  <build>
+    <plugins>
+      <!-- Turn off dependency enforcer because fop has too many dependency errors -->
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.quinsoft.zeidon</groupId>
+      <artifactId>zeidon-joe</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.htmlparser.jericho</groupId>
+      <artifactId>jericho-html</artifactId>
+      <version>3.2</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>fop</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.5</version>
+    </dependency>
+  </dependencies>
 </project>

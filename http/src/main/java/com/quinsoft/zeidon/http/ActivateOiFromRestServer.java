@@ -16,7 +16,7 @@
 
     Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon.standardoe;
+package com.quinsoft.zeidon.http;
 
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
@@ -24,6 +24,7 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.http.ZeidonHttpClientFactory;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -31,12 +32,12 @@ import com.quinsoft.zeidon.objectdefinition.LodDef;
  * Activate an OI from a REST server.
  *
  */
-class ActivateOiFromRestServer implements Activator
+public class ActivateOiFromRestServer implements Activator
 {
     final private String serverUrl;
 
-    private TaskImpl  task;
-    private ViewImpl  view;
+    private Task  task;
+    private View  view;
     private ActivateOptions activateOptions;
 
     public ActivateOiFromRestServer( String serverUrl )
@@ -52,11 +53,11 @@ class ActivateOiFromRestServer implements Activator
     {
         assert options != null;
 
-        this.task = (TaskImpl) task;
+        this.task = task;
         if ( initialView == null )
             view = this.task.activateEmptyObjectInstance( options.getLodDef() );
         else
-            view = ((InternalView) initialView).getViewImpl();
+            view = initialView;
 
         activateOptions = options;
 
@@ -74,10 +75,10 @@ class ActivateOiFromRestServer implements Activator
         View qual = activateOptions.getQualificationObject();
         String url = String.format("%s/%s/%s", serverUrl, application.getName(), view.getLodDef().getName());
 
-        return ZeidonHttpClient.getClient(task)
-                .setUrl(url)
+        return ZeidonHttpClientFactory.getInstance( task.getObjectEngine() ).getClient( task )
+                .setUrl( url )
                 .setQualParam( qual )
-                .callGet()
+                .callGet( view.getLodDef() )
                 .getResponseView();
     }
 
@@ -88,11 +89,6 @@ class ActivateOiFromRestServer implements Activator
     public int activate( EntityDef subobjectRootEntity )
     {
         throw new ZeidonException( "Lazy load activate is not supported for REST (yet)." );
-    }
-
-    private TaskImpl getTask()
-    {
-        return task;
     }
 
     @Override

@@ -165,8 +165,6 @@ public class ViewTest
                 "}";
 
         runJsonTest( json, false );
-
-        System.out.println( "here" );
     }
 
     @Test

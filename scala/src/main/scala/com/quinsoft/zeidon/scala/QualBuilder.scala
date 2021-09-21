@@ -24,6 +24,7 @@ import collection.JavaConversions._
 import com.quinsoft.zeidon._
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
+import com.quinsoft.zeidon.utils.QualificationBuilder
 import org.apache.commons.lang3.StringUtils
 import collection.mutable.ArrayBuffer
 import collection.immutable.List
@@ -40,16 +41,19 @@ import collection.immutable.List
  * }}}
  *
  */
-class QualBuilder private [scala] ( private [this]  val view: View,
+class QualBuilder private [scala] ( private [this]  val jtask: com.quinsoft.zeidon.Task,
                                     private [scala] val jlodDef: com.quinsoft.zeidon.objectdefinition.LodDef ) {
 
-    private [this]  val jtask = view.task
-    private [scala] val jqual = new com.quinsoft.zeidon.utils.QualificationBuilder( jtask )
-    jqual.setLodDef( jlodDef )
+    def this( view: View ) {
+        this( view.jtask, view.lodDef )
+        this.originalView = view
+    }
 
-    private [scala] var jcurrentEntityDef = jlodDef.getRoot
-
+    private [scala] val jqual = new QualificationBuilder( jtask, jlodDef )
     private [scala] val entityQualBuilder = new EntityQualBuilder( this )
+    private [scala] var jcurrentEntityDef = jlodDef.getRoot
+    private var originalView: View = null
+
     private var firstOperator = true
     private var totalRootCount: Integer = null
 
@@ -662,23 +666,27 @@ class QualBuilder private [scala] ( private [this]  val view: View,
      * Returns the view for convenience.
      */
     def activate(): View = {
-        view.jview = jqual.activate()
+        val jview = jqual.activate()
 
         val paging = jqual.getPagination(false)
         if ( paging != null ) {
             // Are we getting the total count?
             if ( paging.isLoadTotalCount() ) {
-                totalRootCount = view.jview.getTotalRootCount
+                totalRootCount = jview.getTotalRootCount
                 paging.setLoadTotalCount( false ) // Don't get it again.
             }
             else
             // We didn't load the root count as part of the activate.  If we
             // have it from a previous activate then set it.
             if ( totalRootCount != null )
-                view.jview.setTotalRootCount( totalRootCount )
+                jview.setTotalRootCount( totalRootCount )
         }
 
-        return view
+        val newView = new View( jview )
+        if ( originalView != null )
+            originalView.jview = jview
+
+        return newView
     }
 
     /**

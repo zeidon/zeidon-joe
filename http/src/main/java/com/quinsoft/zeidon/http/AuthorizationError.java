@@ -16,27 +16,18 @@
  *
  * Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon;
+package com.quinsoft.zeidon.http;
 
-public class HttpErrorMessage extends ZeidonException
+import javax.ws.rs.core.Response.Status;
+
+public class AuthorizationError extends HttpErrorMessage
 {
     private static final long serialVersionUID = 1L;
 
-    private int  statusCode = 500;
-
-    public HttpErrorMessage( String format, Object... strings )
+    public AuthorizationError( String format, Object... strings )
     {
         super( format, strings );
-    }
-
-    public HttpErrorMessage withStatusCode( int statusCode )
-    {
-        this.statusCode = statusCode;
-        return this;
-    }
-
-    public int getStatusCode()
-    {
-        return statusCode;
+        withErrorCode( "authorization" );
+        withStatusCode( Status.FORBIDDEN );
     }
 }

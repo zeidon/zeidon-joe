@@ -142,7 +142,7 @@ object Implicits {
         val view: View = task.newView(lodName)
 
         def apply( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
-            val builder = new QualBuilder( view, view.lodDef )
+            val builder = new QualBuilder( view )
             addQual( builder.entityQualBuilder )
             return builder.activate
         }
@@ -158,7 +158,7 @@ object Implicits {
         def empty() : View = view.activateEmpty
 
         def activate( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
-            val builder = new QualBuilder( view, view.lodDef )
+            val builder = new QualBuilder( view )
             addQual( builder.entityQualBuilder )
             return builder.activate
         }

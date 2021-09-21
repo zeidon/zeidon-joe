@@ -16,25 +16,22 @@
  *
  * Copyright 2009-2015 QuinSoft
  */
-package com.quinsoft.zeidon.standardoe;
+package com.quinsoft.zeidon.http;
 
-import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.DeserializeOi;
 import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.StatusLine;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
 import javax.ws.rs.core.MediaType;
@@ -42,48 +39,34 @@ import javax.ws.rs.core.UriBuilder;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 /**
  * HTTP wrapper to make it easy to make GET and POST calls with Zeidon objects.
  * Uses a connection pool that is configured using zeidon.ini.
  *
  */
-class ZeidonHttpClient
+public class ZeidonHttpClient
 {
-    private final RequestConfig requestConfig;
     private final Task                task;
     private final CloseableHttpClient httpClient;
     private String                    url;
     private View                      sourceView;
     private StreamFormat              format = StreamFormat.JSON;
     private View                      qualOi;
+    private AuthenticationDecorator   authenticationDecorator;
+    private LodDef                    responseLodDef; // LodDef of the OI being returned.
 
-    static ZeidonHttpClient getClient( Task task )
+    ZeidonHttpClient( Task task, CloseableHttpClient httpClient )
     {
-        Application application = task.getApplication();
-
-        synchronized ( application )
-        {
-            ZeidonHttpClient client = application.getCacheMap().get( ZeidonHttpClient.class );
-            if ( client == null )
-            {
-                client = new ZeidonHttpClient( task );
-                application.getCacheMap().put( client );
-            }
-
-            return client;
-        }
-    }
-
-    static ZeidonHttpClient getClient( View sourceView )
-    {
-        ZeidonHttpClient client = getClient( sourceView.getTask() ).setSourceView(sourceView);
-        return client;
+        this.task = task;
+        this.httpClient = httpClient;
     }
 
     public ZeidonHttpClient setSourceView( View sourceView )
     {
         this.sourceView = sourceView;
+        responseLodDef = sourceView.getLodDef();
         return this;
     }
 
@@ -105,59 +88,28 @@ class ZeidonHttpClient
         return this;
     }
 
-    /**
-     * Creates a connection pool for each Application.
-     */
-    private ZeidonHttpClient( Task task )
+    public ZeidonHttpClient setAuthenticationDecorator( AuthenticationDecorator authenticationDecorator )
     {
-        this.task = task;
-        Application application = task.getApplication();
-        String group = application.getName() + ".Http";
-        int timeout;
-        try
-        {
-            timeout = Integer.parseInt( task.readZeidonConfig( group, "HttpTimeout", "2000" ) );
-        }
-        catch ( Exception e )
-        {
-            throw new ZeidonException( "Error reading HTTP config: " + e.getMessage() )
-                    .appendMessage( "Group = %s, key = 'HttpTimeout'", group );
-        }
-
-        int connectionPoolSize;
-        try
-        {
-            connectionPoolSize = Integer
-                    .parseInt( task.readZeidonConfig( group, "ConnectionPoolSize", "5" ) );
-        }
-        catch ( Exception e )
-        {
-            throw new ZeidonException( "Error reading HTTP config: " + e.getMessage() )
-                    .appendMessage( "Group = %s, key = 'ConnectionPoolSize'", group );
-        }
-
-        requestConfig = RequestConfig
-                .custom()
-                .setSocketTimeout( timeout )
-                .setConnectTimeout( timeout )
-                .setConnectionRequestTimeout( timeout )
-                .build();
-
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-        cm.setMaxTotal( connectionPoolSize );
-        cm.setDefaultMaxPerRoute( connectionPoolSize );
-        httpClient = HttpClients.custom().setConnectionManager( cm ).build();
+        this.authenticationDecorator = authenticationDecorator;
+        return this;
     }
 
-    ZeidonHttpClientResponse callGet()
+    public Task getTask()
+    {
+        return task;
+    }
+
+    public ZeidonHttpClientResponse callGet( LodDef responseLodDef )
     {
         if ( sourceView != null )
             throw new ZeidonException( "SourceView is not allowed for GET" );
 
+        this.responseLodDef = responseLodDef;
+
         if ( StringUtils.isBlank( url ) )
             throw new ZeidonException("URL is required for GET");
 
-        UriBuilder builder = UriBuilder.fromUri(url);
+        UriBuilder builder = UriBuilder.fromUri( url );
 
         if ( qualOi != null )
         {
@@ -171,8 +123,9 @@ class ZeidonHttpClient
         try
         {
             HttpGet httpGet = new HttpGet( uri );
-            httpGet.setConfig(requestConfig);
-            httpGet.setHeader("Content-type", MediaType.APPLICATION_JSON);
+            httpGet.setHeader( "Content-type", MediaType.APPLICATION_JSON );
+            if ( authenticationDecorator != null )
+                authenticationDecorator.addAuthentication( this, httpGet );
 
             response = httpClient.execute( httpGet );
             return new ZeidonHttpClientResponse( task, response, StreamFormat.JSON );
@@ -183,7 +136,7 @@ class ZeidonHttpClient
         }
     }
 
-    ZeidonHttpClientResponse callPost()
+    public ZeidonHttpClientResponse callPost()
     {
         if ( sourceView == null )
             throw new ZeidonException( "SourceView is required for POST" );
@@ -219,8 +172,9 @@ class ZeidonHttpClient
 
             StringEntity entity = new StringEntity( body );
             httpPost.setEntity( entity );
+            if ( authenticationDecorator != null )
+                authenticationDecorator.addAuthentication( this, httpPost );
 
-            httpPost.setConfig( requestConfig );
             CloseableHttpResponse response = httpClient.execute( httpPost );
             return new ZeidonHttpClientResponse( task, response, format );
         }
@@ -230,26 +184,35 @@ class ZeidonHttpClient
         }
     }
 
-    static public class ZeidonHttpClientResponse
+    public class ZeidonHttpClientResponse
     {
         private final int  statusCode;
         private final View returnView;
 
         private ZeidonHttpClientResponse( Task task, CloseableHttpResponse response, StreamFormat format )
         {
+            String body = null;
             try
             {
-                InputStream stream = response.getEntity().getContent();
                 StatusLine status = response.getStatusLine();
                 statusCode = status.getStatusCode();
+                if ( statusCode < 200 || statusCode > 299 )
+                    throw HttpErrorMessage.fromResponse( task, response );
+
+                InputStream stream = response.getEntity().getContent();
+                body = IOUtils.toString( stream, StandardCharsets.UTF_8.name() );
 
                 returnView = new DeserializeOi( task )
                         .setFormat( format )
-                        .fromInputStream( stream )
+                        .setLodDef( responseLodDef )
+                        .fromString( body )
                         .activateFirst();
             }
             catch ( Exception e )
             {
+                if ( body != null )
+                    task.log().error( "body = %s", body );
+
                 throw ZeidonException.wrapException( e );
             }
             finally

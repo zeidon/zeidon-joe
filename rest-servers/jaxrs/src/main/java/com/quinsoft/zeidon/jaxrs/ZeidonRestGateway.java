@@ -19,8 +19,8 @@
 package com.quinsoft.zeidon.jaxrs;
 
 import com.quinsoft.zeidon.ObjectEngine;
+import com.quinsoft.zeidon.http.ZeidonRestServerEngine;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
-import com.quinsoft.zeidon.standardoe.ZeidonRestEngine;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -37,13 +37,19 @@ import javax.ws.rs.core.Response;
 public class ZeidonRestGateway
 {
     private final ObjectEngine     oe;
-    private final ZeidonRestEngine restEngine;
+    private final ZeidonRestServerEngine restEngine;
 
 
     public ZeidonRestGateway()
     {
         this.oe = JavaObjectEngine.getInstance();
-        this.restEngine = new ZeidonRestEngine( oe );
+        this.restEngine = new ZeidonRestServerEngine( oe );
+    }
+
+    public ZeidonRestGateway( ObjectEngine oe, ZeidonRestServerEngine engine )
+    {
+        this.oe = oe;
+        this.restEngine = engine;
     }
 
     @GET
@@ -64,12 +70,10 @@ public class ZeidonRestGateway
                               @QueryParam("qualOi")         String qualOi )
     {
         // Since these are path params and not query params these need to be added to the attributes.
-        request.setAttribute("applicationName", applicationName );
+        request.setAttribute( "applicationName", applicationName );
         request.setAttribute( "lodName", lodName );
 
-        return restEngine.withTask(request, (handler) -> {
-            return handler.activate();
-        } );
+        return restEngine.activate( request );
     }
 
     @GET
@@ -85,7 +89,7 @@ public class ZeidonRestGateway
         request.setAttribute( "lodName", lodName );
 
         return restEngine.withTask(request, (handler) -> {
-            return handler.activate( key );
+            return handler.activateByKey( key );
         } );
     }
 

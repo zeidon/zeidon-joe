@@ -25,7 +25,8 @@ import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.standardoe.ZeidonHttpClient.ZeidonHttpClientResponse;
+import com.quinsoft.zeidon.http.ZeidonHttpClient.ZeidonHttpClientResponse;
+import com.quinsoft.zeidon.http.ZeidonHttpClientFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -81,6 +82,8 @@ class CommitToRestServer implements Committer
      * we merge the results from the remote server.
      */
     private boolean hasExternallyLinkedInstances = false;
+
+    public CommitToRestServer() {}
 
     @Override
     public void init( Task task, List<? extends View> list, CommitOptions options )
@@ -241,12 +244,12 @@ class CommitToRestServer implements Committer
     {
         View view = viewList.get( 0 );  // We currently only support one view.
 
-        ZeidonHttpClientResponse response = ZeidonHttpClient
-                    .getClient( view )
-                    .setUrl( url )
-                    .callPost();
+        ZeidonHttpClientResponse response = ZeidonHttpClientFactory.getInstance( task.getObjectEngine() )
+                .getClient( view )
+                .setUrl( url )
+                .callPost();
 
-        if ( response.getStatusCode() != 200 )
+        if ( response.getStatusCode() < 200 || response.getStatusCode() > 299 )
             throw new ZeidonException( "http activate failed with status %s", response.getStatusCode() );
 
         return Arrays.asList( response.getResponseView() );

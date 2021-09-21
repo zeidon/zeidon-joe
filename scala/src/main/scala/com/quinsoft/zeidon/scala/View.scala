@@ -55,6 +55,11 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
         jview = jv
     }
 
+    def this( jtask: com.quinsoft.zeidon.Task, jlodDef: LodDef ) = {
+        this( jtask )
+        this.jlodDef = jlodDef
+    }
+
     def this( view: com.quinsoft.zeidon.scala.View ) = this( view.jview )
 
     /**
@@ -65,9 +70,9 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
     /**
      * Sets the LOD definition for this View.
      */
-    def basedOn( lodName: String ) = setLod( lodName )
-    def basedOn( applicationName: String, lodName: String ) = setLod( lodName, applicationName )
-    def basedOn( lodDef : LodDef ) = { jlodDef = lodDef; this }
+    def basedOn( lodName: String ): View = setLod( lodName )
+    def basedOn( applicationName: String, lodName: String ): View = setLod( lodName, applicationName )
+    def basedOn( lodDef : LodDef ): View = { jlodDef = lodDef; this }
 
     /**
      * Sets the LOD definition for this view as BASED ON LOD lod-name
@@ -158,16 +163,17 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
      */
     def activateWhere( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
         validateLodDef
-        val builder = new QualBuilder( this, jlodDef )
+        val builder = new QualBuilder( this )
         addQual( builder.entityQualBuilder )
-        builder.activate
+        this.jview = builder.activate
         return this
     }
 
     def activate(addQual: (QualBuilder) => QualBuilder): View = {
         val qb = this.buildQual()
         addQual(qb)
-        return qb.activate // Same as "return this".
+        this.jview = qb.activate
+        return this
     }
 
     /**
@@ -178,7 +184,7 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
      */
     def activateAll(): View = {
         validateLodDef
-        val builder = new QualBuilder( this, jlodDef )
+        val builder = new QualBuilder( this )
         builder.activate
         this
     }
@@ -204,7 +210,7 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
      */
     def buildQual(): QualBuilder = {
         validateLodDef
-        val builder = new QualBuilder( this, jlodDef )
+        val builder = new QualBuilder( this )
         return builder
     }
 
@@ -342,7 +348,7 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
      *
      * @return view as JSON string.
      */
-    def toJson( incrementals : Boolean = true, prettyPrint : Boolean = false ) = 
+    def toJson( incrementals : Boolean = true, prettyPrint : Boolean = false ) =
         jview.serializeOi()
              .asJson()
              .withIncremental( incrementals )

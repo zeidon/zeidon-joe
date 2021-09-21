@@ -10,7 +10,6 @@ tmp/
 .project
 .classpath
 .vscode/
-bin
 
 .bloop/
 .metals/

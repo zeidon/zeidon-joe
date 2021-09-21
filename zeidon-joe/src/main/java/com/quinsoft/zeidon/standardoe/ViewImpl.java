@@ -161,7 +161,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     void replaceObjectInstance( ObjectInstance newOi )
     {
         assert lodDef == newOi.getLodDef();
-        assert task == newOi.getTask();
+        assert task == newOi.getTask() || getObjectInstance().getTask() == newOi.getTask();
         newOi.setActivateOptions( getActivateOptions() );
         viewCursor = new ViewCursor( this, newOi );
     }

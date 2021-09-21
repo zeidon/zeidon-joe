@@ -4733,8 +4733,8 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   if (mPerson2.cursor("Demographics").checkExistenceOfEntity().isEmpty())
 		   {
 			   mPerson2.cursor("Demographics").createEntity();
-			   SetMatchingAttributesByName( mPerson2, "Demographics", mPerson, "Demographics", zSET_ALL );
-	 		   Assert.assertEquals("After setMatchingAttributesByName, Demographics.ID should still be NULL.", false, mPerson2.cursor("Demographics").getAttribute("ID").getInteger() == 16471);
+			   SetMatchingAttributesByName( mPerson2, "Demographics", mPerson, "Demographics", zSET_NULL | zSET_NOTNULL );
+	 		   Assert.assertEquals("After setMatchingAttributesByName, Demographics.ID should still be NULL.", true, mPerson2.cursor("Demographics").getAttribute("ID").isNull());
 		   }
 		   DropObjectInstance(mPerson);
 		   DropObjectInstance(mPerson2);

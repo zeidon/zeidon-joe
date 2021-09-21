@@ -84,8 +84,7 @@ public class SerializationMapping
             // If there's only 1 record->entity mapping we'll just get the entity directly.
             return lodDef.getEntityDef( list.get( 0 ).entityName, false, ignoreCase );
         }
-        else
-        if ( list.size() > 1 )
+        else if ( list.size() > 1 )
         {
             // We have multiple record->entity mappings.  To determine which one we want we need
             // to go through the mappings and find the entity that has a parent matching 'parent'.
@@ -98,6 +97,19 @@ public class SerializationMapping
         }
 
         return lodDef.getEntityDef( recordName, required, ignoreCase );
+    }
+
+    public AttributeDef getAttributeFromField( String fieldName, EntityDef entityDef )
+    {
+        EntityMapping entityMapping = entityMappings.get( decase( entityDef.getName() ) );
+        if ( entityMapping == null )
+            return entityDef.getAttribute( fieldName, false, ignoreCase );
+
+        AttributeMapping mapping = entityMapping.fieldMappings.get( decase( fieldName ) );
+        if ( mapping == null )
+            return entityDef.getAttribute( fieldName, false, ignoreCase );
+
+        return entityDef.getAttribute( mapping.attributeName );
     }
 
     public String entityToRecord( EntityDef entityDef )

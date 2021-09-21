@@ -519,7 +519,7 @@ class ActivateOisFromJsonStream implements StreamReader
                 // This better be an attribute
                 // Try getting the attribute.  We won't throw an exception (yet) if there
                 // is no attribute with a matching name.
-                AttributeDef attributeDef = entityDef.getAttribute( fieldName, false, true );
+                AttributeDef attributeDef = mapper.getAttributeFromField( fieldName, entityDef );
 
                 if ( attributeDef == null )
                 {
